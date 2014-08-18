@@ -79,6 +79,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -92,6 +93,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -1292,7 +1294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
-      tinaSouthTabbedPane.addTab("Channel mixer", null, getPanel_92(), null);
+      tinaSouthTabbedPane.addTab("Channel mixer", null, getChannelMixerPanel(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -4501,7 +4503,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenClearPreviewBtn(), getMeshGenPreviewPositionXREd(), getMeshGenPreviewPositionYREd(), getMeshGenPreviewSizeREd(),
         getMeshGenPreviewScaleZREd(), getMeshGenPreviewRotateAlphaREd(), getMeshGenPreviewRotateBetaREd(),
         getMeshGenPreviewPointsREd(), getMeshGenPreviewPolygonsREd(), getMeshGenRefreshPreviewBtn(), getApophysisHintsPane(),
-        getMeshGenPreviewSunflowExportBtn(), getMeshGenDetailThicknessREd(), getMeshGenSliceThicknessREd());
+        getMeshGenPreviewSunflowExportBtn(), getMeshGenSliceThicknessREd(), getChannelMixerResetBtn(), getChannelMixerModeCmb(),
+        getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
+        getChannelMixerGreenGreenRootPanel(), getChannelMixerGreenBlueRootPanel(), getChannelMixerBlueRedRootPanel(), getChannelMixerBlueGreenRootPanel(),
+        getChannelMixerBlueBlueRootPanel());
 
     tinaController = new TinaController(params);
 
@@ -4532,6 +4537,12 @@ public class TinaInternalFrame extends JInternalFrame {
       getShadingLightCmb().addItem(String.valueOf("2"));
       getShadingLightCmb().addItem(String.valueOf("3"));
       getShadingLightCmb().addItem(String.valueOf("4"));
+
+      getChannelMixerModeCmb().removeAllItems();
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.OFF);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.FULL);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.RGB);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.BRIGHTNESS);
 
       initTriangleStyleCmb(getTriangleStyleCmb(), pPrefs);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());
@@ -4609,6 +4620,10 @@ public class TinaInternalFrame extends JInternalFrame {
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
+    }
+
+    if (!Tools.V2_0_FEATURE_ENABLE) {
+      channelMixerPanel.getParent().remove(channelMixerPanel);
     }
 
     return tinaController;
@@ -10378,9 +10393,32 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton meshGenPreviewSunflowExportBtn;
   private JScrollPane scrollPane_11;
   private JTextPane apophysisHintsPane;
-  private JPanel panel_92;
-  private JWFNumberField meshGenDetailThicknessREd;
+  private JPanel channelMixerPanel;
   private JWFNumberField meshGenSliceThicknessREd;
+  private JPanel panel_108;
+  private JPanel panel_109;
+  private JPanel panel_110;
+  private JPanel panel_111;
+  private JPanel panel_112;
+  private JPanel panel_113;
+  private JPanel panel_114;
+  private JPanel panel_115;
+  private JPanel panel_116;
+  private JPanel channelMixerRedRedRootPanel;
+  private JPanel channelMixerRedGreenRootPanel;
+  private JPanel channelMixerRedBlueRootPanel;
+  private JPanel channelMixerGreenRedRootPanel;
+  private JPanel channelMixerGreenGreenRootPanel;
+  private JPanel channelMixerGreenBlueRootPanel;
+  private JPanel channelMixerBlueRedRootPanel;
+  private JPanel channelMixerBlueGreenRootPanel;
+  private JPanel channelMixerBlueBlueRootPanel;
+  private JPanel panel_117;
+  private JLabel lblRed;
+  private JLabel lblGreen;
+  private JLabel lblBlue;
+  private JButton channelMixerResetBtn;
+  private JComboBox channelMixerModeCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -18956,7 +18994,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(meshGenProgressbar, BorderLayout.CENTER);
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(810, 10));
+      panel_3.setPreferredSize(new Dimension(620, 10));
       panel_1.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -19087,7 +19125,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRenderQualityREd.setText("");
       meshGenRenderQualityREd.setSize(new Dimension(100, 24));
       meshGenRenderQualityREd.setPreferredSize(new Dimension(100, 24));
-      meshGenRenderQualityREd.setMaxValue(5000.0);
+      meshGenRenderQualityREd.setMaxValue(50000.0);
       meshGenRenderQualityREd.setLocation(new Point(71, 76));
       meshGenRenderQualityREd.setHasMinValue(true);
       meshGenRenderQualityREd.setHasMaxValue(true);
@@ -19105,31 +19143,6 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderQuality.setBounds(434, 4, 79, 22);
       panel_3.add(lblRenderQuality);
 
-      meshGenDetailThicknessREd = new JWFNumberField();
-      meshGenDetailThicknessREd.setValueStep(1.0);
-      meshGenDetailThicknessREd.setText("");
-      meshGenDetailThicknessREd.setSize(new Dimension(100, 24));
-      meshGenDetailThicknessREd.setPreferredSize(new Dimension(100, 24));
-      meshGenDetailThicknessREd.setOnlyIntegers(true);
-      meshGenDetailThicknessREd.setMaxValue(20.0);
-      meshGenDetailThicknessREd.setLocation(new Point(71, 76));
-      meshGenDetailThicknessREd.setHasMinValue(true);
-      meshGenDetailThicknessREd.setHasMaxValue(true);
-      meshGenDetailThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenDetailThicknessREd.setBounds(704, 2, 100, 24);
-      panel_3.add(meshGenDetailThicknessREd);
-
-      JLabel lblTickness = new JLabel();
-      lblTickness.setToolTipText("Thickness modifier of the rendered details");
-      lblTickness.setText("Detail thickness");
-      lblTickness.setSize(new Dimension(68, 22));
-      lblTickness.setPreferredSize(new Dimension(94, 22));
-      lblTickness.setName("");
-      lblTickness.setLocation(new Point(4, 76));
-      lblTickness.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblTickness.setBounds(613, 4, 94, 22);
-      panel_3.add(lblTickness);
-
       meshGenSliceThicknessREd = new JWFNumberField();
       meshGenSliceThicknessREd.setMinValue(1.0);
       meshGenSliceThicknessREd.setValueStep(1.0);
@@ -19142,7 +19155,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSliceThicknessREd.setHasMinValue(true);
       meshGenSliceThicknessREd.setHasMaxValue(true);
       meshGenSliceThicknessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenSliceThicknessREd.setBounds(704, 26, 100, 24);
+      meshGenSliceThicknessREd.setBounds(510, 24, 100, 24);
       panel_3.add(meshGenSliceThicknessREd);
 
       JLabel lblSliceThickness = new JLabel();
@@ -19153,7 +19166,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSliceThickness.setName("");
       lblSliceThickness.setLocation(new Point(4, 76));
       lblSliceThickness.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSliceThickness.setBounds(613, 28, 94, 22);
+      lblSliceThickness.setBounds(434, 26, 79, 22);
       panel_3.add(lblSliceThickness);
 
       JPanel panel_8 = new JPanel();
@@ -20409,20 +20422,340 @@ public class TinaInternalFrame extends JInternalFrame {
     return apophysisHintsPane;
   }
 
-  private JPanel getPanel_92() {
-    if (panel_92 == null) {
-      panel_92 = new JPanel();
-      panel_92.setLayout(new BorderLayout(0, 0));
-    }
-    return panel_92;
-  }
+  private JPanel getChannelMixerPanel() {
+    if (channelMixerPanel == null) {
+      channelMixerPanel = new JPanel();
+      channelMixerPanel.setLayout(new BorderLayout(0, 0));
 
-  public JWFNumberField getMeshGenDetailThicknessREd() {
-    return meshGenDetailThicknessREd;
+      JPanel panel_1 = new JPanel();
+      panel_1.setPreferredSize(new Dimension(160, 10));
+      channelMixerPanel.add(panel_1, BorderLayout.WEST);
+      panel_1.setLayout(null);
+      panel_1.add(getPanel_117());
+
+      channelMixerModeCmb = new JComboBox();
+      channelMixerModeCmb.setPreferredSize(new Dimension(125, 24));
+      channelMixerModeCmb.setMinimumSize(new Dimension(100, 24));
+      channelMixerModeCmb.setMaximumSize(new Dimension(32767, 24));
+      channelMixerModeCmb.setMaximumRowCount(32);
+      channelMixerModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      channelMixerModeCmb.setBounds(6, 39, 100, 24);
+      channelMixerModeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.getChannelMixerControls().channelMixerModeCmb_changed();
+          }
+        }
+      });
+      panel_1.add(channelMixerModeCmb);
+
+      channelMixerResetBtn = new JButton();
+      channelMixerResetBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.getChannelMixerControls().resetBtn_clicked();
+          }
+        }
+      });
+      channelMixerResetBtn.setText("Reset");
+      channelMixerResetBtn.setPreferredSize(new Dimension(125, 24));
+      channelMixerResetBtn.setMinimumSize(new Dimension(100, 24));
+      channelMixerResetBtn.setMaximumSize(new Dimension(32000, 24));
+      channelMixerResetBtn.setIconTextGap(2);
+      channelMixerResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      channelMixerResetBtn.setBounds(6, 75, 100, 24);
+      panel_1.add(channelMixerResetBtn);
+
+      JLabel lblMode = new JLabel();
+      lblMode.setText("Mixer mode");
+      lblMode.setSize(new Dimension(20, 22));
+      lblMode.setPreferredSize(new Dimension(24, 22));
+      lblMode.setName("affineC00Lbl");
+      lblMode.setLocation(new Point(0, 6));
+      lblMode.setHorizontalAlignment(SwingConstants.LEFT);
+      lblMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMode.setBounds(8, 16, 87, 22);
+      panel_1.add(lblMode);
+
+      JPanel panel_2 = new JPanel();
+      channelMixerPanel.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new GridLayout(0, 3, 0, 0));
+
+      JPanel panel_3 = new JPanel();
+      panel_2.add(panel_3);
+      panel_3.setLayout(new BorderLayout(0, 0));
+      panel_3.add(getPanel_108(), BorderLayout.EAST);
+      panel_3.add(getChannelMixerRedRedRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_8 = new JPanel();
+      panel_2.add(panel_8);
+      panel_8.setLayout(new BorderLayout(0, 0));
+      panel_8.add(getPanel_109(), BorderLayout.EAST);
+      panel_8.add(getChannelMixerRedGreenRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_9 = new JPanel();
+      panel_2.add(panel_9);
+      panel_9.setLayout(new BorderLayout(0, 0));
+      panel_9.add(getPanel_110(), BorderLayout.EAST);
+      panel_9.add(getChannelMixerRedBlueRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_10 = new JPanel();
+      panel_2.add(panel_10);
+      panel_10.setLayout(new BorderLayout(0, 0));
+      panel_10.add(getPanel_111(), BorderLayout.EAST);
+      panel_10.add(getChannelMixerGreenRedRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_11 = new JPanel();
+      panel_2.add(panel_11);
+      panel_11.setLayout(new BorderLayout(0, 0));
+      panel_11.add(getPanel_112(), BorderLayout.EAST);
+      panel_11.add(getChannelMixerGreenGreenRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_83 = new JPanel();
+      panel_2.add(panel_83);
+      panel_83.setLayout(new BorderLayout(0, 0));
+      panel_83.add(getPanel_113(), BorderLayout.EAST);
+      panel_83.add(getChannelMixerGreenBlueRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_85 = new JPanel();
+      panel_2.add(panel_85);
+      panel_85.setLayout(new BorderLayout(0, 0));
+      panel_85.add(getPanel_114(), BorderLayout.EAST);
+      panel_85.add(getChannelMixerBlueRedRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_106 = new JPanel();
+      panel_2.add(panel_106);
+      panel_106.setLayout(new BorderLayout(0, 0));
+      panel_106.add(getPanel_115(), BorderLayout.EAST);
+      panel_106.add(getChannelMixerBlueGreenRootPanel(), BorderLayout.CENTER);
+
+      JPanel panel_107 = new JPanel();
+      panel_2.add(panel_107);
+      panel_107.setLayout(new BorderLayout(0, 0));
+      panel_107.add(getPanel_116(), BorderLayout.EAST);
+      panel_107.add(getChannelMixerBlueBlueRootPanel(), BorderLayout.CENTER);
+    }
+    return channelMixerPanel;
   }
 
   public JWFNumberField getMeshGenSliceThicknessREd() {
     return meshGenSliceThicknessREd;
+  }
+
+  private JPanel getPanel_108() {
+    if (panel_108 == null) {
+      panel_108 = new JPanel();
+      panel_108.setPreferredSize(new Dimension(52, 10));
+      panel_108.setLayout(null);
+    }
+    return panel_108;
+  }
+
+  private JPanel getPanel_109() {
+    if (panel_109 == null) {
+      panel_109 = new JPanel();
+      panel_109.setLayout(null);
+      panel_109.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_109;
+  }
+
+  private JPanel getPanel_110() {
+    if (panel_110 == null) {
+      panel_110 = new JPanel();
+      panel_110.setLayout(null);
+      panel_110.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_110;
+  }
+
+  private JPanel getPanel_111() {
+    if (panel_111 == null) {
+      panel_111 = new JPanel();
+      panel_111.setLayout(null);
+      panel_111.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_111;
+  }
+
+  private JPanel getPanel_112() {
+    if (panel_112 == null) {
+      panel_112 = new JPanel();
+      panel_112.setLayout(null);
+      panel_112.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_112;
+  }
+
+  private JPanel getPanel_113() {
+    if (panel_113 == null) {
+      panel_113 = new JPanel();
+      panel_113.setLayout(null);
+      panel_113.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_113;
+  }
+
+  private JPanel getPanel_114() {
+    if (panel_114 == null) {
+      panel_114 = new JPanel();
+      panel_114.setLayout(null);
+      panel_114.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_114;
+  }
+
+  private JPanel getPanel_115() {
+    if (panel_115 == null) {
+      panel_115 = new JPanel();
+      panel_115.setLayout(null);
+      panel_115.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_115;
+  }
+
+  private JPanel getPanel_116() {
+    if (panel_116 == null) {
+      panel_116 = new JPanel();
+      panel_116.setLayout(null);
+      panel_116.setPreferredSize(new Dimension(52, 10));
+    }
+    return panel_116;
+  }
+
+  private JPanel getChannelMixerRedRedRootPanel() {
+    if (channelMixerRedRedRootPanel == null) {
+      channelMixerRedRedRootPanel = new JPanel();
+      channelMixerRedRedRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerRedRedRootPanel;
+  }
+
+  private JPanel getChannelMixerRedGreenRootPanel() {
+    if (channelMixerRedGreenRootPanel == null) {
+      channelMixerRedGreenRootPanel = new JPanel();
+      channelMixerRedGreenRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerRedGreenRootPanel;
+  }
+
+  private JPanel getChannelMixerRedBlueRootPanel() {
+    if (channelMixerRedBlueRootPanel == null) {
+      channelMixerRedBlueRootPanel = new JPanel();
+      channelMixerRedBlueRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerRedBlueRootPanel;
+  }
+
+  private JPanel getChannelMixerGreenRedRootPanel() {
+    if (channelMixerGreenRedRootPanel == null) {
+      channelMixerGreenRedRootPanel = new JPanel();
+      channelMixerGreenRedRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerGreenRedRootPanel;
+  }
+
+  private JPanel getChannelMixerGreenGreenRootPanel() {
+    if (channelMixerGreenGreenRootPanel == null) {
+      channelMixerGreenGreenRootPanel = new JPanel();
+      channelMixerGreenGreenRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerGreenGreenRootPanel;
+  }
+
+  private JPanel getChannelMixerGreenBlueRootPanel() {
+    if (channelMixerGreenBlueRootPanel == null) {
+      channelMixerGreenBlueRootPanel = new JPanel();
+      channelMixerGreenBlueRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerGreenBlueRootPanel;
+  }
+
+  private JPanel getChannelMixerBlueRedRootPanel() {
+    if (channelMixerBlueRedRootPanel == null) {
+      channelMixerBlueRedRootPanel = new JPanel();
+      channelMixerBlueRedRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerBlueRedRootPanel;
+  }
+
+  private JPanel getChannelMixerBlueGreenRootPanel() {
+    if (channelMixerBlueGreenRootPanel == null) {
+      channelMixerBlueGreenRootPanel = new JPanel();
+      channelMixerBlueGreenRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerBlueGreenRootPanel;
+  }
+
+  private JPanel getChannelMixerBlueBlueRootPanel() {
+    if (channelMixerBlueBlueRootPanel == null) {
+      channelMixerBlueBlueRootPanel = new JPanel();
+      channelMixerBlueBlueRootPanel.setLayout(new BorderLayout(0, 0));
+    }
+    return channelMixerBlueBlueRootPanel;
+  }
+
+  private JPanel getPanel_117() {
+    if (panel_117 == null) {
+      panel_117 = new JPanel();
+      panel_117.setBounds(118, 0, 42, 144);
+      panel_117.setPreferredSize(new Dimension(42, 10));
+      panel_117.setLayout(new GridLayout(0, 1, 0, 0));
+      panel_117.add(getLblRed());
+      panel_117.add(getLblGreen());
+      panel_117.add(getLblBlue());
+    }
+    return panel_117;
+  }
+
+  private JLabel getLblRed() {
+    if (lblRed == null) {
+      lblRed = new JLabel();
+      lblRed.setText("Red ");
+      lblRed.setSize(new Dimension(20, 22));
+      lblRed.setPreferredSize(new Dimension(24, 22));
+      lblRed.setName("affineC00Lbl");
+      lblRed.setLocation(new Point(0, 6));
+      lblRed.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblRed.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return lblRed;
+  }
+
+  private JLabel getLblGreen() {
+    if (lblGreen == null) {
+      lblGreen = new JLabel();
+      lblGreen.setText("Green ");
+      lblGreen.setSize(new Dimension(20, 22));
+      lblGreen.setPreferredSize(new Dimension(24, 22));
+      lblGreen.setName("affineC00Lbl");
+      lblGreen.setLocation(new Point(0, 6));
+      lblGreen.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblGreen.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return lblGreen;
+  }
+
+  private JLabel getLblBlue() {
+    if (lblBlue == null) {
+      lblBlue = new JLabel();
+      lblBlue.setText("Blue ");
+      lblBlue.setSize(new Dimension(20, 22));
+      lblBlue.setPreferredSize(new Dimension(24, 22));
+      lblBlue.setName("affineC00Lbl");
+      lblBlue.setLocation(new Point(0, 6));
+      lblBlue.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblBlue.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return lblBlue;
+  }
+
+  public JButton getChannelMixerResetBtn() {
+    return channelMixerResetBtn;
+  }
+
+  public JComboBox getChannelMixerModeCmb() {
+    return channelMixerModeCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

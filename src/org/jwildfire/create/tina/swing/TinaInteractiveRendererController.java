@@ -25,6 +25,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -278,7 +279,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
-      sampleCount = 0;
+      sampleCount.set(0);
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       threads = renderer.startRenderFlame(info);
@@ -334,7 +335,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputImageFile(file);
-        RenderedFlame res = renderer.finishRenderFlame(sampleCount);
+        RenderedFlame res = renderer.finishRenderFlame(sampleCount.get());
         new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
@@ -356,13 +357,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private long sampleCount = 0;
+  private AtomicLong sampleCount = new AtomicLong();
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
-
-  private synchronized void incSampleCount() {
-    sampleCount++;
-  }
 
   private synchronized void updateImage() {
     imageRootPanel.repaint();
@@ -377,14 +374,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   @Override
   public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    incSampleCount();
+    long samples = sampleCount.incrementAndGet();
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (sampleCount % 2000 == 0) {
+      if (samples % 8000 == 0) {
         updateImage();
       }
-      if (sampleCount % 10000 == 0) {
-        double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
+      if (samples % 32000 == 0) {
+        double quality = pEventSource.getTonemapper().calcDensity(sampleCount.get());
         updateStats(pEventSource, quality);
         pEventSource.getTonemapper().setDensity(quality);
       }
@@ -574,7 +571,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
           image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         }
         renderer.registerIterationObserver(this);
-        sampleCount = renderer.calcSampleCount();
+        sampleCount.set(renderer.calcSampleCount());
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         for (AbstractRenderThread thread : threads) {
@@ -604,7 +601,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
+          renderer.saveState(file.getAbsolutePath(), threads, sampleCount.get(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {
