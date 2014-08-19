@@ -84,6 +84,7 @@ public class EnvelopePanel extends JPanel {
     int fl = 0;
 
     /* lines */
+    int lineMax = 1000;
     {
       double dx = envelope.getViewXMax() - envelope.getViewXMin();
       double step = Tools.FTOI(dx / (double) xnum);
@@ -91,6 +92,7 @@ public class EnvelopePanel extends JPanel {
         step = 1.0;
       int div = Tools.FTOI((double) (envelope.getViewXMin() / step));
       double x = (double) div * step;
+      int lineCount = 0;
       do {
         double fx = pEnvelopeView.getEnvelopeXScale() * x - pEnvelopeView.getEnvelopeXTrans();
         int dxl = Tools.FTOI(fx);
@@ -99,7 +101,7 @@ public class EnvelopePanel extends JPanel {
         }
         x += step;
       }
-      while (x < envelope.getViewXMax());
+      while (x < envelope.getViewXMax() && ++lineCount < lineMax);
     }
 
     {
@@ -118,7 +120,7 @@ public class EnvelopePanel extends JPanel {
       }
       int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
       double y = (double) div * step;
-
+      int lineCount = 0;
       do {
         double fy = pEnvelopeView.getEnvelopeYScale() * y - pEnvelopeView.getEnvelopeYTrans();
         int dyl = Tools.FTOI(fy);
@@ -127,7 +129,7 @@ public class EnvelopePanel extends JPanel {
         }
         y += step;
       }
-      while (y < envelope.getViewYMax());
+      while (y < envelope.getViewYMax() && ++lineCount < lineMax);
     }
     /* tick-labels */
     if (drawTicks) {
@@ -145,6 +147,7 @@ public class EnvelopePanel extends JPanel {
         int div = Tools.FTOI((double) (envelope.getViewXMin() / step));
         double x = (double) div * step;
         int cnt = 0;
+        int tickCount = 0;
         do {
           double fx = pEnvelopeView.getEnvelopeXScale() * x - pEnvelopeView.getEnvelopeXTrans();
           int dxl = Tools.FTOI(fx);
@@ -163,7 +166,7 @@ public class EnvelopePanel extends JPanel {
           }
           x += step;
         }
-        while (x < envelope.getViewXMax());
+        while (x < envelope.getViewXMax() && ++tickCount < lineMax);
       }
       {
         double dx = envelope.getViewYMax() - envelope.getViewYMin();
@@ -182,6 +185,7 @@ public class EnvelopePanel extends JPanel {
         int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
         double x = (double) div * step;
         int cnt = 0;
+        int tickCount = 0;
         do {
           double fx = pEnvelopeView.getEnvelopeYScale() * x - pEnvelopeView.getEnvelopeYTrans();
           int dxl = Tools.FTOI(fx);
@@ -200,7 +204,7 @@ public class EnvelopePanel extends JPanel {
           }
           x += step;
         }
-        while (x < envelope.getViewYMax());
+        while (x < envelope.getViewYMax() && ++tickCount < lineMax);
       }
     }
   }

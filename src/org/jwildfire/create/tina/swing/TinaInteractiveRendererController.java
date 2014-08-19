@@ -25,7 +25,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -279,7 +278,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
-      sampleCount.set(0);
+      sampleCount = 0;
+      initStatsUpdateCounter();
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       threads = renderer.startRenderFlame(info);
@@ -335,7 +335,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputImageFile(file);
-        RenderedFlame res = renderer.finishRenderFlame(sampleCount.get());
+        RenderedFlame res = renderer.finishRenderFlame(sampleCount);
         new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
@@ -357,15 +357,30 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private AtomicLong sampleCount = new AtomicLong();
+  private final static int STATS_UPDATE_INTERVAL = 64000;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 4000;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 2000;
+  private final static int MAX_UPDATE_INC_INTERVAL = 200000;
+
+  private long sampleCount;
+  private int nextImageUpdate;
+  private int nextStatsUpdate;
+  private int lastImageUpdateInterval;
+
+  private void initStatsUpdateCounter() {
+    nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+    lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
+    nextStatsUpdate = STATS_UPDATE_INTERVAL;
+  }
+
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
 
-  private synchronized void updateImage() {
+  private void updateImage() {
     imageRootPanel.repaint();
   }
 
-  private synchronized void updateStats(AbstractRenderThread pEventSource, double pQuality) {
+  private void updateStats(AbstractRenderThread pEventSource, double pQuality) {
     statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
         "samples so far: " + sampleCount + "\n" +
         "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
@@ -374,16 +389,26 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   @Override
   public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    long samples = sampleCount.incrementAndGet();
+    sampleCount++;
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (samples % 8000 == 0) {
-        updateImage();
+      if (--nextImageUpdate <= 0) {
+        synchronized (this) {
+          lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+          if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+            lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+          }
+          updateImage();
+          nextImageUpdate = lastImageUpdateInterval;
+        }
       }
-      if (samples % 32000 == 0) {
-        double quality = pEventSource.getTonemapper().calcDensity(sampleCount.get());
-        updateStats(pEventSource, quality);
-        pEventSource.getTonemapper().setDensity(quality);
+      if (--nextStatsUpdate <= 0) {
+        synchronized (this) {
+          double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
+          updateStats(pEventSource, quality);
+          pEventSource.getTonemapper().setDensity(quality);
+          nextStatsUpdate = STATS_UPDATE_INTERVAL;
+        }
       }
     }
   }
@@ -571,7 +596,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
           image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         }
         renderer.registerIterationObserver(this);
-        sampleCount.set(renderer.calcSampleCount());
+        sampleCount = renderer.calcSampleCount();
+        initStatsUpdateCounter();
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         for (AbstractRenderThread thread : threads) {
@@ -601,7 +627,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, sampleCount.get(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
+          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {
