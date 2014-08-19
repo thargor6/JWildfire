@@ -19119,7 +19119,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_3.add(meshGenSlicesPerRenderREd);
 
       meshGenRenderQualityREd = new JWFNumberField();
-      meshGenRenderQualityREd.setMinValue(100.0);
+      meshGenRenderQualityREd.setMinValue(10.0);
       meshGenRenderQualityREd.setOnlyIntegers(true);
       meshGenRenderQualityREd.setValueStep(1.0);
       meshGenRenderQualityREd.setText("");

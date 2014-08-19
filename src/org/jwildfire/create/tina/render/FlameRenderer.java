@@ -418,7 +418,7 @@ public class FlameRenderer {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
       forceAbort = false;
-      iterate(0, 1, renderFlames, null, 1.0);
+      iterate(0, 1, renderFlames, null, 1.0, 1);
       if (!forceAbort) {
         if (flame.getSampleDensity() <= 10.0 || renderScale > 1) {
           renderImageSimple(img);
@@ -681,8 +681,8 @@ public class FlameRenderer {
     }
   }
 
-  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod) {
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() + 0.5));
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, double pExtSampleMultiplier) {
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) pExtSampleMultiplier + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
@@ -1003,8 +1003,6 @@ public class FlameRenderer {
 
     double dThickness = (pSliceThicknessMod - 1.0) / 2 * thickness;
 
-    System.out.println(thickness + " " + dThickness);
-
     double currZ = zmax;
     int currSlice = 0;
     for (int pass = 0; pass < passes; pass++) {
@@ -1029,7 +1027,8 @@ public class FlameRenderer {
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
-      iterate(0, 1, renderFlames, slices, pSliceThicknessMod);
+      // TODO
+      iterate(0, 1, renderFlames, slices, pSliceThicknessMod, 225);
 
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint();

@@ -22,7 +22,7 @@ public enum ChannelMixerMode {
   OFF {
     @Override
     public Class<? extends ColorFunc> getColorFuncType() {
-      return EmptyColorFunc.class;
+      return null;
     }
   },
   BRIGHTNESS {
@@ -47,9 +47,13 @@ public enum ChannelMixerMode {
   protected abstract Class<? extends ColorFunc> getColorFuncType();
 
   public ColorFunc getColorFunc(Flame pFlame) {
+    Class<? extends ColorFunc> cls = getColorFuncType();
+    if (cls == null) {
+      return ColorFunc.NULL;
+    }
     ColorFunc res;
     try {
-      res = getColorFuncType().newInstance();
+      res = cls.newInstance();
     }
     catch (InstantiationException ex) {
       throw new RuntimeException(ex);

@@ -29,7 +29,9 @@ public enum ChannelMixerCurves {
 
   public abstract void makeCurve(MotionCurve pCurve);
 
-  private static final double SCALE = 25600.0;
+  public static final double FILTER_SCALE = 100.0;
+
+  private static final double SCALE = 256.0 * FILTER_SCALE;
   private static final double BORDER = SCALE / 10 * 2;
 
 }

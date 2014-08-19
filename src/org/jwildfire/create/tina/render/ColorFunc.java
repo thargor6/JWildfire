@@ -27,4 +27,27 @@ public interface ColorFunc {
   double mapRGBToG(double pR, double pG, double pB);
 
   double mapRGBToB(double pR, double pG, double pB);
+
+  public static ColorFunc NULL = new ColorFunc() {
+
+    @Override
+    public void prepare(Flame pFlame) {
+    }
+
+    @Override
+    public double mapRGBToR(double pR, double pG, double pB) {
+      return 0;
+    }
+
+    @Override
+    public double mapRGBToG(double pR, double pG, double pB) {
+      return 0;
+    }
+
+    @Override
+    public double mapRGBToB(double pR, double pG, double pB) {
+      return 0;
+    }
+  };
+
 }
