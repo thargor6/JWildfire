@@ -17,9 +17,11 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.envelope.Envelope;
 
 public class FullColorFunc implements ColorFunc {
+  private AbstractRandomGenerator randGen;
   private Envelope rrEnvelope;
   private Envelope rgEnvelope;
   private Envelope rbEnvelope;
@@ -32,21 +34,22 @@ public class FullColorFunc implements ColorFunc {
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    return getValue(rrEnvelope, pR) + getValue(rgEnvelope, pG) + getValue(rbEnvelope, pB);
+    return (rrEnvelope.evaluate(pR) + rgEnvelope.evaluate(pG) + rbEnvelope.evaluate(pB)) * noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    return getValue(grEnvelope, pR) + getValue(ggEnvelope, pG) + getValue(gbEnvelope, pB);
+    return (grEnvelope.evaluate(pR) + ggEnvelope.evaluate(pG) + gbEnvelope.evaluate(pB)) * noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    return getValue(brEnvelope, pR) + getValue(bgEnvelope, pG) + getValue(bbEnvelope, pB);
+    return (brEnvelope.evaluate(pR) + bgEnvelope.evaluate(pG) + bbEnvelope.evaluate(pB)) * noise();
   }
 
   @Override
-  public void prepare(Flame pFlame) {
+  public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
+    randGen = pRandGen;
     rrEnvelope = pFlame.getMixerRRCurve().toEnvelope();
     rgEnvelope = pFlame.getMixerRGCurve().toEnvelope();
     rbEnvelope = pFlame.getMixerRBCurve().toEnvelope();
@@ -58,14 +61,7 @@ public class FullColorFunc implements ColorFunc {
     bbEnvelope = pFlame.getMixerBBCurve().toEnvelope();
   }
 
-  private final double SCALE = 1.0;
-
-  //  cnt=4.239E8, avg=2.6756524135522164, max=26.704069970929343
-  private double getValue(Envelope pEnvelope, double pValue) {
-    //    System.out.println(pValue);
-
-    //    System.out.println(pValue);
-    return pEnvelope.evaluate(SCALE * pValue) / SCALE;
+  private double noise() {
+    return (1.03 - randGen.random() * 0.06);
   }
-
 }

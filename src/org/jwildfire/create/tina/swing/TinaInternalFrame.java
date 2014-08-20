@@ -19125,10 +19125,9 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRenderQualityREd.setText("");
       meshGenRenderQualityREd.setSize(new Dimension(100, 24));
       meshGenRenderQualityREd.setPreferredSize(new Dimension(100, 24));
-      meshGenRenderQualityREd.setMaxValue(50000.0);
       meshGenRenderQualityREd.setLocation(new Point(71, 76));
       meshGenRenderQualityREd.setHasMinValue(true);
-      meshGenRenderQualityREd.setHasMaxValue(true);
+      meshGenRenderQualityREd.setHasMaxValue(false);
       meshGenRenderQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       meshGenRenderQualityREd.setBounds(510, 2, 100, 24);
       panel_3.add(meshGenRenderQualityREd);

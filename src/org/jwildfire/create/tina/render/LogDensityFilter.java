@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.log10;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
@@ -38,15 +39,17 @@ public class LogDensityFilter {
   private double k1, k2;
   private final FilterKernel filterKernel;
   private double motionBlurScl;
+  private final AbstractRandomGenerator randGen;
 
-  public LogDensityFilter(Flame pFlame) {
+  public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
     flame = pFlame;
-    colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame);
+    colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
     filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius());
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
     motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
+    randGen = pRandGen;
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {

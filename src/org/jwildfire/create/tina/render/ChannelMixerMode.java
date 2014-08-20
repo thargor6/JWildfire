@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 
 public enum ChannelMixerMode {
   OFF {
@@ -46,7 +47,7 @@ public enum ChannelMixerMode {
 
   protected abstract Class<? extends ColorFunc> getColorFuncType();
 
-  public ColorFunc getColorFunc(Flame pFlame) {
+  public ColorFunc getColorFunc(Flame pFlame, AbstractRandomGenerator pRandGen) {
     Class<? extends ColorFunc> cls = getColorFuncType();
     if (cls == null) {
       return ColorFunc.NULL;
@@ -61,7 +62,7 @@ public enum ChannelMixerMode {
     catch (IllegalAccessException ex) {
       throw new RuntimeException(ex);
     }
-    res.prepare(pFlame);
+    res.prepare(pFlame, pRandGen);
     return res;
   }
 }

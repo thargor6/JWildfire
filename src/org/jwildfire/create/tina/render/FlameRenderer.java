@@ -117,7 +117,7 @@ public class FlameRenderer {
 
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
-    logDensityFilter = new LogDensityFilter(flameForInit);
+    logDensityFilter = new LogDensityFilter(flameForInit, randGen);
     gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
@@ -731,7 +731,7 @@ public class FlameRenderer {
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
-      t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight));
+      t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight, randGen));
       threads.add(t);
       if (pStartThreads) {
         new Thread(t).start();

@@ -17,10 +17,11 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 
 public interface ColorFunc {
 
-  void prepare(Flame pFlame);
+  void prepare(Flame pFlame, AbstractRandomGenerator pRandGen);
 
   double mapRGBToR(double pR, double pG, double pB);
 
@@ -31,7 +32,7 @@ public interface ColorFunc {
   public static ColorFunc NULL = new ColorFunc() {
 
     @Override
-    public void prepare(Flame pFlame) {
+    public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
     }
 
     @Override

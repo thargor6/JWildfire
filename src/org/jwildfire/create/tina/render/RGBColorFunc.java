@@ -17,30 +17,40 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.envelope.Envelope;
 
 public class RGBColorFunc implements ColorFunc {
+  private AbstractRandomGenerator randGen;
+  private Envelope rEnvelope;
+  private Envelope gEnvelope;
+  private Envelope bEnvelope;
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    // TODO
-    return pR;
+    return rEnvelope.evaluate(pR) * noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    // TODO
-    return pG;
+    return gEnvelope.evaluate(pG) * noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    // TODO
-    return pB;
+    return bEnvelope.evaluate(pB) * noise();
   }
 
   @Override
-  public void prepare(Flame pFlame) {
-    // TODO
+  public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
+    randGen = pRandGen;
+    rEnvelope = pFlame.getMixerRRCurve().toEnvelope();
+    gEnvelope = pFlame.getMixerGGCurve().toEnvelope();
+    bEnvelope = pFlame.getMixerBBCurve().toEnvelope();
+  }
+
+  private double noise() {
+    return (1.02 - randGen.random() * 0.04);
   }
 
 }

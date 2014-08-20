@@ -25,7 +25,6 @@ import org.jwildfire.create.tina.base.Flame;
 public class GammaCorrectionFilter {
   private final HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
   private final Flame flame;
-  //  private final ColorFunc colorFunc;
   private int vibInt;
   private int inverseVibInt;
   private double vibDouble;
@@ -46,7 +45,6 @@ public class GammaCorrectionFilter {
 
   public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
     flame = pFlame;
-    //    colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame);
     withAlpha = pWithAlpha;
     initFilter();
   }
@@ -161,9 +159,6 @@ public class GammaCorrectionFilter {
       rawGreen = pLogScl * pLogDensityPnt.green;
       rawBlue = pLogScl * pLogDensityPnt.blue;
     }
-    //    res.r = colorFunc.mapRGBToR(rawRed, rawGreen, rawBlue);
-    //    res.g = colorFunc.mapRGBToG(rawRed, rawGreen, rawBlue);
-    //    res.b = colorFunc.mapRGBToB(rawRed, rawGreen, rawBlue);
     res.r = rawRed;
     res.g = rawGreen;
     res.b = rawBlue;

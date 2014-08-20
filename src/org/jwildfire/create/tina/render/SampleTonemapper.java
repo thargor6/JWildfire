@@ -18,10 +18,12 @@ package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.image.Pixel;
 
 public class SampleTonemapper {
-  private Flame flame;
+  private final Flame flame;
+  private final AbstractRandomGenerator randGen;
   private final LogDensityPoint logDensityPnt;
   private Pixel toolPixel;
   private final GammaCorrectedRGBPoint rbgPoint;
@@ -33,12 +35,13 @@ public class SampleTonemapper {
   private int imageWidth;
   private int imageHeight;
 
-  public SampleTonemapper(Flame pFlame, AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
+  public SampleTonemapper(Flame pFlame, AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight, AbstractRandomGenerator pRandGen) {
     logDensityPnt = new LogDensityPoint();
     toolPixel = new Pixel();
     flame = pFlame.makeCopy();
+    randGen = pRandGen;
     rbgPoint = new GammaCorrectedRGBPoint();
-    logDensityFilter = new LogDensityFilter(pFlame);
+    logDensityFilter = new LogDensityFilter(pFlame, randGen);
     gammaCorrectionFilter = new GammaCorrectionFilter(pFlame, false);
     raster = pRaster;
     rasterWidth = pRasterWidth;
@@ -65,7 +68,7 @@ public class SampleTonemapper {
   public void setDensity(double quality) {
     flame.setSampleDensity(quality);
 
-    logDensityFilter = new LogDensityFilter(flame);
+    logDensityFilter = new LogDensityFilter(flame, randGen);
     gammaCorrectionFilter = new GammaCorrectionFilter(flame, false);
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, imageWidth, imageHeight);
   }
