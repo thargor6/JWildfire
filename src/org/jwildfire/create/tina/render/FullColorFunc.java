@@ -34,34 +34,43 @@ public class FullColorFunc implements ColorFunc {
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    return (rrEnvelope.evaluate(pR) + rgEnvelope.evaluate(pG) + rbEnvelope.evaluate(pB)) * noise();
+    return rrEnvelope.evaluate(pR) + rgEnvelope.evaluate(pG) + rbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    return (grEnvelope.evaluate(pR) + ggEnvelope.evaluate(pG) + gbEnvelope.evaluate(pB)) * noise();
+    return grEnvelope.evaluate(pR) + ggEnvelope.evaluate(pG) + gbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    return (brEnvelope.evaluate(pR) + bgEnvelope.evaluate(pG) + bbEnvelope.evaluate(pB)) * noise();
+    return brEnvelope.evaluate(pR) + bgEnvelope.evaluate(pG) + bbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
     randGen = pRandGen;
     rrEnvelope = pFlame.getMixerRRCurve().toEnvelope();
+    rrEnvelope.setUseBisection(true);
     rgEnvelope = pFlame.getMixerRGCurve().toEnvelope();
+    rgEnvelope.setUseBisection(true);
     rbEnvelope = pFlame.getMixerRBCurve().toEnvelope();
+    rbEnvelope.setUseBisection(true);
     grEnvelope = pFlame.getMixerGRCurve().toEnvelope();
+    grEnvelope.setUseBisection(true);
     ggEnvelope = pFlame.getMixerGGCurve().toEnvelope();
+    ggEnvelope.setUseBisection(true);
     gbEnvelope = pFlame.getMixerGBCurve().toEnvelope();
+    gbEnvelope.setUseBisection(true);
     brEnvelope = pFlame.getMixerBRCurve().toEnvelope();
+    brEnvelope.setUseBisection(true);
     bgEnvelope = pFlame.getMixerBGCurve().toEnvelope();
+    bgEnvelope.setUseBisection(true);
     bbEnvelope = pFlame.getMixerBBCurve().toEnvelope();
+    bbEnvelope.setUseBisection(true);
   }
 
   private double noise() {
-    return (1.03 - randGen.random() * 0.06);
+    return 0.01 - randGen.random() * 0.02;
   }
 }

@@ -28,29 +28,32 @@ public class RGBColorFunc implements ColorFunc {
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    return rEnvelope.evaluate(pR) * noise();
+    return rEnvelope.evaluate(pR) + noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    return gEnvelope.evaluate(pG) * noise();
+    return gEnvelope.evaluate(pG) + noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    return bEnvelope.evaluate(pB) * noise();
+    return bEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
     randGen = pRandGen;
     rEnvelope = pFlame.getMixerRRCurve().toEnvelope();
+    rEnvelope.setUseBisection(true);
     gEnvelope = pFlame.getMixerGGCurve().toEnvelope();
+    gEnvelope.setUseBisection(true);
     bEnvelope = pFlame.getMixerBBCurve().toEnvelope();
+    bEnvelope.setUseBisection(true);
   }
 
   private double noise() {
-    return (1.02 - randGen.random() * 0.04);
+    return 0.005 - randGen.random() * 0.01;
   }
 
 }

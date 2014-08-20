@@ -26,7 +26,6 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MotionCurveEditor;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -61,11 +60,7 @@ public class AnimationController {
     keyframesFrameLbl = pKeyframesFrameLbl;
     keyframesFrameCountLbl = pKeyframesFrameCountLbl;
     motionCurveEditModeButton = pMotionCurveEditModeButton;
-    motionCurveEditModeButton.setVisible(Tools.V1_9_FEATURE_ENABLE);
     motionBlurPanel = pMotionBlurPanel;
-    if (!Tools.V1_9_FEATURE_ENABLE) {
-      motionBlurPanel.getParent().remove(motionBlurPanel);
-    }
     enableControls();
   }
 

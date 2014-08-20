@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 
 import javax.swing.JPanel;
 
@@ -27,17 +28,21 @@ import org.jwildfire.envelope.EnvelopePanel;
 
 public abstract class ChannelMixerPanelDelegate {
   private final ChannelMixerControlsDelegate owner;
-  private final JPanel rootPanel;
+  private final Container rootPanel;
+  private final Container envelopeContainerPanel;
+  private final JPanel envelopeParentPanel;
   private final EnvelopePanel envelopePanel;
   private final EnvelopeDlgController ctrl;
 
-  public ChannelMixerPanelDelegate(ChannelMixerControlsDelegate pOwner, JPanel pRootPanel) {
+  public ChannelMixerPanelDelegate(ChannelMixerControlsDelegate pOwner, JPanel pEnvelopeParentPanel) {
     owner = pOwner;
-    rootPanel = pRootPanel;
+    envelopeParentPanel = pEnvelopeParentPanel;
+    envelopeContainerPanel = envelopeParentPanel.getParent();
+    rootPanel = envelopeContainerPanel.getParent();
     envelopePanel = new EnvelopePanel();
     envelopePanel.setLayout(null);
     envelopePanel.setDrawTicks(false);
-    rootPanel.add(envelopePanel, BorderLayout.CENTER);
+    envelopeParentPanel.add(envelopePanel, BorderLayout.CENTER);
 
     ctrl = new EnvelopeDlgController(envelopePanel);
     ctrl.setNoRefresh(true);
@@ -83,4 +88,22 @@ public abstract class ChannelMixerPanelDelegate {
     owner.getOwner().refreshFlameImage(false);
   }
 
+  public void setVisible(boolean pVisible) {
+    if (pVisible) {
+      if (envelopeContainerPanel.getParent() == null) {
+        rootPanel.add(envelopeContainerPanel);
+      }
+    }
+    else {
+      if (envelopeContainerPanel.getParent() != null) {
+        rootPanel.remove(envelopeContainerPanel);
+      }
+    }
+  }
+
+  public void repaintRoot() {
+    rootPanel.getParent().invalidate();
+    rootPanel.getParent().validate();
+    rootPanel.getParent().repaint();
+  }
 }

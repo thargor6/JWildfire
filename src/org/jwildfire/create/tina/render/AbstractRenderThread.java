@@ -31,6 +31,7 @@ public abstract class AbstractRenderThread implements Runnable {
   protected final List<RenderPacket> renderPackets;
   protected final List<RenderSlice> slices;
   protected final double sliceThicknessMod;
+  protected final int sliceThicknessSamples;
   protected final long samples;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
@@ -40,13 +41,14 @@ public abstract class AbstractRenderThread implements Runnable {
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     renderer = pRenderer;
     renderPackets = pRenderPackets;
     samples = pSamples;
     randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
     slices = pSlices;
     sliceThicknessMod = pSliceThicknessMod;
+    sliceThicknessSamples = pSliceThicknessSamples;
     ctx = new FlameTransformationContext(pRenderer, randGen, pRenderPackets.get(0).getFlame().getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
@@ -72,7 +74,7 @@ public abstract class AbstractRenderThread implements Runnable {
 
   protected abstract void iterate();
 
-  protected abstract void iterateSlices(List<RenderSlice> pSlices, double pSliceThicknessMod);
+  protected abstract void iterateSlices(List<RenderSlice> pSlices, double pThicknessMod, int pThicknessSamples);
 
   protected abstract RenderThreadPersistentState saveState();
 
@@ -93,7 +95,7 @@ public abstract class AbstractRenderThread implements Runnable {
           iterate();
         }
         else {
-          iterateSlices(slices, sliceThicknessMod);
+          iterateSlices(slices, sliceThicknessMod, sliceThicknessSamples);
         }
       }
       catch (Throwable ex) {

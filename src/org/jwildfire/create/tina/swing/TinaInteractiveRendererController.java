@@ -25,6 +25,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -357,10 +358,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private final static int STATS_UPDATE_INTERVAL = 64000;
+  private final static int STATS_UPDATE_INTERVAL = 100000;
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 4000;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 2000;
-  private final static int MAX_UPDATE_INC_INTERVAL = 200000;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 500;
+  private final static int MAX_UPDATE_INC_INTERVAL = 500000;
 
   private long sampleCount;
   private int nextImageUpdate;
@@ -371,10 +372,15 @@ public class TinaInteractiveRendererController implements IterationObserver {
     nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
     lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
     nextStatsUpdate = STATS_UPDATE_INTERVAL;
+    updateStatsGate.set(true);
+    updateImageGate.set(true);
   }
 
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
+
+  private AtomicBoolean updateStatsGate = new AtomicBoolean();
+  private AtomicBoolean updateImageGate = new AtomicBoolean();
 
   private void updateImage() {
     imageRootPanel.repaint();
@@ -392,23 +398,21 @@ public class TinaInteractiveRendererController implements IterationObserver {
     sampleCount++;
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (--nextImageUpdate <= 0) {
-        synchronized (this) {
-          lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
-          if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
-            lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
-          }
-          updateImage();
-          nextImageUpdate = lastImageUpdateInterval;
+      if (--nextImageUpdate <= 0 && updateImageGate.getAndSet(false)) {
+        lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+        if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+          lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
         }
+        updateImage();
+        nextImageUpdate = lastImageUpdateInterval;
+        updateImageGate.set(true);
       }
-      if (--nextStatsUpdate <= 0) {
-        synchronized (this) {
-          double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-          updateStats(pEventSource, quality);
-          pEventSource.getTonemapper().setDensity(quality);
-          nextStatsUpdate = STATS_UPDATE_INTERVAL;
-        }
+      if (--nextStatsUpdate <= 0 && updateStatsGate.getAndSet(false)) {
+        double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
+        updateStats(pEventSource, quality);
+        pEventSource.getTonemapper().setDensity(quality);
+        nextStatsUpdate = STATS_UPDATE_INTERVAL;
+        updateStatsGate.set(true);
       }
     }
   }

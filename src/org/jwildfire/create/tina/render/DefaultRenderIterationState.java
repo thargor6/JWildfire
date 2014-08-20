@@ -106,15 +106,14 @@ public class DefaultRenderIterationState extends RenderIterationState {
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);
-      projector.projectPoint(q);
     }
     else {
       applyEmptyFinalTransform();
-      projector.projectPoint(q);
     }
+    projector.projectPoint(q);
   }
 
-  public void iterateNext(List<RenderSlice> pSlices, double pSliceThicknessMod) {
+  public void iterateNext(List<RenderSlice> pSlices, double pThicknessMod, int pTicknessSamples) {
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
@@ -126,42 +125,48 @@ public class DefaultRenderIterationState extends RenderIterationState {
     else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
       return;
     List<XForm> finalXForms = layer.getFinalXForms();
+    if (finalXForms.size() > 0) {
+      applyFinalTransforms(finalXForms);
+    }
+    else {
+      applyEmptyFinalTransform();
+    }
 
-    if (fabs(pSliceThicknessMod - 1.0) > EPSILON) {
-      if (finalXForms.size() > 0) {
-        applyFinalTransforms(finalXForms);
-        List<AbstractRasterPoint[][]> sliceRasters = collectSliceRasters(q, pSlices);
-        for (AbstractRasterPoint[][] sliceRaster : sliceRasters) {
-          raster = sliceRaster;
-          projector.projectPoint(q);
+    if (pThicknessMod > EPSILON && pTicknessSamples > 0) {
+      XYZPoint w = new XYZPoint();
+      w.assign(q);
+      try {
+        for (int i = 0; i < pTicknessSamples; i++) {
+          addNoise(w, q, pThicknessMod);
+          List<AbstractRasterPoint[][]> sliceRasters = collectSliceRasters(q, pSlices);
+          for (AbstractRasterPoint[][] sliceRaster : sliceRasters) {
+            raster = sliceRaster;
+            projector.projectPoint(q);
+          }
         }
       }
-      else {
-        applyEmptyFinalTransform();
-        List<AbstractRasterPoint[][]> sliceRasters = collectSliceRasters(q, pSlices);
-        for (AbstractRasterPoint[][] sliceRaster : sliceRasters) {
-          raster = sliceRaster;
-          projector.projectPoint(q);
-        }
+      finally {
+        q.assign(w);
       }
     }
     else {
-      if (finalXForms.size() > 0) {
-        applyFinalTransforms(finalXForms);
-        if (setupSliceRaster(q, pSlices)) {
-          projector.projectPoint(q);
-        }
-      }
-      else {
-        applyEmptyFinalTransform();
-        if (setupSliceRaster(q, pSlices)) {
-          projector.projectPoint(q);
-        }
+      if (setupSliceRaster(q, pSlices)) {
+        projector.projectPoint(q);
       }
     }
   }
 
-  static int maxC = 1;
+  private void addNoise(XYZPoint pSrc, XYZPoint pDst, double pRadius) {
+    double angle = randGen.random() * 2 * M_PI;
+    double sina = sin(angle);
+    double cosa = cos(angle);
+    angle = randGen.random() * M_PI;
+    double sinb = sin(angle);
+    double cosb = cos(angle);
+    pDst.x = pSrc.x + pRadius * sinb * cosa;
+    pDst.y = pSrc.y + pRadius * sinb * sina;
+    pDst.z = pSrc.z + pRadius * cosb;
+  }
 
   private boolean setupSliceRaster(XYZPoint pPoint, List<RenderSlice> pSlices) {
     int sliceIdx = getSliceIndex(pPoint, pSlices, 0);
@@ -186,10 +191,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       else {
         break;
       }
-    }
-    if (res.size() > maxC) {
-      maxC = res.size();
-      System.out.println("MAX: " + maxC);
     }
     return res;
   }

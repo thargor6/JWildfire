@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.jwildfire.base.Tools;
+
 public class Envelope implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -38,6 +40,7 @@ public class Envelope implements Serializable {
   private int xmin, xmax;
   private double y[];
   private boolean locked;
+  private boolean useBisection = false;
 
   public Envelope clone() {
     Envelope res = new Envelope();
@@ -330,58 +333,6 @@ public class Envelope implements Serializable {
     }
   }
 
-  public double evaluate(int pFrame) {
-    if (size() == 0)
-      return 0.0;
-    else if (size() == 1)
-      return y[0];
-    else if (pFrame <= xmin)
-      return y[0];
-    else if (pFrame >= xmax)
-      return y[size() - 1];
-
-    int indl = -1, indr = -1;
-    InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
-    double vSX[] = iPoints.getvSX();
-    double vSY[] = iPoints.getvSY();
-
-    int low = 0;
-    int high = vSX.length - 1;
-    while (low <= high) {
-      int mid = (low + high) >>> 1;
-      double midVal = vSX[mid];
-      if (midVal < pFrame) {
-        low = mid + 1;
-        indl = mid;
-      }
-      else if (midVal > pFrame) {
-        indr = mid;
-        high = mid - 1;
-      }
-      else {
-        return vSY[mid];
-      }
-    }
-
-    if ((indl >= 0) && (indr >= 0)) {
-      double xdist = vSX[indr] - vSX[indl];
-      if (xdist < 0.001)
-        return vSX[indl];
-      else
-        return vSY[indl] + (pFrame - vSX[indl]) / xdist * (vSY[indr] - vSY[indl]);
-    }
-    else if (indl >= 0) {
-      return vSY[indl];
-    }
-    else if (indr >= 0) {
-      return vSY[indr];
-    }
-    else {
-      return 0.0;
-    }
-
-  }
-
   public double evaluate(double pTime) {
     if (size() == 0)
       return 0.0;
@@ -396,22 +347,36 @@ public class Envelope implements Serializable {
     InterpolatedPoints iPoints = getInterpolatedPoints(x, y, interpolation);
     double vSX[] = iPoints.getvSX();
     double vSY[] = iPoints.getvSY();
+    int vSNum = vSX.length;
 
-    int low = 0;
-    int high = vSX.length - 1;
-    while (low <= high) {
-      int mid = (low + high) >>> 1;
-      double midVal = vSX[mid];
-      if (midVal < pTime) {
-        low = mid + 1;
-        indl = mid;
+    if (useBisection) {
+      int low = 0;
+      int high = vSNum - 1;
+      while (low <= high) {
+        int mid = (low + high) >>> 1;
+        double midVal = vSX[mid];
+        if (midVal < pTime) {
+          low = mid + 1;
+          indl = mid;
+        }
+        else if (midVal > pTime) {
+          indr = mid;
+          high = mid - 1;
+        }
+        else {
+          return vSY[mid];
+        }
       }
-      else if (midVal > pTime) {
-        indr = mid;
-        high = mid - 1;
-      }
-      else {
-        return vSY[mid];
+    }
+    else {
+      for (int i = 0; i < vSNum; i++) {
+        if (Tools.FTOI(vSX[i]) <= pTime) {
+          indl = i;
+        }
+        else {
+          indr = i;
+          break;
+        }
       }
     }
 
@@ -449,5 +414,9 @@ public class Envelope implements Serializable {
   @Override
   public String toString() {
     return "Envelope [" + x.length + "]";
+  }
+
+  public void setUseBisection(boolean useBisection) {
+    this.useBisection = useBisection;
   }
 }

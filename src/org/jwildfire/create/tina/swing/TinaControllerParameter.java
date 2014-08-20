@@ -503,7 +503,8 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenPreviewPolygonsREd;
   public JButton meshGenRefreshPreviewBtn;
   public JButton meshGenPreviewSunflowExportBtn;
-  public JWFNumberField meshGenSliceThicknessREd;
+  public JWFNumberField meshGenThicknessModREd;
+  public JWFNumberField meshGenThicknessSamplesREd;
   public JButton channelMixerResetBtn;
   public JComboBox channelMixerModeCmb;
   public JPanel channelMixerRRRootPanel;
@@ -999,10 +1000,11 @@ public class TinaControllerParameter {
       JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
       JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
       JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
-      JButton pMeshGenRefreshPreviewBtn, JTextPane pApophysisHintsPane, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenSliceThicknessREd,
+      JButton pMeshGenRefreshPreviewBtn, JTextPane pApophysisHintsPane, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenThicknessModREd,
       JButton pChannelMixerResetBtn, JComboBox pChannelMixerModeCmb, JPanel pChannelMixerRRRootPanel, JPanel pChannelMixerRGRootPanel,
       JPanel pChannelMixerRBRootPanel, JPanel pChannelMixerGRRootPanel, JPanel pChannelMixerGGRootPanel, JPanel pChannelMixerGBRootPanel,
-      JPanel pChannelMixerBRRootPanel, JPanel pChannelMixerBGRootPanel, JPanel pChannelMixerBBRootPanel) {
+      JPanel pChannelMixerBRRootPanel, JPanel pChannelMixerBGRootPanel, JPanel pChannelMixerBBRootPanel,
+      JWFNumberField pMeshGenThicknessSamplesREd) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1059,7 +1061,7 @@ public class TinaControllerParameter {
     meshGenRefreshPreviewBtn = pMeshGenRefreshPreviewBtn;
     apophysisHintsPane = pApophysisHintsPane;
     meshGenPreviewSunflowExportBtn = pMeshGenPreviewSunflowExportBtn;
-    meshGenSliceThicknessREd = pMeshGenSliceThicknessREd;
+    meshGenThicknessModREd = pMeshGenThicknessModREd;
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1071,5 +1073,6 @@ public class TinaControllerParameter {
     channelMixerBRRootPanel = pChannelMixerBRRootPanel;
     channelMixerBGRootPanel = pChannelMixerBGRootPanel;
     channelMixerBBRootPanel = pChannelMixerBBRootPanel;
+    meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
   }
 }

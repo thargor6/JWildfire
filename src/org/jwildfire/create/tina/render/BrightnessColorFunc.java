@@ -26,27 +26,28 @@ public class BrightnessColorFunc implements ColorFunc {
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    return envelope.evaluate(pR) * noise();
+    return envelope.evaluate(pR) + noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    return envelope.evaluate(pG) * noise();
+    return envelope.evaluate(pG) + noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    return envelope.evaluate(pB) * noise();
+    return envelope.evaluate(pB) + noise();
   }
 
   @Override
   public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
     randGen = pRandGen;
     envelope = pFlame.getMixerRRCurve().toEnvelope();
+    envelope.setUseBisection(true);
   }
 
   private double noise() {
-    return (1.01 - randGen.random() * 0.02);
+    return 0.005 - randGen.random() * 0.01;
   }
 
 }

@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -666,23 +667,24 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
+        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
+        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
+        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod);
+        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
   }
 
-  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, double pExtSampleMultiplier) {
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) pExtSampleMultiplier + 0.5));
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
+    int SliceThicknessMultiplier = pSliceThicknessMod > MathLib.EPSILON && pSliceThicknessSamples > 0 ? pSliceThicknessSamples : 1;
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier + 0.5));
     int PROGRESS_STEPS = 50;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
@@ -693,7 +695,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod);
+      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -727,7 +729,7 @@ public class FlameRenderer {
     List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1, null, 1.0);
+      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1, null, 0.0, 0);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -849,9 +851,10 @@ public class FlameRenderer {
     }
     if (pFlame.getMotionBlurLength() > 0) {
       double time = pFrame >= 0 ? pFrame : 0;
+      double currTime = time + pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep() / 2.0;
       for (int p = 1; p <= pFlame.getMotionBlurLength(); p++) {
-        time -= pFlame.getMotionBlurTimeStep();
-        Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
+        currTime -= pFlame.getMotionBlurTimeStep();
+        Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), currTime);
         for (Layer layer : newFlame.getLayers()) {
           layer.refreshModWeightTables(flameTransformationContext);
           double brightnessScl = (1.0 - p * p * pFlame.getMotionBlurDecay() * 0.07 / pFlame.getMotionBlurLength());
@@ -986,7 +989,7 @@ public class FlameRenderer {
     preview = pPreview;
   }
 
-  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern, double pSliceThicknessMod) {
+  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern, double pSliceThicknessMod, int pSliceThicknessSamples) {
     if (!flame.isRenderable())
       throw new RuntimeException("Slices can not be created of empty flames");
 
@@ -1000,8 +1003,6 @@ public class FlameRenderer {
     double zmin = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmin() : pSliceRenderInfo.getZmax();
     double zmax = pSliceRenderInfo.getZmin() < pSliceRenderInfo.getZmax() ? pSliceRenderInfo.getZmax() : pSliceRenderInfo.getZmin();
     double thickness = (zmax - zmin) / (double) pSliceRenderInfo.getSlices();
-
-    double dThickness = (pSliceThicknessMod - 1.0) / 2 * thickness;
 
     double currZ = zmax;
     int currSlice = 0;
@@ -1017,7 +1018,7 @@ public class FlameRenderer {
       initRasterSizes(pSliceRenderInfo.getImageWidth(), pSliceRenderInfo.getImageHeight());
       List<RenderSlice> slices = new ArrayList<RenderSlice>();
       for (int i = 0; i < pSliceRenderInfo.getSlicesPerRender() && currSlice < pSliceRenderInfo.getSlices(); i++) {
-        RenderSlice slice = new RenderSlice(allocRaster(), currZ - thickness - dThickness, currZ + dThickness);
+        RenderSlice slice = new RenderSlice(allocRaster(), currZ - thickness, currZ);
         slices.add(slice);
         currZ -= thickness;
         currSlice++;
@@ -1027,8 +1028,8 @@ public class FlameRenderer {
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
-      // TODO
-      iterate(0, 1, renderFlames, slices, pSliceThicknessMod, 225);
+
+      iterate(0, 1, renderFlames, slices, pSliceThicknessMod, pSliceThicknessSamples);
 
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint();

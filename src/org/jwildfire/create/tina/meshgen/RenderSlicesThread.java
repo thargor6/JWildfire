@@ -39,11 +39,12 @@ public class RenderSlicesThread implements Runnable {
   private int slicesCount, slicesPerRender;
   private int quality;
   private double zmin, zmax;
-  private final double sliceThicknessMod;
+  private final double thicknessMod;
+  private final int thicknessSamples;
   private FlameRenderer renderer;
 
   public RenderSlicesThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
-      double pZMin, double pZMax, double pSliceThicknessMod) {
+      double pZMin, double pZMax, double pThicknessMod, int pThicknessSamples) {
     prefs = pPrefs;
     flame = pFlame.makeCopy();
     outFilePattern = pOutFilePattern;
@@ -56,7 +57,8 @@ public class RenderSlicesThread implements Runnable {
     progressUpdater = pProgressUpdater;
     zmin = pZMin;
     zmax = pZMax;
-    sliceThicknessMod = pSliceThicknessMod;
+    thicknessMod = pThicknessMod;
+    thicknessSamples = pThicknessSamples;
   }
 
   @Override
@@ -86,7 +88,7 @@ public class RenderSlicesThread implements Runnable {
       renderer.setProgressUpdater(progressUpdater);
       SliceRenderInfo renderInfo = new SliceRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, slicesCount, zmin, zmax, slicesPerRender);
 
-      renderer.renderSlices(renderInfo, outFilePattern, sliceThicknessMod);
+      renderer.renderSlices(renderInfo, outFilePattern, thicknessMod, thicknessSamples);
 
       t1 = Calendar.getInstance().getTimeInMillis();
 

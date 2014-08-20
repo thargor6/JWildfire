@@ -38,7 +38,18 @@ public class ChannelMixerControlsDelegate {
     rootTabbedPane = pRootTabbedPane;
     useUndoManager = pUseUndoManager;
     channelMixerPanels = createMixerPanels();
+    setupPanels();
   }
+
+  private static final int PANEL_RR = 0;
+  private static final int PANEL_RG = 1;
+  private static final int PANEL_RB = 2;
+  private static final int PANEL_GR = 3;
+  private static final int PANEL_GG = 4;
+  private static final int PANEL_GB = 5;
+  private static final int PANEL_BR = 6;
+  private static final int PANEL_BG = 7;
+  private static final int PANEL_BB = 8;
 
   private List<ChannelMixerPanelDelegate> createMixerPanels() {
     List<ChannelMixerPanelDelegate> res = new ArrayList<ChannelMixerPanelDelegate>();
@@ -146,10 +157,68 @@ public class ChannelMixerControlsDelegate {
         owner.undoManager.saveUndoPoint(flame);
       }
       flame.setChannelMixerMode((ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem());
+      setupPanels();
       enableControls();
       refreshValues();
       owner.refreshFlameImage(false);
     }
+  }
+
+  private void setupPanels() {
+    if (owner.refreshing) {
+      return;
+    }
+    ChannelMixerMode mode = (ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem();
+    if (mode == null) {
+      mode = ChannelMixerMode.OFF;
+    }
+    switch (mode) {
+      case OFF:
+        channelMixerPanels.get(PANEL_RR).setVisible(false);
+        channelMixerPanels.get(PANEL_RG).setVisible(false);
+        channelMixerPanels.get(PANEL_RB).setVisible(false);
+        channelMixerPanels.get(PANEL_GR).setVisible(false);
+        channelMixerPanels.get(PANEL_GG).setVisible(false);
+        channelMixerPanels.get(PANEL_GB).setVisible(false);
+        channelMixerPanels.get(PANEL_BR).setVisible(false);
+        channelMixerPanels.get(PANEL_BG).setVisible(false);
+        channelMixerPanels.get(PANEL_BB).setVisible(false);
+        break;
+      case BRIGHTNESS:
+        channelMixerPanels.get(PANEL_RR).setVisible(true);
+        channelMixerPanels.get(PANEL_RG).setVisible(false);
+        channelMixerPanels.get(PANEL_RB).setVisible(false);
+        channelMixerPanels.get(PANEL_GR).setVisible(false);
+        channelMixerPanels.get(PANEL_GG).setVisible(false);
+        channelMixerPanels.get(PANEL_GB).setVisible(false);
+        channelMixerPanels.get(PANEL_BR).setVisible(false);
+        channelMixerPanels.get(PANEL_BG).setVisible(false);
+        channelMixerPanels.get(PANEL_BB).setVisible(false);
+        break;
+      case RGB:
+        channelMixerPanels.get(PANEL_RR).setVisible(true);
+        channelMixerPanels.get(PANEL_RG).setVisible(false);
+        channelMixerPanels.get(PANEL_RB).setVisible(false);
+        channelMixerPanels.get(PANEL_GR).setVisible(false);
+        channelMixerPanels.get(PANEL_GG).setVisible(true);
+        channelMixerPanels.get(PANEL_GB).setVisible(false);
+        channelMixerPanels.get(PANEL_BR).setVisible(false);
+        channelMixerPanels.get(PANEL_BG).setVisible(false);
+        channelMixerPanels.get(PANEL_BB).setVisible(true);
+        break;
+      case FULL:
+        channelMixerPanels.get(PANEL_RR).setVisible(true);
+        channelMixerPanels.get(PANEL_RG).setVisible(true);
+        channelMixerPanels.get(PANEL_RB).setVisible(true);
+        channelMixerPanels.get(PANEL_GR).setVisible(true);
+        channelMixerPanels.get(PANEL_GG).setVisible(true);
+        channelMixerPanels.get(PANEL_GB).setVisible(true);
+        channelMixerPanels.get(PANEL_BR).setVisible(true);
+        channelMixerPanels.get(PANEL_BG).setVisible(true);
+        channelMixerPanels.get(PANEL_BB).setVisible(true);
+        break;
+    }
+    channelMixerPanels.get(PANEL_RR).repaintRoot();
   }
 
   public void resetBtn_clicked() {
