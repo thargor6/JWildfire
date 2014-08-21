@@ -89,6 +89,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private List<AbstractRenderThread> threads;
   private FlameRenderer renderer;
   private State state = State.IDLE;
+  private final QuickSaveFilenameGen qsaveFilenameGen;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
@@ -98,6 +99,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
+    qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
 
     loadFlameButton = pLoadFlameButton;
     fromClipboardButton = pFromClipboardButton;
@@ -171,6 +173,19 @@ public class TinaInteractiveRendererController implements IterationObserver {
     boolean fadePaletteColors = Math.random() > 0.33;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.HIGH);
     currFlame = sampler.createSample().getFlame();
+    storeCurrFlame();
+  }
+
+  private void storeCurrFlame() {
+    if (currFlame != null) {
+      try {
+        String filename = qsaveFilenameGen.generateFilename("jwf_ir_current.flame");
+        new FlameWriter().writeFlame(currFlame, filename);
+      }
+      catch (Exception ex) {
+        errorHandler.handleError(ex);
+      }
+    }
   }
 
   public void fromClipboardButton_clicked() {
@@ -193,6 +208,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       else {
         currFlame = newFlame;
+        storeCurrFlame();
         cancelRender();
         setupProfiles(currFlame);
         renderButton_clicked();
@@ -239,6 +255,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
+        storeCurrFlame();
         cancelRender();
         setupProfiles(currFlame);
         renderButton_clicked();
@@ -504,6 +521,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       Flame newFlame = parentCtrl.exportFlame();
       if (newFlame != null) {
         currFlame = newFlame;
+        storeCurrFlame();
         cancelRender();
         setupProfiles(currFlame);
         renderButton_clicked();
