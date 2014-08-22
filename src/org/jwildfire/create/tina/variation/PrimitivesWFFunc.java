@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
@@ -31,17 +32,21 @@ public class PrimitivesWFFunc extends VariationFunc {
   private static final String PARAM_SCALEY = "scaley";
   private static final String PARAM_FREQX = "freqx";
   private static final String PARAM_FREQY = "freqy";
-  private static final String[] paramNames = { PARAM_SHAPE, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY };
+  private static final String PARAM_FILLED = "filled";
+  private static final String[] paramNames = { PARAM_SHAPE, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_FILLED };
 
   private static final int SHAPE_DISC = 0;
   private static final int SHAPE_SPHERE = 1;
   private static final int SHAPE_CUBE = 2;
   private static final int SHAPE_SQUARE = 3;
+  private static final int SHAPE_TRIANGLE = 4;
+  private static final int SHAPE_PYRAMID = 5;
 
   private int shape = SHAPE_SPHERE;
   private double scaley = 0.5;
   private double freqx = M_PI / 2;
   private double freqy = M_PI / 4;
+  private int filled = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -55,6 +60,12 @@ public class PrimitivesWFFunc extends VariationFunc {
       case SHAPE_SQUARE:
         createSquare(pContext, pXForm, pAffineTP, pVarTP, pAmount);
         break;
+      case SHAPE_TRIANGLE:
+        createTriangle(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+        break;
+      case SHAPE_PYRAMID:
+        createPyramid(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+        break;
       case SHAPE_SPHERE:
       default:
         createSphere(pContext, pXForm, pAffineTP, pVarTP, pAmount);
@@ -65,7 +76,7 @@ public class PrimitivesWFFunc extends VariationFunc {
     double size = pAmount;
     double dx = 0.0, dy = 0.0;
 
-    if (pContext.random() < 0.5) {
+    if (filled == 1 && pContext.random() < 0.5) {
       dx = size * (pContext.random() - 0.5);
       dy = size * (pContext.random() - 0.5);
     }
@@ -73,19 +84,70 @@ public class PrimitivesWFFunc extends VariationFunc {
       switch (pContext.random(2)) {
         case 0:
           boolean left = pContext.random() < 0.5;
-          dx = size * (left ? -0.5 : 0.5);
+          if (filled == 0 || pContext.random() < 0.05) {
+            dx = size * (left ? -0.5 : 0.5);
+          }
+          else {
+            dx = size * (pContext.random() - 0.5);
+          }
           dy = size * (pContext.random() - 0.5);
           break;
         case 1:
           boolean top = pContext.random() < 0.5;
           dx = size * (pContext.random() - 0.5);
-          dy = size * (top ? -0.5 : 0.5);
+          if (filled == 0 || pContext.random() < 0.05) {
+            dy = size * (top ? -0.5 : 0.5);
+          }
+          else {
+            dy = size * (pContext.random() - 0.5);
+          }
           break;
       }
     }
     pVarTP.x += dx;
     pVarTP.y += dy;
 
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
+
+  private boolean insideUnitTriangle(double pX, double pY) {
+    // Compute vectors
+    //    v0 = C - A
+    //    v1 = B - A
+    //    v2 = P - A
+    double v0x = 0;
+    double v0y = 1;
+    double v1x = 1;
+    double v1y = 0;
+    double v2x = pX;
+    double v2y = pY;
+    // Compute dot products
+    double dot00 = v0x * v0x + v0y * v0y;
+    double dot01 = v0x * v1x + v0y * v1y;
+    double dot02 = v0x * v2x + v0y * v2y;
+    double dot11 = v1x * v1x + v1y * v1y;
+    double dot12 = v1x * v2x + v1y * v2y;
+    // Compute barycentric coordinates
+    double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+    // Check if point is in triangle
+    return (u >= 0) && (v >= 0) && (u + v < 1);
+  }
+
+  private void createTriangle(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double dx = 0.0, dy = 0.0;
+    while (true) {
+      dx = pContext.random();
+      dy = pContext.random();
+      if (insideUnitTriangle(dx, dy)) {
+        break;
+      }
+    }
+    pVarTP.x += pContext.random() < 0.5 ? dx : -dx;
+    pVarTP.y += -dy;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -98,21 +160,36 @@ public class PrimitivesWFFunc extends VariationFunc {
     switch (pContext.random(3)) {
       case 0:
         boolean left = pContext.random() < 0.5;
-        dx = size * (left ? -0.5 : 0.5);
+        if (filled == 0 || pContext.random() < 0.05) {
+          dx = size * (left ? -0.5 : 0.5);
+        }
+        else {
+          dx = size * (pContext.random() - 0.5);
+        }
         dy = size * (pContext.random() - 0.5);
         dz = size * (pContext.random() - 0.5);
         break;
       case 1:
         boolean top = pContext.random() < 0.5;
         dx = size * (pContext.random() - 0.5);
-        dy = size * (top ? -0.5 : 0.5);
+        if (filled == 0 || pContext.random() < 0.05) {
+          dy = size * (top ? -0.5 : 0.5);
+        }
+        else {
+          dy = size * (pContext.random() - 0.5);
+        }
         dz = size * (pContext.random() - 0.5);
         break;
       case 2:
         boolean front = pContext.random() < 0.5;
         dx = size * (pContext.random() - 0.5);
         dy = size * (pContext.random() - 0.5);
-        dz = size * (front ? -0.5 : 0.5);
+        if (filled == 0 || pContext.random() < 0.05) {
+          dz = size * (front ? -0.5 : 0.5);
+        }
+        else {
+          dz = size * (pContext.random() - 0.5);
+        }
         break;
     }
     pVarTP.x += dx;
@@ -120,8 +197,62 @@ public class PrimitivesWFFunc extends VariationFunc {
     pVarTP.z += dz;
   }
 
+  private static final double P_SINA = sqrt(3.0) / 2.0;
+  private static final double P_COSA = 0.5;
+
+  private void createPyramid(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double size = pAmount;
+    double dx = 0.0, dy = 0.0, dz = 0.0;
+    int side = pContext.random(6);
+    switch (side) {
+      case 0:
+        dx = size * (pContext.random() - 0.5);
+        dy = size * 0.5;
+        dz = size * (pContext.random() - 0.5);
+        break;
+      default:
+        double tx = 0.0,
+        ty = 0.0;
+        while (true) {
+          tx = pContext.random();
+          ty = pContext.random();
+          if (insideUnitTriangle(tx, ty)) {
+            break;
+          }
+        }
+        tx *= size;
+        ty *= size;
+
+        switch (side) {
+          case 1:
+            dx = -size * 0.5 + P_COSA * ty;
+            dy = size * 0.5 - P_SINA * ty;
+            dz = (pContext.random() < 0.5 ? tx : -tx) * 0.5;
+            break;
+          case 2:
+            dx = size * 0.5 - P_COSA * ty;
+            dy = 0.5 * size - P_SINA * ty;
+            dz = (pContext.random() < 0.5 ? tx : -tx) * 0.5;
+            break;
+          case 3:
+            dx = (pContext.random() < 0.5 ? tx : -tx) * 0.5;
+            dy = 0.5 * size - P_SINA * ty;
+            dz = -size * 0.5 + P_COSA * ty;
+            break;
+          case 4:
+            dx = (pContext.random() < 0.5 ? tx : -tx) * 0.5;
+            dy = 0.5 * size - P_SINA * ty;
+            dz = size * 0.5 - P_COSA * ty;
+            break;
+        }
+    }
+    pVarTP.x += dx;
+    pVarTP.y += dy;
+    pVarTP.z += dz;
+  }
+
   private void createSphere(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double radius = pAmount;
+    double radius = filled == 0 ? pAmount : pContext.random() < 0.05 ? pAmount : pAmount * pContext.random();
 
     double a = pContext.random() * 2 * M_PI;
     double sina = sin(a);
@@ -137,7 +268,7 @@ public class PrimitivesWFFunc extends VariationFunc {
   }
 
   private void createDisc(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double radius = pContext.random() < 0.05 ? pAmount : pAmount * pContext.random();
+    double radius = filled == 0 ? pAmount : pContext.random() < 0.05 ? pAmount : pAmount * pContext.random();
     double a = pContext.random() * 2 * M_PI;
     double sina = sin(a);
     double cosa = cos(a);
@@ -156,7 +287,7 @@ public class PrimitivesWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shape, scaley, freqx, freqy };
+    return new Object[] { shape, scaley, freqx, freqy, filled };
   }
 
   @Override
@@ -169,6 +300,8 @@ public class PrimitivesWFFunc extends VariationFunc {
       freqx = pValue;
     else if (PARAM_FREQY.equalsIgnoreCase(pName))
       freqy = pValue;
+    else if (PARAM_FILLED.equalsIgnoreCase(pName))
+      filled = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
