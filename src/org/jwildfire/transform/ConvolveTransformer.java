@@ -37,7 +37,7 @@ public class ConvolveTransformer extends Mesh2DTransformer {
 
   public enum KernelType {
     EDGE_DETECT_3x3, EMBOSS_3x3, LAPLACE_3x3, SHARPEN_3x3, SHARPEN_LESS_3x3, SOBEL_3X3,
-    GAUSSIAN_BLUR_5x5
+    GAUSSIAN_BLUR_5x5, GAUSSIAN_BLUR_3x3
   }
 
   public enum KernelDirection {
@@ -288,6 +288,10 @@ public class ConvolveTransformer extends Mesh2DTransformer {
   //  2  4  5  4  2
   private static final int[][] KERNEL_GAUSSIAN_BLUR_5x5 = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 },
       { 5, 12, 15, 12, 5 }, { 4, 9, 12, 9, 4 }, { 2, 4, 5, 4, 2 } };
+  // 1  2  1
+  // 2  4  2
+  // 1  2  1
+  private static final int[][] KERNEL_GAUSSIAN_BLUR_3x3 = { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1 } };
 
   private int[][] getKernel() {
     int res[][];
@@ -309,6 +313,9 @@ public class ConvolveTransformer extends Mesh2DTransformer {
         break;
       case SOBEL_3X3:
         res = KERNEL_SOBEL_3x3;
+        break;
+      case GAUSSIAN_BLUR_3x3:
+        res = KERNEL_GAUSSIAN_BLUR_3x3;
         break;
       case GAUSSIAN_BLUR_5x5:
         res = KERNEL_GAUSSIAN_BLUR_5x5;
@@ -371,7 +378,7 @@ public class ConvolveTransformer extends Mesh2DTransformer {
       super();
       setAvailableValues(new KernelType[] { KernelType.EDGE_DETECT_3x3, KernelType.EMBOSS_3x3,
           KernelType.LAPLACE_3x3, KernelType.SHARPEN_3x3, KernelType.SHARPEN_LESS_3x3,
-          KernelType.SOBEL_3X3, KernelType.GAUSSIAN_BLUR_5x5 });
+          KernelType.SOBEL_3X3, KernelType.GAUSSIAN_BLUR_3x3, KernelType.GAUSSIAN_BLUR_5x5 });
     }
   }
 

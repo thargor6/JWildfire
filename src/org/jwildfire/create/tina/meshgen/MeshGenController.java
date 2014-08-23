@@ -28,12 +28,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,6 +53,8 @@ import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.meshgen.filter.PreFilter;
+import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshPreviewRenderer;
 import org.jwildfire.create.tina.meshgen.sunflow.ExampleScenes;
@@ -146,6 +150,9 @@ public class MeshGenController {
   private final JButton previewSunflowExportBtn;
   private final JWFNumberField thicknessModREd;
   private final JWFNumberField thicknessSamplesREd;
+  private final JComboBox preFilter1Cmb;
+  private final JComboBox preFilter2Cmb;
+  private final JWFNumberField imageStepREd;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -166,7 +173,8 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JWFNumberField pThicknessModREd, JWFNumberField pThicknessSamplesREd) {
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JWFNumberField pThicknessModREd, JWFNumberField pThicknessSamplesREd,
+      JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb, JWFNumberField pImageStepREd) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -230,6 +238,9 @@ public class MeshGenController {
     previewSunflowExportBtn = pPreviewSunflowExportBtn;
     thicknessModREd = pThicknessModREd;
     thicknessSamplesREd = pThicknessSamplesREd;
+    preFilter1Cmb = pPreFilter1Cmb;
+    preFilter2Cmb = pPreFilter2Cmb;
+    imageStepREd = pImageStepREd;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
@@ -250,6 +261,8 @@ public class MeshGenController {
       renderQualityREd.setValue(300);
       thicknessModREd.setValue(0.0);
       thicknessSamplesREd.setValue(100.0);
+      preFilter1Cmb.setSelectedItem(PreFilterType.NONE);
+      preFilter2Cmb.setSelectedItem(PreFilterType.NONE);
 
       sequenceDownSampleREd.setValue(2.0);
       sequenceFilterRadiusREd.setValue(0.25);
@@ -262,6 +275,7 @@ public class MeshGenController {
       previewScaleZREd.setValue(1.0);
       previewRotateAlphaREd.setValue(27.0);
       previewRotateBetaREd.setValue(56.0);
+      imageStepREd.setValue(1);
 
       setZMinValue(0.0);
       setZMaxValue(0.5);
@@ -801,6 +815,9 @@ public class MeshGenController {
     renderQualityREd.setEnabled(!isRendering);
     thicknessModREd.setEnabled(!isRendering);
     thicknessSamplesREd.setEnabled(!isRendering);
+    preFilter1Cmb.setEnabled(!isRendering);
+    preFilter2Cmb.setEnabled(!isRendering);
+    imageStepREd.setEnabled(!isRendering);
 
     sequenceFromRendererBtn.setEnabled(lastRenderedSequenceOutFilePattern != null && !isRendering);
     loadSequenceBtn.setEnabled(!isRendering);
@@ -1034,8 +1051,8 @@ public class MeshGenController {
           };
 
           generateMeshThread = new GenerateMeshThread(outFile.getAbsolutePath(), finishEvent, generateMeshProgressUpdater,
-              getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
-              sequenceDownSampleREd.getIntValue(), true);
+              getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), imageStepREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
+              sequenceDownSampleREd.getIntValue(), true, getPreFilterList());
 
           enableControls();
           new Thread(generateMeshThread).start();
@@ -1045,6 +1062,17 @@ public class MeshGenController {
         errorHandler.handleError(ex);
       }
     }
+  }
+
+  private List<PreFilter> getPreFilterList() {
+    List<PreFilter> preFilterList = new ArrayList<PreFilter>();
+    if (preFilter1Cmb.getSelectedItem() != null) {
+      preFilterList.add(((PreFilterType) preFilter1Cmb.getSelectedItem()).getFilter());
+    }
+    if (preFilter2Cmb.getSelectedItem() != null) {
+      preFilterList.add(((PreFilterType) preFilter2Cmb.getSelectedItem()).getFilter());
+    }
+    return preFilterList;
   }
 
   private void setCurrSequencePattern(String pPattern) {
