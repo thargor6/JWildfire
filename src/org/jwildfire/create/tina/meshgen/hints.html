@@ -70,6 +70,11 @@ The default value of 0 means that every detail of a slice which is not exactly b
 Maybe it will later be filtered out by the spatial filter, but still it has a little influence. If you increase the threshold only brighter portions of the slices will be
 "seen" by the mesh-generator. So increasing this threshold especially helps to filter out dark background noise. But beyond this, you can get some really interesting effect
  by just playing with this setting around.            
+<li>Sometimes you may have created too many slices, for example if you used the default volumetric resolution of 512x512x512 and have a very flat object. In this case you can use the image-step-option 
+to skip generated slices for mesh-generation. This option defaults to 1 which means that every slice is taken into account. If you increase ot to 2, only every 2nd slice is taken etc.
+<li>If your slices are very noisy or contain very thin details, you can apply upto two pre-filters to it. You can choose between different filters to reduce noise and increase the thickness of image details. 
+Just play around with different options and generate different models for later comparison to choose the best.      
+
 <li>Click the "Generate"-button and choose a filename for your Mesh. Currently, the meshes are saved in Wavefront *.obj-format, because it is very easy to create files in this format, 
 and it can be read by almost any 3d-package around. Maybe later I will add more formats.
 <li>Note that you can cancel both slice-rendering and mesh-generation

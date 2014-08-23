@@ -89,6 +89,7 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
+import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
@@ -4390,6 +4391,8 @@ public class TinaInternalFrame extends JInternalFrame {
     initStereo3dColorCmb(getStereo3dRightEyeColorCmb(), Stereo3dColor.CYAN);
     initRandomGradientCmb(getRandomGradientCmb());
     initRandomGradientCmb(getTinaPaletteRandomGeneratorCmb());
+    initPreFilterTypeCmb(getMeshGenPreFilter1Cmb());
+    initPreFilterTypeCmb(getMeshGenPreFilter2Cmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -4506,7 +4509,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenPreviewSunflowExportBtn(), getMeshGenThicknessREd(), getChannelMixerResetBtn(), getChannelMixerModeCmb(),
         getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
         getChannelMixerGreenGreenRootPanel(), getChannelMixerGreenBlueRootPanel(), getChannelMixerBlueRedRootPanel(), getChannelMixerBlueGreenRootPanel(),
-        getChannelMixerBlueBlueRootPanel(), getMeshGenThicknessSamplesREd());
+        getChannelMixerBlueBlueRootPanel(), getMeshGenThicknessSamplesREd(), getMeshGenPreFilter1Cmb(), getMeshGenPreFilter2Cmb(), getMeshGenImageStepREd());
 
     tinaController = new TinaController(params);
 
@@ -4670,6 +4673,15 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(FlamePanelControlStyle.TRIANGLE);
     pCmb.addItem(FlamePanelControlStyle.HIDDEN);
     pCmb.setSelectedItem(pPrefs.getTinaEditorControlsStyle());
+  }
+
+  private void initPreFilterTypeCmb(JComboBox pCmb) {
+    pCmb.addItem(PreFilterType.NONE);
+    pCmb.addItem(PreFilterType.GAUSS3X3);
+    pCmb.addItem(PreFilterType.GAUSS5X5);
+    pCmb.addItem(PreFilterType.DILATE3);
+    pCmb.addItem(PreFilterType.DILATE5);
+    pCmb.setSelectedItem(PreFilterType.NONE);
   }
 
   private void initStereo3dModeCmb(JComboBox pCmb) {
@@ -10420,6 +10432,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton channelMixerResetBtn;
   private JComboBox channelMixerModeCmb;
   private JWFNumberField meshGenSliceThicknessSamplesREd;
+  private JComboBox meshGenPreFilter1Cmb;
+  private JComboBox meshGenPreFilter2Cmb;
+  private JWFNumberField meshGenImageStepREd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -19745,7 +19760,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(440, 10));
+      panel_3.setPreferredSize(new Dimension(610, 10));
       panel_2.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -19786,7 +19801,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       meshGenSequenceFilterRadiusREd = new JWFNumberField();
       meshGenSequenceFilterRadiusREd.setHasMaxValue(true);
-      meshGenSequenceFilterRadiusREd.setValueStep(0.1);
+      meshGenSequenceFilterRadiusREd.setValueStep(0.05);
       meshGenSequenceFilterRadiusREd.setText("");
       meshGenSequenceFilterRadiusREd.setSize(new Dimension(100, 24));
       meshGenSequenceFilterRadiusREd.setPreferredSize(new Dimension(100, 24));
@@ -19808,7 +19823,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceThresholdREd.setHasMinValue(true);
       meshGenSequenceThresholdREd.setHasMaxValue(true);
       meshGenSequenceThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      meshGenSequenceThresholdREd.setBounds(325, 8, 100, 24);
+      meshGenSequenceThresholdREd.setBounds(325, 6, 100, 24);
       panel_3.add(meshGenSequenceThresholdREd);
 
       JLabel lblBrightnessThreshold = new JLabel();
@@ -19818,8 +19833,71 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBrightnessThreshold.setName("");
       lblBrightnessThreshold.setLocation(new Point(6, 76));
       lblBrightnessThreshold.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblBrightnessThreshold.setBounds(218, 10, 108, 22);
+      lblBrightnessThreshold.setBounds(218, 8, 108, 22);
       panel_3.add(lblBrightnessThreshold);
+
+      JLabel lblPrefilter = new JLabel();
+      lblPrefilter.setText("PreFilter 1");
+      lblPrefilter.setSize(new Dimension(68, 22));
+      lblPrefilter.setPreferredSize(new Dimension(94, 22));
+      lblPrefilter.setName("");
+      lblPrefilter.setLocation(new Point(6, 76));
+      lblPrefilter.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPrefilter.setBounds(428, 8, 59, 22);
+      panel_3.add(lblPrefilter);
+
+      meshGenPreFilter1Cmb = new JComboBox();
+      meshGenPreFilter1Cmb.setToolTipText("Random-Symmetry-Geneator");
+      meshGenPreFilter1Cmb.setPreferredSize(new Dimension(50, 24));
+      meshGenPreFilter1Cmb.setMinimumSize(new Dimension(100, 24));
+      meshGenPreFilter1Cmb.setMaximumSize(new Dimension(32767, 24));
+      meshGenPreFilter1Cmb.setMaximumRowCount(32);
+      meshGenPreFilter1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreFilter1Cmb.setBounds(487, 6, 117, 24);
+      panel_3.add(meshGenPreFilter1Cmb);
+
+      meshGenPreFilter2Cmb = new JComboBox();
+      meshGenPreFilter2Cmb.setToolTipText("Random-Symmetry-Geneator");
+      meshGenPreFilter2Cmb.setPreferredSize(new Dimension(50, 24));
+      meshGenPreFilter2Cmb.setMinimumSize(new Dimension(100, 24));
+      meshGenPreFilter2Cmb.setMaximumSize(new Dimension(32767, 24));
+      meshGenPreFilter2Cmb.setMaximumRowCount(32);
+      meshGenPreFilter2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreFilter2Cmb.setBounds(487, 30, 117, 24);
+      panel_3.add(meshGenPreFilter2Cmb);
+
+      JLabel lblPrefilter_1 = new JLabel();
+      lblPrefilter_1.setText("PreFilter 2");
+      lblPrefilter_1.setSize(new Dimension(68, 22));
+      lblPrefilter_1.setPreferredSize(new Dimension(94, 22));
+      lblPrefilter_1.setName("");
+      lblPrefilter_1.setLocation(new Point(6, 76));
+      lblPrefilter_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPrefilter_1.setBounds(428, 32, 59, 22);
+      panel_3.add(lblPrefilter_1);
+
+      meshGenImageStepREd = new JWFNumberField();
+      meshGenImageStepREd.setValueStep(1.0);
+      meshGenImageStepREd.setText("");
+      meshGenImageStepREd.setSize(new Dimension(100, 24));
+      meshGenImageStepREd.setPreferredSize(new Dimension(100, 24));
+      meshGenImageStepREd.setOnlyIntegers(true);
+      meshGenImageStepREd.setMinValue(1.0);
+      meshGenImageStepREd.setLocation(new Point(71, 76));
+      meshGenImageStepREd.setHasMinValue(true);
+      meshGenImageStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenImageStepREd.setBounds(325, 30, 100, 24);
+      panel_3.add(meshGenImageStepREd);
+
+      JLabel lblImageStep = new JLabel();
+      lblImageStep.setText("Image step");
+      lblImageStep.setSize(new Dimension(68, 22));
+      lblImageStep.setPreferredSize(new Dimension(94, 22));
+      lblImageStep.setName("");
+      lblImageStep.setLocation(new Point(6, 76));
+      lblImageStep.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageStep.setBounds(218, 32, 108, 22);
+      panel_3.add(lblImageStep);
 
       JPanel panel_8 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_8.getLayout();
@@ -19834,7 +19912,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       meshGenGenerateMeshBtn.setText("Create Mesh");
       meshGenGenerateMeshBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
-      meshGenGenerateMeshBtn.setPreferredSize(new Dimension(132, 46));
+      meshGenGenerateMeshBtn.setPreferredSize(new Dimension(132, 48));
       meshGenGenerateMeshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_8.add(meshGenGenerateMeshBtn);
 
@@ -20782,6 +20860,18 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getMeshGenThicknessSamplesREd() {
     return meshGenSliceThicknessSamplesREd;
+  }
+
+  public JComboBox getMeshGenPreFilter1Cmb() {
+    return meshGenPreFilter1Cmb;
+  }
+
+  public JComboBox getMeshGenPreFilter2Cmb() {
+    return meshGenPreFilter2Cmb;
+  }
+
+  public JWFNumberField getMeshGenImageStepREd() {
+    return meshGenImageStepREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

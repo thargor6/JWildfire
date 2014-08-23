@@ -17,9 +17,11 @@
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.GaussianFilterKernel;
 import org.jwildfire.image.SimpleImage;
@@ -30,11 +32,14 @@ public class ImageStackSampler {
   private static final double MIN_SPATIAL_FILTER_RADIUS = 0.0;
   private static final double MAX_SPATIAL_FILTER_RADIUS = 0.5;
 
+  private final List<PreFilter> preFilterList;
+
   private final int stackXSize;
   private final int stackYSize;
   private final int stackZSize;
 
   private final List<SimpleImage> images = new ArrayList<SimpleImage>();
+  private final List<Integer> imagesIndex = new ArrayList<Integer>();
 
   private final String inputfilename;
   private final double spatialFilterRadius;
@@ -44,18 +49,25 @@ public class ImageStackSampler {
   private final double[][][] filter;
   private final int noiseFilterSize;
 
-  public ImageStackSampler(String pInputfilename, int pSlices, double pSpatialFilterRadius, int pDownsample) throws Exception {
+  public ImageStackSampler(String pInputfilename, int pSlices, int inputSequenceStep, double pSpatialFilterRadius, int pDownsample, List<PreFilter> pPreFilterList) throws Exception {
+    if (pPreFilterList != null) {
+      preFilterList = pPreFilterList;
+    }
+    else {
+      preFilterList = Collections.emptyList();
+    }
     inputfilename = pInputfilename;
     downsample = pDownsample >= 1 ? pDownsample : 1;
-    for (int i = 1; i <= pSlices; i++) {
+    for (int i = 1; i <= pSlices; i += inputSequenceStep) {
       images.add(null);
+      imagesIndex.add(Integer.valueOf(i));
     }
     String filename = String.format(inputfilename, 1);
     images.set(0, new ImageReader().loadImage(filename));
 
     stackXSize = images.get(0).getImageWidth() / downsample;
     stackYSize = images.get(0).getImageHeight() / downsample;
-    stackZSize = pSlices;
+    stackZSize = images.size();
 
     spatialFilterRadius = pSpatialFilterRadius < MIN_SPATIAL_FILTER_RADIUS ? MIN_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius > MAX_SPATIAL_FILTER_RADIUS ? MAX_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius;
 
@@ -123,9 +135,12 @@ public class ImageStackSampler {
       return 0;
     SimpleImage img = images.get(pZ);
     if (img == null) {
-      String filename = String.format(inputfilename, pZ);
+      String filename = String.format(inputfilename, imagesIndex.get(pZ));
       try {
         SimpleImage loadedImage = new ImageReader().loadImage(filename);
+        for (PreFilter filter : preFilterList) {
+          filter.apply(loadedImage);
+        }
         if (downsample > 1) {
           double square = downsample * downsample;
           img = new SimpleImage(loadedImage.getImageWidth() / downsample, loadedImage.getImageHeight() / downsample);

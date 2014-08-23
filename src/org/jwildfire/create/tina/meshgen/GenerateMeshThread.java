@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.marchingcubes.FacesMerger;
 import org.jwildfire.create.tina.meshgen.marchingcubes.GenerateFacesThread;
 import org.jwildfire.create.tina.meshgen.marchingcubes.ImageStackSampler;
@@ -35,6 +36,7 @@ public class GenerateMeshThread implements Runnable {
   private final String outFilename;
   private final String inputSequencePattern;
   private final int inputSequenceSize;
+  private final int inputSequenceStep;
   private final int threshold;
   private final double spatialFilterRadius;
   private final int imageDownSample;
@@ -43,20 +45,24 @@ public class GenerateMeshThread implements Runnable {
   private final ProgressUpdater progressUpdater;
   private boolean finished;
   private final List<GenerateFacesThread> threads = new ArrayList<GenerateFacesThread>();
+  private final List<PreFilter> preFilterList;
   private boolean forceAbort;
   private Mesh mesh;
 
   public GenerateMeshThread(String pOutFilename, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater,
-      String pInputSequencePattern, int pInputSequenceSize, int pThreshold, double pSpatialFilterRadius, int pImageDownSample, boolean pWithNormals) {
+      String pInputSequencePattern, int pInputSequenceSize, int pInputSequenceStep, int pThreshold, double pSpatialFilterRadius, int pImageDownSample, boolean pWithNormals,
+      List<PreFilter> pPreFilterList) {
     outFilename = pOutFilename;
     finishEvent = pFinishEvent;
     progressUpdater = pProgressUpdater;
     inputSequencePattern = pInputSequencePattern;
     inputSequenceSize = pInputSequenceSize;
+    inputSequenceStep = pInputSequenceStep;
     threshold = pThreshold;
     spatialFilterRadius = pSpatialFilterRadius;
     imageDownSample = pImageDownSample;
     withNormals = pWithNormals;
+    preFilterList = pPreFilterList;
   }
 
   @Override
@@ -70,8 +76,8 @@ public class GenerateMeshThread implements Runnable {
       t0 = Calendar.getInstance().getTimeInMillis();
       int maxProgress = 0;
       if (progressUpdater != null) {
-        maxProgress = (int) (inputSequenceSize * 1.25 + 0.5);
-        if (maxProgress == inputSequenceSize) {
+        maxProgress = (int) ((double) inputSequenceSize / (double) inputSequenceStep * 1.25 + 0.5);
+        if (maxProgress == inputSequenceSize / inputSequenceStep) {
           maxProgress++;
         }
         progressUpdater.initProgress(maxProgress);
@@ -92,7 +98,7 @@ public class GenerateMeshThread implements Runnable {
   }
 
   private Mesh createMesh() throws Exception {
-    ImageStackSampler sampler = new ImageStackSampler(inputSequencePattern, inputSequenceSize, spatialFilterRadius, imageDownSample);
+    ImageStackSampler sampler = new ImageStackSampler(inputSequencePattern, inputSequenceSize, inputSequenceStep, spatialFilterRadius, imageDownSample, preFilterList);
 
     RawFaces rawFaces = createFaces(sampler, threshold);
     if (forceAbort) {

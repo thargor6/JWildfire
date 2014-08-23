@@ -516,6 +516,9 @@ public class TinaControllerParameter {
   public JPanel channelMixerBRRootPanel;
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
+  public JComboBox meshGenPreFilter1Cmb;
+  public JComboBox meshGenPreFilter2Cmb;
+  public JWFNumberField meshGenImageStepREd;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1004,7 +1007,8 @@ public class TinaControllerParameter {
       JButton pChannelMixerResetBtn, JComboBox pChannelMixerModeCmb, JPanel pChannelMixerRRRootPanel, JPanel pChannelMixerRGRootPanel,
       JPanel pChannelMixerRBRootPanel, JPanel pChannelMixerGRRootPanel, JPanel pChannelMixerGGRootPanel, JPanel pChannelMixerGBRootPanel,
       JPanel pChannelMixerBRRootPanel, JPanel pChannelMixerBGRootPanel, JPanel pChannelMixerBBRootPanel,
-      JWFNumberField pMeshGenThicknessSamplesREd) {
+      JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
+      JWFNumberField pMeshGenImageStepREd) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1074,5 +1078,8 @@ public class TinaControllerParameter {
     channelMixerBGRootPanel = pChannelMixerBGRootPanel;
     channelMixerBBRootPanel = pChannelMixerBBRootPanel;
     meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
+    meshGenPreFilter1Cmb = pMeshGenPreFilter1Cmb;
+    meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
+    meshGenImageStepREd = pMeshGenImageStepREd;
   }
 }

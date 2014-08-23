@@ -94,6 +94,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   public void iterateNext() {
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
+    if (xf == null) {
+      return;
+    }
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
       return;
