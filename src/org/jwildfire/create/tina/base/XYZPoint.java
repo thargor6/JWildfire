@@ -55,6 +55,14 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   protected double cosA;
   protected boolean validCosA;
 
+  public XYZPoint() {
+
+  }
+
+  public XYZPoint(XYZPoint p) {
+    assign(p);
+  }
+
   @Override
   public void assign(XYZPoint p) {
     x = p.x;

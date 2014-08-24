@@ -73,7 +73,7 @@ public class FlameRenderer {
   private int progressChangePerPhase = 0;
   private int progressDisplayPhase = 0;
   // 
-  private final FlameTransformationContext flameTransformationContext;
+  protected final FlameTransformationContext flameTransformationContext;
   private RenderInfo renderInfo;
 
   protected final Flame flame;
@@ -877,10 +877,10 @@ public class FlameRenderer {
         case INTERPOLATED_IMAGES:
         case SIDE_BY_SIDE:
         case ANAGLYPH:
-          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
+          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
       }
     }
-    return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight);
+    return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
   }
 
   public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {

@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.io;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -41,7 +42,8 @@ public class JWFFlameWriter extends AbstractFlameWriter {
           layerAttrList.add(xb.createAttr("name", name));
         }
       }
-      writeMotionCurves(layer, xb, layerAttrList, null);
+      List<String> blackList = Collections.emptyList();
+      writeMotionCurves(layer, xb, layerAttrList, null, blackList);
 
       xb.beginElement("layer", layerAttrList);
 

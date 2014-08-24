@@ -1,3 +1,31 @@
+V1.90 (24.08.2014):
+ - Motion-Curves in the Main-Editor:
+    - after a long period of development I finally decided to enable the motion-curve-editor in the main editor! This means you can define 
+      a motion curve (drawn with you mouse) for each flame-property to create awesome animations, using the most easy-to-use interface possible. 
+      You may even add controlled motion-blur! 
+      Or you can use this feature to modify different properties at the same time to find "interesting spots". The possibilities are endless :-)
+      You will see a new large button to enable/disable this new features. I. E. if you dont care about animations, you will notice no change,
+      unless you press this button :-)    
+      A video-tutorial on all this stuff will come later...
+    - preview-playback-function for the global motioncurve-editing-mode
+    - automatically save the flame rendered in the interactive renderer as "jwf_ir_current.flame" (like an auto quicksave). So, in case of a rare crash you will always keep you latest flame in the IR.
+      
+ - Mesh-Generator:
+    - new Option to skip slices in the mesh-generating-process  
+    - added some image-pre-filtering-options to modify (smooth) the generated slices 
+    - some experimental option to thicken details, may get obsolete by using the pre-filters (requires more testing, any feedback is welcome)
+    - Created an official JWildfire-shop at shapeways: https://www.shapeways.com/shops/jwildfire (It is not about making money, just to show what 
+      the mesh-generator can do. But you can also buy this stuff, of course, I have tried to make the prices as fair as possible)  
+    
+ - Other changes:
+    - improved the speed and "smoothness" of the interactive renderer
+    - extended the "mandelbrot"-variation by three params: "seed" (allowing fixed random shapes which may be better animated), "max_points" (to specify the number of fixed major points which build the shape, good if you plan to increase the surface by using a blur-variation) and "rnd_z_range" (specify a range at the z-direction where the major points get distributed, can lead to much more interesting models)
+    - added new shape TRIANGLE and PYRAMID to "primitives_wf"-variation (right, it is now easy to build the pyramids :D)
+    - fixed the encoding of the start_mac.command file, thanks again to Matthew Townsend
+    - new "sph3D"-variation by Xyrus02
+    - added the methode getCurrLayer() to the script-runner-interface
+    - some additions to the FAQ-section    
+    
 V1.80 (10.08.2014):
  - new module to generate meshes from 3d-flame-fractals! The module consists of three parts: 
      - a volumetric renderer

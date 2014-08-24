@@ -1221,7 +1221,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
             if (pDownScale != 1) {
               SimpleImage background = new SimpleImage(panelBounds.width, panelBounds.height);
-              background.fillBackground(24, 24, 24);
               ComposeTransformer cT = new ComposeTransformer();
               cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
               cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
@@ -1244,7 +1243,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           flame.setSampleDensity(oldSampleDensity);
         }
       }
-      if (!pMouseDown) {
+      if (!pMouseDown && !cfg.isNoControls()) {
         for (int i = 0; i < randomBatch.size(); i++) {
           Flame bFlame = randomBatch.get(i).getFlame();
           if (bFlame == flame) {
@@ -1259,8 +1258,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         }
       }
     }
-    centerPanel.getParent().validate();
-    centerPanel.repaint();
+
+    if (!cfg.isNoControls()) {
+      centerPanel.getParent().validate();
+      centerPanel.repaint();
+    }
+    else {
+      imgPanel.repaint();
+    }
   }
 
   @Override

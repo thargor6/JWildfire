@@ -24,6 +24,7 @@ import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_LAYER_NAME;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SATURATION;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,8 @@ public class AbstractFlameWriter {
         }
       }
       // curves
-      writeMotionCurves(v, pXB, attrList, fName + "_");
+      List<String> blackList = Collections.emptyList();
+      writeMotionCurves(v, pXB, attrList, fName + "_", blackList);
       // ressources
       {
         String ressNames[] = func.getRessourceNames();
@@ -126,7 +128,8 @@ public class AbstractFlameWriter {
       attrList.add(pXB.createAttr("name", xName));
     }
 
-    writeMotionCurves(pXForm, pXB, attrList, null);
+    List<String> blackList = Collections.emptyList();
+    writeMotionCurves(pXForm, pXB, attrList, null, blackList);
     return attrList;
   }
 
@@ -270,7 +273,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
 
-    writeMotionCurves(pFlame, xb, attrList, null);
+    writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
     return attrList;
   }
 
@@ -299,11 +302,13 @@ public class AbstractFlameWriter {
     }
   }
 
-  protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList, String pNamePrefix) throws Exception {
+  protected void writeMotionCurves(Object source, SimpleXMLBuilder xb, List<SimpleXMLBuilder.Attribute<?>> attrList, String pNamePrefix, List<String> pNameBlackList) throws Exception {
     for (MotionCurveAttribute attribute : AnimationService.getAllMotionCurves(source)) {
       MotionCurve curve = attribute.getMotionCurve();
       String name = pNamePrefix == null ? attribute.getName() : pNamePrefix + attribute.getName();
-      writeMotionCurve(xb, attrList, name, curve);
+      if (!pNameBlackList.contains(name)) {
+        writeMotionCurve(xb, attrList, name, curve);
+      }
     }
   }
 
@@ -333,5 +338,20 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(namePrefix + AbstractFlameReader.CURVE_ATTR_PARENT_CURVE, parentName));
       addMotionCurveAttributes(xb, attrList, parentName + "_", curve.getParent());
     }
+  }
+
+  private static final List<String> flameAttrMotionCurveBlackList;
+
+  static {
+    flameAttrMotionCurveBlackList = new ArrayList<String>();
+    flameAttrMotionCurveBlackList.add("mixerRRCurve");
+    flameAttrMotionCurveBlackList.add("mixerRGCurve");
+    flameAttrMotionCurveBlackList.add("mixerRBCurve");
+    flameAttrMotionCurveBlackList.add("mixerGRCurve");
+    flameAttrMotionCurveBlackList.add("mixerGGCurve");
+    flameAttrMotionCurveBlackList.add("mixerGBCurve");
+    flameAttrMotionCurveBlackList.add("mixerBRCurve");
+    flameAttrMotionCurveBlackList.add("mixerBGCurve");
+    flameAttrMotionCurveBlackList.add("mixerBBCurve");
   }
 }
