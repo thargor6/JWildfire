@@ -294,7 +294,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     animationController = new AnimationController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
         parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField,
         parameterObject.frameSliderPanel, parameterObject.keyframesFrameLbl, parameterObject.keyframesFrameCountLbl,
-        parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel);
+        parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton);
 
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
@@ -1034,7 +1034,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void refreshFlameImage(boolean pMouseDown) {
-    refreshFlameImage(true, pMouseDown);
+    refreshFlameImage(true, pMouseDown, 1);
   }
 
   @Override
@@ -1099,10 +1099,23 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   //  static int rCount = 1;
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown) {
-    //    System.out.println("R" + rCount++);
+  public FlamePanelConfig getFlamePanelConfig() {
+    return getFlamePanel().getConfig();
+  }
+
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+    //    System.out.println("  R" + rCount++);
     FlamePanel imgPanel = getFlamePanel();
-    Rectangle bounds = imgPanel.getImageBounds();
+    FlamePanelConfig cfg = getFlamePanelConfig();
+    Rectangle panelBounds = imgPanel.getImageBounds();
+    Rectangle bounds;
+    if (pDownScale != 1) {
+      bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
+    }
+    else {
+      bounds = panelBounds;
+    }
+
     int renderScale = pQuickRender && pMouseDown ? 2 : 1;
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;
@@ -1120,7 +1133,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           flame.setHeight(info.getImageHeight());
           try {
             FlameRenderer renderer;
-            if (imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
+            if (!cfg.isNoControls() && imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
               renderer = new DrawFocusPointFlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
             }
             else {
@@ -1168,7 +1181,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                   }
                 }
               }
-              boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer;
+              boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer && !cfg.isNoControls();
 
               if (drawSubLayer) {
                 Flame singleLayerFlame = new Flame();
@@ -1205,8 +1218,22 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
                 cT.transformImage(img);
               }
             }
+
+            if (pDownScale != 1) {
+              SimpleImage background = new SimpleImage(panelBounds.width, panelBounds.height);
+              background.fillBackground(24, 24, 24);
+              ComposeTransformer cT = new ComposeTransformer();
+              cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
+              cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
+              cT.setForegroundImage(img);
+              cT.transformImage(background);
+              img = background;
+            }
+
             imgPanel.setImage(img);
-            showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+            if (!cfg.isNoControls()) {
+              showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
+            }
           }
           catch (Throwable ex) {
             errorHandler.handleError(ex);
@@ -1891,7 +1918,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false);
+    refreshFlameImage(false, false, 1);
   }
 
   public void loadFlameButton_actionPerformed(ActionEvent e) {

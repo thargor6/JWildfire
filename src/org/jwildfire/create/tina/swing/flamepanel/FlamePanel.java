@@ -110,6 +110,12 @@ public class FlamePanel extends ImagePanel {
 
   @Override
   public void paintComponent(Graphics g) {
+    if (config.isNoControls()) {
+      if (withImage) {
+        drawImage(g);
+      }
+      return;
+    }
     Graphics2D g2d = (Graphics2D) g;
     if (prefs.isTinaEditorControlsWithAntialiasing()) {
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

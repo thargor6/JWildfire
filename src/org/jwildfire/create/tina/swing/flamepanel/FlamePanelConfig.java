@@ -28,6 +28,7 @@ public class FlamePanelConfig {
   private double triangleZoom = 1.21;
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int selectedPoint = 1;
+  private boolean noControls;
 
   // Apophysis-compatible colors
   public static final Color[] XFORM_COLORS = new Color[] {
@@ -110,6 +111,14 @@ public class FlamePanelConfig {
 
   public void setSelectedPoint(int pSelectedPoint) {
     selectedPoint = pSelectedPoint;
+  }
+
+  public boolean isNoControls() {
+    return noControls;
+  }
+
+  public void setNoControls(boolean pNoControls) {
+    noControls = pNoControls;
   }
 
 }

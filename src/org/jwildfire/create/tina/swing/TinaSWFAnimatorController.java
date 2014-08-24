@@ -173,7 +173,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       parentCtrl = pParentCtrl;
       prefs = pPrefs;
       currMovie = new FlameMovie(pPrefs);
-      currMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_PITCH, 1.0);
+      //      currMovie.getGlobalScripts()[0] = new GlobalScript(GlobalScriptType.ROTATE_PITCH, 1.0);
       errorHandler = pErrorHandler;
       randomBatchPanel = pRandomMoviePanel;
 
@@ -292,6 +292,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   private void addFlame(Flame pFlame) {
+    boolean firstPart = currMovie.getParts().size() == 0;
+    if (firstPart) {
+      if (pFlame.getMotionBlurLength() > 0) {
+        swfAnimatorMotionBlurLengthREd.setValue(pFlame.getMotionBlurLength());
+        swfAnimatorMotionBlurTimeStepREd.setValue(pFlame.getMotionBlurTimeStep());
+      }
+
+    }
     FlameMoviePart part = new FlameMoviePart();
     part.setFlame(pFlame);
     part.setFrameCount(120);

@@ -4509,7 +4509,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenPreviewSunflowExportBtn(), getMeshGenThicknessREd(), getChannelMixerResetBtn(), getChannelMixerModeCmb(),
         getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
         getChannelMixerGreenGreenRootPanel(), getChannelMixerGreenBlueRootPanel(), getChannelMixerBlueRedRootPanel(), getChannelMixerBlueGreenRootPanel(),
-        getChannelMixerBlueBlueRootPanel(), getMeshGenThicknessSamplesREd(), getMeshGenPreFilter1Cmb(), getMeshGenPreFilter2Cmb(), getMeshGenImageStepREd());
+        getChannelMixerBlueBlueRootPanel(), getMeshGenThicknessSamplesREd(), getMeshGenPreFilter1Cmb(), getMeshGenPreFilter2Cmb(), getMeshGenImageStepREd(),
+        getMotionCurvePlayPreviewButton());
 
     tinaController = new TinaController(params);
 
@@ -10435,6 +10436,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox meshGenPreFilter1Cmb;
   private JComboBox meshGenPreFilter2Cmb;
   private JWFNumberField meshGenImageStepREd;
+  private JButton motionCurvePlayPreviewButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16692,7 +16694,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_80() {
     if (panel_80 == null) {
       panel_80 = new JPanel();
-      panel_80.setPreferredSize(new Dimension(180, 10));
+      panel_80.setPreferredSize(new Dimension(220, 10));
       panel_80.setLayout(null);
 
       keyframesFrameCountField = new JWFNumberField();
@@ -16718,7 +16720,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountField.setHasMinValue(true);
       keyframesFrameCountField.setHasMaxValue(true);
       keyframesFrameCountField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      keyframesFrameCountField.setBounds(92, 2, 70, 24);
+      keyframesFrameCountField.setBounds(144, 0, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
       keyframesFrameCountLbl = new JLabel();
@@ -16726,8 +16728,30 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      keyframesFrameCountLbl.setBounds(6, 2, 82, 22);
+      keyframesFrameCountLbl.setBounds(58, 0, 82, 22);
       panel_80.add(keyframesFrameCountLbl);
+
+      motionCurvePlayPreviewButton = new JButton();
+      motionCurvePlayPreviewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getAnimationController() != null) {
+            try {
+              tinaController.getAnimationController().playPreviewButtonClicked();
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      });
+      motionCurvePlayPreviewButton.setToolTipText("");
+      motionCurvePlayPreviewButton.setText("Play");
+      motionCurvePlayPreviewButton.setSize(new Dimension(70, 24));
+      motionCurvePlayPreviewButton.setPreferredSize(new Dimension(55, 24));
+      motionCurvePlayPreviewButton.setLocation(new Point(0, 57));
+      motionCurvePlayPreviewButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      motionCurvePlayPreviewButton.setBounds(0, 0, 70, 24);
+      panel_80.add(motionCurvePlayPreviewButton);
     }
     return panel_80;
   }
@@ -20872,6 +20896,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getMeshGenImageStepREd() {
     return meshGenImageStepREd;
+  }
+
+  public JButton getMotionCurvePlayPreviewButton() {
+    return motionCurvePlayPreviewButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

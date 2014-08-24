@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -28,7 +29,9 @@ import javax.swing.JToggleButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MotionCurveEditor;
+import org.jwildfire.create.tina.swing.RenderMainFlameThreadFinishEvent;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.swing.ErrorHandler;
 
 public class AnimationController {
@@ -45,10 +48,12 @@ public class AnimationController {
   private final JLabel keyframesFrameLbl;
   private final JLabel keyframesFrameCountLbl;
   private final JPanel motionBlurPanel;
+  private final JButton motionCurvePlayPreviewButton;
 
   public AnimationController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
-      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton, JPanel pMotionBlurPanel) {
+      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton, JPanel pMotionBlurPanel,
+      JButton pMotionCurvePlayPreviewButton) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -61,6 +66,7 @@ public class AnimationController {
     keyframesFrameCountLbl = pKeyframesFrameCountLbl;
     motionCurveEditModeButton = pMotionCurveEditModeButton;
     motionBlurPanel = pMotionBlurPanel;
+    motionCurvePlayPreviewButton = pMotionCurvePlayPreviewButton;
     enableControls();
   }
 
@@ -135,7 +141,21 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
-        tinaController.refreshFlameImage(false);
+        if (playPreviewThread != null) {
+          FlamePanelConfig cfg = tinaController.getFlamePanelConfig();
+          boolean oldNoControls = cfg.isNoControls();
+          try {
+            cfg.setNoControls(true);
+            tinaController.refreshFlameImage(true, false, 2);
+          }
+          finally {
+            cfg.setNoControls(oldNoControls);
+          }
+        }
+        else {
+          tinaController.refreshFlameImage(true, false, 1);
+        }
+
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -170,6 +190,109 @@ public class AnimationController {
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
       }
+    }
+  }
+
+  public class PlayPreviewThread implements Runnable {
+    private boolean finished;
+    private boolean forceAbort;
+    private final RenderMainFlameThreadFinishEvent finishEvent;
+
+    public PlayPreviewThread(RenderMainFlameThreadFinishEvent pFinishEvent) {
+      finishEvent = pFinishEvent;
+    }
+
+    @Override
+    public void run() {
+      finished = forceAbort = false;
+      try {
+        int frameCount = keyframesFrameCountField.getIntValue();
+        long t0 = System.currentTimeMillis();
+        for (int i = 1; i <= frameCount; i++) {
+          if (forceAbort) {
+            break;
+          }
+          long f0 = System.currentTimeMillis();
+          keyframesFrameSlider.setValue(i);
+          while (true) {
+            long f1 = System.currentTimeMillis();
+            if (f1 - f0 > 40) {
+              break;
+            }
+            Thread.sleep(1);
+          }
+        }
+        long t1 = System.currentTimeMillis();
+        finished = true;
+        finishEvent.succeeded((t1 - t0) * 0.001);
+      }
+      catch (Throwable ex) {
+        finished = true;
+        finishEvent.failed(ex);
+      }
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+    public void setForceAbort() {
+      forceAbort = true;
+    }
+
+  }
+
+  private PlayPreviewThread playPreviewThread = null;
+
+  private void enablePlayPreviewControls() {
+    motionCurvePlayPreviewButton.setText(playPreviewThread == null ? "Play" : "Cancel");
+  }
+
+  public void playPreviewButtonClicked() {
+    if (playPreviewThread != null) {
+      playPreviewThread.setForceAbort();
+      while (playPreviewThread.isFinished()) {
+        try {
+          Thread.sleep(10);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      playPreviewThread = null;
+      enablePlayPreviewControls();
+    }
+    else {
+      final int oldFrame = keyframesFrameField.getIntValue();
+
+      RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
+
+        @Override
+        public void succeeded(double pElapsedTime) {
+          try {
+          }
+          catch (Throwable ex) {
+            errorHandler.handleError(ex);
+          }
+          playPreviewThread = null;
+          enablePlayPreviewControls();
+          keyframesFrameField.setValue(oldFrame);
+          tinaController.refreshFlameImage(false);
+        }
+
+        @Override
+        public void failed(Throwable exception) {
+          errorHandler.handleError(exception);
+          playPreviewThread = null;
+          enablePlayPreviewControls();
+          keyframesFrameField.setValue(oldFrame);
+          tinaController.refreshFlameImage(false);
+        }
+      };
+
+      playPreviewThread = new PlayPreviewThread(finishEvent);
+      enablePlayPreviewControls();
+      new Thread(playPreviewThread).start();
     }
   }
 
