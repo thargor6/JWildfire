@@ -79,7 +79,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -1295,7 +1294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
-      tinaSouthTabbedPane.addTab("Channel mixer", null, getChannelMixerPanel(), null);
+      tinaSouthTabbedPane.addTab("Channel mixer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-fill.png")), getChannelMixerPanel(), null);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -4625,11 +4624,6 @@ public class TinaInternalFrame extends JInternalFrame {
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
-
-    if (!Tools.V2_0_FEATURE_ENABLE) {
-      channelMixerPanel.getParent().remove(channelMixerPanel);
-    }
-
     return tinaController;
   }
 
@@ -12460,6 +12454,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getHelpPane() {
     if (helpPane == null) {
       helpPane = new JTextPane();
+      helpPane.setBackground(SystemColor.menu);
       helpPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
       helpPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -12489,6 +12484,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getTextPane_1() {
     if (faqPane == null) {
       faqPane = new JTextPane();
+      faqPane.setBackground(SystemColor.menu);
       faqPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
       faqPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -15227,6 +15223,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getMutaGenHintPane() {
     if (mutaGenHintPane == null) {
       mutaGenHintPane = new JTextPane();
+      mutaGenHintPane.setBackground(SystemColor.menu);
       mutaGenHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
       mutaGenHintPane.setEditable(false);
     }
@@ -19611,6 +19608,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getMeshGenHintPane() {
     if (meshGenHintPane == null) {
       meshGenHintPane = new JTextPane();
+      meshGenHintPane.setBackground(SystemColor.menu);
       meshGenHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
       meshGenHintPane.setEditable(false);
     }
@@ -20540,6 +20538,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane getApophysisHintsPane() {
     if (apophysisHintsPane == null) {
       apophysisHintsPane = new JTextPane();
+      apophysisHintsPane.setBackground(SystemColor.menu);
       apophysisHintsPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
       apophysisHintsPane.setEditable(false);
     }
