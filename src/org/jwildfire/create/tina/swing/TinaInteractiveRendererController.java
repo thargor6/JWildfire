@@ -401,6 +401,12 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private void updateImage() {
     imageRootPanel.repaint();
+    try {
+      Thread.sleep(1);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   private void updateStats(AbstractRenderThread pEventSource, double pQuality) {
@@ -408,6 +414,12 @@ public class TinaInteractiveRendererController implements IterationObserver {
         "samples so far: " + sampleCount + "\n" +
         "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
     statsTextArea.validate();
+    try {
+      Thread.sleep(1);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
