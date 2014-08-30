@@ -203,7 +203,7 @@ public class PrimitivesWFFunc extends VariationFunc {
   private void createPyramid(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double size = pAmount;
     double dx = 0.0, dy = 0.0, dz = 0.0;
-    int side = pContext.random(6);
+    int side = pContext.random(5);
     switch (side) {
       case 0:
         dx = size * (pContext.random() - 0.5);
