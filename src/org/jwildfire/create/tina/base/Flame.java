@@ -31,6 +31,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
@@ -87,6 +88,29 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double camDOF;
   private final MotionCurve camDOFCurve = new MotionCurve();
+  private DOFBlurShapeType camDOFShape;
+  @AnimAware
+  private double camDOFScale;
+  private final MotionCurve camDOFScaleCurve = new MotionCurve();
+  @AnimAware
+  private double camDOFAngle;
+  private final MotionCurve camDOFAngleCurve = new MotionCurve();
+  @AnimAware
+  private double camDOFFade;
+  private final MotionCurve camDOFFadeCurve = new MotionCurve();
+  private double camDOFParam1;
+  private final MotionCurve camDOFParam1Curve = new MotionCurve();
+  private double camDOFParam2;
+  private final MotionCurve camDOFParam2Curve = new MotionCurve();
+  private double camDOFParam3;
+  private final MotionCurve camDOFParam3Curve = new MotionCurve();
+  private double camDOFParam4;
+  private final MotionCurve camDOFParam4Curve = new MotionCurve();
+  private double camDOFParam5;
+  private final MotionCurve camDOFParam5Curve = new MotionCurve();
+  private double camDOFParam6;
+  private final MotionCurve camDOFParam6Curve = new MotionCurve();
+
   @AnimAware
   private double camDOFExponent;
   private final MotionCurve camDOFExponentCurve = new MotionCurve();
@@ -192,6 +216,18 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusZ = 0.0;
     dimishZ = 0.0;
     camDOF = 0.0;
+    camDOFShape = DOFBlurShapeType.BUBBLE;
+    camDOFScale = 0.0;
+    camDOFAngle = 0.0;
+    camDOFFade = 0.0;
+    camDOFParam1 = 0.0;
+    camDOFParam2 = 0.0;
+    camDOFParam3 = 0.0;
+    camDOFParam4 = 0.0;
+    camDOFParam5 = 0.0;
+    camDOFParam6 = 0.0;
+    camDOFShape.getDOFBlurShape().setDefaultParams(this);
+
     camPosX = 0.0;
     camPosY = 0.0;
     camPosZ = 0.0;
@@ -201,7 +237,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponent = 2.0;
     gammaThreshold = 0.01;
     pixelsPerUnit = 50;
-    whiteLevel = 240;
+    whiteLevel = 200;
     saturation = 1.0;
     name = "";
     spatialFilterRadius = 0.0;
@@ -530,7 +566,26 @@ public class Flame implements Assignable<Flame>, Serializable {
     camZ = pFlame.camZ;
     camZCurve.assign(pFlame.camZCurve);
     camDOF = pFlame.camDOF;
+    camDOFShape = pFlame.camDOFShape;
     camDOFCurve.assign(pFlame.camDOFCurve);
+    camDOFScale = pFlame.camDOFScale;
+    camDOFScaleCurve.assign(pFlame.camDOFScaleCurve);
+    camDOFAngle = pFlame.camDOFAngle;
+    camDOFAngleCurve.assign(pFlame.camDOFAngleCurve);
+    camDOFFade = pFlame.camDOFFade;
+    camDOFFadeCurve.assign(pFlame.camDOFFadeCurve);
+    camDOFParam1 = pFlame.camDOFParam1;
+    camDOFParam1Curve.assign(pFlame.camDOFParam1Curve);
+    camDOFParam2 = pFlame.camDOFParam2;
+    camDOFParam2Curve.assign(pFlame.camDOFParam2Curve);
+    camDOFParam3 = pFlame.camDOFParam3;
+    camDOFParam3Curve.assign(pFlame.camDOFParam3Curve);
+    camDOFParam4 = pFlame.camDOFParam4;
+    camDOFParam4Curve.assign(pFlame.camDOFParam4Curve);
+    camDOFParam5 = pFlame.camDOFParam5;
+    camDOFParam5Curve.assign(pFlame.camDOFParam5Curve);
+    camDOFParam6 = pFlame.camDOFParam6;
+    camDOFParam6Curve.assign(pFlame.camDOFParam6Curve);
     newCamDOF = pFlame.newCamDOF;
     camDOFArea = pFlame.camDOFArea;
     camDOFAreaCurve.assign(pFlame.camDOFAreaCurve);
@@ -628,6 +683,16 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
+        (camDOFShape != pFlame.camDOFShape) ||
+        (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
+        (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
+        (fabs(camDOFFade - pFlame.camDOFFade) > EPSILON) || !camDOFFadeCurve.isEqual(pFlame.camDOFFadeCurve) ||
+        (fabs(camDOFParam1 - pFlame.camDOFParam1) > EPSILON) || !camDOFParam1Curve.isEqual(pFlame.camDOFParam1Curve) ||
+        (fabs(camDOFParam2 - pFlame.camDOFParam2) > EPSILON) || !camDOFParam2Curve.isEqual(pFlame.camDOFParam2Curve) ||
+        (fabs(camDOFParam3 - pFlame.camDOFParam3) > EPSILON) || !camDOFParam3Curve.isEqual(pFlame.camDOFParam3Curve) ||
+        (fabs(camDOFParam4 - pFlame.camDOFParam4) > EPSILON) || !camDOFParam4Curve.isEqual(pFlame.camDOFParam4Curve) ||
+        (fabs(camDOFParam5 - pFlame.camDOFParam5) > EPSILON) || !camDOFParam5Curve.isEqual(pFlame.camDOFParam5Curve) ||
+        (fabs(camDOFParam6 - pFlame.camDOFParam6) > EPSILON) || !camDOFParam6Curve.isEqual(pFlame.camDOFParam6Curve) ||
         (fabs(camDOFArea - pFlame.camDOFArea) > EPSILON) || !camDOFAreaCurve.isEqual(pFlame.camDOFAreaCurve) ||
         (fabs(camDOFExponent - pFlame.camDOFExponent) > EPSILON) || !camDOFExponentCurve.isEqual(pFlame.camDOFExponentCurve) ||
         (fabs(camPosX - pFlame.camPosX) > EPSILON) || !camPosXCurve.isEqual(pFlame.camPosXCurve) ||
@@ -1138,6 +1203,86 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public MotionCurve getMixerBBCurve() {
     return mixerBBCurve;
+  }
+
+  public DOFBlurShapeType getCamDOFShape() {
+    return camDOFShape;
+  }
+
+  public void setCamDOFShape(DOFBlurShapeType pCamDOFShape) {
+    camDOFShape = pCamDOFShape;
+  }
+
+  public double getCamDOFScale() {
+    return camDOFScale;
+  }
+
+  public void setCamDOFScale(double pCamDOFScale) {
+    camDOFScale = pCamDOFScale;
+  }
+
+  public double getCamDOFAngle() {
+    return camDOFAngle;
+  }
+
+  public void setCamDOFAngle(double pCamDOFAngle) {
+    camDOFAngle = pCamDOFAngle;
+  }
+
+  public double getCamDOFParam1() {
+    return camDOFParam1;
+  }
+
+  public void setCamDOFParam1(double pCamDOFParam1) {
+    camDOFParam1 = pCamDOFParam1;
+  }
+
+  public double getCamDOFParam2() {
+    return camDOFParam2;
+  }
+
+  public void setCamDOFParam2(double pCamDOFParam2) {
+    camDOFParam2 = pCamDOFParam2;
+  }
+
+  public double getCamDOFParam3() {
+    return camDOFParam3;
+  }
+
+  public void setCamDOFParam3(double pCamDOFParam3) {
+    camDOFParam3 = pCamDOFParam3;
+  }
+
+  public double getCamDOFParam4() {
+    return camDOFParam4;
+  }
+
+  public void setCamDOFParam4(double pCamDOFParam4) {
+    camDOFParam4 = pCamDOFParam4;
+  }
+
+  public double getCamDOFParam5() {
+    return camDOFParam5;
+  }
+
+  public void setCamDOFParam5(double pCamDOFParam5) {
+    camDOFParam5 = pCamDOFParam5;
+  }
+
+  public double getCamDOFParam6() {
+    return camDOFParam6;
+  }
+
+  public void setCamDOFParam6(double pCamDOFParam6) {
+    camDOFParam6 = pCamDOFParam6;
+  }
+
+  public double getCamDOFFade() {
+    return camDOFFade;
+  }
+
+  public void setCamDOFFade(double pCamDOFFade) {
+    camDOFFade = pCamDOFFade;
   }
 
 }
