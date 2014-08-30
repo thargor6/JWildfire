@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -35,11 +36,48 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
+  private final List<DOFParamControl> dofParamControls;
+
+  private static class DOFParamControl {
+    private final JWFNumberField editField;
+    private final JSlider slider;
+    private final JLabel label;
+
+    public DOFParamControl(JWFNumberField pEditField, JSlider pSlider, JLabel pLabel) {
+      editField = pEditField;
+      slider = pSlider;
+      label = pLabel;
+    }
+
+    public void setVisible(boolean pVisible) {
+      editField.setVisible(pVisible);
+      slider.setVisible(pVisible);
+      label.setVisible(pVisible);
+    }
+
+    public void setLabel(String pLabel) {
+      label.setText(pLabel);
+    }
+
+  }
 
   public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
     super(pOwner, pData, pRootTabbedPane, true);
+    dofParamControls = initDofParamControls(pData);
+  }
+
+  private List<DOFParamControl> initDofParamControls(TinaControllerData pData) {
+    List<DOFParamControl> res = new ArrayList<DOFParamControl>();
+    res.add(new DOFParamControl(pData.dofDOFParam1REd, pData.dofDOFParam1Slider, pData.dofDOFParam1Lbl));
+    res.add(new DOFParamControl(pData.dofDOFParam2REd, pData.dofDOFParam2Slider, pData.dofDOFParam2Lbl));
+    res.add(new DOFParamControl(pData.dofDOFParam3REd, pData.dofDOFParam3Slider, pData.dofDOFParam3Lbl));
+    res.add(new DOFParamControl(pData.dofDOFParam4REd, pData.dofDOFParam4Slider, pData.dofDOFParam4Lbl));
+    res.add(new DOFParamControl(pData.dofDOFParam5REd, pData.dofDOFParam5Slider, pData.dofDOFParam5Lbl));
+    res.add(new DOFParamControl(pData.dofDOFParam6REd, pData.dofDOFParam6Slider, pData.dofDOFParam6Lbl));
+    return res;
   }
 
   @Override
@@ -91,6 +129,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.focusXREd);
     res.add(data.focusYREd);
     res.add(data.focusZREd);
+
+    res.add(data.dofDOFScaleREd);
+    res.add(data.dofDOFAngleREd);
+    res.add(data.dofDOFFadeREd);
+    res.add(data.dofDOFParam1REd);
+    res.add(data.dofDOFParam2REd);
+    res.add(data.dofDOFParam3REd);
+    res.add(data.dofDOFParam4REd);
+    res.add(data.dofDOFParam5REd);
+    res.add(data.dofDOFParam6REd);
     return res;
   }
 
@@ -117,6 +165,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.saturationREd, false);
     enableControl(data.gammaREd, false);
     enableControl(data.gammaThresholdREd, false);
+
+    enableControl(data.dofDOFShapeCmb, false);
+    setupDOFParamsControls((DOFBlurShapeType) data.dofDOFShapeCmb.getSelectedItem());
+    enableControl(data.dofDOFScaleREd, false);
+    enableControl(data.dofDOFAngleREd, false);
+    enableControl(data.dofDOFFadeREd, false);
+    enableControl(data.dofDOFParam1REd, false);
+    enableControl(data.dofDOFParam2REd, false);
+    enableControl(data.dofDOFParam3REd, false);
+    enableControl(data.dofDOFParam4REd, false);
+    enableControl(data.dofDOFParam5REd, false);
+    enableControl(data.dofDOFParam6REd, false);
 
     enableStereo3dUI();
     enableDEFilterUI();
@@ -624,11 +684,52 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.stereo3dInterpolatedImageCountSlider.setValue(Tools.FTOI(getCurrFlame().getStereo3dInterpolatedImageCount()));
       data.stereo3dPreviewCmb.setSelectedItem(getCurrFlame().getStereo3dPreview());
       data.stereo3dSwapSidesCBx.setSelected(getCurrFlame().isStereo3dSwapSides());
+
+      setupDOFParamsControls(getCurrFlame().getCamDOFShape());
+      data.dofDOFShapeCmb.setSelectedItem(getCurrFlame().getCamDOFShape());
+      refreshBokehParams();
     }
     finally {
       setNoRefresh(oldNoRefrsh);
     }
     refreshVisualCamValues();
+  }
+
+  private void refreshBokehParams() {
+    data.dofDOFScaleREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFScale()));
+    data.dofDOFScaleSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFScale() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFAngleREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFAngle()));
+    data.dofDOFAngleSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFAngle() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFFadeREd.setText(Tools.doubleToString(getCurrFlame().getCamDOFFade()));
+    data.dofDOFFadeSlider.setValue(Tools.FTOI(getCurrFlame().getCamDOFFade() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam1REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam1()));
+    data.dofDOFParam1Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam1() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam2REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam2()));
+    data.dofDOFParam2Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam2() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam3REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam3()));
+    data.dofDOFParam3Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam3() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam4REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam4()));
+    data.dofDOFParam4Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam4() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam5REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam5()));
+    data.dofDOFParam5Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam5() * TinaController.SLIDER_SCALE_ZOOM));
+    data.dofDOFParam6REd.setText(Tools.doubleToString(getCurrFlame().getCamDOFParam6()));
+    data.dofDOFParam6Slider.setValue(Tools.FTOI(getCurrFlame().getCamDOFParam6() * TinaController.SLIDER_SCALE_ZOOM));
+  }
+
+  private void setupDOFParamsControls(DOFBlurShapeType pShapeType) {
+    List<String> paramNames = pShapeType.getDOFBlurShape().getParamNames();
+    for (int i = 0; i < dofParamControls.size(); i++) {
+      DOFParamControl ctrl = dofParamControls.get(i);
+      if (i < paramNames.size()) {
+        String name = paramNames.get(i);
+        name = name.substring(0, 1).toUpperCase() + name.substring(1, name.length());
+        ctrl.setLabel(name);
+        ctrl.setVisible(true);
+      }
+      else {
+        ctrl.setVisible(false);
+      }
+    }
   }
 
   public void refreshVisualCamValues() {
@@ -1282,4 +1383,90 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
   }
 
+  public void dofDOFShapeCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        DOFBlurShapeType shape = (DOFBlurShapeType) data.dofDOFShapeCmb.getSelectedItem();
+        flame.setCamDOFShape(shape);
+        shape.getDOFBlurShape().setDefaultParams(getCurrFlame());
+        setupDOFParamsControls(getCurrFlame().getCamDOFShape());
+        refreshBokehParams();
+        owner.refreshFlameImage(false);
+      }
+    }
+  }
+
+  public void dofDOFScaleSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFScaleREd_changed() {
+    flameTextFieldChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFAngleSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFAngleREd_changed() {
+    flameTextFieldChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFFadeSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFFadeREd_changed() {
+    flameTextFieldChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam1Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam1REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam2Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam2REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam3Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam3REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam4Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam4REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam5Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam5REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam6Slider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void dofDOFParam6REd_changed() {
+    flameTextFieldChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
+  }
 }

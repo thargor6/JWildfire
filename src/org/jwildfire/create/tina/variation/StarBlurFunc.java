@@ -34,8 +34,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class StarBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_POWER = "power";
-  private static final String PARAM_RANGE = "range";
+  public static final String PARAM_POWER = "power";
+  public static final String PARAM_RANGE = "range";
 
   private static final String[] paramNames = { PARAM_POWER, PARAM_RANGE };
 

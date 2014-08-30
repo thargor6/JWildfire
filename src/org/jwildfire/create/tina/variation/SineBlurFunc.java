@@ -30,7 +30,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class SineBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_POWER = "power";
+  public static final String PARAM_POWER = "power";
   private static final String[] paramNames = { PARAM_POWER };
 
   private double power = 1.0;

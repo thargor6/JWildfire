@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -45,6 +46,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   private static final String PARAM_OFFSETX = "offsetx";
   private static final String PARAM_OFFSETY = "offsety";
   private static final String PARAM_OFFSETZ = "offsetz";
+  private static final String PARAM_Z_FILL = "z_fill";
+  private static final String PARAM_Z_LOGSCALE = "z_logscale";
 
   protected int max_iter = 100;
   protected double xmin = -1.6;
@@ -62,6 +65,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   protected int max_clip_iter = 3;
   protected int buddhabrot_mode = 0;
   protected int buddhabrot_min_iter = 7;
+  protected double z_fill = 0.0;
+  protected int z_logscale = 0;
 
   public AbstractFractWFFunc() {
     initParams();
@@ -191,7 +196,25 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
 
     pVarTP.x += scale * pAmount * (x0 + offsetx);
     pVarTP.y += scale * pAmount * (y0 + offsety);
-    pVarTP.z += scale * pAmount * (scalez / 10 * ((double) iterCount / (double) max_iter) + offsetz);
+
+    double z;
+    if (z_logscale == 1) {
+      z = scale * pAmount * (scalez / 10 * MathLib.log10(1.0 + (double) iterCount / (double) max_iter) + offsetz);
+      if (z_fill > MathLib.EPSILON && pContext.random() < z_fill) {
+        double prevZ = scale * pAmount * (scalez / 10 * MathLib.log10(1.0 + (double) (iterCount - 1) / (double) max_iter) + offsetz);
+        z = (prevZ - z) * pContext.random() + z;
+      }
+    }
+    else {
+      z = scale * pAmount * (scalez / 10 * ((double) iterCount / (double) max_iter) + offsetz);
+      if (z_fill > MathLib.EPSILON && pContext.random() < z_fill) {
+        double prevZ = scale * pAmount * (scalez / 10 * ((double) (iterCount - 1) / (double) max_iter) + offsetz);
+        z = (prevZ - z) * pContext.random() + z;
+      }
+    }
+
+    pVarTP.z += z;
+
     if (direct_color != 0) {
       pVarTP.color += (double) iterCount / (double) max_iter;
       if (pVarTP.color > 1.0)
@@ -234,6 +257,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(PARAM_OFFSETX);
     lst.add(PARAM_OFFSETY);
     lst.add(PARAM_OFFSETZ);
+    lst.add(PARAM_Z_FILL);
+    lst.add(PARAM_Z_LOGSCALE);
     return lst.toArray(new String[0]);
   }
 
@@ -257,6 +282,8 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
     lst.add(offsetx);
     lst.add(offsety);
     lst.add(offsetz);
+    lst.add(z_fill);
+    lst.add(z_logscale);
     return lst.toArray();
   }
 
@@ -294,8 +321,11 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       buddhabrot_mode = Tools.FTOI(pValue);
     else if (PARAM_BUDDHABROT_MIN_ITER.equalsIgnoreCase(pName))
       buddhabrot_min_iter = Tools.FTOI(pValue);
+    else if (PARAM_Z_FILL.equalsIgnoreCase(pName))
+      z_fill = limitVal(pValue, 0, 1);
+    else if (PARAM_Z_LOGSCALE.equalsIgnoreCase(pName))
+      z_logscale = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (!setCustomParameter(pName, pValue))
       throw new IllegalArgumentException(pName);
   }
-
 }

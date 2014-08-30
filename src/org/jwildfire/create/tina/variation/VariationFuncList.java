@@ -403,6 +403,7 @@ public class VariationFuncList {
     registerVariationFunc(AsteriaFunc.class);
     registerVariationFunc(LogDbFunc.class);
     registerVariationFunc(Sph3DFunc.class);
+    registerVariationFunc(XHeartBlurWFFunc.class);
   }
 
   private static void registerVariationFunc(

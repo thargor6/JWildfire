@@ -17,6 +17,16 @@
 package org.jwildfire.create.tina.io;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_FADE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM1;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM2;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM3;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM4;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM5;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM6;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_ROTATE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_SCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_SHAPE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_X;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
@@ -41,6 +51,7 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
@@ -198,6 +209,34 @@ public class AbstractFlameWriter {
     if (pFlame.isNewCamDOF()) {
       attrList.add(xb.createAttr("new_dof", "1"));
     }
+
+    attrList.add(xb.createAttr(ATTR_CAM_DOF_SHAPE, pFlame.getCamDOFShape().toString()));
+    attrList.add(xb.createAttr(ATTR_CAM_DOF_SCALE, pFlame.getCamDOFScale()));
+    attrList.add(xb.createAttr(ATTR_CAM_DOF_ROTATE, pFlame.getCamDOFAngle()));
+    attrList.add(xb.createAttr(ATTR_CAM_DOF_FADE, pFlame.getCamDOFFade()));
+    DOFBlurShape shape = pFlame.getCamDOFShape().getDOFBlurShape();
+    if (shape != null) {
+      List<String> paramNames = shape.getParamNames();
+      if (paramNames.size() > 0) {
+        attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM1, pFlame.getCamDOFParam1()));
+        if (paramNames.size() > 1) {
+          attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM2, pFlame.getCamDOFParam2()));
+          if (paramNames.size() > 2) {
+            attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM3, pFlame.getCamDOFParam3()));
+            if (paramNames.size() > 3) {
+              attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM4, pFlame.getCamDOFParam4()));
+              if (paramNames.size() > 4) {
+                attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM5, pFlame.getCamDOFParam5()));
+                if (paramNames.size() > 5) {
+                  attrList.add(xb.createAttr(ATTR_CAM_DOF_PARAM6, pFlame.getCamDOFParam6()));
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     if (pFlame.isPreserveZ()) {
       attrList.add(xb.createAttr("preserve_z", "1"));
     }

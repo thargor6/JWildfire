@@ -635,6 +635,32 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
     data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
 
+    data.dofDOFShapeCmb = parameterObject.dofDOFShapeCmb;
+    data.dofDOFScaleREd = parameterObject.dofDOFScaleREd;
+    data.dofDOFScaleSlider = parameterObject.dofDOFScaleSlider;
+    data.dofDOFAngleREd = parameterObject.dofDOFAngleREd;
+    data.dofDOFAngleSlider = parameterObject.dofDOFAngleSlider;
+    data.dofDOFFadeREd = parameterObject.dofDOFFadeREd;
+    data.dofDOFFadeSlider = parameterObject.dofDOFFadeSlider;
+    data.dofDOFParam1REd = parameterObject.dofDOFParam1REd;
+    data.dofDOFParam1Slider = parameterObject.dofDOFParam1Slider;
+    data.dofDOFParam1Lbl = parameterObject.dofDOFParam1Lbl;
+    data.dofDOFParam2REd = parameterObject.dofDOFParam2REd;
+    data.dofDOFParam2Slider = parameterObject.dofDOFParam2Slider;
+    data.dofDOFParam2Lbl = parameterObject.dofDOFParam2Lbl;
+    data.dofDOFParam3REd = parameterObject.dofDOFParam3REd;
+    data.dofDOFParam3Slider = parameterObject.dofDOFParam3Slider;
+    data.dofDOFParam3Lbl = parameterObject.dofDOFParam3Lbl;
+    data.dofDOFParam4REd = parameterObject.dofDOFParam4REd;
+    data.dofDOFParam4Slider = parameterObject.dofDOFParam4Slider;
+    data.dofDOFParam4Lbl = parameterObject.dofDOFParam4Lbl;
+    data.dofDOFParam5REd = parameterObject.dofDOFParam5REd;
+    data.dofDOFParam5Slider = parameterObject.dofDOFParam5Slider;
+    data.dofDOFParam5Lbl = parameterObject.dofDOFParam5Lbl;
+    data.dofDOFParam6REd = parameterObject.dofDOFParam6REd;
+    data.dofDOFParam6Slider = parameterObject.dofDOFParam6Slider;
+    data.dofDOFParam6Lbl = parameterObject.dofDOFParam6Lbl;
+
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
@@ -3513,6 +3539,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       saveUndoPoint();
       flame.setNewCamDOF(data.newDOFCBx.isSelected());
       flameControls.enableDOFUI();
+      refreshFlameImage(false);
     }
   }
 

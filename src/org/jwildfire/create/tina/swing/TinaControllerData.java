@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -338,5 +339,30 @@ public class TinaControllerData {
   public JPanel channelMixerBRRootPanel;
   public JPanel channelMixerBGRootPanel;
   public JPanel channelMixerBBRootPanel;
+  public JComboBox dofDOFShapeCmb;
+  public JWFNumberField dofDOFScaleREd;
+  public JSlider dofDOFScaleSlider;
+  public JWFNumberField dofDOFAngleREd;
+  public JSlider dofDOFAngleSlider;
+  public JWFNumberField dofDOFFadeREd;
+  public JSlider dofDOFFadeSlider;
+  public JWFNumberField dofDOFParam1REd;
+  public JSlider dofDOFParam1Slider;
+  public JLabel dofDOFParam1Lbl;
+  public JWFNumberField dofDOFParam2REd;
+  public JSlider dofDOFParam2Slider;
+  public JLabel dofDOFParam2Lbl;
+  public JWFNumberField dofDOFParam3REd;
+  public JSlider dofDOFParam3Slider;
+  public JLabel dofDOFParam3Lbl;
+  public JWFNumberField dofDOFParam4REd;
+  public JSlider dofDOFParam4Slider;
+  public JLabel dofDOFParam4Lbl;
+  public JWFNumberField dofDOFParam5REd;
+  public JSlider dofDOFParam5Slider;
+  public JLabel dofDOFParam5Lbl;
+  public JWFNumberField dofDOFParam6REd;
+  public JSlider dofDOFParam6Slider;
+  public JLabel dofDOFParam6Lbl;
 
 }

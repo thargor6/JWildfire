@@ -520,6 +520,31 @@ public class TinaControllerParameter {
   public JComboBox meshGenPreFilter2Cmb;
   public JWFNumberField meshGenImageStepREd;
   public JButton motionCurvePlayPreviewButton;
+  public JComboBox dofDOFShapeCmb;
+  public JWFNumberField dofDOFScaleREd;
+  public JSlider dofDOFScaleSlider;
+  public JWFNumberField dofDOFAngleREd;
+  public JSlider dofDOFAngleSlider;
+  public JWFNumberField dofDOFFadeREd;
+  public JSlider dofDOFFadeSlider;
+  public JWFNumberField dofDOFParam1REd;
+  public JSlider dofDOFParam1Slider;
+  public JLabel dofDOFParam1Lbl;
+  public JWFNumberField dofDOFParam2REd;
+  public JSlider dofDOFParam2Slider;
+  public JLabel dofDOFParam2Lbl;
+  public JWFNumberField dofDOFParam3REd;
+  public JSlider dofDOFParam3Slider;
+  public JLabel dofDOFParam3Lbl;
+  public JWFNumberField dofDOFParam4REd;
+  public JSlider dofDOFParam4Slider;
+  public JLabel dofDOFParam4Lbl;
+  public JWFNumberField dofDOFParam5REd;
+  public JSlider dofDOFParam5Slider;
+  public JLabel dofDOFParam5Lbl;
+  public JWFNumberField dofDOFParam6REd;
+  public JSlider dofDOFParam6Slider;
+  public JLabel dofDOFParam6Lbl;
 
   public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1009,7 +1034,14 @@ public class TinaControllerParameter {
       JPanel pChannelMixerRBRootPanel, JPanel pChannelMixerGRRootPanel, JPanel pChannelMixerGGRootPanel, JPanel pChannelMixerGBRootPanel,
       JPanel pChannelMixerBRRootPanel, JPanel pChannelMixerBGRootPanel, JPanel pChannelMixerBBRootPanel,
       JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
-      JWFNumberField pMeshGenImageStepREd, JButton pMotionCurvePlayPreviewButton) {
+      JWFNumberField pMeshGenImageStepREd, JButton pMotionCurvePlayPreviewButton,
+      JComboBox pDofDOFShapeCmb, JWFNumberField pDofDOFScaleREd, JSlider pDofDOFScaleSlider, JWFNumberField pDofDOFAngleREd,
+      JSlider pDofDOFAngleSlider, JWFNumberField pDofDOFFadeREd, JSlider pDofDOFFadeSlider, JWFNumberField pDofDOFParam1REd,
+      JSlider pDofDOFParam1Slider, JLabel pDofDOFParam1Lbl, JWFNumberField pDofDOFParam2REd, JSlider pDofDOFParam2Slider,
+      JLabel pDofDOFParam2Lbl, JWFNumberField pDofDOFParam3REd, JSlider pDofDOFParam3Slider, JLabel pDofDOFParam3Lbl,
+      JWFNumberField pDofDOFParam4REd, JSlider pDofDOFParam4Slider, JLabel pDofDOFParam4Lbl, JWFNumberField pDofDOFParam5REd,
+      JSlider pDofDOFParam5Slider, JLabel pDofDOFParam5Lbl, JWFNumberField pDofDOFParam6REd, JSlider pDofDOFParam6Slider,
+      JLabel pDofDOFParam6Lbl) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1083,5 +1115,30 @@ public class TinaControllerParameter {
     meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
     meshGenImageStepREd = pMeshGenImageStepREd;
     motionCurvePlayPreviewButton = pMotionCurvePlayPreviewButton;
+    dofDOFShapeCmb = pDofDOFShapeCmb;
+    dofDOFScaleREd = pDofDOFScaleREd;
+    dofDOFScaleSlider = pDofDOFScaleSlider;
+    dofDOFAngleREd = pDofDOFAngleREd;
+    dofDOFAngleSlider = pDofDOFAngleSlider;
+    dofDOFFadeREd = pDofDOFFadeREd;
+    dofDOFFadeSlider = pDofDOFFadeSlider;
+    dofDOFParam1REd = pDofDOFParam1REd;
+    dofDOFParam1Slider = pDofDOFParam1Slider;
+    dofDOFParam1Lbl = pDofDOFParam1Lbl;
+    dofDOFParam2REd = pDofDOFParam2REd;
+    dofDOFParam2Slider = pDofDOFParam2Slider;
+    dofDOFParam2Lbl = pDofDOFParam2Lbl;
+    dofDOFParam3REd = pDofDOFParam3REd;
+    dofDOFParam3Slider = pDofDOFParam3Slider;
+    dofDOFParam3Lbl = pDofDOFParam3Lbl;
+    dofDOFParam4REd = pDofDOFParam4REd;
+    dofDOFParam4Slider = pDofDOFParam4Slider;
+    dofDOFParam4Lbl = pDofDOFParam4Lbl;
+    dofDOFParam5REd = pDofDOFParam5REd;
+    dofDOFParam5Slider = pDofDOFParam5Slider;
+    dofDOFParam5Lbl = pDofDOFParam5Lbl;
+    dofDOFParam6REd = pDofDOFParam6REd;
+    dofDOFParam6Slider = pDofDOFParam6Slider;
+    dofDOFParam6Lbl = pDofDOFParam6Lbl;
   }
 }

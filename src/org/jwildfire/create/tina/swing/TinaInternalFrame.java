@@ -94,6 +94,7 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -115,6 +116,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel tinaSouthPanel = null;
 
   private JPanel tinaCenterPanel = null;
+
+  private JPanel tinaDOFPanel = null;
 
   private JTabbedPane tinaSouthTabbedPane = null;
 
@@ -753,8 +756,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaSouthTabbedPane.addTab("Camera ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/modify_view.png")), getTinaCameraPanel(), null);
 
-      JPanel tinaDOFPanel = new JPanel();
-      tinaSouthTabbedPane.addTab("DOF ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/office-chart-polar-stacked.png")), tinaDOFPanel, null);
+      tinaDOFPanel = new JPanel();
       tinaDOFPanel.setLayout(null);
 
       dofDOFSlider = new JSlider();
@@ -1284,6 +1286,7 @@ public class TinaInternalFrame extends JInternalFrame {
       camDimishZSlider.setLocation(new Point(202, 98));
       camDimishZSlider.setBounds(645, 28, 220, 24);
       tinaDOFPanel.add(camDimishZSlider);
+      tinaSouthTabbedPane.addTab("DOF / Bokeh ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/office-chart-polar-stacked.png")), getPanel_92(), null);
 
       tinaSouthTabbedPane.addTab("Coloring ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-wheel.png")), getTinaColoringPanel(), null);
       tinaSouthTabbedPane.addTab("Anti-Aliasing / Filter", null, getAntialiasPanel(), null);
@@ -4392,6 +4395,7 @@ public class TinaInternalFrame extends JInternalFrame {
     initRandomGradientCmb(getTinaPaletteRandomGeneratorCmb());
     initPreFilterTypeCmb(getMeshGenPreFilter1Cmb());
     initPreFilterTypeCmb(getMeshGenPreFilter2Cmb());
+    initDOFBlurShapeCmb(getDofDOFShapeCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -4509,7 +4513,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
         getChannelMixerGreenGreenRootPanel(), getChannelMixerGreenBlueRootPanel(), getChannelMixerBlueRedRootPanel(), getChannelMixerBlueGreenRootPanel(),
         getChannelMixerBlueBlueRootPanel(), getMeshGenThicknessSamplesREd(), getMeshGenPreFilter1Cmb(), getMeshGenPreFilter2Cmb(), getMeshGenImageStepREd(),
-        getMotionCurvePlayPreviewButton());
+        getMotionCurvePlayPreviewButton(), getDofDOFShapeCmb(), getDofDOFScaleREd(), getDofDOFScaleSlider(), getDofDOFAngleREd(), getDofDOFAngleSlider(),
+        getDofDOFFadeREd(), getDofDOFFadeSlider(), getDofDOFParam1REd(), getDofDOFParam1Slider(), getDofDOFParam1Lbl(), getDofDOFParam2REd(),
+        getDofDOFParam2Slider(), getDofDOFParam2Lbl(), getDofDOFParam3REd(), getDofDOFParam3Slider(), getDofDOFParam3Lbl(), getDofDOFParam4REd(),
+        getDofDOFParam4Slider(), getDofDOFParam4Lbl(), getDofDOFParam5REd(), getDofDOFParam5Slider(), getDofDOFParam5Lbl(), getDofDOFParam6REd(),
+        getDofDOFParam6Slider(), getDofDOFParam6Lbl());
 
     tinaController = new TinaController(params);
 
@@ -4647,6 +4655,15 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(XFormScriptType.ROTATE_POST_LAST_XFORM);
     pCmb.addItem(XFormScriptType.ROTATE_POST_FINAL_XFORM);
     pCmb.setSelectedItem(XFormScriptType.NONE);
+  }
+
+  private void initDOFBlurShapeCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(DOFBlurShapeType.BUBBLE);
+    pCmb.addItem(DOFBlurShapeType.SINEBLUR);
+    pCmb.addItem(DOFBlurShapeType.STARBLUR);
+    pCmb.addItem(DOFBlurShapeType.HEART);
+    pCmb.setSelectedItem(DOFBlurShapeType.BUBBLE);
   }
 
   private void initGlobalScriptCmb(JComboBox pCmb) {
@@ -10431,6 +10448,37 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox meshGenPreFilter2Cmb;
   private JWFNumberField meshGenImageStepREd;
   private JButton motionCurvePlayPreviewButton;
+  private JPanel panel_92;
+  private JTabbedPane tabbedPane_3;
+  private JPanel panel_118;
+  private JComboBox dofDOFShapeCmb;
+  private JLabel dofDOFScaleLbl;
+  private JLabel dofDOFAngleLbl;
+  private JLabel dofDOFFadeLbl;
+  private JLabel dofDOFParam1Lbl;
+  private JLabel dofDOFParam2Lbl;
+  private JLabel dofDOFParam3Lbl;
+  private JLabel dofDOFParam4Lbl;
+  private JLabel dofDOFParam5Lbl;
+  private JLabel dofDOFParam6Lbl;
+  private JSlider dofDOFScaleSlider;
+  private JSlider dofDOFAngleSlider;
+  private JSlider dofDOFFadeSlider;
+  private JWFNumberField dofDOFScaleREd;
+  private JSlider dofDOFParam1Slider;
+  private JSlider dofDOFParam2Slider;
+  private JSlider dofDOFParam3Slider;
+  private JSlider dofDOFParam4Slider;
+  private JSlider dofDOFParam5Slider;
+  private JSlider dofDOFParam6Slider;
+  private JWFNumberField dofDOFParam1REd;
+  private JWFNumberField dofDOFParam2REd;
+  private JWFNumberField dofDOFParam3REd;
+  private JWFNumberField dofDOFParam4REd;
+  private JWFNumberField dofDOFParam5REd;
+  private JWFNumberField dofDOFParam6REd;
+  private JWFNumberField dofDOFAngleREd;
+  private JWFNumberField dofDOFFadeREd;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -20557,6 +20605,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(getPanel_117());
 
       channelMixerModeCmb = new JComboBox();
+      channelMixerModeCmb.setEnabled(false);
       channelMixerModeCmb.setPreferredSize(new Dimension(125, 24));
       channelMixerModeCmb.setMinimumSize(new Dimension(100, 24));
       channelMixerModeCmb.setMaximumSize(new Dimension(32767, 24));
@@ -20899,6 +20948,785 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMotionCurvePlayPreviewButton() {
     return motionCurvePlayPreviewButton;
+  }
+
+  private JPanel getPanel_92() {
+    if (panel_92 == null) {
+      panel_92 = new JPanel();
+      panel_92.setLayout(new BorderLayout(0, 0));
+      panel_92.add(getTabbedPane_3(), BorderLayout.CENTER);
+    }
+    return panel_92;
+  }
+
+  private JTabbedPane getTabbedPane_3() {
+    if (tabbedPane_3 == null) {
+      tabbedPane_3 = new JTabbedPane(JTabbedPane.LEFT);
+      tabbedPane_3.addTab("DOF", null, tinaDOFPanel, null);
+      tabbedPane_3.addTab("Bokeh", null, getPanel_118(), null);
+    }
+    return tabbedPane_3;
+  }
+
+  private JPanel getPanel_118() {
+    if (panel_118 == null) {
+      panel_118 = new JPanel();
+      panel_118.setLayout(null);
+
+      JLabel lblShape = new JLabel();
+      lblShape.setText("Shape");
+      lblShape.setSize(new Dimension(94, 22));
+      lblShape.setPreferredSize(new Dimension(94, 22));
+      lblShape.setLocation(new Point(488, 2));
+      lblShape.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblShape.setBounds(6, 6, 94, 22);
+      panel_118.add(lblShape);
+
+      dofDOFScaleLbl = new JLabel();
+      dofDOFScaleLbl.setText("Scale");
+      dofDOFScaleLbl.setSize(new Dimension(94, 22));
+      dofDOFScaleLbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFScaleLbl.setName("dofDOFScaleLbl");
+      dofDOFScaleLbl.setLocation(new Point(488, 2));
+      dofDOFScaleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFScaleLbl.setBounds(6, 29, 94, 22);
+      panel_118.add(dofDOFScaleLbl);
+
+      dofDOFScaleREd = new JWFNumberField();
+      dofDOFScaleREd.setName("dofDOFScaleREd");
+      dofDOFScaleREd.setValueStep(0.05);
+      dofDOFScaleREd.setText("");
+      dofDOFScaleREd.setSize(new Dimension(100, 24));
+      dofDOFScaleREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFScaleREd.setMinValue(-10000.0);
+      dofDOFScaleREd.setMaxValue(10000.0);
+      dofDOFScaleREd.setLocation(new Point(584, 2));
+      dofDOFScaleREd.setLinkedMotionControlName("dofDOFScaleSlider");
+      dofDOFScaleREd.setLinkedLabelControlName("dofDOFScaleLbl");
+      dofDOFScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFScaleREd.setEditable(true);
+      dofDOFScaleREd.setBounds(102, 29, 100, 24);
+      dofDOFScaleREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFScaleREd.isMouseAdjusting() || dofDOFScaleREd.getMouseChangeCount() == 0) {
+              if (!dofDOFScaleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFScaleREd_changed();
+          }
+        }
+      });
+
+      panel_118.add(dofDOFScaleREd);
+
+      dofDOFShapeCmb = new JComboBox();
+      dofDOFShapeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().dofDOFShapeCmb_changed();
+          }
+        }
+      });
+      dofDOFShapeCmb.setSize(new Dimension(125, 22));
+      dofDOFShapeCmb.setPreferredSize(new Dimension(125, 22));
+      dofDOFShapeCmb.setLocation(new Point(100, 4));
+      dofDOFShapeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFShapeCmb.setBounds(102, 6, 322, 24);
+      panel_118.add(dofDOFShapeCmb);
+
+      dofDOFScaleSlider = new JSlider();
+      dofDOFScaleSlider.setValue(0);
+      dofDOFScaleSlider.setSize(new Dimension(220, 19));
+      dofDOFScaleSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFScaleSlider.setName("stereo3dAngleSlider");
+      dofDOFScaleSlider.setMinimum(-30000);
+      dofDOFScaleSlider.setMaximum(30000);
+      dofDOFScaleSlider.setLocation(new Point(686, 2));
+      dofDOFScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFScaleSlider.setBounds(204, 29, 220, 24);
+      dofDOFScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFScaleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFScaleSlider_stateChanged(e);
+          }
+        }
+      });
+
+      panel_118.add(dofDOFScaleSlider);
+
+      dofDOFAngleREd = new JWFNumberField();
+      dofDOFAngleREd.setName("dofDOFAngleREd");
+      dofDOFAngleREd.setValueStep(0.05);
+      dofDOFAngleREd.setText("");
+      dofDOFAngleREd.setSize(new Dimension(100, 24));
+      dofDOFAngleREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFAngleREd.setMinValue(-10000.0);
+      dofDOFAngleREd.setMaxValue(10000.0);
+      dofDOFAngleREd.setLocation(new Point(584, 2));
+      dofDOFAngleREd.setLinkedMotionControlName("dofDOFAngleSlider");
+      dofDOFAngleREd.setLinkedLabelControlName("dofDOFAngleLbl");
+      dofDOFAngleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFAngleREd.setEditable(true);
+      dofDOFAngleREd.setBounds(102, 52, 100, 24);
+      dofDOFAngleREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFAngleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFAngleREd.isMouseAdjusting() || dofDOFAngleREd.getMouseChangeCount() == 0) {
+              if (!dofDOFAngleSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFAngleREd_changed();
+          }
+        }
+      });
+
+      panel_118.add(dofDOFAngleREd);
+
+      dofDOFAngleLbl = new JLabel();
+      dofDOFAngleLbl.setText("Rotate");
+      dofDOFAngleLbl.setSize(new Dimension(94, 22));
+      dofDOFAngleLbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFAngleLbl.setName("dofDOFAngleLbl");
+      dofDOFAngleLbl.setLocation(new Point(488, 2));
+      dofDOFAngleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFAngleLbl.setBounds(6, 52, 94, 22);
+      panel_118.add(dofDOFAngleLbl);
+
+      dofDOFAngleSlider = new JSlider();
+      dofDOFAngleSlider.setValue(0);
+      dofDOFAngleSlider.setSize(new Dimension(220, 19));
+      dofDOFAngleSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFAngleSlider.setName("stereo3dAngleSlider");
+      dofDOFAngleSlider.setMinimum(-30000);
+      dofDOFAngleSlider.setMaximum(30000);
+      dofDOFAngleSlider.setLocation(new Point(686, 2));
+      dofDOFAngleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFAngleSlider.setBounds(204, 52, 220, 24);
+      dofDOFAngleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFAngleSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFAngleSlider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFAngleSlider);
+
+      dofDOFFadeLbl = new JLabel();
+      dofDOFFadeLbl.setText("Fade");
+      dofDOFFadeLbl.setSize(new Dimension(94, 22));
+      dofDOFFadeLbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFFadeLbl.setName("dofDOFFadeLbl");
+      dofDOFFadeLbl.setLocation(new Point(488, 2));
+      dofDOFFadeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFFadeLbl.setBounds(6, 75, 94, 22);
+      panel_118.add(dofDOFFadeLbl);
+
+      dofDOFFadeREd = new JWFNumberField();
+      dofDOFFadeREd.setName("dofDOFFadeREd");
+      dofDOFFadeREd.setValueStep(0.05);
+      dofDOFFadeREd.setText("");
+      dofDOFFadeREd.setSize(new Dimension(100, 24));
+      dofDOFFadeREd.setPreferredSize(new Dimension(100, 24));
+      dofDOFFadeREd.setMinValue(-10000.0);
+      dofDOFFadeREd.setMaxValue(10000.0);
+      dofDOFFadeREd.setLocation(new Point(584, 2));
+      dofDOFFadeREd.setLinkedMotionControlName("dofDOFFadeSlider");
+      dofDOFFadeREd.setLinkedLabelControlName("dofDOFFadeLbl");
+      dofDOFFadeREd.setHasMinValue(true);
+      dofDOFFadeREd.setHasMaxValue(true);
+      dofDOFFadeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFFadeREd.setEditable(true);
+      dofDOFFadeREd.setBounds(102, 75, 100, 24);
+      dofDOFFadeREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFFadeREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFFadeREd.isMouseAdjusting() || dofDOFFadeREd.getMouseChangeCount() == 0) {
+              if (!dofDOFFadeSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFFadeREd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFFadeREd);
+
+      dofDOFFadeSlider = new JSlider();
+      dofDOFFadeSlider.setValue(0);
+      dofDOFFadeSlider.setSize(new Dimension(220, 19));
+      dofDOFFadeSlider.setPreferredSize(new Dimension(220, 19));
+      dofDOFFadeSlider.setName("stereo3dAngleSlider");
+      dofDOFFadeSlider.setMinimum(-30000);
+      dofDOFFadeSlider.setMaximum(30000);
+      dofDOFFadeSlider.setLocation(new Point(686, 2));
+      dofDOFFadeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFFadeSlider.setBounds(204, 75, 220, 24);
+      dofDOFFadeSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFFadeSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFFadeSlider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFFadeSlider);
+
+      dofDOFParam1REd = new JWFNumberField();
+      dofDOFParam1REd.setName("dofDOFParam1REd");
+      dofDOFParam1REd.setValueStep(0.05);
+      dofDOFParam1REd.setText("");
+      dofDOFParam1REd.setSize(new Dimension(100, 24));
+      dofDOFParam1REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam1REd.setMinValue(-10000.0);
+      dofDOFParam1REd.setMaxValue(10000.0);
+      dofDOFParam1REd.setLocation(new Point(584, 2));
+      dofDOFParam1REd.setLinkedMotionControlName("dofDOFParam1Slider");
+      dofDOFParam1REd.setLinkedLabelControlName("dofDOFParam1Lbl");
+      dofDOFParam1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam1REd.setEditable(true);
+      dofDOFParam1REd.setBounds(102, 98, 100, 24);
+      dofDOFParam1REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam1REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam1REd.isMouseAdjusting() || dofDOFParam1REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam1Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam1REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam1REd);
+
+      dofDOFParam1Lbl = new JLabel();
+      dofDOFParam1Lbl.setText("Param 1");
+      dofDOFParam1Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam1Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam1Lbl.setName("dofDOFParam1Lbl");
+      dofDOFParam1Lbl.setLocation(new Point(488, 2));
+      dofDOFParam1Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam1Lbl.setBounds(6, 98, 94, 22);
+      panel_118.add(dofDOFParam1Lbl);
+
+      dofDOFParam1Slider = new JSlider();
+      dofDOFParam1Slider.setValue(0);
+      dofDOFParam1Slider.setSize(new Dimension(220, 19));
+      dofDOFParam1Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam1Slider.setName("dofDOFParam1Slider");
+      dofDOFParam1Slider.setMinimum(-30000);
+      dofDOFParam1Slider.setMaximum(30000);
+      dofDOFParam1Slider.setLocation(new Point(686, 2));
+      dofDOFParam1Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam1Slider.setBounds(204, 98, 220, 24);
+      dofDOFParam1Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam1Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam1Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam1Slider);
+
+      dofDOFParam3REd = new JWFNumberField();
+      dofDOFParam3REd.setName("dofDOFParam3REd");
+      dofDOFParam3REd.setValueStep(0.05);
+      dofDOFParam3REd.setText("");
+      dofDOFParam3REd.setSize(new Dimension(100, 24));
+      dofDOFParam3REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam3REd.setMinValue(-10000.0);
+      dofDOFParam3REd.setMaxValue(10000.0);
+      dofDOFParam3REd.setLocation(new Point(584, 2));
+      dofDOFParam3REd.setLinkedMotionControlName("dofDOFParam3Slider");
+      dofDOFParam3REd.setLinkedLabelControlName("dofDOFParam3Lbl");
+      dofDOFParam3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam3REd.setEditable(true);
+      dofDOFParam3REd.setBounds(562, 29, 100, 24);
+      dofDOFParam3REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam3REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam3REd.isMouseAdjusting() || dofDOFParam3REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam3Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam3REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam3REd);
+
+      dofDOFParam3Lbl = new JLabel();
+      dofDOFParam3Lbl.setText("Param 3");
+      dofDOFParam3Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam3Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam3Lbl.setName("dofDOFParam3Lbl");
+      dofDOFParam3Lbl.setLocation(new Point(488, 2));
+      dofDOFParam3Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam3Lbl.setBounds(466, 29, 94, 22);
+      panel_118.add(dofDOFParam3Lbl);
+
+      dofDOFParam4Lbl = new JLabel();
+      dofDOFParam4Lbl.setText("Param 4");
+      dofDOFParam4Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam4Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam4Lbl.setName("dofDOFParam4Lbl");
+      dofDOFParam4Lbl.setLocation(new Point(488, 2));
+      dofDOFParam4Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam4Lbl.setBounds(466, 52, 94, 22);
+      panel_118.add(dofDOFParam4Lbl);
+
+      dofDOFParam4REd = new JWFNumberField();
+      dofDOFParam4REd.setName("dofDOFParam4REd");
+      dofDOFParam4REd.setValueStep(0.05);
+      dofDOFParam4REd.setText("");
+      dofDOFParam4REd.setSize(new Dimension(100, 24));
+      dofDOFParam4REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam4REd.setMinValue(-10000.0);
+      dofDOFParam4REd.setMaxValue(10000.0);
+      dofDOFParam4REd.setLocation(new Point(584, 2));
+      dofDOFParam4REd.setLinkedMotionControlName("dofDOFParam4Slider");
+      dofDOFParam4REd.setLinkedLabelControlName("dofDOFParam4Lbl");
+      dofDOFParam4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam4REd.setEditable(true);
+      dofDOFParam4REd.setBounds(562, 52, 100, 24);
+      dofDOFParam4REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam4REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam4REd.isMouseAdjusting() || dofDOFParam4REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam4Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam4REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam4REd);
+
+      dofDOFParam3Slider = new JSlider();
+      dofDOFParam3Slider.setValue(0);
+      dofDOFParam3Slider.setSize(new Dimension(220, 19));
+      dofDOFParam3Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam3Slider.setName("dofDOFParam3Slider");
+      dofDOFParam3Slider.setMinimum(-30000);
+      dofDOFParam3Slider.setMaximum(30000);
+      dofDOFParam3Slider.setLocation(new Point(686, 2));
+      dofDOFParam3Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam3Slider.setBounds(664, 29, 220, 24);
+      dofDOFParam3Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam3Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam3Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam3Slider);
+
+      dofDOFParam4Slider = new JSlider();
+      dofDOFParam4Slider.setValue(0);
+      dofDOFParam4Slider.setSize(new Dimension(220, 19));
+      dofDOFParam4Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam4Slider.setName("dofDOFParam4Slider");
+      dofDOFParam4Slider.setMinimum(-30000);
+      dofDOFParam4Slider.setMaximum(30000);
+      dofDOFParam4Slider.setLocation(new Point(686, 2));
+      dofDOFParam4Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam4Slider.setBounds(664, 52, 220, 24);
+      dofDOFParam4Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam4Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam4Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam4Slider);
+
+      dofDOFParam5REd = new JWFNumberField();
+      dofDOFParam5REd.setName("dofDOFParam5REd");
+      dofDOFParam5REd.setValueStep(0.05);
+      dofDOFParam5REd.setText("");
+      dofDOFParam5REd.setSize(new Dimension(100, 24));
+      dofDOFParam5REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam5REd.setMinValue(-10000.0);
+      dofDOFParam5REd.setMaxValue(10000.0);
+      dofDOFParam5REd.setLocation(new Point(584, 2));
+      dofDOFParam5REd.setLinkedMotionControlName("dofDOFParam5CurveSlider");
+      dofDOFParam5REd.setLinkedLabelControlName("dofDOFParam5CurveLbl");
+      dofDOFParam5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam5REd.setEditable(true);
+      dofDOFParam5REd.setBounds(562, 75, 100, 24);
+      dofDOFParam5REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam5REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam5REd.isMouseAdjusting() || dofDOFParam5REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam5Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam5REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam5REd);
+
+      dofDOFParam5Lbl = new JLabel();
+      dofDOFParam5Lbl.setText("Param 5");
+      dofDOFParam5Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam5Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam5Lbl.setName("dofDOFParam5Lbl");
+      dofDOFParam5Lbl.setLocation(new Point(488, 2));
+      dofDOFParam5Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam5Lbl.setBounds(466, 75, 94, 22);
+      panel_118.add(dofDOFParam5Lbl);
+
+      dofDOFParam5Slider = new JSlider();
+      dofDOFParam5Slider.setValue(0);
+      dofDOFParam5Slider.setSize(new Dimension(220, 19));
+      dofDOFParam5Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam5Slider.setName("dofDOFParam5Slider");
+      dofDOFParam5Slider.setMinimum(-30000);
+      dofDOFParam5Slider.setMaximum(30000);
+      dofDOFParam5Slider.setLocation(new Point(686, 2));
+      dofDOFParam5Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam5Slider.setBounds(664, 75, 220, 24);
+      dofDOFParam5Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam5Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam5Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam5Slider);
+
+      dofDOFParam6Lbl = new JLabel();
+      dofDOFParam6Lbl.setText("Param 6");
+      dofDOFParam6Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam6Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam6Lbl.setName("dofDOFParam6Lbl");
+      dofDOFParam6Lbl.setLocation(new Point(488, 2));
+      dofDOFParam6Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam6Lbl.setBounds(466, 100, 98, 22);
+      panel_118.add(dofDOFParam6Lbl);
+
+      dofDOFParam6REd = new JWFNumberField();
+      dofDOFParam6REd.setName("dofDOFParam6REd");
+      dofDOFParam6REd.setValueStep(0.05);
+      dofDOFParam6REd.setText("");
+      dofDOFParam6REd.setSize(new Dimension(100, 24));
+      dofDOFParam6REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam6REd.setMinValue(-10000.0);
+      dofDOFParam6REd.setMaxValue(10000.0);
+      dofDOFParam6REd.setLocation(new Point(584, 2));
+      dofDOFParam6REd.setLinkedMotionControlName("dofDOFParam6Slider");
+      dofDOFParam6REd.setLinkedLabelControlName("dofDOFParam6Lbl");
+      dofDOFParam6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam6REd.setEditable(true);
+      dofDOFParam6REd.setBounds(562, 100, 98, 24);
+      dofDOFParam6REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam6REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam6REd.isMouseAdjusting() || dofDOFParam6REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam6Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam6REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam6REd);
+
+      dofDOFParam6Slider = new JSlider();
+      dofDOFParam6Slider.setValue(0);
+      dofDOFParam6Slider.setSize(new Dimension(220, 19));
+      dofDOFParam6Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam6Slider.setName("dofDOFParam6Slider");
+      dofDOFParam6Slider.setMinimum(-30000);
+      dofDOFParam6Slider.setMaximum(30000);
+      dofDOFParam6Slider.setLocation(new Point(686, 2));
+      dofDOFParam6Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam6Slider.setBounds(664, 98, 220, 24);
+      dofDOFParam6Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam6Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam6Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam6Slider);
+
+      dofDOFParam2Lbl = new JLabel();
+      dofDOFParam2Lbl.setText("Param 2");
+      dofDOFParam2Lbl.setSize(new Dimension(94, 22));
+      dofDOFParam2Lbl.setPreferredSize(new Dimension(94, 22));
+      dofDOFParam2Lbl.setName("dofDOFParam2Lbl");
+      dofDOFParam2Lbl.setLocation(new Point(488, 2));
+      dofDOFParam2Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam2Lbl.setBounds(466, 6, 94, 22);
+      panel_118.add(dofDOFParam2Lbl);
+
+      dofDOFParam2REd = new JWFNumberField();
+      dofDOFParam2REd.setName("dofDOFParam2REd");
+      dofDOFParam2REd.setValueStep(0.05);
+      dofDOFParam2REd.setText("");
+      dofDOFParam2REd.setSize(new Dimension(100, 24));
+      dofDOFParam2REd.setPreferredSize(new Dimension(100, 24));
+      dofDOFParam2REd.setMinValue(-10000.0);
+      dofDOFParam2REd.setMaxValue(10000.0);
+      dofDOFParam2REd.setLocation(new Point(584, 2));
+      dofDOFParam2REd.setLinkedMotionControlName("dofDOFParam2Slider");
+      dofDOFParam2REd.setLinkedLabelControlName("dofDOFParam2Lbl");
+      dofDOFParam2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam2REd.setEditable(true);
+      dofDOFParam2REd.setBounds(562, 6, 100, 24);
+      dofDOFParam2REd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      dofDOFParam2REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!dofDOFParam2REd.isMouseAdjusting() || dofDOFParam2REd.getMouseChangeCount() == 0) {
+              if (!dofDOFParam2Slider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().dofDOFParam2REd_changed();
+          }
+        }
+      });
+      panel_118.add(dofDOFParam2REd);
+
+      dofDOFParam2Slider = new JSlider();
+      dofDOFParam2Slider.setValue(0);
+      dofDOFParam2Slider.setSize(new Dimension(220, 19));
+      dofDOFParam2Slider.setPreferredSize(new Dimension(220, 19));
+      dofDOFParam2Slider.setName("dofDOFParam2Slider");
+      dofDOFParam2Slider.setMinimum(-30000);
+      dofDOFParam2Slider.setMaximum(30000);
+      dofDOFParam2Slider.setLocation(new Point(686, 2));
+      dofDOFParam2Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam2Slider.setBounds(664, 6, 220, 24);
+      dofDOFParam2Slider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      dofDOFParam2Slider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            tinaController.getFlameControls().dofDOFParam2Slider_stateChanged(e);
+          }
+        }
+      });
+      panel_118.add(dofDOFParam2Slider);
+    }
+    return panel_118;
+  }
+
+  public JComboBox getDofDOFShapeCmb() {
+    return dofDOFShapeCmb;
+  }
+
+  public JLabel getDofDOFScaleLbl() {
+    return dofDOFScaleLbl;
+  }
+
+  public JLabel getDofDOFAngleLbl() {
+    return dofDOFAngleLbl;
+  }
+
+  public JLabel getDofDOFFadeLbl() {
+    return dofDOFFadeLbl;
+  }
+
+  public JLabel getDofDOFParam1Lbl() {
+    return dofDOFParam1Lbl;
+  }
+
+  public JLabel getDofDOFParam2Lbl() {
+    return dofDOFParam2Lbl;
+  }
+
+  public JLabel getDofDOFParam3Lbl() {
+    return dofDOFParam3Lbl;
+  }
+
+  public JLabel getDofDOFParam4Lbl() {
+    return dofDOFParam4Lbl;
+  }
+
+  public JLabel getDofDOFParam5Lbl() {
+    return dofDOFParam5Lbl;
+  }
+
+  public JLabel getDofDOFParam6Lbl() {
+    return dofDOFParam6Lbl;
+  }
+
+  public JSlider getDofDOFScaleSlider() {
+    return dofDOFScaleSlider;
+  }
+
+  public JSlider getDofDOFAngleSlider() {
+    return dofDOFAngleSlider;
+  }
+
+  public JSlider getDofDOFFadeSlider() {
+    return dofDOFFadeSlider;
+  }
+
+  public JWFNumberField getDofDOFScaleREd() {
+    return dofDOFScaleREd;
+  }
+
+  public JSlider getDofDOFParam1Slider() {
+    return dofDOFParam1Slider;
+  }
+
+  public JSlider getDofDOFParam2Slider() {
+    return dofDOFParam2Slider;
+  }
+
+  public JSlider getDofDOFParam3Slider() {
+    return dofDOFParam3Slider;
+  }
+
+  public JSlider getDofDOFParam4Slider() {
+    return dofDOFParam4Slider;
+  }
+
+  public JSlider getDofDOFParam5Slider() {
+    return dofDOFParam5Slider;
+  }
+
+  public JSlider getDofDOFParam6Slider() {
+    return dofDOFParam6Slider;
+  }
+
+  public JWFNumberField getDofDOFParam1REd() {
+    return dofDOFParam1REd;
+  }
+
+  public JWFNumberField getDofDOFParam2REd() {
+    return dofDOFParam2REd;
+  }
+
+  public JWFNumberField getDofDOFParam3REd() {
+    return dofDOFParam3REd;
+  }
+
+  public JWFNumberField getDofDOFParam4REd() {
+    return dofDOFParam4REd;
+  }
+
+  public JWFNumberField getDofDOFParam5REd() {
+    return dofDOFParam5REd;
+  }
+
+  public JWFNumberField getDofDOFParam6REd() {
+    return dofDOFParam6REd;
+  }
+
+  public JWFNumberField getDofDOFAngleREd() {
+    return dofDOFAngleREd;
+  }
+
+  public JWFNumberField getDofDOFFadeREd() {
+    return dofDOFFadeREd;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

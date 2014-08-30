@@ -20,6 +20,8 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.render.dof.DOFBlurShape;
+import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -64,6 +66,16 @@ public class AbstractFlameReader {
   public static final String ATTR_CAM_DOF_AREA = "cam_dof_area";
   public static final String ATTR_CAM_DOF_EXPONENT = "cam_dof_exponent";
   public static final String ATTR_NEW_DOF = "new_dof";
+  public static final String ATTR_CAM_DOF_SHAPE = "cam_dof_shape";
+  public static final String ATTR_CAM_DOF_SCALE = "cam_dof_scale";
+  public static final String ATTR_CAM_DOF_ROTATE = "cam_dof_rotate";
+  public static final String ATTR_CAM_DOF_FADE = "cam_dof_fade";
+  public static final String ATTR_CAM_DOF_PARAM1 = "cam_dof_param1";
+  public static final String ATTR_CAM_DOF_PARAM2 = "cam_dof_param2";
+  public static final String ATTR_CAM_DOF_PARAM3 = "cam_dof_param3";
+  public static final String ATTR_CAM_DOF_PARAM4 = "cam_dof_param4";
+  public static final String ATTR_CAM_DOF_PARAM5 = "cam_dof_param5";
+  public static final String ATTR_CAM_DOF_PARAM6 = "cam_dof_param6";
   public static final String ATTR_CAM_ZOOM = "cam_zoom";
   public static final String ATTR_NEW_LINEAR = "new_linear";
   public static final String ATTR_SHADING_SHADING = "shading_shading";
@@ -235,6 +247,48 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));
     }
+
+    if ((hs = atts.get(ATTR_CAM_DOF_SHAPE)) != null) {
+      try {
+        pFlame.setCamDOFShape(DOFBlurShapeType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        pFlame.setCamDOFShape(DOFBlurShapeType.BUBBLE);
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_CAM_DOF_SCALE)) != null) {
+      pFlame.setCamDOFScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_DOF_ROTATE)) != null) {
+      pFlame.setCamDOFAngle(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_DOF_FADE)) != null) {
+      pFlame.setCamDOFFade(Double.parseDouble(hs));
+    }
+    {
+      DOFBlurShape shape = pFlame.getCamDOFShape().getDOFBlurShape();
+      List<String> paramNames = shape.getParamNames();
+      if (paramNames.size() > 0 && (hs = atts.get(ATTR_CAM_DOF_PARAM1)) != null) {
+        pFlame.setCamDOFParam1(Double.parseDouble(hs));
+      }
+      if (paramNames.size() > 1 && (hs = atts.get(ATTR_CAM_DOF_PARAM2)) != null) {
+        pFlame.setCamDOFParam2(Double.parseDouble(hs));
+      }
+      if (paramNames.size() > 2 && (hs = atts.get(ATTR_CAM_DOF_PARAM3)) != null) {
+        pFlame.setCamDOFParam3(Double.parseDouble(hs));
+      }
+      if (paramNames.size() > 3 && (hs = atts.get(ATTR_CAM_DOF_PARAM4)) != null) {
+        pFlame.setCamDOFParam4(Double.parseDouble(hs));
+      }
+      if (paramNames.size() > 4 && (hs = atts.get(ATTR_CAM_DOF_PARAM5)) != null) {
+        pFlame.setCamDOFParam5(Double.parseDouble(hs));
+      }
+      if (paramNames.size() > 5 && (hs = atts.get(ATTR_CAM_DOF_PARAM6)) != null) {
+        pFlame.setCamDOFParam6(Double.parseDouble(hs));
+      }
+    }
+
     if ((hs = atts.get(ATTR_CAM_DOF_AREA)) != null) {
       pFlame.setCamDOFArea(Double.parseDouble(hs));
     }
