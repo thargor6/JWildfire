@@ -1,0 +1,10 @@
+Some useful 1-click presets for the crackle plugin.
+Adapted by Anu Wilde (zweeZwyy.deviantart.com) from original 5 choice script written by Ian Anderson (iDeviant.deviantart.com).
+
+Adapted for Jwildfire by MickHogan,  Aug. 25, 2013.
+
+Make or load a flame.  
+Run the script.
+Your selected crackle style will be applied to the flame.
+You can apply more than one crackle, by running the script again.
+You can remove the crackle by deleting the crackle Transform(s) from your flame.

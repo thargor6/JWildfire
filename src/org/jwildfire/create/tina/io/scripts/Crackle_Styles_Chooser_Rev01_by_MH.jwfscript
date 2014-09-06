@@ -1,0 +1,476 @@
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
+import org.jwildfire.create.tina.transform.XFormTransformService;
+
+
+  
+public void run(ScriptRunnerEnvironment pEnv) throws Exception {
+  // create a new flame
+  Flame flame = pEnv.getCurrFlame();
+
+  if(flame==null) {
+    throw new Exception("Please select a flame at first");
+  }
+
+  double code = 1;
+
+  
+  String str = javax.swing.JOptionPane.showInputDialog(null, "Code:" + + "\r\n" + "1 = blob, 2 = net, 3 = texture, 4 = paving, 5 = grid," + + "\r\n" + "6 = mosaic, 7 = boxes, 8 = nebula, 9 = molecular, 10 = tinybubbles," + "\r\n" + "11 = medFilledBoxes, 12 = bigBoxes, 13 = veryBigBoxes, 14 = shibori, 15 = ScotchMist," + "\r\n" + "16 = squaredGrid, 17 = blocky, 18 = cubish, 19 = wired, 20 = mechano, 21 = default" + "\r\n", "Please Enter Code", 1);
+
+  code = Double.parseDouble(str);   // Converts above str value into a number
+
+  // blob
+  if (code == 1)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (blob)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 0.5);
+    varFunc.setParameter("distort", 1.0);
+    varFunc.setParameter("scale", 0.95);
+    varFunc.setParameter("z", 10.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else {
+  
+  // net
+  if (code == 2)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (net)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 0.01);
+    varFunc.setParameter("distort", 0.5);
+    varFunc.setParameter("scale", 1.0);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {
+  
+  // texture
+  if (code == 3)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (texture)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.05);
+    varFunc.setParameter("power", 0.9);
+    varFunc.setParameter("distort", 0.9);
+    varFunc.setParameter("scale", 0.5);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // paving
+  if (code == 4)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (paving)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 1.0);
+    varFunc.setParameter("distort", 1.0);
+    varFunc.setParameter("scale", 0.93);
+    varFunc.setParameter("z", 10.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // grid
+  if (code == 5)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (grid)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 1.0);
+    varFunc.setParameter("power", 1.0);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 0.9);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // mosaic
+  if (code == 6)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (mosaic)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.8);
+    varFunc.setParameter("power", 0.5);
+    varFunc.setParameter("distort", 0.5);
+    varFunc.setParameter("scale", 0.8);
+    varFunc.setParameter("z", 0.5);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // boxes
+  if (code == 7)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (boxes)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.2);
+    varFunc.setParameter("power", 0.01);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 0.4);
+    varFunc.setParameter("z", 2.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else {
+  
+  // nebula
+  if (code == 8)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (nebula)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 1.0);
+    varFunc.setParameter("power", 0.5);
+    varFunc.setParameter("distort", 0.25);
+    varFunc.setParameter("scale", 0.5);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {
+  
+  // molecular
+  if (code == 9)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (molecular)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.6);
+    varFunc.setParameter("power", 0.75);
+    varFunc.setParameter("distort", 1.0);
+    varFunc.setParameter("scale", 0.25);
+    varFunc.setParameter("z", 0.75);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // tinybubbles
+  if (code == 10)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (tinybubbles)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 25.0);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 9.0);
+    varFunc.setParameter("z", 6.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // medFilledBoxes
+  if (code == 11)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (medFilledBoxes)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.2);
+    varFunc.setParameter("power", 1.0);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 0.4);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // bigBoxes
+  if (code == 12)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (bigBoxes)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 1.5);
+    varFunc.setParameter("power", 0.01);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 0.4);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // veryBigBoxes
+  if (code == 13)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (veryBigBoxes)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 8.0);
+    varFunc.setParameter("power", 0.01);
+    varFunc.setParameter("distort", 0.0);
+    varFunc.setParameter("scale", 0.4);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else {
+  
+  // shibori
+  if (code == 14)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (shibori)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.2);
+    varFunc.setParameter("power", 0.05);
+    varFunc.setParameter("distort", 1.0);
+    varFunc.setParameter("scale", 5.0);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {
+  
+  // ScotchMist
+  if (code == 15)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (ScotchMist)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.07);
+    varFunc.setParameter("power", 0.05);
+    varFunc.setParameter("distort", 0.5);
+    varFunc.setParameter("scale", 9.0);
+    varFunc.setParameter("z", 6.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // squaredGrid
+  if (code == 16)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (squaredGrid)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.2);
+    varFunc.setParameter("power", 0.1);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 1.5);
+    varFunc.setParameter("z", 2.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // blocky
+  if (code == 17)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (blocky)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.297494);
+    varFunc.setParameter("power", 0.662265);
+    varFunc.setParameter("distort", 0.0708866);
+    varFunc.setParameter("scale", 0.228156);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // cubish
+  if (code == 18)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (cubish)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.205939);
+    varFunc.setParameter("power", 1.0);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 0.6298);
+    varFunc.setParameter("z", 0.35);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {  
+  
+  // wired
+  if (code == 19)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (wired)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 0.001);
+    varFunc.setParameter("distort", 1.0);
+    varFunc.setParameter("scale", 2.0);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else {
+  
+  // mechano
+  if (code == 20)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (mechano)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 0.5);
+    varFunc.setParameter("power", 0.0005);
+    varFunc.setParameter("distort", 0.748);
+    varFunc.setParameter("scale", 1.465);
+    varFunc.setParameter("z", 6.0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {
+  
+  // default
+  if (code == 21)
+  // create transform 1
+  {
+    XForm xForm = new XForm();
+    flame.getXForms().add(xForm);
+    xForm.setWeight(0.5);
+    xForm.setAntialiasAmount(0.75);
+    xForm.setAntialiasRadius(0.36);
+
+    // variation 1 (default)
+    VariationFunc varFunc=VariationFuncList.getVariationFuncInstance("crackle", true);
+    varFunc.setParameter("cellsize", 1);
+    varFunc.setParameter("power", 0.2);
+    varFunc.setParameter("distort", 0);
+    varFunc.setParameter("scale", 1);
+    varFunc.setParameter("z", 0);    
+    xForm.addVariation(1.0, varFunc);
+  } else  {    
+  
+
+    javax.swing.JOptionPane.showMessageDialog(null, "Incorrect input, should be" + "\r\n" + "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 or 21!" + "\r\n" + "Please Run Script again!", null, 1);
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  
+  
+    pEnv.setCurrFlame(flame);
+
+}

@@ -1,0 +1,5 @@
+/* ScriptInfo
+author="Mick Hogan" category="Randomizer"
+info="From an idea by Mario Olive, Apr. 18, 2014. Adds or Changes Final Transform on an existing flame."
+*/
+
