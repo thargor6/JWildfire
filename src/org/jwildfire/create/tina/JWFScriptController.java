@@ -388,7 +388,11 @@ public class JWFScriptController {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("Script library", true);
     // Internal flames
     {
-      String[] ressources = { "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
+      String[] ressources = {
+          "LoonieSplits DT",
+          "Buckballs by DT",
+          "M&M Flower DT",
+          "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
           "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
           "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3", "Wedge_Sph_Marble" };
       List<String> resLst = Arrays.asList(ressources);

@@ -20605,7 +20605,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(getPanel_117());
 
       channelMixerModeCmb = new JComboBox();
-      channelMixerModeCmb.setEnabled(false);
       channelMixerModeCmb.setPreferredSize(new Dimension(125, 24));
       channelMixerModeCmb.setMinimumSize(new Dimension(100, 24));
       channelMixerModeCmb.setMaximumSize(new Dimension(32767, 24));
