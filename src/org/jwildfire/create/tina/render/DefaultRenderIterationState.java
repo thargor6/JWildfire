@@ -281,6 +281,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
     }
+    if (p.withAlpha) {
+      plotRed *= p.alpha;
+      plotGreen *= p.alpha;
+      plotBlue *= p.alpha;
+    }
   }
 
   public interface PointProjector {
@@ -325,6 +330,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
     @Override
     public void projectPoint(XYZPoint q) {
+      if (q.doHide)
+        return;
       a.assign(q);
       b.assign(q);
       double dx, dy;
@@ -357,6 +364,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
     @Override
     public void projectPoint(XYZPoint q) {
+      if (q.doHide)
+        return;
       a.assign(q);
       b.assign(q);
       double dx, dy;
@@ -407,6 +416,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
     @Override
     public void projectPoint(XYZPoint q) {
+      if (q.doHide)
+        return;
       double dx = q.x - centreX;
       double dy = q.y - centreY;
       parent.projectPoint(q);
@@ -423,7 +434,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
     @Override
     public void projectPoint(XYZPoint q) {
-      if (!view.project(q, prj))
+      if (q.doHide || !view.project(q, prj))
         return;
       int xIdx, yIdx;
       if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {

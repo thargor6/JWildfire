@@ -49,13 +49,14 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_IS_SEQUENCE = "is_sequence";
   private static final String PARAM_SEQUENCE_START = "sequence_start";
   private static final String PARAM_SEQUENCE_DIGITS = "sequence_digits";
+  private static final String PARAM_ALPHA_MODE = "alpha_mode";
 
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
   public static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
   public static final String RESSOURCE_IMAGE_SRC = "image_src";
   public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS };
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS, PARAM_ALPHA_MODE };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC };
 
   private double scaleX = 1.0;
@@ -75,6 +76,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private int is_sequence = 0;
   private int sequence_start = 1;
   private int sequence_digits = 4;
+  private int alpha_mode = 0;
 
   // derived params
   private int imgWidth, imgHeight;
@@ -111,24 +113,42 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       if (colorMap instanceof SimpleImage) {
         toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
             ix, iy));
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = toolPixel.r;
-        pVarTP.greenColor = toolPixel.g;
-        pVarTP.blueColor = toolPixel.b;
+        if (alpha_mode == 1) {
+          pVarTP.withAlpha = true;
+          pVarTP.alpha = (double) toolPixel.r / 255.0 * 10.0;
+        }
+        else {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = toolPixel.r;
+          pVarTP.greenColor = toolPixel.g;
+          pVarTP.blueColor = toolPixel.b;
+        }
       }
       else {
         ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = rgbArray[0];
-        pVarTP.greenColor = rgbArray[0];
-        pVarTP.blueColor = rgbArray[0];
+        if (alpha_mode == 1) {
+          pVarTP.withAlpha = true;
+          pVarTP.alpha = rgbArray[0] / 255.0 * 10.0;
+        }
+        else {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = rgbArray[0];
+          pVarTP.greenColor = rgbArray[0];
+          pVarTP.blueColor = rgbArray[0];
+        }
       }
     }
     else {
-      pVarTP.rgbColor = true;
-      pVarTP.redColor = 0;
-      pVarTP.greenColor = 0;
-      pVarTP.blueColor = 0;
+      if (alpha_mode == 1) {
+        pVarTP.withAlpha = true;
+        pVarTP.alpha = 0;
+      }
+      else {
+        pVarTP.rgbColor = true;
+        pVarTP.redColor = 0;
+        pVarTP.greenColor = 0;
+        pVarTP.blueColor = 0;
+      }
     }
     double dz = this.offsetZ;
     if (fabs(scaleZ) > EPSILON) {
@@ -151,7 +171,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, is_sequence, sequence_start, sequence_digits };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, is_sequence, sequence_start, sequence_digits, alpha_mode };
   }
 
   @Override
@@ -186,6 +206,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       sequence_digits = Tools.FTOI(pValue);
       clearCurrColorMap();
     }
+    else if (PARAM_ALPHA_MODE.equalsIgnoreCase(pName))
+      alpha_mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }

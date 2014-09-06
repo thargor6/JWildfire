@@ -314,7 +314,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;
     pVarT.blueColor = pAffineT.blueColor;
-
+    pVarT.withAlpha = pAffineT.withAlpha;
+    pVarT.doHide = pAffineT.doHide;
+    pVarT.alpha = pAffineT.alpha;
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() < 0) {
         variation.transform(pContext, this, pAffineT, pVarT);
@@ -340,6 +342,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;
     pDstPoint.blueColor = pVarT.blueColor;
+    pDstPoint.withAlpha = pVarT.withAlpha;
+    pDstPoint.doHide = pVarT.doHide;
+    pDstPoint.alpha = pVarT.alpha;
     if (isHasPostCoeffs()) {
       double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
       double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
