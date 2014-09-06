@@ -183,9 +183,10 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       iterCount = iterator.iterate(x0, y0, max_iter);
       if ((clip_iter_max < 0 && iterCount >= (max_iter + clip_iter_max)) || (clip_iter_min > 0 && iterCount <= clip_iter_min)) {
         if (i == max_clip_iter - 1) {
-          pVarTP.x = pVarTP.y = pVarTP.z = -120000.0 * (pContext.random() + 0.5);
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = pVarTP.greenColor = pVarTP.blueColor = 0;
+          //          pVarTP.x = pVarTP.y = pVarTP.z = -120000.0 * (pContext.random() + 0.5);
+          //          pVarTP.rgbColor = true;
+          //          pVarTP.redColor = pVarTP.greenColor = pVarTP.blueColor = 0;
+          pVarTP.doHide = true;
           return;
         }
       }

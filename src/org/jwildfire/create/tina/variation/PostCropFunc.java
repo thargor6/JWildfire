@@ -49,7 +49,9 @@ public class PostCropFunc extends VariationFunc {
     double x = pVarTP.x;
     double y = pVarTP.y;
     if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (zero != 0)) {
-      x = y = 0;
+      //      x = y = 0;
+      pVarTP.doHide = true;
+      return;
     }
     else {
       if (x < xmin)

@@ -36,11 +36,15 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public double modContrast;
   public double modSaturation;
   // custom RGB colors
-  public boolean rgbColor = false;
+  public boolean rgbColor;
   public double redColor;
   public double greenColor;
   public double blueColor;
-
+  // custom alpha channel
+  public boolean withAlpha;
+  public double alpha;
+  // supress sample from drawing
+  public boolean doHide;
   // often (but not always) used properties, calculation only if needed
   protected double sumsq;
   protected boolean validSumsq;
@@ -88,6 +92,9 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     redColor = p.redColor;
     greenColor = p.greenColor;
     blueColor = p.blueColor;
+    withAlpha = p.withAlpha;
+    doHide = p.doHide;
+    alpha = p.alpha;
   }
 
   @Override
@@ -102,8 +109,8 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   }
 
   public void clear() {
-    rgbColor = false;
-    redColor = greenColor = blueColor = 0.0;
+    rgbColor = withAlpha = doHide = false;
+    redColor = greenColor = blueColor = alpha = 0.0;
     x = y = z = color = modGamma = modContrast = modSaturation = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
     validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
@@ -165,7 +172,8 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
         fabs(modContrast - pSrc.modContrast) > EPSILON ||
         fabs(modSaturation - pSrc.modSaturation) > EPSILON ||
         rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
-        fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON) {
+        fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON ||
+        withAlpha != pSrc.withAlpha || fabs(alpha - pSrc.alpha) > EPSILON || doHide != pSrc.doHide) {
       return false;
     }
     return true;

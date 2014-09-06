@@ -49,10 +49,9 @@ public class CropFunc extends VariationFunc {
     double x = pAffineTP.x;
     double y = pAffineTP.y;
     if (((x < xmin) || (x > xmax) || (y < ymin) || (y > ymax)) && (zero != 0)) {
-      // TODO
-      //      x = y = 0;
-      x = 11;
-      y = 12;
+      //            x = y = 0;
+      pVarTP.doHide = true;
+      return;
     }
     else {
       if (x < xmin)

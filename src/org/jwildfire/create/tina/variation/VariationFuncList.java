@@ -404,6 +404,8 @@ public class VariationFuncList {
     registerVariationFunc(LogDbFunc.class);
     registerVariationFunc(Sph3DFunc.class);
     registerVariationFunc(XHeartBlurWFFunc.class);
+    registerVariationFunc(DinisSurfaceWFFunc.class);
+    registerVariationFunc(PreRectWFFunc.class);
   }
 
   private static void registerVariationFunc(

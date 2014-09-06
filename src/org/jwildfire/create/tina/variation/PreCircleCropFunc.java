@@ -70,7 +70,8 @@ public class PreCircleCropFunc extends VariationFunc {
     double c = cos(ang);
 
     if (cr0 && esc) {
-      pAffineTP.x = pAffineTP.y = 0;
+      //      pAffineTP.x = pAffineTP.y = 0;
+      pAffineTP.doHide = true;
     }
     else if (cr0 && !esc) {
       pAffineTP.x += vv * pAffineTP.x + x0;
