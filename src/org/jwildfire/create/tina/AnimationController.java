@@ -86,6 +86,7 @@ public class AnimationController {
     keyframesFrameCountField.setVisible(enabled);
     keyframesFrameLbl.setVisible(enabled);
     keyframesFrameCountLbl.setVisible(enabled);
+    motionCurvePlayPreviewButton.setVisible(enabled);
   }
 
   private void adjustFrameControls(int frame) {

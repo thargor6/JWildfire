@@ -37,6 +37,7 @@ public abstract class AbstractRenderThread implements Runnable {
   protected SampleTonemapper tonemapper;
   protected boolean forceAbort;
   protected boolean finished;
+  protected final Prefs prefs;
   protected RenderThreadPersistentState resumeState;
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
@@ -49,6 +50,7 @@ public abstract class AbstractRenderThread implements Runnable {
     slices = pSlices;
     sliceThicknessMod = pSliceThicknessMod;
     sliceThicknessSamples = pSliceThicknessSamples;
+    prefs = pPrefs;
     ctx = new FlameTransformationContext(pRenderer, randGen, pRenderPackets.get(0).getFlame().getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());

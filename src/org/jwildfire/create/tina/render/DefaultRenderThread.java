@@ -9,11 +9,17 @@ import org.jwildfire.create.tina.base.Layer;
 public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long startIter;
   protected long iter;
+  public int responsibility, responsibilityCheck;
+
   protected List<DefaultRenderIterationState> iterationState;
 
   public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+    responsibility = pPrefs.getTinaResponsibility() > 0 ? pPrefs.getTinaResponsibility() : 0;
+    responsibilityCheck = responsibility > 0 ? 1000 / responsibility : 0;
+
     iterationState = new ArrayList<DefaultRenderIterationState>();
+
     for (RenderPacket packet : pRenderPackets) {
       List<Layer> layers = getValidLayers(packet.getFlame());
       for (Layer layer : layers) {
@@ -99,6 +105,14 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext();
       }
+      if (responsibilityCheck > 0 && (iter % responsibilityCheck == 0)) {
+        try {
+          Thread.sleep(responsibility);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 
@@ -125,6 +139,16 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext(pSlices, pThicknessMod, pThicknessSamples);
       }
+
+      if (responsibilityCheck > 0 && (iter % responsibilityCheck == 0)) {
+        try {
+          Thread.sleep(responsibility);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+
     }
   }
 
