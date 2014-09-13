@@ -25,7 +25,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -87,6 +86,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private SimpleImage image;
   private Flame currFlame;
   private List<AbstractRenderThread> threads;
+  private UpdateDisplayThread updateDisplayThread;
   private FlameRenderer renderer;
   private State state = State.IDLE;
   private final QuickSaveFilenameGen qsaveFilenameGen;
@@ -297,10 +297,12 @@ public class TinaInteractiveRendererController implements IterationObserver {
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
       sampleCount = 0;
-      initStatsUpdateCounter();
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       threads = renderer.startRenderFlame(info);
+      updateDisplayThread = new UpdateDisplayThread();
+      new Thread(updateDisplayThread).start();
+
       state = State.RENDER;
       enableControls();
     }
@@ -316,6 +318,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private void cancelRender() {
     if (state == State.RENDER) {
+      if (updateDisplayThread != null) {
+        updateDisplayThread.cancel();
+        updateDisplayThread = null;
+      }
       while (true) {
         boolean done = true;
         for (AbstractRenderThread thread : threads) {
@@ -375,51 +381,76 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private final static int STATS_UPDATE_INTERVAL = 100000;
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 4000;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 500;
-  private final static int MAX_UPDATE_INC_INTERVAL = 500000;
+  private final static int STATS_UPDATE_INTERVAL = 100;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
+  private final static int MAX_UPDATE_INC_INTERVAL = 1000;
 
   private long sampleCount;
-  private int nextImageUpdate;
-  private int nextStatsUpdate;
-  private int lastImageUpdateInterval;
 
-  private void initStatsUpdateCounter() {
-    nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
-    lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
-    nextStatsUpdate = STATS_UPDATE_INTERVAL;
-    updateStatsGate.set(true);
-    updateImageGate.set(true);
+  private class UpdateDisplayThread implements Runnable {
+    private int nextImageUpdate;
+    private int nextStatsUpdate;
+    private int lastImageUpdateInterval;
+    private boolean cancelSignalled;
+
+    public UpdateDisplayThread() {
+      nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+      lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
+      nextStatsUpdate = STATS_UPDATE_INTERVAL;
+    }
+
+    @Override
+    public void run() {
+      cancelSignalled = false;
+      while (!cancelSignalled) {
+        try {
+          if (--nextImageUpdate <= 0) {
+            lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+            if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+              lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+            }
+            updateImage();
+            nextImageUpdate = lastImageUpdateInterval;
+          }
+          else if (--nextStatsUpdate <= 0) {
+            for (int i = 0; i < threads.size(); i++) {
+              AbstractRenderThread thread = threads.get(0);
+              double quality = thread.getTonemapper().calcDensity(sampleCount);
+              if (i == 0) {
+                updateStats(quality);
+              }
+              thread.getTonemapper().setDensity(quality);
+            }
+            nextStatsUpdate = STATS_UPDATE_INTERVAL;
+          }
+          else
+            Thread.sleep(1);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    public void cancel() {
+      cancelSignalled = true;
+    }
+
   }
 
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
 
-  private AtomicBoolean updateStatsGate = new AtomicBoolean();
-  private AtomicBoolean updateImageGate = new AtomicBoolean();
-
   private void updateImage() {
     imageRootPanel.repaint();
-    try {
-      Thread.sleep(1);
-    }
-    catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
-  private void updateStats(AbstractRenderThread pEventSource, double pQuality) {
+  private void updateStats(double pQuality) {
     statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
         "samples so far: " + sampleCount + "\n" +
         "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
     statsTextArea.validate();
-    try {
-      Thread.sleep(1);
-    }
-    catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
@@ -427,22 +458,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     sampleCount++;
     if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (--nextImageUpdate <= 0 && updateImageGate.getAndSet(false)) {
-        lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
-        if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
-          lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
-        }
-        updateImage();
-        nextImageUpdate = lastImageUpdateInterval;
-        updateImageGate.set(true);
-      }
-      if (--nextStatsUpdate <= 0 && updateStatsGate.getAndSet(false)) {
-        double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-        updateStats(pEventSource, quality);
-        pEventSource.getTonemapper().setDensity(quality);
-        nextStatsUpdate = STATS_UPDATE_INTERVAL;
-        updateStatsGate.set(true);
-      }
     }
   }
 
@@ -631,12 +646,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
         renderer.registerIterationObserver(this);
         sampleCount = renderer.calcSampleCount();
-        initStatsUpdateCounter();
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         for (AbstractRenderThread thread : threads) {
           new Thread(thread).start();
         }
+        updateDisplayThread = new UpdateDisplayThread();
+        new Thread(updateDisplayThread).start();
+
         state = State.RENDER;
         enableControls();
       }
