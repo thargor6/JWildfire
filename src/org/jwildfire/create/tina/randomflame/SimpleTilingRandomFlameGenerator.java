@@ -125,4 +125,8 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
     return true;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

@@ -264,4 +264,8 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
     return Math.random() > 0.5;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

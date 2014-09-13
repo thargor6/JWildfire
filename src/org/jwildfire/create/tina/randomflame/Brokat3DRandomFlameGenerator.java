@@ -52,4 +52,9 @@ public class Brokat3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGe
     return pFlame;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
 }

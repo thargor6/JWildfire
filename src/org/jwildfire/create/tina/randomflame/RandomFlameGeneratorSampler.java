@@ -20,6 +20,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
@@ -121,9 +122,11 @@ public class RandomFlameGeneratorSampler {
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
       flame.setSpatialFilterRadius(0.0);
-      RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors);
-
-      flame.getFirstLayer().setPalette(palette);
+      for (Layer layer : flame.getLayers()) {
+        RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors);
+        layer.setPalette(palette);
+      }
+      flame = randGen.postProcessFlame(randGenState, flame);
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;

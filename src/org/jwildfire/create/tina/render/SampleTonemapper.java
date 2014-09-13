@@ -68,9 +68,12 @@ public class SampleTonemapper {
   public void setDensity(double quality) {
     flame.setSampleDensity(quality);
 
-    logDensityFilter = new LogDensityFilter(flame, randGen);
-    gammaCorrectionFilter = new GammaCorrectionFilter(flame, false);
-    logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, imageWidth, imageHeight);
+    LogDensityFilter newLogDensityFilter = new LogDensityFilter(flame, randGen);
+    GammaCorrectionFilter newGammaCorrectionFilter = new GammaCorrectionFilter(flame, false);
+    newLogDensityFilter.setRaster(raster, rasterWidth, rasterHeight, imageWidth, imageHeight);
+
+    gammaCorrectionFilter = newGammaCorrectionFilter;
+    logDensityFilter = newLogDensityFilter;
   }
 
 }

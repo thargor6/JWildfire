@@ -389,4 +389,8 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

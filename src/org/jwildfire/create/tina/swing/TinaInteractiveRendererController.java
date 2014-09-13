@@ -414,12 +414,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
             nextImageUpdate = lastImageUpdateInterval;
           }
           else if (--nextStatsUpdate <= 0) {
-            for (int i = 0; i < threads.size(); i++) {
-              AbstractRenderThread thread = threads.get(0);
-              double quality = thread.getTonemapper().calcDensity(sampleCount);
-              if (i == 0) {
-                updateStats(quality);
-              }
+            double quality = threads.get(0).getTonemapper().calcDensity(sampleCount);
+            updateStats(quality);
+            for (AbstractRenderThread thread : threads) {
               thread.getTonemapper().setDensity(quality);
             }
             nextStatsUpdate = STATS_UPDATE_INTERVAL;

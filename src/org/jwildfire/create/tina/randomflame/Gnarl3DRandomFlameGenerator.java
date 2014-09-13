@@ -56,4 +56,8 @@ public class Gnarl3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGen
     return pFlame;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

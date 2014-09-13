@@ -115,4 +115,8 @@ public class DuckiesRandomFlameGenerator extends RandomFlameGenerator {
     return true;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

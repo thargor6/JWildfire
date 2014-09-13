@@ -30,6 +30,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
 
   static {
     allGenerators = new ArrayList<RandomFlameGenerator>();
+    allGenerators.add(new BlackAndWhiteRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new Brokat3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
@@ -115,6 +116,12 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
     return createRandGen(pState).isUseFilter(pState);
+  }
+
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    RandomFlameGenerator generator = createRandGen(pState);
+    return generator.postProcessFlame(pState, pFlame);
   }
 
 }

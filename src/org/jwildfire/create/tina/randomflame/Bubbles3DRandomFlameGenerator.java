@@ -146,4 +146,8 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
     return true;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

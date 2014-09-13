@@ -77,4 +77,8 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
     return false;
   }
 
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }
