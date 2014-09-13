@@ -1,3 +1,23 @@
+V2.00 (xx.xx.2014):
+ - new "Black&White"-random-flame-generator inspired by the "B&W converter"-script by Brad Stefanov and Mick Hogan
+ - changed the "*crop", "*circlecrop" and "fract*"-variations to use the new mechanism to hide samples (should remove an "annoying vertical line" in some cases)
+ - support for actually hiding pixels which can be used from within variations to control visibility, especiall useful for cropping which really crops instead of setting points at a random position or zero
+ - added a new experimental option to make the program (and the OS) more responsible while rendering. This is enabled by default. Change the property "tinaResponsibility" in the Prefs-window to tune the behaviour
+ - internally reworked the strategy of the refresh of the display of the interactive renderer
+ - added new scripts "Add Random Final FX by MH and MO", "Textured_Cylinders_Rev01_by_MH" and "Crackle_Styles_Chooser_Rev01_by_MH", all created  by Mick Hogan, as Standard-Scripts
+ - added new scripts "LoonieSplits DT", "Buckballs by DT" and "M&M Flower DT", all created  by Don Town as Standard-Scripts
+ - experimental support for an additional alpha channel which can be modified by variations
+ - new "dinis_surface"-variation
+ - new "pre_rect"-variation
+
+ - created a fix to avoid the default "overexposing" of many flames, i.e. most renders should look darker by default, but should look more smooth
+ - created a new "Bokeh"-subtab on the "DOF"-tab. Here you can adjust different options to create awesome "bokeh"-like effects
+ - tried to make the Interactive Renderer behave more "smooth"
+ - added two new parameters to "fract_*"-variations: "z_fill" to fill the vertical gaps in 3d-mode, "z_logscale" to use log-scale in z-direction (nice for creating 3D-meshes)
+ - fixed an unwanted "dot" in the "primitives_wf"-variation, when drawing a pyramid-shape
+ - new experimental "xheart_blur"-variation (which bases on "xheart" by Xyrus02)
+ - fixed dark background in the help-section
+
 V1.90 (24.08.2014):
  - Motion-Curves in the Main-Editor:
     - after a long period of development I finally decided to enable the motion-curve-editor in the main editor! This means you can define 
