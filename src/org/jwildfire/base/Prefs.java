@@ -67,7 +67,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PATH_MOVIEFLAMES = "tina.path.movie.flames";
 
   static final String KEY_TINA_PATH_SVG = "tina.path.svg";
-  static final String KEY_TINA_RESPONSIBILITY = "tina.render.responsibility";
+  static final String KEY_TINA_RESPONSIVENESS = "tina.render.responsiveness";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
@@ -172,8 +172,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
 
-  @Property(description = "Try to keep the program responsible while rendering, the higher values the higher the responsibility, the lower the render speed", category = PropertyCategory.TINA)
-  private int tinaResponsibility = 1;
+  @Property(description = "Try to keep the program responsible while rendering, the higher values the higher the responsiveness, the lower the render speed", category = PropertyCategory.TINA)
+  private int tinaResponsiveness = 1;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -529,7 +529,7 @@ public class Prefs extends ManagedObject {
     tinaGradientPath = pSrc.tinaGradientPath;
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
-    tinaResponsibility = pSrc.tinaResponsibility;
+    tinaResponsiveness = pSrc.tinaResponsiveness;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -874,17 +874,17 @@ public class Prefs extends ManagedObject {
     tinaMeshPath = pTinaMeshPath;
   }
 
-  public int getTinaResponsibility() {
-    return tinaResponsibility;
+  public int getTinaResponsiveness() {
+    return tinaResponsiveness;
   }
 
-  public void setTinaResponsibility(int pTinaResponsibility) {
-    tinaResponsibility = pTinaResponsibility;
-    if (tinaResponsibility < 0) {
-      tinaResponsibility = 0;
+  public void setTinaResponsiveness(int pTinaResponsiveness) {
+    tinaResponsiveness = pTinaResponsiveness;
+    if (tinaResponsiveness < 0) {
+      tinaResponsiveness = 0;
     }
-    else if (tinaResponsibility > 10) {
-      tinaResponsibility = 10;
+    else if (tinaResponsiveness > 10) {
+      tinaResponsiveness = 10;
     }
   }
 

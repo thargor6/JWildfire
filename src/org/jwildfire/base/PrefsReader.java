@@ -98,7 +98,7 @@ public class PrefsReader {
         pPrefs.setTinaEditorControlsWithShadows(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS, pPrefs.isTinaEditorControlsWithShadows()));
         pPrefs.setTinaEditorControlsWithNumbers(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS, pPrefs.isTinaEditorControlsWithNumbers()));
         pPrefs.setTinaEditorGridSize(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_GRID_SIZE, pPrefs.getTinaEditorGridSize()));
-        pPrefs.setTinaResponsibility(getIntProperty(props, Prefs.KEY_TINA_RESPONSIBILITY, pPrefs.getTinaResponsibility()));
+        pPrefs.setTinaResponsiveness(getIntProperty(props, Prefs.KEY_TINA_RESPONSIVENESS, pPrefs.getTinaResponsiveness()));
         try {
           FlamePanelControlStyle style = FlamePanelControlStyle.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_STYLE, pPrefs.getTinaEditorControlsStyle().toString()));
           pPrefs.setTinaEditorControlsStyle(style);

@@ -15,7 +15,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
   public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-    responsibility = pPrefs.getTinaResponsibility() > 0 ? pPrefs.getTinaResponsibility() : 0;
+    responsibility = pPrefs.getTinaResponsiveness() > 0 ? pPrefs.getTinaResponsiveness() : 0;
     responsibilityCheck = responsibility > 0 ? 1000 / responsibility : 0;
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
