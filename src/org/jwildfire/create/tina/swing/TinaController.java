@@ -4264,11 +4264,15 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       undoManager.setEnabled(false);
       try {
         int txRow = data.transformationsTable.getSelectedRow();
+        int layersRow = data.layersTable.getSelectedRow();
         undoManager.saveUndoPoint(getCurrFlame());
         undoManager.undo(getCurrFlame());
         registerToEditor(getCurrFlame(), getCurrLayer());
         enableUndoControls();
         refreshUI();
+        if (layersRow > 0) {
+          data.layersTable.getSelectionModel().setSelectionInterval(layersRow, layersRow);
+        }
         if (txRow >= 0) {
           data.transformationsTable.getSelectionModel().setSelectionInterval(txRow, txRow);
         }
@@ -4284,10 +4288,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       undoManager.setEnabled(false);
       try {
         int txRow = data.transformationsTable.getSelectedRow();
+        int layersRow = data.layersTable.getSelectedRow();
         undoManager.redo(getCurrFlame());
         registerToEditor(getCurrFlame(), getCurrLayer());
         enableUndoControls();
         refreshUI();
+        if (layersRow > 0) {
+          data.layersTable.getSelectionModel().setSelectionInterval(layersRow, layersRow);
+        }
         if (txRow >= 0) {
           data.transformationsTable.getSelectionModel().setSelectionInterval(txRow, txRow);
         }
