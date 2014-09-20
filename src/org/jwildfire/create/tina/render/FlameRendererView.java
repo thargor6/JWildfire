@@ -25,13 +25,11 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
-import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.SineBlurFunc;
 
 public class FlameRendererView {
   protected final Flame flame;
@@ -60,6 +58,7 @@ public class FlameRendererView {
   private final FlameTransformationContext flameTransformationContext;
   private final DOFBlurShape dofBlurShape;
   protected final Stereo3dEye eye;
+  private double area, fade, areaMinusFade;
 
   public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
     flame = pFlame;
@@ -96,6 +95,9 @@ public class FlameRendererView {
     doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
+    area = flame.getCamDOFArea();
+    fade = flame.getCamDOFArea() / 1.25;
+    areaMinusFade = area - fade;
   }
 
   public void initView() {
@@ -180,25 +182,14 @@ public class FlameRendererView {
           double ydist = (camPoint.y - flame.getFocusY());
           double zdist = (camPoint.z - flame.getFocusZ());
 
-          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1 / flame.getCamDOFExponent()) - flame.getCamDOFArea();
-          if (dist > 0.00001) {
-            boolean starBlur = false;
-            if (starBlur) {
-              XYZPoint s = new XYZPoint();
-              s.x = camPoint.x;
-              s.y = camPoint.y;
-              s.z = camPoint.z;
-              XYZPoint d = new XYZPoint(s);
-              //              StarBlurFunc fnc = new StarBlurFunc();
-              SineBlurFunc fnc = new SineBlurFunc();
-              double dr = randGen.random() * camDOF_10 * dist;
-              fnc.transform(flameTransformationContext, new XForm(), s, d, dr);
-              pPoint.x = d.x / zr;
-              pPoint.y = d.y / zr;
-            }
-            else {
-              dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist, zr);
-            }
+          double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1.0 / flame.getCamDOFExponent());
+
+          if (dist > area) {
+            dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist, zr);
+          }
+          else if (dist > areaMinusFade) {
+            double scl = (dist - areaMinusFade) / fade;
+            dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist * scl * scl, zr);
           }
           else {
             dofBlurShape.applyOnlyCamera(camPoint, pPoint, zdist, zr);
