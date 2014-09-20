@@ -29,6 +29,7 @@ public class RandomGradientGeneratorList {
   static {
     registerRandomGradientGenerator(AllRandomGradientGenerator.class);
     registerRandomGradientGenerator(StrongHueRandomGradientGenerator.class);
+    registerRandomGradientGenerator(StripesRandomGradientGenerator.class);
     registerRandomGradientGenerator(MonochromeRandomGradientGenerator.class);
     registerRandomGradientGenerator(SmoothRandomGradientGenerator.class);
     registerRandomGradientGenerator(TwoColorsRandomGradientGenerator.class);
