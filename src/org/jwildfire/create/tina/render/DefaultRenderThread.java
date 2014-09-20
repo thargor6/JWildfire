@@ -9,14 +9,14 @@ import org.jwildfire.create.tina.base.Layer;
 public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long startIter;
   protected long iter;
-  public int responsibility, responsibilityCheck;
+  public int responsiveness, responsivenessCheck;
 
   protected List<DefaultRenderIterationState> iterationState;
 
   public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-    responsibility = pPrefs.getTinaResponsiveness() > 0 ? pPrefs.getTinaResponsiveness() : 0;
-    responsibilityCheck = responsibility > 0 ? 1000 / responsibility : 0;
+    responsiveness = pPrefs.getTinaResponsiveness() > 0 ? pPrefs.getTinaResponsiveness() : 0;
+    responsivenessCheck = responsiveness > 0 ? 100000 / responsiveness : 0;
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
 
@@ -105,9 +105,9 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext();
       }
-      if (responsibilityCheck > 0 && (iter % responsibilityCheck == 0)) {
+      if (responsivenessCheck > 0 && (iter % responsivenessCheck == 0)) {
         try {
-          Thread.sleep(responsibility);
+          Thread.sleep(responsiveness);
         }
         catch (InterruptedException e) {
           e.printStackTrace();
@@ -127,10 +127,10 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     }
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
-      if (iter % 10000 == 0) {
+      if (iter % 100000 == 0) {
         preFuseIter();
       }
-      else if (iter % 100 == 0) {
+      else if (iter % 1000 == 0) {
         currSample = iter;
         for (DefaultRenderIterationState state : iterationState) {
           state.validateState();
@@ -140,9 +140,9 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
         state.iterateNext(pSlices, pThicknessMod, pThicknessSamples);
       }
 
-      if (responsibilityCheck > 0 && (iter % responsibilityCheck == 0)) {
+      if (responsivenessCheck > 0 && (iter % responsivenessCheck == 0)) {
         try {
-          Thread.sleep(responsibility);
+          Thread.sleep(responsiveness);
         }
         catch (InterruptedException e) {
           e.printStackTrace();
