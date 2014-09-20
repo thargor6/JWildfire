@@ -1,4 +1,10 @@
 V2.00 (xx.xx.2014):
+ - retain selected layer after "Undo"/"Redo"
+ - smoother transition between DoF and non-DoF-areas
+ - new "Stripes"-random-gradient-generator
+ - renamed the misspelled "Responsibility"-property into "Responsiveness"
+ - fine-tuned the new "responsiveness"-setting
+
  - new "Black&White"-random-flame-generator inspired by the "B&W converter"-script by Brad Stefanov and Mick Hogan
  - changed the "*crop", "*circlecrop" and "fract*"-variations to use the new mechanism to hide samples (should remove an "annoying vertical line" in some cases)
  - support for actually hiding pixels which can be used from within variations to control visibility, especiall useful for cropping which really crops instead of setting points at a random position or zero
