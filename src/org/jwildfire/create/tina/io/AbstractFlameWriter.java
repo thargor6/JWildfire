@@ -313,6 +313,32 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
 
     writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
+
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_CHANNEL_MIXER_MODE, pFlame.getChannelMixerMode().toString()));
+    switch (pFlame.getChannelMixerMode()) {
+      case BRIGHTNESS:
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RR_CURVE, pFlame.getMixerRRCurve());
+        break;
+      case RGB:
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RR_CURVE, pFlame.getMixerRRCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_GG_CURVE, pFlame.getMixerGGCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_BB_CURVE, pFlame.getMixerBBCurve());
+        break;
+      case FULL:
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RR_CURVE, pFlame.getMixerRRCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RG_CURVE, pFlame.getMixerRGCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RB_CURVE, pFlame.getMixerRBCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_GR_CURVE, pFlame.getMixerGRCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_GG_CURVE, pFlame.getMixerGGCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_GB_CURVE, pFlame.getMixerGBCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_BR_CURVE, pFlame.getMixerBRCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_BG_CURVE, pFlame.getMixerBGCurve());
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_BB_CURVE, pFlame.getMixerBBCurve());
+        break;
+      default:
+        break;
+    }
+
     return attrList;
   }
 

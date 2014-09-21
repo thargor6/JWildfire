@@ -135,12 +135,16 @@ public class ChannelMixerControlsDelegate {
     data.channelMixerResetBtn.setEnabled(hasFlame);
   }
 
-  public void refreshValues() {
+  public void refreshValues(boolean pSwitchPanels) {
     boolean oldRefreshing = owner.refreshing;
     owner.refreshing = true;
     try {
       Flame flame = owner.getCurrFlame();
       data.channelMixerModeCmb.setSelectedItem(flame.getChannelMixerMode());
+      if (pSwitchPanels) {
+        setupPanels();
+        enableControls();
+      }
       for (ChannelMixerPanelDelegate mixerPanel : channelMixerPanels) {
         mixerPanel.refreshCurve(flame);
       }
@@ -157,17 +161,12 @@ public class ChannelMixerControlsDelegate {
         owner.undoManager.saveUndoPoint(flame);
       }
       flame.setChannelMixerMode((ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem());
-      setupPanels();
-      enableControls();
-      refreshValues();
+      refreshValues(true);
       owner.refreshFlameImage(false);
     }
   }
 
   private void setupPanels() {
-    if (owner.refreshing) {
-      return;
-    }
     ChannelMixerMode mode = (ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem();
     if (mode == null) {
       mode = ChannelMixerMode.OFF;
@@ -227,7 +226,7 @@ public class ChannelMixerControlsDelegate {
       owner.undoManager.saveUndoPoint(flame);
     }
     flame.resetMixerCurves();
-    refreshValues();
+    refreshValues(false);
     owner.refreshFlameImage(false);
   }
 

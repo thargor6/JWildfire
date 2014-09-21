@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -504,6 +505,39 @@ public class AbstractFlameReader {
       pFlame.setFrameCount(Integer.parseInt(hs));
     }
     readMotionCurves(pFlame, atts, null);
+
+    if ((hs = atts.get(ATTR_CHANNEL_MIXER_MODE)) != null) {
+      try {
+        pFlame.setChannelMixerMode(ChannelMixerMode.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    switch (pFlame.getChannelMixerMode()) {
+      case BRIGHTNESS:
+        readMotionCurveAttributes(atts, pFlame.getMixerRRCurve(), ATTR_CHANNEL_MIXER_RR_CURVE + "_");
+        break;
+      case RGB:
+        readMotionCurveAttributes(atts, pFlame.getMixerRRCurve(), ATTR_CHANNEL_MIXER_RR_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerGGCurve(), ATTR_CHANNEL_MIXER_GG_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerBBCurve(), ATTR_CHANNEL_MIXER_BB_CURVE + "_");
+        break;
+      case FULL:
+        readMotionCurveAttributes(atts, pFlame.getMixerRRCurve(), ATTR_CHANNEL_MIXER_RR_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerRGCurve(), ATTR_CHANNEL_MIXER_RG_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerRBCurve(), ATTR_CHANNEL_MIXER_RB_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerGRCurve(), ATTR_CHANNEL_MIXER_GR_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerGGCurve(), ATTR_CHANNEL_MIXER_GG_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerGBCurve(), ATTR_CHANNEL_MIXER_GB_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerBRCurve(), ATTR_CHANNEL_MIXER_BR_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerBGCurve(), ATTR_CHANNEL_MIXER_BG_CURVE + "_");
+        readMotionCurveAttributes(atts, pFlame.getMixerBBCurve(), ATTR_CHANNEL_MIXER_BB_CURVE + "_");
+        break;
+      default:
+        break;
+    }
+
   }
 
   public static final String ATTR_WEIGHT = "weight";
@@ -522,6 +556,16 @@ public class AbstractFlameReader {
   public static final String ATTR_ANTIALIAS_AMOUNT = "antialias_amount";
   public static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
   public static final String ATTR_VISIBLE = "visible";
+  public static final String ATTR_CHANNEL_MIXER_MODE = "mixer_mode";
+  public static final String ATTR_CHANNEL_MIXER_RR_CURVE = "mixer_rr_curve";
+  public static final String ATTR_CHANNEL_MIXER_RG_CURVE = "mixer_rg_curve";
+  public static final String ATTR_CHANNEL_MIXER_RB_CURVE = "mixer_rb_curve";
+  public static final String ATTR_CHANNEL_MIXER_GR_CURVE = "mixer_gr_curve";
+  public static final String ATTR_CHANNEL_MIXER_GG_CURVE = "mixer_gg_curve";
+  public static final String ATTR_CHANNEL_MIXER_GB_CURVE = "mixer_gb_curve";
+  public static final String ATTR_CHANNEL_MIXER_BR_CURVE = "mixer_br_curve";
+  public static final String ATTR_CHANNEL_MIXER_BG_CURVE = "mixer_bg_curve";
+  public static final String ATTR_CHANNEL_MIXER_BB_CURVE = "mixer_bb_curve";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);

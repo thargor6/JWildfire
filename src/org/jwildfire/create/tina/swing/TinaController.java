@@ -1346,7 +1346,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       enableControls();
       flameControls.refreshShadingUI();
       enableLayerControls();
-      channelMixerControls.refreshValues();
+      channelMixerControls.refreshValues(true);
       refreshPaletteUI(getCurrLayer().getPalette());
     }
     finally {
