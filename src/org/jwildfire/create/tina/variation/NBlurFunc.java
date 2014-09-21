@@ -40,11 +40,11 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class NBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_NUMEDGES = "numEdges";
-  private static final String PARAM_NUMSTRIPES = "numStripes";
-  private static final String PARAM_RATIOSTRIPES = "ratioStripes";
-  private static final String PARAM_RATIOHOLE = "ratioHole";
-  private static final String PARAM_CIRCUMCIRCLE = "circumCircle";
+  public static final String PARAM_NUMEDGES = "numEdges";
+  public static final String PARAM_NUMSTRIPES = "numStripes";
+  public static final String PARAM_RATIOSTRIPES = "ratioStripes";
+  public static final String PARAM_RATIOHOLE = "ratioHole";
+  public static final String PARAM_CIRCUMCIRCLE = "circumCircle";
   private static final String PARAM_ADJUSTTOLINEAR = "adjustToLinear";
   private static final String PARAM_EQUALBLUR = "equalBlur";
   private static final String PARAM_EXACTCALC = "exactCalc";

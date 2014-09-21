@@ -35,6 +35,12 @@ public enum DOFBlurShapeType {
       return StarBlurDOFBlurShape.class;
     }
   },
+  NBLUR {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return NBlurDOFBlurShape.class;
+    }
+  },
   HEART {
     @Override
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
