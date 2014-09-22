@@ -93,10 +93,10 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     }
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
-      if (iter % 10000 == 0) {
+      if (iter % 10000000 == 0) {
         preFuseIter();
       }
-      else if (iter % 100 == 0) {
+      else if (iter % 10000 == 0) {
         currSample = iter;
         for (DefaultRenderIterationState state : iterationState) {
           state.validateState();
@@ -127,10 +127,10 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     }
 
     for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
-      if (iter % 100000 == 0) {
+      if (iter % 10000000 == 0) {
         preFuseIter();
       }
-      else if (iter % 1000 == 0) {
+      else if (iter % 10000 == 0) {
         currSample = iter;
         for (DefaultRenderIterationState state : iterationState) {
           state.validateState();

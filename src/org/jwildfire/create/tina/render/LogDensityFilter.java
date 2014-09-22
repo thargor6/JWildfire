@@ -39,7 +39,6 @@ public class LogDensityFilter {
   private double k1, k2;
   private final FilterKernel filterKernel;
   private double motionBlurScl;
-  private final AbstractRandomGenerator randGen;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
     flame = pFlame;
@@ -49,7 +48,6 @@ public class LogDensityFilter {
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
     motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
-    randGen = pRandGen;
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
