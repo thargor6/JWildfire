@@ -16,20 +16,22 @@
 */
 package org.jwildfire.create.tina.random;
 
+import org.jwildfire.base.Prefs;
+
 public enum RandomGeneratorType {
   SIMPLE {
 
     @Override
-    public Class<? extends AbstractRandomGenerator> getGeneratorClass() {
-      return SimpleRandomGenerator.class;
+    public Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : SimpleRandomGenerator.class;
     }
   },
 
   MARSAGLIA {
 
     @Override
-    protected Class<? extends AbstractRandomGenerator> getGeneratorClass() {
-      return MarsagliaRandomGenerator.class;
+    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : MarsagliaRandomGenerator.class;
     }
 
   },
@@ -37,8 +39,8 @@ public enum RandomGeneratorType {
   MERSENNE_TWISTER {
 
     @Override
-    protected Class<? extends AbstractRandomGenerator> getGeneratorClass() {
-      return MersenneTwisterRandomGenerator.class;
+    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : MersenneTwisterRandomGenerator.class;
     }
 
   },
@@ -46,18 +48,18 @@ public enum RandomGeneratorType {
   JAVA_INTERNAL {
 
     @Override
-    protected Class<? extends AbstractRandomGenerator> getGeneratorClass() {
-      return JavaInternalRandomGenerator.class;
+    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : JavaInternalRandomGenerator.class;
     }
 
   };
 
-  protected abstract Class<? extends AbstractRandomGenerator> getGeneratorClass();
+  protected abstract Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs);
 
-  public AbstractRandomGenerator createInstance() {
+  public AbstractRandomGenerator createInstance(Prefs pPrefs) {
     AbstractRandomGenerator res;
     try {
-      res = getGeneratorClass().newInstance();
+      res = getGeneratorClass(pPrefs).newInstance();
     }
     catch (InstantiationException e) {
       throw new RuntimeException(e);
@@ -70,6 +72,6 @@ public enum RandomGeneratorType {
   }
 
   public static RandomGeneratorType getDefaultValue() {
-    return MERSENNE_TWISTER;
+    return MARSAGLIA;
   }
 }

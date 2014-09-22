@@ -1179,6 +1179,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
             RenderedFlame res = renderer.renderFlame(info);
             long t1 = System.currentTimeMillis();
             SimpleImage img = res.getImage();
+            img.getBufferedImg().setAccelerationPriority(1.0f);
 
             if (data.layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();

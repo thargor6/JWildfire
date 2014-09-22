@@ -539,6 +539,7 @@ public class Prefs extends ManagedObject {
     baseMathLibType = pSrc.baseMathLibType;
     tinaResponsiveness = pSrc.tinaResponsiveness;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
+    tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {

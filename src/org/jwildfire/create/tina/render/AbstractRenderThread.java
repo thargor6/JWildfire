@@ -46,7 +46,7 @@ public abstract class AbstractRenderThread implements Runnable {
     renderer = pRenderer;
     renderPackets = pRenderPackets;
     samples = pSamples;
-    randGen = RandomGeneratorFactory.getInstance(pPrefs.getTinaRandomNumberGenerator(), pThreadId);
+    randGen = RandomGeneratorFactory.getInstance(pPrefs, pPrefs.getTinaRandomNumberGenerator(), pThreadId);
     slices = pSlices;
     sliceThicknessMod = pSliceThicknessMod;
     sliceThicknessSamples = pSliceThicknessSamples;

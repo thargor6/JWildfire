@@ -19,14 +19,16 @@ package org.jwildfire.create.tina.random;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jwildfire.base.Prefs;
+
 public class RandomGeneratorFactory {
   private static Map<String, AbstractRandomGenerator> generatorMap = new HashMap<String, AbstractRandomGenerator>();
 
-  public static AbstractRandomGenerator getInstance(RandomGeneratorType pType, int pThreadId) {
+  public static AbstractRandomGenerator getInstance(Prefs pPrefs, RandomGeneratorType pType, int pThreadId) {
     String key = pType.toString() + "#" + pThreadId;
     AbstractRandomGenerator res = generatorMap.get(key);
     if (res == null) {
-      res = pType.createInstance();
+      res = pType.createInstance(pPrefs);
       if (!pType.equals(RandomGeneratorType.MERSENNE_TWISTER)) {
         generatorMap.put(key, res);
       }
@@ -34,7 +36,7 @@ public class RandomGeneratorFactory {
     return res;
   }
 
-  public static AbstractRandomGenerator getInstance(RandomGeneratorType pType) {
-    return getInstance(pType, 0);
+  public static AbstractRandomGenerator getInstance(Prefs pPrefs, RandomGeneratorType pType) {
+    return getInstance(pPrefs, pType, 0);
   }
 }

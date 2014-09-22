@@ -100,7 +100,7 @@ public class FlameRenderer {
     prefs = pPrefs;
     withAlpha = pWithAlpha;
     preview = pPreview;
-    randGen = RandomGeneratorFactory.getInstance(prefs.getTinaRandomNumberGenerator());
+    randGen = RandomGeneratorFactory.getInstance(prefs, prefs.getTinaRandomNumberGenerator());
     flameTransformationContext = new FlameTransformationContext(this, randGen, flame.getFrame());
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
     flameTransformationContext.setPreview(pPreview);
