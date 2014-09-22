@@ -10420,15 +10420,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextPane apophysisHintsPane;
   private JPanel channelMixerPanel;
   private JWFNumberField meshGenSliceThicknessModREd;
-  private JPanel panel_108;
-  private JPanel panel_109;
-  private JPanel panel_110;
-  private JPanel panel_111;
-  private JPanel panel_112;
-  private JPanel panel_113;
-  private JPanel panel_114;
-  private JPanel panel_115;
-  private JPanel panel_116;
   private JPanel channelMixerRedRedRootPanel;
   private JPanel channelMixerRedGreenRootPanel;
   private JPanel channelMixerRedBlueRootPanel;
@@ -20656,55 +20647,46 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_3 = new JPanel();
       panel_2.add(panel_3);
       panel_3.setLayout(new BorderLayout(0, 0));
-      panel_3.add(getPanel_108(), BorderLayout.EAST);
       panel_3.add(getChannelMixerRedRedRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_8 = new JPanel();
       panel_2.add(panel_8);
       panel_8.setLayout(new BorderLayout(0, 0));
-      panel_8.add(getPanel_109(), BorderLayout.EAST);
       panel_8.add(getChannelMixerRedGreenRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_9 = new JPanel();
       panel_2.add(panel_9);
       panel_9.setLayout(new BorderLayout(0, 0));
-      panel_9.add(getPanel_110(), BorderLayout.EAST);
       panel_9.add(getChannelMixerRedBlueRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_10 = new JPanel();
       panel_2.add(panel_10);
       panel_10.setLayout(new BorderLayout(0, 0));
-      panel_10.add(getPanel_111(), BorderLayout.EAST);
       panel_10.add(getChannelMixerGreenRedRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_11 = new JPanel();
       panel_2.add(panel_11);
       panel_11.setLayout(new BorderLayout(0, 0));
-      panel_11.add(getPanel_112(), BorderLayout.EAST);
       panel_11.add(getChannelMixerGreenGreenRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_83 = new JPanel();
       panel_2.add(panel_83);
       panel_83.setLayout(new BorderLayout(0, 0));
-      panel_83.add(getPanel_113(), BorderLayout.EAST);
       panel_83.add(getChannelMixerGreenBlueRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_85 = new JPanel();
       panel_2.add(panel_85);
       panel_85.setLayout(new BorderLayout(0, 0));
-      panel_85.add(getPanel_114(), BorderLayout.EAST);
       panel_85.add(getChannelMixerBlueRedRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_106 = new JPanel();
       panel_2.add(panel_106);
       panel_106.setLayout(new BorderLayout(0, 0));
-      panel_106.add(getPanel_115(), BorderLayout.EAST);
       panel_106.add(getChannelMixerBlueGreenRootPanel(), BorderLayout.CENTER);
 
       JPanel panel_107 = new JPanel();
       panel_2.add(panel_107);
       panel_107.setLayout(new BorderLayout(0, 0));
-      panel_107.add(getPanel_116(), BorderLayout.EAST);
       panel_107.add(getChannelMixerBlueBlueRootPanel(), BorderLayout.CENTER);
     }
     return channelMixerPanel;
@@ -20712,87 +20694,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getMeshGenThicknessREd() {
     return meshGenSliceThicknessModREd;
-  }
-
-  private JPanel getPanel_108() {
-    if (panel_108 == null) {
-      panel_108 = new JPanel();
-      panel_108.setPreferredSize(new Dimension(52, 10));
-      panel_108.setLayout(null);
-    }
-    return panel_108;
-  }
-
-  private JPanel getPanel_109() {
-    if (panel_109 == null) {
-      panel_109 = new JPanel();
-      panel_109.setLayout(null);
-      panel_109.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_109;
-  }
-
-  private JPanel getPanel_110() {
-    if (panel_110 == null) {
-      panel_110 = new JPanel();
-      panel_110.setLayout(null);
-      panel_110.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_110;
-  }
-
-  private JPanel getPanel_111() {
-    if (panel_111 == null) {
-      panel_111 = new JPanel();
-      panel_111.setLayout(null);
-      panel_111.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_111;
-  }
-
-  private JPanel getPanel_112() {
-    if (panel_112 == null) {
-      panel_112 = new JPanel();
-      panel_112.setLayout(null);
-      panel_112.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_112;
-  }
-
-  private JPanel getPanel_113() {
-    if (panel_113 == null) {
-      panel_113 = new JPanel();
-      panel_113.setLayout(null);
-      panel_113.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_113;
-  }
-
-  private JPanel getPanel_114() {
-    if (panel_114 == null) {
-      panel_114 = new JPanel();
-      panel_114.setLayout(null);
-      panel_114.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_114;
-  }
-
-  private JPanel getPanel_115() {
-    if (panel_115 == null) {
-      panel_115 = new JPanel();
-      panel_115.setLayout(null);
-      panel_115.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_115;
-  }
-
-  private JPanel getPanel_116() {
-    if (panel_116 == null) {
-      panel_116 = new JPanel();
-      panel_116.setLayout(null);
-      panel_116.setPreferredSize(new Dimension(52, 10));
-    }
-    return panel_116;
   }
 
   private JPanel getChannelMixerRedRedRootPanel() {

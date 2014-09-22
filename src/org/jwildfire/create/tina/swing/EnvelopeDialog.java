@@ -82,6 +82,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private String curveToPreviewPropertyPath;
   private int frameToPreview;
   private double curveValueToPreview;
+  private EnvelopeDialogFlamePreviewType flamePreviewType = EnvelopeDialogFlamePreviewType.NONE;
 
   public EnvelopeDialog(Window pOwner, Envelope pEnvelope, boolean pAllowRemove) {
     super(pOwner);
@@ -709,26 +710,39 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     if (flameToPreview != null) {
       Flame res = flameToPreview.makeCopy();
       res.setFrame(frameToPreview);
-      if (curveToPreviewPropertyPath != null) {
-        MotionCurve curve = getMotionCurve(res, curveToPreviewPropertyPath);
-        if (curve != null) {
-          curve.setPoints(new int[] { frameToPreview }, new double[] { curveValueToPreview });
-          curve.setInterpolation(Interpolation.LINEAR);
-          curve.setEnabled(true);
-        }
+      switch (flamePreviewType) {
+        case MOTION_CURVE:
+          if (curveToPreviewPropertyPath != null) {
+            MotionCurve curve = getMotionCurve(res, curveToPreviewPropertyPath);
+            if (curve != null) {
+              curve.setPoints(new int[] { frameToPreview }, new double[] { curveValueToPreview });
+              curve.setInterpolation(Interpolation.LINEAR);
+              curve.setEnabled(true);
+            }
+          }
+          break;
+        case COLOR_CURVE:
+          if (curveToPreviewPropertyPath != null) {
+            MotionCurve curve = getMotionCurve(res, curveToPreviewPropertyPath);
+            if (curve != null) {
+              curve.assignFromEnvelope(ctrl.getCurrEnvelope());
+            }
+          }
+          break;
       }
       return res;
     }
     return null;
   }
 
-  public void setFlameToPreview(Flame pFlameToPreview, MotionCurve pCurveToPreview) {
+  public void setFlameToPreview(EnvelopeDialogFlamePreviewType pFlamePreviewType, Flame pFlameToPreview, MotionCurve pCurveToPreview) {
+    flamePreviewType = pFlamePreviewType;
     flameToPreview = pFlameToPreview;
     frameToPreview = pFlameToPreview.getFrame();
     curveToPreview = pCurveToPreview;
     curveValueToPreview = 0.0;
     curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
-    //    System.out.println(curveToPreviewPropertyPath);
+    // System.out.println(curveToPreviewPropertyPath);
     //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
     //    System.out.println(curve);
   }

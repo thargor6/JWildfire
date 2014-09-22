@@ -320,6 +320,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (state == State.RENDER) {
       if (updateDisplayThread != null) {
         updateDisplayThread.cancel();
+        if (!updateDisplayThread.isFinished()) {
+          try {
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
         updateDisplayThread = null;
       }
       while (true) {
@@ -393,6 +401,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     private int nextStatsUpdate;
     private int lastImageUpdateInterval;
     private boolean cancelSignalled;
+    private boolean finished;
 
     public UpdateDisplayThread() {
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
@@ -402,36 +411,46 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
     @Override
     public void run() {
-      cancelSignalled = false;
-      while (!cancelSignalled) {
-        try {
-          if (--nextImageUpdate <= 0) {
-            lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
-            if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
-              lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+      finished = false;
+      try {
+        cancelSignalled = false;
+        while (!cancelSignalled) {
+          try {
+            if (--nextImageUpdate <= 0) {
+              lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+              if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+                lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+              }
+              updateImage();
+              nextImageUpdate = lastImageUpdateInterval;
             }
-            updateImage();
-            nextImageUpdate = lastImageUpdateInterval;
-          }
-          else if (--nextStatsUpdate <= 0) {
-            double quality = threads.get(0).getTonemapper().calcDensity(sampleCount);
-            updateStats(quality);
-            for (AbstractRenderThread thread : threads) {
-              thread.getTonemapper().setDensity(quality);
+            else if (--nextStatsUpdate <= 0) {
+              double quality = threads.get(0).getTonemapper().calcDensity(sampleCount);
+              updateStats(quality);
+              for (AbstractRenderThread thread : threads) {
+                thread.getTonemapper().setDensity(quality);
+              }
+              nextStatsUpdate = STATS_UPDATE_INTERVAL;
             }
-            nextStatsUpdate = STATS_UPDATE_INTERVAL;
+            else
+              Thread.sleep(1);
           }
-          else
-            Thread.sleep(1);
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
+      }
+      finally {
+        finished = true;
       }
     }
 
     public void cancel() {
       cancelSignalled = true;
+    }
+
+    public boolean isFinished() {
+      return finished;
     }
 
   }

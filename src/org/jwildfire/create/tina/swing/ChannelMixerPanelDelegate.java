@@ -18,8 +18,14 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -44,6 +50,8 @@ public abstract class ChannelMixerPanelDelegate {
     envelopePanel.setDrawTicks(false);
     envelopeParentPanel.add(envelopePanel, BorderLayout.CENTER);
 
+    addButtons(envelopeParentPanel);
+
     ctrl = new EnvelopeDlgController(envelopePanel);
     ctrl.setNoRefresh(true);
 
@@ -64,6 +72,64 @@ public abstract class ChannelMixerPanelDelegate {
       ctrl.setNoRefresh(false);
     }
 
+  }
+
+  private void addButtons(JPanel pPanel) {
+    int panelWidth = 42;
+
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setLayout(null);
+    buttonPanel.setPreferredSize(new Dimension(panelWidth, 0));
+
+    int xOffSet = 0;
+    int yOffset = 0;
+    int buttonWidth = 42;
+    int buttonHeight = 24;
+    int gap = 4;
+
+    JButton editCurveButton = createEditCurveButton();
+    editCurveButton.setBounds(xOffSet, yOffset, buttonWidth, buttonHeight);
+    yOffset += gap + buttonHeight;
+
+    buttonPanel.add(editCurveButton);
+
+    pPanel.add(buttonPanel, BorderLayout.EAST);
+  }
+
+  private JButton createEditCurveButton() {
+    JButton res = new JButton();
+    res.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+    res.setMinimumSize(new Dimension(100, 24));
+    res.setMaximumSize(new Dimension(32000, 24));
+    res.setText("");
+    res.setPreferredSize(new Dimension(125, 24));
+    res.setFont(new Font("Dialog", Font.BOLD, 10));
+    res.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent e) {
+        editCurve(e);
+      }
+    });
+    return res;
+  }
+
+  protected void editCurve(ActionEvent e) {
+    Flame flame = owner.getOwner().getCurrFlame();
+    MotionCurve curve = getCurve(flame);
+    Envelope envelope = curve.toEnvelope();
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootPanel), envelope, false);
+    dlg.setFlameToPreview(EnvelopeDialogFlamePreviewType.COLOR_CURVE, flame, curve);
+
+    dlg.setTitle("Editing motion curve");
+    dlg.setModal(true);
+    dlg.setVisible(true);
+    if (dlg.isConfirmed()) {
+      if (owner.isUseUndoManager()) {
+        owner.getOwner().undoManager.saveUndoPoint(flame);
+      }
+      curve.assignFromEnvelope(envelope);
+      owner.getOwner().refreshFlameImage(false);
+      refreshCurve(flame);
+    }
   }
 
   public abstract MotionCurve getCurve(Flame pFlame);
