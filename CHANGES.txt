@@ -1,4 +1,13 @@
 V2.00 (xx.xx.2014):
+ - some experimental OpenCl-code which should cause faster rendering (if not, disable tinaUseExperimentalOpenClCode in the Prefs)  
+ - experimental channel mixer which allows to adjust raw fractal colors using several modes:
+    - gamma
+    - rgb (one curve for each color component)
+    - full (three curves for each color component)
+ - new "NBlur"-bokeh style
+ - optimized the refresh of the display of the interactive renderer (disable property tinaOptimizedRenderingIR in the Prefs if this makes problems on slow machines) 
+ - several small optimizations to the renderer 
+
  - retain selected layer after "Undo"/"Redo"
  - smoother transition between DoF and non-DoF-areas
  - new "Stripes"-random-gradient-generator
