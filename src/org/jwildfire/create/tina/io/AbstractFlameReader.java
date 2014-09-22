@@ -515,7 +515,7 @@ public class AbstractFlameReader {
       }
     }
     switch (pFlame.getChannelMixerMode()) {
-      case BRIGHTNESS:
+      case GAMMA:
         readMotionCurveAttributes(atts, pFlame.getMixerRRCurve(), ATTR_CHANNEL_MIXER_RR_CURVE + "_");
         break;
       case RGB:

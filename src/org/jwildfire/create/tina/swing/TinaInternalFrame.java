@@ -4551,9 +4551,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
       getChannelMixerModeCmb().removeAllItems();
       getChannelMixerModeCmb().addItem(ChannelMixerMode.OFF);
-      getChannelMixerModeCmb().addItem(ChannelMixerMode.FULL);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.GAMMA);
       getChannelMixerModeCmb().addItem(ChannelMixerMode.RGB);
-      getChannelMixerModeCmb().addItem(ChannelMixerMode.BRIGHTNESS);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.FULL);
 
       initTriangleStyleCmb(getTriangleStyleCmb(), pPrefs);
       initGlobalScriptCmb(getSwfAnimatorGlobalScript1Cmb());

@@ -94,6 +94,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
+  static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -174,6 +175,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Try to keep the program responsible while rendering, the higher values the higher the responsiveness, the lower the render speed", category = PropertyCategory.TINA)
   private int tinaResponsiveness = 1;
+
+  @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
+  private boolean tinaOptimizedRenderingIR = true;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -530,6 +534,7 @@ public class Prefs extends ManagedObject {
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
     tinaResponsiveness = pSrc.tinaResponsiveness;
+    tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -886,6 +891,14 @@ public class Prefs extends ManagedObject {
     else if (tinaResponsiveness > 10) {
       tinaResponsiveness = 10;
     }
+  }
+
+  public boolean isTinaOptimizedRenderingIR() {
+    return tinaOptimizedRenderingIR;
+  }
+
+  public void setTinaOptimizedRenderingIR(boolean pTinaOptimizedRenderingIR) {
+    tinaOptimizedRenderingIR = pTinaOptimizedRenderingIR;
   }
 
 }

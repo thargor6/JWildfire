@@ -316,7 +316,7 @@ public class AbstractFlameWriter {
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_CHANNEL_MIXER_MODE, pFlame.getChannelMixerMode().toString()));
     switch (pFlame.getChannelMixerMode()) {
-      case BRIGHTNESS:
+      case GAMMA:
         writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RR_CURVE, pFlame.getMixerRRCurve());
         break;
       case RGB:

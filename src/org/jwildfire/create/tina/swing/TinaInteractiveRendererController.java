@@ -90,6 +90,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private FlameRenderer renderer;
   private State state = State.IDLE;
   private final QuickSaveFilenameGen qsaveFilenameGen;
+  private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
@@ -143,6 +144,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       height /= 2;
     }
     image = new SimpleImage(width, height);
+    image.getBufferedImg().setAccelerationPriority(1.0f);
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());
@@ -296,7 +298,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
-      sampleCount = 0;
+      displayUpdater = createDisplayUpdater();
+      displayUpdater.setSampleCount(0);
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       threads = renderer.startRenderFlame(info);
@@ -311,6 +314,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
   }
 
+  private InteractiveRendererDisplayUpdater createDisplayUpdater() {
+    return prefs.isTinaOptimizedRenderingIR() ? new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image) : new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image);
+  }
+
   public void stopButton_clicked() {
     cancelRender();
     enableControls();
@@ -320,15 +327,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (state == State.RENDER) {
       if (updateDisplayThread != null) {
         updateDisplayThread.cancel();
-        if (!updateDisplayThread.isFinished()) {
-          try {
-            Thread.sleep(1);
-          }
-          catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-        updateDisplayThread = null;
       }
       while (true) {
         boolean done = true;
@@ -349,6 +347,18 @@ public class TinaInteractiveRendererController implements IterationObserver {
           break;
         }
       }
+      if (updateDisplayThread != null) {
+        if (!updateDisplayThread.isFinished()) {
+          try {
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        updateDisplayThread = null;
+      }
+
       state = State.IDLE;
     }
   }
@@ -367,7 +377,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputImageFile(file);
-        RenderedFlame res = renderer.finishRenderFlame(sampleCount);
+        RenderedFlame res = renderer.finishRenderFlame(displayUpdater.getSampleCount());
         new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
         if (res.getHDRImage() != null) {
           new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
@@ -389,12 +399,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private final static int STATS_UPDATE_INTERVAL = 100;
+  private final static int STATS_UPDATE_INTERVAL = 75;
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
-  private final static int MAX_UPDATE_INC_INTERVAL = 1000;
-
-  private long sampleCount;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 4;
+  private final static int MAX_UPDATE_INC_INTERVAL = 500;
 
   private class UpdateDisplayThread implements Runnable {
     private int nextImageUpdate;
@@ -411,9 +419,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
     @Override
     public void run() {
-      finished = false;
+      finished = cancelSignalled = false;
       try {
-        cancelSignalled = false;
         while (!cancelSignalled) {
           try {
             if (--nextImageUpdate <= 0) {
@@ -425,7 +432,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
               nextImageUpdate = lastImageUpdateInterval;
             }
             else if (--nextStatsUpdate <= 0) {
-              double quality = threads.get(0).getTonemapper().calcDensity(sampleCount);
+              double quality = threads.get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
               updateStats(quality);
               for (AbstractRenderThread thread : threads) {
                 thread.getTonemapper().setDensity(quality);
@@ -435,7 +442,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
             else
               Thread.sleep(1);
           }
-          catch (InterruptedException e) {
+          catch (Throwable e) {
             e.printStackTrace();
           }
         }
@@ -459,22 +466,19 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private long pausedRenderTime = 0;
 
   private void updateImage() {
-    imageRootPanel.repaint();
-  }
-
-  private void updateStats(double pQuality) {
-    statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
-        "samples so far: " + sampleCount + "\n" +
-        "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
-    statsTextArea.validate();
+    displayUpdater.updateImage();
   }
 
   @Override
   public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    sampleCount++;
-    if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
-      image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-    }
+    displayUpdater.iterationFinished(pEventSource, pX, pY);
+  }
+
+  private void updateStats(double pQuality) {
+    statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
+        "samples so far: " + displayUpdater.getSampleCount() + "\n" +
+        "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
+    statsTextArea.validate();
   }
 
   public void nextButton_clicked() {
@@ -661,7 +665,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
           image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         }
         renderer.registerIterationObserver(this);
-        sampleCount = renderer.calcSampleCount();
+        displayUpdater = createDisplayUpdater();
+        displayUpdater.setSampleCount(renderer.calcSampleCount());
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         for (AbstractRenderThread thread : threads) {
@@ -694,7 +699,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, sampleCount, System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
+          renderer.saveState(file.getAbsolutePath(), threads, displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {
