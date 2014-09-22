@@ -80,6 +80,7 @@ public class PrefsReader {
         pPrefs.setTinaSaveFlamesWhenImageIsSaved(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved()));
         pPrefs.setTinaSaveHDRInIR(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_HDR_IN_IR, pPrefs.isTinaSaveHDRInIR()));
         pPrefs.setTinaOptimizedRenderingIR(getBooleanProperty(props, Prefs.KEY_TINA_OPTIMIZED_RENDERING_IR, pPrefs.isTinaOptimizedRenderingIR()));
+        pPrefs.setTinaUseExperimentalOpenClCode(getBooleanProperty(props, Prefs.KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE, pPrefs.isTinaUseExperimentalOpenClCode()));
         pPrefs.setTinaDefaultBGTransparency(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency()));
         pPrefs.setTinaDefaultAntialiasingAmount(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT, pPrefs.getTinaDefaultAntialiasingAmount()));
         pPrefs.setTinaDefaultAntialiasingRadius(getDoubleProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS, pPrefs.getTinaDefaultAntialiasingRadius()));
