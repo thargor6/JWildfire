@@ -57,8 +57,8 @@ import org.jocl.cl_program;
 // A random generator following ideas of George Marsaglia, http://programmingpraxis.com/2010/10/05/george-marsaglias-random-number-generators/
 public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
   private static final int SMALL_BUFFER_SIZE = 80000;
-  private static final int BUFFER_SIZE = 800000;
-  private static final int MAX_BATCHES = 21;
+  private static final int BUFFER_SIZE = 1600000;
+  private static final int MAX_BATCHES = 12;
 
   private float buffer[];
   private int bufferIdx;
@@ -102,17 +102,24 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
       try {
         if (buffer == null || bufferIdx >= buffer.length) {
           if (batches.size() > 0) {
-            buffer = batches.get(0);
-            batches.remove(0);
+            try {
+              buffer = batches.get(0);
+              batches.remove(0);
+            }
+            catch (Exception ex) {
+              // no problem
+            }
           }
-          else {
+          if (buffer == null) {
             buffer = createFastBatch();
           }
           bufferIdx = 0;
         }
         float res = buffer[bufferIdx++];
-        if (res < 0.0f || res >= 1.0f)
+        if (res < 0.0f || res >= 1.0f) {
+          //System.out.println(res);
           return random();
+        }
         return res;
       }
       catch (Throwable ex) {
@@ -233,7 +240,7 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
 
       // Set the work-item dimensions
       global_work_size = new long[] { n };
-      local_work_size = new long[] { 1 };
+      local_work_size = new long[] { 16 };
     }
 
     private long global_work_size[];
@@ -265,10 +272,10 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
       clEnqueueNDRangeKernel(commandQueue, kernel, 1, null,
           global_work_size, local_work_size, 0, null, null);
 
-      clEnqueueReadBuffer(commandQueue, memObjects[0], CL_TRUE, 0,
-          n * Sizeof.cl_int, srcA, 0, null, null);
-      clEnqueueReadBuffer(commandQueue, memObjects[1], CL_TRUE, 0,
-          n * Sizeof.cl_int, srcB, 0, null, null);
+      //      clEnqueueReadBuffer(commandQueue, memObjects[0], CL_TRUE, 0,
+      //          n * Sizeof.cl_int, srcA, 0, null, null);
+      //      clEnqueueReadBuffer(commandQueue, memObjects[1], CL_TRUE, 0,
+      //          n * Sizeof.cl_int, srcB, 0, null, null);
       clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
           n * Sizeof.cl_float, dst, 0, null, null);
 
@@ -291,20 +298,25 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
               e.printStackTrace();
             }
           }
-          long t0 = System.currentTimeMillis();
+          //          long t0 = System.currentTimeMillis();
           float[] newBatch = createGPUBatch();
-          synchronized (batches) {
-            batches.add(newBatch);
+          while (true) {
+            try {
+              batches.add(newBatch);
+              break;
+            }
+            catch (Exception ex) {
+              // no problem
+            }
           }
-          long t1 = System.currentTimeMillis();
-          System.out.println("A" + batches.size() + " " + (t1 - t0) + " ms " + srcArrayA[0] + " " + srcArrayB[0]);
+          //          long t1 = System.currentTimeMillis();
+          //          System.out.println("A" + batches.size() + " " + (t1 - t0) + " ms " + srcArrayA[0] + " " + srcArrayB[0]);
         }
       }
       finally {
         cleanupOpenCL();
       }
     }
-
   }
 
   private float[] createFastBatch() {

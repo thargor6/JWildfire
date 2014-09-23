@@ -766,7 +766,7 @@ public class Prefs extends ManagedObject {
   }
 
   public int getTinaPreserveFreeCPUs() {
-    return tinaPreserveFreeCPUs;
+    return tinaUseExperimentalOpenClCode ? tinaPreserveFreeCPUs + 1 : tinaPreserveFreeCPUs;
   }
 
   public void setTinaPreserveFreeCPUs(int tinaPreserveFreeCPUs) {
