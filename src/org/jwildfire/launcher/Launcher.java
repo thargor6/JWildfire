@@ -117,6 +117,7 @@ public class Launcher {
   private JPanel imgDisplayPanel;
   private JTabbedPane mainTabbedPane;
   private JCheckBox debugCmb;
+  private JCheckBox openCLCmb;
 
   private void loadImages() {
     frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
@@ -242,6 +243,13 @@ public class Launcher {
     debugCmb.setForeground(SystemColor.menu);
     debugCmb.setBackground(Color.BLACK);
     panel_2.add(debugCmb);
+
+    openCLCmb = new JCheckBox("OpenCL (experimental)");
+    openCLCmb.setToolTipText("Enable experimental OpenCL code");
+    openCLCmb.setForeground(SystemColor.menu);
+    openCLCmb.setBackground(Color.BLACK);
+    openCLCmb.setBounds(369, 20, 170, 18);
+    panel_2.add(openCLCmb);
 
     mainPanel = new JPanel();
     mainPanel.setBackground(Color.BLACK);
@@ -415,6 +423,7 @@ public class Launcher {
     getLaunchButton().setEnabled(false);
     try {
       savePrefs();
+      validatePrefs();
       launchApp();
       if (!getDebugCbx().isSelected()) {
         System.exit(0);
@@ -423,6 +432,12 @@ public class Launcher {
     catch (Throwable ex) {
       getLaunchButton().setEnabled(true);
       handleError(ex);
+    }
+  }
+
+  private void validatePrefs() {
+    if (prefs.getMaxMem() > 1024 && prefs.getJavaPath() != null && prefs.getJavaPath().contains("(x86)")) {
+      throw new RuntimeException("You seem to use a 32 BIT Java runtime, which can not\nuse more than 1 GB memory. Either please use a 64 BIT java or decrease the\namount of memory.\n\n\n");
     }
   }
 
@@ -445,7 +460,8 @@ public class Launcher {
   private void savePrefs() throws Exception {
     prefs.setJavaPath((String) getJdkCmb().getSelectedItem());
     prefs.setMaxMem(Integer.parseInt(getMaxMemField().getText()));
-    prefs.saveToFromFile();
+    prefs.setWithOpenCL(openCLCmb.isSelected());
+    prefs.saveToFile();
   }
 
   public JButton getLaunchButton() {
@@ -468,6 +484,7 @@ public class Launcher {
     if (prefs.getMaxMem() > 0) {
       getMaxMemField().setText(String.valueOf(prefs.getMaxMem()));
     }
+    getOpenCLCmb().setSelected(prefs.isWithOpenCL());
   }
 
   public JComboBox getJdkCmb() {
@@ -565,5 +582,9 @@ public class Launcher {
 
   public JCheckBox getDebugCbx() {
     return debugCmb;
+  }
+
+  public JCheckBox getOpenCLCmb() {
+    return openCLCmb;
   }
 }
