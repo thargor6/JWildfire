@@ -95,7 +95,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir";
-  static final String KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE = "tina.use_experimental_opencl_code";
+  //  static final String KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE = "tina.use_experimental_opencl_code";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -180,7 +180,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
 
-  @Property(description = "Use experimental openCL-code fragments, just turn it off if you face any kind of problems", category = PropertyCategory.TINA)
+  //@Property(description = "Use experimental openCL-code fragments, just turn it off if you face any kind of problems", category = PropertyCategory.TINA)
   private boolean tinaUseExperimentalOpenClCode = true;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
@@ -437,7 +437,7 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  public void loadFromFile() throws Exception {
+  private void loadFromFile() throws Exception {
     new PrefsReader().readPrefs(this);
   }
 
@@ -667,7 +667,7 @@ public class Prefs extends ManagedObject {
     return null;
   }
 
-  public Prefs() {
+  private Prefs() {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
   }
@@ -912,6 +912,10 @@ public class Prefs extends ManagedObject {
 
   public void setTinaUseExperimentalOpenClCode(boolean pTinaUseExperimentalOpenClCode) {
     tinaUseExperimentalOpenClCode = pTinaUseExperimentalOpenClCode;
+  }
+
+  public static Prefs newInstance() {
+    return new Prefs();
   }
 
 }

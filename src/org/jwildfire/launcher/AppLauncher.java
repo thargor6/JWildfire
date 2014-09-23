@@ -26,6 +26,8 @@ public class AppLauncher {
   private final String JWFILDFIRE_JAR = "j-wildfire.jar";
   private final String JWILDFIRE_MAIN_CLASS = "org.jwildfire.swing.Desktop";
 
+  public static final String PROPERTY_OPENCL = "org.jwildfire.experimental_opencl";
+
   public AppLauncher(LauncherPrefs pPrefs) {
     prefs = pPrefs;
   }
@@ -62,8 +64,9 @@ public class AppLauncher {
     }
 
     //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
+    String openClOption = prefs.isWithOpenCL() ? "-D" + PROPERTY_OPENCL + "=true" : "";
 
-    String cmd[] = { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
+    String cmd[] = { javaCmd, minMemOption, maxMemOption, openClOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
     return cmd;
   }
 

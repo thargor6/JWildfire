@@ -47,14 +47,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame prepareFlame(RandomFlameGeneratorState pState) {
-    Prefs prefs = new Prefs();
-    try {
-      prefs.loadFromFile();
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
+    Prefs prefs = Prefs.getPrefs();
     Flame flame = createSubFlame(prefs);
     flame.setPixelsPerUnit(200);
     return flame;

@@ -49,13 +49,7 @@ public class EnvelopePanel extends JPanel {
 
   public EnvelopePanel() {
     super();
-    prefs = new Prefs();
-    try {
-      prefs.loadFromFile();
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    prefs = Prefs.getPrefs();
   }
 
   @Override

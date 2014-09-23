@@ -39,4 +39,8 @@ public class MarsagliaRandomGenerator extends AbstractRandomGenerator {
     return res < 0 ? -res : res;
   }
 
+  @Override
+  public void cleanup() {
+    // empty
+  }
 }

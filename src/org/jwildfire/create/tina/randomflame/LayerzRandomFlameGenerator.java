@@ -25,14 +25,7 @@ public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame prepareFlame(RandomFlameGeneratorState pState) {
-    Prefs prefs = new Prefs();
-    try {
-      prefs.loadFromFile();
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
+    Prefs prefs = Prefs.getPrefs();
     Flame flame = createSubFlame(pState);
     int layerCount = 2 + ((Math.random() > 0.66) ? 1 : 0);
     for (int i = 1; i < layerCount; i++) {

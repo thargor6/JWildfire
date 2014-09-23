@@ -146,7 +146,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
 
   public void setPrefs(Prefs pPrefs) {
     prefs = pPrefs;
-    editPrefs = new Prefs();
+    editPrefs = Prefs.newInstance();
     editPrefs.assign(prefs);
     switchCreatorPropertiesPanel();
   }

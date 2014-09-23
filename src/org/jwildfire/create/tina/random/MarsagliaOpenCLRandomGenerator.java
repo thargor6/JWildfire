@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -56,9 +56,9 @@ import org.jocl.cl_program;
 
 // A random generator following ideas of George Marsaglia, http://programmingpraxis.com/2010/10/05/george-marsaglias-random-number-generators/
 public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
-  private static final int SMALL_BUFFER_SIZE = 100000;
-  private static final int BUFFER_SIZE = 1000000;
-  private static final int MAX_BATCHES = 42;
+  private static final int SMALL_BUFFER_SIZE = 80000;
+  private static final int BUFFER_SIZE = 800000;
+  private static final int MAX_BATCHES = 21;
 
   private float buffer[];
   private int bufferIdx;
@@ -69,22 +69,25 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
           "             __global int *v," +
           "             __global float *c)" +
           "{" +
-          " int gid = get_global_id(0);" +
-          "v[gid] = 36969 * (v[gid] & 65535) + (v[gid] >> 16);" +
-          "u[gid] = 18000 * (u[gid] & 65535) + (u[gid] >> 16);" +
-          " int rnd = (v[gid] << 16) + u[gid];" +
-          " float res= rnd / (float)0x7fffffff;" +
-          " c[gid] = res<0 ? -res : res;" +
+          "int gid = get_global_id(0);" +
+          "  v[gid] = 36969 * (v[gid] & 65535) + (v[gid] >> 16);" +
+          "  u[gid] = 18000 * (u[gid] & 65535) + (u[gid] >> 16);" +
+          "  int rnd = (v[gid] << 16) + u[gid];" +
+          "  float res= rnd / (float)0x7fffffff;" +
+          "  c[gid] = res < 0 ? -res : res;" +
           "}";
 
   private int u = 12244355;
   private int v = 34384;
 
-  List<float[]> batches = new ArrayList<float[]>();
+  private List<float[]> batches = new ArrayList<float[]>();
+
+  private CreateBatchThread createBatchThread;
 
   public MarsagliaOpenCLRandomGenerator() {
     buffer = createFastBatch();
-    new Thread(new CreateBatchThread()).start();
+    createBatchThread = new CreateBatchThread();
+    new Thread(createBatchThread).start();
   }
 
   @Override
@@ -100,9 +103,6 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
         if (buffer == null || bufferIdx >= buffer.length) {
           if (batches.size() > 0) {
             buffer = batches.get(0);
-            if (Math.random() > 0.33) {
-              batches.add(buffer);
-            }
             batches.remove(0);
           }
           else {
@@ -110,7 +110,10 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
           }
           bufferIdx = 0;
         }
-        return buffer[bufferIdx++];
+        float res = buffer[bufferIdx++];
+        if (res < 0.0f || res >= 1.0f)
+          return random();
+        return res;
       }
       catch (Throwable ex) {
         ex.printStackTrace();
@@ -119,6 +122,10 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
   }
 
   private class CreateBatchThread implements Runnable {
+    int n;
+    int srcArrayA[];
+    int srcArrayB[];
+    float dstArray[];
 
     public float[] createCPUBatch(int n) {
       float dstArray[] = new float[n];
@@ -132,19 +139,24 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
       return dstArray;
     }
 
-    public float[] createGPUBatch(int n) {
-      int srcArrayA[] = new int[n];
-      int srcArrayB[] = new int[n];
-      float dstArray[] = new float[n];
+    public void init(int pCount) {
+      n = pCount;
+      srcArrayA = new int[n];
+      srcArrayB = new int[n];
+      dstArray = new float[n];
       for (int i = 0; i < n; i++) {
         v = 36969 * (v & 65535) + (v >> 16);
         u = 18000 * (u & 65535) + (u >> 16);
         srcArrayA[i] = v;
         srcArrayB[i] = u;
       }
-      Pointer srcA = Pointer.to(srcArrayA);
-      Pointer srcB = Pointer.to(srcArrayB);
-      Pointer dst = Pointer.to(dstArray);
+
+    }
+
+    public void prepareOpenCL() {
+      srcA = Pointer.to(srcArrayA);
+      srcB = Pointer.to(srcArrayB);
+      dst = Pointer.to(dstArray);
 
       // The platform, device type and device number
       // that will be used
@@ -180,16 +192,16 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
       cl_device_id device = devices[deviceIndex];
 
       // Create a context for the selected device
-      cl_context context = clCreateContext(
+      context = clCreateContext(
           contextProperties, 1, new cl_device_id[] { device },
           null, null, null);
 
       // Create a command-queue for the selected device
-      cl_command_queue commandQueue =
+      commandQueue =
           clCreateCommandQueue(context, device, 0, null);
 
       // Allocate the memory objects for the input- and output data
-      cl_mem memObjects[] = new cl_mem[3];
+      memObjects = new cl_mem[3];
       memObjects[0] = clCreateBuffer(context,
           CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
           Sizeof.cl_int * n, srcA, null);
@@ -201,14 +213,14 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
           Sizeof.cl_float * n, null, null);
 
       // Create the program from the source code
-      cl_program program = clCreateProgramWithSource(context,
+      program = clCreateProgramWithSource(context,
           1, new String[] { marsagliaKernel }, null, null);
 
       // Build the program
       clBuildProgram(program, 0, null, null, null, null);
 
       // Create the kernel
-      cl_kernel kernel = clCreateKernel(program, "marsagliaKernel", null);
+      kernel = clCreateKernel(program, "marsagliaKernel", null);
 
       // Set the arguments for the kernel
 
@@ -220,19 +232,24 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
           Sizeof.cl_mem, Pointer.to(memObjects[2]));
 
       // Set the work-item dimensions
-      long global_work_size[] = new long[] { n };
-      long local_work_size[] = new long[] { 1 };
+      global_work_size = new long[] { n };
+      local_work_size = new long[] { 1 };
+    }
 
-      long t0 = System.currentTimeMillis();
-      // Execute the kernel
-      clEnqueueNDRangeKernel(commandQueue, kernel, 1, null,
-          global_work_size, local_work_size, 0, null, null);
+    private long global_work_size[];
+    private long local_work_size[];
 
-      clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
-          n * Sizeof.cl_float, dst, 0, null, null);
-      long t1 = System.currentTimeMillis();
-      //      System.out.println("openCL: " + (t1 - t0) + "ms");
+    private Pointer srcA;
+    private Pointer srcB;
+    private Pointer dst;
 
+    private cl_context context;
+    private cl_program program;
+    private cl_kernel kernel;
+    private cl_mem memObjects[];
+    private cl_command_queue commandQueue;
+
+    public void cleanupOpenCL() {
       // Release kernel, program, and memory objects
       clReleaseMemObject(memObjects[0]);
       clReleaseMemObject(memObjects[1]);
@@ -241,33 +258,63 @@ public class MarsagliaOpenCLRandomGenerator extends AbstractRandomGenerator {
       clReleaseProgram(program);
       clReleaseCommandQueue(commandQueue);
       clReleaseContext(context);
-      return dstArray;
+    }
+
+    public float[] createGPUBatch() {
+      // Execute the kernel
+      clEnqueueNDRangeKernel(commandQueue, kernel, 1, null,
+          global_work_size, local_work_size, 0, null, null);
+
+      clEnqueueReadBuffer(commandQueue, memObjects[0], CL_TRUE, 0,
+          n * Sizeof.cl_int, srcA, 0, null, null);
+      clEnqueueReadBuffer(commandQueue, memObjects[1], CL_TRUE, 0,
+          n * Sizeof.cl_int, srcB, 0, null, null);
+      clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
+          n * Sizeof.cl_float, dst, 0, null, null);
+
+      float[] res = new float[dstArray.length];
+      System.arraycopy(dstArray, 0, res, 0, dstArray.length);
+      return res;
     }
 
     @Override
     public void run() {
-      while (true) {
-        while (batches.size() >= MAX_BATCHES) {
-          try {
-            Thread.sleep(1);
+      init(BUFFER_SIZE);
+      prepareOpenCL();
+      try {
+        while (true) {
+          while (batches.size() >= MAX_BATCHES) {
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
           }
-          catch (InterruptedException e) {
-            e.printStackTrace();
+          long t0 = System.currentTimeMillis();
+          float[] newBatch = createGPUBatch();
+          synchronized (batches) {
+            batches.add(newBatch);
           }
+          long t1 = System.currentTimeMillis();
+          System.out.println("A" + batches.size() + " " + (t1 - t0) + " ms " + srcArrayA[0] + " " + srcArrayB[0]);
         }
-        if (Math.random() < 0.33) {
-          batches.add(createCPUBatch((int) (1.0 + Math.random()) * BUFFER_SIZE));
-        }
-        else {
-          batches.add(createGPUBatch((int) (1.0 + Math.random()) * BUFFER_SIZE));
-        }
-        //        System.out.println("A" + batches.size());
+      }
+      finally {
+        cleanupOpenCL();
       }
     }
 
   }
 
   private float[] createFastBatch() {
-    return new CreateBatchThread().createGPUBatch((int) (1.0 + Math.random()) * SMALL_BUFFER_SIZE);
+    return new CreateBatchThread().createCPUBatch(SMALL_BUFFER_SIZE);
+  }
+
+  @Override
+  public void cleanup() {
+    if (createBatchThread != null) {
+      createBatchThread.cleanupOpenCL();
+    }
   }
 }

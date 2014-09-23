@@ -39,4 +39,16 @@ public class RandomGeneratorFactory {
   public static AbstractRandomGenerator getInstance(Prefs pPrefs, RandomGeneratorType pType) {
     return getInstance(pPrefs, pType, 0);
   }
+
+  public static void cleanup() {
+    for (String key : generatorMap.keySet()) {
+      AbstractRandomGenerator gen = generatorMap.get(key);
+      try {
+        gen.cleanup();
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
 }

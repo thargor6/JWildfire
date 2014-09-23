@@ -31,4 +31,8 @@ public class JavaInternalRandomGenerator extends AbstractRandomGenerator {
     return random.nextDouble();
   }
 
+  @Override
+  public void cleanup() {
+    // empty
+  }
 }

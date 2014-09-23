@@ -61,9 +61,8 @@ public class ColorMapRandomFlameGenerator extends WikimediaCommonsRandomFlameGen
   private File getRandomFile() throws Exception {
     if (files == null) {
       files = new ArrayList<File>();
-      Prefs prefs = new Prefs();
+      Prefs prefs = Prefs.getPrefs();
       try {
-        prefs.loadFromFile();
         if (prefs.getTinaRandGenColorMapImagePath() != null && prefs.getTinaRandGenColorMapImagePath().length() > 0) {
           scanFiles(prefs.getTinaRandGenColorMapImagePath(), files);
         }

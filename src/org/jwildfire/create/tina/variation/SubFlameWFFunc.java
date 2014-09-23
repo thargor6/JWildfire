@@ -118,7 +118,7 @@ public class SubFlameWFFunc extends VariationFunc {
     xf = null;
     p = null;
     try {
-      List<Flame> flames = new FlameReader(new Prefs()).readFlamesfromXML(flameXML);
+      List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlamesfromXML(flameXML);
       if (flames.size() > 0) {
         flame = flames.get(0);
       }

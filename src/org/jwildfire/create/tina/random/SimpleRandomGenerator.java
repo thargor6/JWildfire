@@ -39,4 +39,9 @@ public class SimpleRandomGenerator extends AbstractRandomGenerator {
     return res;
   }
 
+  @Override
+  public void cleanup() {
+    // empty
+  }
+
 }

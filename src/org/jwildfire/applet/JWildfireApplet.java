@@ -66,7 +66,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   private State state = State.IDLE;
   private List<AbstractRenderThread> threads;
   private FlameRenderer renderer;
-  private final Prefs prefs = new Prefs();
+  private final Prefs prefs = Prefs.getPrefs();
   private Flame currFlame;
   private JScrollPane imageScrollPane;
   private SimpleImage image;

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -35,10 +35,10 @@ public class LauncherPrefsReader {
     return val.length() > 0 ? Tools.stringToInt(val) : pDefaultValue;
   }
 
-  //  private boolean getBooleanProperty(Properties pProperties, String pKey, boolean pDefaultValue) {
-  //    String val = pProperties.getProperty(pKey, "").trim();
-  //    return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
-  //  }
+  private boolean getBooleanProperty(Properties pProperties, String pKey, boolean pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
+  }
 
   //  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
   //    String val = pProperties.getProperty(pKey, "").trim();
@@ -52,16 +52,13 @@ public class LauncherPrefsReader {
       try {
         Properties props = new Properties();
         props.load(inputStream);
-        pPrefs.setJavaPath(getProperty(props, LauncherPrefs.KEY_JAVA_PATH, null));
-        pPrefs.setMaxMem(getIntProperty(props, LauncherPrefs.KEY_MEMORY_MAX, 1024));
+        pPrefs.setJavaPath(getProperty(props, LauncherPrefs.KEY_JAVA_PATH, pPrefs.getJavaPath()));
+        pPrefs.setMaxMem(getIntProperty(props, LauncherPrefs.KEY_MEMORY_MAX, pPrefs.getMaxMem()));
+        pPrefs.setWithOpenCL(getBooleanProperty(props, LauncherPrefs.KEY_WITH_OPENCL, pPrefs.isWithOpenCL()));
       }
       finally {
         inputStream.close();
       }
-    }
-    else {
-      pPrefs.setJavaPath(null);
-      pPrefs.setMaxMem(1024);
     }
   }
 }

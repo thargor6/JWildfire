@@ -32,4 +32,8 @@ public class MersenneTwisterRandomGenerator extends AbstractRandomGenerator {
     return mtRandom.nextDouble();
   }
 
+  @Override
+  public void cleanup() {
+    // empty
+  }
 }

@@ -59,12 +59,14 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.eden.swing.EDENInternalFrame;
+import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.launcher.AppLauncher;
 
 public class Desktop extends JApplet {
   private static final long serialVersionUID = 1L;
@@ -1439,11 +1441,16 @@ public class Desktop extends JApplet {
   /**
    * @param args
    */
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-
+        try {
+          parseStartParams(args);
+        }
+        catch (Throwable ex) {
+          ex.printStackTrace();
+        }
         setUserLookAndFeel();
         Desktop application = new Desktop();
         application.getJFrame().setVisible(true);
@@ -1456,13 +1463,29 @@ public class Desktop extends JApplet {
         }
       }
 
+      private void parseStartParams(String[] args) {
+        for (String arg : args) {
+          if (arg.indexOf("-D") == 0) {
+            String param = arg.substring(2, arg.length());
+            String value = "";
+            int p = param.indexOf("=");
+            if (p > 0) {
+              value = param.substring(p + 1, param.length()).trim();
+              param = param.substring(0, p).trim();
+            }
+            if (AppLauncher.PROPERTY_OPENCL.equals(param)) {
+              Prefs.getPrefs().setTinaUseExperimentalOpenClCode(Boolean.parseBoolean(value));
+            }
+          }
+        }
+      }
+
     });
   }
 
   public static void setUserLookAndFeel() {
     try {
-      Prefs prefs = new Prefs();
-      prefs.loadFromFile();
+      Prefs prefs = Prefs.getPrefs();
       if (prefs.getLookAndFeelType() != null) {
         prefs.getLookAndFeelType().changeTo();
         if (prefs.getLookAndFeelTheme() != null && prefs.getLookAndFeelTheme().length() > 0)
@@ -1496,14 +1519,7 @@ public class Desktop extends JApplet {
    */
   private JFrame getJFrame() {
     if (jFrame == null) {
-      prefs = new Prefs();
-      try {
-        prefs.loadFromFile();
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-
+      prefs = Prefs.getPrefs();
       jFrame = new JFrame();
       jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       jFrame.setJMenuBar(getMainJMenuBar());
@@ -1511,7 +1527,7 @@ public class Desktop extends JApplet {
       jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
       jFrame.setSize(wPrefs.getWidth(1240), wPrefs.getHeight(800));
       jFrame.setContentPane(getJContentPane());
-      jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
+      jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION + (prefs.isTinaUseExperimentalOpenClCode() ? " (with OpenCL)" : ""));
 
       jFrame.addWindowListener(new WindowAdapter() {
 
@@ -2135,6 +2151,7 @@ public class Desktop extends JApplet {
     catch (Exception ex) {
       ex.printStackTrace();
     }
+    RandomGeneratorFactory.cleanup();
     System.exit(0);
   }
 }

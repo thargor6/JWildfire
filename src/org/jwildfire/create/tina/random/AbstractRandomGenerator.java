@@ -27,4 +27,6 @@ public abstract class AbstractRandomGenerator {
 
   public abstract void randomize(long pSeed);
 
+  public abstract void cleanup();
+
 }
