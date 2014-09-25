@@ -24,6 +24,10 @@ public class Job {
   private boolean finished;
   private double elapsedSeconds;
   private String imageFilename;
+  private int customWidth;
+  private int customHeight;
+  private int customQuality;
+
   private Throwable lastError;
 
   public String getFlameFilename() {
@@ -79,6 +83,30 @@ public class Job {
 
   public void setElapsedSeconds(double elapsedSeconds) {
     this.elapsedSeconds = elapsedSeconds;
+  }
+
+  public int getCustomWidth() {
+    return customWidth;
+  }
+
+  public int getCustomHeight() {
+    return customHeight;
+  }
+
+  public int getCustomQuality() {
+    return customQuality;
+  }
+
+  public void setCustomWidth(int pCustomWidth) {
+    customWidth = pCustomWidth;
+  }
+
+  public void setCustomHeight(int pCustomHeight) {
+    customHeight = pCustomHeight;
+  }
+
+  public void setCustomQuality(int pCustomQuality) {
+    customQuality = pCustomQuality;
   }
 
 }

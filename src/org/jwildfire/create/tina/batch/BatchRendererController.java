@@ -83,7 +83,7 @@ public class BatchRendererController implements JobRenderThreadController {
     }
     List<Job> activeJobList = new ArrayList<Job>();
     for (Job job : batchRenderList) {
-      if (!job.isFinished()) {
+      if (batchRenderOverrideCBx.isSelected() || !job.isFinished()) {
         activeJobList.add(job);
       }
     }
