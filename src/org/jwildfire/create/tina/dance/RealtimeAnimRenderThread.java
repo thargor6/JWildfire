@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.dance;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.audio.JLayerInterface;
 import org.jwildfire.create.tina.audio.RecordedFFT;
 import org.jwildfire.create.tina.base.Flame;
@@ -43,7 +44,7 @@ public class RealtimeAnimRenderThread implements Runnable, FlameHolder {
   public RealtimeAnimRenderThread(DancingFractalsController pController, DancingFlameProject pProject) {
     controller = pController;
     transformer = new DanceFlameTransformer(pProject);
-    flameStack = new DancingFlameStack(pController.getParentCtrl().getPrefs());
+    flameStack = new DancingFlameStack(Prefs.getPrefs());
   }
 
   @Override

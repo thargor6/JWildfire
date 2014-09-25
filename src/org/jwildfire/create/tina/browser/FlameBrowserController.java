@@ -541,7 +541,7 @@ public class FlameBrowserController {
       FlameFlatNode node = getSelectedFlame();
       if (node != null) {
         String filename = node.getFilename();
-        tinaController.addFlameToBatchRenderer(filename, true);
+        tinaController.getBatchRendererController().addFlameToBatchRenderer(filename, true);
       }
     }
     catch (Exception ex) {

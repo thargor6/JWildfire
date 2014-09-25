@@ -64,9 +64,14 @@ public class AppLauncher {
     }
 
     //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
-    String openClOption = prefs.isWithOpenCL() ? "-D" + PROPERTY_OPENCL + "=true" : "";
-
-    String cmd[] = { javaCmd, minMemOption, maxMemOption, openClOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
+    String cmd[];
+    if (prefs.isWithOpenCL()) {
+      String openClOption = "-D" + PROPERTY_OPENCL + "=true";
+      cmd = new String[] { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS, openClOption };
+    }
+    else {
+      cmd = new String[] { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
+    }
     return cmd;
   }
 

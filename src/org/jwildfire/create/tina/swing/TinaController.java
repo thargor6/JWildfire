@@ -52,7 +52,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
@@ -78,9 +77,7 @@ import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
-import org.jwildfire.create.tina.batch.Job;
-import org.jwildfire.create.tina.batch.JobRenderThread;
-import org.jwildfire.create.tina.batch.JobRenderThreadController;
+import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
@@ -140,7 +137,7 @@ import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
 import com.l2fprod.common.util.ResourceManager;
 
-public class TinaController implements FlameHolder, LayerHolder, JobRenderThreadController, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
+public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
   public static final int PAGE_INDEX = 0;
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -163,6 +160,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private DancingFractalsController dancingFractalsController;
   private MutaGenController mutaGenController;
   private MeshGenController meshGenController;
+  private BatchRendererController batchRendererController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
@@ -180,7 +178,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
-  private FlamePanel batchPreviewFlamePanel;
 
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
@@ -188,7 +185,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   boolean cmbRefreshing = false;
   boolean refreshing = false;
 
-  private final List<Job> batchRenderList = new ArrayList<Job>();
   final UndoManager<Flame> undoManager = new UndoManager<Flame>();
   private final QuickSaveFilenameGen qsaveFilenameGen;
 
@@ -197,7 +193,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
-  private final ProgressUpdater jobProgressUpdater;
   private TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
 
@@ -255,6 +250,9 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
+
+    batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, data,
+        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn);
 
     meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane,
         parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
@@ -524,7 +522,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
     data.randomizeButton = parameterObject.randomizeButton;
     mainProgressUpdater = parameterObject.pMainProgressUpdater;
-    jobProgressUpdater = parameterObject.pJobProgressUpdater;
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
     data.shadingCmb = parameterObject.pShadingCmb;
@@ -677,7 +674,7 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     initFAQPane();
 
     refreshPaletteColorsTable();
-    refreshRenderBatchJobsTable();
+    getBatchRendererController().refreshRenderBatchJobsTable();
 
     enableControls();
 
@@ -2220,25 +2217,12 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     flameControls.enableControls();
     channelMixerControls.enableControls();
     enableUndoControls();
-    enableJobRenderControls();
+    getBatchRendererController().enableJobRenderControls();
     getAnimationController().enableControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
     getMeshGenController().enableControls();
-  }
-
-  private void enableJobRenderControls() {
-    boolean idle = jobRenderThread == null;
-    data.batchRenderAddFilesButton.setEnabled(idle);
-    data.batchRenderFilesMoveDownButton.setEnabled(idle);
-    data.batchRenderFilesMoveUpButton.setEnabled(idle);
-    data.batchRenderFilesRemoveButton.setEnabled(idle);
-    data.batchRenderFilesRemoveAllButton.setEnabled(idle);
-    data.batchRenderStartButton.setText(idle ? "Render" : "Stop");
-    data.batchRenderStartButton.invalidate();
-    data.batchRenderStartButton.validate();
-    rootTabbedPane.setEnabled(idle);
   }
 
   private void refreshLayerControls(Layer pLayer) {
@@ -3552,14 +3536,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
     return res;
   }
 
-  private ResolutionProfile getBatchRenderResolutionProfile() {
-    ResolutionProfile res = (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem();
-    if (res == null) {
-      res = new ResolutionProfile(false, 800, 600);
-    }
-    return res;
-  }
-
   private QualityProfile getQualityProfile() {
     QualityProfile res = (QualityProfile) data.qualityProfileCmb.getSelectedItem();
     if (res == null) {
@@ -3714,234 +3690,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
       flamePanel.setFineMovement(data.mouseTransformSlowButton.isSelected());
       EditingPrecision.setCurrent(data.mouseTransformSlowButton.isSelected() ? EditingPrecision.FINE : EditingPrecision.NORMAL);
     }
-  }
-
-  @Override
-  public void refreshRenderBatchJobsTable() {
-    final int COL_FLAME_FILE = 0;
-    final int COL_FINISHED = 1;
-    final int COL_ELAPSED = 2;
-    final int COL_LAST_ERROR = 3;
-    data.renderBatchJobsTable.setModel(new DefaultTableModel() {
-      private static final long serialVersionUID = 1L;
-
-      @Override
-      public int getRowCount() {
-        return batchRenderList.size();
-      }
-
-      @Override
-      public int getColumnCount() {
-        return 4;
-      }
-
-      @Override
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case COL_FLAME_FILE:
-            return "Flame file";
-          case COL_FINISHED:
-            return "Finished";
-          case COL_ELAPSED:
-            return "Elapsed time (seconds)";
-          case COL_LAST_ERROR:
-            return "Last error";
-        }
-        return null;
-      }
-
-      @Override
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        Job job = rowIndex < batchRenderList.size() ? batchRenderList.get(rowIndex) : null;
-        if (job != null) {
-          switch (columnIndex) {
-            case COL_FLAME_FILE:
-              return new File(job.getFlameFilename()).getName();
-            case COL_FINISHED:
-              return job.isFinished() ? String.valueOf(job.isFinished()) : "";
-            case COL_ELAPSED:
-              return job.isFinished() ? Tools.doubleToString(job.getElapsedSeconds()) : "";
-            case COL_LAST_ERROR:
-              return job.getLastErrorMsg();
-          }
-        }
-        return null;
-      }
-
-      @Override
-      public boolean isCellEditable(int row, int column) {
-        return false;
-      }
-    });
-    data.renderBatchJobsTable.getTableHeader().setFont(data.transformationsTable.getFont());
-    data.renderBatchJobsTable.getColumnModel().getColumn(COL_FLAME_FILE).setWidth(120);
-    data.renderBatchJobsTable.getColumnModel().getColumn(COL_FINISHED).setPreferredWidth(10);
-    data.renderBatchJobsTable.getColumnModel().getColumn(COL_ELAPSED).setWidth(10);
-    data.renderBatchJobsTable.getColumnModel().getColumn(COL_LAST_ERROR).setWidth(120);
-    if (batchRenderList.size() > 0)
-      data.renderBatchJobsTable.setRowSelectionInterval(0, 0);
-  }
-
-  public void batchRenderAddFilesButton_clicked() {
-    if (jobRenderThread != null) {
-      return;
-    }
-    try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      int jobCount = batchRenderList.size();
-      chooser.setMultiSelectionEnabled(true);
-      if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
-        for (File file : chooser.getSelectedFiles()) {
-          addFlameToBatchRenderer(file.getPath(), false);
-        }
-      }
-      if (jobCount != batchRenderList.size()) {
-        refreshRenderBatchJobsTable();
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
-    }
-
-  }
-
-  public void addFlameToBatchRenderer(String filename, boolean refreshTable) {
-    boolean hasFile = false;
-    for (Job job : batchRenderList) {
-      if (job.getFlameFilename().equals(filename)) {
-        hasFile = true;
-        break;
-      }
-    }
-    if (!hasFile) {
-      Job job = new Job();
-      job.setFlameFilename(filename);
-      batchRenderList.add(job);
-      if (refreshTable) {
-        refreshRenderBatchJobsTable();
-      }
-    }
-  }
-
-  public void batchRenderFilesMoveUpButton_clicked() {
-    if (jobRenderThread != null) {
-      return;
-    }
-    int row = data.renderBatchJobsTable.getSelectedRow();
-    if (row < 0 && batchRenderList.size() > 0) {
-      row = 0;
-      data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row, row);
-    }
-    else if (row > 0 && row < batchRenderList.size()) {
-      Job t = batchRenderList.get(row - 1);
-      batchRenderList.set(row - 1, batchRenderList.get(row));
-      batchRenderList.set(row, t);
-      refreshRenderBatchJobsTable();
-      data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row - 1, row - 1);
-    }
-  }
-
-  public void batchRenderFilesMoveDownButton_clicked() {
-    if (jobRenderThread != null) {
-      return;
-    }
-    int row = data.renderBatchJobsTable.getSelectedRow();
-    if (row < 0 && batchRenderList.size() > 0) {
-      row = 0;
-      data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row, row);
-    }
-    else if (row >= 0 && row < batchRenderList.size() - 1) {
-      Job t = batchRenderList.get(row + 1);
-      batchRenderList.set(row + 1, batchRenderList.get(row));
-      batchRenderList.set(row, t);
-      refreshRenderBatchJobsTable();
-      data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row + 1, row + 1);
-    }
-  }
-
-  private JobRenderThread jobRenderThread = null;
-
-  public void batchRenderStartButton_clicked() {
-    if (jobRenderThread != null) {
-      jobRenderThread.setCancelSignalled(true);
-      return;
-    }
-    List<Job> activeJobList = new ArrayList<Job>();
-    for (Job job : batchRenderList) {
-      if (!job.isFinished()) {
-        activeJobList.add(job);
-      }
-    }
-    if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) data.batchQualityProfileCmb.getSelectedItem());
-      new Thread(jobRenderThread).start();
-    }
-    enableJobRenderControls();
-  }
-
-  public void batchRenderFilesRemoveAllButton_clicked() {
-    if (jobRenderThread != null) {
-      return;
-    }
-    batchRenderList.clear();
-    refreshRenderBatchJobsTable();
-  }
-
-  public void batchRenderFilesRemoveButton_clicked() {
-    if (jobRenderThread != null) {
-      return;
-    }
-    int row = data.renderBatchJobsTable.getSelectedRow();
-    if (row >= 0 && row < batchRenderList.size()) {
-      batchRenderList.remove(row);
-      refreshRenderBatchJobsTable();
-      if (row >= batchRenderList.size()) {
-        row--;
-      }
-      if (row >= 0 && row < batchRenderList.size()) {
-        data.renderBatchJobsTable.getSelectionModel().setSelectionInterval(row, row);
-      }
-    }
-  }
-
-  @Override
-  public Prefs getPrefs() {
-    return prefs;
-  }
-
-  @Override
-  public JProgressBar getTotalProgressBar() {
-    return data.batchRenderTotalProgressBar;
-  }
-
-  @Override
-  public JProgressBar getJobProgressBar() {
-    return data.batchRenderJobProgressBar;
-  }
-
-  @Override
-  public ProgressUpdater getJobProgressUpdater() {
-    return jobProgressUpdater;
-  }
-
-  @Override
-  public void onJobFinished() {
-    jobRenderThread = null;
-    System.err.println("JOB FINISHED");
-    enableJobRenderControls();
-  }
-
-  @Override
-  public JTable getRenderBatchJobsTable() {
-    return data.renderBatchJobsTable;
   }
 
   @Override
@@ -4494,90 +4242,6 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
 
   public DancingFractalsController getDancingFractalsController() {
     return dancingFractalsController;
-  }
-
-  private class BatchRenderPreviewFlameHolder implements FlameHolder {
-
-    @Override
-    public Flame getFlame() {
-      try {
-        int row = data.renderBatchJobsTable.getSelectedRow();
-        if (row >= 0 && row < batchRenderList.size()) {
-          Job job = batchRenderList.get(row);
-          List<Flame> flames = new FlameReader(prefs).readFlames(job.getFlameFilename());
-          return flames.size() > 0 ? flames.get(0) : null;
-        }
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-      return null;
-    }
-
-  }
-
-  private BatchRenderPreviewFlameHolder batchRenderPreviewFlameHolder = null;
-
-  private BatchRenderPreviewFlameHolder getBatchRenderPreviewFlameHolder() {
-    if (batchRenderPreviewFlameHolder == null) {
-      batchRenderPreviewFlameHolder = new BatchRenderPreviewFlameHolder();
-    }
-    return batchRenderPreviewFlameHolder;
-  }
-
-  private FlamePanel getBatchPreviewFlamePanel() {
-    if (batchPreviewFlamePanel == null) {
-      int width = data.batchPreviewRootPanel.getWidth();
-      int height = data.batchPreviewRootPanel.getHeight();
-      SimpleImage img = new SimpleImage(width, height);
-      img.fillBackground(0, 0, 0);
-      batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null);
-      ResolutionProfile resProfile = getBatchRenderResolutionProfile();
-      batchPreviewFlamePanel.setRenderWidth(resProfile.getWidth());
-      batchPreviewFlamePanel.setRenderHeight(resProfile.getHeight());
-      batchPreviewFlamePanel.setDrawTriangles(false);
-      data.batchPreviewRootPanel.add(batchPreviewFlamePanel, BorderLayout.CENTER);
-      data.batchPreviewRootPanel.getParent().validate();
-      data.batchPreviewRootPanel.repaint();
-    }
-    return batchPreviewFlamePanel;
-  }
-
-  public void renderBatchJobsTableClicked() {
-    FlamePanel imgPanel = getBatchPreviewFlamePanel();
-    Rectangle bounds = imgPanel.getImageBounds();
-    int width = bounds.width;
-    int height = bounds.height;
-    Flame flame = getBatchRenderPreviewFlameHolder().getFlame();
-    if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      if (flame != null) {
-        double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-        double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(info.getImageWidth());
-        flame.setHeight(info.getImageHeight());
-
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
-        flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-        flame.setSpatialFilterRadius(0.0);
-        RenderedFlame res = renderer.renderFlame(info);
-        imgPanel.setImage(res.getImage());
-      }
-      else {
-        imgPanel.setImage(new SimpleImage(width, height));
-      }
-    }
-    data.batchPreviewRootPanel.invalidate();
-    data.batchPreviewRootPanel.validate();
-  }
-
-  public void batchRendererResolutionProfileCmb_changed() {
-    if (batchPreviewFlamePanel != null) {
-      data.batchPreviewRootPanel.remove(batchPreviewFlamePanel);
-      batchPreviewFlamePanel = null;
-    }
-    renderBatchJobsTableClicked();
   }
 
   private RenderMainFlameThread mainRenderThread = null;
@@ -5395,6 +5059,14 @@ public class TinaController implements FlameHolder, LayerHolder, JobRenderThread
         refreshFlameImage(false);
       }
     }
+  }
+
+  public BatchRendererController getBatchRendererController() {
+    return batchRendererController;
+  }
+
+  public MainController getMainController() {
+    return mainController;
   }
 
 }

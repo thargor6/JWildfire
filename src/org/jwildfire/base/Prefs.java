@@ -45,7 +45,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
-  static final String KEY_TINA_PRESERVE_FREE_CPUS = "tina.preserve_free_cpus";
+  static final String KEY_TINA_PRESERVE_FREE_CPUS = "tina.render.preserve_free_cpus";
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
   static final String KEY_TINA_PROFILE_RESOLUTION_WIDTH = "tina.profile.resolution.width";
   static final String KEY_TINA_PROFILE_RESOLUTION_HEIGHT = "tina.profile.resolution.height";
@@ -181,7 +181,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaOptimizedRenderingIR = true;
 
   //@Property(description = "Use experimental openCL-code fragments, just turn it off if you face any kind of problems", category = PropertyCategory.TINA)
-  private boolean tinaUseExperimentalOpenClCode = true;
+  private boolean tinaUseExperimentalOpenClCode = false;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -560,6 +560,8 @@ public class Prefs extends ManagedObject {
 
   public int getTinaRenderThreads() {
     int numThreads = tinaRenderThreads - tinaPreserveFreeCPUs;
+    if (tinaUseExperimentalOpenClCode)
+      numThreads--;
     return numThreads > 1 ? numThreads : 1;
   }
 
@@ -766,7 +768,7 @@ public class Prefs extends ManagedObject {
   }
 
   public int getTinaPreserveFreeCPUs() {
-    return tinaUseExperimentalOpenClCode ? tinaPreserveFreeCPUs + 1 : tinaPreserveFreeCPUs;
+    return tinaPreserveFreeCPUs;
   }
 
   public void setTinaPreserveFreeCPUs(int tinaPreserveFreeCPUs) {

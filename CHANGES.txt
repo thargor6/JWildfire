@@ -1,12 +1,13 @@
 V2.00 (xx.xx.2014):
- - some experimental OpenCl-code which should cause faster rendering (if not, disable tinaUseExperimentalOpenClCode in the Prefs)  
+ - some experimental OpenCl-code which can cause faster rendering on some devices (use the new checkbox in the launcher to turn it on or off, per default it is off) 
  - experimental channel mixer which allows to adjust raw fractal colors using several modes:
     - gamma
     - rgb (one curve for each color component)
     - full (three curves for each color component)
  - new "NBlur"-bokeh style
  - optimized the refresh of the display of the interactive renderer (disable property tinaOptimizedRenderingIR in the Prefs if this makes problems on slow machines) 
- - several small optimizations to the renderer 
+ - several small optimizations to the renderer
+ - the launcher now shows an error message (different from the technical java-error) when it detects a 32bit java and a memory usage below 1 GB 
 
  - retain selected layer after "Undo"/"Redo"
  - smoother transition between DoF and non-DoF-areas

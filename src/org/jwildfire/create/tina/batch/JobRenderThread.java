@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.base.Flame;
@@ -37,13 +38,14 @@ public class JobRenderThread implements Runnable {
   private final QualityProfile qualityProfile;
   private final ResolutionProfile resolutionProfile;
   private boolean cancelSignalled;
-  private boolean doOverwriteExisting = false;
+  private final boolean doOverwriteExisting;
 
-  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
+  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting) {
     controller = pController;
     activeJobList = pActiveJobList;
     resolutionProfile = pResolutionProfile;
     qualityProfile = pQualityProfile;
+    doOverwriteExisting = pDoOverwriteExisting;
   }
 
   @Override
@@ -60,12 +62,19 @@ public class JobRenderThread implements Runnable {
             break;
           }
           try {
-            int width = resolutionProfile.getWidth();
-            int height = resolutionProfile.getHeight();
+            int width, height;
+            if (job.getCustomWidth() > 0 && job.getCustomHeight() > 0) {
+              width = job.getCustomWidth();
+              height = job.getCustomHeight();
+            }
+            else {
+              width = resolutionProfile.getWidth();
+              height = resolutionProfile.getHeight();
+            }
             RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
             info.setRenderHDR(qualityProfile.isWithHDR());
             info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
-            List<Flame> flames = new FlameReader(controller.getPrefs()).readFlames(job.getFlameFilename());
+            List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
             double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -81,8 +90,8 @@ public class JobRenderThread implements Runnable {
                 controller.getJobProgressUpdater().updateProgress(1);
               }
               else {
-                flame.setSampleDensity(qualityProfile.getQuality());
-                FlameRenderer renderer = new FlameRenderer(flame, controller.getPrefs(), flame.isBGTransparency(), false);
+                flame.setSampleDensity(job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality());
+                FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
                 renderer.setProgressUpdater(controller.getJobProgressUpdater());
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);

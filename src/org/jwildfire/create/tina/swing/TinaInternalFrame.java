@@ -4517,7 +4517,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFFadeREd(), getDofDOFFadeSlider(), getDofDOFParam1REd(), getDofDOFParam1Slider(), getDofDOFParam1Lbl(), getDofDOFParam2REd(),
         getDofDOFParam2Slider(), getDofDOFParam2Lbl(), getDofDOFParam3REd(), getDofDOFParam3Slider(), getDofDOFParam3Lbl(), getDofDOFParam4REd(),
         getDofDOFParam4Slider(), getDofDOFParam4Lbl(), getDofDOFParam5REd(), getDofDOFParam5Slider(), getDofDOFParam5Lbl(), getDofDOFParam6REd(),
-        getDofDOFParam6Slider(), getDofDOFParam6Lbl());
+        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn());
 
     tinaController = new TinaController(params);
 
@@ -9774,7 +9774,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchResolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
-            tinaController.batchRendererResolutionProfileCmb_changed();
+            tinaController.getBatchRendererController().batchRendererResolutionProfileCmb_changed();
           }
         }
       });
@@ -9792,6 +9792,35 @@ public class TinaInternalFrame extends JInternalFrame {
       batchQualityProfileCmb.setPreferredSize(new Dimension(159, 24));
       batchQualityProfileCmb.setMaximumRowCount(32);
       batchQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setMaximumSize(new Dimension(159, 28));
+      panel_2.add(panel_8);
+      panel_8.setLayout(null);
+
+      batchRenderOverrideCBx = new JCheckBox("Overwrite images");
+      batchRenderOverrideCBx.setBounds(4, 4, 149, 18);
+      panel_8.add(batchRenderOverrideCBx);
+      batchRenderOverrideCBx.setToolTipText("Overwrite already rendered images");
+
+      JPanel panel_9 = new JPanel();
+      panel_9.setMaximumSize(new Dimension(159, 36));
+      panel_2.add(panel_9);
+
+      batchRenderShowImageBtn = new JButton();
+      batchRenderShowImageBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getBatchRendererController().showImageBtn_clicked();
+        }
+      });
+      batchRenderShowImageBtn.setToolTipText("Show rendered image (if there is one)");
+      batchRenderShowImageBtn.setText("Show image");
+      batchRenderShowImageBtn.setPreferredSize(new Dimension(159, 24));
+      batchRenderShowImageBtn.setMinimumSize(new Dimension(159, 12));
+      batchRenderShowImageBtn.setMaximumSize(new Dimension(159, 24));
+      batchRenderShowImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderShowImageBtn.setAlignmentX(0.5f);
+      panel_2.add(batchRenderShowImageBtn);
 
       JPanel panel_3 = new JPanel();
       panel_3.setPreferredSize(new Dimension(10, 100));
@@ -10471,6 +10500,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField dofDOFParam6REd;
   private JWFNumberField dofDOFAngleREd;
   private JWFNumberField dofDOFFadeREd;
+  private JCheckBox batchRenderOverrideCBx;
+  private JButton batchRenderShowImageBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10498,7 +10529,7 @@ public class TinaInternalFrame extends JInternalFrame {
         @Override
         public void valueChanged(ListSelectionEvent e) {
           if (!e.getValueIsAdjusting()) {
-            tinaController.renderBatchJobsTableClicked();
+            tinaController.getBatchRendererController().renderBatchJobsTableClicked();
           }
         }
       });
@@ -10524,7 +10555,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderAddFilesButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderAddFilesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderAddFilesButton_clicked();
+          tinaController.getBatchRendererController().batchRenderAddFilesButton_clicked();
         }
       });
     }
@@ -10547,7 +10578,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderFilesMoveUpButton_clicked();
+          tinaController.getBatchRendererController().batchRenderFilesMoveUpButton_clicked();
         }
       });
     }
@@ -10571,7 +10602,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderFilesMoveDownButton_clicked();
+          tinaController.getBatchRendererController().batchRenderFilesMoveDownButton_clicked();
         }
       });
     }
@@ -10624,7 +10655,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesRemoveButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderFilesRemoveButton_clicked();
+          tinaController.getBatchRendererController().batchRenderFilesRemoveButton_clicked();
         }
       });
     }
@@ -10647,7 +10678,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesRemoveAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveAllButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderFilesRemoveAllButton_clicked();
+          tinaController.getBatchRendererController().batchRenderFilesRemoveAllButton_clicked();
         }
       });
     }
@@ -10669,7 +10700,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderStartButton.setFont(new Font("Dialog", Font.BOLD, 10));
       batchRenderStartButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.batchRenderStartButton_clicked();
+          tinaController.getBatchRendererController().batchRenderStartButton_clicked();
         }
       });
     }
@@ -13254,7 +13285,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_20() {
     if (panel_20 == null) {
       panel_20 = new JPanel();
-      panel_20.setMaximumSize(new Dimension(159, 50));
+      panel_20.setMaximumSize(new Dimension(159, 36));
     }
     return panel_20;
   }
@@ -13262,7 +13293,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_21() {
     if (panel_21 == null) {
       panel_21 = new JPanel();
-      panel_21.setMaximumSize(new Dimension(159, 50));
+      panel_21.setMaximumSize(new Dimension(159, 36));
     }
     return panel_21;
   }
@@ -13270,7 +13301,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_22() {
     if (panel_22 == null) {
       panel_22 = new JPanel();
-      panel_22.setMaximumSize(new Dimension(32767, 50));
+      panel_22.setMaximumSize(new Dimension(32767, 36));
+      panel_22.setLayout(null);
+
+      JLabel lblGlobalSettings = new JLabel();
+      lblGlobalSettings.setText("Global settings:");
+      lblGlobalSettings.setPreferredSize(new Dimension(100, 22));
+      lblGlobalSettings.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalSettings.setAlignmentX(1.0f);
+      lblGlobalSettings.setBounds(6, 20, 100, 14);
+      panel_22.add(lblGlobalSettings);
     }
     return panel_22;
   }
@@ -21628,6 +21668,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getDofDOFFadeREd() {
     return dofDOFFadeREd;
+  }
+
+  public JCheckBox getBatchRenderOverrideCBx() {
+    return batchRenderOverrideCBx;
+  }
+
+  public JButton getBatchRenderShowImageBtn() {
+    return batchRenderShowImageBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

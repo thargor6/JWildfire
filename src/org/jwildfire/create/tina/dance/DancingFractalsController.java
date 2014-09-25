@@ -168,7 +168,7 @@ public class DancingFractalsController {
     rootTabbedPane = pRootTabbedPane;
     parentCtrl = pParent;
     errorHandler = pErrorHandler;
-    prefs = parentCtrl.getPrefs();
+    prefs = Prefs.getPrefs();
     flameRootPanel = pRealtimeFlamePnl;
     graph1RootPanel = pRealtimeGraph1Pnl;
     loadSoundBtn = pLoadSoundBtn;
@@ -425,7 +425,7 @@ public class DancingFractalsController {
         if (chooser.showSaveDialog(flameRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(getParentCtrl().getPrefs(), project, actionRecorder, renderThread, project.getFFT());
+          PostRecordFlameGenerator generator = new PostRecordFlameGenerator(Prefs.getPrefs(), project, actionRecorder, renderThread, project.getFFT());
           generator.createRecordedFlameFiles(file.getAbsolutePath());
         }
       }
