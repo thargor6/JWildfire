@@ -358,7 +358,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
           ctrl.applyTransform(true);
       }
     });
-    envelopeApplyTransformReverseBtn.setToolTipText("Apply, but revert params so that it works similar to an undo");
+    envelopeApplyTransformReverseBtn.setToolTipText("Apply, but revert params, can also be used as undo-function");
     envelopeApplyTransformReverseBtn.setText("Reverse");
     envelopeApplyTransformReverseBtn.setPreferredSize(new Dimension(141, 26));
     envelopeApplyTransformReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
