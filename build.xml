@@ -134,7 +134,7 @@
       <fileset file="Delphi/JWildfire.exe" />
      </copy>    
     <zip destfile="${dist.name}">
-      <zipfileset dir="${dist.dir}/"/>
+      <zipfileset dir="${dist.dir}/" excludes="start_*" />
       <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
     </zip>
   </target>

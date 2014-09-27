@@ -5099,6 +5099,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               double scale = (Double) varFunc.getParameter(CrackleFunc.PARAM_SCALE);
               if (MathLib.fabs(scale) < MathLib.EPSILON) {
                 crackle = var;
+                xform.setColor(Math.random());
                 break;
               }
             }

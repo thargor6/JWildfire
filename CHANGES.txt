@@ -1,4 +1,14 @@
 V2.00 (xx.xx.2014):
+ - button for simply-generation of bokeh-like effects in the main editor - it's pure fun!
+ - new "Rect"-bokeh-style
+ - ability to use/create motion-curves made from mp3-audio, it has never been easier to create a sound-sync motion of a flame-fractal!
+ - ability to transform (shift, scale) motion-curves in the motion-curve-dialog
+ - improved the behaviour of "view-all"-function in the motion-curve-dialog
+ - increased the preview quality in the motion-curve-dialog (may be slower, but makes sense to see more detail here)
+ - options to specify custom (individual) sizes or quality-levels in the batch-renderer
+ - option to override (re-render) images in the Batch-renderer
+ - ability to display also rendered images in the batch-renderer
+
  - some experimental OpenCl-code which can cause faster rendering on some devices (use the new checkbox in the launcher to turn it on or off, per default it is off) 
  - experimental channel mixer which allows to adjust raw fractal colors using several modes:
     - gamma

@@ -402,7 +402,8 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     panel_7.add(envelopeMP3ChannelREd);
 
     JLabel lblChannel = new JLabel();
-    lblChannel.setText("Channel");
+    lblChannel.setToolTipText("Choose from one of the available 64 frequency channels");
+    lblChannel.setText("Frequency Band");
     lblChannel.setPreferredSize(new Dimension(38, 26));
     lblChannel.setHorizontalAlignment(SwingConstants.RIGHT);
     lblChannel.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -414,7 +415,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     lblOffsetms.setPreferredSize(new Dimension(38, 26));
     lblOffsetms.setHorizontalAlignment(SwingConstants.RIGHT);
     lblOffsetms.setFont(new Font("Dialog", Font.BOLD, 10));
-    lblOffsetms.setBounds(25, 131, 93, 26);
+    lblOffsetms.setBounds(16, 131, 102, 26);
     panel_7.add(lblOffsetms);
 
     envelopeMP3OffsetREd = new JWFNumberField();
@@ -456,7 +457,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     lblDurationframes.setPreferredSize(new Dimension(38, 26));
     lblDurationframes.setHorizontalAlignment(SwingConstants.RIGHT);
     lblDurationframes.setFont(new Font("Dialog", Font.BOLD, 10));
-    lblDurationframes.setBounds(25, 157, 93, 26);
+    lblDurationframes.setBounds(16, 157, 102, 26);
     panel_7.add(lblDurationframes);
 
     envelopeMP3FPSREd = new JWFNumberField();
@@ -482,7 +483,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     lblFps.setPreferredSize(new Dimension(38, 26));
     lblFps.setHorizontalAlignment(SwingConstants.RIGHT);
     lblFps.setFont(new Font("Dialog", Font.BOLD, 10));
-    lblFps.setBounds(25, 105, 93, 26);
+    lblFps.setBounds(16, 105, 102, 26);
     panel_7.add(lblFps);
 
     ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
