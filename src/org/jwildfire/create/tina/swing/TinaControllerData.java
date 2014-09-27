@@ -266,6 +266,7 @@ public class TinaControllerData {
   public JButton snapShotButton;
   public JButton qSaveButton;
   public JButton quickMutationButton;
+  public JButton bokehButton;
   public JButton dancingFlamesButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;

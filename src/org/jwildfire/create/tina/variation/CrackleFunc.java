@@ -44,10 +44,12 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class CrackleFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_CELLSIZE = "cellsize";
-  private static final String PARAM_POWER = "power";
-  private static final String PARAM_DISTORT = "distort";
-  private static final String PARAM_SCALE = "scale";
+  public static final String VAR_NAME = "crackle";
+
+  public static final String PARAM_CELLSIZE = "cellsize";
+  public static final String PARAM_POWER = "power";
+  public static final String PARAM_DISTORT = "distort";
+  public static final String PARAM_SCALE = "scale";
   private static final String PARAM_Z = "z";
 
   protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z };
@@ -173,7 +175,7 @@ public class CrackleFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "crackle";
+    return VAR_NAME;
   }
 
   //These set cache size for cell centres, they take a lot of processing, so it's handy to

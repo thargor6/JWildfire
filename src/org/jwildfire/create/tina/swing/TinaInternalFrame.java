@@ -1286,7 +1286,7 @@ public class TinaInternalFrame extends JInternalFrame {
       camDimishZSlider.setLocation(new Point(202, 98));
       camDimishZSlider.setBounds(645, 28, 220, 24);
       tinaDOFPanel.add(camDimishZSlider);
-      tinaSouthTabbedPane.addTab("DOF / Bokeh ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/office-chart-polar-stacked.png")), getPanel_92(), null);
+      tinaSouthTabbedPane.addTab("DOF / Bokeh ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/games-config-background.png")), getPanel_92(), null);
 
       tinaSouthTabbedPane.addTab("Coloring ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-wheel.png")), getTinaColoringPanel(), null);
       tinaSouthTabbedPane.addTab("Anti-Aliasing / Filter", null, getAntialiasPanel(), null);
@@ -4517,7 +4517,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFFadeREd(), getDofDOFFadeSlider(), getDofDOFParam1REd(), getDofDOFParam1Slider(), getDofDOFParam1Lbl(), getDofDOFParam2REd(),
         getDofDOFParam2Slider(), getDofDOFParam2Lbl(), getDofDOFParam3REd(), getDofDOFParam3Slider(), getDofDOFParam3Lbl(), getDofDOFParam4REd(),
         getDofDOFParam4Slider(), getDofDOFParam4Lbl(), getDofDOFParam5REd(), getDofDOFParam5Slider(), getDofDOFParam5Lbl(), getDofDOFParam6REd(),
-        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn());
+        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn());
 
     tinaController = new TinaController(params);
 
@@ -7059,7 +7059,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditFocusPointButton = new JToggleButton();
       mouseTransformEditFocusPointButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformEditFocusPointButton.setToolTipText("Edit focus point");
-      mouseTransformEditFocusPointButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/office-chart-polar-stacked.png")));
+      mouseTransformEditFocusPointButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
       mouseTransformEditFocusPointButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           expandGradientEditorFncPnl(false);
@@ -7206,6 +7206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.add(getSnapShotButton());
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
+      centerWestPanel.add(getBokehBtn());
 
       motionCurveEditModeButton = new JToggleButton();
       centerWestPanel.add(motionCurveEditModeButton);
@@ -7215,7 +7216,6 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
-      motionCurveEditModeButton.setText("");
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -10503,6 +10503,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField dofDOFFadeREd;
   private JCheckBox batchRenderOverrideCBx;
   private JButton batchRenderShowImageBtn;
+  private JButton bokehBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -21677,6 +21678,24 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getBatchRenderShowImageBtn() {
     return batchRenderShowImageBtn;
+  }
+
+  private JButton getBokehBtn() {
+    if (bokehBtn == null) {
+      bokehBtn = new JButton();
+      bokehBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.bokehBtn_clicked();
+        }
+      });
+      bokehBtn.setToolTipText("Add random bokeh-like-effects (DOF)");
+      bokehBtn.setText("DOF");
+      bokehBtn.setPreferredSize(new Dimension(72, 24));
+      bokehBtn.setMnemonic(KeyEvent.VK_K);
+      bokehBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
+    }
+    return bokehBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

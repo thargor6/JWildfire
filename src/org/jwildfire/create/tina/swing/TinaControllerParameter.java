@@ -351,6 +351,7 @@ public class TinaControllerParameter {
   public JButton snapShotButton;
   public JButton qSaveButton;
   public JButton quickMutationButton;
+  public JButton bokehButton;
   public JButton dancingFlamesButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
@@ -1043,7 +1044,7 @@ public class TinaControllerParameter {
       JLabel pDofDOFParam2Lbl, JWFNumberField pDofDOFParam3REd, JSlider pDofDOFParam3Slider, JLabel pDofDOFParam3Lbl,
       JWFNumberField pDofDOFParam4REd, JSlider pDofDOFParam4Slider, JLabel pDofDOFParam4Lbl, JWFNumberField pDofDOFParam5REd,
       JSlider pDofDOFParam5Slider, JLabel pDofDOFParam5Lbl, JWFNumberField pDofDOFParam6REd, JSlider pDofDOFParam6Slider,
-      JLabel pDofDOFParam6Lbl, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn) {
+      JLabel pDofDOFParam6Lbl, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn, JButton pBokehButton) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1144,5 +1145,6 @@ public class TinaControllerParameter {
     dofDOFParam6Lbl = pDofDOFParam6Lbl;
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
+    bokehButton = pBokehButton;
   }
 }
