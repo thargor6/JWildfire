@@ -928,7 +928,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
           FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
           renderer.setProgressUpdater(null);
-          flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 3.0);
+          flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
           flame.setSpatialFilterRadius(0.0);
           RenderedFlame res = renderer.renderFlame(info);
           imgPanel.setImage(res.getImage());

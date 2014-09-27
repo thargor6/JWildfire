@@ -683,10 +683,10 @@ public class EnvelopeDlgController {
         ymin = ymin - dy;
         ymax = ymax + dy;
       }
-      if ((xmax - xmin) < 10.0)
-        xmax = xmin + 10.0;
-      if ((ymax - ymin) < 0.5)
-        ymax = ymin + 0.5;
+      if ((xmax - xmin) < 3.0)
+        xmax = xmin + 3.0;
+      if ((ymax - ymin) < 0.00005)
+        ymax = ymin + 0.00005;
 
       envelope.setViewXMin(Tools.FTOI(xmin));
       envelope.setViewXMax(Tools.FTOI(xmax));

@@ -38,12 +38,9 @@ public class EnvelopeMP3Data {
     int samplesPerFrame = 10;
     int dt = 1000 / fps / samplesPerFrame;
 
-    System.out.println("REC: " + fft.getRecordedTime());
     int points = (int) ((fft.getRecordedTime() * fps) / 1000.0 + 0.5);
     if (duration > 0 && duration < points)
       points = duration;
-
-    System.out.println("POINTS: " + points);
 
     double scale = 0.01;
     int x[] = new int[points - frameoffset];
