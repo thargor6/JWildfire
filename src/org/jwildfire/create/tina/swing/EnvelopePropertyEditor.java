@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.jwildfire.envelope.Envelope;
+import org.jwildfire.swing.ErrorHandler;
 
 import com.l2fprod.common.beans.editor.AbstractPropertyEditor;
 import com.l2fprod.common.swing.ComponentFactory;
@@ -66,7 +67,14 @@ public class EnvelopePropertyEditor extends AbstractPropertyEditor {
 
   protected void selectEnvelope() {
     Envelope editEnvelope = envelope.clone();
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(editor), editEnvelope, false);
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(editor), new ErrorHandler() {
+
+      @Override
+      public void handleError(Throwable pThrowable) {
+        pThrowable.printStackTrace();
+
+      }
+    }, editEnvelope, false);
     dlg.setModal(true);
     dlg.setVisible(true);
     if (dlg.isConfirmed()) {

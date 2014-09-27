@@ -52,7 +52,7 @@ public abstract class ChannelMixerPanelDelegate {
 
     addButtons(envelopeParentPanel);
 
-    ctrl = new EnvelopeDlgController(envelopePanel);
+    ctrl = new EnvelopeDlgController(envelopePanel, owner.getErrorHandler());
     ctrl.setNoRefresh(true);
 
     EnvelopeChangeListener changeListener = new EnvelopeChangeListener() {
@@ -116,7 +116,7 @@ public abstract class ChannelMixerPanelDelegate {
     Flame flame = owner.getOwner().getCurrFlame();
     MotionCurve curve = getCurve(flame);
     Envelope envelope = curve.toEnvelope();
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootPanel), envelope, false);
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootPanel), owner.getErrorHandler(), envelope, false);
     dlg.setFlameToPreview(EnvelopeDialogFlamePreviewType.COLOR_CURVE, flame, curve);
 
     dlg.setTitle("Editing motion curve");

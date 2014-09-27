@@ -24,16 +24,19 @@ import javax.swing.JTabbedPane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
+import org.jwildfire.swing.ErrorHandler;
 
 public class ChannelMixerControlsDelegate {
+  private final ErrorHandler errorHandler;
   private final TinaController owner;
   private final TinaControllerData data;
   private final JTabbedPane rootTabbedPane;
   private final boolean useUndoManager;
   private List<ChannelMixerPanelDelegate> channelMixerPanels;
 
-  public ChannelMixerControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane, boolean pUseUndoManager) {
+  public ChannelMixerControlsDelegate(TinaController pOwner, ErrorHandler pErrorHandler, TinaControllerData pData, JTabbedPane pRootTabbedPane, boolean pUseUndoManager) {
     owner = pOwner;
+    errorHandler = pErrorHandler;
     data = pData;
     rootTabbedPane = pRootTabbedPane;
     useUndoManager = pUseUndoManager;
@@ -236,6 +239,10 @@ public class ChannelMixerControlsDelegate {
 
   protected boolean isUseUndoManager() {
     return useUndoManager;
+  }
+
+  protected ErrorHandler getErrorHandler() {
+    return errorHandler;
   }
 
 }

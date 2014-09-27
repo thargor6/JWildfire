@@ -25,6 +25,7 @@ import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 public class RecordedFFT implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  private final int samplesPerSecond;
   private final int recordedIntervalInMilliseconds;
   private final int movingAvgSize;
   private final int inputSamplePerFFTRowCount;
@@ -32,12 +33,13 @@ public class RecordedFFT implements Serializable {
   private final int recordedChannels;
   private List<long[]> fftList = new ArrayList<long[]>();
 
-  public RecordedFFT(int pRecordedIntervalInMilliseconds, int pMovingAvgSize, int pInputSamplePerFFTRowCount, int pStoredValuesPerFFTRow, int pRecordedChannels) {
+  public RecordedFFT(int pRecordedIntervalInMilliseconds, int pMovingAvgSize, int pInputSamplePerFFTRowCount, int pStoredValuesPerFFTRow, int pRecordedChannels, int pSamplesPerSecond) {
     recordedIntervalInMilliseconds = pRecordedIntervalInMilliseconds;
     movingAvgSize = pMovingAvgSize;
     inputSamplePerFFTRowCount = pInputSamplePerFFTRowCount;
     storedValuesPerFFTRow = pStoredValuesPerFFTRow;
     recordedChannels = pRecordedChannels;
+    samplesPerSecond = pSamplesPerSecond;
   }
 
   public int getRecordedInterval() {
@@ -99,6 +101,10 @@ public class RecordedFFT implements Serializable {
     return getData(position);
   }
 
+  public long getRecordedTime() {
+    return ((long) fftList.size() * (long) inputSamplePerFFTRowCount * (long) 1000) / (long) samplesPerSecond;
+  }
+
   public short[] getData(long pPosition) {
     short[] res = new short[storedValuesPerFFTRow];
     double fidx = (double) pPosition / (double) inputSamplePerFFTRowCount * (double) recordedChannels;
@@ -127,4 +133,5 @@ public class RecordedFFT implements Serializable {
   public int getSize() {
     return fftList.size();
   }
+
 }

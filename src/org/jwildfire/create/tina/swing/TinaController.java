@@ -661,7 +661,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
-    channelMixerControls = new ChannelMixerControlsDelegate(this, data, rootTabbedPane, true);
+    channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
 
     registerMotionPropertyControls();
 
@@ -5067,6 +5067,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public MainController getMainController() {
     return mainController;
+  }
+
+  protected ErrorHandler getErrorHandler() {
+    return errorHandler;
   }
 
 }

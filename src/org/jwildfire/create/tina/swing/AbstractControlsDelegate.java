@@ -74,7 +74,7 @@ public abstract class AbstractControlsDelegate {
       envelope.setValues(x, y);
     }
 
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), envelope, true);
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), owner.getErrorHandler(), envelope, true);
     dlg.setFlameToPreview(EnvelopeDialogFlamePreviewType.MOTION_CURVE, owner.getCurrFlame(), pCurve);
 
     dlg.setTitle("Editing " + pLabel);

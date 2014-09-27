@@ -33,7 +33,7 @@ public class FFTRecordingAudioProcessor extends RecordingAudioProcessor {
     if (getBufferSize() < 6 * inputSamplePerFFTRowCount) {
       setBufferSize(6 * inputSamplePerFFTRowCount);
     }
-    fft = new RecordedFFT(recordingIntervalInMilliseconds, movingAvgSize, inputSamplePerFFTRowCount, storedValuesPerFFTRow, pAudioDevice.getChannelCount());
+    fft = new RecordedFFT(recordingIntervalInMilliseconds, movingAvgSize, inputSamplePerFFTRowCount, storedValuesPerFFTRow, pAudioDevice.getChannelCount(), samplesPerSecond);
   }
 
   @Override
@@ -50,4 +50,5 @@ public class FFTRecordingAudioProcessor extends RecordingAudioProcessor {
   public RecordedFFT getFFT() {
     return fft;
   }
+
 }

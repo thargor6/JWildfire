@@ -458,7 +458,7 @@ public class DancingFractalsController {
   public void loadSoundButton_clicked() {
     try {
       JFileChooser chooser = new SoundFileChooser(prefs);
-      if (prefs.getInputFlamePath() != null) {
+      if (prefs.getInputSoundFilePath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getInputSoundFilePath()));
         }

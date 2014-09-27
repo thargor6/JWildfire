@@ -68,7 +68,9 @@ public class EnvelopePanel extends JPanel {
         drawGrid(g, envelopeView);
       }
       drawLines(g, envelopeView);
-      drawPoints(g, envelopeView);
+      if (envelope != null && !envelope.isLocked()) {
+        drawPoints(g, envelopeView);
+      }
     }
   }
 
