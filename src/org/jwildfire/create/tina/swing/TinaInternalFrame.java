@@ -4660,6 +4660,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private void initDOFBlurShapeCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(DOFBlurShapeType.BUBBLE);
+    pCmb.addItem(DOFBlurShapeType.RECT);
     pCmb.addItem(DOFBlurShapeType.SINEBLUR);
     pCmb.addItem(DOFBlurShapeType.STARBLUR);
     pCmb.addItem(DOFBlurShapeType.NBLUR);
