@@ -455,7 +455,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
         if (yIdx < 0 || yIdx >= renderer.rasterHeight)
           return;
       }
-
       double intensity = prj.intensity * layer.getWeight();
       plotPoint(xIdx, yIdx, intensity);
     }

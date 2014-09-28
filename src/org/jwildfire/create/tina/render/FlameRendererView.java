@@ -150,8 +150,8 @@ public class FlameRendererView {
       camPoint.z += flame.getCamPosZ();
 
       double zr = 1.0 - flame.getCamPerspective() * camPoint.z + flame.getCamPosZ();
-      if (zr < 0.0) {
-        zr = 0.0;
+      if (zr < EPSILON) {
+        return false;
       }
 
       if (flame.getDimishZ() > EPSILON) {
