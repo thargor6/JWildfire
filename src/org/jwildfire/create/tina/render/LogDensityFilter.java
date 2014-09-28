@@ -32,7 +32,6 @@ public class LogDensityFilter {
   private AbstractRasterPoint[][] raster;
   private int rasterWidth, rasterHeight, rasterSize;
   private final int PRECALC_LOG_ARRAY_SIZE = 512;
-  private final double HDR_SCALE = 0.0001;
   private double filter[][];
   private int noiseFilterSize;
   private double precalcLogArray[];
@@ -97,69 +96,7 @@ public class LogDensityFilter {
   }
 
   public void transformPointHDR(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    if (noiseFilterSize > 1) {
-      if (colorFunc == ColorFunc.NULL) {
-        pFilteredPnt.clear();
-        for (int i = 0; i < noiseFilterSize; i++) {
-          for (int j = 0; j < noiseFilterSize; j++) {
-            AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
-            pFilteredPnt.red += filter[i][j] * point.getRed();
-            pFilteredPnt.green += filter[i][j] * point.getGreen();
-            pFilteredPnt.blue += filter[i][j] * point.getBlue();
-            pFilteredPnt.intensity += filter[i][j] * point.getCount() * motionBlurScl;
-          }
-        }
-      }
-      else {
-        double rawR = 0.0, rawG = 0.0, rawB = 0.0;
-        double pCount = 0.0;
-        pFilteredPnt.intensity = 0;
-        for (int i = 0; i < noiseFilterSize; i++) {
-          for (int j = 0; j < noiseFilterSize; j++) {
-            AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
-            rawR += filter[i][j] * point.getRed();
-            rawG += filter[i][j] * point.getGreen();
-            rawB += filter[i][j] * point.getBlue();
-            double lPCount = filter[i][j] * point.getCount();
-            pCount += lPCount;
-            pFilteredPnt.intensity += lPCount * motionBlurScl;
-          }
-        }
-        final double scale = ChannelMixerCurves.FILTER_SCALE;
-        rawR = rawR * scale / pCount;
-        rawG = rawG * scale / pCount;
-        rawB = rawB * scale / pCount;
-        pFilteredPnt.red = colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
-        pFilteredPnt.green = colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
-        pFilteredPnt.blue = colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
-      }
-      pFilteredPnt.intensity = flame.getWhiteLevel() * pFilteredPnt.intensity * HDR_SCALE;
-    }
-    else {
-      AbstractRasterPoint point = getRasterPoint(pX, pY);
-      long pCount = point.getCount();
-      if (pCount > 0) {
-        if (colorFunc == ColorFunc.NULL) {
-          pFilteredPnt.red = point.getRed();
-          pFilteredPnt.green = point.getGreen();
-          pFilteredPnt.blue = point.getBlue();
-        }
-        else {
-          final double scale = ChannelMixerCurves.FILTER_SCALE;
-          double rawR = point.getRed() * scale / pCount;
-          double rawG = point.getGreen() * scale / pCount;
-          double rawB = point.getBlue() * scale / pCount;
-          pFilteredPnt.red = colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
-          pFilteredPnt.green = colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
-          pFilteredPnt.blue = colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
-        }
-        pFilteredPnt.intensity = point.getCount() * motionBlurScl * flame.getWhiteLevel() * HDR_SCALE;
-      }
-      else {
-        pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
-        pFilteredPnt.intensity = 0;
-      }
-    }
+    transformPointSimple(pFilteredPnt, pX, pY);
   }
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
