@@ -154,34 +154,34 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<Layer> layers = new ArrayList<Layer>();
 
   @AnimAware
-  private ShadingInfo shadingInfo = new ShadingInfo();
+  private ShadingInfo shadingInfo;
   private String lastFilename = null;
-  private double antialiasAmount = 0.75;
-  private double antialiasRadius = 0.36;
+  private double antialiasAmount;
+  private double antialiasRadius;
 
-  private int motionBlurLength = 0;
-  private double motionBlurTimeStep = 0.15;
-  private double motionBlurDecay = 0.03;
+  private int motionBlurLength;
+  private double motionBlurTimeStep;
+  private double motionBlurDecay;
 
   private int frame = 1;
   private int frameCount = 300;
 
-  private PostSymmetryType postSymmetryType = PostSymmetryType.NONE;
-  private int postSymmetryOrder = 3;
-  private double postSymmetryCentreX = 0.0;
-  private double postSymmetryCentreY = 0.0;
-  private double postSymmetryDistance = 1.25;
-  private double postSymmetryRotation = 6.0;
+  private PostSymmetryType postSymmetryType;
+  private int postSymmetryOrder;
+  private double postSymmetryCentreX;
+  private double postSymmetryCentreY;
+  private double postSymmetryDistance;
+  private double postSymmetryRotation;
 
-  private Stereo3dMode stereo3dMode = Stereo3dMode.NONE;
-  private double stereo3dAngle = 1.6;
-  private double stereo3dEyeDist = 0.032;
-  private double stereo3dFocalOffset = 0.5;
-  private Stereo3dColor stereo3dLeftEyeColor = Stereo3dColor.RED;
-  private Stereo3dColor stereo3dRightEyeColor = Stereo3dColor.CYAN;
-  private Stereo3dPreview stereo3dPreview = Stereo3dPreview.ANAGLYPH;
-  private int stereo3dInterpolatedImageCount = 3;
-  private boolean stereo3dSwapSides = false;
+  private Stereo3dMode stereo3dMode;
+  private double stereo3dAngle;
+  private double stereo3dEyeDist;
+  private double stereo3dFocalOffset;
+  private Stereo3dColor stereo3dLeftEyeColor;
+  private Stereo3dColor stereo3dRightEyeColor;
+  private Stereo3dPreview stereo3dPreview;
+  private int stereo3dInterpolatedImageCount;
+  private boolean stereo3dSwapSides;
 
   private ChannelMixerMode channelMixerMode;
   private final MotionCurve mixerRRCurve = new MotionCurve();
@@ -199,23 +199,73 @@ public class Flame implements Assignable<Flame>, Serializable {
     layers.add(new Layer());
     sampleDensity = 100.0;
     bgTransparency = true;
-    bgColorRed = bgColorGreen = bgColorBlue = 0;
+    pixelsPerUnit = 50;
+    name = "";
+
+    resetColoringSettings();
+    resetAntialiasingSettings();
+    resetCameraSettings();
+    resetDOFSettings();
+    resetBokehSettings();
+    resetShadingSettings();
+    resetStereo3DSettings();
+    resetPostSymmetrySettings();
+    resetMotionBlurSettings();
+    channelMixerMode = ChannelMixerMode.OFF;
+    resetMixerCurves();
+  }
+
+  public void resetMotionBlurSettings() {
+    motionBlurLength = 0;
+    motionBlurTimeStep = 0.15;
+    motionBlurDecay = 0.03;
+  }
+
+  public void resetPostSymmetrySettings() {
+    postSymmetryType = PostSymmetryType.NONE;
+    postSymmetryOrder = 3;
+    postSymmetryCentreX = 0.0;
+    postSymmetryCentreY = 0.0;
+    postSymmetryDistance = 1.25;
+    postSymmetryRotation = 6.0;
+  }
+
+  public void resetStereo3DSettings() {
+    stereo3dMode = Stereo3dMode.NONE;
+    stereo3dAngle = 1.6;
+    stereo3dEyeDist = 0.032;
+    stereo3dFocalOffset = 0.5;
+    stereo3dLeftEyeColor = Stereo3dColor.RED;
+    stereo3dRightEyeColor = Stereo3dColor.CYAN;
+    stereo3dPreview = Stereo3dPreview.ANAGLYPH;
+    stereo3dInterpolatedImageCount = 3;
+    stereo3dSwapSides = false;
+  }
+
+  public void resetShadingSettings() {
+    shadingInfo = new ShadingInfo();
+    shadingInfo.init();
+  }
+
+  public void resetAntialiasingSettings() {
+    antialiasAmount = 0.75;
+    antialiasRadius = 0.36;
+    spatialFilterRadius = 0.0;
+    spatialFilterKernel = FilterKernelType.GAUSSIAN;
+  }
+
+  public void resetColoringSettings() {
     brightness = 4.0;
     contrast = 1;
-    vibrancy = 1;
     gamma = 4.0;
-    centreX = 0.0;
-    centreY = 0.0;
-    camRoll = 0.0;
-    camPitch = 0.0;
-    camYaw = 0.0;
-    camPerspective = 0.0;
-    camZoom = 1.0;
-    focusX = 0.0;
-    focusY = 0.0;
-    focusZ = 0.0;
-    dimishZ = 0.0;
-    camDOF = 0.0;
+    gammaThreshold = 0.01;
+    vibrancy = 1;
+    bgColorRed = bgColorGreen = bgColorBlue = 0;
+    whiteLevel = 200;
+    saturation = 1.0;
+  }
+
+  public void resetBokehSettings() {
     camDOFShape = DOFBlurShapeType.BUBBLE;
     camDOFScale = 0.0;
     camDOFAngle = 0.0;
@@ -227,25 +277,31 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFParam5 = 0.0;
     camDOFParam6 = 0.0;
     camDOFShape.getDOFBlurShape().setDefaultParams(this);
+  }
 
+  public void resetDOFSettings() {
+    newCamDOF = true;
+    camDOFArea = 0.5;
+    camDOFExponent = 2.0;
+    camDOF = 0.0;
+    dimishZ = 0.0;
+    camZ = 0.0;
+    focusX = 0.0;
+    focusY = 0.0;
+    focusZ = 0.0;
+  }
+
+  public void resetCameraSettings() {
+    camRoll = 0.0;
+    camPitch = 0.0;
+    camYaw = 0.0;
+    camPerspective = 0.0;
+    centreX = 0.0;
+    centreY = 0.0;
+    camZoom = 1.0;
     camPosX = 0.0;
     camPosY = 0.0;
     camPosZ = 0.0;
-    camZ = 0.0;
-    newCamDOF = false;
-    camDOFArea = 0.5;
-    camDOFExponent = 2.0;
-    gammaThreshold = 0.01;
-    pixelsPerUnit = 50;
-    whiteLevel = 200;
-    saturation = 1.0;
-    name = "";
-    spatialFilterRadius = 0.0;
-    spatialFilterKernel = FilterKernelType.GAUSSIAN;
-    shadingInfo.init();
-
-    channelMixerMode = ChannelMixerMode.OFF;
-    resetMixerCurves();
   }
 
   public void resetMixerCurves() {

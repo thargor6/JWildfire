@@ -365,5 +365,14 @@ public class TinaControllerData {
   public JWFNumberField dofDOFParam6REd;
   public JSlider dofDOFParam6Slider;
   public JLabel dofDOFParam6Lbl;
+  public JButton resetCameraSettingsBtn;
+  public JButton resetDOFSettingsButton;
+  public JButton resetBokehOptionsButton;
+  public JButton resetColoringOptionsButton;
+  public JButton resetAntialiasOptionsButton;
+  public JButton resetShadingSettingsBtn;
+  public JButton resetStereo3DSettingsBtn;
+  public JButton resetPostSymmetrySettingsBtn;
+  public JButton resetMotionBlurSettingsBtn;
 
 }

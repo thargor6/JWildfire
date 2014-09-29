@@ -1286,6 +1286,7 @@ public class TinaInternalFrame extends JInternalFrame {
       camDimishZSlider.setLocation(new Point(202, 98));
       camDimishZSlider.setBounds(645, 28, 220, 24);
       tinaDOFPanel.add(camDimishZSlider);
+      tinaDOFPanel.add(getResetDOFSettingsButton());
       tinaSouthTabbedPane.addTab("DOF / Bokeh ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/games-config-background.png")), getPanel_92(), null);
 
       tinaSouthTabbedPane.addTab("Coloring ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-wheel.png")), getTinaColoringPanel(), null);
@@ -1587,6 +1588,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaCameraPanel.add(tinaCameraCamPosZSlider);
+      tinaCameraPanel.add(getResetCameraSettingsBtn());
     }
     return tinaCameraPanel;
   }
@@ -1601,28 +1603,28 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdLbl = new JLabel();
       tinaGammaThresholdLbl.setName("tinaGammaThresholdLbl");
       tinaGammaThresholdLbl.setText("Gamma threshold");
-      tinaGammaThresholdLbl.setLocation(new Point(4, 76));
+      tinaGammaThresholdLbl.setLocation(new Point(4, 73));
       tinaGammaThresholdLbl.setSize(new Dimension(94, 22));
       tinaGammaThresholdLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaThresholdLbl.setPreferredSize(new Dimension(94, 22));
       tinaVibrancyLbl = new JLabel();
       tinaVibrancyLbl.setName("tinaVibrancyLbl");
       tinaVibrancyLbl.setText("Vibrancy");
-      tinaVibrancyLbl.setLocation(new Point(4, 100));
+      tinaVibrancyLbl.setLocation(new Point(4, 96));
       tinaVibrancyLbl.setSize(new Dimension(94, 22));
       tinaVibrancyLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaVibrancyLbl.setPreferredSize(new Dimension(94, 22));
       tinaGammaLbl = new JLabel();
       tinaGammaLbl.setName("tinaGammaLbl");
       tinaGammaLbl.setText("Gamma");
-      tinaGammaLbl.setLocation(new Point(4, 52));
+      tinaGammaLbl.setLocation(new Point(4, 50));
       tinaGammaLbl.setSize(new Dimension(94, 22));
       tinaGammaLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaLbl.setPreferredSize(new Dimension(94, 22));
       tinaContrastLbl = new JLabel();
       tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast");
-      tinaContrastLbl.setLocation(new Point(4, 28));
+      tinaContrastLbl.setLocation(new Point(4, 27));
       tinaContrastLbl.setSize(new Dimension(94, 22));
       tinaContrastLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaContrastLbl.setPreferredSize(new Dimension(94, 22));
@@ -1680,7 +1682,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationLbl.setName("tinaSaturationLbl");
       tinaSaturationLbl.setLocation(new Point(4, 100));
       tinaSaturationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaSaturationLbl.setBounds(451, 98, 94, 22);
+      tinaSaturationLbl.setBounds(451, 96, 94, 22);
       tinaColoringPanel.add(tinaSaturationLbl);
 
       tinaSaturationREd = new JWFNumberField();
@@ -1696,7 +1698,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationREd.setLinkedLabelControlName("tinaSaturationLbl");
       tinaSaturationREd.setHasMinValue(true);
       tinaSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      tinaSaturationREd.setBounds(547, 98, 100, 24);
+      tinaSaturationREd.setBounds(547, 96, 100, 24);
       tinaSaturationREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -1725,7 +1727,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationSlider.setMaximum(200);
       tinaSaturationSlider.setLocation(new Point(202, 100));
       tinaSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaSaturationSlider.setBounds(649, 98, 220, 19);
+      tinaSaturationSlider.setBounds(649, 96, 220, 19);
       tinaSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1739,6 +1741,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       tinaColoringPanel.add(tinaSaturationSlider);
+      tinaColoringPanel.add(getResetColoringOptionsButton());
     }
     return tinaColoringPanel;
   }
@@ -2465,7 +2468,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaContrastREd.setPreferredSize(new Dimension(100, 24));
       tinaContrastREd.setText("");
-      tinaContrastREd.setLocation(new Point(100, 28));
+      tinaContrastREd.setLocation(new Point(100, 27));
       tinaContrastREd.setSize(new Dimension(100, 24));
       tinaContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2505,7 +2508,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaGammaREd.setPreferredSize(new Dimension(100, 24));
       tinaGammaREd.setText("");
-      tinaGammaREd.setLocation(new Point(100, 52));
+      tinaGammaREd.setLocation(new Point(100, 50));
       tinaGammaREd.setSize(new Dimension(100, 24));
       tinaGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2546,7 +2549,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaVibrancyREd.setPreferredSize(new Dimension(100, 24));
       tinaVibrancyREd.setText("");
-      tinaVibrancyREd.setLocation(new Point(100, 100));
+      tinaVibrancyREd.setLocation(new Point(100, 96));
       tinaVibrancyREd.setSize(new Dimension(100, 24));
       tinaVibrancyREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2586,7 +2589,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaGammaThresholdREd.setPreferredSize(new Dimension(100, 24));
       tinaGammaThresholdREd.setText("");
-      tinaGammaThresholdREd.setLocation(new Point(100, 76));
+      tinaGammaThresholdREd.setLocation(new Point(100, 73));
       tinaGammaThresholdREd.setSize(new Dimension(100, 24));
       tinaGammaThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
@@ -2613,7 +2616,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastSlider.setValue(0);
       tinaContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaContrastSlider.setSize(new Dimension(220, 19));
-      tinaContrastSlider.setLocation(new Point(202, 28));
+      tinaContrastSlider.setLocation(new Point(202, 27));
       tinaContrastSlider.setPreferredSize(new Dimension(220, 19));
       tinaContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -2644,7 +2647,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaSlider.setValue(0);
       tinaGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaSlider.setSize(new Dimension(220, 19));
-      tinaGammaSlider.setLocation(new Point(202, 52));
+      tinaGammaSlider.setLocation(new Point(202, 50));
       tinaGammaSlider.setPreferredSize(new Dimension(220, 19));
       tinaGammaSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -2675,7 +2678,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaVibrancySlider.setValue(0);
       tinaVibrancySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaVibrancySlider.setSize(new Dimension(220, 19));
-      tinaVibrancySlider.setLocation(new Point(202, 100));
+      tinaVibrancySlider.setLocation(new Point(202, 96));
       tinaVibrancySlider.setPreferredSize(new Dimension(220, 19));
       tinaVibrancySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -2707,7 +2710,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdSlider.setMajorTickSpacing(1);
       tinaGammaThresholdSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaGammaThresholdSlider.setSize(new Dimension(220, 19));
-      tinaGammaThresholdSlider.setLocation(new Point(202, 76));
+      tinaGammaThresholdSlider.setLocation(new Point(202, 73));
       tinaGammaThresholdSlider.setPreferredSize(new Dimension(220, 19));
       tinaGammaThresholdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4517,7 +4520,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFFadeREd(), getDofDOFFadeSlider(), getDofDOFParam1REd(), getDofDOFParam1Slider(), getDofDOFParam1Lbl(), getDofDOFParam2REd(),
         getDofDOFParam2Slider(), getDofDOFParam2Lbl(), getDofDOFParam3REd(), getDofDOFParam3Slider(), getDofDOFParam3Lbl(), getDofDOFParam4REd(),
         getDofDOFParam4Slider(), getDofDOFParam4Lbl(), getDofDOFParam5REd(), getDofDOFParam5Slider(), getDofDOFParam5Lbl(), getDofDOFParam6REd(),
-        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn());
+        getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn(),
+        getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
+        getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
+        getResetMotionBlurSettingsBtn());
 
     tinaController = new TinaController(params);
 
@@ -7333,8 +7339,9 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton.setText("Reset TF");
       affineResetTransformButton.setLocation(new Point(109, 155));
       affineResetTransformButton.setSize(new Dimension(104, 24));
-      affineResetTransformButton.setToolTipText("Reset triangle to defaults");
+      affineResetTransformButton.setToolTipText("Reset affine transform to defaults");
       affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineResetTransformButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.affineResetTransformButton_clicked();
@@ -10504,6 +10511,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox batchRenderOverrideCBx;
   private JButton batchRenderShowImageBtn;
   private JButton bokehBtn;
+  private JButton resetCameraSettingsBtn;
+  private JButton resetDOFSettingsButton;
+  private JButton resetBokehOptionsButton;
+  private JButton resetColoringOptionsButton;
+  private JButton resetAntialiasOptionsButton;
+  private JButton resetShadingSettingsBtn;
+  private JButton resetStereo3DSettingsBtn;
+  private JButton resetPostSymmetrySettingsBtn;
+  private JButton resetMotionBlurSettingsBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -10782,6 +10798,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLbl.setText("Shading");
       shadingLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_2.add(getShadingCmb());
+      panel_2.add(getResetShadingSettingsBtn());
       tabbedPane_1.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
       tabbedPane_1.addTab("Blur-Shading", null, getBlurShadingPanel(), null);
 
@@ -12735,6 +12752,23 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSpatialFilterKernel.setFont(new Font("Dialog", Font.BOLD, 10));
       lblSpatialFilterKernel.setBounds(450, 31, 94, 22);
       antialiasPanel.add(lblSpatialFilterKernel);
+
+      resetAntialiasOptionsButton = new JButton();
+      resetAntialiasOptionsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetAntialiasingSettings();
+        }
+      });
+      resetAntialiasOptionsButton.setToolTipText("Reset the antialiasing-options to the defaults");
+      resetAntialiasOptionsButton.setText("Reset");
+      resetAntialiasOptionsButton.setPreferredSize(new Dimension(125, 24));
+      resetAntialiasOptionsButton.setMinimumSize(new Dimension(100, 24));
+      resetAntialiasOptionsButton.setMaximumSize(new Dimension(32000, 24));
+      resetAntialiasOptionsButton.setIconTextGap(2);
+      resetAntialiasOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetAntialiasOptionsButton.setBounds(116, 49, 100, 24);
+      resetAntialiasOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      antialiasPanel.add(resetAntialiasOptionsButton);
 
     }
     return antialiasPanel;
@@ -16727,6 +16761,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecaySlider.setLocation(new Point(202, 52));
       motionBlurDecaySlider.setBounds(204, 54, 220, 19);
       motionBlurPanel.add(motionBlurDecaySlider);
+      motionBlurPanel.add(getResetMotionBlurSettingsBtn());
     }
     return motionBlurPanel;
   }
@@ -17233,6 +17268,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_34.add(postSymmetryCentreYSlider);
+      panel_34.add(getResetPostSymmetrySettingsBtn());
     }
     return panel_34;
   }
@@ -17692,6 +17728,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       panel_82.add(stereo3dSwapSidesCBx);
+      panel_82.add(getResetStereo3DSettingsBtn());
     }
     return panel_82;
   }
@@ -20655,6 +20692,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(channelMixerModeCmb);
 
       channelMixerResetBtn = new JButton();
+      channelMixerResetBtn.setToolTipText("Reset curves to defaults");
       channelMixerResetBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -20669,6 +20707,7 @@ public class TinaInternalFrame extends JInternalFrame {
       channelMixerResetBtn.setIconTextGap(2);
       channelMixerResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       channelMixerResetBtn.setBounds(6, 75, 100, 24);
+      channelMixerResetBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       panel_1.add(channelMixerResetBtn);
 
       JLabel lblMode = new JLabel();
@@ -21556,6 +21595,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_118.add(dofDOFParam2Slider);
+      panel_118.add(getResetBokehOptionsButton());
     }
     return panel_118;
   }
@@ -21696,6 +21736,178 @@ public class TinaInternalFrame extends JInternalFrame {
       bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
     }
     return bokehBtn;
+  }
+
+  private JButton getResetCameraSettingsBtn() {
+    if (resetCameraSettingsBtn == null) {
+      resetCameraSettingsBtn = new JButton();
+      resetCameraSettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetCameraSettings();
+        }
+      });
+      resetCameraSettingsBtn.setToolTipText("Reset the camera-options to the defaults");
+      resetCameraSettingsBtn.setText("Reset");
+      resetCameraSettingsBtn.setPreferredSize(new Dimension(125, 24));
+      resetCameraSettingsBtn.setMinimumSize(new Dimension(100, 24));
+      resetCameraSettingsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetCameraSettingsBtn.setIconTextGap(2);
+      resetCameraSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetCameraSettingsBtn.setBounds(71, 100, 100, 24);
+      resetCameraSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetCameraSettingsBtn;
+  }
+
+  private JButton getResetDOFSettingsButton() {
+    if (resetDOFSettingsButton == null) {
+      resetDOFSettingsButton = new JButton();
+      resetDOFSettingsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetDOFSettings();
+        }
+      });
+      resetDOFSettingsButton.setToolTipText("Reset the DOF-options to the defaults");
+      resetDOFSettingsButton.setText("Reset");
+      resetDOFSettingsButton.setPreferredSize(new Dimension(125, 24));
+      resetDOFSettingsButton.setMinimumSize(new Dimension(100, 24));
+      resetDOFSettingsButton.setMaximumSize(new Dimension(32000, 24));
+      resetDOFSettingsButton.setIconTextGap(2);
+      resetDOFSettingsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetDOFSettingsButton.setBounds(102, 99, 100, 24);
+      resetDOFSettingsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetDOFSettingsButton;
+  }
+
+  private JButton getResetBokehOptionsButton() {
+    if (resetBokehOptionsButton == null) {
+      resetBokehOptionsButton = new JButton();
+      resetBokehOptionsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetBokehSettings();
+        }
+      });
+      resetBokehOptionsButton.setToolTipText("Reset the camera-options to the defaults");
+      resetBokehOptionsButton.setText("Reset");
+      resetBokehOptionsButton.setPreferredSize(new Dimension(125, 24));
+      resetBokehOptionsButton.setMinimumSize(new Dimension(100, 24));
+      resetBokehOptionsButton.setMaximumSize(new Dimension(32000, 24));
+      resetBokehOptionsButton.setIconTextGap(2);
+      resetBokehOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetBokehOptionsButton.setBounds(102, 120, 100, 24);
+      resetBokehOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetBokehOptionsButton;
+  }
+
+  private JButton getResetColoringOptionsButton() {
+    if (resetColoringOptionsButton == null) {
+      resetColoringOptionsButton = new JButton();
+      resetColoringOptionsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetColoringSettings();
+        }
+      });
+      resetColoringOptionsButton.setToolTipText("Reset the coloring-options to the defaults");
+      resetColoringOptionsButton.setText("Reset");
+      resetColoringOptionsButton.setPreferredSize(new Dimension(125, 24));
+      resetColoringOptionsButton.setMinimumSize(new Dimension(100, 24));
+      resetColoringOptionsButton.setMaximumSize(new Dimension(32000, 24));
+      resetColoringOptionsButton.setIconTextGap(2);
+      resetColoringOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetColoringOptionsButton.setBounds(100, 119, 100, 24);
+      resetColoringOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetColoringOptionsButton;
+  }
+
+  public JButton getResetAntialiasOptionsButton() {
+    return resetAntialiasOptionsButton;
+  }
+
+  private JButton getResetShadingSettingsBtn() {
+    if (resetShadingSettingsBtn == null) {
+      resetShadingSettingsBtn = new JButton();
+      resetShadingSettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetShadingSettings();
+        }
+      });
+      resetShadingSettingsBtn.setToolTipText("Reset the shading-options to the defaults");
+      resetShadingSettingsBtn.setText("Reset");
+      resetShadingSettingsBtn.setPreferredSize(new Dimension(125, 24));
+      resetShadingSettingsBtn.setMinimumSize(new Dimension(100, 24));
+      resetShadingSettingsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetShadingSettingsBtn.setIconTextGap(2);
+      resetShadingSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetShadingSettingsBtn.setBounds(102, 28, 100, 24);
+      resetShadingSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetShadingSettingsBtn;
+  }
+
+  private JButton getResetStereo3DSettingsBtn() {
+    if (resetStereo3DSettingsBtn == null) {
+      resetStereo3DSettingsBtn = new JButton();
+      resetStereo3DSettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetStereo3DSettings();
+        }
+      });
+      resetStereo3DSettingsBtn.setToolTipText("Reset the stereo3d-options to the defaults");
+      resetStereo3DSettingsBtn.setText("Reset");
+      resetStereo3DSettingsBtn.setPreferredSize(new Dimension(125, 24));
+      resetStereo3DSettingsBtn.setMinimumSize(new Dimension(100, 24));
+      resetStereo3DSettingsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetStereo3DSettingsBtn.setIconTextGap(2);
+      resetStereo3DSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetStereo3DSettingsBtn.setBounds(102, 104, 100, 24);
+      resetStereo3DSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetStereo3DSettingsBtn;
+  }
+
+  private JButton getResetPostSymmetrySettingsBtn() {
+    if (resetPostSymmetrySettingsBtn == null) {
+      resetPostSymmetrySettingsBtn = new JButton();
+      resetPostSymmetrySettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetPostSymmetrySettings();
+        }
+      });
+      resetPostSymmetrySettingsBtn.setToolTipText("Reset the post-symmetry-options to the defaults");
+      resetPostSymmetrySettingsBtn.setText("Reset");
+      resetPostSymmetrySettingsBtn.setPreferredSize(new Dimension(125, 24));
+      resetPostSymmetrySettingsBtn.setMinimumSize(new Dimension(100, 24));
+      resetPostSymmetrySettingsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetPostSymmetrySettingsBtn.setIconTextGap(2);
+      resetPostSymmetrySettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetPostSymmetrySettingsBtn.setBounds(102, 80, 100, 24);
+      resetPostSymmetrySettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetPostSymmetrySettingsBtn;
+  }
+
+  private JButton getResetMotionBlurSettingsBtn() {
+    if (resetMotionBlurSettingsBtn == null) {
+      resetMotionBlurSettingsBtn = new JButton();
+      resetMotionBlurSettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.resetMotionBlurSettings();
+        }
+      });
+      resetMotionBlurSettingsBtn.setToolTipText("Reset the motion-blur-options to the defaults");
+      resetMotionBlurSettingsBtn.setText("Reset");
+      resetMotionBlurSettingsBtn.setPreferredSize(new Dimension(125, 24));
+      resetMotionBlurSettingsBtn.setMinimumSize(new Dimension(100, 24));
+      resetMotionBlurSettingsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetMotionBlurSettingsBtn.setIconTextGap(2);
+      resetMotionBlurSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetMotionBlurSettingsBtn.setBounds(102, 77, 100, 24);
+      resetMotionBlurSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+    }
+    return resetMotionBlurSettingsBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

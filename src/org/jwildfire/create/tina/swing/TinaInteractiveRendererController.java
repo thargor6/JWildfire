@@ -348,8 +348,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
       }
       if (updateDisplayThread != null) {
-        if (!updateDisplayThread.isFinished()) {
+        while (!updateDisplayThread.isFinished()) {
           try {
+            updateDisplayThread.cancel();
             Thread.sleep(1);
           }
           catch (InterruptedException e) {

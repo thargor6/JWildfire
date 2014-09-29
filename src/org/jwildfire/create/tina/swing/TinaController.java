@@ -634,7 +634,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.channelMixerBRRootPanel = parameterObject.channelMixerBRRootPanel;
     data.channelMixerBGRootPanel = parameterObject.channelMixerBGRootPanel;
     data.channelMixerBBRootPanel = parameterObject.channelMixerBBRootPanel;
-
+    data.resetCameraSettingsBtn = parameterObject.resetCameraSettingsBtn;
+    data.resetDOFSettingsButton = parameterObject.resetDOFSettingsButton;
+    data.resetBokehOptionsButton = parameterObject.resetBokehOptionsButton;
+    data.resetColoringOptionsButton = parameterObject.resetColoringOptionsButton;
+    data.resetAntialiasOptionsButton = parameterObject.resetAntialiasOptionsButton;
+    data.resetShadingSettingsBtn = parameterObject.resetShadingSettingsBtn;
+    data.resetStereo3DSettingsBtn = parameterObject.resetStereo3DSettingsBtn;
+    data.resetPostSymmetrySettingsBtn = parameterObject.resetPostSymmetrySettingsBtn;
+    data.resetMotionBlurSettingsBtn = parameterObject.resetMotionBlurSettingsBtn;
     data.dofDOFShapeCmb = parameterObject.dofDOFShapeCmb;
     data.dofDOFScaleREd = parameterObject.dofDOFScaleREd;
     data.dofDOFScaleSlider = parameterObject.dofDOFScaleSlider;
@@ -2218,6 +2226,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
+    data.resetCameraSettingsBtn.setEnabled(enabled);
+    data.resetDOFSettingsButton.setEnabled(enabled);
+    data.resetBokehOptionsButton.setEnabled(enabled);
+    data.resetColoringOptionsButton.setEnabled(enabled);
+    data.resetAntialiasOptionsButton.setEnabled(enabled);
+    data.resetShadingSettingsBtn.setEnabled(enabled);
+    data.resetStereo3DSettingsBtn.setEnabled(enabled);
+    data.resetPostSymmetrySettingsBtn.setEnabled(enabled);
+    data.resetMotionBlurSettingsBtn.setEnabled(enabled);
     flameControls.enableControls();
     channelMixerControls.enableControls();
     enableUndoControls();
@@ -5180,6 +5197,87 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
       }
 
+      refreshUI();
+    }
+  }
+
+  public void resetCameraSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetCameraSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetDOFSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetDOFSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetBokehSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetBokehSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetColoringSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetColoringSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetAntialiasingSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetAntialiasingSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetShadingSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetShadingSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetStereo3DSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetStereo3DSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetPostSymmetrySettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetPostSymmetrySettings();
+      refreshUI();
+    }
+  }
+
+  public void resetMotionBlurSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.resetMotionBlurSettings();
       refreshUI();
     }
   }
