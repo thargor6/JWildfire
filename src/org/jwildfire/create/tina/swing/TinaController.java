@@ -668,7 +668,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.dofDOFParam6REd = parameterObject.dofDOFParam6REd;
     data.dofDOFParam6Slider = parameterObject.dofDOFParam6Slider;
     data.dofDOFParam6Lbl = parameterObject.dofDOFParam6Lbl;
-
+    data.xaosViewAsToBtn = parameterObject.xaosViewAsToBtn;
+    data.xaosViewAsFromBtn = parameterObject.xaosViewAsFromBtn;
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
@@ -1681,10 +1682,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.createPaletteColorsTable.getColumnModel().getColumn(COL_BLUE).setPreferredWidth(60);
   }
 
+  private boolean isXaosViewAsTo() {
+    return data.xaosViewAsToBtn.isSelected();
+  }
+
   private void refreshRelWeightsTable() {
     final int COL_TRANSFORM = 0;
-    final int COL_VARIATIONS = 1;
-    final int COL_WEIGHT = 2;
+    final int COL_WEIGHT = 1;
+
     data.relWeightsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -1696,16 +1701,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public int getColumnCount() {
-        return 3;
+        return 2;
       }
 
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
           case COL_TRANSFORM:
-            return "Transf";
-          case COL_VARIATIONS:
-            return "Variations/Name";
+            return "From transform A to B";
           case COL_WEIGHT:
             return "Weight";
         }
@@ -1714,17 +1717,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public Object getValueAt(int rowIndex, int columnIndex) {
-        if (getCurrFlame() != null) {
-          switch (columnIndex) {
-            case COL_TRANSFORM:
-              return String.valueOf(rowIndex + 1);
-            case COL_VARIATIONS: {
-              XForm xForm = getCurrLayer().getXForms().get(rowIndex);
-              return getXFormCaption(xForm);
+        int transformIndex = data.transformationsTable.getSelectedRow();
+        Layer layer = getCurrLayer();
+        if (layer != null && transformIndex >= 0 && transformIndex < layer.getXForms().size()) {
+          if (isXaosViewAsTo()) {
+            switch (columnIndex) {
+              case COL_TRANSFORM:
+                return String.valueOf(transformIndex + 1) + " to " + String.valueOf(rowIndex + 1);
+              case COL_WEIGHT:
+                return Tools.doubleToString(layer.getXForms().get(transformIndex).getModifiedWeights()[rowIndex]);
             }
-            case COL_WEIGHT: {
-              XForm xForm = getCurrXForm();
-              return xForm != null ? Tools.doubleToString(xForm.getModifiedWeights()[rowIndex]) : null;
+          }
+          else {
+            switch (columnIndex) {
+              case COL_TRANSFORM:
+                return String.valueOf(transformIndex + 1) + " from " + String.valueOf(rowIndex + 1);
+              case COL_WEIGHT: {
+                return Tools.doubleToString(layer.getXForms().get(rowIndex).getModifiedWeights()[transformIndex]);
+              }
             }
           }
         }
@@ -2195,11 +2205,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       boolean oldCmbRefreshing = cmbRefreshing;
       gridRefreshing = cmbRefreshing = true;
       try {
-        int selRow = data.relWeightsTable.getSelectedRow();
-        XForm xForm = getCurrXForm();
-        if (xForm != null && selRow >= 0) {
-          data.relWeightREd.setText(Tools.doubleToString(xForm.getModifiedWeights()[selRow]));
-
+        Layer layer = getCurrLayer();
+        int xaosRow = data.relWeightsTable.getSelectedRow();
+        int transformRow = data.transformationsTable.getSelectedRow();
+        if (layer != null && xaosRow >= 0 && xaosRow < layer.getXForms().size() && transformRow >= 0 && transformRow < layer.getXForms().size()) {
+          if (isXaosViewAsTo()) {
+            data.relWeightREd.setText(Tools.doubleToString(layer.getXForms().get(transformRow).getModifiedWeights()[xaosRow]));
+          }
+          else {
+            data.relWeightREd.setText(Tools.doubleToString(layer.getXForms().get(xaosRow).getModifiedWeights()[transformRow]));
+          }
         }
         else {
           data.relWeightREd.setText("");
@@ -3237,20 +3252,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void setRelWeight(double pValue) {
-    XForm xForm = getCurrXForm();
-    if (xForm != null && getCurrLayer() != null && getCurrLayer().getFinalXForms().indexOf(xForm) < 0) {
-      int row = data.relWeightsTable.getSelectedRow();
-      if (row >= 0 && row < getCurrLayer().getXForms().size()) {
-        xForm.getModifiedWeights()[row] = pValue;
-        gridRefreshing = true;
-        try {
-          refreshRelWeightsTable();
-          data.relWeightsTable.getSelectionModel().setSelectionInterval(row, row);
-          refreshFlameImage(false);
-        }
-        finally {
-          gridRefreshing = false;
-        }
+    if (gridRefreshing)
+      return;
+    Layer layer = getCurrLayer();
+    int transformRow = data.transformationsTable.getSelectedRow();
+    int xaosRow = data.relWeightsTable.getSelectedRow();
+    if (layer != null && transformRow >= 0 && transformRow < layer.getXForms().size() && xaosRow >= 0 && xaosRow < layer.getXForms().size()) {
+      if (isXaosViewAsTo()) {
+        layer.getXForms().get(transformRow).getModifiedWeights()[xaosRow] = pValue;
+      }
+      else {
+        layer.getXForms().get(xaosRow).getModifiedWeights()[transformRow] = pValue;
+      }
+      gridRefreshing = true;
+      try {
+        refreshRelWeightsTable();
+        data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
+        refreshFlameImage(false);
+      }
+      finally {
+        gridRefreshing = false;
       }
     }
   }
@@ -5279,6 +5300,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       flame.resetMotionBlurSettings();
       refreshUI();
+    }
+  }
+
+  public void xaosViewAsChanged() {
+    boolean oldGridRefreshing = gridRefreshing;
+    gridRefreshing = true;
+    try {
+      refreshRelWeightsTable();
+    }
+    finally {
+      gridRefreshing = oldGridRefreshing;
     }
   }
 }

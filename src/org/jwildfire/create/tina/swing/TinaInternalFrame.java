@@ -50,6 +50,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
@@ -3449,6 +3450,33 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaModifiedWeightsPanel.setLayout(new BorderLayout());
       tinaModifiedWeightsPanel.add(getRelWeightsEastPanel(), BorderLayout.EAST);
       tinaModifiedWeightsPanel.add(getRelWeightsScrollPane(), BorderLayout.CENTER);
+
+      JPanel panel_1 = new JPanel();
+      panel_1.setPreferredSize(new Dimension(10, 24));
+      panel_1.setMinimumSize(new Dimension(10, 24));
+      tinaModifiedWeightsPanel.add(panel_1, BorderLayout.NORTH);
+      panel_1.setLayout(null);
+
+      xaosViewAsToBtn = new JRadioButton("View as \"to\"");
+      xaosViewAsToBtn.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.xaosViewAsChanged();
+        }
+      });
+      xaosViewAsToBtn.setSelected(true);
+      xaosViewAsToBtn.setBounds(6, 2, 86, 18);
+      panel_1.add(xaosViewAsToBtn);
+
+      xaosViewAsFromBtn = new JRadioButton("View as \"from\"");
+      xaosViewAsFromBtn.setBounds(120, 2, 101, 18);
+      xaosViewAsFromBtn.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null)
+            tinaController.xaosViewAsChanged();
+        }
+      });
+      panel_1.add(xaosViewAsFromBtn);
     }
     return tinaModifiedWeightsPanel;
   }
@@ -4523,7 +4551,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn(),
         getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
-        getResetMotionBlurSettingsBtn());
+        getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn());
 
     tinaController = new TinaController(params);
 
@@ -4535,6 +4563,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
     tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = true;
     try {
+      ButtonGroup buttonGroup = new ButtonGroup();
+      buttonGroup.add(getXaosViewAsToBtn());
+      buttonGroup.add(getXaosViewAsFromBtn());
+
       for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
@@ -6086,7 +6118,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightREd.setLocation(new Point(238, 6));
       relWeightREd.setHasMinValue(true);
       relWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      relWeightREd.setBounds(4, 6, 81, 24);
+      relWeightREd.setBounds(6, 58, 81, 24);
       relWeightsEastPanel.add(relWeightREd);
     }
     return relWeightsEastPanel;
@@ -6105,7 +6137,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsZeroButton.setIcon(null);
       relWeightsZeroButton.setText("0");
       relWeightsZeroButton.setSize(new Dimension(36, 22));
-      relWeightsZeroButton.setLocation(new Point(4, 37));
+      relWeightsZeroButton.setLocation(new Point(6, 89));
       relWeightsZeroButton.setFont(new Font("Dialog", Font.BOLD, 10));
       relWeightsZeroButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -6130,7 +6162,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsOneButton.setIcon(null);
       relWeightsOneButton.setText("1");
       relWeightsOneButton.setSize(new Dimension(36, 22));
-      relWeightsOneButton.setLocation(new Point(49, 37));
+      relWeightsOneButton.setLocation(new Point(51, 89));
       relWeightsOneButton.setFont(new Font("Dialog", Font.BOLD, 10));
       relWeightsOneButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -10520,6 +10552,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton resetStereo3DSettingsBtn;
   private JButton resetPostSymmetrySettingsBtn;
   private JButton resetMotionBlurSettingsBtn;
+  private JRadioButton xaosViewAsToBtn;
+  private JRadioButton xaosViewAsFromBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -21908,6 +21942,14 @@ public class TinaInternalFrame extends JInternalFrame {
       resetMotionBlurSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetMotionBlurSettingsBtn;
+  }
+
+  public JRadioButton getXaosViewAsToBtn() {
+    return xaosViewAsToBtn;
+  }
+
+  public JRadioButton getXaosViewAsFromBtn() {
+    return xaosViewAsFromBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
