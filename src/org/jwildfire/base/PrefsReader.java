@@ -16,11 +16,13 @@
 */
 package org.jwildfire.base;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
@@ -49,6 +51,29 @@ public class PrefsReader {
   private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
     String val = pProperties.getProperty(pKey, "").trim();
     return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
+  }
+
+  private Color getColorProperty(Properties pProperties, String pKey, Color pDefaultValue) {
+    String res = pProperties.getProperty(pKey, "").trim();
+    if (res.length() > 0) {
+      try {
+        int p1 = res.lastIndexOf("[");
+        int p2 = res.lastIndexOf("]");
+        if (p1 >= 0 && p2 > p1) {
+          String rgb = res.substring(p1 + 1, p2);
+          StringTokenizer tokenizer = new StringTokenizer(rgb, ",");
+          int r = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+          int g = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+          int b = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+          return new Color(r, g, b);
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+        return pDefaultValue;
+      }
+    }
+    return pDefaultValue;
   }
 
   public void readPrefs(Prefs pPrefs) throws Exception {
@@ -101,6 +126,11 @@ public class PrefsReader {
         pPrefs.setTinaEditorControlsWithNumbers(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS, pPrefs.isTinaEditorControlsWithNumbers()));
         pPrefs.setTinaEditorGridSize(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_GRID_SIZE, pPrefs.getTinaEditorGridSize()));
         pPrefs.setTinaResponsiveness(getIntProperty(props, Prefs.KEY_TINA_RESPONSIVENESS, pPrefs.getTinaResponsiveness()));
+        pPrefs.setTinaEditorGuidesCenterPointColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT, pPrefs.getTinaEditorGuidesCenterPointColor()));
+        pPrefs.setTinaEditorGuidesRuleOfThirdsColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS, pPrefs.getTinaEditorGuidesRuleOfThirdsColor()));
+        pPrefs.setTinaEditorGuidesGoldenRatioColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor()));
+        pPrefs.setTinaEditorGuidesLineWidth(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_LINE_WIDTH, pPrefs.getTinaEditorGuidesLineWidth()));
+
         try {
           FlamePanelControlStyle style = FlamePanelControlStyle.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_STYLE, pPrefs.getTinaEditorControlsStyle().toString()));
           pPrefs.setTinaEditorControlsStyle(style);

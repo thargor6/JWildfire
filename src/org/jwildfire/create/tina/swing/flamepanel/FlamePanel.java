@@ -76,6 +76,7 @@ public class FlamePanel extends ImagePanel {
   private boolean withVariations = false;
   private boolean withShowTransparency = false;
   private boolean withGrid = false;
+  private boolean withGuides = false;
   private boolean fineMovement = false;
   private XForm selectedXForm = null;
   private boolean allowScaleX = true;
@@ -101,11 +102,24 @@ public class FlamePanel extends ImagePanel {
 
   private final FlamePanelConfig config = new FlamePanelConfig();
 
+  private BasicStroke strokeGuides;
+  private Color colorGuideCenter;
+  private Color colorGuideThirds;
+  private Color colorGuideGoldenRatio;
+
   public FlamePanel(Prefs pPrefs, SimpleImage pSimpleImage, int pX, int pY, int pWidth, FlameHolder pFlameHolder, LayerHolder pLayerHolder) {
     super(pSimpleImage, pX, pY, pWidth);
     prefs = pPrefs;
+    initPropertiesFromPrefs();
     flameHolder = pFlameHolder;
     layerHolder = pLayerHolder;
+  }
+
+  private void initPropertiesFromPrefs() {
+    strokeGuides = new BasicStroke((float) prefs.getTinaEditorGuidesLineWidth());
+    colorGuideCenter = prefs.getTinaEditorGuidesCenterPointColor();
+    colorGuideThirds = prefs.getTinaEditorGuidesRuleOfThirdsColor();
+    colorGuideGoldenRatio = prefs.getTinaEditorGuidesGoldenRatioColor();
   }
 
   @Override
@@ -132,6 +146,9 @@ public class FlamePanel extends ImagePanel {
     }
     if (withGrid) {
       drawGrid(g2d);
+    }
+    if (withGuides) {
+      drawGuides(g2d);
     }
     if (withTriangles) {
       drawTriangles(g2d);
@@ -279,6 +296,38 @@ public class FlamePanel extends ImagePanel {
       return tstep;
     }
 
+  }
+
+  // guides known from Apo
+  private void drawGuides(Graphics2D g) {
+    Rectangle bounds = this.getImageBounds();
+    int width = bounds.width;
+    int height = bounds.height;
+    int position;
+
+    g.setStroke(strokeGuides);
+    g.setColor(colorGuideCenter);
+    position = (int) ((double) height / 2.0 + 0.5);
+    g.drawLine(0, position, width - 1, position);
+    position = (int) ((double) width / 2.0 + 0.5);
+    g.drawLine(position, 0, position, height - 1);
+
+    g.setColor(colorGuideThirds);
+    position = (int) ((double) height / 3.0 + 0.5);
+    g.drawLine(0, position, width - 1, position);
+    g.drawLine(0, height - position - 1, width - 1, height - position - 1);
+    position = (int) ((double) width / 3.0 + 0.5);
+    g.drawLine(position, 0, position, height - 1);
+    g.drawLine(width - position - 1, 0, width - position - 1, height);
+
+    g.setColor(colorGuideGoldenRatio);
+
+    position = (int) ((double) height * 0.61803399 + 0.5);
+    g.drawLine(0, position, width, position);
+    g.drawLine(0, height - position - 1, width - 1, height - position - 1);
+    position = (int) ((double) width * 0.61803399 + 0.5);
+    g.drawLine(position, 0, position, height - 1);
+    g.drawLine(width - position - 1, 0, width - position - 1, height);
   }
 
   private void drawGrid(Graphics2D g) {
@@ -987,6 +1036,7 @@ public class FlamePanel extends ImagePanel {
       flamePanelTriangleMode = pFlamePanel.flamePanelTriangleMode;
       withVariations = pFlamePanel.withVariations;
       withGrid = pFlamePanel.withGrid;
+      withGuides = pFlamePanel.withGuides;
       fineMovement = pFlamePanel.fineMovement;
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
@@ -1112,6 +1162,14 @@ public class FlamePanel extends ImagePanel {
 
   public void setWithGrid(boolean pWithGrid) {
     withGrid = pWithGrid;
+  }
+
+  public boolean isWithGuides() {
+    return withGuides;
+  }
+
+  public void setWithGuides(boolean pWithGuides) {
+    withGuides = pWithGuides;
   }
 
   public int getImageBrightness() {

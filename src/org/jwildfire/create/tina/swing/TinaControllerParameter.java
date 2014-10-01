@@ -447,6 +447,7 @@ public class TinaControllerParameter {
   public JWFNumberField camPosZREd;
   public JSlider camPosZSlider;
   public JToggleButton toggleDrawGridButton;
+  public JToggleButton toggleDrawGuidesButton;
   public JSlider editorFractalBrightnessSlider;
   public JToggleButton toggleTriangleWithColorsButton;
   public JComboBox triangleStyleCmb;
@@ -1060,7 +1061,7 @@ public class TinaControllerParameter {
       JButton pResetCameraSettingsBtn, JButton pResetDOFSettingsButton, JButton pResetBokehOptionsButton,
       JButton pResetColoringOptionsButton, JButton pResetAntialiasOptionsButton, JButton pResetShadingSettingsBtn,
       JButton pResetStereo3DSettingsBtn, JButton pResetPostSymmetrySettingsBtn, JButton pResetMotionBlurSettingsBtn,
-      JRadioButton pXaosViewAsToBtn, JRadioButton pXaosViewAsFromBtn) {
+      JRadioButton pXaosViewAsToBtn, JRadioButton pXaosViewAsFromBtn, JToggleButton pToggleDrawGuidesButton) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1173,5 +1174,6 @@ public class TinaControllerParameter {
     resetMotionBlurSettingsBtn = pResetMotionBlurSettingsBtn;
     xaosViewAsToBtn = pXaosViewAsToBtn;
     xaosViewAsFromBtn = pXaosViewAsFromBtn;
+    toggleDrawGuidesButton = pToggleDrawGuidesButton;
   }
 }

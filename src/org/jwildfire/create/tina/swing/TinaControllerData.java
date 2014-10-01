@@ -344,6 +344,7 @@ public class TinaControllerData {
   public JSlider stereo3dFocalOffsetSlider;
   public JCheckBox stereo3dSwapSidesCBx;
   public JToggleButton toggleDrawGridButton;
+  public JToggleButton toggleDrawGuidesButton;
   public JSlider editorFractalBrightnessSlider;
   public JComboBox triangleStyleCmb;
   public JButton channelMixerResetBtn;

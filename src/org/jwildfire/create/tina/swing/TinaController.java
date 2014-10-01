@@ -621,6 +621,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
+    data.toggleDrawGuidesButton = parameterObject.toggleDrawGuidesButton;
     data.triangleStyleCmb = parameterObject.triangleStyleCmb;
     data.editorFractalBrightnessSlider = parameterObject.editorFractalBrightnessSlider;
     data.channelMixerResetBtn = parameterObject.channelMixerResetBtn;
@@ -5311,6 +5312,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     finally {
       gridRefreshing = oldGridRefreshing;
+    }
+  }
+
+  public void toggleDrawGuidesButton_clicked() {
+    if (refreshing) {
+      return;
+    }
+    if (flamePanel != null) {
+      flamePanel.setWithGuides(data.toggleDrawGuidesButton.isSelected());
+      refreshFlameImage(false);
     }
   }
 }

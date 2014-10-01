@@ -16,6 +16,7 @@
 */
 package org.jwildfire.base;
 
+import java.awt.Color;
 import java.io.File;
 
 public class PrefsWriter {
@@ -69,6 +70,10 @@ public class PrefsWriter {
 
     addValue(sb, Prefs.KEY_TINA_EDITOR_GRID_SIZE, pPrefs.getTinaEditorGridSize());
     addValue(sb, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath());
+    addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT, pPrefs.getTinaEditorGuidesCenterPointColor());
+    addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS, pPrefs.getTinaEditorGuidesRuleOfThirdsColor());
+    addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor());
+    addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_LINE_WIDTH, pPrefs.getTinaEditorGuidesLineWidth());
 
     // resolution profiles
     addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, pPrefs.getResolutionProfiles().size());
@@ -119,4 +124,7 @@ public class PrefsWriter {
     pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");
   }
 
+  private void addValue(StringBuilder pSB, String pKey, Color pValue) {
+    pSB.append(pKey + "=" + "[" + pValue.getRed() + ", " + pValue.getGreen() + ", " + pValue.getBlue() + "]" + "\n");
+  }
 }

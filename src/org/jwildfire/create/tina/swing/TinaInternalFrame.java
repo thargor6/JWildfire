@@ -4551,7 +4551,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn(),
         getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
-        getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn());
+        getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton());
 
     tinaController = new TinaController(params);
 
@@ -7149,7 +7149,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDrawGridButton.setSelected(false);
       toggleDrawGridButton.setPreferredSize(new Dimension(42, 24));
       toggleDrawGridButton.setLocation(new Point(4, 4));
-      toggleDrawGridButton.setBounds(486, 4, 42, 24);
+      toggleDrawGridButton.setBounds(471, 4, 42, 24);
       toggleDrawGridButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/grid.png")));
       centerNorthPanel.add(toggleDrawGridButton);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton());
@@ -7182,7 +7182,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
       toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
       toggleTriangleWithColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      toggleTriangleWithColorsButton.setBounds(596, 4, 42, 24);
+      toggleTriangleWithColorsButton.setBounds(625, 4, 42, 24);
       centerNorthPanel.add(toggleTriangleWithColorsButton);
 
       triangleStyleCmb = new JComboBox();
@@ -7191,7 +7191,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
       triangleStyleCmb.setMaximumRowCount(32);
       triangleStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      triangleStyleCmb.setBounds(528, 4, 68, 24);
+      triangleStyleCmb.setBounds(557, 4, 68, 24);
       triangleStyleCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -7201,6 +7201,21 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       centerNorthPanel.add(triangleStyleCmb);
+
+      toggleDrawGuidesButton = new JToggleButton();
+      toggleDrawGuidesButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.toggleDrawGuidesButton_clicked();
+        }
+      });
+      toggleDrawGuidesButton.setToolTipText("Turn guides (center point, rule of thirds and the golden ratio) on/off");
+      toggleDrawGuidesButton.setSize(new Dimension(95, 24));
+      toggleDrawGuidesButton.setSelected(false);
+      toggleDrawGuidesButton.setPreferredSize(new Dimension(42, 24));
+      toggleDrawGuidesButton.setLocation(new Point(4, 4));
+      toggleDrawGuidesButton.setBounds(514, 4, 42, 24);
+      toggleDrawGuidesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/guides.png")));
+      centerNorthPanel.add(toggleDrawGuidesButton);
     }
     return centerNorthPanel;
   }
@@ -7332,7 +7347,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
-      affineEditPostTransformSmallButton.setBounds(638, 4, 42, 24);
+      affineEditPostTransformSmallButton.setBounds(667, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
@@ -7351,9 +7366,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(184, 14));
+      renderProgressBar.setSize(new Dimension(169, 14));
       renderProgressBar.setLocation(new Point(232, 9));
-      renderProgressBar.setPreferredSize(new Dimension(179, 14));
+      renderProgressBar.setPreferredSize(new Dimension(169, 14));
       renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;
@@ -9769,7 +9784,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformSlowButton.setSelected(false);
       mouseTransformSlowButton.setText("Fine");
       mouseTransformSlowButton.setSize(new Dimension(68, 24));
-      mouseTransformSlowButton.setLocation(new Point(417, 4));
+      mouseTransformSlowButton.setLocation(new Point(402, 4));
       mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
       mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
@@ -10554,6 +10569,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton resetMotionBlurSettingsBtn;
   private JRadioButton xaosViewAsToBtn;
   private JRadioButton xaosViewAsFromBtn;
+  private JToggleButton toggleDrawGuidesButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -21950,6 +21966,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JRadioButton getXaosViewAsFromBtn() {
     return xaosViewAsFromBtn;
+  }
+
+  public JToggleButton getToggleDrawGuidesButton() {
+    return toggleDrawGuidesButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

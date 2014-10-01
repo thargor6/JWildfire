@@ -16,6 +16,7 @@
 */
 package org.jwildfire.base;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +93,14 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
+  static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
+  static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
+  static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
+  static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
+
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir";
-  //  static final String KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE = "tina.use_experimental_opencl_code";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -180,7 +185,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
 
-  //@Property(description = "Use experimental openCL-code fragments, just turn it off if you face any kind of problems", category = PropertyCategory.TINA)
   private boolean tinaUseExperimentalOpenClCode = false;
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
@@ -196,6 +200,15 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Implementation of basic mathematical functions to use", category = PropertyCategory.GENERAL, editorClass = BaseMathLibTypeEditor.class)
   private BaseMathLibType baseMathLibType = BaseMathLibType.getDefaultValue();
+
+  @Property(description = "Color of the guides for the center point (restart of program after change required)", category = PropertyCategory.TINA)
+  private Color tinaEditorGuidesCenterPointColor = new Color(255, 255, 255);
+  @Property(description = "Color of the guides for rule of thirds (restart of program after change required)", category = PropertyCategory.TINA)
+  private Color tinaEditorGuidesRuleOfThirdsColor = new Color(255, 0, 0);
+  @Property(description = "Color of the guides for rule of golden ratio (restart of program after change required)", category = PropertyCategory.TINA)
+  private Color tinaEditorGuidesGoldenRatioColor = new Color(0, 255, 0);
+  @Property(description = "Line width of the guides (restart of program after change required)", category = PropertyCategory.TINA)
+  private double tinaEditorGuidesLineWidth = 1.6;
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
@@ -540,6 +553,11 @@ public class Prefs extends ManagedObject {
     tinaResponsiveness = pSrc.tinaResponsiveness;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
     tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
+
+    tinaEditorGuidesCenterPointColor = new Color(pSrc.tinaEditorGuidesCenterPointColor.getRed(), pSrc.tinaEditorGuidesCenterPointColor.getGreen(), pSrc.tinaEditorGuidesCenterPointColor.getBlue());
+    tinaEditorGuidesRuleOfThirdsColor = new Color(pSrc.tinaEditorGuidesRuleOfThirdsColor.getRed(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getGreen(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getBlue());
+    tinaEditorGuidesGoldenRatioColor = new Color(pSrc.tinaEditorGuidesGoldenRatioColor.getRed(), pSrc.tinaEditorGuidesGoldenRatioColor.getGreen(), pSrc.tinaEditorGuidesGoldenRatioColor.getBlue());
+    tinaEditorGuidesLineWidth = pSrc.tinaEditorGuidesLineWidth;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -920,10 +938,36 @@ public class Prefs extends ManagedObject {
     return new Prefs();
   }
 
-}
+  public Color getTinaEditorGuidesCenterPointColor() {
+    return tinaEditorGuidesCenterPointColor;
+  }
 
-/*
-1920x1080 = 1080p
-1280x720 = 720p
-640x360 = 360p
-*/
+  public void setTinaEditorGuidesCenterPointColor(Color pTinaEditorGuidesCenterPointColor) {
+    tinaEditorGuidesCenterPointColor = pTinaEditorGuidesCenterPointColor;
+  }
+
+  public Color getTinaEditorGuidesRuleOfThirdsColor() {
+    return tinaEditorGuidesRuleOfThirdsColor;
+  }
+
+  public void setTinaEditorGuidesRuleOfThirdsColor(Color pTinaEditorGuidesRuleOfThirdsColor) {
+    tinaEditorGuidesRuleOfThirdsColor = pTinaEditorGuidesRuleOfThirdsColor;
+  }
+
+  public Color getTinaEditorGuidesGoldenRatioColor() {
+    return tinaEditorGuidesGoldenRatioColor;
+  }
+
+  public void setTinaEditorGuidesGoldenRatioColor(Color pTinaEditorGuidesGoldenRatioColor) {
+    tinaEditorGuidesGoldenRatioColor = pTinaEditorGuidesGoldenRatioColor;
+  }
+
+  public double getTinaEditorGuidesLineWidth() {
+    return tinaEditorGuidesLineWidth;
+  }
+
+  public void setTinaEditorGuidesLineWidth(double pTinaEditorGuidesLineWidth) {
+    tinaEditorGuidesLineWidth = pTinaEditorGuidesLineWidth;
+  }
+
+}
