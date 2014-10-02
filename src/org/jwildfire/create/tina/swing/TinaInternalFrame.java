@@ -3489,27 +3489,29 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getTinaTransformationColorPanel() {
     if (tinaTransformationColorPanel == null) {
       xFormDrawModeLbl = new JLabel();
+      xFormDrawModeLbl.setToolTipText("");
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
-      xFormDrawModeLbl.setSize(new Dimension(64, 22));
-      xFormDrawModeLbl.setLocation(new Point(6, 99));
+      xFormDrawModeLbl.setSize(new Dimension(119, 22));
+      xFormDrawModeLbl.setLocation(new Point(6, 81));
       xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
-      xFormOpacityLbl.setSize(new Dimension(64, 22));
-      xFormOpacityLbl.setLocation(new Point(6, 73));
+      xFormOpacityLbl.setSize(new Dimension(49, 22));
+      xFormOpacityLbl.setLocation(new Point(6, 107));
       xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
+      xFormSymmetryLbl.setToolTipText("Color speed");
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
-      xFormSymmetryLbl.setText("Color speed");
-      xFormSymmetryLbl.setSize(new Dimension(64, 22));
+      xFormSymmetryLbl.setText("Speed");
+      xFormSymmetryLbl.setSize(new Dimension(49, 22));
       xFormSymmetryLbl.setLocation(new Point(6, 47));
       xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
-      xFormColorLbl.setSize(new Dimension(64, 22));
+      xFormColorLbl.setSize(new Dimension(49, 22));
       xFormColorLbl.setLocation(new Point(6, 21));
       xFormColorLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaTransformationColorPanel = new JPanel();
@@ -3527,7 +3529,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationColorPanel.add(getXFormDrawModeCmb(), null);
 
       tinaColorChooserPaletteImgPanel = new JPanel();
-      tinaColorChooserPaletteImgPanel.setBounds(125, 10, 172, 10);
+      tinaColorChooserPaletteImgPanel.setBounds(125, 10, 195, 10);
       tinaTransformationColorPanel.add(tinaColorChooserPaletteImgPanel);
       tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
     }
@@ -5883,6 +5885,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormColorREd() {
     if (xFormColorREd == null) {
       xFormColorREd = new JWFNumberField();
+      xFormColorREd.setMotionPropertyName("color");
+      xFormColorREd.setLinkedMotionControlName("xFormColorSlider");
+      xFormColorREd.setLinkedLabelControlName("xFormColorREd");
       xFormColorREd.setValueStep(0.01);
       xFormColorREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5899,10 +5904,10 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorREd.setMaxValue(1.0);
       xFormColorREd.setHasMinValue(true);
       xFormColorREd.setHasMaxValue(true);
-      xFormColorREd.setPreferredSize(new Dimension(55, 22));
+      xFormColorREd.setPreferredSize(new Dimension(70, 24));
       xFormColorREd.setText("");
-      xFormColorREd.setSize(new Dimension(55, 22));
-      xFormColorREd.setLocation(new Point(70, 21));
+      xFormColorREd.setSize(new Dimension(70, 24));
+      xFormColorREd.setLocation(new Point(55, 21));
       xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormColorREd;
@@ -5916,7 +5921,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormColorSlider() {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
-      xFormColorSlider.setPreferredSize(new Dimension(172, 22));
+      xFormColorSlider.setPreferredSize(new Dimension(195, 22));
       xFormColorSlider.setMaximum(100);
       xFormColorSlider.setMinimum(0);
       xFormColorSlider.setValue(0);
@@ -5946,6 +5951,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormSymmetryREd() {
     if (xFormSymmetryREd == null) {
       xFormSymmetryREd = new JWFNumberField();
+      xFormSymmetryREd.setMotionPropertyName("colorSymmetry");
+      xFormSymmetryREd.setLinkedMotionControlName("xFormSymmetrySlider");
+      xFormSymmetryREd.setLinkedLabelControlName("xFormSymmetryLbl");
       xFormSymmetryREd.setValueStep(0.01);
       xFormSymmetryREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5963,10 +5971,10 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryREd.setHasMaxValue(true);
       xFormSymmetryREd.setMaxValue(1.0);
       xFormSymmetryREd.setMinValue(-1.0);
-      xFormSymmetryREd.setPreferredSize(new Dimension(55, 22));
+      xFormSymmetryREd.setPreferredSize(new Dimension(55, 24));
       xFormSymmetryREd.setText("");
-      xFormSymmetryREd.setSize(new Dimension(55, 22));
-      xFormSymmetryREd.setLocation(new Point(70, 47));
+      xFormSymmetryREd.setSize(new Dimension(70, 24));
+      xFormSymmetryREd.setLocation(new Point(55, 47));
       xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormSymmetryREd;
@@ -5980,7 +5988,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormSymmetrySlider() {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
-      xFormSymmetrySlider.setPreferredSize(new Dimension(172, 22));
+      xFormSymmetrySlider.setPreferredSize(new Dimension(195, 22));
       xFormSymmetrySlider.setMaximum(100);
       xFormSymmetrySlider.setMinimum(-100);
       xFormSymmetrySlider.setValue(0);
@@ -6010,6 +6018,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormOpacityREd() {
     if (xFormOpacityREd == null) {
       xFormOpacityREd = new JWFNumberField();
+      xFormOpacityREd.setLinkedMotionControlName("xFormOpacitySlider");
+      xFormOpacityREd.setLinkedLabelControlName("xFormOpacityLbl");
+      xFormOpacityREd.setMotionPropertyName("opacity");
       xFormOpacityREd.setValueStep(0.05);
       xFormOpacityREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -6026,10 +6037,10 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setHasMaxValue(true);
       xFormOpacityREd.setHasMinValue(true);
       xFormOpacityREd.setMaxValue(1.0);
-      xFormOpacityREd.setPreferredSize(new Dimension(55, 22));
+      xFormOpacityREd.setPreferredSize(new Dimension(55, 24));
       xFormOpacityREd.setText("");
-      xFormOpacityREd.setSize(new Dimension(55, 22));
-      xFormOpacityREd.setLocation(new Point(70, 73));
+      xFormOpacityREd.setSize(new Dimension(70, 24));
+      xFormOpacityREd.setLocation(new Point(55, 107));
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormOpacityREd;
@@ -6049,12 +6060,12 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.saveUndoPoint();
         }
       });
-      xFormOpacitySlider.setPreferredSize(new Dimension(172, 22));
+      xFormOpacitySlider.setPreferredSize(new Dimension(195, 22));
       xFormOpacitySlider.setMaximum(100);
       xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(195, 22));
-      xFormOpacitySlider.setLocation(new Point(125, 73));
+      xFormOpacitySlider.setLocation(new Point(125, 107));
       xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -6075,7 +6086,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeCmb = new JComboBox();
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
-      xFormDrawModeCmb.setLocation(new Point(70, 99));
+      xFormDrawModeCmb.setLocation(new Point(122, 83));
       xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -12557,6 +12568,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTransformationWeightREd() {
     if (transformationWeightREd == null) {
       transformationWeightREd = new JWFNumberField();
+      transformationWeightREd.setMotionPropertyName("weight");
       transformationWeightREd.setHasMinValue(true);
       transformationWeightREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -16866,7 +16878,11 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
             try {
-              swfAnimatorFrameSlider.setMaximum(keyframesFrameCountField.getIntValue());
+              int frameCount = keyframesFrameCountField.getIntValue();
+              if (keyframesFrameSlider.getValue() > frameCount) {
+                keyframesFrameSlider.setValue(frameCount);
+              }
+              keyframesFrameSlider.setMaximum(frameCount);
               tinaController.getAnimationController().keyFrameCountFieldChanged();
             }
             catch (Exception ex) {
@@ -21025,6 +21041,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFScaleLbl);
 
       dofDOFScaleREd = new JWFNumberField();
+      dofDOFScaleREd.setMotionPropertyName("camDOFScale");
       dofDOFScaleREd.setName("dofDOFScaleREd");
       dofDOFScaleREd.setValueStep(0.05);
       dofDOFScaleREd.setText("");
@@ -21100,6 +21117,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFScaleSlider);
 
       dofDOFAngleREd = new JWFNumberField();
+      dofDOFAngleREd.setMotionPropertyName("camDOFAngle");
       dofDOFAngleREd.setName("dofDOFAngleREd");
       dofDOFAngleREd.setValueStep(0.05);
       dofDOFAngleREd.setText("");
@@ -21179,6 +21197,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFFadeLbl);
 
       dofDOFFadeREd = new JWFNumberField();
+      dofDOFFadeREd.setMotionPropertyName("camDOFFade");
       dofDOFFadeREd.setName("dofDOFFadeREd");
       dofDOFFadeREd.setValueStep(0.05);
       dofDOFFadeREd.setText("");
@@ -21239,6 +21258,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFFadeSlider);
 
       dofDOFParam1REd = new JWFNumberField();
+      dofDOFParam1REd.setMotionPropertyName("camDOFParam1");
       dofDOFParam1REd.setName("dofDOFParam1REd");
       dofDOFParam1REd.setValueStep(0.05);
       dofDOFParam1REd.setText("");
@@ -21307,6 +21327,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFParam1Slider);
 
       dofDOFParam3REd = new JWFNumberField();
+      dofDOFParam3REd.setMotionPropertyName("camDOFParam3");
       dofDOFParam3REd.setName("dofDOFParam3REd");
       dofDOFParam3REd.setValueStep(0.05);
       dofDOFParam3REd.setText("");
@@ -21360,6 +21381,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFParam4Lbl);
 
       dofDOFParam4REd = new JWFNumberField();
+      dofDOFParam4REd.setMotionPropertyName("camDOFParam4");
       dofDOFParam4REd.setName("dofDOFParam4REd");
       dofDOFParam4REd.setValueStep(0.05);
       dofDOFParam4REd.setText("");
@@ -21443,6 +21465,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFParam4Slider);
 
       dofDOFParam5REd = new JWFNumberField();
+      dofDOFParam5REd.setMotionPropertyName("camDOFParam5");
       dofDOFParam5REd.setName("dofDOFParam5REd");
       dofDOFParam5REd.setValueStep(0.05);
       dofDOFParam5REd.setText("");
@@ -21521,6 +21544,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFParam6Lbl);
 
       dofDOFParam6REd = new JWFNumberField();
+      dofDOFParam6REd.setMotionPropertyName("camDOFParam6");
       dofDOFParam6REd.setName("dofDOFParam6REd");
       dofDOFParam6REd.setValueStep(0.05);
       dofDOFParam6REd.setText("");
@@ -21589,6 +21613,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_118.add(dofDOFParam2Lbl);
 
       dofDOFParam2REd = new JWFNumberField();
+      dofDOFParam2REd.setMotionPropertyName("camDOFParam2");
       dofDOFParam2REd.setName("dofDOFParam2REd");
       dofDOFParam2REd.setValueStep(0.05);
       dofDOFParam2REd.setText("");
