@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.jwildfire.create.tina.animate.AnimationService;
@@ -38,7 +39,8 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
 
   @Override
   public String getEditingTitle(JWFNumberField sender) {
-    return formatPropertyName(sender.getLinkedLabelControl().getText());
+    JLabel label = sender.getLinkedLabelControl();
+    return label != null ? formatPropertyName(sender.getLinkedLabelControl().getText()) : sender.getLinkedLabelControlName();
   }
 
   @Override

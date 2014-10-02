@@ -5885,9 +5885,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormColorREd() {
     if (xFormColorREd == null) {
       xFormColorREd = new JWFNumberField();
+      xFormColorREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       xFormColorREd.setMotionPropertyName("color");
       xFormColorREd.setLinkedMotionControlName("xFormColorSlider");
-      xFormColorREd.setLinkedLabelControlName("xFormColorREd");
+      xFormColorREd.setLinkedLabelControlName("xFormColorLbl");
       xFormColorREd.setValueStep(0.01);
       xFormColorREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -5951,6 +5956,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormSymmetryREd() {
     if (xFormSymmetryREd == null) {
       xFormSymmetryREd = new JWFNumberField();
+      xFormSymmetryREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       xFormSymmetryREd.setMotionPropertyName("colorSymmetry");
       xFormSymmetryREd.setLinkedMotionControlName("xFormSymmetrySlider");
       xFormSymmetryREd.setLinkedLabelControlName("xFormSymmetryLbl");
@@ -6018,6 +6028,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormOpacityREd() {
     if (xFormOpacityREd == null) {
       xFormOpacityREd = new JWFNumberField();
+      xFormOpacityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       xFormOpacityREd.setLinkedMotionControlName("xFormOpacitySlider");
       xFormOpacityREd.setLinkedLabelControlName("xFormOpacityLbl");
       xFormOpacityREd.setMotionPropertyName("opacity");
@@ -12568,6 +12583,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTransformationWeightREd() {
     if (transformationWeightREd == null) {
       transformationWeightREd = new JWFNumberField();
+      transformationWeightREd.setLinkedLabelControlName("Weight");
+      transformationWeightREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       transformationWeightREd.setMotionPropertyName("weight");
       transformationWeightREd.setHasMinValue(true);
       transformationWeightREd.addChangeListener(new ChangeListener() {

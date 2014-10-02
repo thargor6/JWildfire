@@ -4912,6 +4912,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.affineC21REd);
     animationController.registerMotionPropertyControls(new MotionCurveButtonPair(data.affineRotateLeftButton, data.affineRotateEditMotionCurveBtn));
     animationController.registerMotionPropertyControls(new MotionCurveButtonPair(data.affineEnlargeButton, data.affineScaleEditMotionCurveBtn));
+    animationController.registerMotionPropertyControls(data.transformationWeightREd);
+    animationController.registerMotionPropertyControls(data.xFormColorREd);
+    animationController.registerMotionPropertyControls(data.xFormSymmetryREd);
+    animationController.registerMotionPropertyControls(data.xFormOpacityREd);
 
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
       animationController.registerMotionPropertyControls(row.getNonlinearVarREd());

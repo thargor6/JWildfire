@@ -39,10 +39,13 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private static final long serialVersionUID = 1L;
   @AnimAware
   private double weight;
+  private final MotionCurve weightCurve = new MotionCurve();
   @AnimAware
   private double color;
+  private final MotionCurve colorCurve = new MotionCurve();
   @AnimAware
   private double colorSymmetry;
+  private final MotionCurve colorSymmetryCurve = new MotionCurve();
   @AnimAware
   private double modGamma;
   @AnimAware
@@ -99,6 +102,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
   @AnimAware
   private double opacity = 0.0;
+  private final MotionCurve opacityCurve = new MotionCurve();
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
   private String name = "";
@@ -317,12 +321,17 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.withAlpha = pAffineT.withAlpha;
     pVarT.doHide = pAffineT.doHide;
     pVarT.alpha = pAffineT.alpha;
+
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() < 0) {
         variation.transform(pContext, this, pAffineT, pVarT);
         pAffineT.invalidate();
       }
     }
+    pVarT.doHide = pAffineT.doHide;
+    pVarT.withAlpha = pAffineT.withAlpha;
+    pVarT.alpha = pAffineT.alpha;
+
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() == 0) {
         variation.transform(pContext, this, pAffineT, pVarT);
@@ -379,6 +388,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
           pAffineT[i].invalidate();
         }
       }
+      pVarT[i].doHide = pAffineT[i].doHide;
+      pVarT[i].withAlpha = pAffineT[i].withAlpha;
+      pVarT[i].alpha = pAffineT[i].alpha;
+
       for (Variation variation : variations) {
         if (variation.getFunc().getPriority() == 0) {
           variation.transform(pContext, this, pAffineT[i], pVarT[i]);
@@ -435,8 +448,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
   @Override
   public void assign(XForm pXForm) {
     weight = pXForm.weight;
+    weightCurve.assign(pXForm.weightCurve);
     color = pXForm.color;
+    colorCurve.assign(pXForm.colorCurve);
     colorSymmetry = pXForm.colorSymmetry;
+    colorSymmetryCurve.assign(pXForm.colorSymmetryCurve);
     modGamma = pXForm.modGamma;
     modGammaSpeed = pXForm.modGammaSpeed;
     modContrast = pXForm.modContrast;
@@ -481,6 +497,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
     System.arraycopy(pXForm.modifiedWeights, 0, modifiedWeights, 0, pXForm.modifiedWeights.length);
     opacity = pXForm.opacity;
+    opacityCurve.assign(pXForm.opacityCurve);
     drawMode = pXForm.drawMode;
     name = pXForm.name;
   }
@@ -548,8 +565,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   @Override
   public boolean isEqual(XForm pSrc) {
-    if ((fabs(weight - pSrc.weight) > EPSILON) ||
-        (fabs(color - pSrc.color) > EPSILON) || (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) ||
+    if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
+        (fabs(color - pSrc.color) > EPSILON) || !colorCurve.isEqual(pSrc.colorCurve) ||
+        (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
@@ -567,7 +585,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || !postCoeff21Curve.isEqual(pSrc.postCoeff21Curve) ||
         !rotateCurve.isEqual(pSrc.rotateCurve) || !scaleCurve.isEqual(pSrc.scaleCurve) ||
         !postRotateCurve.isEqual(pSrc.postRotateCurve) || !postScaleCurve.isEqual(pSrc.postScaleCurve) ||
-        (fabs(opacity - pSrc.opacity) > EPSILON) ||
+        (fabs(opacity - pSrc.opacity) > EPSILON) || !opacityCurve.isEqual(pSrc.opacityCurve) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
         !name.equals(pSrc.name) ||
