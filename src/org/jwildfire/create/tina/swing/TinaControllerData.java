@@ -394,4 +394,6 @@ public class TinaControllerData {
   public JButton resetMotionBlurSettingsBtn;
   public JRadioButton xaosViewAsToBtn;
   public JRadioButton xaosViewAsFromBtn;
+  public JPanel previewEastMainPanel;
+  public JPanel macroButtonPanel;
 }

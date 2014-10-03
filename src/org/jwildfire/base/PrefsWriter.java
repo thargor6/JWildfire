@@ -104,6 +104,16 @@ public class PrefsWriter {
       addValue(sb, WindowPrefs.KEY_HEIGHT + "." + i, prefs.getHeight());
       addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
     }
+    // macro buttons
+    addValue(sb, MacroButton.KEY_MACRO_BUTTON_COUNT, pPrefs.getMacroButtons().size());
+    for (int i = 0; i < pPrefs.getMacroButtons().size(); i++) {
+      MacroButton macroButton = pPrefs.getMacroButtons().get(i);
+      addValue(sb, MacroButton.KEY_MACRO_BUTTON_CAPTION + "." + i, macroButton.getCaption());
+      addValue(sb, MacroButton.KEY_MACRO_BUTTON_HINT + "." + i, macroButton.getHint());
+      addValue(sb, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, macroButton.getImage());
+      addValue(sb, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, macroButton.getMacro());
+      addValue(sb, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, macroButton.isInternal());
+    }
     //
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
   }

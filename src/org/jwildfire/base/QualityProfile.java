@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -111,7 +111,7 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
 
   @Override
   public boolean isEqual(QualityProfile pSrc) {
-    if (caption != pSrc.caption || quality != pSrc.quality ||
+    if (!Tools.stringEquals(caption, pSrc.caption) || quality != pSrc.quality ||
         withHDR != pSrc.withHDR || withHDRIntensityMap != pSrc.withHDRIntensityMap ||
         defaultProfile != pSrc.defaultProfile) {
       return false;

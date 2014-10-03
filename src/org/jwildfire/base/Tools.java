@@ -514,4 +514,15 @@ public class Tools {
     return pName;
   }
 
+  public static boolean stringEquals(String a, String b) {
+    if (a != null && b == null)
+      return false;
+    else if (a == null && b != null)
+      return false;
+    else if (a == null && b == null)
+      return true;
+    else
+      return a.equals(b);
+  }
+
 }

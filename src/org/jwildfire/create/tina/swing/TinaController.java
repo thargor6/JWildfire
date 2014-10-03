@@ -62,6 +62,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
@@ -81,8 +82,10 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
+import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.meshgen.MeshGenController;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
@@ -282,7 +285,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
-        parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn);
+        parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn, parameterObject.scriptAddButtonBtn);
 
     flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl,
         parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserToBatchEditorBtn, parameterObject.flameBrowserDeleteBtn,
@@ -672,6 +675,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.dofDOFParam6Lbl = parameterObject.dofDOFParam6Lbl;
     data.xaosViewAsToBtn = parameterObject.xaosViewAsToBtn;
     data.xaosViewAsFromBtn = parameterObject.xaosViewAsFromBtn;
+    data.previewEastMainPanel = parameterObject.previewEastMainPanel;
+    data.macroButtonPanel = parameterObject.macroButtonPanel;
+
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
@@ -5368,4 +5374,64 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public GradientControlsDelegate getGradientControls() {
     return gradientControls;
   }
+
+  public void refreshMacroButtonsPanel() {
+    data.macroButtonPanel.removeAll();
+    if (prefs.getMacroButtons().size() == 0) {
+      data.previewEastMainPanel.setPreferredSize(new Dimension(52, 0));
+    }
+    else {
+      data.previewEastMainPanel.setPreferredSize(new Dimension(104, 0));
+      for (final MacroButton macroButton : prefs.getMacroButtons()) {
+        JButton button = new JButton();
+        button.setFont(new Font("Dialog", Font.BOLD, 9));
+        button.setPreferredSize(new Dimension(42, 24));
+        if (macroButton.getCaption() != null && macroButton.getCaption().length() > 0) {
+          button.setText(macroButton.getCaption());
+        }
+        if (macroButton.getHint() != null && macroButton.getHint().length() > 0) {
+          button.setToolTipText(macroButton.getHint());
+        }
+        if (macroButton.getImage() != null && macroButton.getImage().length() > 0) {
+          try {
+            button.setIconTextGap(0);
+            button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        button.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent e) {
+            runScript(macroButton.getMacro(), macroButton.isInternal());
+          }
+        });
+        data.macroButtonPanel.add(button);
+      }
+    }
+    data.previewEastMainPanel.invalidate();
+    data.previewEastMainPanel.getParent().validate();
+  }
+
+  public void runScript(String filename, boolean internal) {
+    try {
+      String script;
+      if (internal) {
+        RGBPaletteReader reader = new Flam3GradientReader();
+        InputStream is = reader.getClass().getResourceAsStream(filename);
+        script = Tools.readUTF8Textfile(is);
+      }
+      else {
+        script = Tools.readUTF8Textfile(filename);
+      }
+
+      ScriptRunner scriptRunner = ScriptRunner.compile(script);
+      saveUndoPoint();
+      scriptRunner.run(this);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
 }

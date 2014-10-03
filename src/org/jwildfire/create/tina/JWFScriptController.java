@@ -21,6 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -51,6 +52,7 @@ public class JWFScriptController {
   private final JButton scriptRenameBtn;
   private final JButton scriptDuplicateBtn;
   private final JButton scriptRunBtn;
+  private final JButton addMacroButtonBtn;
   private boolean allowEdit = false;
   private boolean editing = false;
   private boolean noTextChange = false;
@@ -58,7 +60,8 @@ public class JWFScriptController {
 
   public JWFScriptController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
       JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptButton, JButton pRevertScriptButton, JButton pRescanScriptsBtn,
-      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn) {
+      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
+      JButton pAddMacroButtonBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -76,6 +79,7 @@ public class JWFScriptController {
     scriptRenameBtn = pScriptRenameBtn;
     scriptDuplicateBtn = pScriptDuplicateBtn;
     scriptRunBtn = pScriptRunBtn;
+    addMacroButtonBtn = pAddMacroButtonBtn;
 
     scriptTextArea.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -179,6 +183,7 @@ public class JWFScriptController {
     saveScriptBtn.setEnabled(editing);
     revertScriptBtn.setEnabled(editing);
     scriptTree.setEnabled(!editing);
+    addMacroButtonBtn.setEnabled(scriptSelected);
   }
 
   private interface ScriptNode {
@@ -239,6 +244,10 @@ public class JWFScriptController {
     @Override
     public String getCaption() {
       return caption;
+    }
+
+    public String getResFilename() {
+      return resFilename;
     }
   }
 
@@ -919,6 +928,44 @@ public class JWFScriptController {
           scriptTree.getParent().validate();
           scriptTree.repaint();
         }
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void addMacroButtonBtn_clicked() {
+    try {
+      DefaultMutableTreeNode selNode = getSelNode();
+      if (selNode != null && selNode instanceof ScriptNode) {
+        String scriptFilename;
+        String caption;
+        boolean internal;
+        if (selNode instanceof ScriptInternalNode) {
+          scriptFilename = ((ScriptInternalNode) selNode).getResFilename();
+          caption = ((ScriptInternalNode) selNode).getCaption();
+          internal = true;
+        }
+        else if (selNode instanceof ScriptUserNode) {
+          scriptFilename = ((ScriptUserNode) selNode).getFilename();
+          caption = ((ScriptUserNode) selNode).getCaption();
+          internal = false;
+        }
+        else {
+          throw new Exception("Unknown node type <" + selNode.getClass() + ">");
+        }
+        int CAPTION_MAX_SIZE = 6;
+
+        if (caption.length() > CAPTION_MAX_SIZE) {
+          caption = caption.substring(0, CAPTION_MAX_SIZE);
+        }
+        MacroButton button = new MacroButton();
+        button.setCaption(caption);
+        button.setInternal(internal);
+        button.setMacro(scriptFilename);
+        prefs.getMacroButtons().add(button);
+        tinaController.refreshMacroButtonsPanel();
       }
     }
     catch (Exception ex) {

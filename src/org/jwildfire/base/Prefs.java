@@ -213,6 +213,7 @@ public class Prefs extends ManagedObject {
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
+  private final List<MacroButton> macroButtons = new ArrayList<MacroButton>();
 
   public static class RandomBatchRefreshTypeEditor extends ComboBoxPropertyEditor {
     public RandomBatchRefreshTypeEditor() {
@@ -574,6 +575,10 @@ public class Prefs extends ManagedObject {
       windowPrefs.add((WindowPrefs) prefs.makeCopy());
     }
 
+    macroButtons.clear();
+    for (MacroButton macroButton : pSrc.macroButtons) {
+      macroButtons.add((MacroButton) macroButton.makeCopy());
+    }
   }
 
   public int getTinaRenderThreads() {
@@ -968,6 +973,10 @@ public class Prefs extends ManagedObject {
 
   public void setTinaEditorGuidesLineWidth(double pTinaEditorGuidesLineWidth) {
     tinaEditorGuidesLineWidth = pTinaEditorGuidesLineWidth;
+  }
+
+  public List<MacroButton> getMacroButtons() {
+    return macroButtons;
   }
 
 }

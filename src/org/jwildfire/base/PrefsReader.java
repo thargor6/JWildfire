@@ -174,6 +174,7 @@ public class PrefsReader {
         // resolution profiles
         {
           int count = getIntProperty(props, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, 0);
+          pPrefs.getResolutionProfiles().clear();
           for (int i = 0; i < count; i++) {
             try {
               ResolutionProfile profile = new ResolutionProfile();
@@ -191,6 +192,7 @@ public class PrefsReader {
         // quality profiles
         {
           int count = getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_COUNT, 0);
+          pPrefs.getQualityProfiles().clear();
           for (int i = 0; i < count; i++) {
             try {
               QualityProfile profile = new QualityProfile();
@@ -221,6 +223,25 @@ public class PrefsReader {
                 windowPrefs.setHeight(getIntProperty(props, WindowPrefs.KEY_HEIGHT + "." + i, 0));
                 windowPrefs.setMaximized(getBooleanProperty(props, WindowPrefs.KEY_MAXIMIZED + "." + i, false));
               }
+            }
+            catch (Throwable ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        // macro buttons
+        {
+          int count = getIntProperty(props, MacroButton.KEY_MACRO_BUTTON_COUNT, 0);
+          Prefs.getPrefs().getMacroButtons().clear();
+          for (int i = 0; i < count; i++) {
+            try {
+              MacroButton macroButton = new MacroButton();
+              macroButton.setCaption(getProperty(props, MacroButton.KEY_MACRO_BUTTON_CAPTION + "." + i, ""));
+              macroButton.setHint(getProperty(props, MacroButton.KEY_MACRO_BUTTON_HINT + "." + i, ""));
+              macroButton.setImage(getProperty(props, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, ""));
+              macroButton.setMacro(getProperty(props, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, ""));
+              macroButton.setInternal(getBooleanProperty(props, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, false));
+              Prefs.getPrefs().getMacroButtons().add(macroButton);
             }
             catch (Throwable ex) {
               ex.printStackTrace();

@@ -395,7 +395,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorGlobalScript1Cmb = null;
   private JLabel animateXFormScriptLbl = null;
   private JComboBox swfAnimatorXFormScript1Cmb = null;
-  private JPanel triangleOperationsPanel = null;
+  private JPanel previewEastMainPanel = null;
   private JToggleButton mouseTransformMoveTrianglesButton = null;
   private JToggleButton mouseTransformEditFocusPointButton = null;
   private JPanel centerNorthPanel = null;
@@ -738,7 +738,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCenterPanel.setLayout(new BorderLayout());
       tinaCenterPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
       tinaCenterPanel.setBackground(SystemColor.controlDkShadow);
-      tinaCenterPanel.add(getTriangleOperationsPanel(), BorderLayout.EAST);
+      tinaCenterPanel.add(getPreviewEastMainPanel(), BorderLayout.EAST);
       tinaCenterPanel.add(getCenterNorthPanel(), BorderLayout.NORTH);
       tinaCenterPanel.add(getCenterWestPanel(), BorderLayout.WEST);
       tinaCenterPanel.add(getCenterCenterPanel(), BorderLayout.CENTER);
@@ -4566,7 +4566,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getDofDOFParam6Slider(), getDofDOFParam6Lbl(), getBatchRenderOverrideCBx(), getBatchRenderShowImageBtn(), getBokehBtn(),
         getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
-        getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton());
+        getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
+        getMacroButtonPanel(), getScriptAddButtonBtn());
 
     tinaController = new TinaController(params);
 
@@ -4681,6 +4682,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
       getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorControlsWithColor());
+
+      tinaController.refreshMacroButtonsPanel();
     }
     finally {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
@@ -7000,19 +7003,22 @@ public class TinaInternalFrame extends JInternalFrame {
     return swfAnimatorXFormScript1Cmb;
   }
 
-  private JPanel getTriangleOperationsPanel() {
-    if (triangleOperationsPanel == null) {
-      editSpaceLbl1 = new JLabel();
-      editSpaceLbl1.setFont(new Font("Dialog", Font.BOLD, 10));
-      editSpaceLbl1.setText("");
-      editSpaceLbl1.setPreferredSize(new Dimension(42, 2));
-      triangleOperationsPanel = new JPanel();
-      FlowLayout fl_triangleOperationsPanel = new FlowLayout();
-      fl_triangleOperationsPanel.setVgap(1);
-      triangleOperationsPanel.setLayout(fl_triangleOperationsPanel);
-      triangleOperationsPanel.setPreferredSize(new Dimension(52, 0));
+  private JPanel getPreviewEastMainPanel() {
+    if (previewEastMainPanel == null) {
+      previewEastMainPanel = new JPanel();
+      previewEastMainPanel.setPreferredSize(new Dimension(104, 0));
+      previewEastMainPanel.setLayout(new BorderLayout(0, 0));
+
+      previewEastDefaultPanel = new JPanel();
+      previewEastDefaultPanel.setMaximumSize(new Dimension(52, 32767));
+      previewEastDefaultPanel.setMinimumSize(new Dimension(52, 10));
+      previewEastDefaultPanel.setPreferredSize(new Dimension(52, 10));
+      FlowLayout fl_previewEastDefaultPanel = (FlowLayout) previewEastDefaultPanel.getLayout();
+      fl_previewEastDefaultPanel.setVgap(1);
+      previewEastMainPanel.add(previewEastDefaultPanel, BorderLayout.WEST);
 
       mouseTransformEditViewButton = new JToggleButton();
+      previewEastDefaultPanel.add(mouseTransformEditViewButton);
       mouseTransformEditViewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           expandGradientEditorFncPnl(false);
@@ -7022,46 +7028,34 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditViewButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/modify_view.png")));
       mouseTransformEditViewButton.setToolTipText("Enable view editing mode (Left mouse: move, right mouse: rotate, middle/wheel: zoom)");
       mouseTransformEditViewButton.setPreferredSize(new Dimension(42, 24));
-      triangleOperationsPanel.add(mouseTransformEditViewButton);
-      triangleOperationsPanel.add(getMouseTransformMoveTrianglesButton(), null);
+      previewEastDefaultPanel.add(getMouseTransformMoveTrianglesButton());
+
+      mouseTransformRotateTrianglesButton = new JToggleButton();
+      previewEastDefaultPanel.add(mouseTransformRotateTrianglesButton);
+      mouseTransformRotateTrianglesButton.setToolTipText("Rotate triangles using the left mouse button");
+      mouseTransformRotateTrianglesButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformRotateTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/object-rotate-right-3.png")));
+
+      mouseTransformScaleTrianglesButton = new JToggleButton();
+      previewEastDefaultPanel.add(mouseTransformScaleTrianglesButton);
+      mouseTransformScaleTrianglesButton.setToolTipText("Scale triangles using the left mouse button");
+      mouseTransformScaleTrianglesButton.setPreferredSize(new Dimension(42, 24));
+      mouseTransformScaleTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-inout.png")));
 
       mouseTransformEditPointsButton = new JToggleButton();
+      previewEastDefaultPanel.add(mouseTransformEditPointsButton);
       mouseTransformEditPointsButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           expandGradientEditorFncPnl(false);
           tinaController.mouseTransformEditPointsButton_clicked();
         }
       });
-
-      mouseTransformRotateTrianglesButton = new JToggleButton();
-      mouseTransformRotateTrianglesButton.setToolTipText("Rotate triangles using the left mouse button");
-      mouseTransformRotateTrianglesButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformRotateTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/object-rotate-right-3.png")));
-      mouseTransformRotateTrianglesButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          expandGradientEditorFncPnl(false);
-          tinaController.mouseTransformRotateTrianglesButton_clicked();
-        }
-      });
-      triangleOperationsPanel.add(mouseTransformRotateTrianglesButton);
-
-      mouseTransformScaleTrianglesButton = new JToggleButton();
-      mouseTransformScaleTrianglesButton.setToolTipText("Scale triangles using the left mouse button");
-      mouseTransformScaleTrianglesButton.setPreferredSize(new Dimension(42, 24));
-      mouseTransformScaleTrianglesButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-inout.png")));
-      mouseTransformScaleTrianglesButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          expandGradientEditorFncPnl(false);
-          tinaController.mouseTransformScaleTrianglesButton_clicked();
-        }
-      });
-      triangleOperationsPanel.add(mouseTransformScaleTrianglesButton);
       mouseTransformEditPointsButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_points.png")));
       mouseTransformEditPointsButton.setToolTipText("Enable free triangle editing mode");
       mouseTransformEditPointsButton.setPreferredSize(new Dimension(42, 24));
-      triangleOperationsPanel.add(mouseTransformEditPointsButton);
 
       mouseTransformEditTriangleViewButton = new JToggleButton();
+      previewEastDefaultPanel.add(mouseTransformEditTriangleViewButton);
       mouseTransformEditTriangleViewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           expandGradientEditorFncPnl(false);
@@ -7071,17 +7065,16 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditTriangleViewButton.setToolTipText("Edit the view of the controls (drag mouse to move, mouse-wheel or hold <Alt> to zoom)");
       mouseTransformEditTriangleViewButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformEditTriangleViewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_view.png")));
-
-      triangleOperationsPanel.add(mouseTransformEditTriangleViewButton);
-      triangleOperationsPanel.add(getMouseTransformEditFocusPointButton(), null);
-      triangleOperationsPanel.add(editSpaceLbl1, null);
+      previewEastDefaultPanel.add(getMouseTransformEditFocusPointButton());
 
       editorFractalBrightnessSlider = new JSlider();
+      previewEastDefaultPanel.add(editorFractalBrightnessSlider);
       editorFractalBrightnessSlider.setOrientation(SwingConstants.VERTICAL);
-      triangleOperationsPanel.add(editorFractalBrightnessSlider);
       editorFractalBrightnessSlider.setValue(100);
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 100));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
+      previewEastDefaultPanel.add(getTinaRenderFlameButton());
+      previewEastMainPanel.add(getMacroButtonPanel(), BorderLayout.CENTER);
       editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -7089,14 +7082,20 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      editSpaceLbl2 = new JLabel();
-      editSpaceLbl2.setFont(new Font("Dialog", Font.BOLD, 10));
-      editSpaceLbl2.setText("");
-      editSpaceLbl2.setPreferredSize(new Dimension(42, 2));
-      triangleOperationsPanel.add(editSpaceLbl2, null);
-      triangleOperationsPanel.add(getTinaRenderFlameButton(), null);
+      mouseTransformScaleTrianglesButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
+          tinaController.mouseTransformScaleTrianglesButton_clicked();
+        }
+      });
+      mouseTransformRotateTrianglesButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(false);
+          tinaController.mouseTransformRotateTrianglesButton_clicked();
+        }
+      });
     }
-    return triangleOperationsPanel;
+    return previewEastMainPanel;
   }
 
   protected void expandGradientEditorFncPnl(boolean pSelected) {
@@ -10612,6 +10611,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JRadioButton xaosViewAsToBtn;
   private JRadioButton xaosViewAsFromBtn;
   private JToggleButton toggleDrawGuidesButton;
+  private JPanel macroButtonPanel;
+  private JPanel previewEastDefaultPanel;
+  private JButton scriptAddButtonBtn;
+  private JPanel panel_108;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -11656,16 +11659,18 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JPanel panel_1 = new JPanel();
       panel_1.setMaximumSize(new Dimension(32767, 120));
-      panel_1.setPreferredSize(new Dimension(10, 170));
+      panel_1.setPreferredSize(new Dimension(10, 166));
       scriptPanel.add(panel_1, BorderLayout.NORTH);
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(104, 10));
+      panel_2.setPreferredSize(new Dimension(124, 10));
       panel_1.add(panel_2, BorderLayout.EAST);
-      panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 2));
+      panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 1));
 
       rescanScriptsBtn = new JButton();
+      rescanScriptsBtn.setMinimumSize(new Dimension(116, 12));
+      rescanScriptsBtn.setMaximumSize(new Dimension(116, 12));
       rescanScriptsBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().rescanBtn_clicked();
@@ -11674,20 +11679,22 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(rescanScriptsBtn);
       rescanScriptsBtn.setToolTipText("Rescan script-folder");
       rescanScriptsBtn.setText("Rescan");
-      rescanScriptsBtn.setPreferredSize(new Dimension(96, 24));
+      rescanScriptsBtn.setPreferredSize(new Dimension(116, 24));
       rescanScriptsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
 
       JPanel panel_8 = new JPanel();
-      panel_8.setPreferredSize(new Dimension(16, 4));
-      panel_8.setMinimumSize(new Dimension(10, 8));
+      panel_8.setPreferredSize(new Dimension(116, 4));
+      panel_8.setMinimumSize(new Dimension(116, 8));
       panel_8.setMaximumSize(new Dimension(32767, 8));
       panel_2.add(panel_8);
       panel_2.add(getNewScriptBtn());
-      panel_2.add(getNewScriptFromFlameBtn());
       panel_2.add(getDuplicateScriptBtn());
+      panel_2.add(getNewScriptFromFlameBtn());
 
       deleteScriptBtn = new JButton();
+      deleteScriptBtn.setMinimumSize(new Dimension(58, 12));
+      deleteScriptBtn.setMaximumSize(new Dimension(58, 12));
       deleteScriptBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().deleteScriptBtn_clicked();
@@ -11695,12 +11702,14 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       deleteScriptBtn.setToolTipText("Delete script");
       deleteScriptBtn.setText("Del");
-      deleteScriptBtn.setPreferredSize(new Dimension(48, 24));
+      deleteScriptBtn.setPreferredSize(new Dimension(58, 24));
       deleteScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       deleteScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(deleteScriptBtn);
 
       scriptRenameBtn = new JButton();
+      scriptRenameBtn.setMinimumSize(new Dimension(58, 12));
+      scriptRenameBtn.setMaximumSize(new Dimension(58, 12));
       scriptRenameBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().scriptRename_clicked();
@@ -11708,7 +11717,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       scriptRenameBtn.setToolTipText("Rename script");
       scriptRenameBtn.setText("Ren");
-      scriptRenameBtn.setPreferredSize(new Dimension(48, 24));
+      scriptRenameBtn.setPreferredSize(new Dimension(58, 24));
       scriptRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       scriptRenameBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRenameBtn);
@@ -11716,7 +11725,7 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_3 = new JPanel();
       panel_3.setMaximumSize(new Dimension(32767, 8));
       panel_3.setMinimumSize(new Dimension(10, 8));
-      panel_3.setPreferredSize(new Dimension(16, 4));
+      panel_3.setPreferredSize(new Dimension(116, 4));
       panel_2.add(panel_3);
 
       scriptRunBtn = new JButton();
@@ -11726,9 +11735,11 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.getJwfScriptController().scriptRunBtn_clicked();
         }
       });
+      panel_2.add(getScriptAddButtonBtn());
+      panel_2.add(getPanel_108());
       scriptRunBtn.setToolTipText("Run script");
       scriptRunBtn.setText("Run");
-      scriptRunBtn.setPreferredSize(new Dimension(96, 24));
+      scriptRunBtn.setPreferredSize(new Dimension(116, 24));
       scriptRunBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       scriptRunBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRunBtn);
@@ -15542,14 +15553,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getNewScriptBtn() {
     if (newScriptBtn == null) {
       newScriptBtn = new JButton();
+      newScriptBtn.setMinimumSize(new Dimension(58, 12));
+      newScriptBtn.setMaximumSize(new Dimension(58, 12));
       newScriptBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().newScriptBtn_clicked();
         }
       });
-      newScriptBtn.setToolTipText("Create a new script");
-      newScriptBtn.setText("New script");
-      newScriptBtn.setPreferredSize(new Dimension(96, 24));
+      newScriptBtn.setToolTipText("Create a new script from scratch");
+      newScriptBtn.setText("New");
+      newScriptBtn.setPreferredSize(new Dimension(58, 24));
       newScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       newScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
@@ -15654,14 +15667,16 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getDuplicateScriptBtn() {
     if (duplicateScriptBtn == null) {
       duplicateScriptBtn = new JButton();
+      duplicateScriptBtn.setMinimumSize(new Dimension(58, 12));
+      duplicateScriptBtn.setMaximumSize(new Dimension(58, 12));
       duplicateScriptBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getJwfScriptController().duplicateScriptBtn_clicked();
         }
       });
       duplicateScriptBtn.setToolTipText("Create a copy of the currently selected script");
-      duplicateScriptBtn.setText("Duplicate");
-      duplicateScriptBtn.setPreferredSize(new Dimension(96, 24));
+      duplicateScriptBtn.setText("Dupl");
+      duplicateScriptBtn.setPreferredSize(new Dimension(58, 24));
       duplicateScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       duplicateScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
@@ -15686,7 +15701,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       newScriptFromFlameBtn.setToolTipText("Create a new script by convderting the currently selected flame");
       newScriptFromFlameBtn.setText("From flame");
-      newScriptFromFlameBtn.setPreferredSize(new Dimension(96, 24));
+      newScriptFromFlameBtn.setPreferredSize(new Dimension(116, 24));
       newScriptFromFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       newScriptFromFlameBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
@@ -22032,6 +22047,46 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getToggleDrawGuidesButton() {
     return toggleDrawGuidesButton;
+  }
+
+  private JPanel getMacroButtonPanel() {
+    if (macroButtonPanel == null) {
+      macroButtonPanel = new JPanel();
+      FlowLayout fl_macroButtonPanel = (FlowLayout) macroButtonPanel.getLayout();
+      fl_macroButtonPanel.setVgap(1);
+    }
+    return macroButtonPanel;
+  }
+
+  public JPanel getPreviewEastDefaultPanel() {
+    return previewEastDefaultPanel;
+  }
+
+  private JButton getScriptAddButtonBtn() {
+    if (scriptAddButtonBtn == null) {
+      scriptAddButtonBtn = new JButton();
+      scriptAddButtonBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().addMacroButtonBtn_clicked();
+        }
+      });
+      scriptAddButtonBtn.setToolTipText("Add this script to the macro-toolbar");
+      scriptAddButtonBtn.setText("Add macro button");
+      scriptAddButtonBtn.setPreferredSize(new Dimension(116, 24));
+      scriptAddButtonBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptAddButtonBtn.setBounds(new Rectangle(9, 280, 125, 24));
+    }
+    return scriptAddButtonBtn;
+  }
+
+  private JPanel getPanel_108() {
+    if (panel_108 == null) {
+      panel_108 = new JPanel();
+      panel_108.setPreferredSize(new Dimension(116, 4));
+      panel_108.setMinimumSize(new Dimension(10, 8));
+      panel_108.setMaximumSize(new Dimension(32767, 8));
+    }
+    return panel_108;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
