@@ -1239,6 +1239,36 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 RenderedFlame lRes = lRenderer.renderFlame(lInfo);
                 SimpleImage layerImg = lRes.getImage();
 
+                boolean drawLayerNumber = true;
+                if (drawLayerNumber) {
+                  RectangleTransformer rT = new RectangleTransformer();
+                  int textWidth = 28;
+                  int textHeight = 22;
+                  int margin = 2;
+
+                  rT.setColor(new java.awt.Color(0, 0, 0));
+                  rT.setLeft(layerImg.getImageWidth() - textWidth - 2 * margin);
+                  rT.setTop(layerImg.getImageHeight() - textHeight - 2 * margin);
+                  rT.setThickness(textHeight / 2 + 1);
+                  rT.setWidth(textWidth);
+                  rT.setHeight(textHeight);
+                  rT.transformImage(layerImg);
+
+                  TextTransformer txt = new TextTransformer();
+                  txt.setText1("  " + (flame.getLayers().indexOf(getCurrLayer()) + 1) + "  ");
+                  txt.setAntialiasing(true);
+                  txt.setColor(new java.awt.Color(200, 200, 200));
+                  txt.setMode(Mode.NORMAL);
+                  txt.setFontStyle(FontStyle.BOLD);
+                  txt.setFontName("Arial");
+                  txt.setFontSize(16);
+                  txt.setHAlign(HAlignment.NONE);
+                  txt.setPosX(layerImg.getImageWidth() - textWidth - margin);
+                  txt.setPosY(layerImg.getImageHeight() - textHeight - margin);
+                  txt.setVAlign(VAlignment.NONE);
+                  txt.transformImage(layerImg);
+                }
+
                 RectangleTransformer rT = new RectangleTransformer();
                 rT.setColor(new java.awt.Color(200, 200, 200));
                 rT.setLeft(0);

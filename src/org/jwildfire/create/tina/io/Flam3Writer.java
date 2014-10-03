@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.io;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -28,9 +29,10 @@ public class Flam3Writer extends AbstractFlameWriter {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     // Flame
     List<SimpleXMLBuilder.Attribute<?>> attrList = createFlameAttributes(pFlame, xb);
+    Layer layer = pFlame.getFirstLayer();
+    writeMotionCurves(layer.getPalette(), xb, attrList, "palette_", Collections.<String> emptyList());
 
     xb.beginElement("flame", attrList);
-    Layer layer = pFlame.getFirstLayer();
     // XForm
     for (XForm xForm : layer.getXForms()) {
       xb.emptyElement("xform", createXFormAttrList(xb, layer, xForm));

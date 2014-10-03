@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
@@ -48,6 +49,7 @@ public class Flam3Reader extends AbstractFlameReader {
       Flame flame = new Flame();
       res.add(flame);
       // Flame attributes
+      XMLAttributes atts;
       {
         int ps = flameXML.indexOf("<flame ");
         int pe = -1;
@@ -62,12 +64,13 @@ public class Flam3Reader extends AbstractFlameReader {
           }
         }
         String hs = flameXML.substring(ps + 7, pe);
-        parseFlameAttributes(flame, hs);
+        atts = parseFlameAttributes(flame, hs);
       }
       Layer layer = flame.getFirstLayer();
       readXForms(flameXML, flame, layer);
       readFinalXForms(flameXML, flame, layer);
       readColors(flameXML, layer);
+      readMotionCurves(layer.getPalette(), atts, "palette_");
     }
     return res;
   }

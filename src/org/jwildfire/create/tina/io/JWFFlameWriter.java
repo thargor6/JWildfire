@@ -45,6 +45,8 @@ public class JWFFlameWriter extends AbstractFlameWriter {
       List<String> blackList = Collections.emptyList();
       writeMotionCurves(layer, xb, layerAttrList, null, blackList);
 
+      RGBPalette palette = layer.getPalette();
+      writeMotionCurves(palette, xb, layerAttrList, "palette_", Collections.<String> emptyList());
       xb.beginElement("layer", layerAttrList);
 
       // XForm
@@ -57,7 +59,6 @@ public class JWFFlameWriter extends AbstractFlameWriter {
       }
       // Palette
       {
-        RGBPalette palette = layer.getPalette();
         xb.beginElement("palette",
             xb.createAttr("count", palette.getSize()),
             xb.createAttr("format", "RGB"));
@@ -77,6 +78,7 @@ public class JWFFlameWriter extends AbstractFlameWriter {
         xb.addContent(rgb.toString());
         xb.endElement("palette");
       }
+
       xb.endElement("layer");
     }
     xb.endElement("jwf-flame");

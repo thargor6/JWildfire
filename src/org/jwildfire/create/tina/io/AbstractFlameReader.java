@@ -144,7 +144,7 @@ public class AbstractFlameReader {
     prefs = pPrefs;
   }
 
-  protected void parseFlameAttributes(Flame pFlame, String pXML) {
+  protected XMLAttributes parseFlameAttributes(Flame pFlame, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
@@ -537,7 +537,7 @@ public class AbstractFlameReader {
       default:
         break;
     }
-
+    return atts;
   }
 
   public static final String ATTR_WEIGHT = "weight";

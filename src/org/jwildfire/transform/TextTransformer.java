@@ -48,11 +48,11 @@ public class TextTransformer extends Mesh2DTransformer {
   }
 
   public enum HAlignment {
-    CENTRE, LEFT, RIGHT
+    CENTRE, LEFT, RIGHT, NONE
   }
 
   public enum VAlignment {
-    CENTRE, TOP, BOTTOM
+    CENTRE, TOP, BOTTOM, NONE
   }
 
   @Property(description = "1st row of text")
@@ -99,6 +99,12 @@ public class TextTransformer extends Mesh2DTransformer {
 
   @Property(description = "Text mode", editorClass = ModeEditor.class)
   private Mode mode;
+
+  @Property(description = "Text position in x-direction (when no alignment")
+  private int posX;
+
+  @Property(description = "Text position in y-direction (when no alignment")
+  private int posY;
 
   @PropertyMin(1)
   @Property(description = "Outline width (mode=OUTLINE)", category = PropertyCategory.SECONDARY)
@@ -191,6 +197,8 @@ public class TextTransformer extends Mesh2DTransformer {
         case RIGHT:
           row.left = width - row.width;
           break;
+        case NONE:
+          row.left = posX;
       }
       switch (vAlign) {
         case CENTRE:
@@ -202,6 +210,8 @@ public class TextTransformer extends Mesh2DTransformer {
         case BOTTOM:
           row.top = height - (renderInfo.maxRow + 1 - row.row) * renderInfo.maxHeight;
           break;
+        case NONE:
+          row.top = posY + row.row * renderInfo.maxHeight;
       }
       row.top += baseLineOffset;
     }
@@ -469,14 +479,14 @@ public class TextTransformer extends Mesh2DTransformer {
   public static class HAlignmentEditor extends ComboBoxPropertyEditor {
     public HAlignmentEditor() {
       super();
-      setAvailableValues(new HAlignment[] { HAlignment.CENTRE, HAlignment.LEFT, HAlignment.RIGHT });
+      setAvailableValues(new HAlignment[] { HAlignment.CENTRE, HAlignment.LEFT, HAlignment.RIGHT, HAlignment.NONE });
     }
   }
 
   public static class VAlignmentEditor extends ComboBoxPropertyEditor {
     public VAlignmentEditor() {
       super();
-      setAvailableValues(new VAlignment[] { VAlignment.CENTRE, VAlignment.TOP, VAlignment.BOTTOM });
+      setAvailableValues(new VAlignment[] { VAlignment.CENTRE, VAlignment.TOP, VAlignment.BOTTOM, VAlignment.NONE });
     }
   }
 
@@ -502,5 +512,21 @@ public class TextTransformer extends Mesh2DTransformer {
 
   public void setBaseLineOffset(int baseLineOffset) {
     this.baseLineOffset = baseLineOffset;
+  }
+
+  public int getPosX() {
+    return posX;
+  }
+
+  public void setPosX(int posX) {
+    this.posX = posX;
+  }
+
+  public int getPosY() {
+    return posY;
+  }
+
+  public void setPosY(int posY) {
+    this.posY = posY;
   }
 }

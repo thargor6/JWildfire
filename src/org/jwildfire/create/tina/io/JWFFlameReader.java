@@ -67,23 +67,25 @@ public class JWFFlameReader extends AbstractFlameReader {
 
         Layer layer = new Layer();
         flame.getLayers().add(layer);
+        XMLAttributes atts;
         // Layer attributes
         {
           int ps = layerXML.indexOf("<" + ATTR_LAYER + " ");
           int pe = layerXML.indexOf(">", ps);
           String hs = layerXML.substring(ps + 7, pe);
-          parseLayerAttributes(layer, hs);
+          atts = parseLayerAttributes(layer, hs);
         }
 
         readXForms(layerXML, flame, layer);
         readFinalXForms(layerXML, flame, layer);
         readColors(layerXML, layer);
+        readMotionCurves(layer.getPalette(), atts, "palette_");
       }
     }
     return res;
   }
 
-  protected void parseLayerAttributes(Layer pLayer, String pXML) {
+  protected XMLAttributes parseLayerAttributes(Layer pLayer, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
     String hs;
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
@@ -96,5 +98,6 @@ public class JWFFlameReader extends AbstractFlameReader {
       pLayer.setName(hs);
     }
     readMotionCurves(pLayer, atts, "");
+    return atts;
   }
 }
