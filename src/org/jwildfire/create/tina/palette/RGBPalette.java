@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimAware;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
@@ -48,6 +49,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   private int modBlue;
   @AnimAware
   private int modShift;
+  private final MotionCurve modShiftCurve = new MotionCurve();
   @AnimAware
   private int modHue;
   @AnimAware
@@ -368,6 +370,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     modGreen = pRGBPalette.modGreen;
     modBlue = pRGBPalette.modBlue;
     modShift = pRGBPalette.modShift;
+    modShiftCurve.assign(pRGBPalette.modShiftCurve);
     modHue = pRGBPalette.modHue;
     modContrast = pRGBPalette.modContrast;
     modGamma = pRGBPalette.modGamma;
@@ -430,7 +433,8 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   public boolean isEqual(RGBPalette pSrc) {
     // flam3Number and flam3Name can not be changed
     if ((modRed != pSrc.modRed) || (modGreen != pSrc.modGreen) || (modBlue != pSrc.modBlue) ||
-        (modShift != pSrc.modShift) || (modHue != pSrc.modHue) || (modContrast != pSrc.modContrast) ||
+        (modShift != pSrc.modShift) || !modShiftCurve.isEqual(pSrc.modShiftCurve) ||
+        (modHue != pSrc.modHue) || (modContrast != pSrc.modContrast) ||
         (modGamma != pSrc.modGamma) || (modBrightness != pSrc.modBrightness) || (modSaturation != pSrc.modSaturation) ||
         (modSwapRGB != pSrc.modSwapRGB) || (modFrequency != pSrc.modFrequency) || (modBlur != pSrc.modBlur) ||
         (rawColors.size() != pSrc.rawColors.size())) {

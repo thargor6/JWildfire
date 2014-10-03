@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -240,6 +241,10 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
     else {
       int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
+      if (colorIdx < 0)
+        colorIdx = 0;
+      else if (colorIdx > RGBPalette.PALETTE_SIZE)
+        colorIdx = RGBPalette.PALETTE_SIZE;
       RenderColor color = colorMap[colorIdx];
       plotRed = color.red;
       plotGreen = color.green;

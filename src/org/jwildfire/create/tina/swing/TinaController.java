@@ -171,6 +171,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private AnimationController animationController;
 
   private FlameControlsDelegate flameControls;
+  private GradientControlsDelegate gradientControls;
   private XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
 
@@ -674,6 +675,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
     xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
+    gradientControls = new GradientControlsDelegate(this, data, rootTabbedPane);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
 
     registerMotionPropertyControls();
@@ -2252,6 +2254,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.resetPostSymmetrySettingsBtn.setEnabled(enabled);
     data.resetMotionBlurSettingsBtn.setEnabled(enabled);
     flameControls.enableControls();
+    gradientControls.enableControls();
     channelMixerControls.enableControls();
     enableUndoControls();
     getBatchRendererController().enableJobRenderControls();
@@ -4903,6 +4906,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (JWFNumberField field : flameControls.getMotionControls()) {
       animationController.registerMotionPropertyControls(field);
     }
+    for (JWFNumberField field : gradientControls.getMotionControls()) {
+      animationController.registerMotionPropertyControls(field);
+    }
 
     animationController.registerMotionPropertyControls(data.affineC00REd);
     animationController.registerMotionPropertyControls(data.affineC01REd);
@@ -5327,5 +5333,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flamePanel.setWithGuides(data.toggleDrawGuidesButton.isSelected());
       refreshFlameImage(false);
     }
+  }
+
+  public GradientControlsDelegate getGradientControls() {
+    return gradientControls;
   }
 }

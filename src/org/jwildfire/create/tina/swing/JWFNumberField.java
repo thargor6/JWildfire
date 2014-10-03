@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -376,13 +377,27 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     linkedLabelControl = null;
   }
 
+  public JLabel _findControl(Container parent, String name) {
+    for (Component component : parent.getComponents()) {
+      if (component instanceof JLabel && name.equals(component.getName())) {
+        return (JLabel) component;
+      }
+      else if (component instanceof Container) {
+        JLabel res = _findControl((Container) component, name);
+        if (res != null) {
+          return res;
+        }
+      }
+    }
+    return null;
+  }
+
   public JLabel getLinkedLabelControl() {
     if (linkedLabelControlName != null && linkedLabelControlName.length() > 0 && linkedLabelControl == null) {
-      for (Component component : getParent().getComponents()) {
-        if (linkedLabelControlName.equals(component.getName())) {
-          linkedLabelControl = component;
-          break;
-        }
+      Container parent = getParent();
+      while (parent != null && linkedLabelControl == null) {
+        linkedLabelControl = _findControl(parent, linkedLabelControlName);
+        parent = parent.getParent();
       }
     }
     return (JLabel) linkedLabelControl;

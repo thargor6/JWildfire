@@ -53,6 +53,7 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
@@ -983,9 +984,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     curveToPreview = pCurveToPreview;
     curveValueToPreview = 0.0;
     curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
-    // System.out.println(curveToPreviewPropertyPath);
+    //    System.out.println("PATH: " + curveToPreviewPropertyPath);
     //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
-    //    System.out.println(curve);
+    //    System.out.println("CURVE: " + curve);
   }
 
   protected void notifyChange(int pSelectedPoint, int pX, double pY) {
@@ -1055,6 +1056,15 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             if (subResult != null) {
               return subResult;
             }
+          }
+        }
+        else if (fieldValue instanceof RGBPalette) {
+          RGBPalette palette = (RGBPalette) fieldValue;
+          String pathExt = field.getName();
+          String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+          String subResult = findProperty(palette, pProperty, subPath);
+          if (subResult != null) {
+            return subResult;
           }
         }
       }

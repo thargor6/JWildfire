@@ -3496,12 +3496,14 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeLbl.setLocation(new Point(6, 81));
       xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
+      xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
       xFormOpacityLbl.setSize(new Dimension(49, 22));
       xFormOpacityLbl.setLocation(new Point(6, 107));
       xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
+      xFormSymmetryLbl.setName("xFormSymmetryLbl");
       xFormSymmetryLbl.setToolTipText("Color speed");
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
       xFormSymmetryLbl.setText("Speed");
@@ -3509,6 +3511,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryLbl.setLocation(new Point(6, 47));
       xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
+      xFormColorLbl.setName("xFormColorLbl");
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
       xFormColorLbl.setSize(new Dimension(49, 22));
@@ -3642,6 +3645,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftSlider());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftREd());
       tinaPaletteShiftLbl = new JLabel();
+      tinaPaletteShiftLbl.setName("tinaPaletteShiftLbl");
       tinaPaletteShiftLbl.setBounds(116, 7, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
@@ -3839,6 +3843,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getTinaPaletteShiftREd() {
     if (tinaPaletteShiftREd == null) {
       tinaPaletteShiftREd = new JWFNumberField();
+      tinaPaletteShiftREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientControls().editMotionCurve(e);
+        }
+      });
+      tinaPaletteShiftREd.setMotionPropertyName("modShift");
+      tinaPaletteShiftREd.setLinkedMotionControlName("tinaPaletteShiftSlider");
+      tinaPaletteShiftREd.setLinkedLabelControlName("tinaPaletteShiftLbl");
       tinaPaletteShiftREd.setMinValue(-255.0);
       tinaPaletteShiftREd.setEditable(true);
       tinaPaletteShiftREd.setOnlyIntegers(true);
@@ -4127,6 +4139,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getTinaPaletteShiftSlider() {
     if (tinaPaletteShiftSlider == null) {
       tinaPaletteShiftSlider = new JSlider();
+      tinaPaletteShiftSlider.setName("tinaPaletteShiftSlider");
       tinaPaletteShiftSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -5926,6 +5939,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormColorSlider() {
     if (xFormColorSlider == null) {
       xFormColorSlider = new JSlider();
+      xFormColorSlider.setName("xFormColorSlider");
       xFormColorSlider.setPreferredSize(new Dimension(195, 22));
       xFormColorSlider.setMaximum(100);
       xFormColorSlider.setMinimum(0);
@@ -5998,6 +6012,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormSymmetrySlider() {
     if (xFormSymmetrySlider == null) {
       xFormSymmetrySlider = new JSlider();
+      xFormSymmetrySlider.setName("xFormSymmetrySlider");
       xFormSymmetrySlider.setPreferredSize(new Dimension(195, 22));
       xFormSymmetrySlider.setMaximum(100);
       xFormSymmetrySlider.setMinimum(-100);
@@ -6069,6 +6084,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getXFormOpacitySlider() {
     if (xFormOpacitySlider == null) {
       xFormOpacitySlider = new JSlider();
+      xFormOpacitySlider.setName("xFormOpacitySlider");
       xFormOpacitySlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {

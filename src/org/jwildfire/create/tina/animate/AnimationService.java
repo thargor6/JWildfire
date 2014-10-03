@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
@@ -86,6 +87,10 @@ public class AnimationService {
         Integer res = field.getInt(pSource);
         return res != null ? Double.valueOf(res.intValue()) : 0.0;
       }
+      else if (fieldCls == boolean.class || fieldCls == Boolean.class) {
+        Boolean res = field.getBoolean(pSource);
+        return res ? 1.0 : 0.0;
+      }
       else {
         throw new IllegalStateException(fieldCls.getName());
       }
@@ -108,6 +113,9 @@ public class AnimationService {
       }
       else if (fieldCls == int.class || fieldCls == Integer.class) {
         field.setInt(pDest, (int) MathLib.round(pValue));
+      }
+      else if (fieldCls == boolean.class || fieldCls == Boolean.class) {
+        field.setBoolean(pDest, (int) MathLib.round(pValue) != 0);
       }
       else {
         throw new IllegalStateException(fieldCls.getName());
@@ -158,6 +166,9 @@ public class AnimationService {
           double value = evalCurve(pFrame, curve);
           String propName = field.getName().substring(0, field.getName().length() - Tools.CURVE_POSTFIX.length());
           curve.getChangeHandler().processValueChange(pObject, propName, value);
+          if (pObject instanceof RGBPalette) {
+            curve.getChangeHandler().processValueChange(pObject, "modified", 1.0);
+          }
           //setPropertyValue(pObject, propName, value);
           //          System.out.println(propName + " " + value);
         }
@@ -167,6 +178,10 @@ public class AnimationService {
         for (Object child : childs) {
           _evalMotionCurves(child, pFrame);
         }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        _evalMotionCurves(gradient, pFrame);
       }
     }
     if (pObject instanceof Variation) {
@@ -212,6 +227,10 @@ public class AnimationService {
         for (Object child : childs) {
           _disableMotionCurves(child);
         }
+      }
+      else if (field.getType().isAssignableFrom(RGBPalette.class)) {
+        RGBPalette gradient = (RGBPalette) field.get(pObject);
+        _disableMotionCurves(gradient);
       }
     }
     if (pObject instanceof Variation) {
