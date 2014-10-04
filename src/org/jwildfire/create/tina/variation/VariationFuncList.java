@@ -407,6 +407,7 @@ public class VariationFuncList {
     registerVariationFunc(DinisSurfaceWFFunc.class);
     registerVariationFunc(PreRectWFFunc.class);
     registerVariationFunc(Ennepers2Func.class);
+    registerVariationFunc(WhitneyUmbrellaFunc.class);
   }
 
   private static void registerVariationFunc(
