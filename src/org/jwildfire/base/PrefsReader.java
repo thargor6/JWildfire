@@ -264,14 +264,22 @@ public class PrefsReader {
     }
   }
 
+  private void addMacroButton(Prefs prefs, String caption, String hint, String script) {
+    MacroButton button = new MacroButton();
+    button.setCaption(caption);
+    button.setHint(hint);
+    button.setInternal(true);
+    button.setMacro(script);
+    prefs.getTinaMacroButtons().add(button);
+  }
+
   private void setupDefaultTinaMacroButtons(Prefs pPrefs) {
     if (pPrefs.getTinaMacroButtons().size() == 0) {
-      MacroButton button = new MacroButton();
-      button.setCaption("Buckballs");
-      button.setHint("Buckballs by DT");
-      button.setInternal(true);
-      button.setMacro("scripts/Buckballs by DT.jwfscript");
-      pPrefs.getTinaMacroButtons().add(button);
+      addMacroButton(pPrefs, "Buckballs", "Buckballs by DT", "scripts/Buckballs by DT.jwfscript");
+      addMacroButton(pPrefs, "EschFlx", "Escher Flux", "scripts/Escher Flux.jwfscript");
+      addMacroButton(pPrefs, "LoonSplt", "LoonieSplits DT", "scripts/LoonieSplits DT.jwfscript");
+      addMacroButton(pPrefs, "MobDrgn", "Mobius Dragon", "scripts/Mobius Dragon.jwfscript");
+      addMacroButton(pPrefs, "RndFX", "Add Random Final FX by MH and MO", "scripts/Add Random Final FX by MH and MO.jwfscript");
     }
   }
 

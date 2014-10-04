@@ -10,10 +10,9 @@ import org.jwildfire.create.tina.transform.XFormTransformService;
 public void run(ScriptRunnerEnvironment pEnv) throws Exception {
   XForm xForm1;
   VariationFunc varFunc;
-  Flame currFlame = pEnv.getCurrFlame();
-  if(currFlame==null) {
-    throw new Exception("Please select a flame at first");
-  }
+  Flame currFlame = pEnv.getCurrFlame(true);
+pEnv.refreshUI();
+
   currFlame.getXForms().clear();
   double ranx = (Math.random() / 10.0)*1.2;   
   double rany = (Math.random() / 10.0)*1.2;

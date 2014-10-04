@@ -10,10 +10,7 @@ import org.jwildfire.create.tina.transform.XFormTransformService;
 public void run(ScriptRunnerEnvironment pEnv) throws Exception {
   XForm xForm1;
   VariationFunc varFunc;
-  Flame currFlame = pEnv.getCurrFlame();
-  if(currFlame==null) {
-    throw new Exception("Please select a flame at first");
-  }
+  Flame currFlame = pEnv.getCurrFlame(true);
   currFlame.getXForms().clear();
   currFlame.getFinalXForms().clear();
 
