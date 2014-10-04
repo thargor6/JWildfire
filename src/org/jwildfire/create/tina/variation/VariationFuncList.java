@@ -414,6 +414,7 @@ public class VariationFuncList {
     registerVariationFunc(YinYangFunc.class);
     registerVariationFunc(TargetSpFunc.class);
     registerVariationFunc(ExBlurFunc.class);
+    registerVariationFunc(PowBlockFunc.class);
   }
 
   private static void registerVariationFunc(
