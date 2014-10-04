@@ -23,6 +23,8 @@ public interface ScriptRunnerEnvironment {
 
   public Flame getCurrFlame();
 
+  public Flame getCurrFlame(boolean autoGenerateIfEmpty);
+
   public void setCurrFlame(Flame pFlame);
 
   public Layer getCurrLayer();

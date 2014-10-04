@@ -95,6 +95,7 @@ import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
@@ -1087,6 +1088,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public Flame getCurrFlame() {
+    return _currFlame;
+  }
+
+  @Override
+  public Flame getCurrFlame(boolean autoGenerateIfEmpty) {
+    if (_currFlame == null) {
+      final int IMG_WIDTH = 80;
+      final int IMG_HEIGHT = 60;
+      RandomFlameGenerator randGen = new AllRandomFlameGenerator();
+      int palettePoints = 3 + (int) (Math.random() * 21.0);
+      boolean fadePaletteColors = Math.random() > 0.09;
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+      Flame flame = sampler.createSample().getFlame();
+      setCurrFlame(flame);
+    }
     return _currFlame;
   }
 
