@@ -412,6 +412,7 @@ public class VariationFuncList {
     registerVariationFunc(PolylogarithmFunc.class);
     registerVariationFunc(DevilWarpFunc.class);
     registerVariationFunc(YinYangFunc.class);
+    registerVariationFunc(TargetSpFunc.class);
   }
 
   private static void registerVariationFunc(
