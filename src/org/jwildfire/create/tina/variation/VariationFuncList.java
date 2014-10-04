@@ -410,6 +410,7 @@ public class VariationFuncList {
     registerVariationFunc(WhitneyUmbrellaFunc.class);
     registerVariationFunc(BSplitFunc.class);
     registerVariationFunc(PolylogarithmFunc.class);
+    registerVariationFunc(DevilWarpFunc.class);
   }
 
   private static void registerVariationFunc(
