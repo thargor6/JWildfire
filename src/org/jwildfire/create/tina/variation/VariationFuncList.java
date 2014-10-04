@@ -406,6 +406,7 @@ public class VariationFuncList {
     registerVariationFunc(XHeartBlurWFFunc.class);
     registerVariationFunc(DinisSurfaceWFFunc.class);
     registerVariationFunc(PreRectWFFunc.class);
+    registerVariationFunc(Ennepers2Func.class);
   }
 
   private static void registerVariationFunc(
