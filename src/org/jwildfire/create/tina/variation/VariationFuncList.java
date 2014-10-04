@@ -408,6 +408,8 @@ public class VariationFuncList {
     registerVariationFunc(PreRectWFFunc.class);
     registerVariationFunc(Ennepers2Func.class);
     registerVariationFunc(WhitneyUmbrellaFunc.class);
+    registerVariationFunc(BSplitFunc.class);
+
   }
 
   private static void registerVariationFunc(
