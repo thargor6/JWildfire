@@ -46,9 +46,6 @@ public class Ennepers2Func extends VariationFunc {
     pVarTP.x += pAmount * xx * (sqr(a) - dxy * r2 - c * sqrt(fabs(xx)));
     pVarTP.y += pAmount * yy * (sqr(b) - dxy * r2 - c * sqrt(fabs(yy)));
     pVarTP.z += pAmount * dxy * 0.5 * sqrt(r2);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
   }
 
   @Override

@@ -409,7 +409,7 @@ public class VariationFuncList {
     registerVariationFunc(Ennepers2Func.class);
     registerVariationFunc(WhitneyUmbrellaFunc.class);
     registerVariationFunc(BSplitFunc.class);
-
+    registerVariationFunc(PolylogarithmFunc.class);
   }
 
   private static void registerVariationFunc(
