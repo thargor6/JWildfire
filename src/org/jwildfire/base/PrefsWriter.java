@@ -23,6 +23,8 @@ public class PrefsWriter {
 
   public void writePrefs(Prefs pPrefs) throws Exception {
     StringBuilder sb = new StringBuilder();
+    pPrefs.setCreateTinaDefaultMacroButtons(false);
+
     addValue(sb, Prefs.KEY_GENERAL_DEVELOPMENT_MODE, pPrefs.isDevelopmentMode());
     addValue(sb, Prefs.KEY_GENERAL_BASE_MATH_LIB, pPrefs.getBaseMathLibType().toString());
     if (pPrefs.getLookAndFeelType() != null) {
@@ -105,9 +107,11 @@ public class PrefsWriter {
       addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
     }
     // macro buttons
-    addValue(sb, MacroButton.KEY_MACRO_BUTTON_COUNT, pPrefs.getMacroButtons().size());
-    for (int i = 0; i < pPrefs.getMacroButtons().size(); i++) {
-      MacroButton macroButton = pPrefs.getMacroButtons().get(i);
+    addValue(sb, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons());
+    addValue(sb, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth());
+    addValue(sb, MacroButton.KEY_MACRO_BUTTON_COUNT, pPrefs.getTinaMacroButtons().size());
+    for (int i = 0; i < pPrefs.getTinaMacroButtons().size(); i++) {
+      MacroButton macroButton = pPrefs.getTinaMacroButtons().get(i);
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_CAPTION + "." + i, macroButton.getCaption());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_HINT + "." + i, macroButton.getHint());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, macroButton.getImage());

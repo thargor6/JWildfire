@@ -105,6 +105,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
 
+  public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons";
+  public static final String KEY_TINA_MACRO_TOOLBAR_WIDTH = "tina.toolbar.macro.width";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -210,10 +213,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Line width of the guides (restart of program after change required)", category = PropertyCategory.TINA)
   private double tinaEditorGuidesLineWidth = 1.6;
 
+  @Property(description = "The width of the macro-toolbar when active (restart of program after change required)", category = PropertyCategory.TINA)
+  private int tinaMacroToolbarWidth = 90;
+
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
-  private final List<MacroButton> macroButtons = new ArrayList<MacroButton>();
+
+  private boolean createTinaDefaultMacroButtons = true;
+  private final List<MacroButton> tinaMacroButtons = new ArrayList<MacroButton>();
 
   public static class RandomBatchRefreshTypeEditor extends ComboBoxPropertyEditor {
     public RandomBatchRefreshTypeEditor() {
@@ -575,9 +583,11 @@ public class Prefs extends ManagedObject {
       windowPrefs.add((WindowPrefs) prefs.makeCopy());
     }
 
-    macroButtons.clear();
-    for (MacroButton macroButton : pSrc.macroButtons) {
-      macroButtons.add((MacroButton) macroButton.makeCopy());
+    createTinaDefaultMacroButtons = pSrc.createTinaDefaultMacroButtons;
+    tinaMacroToolbarWidth = pSrc.tinaMacroToolbarWidth;
+    tinaMacroButtons.clear();
+    for (MacroButton macroButton : pSrc.tinaMacroButtons) {
+      tinaMacroButtons.add((MacroButton) macroButton.makeCopy());
     }
   }
 
@@ -975,8 +985,26 @@ public class Prefs extends ManagedObject {
     tinaEditorGuidesLineWidth = pTinaEditorGuidesLineWidth;
   }
 
-  public List<MacroButton> getMacroButtons() {
-    return macroButtons;
+  public List<MacroButton> getTinaMacroButtons() {
+    return tinaMacroButtons;
+  }
+
+  public boolean isCreateTinaDefaultMacroButtons() {
+    return createTinaDefaultMacroButtons;
+  }
+
+  public void setCreateTinaDefaultMacroButtons(boolean createTinaDefaultMacroButtons) {
+    this.createTinaDefaultMacroButtons = createTinaDefaultMacroButtons;
+  }
+
+  public int getTinaMacroToolbarWidth() {
+    return tinaMacroToolbarWidth;
+  }
+
+  public void setTinaMacroToolbarWidth(int tinaMacroToolbarWidth) {
+    this.tinaMacroToolbarWidth = tinaMacroToolbarWidth;
+    if (this.tinaMacroToolbarWidth < 16)
+      this.tinaMacroToolbarWidth = 16;
   }
 
 }

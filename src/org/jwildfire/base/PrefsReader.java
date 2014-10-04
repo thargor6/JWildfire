@@ -230,9 +230,11 @@ public class PrefsReader {
           }
         }
         // macro buttons
+        pPrefs.setCreateTinaDefaultMacroButtons(getBooleanProperty(props, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons()));
+        pPrefs.setTinaMacroToolbarWidth(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth()));
         {
           int count = getIntProperty(props, MacroButton.KEY_MACRO_BUTTON_COUNT, 0);
-          Prefs.getPrefs().getMacroButtons().clear();
+          Prefs.getPrefs().getTinaMacroButtons().clear();
           for (int i = 0; i < count; i++) {
             try {
               MacroButton macroButton = new MacroButton();
@@ -241,12 +243,15 @@ public class PrefsReader {
               macroButton.setImage(getProperty(props, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, ""));
               macroButton.setMacro(getProperty(props, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, ""));
               macroButton.setInternal(getBooleanProperty(props, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, false));
-              Prefs.getPrefs().getMacroButtons().add(macroButton);
+              Prefs.getPrefs().getTinaMacroButtons().add(macroButton);
             }
             catch (Throwable ex) {
               ex.printStackTrace();
             }
           }
+        }
+        if (pPrefs.isCreateTinaDefaultMacroButtons()) {
+          setupDefaultTinaMacroButtons(pPrefs);
         }
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
@@ -256,6 +261,17 @@ public class PrefsReader {
       finally {
         inputStream.close();
       }
+    }
+  }
+
+  private void setupDefaultTinaMacroButtons(Prefs pPrefs) {
+    if (pPrefs.getTinaMacroButtons().size() == 0) {
+      MacroButton button = new MacroButton();
+      button.setCaption("Buckballs");
+      button.setHint("Buckballs by DT");
+      button.setInternal(true);
+      button.setMacro("scripts/Buckballs by DT.jwfscript");
+      pPrefs.getTinaMacroButtons().add(button);
     }
   }
 

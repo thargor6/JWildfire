@@ -282,7 +282,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenThicknessModREd, parameterObject.meshGenThicknessSamplesREd,
         parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd);
 
-    jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.scriptTree,
+    data.macroButtonsTable = parameterObject.macroButtonsTable;
+    data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;
+    data.macroButtonMoveDownBtn = parameterObject.macroButtonMoveDownBtn;
+    data.macroButtonDeleteBtn = parameterObject.macroButtonDeleteBtn;
+    jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, data, parameterObject.scriptTree,
         parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
         parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
         parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn, parameterObject.scriptAddButtonBtn);
@@ -5376,16 +5380,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshMacroButtonsPanel() {
+    final int DFLT_TOOLBAR_SIZE = 52;
     data.macroButtonPanel.removeAll();
-    if (prefs.getMacroButtons().size() == 0) {
-      data.previewEastMainPanel.setPreferredSize(new Dimension(52, 0));
+    if (prefs.getTinaMacroButtons().size() == 0) {
+      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_TOOLBAR_SIZE, 0));
     }
     else {
-      data.previewEastMainPanel.setPreferredSize(new Dimension(104, 0));
-      for (final MacroButton macroButton : prefs.getMacroButtons()) {
+      int toolbarWidth = prefs.getTinaMacroToolbarWidth();
+      int gap = 1;
+      int buttonWidth = prefs.getTinaMacroToolbarWidth() - 16;
+      int buttonHeight = 24;
+      int toolbarHeight = buttonHeight * prefs.getTinaMacroButtons().size() + gap * (prefs.getTinaMacroButtons().size() - 1);
+      data.macroButtonPanel.setPreferredSize(new Dimension(toolbarWidth, toolbarHeight));
+
+      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_TOOLBAR_SIZE + toolbarWidth, 0));
+      for (final MacroButton macroButton : prefs.getTinaMacroButtons()) {
         JButton button = new JButton();
         button.setFont(new Font("Dialog", Font.BOLD, 9));
-        button.setPreferredSize(new Dimension(42, 24));
+        button.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+        button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+        button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
         if (macroButton.getCaption() != null && macroButton.getCaption().length() > 0) {
           button.setText(macroButton.getCaption());
         }
@@ -5411,6 +5425,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     data.previewEastMainPanel.invalidate();
     data.previewEastMainPanel.getParent().validate();
+    data.previewEastMainPanel.getParent().repaint();
   }
 
   public void runScript(String filename, boolean internal) {

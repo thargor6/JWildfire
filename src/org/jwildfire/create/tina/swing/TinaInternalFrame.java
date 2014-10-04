@@ -4567,7 +4567,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetCameraSettingsBtn(), getResetDOFSettingsButton(), getResetBokehOptionsButton(), getResetColoringOptionsButton(),
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
-        getMacroButtonPanel(), getScriptAddButtonBtn());
+        getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
+        getMacroButtonDeleteBtn());
 
     tinaController = new TinaController(params);
 
@@ -4682,6 +4683,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
       getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorControlsWithColor());
+
+      tinaController.getJwfScriptController().refreshControls();
 
       tinaController.refreshMacroButtonsPanel();
     }
@@ -6373,7 +6376,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JScrollPane scrollPane_2 = new JScrollPane();
       scrollPane_2.setBorder(new TitledBorder(null, "Global scripts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       panel_10.add(scrollPane_2);
 
       JPanel panel_85 = new JPanel();
@@ -7074,7 +7076,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 100));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
-      previewEastMainPanel.add(getMacroButtonPanel(), BorderLayout.CENTER);
+      previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
       editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -10611,10 +10613,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JRadioButton xaosViewAsToBtn;
   private JRadioButton xaosViewAsFromBtn;
   private JToggleButton toggleDrawGuidesButton;
-  private JPanel macroButtonPanel;
+  private JPanel macroButtonRootPanel;
   private JPanel previewEastDefaultPanel;
   private JButton scriptAddButtonBtn;
   private JPanel panel_108;
+  private JTable macroButtonsTable;
+  private JButton macroButtonMoveUpBtn;
+  private JButton macroButtonDeleteBtn;
+  private JButton macroButtonMoveDownBtn;
+  private JPanel macroButtonPanel;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -15607,6 +15614,98 @@ public class TinaInternalFrame extends JInternalFrame {
       tabbedPane = new JTabbedPane(JTabbedPane.TOP);
       tabbedPane.addTab("Description", null, getPanel_60(), null);
       tabbedPane.addTab("Code", null, getPanel_61(), null);
+
+      JPanel panel_1 = new JPanel();
+      tabbedPane.addTab("Macro buttons", null, panel_1, null);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(120, 10));
+      panel_1.add(panel_2, BorderLayout.CENTER);
+      panel_2.setLayout(new BorderLayout(0, 0));
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollPane_2.setBorder(null);
+      panel_2.add(scrollPane_2, BorderLayout.CENTER);
+
+      macroButtonsTable = new JTable();
+      macroButtonsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      macroButtonsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      macroButtonsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting()) {
+            tinaController.getJwfScriptController().macroButtonsTableClicked();
+          }
+        }
+
+      });
+
+      scrollPane_2.setViewportView(macroButtonsTable);
+
+      JPanel panel_3 = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel_3.getLayout();
+      flowLayout.setHgap(0);
+      flowLayout.setVgap(1);
+      panel_3.setPreferredSize(new Dimension(124, 10));
+      panel_1.add(panel_3, BorderLayout.EAST);
+
+      JPanel panel_9 = new JPanel();
+      panel_9.setPreferredSize(new Dimension(116, 4));
+      panel_9.setMinimumSize(new Dimension(116, 8));
+      panel_9.setMaximumSize(new Dimension(32767, 8));
+      panel_3.add(panel_9);
+
+      macroButtonMoveUpBtn = new JButton();
+      macroButtonMoveUpBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().macroButtonMoveUp();
+        }
+      });
+      macroButtonMoveUpBtn.setToolTipText("Move the button one up in the list");
+      macroButtonMoveUpBtn.setText("Up");
+      macroButtonMoveUpBtn.setPreferredSize(new Dimension(58, 24));
+      macroButtonMoveUpBtn.setMinimumSize(new Dimension(58, 12));
+      macroButtonMoveUpBtn.setMaximumSize(new Dimension(58, 12));
+      macroButtonMoveUpBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonMoveUpBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_3.add(macroButtonMoveUpBtn);
+
+      macroButtonMoveDownBtn = new JButton();
+      macroButtonMoveDownBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().macroButtonMoveDown();
+        }
+      });
+      macroButtonMoveDownBtn.setToolTipText("Move the button one down in the list");
+      macroButtonMoveDownBtn.setText("Down");
+      macroButtonMoveDownBtn.setPreferredSize(new Dimension(58, 24));
+      macroButtonMoveDownBtn.setMinimumSize(new Dimension(58, 12));
+      macroButtonMoveDownBtn.setMaximumSize(new Dimension(58, 12));
+      macroButtonMoveDownBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonMoveDownBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_3.add(macroButtonMoveDownBtn);
+
+      JPanel panel_8 = new JPanel();
+      panel_8.setPreferredSize(new Dimension(116, 4));
+      panel_8.setMinimumSize(new Dimension(116, 8));
+      panel_8.setMaximumSize(new Dimension(32767, 8));
+      panel_3.add(panel_8);
+
+      macroButtonDeleteBtn = new JButton();
+      macroButtonDeleteBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().macroButtonDelete();
+        }
+      });
+      macroButtonDeleteBtn.setToolTipText("Delete the button");
+      macroButtonDeleteBtn.setText("Delete");
+      macroButtonDeleteBtn.setPreferredSize(new Dimension(116, 24));
+      macroButtonDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonDeleteBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_3.add(macroButtonDeleteBtn);
     }
     return tabbedPane;
   }
@@ -22049,13 +22148,23 @@ public class TinaInternalFrame extends JInternalFrame {
     return toggleDrawGuidesButton;
   }
 
-  private JPanel getMacroButtonPanel() {
-    if (macroButtonPanel == null) {
+  private JPanel getMacroButtonRootPanel() {
+    if (macroButtonRootPanel == null) {
+      macroButtonRootPanel = new JPanel();
+      macroButtonRootPanel.setBorder(null);
+      macroButtonRootPanel.setLayout(new BorderLayout(0, 0));
+
+      JScrollPane macroButtonsScrollPane = new JScrollPane();
+      macroButtonsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      macroButtonRootPanel.add(macroButtonsScrollPane, BorderLayout.CENTER);
+
       macroButtonPanel = new JPanel();
-      FlowLayout fl_macroButtonPanel = (FlowLayout) macroButtonPanel.getLayout();
-      fl_macroButtonPanel.setVgap(1);
+      FlowLayout flowLayout = (FlowLayout) macroButtonPanel.getLayout();
+      flowLayout.setAlignment(FlowLayout.LEFT);
+      flowLayout.setVgap(1);
+      macroButtonsScrollPane.setViewportView(macroButtonPanel);
     }
-    return macroButtonPanel;
+    return macroButtonRootPanel;
   }
 
   public JPanel getPreviewEastDefaultPanel() {
@@ -22087,6 +22196,26 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_108.setMaximumSize(new Dimension(32767, 8));
     }
     return panel_108;
+  }
+
+  public JTable getMacroButtonsTable() {
+    return macroButtonsTable;
+  }
+
+  public JButton getMacroButtonMoveUpBtn() {
+    return macroButtonMoveUpBtn;
+  }
+
+  public JButton getMacroButtonDeleteBtn() {
+    return macroButtonDeleteBtn;
+  }
+
+  public JButton getMacroButtonMoveDownBtn() {
+    return macroButtonMoveDownBtn;
+  }
+
+  public JPanel getMacroButtonPanel() {
+    return macroButtonPanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

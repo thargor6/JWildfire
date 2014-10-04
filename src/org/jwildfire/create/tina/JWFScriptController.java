@@ -17,6 +17,7 @@ import javax.swing.JTree;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -31,6 +32,7 @@ import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaControllerData;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -39,6 +41,7 @@ public class JWFScriptController {
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
   private final JPanel rootPanel;
+  private final TinaControllerData data;
   private final JTree scriptTree;
   private final JTextArea scriptDescriptionTextArea;
   private final JTextArea scriptTextArea;
@@ -58,7 +61,7 @@ public class JWFScriptController {
   private boolean noTextChange = false;
   private DefaultMutableTreeNode userScriptsRootNode;
 
-  public JWFScriptController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
+  public JWFScriptController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
       JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptButton, JButton pRevertScriptButton, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JButton pAddMacroButtonBtn) {
@@ -66,6 +69,7 @@ public class JWFScriptController {
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     rootPanel = pRootPanel;
+    data = pData;
     scriptTree = pScriptTree;
     scriptDescriptionTextArea = pScriptDescriptionTextArea;
     scriptTextArea = pScriptTextArea;
@@ -118,7 +122,6 @@ public class JWFScriptController {
 
     });
 
-    enableControls();
     //    initScriptLibrary();
   }
 
@@ -184,6 +187,16 @@ public class JWFScriptController {
     revertScriptBtn.setEnabled(editing);
     scriptTree.setEnabled(!editing);
     addMacroButtonBtn.setEnabled(scriptSelected);
+
+    enableMacroButtonsControls();
+  }
+
+  private void enableMacroButtonsControls() {
+    int row = data.macroButtonsTable.getSelectedRow();
+    List<MacroButton> buttons = prefs.getTinaMacroButtons();
+    data.macroButtonMoveUpBtn.setEnabled(row > 0 && row < buttons.size());
+    data.macroButtonMoveDownBtn.setEnabled(row >= 0 && row < buttons.size() - 1);
+    data.macroButtonDeleteBtn.setEnabled(row >= 0 && row < buttons.size());
   }
 
   private interface ScriptNode {
@@ -955,21 +968,171 @@ public class JWFScriptController {
         else {
           throw new Exception("Unknown node type <" + selNode.getClass() + ">");
         }
+        String hint = caption;
         int CAPTION_MAX_SIZE = 6;
-
         if (caption.length() > CAPTION_MAX_SIZE) {
           caption = caption.substring(0, CAPTION_MAX_SIZE);
         }
         MacroButton button = new MacroButton();
         button.setCaption(caption);
+        button.setHint(hint);
         button.setInternal(internal);
         button.setMacro(scriptFilename);
-        prefs.getMacroButtons().add(button);
+        prefs.getTinaMacroButtons().add(button);
+        refreshMacroButtonsTable();
+        int selRow = prefs.getTinaMacroButtons().size() - 1;
+        data.macroButtonsTable.getSelectionModel().setSelectionInterval(selRow, selRow);
+        enableMacroButtonsControls();
         tinaController.refreshMacroButtonsPanel();
       }
     }
     catch (Exception ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void macroButtonMoveUp() {
+    int row = data.macroButtonsTable.getSelectedRow();
+    List<MacroButton> buttons = prefs.getTinaMacroButtons();
+    MacroButton button = buttons.get(row);
+    buttons.remove(row);
+    buttons.add(row - 1, button);
+    refreshMacroButtonsTable();
+    data.macroButtonsTable.getSelectionModel().setSelectionInterval(row - 1, row - 1);
+    enableMacroButtonsControls();
+    tinaController.refreshMacroButtonsPanel();
+  }
+
+  public void macroButtonMoveDown() {
+    int row = data.macroButtonsTable.getSelectedRow();
+    List<MacroButton> buttons = prefs.getTinaMacroButtons();
+    MacroButton button = buttons.get(row);
+    buttons.remove(row);
+    buttons.add(row + 1, button);
+    refreshMacroButtonsTable();
+    data.macroButtonsTable.getSelectionModel().setSelectionInterval(row + 1, row + 1);
+    enableMacroButtonsControls();
+    tinaController.refreshMacroButtonsPanel();
+  }
+
+  public void macroButtonDelete() {
+    int row = data.macroButtonsTable.getSelectedRow();
+    List<MacroButton> buttons = prefs.getTinaMacroButtons();
+    buttons.remove(row);
+    refreshMacroButtonsTable();
+    if (buttons.size() > 0) {
+      data.macroButtonsTable.getSelectionModel().setSelectionInterval(0, 0);
+    }
+
+    enableMacroButtonsControls();
+    tinaController.refreshMacroButtonsPanel();
+  }
+
+  public void macroButtonsTableClicked() {
+    enableMacroButtonsControls();
+  }
+
+  private void refreshMacroButtonsTable() {
+    final int COL_CAPTION = 0;
+    final int COL_HINT = 1;
+    final int COL_MACRO = 2;
+
+    data.macroButtonsTable.setModel(new DefaultTableModel() {
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public int getRowCount() {
+        return prefs.getTinaMacroButtons().size();
+      }
+
+      @Override
+      public int getColumnCount() {
+        return 3;
+      }
+
+      @Override
+      public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+          case COL_CAPTION:
+            return "Caption";
+          case COL_HINT:
+            return "Hint";
+          case COL_MACRO:
+            return "Macro";
+        }
+        return null;
+      }
+
+      @Override
+      public Object getValueAt(int rowIndex, int columnIndex) {
+        List<MacroButton> buttons = prefs.getTinaMacroButtons();
+        if (rowIndex >= 0 && rowIndex < buttons.size()) {
+          MacroButton button = buttons.get(rowIndex);
+          switch (columnIndex) {
+            case COL_CAPTION:
+              return button.getCaption();
+            case COL_HINT:
+              return button.getHint();
+            case COL_MACRO:
+              return button.getMacro();
+          }
+        }
+        return null;
+      }
+
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return column == COL_CAPTION || column == COL_HINT || column == COL_MACRO;
+      }
+
+      @Override
+      public void setValueAt(Object aValue, int row, int column) {
+        List<MacroButton> buttons = prefs.getTinaMacroButtons();
+        if (row >= 0 && row < buttons.size()) {
+          MacroButton button = buttons.get(row);
+          String valStr = (String) aValue;
+          if (valStr == null) {
+            valStr = "";
+          }
+          switch (column) {
+            case COL_CAPTION:
+            {
+              if (!valStr.equals(button.getCaption())) {
+                button.setCaption(valStr);
+                tinaController.refreshMacroButtonsPanel();
+              }
+              break;
+            }
+            case COL_HINT:
+            {
+              if (!valStr.equals(button.getHint())) {
+                button.setHint(valStr);
+                tinaController.refreshMacroButtonsPanel();
+              }
+              break;
+            }
+            case COL_MACRO:
+            {
+              if (!valStr.equals(button.getMacro())) {
+                button.setMacro(valStr);
+                tinaController.refreshMacroButtonsPanel();
+              }
+              break;
+            }
+          }
+        }
+        super.setValueAt(aValue, row, column);
+      }
+
+    });
+    data.macroButtonsTable.getTableHeader().setFont(data.transformationsTable.getFont());
+    data.macroButtonsTable.getColumnModel().getColumn(COL_CAPTION).setWidth(20);
+    data.macroButtonsTable.getColumnModel().getColumn(COL_HINT).setPreferredWidth(40);
+    data.macroButtonsTable.getColumnModel().getColumn(COL_MACRO).setWidth(80);
+  }
+
+  public void refreshControls() {
+    refreshMacroButtonsTable();
+    enableControls();
   }
 }
