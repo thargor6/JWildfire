@@ -7182,12 +7182,20 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(randomizeBtn);
 
       toggleDrawGridButton = new JToggleButton();
+      toggleDrawGridButton.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.resetGridToDefaults();
+          }
+        }
+      });
       toggleDrawGridButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.toggleDrawGridButton_clicked();
         }
       });
-      toggleDrawGridButton.setToolTipText("Turn grid on/off");
+      toggleDrawGridButton.setToolTipText("Turn grid on/off, double-click to rest grid-size and -position");
       toggleDrawGridButton.setSize(new Dimension(95, 24));
       toggleDrawGridButton.setSelected(false);
       toggleDrawGridButton.setPreferredSize(new Dimension(42, 24));

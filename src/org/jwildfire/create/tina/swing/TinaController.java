@@ -5465,4 +5465,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void resetGridToDefaults() {
+    flamePanel.resetGridToDefaults();
+    refreshFlameImage(false);
+  }
+
 }

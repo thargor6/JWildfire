@@ -55,6 +55,7 @@ import org.jwildfire.transform.BalancingTransformer;
 
 public class FlamePanel extends ImagePanel {
   private final static int BORDER = 20;
+  private static final double DFLT_VIEWSIZE = 5.0;
   private static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
   private static final Color BACKGROUND_COLOR = new Color(60, 60, 60);
   private static final Color VARIATION_COLOR = new Color(245, 205, 16);
@@ -95,10 +96,9 @@ public class FlamePanel extends ImagePanel {
   private GradientOverlay gradientOverlay = new GradientOverlay(this);
   private final Prefs prefs;
 
-  private double viewXMin = -2.0;
-  private double viewXMax = 2.0;
-  private double viewYMin = -1.5;
-  private double viewYMax = 1.5;
+  private double viewSizeIncrease = 0.0;
+  private double viewOffsetX = 0.0;
+  private double viewOffsetY = 0.0;
 
   private final FlamePanelConfig config = new FlamePanelConfig();
 
@@ -210,18 +210,9 @@ public class FlamePanel extends ImagePanel {
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
-  private boolean initViewFlag = false;
-
   private int viewAreaLeft, viewAreaRight, viewAreaTop, viewAreaBottom;
 
   private void initTriangleView(Graphics2D g) {
-    if (initViewFlag) {
-      return;
-    }
-    else {
-      initViewFlag = true;
-    }
-
     Rectangle bounds = this.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
@@ -231,8 +222,10 @@ public class FlamePanel extends ImagePanel {
     viewAreaTop = BORDER;
     viewAreaBottom = height - 1 - BORDER;
 
-    config.setTriangleViewXScale((double) (width - 2 * BORDER) / (viewXMax - viewXMin));
-    config.setTriangleViewYScale((double) (height - 2 * BORDER) / (viewYMin - viewYMax));
+    double viewSize = DFLT_VIEWSIZE + viewSizeIncrease;
+
+    config.setTriangleViewXScale((double) (width - 2 * BORDER) / viewSize);
+    config.setTriangleViewYScale(-(double) (height - 2 * BORDER) / viewSize);
 
     if (fabs(config.getTriangleViewXScale()) < fabs(config.getTriangleViewYScale())) {
       config.setTriangleViewYScale(-config.getTriangleViewXScale());
@@ -240,6 +233,11 @@ public class FlamePanel extends ImagePanel {
     else {
       config.setTriangleViewXScale(-config.getTriangleViewYScale());
     }
+
+    double xsize = (width - 2 * BORDER) / config.getTriangleViewXScale();
+    double ysize = (height - 2 * BORDER) / config.getTriangleViewXScale();
+    double viewXMin = -xsize / 2.0 + viewOffsetX;
+    double viewYMin = -ysize / 2.0 + viewOffsetY;
 
     config.setTriangleViewXTrans(viewXMin * config.getTriangleViewXScale() - viewAreaLeft);
     config.setTriangleViewYTrans(viewYMin * config.getTriangleViewYScale() - viewAreaBottom);
@@ -548,19 +546,13 @@ public class FlamePanel extends ImagePanel {
             }
             if (pRightButton || pMiddleButton) {
               // zoom 
-              viewXMin -= dx;
-              viewXMax += dx;
-              viewYMin -= dx;
-              viewYMax += dx;
+              viewSizeIncrease -= dx;
             }
             else {
               // move
-              viewXMin -= dx;
-              viewXMax -= dx;
-              viewYMin -= dy;
-              viewYMax -= dy;
+              viewOffsetX -= dx;
+              viewOffsetY -= dy;
             }
-            initViewFlag = false;
             return true;
           }
           case MOVE_TRIANGLE: {
@@ -959,11 +951,7 @@ public class FlamePanel extends ImagePanel {
         if (fineMovement) {
           dx *= 0.1;
         }
-        viewXMin -= dx;
-        viewXMax += dx;
-        viewYMin -= dx;
-        viewYMax += dx;
-        initViewFlag = false;
+        viewSizeIncrease -= dx;
         return true;
       }
       else if (config.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE && selectedXForm != null) {
@@ -1186,6 +1174,12 @@ public class FlamePanel extends ImagePanel {
 
   public FlamePanelConfig getConfig() {
     return config;
+  }
+
+  public void resetGridToDefaults() {
+    viewSizeIncrease = 0.0;
+    viewOffsetX = 0.0;
+    viewOffsetY = 0.0;
   }
 
 }
