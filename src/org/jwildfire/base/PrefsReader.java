@@ -251,6 +251,7 @@ public class PrefsReader {
           }
         }
         if (pPrefs.isCreateTinaDefaultMacroButtons()) {
+          pPrefs.getTinaMacroButtons().clear();
           setupDefaultTinaMacroButtons(pPrefs);
         }
         //
