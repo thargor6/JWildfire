@@ -202,6 +202,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final ProgressUpdater mainProgressUpdater;
   private TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
+  private RGBPalette _lastGradient;
 
   public TinaController(TinaControllerParameter parameterObject) {
     tinaFrame = parameterObject.pTinaFrame;
@@ -683,6 +684,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xaosViewAsFromBtn = parameterObject.xaosViewAsFromBtn;
     data.previewEastMainPanel = parameterObject.previewEastMainPanel;
     data.macroButtonPanel = parameterObject.macroButtonPanel;
+    data.gradientResetBtn = parameterObject.gradientResetBtn;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
@@ -1139,6 +1141,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (_currFlame == null || !_currFlame.equals(pFlame)) {
       _currRandomizeFlame = pFlame.makeCopy();
     }
+    setLastGradient(null);
     if (_currFlame != null) {
       for (Layer layer : _currFlame.getLayers()) {
         deRegisterFromEditor(_currFlame, layer);
@@ -1148,6 +1151,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (Layer layer : _currFlame.getLayers()) {
       registerToEditor(_currFlame, layer);
     }
+  }
+
+  public void setLastGradient(RGBPalette pGradient) {
+    _lastGradient = pGradient != null ? pGradient.makeDeepCopy() : null;
+    System.out.println("SET");
   }
 
   protected void deRegisterFromEditor(Flame pFlame, Layer pLayer) {
@@ -1161,8 +1169,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       pLayer.getPalette().setSelectionProvider(this);
     }
   }
-
-  //  static int rCount = 1;
 
   public FlamePanelConfig getFlamePanelConfig() {
     return getFlamePanel().getConfig();
@@ -1732,6 +1738,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
           saveUndoPoint();
           getCurrLayer().setPalette(palette);
+          setLastGradient(palette);
           refreshPaletteUI(palette);
           refreshFlameImage(false);
         }
@@ -2093,6 +2100,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
       saveUndoPoint();
       getCurrLayer().setPalette(palette);
+      setLastGradient(palette);
       refreshPaletteUI(palette);
       refreshFlameImage(false);
     }
@@ -2117,6 +2125,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.paletteKeyFrames = null;
       saveUndoPoint();
       getCurrLayer().setPalette(palette);
+      setLastGradient(palette);
       refreshPaletteColorsTable();
       refreshPaletteUI(palette);
       refreshFlameImage(false);
@@ -3383,6 +3392,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
     RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
+    setLastGradient(palette);
     setCurrFlame(flame);
     undoManager.initUndoStack(getCurrFlame());
   }
@@ -3738,6 +3748,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
       if (appendToFlame(pFlame)) {
         showStatusMessage(pFlame, "added as new layers");
+        setLastGradient(getCurrLayer().getPalette());
       }
     }
     else {
@@ -3758,6 +3769,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         setupProfiles(getCurrFlame());
         showStatusMessage(getCurrFlame(), "imported into editor");
       }
+      setLastGradient(getCurrLayer().getPalette());
     }
     refreshUI();
   }
@@ -4241,6 +4253,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.paletteKeyFrames = null;
         saveUndoPoint();
         getCurrLayer().setPalette(palette);
+        setLastGradient(palette);
         refreshPaletteColorsTable();
         refreshPaletteUI(palette);
         refreshFlameImage(false);
@@ -4796,6 +4809,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       boolean oldCmbRefreshing = cmbRefreshing;
       gridRefreshing = cmbRefreshing = true;
       try {
+        setLastGradient(null);
         Layer layer = getCurrLayer();
         refreshLayerUI();
         refreshLayerControls(layer);
@@ -4814,6 +4828,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Layer layer = new Layer();
     RGBPalette palette = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem()).generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     layer.setPalette(palette);
+    setLastGradient(palette);
     saveUndoPoint();
     flame.getLayers().add(layer);
 
@@ -5497,6 +5512,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       detachedPreviewWindow.getFrame().setVisible(false);
       detachedPreviewWindow = null;
     }
+  }
+
+  public void gradientResetBtn_clicked() {
+    if (getLastGradient() != null && getCurrLayer() != null) {
+      saveUndoPoint();
+      getCurrLayer().setPalette(getLastGradient().makeDeepCopy());
+      System.out.println("RESET");
+      refreshUI();
+    }
+  }
+
+  private RGBPalette getLastGradient() {
+    return _lastGradient;
   }
 
 }

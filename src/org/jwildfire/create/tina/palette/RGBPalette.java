@@ -362,6 +362,21 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return res;
   }
 
+  public RGBPalette makeDeepCopy() {
+    RGBPalette res = new RGBPalette();
+    res.assign(this);
+    res.assignRawColors(this);
+    return res;
+  }
+
+  public void assignRawColors(RGBPalette pRGBPalette) {
+    rawColors.clear();
+    for (Integer key : pRGBPalette.rawColors.keySet()) {
+      RGBColor newColor = pRGBPalette.rawColors.get(key).makeCopy();
+      rawColors.put(key, newColor);
+    }
+  }
+
   @Override
   public void assign(RGBPalette pRGBPalette) {
     highestIdx = pRGBPalette.highestIdx;

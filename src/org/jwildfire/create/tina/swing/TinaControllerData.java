@@ -401,4 +401,5 @@ public class TinaControllerData {
   public JButton macroButtonMoveDownBtn;
   public JButton macroButtonDeleteBtn;
   public JToggleButton toggleDetachedPreviewButton;
+  public JButton gradientResetBtn;
 }

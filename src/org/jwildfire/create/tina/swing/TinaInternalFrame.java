@@ -4569,7 +4569,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
-        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton());
+        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn());
 
     tinaController = new TinaController(params);
 
@@ -10633,6 +10633,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton macroButtonMoveDownBtn;
   private JPanel macroButtonPanel;
   private JToggleButton toggleDetachedPreviewButton;
+  private JButton gradientResetBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -15829,6 +15830,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flowLayout.setHgap(2);
       flowLayout.setVgap(1);
       gradientEditorFncPnl.setPreferredSize(new Dimension(80, 50));
+      gradientEditorFncPnl.add(getGradientResetBtn());
       gradientEditorFncPnl.add(getPanel_62());
       gradientEditorFncPnl.add(getPanel_63());
       gradientEditorFncPnl.add(getPanel_64());
@@ -22248,6 +22250,25 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDetachedPreviewButton.setPreferredSize(new Dimension(42, 24));
     }
     return toggleDetachedPreviewButton;
+  }
+
+  private JButton getGradientResetBtn() {
+    if (gradientResetBtn == null) {
+      gradientResetBtn = new JButton();
+      gradientResetBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.gradientResetBtn_clicked();
+        }
+      });
+      gradientResetBtn.setToolTipText("Reset the gradient to the initial state");
+      gradientResetBtn.setText("R");
+      gradientResetBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      gradientResetBtn.setSize(new Dimension(128, 50));
+      gradientResetBtn.setPreferredSize(new Dimension(60, 48));
+      gradientResetBtn.setLocation(new Point(4, 181));
+      gradientResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return gradientResetBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
