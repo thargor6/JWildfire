@@ -1295,6 +1295,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaSouthTabbedPane.addTab("Special Shading", null, getShadingPanel(), null);
       tinaSouthTabbedPane.addTab("Gradient ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")), getTinaPalettePanel(), null);
+
       tinaSouthTabbedPane.addTab("Stereo3d rendering ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layer-novisible.png")), getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
       tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
@@ -4568,7 +4569,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
-        getMacroButtonDeleteBtn());
+        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton());
 
     tinaController = new TinaController(params);
 
@@ -5047,7 +5048,6 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
       affineRotateLeftButton.setSize(new Dimension(70, 24));
       affineRotateLeftButton.setLocation(new Point(0, 57));
-      //      affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/turnLeft.gif")));
       affineRotateLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-rotate-left-3.png")));
       affineRotateLeftButton.setToolTipText("Rotate triangle left");
       affineRotateLeftButton.setText("");
@@ -7070,11 +7070,13 @@ public class TinaInternalFrame extends JInternalFrame {
       previewEastDefaultPanel.add(getMouseTransformEditFocusPointButton());
 
       editorFractalBrightnessSlider = new JSlider();
+      editorFractalBrightnessSlider.setToolTipText("Show/Hide the realtime preview (may make sense to hide it temporary completely to get better control over the triangles)");
       previewEastDefaultPanel.add(editorFractalBrightnessSlider);
       editorFractalBrightnessSlider.setOrientation(SwingConstants.VERTICAL);
       editorFractalBrightnessSlider.setValue(100);
-      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 100));
+      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 66));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
+      previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
       editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
@@ -10630,6 +10632,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton macroButtonDeleteBtn;
   private JButton macroButtonMoveDownBtn;
   private JPanel macroButtonPanel;
+  private JToggleButton toggleDetachedPreviewButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -22224,6 +22227,27 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JPanel getMacroButtonPanel() {
     return macroButtonPanel;
+  }
+
+  private JToggleButton getToggleDetachedPreviewButton() {
+    if (toggleDetachedPreviewButton == null) {
+      toggleDetachedPreviewButton = new JToggleButton();
+      toggleDetachedPreviewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (toggleDetachedPreviewButton.isSelected()) {
+            tinaController.openDetachedPreview();
+          }
+          else {
+            tinaController.closeDetachedPreview();
+          }
+        }
+      });
+      toggleDetachedPreviewButton.setToolTipText("Additionally show changes in external window");
+
+      toggleDetachedPreviewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/view-preview.png")));
+      toggleDetachedPreviewButton.setPreferredSize(new Dimension(42, 24));
+    }
+    return toggleDetachedPreviewButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
