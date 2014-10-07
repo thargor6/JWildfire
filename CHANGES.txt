@@ -1,4 +1,32 @@
 V2.00 (xx.xx.2014):
+ - created a small detached preview is showing the currently edited flame in constantly increasing quality
+ - the fading-slider of the realtime-preview now got a hint and actually can fade the preview to black (thanks to Martin Flink)
+ - added more clear indicators to show if a motion curve is present or not  
+
+ - you can now create your own buttons to execute your own scripts in the editor! I. E., you have in the script-tab the possibility to add a persistent 
+   button to the user-interface to execute a certain script. You may, of course, cutomize it. Just select script and hit the "Add macro button"-button to add a new button to the user-interace which executes this script. You can have as many buttons as you want! 
+ - addded 5 default macro-buttons (which also may be customized or removed)
+ - display the layer number in layer-preview
+ - added support for animating the shift-paremeter of gradients by using motion-curves
+ - added support for animating weight, color, color-speed and opacity of transforms by using motion-curves
+ - new option to draw guides (center point, rule of thirds and the golden ratio) as known from Apo in the editor. You may control the colors and line-widths by changing the properties tinaEditorGuidesCenterPointColor, tinaEditorGuidesRuleOfThirdsColor, tinaEditorGuidesGoldenRatioColor and tinaEditorGuidesLineWidth in the Preferences-window
+ - the "Xaos"-tab now features the "from"- and "to"-views as known from Apo
+ - several "Reset-to-defaults"-button at several tabs
+ - changed the HDR-exporter in the way that it also executes the log-scaling-step which solves some problems and seems to ease to processing of those kind of images by certain other software-packages
+ - fixed a bug in the renderer causing a bright spot at (0,0) sometimes
+ - fixed a bug regarding the update of the frame slider in the main editor. Fixed a bug regarding the length of the gradient-guide on the transformation-color-tab
+ - new "power_block"-variation by cothe and dark-beam
+ - new "exblur"-variation by zephyrtronium and dark-beam
+ - new "target_sp"-variation by dark-beam
+ - new "yin_yang"-variation by dark-beam
+ - new "devil_warp"-variation by dark-beam
+ - new "polylogarithm"-variation by dark-beam
+ - new "bsplit"-variation by Raykoid666 and Nic Anderson
+ - new "whitney_umbrella"-variation by Don Town
+ - new "ennepers2"-variation by dark-beam
+ - the optional grid and display of affine transfomsm ishould be correct aligned to the center noew
+ - added a new method tho the scripting-interface which creates a new random flame when there is currently no flame in the editor. This simplifies the script-initializing code
+ 
  - button for simply-generation of bokeh-like effects in the main editor - it's pure fun!
  - new "Rect"-bokeh-style
  - ability to use/create motion-curves made from mp3-audio, it has never been easier to create a sound-sync motion of a flame-fractal!

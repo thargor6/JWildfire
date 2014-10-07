@@ -1137,8 +1137,7 @@ public class FlamePanel extends ImagePanel {
     SimpleImage img = super.preProcessImage(pSimpleImage);
     if (imageBrightness < 100 && imageBrightness >= 0) {
       BalancingTransformer bT = new BalancingTransformer();
-      bT.setGamma(-2 * (100 - imageBrightness));
-      bT.setBrightness(-(100 - imageBrightness));
+      bT.setBrightness((int) (-(100 - imageBrightness) * 2.55));
       bT.transformImage(img);
     }
     return img;

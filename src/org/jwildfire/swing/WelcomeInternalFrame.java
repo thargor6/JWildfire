@@ -118,8 +118,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     youtubeVideosBtn.setDefaultCapable(false);
     youtubeVideosBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        //        browse("http://www.andreas-maschke.com/?page_id=1411");
-        browse("http://www.andreas-maschke.de/java/JWildfireVariations.html");
+        browse("http://www.andreas-maschke.de/java/JWildfireVariations200.html");
       }
     });
     youtubeVideosBtn.setPreferredSize(new Dimension(128, 24));

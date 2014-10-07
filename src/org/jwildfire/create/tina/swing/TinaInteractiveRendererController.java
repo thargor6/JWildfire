@@ -52,6 +52,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderThreads;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.ResumedFlameRender;
 import org.jwildfire.image.SimpleImage;
@@ -85,7 +86,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JTextArea statsTextArea;
   private SimpleImage image;
   private Flame currFlame;
-  private List<AbstractRenderThread> threads;
+  private RenderThreads threads;
   private UpdateDisplayThread updateDisplayThread;
   private FlameRenderer renderer;
   private State state = State.IDLE;
@@ -330,7 +331,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       }
       while (true) {
         boolean done = true;
-        for (AbstractRenderThread thread : threads) {
+        for (AbstractRenderThread thread : threads.getRenderThreads()) {
           if (!thread.isFinished()) {
             done = false;
             thread.cancel();
@@ -433,9 +434,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
               nextImageUpdate = lastImageUpdateInterval;
             }
             else if (--nextStatsUpdate <= 0) {
-              double quality = threads.get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+              double quality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
               updateStats(quality);
-              for (AbstractRenderThread thread : threads) {
+              for (AbstractRenderThread thread : threads.getRenderThreads()) {
                 thread.getTonemapper().setDensity(quality);
               }
               nextStatsUpdate = STATS_UPDATE_INTERVAL;
@@ -618,7 +619,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency(), false);
 
         ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
-        threads = resumedRender.getThreads();
+        threads = new RenderThreads(resumedRender.getThreads(), null);
         Flame flame = currFlame = newRenderer.getFlame();
         // setup size profile
         {
@@ -670,7 +671,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         displayUpdater.setSampleCount(renderer.calcSampleCount());
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
-        for (AbstractRenderThread thread : threads) {
+        for (AbstractRenderThread thread : threads.getRenderThreads()) {
           new Thread(thread).start();
         }
         updateDisplayThread = new UpdateDisplayThread();
@@ -700,7 +701,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputFlameFile(file);
-          renderer.saveState(file.getAbsolutePath(), threads, displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
+          renderer.saveState(file.getAbsolutePath(), threads.getRenderThreads(), displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {

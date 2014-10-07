@@ -29,6 +29,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
 
   public static final String WINDOW_DESKTOP = "Desktop";
   public static final String WINDOW_TINA = "TINA";
+  public static final String WINDOW_TINA_PREVIEW = "TINA_PREVIEW";
 
   private int width;
   private int height;

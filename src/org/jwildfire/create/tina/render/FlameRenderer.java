@@ -725,8 +725,9 @@ public class FlameRenderer {
     }
   }
 
-  private List<AbstractRenderThread> startIterate(List<List<RenderPacket>> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
-    List<AbstractRenderThread> threads = new ArrayList<AbstractRenderThread>();
+  private RenderThreads startIterate(List<List<RenderPacket>> pFlames, RenderThreadPersistentState pState[], boolean pStartThreads) {
+    List<AbstractRenderThread> renderThreads = new ArrayList<AbstractRenderThread>();
+    List<Thread> executingThreads = new ArrayList<Thread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
       AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1, null, 0.0, 0);
@@ -734,12 +735,14 @@ public class FlameRenderer {
         t.setResumeState(pState[i]);
       }
       t.setTonemapper(new SampleTonemapper(flame, raster, rasterWidth, rasterHeight, imageWidth, imageHeight, randGen));
-      threads.add(t);
+      renderThreads.add(t);
       if (pStartThreads) {
-        new Thread(t).start();
+        Thread executingThread = new Thread(t);
+        executingThreads.add(executingThread);
+        executingThread.start();
       }
     }
-    return threads;
+    return new RenderThreads(renderThreads, executingThreads);
   }
 
   public void setRandomNumberGenerator(AbstractRandomGenerator random) {
@@ -883,7 +886,7 @@ public class FlameRenderer {
     return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
   }
 
-  public List<AbstractRenderThread> startRenderFlame(RenderInfo pRenderInfo) {
+  public RenderThreads startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
@@ -919,8 +922,8 @@ public class FlameRenderer {
         // read raster
         raster = (AbstractRasterPoint[][]) in.readObject();
         // create threads
-        List<AbstractRenderThread> threads = startIterate(renderFlames, state, false);
-        return new ResumedFlameRender(header, threads);
+        RenderThreads threads = startIterate(renderFlames, state, false);
+        return new ResumedFlameRender(header, threads.getRenderThreads());
       }
       finally {
         in.close();

@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -112,12 +113,14 @@ public abstract class AbstractControlsDelegate {
     boolean controlEnabled = false;
     boolean curveBtnEnabled = false;
     boolean mainButtonEnabled = false;
+    boolean hasCurve = false;
     if (!pDisabled && isEnabled()) {
       controlEnabled = true;
       if (pPropertyName != null && pPropertyName.length() > 0) {
         MotionCurve curve = getCurveToEdit(pPropertyName);
         curveBtnEnabled = true;
         mainButtonEnabled = !curve.isEnabled();
+        hasCurve = curve.isEnabled();
       }
       else {
         curveBtnEnabled = false;
@@ -125,6 +128,10 @@ public abstract class AbstractControlsDelegate {
       }
     }
     pMainButton.setEnabled(controlEnabled && mainButtonEnabled);
+    if (hasCurve)
+      pCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
+    else
+      pCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
     pCurveBtn.setEnabled(controlEnabled && curveBtnEnabled);
   }
 
@@ -132,12 +139,14 @@ public abstract class AbstractControlsDelegate {
     boolean controlEnabled = false;
     boolean curveBtnEnabled = false;
     boolean spinnerEnabled = false;
+    boolean hasCurve = false;
     if (!pDisabled && isEnabled()) {
       controlEnabled = true;
       if (pPropertyName != null && pPropertyName.length() > 0) {
         MotionCurve curve = getCurveToEdit(pPropertyName);
         curveBtnEnabled = true;
         spinnerEnabled = !curve.isEnabled();
+        hasCurve = curve.isEnabled();
       }
       else {
         curveBtnEnabled = false;
@@ -147,20 +156,27 @@ public abstract class AbstractControlsDelegate {
     pSender.setEnabled(controlEnabled);
     pSender.enableMotionCurveBtn(controlEnabled && curveBtnEnabled);
     pSender.enableSpinnerField(controlEnabled && spinnerEnabled);
+    setupStyle(pSender, hasCurve);
     if (pSender.getLinkedMotionControl() != null) {
       pSender.getLinkedMotionControl().setEnabled(controlEnabled && spinnerEnabled);
     }
+  }
+
+  private void setupStyle(JWFNumberField pSender, boolean pHasCurve) {
+    pSender.setHasCurve(pHasCurve);
   }
 
   public void enableControl(JWFNumberField pSender, MotionCurve pCurve, boolean pDisabled) {
     boolean controlEnabled = false;
     boolean curveBtnEnabled = false;
     boolean spinnerEnabled = false;
+    boolean hasCurve = false;
     if (!pDisabled && isEnabled()) {
       controlEnabled = true;
       if (pCurve != null) {
         curveBtnEnabled = true;
         spinnerEnabled = !pCurve.isEnabled();
+        hasCurve = pCurve.isEnabled();
       }
       else {
         curveBtnEnabled = false;
@@ -170,6 +186,7 @@ public abstract class AbstractControlsDelegate {
     pSender.setEnabled(controlEnabled);
     pSender.enableMotionCurveBtn(controlEnabled && curveBtnEnabled);
     pSender.enableSpinnerField(controlEnabled && spinnerEnabled);
+    setupStyle(pSender, hasCurve);
     if (pSender.getLinkedMotionControl() != null) {
       pSender.getLinkedMotionControl().setEnabled(controlEnabled && spinnerEnabled);
     }

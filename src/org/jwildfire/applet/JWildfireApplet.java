@@ -9,7 +9,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -33,6 +32,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderThreads;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ImagePanel;
@@ -64,7 +64,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   }
 
   private State state = State.IDLE;
-  private List<AbstractRenderThread> threads;
+  private RenderThreads threads;
   private FlameRenderer renderer;
   private final Prefs prefs = Prefs.getPrefs();
   private Flame currFlame;
@@ -144,7 +144,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     if (state == State.RENDER) {
       while (true) {
         boolean done = true;
-        for (AbstractRenderThread thread : threads) {
+        for (AbstractRenderThread thread : threads.getRenderThreads()) {
           if (!thread.isFinished()) {
             done = false;
             thread.cancel();

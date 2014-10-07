@@ -275,10 +275,10 @@ public class PrefsReader {
 
   private void setupDefaultTinaMacroButtons(Prefs pPrefs) {
     if (pPrefs.getTinaMacroButtons().size() == 0) {
-      addMacroButton(pPrefs, "Buckballs", "Buckballs by DT", "scripts/Buckballs by DT.jwfscript");
       addMacroButton(pPrefs, "EschFlx", "Escher Flux", "scripts/Escher Flux.jwfscript");
-      addMacroButton(pPrefs, "LoonSplt", "LoonieSplits DT", "scripts/LoonieSplits DT.jwfscript");
       addMacroButton(pPrefs, "MobDrgn", "Mobius Dragon", "scripts/Mobius Dragon.jwfscript");
+      addMacroButton(pPrefs, "Heart", "Wrap into Heart", "scripts/Wrap into Heart.jwfscript");
+      addMacroButton(pPrefs, "SubFlame", "Wrap into SubFlame", "scripts/Wrap into SubFlame.jwfscript");
       addMacroButton(pPrefs, "RndFX", "Add Random Final FX by MH and MO", "scripts/Add Random Final FX by MH and MO.jwfscript");
     }
   }
