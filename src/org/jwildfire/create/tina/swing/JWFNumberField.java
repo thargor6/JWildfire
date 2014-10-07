@@ -427,4 +427,24 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
   public void setMouseSpeed(double pMouseSpeed) {
     mouseSpeed = pMouseSpeed;
   }
+
+  public JSpinner getSpinnerField() {
+    return spinnerField;
+  }
+
+  public JButton getMotionCurveBtn() {
+    return motionCurveBtn;
+  }
+
+  public void setHasCurve(boolean pHasCurve) {
+    if (motionCurveBtn != null) {
+      if (pHasCurve)
+        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2a.png")));
+      else
+        motionCurveBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+    }
+    if (spinnerField != null) {
+      spinnerField.setVisible(!pHasCurve);
+    }
+  }
 }

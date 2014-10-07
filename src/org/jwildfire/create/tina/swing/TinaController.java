@@ -305,6 +305,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.frameSliderPanel, parameterObject.keyframesFrameLbl, parameterObject.keyframesFrameCountLbl,
         parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton);
 
+    data.toggleDetachedPreviewButton = parameterObject.toggleDetachedPreviewButton;
     data.cameraRollREd = parameterObject.pCameraRollREd;
     data.cameraRollSlider = parameterObject.pCameraRollSlider;
     data.cameraPitchREd = parameterObject.pCameraPitchREd;
@@ -1168,6 +1169,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+    if (pQuickRender && detachedPreviewController != null && pDownScale == 1) {
+      detachedPreviewController.setFlame(getCurrFlame());
+    }
+
     //    System.out.println("  R" + rCount++);
     FlamePanel imgPanel = getFlamePanel();
     FlamePanelConfig cfg = getFlamePanelConfig();
@@ -5468,6 +5473,30 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void resetGridToDefaults() {
     flamePanel.resetGridToDefaults();
     refreshFlameImage(false);
+  }
+
+  DetachedPreviewWindow detachedPreviewWindow;
+  DetachedPreviewController detachedPreviewController;
+
+  public void openDetachedPreview() {
+    closeDetachedPreview();
+    detachedPreviewWindow = new DetachedPreviewWindow();
+    detachedPreviewController = new DetachedPreviewController(detachedPreviewWindow, data.toggleDetachedPreviewButton);
+    detachedPreviewWindow.setController(detachedPreviewController);
+    detachedPreviewWindow.getFrame().setVisible(true);
+    detachedPreviewController.setFlame(getCurrFlame());
+  }
+
+  public void closeDetachedPreview() {
+    if (detachedPreviewController != null) {
+      detachedPreviewController.cancelRender();
+      detachedPreviewController = null;
+    }
+    if (detachedPreviewWindow != null) {
+      detachedPreviewWindow.onClose(false);
+      detachedPreviewWindow.getFrame().setVisible(false);
+      detachedPreviewWindow = null;
+    }
   }
 
 }
