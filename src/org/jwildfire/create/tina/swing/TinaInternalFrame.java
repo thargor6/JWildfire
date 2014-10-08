@@ -742,6 +742,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCenterPanel.add(getCenterNorthPanel(), BorderLayout.NORTH);
       tinaCenterPanel.add(getCenterWestPanel(), BorderLayout.WEST);
       tinaCenterPanel.add(getCenterCenterPanel(), BorderLayout.CENTER);
+      tinaCenterPanel.add(getMacroButtonHorizRootPanel(), BorderLayout.SOUTH);
     }
     return tinaCenterPanel;
   }
@@ -4638,7 +4639,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
-        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider());
+        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
+        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel());
 
     tinaController = new TinaController(params);
 
@@ -10705,6 +10707,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientResetBtn;
   private JWFNumberField tinaWhiteLevelREd;
   private JSlider tinaWhiteLevelSlider;
+  private JPanel panel_109;
+  private JPanel macroButtonHorizRootPanel;
+  private JScrollPane macroButtonsHorizScrollPane;
+  private JPanel macroButtonHorizPanel;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -22348,6 +22354,36 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaWhiteLevelSlider() {
     return tinaWhiteLevelSlider;
+  }
+
+  private JPanel getMacroButtonHorizRootPanel() {
+    if (macroButtonHorizRootPanel == null) {
+      macroButtonHorizRootPanel = new JPanel();
+      macroButtonHorizRootPanel.setPreferredSize(new Dimension(10, 28));
+      macroButtonHorizRootPanel.setLayout(new BorderLayout(0, 0));
+      macroButtonHorizRootPanel.add(getMacroButtonsHorizScrollPane(), BorderLayout.CENTER);
+    }
+    return macroButtonHorizRootPanel;
+  }
+
+  private JScrollPane getMacroButtonsHorizScrollPane() {
+    if (macroButtonsHorizScrollPane == null) {
+      macroButtonsHorizScrollPane = new JScrollPane();
+      macroButtonsHorizScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+      macroButtonsHorizScrollPane.setViewportView(getMacroButtonHorizPanel());
+    }
+    return macroButtonsHorizScrollPane;
+  }
+
+  private JPanel getMacroButtonHorizPanel() {
+    if (macroButtonHorizPanel == null) {
+      macroButtonHorizPanel = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) macroButtonHorizPanel.getLayout();
+      flowLayout.setHgap(1);
+      flowLayout.setVgap(0);
+      macroButtonHorizPanel.setPreferredSize(new Dimension(10, 28));
+    }
+    return macroButtonHorizPanel;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

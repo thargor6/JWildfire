@@ -105,8 +105,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
 
-  public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.3";
+  public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.5";
+  public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
   public static final String KEY_TINA_MACRO_TOOLBAR_WIDTH = "tina.toolbar.macro.width";
+  public static final String KEY_TINA_MACRO_TOOLBAR_HEIGHT = "tina.toolbar.macro.height";
 
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
@@ -182,7 +184,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
 
-  @Property(description = "Try to keep the program responsible while rendering, the higher values the higher the responsiveness, the lower the render speed", category = PropertyCategory.TINA)
+  @Property(description = "Tries to keep the program responsive while rendering, the higher the value, the more responsiveness, but this also lowers render speed", category = PropertyCategory.TINA)
   private int tinaResponsiveness = 1;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
@@ -213,8 +215,14 @@ public class Prefs extends ManagedObject {
   @Property(description = "Line width of the guides (restart of program after change required)", category = PropertyCategory.TINA)
   private double tinaEditorGuidesLineWidth = 1.6;
 
-  @Property(description = "The width of the macro-toolbar when active (restart of program after change required)", category = PropertyCategory.TINA)
+  @Property(description = "The width of the macro-toolbar when active and in vertical mode (restart of program after change required)", category = PropertyCategory.TINA)
   private int tinaMacroToolbarWidth = 90;
+
+  @Property(description = "The height of the macro-toolbar when active and in horizontal mode (restart of program after change required)", category = PropertyCategory.TINA)
+  private int tinaMacroToolbarHeight = 28;
+
+  @Property(description = "Create a vertical toolbar to hold macro-buttons instead of the horizontal one (restart of program after change required)", category = PropertyCategory.TINA)
+  private boolean tinaMacroButtonsVertical = false;
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
@@ -562,6 +570,8 @@ public class Prefs extends ManagedObject {
     tinaResponsiveness = pSrc.tinaResponsiveness;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
     tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
+    tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
+    tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
 
     tinaEditorGuidesCenterPointColor = new Color(pSrc.tinaEditorGuidesCenterPointColor.getRed(), pSrc.tinaEditorGuidesCenterPointColor.getGreen(), pSrc.tinaEditorGuidesCenterPointColor.getBlue());
     tinaEditorGuidesRuleOfThirdsColor = new Color(pSrc.tinaEditorGuidesRuleOfThirdsColor.getRed(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getGreen(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getBlue());
@@ -1006,6 +1016,22 @@ public class Prefs extends ManagedObject {
     this.tinaMacroToolbarWidth = tinaMacroToolbarWidth;
     if (this.tinaMacroToolbarWidth < 16)
       this.tinaMacroToolbarWidth = 16;
+  }
+
+  public boolean isTinaMacroButtonsVertical() {
+    return tinaMacroButtonsVertical;
+  }
+
+  public void setTinaMacroButtonsVertical(boolean tinaMacroButtonsVertical) {
+    this.tinaMacroButtonsVertical = tinaMacroButtonsVertical;
+  }
+
+  public int getTinaMacroToolbarHeight() {
+    return tinaMacroToolbarHeight;
+  }
+
+  public void setTinaMacroToolbarHeight(int tinaMacroToolbarHeight) {
+    this.tinaMacroToolbarHeight = tinaMacroToolbarHeight;
   }
 
 }

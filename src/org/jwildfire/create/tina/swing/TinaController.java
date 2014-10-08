@@ -685,8 +685,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xaosViewAsToBtn = parameterObject.xaosViewAsToBtn;
     data.xaosViewAsFromBtn = parameterObject.xaosViewAsFromBtn;
     data.previewEastMainPanel = parameterObject.previewEastMainPanel;
-    data.macroButtonPanel = parameterObject.macroButtonPanel;
+    data.macroButtonVertPanel = parameterObject.macroButtonVertPanel;
+    data.macroButtonHorizPanel = parameterObject.macroButtonHorizPanel;
     data.gradientResetBtn = parameterObject.gradientResetBtn;
+    data.macroButtonHorizRootPanel = parameterObject.macroButtonHorizRootPanel;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
@@ -5428,11 +5430,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return gradientControls;
   }
 
+  final int DFLT_VERT_TOOLBAR_SIZE = 52;
+
   public void refreshMacroButtonsPanel() {
-    final int DFLT_TOOLBAR_SIZE = 52;
-    data.macroButtonPanel.removeAll();
+    if (prefs.isTinaMacroButtonsVertical()) {
+      data.macroButtonHorizRootPanel.setPreferredSize(new Dimension(0, 0));
+      data.macroButtonHorizRootPanel.setVisible(false);
+      refreshMacroButtonsPanelVertical();
+    }
+    else {
+      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_VERT_TOOLBAR_SIZE, 0));
+      refreshMacroButtonsPanelHorizontal();
+    }
+  }
+
+  public void refreshMacroButtonsPanelVertical() {
+    data.macroButtonVertPanel.removeAll();
     if (prefs.getTinaMacroButtons().size() == 0) {
-      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_TOOLBAR_SIZE, 0));
+      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_VERT_TOOLBAR_SIZE, 0));
     }
     else {
       int toolbarWidth = prefs.getTinaMacroToolbarWidth();
@@ -5440,9 +5455,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       int buttonWidth = prefs.getTinaMacroToolbarWidth() - 16;
       int buttonHeight = 24;
       int toolbarHeight = buttonHeight * prefs.getTinaMacroButtons().size() + gap * (prefs.getTinaMacroButtons().size() - 1);
-      data.macroButtonPanel.setPreferredSize(new Dimension(toolbarWidth, toolbarHeight));
+      data.macroButtonVertPanel.setPreferredSize(new Dimension(toolbarWidth, toolbarHeight));
 
-      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_TOOLBAR_SIZE + toolbarWidth, 0));
+      data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_VERT_TOOLBAR_SIZE + toolbarWidth, 0));
       for (final MacroButton macroButton : prefs.getTinaMacroButtons()) {
         JButton button = new JButton();
         button.setFont(new Font("Dialog", Font.BOLD, 9));
@@ -5469,12 +5484,60 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             runScript(macroButton.getMacro(), macroButton.isInternal());
           }
         });
-        data.macroButtonPanel.add(button);
+        data.macroButtonVertPanel.add(button);
       }
     }
     data.previewEastMainPanel.invalidate();
     data.previewEastMainPanel.getParent().validate();
     data.previewEastMainPanel.getParent().repaint();
+  }
+
+  public void refreshMacroButtonsPanelHorizontal() {
+    data.macroButtonHorizPanel.removeAll();
+    if (prefs.getTinaMacroButtons().size() == 0) {
+      data.macroButtonHorizRootPanel.setPreferredSize(new Dimension(0, 0));
+    }
+    else {
+      int toolbarHeight = prefs.getTinaMacroToolbarHeight();
+      int gap = 1;
+      int buttonWidth = prefs.getTinaMacroToolbarWidth();
+      int buttonHeight = 24;
+      int toolbarWidth = buttonWidth * prefs.getTinaMacroButtons().size() + gap * (prefs.getTinaMacroButtons().size() - 1);
+      data.macroButtonHorizPanel.setPreferredSize(new Dimension(toolbarWidth, toolbarHeight));
+
+      data.macroButtonHorizRootPanel.setPreferredSize(new Dimension(0, toolbarHeight + 2));
+      for (final MacroButton macroButton : prefs.getTinaMacroButtons()) {
+        JButton button = new JButton();
+        button.setFont(new Font("Dialog", Font.BOLD, 9));
+        button.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
+        button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
+        button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        if (macroButton.getCaption() != null && macroButton.getCaption().length() > 0) {
+          button.setText(macroButton.getCaption());
+        }
+        if (macroButton.getHint() != null && macroButton.getHint().length() > 0) {
+          button.setToolTipText(macroButton.getHint());
+        }
+        if (macroButton.getImage() != null && macroButton.getImage().length() > 0) {
+          try {
+            button.setIconTextGap(0);
+            button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        button.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent e) {
+            runScript(macroButton.getMacro(), macroButton.isInternal());
+          }
+        });
+        data.macroButtonHorizPanel.add(button);
+      }
+    }
+    data.macroButtonHorizRootPanel.invalidate();
+    data.macroButtonHorizRootPanel.getParent().validate();
+    data.macroButtonHorizRootPanel.getParent().repaint();
   }
 
   public void runScript(String filename, boolean internal) {

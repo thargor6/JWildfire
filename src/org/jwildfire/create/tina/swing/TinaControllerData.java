@@ -397,11 +397,13 @@ public class TinaControllerData {
   public JRadioButton xaosViewAsToBtn;
   public JRadioButton xaosViewAsFromBtn;
   public JPanel previewEastMainPanel;
-  public JPanel macroButtonPanel;
+  public JPanel macroButtonVertPanel;
+  public JPanel macroButtonHorizPanel;
   public JTable macroButtonsTable;
   public JButton macroButtonMoveUpBtn;
   public JButton macroButtonMoveDownBtn;
   public JButton macroButtonDeleteBtn;
   public JToggleButton toggleDetachedPreviewButton;
   public JButton gradientResetBtn;
+  public JPanel macroButtonHorizRootPanel;
 }

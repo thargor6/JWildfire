@@ -76,6 +76,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS, pPrefs.getTinaEditorGuidesRuleOfThirdsColor());
     addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor());
     addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_LINE_WIDTH, pPrefs.getTinaEditorGuidesLineWidth());
+    addValue(sb, Prefs.KEY_TINA_VERTICAL_MACRO_BUTTONS, pPrefs.isTinaMacroButtonsVertical());
 
     // resolution profiles
     addValue(sb, Prefs.KEY_TINA_PROFILE_RESOLUTION_COUNT, pPrefs.getResolutionProfiles().size());
@@ -109,6 +110,7 @@ public class PrefsWriter {
     // macro buttons
     addValue(sb, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons());
     addValue(sb, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth());
+    addValue(sb, Prefs.KEY_TINA_MACRO_TOOLBAR_HEIGHT, pPrefs.getTinaMacroToolbarHeight());
     addValue(sb, MacroButton.KEY_MACRO_BUTTON_COUNT, pPrefs.getTinaMacroButtons().size());
     for (int i = 0; i < pPrefs.getTinaMacroButtons().size(); i++) {
       MacroButton macroButton = pPrefs.getTinaMacroButtons().get(i);

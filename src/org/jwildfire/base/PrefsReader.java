@@ -130,6 +130,7 @@ public class PrefsReader {
         pPrefs.setTinaEditorGuidesRuleOfThirdsColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS, pPrefs.getTinaEditorGuidesRuleOfThirdsColor()));
         pPrefs.setTinaEditorGuidesGoldenRatioColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor()));
         pPrefs.setTinaEditorGuidesLineWidth(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_LINE_WIDTH, pPrefs.getTinaEditorGuidesLineWidth()));
+        pPrefs.setTinaMacroButtonsVertical(getBooleanProperty(props, Prefs.KEY_TINA_VERTICAL_MACRO_BUTTONS, pPrefs.isTinaMacroButtonsVertical()));
 
         try {
           FlamePanelControlStyle style = FlamePanelControlStyle.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_STYLE, pPrefs.getTinaEditorControlsStyle().toString()));
@@ -232,6 +233,7 @@ public class PrefsReader {
         // macro buttons
         pPrefs.setCreateTinaDefaultMacroButtons(getBooleanProperty(props, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons()));
         pPrefs.setTinaMacroToolbarWidth(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_WIDTH, pPrefs.getTinaMacroToolbarWidth()));
+        pPrefs.setTinaMacroToolbarHeight(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_HEIGHT, pPrefs.getTinaMacroToolbarHeight()));
         {
           int count = getIntProperty(props, MacroButton.KEY_MACRO_BUTTON_COUNT, 0);
           Prefs.getPrefs().getTinaMacroButtons().clear();
