@@ -174,45 +174,12 @@ public class GammaCorrectionFilter {
   }
 
   private static final double COLORSCL = 255.0;
+  private static final double HDRSCL = 0.042;
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
-    double logScl;
-    if (logDensityPnt.intensity > 0.0) {
-      double alpha;
-      if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
-        double frac = logDensityPnt.intensity / flame.getGammaThreshold();
-        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
-      }
-      else {
-        alpha = pow(logDensityPnt.intensity, gamma);
-      }
-      logScl = vibDouble * alpha / logDensityPnt.intensity;
-
-      if (alpha < 0)
-        alpha = 0;
-      else if (alpha > 1.0)
-        alpha = 1.0;
-
-      double red, green, blue;
-      if (inverseVibDouble > 0.0) {
-        red = logScl * logDensityPnt.red + inverseVibDouble * pow(logDensityPnt.red, gamma);
-        green = logScl * logDensityPnt.green + inverseVibDouble * pow(logDensityPnt.green, gamma);
-        blue = logScl * logDensityPnt.blue + inverseVibDouble * pow(logDensityPnt.blue, gamma);
-      }
-      else {
-        red = logScl * logDensityPnt.red;
-        green = logScl * logDensityPnt.green;
-        blue = logScl * logDensityPnt.blue;
-      }
-      pHDRPoint.red = (float) red;
-      pHDRPoint.green = (float) green;
-      pHDRPoint.blue = (float) blue;
-    }
-    else {
-      pHDRPoint.red = (float) -1.0;
-      pHDRPoint.green = (float) -1.0;
-      pHDRPoint.blue = (float) -1.0;
-    }
+    pHDRPoint.red = (float) (logDensityPnt.red * HDRSCL);
+    pHDRPoint.green = (float) (logDensityPnt.green * HDRSCL);
+    pHDRPoint.blue = (float) (logDensityPnt.blue * HDRSCL);
   }
 
   public static class HSLRGBConverter {
