@@ -83,7 +83,7 @@ public class DetachedPreviewController implements IterationObserver {
 
   public void setFlame(Flame pFlame) {
     cancelRender();
-    flame = pFlame;
+    flame = pFlame != null ? pFlame.makeCopy() : null;
     startRender();
   }
 

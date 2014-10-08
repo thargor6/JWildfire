@@ -428,11 +428,11 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     mouseSpeed = pMouseSpeed;
   }
 
-  public JSpinner getSpinnerField() {
+  public JSpinner exposeInternalSpinnerField() {
     return spinnerField;
   }
 
-  public JButton getMotionCurveBtn() {
+  public JButton exposeInternalMotionCurveBtn() {
     return motionCurveBtn;
   }
 

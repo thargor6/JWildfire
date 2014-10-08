@@ -351,6 +351,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.brightnessSlider = parameterObject.pBrightnessSlider;
     data.contrastREd = parameterObject.pContrastREd;
     data.contrastSlider = parameterObject.pContrastSlider;
+    data.whiteLevelREd = parameterObject.whiteLevelREd;
+    data.whiteLevelSlider = parameterObject.whiteLevelSlider;
     data.gammaREd = parameterObject.pGammaREd;
     data.gammaSlider = parameterObject.pGammaSlider;
     data.vibrancyREd = parameterObject.pVibrancyREd;

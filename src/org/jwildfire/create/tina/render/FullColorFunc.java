@@ -21,6 +21,7 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.envelope.Envelope;
 
 public class FullColorFunc implements ColorFunc {
+  private AbstractRandomGenerator randGen;
   private Envelope rrEnvelope;
   private Envelope rgEnvelope;
   private Envelope rbEnvelope;
@@ -33,21 +34,22 @@ public class FullColorFunc implements ColorFunc {
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
-    return rrEnvelope.evaluate(pR) + rgEnvelope.evaluate(pG) + rbEnvelope.evaluate(pB);
+    return rrEnvelope.evaluate(pR) + rgEnvelope.evaluate(pG) + rbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
-    return grEnvelope.evaluate(pR) + ggEnvelope.evaluate(pG) + gbEnvelope.evaluate(pB);
+    return grEnvelope.evaluate(pR) + ggEnvelope.evaluate(pG) + gbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
-    return brEnvelope.evaluate(pR) + bgEnvelope.evaluate(pG) + bbEnvelope.evaluate(pB);
+    return brEnvelope.evaluate(pR) + bgEnvelope.evaluate(pG) + bbEnvelope.evaluate(pB) + noise();
   }
 
   @Override
   public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
+    randGen = pRandGen;
     rrEnvelope = pFlame.getMixerRRCurve().toEnvelope();
     rrEnvelope.setUseBisection(true);
     rgEnvelope = pFlame.getMixerRGCurve().toEnvelope();
@@ -68,4 +70,7 @@ public class FullColorFunc implements ColorFunc {
     bbEnvelope.setUseBisection(true);
   }
 
+  private double noise() {
+    return 0.0 - randGen.random();
+  }
 }

@@ -49,6 +49,7 @@ public class AbstractFlameReader {
   public static final String ATTR_GAMMA_THRESHOLD = "gamma_threshold";
   public static final String ATTR_VIBRANCY = "vibrancy";
   public static final String ATTR_CONTRAST = "contrast";
+  public static final String ATTR_WHITE_LEVEL = "white_level";
   public static final String ATTR_INDEX = "index";
   public static final String ATTR_RGB = "rgb";
   public static final String ATTR_CAM_PITCH = "cam_pitch";
@@ -214,6 +215,9 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_CONTRAST)) != null) {
       pFlame.setContrast(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WHITE_LEVEL)) != null) {
+      pFlame.setWhiteLevel(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_PERSP)) != null) {
       pFlame.setCamPerspective(Double.parseDouble(hs));
@@ -515,7 +519,7 @@ public class AbstractFlameReader {
       }
     }
     switch (pFlame.getChannelMixerMode()) {
-      case GAMMA:
+      case BRIGHTNESS:
         readMotionCurveAttributes(atts, pFlame.getMixerRRCurve(), ATTR_CHANNEL_MIXER_RR_CURVE + "_");
         break;
       case RGB:

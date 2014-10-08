@@ -134,7 +134,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve gammaThresholdCurve = new MotionCurve();
   private double pixelsPerUnit;
   private final MotionCurve pixelsPerUnitCurve = new MotionCurve();
-  private int whiteLevel;
+  private double whiteLevel;
+  private final MotionCurve whiteLevelCurve = new MotionCurve();
   @AnimAware
   private double brightness;
   private final MotionCurve brightnessCurve = new MotionCurve();
@@ -261,7 +262,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     gammaThreshold = 0.01;
     vibrancy = 1;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
-    whiteLevel = 200;
+    whiteLevel = 200.0;
     saturation = 1.0;
   }
 
@@ -388,11 +389,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.pixelsPerUnit = pixelsPerUnit;
   }
 
-  public int getWhiteLevel() {
+  public double getWhiteLevel() {
     return whiteLevel;
   }
 
-  public void setWhiteLevel(int whiteLevel) {
+  public void setWhiteLevel(double whiteLevel) {
     this.whiteLevel = whiteLevel;
   }
 
@@ -661,6 +662,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     pixelsPerUnit = pFlame.pixelsPerUnit;
     pixelsPerUnitCurve.assign(pFlame.pixelsPerUnitCurve);
     whiteLevel = pFlame.whiteLevel;
+    whiteLevelCurve.assign(pFlame.whiteLevelCurve);
     brightness = pFlame.brightness;
     brightnessCurve.assign(pFlame.brightnessCurve);
     saturation = pFlame.saturation;
@@ -762,7 +764,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
         (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) || !gammaThresholdCurve.isEqual(pFlame.gammaThresholdCurve) ||
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
-        (whiteLevel != pFlame.whiteLevel) ||
+        (whiteLevel != pFlame.whiteLevel) || !whiteLevelCurve.isEqual(pFlame.whiteLevelCurve) ||
         (fabs(brightness - pFlame.brightness) > EPSILON) || !brightnessCurve.isEqual(pFlame.brightnessCurve) ||
         (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||

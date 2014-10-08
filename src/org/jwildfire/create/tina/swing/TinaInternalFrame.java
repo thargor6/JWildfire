@@ -1664,7 +1664,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      bgTransparencyCBx.setBounds(451, 53, 197, 18);
+      bgTransparencyCBx.setBounds(649, 17, 197, 18);
       tinaColoringPanel.add(bgTransparencyCBx);
       tinaColoringPanel.add(getBackgroundColorIndicatorBtn());
 
@@ -1674,7 +1674,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBackgroundColor.setPreferredSize(new Dimension(94, 22));
       lblBackgroundColor.setLocation(new Point(4, 4));
       lblBackgroundColor.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblBackgroundColor.setBounds(451, 4, 94, 22);
+      lblBackgroundColor.setBounds(451, 17, 94, 22);
       tinaColoringPanel.add(lblBackgroundColor);
 
       JLabel tinaSaturationLbl = new JLabel();
@@ -1744,6 +1744,75 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaColoringPanel.add(tinaSaturationSlider);
       tinaColoringPanel.add(getResetColoringOptionsButton());
+
+      JLabel lblFadeToWhite = new JLabel();
+      lblFadeToWhite.setToolTipText("Color Level at which colors are faded to white");
+      lblFadeToWhite.setText("Fade to White");
+      lblFadeToWhite.setSize(new Dimension(94, 22));
+      lblFadeToWhite.setPreferredSize(new Dimension(94, 22));
+      lblFadeToWhite.setName("tinaWhiteLevelLbl");
+      lblFadeToWhite.setLocation(new Point(4, 100));
+      lblFadeToWhite.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFadeToWhite.setBounds(451, 71, 94, 22);
+      tinaColoringPanel.add(lblFadeToWhite);
+
+      tinaWhiteLevelREd = new JWFNumberField();
+      tinaWhiteLevelREd.setValueStep(3.0);
+      tinaWhiteLevelREd.setText("");
+      tinaWhiteLevelREd.setSize(new Dimension(100, 24));
+      tinaWhiteLevelREd.setPreferredSize(new Dimension(100, 24));
+      tinaWhiteLevelREd.setMotionPropertyName("saturation");
+      tinaWhiteLevelREd.setMinValue(20);
+      tinaWhiteLevelREd.setMaxValue(500.0);
+      tinaWhiteLevelREd.setLocation(new Point(100, 100));
+      tinaWhiteLevelREd.setLinkedMotionControlName("tinaWhiteLevelSlider");
+      tinaWhiteLevelREd.setLinkedLabelControlName("tinaWhiteLevelLbl");
+      tinaWhiteLevelREd.setHasMinValue(true);
+      tinaWhiteLevelREd.setHasMaxValue(true);
+      tinaWhiteLevelREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaWhiteLevelREd.setBounds(547, 71, 100, 24);
+      tinaWhiteLevelREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaWhiteLevelREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!tinaWhiteLevelREd.isMouseAdjusting() || tinaWhiteLevelREd.getMouseChangeCount() == 0) {
+              if (!tinaWhiteLevelSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().whiteLevelREd_changed();
+          }
+        }
+      });
+
+      tinaColoringPanel.add(tinaWhiteLevelREd);
+
+      tinaWhiteLevelSlider = new JSlider();
+      tinaWhiteLevelSlider.setValue(0);
+      tinaWhiteLevelSlider.setSize(new Dimension(220, 19));
+      tinaWhiteLevelSlider.setPreferredSize(new Dimension(220, 19));
+      tinaWhiteLevelSlider.setName("tinaWhiteLevelSlider");
+      tinaWhiteLevelSlider.setMinimum(20);
+      tinaWhiteLevelSlider.setMaximum(500);
+      tinaWhiteLevelSlider.setLocation(new Point(202, 100));
+      tinaWhiteLevelSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaWhiteLevelSlider.setBounds(649, 71, 220, 19);
+      tinaWhiteLevelSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaWhiteLevelSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().whiteLevelSlider_stateChanged(e);
+        }
+      });
+      tinaColoringPanel.add(tinaWhiteLevelSlider);
     }
     return tinaColoringPanel;
   }
@@ -4569,7 +4638,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetAntialiasOptionsButton(), getResetShadingSettingsBtn(), getResetStereo3DSettingsBtn(), getResetPostSymmetrySettingsBtn(),
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
-        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn());
+        getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider());
 
     tinaController = new TinaController(params);
 
@@ -4607,7 +4676,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       getChannelMixerModeCmb().removeAllItems();
       getChannelMixerModeCmb().addItem(ChannelMixerMode.OFF);
-      getChannelMixerModeCmb().addItem(ChannelMixerMode.GAMMA);
+      getChannelMixerModeCmb().addItem(ChannelMixerMode.BRIGHTNESS);
       getChannelMixerModeCmb().addItem(ChannelMixerMode.RGB);
       getChannelMixerModeCmb().addItem(ChannelMixerMode.FULL);
 
@@ -10634,6 +10703,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel macroButtonPanel;
   private JToggleButton toggleDetachedPreviewButton;
   private JButton gradientResetBtn;
+  private JWFNumberField tinaWhiteLevelREd;
+  private JSlider tinaWhiteLevelSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16308,7 +16379,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorIndicatorBtn.setPreferredSize(new Dimension(190, 24));
       backgroundColorIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      backgroundColorIndicatorBtn.setBounds(544, 4, 56, 46);
+      backgroundColorIndicatorBtn.setBounds(547, 4, 56, 46);
     }
     return backgroundColorIndicatorBtn;
   }
@@ -22269,6 +22340,14 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return gradientResetBtn;
+  }
+
+  public JWFNumberField getTinaWhiteLevelREd() {
+    return tinaWhiteLevelREd;
+  }
+
+  public JSlider getTinaWhiteLevelSlider() {
+    return tinaWhiteLevelSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

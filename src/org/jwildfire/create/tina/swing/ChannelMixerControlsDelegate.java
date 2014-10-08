@@ -186,7 +186,7 @@ public class ChannelMixerControlsDelegate {
         channelMixerPanels.get(PANEL_BG).setVisible(false);
         channelMixerPanels.get(PANEL_BB).setVisible(false);
         break;
-      case GAMMA:
+      case BRIGHTNESS:
         channelMixerPanels.get(PANEL_RR).setVisible(true);
         channelMixerPanels.get(PANEL_RG).setVisible(false);
         channelMixerPanels.get(PANEL_RB).setVisible(false);

@@ -105,7 +105,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     return res != null ? res : BLACK;
   }
 
-  public RenderColor[] createRenderPalette(int pWhiteLevel) {
+  public RenderColor[] createRenderPalette(double pWhiteLevel) {
     transformColors();
     RenderColor res[] = new RenderColor[PALETTE_SIZE];
     for (int i = 0; i < res.length; i++) {
@@ -153,10 +153,10 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
           b = BLACK.getBlue();
         }
       }
-
-      res[i].red = (r * pWhiteLevel) / 256;
-      res[i].green = (g * pWhiteLevel) / 256;
-      res[i].blue = (b * pWhiteLevel) / 256;
+      double DFLT_WHITE_LEVEL = 200.0;
+      res[i].red = (r * DFLT_WHITE_LEVEL) / 256.0;
+      res[i].green = (g * DFLT_WHITE_LEVEL) / 256.0;
+      res[i].blue = (b * DFLT_WHITE_LEVEL) / 256.0;
     }
     return res;
   }

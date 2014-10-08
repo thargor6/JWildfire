@@ -26,10 +26,10 @@ public enum ChannelMixerMode {
       return null;
     }
   },
-  GAMMA {
+  BRIGHTNESS {
     @Override
     protected Class<? extends ColorFunc> getColorFuncType() {
-      return GammaColorFunc.class;
+      return BrightnessColorFunc.class;
     }
   },
   RGB {

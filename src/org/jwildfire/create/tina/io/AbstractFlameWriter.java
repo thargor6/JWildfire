@@ -32,6 +32,7 @@ import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_LAYER_NAME;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SATURATION;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_WHITE_LEVEL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -188,6 +189,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("gamma_threshold", pFlame.getGammaThreshold()));
     attrList.add(xb.createAttr("vibrancy", pFlame.getVibrancy()));
     attrList.add(xb.createAttr("contrast", pFlame.getContrast()));
+    attrList.add(xb.createAttr(ATTR_WHITE_LEVEL, pFlame.getWhiteLevel()));
     attrList.add(xb.createAttr("temporal_samples", 1.0));
     attrList.add(xb.createAttr("cam_zoom", pFlame.getCamZoom()));
     attrList.add(xb.createAttr("cam_pitch", (pFlame.getCamPitch() * Math.PI) / 180.0));
@@ -316,7 +318,7 @@ public class AbstractFlameWriter {
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_CHANNEL_MIXER_MODE, pFlame.getChannelMixerMode().toString()));
     switch (pFlame.getChannelMixerMode()) {
-      case GAMMA:
+      case BRIGHTNESS:
         writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_CHANNEL_MIXER_RR_CURVE, pFlame.getMixerRRCurve());
         break;
       case RGB:

@@ -116,6 +116,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
     res.add(data.brightnessREd);
     res.add(data.contrastREd);
+    res.add(data.whiteLevelREd);
     res.add(data.vibrancyREd);
     res.add(data.saturationREd);
     res.add(data.gammaREd);
@@ -161,6 +162,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
     enableControl(data.brightnessREd, false);
     enableControl(data.contrastREd, false);
+    enableControl(data.whiteLevelREd, false);
     enableControl(data.vibrancyREd, false);
     enableControl(data.saturationREd, false);
     enableControl(data.gammaREd, false);
@@ -419,6 +421,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
   }
 
+  public void whiteLevelREd_changed() {
+    flameTextFieldChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0);
+  }
+
   public void gammaSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA);
   }
@@ -433,6 +439,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void contrastSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+  }
+
+  public void whiteLevelSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0);
   }
 
   public void cameraRollREd_changed() {
@@ -629,6 +639,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.contrastREd.setText(Tools.doubleToString(getCurrFlame().getContrast()));
       data.contrastSlider.setValue(Tools.FTOI(getCurrFlame().getContrast() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+
+      data.whiteLevelREd.setText(Tools.doubleToString(getCurrFlame().getWhiteLevel()));
+      data.whiteLevelSlider.setValue(Tools.FTOI(getCurrFlame().getWhiteLevel()));
 
       data.vibrancyREd.setText(Tools.doubleToString(getCurrFlame().getVibrancy()));
       data.vibrancySlider.setValue(Tools.FTOI(getCurrFlame().getVibrancy() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));

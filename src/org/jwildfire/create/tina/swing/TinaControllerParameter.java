@@ -80,6 +80,8 @@ public class TinaControllerParameter {
   public JSlider pBrightnessSlider;
   public JWFNumberField pContrastREd;
   public JSlider pContrastSlider;
+  public JWFNumberField whiteLevelREd;
+  public JSlider whiteLevelSlider;
   public JWFNumberField pGammaREd;
   public JSlider pGammaSlider;
   public JWFNumberField pVibrancyREd;
@@ -1073,7 +1075,8 @@ public class TinaControllerParameter {
       JRadioButton pXaosViewAsToBtn, JRadioButton pXaosViewAsFromBtn, JToggleButton pToggleDrawGuidesButton,
       JPanel pPreviewEastMainPanel, JPanel pMacroButtonPanel, JButton pScriptAddButtonBtn, JTable pMacroButtonsTable,
       JButton pMacroButtonMoveUpBtn, JButton pMacroButtonMoveDownBtn, JButton pMacroButtonDeleteBtn,
-      JToggleButton pToggleDetachedPreviewButton, JButton pGradientResetBtn) {
+      JToggleButton pToggleDetachedPreviewButton, JButton pGradientResetBtn, JWFNumberField pWhiteLevelREd,
+      JSlider pWhiteLevelSlider) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1196,5 +1199,7 @@ public class TinaControllerParameter {
     macroButtonDeleteBtn = pMacroButtonDeleteBtn;
     toggleDetachedPreviewButton = pToggleDetachedPreviewButton;
     gradientResetBtn = pGradientResetBtn;
+    whiteLevelREd = pWhiteLevelREd;
+    whiteLevelSlider = pWhiteLevelSlider;
   }
 }

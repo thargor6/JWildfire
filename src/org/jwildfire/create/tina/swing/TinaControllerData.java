@@ -87,6 +87,8 @@ public class TinaControllerData {
   public JSlider brightnessSlider;
   public JWFNumberField contrastREd;
   public JSlider contrastSlider;
+  public JWFNumberField whiteLevelREd;
+  public JSlider whiteLevelSlider;
   public JWFNumberField gammaREd;
   public JSlider gammaSlider;
   public JWFNumberField vibrancyREd;
