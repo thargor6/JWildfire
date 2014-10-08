@@ -341,7 +341,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
             catch (InterruptedException e) {
               e.printStackTrace();
             }
-            break;
           }
         }
         if (done) {

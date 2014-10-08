@@ -127,13 +127,18 @@ public class DetachedPreviewController implements IterationObserver {
     if (state == State.PAUSE) {
       togglePause();
     }
-    for (Thread thread : threads.getExecutingThreads()) {
-      try {
-        thread.setPriority(Thread.NORM_PRIORITY);
+    try {
+      for (Thread thread : threads.getExecutingThreads()) {
+        try {
+          thread.setPriority(Thread.NORM_PRIORITY);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
     }
     if (state == State.RENDER) {
       while (true) {
@@ -148,7 +153,6 @@ public class DetachedPreviewController implements IterationObserver {
             catch (InterruptedException e) {
               e.printStackTrace();
             }
-            break;
           }
         }
         if (done) {
