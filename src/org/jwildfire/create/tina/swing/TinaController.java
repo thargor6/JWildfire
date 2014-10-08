@@ -1155,7 +1155,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void setLastGradient(RGBPalette pGradient) {
     _lastGradient = pGradient != null ? pGradient.makeDeepCopy() : null;
-    System.out.println("SET");
   }
 
   protected void deRegisterFromEditor(Flame pFlame, Layer pLayer) {
@@ -1179,7 +1178,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       detachedPreviewController.setFlame(getCurrFlame());
     }
 
-    //    System.out.println("  R" + rCount++);
     FlamePanel imgPanel = getFlamePanel();
     FlamePanelConfig cfg = getFlamePanelConfig();
     Rectangle panelBounds = imgPanel.getImageBounds();
@@ -1760,6 +1758,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private void refreshRelWeightsTable() {
     final int COL_TRANSFORM = 0;
     final int COL_WEIGHT = 1;
+    final int COL_FROM = 2;
+    final int COL_TO = 3;
 
     data.relWeightsTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
@@ -1772,16 +1772,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public int getColumnCount() {
-        return 2;
+        return 4;
       }
 
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
           case COL_TRANSFORM:
-            return "From transform A to B";
+            return isXaosViewAsTo() ? "A to B" : "B from A";
           case COL_WEIGHT:
             return "Weight";
+          case COL_FROM:
+            return "From";
+          case COL_TO:
+            return "To";
         }
         return null;
       }
@@ -1797,15 +1801,22 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 return String.valueOf(transformIndex + 1) + " to " + String.valueOf(rowIndex + 1);
               case COL_WEIGHT:
                 return Tools.doubleToString(layer.getXForms().get(transformIndex).getModifiedWeights()[rowIndex]);
+              case COL_FROM:
+                return getXFormCaption(layer.getXForms().get(transformIndex));
+              case COL_TO:
+                return getXFormCaption(layer.getXForms().get(rowIndex));
             }
           }
           else {
             switch (columnIndex) {
               case COL_TRANSFORM:
                 return String.valueOf(transformIndex + 1) + " from " + String.valueOf(rowIndex + 1);
-              case COL_WEIGHT: {
+              case COL_WEIGHT:
                 return Tools.doubleToString(layer.getXForms().get(rowIndex).getModifiedWeights()[transformIndex]);
-              }
+              case COL_FROM:
+                return getXFormCaption(layer.getXForms().get(rowIndex));
+              case COL_TO:
+                return getXFormCaption(layer.getXForms().get(transformIndex));
             }
           }
         }
@@ -5518,7 +5529,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (getLastGradient() != null && getCurrLayer() != null) {
       saveUndoPoint();
       getCurrLayer().setPalette(getLastGradient().makeDeepCopy());
-      System.out.println("RESET");
       refreshUI();
     }
   }
