@@ -18897,7 +18897,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gbc_swfAnimatorMotionBlurTimeStepREd.gridx = 3;
       gbc_swfAnimatorMotionBlurTimeStepREd.gridy = 1;
       panel_87.add(swfAnimatorMotionBlurTimeStepREd, gbc_swfAnimatorMotionBlurTimeStepREd);
-      swfAnimatorMotionBlurTimeStepREd.setValueStep(0.1);
+      swfAnimatorMotionBlurTimeStepREd.setValueStep(0.01);
       swfAnimatorMotionBlurTimeStepREd.setText("0.15");
       swfAnimatorMotionBlurTimeStepREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
@@ -22311,6 +22311,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getToggleDetachedPreviewButton() {
     if (toggleDetachedPreviewButton == null) {
       toggleDetachedPreviewButton = new JToggleButton();
+      toggleDetachedPreviewButton.setMnemonic(KeyEvent.VK_V);
       toggleDetachedPreviewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (toggleDetachedPreviewButton.isSelected()) {
@@ -22321,7 +22322,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      toggleDetachedPreviewButton.setToolTipText("Additionally show changes in external window");
+      toggleDetachedPreviewButton.setToolTipText("Additionally show changes in external window (Press <Alt+V>)");
 
       toggleDetachedPreviewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/view-preview.png")));
       toggleDetachedPreviewButton.setPreferredSize(new Dimension(42, 24));

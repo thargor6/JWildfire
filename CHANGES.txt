@@ -1,4 +1,20 @@
 V2.00 (xx.xx.2014):
+ - reworked the whole HDR-export again, background-color is supported now
+ - 30 new imnages for the launcher
+ - the OpenCl-option is now hidden per default (double-click to image to get it back)
+ 
+ - general note #1: if you have any strange behaviour in the user-interface, please switch back to "Nimbus"-theme, this is the only one which is supported. All others may (should) work, but may not, they are using an external library
+ - general note #2: The HDR-export has slöightly improved again. But it is impossible to satisfy anyone with it, because everybody uses other tools to process those kind of files. The current way of producing them should work for the most people. 
+ 
+ - one more fix to the HDR-export
+ - slightly faster cancel of rendering in interactive renderer/detached preview
+ - macro-bar is horizontal now per default, but this can be changed in the Prefs
+ - renamed the "GAMMA"-colorcurve-type into "BRIGHTNESS"
+ - new property "Fade to White" at the color-tab
+ - two new columns showing the variations/caption in the xaos-view
+ - new "reset"-button to reset gradient to their original state (usual faster to use than undo, which also would work, of course)
+  
+ 
  - created a small detached preview is showing the currently edited flame in constantly increasing quality
  - the fading-slider of the realtime-preview now got a hint and actually can fade the preview to black (thanks to Martin Flink)
  - added more clear indicators to show if a motion curve is present or not  

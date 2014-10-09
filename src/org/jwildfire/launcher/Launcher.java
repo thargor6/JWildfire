@@ -30,6 +30,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -134,8 +136,8 @@ public class Launcher {
       ex.printStackTrace();
     }
 
+    String imageFilename = "";
     try {
-      String imageFilename;
       if (Tools.SPECIAL_VERSION) {
         final int IMG_COUNT = 3;
         int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
@@ -146,7 +148,7 @@ public class Launcher {
         imageFilename = "special" + id + ".jpg";
       }
       else {
-        final int IMG_COUNT = 71;
+        final int IMG_COUNT = 101;
         int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
         String id = String.valueOf(imageIdx);
         while (id.length() < 3) {
@@ -163,6 +165,7 @@ public class Launcher {
       imgPanel.setLayout(null);
     }
     catch (Throwable ex) {
+      System.out.println(imageFilename);
       ex.printStackTrace();
     }
   }
@@ -245,6 +248,7 @@ public class Launcher {
     panel_2.add(debugCmb);
 
     openCLCmb = new JCheckBox("OpenCL (experimental)");
+    openCLCmb.setVisible(false);
     openCLCmb.setToolTipText("Enable experimental OpenCL code");
     openCLCmb.setForeground(SystemColor.menu);
     openCLCmb.setBackground(Color.BLACK);
@@ -346,6 +350,14 @@ public class Launcher {
     scrollPane.setViewportView(logTextArea);
 
     imgDisplayPanel = new JPanel();
+    imgDisplayPanel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
+          openCLCmb.setVisible(true);
+        }
+      }
+    });
     imgDisplayPanel.setBackground(Color.BLACK);
     imgDisplayPanel.setBounds(20, 86, 500, 270);
     mainPanel.add(imgDisplayPanel);
