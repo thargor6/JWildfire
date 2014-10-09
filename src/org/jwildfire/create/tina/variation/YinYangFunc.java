@@ -40,7 +40,7 @@ public class YinYangFunc extends VariationFunc {
   private double ang1 = 0.0;
   private double ang2 = 0.0;
   private int dual_t = 1;
-  private int outside = 1;
+  private int outside = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
