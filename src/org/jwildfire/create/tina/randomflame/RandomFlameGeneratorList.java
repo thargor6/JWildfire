@@ -55,6 +55,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(SynthRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
+    registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
     //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
   }
 

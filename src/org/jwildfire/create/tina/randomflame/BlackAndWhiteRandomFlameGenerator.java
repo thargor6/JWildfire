@@ -59,6 +59,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SubFlameRandomFlameGenerator());
     generators.add(new SynthRandomFlameGenerator());
     generators.add(new TentacleRandomFlameGenerator());
+    generators.add(new XenomorphRandomFlameGenerator());
   }
 
   private static final String RANDGEN = "RANDGEN";

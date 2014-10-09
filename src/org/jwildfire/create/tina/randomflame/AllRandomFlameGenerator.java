@@ -58,6 +58,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SubFlameRandomFlameGenerator());
     allGenerators.add(new SynthRandomFlameGenerator());
     allGenerators.add(new TentacleRandomFlameGenerator());
+    allGenerators.add(new XenomorphRandomFlameGenerator());
     //    allGenerators.add(new ColorMapRandomFlameGenerator());
     // allGenerators.add(new WikimediaCommonsRandomFlameGenerator());
 
