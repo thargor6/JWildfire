@@ -146,6 +146,25 @@ public class GammaCorrectionFilter {
     return res;
   }
 
+  final static double ALPHA_RANGE = 256.0;
+
+  private ColorF addBackgroundF(ColorF pTransfColor, double pInverseAlphaInt) {
+    ColorF res = new ColorF();
+
+    res.r = pTransfColor.r + (pInverseAlphaInt * bgRed) / ALPHA_RANGE;
+    if (res.r < 0.0)
+      res.r = 0.0;
+
+    res.g = pTransfColor.g + (pInverseAlphaInt * bgGreen) / ALPHA_RANGE;
+    if (res.g < 0.0)
+      res.g = 0.0;
+
+    res.b = pTransfColor.b + (pInverseAlphaInt * bgBlue) / ALPHA_RANGE;
+    if (res.b < 0.0)
+      res.b = 0.0;
+    return res;
+  }
+
   private ColorF applyLogScale(LogDensityPoint pLogDensityPnt, double pLogScl) {
     ColorF res = new ColorF();
     double rawRed, rawGreen, rawBlue;
@@ -174,12 +193,40 @@ public class GammaCorrectionFilter {
   }
 
   private static final double COLORSCL = 255.0;
-  private static final double HDRSCL = 0.042;
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint) {
-    pHDRPoint.red = (float) (logDensityPnt.red * HDRSCL);
-    pHDRPoint.green = (float) (logDensityPnt.green * HDRSCL);
-    pHDRPoint.blue = (float) (logDensityPnt.blue * HDRSCL);
+    double logScl;
+    double inverseAlphaInt;
+    if (logDensityPnt.intensity > 0.0) {
+      double alpha;
+      if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
+        double frac = logDensityPnt.intensity / flame.getGammaThreshold();
+        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
+      }
+      else {
+        alpha = pow(logDensityPnt.intensity, gamma);
+      }
+
+      logScl = vibInt * alpha / logDensityPnt.intensity;
+      double alphaInt = alpha * ALPHA_RANGE;
+      if (alphaInt < 0.0)
+        alphaInt = 0.0;
+      else if (alphaInt > ALPHA_RANGE)
+        alphaInt = ALPHA_RANGE;
+      inverseAlphaInt = ALPHA_RANGE - alphaInt;
+
+      ColorF transfColor = applyLogScale(logDensityPnt, logScl);
+      ColorF finalColor = addBackgroundF(transfColor, inverseAlphaInt);
+
+      pHDRPoint.red = (float) (finalColor.r / ALPHA_RANGE);
+      pHDRPoint.green = (float) (finalColor.g / ALPHA_RANGE);
+      pHDRPoint.blue = (float) (finalColor.b / ALPHA_RANGE);
+    }
+    else {
+      pHDRPoint.red = (float) (bgRed / ALPHA_RANGE);
+      pHDRPoint.green = (float) (bgGreen / ALPHA_RANGE);
+      pHDRPoint.blue = (float) (bgBlue / ALPHA_RANGE);
+    }
   }
 
   public static class HSLRGBConverter {

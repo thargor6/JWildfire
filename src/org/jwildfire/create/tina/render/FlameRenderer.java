@@ -468,7 +468,7 @@ public class FlameRenderer {
       GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
       for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
         for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-          logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+          logDensityFilter.transformPoint(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
           pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
@@ -478,7 +478,7 @@ public class FlameRenderer {
     if (pHDRIntensityMap != null) {
       for (int i = 0; i < pHDRIntensityMap.getImageHeight(); i++) {
         for (int j = 0; j < pHDRIntensityMap.getImageWidth(); j++) {
-          logDensityFilter.transformPointHDR(logDensityPnt, j, i);
+          logDensityFilter.transformPoint(logDensityPnt, j, i);
           pHDRIntensityMap.setRGB(j, i, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity);
         }
       }

@@ -95,10 +95,6 @@ public class LogDensityFilter {
     }
   }
 
-  public void transformPointHDR(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    transformPointSimple(pFilteredPnt, pX, pY);
-  }
-
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
     AbstractRasterPoint point = getRasterPoint(pX, pY);
     double logScale;
