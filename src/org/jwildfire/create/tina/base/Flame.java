@@ -281,7 +281,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void resetDOFSettings() {
-    newCamDOF = true;
+    newCamDOF = false;
     camDOFArea = 0.5;
     camDOFExponent = 2.0;
     camDOF = 0.0;
