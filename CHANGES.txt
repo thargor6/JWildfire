@@ -1,3 +1,8 @@
+V2.00 R2 (12.10.2014):
+ - fixed some problems with the detached preview:
+     - rendering should now alwasy been suspended when then window is closed
+ - "new dof" is off per default (as is was off in any other version) 
+
 V2.00 (10.10.2014):
  - new "Xenomomorph"-random-flame-generator
  - reworked the whole HDR-export again, background-color is supported now

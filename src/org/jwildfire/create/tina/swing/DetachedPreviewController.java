@@ -63,6 +63,7 @@ public class DetachedPreviewController implements IterationObserver {
   private Flame flame;
   private State state = State.IDLE;
   private RenderThreads threads;
+  private Thread updateDisplayExecuteThread;
   private FlameRenderer renderer;
   private long sampleCount = 0;
   private long renderStartTime = 0;
@@ -73,6 +74,8 @@ public class DetachedPreviewController implements IterationObserver {
   private boolean refreshing;
   private boolean paused;
   private double currQuality;
+  private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
+  private UpdateDisplayThread updateDisplayThread;
 
   public DetachedPreviewController(DetachedPreviewWindow pDetachedPreviewWindow, JToggleButton pToggleDetachedPreviewButton) {
     detachedPreviewWindow = pDetachedPreviewWindow;
@@ -114,10 +117,20 @@ public class DetachedPreviewController implements IterationObserver {
     sampleCount = 0;
     renderStartTime = System.currentTimeMillis();
     pausedRenderTime = 0;
+
+    displayUpdater = createDisplayUpdater();
+    displayUpdater.setSampleCount(0);
+
     threads = renderer.startRenderFlame(info);
     for (Thread thread : threads.getExecutingThreads()) {
       thread.setPriority(Thread.MIN_PRIORITY);
     }
+
+    updateDisplayThread = new UpdateDisplayThread();
+    updateDisplayExecuteThread = new Thread(updateDisplayThread);
+    updateDisplayExecuteThread.setPriority(Thread.MIN_PRIORITY);
+    updateDisplayExecuteThread.start();
+
     state = State.RENDER;
   }
 
@@ -127,6 +140,11 @@ public class DetachedPreviewController implements IterationObserver {
     if (state == State.PAUSE) {
       togglePause();
     }
+
+    if (updateDisplayThread != null) {
+      updateDisplayThread.cancel();
+    }
+
     try {
       for (Thread thread : threads.getExecutingThreads()) {
         try {
@@ -135,6 +153,10 @@ public class DetachedPreviewController implements IterationObserver {
         catch (Exception ex) {
           ex.printStackTrace();
         }
+      }
+
+      if (updateDisplayExecuteThread != null) {
+        updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
       }
     }
     catch (Exception ex) {
@@ -159,6 +181,20 @@ public class DetachedPreviewController implements IterationObserver {
           break;
         }
       }
+
+      if (updateDisplayThread != null) {
+        while (!updateDisplayThread.isFinished()) {
+          try {
+            updateDisplayThread.cancel();
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        updateDisplayThread = null;
+      }
+
       state = State.IDLE;
     }
   }
@@ -188,10 +224,6 @@ public class DetachedPreviewController implements IterationObserver {
     imageRootPanel.getParent().validate();
   }
 
-  private synchronized void incSampleCount() {
-    sampleCount++;
-  }
-
   private synchronized void updateImage() {
     imageRootPanel.repaint();
   }
@@ -206,32 +238,10 @@ public class DetachedPreviewController implements IterationObserver {
         e.printStackTrace();
       }
     }
-    incSampleCount();
-    if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
-      image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
-      if (sampleCount % 2000 == 0) {
-        updateImage();
-      }
-      if (sampleCount % 4000 == 0) {
-        double quality = pEventSource.getTonemapper().calcDensity(sampleCount);
-        currQuality = quality;
-        updateStats(pEventSource);
-        pEventSource.getTonemapper().setDensity(quality);
-        if (threads != null) {
-          for (AbstractRenderThread thread : threads.getRenderThreads()) {
-            try {
-              thread.getTonemapper().setDensity(quality);
-            }
-            catch (Exception ex) {
-              // no op
-            }
-          }
-        }
-      }
-    }
+    displayUpdater.iterationFinished(pEventSource, pX, pY);
   }
 
-  private void updateStats(AbstractRenderThread pEventSource) {
+  private void updateStats() {
     detachedPreviewWindow.setTitle(state, currQuality);
   }
 
@@ -246,6 +256,7 @@ public class DetachedPreviewController implements IterationObserver {
         refreshing = oldRefreshing;
       }
     }
+    cancelRender();
   }
 
   public void togglePause() {
@@ -267,4 +278,72 @@ public class DetachedPreviewController implements IterationObserver {
   public void setPaused(boolean paused) {
     this.paused = paused;
   }
+
+  private class UpdateDisplayThread implements Runnable {
+    private int nextImageUpdate;
+    private int nextStatsUpdate;
+    private int lastImageUpdateInterval;
+    private boolean cancelSignalled;
+    private boolean finished;
+
+    public UpdateDisplayThread() {
+      nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+      lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
+      nextStatsUpdate = STATS_UPDATE_INTERVAL;
+    }
+
+    @Override
+    public void run() {
+      finished = cancelSignalled = false;
+      try {
+        while (!cancelSignalled) {
+          try {
+            if (--nextImageUpdate <= 0) {
+              lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+              if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+                lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+              }
+              updateImage();
+              nextImageUpdate = lastImageUpdateInterval;
+            }
+            else if (--nextStatsUpdate <= 0) {
+              currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+              updateStats();
+              for (AbstractRenderThread thread : threads.getRenderThreads()) {
+                thread.getTonemapper().setDensity(currQuality);
+              }
+              nextStatsUpdate = STATS_UPDATE_INTERVAL;
+            }
+            else
+              Thread.sleep(1);
+          }
+          catch (Throwable e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      finally {
+        finished = true;
+      }
+    }
+
+    public void cancel() {
+      cancelSignalled = true;
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+  }
+
+  private final static int STATS_UPDATE_INTERVAL = 24;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
+  private final static int MAX_UPDATE_INC_INTERVAL = 20;
+
+  private InteractiveRendererDisplayUpdater createDisplayUpdater() {
+    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image);
+  }
+
 }
