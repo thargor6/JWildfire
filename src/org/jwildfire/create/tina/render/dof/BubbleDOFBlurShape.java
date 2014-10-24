@@ -50,4 +50,9 @@ public class BubbleDOFBlurShape extends AbstractDOFBlurShape {
     pFlame.setCamDOFAngle(0.0);
   }
 
+  @Override
+  public boolean isUseColor() {
+    return false;
+  }
+
 }

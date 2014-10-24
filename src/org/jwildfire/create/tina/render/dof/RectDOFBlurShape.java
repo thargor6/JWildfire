@@ -78,4 +78,9 @@ public class RectDOFBlurShape extends AbstractDOFBlurShape {
     pFlame.setCamDOFParam1(0.67);// width
   }
 
+  @Override
+  public boolean isUseColor() {
+    return false;
+  }
+
 }

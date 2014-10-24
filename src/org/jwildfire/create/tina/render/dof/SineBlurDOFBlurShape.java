@@ -72,4 +72,9 @@ public class SineBlurDOFBlurShape extends AbstractDOFBlurShape {
     pFlame.setCamDOFParam1(1.4);// power
   }
 
+  @Override
+  public boolean isUseColor() {
+    return false;
+  }
+
 }

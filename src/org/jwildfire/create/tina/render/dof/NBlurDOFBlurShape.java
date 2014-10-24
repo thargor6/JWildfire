@@ -77,4 +77,9 @@ public class NBlurDOFBlurShape extends AbstractDOFBlurShape {
     pFlame.setCamDOFParam5(0);// circum circle
   }
 
+  @Override
+  public boolean isUseColor() {
+    return false;
+  }
+
 }

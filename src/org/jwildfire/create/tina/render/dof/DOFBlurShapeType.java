@@ -52,6 +52,12 @@ public enum DOFBlurShapeType {
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
       return HeartDOFBlurShape.class;
     }
+  },
+  SUB_FLAME {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return SubFlameDOFBlurShape.class;
+    }
   };
 
   protected abstract Class<? extends DOFBlurShape> getDOFBlurShapeType();

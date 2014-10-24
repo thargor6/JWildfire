@@ -31,9 +31,9 @@ public class SubFlameWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String RESSOURCE_FLAME = "flame";
-  private static final String PARAM_OFFSETX = "offset_x";
-  private static final String PARAM_OFFSETY = "offset_y";
-  private static final String PARAM_OFFSETZ = "offset_z";
+  public static final String PARAM_OFFSETX = "offset_x";
+  public static final String PARAM_OFFSETY = "offset_y";
+  public static final String PARAM_OFFSETZ = "offset_z";
   private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ };
   private static final String[] ressourceNames = { RESSOURCE_FLAME };
 
@@ -145,7 +145,7 @@ public class SubFlameWFFunc extends VariationFunc {
     }
   }
 
-  private String flameXML = "<flame name=\"JWildfire\" version=\"0.35 (15.01.2012)\" size=\"581 327\" center=\"0.0 0.0\" scale=\"63.5625\" rotate=\"0.0\" oversample=\"1\" color_oversample=\"1\" filter=\"1.0\" quality=\"50.0\" background=\"0.0 0.0 0.0\" brightness=\"4.0\" gamma=\"4.0\" gamma_threshold=\"0.04\" estimator_radius=\"9\" estimator_minimum=\"0\" estimator_curve=\"0.4\" temporal_samples=\"1.0\" cam_zoom=\"1.0\" cam_pitch=\"0.0\" cam_yaw=\"0.0\" cam_persp=\"0.0\" cam_zpos=\"0.0\" cam_dof=\"0.0\" shading_shading=\"FLAT\" >\r\n" +
+  public static final String DFLT_FLAME_XML = "<flame name=\"JWildfire\" version=\"0.35 (15.01.2012)\" size=\"581 327\" center=\"0.0 0.0\" scale=\"63.5625\" rotate=\"0.0\" oversample=\"1\" color_oversample=\"1\" filter=\"1.0\" quality=\"50.0\" background=\"0.0 0.0 0.0\" brightness=\"4.0\" gamma=\"4.0\" gamma_threshold=\"0.04\" estimator_radius=\"9\" estimator_minimum=\"0\" estimator_curve=\"0.4\" temporal_samples=\"1.0\" cam_zoom=\"1.0\" cam_pitch=\"0.0\" cam_yaw=\"0.0\" cam_persp=\"0.0\" cam_zpos=\"0.0\" cam_dof=\"0.0\" shading_shading=\"FLAT\" >\r\n" +
       "  <xform weight=\"37.974195875650885\" color=\"0.0\" symmetry=\"0.6363142683575415\" waves2_wf=\"1.0\" waves2_wf_scalex=\"0.05411632642405888\" waves2_wf_scaley=\"0.07140430473672771\" waves2_wf_freqx=\"5.665411884739101\" waves2_wf_freqy=\"3.5622214535317194\" waves2_wf_use_cos_x=\"0\" waves2_wf_use_cos_y=\"0\" waves2_wf_dampx=\"0.0\" waves2_wf_dampy=\"-0.0749313500620006\" popcorn2=\"1.1747945422649702E-4\" popcorn2_x=\"1.0\" popcorn2_y=\"0.5\" popcorn2_c=\"1.5\" coefs=\"0.29869999951569876 0.9193040710637221 -0.9193040710637221 0.29869999951569876 -1.6842788839099072 2.0224216083110305\" chaos=\"1.0 1.0 1.0\" />\r\n" +
       "  <xform weight=\"0.5\" color=\"0.0\" symmetry=\"-1.0\" spherical3D=\"0.43660175471191676\" coefs=\"1.0 0.0 0.0 1.0 0.0 0.0\" chaos=\"1.0 1.0 1.0\" />\r\n" +
       "  <xform weight=\"0.5\" color=\"0.0\" symmetry=\"-1.0\" linear3D=\"1.0\" coefs=\"0.9321767990927353 -0.36200333594211836 0.36200333594211836 0.9321767990927353 -0.1636856703682093 0.5528632251910492\" chaos=\"1.0 1.0 1.0\" />\r\n" +
@@ -174,6 +174,8 @@ public class SubFlameWFFunc extends VariationFunc {
       "6F04496D04486B0448690347</palette>\r\n" +
       "</flame>\r\n" +
       "";
+
+  private String flameXML = DFLT_FLAME_XML;
 
   @Override
   public String[] getRessourceNames() {

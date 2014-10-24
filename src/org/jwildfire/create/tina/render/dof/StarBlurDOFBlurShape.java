@@ -74,4 +74,9 @@ public class StarBlurDOFBlurShape extends AbstractDOFBlurShape {
     pFlame.setCamDOFParam2(0.40162283177245455973959534526548);// range
   }
 
+  @Override
+  public boolean isUseColor() {
+    return false;
+  }
+
 }

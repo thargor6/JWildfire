@@ -37,4 +37,6 @@ public interface DOFBlurShape {
   void setDefaultParams(Flame pFlame);
 
   void assignParams(Flame pFlame);
+
+  boolean isUseColor();
 }
