@@ -547,8 +547,12 @@ public class AbstractFlameReader {
   public static final String ATTR_WEIGHT = "weight";
   public static final String ATTR_COLOR = "color";
   public static final String ATTR_OPACITY = "opacity";
-  public static final String ATTR_COEFS = "coefs";
-  public static final String ATTR_POST = "post";
+  public static final String ATTR_XY_COEFS = "coefs";
+  public static final String ATTR_XY_POST = "post";
+  public static final String ATTR_YZ_COEFS = "yzCoefs";
+  public static final String ATTR_YZ_POST = "yzPost";
+  public static final String ATTR_ZX_COEFS = "zxCoefs";
+  public static final String ATTR_ZX_POST = "zxPost";
   public static final String ATTR_CHAOS = "chaos";
   public static final String ATTR_SYMMETRY = "symmetry";
   public static final String ATTR_MOD_GAMMA = "mod_gamma";
@@ -629,23 +633,59 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_SYMMETRY)) != null) {
       pXForm.setColorSymmetry(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_COEFS)) != null) {
+    if ((hs = atts.get(ATTR_XY_COEFS)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setCoeff00(Double.parseDouble(s[0]));
-      pXForm.setCoeff01(Double.parseDouble(s[1]));
-      pXForm.setCoeff10(Double.parseDouble(s[2]));
-      pXForm.setCoeff11(Double.parseDouble(s[3]));
-      pXForm.setCoeff20(Double.parseDouble(s[4]));
-      pXForm.setCoeff21(Double.parseDouble(s[5]));
+      pXForm.setXYCoeff00(Double.parseDouble(s[0]));
+      pXForm.setXYCoeff01(Double.parseDouble(s[1]));
+      pXForm.setXYCoeff10(Double.parseDouble(s[2]));
+      pXForm.setXYCoeff11(Double.parseDouble(s[3]));
+      pXForm.setXYCoeff20(Double.parseDouble(s[4]));
+      pXForm.setXYCoeff21(Double.parseDouble(s[5]));
     }
-    if ((hs = atts.get(ATTR_POST)) != null) {
+    if ((hs = atts.get(ATTR_XY_POST)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setPostCoeff00(Double.parseDouble(s[0]));
-      pXForm.setPostCoeff01(Double.parseDouble(s[1]));
-      pXForm.setPostCoeff10(Double.parseDouble(s[2]));
-      pXForm.setPostCoeff11(Double.parseDouble(s[3]));
-      pXForm.setPostCoeff20(Double.parseDouble(s[4]));
-      pXForm.setPostCoeff21(Double.parseDouble(s[5]));
+      pXForm.setXYPostCoeff00(Double.parseDouble(s[0]));
+      pXForm.setXYPostCoeff01(Double.parseDouble(s[1]));
+      pXForm.setXYPostCoeff10(Double.parseDouble(s[2]));
+      pXForm.setXYPostCoeff11(Double.parseDouble(s[3]));
+      pXForm.setXYPostCoeff20(Double.parseDouble(s[4]));
+      pXForm.setXYPostCoeff21(Double.parseDouble(s[5]));
+    }
+    if ((hs = atts.get(ATTR_YZ_COEFS)) != null) {
+      String s[] = hs.split(" ");
+      pXForm.setYZCoeff00(Double.parseDouble(s[0]));
+      pXForm.setYZCoeff01(Double.parseDouble(s[1]));
+      pXForm.setYZCoeff10(Double.parseDouble(s[2]));
+      pXForm.setYZCoeff11(Double.parseDouble(s[3]));
+      pXForm.setYZCoeff20(Double.parseDouble(s[4]));
+      pXForm.setYZCoeff21(Double.parseDouble(s[5]));
+    }
+    if ((hs = atts.get(ATTR_YZ_POST)) != null) {
+      String s[] = hs.split(" ");
+      pXForm.setYZPostCoeff00(Double.parseDouble(s[0]));
+      pXForm.setYZPostCoeff01(Double.parseDouble(s[1]));
+      pXForm.setYZPostCoeff10(Double.parseDouble(s[2]));
+      pXForm.setYZPostCoeff11(Double.parseDouble(s[3]));
+      pXForm.setYZPostCoeff20(Double.parseDouble(s[4]));
+      pXForm.setYZPostCoeff21(Double.parseDouble(s[5]));
+    }
+    if ((hs = atts.get(ATTR_ZX_COEFS)) != null) {
+      String s[] = hs.split(" ");
+      pXForm.setZXCoeff00(Double.parseDouble(s[0]));
+      pXForm.setZXCoeff01(Double.parseDouble(s[1]));
+      pXForm.setZXCoeff10(Double.parseDouble(s[2]));
+      pXForm.setZXCoeff11(Double.parseDouble(s[3]));
+      pXForm.setZXCoeff20(Double.parseDouble(s[4]));
+      pXForm.setZXCoeff21(Double.parseDouble(s[5]));
+    }
+    if ((hs = atts.get(ATTR_ZX_POST)) != null) {
+      String s[] = hs.split(" ");
+      pXForm.setZXPostCoeff00(Double.parseDouble(s[0]));
+      pXForm.setZXPostCoeff01(Double.parseDouble(s[1]));
+      pXForm.setZXPostCoeff10(Double.parseDouble(s[2]));
+      pXForm.setZXPostCoeff11(Double.parseDouble(s[3]));
+      pXForm.setZXPostCoeff20(Double.parseDouble(s[4]));
+      pXForm.setZXPostCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_CHAOS)) != null) {
       String s[] = hs.split(" ");

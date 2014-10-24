@@ -20,7 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.QualityProfile;
@@ -152,7 +151,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String qualityProfile;
   private String name = "";
   @AnimAware
-  private final List<Layer> layers = new ArrayList<Layer>();
+  private final List<Layer> layers = new LayerList(this);
 
   @AnimAware
   private ShadingInfo shadingInfo;
@@ -195,6 +194,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve mixerBGCurve = new MotionCurve();
   private final MotionCurve mixerBBCurve = new MotionCurve();
 
+  private EditPlane editPlane;
+
   public Flame() {
     layers.clear();
     layers.add(new Layer());
@@ -202,6 +203,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgTransparency = true;
     pixelsPerUnit = 50;
     name = "";
+    editPlane = EditPlane.XY;
 
     resetColoringSettings();
     resetAntialiasingSettings();
@@ -715,6 +717,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     mixerBGCurve.assign(pFlame.mixerBGCurve);
     mixerBBCurve.assign(pFlame.mixerBBCurve);
 
+    editPlane = pFlame.editPlane;
+
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
@@ -786,7 +790,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
         (stereo3dPreview != pFlame.stereo3dPreview) || (fabs(stereo3dFocalOffset - pFlame.stereo3dFocalOffset) > EPSILON) ||
-        (stereo3dSwapSides != pFlame.stereo3dSwapSides) ||
+        (stereo3dSwapSides != pFlame.stereo3dSwapSides) || (editPlane != pFlame.editPlane) ||
         (channelMixerMode != pFlame.channelMixerMode) || !mixerRRCurve.isEqual(pFlame.mixerRRCurve) || !mixerRGCurve.isEqual(pFlame.mixerRGCurve) ||
         !mixerRBCurve.isEqual(pFlame.mixerRBCurve) || !mixerGRCurve.isEqual(pFlame.mixerGRCurve) || !mixerGGCurve.isEqual(pFlame.mixerGGCurve) ||
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
@@ -1341,6 +1345,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setCamDOFFade(double pCamDOFFade) {
     camDOFFade = pCamDOFFade;
+  }
+
+  public EditPlane getEditPlane() {
+    return editPlane;
+  }
+
+  public void setEditPlane(EditPlane editPlane) {
+    this.editPlane = editPlane;
   }
 
 }

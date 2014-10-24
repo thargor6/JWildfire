@@ -40,42 +40,42 @@ public class AffineMutation implements Mutation {
     if (Math.random() < 0.5) {
       if (Math.random() < 0.75) {
         if (Math.random() < 0.5) {
-          xForm.setCoeff00(xForm.getCoeff00() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff00(xForm.getXYCoeff00() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setCoeff01(xForm.getCoeff01() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff01(xForm.getXYCoeff01() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setCoeff10(xForm.getCoeff10() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff10(xForm.getXYCoeff10() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setCoeff11(xForm.getCoeff11() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff11(xForm.getXYCoeff11() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setCoeff20(xForm.getCoeff20() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff20(xForm.getXYCoeff20() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setCoeff21(xForm.getCoeff21() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYCoeff21(xForm.getXYCoeff21() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
       }
       else {
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff00(xForm.getPostCoeff00() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff00(xForm.getXYPostCoeff00() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff01(xForm.getPostCoeff01() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff01(xForm.getXYPostCoeff01() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff10(xForm.getPostCoeff10() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff10(xForm.getXYPostCoeff10() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff11(xForm.getPostCoeff11() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff11(xForm.getXYPostCoeff11() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff20(xForm.getPostCoeff20() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff20(xForm.getXYPostCoeff20() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
         if (Math.random() < 0.5) {
-          xForm.setPostCoeff21(xForm.getPostCoeff21() + pAmount * (-0.25 + 0.5 * Math.random()));
+          xForm.setXYPostCoeff21(xForm.getXYPostCoeff21() + pAmount * (-0.25 + 0.5 * Math.random()));
         }
       }
     }

@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 
@@ -60,12 +61,39 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
 
   public void setUpMotionControls() {
     boolean postTransform = isPostTransform();
-    data.affineC00REd.setMotionPropertyName(postTransform ? "postCoeff00" : "coeff00");
-    data.affineC01REd.setMotionPropertyName(postTransform ? "postCoeff01" : "coeff01");
-    data.affineC10REd.setMotionPropertyName(postTransform ? "postCoeff10" : "coeff10");
-    data.affineC11REd.setMotionPropertyName(postTransform ? "postCoeff11" : "coeff11");
-    data.affineC20REd.setMotionPropertyName(postTransform ? "postCoeff20" : "coeff20");
-    data.affineC21REd.setMotionPropertyName(postTransform ? "postCoeff21" : "coeff21");
+    switch (getEditPlane()) {
+      case XY:
+        data.affineC00REd.setMotionPropertyName(postTransform ? "xyPostCoeff00" : "xyCoeff00");
+        data.affineC01REd.setMotionPropertyName(postTransform ? "xyPostCoeff01" : "xyCoeff01");
+        data.affineC10REd.setMotionPropertyName(postTransform ? "xyPostCoeff10" : "xyCoeff10");
+        data.affineC11REd.setMotionPropertyName(postTransform ? "xyPostCoeff11" : "xyCoeff11");
+        data.affineC20REd.setMotionPropertyName(postTransform ? "xyPostCoeff20" : "xyCoeff20");
+        data.affineC21REd.setMotionPropertyName(postTransform ? "xyPostCoeff21" : "xyCoeff21");
+        break;
+      case YZ:
+        data.affineC00REd.setMotionPropertyName(postTransform ? "yzPostCoeff00" : "yzCoeff00");
+        data.affineC01REd.setMotionPropertyName(postTransform ? "yzPostCoeff01" : "yzCoeff01");
+        data.affineC10REd.setMotionPropertyName(postTransform ? "yzPostCoeff10" : "yzCoeff10");
+        data.affineC11REd.setMotionPropertyName(postTransform ? "yzPostCoeff11" : "yzCoeff11");
+        data.affineC20REd.setMotionPropertyName(postTransform ? "yzPostCoeff20" : "yzCoeff20");
+        data.affineC21REd.setMotionPropertyName(postTransform ? "yzPostCoeff21" : "yzCoeff21");
+        break;
+      default:
+        data.affineC00REd.setMotionPropertyName(postTransform ? "zxPostCoeff00" : "zxCoeff00");
+        data.affineC01REd.setMotionPropertyName(postTransform ? "zxPostCoeff01" : "zxCoeff01");
+        data.affineC10REd.setMotionPropertyName(postTransform ? "zxPostCoeff10" : "zxCoeff10");
+        data.affineC11REd.setMotionPropertyName(postTransform ? "zxPostCoeff11" : "zxCoeff11");
+        data.affineC20REd.setMotionPropertyName(postTransform ? "zxPostCoeff20" : "zxCoeff20");
+        data.affineC21REd.setMotionPropertyName(postTransform ? "zxPostCoeff21" : "zxCoeff21");
+        break;
+    }
+  }
+
+  private EditPlane getEditPlane() {
+    if (owner == null || owner.getCurrFlame() == null)
+      return EditPlane.XY;
+    else
+      return owner.getCurrFlame().getEditPlane();
   }
 
   public void enableControls(XForm xForm) {
@@ -156,7 +184,14 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
   }
 
   private String getRotateMotionCurveProperty() {
-    return isPostTransform() ? "postRotate" : "rotate";
+    switch (getEditPlane()) {
+      case XY:
+        return isPostTransform() ? "xyPostRotate" : "xyRotate";
+      case YZ:
+        return isPostTransform() ? "yzPostRotate" : "yzRotate";
+      default:
+        return isPostTransform() ? "zxPostRotate" : "zxRotate";
+    }
   }
 
   public void editRotateMotionCurve(ActionEvent e) {
@@ -166,7 +201,14 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
   }
 
   private String getScaleMotionCurveProperty() {
-    return isPostTransform() ? "postScale" : "scale";
+    switch (getEditPlane()) {
+      case XY:
+        return isPostTransform() ? "xyPostScale" : "xyScale";
+      case YZ:
+        return isPostTransform() ? "yzPostScale" : "yzScale";
+      default:
+        return isPostTransform() ? "zxPostScale" : "zxScale";
+    }
   }
 
   public void editScaleMotionCurve(ActionEvent e) {

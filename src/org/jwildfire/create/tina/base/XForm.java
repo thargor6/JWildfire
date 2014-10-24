@@ -37,6 +37,7 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 
 public final class XForm implements Assignable<XForm>, Serializable {
   private static final long serialVersionUID = 1L;
+  private Layer owner;
   @AnimAware
   private double weight;
   private final MotionCurve weightCurve = new MotionCurve();
@@ -60,43 +61,122 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double modSaturationSpeed;
 
   @AnimAware
-  private double coeff00;
-  private final MotionCurve coeff00Curve = new MotionCurve();
+  private double xyCoeff00;
+  private final MotionCurve xyCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double coeff01;
-  private final MotionCurve coeff01Curve = new MotionCurve();
+  private double xyCoeff01;
+  private final MotionCurve xyCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double coeff10;
-  private final MotionCurve coeff10Curve = new MotionCurve();
+  private double xyCoeff10;
+  private final MotionCurve xyCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double coeff11;
-  private final MotionCurve coeff11Curve = new MotionCurve();
+  private double xyCoeff11;
+  private final MotionCurve xyCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double coeff20;
-  private final MotionCurve coeff20Curve = new MotionCurve();
+  private double xyCoeff20;
+  private final MotionCurve xyCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double coeff21;
-  private final MotionCurve coeff21Curve = new MotionCurve();
+  private double xyCoeff21;
+  private final MotionCurve xyCoeff21Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff00;
-  private final MotionCurve postCoeff00Curve = new MotionCurve();
+  private double xyPostCoeff00;
+  private final MotionCurve xyPostCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff01;
-  private final MotionCurve postCoeff01Curve = new MotionCurve();
+  private double xyPostCoeff01;
+  private final MotionCurve xyPostCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff10;
-  private final MotionCurve postCoeff10Curve = new MotionCurve();
+  private double xyPostCoeff10;
+  private final MotionCurve xyPostCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff11;
-  private final MotionCurve postCoeff11Curve = new MotionCurve();
+  private double xyPostCoeff11;
+  private final MotionCurve xyPostCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff20;
-  private final MotionCurve postCoeff20Curve = new MotionCurve();
+  private double xyPostCoeff20;
+  private final MotionCurve xyPostCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double postCoeff21;
-  private final MotionCurve postCoeff21Curve = new MotionCurve();
-  private boolean hasPostCoeffs;
-  private boolean hasCoeffs;
+  private double xyPostCoeff21;
+  private final MotionCurve xyPostCoeff21Curve = new MotionCurve();
+  private boolean hasXYPostCoeffs;
+  private boolean hasXYCoeffs;
+
+  @AnimAware
+  private double yzCoeff00;
+  private final MotionCurve yzCoeff00Curve = new MotionCurve();
+  @AnimAware
+  private double yzCoeff01;
+  private final MotionCurve yzCoeff01Curve = new MotionCurve();
+  @AnimAware
+  private double yzCoeff10;
+  private final MotionCurve yzCoeff10Curve = new MotionCurve();
+  @AnimAware
+  private double yzCoeff11;
+  private final MotionCurve yzCoeff11Curve = new MotionCurve();
+  @AnimAware
+  private double yzCoeff20;
+  private final MotionCurve yzCoeff20Curve = new MotionCurve();
+  @AnimAware
+  private double yzCoeff21;
+  private final MotionCurve yzCoeff21Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff00;
+  private final MotionCurve yzPostCoeff00Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff01;
+  private final MotionCurve yzPostCoeff01Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff10;
+  private final MotionCurve yzPostCoeff10Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff11;
+  private final MotionCurve yzPostCoeff11Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff20;
+  private final MotionCurve yzPostCoeff20Curve = new MotionCurve();
+  @AnimAware
+  private double yzPostCoeff21;
+  private final MotionCurve yzPostCoeff21Curve = new MotionCurve();
+  private boolean hasYZPostCoeffs;
+  private boolean hasYZCoeffs;
+
+  @AnimAware
+  private double zxCoeff00;
+  private final MotionCurve zxCoeff00Curve = new MotionCurve();
+  @AnimAware
+  private double zxCoeff01;
+  private final MotionCurve zxCoeff01Curve = new MotionCurve();
+  @AnimAware
+  private double zxCoeff10;
+  private final MotionCurve zxCoeff10Curve = new MotionCurve();
+  @AnimAware
+  private double zxCoeff11;
+  private final MotionCurve zxCoeff11Curve = new MotionCurve();
+  @AnimAware
+  private double zxCoeff20;
+  private final MotionCurve zxCoeff20Curve = new MotionCurve();
+  @AnimAware
+  private double zxCoeff21;
+  private final MotionCurve zxCoeff21Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff00;
+  private final MotionCurve zxPostCoeff00Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff01;
+  private final MotionCurve zxPostCoeff01Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff10;
+  private final MotionCurve zxPostCoeff10Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff11;
+  private final MotionCurve zxPostCoeff11Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff20;
+  private final MotionCurve zxPostCoeff20Curve = new MotionCurve();
+  @AnimAware
+  private double zxPostCoeff21;
+  private final MotionCurve zxPostCoeff21Curve = new MotionCurve();
+  private boolean hasZXPostCoeffs;
+  private boolean hasZXCoeffs;
+
   @AnimAware
   private final List<Variation> variations = new ArrayList<Variation>();
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
@@ -107,16 +187,37 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private DrawMode drawMode = DrawMode.NORMAL;
   private String name = "";
 
-  private final MotionCurve rotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
-  private final MotionCurve scaleCurve = new MotionCurve(ScaleMotionValueChangeHandler.INSTANCE);
-  private final MotionCurve postRotateCurve = new MotionCurve(PostRotateMotionValueChangeHandler.INSTANCE);
-  private final MotionCurve postScaleCurve = new MotionCurve(PostScaleMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve xyRotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve xyScaleCurve = new MotionCurve(ScaleMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve xyPostRotateCurve = new MotionCurve(PostRotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve xyPostScaleCurve = new MotionCurve(PostScaleMotionValueChangeHandler.INSTANCE);
+
+  private final MotionCurve yzRotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve yzScaleCurve = new MotionCurve(ScaleMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve yzPostRotateCurve = new MotionCurve(PostRotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve yzPostScaleCurve = new MotionCurve(PostScaleMotionValueChangeHandler.INSTANCE);
+
+  private final MotionCurve zxRotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve zxScaleCurve = new MotionCurve(ScaleMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve zxPostRotateCurve = new MotionCurve(PostRotateMotionValueChangeHandler.INSTANCE);
+  private final MotionCurve zxPostScaleCurve = new MotionCurve(PostScaleMotionValueChangeHandler.INSTANCE);
 
   public XForm() {
-    coeff00 = 1;
-    coeff11 = 1;
-    postCoeff00 = 1;
-    postCoeff11 = 1;
+    xyCoeff00 = 1.0;
+    xyCoeff11 = 1.0;
+    xyPostCoeff00 = 1.0;
+    xyPostCoeff11 = 1.0;
+
+    yzCoeff00 = 1.0;
+    yzCoeff11 = 1.0;
+    yzPostCoeff00 = 1.0;
+    yzPostCoeff11 = 1.0;
+
+    zxCoeff00 = 1.0;
+    zxCoeff11 = 1.0;
+    zxPostCoeff00 = 1.0;
+    zxPostCoeff11 = 1.0;
+
     for (int i = 0; i < modifiedWeights.length; i++) {
       modifiedWeights[i] = 1.0;
     }
@@ -143,60 +244,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
       color = 1.0;
     }
     this.color = color;
-  }
-
-  public double getCoeff00() {
-    return coeff00;
-  }
-
-  public void setCoeff00(double coeff00) {
-    this.coeff00 = coeff00;
-    updateHasCoeffs();
-  }
-
-  public double getCoeff01() {
-    return coeff01;
-  }
-
-  public void setCoeff01(double coeff01) {
-    this.coeff01 = coeff01;
-    updateHasCoeffs();
-  }
-
-  public double getCoeff10() {
-    return coeff10;
-  }
-
-  public void setCoeff10(double coeff10) {
-    this.coeff10 = coeff10;
-    updateHasCoeffs();
-  }
-
-  public double getCoeff11() {
-    return coeff11;
-  }
-
-  public void setCoeff11(double coeff11) {
-    this.coeff11 = coeff11;
-    updateHasCoeffs();
-  }
-
-  public double getCoeff20() {
-    return coeff20;
-  }
-
-  public void setCoeff20(double coeff20) {
-    this.coeff20 = coeff20;
-    updateHasCoeffs();
-  }
-
-  public double getCoeff21() {
-    return coeff21;
-  }
-
-  public void setCoeff21(double coeff21) {
-    this.coeff21 = coeff21;
-    updateHasCoeffs();
   }
 
   public int getVariationCount() {
@@ -267,26 +314,66 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modSaturation1 = (1 + modSaturationSpeed) * 0.5;
     modSaturation2 = modSaturation * (1 - modSaturationSpeed) * 0.5;
 
-    updateHasCoeffs();
-    updateHasPostCoeffs();
+    updateHasXYCoeffs();
+    updateHasXYPostCoeffs();
+    updateHasYZCoeffs();
+    updateHasYZPostCoeffs();
+    updateHasZXCoeffs();
+    updateHasZXPostCoeffs();
   }
 
-  private void updateHasPostCoeffs() {
-    hasPostCoeffs = fabs(postCoeff00 - 1.0) > MathLib.EPSILON || fabs(postCoeff01) > MathLib.EPSILON || fabs(postCoeff10) > MathLib.EPSILON
-        || fabs(postCoeff11 - 1.0) > MathLib.EPSILON || fabs(postCoeff20) > MathLib.EPSILON || fabs(postCoeff21) > MathLib.EPSILON;
+  private void updateHasXYPostCoeffs() {
+    hasXYPostCoeffs = fabs(xyPostCoeff00 - 1.0) > MathLib.EPSILON || fabs(xyPostCoeff01) > MathLib.EPSILON || fabs(xyPostCoeff10) > MathLib.EPSILON
+        || fabs(xyPostCoeff11 - 1.0) > MathLib.EPSILON || fabs(xyPostCoeff20) > MathLib.EPSILON || fabs(xyPostCoeff21) > MathLib.EPSILON;
   }
 
-  private void updateHasCoeffs() {
-    hasCoeffs = fabs(coeff00 - 1.0) > MathLib.EPSILON || fabs(coeff01) > MathLib.EPSILON || fabs(coeff10) > MathLib.EPSILON
-        || fabs(coeff11 - 1.0) > MathLib.EPSILON || fabs(coeff20) > MathLib.EPSILON || fabs(coeff21) > MathLib.EPSILON;
+  private void updateHasXYCoeffs() {
+    hasXYCoeffs = fabs(xyCoeff00 - 1.0) > MathLib.EPSILON || fabs(xyCoeff01) > MathLib.EPSILON || fabs(xyCoeff10) > MathLib.EPSILON
+        || fabs(xyCoeff11 - 1.0) > MathLib.EPSILON || fabs(xyCoeff20) > MathLib.EPSILON || fabs(xyCoeff21) > MathLib.EPSILON;
   }
 
-  public boolean isHasPostCoeffs() {
-    return hasPostCoeffs;
+  public boolean isHasXYPostCoeffs() {
+    return hasXYPostCoeffs;
   }
 
   public boolean isHasCoeffs() {
-    return hasCoeffs;
+    return hasXYCoeffs;
+  }
+
+  private void updateHasYZPostCoeffs() {
+    hasYZPostCoeffs = fabs(yzPostCoeff00 - 1.0) > MathLib.EPSILON || fabs(yzPostCoeff01) > MathLib.EPSILON || fabs(yzPostCoeff10) > MathLib.EPSILON
+        || fabs(yzPostCoeff11 - 1.0) > MathLib.EPSILON || fabs(yzPostCoeff20) > MathLib.EPSILON || fabs(yzPostCoeff21) > MathLib.EPSILON;
+  }
+
+  private void updateHasYZCoeffs() {
+    hasYZCoeffs = fabs(yzCoeff00 - 1.0) > MathLib.EPSILON || fabs(yzCoeff01) > MathLib.EPSILON || fabs(yzCoeff10) > MathLib.EPSILON
+        || fabs(yzCoeff11 - 1.0) > MathLib.EPSILON || fabs(yzCoeff20) > MathLib.EPSILON || fabs(yzCoeff21) > MathLib.EPSILON;
+  }
+
+  public boolean isHasYZPostCoeffs() {
+    return hasYZPostCoeffs;
+  }
+
+  public boolean isHasYZCoeffs() {
+    return hasYZCoeffs;
+  }
+
+  private void updateHasZXPostCoeffs() {
+    hasZXPostCoeffs = fabs(zxPostCoeff00 - 1.0) > MathLib.EPSILON || fabs(zxPostCoeff01) > MathLib.EPSILON || fabs(zxPostCoeff10) > MathLib.EPSILON
+        || fabs(zxPostCoeff11 - 1.0) > MathLib.EPSILON || fabs(zxPostCoeff20) > MathLib.EPSILON || fabs(zxPostCoeff21) > MathLib.EPSILON;
+  }
+
+  private void updateHasZXCoeffs() {
+    hasZXCoeffs = fabs(zxCoeff00 - 1.0) > MathLib.EPSILON || fabs(zxCoeff01) > MathLib.EPSILON || fabs(zxCoeff10) > MathLib.EPSILON
+        || fabs(zxCoeff11 - 1.0) > MathLib.EPSILON || fabs(zxCoeff20) > MathLib.EPSILON || fabs(zxCoeff21) > MathLib.EPSILON;
+  }
+
+  public boolean isHasZXPostCoeffs() {
+    return hasZXPostCoeffs;
+  }
+
+  public boolean isHasZXCoeffs() {
+    return hasZXCoeffs;
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
@@ -296,15 +383,37 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pAffineT.modContrast = pSrcPoint.modContrast * modContrast1 + modContrast2;
     pAffineT.modSaturation = pSrcPoint.modSaturation * modSaturation1 + modSaturation2;
 
+    double x, y, z;
+
     if (isHasCoeffs()) {
-      pAffineT.x = coeff00 * pSrcPoint.x + coeff10 * pSrcPoint.y + coeff20;
-      pAffineT.y = coeff01 * pSrcPoint.x + coeff11 * pSrcPoint.y + coeff21;
+      x = xyCoeff00 * pSrcPoint.x + xyCoeff10 * pSrcPoint.y/* + coeff20*/;
+      y = xyCoeff01 * pSrcPoint.x + xyCoeff11 * pSrcPoint.y/* + coeff21*/;
+      z = pSrcPoint.z;
     }
     else {
-      pAffineT.x = pSrcPoint.x;
-      pAffineT.y = pSrcPoint.y;
+      x = pSrcPoint.x;
+      y = pSrcPoint.y;
+      z = pSrcPoint.z;
     }
-    pAffineT.z = pSrcPoint.z;
+
+    if (isHasYZCoeffs()) {
+      double ny = yzCoeff00 * y + yzCoeff10 * z/* + xCoeff20*/;
+      double nz = yzCoeff01 * y + yzCoeff11 * z /*+ xCoeff21*/;
+      y = ny;
+      z = nz;
+    }
+
+    if (isHasZXCoeffs()) {
+      double nx = zxCoeff00 * x + zxCoeff10 * z/* + yCoeff20*/;
+      double nz = zxCoeff01 * x + zxCoeff11 * z/* + yCoeff21*/;
+      x = nx;
+      z = nz;
+    }
+
+    pAffineT.x = x + xyCoeff20 + zxCoeff20;
+    pAffineT.y = y + xyCoeff21 + yzCoeff20;
+    pAffineT.z = z + yzCoeff21 + zxCoeff21;
+
     //pVarT.clear();
 
     pVarT.invalidate();
@@ -354,9 +463,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pDstPoint.withAlpha = pVarT.withAlpha;
     pDstPoint.doHide = pVarT.doHide;
     pDstPoint.alpha = pVarT.alpha;
-    if (isHasPostCoeffs()) {
-      double px = postCoeff00 * pVarT.x + postCoeff10 * pVarT.y + postCoeff20;
-      double py = postCoeff01 * pVarT.x + postCoeff11 * pVarT.y + postCoeff21;
+    if (isHasXYPostCoeffs()) {
+      double px = xyPostCoeff00 * pVarT.x + xyPostCoeff10 * pVarT.y + xyPostCoeff20;
+      double py = xyPostCoeff01 * pVarT.x + xyPostCoeff11 * pVarT.y + xyPostCoeff21;
       double pz = pVarT.z;
       pVarT.x = px;
       pVarT.y = py;
@@ -374,8 +483,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
       pAffineT[i].modGamma = pSrcPoint[i].modGamma * modGamma1 + modGamma2;
       pAffineT[i].modContrast = pSrcPoint[i].modContrast * modContrast1 + modContrast2;
       pAffineT[i].modSaturation = pSrcPoint[i].modSaturation * modSaturation1 + modSaturation2;
-      pAffineT[i].x = coeff00 * pSrcPoint[i].x + coeff10 * pSrcPoint[i].y + coeff20;
-      pAffineT[i].y = coeff01 * pSrcPoint[i].x + coeff11 * pSrcPoint[i].y + coeff21;
+      pAffineT[i].x = xyCoeff00 * pSrcPoint[i].x + xyCoeff10 * pSrcPoint[i].y + xyCoeff20;
+      pAffineT[i].y = xyCoeff01 * pSrcPoint[i].x + xyCoeff11 * pSrcPoint[i].y + xyCoeff21;
       pAffineT[i].z = pSrcPoint[i].z;
       pVarT[i].clear();
       pVarT[i].color = pAffineT[i].color;
@@ -406,9 +515,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
       pDstPoint[i].modGamma = pVarT[i].modGamma;
       pDstPoint[i].modContrast = pVarT[i].modContrast;
       pDstPoint[i].modSaturation = pVarT[i].modSaturation;
-      if (isHasPostCoeffs()) {
-        double px = postCoeff00 * pVarT[i].x + postCoeff10 * pVarT[i].y + postCoeff20;
-        double py = postCoeff01 * pVarT[i].x + postCoeff11 * pVarT[i].y + postCoeff21;
+      if (isHasXYPostCoeffs()) {
+        double px = xyPostCoeff00 * pVarT[i].x + xyPostCoeff10 * pVarT[i].y + xyPostCoeff20;
+        double py = xyPostCoeff01 * pVarT[i].x + xyPostCoeff11 * pVarT[i].y + xyPostCoeff21;
         double pz = pVarT[i].z;
         pVarT[i].x = px;
         pVarT[i].y = py;
@@ -459,36 +568,103 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modContrastSpeed = pXForm.modContrastSpeed;
     modSaturation = pXForm.modSaturation;
     modSaturationSpeed = pXForm.modSaturationSpeed;
-    coeff00 = pXForm.coeff00;
-    coeff00Curve.assign(pXForm.coeff00Curve);
-    coeff01 = pXForm.coeff01;
-    coeff01Curve.assign(pXForm.coeff01Curve);
-    coeff10 = pXForm.coeff10;
-    coeff10Curve.assign(pXForm.coeff10Curve);
-    coeff11 = pXForm.coeff11;
-    coeff11Curve.assign(pXForm.coeff11Curve);
-    coeff20 = pXForm.coeff20;
-    coeff20Curve.assign(pXForm.coeff20Curve);
-    coeff21 = pXForm.coeff21;
-    coeff21Curve.assign(pXForm.coeff21Curve);
-    postCoeff00 = pXForm.postCoeff00;
-    postCoeff00Curve.assign(pXForm.postCoeff00Curve);
-    postCoeff01 = pXForm.postCoeff01;
-    postCoeff01Curve.assign(pXForm.postCoeff01Curve);
-    postCoeff10 = pXForm.postCoeff10;
-    postCoeff10Curve.assign(pXForm.postCoeff10Curve);
-    postCoeff11 = pXForm.postCoeff11;
-    postCoeff11Curve.assign(pXForm.postCoeff11Curve);
-    postCoeff20 = pXForm.postCoeff20;
-    postCoeff20Curve.assign(pXForm.postCoeff20Curve);
-    postCoeff21 = pXForm.postCoeff21;
-    postCoeff21Curve.assign(pXForm.postCoeff21Curve);
-    rotateCurve.assign(pXForm.rotateCurve);
-    scaleCurve.assign(pXForm.scaleCurve);
-    postRotateCurve.assign(pXForm.postRotateCurve);
-    postScaleCurve.assign(pXForm.postScaleCurve);
-    hasPostCoeffs = pXForm.hasPostCoeffs;
-    hasCoeffs = pXForm.hasCoeffs;
+
+    xyCoeff00 = pXForm.xyCoeff00;
+    xyCoeff00Curve.assign(pXForm.xyCoeff00Curve);
+    xyCoeff01 = pXForm.xyCoeff01;
+    xyCoeff01Curve.assign(pXForm.xyCoeff01Curve);
+    xyCoeff10 = pXForm.xyCoeff10;
+    xyCoeff10Curve.assign(pXForm.xyCoeff10Curve);
+    xyCoeff11 = pXForm.xyCoeff11;
+    xyCoeff11Curve.assign(pXForm.xyCoeff11Curve);
+    xyCoeff20 = pXForm.xyCoeff20;
+    xyCoeff20Curve.assign(pXForm.xyCoeff20Curve);
+    xyCoeff21 = pXForm.xyCoeff21;
+    xyCoeff21Curve.assign(pXForm.xyCoeff21Curve);
+    xyPostCoeff00 = pXForm.xyPostCoeff00;
+    xyPostCoeff00Curve.assign(pXForm.xyPostCoeff00Curve);
+    xyPostCoeff01 = pXForm.xyPostCoeff01;
+    xyPostCoeff01Curve.assign(pXForm.xyPostCoeff01Curve);
+    xyPostCoeff10 = pXForm.xyPostCoeff10;
+    xyPostCoeff10Curve.assign(pXForm.xyPostCoeff10Curve);
+    xyPostCoeff11 = pXForm.xyPostCoeff11;
+    xyPostCoeff11Curve.assign(pXForm.xyPostCoeff11Curve);
+    xyPostCoeff20 = pXForm.xyPostCoeff20;
+    xyPostCoeff20Curve.assign(pXForm.xyPostCoeff20Curve);
+    xyPostCoeff21 = pXForm.xyPostCoeff21;
+    xyPostCoeff21Curve.assign(pXForm.xyPostCoeff21Curve);
+
+    yzCoeff00 = pXForm.yzCoeff00;
+    yzCoeff00Curve.assign(pXForm.yzCoeff00Curve);
+    yzCoeff01 = pXForm.yzCoeff01;
+    yzCoeff01Curve.assign(pXForm.yzCoeff01Curve);
+    yzCoeff10 = pXForm.yzCoeff10;
+    yzCoeff10Curve.assign(pXForm.yzCoeff10Curve);
+    yzCoeff11 = pXForm.yzCoeff11;
+    yzCoeff11Curve.assign(pXForm.yzCoeff11Curve);
+    yzCoeff20 = pXForm.yzCoeff20;
+    yzCoeff20Curve.assign(pXForm.yzCoeff20Curve);
+    yzCoeff21 = pXForm.yzCoeff21;
+    yzCoeff21Curve.assign(pXForm.yzCoeff21Curve);
+    yzPostCoeff00 = pXForm.yzPostCoeff00;
+    yzPostCoeff00Curve.assign(pXForm.yzPostCoeff00Curve);
+    yzPostCoeff01 = pXForm.yzPostCoeff01;
+    yzPostCoeff01Curve.assign(pXForm.yzPostCoeff01Curve);
+    yzPostCoeff10 = pXForm.yzPostCoeff10;
+    yzPostCoeff10Curve.assign(pXForm.yzPostCoeff10Curve);
+    yzPostCoeff11 = pXForm.yzPostCoeff11;
+    yzPostCoeff11Curve.assign(pXForm.yzPostCoeff11Curve);
+    yzPostCoeff20 = pXForm.yzPostCoeff20;
+    yzPostCoeff20Curve.assign(pXForm.yzPostCoeff20Curve);
+    yzPostCoeff21 = pXForm.yzPostCoeff21;
+    yzPostCoeff21Curve.assign(pXForm.yzPostCoeff21Curve);
+
+    zxCoeff00 = pXForm.zxCoeff00;
+    zxCoeff00Curve.assign(pXForm.zxCoeff00Curve);
+    zxCoeff01 = pXForm.zxCoeff01;
+    zxCoeff01Curve.assign(pXForm.zxCoeff01Curve);
+    zxCoeff10 = pXForm.zxCoeff10;
+    zxCoeff10Curve.assign(pXForm.zxCoeff10Curve);
+    zxCoeff11 = pXForm.zxCoeff11;
+    zxCoeff11Curve.assign(pXForm.zxCoeff11Curve);
+    zxCoeff20 = pXForm.zxCoeff20;
+    zxCoeff20Curve.assign(pXForm.zxCoeff20Curve);
+    zxCoeff21 = pXForm.zxCoeff21;
+    zxCoeff21Curve.assign(pXForm.zxCoeff21Curve);
+    zxPostCoeff00 = pXForm.zxPostCoeff00;
+    zxPostCoeff00Curve.assign(pXForm.zxPostCoeff00Curve);
+    zxPostCoeff01 = pXForm.zxPostCoeff01;
+    zxPostCoeff01Curve.assign(pXForm.zxPostCoeff01Curve);
+    zxPostCoeff10 = pXForm.zxPostCoeff10;
+    zxPostCoeff10Curve.assign(pXForm.zxPostCoeff10Curve);
+    zxPostCoeff11 = pXForm.zxPostCoeff11;
+    zxPostCoeff11Curve.assign(pXForm.zxPostCoeff11Curve);
+    zxPostCoeff20 = pXForm.zxPostCoeff20;
+    zxPostCoeff20Curve.assign(pXForm.zxPostCoeff20Curve);
+    zxPostCoeff21 = pXForm.zxPostCoeff21;
+    zxPostCoeff21Curve.assign(pXForm.zxPostCoeff21Curve);
+
+    xyRotateCurve.assign(pXForm.xyRotateCurve);
+    xyScaleCurve.assign(pXForm.xyScaleCurve);
+    xyPostRotateCurve.assign(pXForm.xyPostRotateCurve);
+    xyPostScaleCurve.assign(pXForm.xyPostScaleCurve);
+
+    yzRotateCurve.assign(pXForm.yzRotateCurve);
+    yzScaleCurve.assign(pXForm.yzScaleCurve);
+    yzPostRotateCurve.assign(pXForm.yzPostRotateCurve);
+    yzPostScaleCurve.assign(pXForm.yzPostScaleCurve);
+
+    zxRotateCurve.assign(pXForm.zxRotateCurve);
+    zxScaleCurve.assign(pXForm.zxScaleCurve);
+    zxPostRotateCurve.assign(pXForm.zxPostRotateCurve);
+    zxPostScaleCurve.assign(pXForm.zxPostScaleCurve);
+
+    hasXYPostCoeffs = pXForm.hasXYPostCoeffs;
+    hasXYCoeffs = pXForm.hasXYCoeffs;
+    hasYZPostCoeffs = pXForm.hasYZPostCoeffs;
+    hasYZCoeffs = pXForm.hasYZCoeffs;
+    hasZXPostCoeffs = pXForm.hasZXPostCoeffs;
+    hasZXCoeffs = pXForm.hasZXCoeffs;
     variations.clear();
     for (Variation var : pXForm.variations) {
       Variation newVar = new Variation();
@@ -509,60 +685,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return res;
   }
 
-  public double getPostCoeff00() {
-    return postCoeff00;
-  }
-
-  public void setPostCoeff00(double postCoeff00) {
-    this.postCoeff00 = postCoeff00;
-    updateHasPostCoeffs();
-  }
-
-  public double getPostCoeff01() {
-    return postCoeff01;
-  }
-
-  public void setPostCoeff01(double postCoeff01) {
-    this.postCoeff01 = postCoeff01;
-    updateHasPostCoeffs();
-  }
-
-  public double getPostCoeff10() {
-    return postCoeff10;
-  }
-
-  public void setPostCoeff10(double postCoeff10) {
-    this.postCoeff10 = postCoeff10;
-    updateHasPostCoeffs();
-  }
-
-  public double getPostCoeff11() {
-    return postCoeff11;
-  }
-
-  public void setPostCoeff11(double postCoeff11) {
-    this.postCoeff11 = postCoeff11;
-    updateHasPostCoeffs();
-  }
-
-  public double getPostCoeff20() {
-    return postCoeff20;
-  }
-
-  public void setPostCoeff20(double postCoeff20) {
-    this.postCoeff20 = postCoeff20;
-    updateHasPostCoeffs();
-  }
-
-  public double getPostCoeff21() {
-    return postCoeff21;
-  }
-
-  public void setPostCoeff21(double postCoeff21) {
-    this.postCoeff21 = postCoeff21;
-    updateHasPostCoeffs();
-  }
-
   @Override
   public boolean isEqual(XForm pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
@@ -571,20 +693,53 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
-        (fabs(coeff00 - pSrc.coeff00) > EPSILON) || !coeff00Curve.isEqual(pSrc.coeff00Curve) ||
-        (fabs(coeff01 - pSrc.coeff01) > EPSILON) || !coeff01Curve.isEqual(pSrc.coeff01Curve) ||
-        (fabs(coeff10 - pSrc.coeff10) > EPSILON) || !coeff10Curve.isEqual(pSrc.coeff10Curve) ||
-        (fabs(coeff11 - pSrc.coeff11) > EPSILON) || !coeff11Curve.isEqual(pSrc.coeff11Curve) ||
-        (fabs(coeff20 - pSrc.coeff20) > EPSILON) || !coeff20Curve.isEqual(pSrc.coeff20Curve) ||
-        (fabs(coeff21 - pSrc.coeff21) > EPSILON) || !coeff21Curve.isEqual(pSrc.coeff21Curve) ||
-        (fabs(postCoeff00 - pSrc.postCoeff00) > EPSILON) || !postCoeff00Curve.isEqual(pSrc.postCoeff00Curve) ||
-        (fabs(postCoeff01 - pSrc.postCoeff01) > EPSILON) || !postCoeff01Curve.isEqual(pSrc.postCoeff01Curve) ||
-        (fabs(postCoeff10 - pSrc.postCoeff10) > EPSILON) || !postCoeff10Curve.isEqual(pSrc.postCoeff10Curve) ||
-        (fabs(postCoeff11 - pSrc.postCoeff11) > EPSILON) || !postCoeff11Curve.isEqual(pSrc.postCoeff11Curve) ||
-        (fabs(postCoeff20 - pSrc.postCoeff20) > EPSILON) || !postCoeff20Curve.isEqual(pSrc.postCoeff20Curve) ||
-        (fabs(postCoeff21 - pSrc.postCoeff21) > EPSILON) || !postCoeff21Curve.isEqual(pSrc.postCoeff21Curve) ||
-        !rotateCurve.isEqual(pSrc.rotateCurve) || !scaleCurve.isEqual(pSrc.scaleCurve) ||
-        !postRotateCurve.isEqual(pSrc.postRotateCurve) || !postScaleCurve.isEqual(pSrc.postScaleCurve) ||
+
+        (fabs(xyCoeff00 - pSrc.xyCoeff00) > EPSILON) || !xyCoeff00Curve.isEqual(pSrc.xyCoeff00Curve) ||
+        (fabs(xyCoeff01 - pSrc.xyCoeff01) > EPSILON) || !xyCoeff01Curve.isEqual(pSrc.xyCoeff01Curve) ||
+        (fabs(xyCoeff10 - pSrc.xyCoeff10) > EPSILON) || !xyCoeff10Curve.isEqual(pSrc.xyCoeff10Curve) ||
+        (fabs(xyCoeff11 - pSrc.xyCoeff11) > EPSILON) || !xyCoeff11Curve.isEqual(pSrc.xyCoeff11Curve) ||
+        (fabs(xyCoeff20 - pSrc.xyCoeff20) > EPSILON) || !xyCoeff20Curve.isEqual(pSrc.xyCoeff20Curve) ||
+        (fabs(xyCoeff21 - pSrc.xyCoeff21) > EPSILON) || !xyCoeff21Curve.isEqual(pSrc.xyCoeff21Curve) ||
+        (fabs(xyPostCoeff00 - pSrc.xyPostCoeff00) > EPSILON) || !xyPostCoeff00Curve.isEqual(pSrc.xyPostCoeff00Curve) ||
+        (fabs(xyPostCoeff01 - pSrc.xyPostCoeff01) > EPSILON) || !xyPostCoeff01Curve.isEqual(pSrc.xyPostCoeff01Curve) ||
+        (fabs(xyPostCoeff10 - pSrc.xyPostCoeff10) > EPSILON) || !xyPostCoeff10Curve.isEqual(pSrc.xyPostCoeff10Curve) ||
+        (fabs(xyPostCoeff11 - pSrc.xyPostCoeff11) > EPSILON) || !xyPostCoeff11Curve.isEqual(pSrc.xyPostCoeff11Curve) ||
+        (fabs(xyPostCoeff20 - pSrc.xyPostCoeff20) > EPSILON) || !xyPostCoeff20Curve.isEqual(pSrc.xyPostCoeff20Curve) ||
+        (fabs(xyPostCoeff21 - pSrc.xyPostCoeff21) > EPSILON) || !xyPostCoeff21Curve.isEqual(pSrc.xyPostCoeff21Curve) ||
+
+        (fabs(yzCoeff00 - pSrc.yzCoeff00) > EPSILON) || !yzCoeff00Curve.isEqual(pSrc.yzCoeff00Curve) ||
+        (fabs(yzCoeff01 - pSrc.yzCoeff01) > EPSILON) || !yzCoeff01Curve.isEqual(pSrc.yzCoeff01Curve) ||
+        (fabs(yzCoeff10 - pSrc.yzCoeff10) > EPSILON) || !yzCoeff10Curve.isEqual(pSrc.yzCoeff10Curve) ||
+        (fabs(yzCoeff11 - pSrc.yzCoeff11) > EPSILON) || !yzCoeff11Curve.isEqual(pSrc.yzCoeff11Curve) ||
+        (fabs(yzCoeff20 - pSrc.yzCoeff20) > EPSILON) || !yzCoeff20Curve.isEqual(pSrc.yzCoeff20Curve) ||
+        (fabs(yzCoeff21 - pSrc.yzCoeff21) > EPSILON) || !yzCoeff21Curve.isEqual(pSrc.yzCoeff21Curve) ||
+        (fabs(yzPostCoeff00 - pSrc.yzPostCoeff00) > EPSILON) || !yzPostCoeff00Curve.isEqual(pSrc.yzPostCoeff00Curve) ||
+        (fabs(yzPostCoeff01 - pSrc.yzPostCoeff01) > EPSILON) || !yzPostCoeff01Curve.isEqual(pSrc.yzPostCoeff01Curve) ||
+        (fabs(yzPostCoeff10 - pSrc.yzPostCoeff10) > EPSILON) || !yzPostCoeff10Curve.isEqual(pSrc.yzPostCoeff10Curve) ||
+        (fabs(yzPostCoeff11 - pSrc.yzPostCoeff11) > EPSILON) || !yzPostCoeff11Curve.isEqual(pSrc.yzPostCoeff11Curve) ||
+        (fabs(yzPostCoeff20 - pSrc.yzPostCoeff20) > EPSILON) || !yzPostCoeff20Curve.isEqual(pSrc.yzPostCoeff20Curve) ||
+        (fabs(yzPostCoeff21 - pSrc.yzPostCoeff21) > EPSILON) || !yzPostCoeff21Curve.isEqual(pSrc.yzPostCoeff21Curve) ||
+
+        (fabs(zxCoeff00 - pSrc.zxCoeff00) > EPSILON) || !zxCoeff00Curve.isEqual(pSrc.zxCoeff00Curve) ||
+        (fabs(zxCoeff01 - pSrc.zxCoeff01) > EPSILON) || !zxCoeff01Curve.isEqual(pSrc.zxCoeff01Curve) ||
+        (fabs(zxCoeff10 - pSrc.zxCoeff10) > EPSILON) || !zxCoeff10Curve.isEqual(pSrc.zxCoeff10Curve) ||
+        (fabs(zxCoeff11 - pSrc.zxCoeff11) > EPSILON) || !zxCoeff11Curve.isEqual(pSrc.zxCoeff11Curve) ||
+        (fabs(zxCoeff20 - pSrc.zxCoeff20) > EPSILON) || !zxCoeff20Curve.isEqual(pSrc.zxCoeff20Curve) ||
+        (fabs(zxCoeff21 - pSrc.zxCoeff21) > EPSILON) || !zxCoeff21Curve.isEqual(pSrc.zxCoeff21Curve) ||
+        (fabs(zxPostCoeff00 - pSrc.zxPostCoeff00) > EPSILON) || !zxPostCoeff00Curve.isEqual(pSrc.zxPostCoeff00Curve) ||
+        (fabs(zxPostCoeff01 - pSrc.zxPostCoeff01) > EPSILON) || !zxPostCoeff01Curve.isEqual(pSrc.zxPostCoeff01Curve) ||
+        (fabs(zxPostCoeff10 - pSrc.zxPostCoeff10) > EPSILON) || !zxPostCoeff10Curve.isEqual(pSrc.zxPostCoeff10Curve) ||
+        (fabs(zxPostCoeff11 - pSrc.zxPostCoeff11) > EPSILON) || !zxPostCoeff11Curve.isEqual(pSrc.zxPostCoeff11Curve) ||
+        (fabs(zxPostCoeff20 - pSrc.zxPostCoeff20) > EPSILON) || !zxPostCoeff20Curve.isEqual(pSrc.zxPostCoeff20Curve) ||
+        (fabs(zxPostCoeff21 - pSrc.zxPostCoeff21) > EPSILON) || !zxPostCoeff21Curve.isEqual(pSrc.zxPostCoeff21Curve) ||
+
+        !xyRotateCurve.isEqual(pSrc.xyRotateCurve) || !xyScaleCurve.isEqual(pSrc.xyScaleCurve) ||
+        !xyPostRotateCurve.isEqual(pSrc.xyPostRotateCurve) || !xyPostScaleCurve.isEqual(pSrc.xyPostScaleCurve) ||
+        !yzRotateCurve.isEqual(pSrc.yzRotateCurve) || !yzScaleCurve.isEqual(pSrc.yzScaleCurve) ||
+        !yzPostRotateCurve.isEqual(pSrc.yzPostRotateCurve) || !yzPostScaleCurve.isEqual(pSrc.yzPostScaleCurve) ||
+        !zxRotateCurve.isEqual(pSrc.zxRotateCurve) || !zxScaleCurve.isEqual(pSrc.zxScaleCurve) ||
+        !zxPostRotateCurve.isEqual(pSrc.zxPostRotateCurve) || !zxPostScaleCurve.isEqual(pSrc.zxPostScaleCurve) ||
+
         (fabs(opacity - pSrc.opacity) > EPSILON) || !opacityCurve.isEqual(pSrc.opacityCurve) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
@@ -634,20 +789,20 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return false;
   }
 
-  public MotionCurve getRotateCurve() {
-    return rotateCurve;
+  public MotionCurve getXYRotateCurve() {
+    return xyRotateCurve;
   }
 
-  public MotionCurve getScaleCurve() {
-    return scaleCurve;
+  public MotionCurve getXYScaleCurve() {
+    return xyScaleCurve;
   }
 
-  public MotionCurve getPostRotateCurve() {
-    return postRotateCurve;
+  public MotionCurve getXYPostRotateCurve() {
+    return xyPostRotateCurve;
   }
 
-  public MotionCurve getPostScaleCurve() {
-    return postScaleCurve;
+  public MotionCurve getXYPostScaleCurve() {
+    return xyPostScaleCurve;
   }
 
   public double getModGamma() {
@@ -715,4 +870,647 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modSaturation = 0.0;
     modSaturationSpeed = 0.0;
   }
+
+  public double getXYCoeff00() {
+    return xyCoeff00;
+  }
+
+  public void setXYCoeff00(double xyCoeff00) {
+    this.xyCoeff00 = xyCoeff00;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYCoeff01() {
+    return xyCoeff01;
+  }
+
+  public void setXYCoeff01(double xyCoeff01) {
+    this.xyCoeff01 = xyCoeff01;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYCoeff10() {
+    return xyCoeff10;
+  }
+
+  public void setXYCoeff10(double xyCoeff10) {
+    this.xyCoeff10 = xyCoeff10;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYCoeff11() {
+    return xyCoeff11;
+  }
+
+  public void setXYCoeff11(double xyCoeff11) {
+    this.xyCoeff11 = xyCoeff11;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYCoeff20() {
+    return xyCoeff20;
+  }
+
+  public void setXYCoeff20(double xyCoeff20) {
+    this.xyCoeff20 = xyCoeff20;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYCoeff21() {
+    return xyCoeff21;
+  }
+
+  public void setXYCoeff21(double xyCoeff21) {
+    this.xyCoeff21 = xyCoeff21;
+    updateHasXYCoeffs();
+  }
+
+  public double getXYPostCoeff00() {
+    return xyPostCoeff00;
+  }
+
+  public void setXYPostCoeff00(double xyPostCoeff00) {
+    this.xyPostCoeff00 = xyPostCoeff00;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getXYPostCoeff01() {
+    return xyPostCoeff01;
+  }
+
+  public void setXYPostCoeff01(double xyPostCoeff01) {
+    this.xyPostCoeff01 = xyPostCoeff01;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getXYPostCoeff10() {
+    return xyPostCoeff10;
+  }
+
+  public void setXYPostCoeff10(double xyPostCoeff10) {
+    this.xyPostCoeff10 = xyPostCoeff10;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getXYPostCoeff11() {
+    return xyPostCoeff11;
+  }
+
+  public void setXYPostCoeff11(double xyPostCoeff11) {
+    this.xyPostCoeff11 = xyPostCoeff11;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getXYPostCoeff20() {
+    return xyPostCoeff20;
+  }
+
+  public void setXYPostCoeff20(double xyPostCoeff20) {
+    this.xyPostCoeff20 = xyPostCoeff20;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getXYPostCoeff21() {
+    return xyPostCoeff21;
+  }
+
+  public void setXYPostCoeff21(double xyPostCoeff21) {
+    this.xyPostCoeff21 = xyPostCoeff21;
+    updateHasXYPostCoeffs();
+  }
+
+  public double getYZCoeff00() {
+    return yzCoeff00;
+  }
+
+  public void setYZCoeff00(double yzCoeff00) {
+    this.yzCoeff00 = yzCoeff00;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZCoeff01() {
+    return yzCoeff01;
+  }
+
+  public void setYZCoeff01(double yzCoeff01) {
+    this.yzCoeff01 = yzCoeff01;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZCoeff10() {
+    return yzCoeff10;
+  }
+
+  public void setYZCoeff10(double yzCoeff10) {
+    this.yzCoeff10 = yzCoeff10;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZCoeff11() {
+    return yzCoeff11;
+  }
+
+  public void setYZCoeff11(double yzCoeff11) {
+    this.yzCoeff11 = yzCoeff11;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZCoeff20() {
+    return yzCoeff20;
+  }
+
+  public void setYZCoeff20(double yzCoeff20) {
+    this.yzCoeff20 = yzCoeff20;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZCoeff21() {
+    return yzCoeff21;
+  }
+
+  public void setYZCoeff21(double yzCoeff21) {
+    this.yzCoeff21 = yzCoeff21;
+    updateHasYZCoeffs();
+  }
+
+  public double getYZPostCoeff00() {
+    return yzPostCoeff00;
+  }
+
+  public void setYZPostCoeff00(double yzPostCoeff00) {
+    this.yzPostCoeff00 = yzPostCoeff00;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getYZPostCoeff01() {
+    return yzPostCoeff01;
+  }
+
+  public void setYZPostCoeff01(double yzPostCoeff01) {
+    this.yzPostCoeff01 = yzPostCoeff01;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getYZPostCoeff10() {
+    return yzPostCoeff10;
+  }
+
+  public void setYZPostCoeff10(double yzPostCoeff10) {
+    this.yzPostCoeff10 = yzPostCoeff10;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getYZPostCoeff11() {
+    return yzPostCoeff11;
+  }
+
+  public void setYZPostCoeff11(double yzPostCoeff11) {
+    this.yzPostCoeff11 = yzPostCoeff11;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getYZPostCoeff20() {
+    return yzPostCoeff20;
+  }
+
+  public void setYZPostCoeff20(double yzPostCoeff20) {
+    this.yzPostCoeff20 = yzPostCoeff20;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getYZPostCoeff21() {
+    return yzPostCoeff21;
+  }
+
+  public void setYZPostCoeff21(double yzPostCoeff21) {
+    this.yzPostCoeff21 = yzPostCoeff21;
+    updateHasYZPostCoeffs();
+  }
+
+  public double getZXCoeff00() {
+    return zxCoeff00;
+  }
+
+  public void setZXCoeff00(double zxCoeff00) {
+    this.zxCoeff00 = zxCoeff00;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXCoeff01() {
+    return zxCoeff01;
+  }
+
+  public void setZXCoeff01(double zxCoeff01) {
+    this.zxCoeff01 = zxCoeff01;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXCoeff10() {
+    return zxCoeff10;
+  }
+
+  public void setZXCoeff10(double zxCoeff10) {
+    this.zxCoeff10 = zxCoeff10;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXCoeff11() {
+    return zxCoeff11;
+  }
+
+  public void setZXCoeff11(double zxCoeff11) {
+    this.zxCoeff11 = zxCoeff11;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXCoeff20() {
+    return zxCoeff20;
+  }
+
+  public void setZXCoeff20(double zxCoeff20) {
+    this.zxCoeff20 = zxCoeff20;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXCoeff21() {
+    return zxCoeff21;
+  }
+
+  public void setZXCoeff21(double zxCoeff21) {
+    this.zxCoeff21 = zxCoeff21;
+    updateHasZXCoeffs();
+  }
+
+  public double getZXPostCoeff00() {
+    return zxPostCoeff00;
+  }
+
+  public void setZXPostCoeff00(double zxPostCoeff00) {
+    this.zxPostCoeff00 = zxPostCoeff00;
+    updateHasZXPostCoeffs();
+  }
+
+  public double getZXPostCoeff01() {
+    return zxPostCoeff01;
+  }
+
+  public void setZXPostCoeff01(double zxPostCoeff01) {
+    this.zxPostCoeff01 = zxPostCoeff01;
+    updateHasZXPostCoeffs();
+  }
+
+  public double getZXPostCoeff10() {
+    return zxPostCoeff10;
+  }
+
+  public void setZXPostCoeff10(double zxPostCoeff10) {
+    this.zxPostCoeff10 = zxPostCoeff10;
+    updateHasZXPostCoeffs();
+  }
+
+  public double getZXPostCoeff11() {
+    return zxPostCoeff11;
+  }
+
+  public void setZXPostCoeff11(double zxPostCoeff11) {
+    this.zxPostCoeff11 = zxPostCoeff11;
+    updateHasZXPostCoeffs();
+  }
+
+  public double getZXPostCoeff20() {
+    return zxPostCoeff20;
+  }
+
+  public void setZXPostCoeff20(double zxPostCoeff20) {
+    this.zxPostCoeff20 = zxPostCoeff20;
+    updateHasZXPostCoeffs();
+  }
+
+  public double getZXPostCoeff21() {
+    return zxPostCoeff21;
+  }
+
+  public void setZXPostCoeff21(double zxPostCoeff21) {
+    this.zxPostCoeff21 = zxPostCoeff21;
+    updateHasZXPostCoeffs();
+  }
+
+  private EditPlane getEditPlane() {
+    if (owner == null || owner.getOwner() == null) {
+      System.out.println("EditPlane NULL");
+      return EditPlane.XY;
+    }
+    else {
+      return owner.getOwner().getEditPlane();
+    }
+  }
+
+  public double getCoeff00() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff00;
+      case YZ:
+        return yzCoeff00;
+      default:
+        return zxCoeff00;
+    }
+  }
+
+  public double getCoeff01() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff01;
+      case YZ:
+        return yzCoeff01;
+      default:
+        return zxCoeff01;
+    }
+  }
+
+  public double getCoeff10() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff10;
+      case YZ:
+        return yzCoeff10;
+      default:
+        return zxCoeff10;
+    }
+  }
+
+  public double getCoeff11() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff11;
+      case YZ:
+        return yzCoeff11;
+      default:
+        return zxCoeff11;
+    }
+  }
+
+  public double getCoeff20() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff20;
+      case YZ:
+        return yzCoeff20;
+      default:
+        return zxCoeff20;
+    }
+  }
+
+  public double getCoeff21() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyCoeff21;
+      case YZ:
+        return yzCoeff21;
+      default:
+        return zxCoeff21;
+    }
+  }
+
+  public double getPostCoeff00() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff00;
+      case YZ:
+        return yzPostCoeff00;
+      default:
+        return zxPostCoeff00;
+    }
+  }
+
+  public double getPostCoeff01() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff01;
+      case YZ:
+        return yzPostCoeff01;
+      default:
+        return zxPostCoeff01;
+    }
+  }
+
+  public double getPostCoeff10() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff10;
+      case YZ:
+        return yzPostCoeff10;
+      default:
+        return zxPostCoeff10;
+    }
+  }
+
+  public double getPostCoeff11() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff11;
+      case YZ:
+        return yzPostCoeff11;
+      default:
+        return zxPostCoeff11;
+    }
+  }
+
+  public double getPostCoeff20() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff20;
+      case YZ:
+        return yzPostCoeff20;
+      default:
+        return zxPostCoeff20;
+    }
+  }
+
+  public double getPostCoeff21() {
+    switch (getEditPlane()) {
+      case XY:
+        return xyPostCoeff21;
+      case YZ:
+        return yzPostCoeff21;
+      default:
+        return zxPostCoeff21;
+    }
+  }
+
+  public void setCoeff00(double coeff00) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff00(coeff00);
+        break;
+      case YZ:
+        setYZCoeff00(coeff00);
+        break;
+      default:
+        setZXCoeff00(coeff00);
+        break;
+    }
+  }
+
+  public void setCoeff01(double coeff01) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff01(coeff01);
+        break;
+      case YZ:
+        setYZCoeff01(coeff01);
+        break;
+      default:
+        setZXCoeff01(coeff01);
+        break;
+    }
+  }
+
+  public void setCoeff10(double coeff10) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff10(coeff10);
+        break;
+      case YZ:
+        setYZCoeff10(coeff10);
+        break;
+      default:
+        setZXCoeff10(coeff10);
+        break;
+    }
+  }
+
+  public void setCoeff11(double coeff11) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff11(coeff11);
+        break;
+      case YZ:
+        setYZCoeff11(coeff11);
+        break;
+      default:
+        setZXCoeff11(coeff11);
+        break;
+    }
+  }
+
+  public void setCoeff20(double coeff20) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff20(coeff20);
+        break;
+      case YZ:
+        setYZCoeff20(coeff20);
+        break;
+      default:
+        setZXCoeff20(coeff20);
+        break;
+    }
+  }
+
+  public void setCoeff21(double coeff21) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYCoeff21(coeff21);
+        break;
+      case YZ:
+        setYZCoeff21(coeff21);
+        break;
+      default:
+        setZXCoeff21(coeff21);
+        break;
+    }
+  }
+
+  public void setPostCoeff00(double postCoeff00) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff00(postCoeff00);
+        break;
+      case YZ:
+        setYZPostCoeff00(postCoeff00);
+        break;
+      default:
+        setZXPostCoeff00(postCoeff00);
+        break;
+    }
+  }
+
+  public void setPostCoeff01(double postCoeff01) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff01(postCoeff01);
+        break;
+      case YZ:
+        setYZPostCoeff01(postCoeff01);
+        break;
+      default:
+        setZXPostCoeff01(postCoeff01);
+        break;
+    }
+  }
+
+  public void setPostCoeff10(double postCoeff10) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff10(postCoeff10);
+        break;
+      case YZ:
+        setYZPostCoeff10(postCoeff10);
+        break;
+      default:
+        setZXPostCoeff10(postCoeff10);
+        break;
+    }
+  }
+
+  public void setPostCoeff11(double postCoeff11) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff11(postCoeff11);
+        break;
+      case YZ:
+        setYZPostCoeff11(postCoeff11);
+        break;
+      default:
+        setZXPostCoeff11(postCoeff11);
+        break;
+    }
+  }
+
+  public void setPostCoeff20(double postCoeff20) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff20(postCoeff20);
+        break;
+      case YZ:
+        setYZPostCoeff20(postCoeff20);
+        break;
+      default:
+        setZXPostCoeff20(postCoeff20);
+        break;
+    }
+  }
+
+  public void setPostCoeff21(double postCoeff21) {
+    switch (getEditPlane()) {
+      case XY:
+        setXYPostCoeff21(postCoeff21);
+        break;
+      case YZ:
+        setYZPostCoeff21(postCoeff21);
+        break;
+      default:
+        setZXPostCoeff21(postCoeff21);
+        break;
+    }
+  }
+
+  public Layer getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Layer owner) {
+    this.owner = owner;
+  }
+
 }

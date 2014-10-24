@@ -122,9 +122,21 @@ public class AbstractFlameWriter {
       }
     }
 
-    attrList.add(pXB.createAttr("coefs", pXForm.getCoeff00() + " " + pXForm.getCoeff01() + " " + pXForm.getCoeff10() + " " + pXForm.getCoeff11() + " " + pXForm.getCoeff20() + " " + pXForm.getCoeff21()));
-    if (pXForm.isHasPostCoeffs()) {
-      attrList.add(pXB.createAttr("post", pXForm.getPostCoeff00() + " " + pXForm.getPostCoeff01() + " " + pXForm.getPostCoeff10() + " " + pXForm.getPostCoeff11() + " " + pXForm.getPostCoeff20() + " " + pXForm.getPostCoeff21()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_XY_COEFS, pXForm.getXYCoeff00() + " " + pXForm.getXYCoeff01() + " " + pXForm.getXYCoeff10() + " " + pXForm.getXYCoeff11() + " " + pXForm.getXYCoeff20() + " " + pXForm.getXYCoeff21()));
+    if (pXForm.isHasXYPostCoeffs()) {
+      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_XY_POST, pXForm.getXYPostCoeff00() + " " + pXForm.getXYPostCoeff01() + " " + pXForm.getXYPostCoeff10() + " " + pXForm.getXYPostCoeff11() + " " + pXForm.getXYPostCoeff20() + " " + pXForm.getXYPostCoeff21()));
+    }
+    if (pXForm.isHasYZCoeffs()) {
+      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_YZ_COEFS, pXForm.getYZCoeff00() + " " + pXForm.getYZCoeff01() + " " + pXForm.getYZCoeff10() + " " + pXForm.getYZCoeff11() + " " + pXForm.getYZCoeff20() + " " + pXForm.getYZCoeff21()));
+    }
+    if (pXForm.isHasYZPostCoeffs()) {
+      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_YZ_POST, pXForm.getYZPostCoeff00() + " " + pXForm.getYZPostCoeff01() + " " + pXForm.getYZPostCoeff10() + " " + pXForm.getYZPostCoeff11() + " " + pXForm.getYZPostCoeff20() + " " + pXForm.getYZPostCoeff21()));
+    }
+    if (pXForm.isHasZXCoeffs()) {
+      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_ZX_COEFS, pXForm.getZXCoeff00() + " " + pXForm.getZXCoeff01() + " " + pXForm.getZXCoeff10() + " " + pXForm.getZXCoeff11() + " " + pXForm.getZXCoeff20() + " " + pXForm.getZXCoeff21()));
+    }
+    if (pXForm.isHasZXPostCoeffs()) {
+      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_ZX_POST, pXForm.getZXPostCoeff00() + " " + pXForm.getZXPostCoeff01() + " " + pXForm.getZXPostCoeff10() + " " + pXForm.getZXPostCoeff11() + " " + pXForm.getZXPostCoeff20() + " " + pXForm.getZXPostCoeff21()));
     }
     {
       String hs = "";

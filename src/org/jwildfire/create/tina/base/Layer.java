@@ -20,7 +20,6 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.create.tina.animate.AnimAware;
@@ -30,6 +29,8 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
 public class Layer implements Assignable<Layer>, Serializable {
+  private Flame owner;
+
   private static final long serialVersionUID = 1L;
 
   private boolean visible = true;
@@ -39,9 +40,9 @@ public class Layer implements Assignable<Layer>, Serializable {
   @AnimAware
   private RGBPalette palette = new RGBPalette();
   @AnimAware
-  private final List<XForm> xForms = new ArrayList<XForm>();
+  private final List<XForm> xForms = new XFormList(this);
   @AnimAware
-  private final List<XForm> finalXForms = new ArrayList<XForm>();
+  private final List<XForm> finalXForms = new XFormList(this);
 
   private String name = "";
 
@@ -195,5 +196,13 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   public void setName(String name) {
     this.name = name != null ? name : "";
+  }
+
+  public void setOwner(Flame pOwner) {
+    owner = pOwner;
+  }
+
+  public Flame getOwner() {
+    return owner;
   }
 }

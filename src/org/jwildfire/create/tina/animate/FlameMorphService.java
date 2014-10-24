@@ -212,19 +212,51 @@ public class FlameMorphService {
     res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
     res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
     res.setColorSymmetry(morphValue(pXForm1.getColorSymmetry(), pXForm2.getColorSymmetry(), pFScl));
-    res.setCoeff00(morphValue(pXForm1.getCoeff00(), pXForm2.getCoeff00(), pFScl));
-    res.setCoeff01(morphValue(pXForm1.getCoeff01(), pXForm2.getCoeff01(), pFScl));
-    res.setCoeff10(morphValue(pXForm1.getCoeff10(), pXForm2.getCoeff10(), pFScl));
-    res.setCoeff11(morphValue(pXForm1.getCoeff11(), pXForm2.getCoeff11(), pFScl));
-    res.setCoeff20(morphValue(pXForm1.getCoeff20(), pXForm2.getCoeff20(), pFScl));
-    res.setCoeff21(morphValue(pXForm1.getCoeff21(), pXForm2.getCoeff21(), pFScl));
+
+    res.setXYCoeff00(morphValue(pXForm1.getXYCoeff00(), pXForm2.getXYCoeff00(), pFScl));
+    res.setXYCoeff01(morphValue(pXForm1.getXYCoeff01(), pXForm2.getXYCoeff01(), pFScl));
+    res.setXYCoeff10(morphValue(pXForm1.getXYCoeff10(), pXForm2.getXYCoeff10(), pFScl));
+    res.setXYCoeff11(morphValue(pXForm1.getXYCoeff11(), pXForm2.getXYCoeff11(), pFScl));
+    res.setXYCoeff20(morphValue(pXForm1.getXYCoeff20(), pXForm2.getXYCoeff20(), pFScl));
+    res.setXYCoeff21(morphValue(pXForm1.getXYCoeff21(), pXForm2.getXYCoeff21(), pFScl));
+
+    res.setYZCoeff00(morphValue(pXForm1.getYZCoeff00(), pXForm2.getYZCoeff00(), pFScl));
+    res.setYZCoeff01(morphValue(pXForm1.getYZCoeff01(), pXForm2.getYZCoeff01(), pFScl));
+    res.setYZCoeff10(morphValue(pXForm1.getYZCoeff10(), pXForm2.getYZCoeff10(), pFScl));
+    res.setYZCoeff11(morphValue(pXForm1.getYZCoeff11(), pXForm2.getYZCoeff11(), pFScl));
+    res.setYZCoeff20(morphValue(pXForm1.getYZCoeff20(), pXForm2.getYZCoeff20(), pFScl));
+    res.setYZCoeff21(morphValue(pXForm1.getYZCoeff21(), pXForm2.getYZCoeff21(), pFScl));
+
+    res.setZXCoeff00(morphValue(pXForm1.getZXCoeff00(), pXForm2.getZXCoeff00(), pFScl));
+    res.setZXCoeff01(morphValue(pXForm1.getZXCoeff01(), pXForm2.getZXCoeff01(), pFScl));
+    res.setZXCoeff10(morphValue(pXForm1.getZXCoeff10(), pXForm2.getZXCoeff10(), pFScl));
+    res.setZXCoeff11(morphValue(pXForm1.getZXCoeff11(), pXForm2.getZXCoeff11(), pFScl));
+    res.setZXCoeff20(morphValue(pXForm1.getZXCoeff20(), pXForm2.getZXCoeff20(), pFScl));
+    res.setZXCoeff21(morphValue(pXForm1.getZXCoeff21(), pXForm2.getZXCoeff21(), pFScl));
+
     res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
-    res.setPostCoeff00(morphValue(pXForm1.getPostCoeff00(), pXForm2.getPostCoeff00(), pFScl));
-    res.setPostCoeff01(morphValue(pXForm1.getPostCoeff01(), pXForm2.getPostCoeff01(), pFScl));
-    res.setPostCoeff10(morphValue(pXForm1.getPostCoeff10(), pXForm2.getPostCoeff10(), pFScl));
-    res.setPostCoeff11(morphValue(pXForm1.getPostCoeff11(), pXForm2.getPostCoeff11(), pFScl));
-    res.setPostCoeff20(morphValue(pXForm1.getPostCoeff20(), pXForm2.getPostCoeff20(), pFScl));
-    res.setPostCoeff21(morphValue(pXForm1.getPostCoeff21(), pXForm2.getPostCoeff21(), pFScl));
+
+    res.setXYPostCoeff00(morphValue(pXForm1.getXYPostCoeff00(), pXForm2.getXYPostCoeff00(), pFScl));
+    res.setXYPostCoeff01(morphValue(pXForm1.getXYPostCoeff01(), pXForm2.getXYPostCoeff01(), pFScl));
+    res.setXYPostCoeff10(morphValue(pXForm1.getXYPostCoeff10(), pXForm2.getXYPostCoeff10(), pFScl));
+    res.setXYPostCoeff11(morphValue(pXForm1.getXYPostCoeff11(), pXForm2.getXYPostCoeff11(), pFScl));
+    res.setXYPostCoeff20(morphValue(pXForm1.getXYPostCoeff20(), pXForm2.getXYPostCoeff20(), pFScl));
+    res.setXYPostCoeff21(morphValue(pXForm1.getXYPostCoeff21(), pXForm2.getXYPostCoeff21(), pFScl));
+
+    res.setYZPostCoeff00(morphValue(pXForm1.getYZPostCoeff00(), pXForm2.getYZPostCoeff00(), pFScl));
+    res.setYZPostCoeff01(morphValue(pXForm1.getYZPostCoeff01(), pXForm2.getYZPostCoeff01(), pFScl));
+    res.setYZPostCoeff10(morphValue(pXForm1.getYZPostCoeff10(), pXForm2.getYZPostCoeff10(), pFScl));
+    res.setYZPostCoeff11(morphValue(pXForm1.getYZPostCoeff11(), pXForm2.getYZPostCoeff11(), pFScl));
+    res.setYZPostCoeff20(morphValue(pXForm1.getYZPostCoeff20(), pXForm2.getYZPostCoeff20(), pFScl));
+    res.setYZPostCoeff21(morphValue(pXForm1.getYZPostCoeff21(), pXForm2.getYZPostCoeff21(), pFScl));
+
+    res.setZXPostCoeff00(morphValue(pXForm1.getZXPostCoeff00(), pXForm2.getZXPostCoeff00(), pFScl));
+    res.setZXPostCoeff01(morphValue(pXForm1.getZXPostCoeff01(), pXForm2.getZXPostCoeff01(), pFScl));
+    res.setZXPostCoeff10(morphValue(pXForm1.getZXPostCoeff10(), pXForm2.getZXPostCoeff10(), pFScl));
+    res.setZXPostCoeff11(morphValue(pXForm1.getZXPostCoeff11(), pXForm2.getZXPostCoeff11(), pFScl));
+    res.setZXPostCoeff20(morphValue(pXForm1.getZXPostCoeff20(), pXForm2.getZXPostCoeff20(), pFScl));
+    res.setZXPostCoeff21(morphValue(pXForm1.getZXPostCoeff21(), pXForm2.getZXPostCoeff21(), pFScl));
+
     res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
     res.setDrawMode(pFScl >= 0.5 ? pXForm2.getDrawMode() : pXForm1.getDrawMode());
     for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {

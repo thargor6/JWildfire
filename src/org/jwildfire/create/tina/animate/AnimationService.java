@@ -484,7 +484,7 @@ public class AnimationService {
           case ROTATE_FULL: {
             int idx = 0;
             for (XForm xForm : layer.getXForms()) {
-              MotionCurve curve = xForm.getRotateCurve();
+              MotionCurve curve = xForm.getXYRotateCurve();
               EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, idx++ % 2 == 0 ? 360.0 : -360.0);
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
@@ -493,7 +493,7 @@ public class AnimationService {
           case ROTATE_POST_FULL: {
             int idx = 0;
             for (XForm xForm : layer.getXForms()) {
-              MotionCurve curve = xForm.getPostRotateCurve();
+              MotionCurve curve = xForm.getXYPostRotateCurve();
               EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, idx++ % 2 == 0 ? 360.0 : -360.0);
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
@@ -511,7 +511,7 @@ public class AnimationService {
 
             if (xForm != null) {
               EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
-              MotionCurve curve = xForm.getRotateCurve();
+              MotionCurve curve = xForm.getXYRotateCurve();
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
           }
@@ -528,7 +528,7 @@ public class AnimationService {
 
             if (xForm != null) {
               EnvelopePoints points = new EnvelopePoints(pScript, pFrameCount, pFPS, EnvelopePointsShape.RAMP, 360.0);
-              MotionCurve curve = xForm.getPostRotateCurve();
+              MotionCurve curve = xForm.getXYPostRotateCurve();
               addEnvelope(pFrameCount, curve, points.getEnvX(), points.getEnvY());
             }
           }

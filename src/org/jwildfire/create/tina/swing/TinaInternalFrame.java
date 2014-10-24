@@ -4837,7 +4837,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.removeAllItems();
     pCmb.addItem(EditPlane.XY);
     pCmb.addItem(EditPlane.YZ);
-    pCmb.addItem(EditPlane.XZ);
+    pCmb.addItem(EditPlane.ZX);
     pCmb.setSelectedItem(EditPlane.XY);
   }
 

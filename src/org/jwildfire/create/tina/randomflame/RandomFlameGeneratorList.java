@@ -33,6 +33,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(Bubbles3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(CrossRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalBubbles3DRandomFlameGenerator.class);
+    registerRandomFlameGenerator(DualityRandomFlameGenerator.class);
     registerRandomFlameGenerator(DuckiesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Gnarl3DRandomFlameGenerator.class);
