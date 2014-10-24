@@ -406,4 +406,5 @@ public class TinaControllerData {
   public JToggleButton toggleDetachedPreviewButton;
   public JButton gradientResetBtn;
   public JPanel macroButtonHorizRootPanel;
+  public JComboBox affineEditPlaneCmb;
 }

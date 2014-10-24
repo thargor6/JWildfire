@@ -83,6 +83,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dColor;
@@ -3480,6 +3481,22 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateEditMotionCurveBtn.setBounds(0, 57, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
       tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
+
+      affineEditPlaneCmb = new JComboBox();
+      affineEditPlaneCmb.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.affineEditPlaneCmb_changed();
+          }
+        }
+      });
+      affineEditPlaneCmb.setPreferredSize(new Dimension(125, 24));
+      affineEditPlaneCmb.setMinimumSize(new Dimension(100, 24));
+      affineEditPlaneCmb.setMaximumSize(new Dimension(32767, 24));
+      affineEditPlaneCmb.setMaximumRowCount(32);
+      affineEditPlaneCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPlaneCmb.setBounds(0, 127, 70, 24);
+      tinaAffineTransformationPanel.add(affineEditPlaneCmb);
     }
     return tinaAffineTransformationPanel;
   }
@@ -4640,7 +4657,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
         getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
-        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel());
+        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineEditPlaneCmb());
 
     tinaController = new TinaController(params);
 
@@ -4659,6 +4676,9 @@ public class TinaInternalFrame extends JInternalFrame {
       for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
+
+      initEditPlaneCmb(getAffineEditPlaneCmb());
+
       getXFormDrawModeCmb().removeAllItems();
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
@@ -4713,7 +4733,8 @@ public class TinaInternalFrame extends JInternalFrame {
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
           getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
           getInteractiveSaveFlameButton(), getInteractiveRandomStyleCmb(), getInteractiveCenterTopPanel(), getInteractiveStatsTextArea(),
-          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractivePauseButton(), getInteractiveResumeButton()));
+          getInteractiveHalveSizeButton(), getInteractiveResolutionProfileCmb(), getInteractivePauseButton(), getInteractiveResumeButton(),
+          getInteractiveRendererShowStatsButton(), getInteractiveRendererShowPreviewButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {
@@ -4796,6 +4817,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(DOFBlurShapeType.STARBLUR);
     pCmb.addItem(DOFBlurShapeType.NBLUR);
     pCmb.addItem(DOFBlurShapeType.HEART);
+    pCmb.addItem(DOFBlurShapeType.SUB_FLAME);
     pCmb.setSelectedItem(DOFBlurShapeType.BUBBLE);
   }
 
@@ -4809,6 +4831,14 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Y);
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Z);
     pCmb.setSelectedItem(GlobalScriptType.NONE);
+  }
+
+  private void initEditPlaneCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(EditPlane.XY);
+    pCmb.addItem(EditPlane.YZ);
+    pCmb.addItem(EditPlane.XZ);
+    pCmb.setSelectedItem(EditPlane.XY);
   }
 
   private void initTriangleStyleCmb(JComboBox pCmb, Prefs pPrefs) {
@@ -10711,6 +10741,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel macroButtonHorizRootPanel;
   private JScrollPane macroButtonsHorizScrollPane;
   private JPanel macroButtonHorizPanel;
+  private JComboBox affineEditPlaneCmb;
+  private JPanel panel_110;
+  private JToggleButton interactiveRendererShowStatsButton;
+  private JToggleButton interactiveRendererShowPreviewButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12222,6 +12256,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (interactiveStatsScrollPane == null) {
       interactiveStatsScrollPane = new JScrollPane();
       interactiveStatsScrollPane.setViewportView(getInteractiveStatsTextArea());
+      interactiveStatsScrollPane.setColumnHeaderView(getPanel_110());
     }
     return interactiveStatsScrollPane;
   }
@@ -22385,6 +22420,57 @@ public class TinaInternalFrame extends JInternalFrame {
       macroButtonHorizPanel.setPreferredSize(new Dimension(10, 28));
     }
     return macroButtonHorizPanel;
+  }
+
+  public JComboBox getAffineEditPlaneCmb() {
+    return affineEditPlaneCmb;
+  }
+
+  private JPanel getPanel_110() {
+    if (panel_110 == null) {
+      panel_110 = new JPanel();
+      panel_110.setPreferredSize(new Dimension(10, 32));
+      panel_110.setLayout(null);
+
+      interactiveRendererShowStatsButton = new JToggleButton();
+      interactiveRendererShowStatsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.getInteractiveRendererCtrl().showStatsBtn_changed();
+          }
+        }
+      });
+      interactiveRendererShowStatsButton.setText("Stats");
+      interactiveRendererShowStatsButton.setToolTipText("Show statistics (may slightly slow down rendering)");
+      interactiveRendererShowStatsButton.setSelected(true);
+      interactiveRendererShowStatsButton.setPreferredSize(new Dimension(42, 24));
+      interactiveRendererShowStatsButton.setBounds(4, 4, 72, 24);
+      panel_110.add(interactiveRendererShowStatsButton);
+
+      interactiveRendererShowPreviewButton = new JToggleButton();
+      interactiveRendererShowPreviewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.getInteractiveRendererCtrl().showPreviewBtn_changed();
+          }
+        }
+      });
+      interactiveRendererShowPreviewButton.setToolTipText("Show previews (may slow down rendering)");
+      interactiveRendererShowPreviewButton.setText("Preview");
+      interactiveRendererShowPreviewButton.setSelected(true);
+      interactiveRendererShowPreviewButton.setPreferredSize(new Dimension(42, 24));
+      interactiveRendererShowPreviewButton.setBounds(81, 4, 72, 24);
+      panel_110.add(interactiveRendererShowPreviewButton);
+    }
+    return panel_110;
+  }
+
+  public JToggleButton getInteractiveRendererShowStatsButton() {
+    return interactiveRendererShowStatsButton;
+  }
+
+  public JToggleButton getInteractiveRendererShowPreviewButton() {
+    return interactiveRendererShowPreviewButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

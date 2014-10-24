@@ -343,7 +343,7 @@ public class DetachedPreviewController implements IterationObserver {
   private final static int MAX_UPDATE_INC_INTERVAL = 20;
 
   private InteractiveRendererDisplayUpdater createDisplayUpdater() {
-    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image);
+    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
   }
 
 }

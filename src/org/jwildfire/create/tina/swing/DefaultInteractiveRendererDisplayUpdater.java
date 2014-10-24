@@ -25,23 +25,26 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
   private long sampleCount;
   private final JPanel imageRootPanel;
   private final SimpleImage image;
+  private boolean showPreview;
 
-  public DefaultInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage) {
+  public DefaultInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage, boolean pShowPreview) {
     imageRootPanel = pImageRootPanel;
     image = pImage;
+    showPreview = pShowPreview;
   }
 
   @Override
   public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     sampleCount++;
-    if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
+    if (showPreview && pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
       image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
     }
   }
 
   @Override
   public void updateImage() {
-    imageRootPanel.repaint();
+    if (showPreview)
+      imageRootPanel.repaint();
   }
 
   @Override
@@ -54,4 +57,8 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
     sampleCount = pSampleCount;
   }
 
+  @Override
+  public void setShowPreview(boolean pShowPreview) {
+    showPreview = pShowPreview;
+  }
 }

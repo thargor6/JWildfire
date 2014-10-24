@@ -72,6 +72,7 @@ import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.JWFScriptController;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Shading;
@@ -689,6 +690,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.macroButtonHorizPanel = parameterObject.macroButtonHorizPanel;
     data.gradientResetBtn = parameterObject.gradientResetBtn;
     data.macroButtonHorizRootPanel = parameterObject.macroButtonHorizRootPanel;
+    data.affineEditPlaneCmb = parameterObject.affineEditPlaneCmb;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
@@ -2381,24 +2383,65 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     boolean oldNoRefresh = noRefresh;
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-
+      data.affineEditPlaneCmb.setSelectedItem(getCurrFlame().getEditPlane());
       if (pXForm != null) {
-        if (data.affineEditPostTransformButton.isSelected()) {
-          data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
-          data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
-          data.affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
-          data.affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
-          data.affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
-          data.affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
+        switch (getCurrFlame().getEditPlane()) {
+          case XY:
+            if (data.affineEditPostTransformButton.isSelected()) {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getPostCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getPostCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getPostCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getPostCoeff21()));
+            }
+            else {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+            }
+            break;
+          case YZ:
+            if (data.affineEditPostTransformButton.isSelected()) {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getXPostCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getXPostCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getXPostCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getXPostCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getXPostCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getXPostCoeff21()));
+            }
+            else {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getXCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getXCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getXCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getXCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getXCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getXCoeff21()));
+            }
+            break;
+          case XZ:
+            if (data.affineEditPostTransformButton.isSelected()) {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getYPostCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getYPostCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getYPostCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getYPostCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getYPostCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getYPostCoeff21()));
+            }
+            else {
+              data.affineC00REd.setText(Tools.doubleToString(pXForm.getYCoeff00()));
+              data.affineC01REd.setText(Tools.doubleToString(pXForm.getYCoeff01()));
+              data.affineC10REd.setText(Tools.doubleToString(pXForm.getYCoeff10()));
+              data.affineC11REd.setText(Tools.doubleToString(pXForm.getYCoeff11()));
+              data.affineC20REd.setText(Tools.doubleToString(pXForm.getYCoeff20()));
+              data.affineC21REd.setText(Tools.doubleToString(pXForm.getYCoeff21()));
+            }
+            break;
         }
-        else {
-          data.affineC00REd.setText(Tools.doubleToString(pXForm.getCoeff00()));
-          data.affineC01REd.setText(Tools.doubleToString(pXForm.getCoeff01()));
-          data.affineC10REd.setText(Tools.doubleToString(pXForm.getCoeff10()));
-          data.affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
-          data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
-          data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
-        }
+
         data.xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
         data.xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
         data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
@@ -3614,13 +3657,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC21REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff21(value);
+        xForm.setPostCoeff21(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff21(value);
+        xForm.setCoeff21(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
-      //      refreshFlameImage();
     }
   }
 
@@ -3632,10 +3674,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC20REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff20(value);
+        xForm.setPostCoeff20(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff20(value);
+        xForm.setCoeff20(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
     }
@@ -3909,10 +3951,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC01REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff01(value);
+        xForm.setPostCoeff01(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff01(value);
+        xForm.setCoeff01(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
     }
@@ -3926,10 +3968,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC11REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff11(value);
+        xForm.setPostCoeff11(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff11(value);
+        xForm.setCoeff11(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
     }
@@ -3943,10 +3985,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC00REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff00(value);
+        xForm.setPostCoeff00(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff00(value);
+        xForm.setCoeff00(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
     }
@@ -3960,10 +4002,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       double value = Tools.stringToDouble(data.affineC10REd.getText());
       if (data.affineEditPostTransformButton.isSelected()) {
-        xForm.setPostCoeff10(value);
+        xForm.setPostCoeff10(getCurrFlame().getEditPlane(), value);
       }
       else {
-        xForm.setCoeff10(value);
+        xForm.setCoeff10(getCurrFlame().getEditPlane(), value);
       }
       transformationTableClicked();
     }
@@ -5600,6 +5642,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private RGBPalette getLastGradient() {
     return _lastGradient;
+  }
+
+  public void affineEditPlaneCmb_changed() {
+    if (gridRefreshing || cmbRefreshing || getCurrFlame() == null) {
+      return;
+    }
+    getCurrFlame().setEditPlane((EditPlane) data.affineEditPlaneCmb.getSelectedItem());
+    transformationTableClicked();
   }
 
 }

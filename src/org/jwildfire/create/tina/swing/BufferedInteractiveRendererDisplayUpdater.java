@@ -30,12 +30,15 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   private final int imageHeight;
   private int[] buffer;
 
-  public BufferedInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage) {
+  private boolean showPreview;
+
+  public BufferedInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage, boolean pShowPreview) {
     imageRootPanel = pImageRootPanel;
     image = pImage;
     imageWidth = image.getImageWidth();
     imageHeight = image.getImageHeight();
     buffer = getBufferFromImage();
+    showPreview = pShowPreview;
   }
 
   private int[] getBufferFromImage() {
@@ -45,7 +48,7 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   @Override
   public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     sampleCount++;
-    if (pX >= 0 && pX < imageWidth && pY >= 0 && pY < imageHeight) {
+    if (showPreview && pX >= 0 && pX < imageWidth && pY >= 0 && pY < imageHeight) {
       int argb = pEventSource.getTonemapper().tonemapSample(pX, pY);
       int offset = imageWidth * pY + pX;
       buffer[offset] = argb;
@@ -54,8 +57,10 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
 
   @Override
   public void updateImage() {
-    image.getBufferedImg().setRGB(0, 0, imageWidth, imageHeight, buffer, 0, imageWidth);
-    imageRootPanel.repaint();
+    if (showPreview) {
+      image.getBufferedImg().setRGB(0, 0, imageWidth, imageHeight, buffer, 0, imageWidth);
+      imageRootPanel.repaint();
+    }
   }
 
   @Override
@@ -66,6 +71,11 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   @Override
   public void setSampleCount(long pSampleCount) {
     sampleCount = pSampleCount;
+  }
+
+  @Override
+  public void setShowPreview(boolean pShowPreview) {
+    showPreview = pShowPreview;
   }
 
 }

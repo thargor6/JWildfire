@@ -84,6 +84,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JPanel imageRootPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;
+  private final JToggleButton showStatsButton;
+  private final JToggleButton showPreviewButton;
   private SimpleImage image;
   private Flame currFlame;
   private RenderThreads threads;
@@ -97,7 +99,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton) {
+      JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
+      JToggleButton pShowStatsButton, JToggleButton pShowPreviewButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
@@ -116,6 +119,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     imageRootPanel = pImagePanel;
     pauseButton = pPauseButton;
     resumeButton = pResumeButton;
+    showStatsButton = pShowStatsButton;
+    showPreviewButton = pShowPreviewButton;
     // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
@@ -316,7 +321,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   private InteractiveRendererDisplayUpdater createDisplayUpdater() {
-    return prefs.isTinaOptimizedRenderingIR() ? new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image) : new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image);
+    return prefs.isTinaOptimizedRenderingIR() ? new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image, showPreviewButton.isSelected()) : new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, showPreviewButton.isSelected());
   }
 
   public void stopButton_clicked() {
@@ -475,11 +480,15 @@ public class TinaInteractiveRendererController implements IterationObserver {
     displayUpdater.iterationFinished(pEventSource, pX, pY);
   }
 
+  private boolean showStats = true;
+
   private void updateStats(double pQuality) {
-    statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
-        "samples so far: " + displayUpdater.getSampleCount() + "\n" +
-        "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
-    statsTextArea.validate();
+    if (showStats) {
+      statsTextArea.setText("Current quality: " + Tools.doubleToString(pQuality) + "\n" +
+          "samples so far: " + displayUpdater.getSampleCount() + "\n" +
+          "render time: " + Tools.doubleToString((System.currentTimeMillis() - renderStartTime + pausedRenderTime) / 1000.0) + "s");
+      statsTextArea.validate();
+    }
   }
 
   public void nextButton_clicked() {
@@ -707,6 +716,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
         errorHandler.handleError(ex);
       }
     }
+  }
+
+  public void showStatsBtn_changed() {
+    showStats = showStatsButton.isSelected();
+  }
+
+  public void showPreviewBtn_changed() {
+    displayUpdater.setShowPreview(showPreviewButton.isSelected());
   }
 
 }

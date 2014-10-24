@@ -28,4 +28,6 @@ public interface InteractiveRendererDisplayUpdater {
 
   void setSampleCount(long pSampleCount);
 
+  void setShowPreview(boolean pShowPreview);
+
 }
