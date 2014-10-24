@@ -37,6 +37,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new BubblesRandomFlameGenerator());
     generators.add(new Bubbles3DRandomFlameGenerator());
     generators.add(new CrossRandomFlameGenerator());
+    generators.add(new DualityRandomFlameGenerator());
     generators.add(new DuckiesRandomFlameGenerator());
     generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
     generators.add(new ExperimentalGnarlRandomFlameGenerator());
