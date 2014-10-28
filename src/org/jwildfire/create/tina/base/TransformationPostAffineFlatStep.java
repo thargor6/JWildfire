@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,30 +14,21 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base.raster;
+package org.jwildfire.create.tina.base;
 
-public interface AbstractRasterPoint {
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-  public double getRed();
+public final class TransformationPostAffineFlatStep extends AbstractTransformationStep {
+  private static final long serialVersionUID = 1L;
 
-  public void setRed(double red);
+  public TransformationPostAffineFlatStep(XForm pXForm) {
+    super(pXForm);
+  }
 
-  public double getGreen();
-
-  public void setGreen(double green);
-
-  public double getBlue();
-
-  public void setBlue(double blue);
-
-  public long getCount();
-
-  public void setCount(long count);
-
-  public void incCount();
-
-  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight);
-
-  public void addSample(double red, double green, double blue);
-
+  @Override
+  public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
+    pDstPoint.x = xform.xyPostCoeff00 * pVarT.x + xform.xyPostCoeff10 * pVarT.y + xform.xyPostCoeff20;
+    pDstPoint.y = xform.xyPostCoeff01 * pVarT.x + xform.xyPostCoeff11 * pVarT.y + xform.xyPostCoeff21;
+    pDstPoint.z = pVarT.z;
+  }
 }

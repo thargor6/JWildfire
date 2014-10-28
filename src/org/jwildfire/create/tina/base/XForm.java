@@ -61,121 +61,121 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double modSaturationSpeed;
 
   @AnimAware
-  private double xyCoeff00;
+  double xyCoeff00;
   private final MotionCurve xyCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double xyCoeff01;
+  double xyCoeff01;
   private final MotionCurve xyCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double xyCoeff10;
+  double xyCoeff10;
   private final MotionCurve xyCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double xyCoeff11;
+  double xyCoeff11;
   private final MotionCurve xyCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double xyCoeff20;
+  double xyCoeff20;
   private final MotionCurve xyCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double xyCoeff21;
+  double xyCoeff21;
   private final MotionCurve xyCoeff21Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff00;
+  double xyPostCoeff00;
   private final MotionCurve xyPostCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff01;
+  double xyPostCoeff01;
   private final MotionCurve xyPostCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff10;
+  double xyPostCoeff10;
   private final MotionCurve xyPostCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff11;
+  double xyPostCoeff11;
   private final MotionCurve xyPostCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff20;
+  double xyPostCoeff20;
   private final MotionCurve xyPostCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double xyPostCoeff21;
+  double xyPostCoeff21;
   private final MotionCurve xyPostCoeff21Curve = new MotionCurve();
-  private boolean hasXYPostCoeffs;
-  private boolean hasXYCoeffs;
+  boolean hasXYPostCoeffs;
+  boolean hasXYCoeffs;
 
   @AnimAware
-  private double yzCoeff00;
+  double yzCoeff00;
   private final MotionCurve yzCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double yzCoeff01;
+  double yzCoeff01;
   private final MotionCurve yzCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double yzCoeff10;
+  double yzCoeff10;
   private final MotionCurve yzCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double yzCoeff11;
+  double yzCoeff11;
   private final MotionCurve yzCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double yzCoeff20;
+  double yzCoeff20;
   private final MotionCurve yzCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double yzCoeff21;
+  double yzCoeff21;
   private final MotionCurve yzCoeff21Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff00;
+  double yzPostCoeff00;
   private final MotionCurve yzPostCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff01;
+  double yzPostCoeff01;
   private final MotionCurve yzPostCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff10;
+  double yzPostCoeff10;
   private final MotionCurve yzPostCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff11;
+  double yzPostCoeff11;
   private final MotionCurve yzPostCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff20;
+  double yzPostCoeff20;
   private final MotionCurve yzPostCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double yzPostCoeff21;
+  double yzPostCoeff21;
   private final MotionCurve yzPostCoeff21Curve = new MotionCurve();
-  private boolean hasYZPostCoeffs;
-  private boolean hasYZCoeffs;
+  boolean hasYZPostCoeffs;
+  boolean hasYZCoeffs;
 
   @AnimAware
-  private double zxCoeff00;
+  double zxCoeff00;
   private final MotionCurve zxCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double zxCoeff01;
+  double zxCoeff01;
   private final MotionCurve zxCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double zxCoeff10;
+  double zxCoeff10;
   private final MotionCurve zxCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double zxCoeff11;
+  double zxCoeff11;
   private final MotionCurve zxCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double zxCoeff20;
+  double zxCoeff20;
   private final MotionCurve zxCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double zxCoeff21;
+  double zxCoeff21;
   private final MotionCurve zxCoeff21Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff00;
+  double zxPostCoeff00;
   private final MotionCurve zxPostCoeff00Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff01;
+  double zxPostCoeff01;
   private final MotionCurve zxPostCoeff01Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff10;
+  double zxPostCoeff10;
   private final MotionCurve zxPostCoeff10Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff11;
+  double zxPostCoeff11;
   private final MotionCurve zxPostCoeff11Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff20;
+  double zxPostCoeff20;
   private final MotionCurve zxPostCoeff20Curve = new MotionCurve();
   @AnimAware
-  private double zxPostCoeff21;
+  double zxPostCoeff21;
   private final MotionCurve zxPostCoeff21Curve = new MotionCurve();
-  private boolean hasZXPostCoeffs;
-  private boolean hasZXCoeffs;
+  boolean hasZXPostCoeffs;
+  boolean hasZXCoeffs;
 
   @AnimAware
   private final List<Variation> variations = new ArrayList<Variation>();
@@ -292,10 +292,14 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.colorSymmetry = colorSymmetry;
   }
 
-  private double c1, c2;
-  private double modGamma1, modGamma2;
-  private double modContrast1, modContrast2;
-  private double modSaturation1, modSaturation2;
+  double c1;
+  double c2;
+  double modGamma1;
+  double modGamma2;
+  double modContrast1;
+  double modContrast2;
+  double modSaturation1;
+  double modSaturation2;
 
   public void initTransform() {
     // precalculate those variables to simplify the expression: 
@@ -320,6 +324,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     updateHasYZPostCoeffs();
     updateHasZXCoeffs();
     updateHasZXPostCoeffs();
+
+    createTransformations();
   }
 
   private void updateHasXYPostCoeffs() {
@@ -336,7 +342,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return hasXYPostCoeffs;
   }
 
-  public boolean isHasCoeffs() {
+  public boolean isHasXYCoeffs() {
     return hasXYCoeffs;
   }
 
@@ -376,7 +382,65 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return hasZXCoeffs;
   }
 
+  private TransformationStep[] transformations;
+  private int transformationsCount;
+
+  private void createTransformations() {
+    List<TransformationStep> t = new ArrayList<TransformationStep>();
+    t.add(new TransformationInitStep(this));
+    if (!isHasXYCoeffs() && !isHasYZCoeffs() && !isHasZXCoeffs()) {
+      t.add(new TransformationAffineNoneStep(this));
+    }
+    else if (isHasXYCoeffs() && !isHasYZCoeffs() && !isHasZXCoeffs()) {
+      t.add(new TransformationAffineFlatStep(this));
+    }
+    else {
+      t.add(new TransformationAffineFullStep(this));
+    }
+    t.add(new TransformationPreparePreVariationsStep(this));
+
+    for (Variation variation : variations) {
+      if (variation.getFunc().getPriority() < 0) {
+        t.add(new PreVariationTransformationStep(this, variation));
+      }
+    }
+
+    t.add(new TransformationPrepareVariationsStep(this));
+
+    for (Variation variation : variations) {
+      if (variation.getFunc().getPriority() == 0) {
+        t.add(new VariationTransformationStep(this, variation));
+      }
+    }
+
+    for (Variation variation : variations) {
+      if (variation.getFunc().getPriority() > 0) {
+        t.add(new VariationTransformationStep(this, variation));
+      }
+    }
+
+    t.add(new TransformationPreparePostAffineStep(this));
+    if (!isHasXYPostCoeffs() && !isHasYZPostCoeffs() && !isHasZXPostCoeffs()) {
+      t.add(new TransformationPostAffineNoneStep(this));
+    }
+    else if (isHasXYPostCoeffs() && !isHasYZPostCoeffs() && !isHasZXPostCoeffs()) {
+      t.add(new TransformationPostAffineFlatStep(this));
+    }
+    else {
+      t.add(new TransformationPostAffineStep(this));
+    }
+
+    transformations = t.toArray(new TransformationStep[0]);
+    transformationsCount = transformations.length;
+  }
+
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
+    for (int i = 0; i < transformationsCount; i++) {
+      transformations[i].transform(pContext, pAffineT, pVarT, pSrcPoint, pDstPoint);
+    }
+  }
+
+  public void transformPoint0(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
     pAffineT.color = pSrcPoint.color * c1 + c2;
     pAffineT.modGamma = pSrcPoint.modGamma * modGamma1 + modGamma2;
@@ -385,7 +449,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
     double x, y, z;
 
-    if (isHasCoeffs()) {
+    if (isHasXYCoeffs()) {
       x = xyCoeff00 * pSrcPoint.x + xyCoeff10 * pSrcPoint.y/* + coeff20*/;
       y = xyCoeff01 * pSrcPoint.x + xyCoeff11 * pSrcPoint.y/* + coeff21*/;
       z = pSrcPoint.z;
@@ -427,9 +491,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;
     pVarT.blueColor = pAffineT.blueColor;
-    pVarT.withAlpha = pAffineT.withAlpha;
     pVarT.doHide = pAffineT.doHide;
-    pVarT.alpha = pAffineT.alpha;
 
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() < 0) {
@@ -438,8 +500,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
       }
     }
     pVarT.doHide = pAffineT.doHide;
-    pVarT.withAlpha = pAffineT.withAlpha;
-    pVarT.alpha = pAffineT.alpha;
 
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() == 0) {
@@ -460,20 +520,37 @@ public final class XForm implements Assignable<XForm>, Serializable {
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;
     pDstPoint.blueColor = pVarT.blueColor;
-    pDstPoint.withAlpha = pVarT.withAlpha;
     pDstPoint.doHide = pVarT.doHide;
-    pDstPoint.alpha = pVarT.alpha;
+
+    double px, py, pz;
     if (isHasXYPostCoeffs()) {
-      double px = xyPostCoeff00 * pVarT.x + xyPostCoeff10 * pVarT.y + xyPostCoeff20;
-      double py = xyPostCoeff01 * pVarT.x + xyPostCoeff11 * pVarT.y + xyPostCoeff21;
-      double pz = pVarT.z;
-      pVarT.x = px;
-      pVarT.y = py;
-      pVarT.z = pz;
+      px = xyPostCoeff00 * pVarT.x + xyPostCoeff10 * pVarT.y;
+      py = xyPostCoeff01 * pVarT.x + xyPostCoeff11 * pVarT.y;
+      pz = pVarT.z;
     }
-    pDstPoint.x = pVarT.x;
-    pDstPoint.y = pVarT.y;
-    pDstPoint.z = pVarT.z;
+    else {
+      px = pVarT.x;
+      py = pVarT.y;
+      pz = pVarT.z;
+    }
+
+    if (isHasYZPostCoeffs()) {
+      double ny = yzPostCoeff00 * py + yzPostCoeff10 * pz;
+      double nz = yzPostCoeff01 * py + yzPostCoeff11 * pz;
+      py = ny;
+      pz = nz;
+    }
+
+    if (isHasZXPostCoeffs()) {
+      double nx = zxPostCoeff00 * px + zxPostCoeff10 * pz;
+      double nz = zxPostCoeff01 * px + zxPostCoeff11 * pz;
+      px = nx;
+      pz = nz;
+    }
+
+    pDstPoint.x = px + xyPostCoeff20 + zxPostCoeff20;
+    pDstPoint.y = py + xyPostCoeff21 + yzPostCoeff20;
+    pDstPoint.z = pz + yzPostCoeff21 + zxPostCoeff21;
   }
 
   public void transformPoints(FlameTransformationContext pContext, XYZPoint[] pAffineT, XYZPoint[] pVarT, XYZPoint[] pSrcPoint, XYZPoint[] pDstPoint) {
@@ -498,8 +575,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
         }
       }
       pVarT[i].doHide = pAffineT[i].doHide;
-      pVarT[i].withAlpha = pAffineT[i].withAlpha;
-      pVarT[i].alpha = pAffineT[i].alpha;
 
       for (Variation variation : variations) {
         if (variation.getFunc().getPriority() == 0) {
@@ -515,18 +590,35 @@ public final class XForm implements Assignable<XForm>, Serializable {
       pDstPoint[i].modGamma = pVarT[i].modGamma;
       pDstPoint[i].modContrast = pVarT[i].modContrast;
       pDstPoint[i].modSaturation = pVarT[i].modSaturation;
+      double px, py, pz;
       if (isHasXYPostCoeffs()) {
-        double px = xyPostCoeff00 * pVarT[i].x + xyPostCoeff10 * pVarT[i].y + xyPostCoeff20;
-        double py = xyPostCoeff01 * pVarT[i].x + xyPostCoeff11 * pVarT[i].y + xyPostCoeff21;
-        double pz = pVarT[i].z;
-        pVarT[i].x = px;
-        pVarT[i].y = py;
-        pVarT[i].z = pz;
+        px = xyPostCoeff00 * pVarT[i].x + xyPostCoeff10 * pVarT[i].y;
+        py = xyPostCoeff01 * pVarT[i].x + xyPostCoeff11 * pVarT[i].y;
+        pz = pVarT[i].z;
+      }
+      else {
+        px = pVarT[i].x;
+        py = pVarT[i].y;
+        pz = pVarT[i].z;
       }
 
-      pDstPoint[i].x = pVarT[i].x;
-      pDstPoint[i].y = pVarT[i].y;
-      pDstPoint[i].z = pVarT[i].z;
+      if (isHasYZPostCoeffs()) {
+        double ny = yzPostCoeff00 * py + yzPostCoeff10 * pz;
+        double nz = yzPostCoeff01 * py + yzPostCoeff11 * pz;
+        py = ny;
+        pz = nz;
+      }
+
+      if (isHasZXPostCoeffs()) {
+        double nx = zxPostCoeff00 * px + zxPostCoeff10 * pz;
+        double nz = zxPostCoeff01 * px + zxPostCoeff11 * pz;
+        px = nx;
+        pz = nz;
+      }
+
+      pDstPoint[i].x = px + xyPostCoeff20 + zxPostCoeff20;
+      pDstPoint[i].y = py + xyPostCoeff21 + yzPostCoeff20;
+      pDstPoint[i].z = pz + yzPostCoeff21 + zxPostCoeff21;
     }
   }
 

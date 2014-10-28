@@ -156,19 +156,20 @@ public class LogDensityFilter {
         for (int i = 0; i < noiseFilterSize; i++) {
           for (int j = 0; j < noiseFilterSize; j++) {
             AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
-            int pIdx = (int) point.getCount();
+            long count = point.getCount();
+            int pIdx = (int) count;
             if (pIdx > 0) {
               double logScale;
               if (pIdx < precalcLogArray.length) {
                 logScale = precalcLogArray[pIdx];
               }
               else {
-                logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+                logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
               }
               pFilteredPnt.red += filter[i][j] * logScale * point.getRed();
               pFilteredPnt.green += filter[i][j] * logScale * point.getGreen();
               pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue();
-              pFilteredPnt.intensity += filter[i][j] * logScale * point.getCount() * flame.getWhiteLevel();
+              pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel();
             }
           }
         }
@@ -180,19 +181,20 @@ public class LogDensityFilter {
         for (int i = 0; i < noiseFilterSize; i++) {
           for (int j = 0; j < noiseFilterSize; j++) {
             AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
-            int pIdx = (int) point.getCount();
+            long count = point.getCount();
+            int pIdx = (int) count;
             if (pIdx > 0) {
               double logScale;
               if (pIdx < precalcLogArray.length) {
                 logScale = precalcLogArray[pIdx];
               }
               else {
-                logScale = (k1 * log10(1.0 + point.getCount() * motionBlurScl * k2)) / (flame.getWhiteLevel() * point.getCount() * motionBlurScl);
+                logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
               }
               rawR += filter[i][j] * point.getRed();
               rawG += filter[i][j] * point.getGreen();
               rawB += filter[i][j] * point.getBlue();
-              double lPCount = filter[i][j] * point.getCount();
+              double lPCount = filter[i][j] * count;
               avgLogScale += filter[i][j] * logScale;
               pCount += lPCount;
               pFilteredPnt.intensity += logScale * lPCount * flame.getWhiteLevel();

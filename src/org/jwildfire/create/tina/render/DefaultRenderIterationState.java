@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2014 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
@@ -228,7 +244,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected double plotRed, plotGreen, plotBlue, plotContribution;
 
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = raster[yIdx][xIdx];
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
@@ -251,11 +266,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotBlue = color.blue;
     }
     transformPlotColor(p);
-    rp.setRed(rp.getRed() + plotRed * intensity);
-    rp.setGreen(rp.getGreen() + plotGreen * intensity);
-    rp.setBlue(rp.getBlue() + plotBlue * intensity);
+    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
 
-    rp.incCount();
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);
@@ -285,11 +297,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotRed += (plotRed - avg) * p.modSaturation;
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
-    }
-    if (p.withAlpha) {
-      plotRed *= p.alpha;
-      plotGreen *= p.alpha;
-      plotBlue *= p.alpha;
     }
   }
 

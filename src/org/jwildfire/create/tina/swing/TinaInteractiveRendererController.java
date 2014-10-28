@@ -405,22 +405,24 @@ public class TinaInteractiveRendererController implements IterationObserver {
     return currFlame;
   }
 
-  private final static int STATS_UPDATE_INTERVAL = 75;
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 4;
-  private final static int MAX_UPDATE_INC_INTERVAL = 500;
+  private final static int STATS_UPDATE_INTERVAL = 1000;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 100;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 50;
+  private final static int MAX_IMAGE_UPDATE_INC_INTERVAL = 5000;
+  private final static int SLEEP_INTERVAL = 25;
 
   private class UpdateDisplayThread implements Runnable {
-    private int nextImageUpdate;
-    private int nextStatsUpdate;
-    private int lastImageUpdateInterval;
+    private long nextImageUpdate;
+    private long nextStatsUpdate;
+    private long lastImageUpdateInterval;
     private boolean cancelSignalled;
     private boolean finished;
 
     public UpdateDisplayThread() {
-      nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+      long time = System.currentTimeMillis();
+      nextImageUpdate = time + INITIAL_IMAGE_UPDATE_INTERVAL;
+      nextStatsUpdate = time + STATS_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
-      nextStatsUpdate = STATS_UPDATE_INTERVAL;
     }
 
     @Override
@@ -429,24 +431,25 @@ public class TinaInteractiveRendererController implements IterationObserver {
       try {
         while (!cancelSignalled) {
           try {
-            if (--nextImageUpdate <= 0) {
+            long time = System.currentTimeMillis();
+            if (time >= nextImageUpdate) {
               lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
-              if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
-                lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+              if (lastImageUpdateInterval > MAX_IMAGE_UPDATE_INC_INTERVAL) {
+                lastImageUpdateInterval = MAX_IMAGE_UPDATE_INC_INTERVAL;
               }
               updateImage();
-              nextImageUpdate = lastImageUpdateInterval;
+              nextImageUpdate = System.currentTimeMillis() + lastImageUpdateInterval;
             }
-            else if (--nextStatsUpdate <= 0) {
+            if (time >= nextStatsUpdate) {
               double quality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
               updateStats(quality);
               for (AbstractRenderThread thread : threads.getRenderThreads()) {
                 thread.getTonemapper().setDensity(quality);
               }
-              nextStatsUpdate = STATS_UPDATE_INTERVAL;
+              nextStatsUpdate = System.currentTimeMillis() + STATS_UPDATE_INTERVAL;
             }
-            else
-              Thread.sleep(1);
+
+            Thread.sleep(SLEEP_INTERVAL);
           }
           catch (Throwable e) {
             e.printStackTrace();
@@ -470,15 +473,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private long renderStartTime = 0;
   private long pausedRenderTime = 0;
-
-  private void updateImage() {
-    displayUpdater.updateImage();
-  }
-
-  @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
-  }
 
   private boolean showStats = true;
 
@@ -723,7 +717,23 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void showPreviewBtn_changed() {
-    displayUpdater.setShowPreview(showPreviewButton.isSelected());
+    boolean showPreview = showPreviewButton.isSelected();
+    displayUpdater.setShowPreview(showPreview);
+    //    if (showPreview) {
+    //      renderer.registerIterationObserver(this);
+    //    }
+    //    else {
+    //      renderer.deregisterIterationObserver(this);
+    //    }
+  }
+
+  private void updateImage() {
+    displayUpdater.updateImage();
+  }
+
+  @Override
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+    displayUpdater.iterationFinished(pEventSource, pX, pY);
   }
 
 }

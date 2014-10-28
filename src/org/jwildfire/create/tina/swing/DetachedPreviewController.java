@@ -225,7 +225,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   private synchronized void updateImage() {
-    imageRootPanel.repaint();
+    displayUpdater.updateImage();
   }
 
   @Override
@@ -343,7 +343,8 @@ public class DetachedPreviewController implements IterationObserver {
   private final static int MAX_UPDATE_INC_INTERVAL = 20;
 
   private InteractiveRendererDisplayUpdater createDisplayUpdater() {
-    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
+    //    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
+    return new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
   }
 
 }

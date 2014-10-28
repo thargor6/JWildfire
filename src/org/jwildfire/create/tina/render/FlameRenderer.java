@@ -85,6 +85,11 @@ public class FlameRenderer {
   private boolean forceAbort;
   private Stereo3dEye eye = Stereo3dEye.UNSPECIFIED;
 
+  public void deregisterIterationObserver(IterationObserver pObserver) {
+    if (iterationObservers != null)
+      iterationObservers.remove(pObserver);
+  }
+
   public void registerIterationObserver(IterationObserver pObserver) {
     if (iterationObservers == null) {
       iterationObservers = new ArrayList<IterationObserver>();

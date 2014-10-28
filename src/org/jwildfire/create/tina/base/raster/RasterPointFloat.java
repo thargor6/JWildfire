@@ -23,7 +23,6 @@ public class RasterPointFloat implements AbstractRasterPoint, Serializable {
   private float red;
   private float green;
   private float blue;
-  private float contribution;
   private long count;
 
   @Override
@@ -79,6 +78,14 @@ public class RasterPointFloat implements AbstractRasterPoint, Serializable {
 
   @Override
   public void incCount() {
+    count++;
+  }
+
+  @Override
+  public void addSample(double pRed, double pGreen, double pBlue) {
+    red += pRed;
+    green += pGreen;
+    blue += pBlue;
     count++;
   }
 

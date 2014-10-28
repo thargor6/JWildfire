@@ -39,6 +39,7 @@ public class JobRenderThread implements Runnable {
   private final ResolutionProfile resolutionProfile;
   private boolean cancelSignalled;
   private final boolean doOverwriteExisting;
+  private FlameRenderer renderer;
 
   public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting) {
     controller = pController;
@@ -91,7 +92,7 @@ public class JobRenderThread implements Runnable {
               }
               else {
                 flame.setSampleDensity(job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality());
-                FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
+                renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
                 renderer.setProgressUpdater(controller.getJobProgressUpdater());
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);
@@ -159,6 +160,14 @@ public class JobRenderThread implements Runnable {
 
   public void setCancelSignalled(boolean cancelSignalled) {
     this.cancelSignalled = cancelSignalled;
+    if (cancelSignalled && renderer != null) {
+      try {
+        renderer.cancel();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
 }

@@ -43,8 +43,9 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
 
   @Override
   public void updateImage() {
-    if (showPreview)
+    if (showPreview) {
       imageRootPanel.repaint();
+    }
   }
 
   @Override

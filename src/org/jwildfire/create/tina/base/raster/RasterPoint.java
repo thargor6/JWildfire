@@ -81,4 +81,12 @@ public class RasterPoint implements AbstractRasterPoint, Serializable {
     count++;
   }
 
+  @Override
+  public void addSample(double pRed, double pGreen, double pBlue) {
+    red += pRed;
+    green += pGreen;
+    blue += pBlue;
+    count++;
+  }
+
 }
