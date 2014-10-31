@@ -18,12 +18,12 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
+import odk.lang.DoubleWrapper;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -61,11 +61,11 @@ public class Julia3DFunc extends VariationFunc {
 
     double tmp = r * sqrt(r2d);
     double a = atan2(pAffineTP.y, pAffineTP.x) / 2 + M_PI * pContext.random(2);
-    double sina = sin(a);
-    double cosa = cos(a);
 
-    pVarTP.x = pVarTP.x + tmp * cosa;
-    pVarTP.y = pVarTP.y + tmp * sina;
+    sinAndCos(a, sina, cosa);
+
+    pVarTP.x = pVarTP.x + tmp * cosa.value;
+    pVarTP.y = pVarTP.y + tmp * sina.value;
   }
 
   public void transformPowerMinus2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -78,11 +78,10 @@ public class Julia3DFunc extends VariationFunc {
 
     double tmp = r * sqrt(r2d);
     double a = atan2(pAffineTP.y, pAffineTP.x) / 2 + M_PI * pContext.random(2);
-    double sina = sin(a);
-    double cosa = cos(a);
+    sinAndCos(a, sina, cosa);
 
-    pVarTP.x = pVarTP.x + tmp * cosa;
-    pVarTP.y = pVarTP.y - tmp * sina;
+    pVarTP.x = pVarTP.x + tmp * cosa.value;
+    pVarTP.y = pVarTP.y - tmp * sina.value;
   }
 
   public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -106,11 +105,10 @@ public class Julia3DFunc extends VariationFunc {
     double r2 = r * sqrt(r2d);
     int rnd = (int) (pContext.random() * absPower);
     double angle = (atan2(pAffineTP.y, pAffineTP.x) + 2 * M_PI * rnd) / (double) power;
-    double sina = sin(angle);
-    double cosa = cos(angle);
+    sinAndCos(angle, sina, cosa);
 
-    pVarTP.x += r2 * cosa;
-    pVarTP.y += r2 * sina;
+    pVarTP.x += r2 * cosa.value;
+    pVarTP.y += r2 * sina.value;
     pVarTP.z += r * z;
   }
 
@@ -143,6 +141,7 @@ public class Julia3DFunc extends VariationFunc {
   }
 
   private double absPower, cPower;
+  private DoubleWrapper sina = new DoubleWrapper(), cosa = new DoubleWrapper();
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {

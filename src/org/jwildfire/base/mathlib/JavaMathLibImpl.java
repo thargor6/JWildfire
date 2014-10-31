@@ -16,6 +16,8 @@
 */
 package org.jwildfire.base.mathlib;
 
+import odk.lang.DoubleWrapper;
+
 public final class JavaMathLibImpl implements BaseMathLib {
 
   @Override
@@ -26,6 +28,12 @@ public final class JavaMathLibImpl implements BaseMathLib {
   @Override
   public double cos(double a) {
     return Math.cos(a);
+  }
+
+  @Override
+  public void sinAndCos(double a, DoubleWrapper sine, DoubleWrapper cosine) {
+    sine.value = Math.sin(a);
+    cosine.value = Math.cos(a);
   }
 
   @Override

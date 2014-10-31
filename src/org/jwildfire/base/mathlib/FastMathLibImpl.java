@@ -16,6 +16,7 @@
 */
 package org.jwildfire.base.mathlib;
 
+import odk.lang.DoubleWrapper;
 import odk.lang.FastMath;
 
 public final class FastMathLibImpl implements BaseMathLib {
@@ -28,6 +29,11 @@ public final class FastMathLibImpl implements BaseMathLib {
   @Override
   public double cos(double a) {
     return FastMath.cos(a);
+  }
+
+  @Override
+  public void sinAndCos(double a, DoubleWrapper sine, DoubleWrapper cosine) {
+    FastMath.sinAndCos(a, sine, cosine);
   }
 
   @Override

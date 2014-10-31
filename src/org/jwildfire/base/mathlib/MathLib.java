@@ -16,6 +16,8 @@
 */
 package org.jwildfire.base.mathlib;
 
+import odk.lang.DoubleWrapper;
+
 public final class MathLib {
   public final static double SMALL_EPSILON = 1.0e-300;
   public static final double EPSILON = 0.00000001;
@@ -54,6 +56,10 @@ public final class MathLib {
       return -1;
     else
       return 0;
+  }
+
+  public static final void sinAndCos(double a, DoubleWrapper sine, DoubleWrapper cosine) {
+    baseLib.sinAndCos(a, sine, cosine);
   }
 
   public static final double sin(double a) {

@@ -16,11 +16,15 @@
 */
 package org.jwildfire.base.mathlib;
 
+import odk.lang.DoubleWrapper;
+
 public interface BaseMathLib {
 
   public double sin(double a);
 
   public double cos(double a);
+
+  public void sinAndCos(double a, DoubleWrapper sine, DoubleWrapper cosine);
 
   public double tan(double a);
 
