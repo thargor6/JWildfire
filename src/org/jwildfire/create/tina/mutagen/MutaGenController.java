@@ -176,6 +176,8 @@ public class MutaGenController {
     pCmb.addItem(MutationType.ADD_TRANSFORM);
     pCmb.addItem(MutationType.ADD_VARIATION);
     pCmb.addItem(MutationType.AFFINE);
+    pCmb.addItem(MutationType.AFFINE_3D);
+    pCmb.addItem(MutationType.BOKEH);
     pCmb.addItem(MutationType.CHANGE_WEIGHT);
     pCmb.addItem(MutationType.GRADIENT_POSITION);
     pCmb.addItem(MutationType.LOCAL_GAMMA);

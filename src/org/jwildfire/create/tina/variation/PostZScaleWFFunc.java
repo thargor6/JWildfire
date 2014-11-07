@@ -22,6 +22,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PostZScaleWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
+  public static final String VAR_NAME = "post_zscale_wf";
+
   private static final String PARAM_ZTRANSLATE = "ztranslate";
 
   private static final String[] paramNames = { PARAM_ZTRANSLATE };
@@ -35,7 +37,7 @@ public class PostZScaleWFFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "post_zscale_wf";
+    return VAR_NAME;
   }
 
   @Override

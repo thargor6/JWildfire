@@ -59,6 +59,18 @@ public enum MutationType {
       return AffineMutation.class;
     }
   },
+  AFFINE_3D {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return Affine3DMutation.class;
+    }
+  },
+  BOKEH {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return BokehMutation.class;
+    }
+  },
   RANDOM_FLAME {
     @Override
     protected Class<? extends Mutation> getMutationClass() {

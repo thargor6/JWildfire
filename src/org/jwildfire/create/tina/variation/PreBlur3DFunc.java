@@ -20,30 +20,47 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import odk.lang.DoubleWrapper;
 
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class BlurFunc extends SimpleVariationFunc {
+public class PreBlur3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
+
+  private double gauss_rnd[] = new double[4];
+  private int gauss_N;
 
   private DoubleWrapper sina = new DoubleWrapper();
   private DoubleWrapper cosa = new DoubleWrapper();
+  private DoubleWrapper sinb = new DoubleWrapper();
+  private DoubleWrapper cosb = new DoubleWrapper();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r = pContext.random() * (M_PI + M_PI);
-    sinAndCos(r, sina, cosa);
-    double r2 = pAmount * pContext.random();
-    pVarTP.x += r2 * cosa.value;
-    pVarTP.y += r2 * sina.value;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    double angle = pContext.random() * 2 * M_PI;
+    sinAndCos(angle, sina, cosa);
+    double r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
+    gauss_rnd[gauss_N] = pContext.random();
+    gauss_N = (gauss_N + 1) & 3;
+    angle = pContext.random() * M_PI;
+    sinAndCos(angle, sinb, cosb);
+    pAffineTP.x += r * sinb.value * cosa.value;
+    pAffineTP.y += r * sinb.value * sina.value;
+    pAffineTP.z += r * cosb.value;
   }
 
   @Override
   public String getName() {
-    return "blur";
+    return "pre_blur3D";
+  }
+
+  @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    gauss_rnd[0] = pContext.random();
+    gauss_rnd[1] = pContext.random();
+    gauss_rnd[2] = pContext.random();
+    gauss_rnd[3] = pContext.random();
+    gauss_N = 0;
   }
 
 }

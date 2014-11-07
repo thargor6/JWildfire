@@ -26,10 +26,12 @@ public class AllMutation implements Mutation {
 
   static {
     types = new ArrayList<MutationType>();
+    types.add(MutationType.BOKEH);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.RANDOM_GRADIENT);
+    types.add(MutationType.AFFINE_3D);
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.RANDOM_PARAMETER);
     types.add(MutationType.AFFINE);
@@ -37,12 +39,16 @@ public class AllMutation implements Mutation {
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
+    types.add(MutationType.BOKEH);
+    types.add(MutationType.AFFINE_3D);
     types.add(MutationType.ADD_VARIATION);
     types.add(MutationType.CHANGE_WEIGHT);
     types.add(MutationType.ADD_TRANSFORM);
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.AFFINE);
     types.add(MutationType.RANDOM_PARAMETER);
+    types.add(MutationType.AFFINE_3D);
+    types.add(MutationType.BOKEH);
     types.add(MutationType.GRADIENT_POSITION);
     types.add(MutationType.LOCAL_GAMMA);
     types.add(MutationType.ADD_TRANSFORM);
@@ -51,6 +57,7 @@ public class AllMutation implements Mutation {
     //    types.add(MutationType.RANDOM_FLAME);
     types.add(MutationType.AFFINE);
     types.add(MutationType.CHANGE_WEIGHT);
+    types.add(MutationType.AFFINE_3D);
     types.add(MutationType.RANDOM_PARAMETER);
   }
 

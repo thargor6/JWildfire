@@ -415,6 +415,7 @@ public class VariationFuncList {
     registerVariationFunc(TargetSpFunc.class);
     registerVariationFunc(ExBlurFunc.class);
     registerVariationFunc(PowBlockFunc.class);
+    registerVariationFunc(PreBlur3DFunc.class);
   }
 
   private static void registerVariationFunc(

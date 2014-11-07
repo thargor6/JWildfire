@@ -17,8 +17,8 @@
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
+import odk.lang.DoubleWrapper;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -30,20 +30,23 @@ public class Blur3DFunc extends SimpleVariationFunc {
   private double gauss_rnd[] = new double[4];
   private int gauss_N;
 
+  private DoubleWrapper sina = new DoubleWrapper();
+  private DoubleWrapper cosa = new DoubleWrapper();
+  private DoubleWrapper sinb = new DoubleWrapper();
+  private DoubleWrapper cosb = new DoubleWrapper();
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double angle = pContext.random() * 2 * M_PI;
-    double sina = sin(angle);
-    double cosa = cos(angle);
+    sinAndCos(angle, sina, cosa);
     double r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
     gauss_rnd[gauss_N] = pContext.random();
     gauss_N = (gauss_N + 1) & 3;
     angle = pContext.random() * M_PI;
-    double sinb = sin(angle);
-    double cosb = cos(angle);
-    pVarTP.x += r * sinb * cosa;
-    pVarTP.y += r * sinb * sina;
-    pVarTP.z += r * cosb;
+    sinAndCos(angle, sinb, cosb);
+    pVarTP.x += r * sinb.value * cosa.value;
+    pVarTP.y += r * sinb.value * sina.value;
+    pVarTP.z += r * cosb.value;
   }
 
   @Override
