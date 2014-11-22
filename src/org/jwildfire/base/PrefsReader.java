@@ -125,7 +125,6 @@ public class PrefsReader {
         pPrefs.setTinaEditorControlsWithShadows(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS, pPrefs.isTinaEditorControlsWithShadows()));
         pPrefs.setTinaEditorControlsWithNumbers(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS, pPrefs.isTinaEditorControlsWithNumbers()));
         pPrefs.setTinaEditorGridSize(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_GRID_SIZE, pPrefs.getTinaEditorGridSize()));
-        pPrefs.setTinaResponsiveness(getIntProperty(props, Prefs.KEY_TINA_RESPONSIVENESS, pPrefs.getTinaResponsiveness()));
         pPrefs.setTinaEditorGuidesCenterPointColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT, pPrefs.getTinaEditorGuidesCenterPointColor()));
         pPrefs.setTinaEditorGuidesRuleOfThirdsColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS, pPrefs.getTinaEditorGuidesRuleOfThirdsColor()));
         pPrefs.setTinaEditorGuidesGoldenRatioColor(getColorProperty(props, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor()));

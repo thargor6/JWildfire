@@ -9,14 +9,11 @@ import org.jwildfire.create.tina.base.Layer;
 public abstract class DefaultRenderThread extends AbstractRenderThread {
   protected long startIter;
   protected long iter;
-  public int responsiveness, responsivenessCheck;
 
   protected List<DefaultRenderIterationState> iterationState;
 
   public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-    responsiveness = pPrefs.getTinaResponsiveness() > 0 ? pPrefs.getTinaResponsiveness() : 0;
-    responsivenessCheck = responsiveness > 0 ? 100000 / responsiveness : 0;
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
 
@@ -105,14 +102,6 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext();
       }
-      if (responsivenessCheck > 0 && (iter % responsivenessCheck == 0)) {
-        try {
-          Thread.sleep(responsiveness);
-        }
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
     }
   }
 
@@ -139,16 +128,6 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       for (DefaultRenderIterationState state : iterationState) {
         state.iterateNext(pSlices, pThicknessMod, pThicknessSamples);
       }
-
-      if (responsivenessCheck > 0 && (iter % responsivenessCheck == 0)) {
-        try {
-          Thread.sleep(responsiveness);
-        }
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-
     }
   }
 

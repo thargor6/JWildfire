@@ -18,6 +18,7 @@ package org.jwildfire.base;
 
 import java.awt.Color;
 import java.io.File;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PATH_MOVIEFLAMES = "tina.path.movie.flames";
 
   static final String KEY_TINA_PATH_SVG = "tina.path.svg";
-  static final String KEY_TINA_RESPONSIVENESS = "tina.render.responsiveness";
 
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
@@ -183,9 +183,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
-
-  @Property(description = "Tries to keep the program responsive while rendering, the higher the value, the more responsiveness, but this also lowers render speed", category = PropertyCategory.TINA)
-  private int tinaResponsiveness = 1;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
@@ -567,7 +564,6 @@ public class Prefs extends ManagedObject {
     tinaGradientPath = pSrc.tinaGradientPath;
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
-    tinaResponsiveness = pSrc.tinaResponsiveness;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
     tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
@@ -930,20 +926,6 @@ public class Prefs extends ManagedObject {
     tinaMeshPath = pTinaMeshPath;
   }
 
-  public int getTinaResponsiveness() {
-    return tinaResponsiveness;
-  }
-
-  public void setTinaResponsiveness(int pTinaResponsiveness) {
-    tinaResponsiveness = pTinaResponsiveness;
-    if (tinaResponsiveness < 0) {
-      tinaResponsiveness = 0;
-    }
-    else if (tinaResponsiveness > 10) {
-      tinaResponsiveness = 10;
-    }
-  }
-
   public boolean isTinaOptimizedRenderingIR() {
     return tinaOptimizedRenderingIR;
   }
@@ -1032,6 +1014,24 @@ public class Prefs extends ManagedObject {
 
   public void setTinaMacroToolbarHeight(int tinaMacroToolbarHeight) {
     this.tinaMacroToolbarHeight = tinaMacroToolbarHeight;
+  }
+
+  private boolean hasCheckedExperimentalMode = false;
+  private boolean allowExperimentalFeatures = false;
+
+  public boolean isAllowExperimentalFeatures() {
+    if (!hasCheckedExperimentalMode) {
+      hasCheckedExperimentalMode = true;
+      try {
+        String username = System.getProperty("user.name");
+        String host = InetAddress.getLocalHost().getHostName();
+        allowExperimentalFeatures = username.toLowerCase().contains("thargor") && host.toLowerCase().contains("thargor") && isDevelopmentMode();
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
+    }
+    return allowExperimentalFeatures;
   }
 
 }
