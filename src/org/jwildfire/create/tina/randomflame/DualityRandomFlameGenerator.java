@@ -75,7 +75,13 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
       //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
     }
 
-    if (Math.random() > 0.66) {
+    if (Math.random() > 0.25) {
+      new RandomParamMutation().execute(flame.getFirstLayer());
+    }
+    if (Math.random() > 0.50) {
+      new RandomParamMutation().execute(flame.getFirstLayer());
+    }
+    if (Math.random() > 0.75) {
       new RandomParamMutation().execute(flame.getFirstLayer());
     }
 
@@ -84,10 +90,15 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
 
   private VariationFunc getRandomVariation() {
     String name = "";
-    while (true) {
-      name = VariationFuncList.getRandomVariationname();
-      if (!name.startsWith("fract"))
-        break;
+    if (Math.random() < 0.25) {
+      name = "spherical3D";
+    }
+    else {
+      while (true) {
+        name = VariationFuncList.getRandomVariationname();
+        if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_"))
+          break;
+      }
     }
     return VariationFuncList.getVariationFuncInstance(name, true);
   }

@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
@@ -416,6 +419,9 @@ public class VariationFuncList {
     registerVariationFunc(ExBlurFunc.class);
     registerVariationFunc(PowBlockFunc.class);
     registerVariationFunc(PreBlur3DFunc.class);
+    if (Prefs.getPrefs().isAllowExperimentalFeatures()) {
+      registerVariationFunc(IFlamesFunc.class);
+    }
   }
 
   private static void registerVariationFunc(

@@ -97,7 +97,7 @@ public abstract class VariationFunc implements Serializable {
     return RessourceType.BYTEARRAY;
   }
 
-  protected double limitVal(double pValue, double pMin, double pMax) {
+  public static double limitVal(double pValue, double pMin, double pMax) {
     if (pValue < pMin) {
       return pMin;
     }
@@ -109,7 +109,7 @@ public abstract class VariationFunc implements Serializable {
     }
   }
 
-  protected int limitIntVal(int pValue, int pMin, int pMax) {
+  public static int limitIntVal(int pValue, int pMin, int pMax) {
     if (pValue < pMin) {
       return pMin;
     }

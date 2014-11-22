@@ -18,8 +18,10 @@ package org.jwildfire.create.tina.variation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -119,6 +121,19 @@ public class RessourceManager {
     }
     else {
       return "jpg";
+    }
+  }
+
+  public static void clearRessources(String pKeyPrefix) {
+    List<String> keys = new ArrayList<String>();
+    for (String key : ressourceMap.keySet()) {
+      if (key.startsWith(pKeyPrefix)) {
+        keys.add(key);
+      }
+    }
+    for (String key : keys) {
+      System.out.println("REM: " + key);
+      ressourceMap.remove(key);
     }
   }
 }

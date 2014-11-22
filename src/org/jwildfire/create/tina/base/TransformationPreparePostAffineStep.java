@@ -36,5 +36,6 @@ public final class TransformationPreparePostAffineStep extends AbstractTransform
     pDstPoint.greenColor = pVarT.greenColor;
     pDstPoint.blueColor = pVarT.blueColor;
     pDstPoint.doHide = pVarT.doHide;
+    pDstPoint.tag = pVarT.tag;
   }
 }
