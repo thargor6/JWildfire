@@ -55,12 +55,18 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
           for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
             if (l >= 0 && l < rasterWidth) {
               // y, x
-              AbstractRasterPoint rp = raster[k][l];
+
               double scl = blurKernel[yk][xk];
-              rp.setRed(rp.getRed() + plotRed * scl * prj.intensity);
-              rp.setGreen(rp.getGreen() + plotGreen * scl * prj.intensity);
-              rp.setBlue(rp.getBlue() + plotBlue * scl * prj.intensity);
-              rp.incCount();
+
+              plotBuffer[plotBufferIdx++].set(l, k, plotRed * scl * prj.intensity, plotGreen * scl * prj.intensity, plotBlue * scl * prj.intensity);
+              if (plotBufferIdx >= plotBuffer.length) {
+                for (int i = 0; i < plotBufferIdx; i++) {
+                  PlotSample sample = plotBuffer[i];
+                  raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
+                }
+                plotBufferIdx = 0;
+              }
+
               if (observers != null && observers.size() > 0) {
                 for (IterationObserver observer : observers) {
                   observer.notifyIterationFinished(renderThread, k, l);

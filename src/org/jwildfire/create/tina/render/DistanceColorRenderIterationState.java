@@ -176,9 +176,14 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     }
     transformPlotColor(p);
 
-    rp.setRed(rp.getRed() + plotRed * prj.intensity);
-    rp.setGreen(rp.getGreen() + plotGreen * prj.intensity);
-    rp.setBlue(rp.getBlue() + plotBlue * prj.intensity);
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * prj.intensity, plotGreen * intensity, plotBlue * intensity);
+    if (plotBufferIdx >= plotBuffer.length) {
+      for (int i = 0; i < plotBufferIdx; i++) {
+        PlotSample sample = plotBuffer[i];
+        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
+      }
+      plotBufferIdx = 0;
+    }
 
     rp.incCount();
     if (observers != null && observers.size() > 0) {

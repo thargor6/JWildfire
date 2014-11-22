@@ -51,6 +51,8 @@ public class Tools {
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
+  public static final int PLOT_BUFFER_SIZE = 512;
+
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_FLAME = "flame";

@@ -22,7 +22,6 @@ import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -84,11 +83,11 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   }
 
   private void distributeInitialPoints(XYZPoint[] p) {
-    p[1].x = p[0].x + 0.001;
+    p[1].x = p[0].x + 0.01;
     p[1].y = p[0].y;
     p[1].z = p[0].z;
     p[2].x = p[0].x;
-    p[2].y = p[0].y + 0.001;
+    p[2].y = p[0].y + 0.01;
     p[2].z = p[0].z;
   }
 
@@ -106,21 +105,26 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
     for (int pIdx = 0; pIdx < pA.length; pIdx++) {
       qA[pIdx] = new XYZPoint();
     }
-    finalXForms.get(0).transformPoints(ctx, affineTA, varTA, pA, qA);
+    for (int p = 0; p < affineTA.length; p++) {
+      finalXForms.get(0).transformPoint(ctx, affineTA[p], varTA[p], pA[p], qA[p]);
+    }
     for (int i = 1; i < finalXForms.size(); i++) {
-      finalXForms.get(i).transformPoints(ctx, affineTA, varTA, qA, qA);
+      for (int p = 0; p < affineTA.length; p++) {
+        finalXForms.get(i).transformPoint(ctx, affineTA[p], varTA[p], qA[p], qA[p]);
+      }
     }
     q.assign(qA[0]);
   }
 
   @Override
   protected void transformPoint() {
-    xf.transformPoints(ctx, affineTA, varTA, pA, pA);
+    for (int p = 0; p < affineTA.length; p++) {
+      xf.transformPoint(ctx, affineTA[p], varTA[p], pA[p], pA[p]);
+    }
   }
 
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = raster[yIdx][xIdx];
     if (pA[0].rgbColor) {
       plotRed = pA[0].redColor;
       plotGreen = pA[0].greenColor;
@@ -139,10 +143,16 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
     color.blue = plotBlue;
 
     RenderColor shadedColor = shader.calculateColor(qA, color);
-    rp.setRed(rp.getRed() + shadedColor.red * prj.intensity);
-    rp.setGreen(rp.getGreen() + shadedColor.green * prj.intensity);
-    rp.setBlue(rp.getBlue() + shadedColor.blue * prj.intensity);
-    rp.incCount();
+
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, shadedColor.red * prj.intensity, shadedColor.green * prj.intensity, shadedColor.blue * prj.intensity);
+    if (plotBufferIdx >= plotBuffer.length) {
+      for (int i = 0; i < plotBufferIdx; i++) {
+        PlotSample sample = plotBuffer[i];
+        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
+      }
+      plotBufferIdx = 0;
+    }
+
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);

@@ -29,6 +29,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -243,6 +244,10 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   protected double plotRed, plotGreen, plotBlue, plotContribution;
 
+  protected int plotBufferIdx = 0;
+
+  protected PlotSample[] plotBuffer = initPlotBuffer();
+
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
     if (p.rgbColor) {
       plotRed = p.redColor;
@@ -266,13 +271,30 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotBlue = color.blue;
     }
     transformPlotColor(p);
-    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
+
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
+    if (plotBufferIdx >= plotBuffer.length) {
+      for (int i = 0; i < plotBufferIdx; i++) {
+        PlotSample sample = plotBuffer[i];
+        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
+      }
+      plotBufferIdx = 0;
+    }
+    // raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
 
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);
       }
     }
+  }
+
+  private PlotSample[] initPlotBuffer() {
+    PlotSample[] res = new PlotSample[Tools.PLOT_BUFFER_SIZE];
+    for (int i = 0; i < res.length; i++) {
+      res[i] = new PlotSample();
+    }
+    return res;
   }
 
   protected void transformPlotColor(XYZPoint p) {
