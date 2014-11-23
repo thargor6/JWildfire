@@ -309,8 +309,11 @@ public class TinaInteractiveRendererController implements IterationObserver {
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       threads = renderer.startRenderFlame(info);
+      for (Thread t : threads.getExecutingThreads()) {
+        t.setPriority(Thread.MIN_PRIORITY);
+      }
       updateDisplayThread = new UpdateDisplayThread();
-      new Thread(updateDisplayThread).start();
+      startRenderThread(updateDisplayThread);
 
       state = State.RENDER;
       enableControls();
@@ -318,6 +321,20 @@ public class TinaInteractiveRendererController implements IterationObserver {
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  private Thread startRenderThread(Runnable runnable) {
+    Thread thread = new Thread(runnable);
+    thread.setPriority(Thread.MIN_PRIORITY);
+    thread.start();
+    return thread;
+  }
+
+  private Thread startDisplayThread(Runnable runnable) {
+    Thread thread = new Thread(runnable);
+    thread.setPriority(Thread.NORM_PRIORITY);
+    thread.start();
+    return thread;
   }
 
   private InteractiveRendererDisplayUpdater createDisplayUpdater() {
@@ -674,10 +691,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         for (AbstractRenderThread thread : threads.getRenderThreads()) {
-          new Thread(thread).start();
+          startRenderThread(thread);
         }
         updateDisplayThread = new UpdateDisplayThread();
-        new Thread(updateDisplayThread).start();
+        startDisplayThread(updateDisplayThread);
 
         state = State.RENDER;
         enableControls();
