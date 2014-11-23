@@ -101,6 +101,15 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFFade(0.0);
         }
       }
+      else if (rnd < 0.3) {
+        flame.setCamDOFShape(DOFBlurShapeType.CANNABISCURVE);
+        if (Math.random() < 0.25) {
+          flame.setCamDOFFade(0.2 + Math.random() * 0.8);
+        }
+        else {
+          flame.setCamDOFFade(0.0);
+        }
+      }
       else if (rnd < 0.4) {
         flame.setCamDOFShape(DOFBlurShapeType.NBLUR);
         flame.setCamDOFFade(0.0);
@@ -112,10 +121,26 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFParam5(Math.random() < 0.33 ? 1 : 0);// circum circle
         }
       }
+      else if (rnd < 0.5) {
+        flame.setCamDOFShape(DOFBlurShapeType.CLOVERLEAF);
+        if (Math.random() < 0.25) {
+          flame.setCamDOFFade(0.2 + Math.random() * 0.8);
+        }
+        else {
+          flame.setCamDOFFade(0.0);
+        }
+      }
       else if (rnd < 0.6) {
         flame.setCamDOFShape(DOFBlurShapeType.SINEBLUR);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(1.2 + Math.random());
+      }
+      else if (rnd < 0.7) {
+        flame.setCamDOFShape(DOFBlurShapeType.PERLIN_NOISE);
+        flame.setCamDOFFade(0.0);
+        flame.setCamDOFParam1(Math.random());// shape
+        flame.setCamDOFParam2(1.2 + Math.random() * 1.8);// freqs
+        flame.setCamDOFParam3(0.1 + Math.random() * 0.4);// amp
       }
       else if (rnd < 0.8) {
         flame.setCamDOFFade(0.2 + Math.random() * 0.8);

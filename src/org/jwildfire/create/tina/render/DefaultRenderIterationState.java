@@ -274,11 +274,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
     plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
     if (plotBufferIdx >= plotBuffer.length) {
-      for (int i = 0; i < plotBufferIdx; i++) {
-        PlotSample sample = plotBuffer[i];
-        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
-      }
-      plotBufferIdx = 0;
+      applySamplesToRaster();
     }
     // raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
 
@@ -287,6 +283,14 @@ public class DefaultRenderIterationState extends RenderIterationState {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);
       }
     }
+  }
+
+  protected synchronized void applySamplesToRaster() {
+    for (int i = 0; i < plotBufferIdx; i++) {
+      PlotSample sample = plotBuffer[i];
+      raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
+    }
+    plotBufferIdx = 0;
   }
 
   private PlotSample[] initPlotBuffer() {
@@ -493,5 +497,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotPoint(xIdx, yIdx, intensity);
     }
 
+  }
+
+  public void cleanup() {
+    if (plotBufferIdx > 0) {
+      applySamplesToRaster();
+    }
   }
 }

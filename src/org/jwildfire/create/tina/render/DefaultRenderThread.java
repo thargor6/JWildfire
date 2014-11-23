@@ -89,18 +89,30 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
       state.init();
     }
 
-    for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
-      if (iter % 10000000 == 0) {
-        preFuseIter();
-      }
-      else if (iter % 10000 == 0) {
-        currSample = iter;
+    try {
+      for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
+        if (iter % 10000000 == 0) {
+          preFuseIter();
+        }
+        else if (iter % 10000 == 0) {
+          currSample = iter;
+          for (DefaultRenderIterationState state : iterationState) {
+            state.validateState();
+          }
+        }
         for (DefaultRenderIterationState state : iterationState) {
-          state.validateState();
+          state.iterateNext();
         }
       }
+    }
+    finally {
       for (DefaultRenderIterationState state : iterationState) {
-        state.iterateNext();
+        try {
+          state.cleanup();
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
     }
   }

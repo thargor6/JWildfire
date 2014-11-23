@@ -178,11 +178,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
 
     plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * prj.intensity, plotGreen * intensity, plotBlue * intensity);
     if (plotBufferIdx >= plotBuffer.length) {
-      for (int i = 0; i < plotBufferIdx; i++) {
-        PlotSample sample = plotBuffer[i];
-        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
-      }
-      plotBufferIdx = 0;
+      applySamplesToRaster();
     }
 
     rp.incCount();

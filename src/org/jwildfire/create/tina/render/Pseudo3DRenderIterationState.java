@@ -146,11 +146,7 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
 
     plotBuffer[plotBufferIdx++].set(xIdx, yIdx, shadedColor.red * prj.intensity, shadedColor.green * prj.intensity, shadedColor.blue * prj.intensity);
     if (plotBufferIdx >= plotBuffer.length) {
-      for (int i = 0; i < plotBufferIdx; i++) {
-        PlotSample sample = plotBuffer[i];
-        raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
-      }
-      plotBufferIdx = 0;
+      applySamplesToRaster();
     }
 
     if (observers != null && observers.size() > 0) {

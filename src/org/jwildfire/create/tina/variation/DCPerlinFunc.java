@@ -31,17 +31,17 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class DCPerlinFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SHAPE = "shape";
+  public static final String PARAM_SHAPE = "shape";
   private static final String PARAM_MAP = "map";
   private static final String PARAM_SELECT_CENTRE = "select_centre";
   private static final String PARAM_SELECT_RANGE = "select_range";
-  private static final String PARAM_CENTRE = "centre";
-  private static final String PARAM_RANGE = "range";
+  public static final String PARAM_CENTRE = "centre";
+  public static final String PARAM_RANGE = "range";
   private static final String PARAM_EDGE = "edge";
   private static final String PARAM_SCALE = "scale";
-  private static final String PARAM_OCTAVES = "octaves";
-  private static final String PARAM_AMPS = "amps";
-  private static final String PARAM_FREQS = "freqs";
+  public static final String PARAM_OCTAVES = "octaves";
+  public static final String PARAM_AMPS = "amps";
+  public static final String PARAM_FREQS = "freqs";
   private static final String PARAM_Z = "z";
   private static final String PARAM_SELECT_BAILOUT = "select_bailout";
 

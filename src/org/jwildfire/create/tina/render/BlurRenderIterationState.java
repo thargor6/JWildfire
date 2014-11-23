@@ -60,11 +60,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
 
               plotBuffer[plotBufferIdx++].set(l, k, plotRed * scl * prj.intensity, plotGreen * scl * prj.intensity, plotBlue * scl * prj.intensity);
               if (plotBufferIdx >= plotBuffer.length) {
-                for (int i = 0; i < plotBufferIdx; i++) {
-                  PlotSample sample = plotBuffer[i];
-                  raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
-                }
-                plotBufferIdx = 0;
+                applySamplesToRaster();
               }
 
               if (observers != null && observers.size() > 0) {
