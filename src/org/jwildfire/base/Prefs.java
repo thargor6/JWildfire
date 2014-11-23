@@ -79,6 +79,9 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
+  static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
+  static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
+  static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2 = "tina.random_batch.duality.prefered_variation_probability2";
   static final String KEY_TINA_RANDOMMOVIEBATCH_SIZE = "tina.random_movie_batch.size";
   static final String KEY_TINA_RASTERPOINT_PRECISION = "tina.rasterpoint.precision";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
@@ -193,6 +196,13 @@ public class Prefs extends ManagedObject {
   private String sunflowScenePath = null;
   private String lastInputSunflowScenePath = null;
   private String lastOutputSunflowScenePath = null;
+
+  @Property(description = "Prefered variations of the \"Duality\"-random-flame generator. You may specify a comma-separated list of your favourite variations", category = PropertyCategory.TINA)
+  private String tinaRandGenDualityPreferedVariation = "spherical3D";
+  @Property(description = "Probability to use one of the prefered variations in the 1st transform by the \"Duality\"-random-flame generator.", category = PropertyCategory.TINA)
+  private double tinaRandGenDualityPreferedVariationProbability1 = 0.33;
+  @Property(description = "Probability to use one of the prefered variations in the 2nd transform by the \"Duality\"-random-flame generator.", category = PropertyCategory.TINA)
+  private double tinaRandGenDualityPreferedVariationProbability2 = 0.25;
 
   @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA)
   private String tinaRandGenColorMapImagePath = null;
@@ -568,6 +578,10 @@ public class Prefs extends ManagedObject {
     tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
     tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
+
+    tinaRandGenDualityPreferedVariation = pSrc.tinaRandGenDualityPreferedVariation;
+    tinaRandGenDualityPreferedVariationProbability1 = pSrc.tinaRandGenDualityPreferedVariationProbability1;
+    tinaRandGenDualityPreferedVariationProbability2 = pSrc.tinaRandGenDualityPreferedVariationProbability2;
 
     tinaEditorGuidesCenterPointColor = new Color(pSrc.tinaEditorGuidesCenterPointColor.getRed(), pSrc.tinaEditorGuidesCenterPointColor.getGreen(), pSrc.tinaEditorGuidesCenterPointColor.getBlue());
     tinaEditorGuidesRuleOfThirdsColor = new Color(pSrc.tinaEditorGuidesRuleOfThirdsColor.getRed(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getGreen(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getBlue());
@@ -1032,6 +1046,30 @@ public class Prefs extends ManagedObject {
       }
     }
     return allowExperimentalFeatures;
+  }
+
+  public String getTinaRandGenDualityPreferedVariation() {
+    return tinaRandGenDualityPreferedVariation;
+  }
+
+  public void setTinaRandGenDualityPreferedVariation(String pTinaRandGenDualityPreferedVariation) {
+    tinaRandGenDualityPreferedVariation = pTinaRandGenDualityPreferedVariation;
+  }
+
+  public double getTinaRandGenDualityPreferedVariationProbability1() {
+    return tinaRandGenDualityPreferedVariationProbability1;
+  }
+
+  public void setTinaRandGenDualityPreferedVariationProbability1(double pTinaRandGenDualityPreferedVariationProbability1) {
+    tinaRandGenDualityPreferedVariationProbability1 = pTinaRandGenDualityPreferedVariationProbability1;
+  }
+
+  public double getTinaRandGenDualityPreferedVariationProbability2() {
+    return tinaRandGenDualityPreferedVariationProbability2;
+  }
+
+  public void setTinaRandGenDualityPreferedVariationProbability2(double pTinaRandGenDualityPreferedVariationProbability2) {
+    tinaRandGenDualityPreferedVariationProbability2 = pTinaRandGenDualityPreferedVariationProbability2;
   }
 
 }

@@ -16,6 +16,11 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -25,6 +30,31 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class DualityRandomFlameGenerator extends RandomFlameGenerator {
+  private final List<String> preferedVariations = new ArrayList<String>();
+  private final double preferedVariationsProb1;
+  private final double preferedVariationsProb2;
+
+  public DualityRandomFlameGenerator() {
+    Prefs prefs = Prefs.getPrefs();
+
+    String vString = prefs.getTinaRandGenDualityPreferedVariation();
+    if (vString != null && vString.length() > 0) {
+      StringTokenizer tokenizer = new StringTokenizer(vString, ",");
+      while (tokenizer.hasMoreElements()) {
+        String vName = tokenizer.nextToken().trim();
+        try {
+          VariationFuncList.getVariationFuncInstance(vName);
+          preferedVariations.add(vName);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+
+    preferedVariationsProb1 = prefs.getTinaRandGenDualityPreferedVariationProbability1() >= 0.0 && prefs.getTinaRandGenDualityPreferedVariationProbability1() <= 1.0 ? prefs.getTinaRandGenDualityPreferedVariationProbability1() : 0.0;
+    preferedVariationsProb2 = prefs.getTinaRandGenDualityPreferedVariationProbability2() >= 0.0 && prefs.getTinaRandGenDualityPreferedVariationProbability2() <= 1.0 ? prefs.getTinaRandGenDualityPreferedVariationProbability2() : 0.0;
+  }
 
   @Override
   protected Flame prepareFlame(RandomFlameGeneratorState pState) {
@@ -45,7 +75,7 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0);
 
       // variation 1
-      xForm.addVariation(1.0, getRandomVariation());
+      xForm.addVariation(1.0, getRandomVariation1());
       // random affine transforms (uncomment to play around)
       //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
       //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
@@ -63,11 +93,32 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(0.90312262);
       xForm.setColorSymmetry(0.95);
 
-      xForm.addVariation(1.0, getRandomVariation());
+      xForm.addVariation(1.0, getRandomVariation2());
 
       // random affine transforms (uncomment to play around)
       XFormTransformService.scale(xForm, 1.25 - Math.random() * 0.5, true, true, false);
       XFormTransformService.rotate(xForm, 36.0 * Math.random(), false);
+      XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), false);
+      // random affine post transforms (uncomment to play around)
+      //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
+      //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
+      //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+    }
+
+    // create transform 3
+    if (Math.random() < 0.1) {
+      XForm xForm = new XForm();
+      layer.getXForms().add(xForm);
+      xForm.setWeight(0.01 + Math.random() * 200.0);
+      xForm.setColor(0.6312262);
+      xForm.setColorSymmetry(0.12);
+
+      xForm.addVariation(0.5 + Math.random() * 0.75, getRandomVariation3());
+      xForm.getModifiedWeights()[2] = 0.0;
+
+      // random affine transforms (uncomment to play around)
+      XFormTransformService.scale(xForm, 1.05 - Math.random() * 0.45, true, true, false);
+      XFormTransformService.rotate(xForm, 24.0 * Math.random(), false);
       XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), false);
       // random affine post transforms (uncomment to play around)
       //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
@@ -88,19 +139,40 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
     return flame;
   }
 
-  private VariationFunc getRandomVariation() {
+  private VariationFunc getRandomVariation1() {
     String name = "";
-    if (Math.random() < 0.25) {
-      name = "spherical3D";
+    if (preferedVariations.size() > 0 && Math.random() < preferedVariationsProb1) {
+      name = preferedVariations.get((int) (Math.random() * preferedVariations.size()));
     }
     else {
-      while (true) {
-        name = VariationFuncList.getRandomVariationname();
-        if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_"))
-          break;
-      }
+      name = getRandomVariationName();
     }
     return VariationFuncList.getVariationFuncInstance(name, true);
+  }
+
+  private VariationFunc getRandomVariation2() {
+    String name = "";
+    if (preferedVariations.size() > 0 && Math.random() < preferedVariationsProb2) {
+      name = preferedVariations.get((int) (Math.random() * preferedVariations.size()));
+    }
+    else {
+      name = getRandomVariationName();
+    }
+    return VariationFuncList.getVariationFuncInstance(name, true);
+  }
+
+  private VariationFunc getRandomVariation3() {
+    String name = getRandomVariationName();
+    return VariationFuncList.getVariationFuncInstance(name, true);
+  }
+
+  private String getRandomVariationName() {
+    while (true) {
+      String name = VariationFuncList.getRandomVariationname();
+      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_")) {
+        return name;
+      }
+    }
   }
 
   @Override
