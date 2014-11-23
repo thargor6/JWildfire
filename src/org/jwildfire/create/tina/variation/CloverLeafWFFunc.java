@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class CloverLeafWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_FILLED = "filled";
+  public static final String PARAM_FILLED = "filled";
   private static final String[] paramNames = { PARAM_FILLED };
 
   private int filled = 1;
