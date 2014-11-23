@@ -31,6 +31,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   static {
     allGenerators = new ArrayList<RandomFlameGenerator>();
     allGenerators.add(new BlackAndWhiteRandomFlameGenerator());
+    allGenerators.add(new BokehRandomFlameGenerator());
     allGenerators.add(new BrokatRandomFlameGenerator());
     allGenerators.add(new Brokat3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());

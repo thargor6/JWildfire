@@ -27,6 +27,7 @@ public class RandomFlameGeneratorList {
   static {
     registerRandomFlameGenerator(AllRandomFlameGenerator.class);
     registerRandomFlameGenerator(BlackAndWhiteRandomFlameGenerator.class);
+    registerRandomFlameGenerator(BokehRandomFlameGenerator.class);
     registerRandomFlameGenerator(BrokatRandomFlameGenerator.class);
     registerRandomFlameGenerator(Brokat3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
