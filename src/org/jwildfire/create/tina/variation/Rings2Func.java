@@ -73,7 +73,7 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _dx = pAmount * pAmount + EPSILON;
+    _dx = val * val + EPSILON;
   }
 
 }
