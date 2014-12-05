@@ -419,6 +419,7 @@ public class VariationFuncList {
     registerVariationFunc(ExBlurFunc.class);
     registerVariationFunc(PowBlockFunc.class);
     registerVariationFunc(PreBlur3DFunc.class);
+    registerVariationFunc(VogelFunc.class);
     if (Prefs.getPrefs().isAllowExperimentalFeatures()) {
       registerVariationFunc(IFlamesFunc.class);
     }
