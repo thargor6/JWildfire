@@ -81,6 +81,13 @@ public class Layer implements Assignable<Layer>, Serializable {
     }
   }
 
+  public void randomizeColorSpeed() {
+    for (int i = 0; i < getXForms().size(); i++) {
+      XForm xForm = getXForms().get(i);
+      xForm.setColorSymmetry(Math.random());
+    }
+  }
+
   public void refreshModWeightTables(FlameTransformationContext pFlameTransformationContext) {
     double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
     int n = getXForms().size();

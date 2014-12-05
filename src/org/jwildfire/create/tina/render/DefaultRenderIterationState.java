@@ -285,7 +285,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  protected synchronized void applySamplesToRaster() {
+  protected void applySamplesToRaster() {
     for (int i = 0; i < plotBufferIdx; i++) {
       PlotSample sample = plotBuffer[i];
       raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);

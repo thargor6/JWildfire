@@ -210,6 +210,7 @@ public class FlameRendererView {
     pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
     if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
       return false;
+    // pProjectedPoint.z = camPoint.z;
     return true;
   }
 

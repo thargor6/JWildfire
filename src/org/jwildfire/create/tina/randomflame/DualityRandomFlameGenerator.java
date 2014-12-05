@@ -93,7 +93,12 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(0.90312262);
       xForm.setColorSymmetry(0.95);
 
-      xForm.addVariation(1.0, getRandomVariation2());
+      if (Math.random() < 0.33) {
+        xForm.addVariation(0.5 + Math.random() * 0.5, getRandomVariation2());
+      }
+      else {
+        xForm.addVariation(1.0, getRandomVariation2());
+      }
 
       // random affine transforms (uncomment to play around)
       XFormTransformService.scale(xForm, 1.25 - Math.random() * 0.5, true, true, false);
@@ -103,10 +108,19 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
       //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, true);
       //   XFormTransformService.rotate(xForm, 360.0*Math.random(), true);
       //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), true);
+      if (Math.random() < 0.5) {
+        if (Math.random() < 0.5) {
+          xForm.getModifiedWeights()[0] = 0.1 + Math.random() * 0.5;
+        }
+        else {
+          xForm.getModifiedWeights()[0] = 3.0 + Math.random() * 7;
+        }
+      }
+
     }
 
     // create transform 3
-    if (Math.random() < 0.1) {
+    if (Math.random() < 0.01) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.01 + Math.random() * 200.0);

@@ -3878,6 +3878,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void randomizeColorSpeedBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      getCurrLayer().randomizeColorSpeed();
+      transformationTableClicked();
+    }
+  }
+
+  public void randomizeColorShiftBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      getCurrLayer().getPalette().setModShift(1);
+      transformationTableClicked();
+    }
+  }
+
   public void paletteSwapRGBREd_changed() {
     paletteTextFieldChanged(data.paletteSwapRGBSlider, data.paletteSwapRGBREd, "modSwapRGB", 1.0);
   }
