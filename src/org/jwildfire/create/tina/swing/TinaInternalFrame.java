@@ -3755,6 +3755,11 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubSouthPanel.add(randomizeColorSpeedButton);
 
       JButton randomizeColorShiftButton = new JButton();
+      randomizeColorShiftButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.randomizeColorShiftBtn_clicked();
+        }
+      });
       randomizeColorShiftButton.setToolTipText("Randomize color shift");
       randomizeColorShiftButton.setText("Rnd shift");
       randomizeColorShiftButton.setPreferredSize(new Dimension(190, 24));

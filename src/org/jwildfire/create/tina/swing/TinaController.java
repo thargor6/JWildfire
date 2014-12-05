@@ -3891,8 +3891,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Flame flame = getCurrFlame();
     if (flame != null) {
       saveUndoPoint();
-      getCurrLayer().getPalette().setModShift(1);
-      transformationTableClicked();
+      data.paletteShiftREd.setText(String.valueOf(255 - (int) (511 * Math.random())));
     }
   }
 
