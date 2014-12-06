@@ -9,7 +9,6 @@ applet
 *l2fprod*
 *toedter*
 *flagstone*
-lib/*
 *.prefs
 gitlog.sh
 .classpath
@@ -40,3 +39,16 @@ src/org/sunflow
 FasterMath*
 MathTest*
 IFlame*
+
+
+lib/colt*
+lib/jcodec*
+lib/jep*
+lib/jl*
+lib/JOCL*
+lib/JTatt*
+lib/jtrans*
+lib/sunflow*old*
+lib/svg*
+
+

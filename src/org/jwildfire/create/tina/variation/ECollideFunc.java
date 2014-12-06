@@ -66,24 +66,13 @@ public class ECollideFunc extends VariationFunc {
       t = -1.0;
     double nu = acos(t); // -Pi < nu < Pi
 
-    if (pAffineTP.y > 0.0) {
-      alt = (int) (nu * _eCn_pi);
-      if (alt % 2 == 0)
-        nu = alt * _pi_eCn + fmod(nu + _eCa_eCn, _pi_eCn);
-      else
-        nu = alt * _pi_eCn + fmod(nu - _eCa_eCn, _pi_eCn);
-
-    }
-    else {
-      alt = (int) (nu * _eCn_pi);
-      if (alt % 2 == 0)
-        nu = alt * _pi_eCn + fmod(nu + _eCa_eCn, _pi_eCn);
-      else
-        nu = alt * _pi_eCn + fmod(nu - _eCa_eCn, _pi_eCn);
-
+    alt = (int) (nu * _eCn_pi);
+    if (alt % 2 == 0)
+      nu = alt * _pi_eCn + fmod(nu + _eCa_eCn, _pi_eCn);
+    else
+      nu = alt * _pi_eCn + fmod(nu - _eCa_eCn, _pi_eCn);
+    if (pAffineTP.y <= 0.0)
       nu *= -1.0;
-    }
-
     sinnu = sin(nu);
     cosnu = cos(nu);
     pVarTP.x += pAmount * xmax * cosnu;

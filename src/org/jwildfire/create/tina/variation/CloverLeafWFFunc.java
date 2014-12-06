@@ -34,9 +34,8 @@ public class CloverLeafWFFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double a = pAffineTP.getPrecalcAtan();
-    double r = pAffineTP.getPrecalcSqrt();
 
-    r = (sin(2 * a) + 0.25 * sin(6 * a));
+    double r = (sin(2 * a) + 0.25 * sin(6 * a));
 
     if (filled == 1) {
       r *= pContext.random();

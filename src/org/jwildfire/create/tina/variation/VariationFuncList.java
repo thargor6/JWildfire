@@ -61,6 +61,7 @@ public class VariationFuncList {
     aliasMap.put(SplitBrdrFunc.class, "SplitBrdr");
     aliasMap.put(JuliaCFunc.class, "Juliac");
     aliasMap.put(VoronFunc.class, "Voron");
+    aliasMap.put(CrossFunc.class, "cross2");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -293,7 +294,6 @@ public class VariationFuncList {
     registerVariationFunc(LogApoFunc.class);
     registerVariationFunc(RippleFunc.class);
     registerVariationFunc(JuliaN2Func.class);
-    registerVariationFunc(Cross2Func.class);
     registerVariationFunc(PostBWraps2Func.class);
     registerVariationFunc(PreBWraps2Func.class);
     registerVariationFunc(PostCurlFunc.class);
