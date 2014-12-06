@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.render.dof;
 
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +27,11 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-import org.jwildfire.create.tina.variation.CannabisCurveWFFunc;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.TaurusFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
-public class CannabisCurveDOFBlurShape extends AbstractDOFBlurShape {
+public class TaurusDOFBlurShape extends AbstractDOFBlurShape {
   private XYZPoint s, d;
   private VariationFunc fnc;
   private XForm xform;
@@ -40,10 +42,10 @@ public class CannabisCurveDOFBlurShape extends AbstractDOFBlurShape {
     d.assign(pSrc);
     double fade = doFade();
     double dr = Math.abs(camDOF_10 * pZDist * scale * fade);
-    s.x = (1.0 - 2.0 * Math.random()) * fade;
-    s.y = (1.0 - 2.0 * Math.random()) * fade;
+    s.x = (2.0 * M_PI - 4.0 * Math.random() * M_PI) * fade;
+    s.y = (2.0 * M_PI - 4.0 * Math.random() * M_PI) * fade;
     fnc.transform(flameTransformationContext, xform, s, d, dr);
-    rotate(pSrc, d);
+    //    rotate(s, d);
     pDest.x = d.x / pZR;
     pDest.y = d.y / pZR;
   }
@@ -54,12 +56,14 @@ public class CannabisCurveDOFBlurShape extends AbstractDOFBlurShape {
     s = new XYZPoint();
     d = new XYZPoint();
     xform = new XForm();
-    fnc = new CannabisCurveWFFunc();
-    fnc.setParameter(CannabisCurveWFFunc.PARAM_FILLED, 1.0);
+    fnc = new TaurusFunc();
+    for (String paramName : getParamNames()) {
+      fnc.setParameter(paramName, params.get(paramName));
+    }
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 
-  private static final List<String> paramNames = new ArrayList<String>(Arrays.asList(new String[] {}));
+  private static final List<String> paramNames = new ArrayList<String>(Arrays.asList(new String[] { TaurusFunc.PARAM_R, TaurusFunc.PARAM_N, TaurusFunc.PARAM_INV, TaurusFunc.PARAM_SOR }));
 
   @Override
   public List<String> getParamNames() {
@@ -70,7 +74,11 @@ public class CannabisCurveDOFBlurShape extends AbstractDOFBlurShape {
   public void setDefaultParams(Flame pFlame) {
     pFlame.setCamDOFFade(0.0);
     pFlame.setCamDOFScale(1.0);
-    pFlame.setCamDOFAngle(0.0);
+    pFlame.setCamDOFAngle(30.0);
+    pFlame.setCamDOFParam1(3.0);// r
+    pFlame.setCamDOFParam2(5.0);// n
+    pFlame.setCamDOFParam3(1.5);// inv
+    pFlame.setCamDOFParam4(1.0);// sor
   }
 
   @Override

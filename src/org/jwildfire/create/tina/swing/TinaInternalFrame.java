@@ -4841,12 +4841,14 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(DOFBlurShapeType.BUBBLE);
     pCmb.addItem(DOFBlurShapeType.CANNABISCURVE);
     pCmb.addItem(DOFBlurShapeType.CLOVERLEAF);
+    pCmb.addItem(DOFBlurShapeType.FLOWER);
+    pCmb.addItem(DOFBlurShapeType.HEART);
+    pCmb.addItem(DOFBlurShapeType.NBLUR);
     pCmb.addItem(DOFBlurShapeType.PERLIN_NOISE);
     pCmb.addItem(DOFBlurShapeType.RECT);
     pCmb.addItem(DOFBlurShapeType.SINEBLUR);
     pCmb.addItem(DOFBlurShapeType.STARBLUR);
-    pCmb.addItem(DOFBlurShapeType.NBLUR);
-    pCmb.addItem(DOFBlurShapeType.HEART);
+    pCmb.addItem(DOFBlurShapeType.TAURUS);
     if (Prefs.getPrefs().isAllowExperimentalFeatures()) {
       pCmb.addItem(DOFBlurShapeType.SUB_FLAME);
     }

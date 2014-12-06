@@ -88,11 +88,11 @@ public class BokehMutation implements Mutation {
       flame.setCamDOFParam5(0);
 
       double rnd = Math.random();
-      if (rnd < 0.1) {
+      if (rnd < 0.08) {
         flame.setCamDOFShape(DOFBlurShapeType.BUBBLE);
         flame.setCamDOFFade(0.6 + Math.random() * 0.4);
       }
-      else if (rnd < 0.2) {
+      else if (rnd < 0.16) {
         flame.setCamDOFShape(DOFBlurShapeType.HEART);
         if (Math.random() < 0.25) {
           flame.setCamDOFFade(0.2 + Math.random() * 0.8);
@@ -101,7 +101,7 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.3) {
+      else if (rnd < 0.24) {
         flame.setCamDOFShape(DOFBlurShapeType.CANNABISCURVE);
         if (Math.random() < 0.25) {
           flame.setCamDOFFade(0.2 + Math.random() * 0.8);
@@ -110,7 +110,7 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.4) {
+      else if (rnd < 0.32) {
         flame.setCamDOFShape(DOFBlurShapeType.NBLUR);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(3 + Math.random() * 5); // num edges
@@ -121,7 +121,13 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFParam5(Math.random() < 0.33 ? 1 : 0);// circum circle
         }
       }
-      else if (rnd < 0.5) {
+      else if (rnd < 0.40) {
+        flame.setCamDOFShape(DOFBlurShapeType.FLOWER);
+        flame.setCamDOFFade(0.0);
+        flame.setCamDOFParam1(0.3 + Math.random() * 0.2); // holes
+        flame.setCamDOFParam2(5 + Math.random() * 5); // petals
+      }
+      else if (rnd < 0.48) {
         flame.setCamDOFShape(DOFBlurShapeType.CLOVERLEAF);
         if (Math.random() < 0.25) {
           flame.setCamDOFFade(0.2 + Math.random() * 0.8);
@@ -130,23 +136,32 @@ public class BokehMutation implements Mutation {
           flame.setCamDOFFade(0.0);
         }
       }
-      else if (rnd < 0.6) {
+      else if (rnd < 0.56) {
         flame.setCamDOFShape(DOFBlurShapeType.SINEBLUR);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(1.2 + Math.random());
       }
-      else if (rnd < 0.7) {
+      else if (rnd < 0.64) {
         flame.setCamDOFShape(DOFBlurShapeType.PERLIN_NOISE);
         flame.setCamDOFFade(0.0);
         flame.setCamDOFParam1(Math.random());// shape
         flame.setCamDOFParam2(1.2 + Math.random() * 1.8);// freqs
         flame.setCamDOFParam3(0.1 + Math.random() * 0.4);// amp
       }
-      else if (rnd < 0.8) {
+      else if (rnd < 0.72) {
         flame.setCamDOFFade(0.2 + Math.random() * 0.8);
         flame.setCamDOFShape(DOFBlurShapeType.STARBLUR);
         flame.setCamDOFParam1(4 + Math.random() * 6);// power
         flame.setCamDOFParam2(0.40162283177245455973959534526548);// range
+      }
+      else if (rnd < 0.80) {
+        flame.setCamDOFAngle(0.0);
+        flame.setCamDOFFade(0.);
+        flame.setCamDOFShape(DOFBlurShapeType.TAURUS);
+        flame.setCamDOFParam1(2.5 + Math.random());// r
+        flame.setCamDOFParam2(4 + Math.random() * 3.0);// n
+        flame.setCamDOFParam3(1.25 * Math.random() * 0.5);// inv
+        flame.setCamDOFParam4(0.9 + Math.random() * 0.2);// sor
       }
       else if (rnd < 0.9) {
         flame.setCamDOFShape(DOFBlurShapeType.RECT);

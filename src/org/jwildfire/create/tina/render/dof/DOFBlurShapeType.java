@@ -35,6 +35,12 @@ public enum DOFBlurShapeType {
       return CloverleafDOFBlurShape.class;
     }
   },
+  FLOWER {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return FlowerDOFBlurShape.class;
+    }
+  },
   PERLIN_NOISE {
     @Override
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
@@ -57,6 +63,12 @@ public enum DOFBlurShapeType {
     @Override
     protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
       return StarBlurDOFBlurShape.class;
+    }
+  },
+  TAURUS {
+    @Override
+    protected Class<? extends DOFBlurShape> getDOFBlurShapeType() {
+      return TaurusDOFBlurShape.class;
     }
   },
   NBLUR {
