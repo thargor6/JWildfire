@@ -25,10 +25,10 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class TaurusFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_R = "r";
-  private static final String PARAM_N = "n";
-  private static final String PARAM_INV = "inv";
-  private static final String PARAM_SOR = "sor";
+  public static final String PARAM_R = "r";
+  public static final String PARAM_N = "n";
+  public static final String PARAM_INV = "inv";
+  public static final String PARAM_SOR = "sor";
   private static final String[] paramNames = { PARAM_R, PARAM_N, PARAM_INV, PARAM_SOR };
 
   private double r = 3.0;

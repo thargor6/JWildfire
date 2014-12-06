@@ -24,8 +24,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class FlowerFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_HOLES = "holes";
-  private static final String PARAM_PETALS = "petals";
+  public static final String PARAM_HOLES = "holes";
+  public static final String PARAM_PETALS = "petals";
 
   private static final String[] paramNames = { PARAM_HOLES, PARAM_PETALS };
 
