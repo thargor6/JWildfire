@@ -407,4 +407,17 @@ public class TinaControllerData {
   public JButton gradientResetBtn;
   public JPanel macroButtonHorizRootPanel;
   public JComboBox affineEditPlaneCmb;
+  public JWFNumberField gradientColorMapHorizOffsetREd;
+  public JSlider gradientColorMapHorizOffsetSlider;
+  public JWFNumberField gradientColorMapHorizScaleREd;
+  public JSlider gradientColorMapHorizScaleSlider;
+  public JWFNumberField gradientColorMapVertOffsetREd;
+  public JSlider gradientColorMapVertOffsetSlider;
+  public JWFNumberField gradientColorMapVertScaleREd;
+  public JSlider gradientColorMapVertScaleSlider;
+  public JWFNumberField gradientColorMapLocalColorAddREd;
+  public JSlider gradientColorMapLocalColorAddSlider;
+  public JWFNumberField gradientColorMapLocalColorScaleREd;
+  public JSlider gradientColorMapLocalColorScaleSlider;
+
 }

@@ -1666,7 +1666,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      bgTransparencyCBx.setBounds(649, 17, 197, 18);
+      bgTransparencyCBx.setBounds(880, 28, 169, 18);
       tinaColoringPanel.add(bgTransparencyCBx);
       tinaColoringPanel.add(getBackgroundColorIndicatorBtn());
 
@@ -1815,6 +1815,32 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaColoringPanel.add(tinaWhiteLevelSlider);
+
+      backgroundSelectImageBtn = new JButton();
+      backgroundSelectImageBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.selectImageForBackgroundButton_actionPerformed(e);
+        }
+      });
+      backgroundSelectImageBtn.setToolTipText("Select an image to use as a background");
+      backgroundSelectImageBtn.setText("Select image...");
+      backgroundSelectImageBtn.setPreferredSize(new Dimension(190, 24));
+      backgroundSelectImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundSelectImageBtn.setBounds(649, 4, 148, 24);
+      tinaColoringPanel.add(backgroundSelectImageBtn);
+
+      backgroundRemoveImageBtn = new JButton();
+      backgroundRemoveImageBtn.setToolTipText("Remove the currently used image");
+      backgroundRemoveImageBtn.setText("Remove image");
+      backgroundRemoveImageBtn.setPreferredSize(new Dimension(190, 24));
+      backgroundRemoveImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundRemoveImageBtn.setBounds(649, 28, 148, 24);
+      backgroundRemoveImageBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.removeBackgroundImageButton_actionPerformed(e);
+        }
+      });
+      tinaColoringPanel.add(backgroundRemoveImageBtn);
     }
     return tinaColoringPanel;
   }
@@ -3581,14 +3607,14 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
       xFormDrawModeLbl.setSize(new Dimension(119, 22));
-      xFormDrawModeLbl.setLocation(new Point(6, 81));
+      xFormDrawModeLbl.setLocation(new Point(6, 75));
       xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
       xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
       xFormOpacityLbl.setSize(new Dimension(49, 22));
-      xFormOpacityLbl.setLocation(new Point(6, 107));
+      xFormOpacityLbl.setLocation(new Point(6, 101));
       xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setName("xFormSymmetryLbl");
@@ -3800,6 +3826,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
       tinaPaletteSubTabbedPane.addTab("Modify gradient", null, getTinaPaletteTransformPanel(), "Apply general modifications to the gradient");
       tinaPaletteSubTabbedPane.addTab("Balancing", null, getTinaPaletteBalancingPanel(), "Apply common color balancing options to the gradient");
+      tinaPaletteSubTabbedPane.addTab("Color map", null, getGradientColorMapPnl(), null);
     }
     return tinaPaletteSubTabbedPane;
   }
@@ -4684,7 +4711,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
         getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
-        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineEditPlaneCmb());
+        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineEditPlaneCmb(),
+        getGradientColorMapHorizOffsetREd(), getGradientColorMapHorizOffsetSlider(), getGradientColorMapHorizScaleREd(),
+        getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
+        getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
+        getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider());
 
     tinaController = new TinaController(params);
 
@@ -6211,7 +6242,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setPreferredSize(new Dimension(55, 24));
       xFormOpacityREd.setText("");
       xFormOpacityREd.setSize(new Dimension(70, 24));
-      xFormOpacityREd.setLocation(new Point(55, 107));
+      xFormOpacityREd.setLocation(new Point(55, 101));
       xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
     }
     return xFormOpacityREd;
@@ -6237,7 +6268,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(195, 22));
-      xFormOpacitySlider.setLocation(new Point(125, 107));
+      xFormOpacitySlider.setLocation(new Point(125, 101));
       xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -6258,7 +6289,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeCmb = new JComboBox();
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
-      xFormDrawModeCmb.setLocation(new Point(122, 83));
+      xFormDrawModeCmb.setLocation(new Point(122, 77));
       xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -10780,6 +10811,34 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton interactiveRendererShowStatsButton;
   private JToggleButton interactiveRendererShowPreviewButton;
   private JButton randomizeColorSpeedButton;
+  private JButton tinaClearGradientImageButton;
+  private JButton backgroundSelectImageBtn;
+  private JButton backgroundRemoveImageBtn;
+  private JPanel gradientColorMapPnl;
+  private JLabel lblHoffset;
+  private JLabel lblHscale;
+  private JLabel lblLocalCAdd;
+  private JLabel lblLocalScl;
+  private JLabel lblVoffset;
+  private JLabel lblVScale;
+  private JLabel label_15;
+  private JLabel label_16;
+  private JWFNumberField gradientColorMapHorizOffsetREd;
+  private JWFNumberField gradientColorMapHorizScaleREd;
+  private JWFNumberField gradientColorMapLocalColorAddREd;
+  private JWFNumberField gradientColorMapLocalColorScaleREd;
+  private JWFNumberField gradientColorMapVertOffsetREd;
+  private JWFNumberField gradientColorMapVertScaleREd;
+  private JWFNumberField numberField_6;
+  private JWFNumberField numberField_7;
+  private JSlider gradientColorMapHorizOffsetSlider;
+  private JSlider gradientColorMapHorizScaleSlider;
+  private JSlider gradientColorMapLocalColorAddSlider;
+  private JSlider gradientColorMapLocalColorScaleSlider;
+  private JSlider gradientColorMapVertOffsetSlider;
+  private JSlider gradientColorMapVertScaleSlider;
+  private JSlider slider_6;
+  private JSlider slider_7;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -16648,7 +16707,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_73() {
     if (panel_73 == null) {
       panel_73 = new JPanel();
-      panel_73.setPreferredSize(new Dimension(10, 24));
+      panel_73.setPreferredSize(new Dimension(10, 20));
       panel_73.setMinimumSize(new Dimension(10, 20));
     }
     return panel_73;
@@ -22511,6 +22570,576 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getRandomizeColorSpeedButton() {
     return randomizeColorSpeedButton;
+  }
+
+  private JButton getTinaClearGradientImageButton() {
+    if (tinaClearGradientImageButton == null) {
+      tinaClearGradientImageButton = new JButton();
+      tinaClearGradientImageButton.setBounds(334, 6, 148, 24);
+      tinaClearGradientImageButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.clearImageForGradientButton_actionPerformed(e);
+        }
+      });
+      tinaClearGradientImageButton.setToolTipText("Remove the currently used image");
+      tinaClearGradientImageButton.setText("Remove image");
+      tinaClearGradientImageButton.setPreferredSize(new Dimension(190, 24));
+      tinaClearGradientImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return tinaClearGradientImageButton;
+  }
+
+  public JButton getBackgroundSelectImageBtn() {
+    return backgroundSelectImageBtn;
+  }
+
+  public JButton getBackgroundRemoveImageBtn() {
+    return backgroundRemoveImageBtn;
+  }
+
+  private JPanel getGradientColorMapPnl() {
+    if (gradientColorMapPnl == null) {
+      gradientColorMapPnl = new JPanel();
+      gradientColorMapPnl.setLayout(null);
+      gradientColorMapPnl.add(getLblHoffset());
+      gradientColorMapPnl.add(getLblHscale());
+      gradientColorMapPnl.add(getLblLocalCAdd());
+      gradientColorMapPnl.add(getLblLocalScl());
+      gradientColorMapPnl.add(getLblVoffset());
+      gradientColorMapPnl.add(getLblVScale());
+      gradientColorMapPnl.add(getLabel_15());
+      gradientColorMapPnl.add(getLabel_16());
+      gradientColorMapPnl.add(getGradientColorMapHorizOffsetREd());
+      gradientColorMapPnl.add(getGradientColorMapHorizScaleREd());
+      gradientColorMapPnl.add(getGradientColorMapLocalColorAddREd());
+      gradientColorMapPnl.add(getGradientColorMapLocalColorScaleREd());
+      gradientColorMapPnl.add(getGradientColorMapVertOffsetREd());
+      gradientColorMapPnl.add(getGradientColorMapVertScaleREd());
+      gradientColorMapPnl.add(getNumberField_6());
+      gradientColorMapPnl.add(getNumberField_7());
+      gradientColorMapPnl.add(getGradientColorMapHorizOffsetSlider());
+      gradientColorMapPnl.add(getGradientColorMapHorizScaleSlider());
+      gradientColorMapPnl.add(getGradientColorMapLocalColorAddSlider());
+      gradientColorMapPnl.add(getGradientColorMapLocalColorScaleSlider());
+      gradientColorMapPnl.add(getGradientColorMapVertOffsetSlider());
+      gradientColorMapPnl.add(getGradientColorMapVertScaleSlider());
+      gradientColorMapPnl.add(getSlider_6());
+      gradientColorMapPnl.add(getSlider_7());
+
+      JButton tinaSelectGradientImageButton = new JButton();
+      tinaSelectGradientImageButton.setBounds(6, 6, 148, 24);
+      gradientColorMapPnl.add(tinaSelectGradientImageButton);
+      tinaSelectGradientImageButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.selectImageForGradientButton_actionPerformed(e);
+        }
+      });
+      tinaSelectGradientImageButton.setToolTipText("Select an image to use as a 2D-gradient");
+      tinaSelectGradientImageButton.setText("Select image...");
+      tinaSelectGradientImageButton.setPreferredSize(new Dimension(190, 24));
+      tinaSelectGradientImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapPnl.add(getTinaClearGradientImageButton());
+    }
+    return gradientColorMapPnl;
+  }
+
+  private JLabel getLblHoffset() {
+    if (lblHoffset == null) {
+      lblHoffset = new JLabel();
+      lblHoffset.setToolTipText("Horizontal offset");
+      lblHoffset.setText("H Offset");
+      lblHoffset.setSize(new Dimension(56, 22));
+      lblHoffset.setPreferredSize(new Dimension(64, 22));
+      lblHoffset.setLocation(new Point(6, 6));
+      lblHoffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHoffset.setBounds(6, 36, 56, 22);
+    }
+    return lblHoffset;
+  }
+
+  private JLabel getLblHscale() {
+    if (lblHscale == null) {
+      lblHscale = new JLabel();
+      lblHscale.setToolTipText("Horizontal scale");
+      lblHscale.setText("HScale");
+      lblHscale.setSize(new Dimension(56, 22));
+      lblHscale.setPreferredSize(new Dimension(64, 22));
+      lblHscale.setLocation(new Point(6, 32));
+      lblHscale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHscale.setBounds(6, 62, 56, 22);
+    }
+    return lblHscale;
+  }
+
+  private JLabel getLblLocalCAdd() {
+    if (lblLocalCAdd == null) {
+      lblLocalCAdd = new JLabel();
+      lblLocalCAdd.setToolTipText("Local color add");
+      lblLocalCAdd.setText("Local Add");
+      lblLocalCAdd.setSize(new Dimension(56, 22));
+      lblLocalCAdd.setPreferredSize(new Dimension(64, 22));
+      lblLocalCAdd.setLocation(new Point(6, 58));
+      lblLocalCAdd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLocalCAdd.setBounds(6, 88, 56, 22);
+    }
+    return lblLocalCAdd;
+  }
+
+  private JLabel getLblLocalScl() {
+    if (lblLocalScl == null) {
+      lblLocalScl = new JLabel();
+      lblLocalScl.setToolTipText("Local color scale");
+      lblLocalScl.setText("Local Scl");
+      lblLocalScl.setSize(new Dimension(56, 22));
+      lblLocalScl.setPreferredSize(new Dimension(64, 22));
+      lblLocalScl.setLocation(new Point(6, 84));
+      lblLocalScl.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLocalScl.setBounds(6, 114, 56, 22);
+    }
+    return lblLocalScl;
+  }
+
+  private JLabel getLblVoffset() {
+    if (lblVoffset == null) {
+      lblVoffset = new JLabel();
+      lblVoffset.setToolTipText("Vertical offset");
+      lblVoffset.setText("V Offset");
+      lblVoffset.setSize(new Dimension(56, 22));
+      lblVoffset.setPreferredSize(new Dimension(64, 22));
+      lblVoffset.setLocation(new Point(334, 6));
+      lblVoffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVoffset.setBounds(334, 36, 56, 22);
+    }
+    return lblVoffset;
+  }
+
+  private JLabel getLblVScale() {
+    if (lblVScale == null) {
+      lblVScale = new JLabel();
+      lblVScale.setText("V Scale");
+      lblVScale.setSize(new Dimension(56, 22));
+      lblVScale.setPreferredSize(new Dimension(64, 22));
+      lblVScale.setLocation(new Point(334, 32));
+      lblVScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVScale.setBounds(334, 62, 56, 22);
+    }
+    return lblVScale;
+  }
+
+  private JLabel getLabel_15() {
+    if (label_15 == null) {
+      label_15 = new JLabel();
+      label_15.setText(" ");
+      label_15.setSize(new Dimension(56, 22));
+      label_15.setPreferredSize(new Dimension(64, 22));
+      label_15.setLocation(new Point(334, 58));
+      label_15.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_15.setBounds(334, 88, 56, 22);
+    }
+    return label_15;
+  }
+
+  private JLabel getLabel_16() {
+    if (label_16 == null) {
+      label_16 = new JLabel();
+      label_16.setText(" ");
+      label_16.setSize(new Dimension(56, 22));
+      label_16.setPreferredSize(new Dimension(64, 22));
+      label_16.setLocation(new Point(334, 84));
+      label_16.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_16.setBounds(334, 114, 56, 22);
+    }
+    return label_16;
+  }
+
+  private JWFNumberField getGradientColorMapHorizOffsetREd() {
+    if (gradientColorMapHorizOffsetREd == null) {
+      gradientColorMapHorizOffsetREd = new JWFNumberField();
+      gradientColorMapHorizOffsetREd.setValueStep(0.05);
+      gradientColorMapHorizOffsetREd.setText("0");
+      gradientColorMapHorizOffsetREd.setSize(new Dimension(56, 24));
+      gradientColorMapHorizOffsetREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapHorizOffsetREd.setMinValue(-255.0);
+      gradientColorMapHorizOffsetREd.setMaxValue(255.0);
+      gradientColorMapHorizOffsetREd.setLocation(new Point(62, 6));
+      gradientColorMapHorizOffsetREd.setHasMinValue(true);
+      gradientColorMapHorizOffsetREd.setHasMaxValue(true);
+      gradientColorMapHorizOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapHorizOffsetREd.setBounds(62, 36, 56, 24);
+      gradientColorMapHorizOffsetREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapHorizOffsetREd.isMouseAdjusting() || gradientColorMapHorizOffsetREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapHorizOffsetSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapHorizOffsetREd_changed();
+        }
+      });
+    }
+    return gradientColorMapHorizOffsetREd;
+  }
+
+  private JWFNumberField getGradientColorMapHorizScaleREd() {
+    if (gradientColorMapHorizScaleREd == null) {
+      gradientColorMapHorizScaleREd = new JWFNumberField();
+      gradientColorMapHorizScaleREd.setValueStep(0.05);
+      gradientColorMapHorizScaleREd.setText("0");
+      gradientColorMapHorizScaleREd.setSize(new Dimension(56, 24));
+      gradientColorMapHorizScaleREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapHorizScaleREd.setMinValue(-255.0);
+      gradientColorMapHorizScaleREd.setMaxValue(255.0);
+      gradientColorMapHorizScaleREd.setLocation(new Point(62, 32));
+      gradientColorMapHorizScaleREd.setHasMinValue(true);
+      gradientColorMapHorizScaleREd.setHasMaxValue(true);
+      gradientColorMapHorizScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapHorizScaleREd.setBounds(62, 62, 56, 24);
+      gradientColorMapHorizScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapHorizScaleREd.isMouseAdjusting() || gradientColorMapHorizScaleREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapHorizScaleSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapHorizScaleREd_changed();
+        }
+      });
+    }
+    return gradientColorMapHorizScaleREd;
+  }
+
+  private JWFNumberField getGradientColorMapLocalColorAddREd() {
+    if (gradientColorMapLocalColorAddREd == null) {
+      gradientColorMapLocalColorAddREd = new JWFNumberField();
+      gradientColorMapLocalColorAddREd.setValueStep(0.05);
+      gradientColorMapLocalColorAddREd.setText("0");
+      gradientColorMapLocalColorAddREd.setSize(new Dimension(56, 24));
+      gradientColorMapLocalColorAddREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapLocalColorAddREd.setMinValue(-255.0);
+      gradientColorMapLocalColorAddREd.setMaxValue(255.0);
+      gradientColorMapLocalColorAddREd.setLocation(new Point(62, 58));
+      gradientColorMapLocalColorAddREd.setHasMinValue(true);
+      gradientColorMapLocalColorAddREd.setHasMaxValue(true);
+      gradientColorMapLocalColorAddREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapLocalColorAddREd.setBounds(62, 88, 56, 24);
+      gradientColorMapLocalColorAddREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapLocalColorAddREd.isMouseAdjusting() || gradientColorMapLocalColorAddREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapLocalColorAddSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapLocalColorAddREd_changed();
+        }
+      });
+    }
+    return gradientColorMapLocalColorAddREd;
+  }
+
+  private JWFNumberField getGradientColorMapLocalColorScaleREd() {
+    if (gradientColorMapLocalColorScaleREd == null) {
+      gradientColorMapLocalColorScaleREd = new JWFNumberField();
+      gradientColorMapLocalColorScaleREd.setValueStep(0.05);
+      gradientColorMapLocalColorScaleREd.setText("0");
+      gradientColorMapLocalColorScaleREd.setSize(new Dimension(56, 24));
+      gradientColorMapLocalColorScaleREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapLocalColorScaleREd.setMinValue(-255.0);
+      gradientColorMapLocalColorScaleREd.setMaxValue(255.0);
+      gradientColorMapLocalColorScaleREd.setLocation(new Point(62, 84));
+      gradientColorMapLocalColorScaleREd.setHasMinValue(true);
+      gradientColorMapLocalColorScaleREd.setHasMaxValue(true);
+      gradientColorMapLocalColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapLocalColorScaleREd.setBounds(62, 114, 56, 24);
+      gradientColorMapLocalColorScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapLocalColorScaleREd.isMouseAdjusting() || gradientColorMapLocalColorScaleREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapLocalColorScaleSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapLocalColorScaleREd_changed();
+        }
+      });
+    }
+    return gradientColorMapLocalColorScaleREd;
+  }
+
+  private JWFNumberField getGradientColorMapVertOffsetREd() {
+    if (gradientColorMapVertOffsetREd == null) {
+      gradientColorMapVertOffsetREd = new JWFNumberField();
+      gradientColorMapVertOffsetREd.setValueStep(0.05);
+      gradientColorMapVertOffsetREd.setText("0");
+      gradientColorMapVertOffsetREd.setSize(new Dimension(56, 24));
+      gradientColorMapVertOffsetREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapVertOffsetREd.setMinValue(-255.0);
+      gradientColorMapVertOffsetREd.setMaxValue(255.0);
+      gradientColorMapVertOffsetREd.setLocation(new Point(390, 6));
+      gradientColorMapVertOffsetREd.setHasMinValue(true);
+      gradientColorMapVertOffsetREd.setHasMaxValue(true);
+      gradientColorMapVertOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapVertOffsetREd.setBounds(390, 36, 56, 24);
+      gradientColorMapVertOffsetREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapVertOffsetREd.isMouseAdjusting() || gradientColorMapVertOffsetREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapVertOffsetSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapVertOffsetREd_changed();
+        }
+      });
+    }
+    return gradientColorMapVertOffsetREd;
+  }
+
+  private JWFNumberField getGradientColorMapVertScaleREd() {
+    if (gradientColorMapVertScaleREd == null) {
+      gradientColorMapVertScaleREd = new JWFNumberField();
+      gradientColorMapVertScaleREd.setValueStep(0.05);
+      gradientColorMapVertScaleREd.setText("0");
+      gradientColorMapVertScaleREd.setSize(new Dimension(56, 24));
+      gradientColorMapVertScaleREd.setPreferredSize(new Dimension(36, 22));
+      gradientColorMapVertScaleREd.setMinValue(-255.0);
+      gradientColorMapVertScaleREd.setMaxValue(255.0);
+      gradientColorMapVertScaleREd.setLocation(new Point(390, 32));
+      gradientColorMapVertScaleREd.setHasMinValue(true);
+      gradientColorMapVertScaleREd.setHasMaxValue(true);
+      gradientColorMapVertScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapVertScaleREd.setBounds(390, 62, 56, 24);
+      gradientColorMapVertScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!gradientColorMapVertScaleREd.isMouseAdjusting() || gradientColorMapVertScaleREd.getMouseChangeCount() == 0) {
+            if (!gradientColorMapVertScaleSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.gradientColorMapVertScaleREd_changed();
+        }
+      });
+    }
+    return gradientColorMapVertScaleREd;
+  }
+
+  private JWFNumberField getNumberField_6() {
+    if (numberField_6 == null) {
+      numberField_6 = new JWFNumberField();
+      numberField_6.setVisible(false);
+      numberField_6.setText("0");
+      numberField_6.setSize(new Dimension(56, 24));
+      numberField_6.setPreferredSize(new Dimension(36, 22));
+      numberField_6.setMinValue(-255.0);
+      numberField_6.setMaxValue(255.0);
+      numberField_6.setLocation(new Point(390, 58));
+      numberField_6.setHasMinValue(true);
+      numberField_6.setHasMaxValue(true);
+      numberField_6.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_6.setBounds(390, 88, 56, 24);
+    }
+    return numberField_6;
+  }
+
+  private JWFNumberField getNumberField_7() {
+    if (numberField_7 == null) {
+      numberField_7 = new JWFNumberField();
+      numberField_7.setVisible(false);
+      numberField_7.setText("0");
+      numberField_7.setSize(new Dimension(56, 24));
+      numberField_7.setPreferredSize(new Dimension(36, 22));
+      numberField_7.setMinValue(-255.0);
+      numberField_7.setMaxValue(255.0);
+      numberField_7.setLocation(new Point(390, 84));
+      numberField_7.setHasMinValue(true);
+      numberField_7.setHasMaxValue(true);
+      numberField_7.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_7.setBounds(390, 114, 56, 24);
+    }
+    return numberField_7;
+  }
+
+  private JSlider getGradientColorMapHorizOffsetSlider() {
+    if (gradientColorMapHorizOffsetSlider == null) {
+      gradientColorMapHorizOffsetSlider = new JSlider();
+      gradientColorMapHorizOffsetSlider.setValue(0);
+      gradientColorMapHorizOffsetSlider.setSize(new Dimension(204, 22));
+      gradientColorMapHorizOffsetSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapHorizOffsetSlider.setMinimum(-25000);
+      gradientColorMapHorizOffsetSlider.setMaximum(25000);
+      gradientColorMapHorizOffsetSlider.setLocation(new Point(118, 6));
+      gradientColorMapHorizOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapHorizOffsetSlider.setBounds(118, 36, 204, 22);
+      gradientColorMapHorizOffsetSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapHorizOffsetSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapHorizOffsetSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapHorizOffsetSlider;
+  }
+
+  private JSlider getGradientColorMapHorizScaleSlider() {
+    if (gradientColorMapHorizScaleSlider == null) {
+      gradientColorMapHorizScaleSlider = new JSlider();
+      gradientColorMapHorizScaleSlider.setValue(0);
+      gradientColorMapHorizScaleSlider.setSize(new Dimension(204, 22));
+      gradientColorMapHorizScaleSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapHorizScaleSlider.setMaximum(25000);
+      gradientColorMapHorizScaleSlider.setLocation(new Point(118, 32));
+      gradientColorMapHorizScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapHorizScaleSlider.setBounds(118, 62, 204, 22);
+      gradientColorMapHorizScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapHorizScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapHorizScaleSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapHorizScaleSlider;
+  }
+
+  private JSlider getGradientColorMapLocalColorAddSlider() {
+    if (gradientColorMapLocalColorAddSlider == null) {
+      gradientColorMapLocalColorAddSlider = new JSlider();
+      gradientColorMapLocalColorAddSlider.setValue(0);
+      gradientColorMapLocalColorAddSlider.setSize(new Dimension(204, 22));
+      gradientColorMapLocalColorAddSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapLocalColorAddSlider.setMinimum(-25000);
+      gradientColorMapLocalColorAddSlider.setMaximum(25000);
+      gradientColorMapLocalColorAddSlider.setLocation(new Point(118, 58));
+      gradientColorMapLocalColorAddSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapLocalColorAddSlider.setBounds(118, 88, 204, 22);
+      gradientColorMapLocalColorAddSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapLocalColorAddSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapLocalColorAddSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapLocalColorAddSlider;
+  }
+
+  private JSlider getGradientColorMapLocalColorScaleSlider() {
+    if (gradientColorMapLocalColorScaleSlider == null) {
+      gradientColorMapLocalColorScaleSlider = new JSlider();
+      gradientColorMapLocalColorScaleSlider.setValue(0);
+      gradientColorMapLocalColorScaleSlider.setSize(new Dimension(204, 22));
+      gradientColorMapLocalColorScaleSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapLocalColorScaleSlider.setMinimum(-25000);
+      gradientColorMapLocalColorScaleSlider.setMaximum(25000);
+      gradientColorMapLocalColorScaleSlider.setLocation(new Point(118, 84));
+      gradientColorMapLocalColorScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapLocalColorScaleSlider.setBounds(118, 114, 204, 22);
+      gradientColorMapLocalColorScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapLocalColorScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapLocalColorScaleSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapLocalColorScaleSlider;
+  }
+
+  private JSlider getGradientColorMapVertOffsetSlider() {
+    if (gradientColorMapVertOffsetSlider == null) {
+      gradientColorMapVertOffsetSlider = new JSlider();
+      gradientColorMapVertOffsetSlider.setValue(0);
+      gradientColorMapVertOffsetSlider.setSize(new Dimension(204, 22));
+      gradientColorMapVertOffsetSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapVertOffsetSlider.setMinimum(-25000);
+      gradientColorMapVertOffsetSlider.setMaximum(25000);
+      gradientColorMapVertOffsetSlider.setLocation(new Point(446, 6));
+      gradientColorMapVertOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapVertOffsetSlider.setBounds(446, 36, 204, 22);
+      gradientColorMapVertOffsetSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapVertOffsetSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapVertOffsetSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapVertOffsetSlider;
+  }
+
+  private JSlider getGradientColorMapVertScaleSlider() {
+    if (gradientColorMapVertScaleSlider == null) {
+      gradientColorMapVertScaleSlider = new JSlider();
+      gradientColorMapVertScaleSlider.setValue(0);
+      gradientColorMapVertScaleSlider.setSize(new Dimension(204, 22));
+      gradientColorMapVertScaleSlider.setPreferredSize(new Dimension(86, 22));
+      gradientColorMapVertScaleSlider.setMaximum(25000);
+      gradientColorMapVertScaleSlider.setLocation(new Point(446, 32));
+      gradientColorMapVertScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapVertScaleSlider.setBounds(446, 62, 204, 22);
+      gradientColorMapVertScaleSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      gradientColorMapVertScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.gradientColorMapVertScaleSlider_changed();
+        }
+      });
+    }
+    return gradientColorMapVertScaleSlider;
+  }
+
+  private JSlider getSlider_6() {
+    if (slider_6 == null) {
+      slider_6 = new JSlider();
+      slider_6.setVisible(false);
+      slider_6.setValue(0);
+      slider_6.setSize(new Dimension(204, 22));
+      slider_6.setPreferredSize(new Dimension(86, 22));
+      slider_6.setMinimum(-255);
+      slider_6.setMaximum(255);
+      slider_6.setLocation(new Point(446, 58));
+      slider_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      slider_6.setBounds(446, 88, 204, 22);
+    }
+    return slider_6;
+  }
+
+  private JSlider getSlider_7() {
+    if (slider_7 == null) {
+      slider_7 = new JSlider();
+      slider_7.setVisible(false);
+      slider_7.setValue(0);
+      slider_7.setSize(new Dimension(204, 22));
+      slider_7.setPreferredSize(new Dimension(86, 22));
+      slider_7.setMinimum(-255);
+      slider_7.setMaximum(255);
+      slider_7.setLocation(new Point(446, 84));
+      slider_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      slider_7.setBounds(446, 114, 204, 22);
+    }
+    return slider_7;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

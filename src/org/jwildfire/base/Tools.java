@@ -45,7 +45,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "2.10 ALPHA (23.11.2014)";
+  public static final String APP_VERSION = "2.10 (14.12.2014)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -525,6 +525,14 @@ public class Tools {
       return true;
     else
       return a.equals(b);
+  }
+
+  public static double lerp(double s, double e, double t) {
+    return s + (e - s) * t;
+  }
+
+  public static double blerp(double c00, double c10, double c01, double c11, double tx, double ty) {
+    return lerp(lerp(c00, c10, tx), lerp(c01, c11, tx), ty);
   }
 
 }

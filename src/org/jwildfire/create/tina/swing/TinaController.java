@@ -121,11 +121,13 @@ import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
@@ -498,6 +500,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.layerPreviewBtn = parameterObject.layerPreviewBtn;
     data.layerHideOthersBtn = parameterObject.layerHideOthersBtn;
     data.layerShowAllBtn = parameterObject.layerShowAllBtn;
+
+    data.gradientColorMapHorizOffsetREd = parameterObject.gradientColorMapHorizOffsetREd;
+    data.gradientColorMapHorizOffsetSlider = parameterObject.gradientColorMapHorizOffsetSlider;
+    data.gradientColorMapHorizScaleREd = parameterObject.gradientColorMapHorizScaleREd;
+    data.gradientColorMapHorizScaleSlider = parameterObject.gradientColorMapHorizScaleSlider;
+    data.gradientColorMapVertOffsetREd = parameterObject.gradientColorMapVertOffsetREd;
+    data.gradientColorMapVertOffsetSlider = parameterObject.gradientColorMapVertOffsetSlider;
+    data.gradientColorMapVertScaleREd = parameterObject.gradientColorMapVertScaleREd;
+    data.gradientColorMapVertScaleSlider = parameterObject.gradientColorMapVertScaleSlider;
+    data.gradientColorMapLocalColorAddREd = parameterObject.gradientColorMapLocalColorAddREd;
+    data.gradientColorMapLocalColorAddSlider = parameterObject.gradientColorMapLocalColorAddSlider;
+    data.gradientColorMapLocalColorScaleREd = parameterObject.gradientColorMapLocalColorScaleREd;
+    data.gradientColorMapLocalColorScaleSlider = parameterObject.gradientColorMapLocalColorScaleSlider;
 
     data.motionBlurLengthField = parameterObject.motionBlurLengthField;
     data.motionBlurLengthSlider = parameterObject.motionBlurLengthSlider;
@@ -1884,18 +1899,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void refreshPaletteImg() {
-    if (getCurrLayer() != null) {
-      ImagePanel panels[] = { getPalettePanel(), getColorChooserPalettePanel() };
-      for (ImagePanel imgPanel : panels) {
-        int width = imgPanel.getWidth();
-        int height = imgPanel.getHeight();
-        if (width >= 16 && height >= 4) {
-          SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(getCurrLayer().getPalette(), width, height);
-          imgPanel.setImage(img);
+    try {
+      if (getCurrLayer() != null) {
+        ImagePanel panels[] = { getPalettePanel(), getColorChooserPalettePanel() };
+        for (ImagePanel imgPanel : panels) {
+          int width = imgPanel.getWidth();
+          int height = imgPanel.getHeight();
+          if (width >= 16 && height >= 4) {
+            if (getCurrLayer().getGradientMapFilename() != null && getCurrLayer().getGradientMapFilename().length() > 0) {
+              SimpleImage img = (SimpleImage) RessourceManager.getImage(getCurrLayer().getGradientMapFilename());
+              imgPanel.setImage(img, 0, 0, width, height);
+            }
+            else {
+              SimpleImage img = new RGBPaletteRenderer().renderHorizPalette(getCurrLayer().getPalette(), width, height);
+              imgPanel.setImage(img);
+            }
+          }
+          imgPanel.getParent().validate();
+          imgPanel.repaint();
         }
-        imgPanel.getParent().validate();
-        imgPanel.repaint();
       }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
     }
   }
 
@@ -1929,6 +1955,39 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void layerSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null || getCurrLayer() == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Class<?> cls = getCurrLayer().getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(getCurrLayer(), propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(getCurrLayer(), Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
       refreshFlameImage(false);
     }
     finally {
@@ -2008,6 +2067,40 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
+      refreshFlameImage(false);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void layerTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null || getCurrLayer() == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+
+      Class<?> cls = getCurrLayer().getClass();
+      Field field;
+      try {
+        field = cls.getDeclaredField(pProperty);
+        field.setAccessible(true);
+        Class<?> fieldCls = field.getType();
+        if (fieldCls == double.class || fieldCls == Double.class) {
+          field.setDouble(getCurrLayer(), propValue);
+        }
+        else if (fieldCls == int.class || fieldCls == Integer.class) {
+          field.setInt(getCurrLayer(), Tools.FTOI(propValue));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
       refreshFlameImage(false);
     }
     finally {
@@ -2361,10 +2454,34 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (pLayer == null) {
         data.layerWeightEd.setText(null);
         data.layerVisibleBtn.setSelected(true);
+        data.gradientColorMapHorizOffsetREd.setText(null);
+        data.gradientColorMapHorizOffsetSlider.setValue(0);
+        data.gradientColorMapHorizScaleREd.setText(null);
+        data.gradientColorMapHorizScaleSlider.setValue(0);
+        data.gradientColorMapVertOffsetREd.setText(null);
+        data.gradientColorMapVertOffsetSlider.setValue(0);
+        data.gradientColorMapVertScaleREd.setText(null);
+        data.gradientColorMapVertScaleSlider.setValue(0);
+        data.gradientColorMapLocalColorAddREd.setText(null);
+        data.gradientColorMapLocalColorAddSlider.setValue(0);
+        data.gradientColorMapLocalColorScaleREd.setText(null);
+        data.gradientColorMapLocalColorScaleSlider.setValue(0);
       }
       else {
         data.layerWeightEd.setValue(pLayer.getWeight());
         data.layerVisibleBtn.setSelected(pLayer.isVisible());
+        data.gradientColorMapHorizOffsetREd.setText(Tools.doubleToString(pLayer.getGradientMapHorizOffset()));
+        data.gradientColorMapHorizOffsetSlider.setValue(Tools.FTOI(pLayer.getGradientMapHorizOffset() * TinaController.SLIDER_SCALE_CENTRE));
+        data.gradientColorMapHorizScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapHorizScale()));
+        data.gradientColorMapHorizScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapHorizScale() * TinaController.SLIDER_SCALE_CENTRE));
+        data.gradientColorMapVertOffsetREd.setText(Tools.doubleToString(pLayer.getGradientMapVertOffset()));
+        data.gradientColorMapVertOffsetSlider.setValue(Tools.FTOI(pLayer.getGradientMapVertOffset() * TinaController.SLIDER_SCALE_CENTRE));
+        data.gradientColorMapVertScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapVertScale()));
+        data.gradientColorMapVertScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapVertScale() * TinaController.SLIDER_SCALE_CENTRE));
+        data.gradientColorMapLocalColorAddREd.setText(Tools.doubleToString(pLayer.getGradientMapLocalColorAdd()));
+        data.gradientColorMapLocalColorAddSlider.setValue(Tools.FTOI(pLayer.getGradientMapLocalColorAdd() * TinaController.SLIDER_SCALE_CENTRE));
+        data.gradientColorMapLocalColorScaleREd.setText(Tools.doubleToString(pLayer.getGradientMapLocalColorScale()));
+        data.gradientColorMapLocalColorScaleSlider.setValue(Tools.FTOI(pLayer.getGradientMapLocalColorScale() * TinaController.SLIDER_SCALE_CENTRE));
       }
     }
     finally {
@@ -4297,6 +4414,48 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void selectImageForGradientButton_actionPerformed(ActionEvent e) {
+    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+    if (prefs.getInputImagePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      try {
+        String filename = file.getAbsolutePath();
+        WFImage img = RessourceManager.getImage(filename);
+        if (img.getImageWidth() < 16 || img.getImageHeight() < 16 || !(img instanceof SimpleImage)) {
+          throw new Exception("Invalid gradient map");
+        }
+        prefs.setLastInputImageFile(file);
+
+        saveUndoPoint();
+        getCurrLayer().setGradientMapFilename(filename);
+        setLastGradient(getCurrLayer().getPalette());
+        refreshPaletteColorsTable();
+        refreshPaletteUI(getCurrLayer().getPalette());
+        refreshFlameImage(false);
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  public void clearImageForGradientButton_actionPerformed(ActionEvent e) {
+    saveUndoPoint();
+    getCurrLayer().setGradientMapFilename(null);
+    setLastGradient(getCurrLayer().getPalette());
+    refreshPaletteColorsTable();
+    refreshPaletteUI(getCurrLayer().getPalette());
+    refreshFlameImage(false);
+  }
+
   public void paletteInvertBtn_clicked() {
     Layer layer = getCurrLayer();
     if (layer != null) {
@@ -5530,4 +5689,92 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     transformationTableClicked();
   }
 
+  public void selectImageForBackgroundButton_actionPerformed(ActionEvent e) {
+    JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+    if (prefs.getInputImagePath() != null) {
+      try {
+        if (getCurrFlame().getBGImageFilename().length() > 0) {
+          chooser.setSelectedFile(new File(getCurrFlame().getBGImageFilename()));
+        }
+        else {
+          chooser.setCurrentDirectory(new File(prefs.getInputImagePath()));
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+      File file = chooser.getSelectedFile();
+      try {
+        String filename = file.getAbsolutePath();
+        WFImage img = RessourceManager.getImage(filename);
+        if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
+          throw new Exception("Invalid background image");
+        }
+        prefs.setLastInputImageFile(file);
+
+        saveUndoPoint();
+        getCurrFlame().setBGImageFilename(filename);
+        refreshFlameImage(false);
+      }
+      catch (Throwable ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  public void removeBackgroundImageButton_actionPerformed(ActionEvent e) {
+    saveUndoPoint();
+    getCurrFlame().setBGImageFilename(null);
+    refreshFlameImage(false);
+  }
+
+  public void gradientColorMapHorizOffsetREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "gradientMapHorizOffset", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapHorizOffsetSlider_changed() {
+    layerSliderChanged(data.gradientColorMapHorizOffsetSlider, data.gradientColorMapHorizOffsetREd, "gradientMapHorizOffset", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapHorizScaleREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "gradientMapHorizScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapHorizScaleSlider_changed() {
+    layerSliderChanged(data.gradientColorMapHorizScaleSlider, data.gradientColorMapHorizScaleREd, "gradientMapHorizScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapVertOffsetREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "gradientMapVertOffset", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapVertOffsetSlider_changed() {
+    layerSliderChanged(data.gradientColorMapVertOffsetSlider, data.gradientColorMapVertOffsetREd, "gradientMapVertOffset", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapVertScaleREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "gradientMapVertScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapVertScaleSlider_changed() {
+    layerSliderChanged(data.gradientColorMapVertScaleSlider, data.gradientColorMapVertScaleREd, "gradientMapVertScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapLocalColorAddREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "gradientMapLocalColorAdd", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapLocalColorAddSlider_changed() {
+    layerSliderChanged(data.gradientColorMapLocalColorAddSlider, data.gradientColorMapLocalColorAddREd, "gradientMapLocalColorAdd", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapLocalColorScaleREd_changed() {
+    layerTextFieldChanged(data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "gradientMapLocalColorScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public void gradientColorMapLocalColorScaleSlider_changed() {
+    layerSliderChanged(data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "gradientMapLocalColorScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
 }

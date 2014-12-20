@@ -19,13 +19,13 @@ package org.jwildfire.create.tina.swing;
 import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.render.AbstractRenderThread;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 
 public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
   private long sampleCount;
   private final JPanel imageRootPanel;
   private final SimpleImage image;
-
   private final int imageWidth;
   private final int imageHeight;
   private int[] buffer;
@@ -78,4 +78,27 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
     showPreview = pShowPreview;
   }
 
+  @Override
+  public void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
+    boolean repaint = false;
+    if (pBGRed > 0 || pBGGreen > 0 || pBGBlue > 0) {
+      SimpleImage img = new SimpleImage(image.getBufferedImg(), imageWidth, imageHeight);
+      img.fillBackground(pBGRed, pBGGreen, pBGBlue);
+      repaint = true;
+    }
+    if (pBGImagefile != null && pBGImagefile.length() > 0) {
+      try {
+        SimpleImage img = new SimpleImage(image.getBufferedImg(), imageWidth, imageHeight);
+        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
+        img.fillBackground(bgImg);
+        repaint = true;
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (repaint) {
+      buffer = getBufferFromImage();
+    }
+  }
 }

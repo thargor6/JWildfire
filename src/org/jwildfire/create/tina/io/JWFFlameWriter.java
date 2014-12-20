@@ -16,6 +16,15 @@
 */
 package org.jwildfire.create.tina.io;
 
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_HOFFSET;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_HSCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_LCOLOR_ADD;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_LCOLOR_SCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_VOFFSET;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_VSCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SMOOTH_GRADIENT;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +51,19 @@ public class JWFFlameWriter extends AbstractFlameWriter {
           layerAttrList.add(xb.createAttr("name", name));
         }
       }
+      {
+        String gradientMapFilename = layer.getGradientMapFilename().replaceAll("\"", "");
+        if (!gradientMapFilename.equals("")) {
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP, gradientMapFilename));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_HOFFSET, layer.getGradientMapHorizOffset()));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_HSCALE, layer.getGradientMapHorizScale()));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_VOFFSET, layer.getGradientMapVertOffset()));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_VSCALE, layer.getGradientMapVertScale()));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_LCOLOR_ADD, layer.getGradientMapLocalColorAdd()));
+          layerAttrList.add(xb.createAttr(ATTR_GRADIENT_MAP_LCOLOR_SCALE, layer.getGradientMapLocalColorScale()));
+        }
+      }
+      layerAttrList.add(xb.createAttr(ATTR_SMOOTH_GRADIENT, layer.isSmoothGradient() ? "1" : "0"));
       List<String> blackList = Collections.emptyList();
       writeMotionCurves(layer, xb, layerAttrList, null, blackList);
 

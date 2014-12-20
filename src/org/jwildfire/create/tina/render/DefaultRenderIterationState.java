@@ -26,10 +26,13 @@ import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -42,6 +45,9 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleImage;
 
 public class DefaultRenderIterationState extends RenderIterationState {
 
@@ -54,10 +60,18 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected XForm xf;
   protected final XYZProjectedPoint prj = new XYZProjectedPoint();
   protected PointProjector projector;
+  protected final ColorProvider colorProvider;
 
   public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
     projector = new DefaultPointProjector();
+    if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
+      colorProvider = new GradientMapColorProvider(pLayer.getGradientMapFilename());
+    }
+    else {
+      colorProvider = pLayer.isSmoothGradient() ? new SmoothColorProvider() : new DefaultColorProvider();
+    }
+
     Flame flame = pPacket.getFlame();
     switch (flame.getPostSymmetryType()) {
       case POINT: {
@@ -248,6 +262,135 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   protected PlotSample[] plotBuffer = initPlotBuffer();
 
+  interface ColorProvider extends Serializable {
+    RenderColor getColor(XYZPoint pPoint);
+  }
+
+  private class DefaultColorProvider implements ColorProvider {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public RenderColor getColor(XYZPoint pPoint) {
+      int colorIdx = (int) (pPoint.color * paletteIdxScl + 0.5);
+      if (colorIdx < 0)
+        colorIdx = 0;
+      else if (colorIdx > RGBPalette.PALETTE_SIZE)
+        colorIdx = RGBPalette.PALETTE_SIZE;
+      return colorMap[colorIdx];
+    }
+
+  }
+
+  private class SmoothColorProvider implements ColorProvider {
+    private static final long serialVersionUID = 1L;
+
+    private final RenderColor rc = new RenderColor();
+
+    @Override
+    public RenderColor getColor(XYZPoint pPoint) {
+      double colorIdx = pPoint.color * paletteIdxScl;
+      int lIdx = (int) colorIdx;
+      double lR, lG, lB;
+      if (lIdx >= 0 && lIdx < RGBPalette.PALETTE_SIZE) {
+        lR = colorMap[lIdx].red;
+        lG = colorMap[lIdx].green;
+        lB = colorMap[lIdx].blue;
+      }
+      else {
+        lR = lG = lB = 0.0;
+      }
+
+      double rR, rG, rB;
+      int rIdx = lIdx + 1;
+      if (rIdx >= 0 && rIdx < RGBPalette.PALETTE_SIZE) {
+        rR = colorMap[rIdx].red;
+        rG = colorMap[rIdx].green;
+        rB = colorMap[rIdx].blue;
+      }
+      else {
+        rR = rG = rB = 0.0;
+      }
+
+      double t = MathLib.frac(colorIdx);
+      rc.red = Tools.lerp(lR, rR, t);
+      rc.green = Tools.lerp(lG, rG, t);
+      rc.blue = Tools.lerp(lB, rB, t);
+      return rc;
+    }
+  }
+
+  private class GradientMapColorProvider implements ColorProvider {
+    private static final long serialVersionUID = 1L;
+    private final SimpleImage map;
+
+    private SimpleImage createDfltImage() {
+      GradientCreator creator = new GradientCreator();
+      return creator.createImage(256, 256);
+    }
+
+    private final Pixel toolPixel = new Pixel();
+    private final RenderColor rc = new RenderColor();
+
+    public GradientMapColorProvider(String pGradientMap) {
+      SimpleImage image;
+      try {
+        image = (SimpleImage) RessourceManager.getImage(pGradientMap);
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+        image = createDfltImage();
+      }
+      map = image;
+    }
+
+    @Override
+    public RenderColor getColor(XYZPoint pPoint) {
+      double localColorAdd = layer.getGradientMapLocalColorAdd();
+      double localColorMultiply = layer.getGradientMapLocalColorScale();
+
+      double x = (pPoint.x * (1.0 - localColorMultiply) + pPoint.x * localColorMultiply * pPoint.color + localColorAdd * pPoint.color) * layer.getGradientMapHorizScale() + layer.getGradientMapHorizOffset();
+      double y = (pPoint.y * (1.0 - localColorMultiply) + pPoint.y * localColorMultiply * pPoint.color + localColorAdd * pPoint.color) * layer.getGradientMapVertScale() + layer.getGradientMapVertOffset();
+
+      double width = map.getImageWidth() - 2;
+      double height = map.getImageHeight() - 2;
+      double fx = MathLib.fabs(x);
+      double imageX = MathLib.fmod(fx * width, width);
+      if (((int) fx) % 2 == 1) {
+        imageX = width - imageX;
+      }
+      double fy = MathLib.fabs(y);
+      double imageY = MathLib.fmod(fy * height, height);
+      if (((int) fy) % 2 == 1) {
+        imageY = height - imageY;
+      }
+
+      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds((int) imageX, (int) imageY));
+      int luR = toolPixel.r;
+      int luG = toolPixel.g;
+      int luB = toolPixel.b;
+
+      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds(((int) imageX) + 1, (int) imageY));
+      int ruR = toolPixel.r;
+      int ruG = toolPixel.g;
+      int ruB = toolPixel.b;
+      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds((int) imageX, ((int) imageY) + 1));
+      int lbR = toolPixel.r;
+      int lbG = toolPixel.g;
+      int lbB = toolPixel.b;
+      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds(((int) imageX) + 1, ((int) imageY) + 1));
+      int rbR = toolPixel.r;
+      int rbG = toolPixel.g;
+      int rbB = toolPixel.b;
+
+      double localX = MathLib.frac(imageX);
+      double localY = MathLib.frac(imageY);
+      rc.red = Tools.blerp(luR, ruR, lbR, rbR, localX, localY);
+      rc.green = Tools.blerp(luG, ruG, lbG, rbG, localX, localY);
+      rc.blue = Tools.blerp(luB, ruB, lbB, rbB, localX, localY);
+      return rc;
+    }
+  }
+
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
     if (p.rgbColor) {
       plotRed = p.redColor;
@@ -260,12 +403,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotBlue = q.blueColor;
     }
     else {
-      int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
-      if (colorIdx < 0)
-        colorIdx = 0;
-      else if (colorIdx > RGBPalette.PALETTE_SIZE)
-        colorIdx = RGBPalette.PALETTE_SIZE;
-      RenderColor color = colorMap[colorIdx];
+      RenderColor color = colorProvider.getColor(q);
       plotRed = color.red;
       plotGreen = color.green;
       plotBlue = color.blue;
@@ -276,7 +414,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
-    // raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
+    //    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
 
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {

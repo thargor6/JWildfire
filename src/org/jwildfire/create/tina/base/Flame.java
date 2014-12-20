@@ -150,6 +150,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private String resolutionProfile;
   private String qualityProfile;
   private String name = "";
+  private String bgImageFilename = "";
   @AnimAware
   private final List<Layer> layers = new LayerList(this);
 
@@ -203,6 +204,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgTransparency = true;
     pixelsPerUnit = 50;
     name = "";
+    bgImageFilename = "";
     editPlane = EditPlane.XY;
 
     resetColoringSettings();
@@ -678,6 +680,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
     name = pFlame.name;
+    bgImageFilename = pFlame.bgImageFilename;
     lastFilename = pFlame.lastFilename;
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
@@ -779,6 +782,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
+        !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
@@ -1353,6 +1357,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setEditPlane(EditPlane editPlane) {
     this.editPlane = editPlane;
+  }
+
+  public String getBGImageFilename() {
+    return bgImageFilename;
+  }
+
+  public void setBGImageFilename(String pBGImageFilename) {
+    bgImageFilename = pBGImageFilename != null ? pBGImageFilename : "";
   }
 
 }

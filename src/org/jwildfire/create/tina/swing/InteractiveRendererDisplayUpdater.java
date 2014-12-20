@@ -30,4 +30,6 @@ public interface InteractiveRendererDisplayUpdater {
 
   void setShowPreview(boolean pShowPreview);
 
+  void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile);
+
 }

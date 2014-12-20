@@ -41,6 +41,8 @@ public abstract class AbstractRenderThread implements Runnable {
   protected RenderThreadPersistentState resumeState;
   protected FlameTransformationContext ctx;
   protected AbstractRandomGenerator randGen;
+  protected final int bgRed, bgGreen, bgBlue;
+  protected final String bgImagefile;
 
   public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     renderer = pRenderer;
@@ -51,7 +53,12 @@ public abstract class AbstractRenderThread implements Runnable {
     sliceThicknessMod = pSliceThicknessMod;
     sliceThicknessSamples = pSliceThicknessSamples;
     prefs = pPrefs;
-    ctx = new FlameTransformationContext(pRenderer, randGen, pRenderPackets.get(0).getFlame().getFrame());
+    Flame flame = pRenderPackets.get(0).getFlame();
+    bgRed = flame.getBGColorRed();
+    bgGreen = flame.getBGColorGreen();
+    bgBlue = flame.getBGColorBlue();
+    bgImagefile = flame.getBGImageFilename();
+    ctx = new FlameTransformationContext(pRenderer, randGen, flame.getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
   }
@@ -135,4 +142,20 @@ public abstract class AbstractRenderThread implements Runnable {
   }
 
   protected abstract long getIter();
+
+  public int getBgRed() {
+    return bgRed;
+  }
+
+  public int getBgGreen() {
+    return bgGreen;
+  }
+
+  public int getBgBlue() {
+    return bgBlue;
+  }
+
+  public String getBgImagefile() {
+    return bgImagefile;
+  }
 }

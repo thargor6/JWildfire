@@ -41,4 +41,8 @@ public class EmptyInteractiveRendererDisplayUpdater implements InteractiveRender
   public void setShowPreview(boolean pShowPreview) {
   }
 
+  @Override
+  public void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
+  }
+
 }

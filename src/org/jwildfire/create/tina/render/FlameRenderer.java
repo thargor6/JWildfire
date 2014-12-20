@@ -39,6 +39,7 @@ import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -124,11 +125,11 @@ public class FlameRenderer {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
-    gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha);
     maxBorderWidth = (MAX_FILTER_WIDTH - 1) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - 1) / 2;
     rasterWidth = imageWidth + 2 * maxBorderWidth;
     rasterHeight = imageHeight + 2 * maxBorderWidth;
+    gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha, rasterWidth, rasterHeight);
     rasterSize = rasterWidth * rasterHeight;
   }
 
@@ -395,9 +396,23 @@ public class FlameRenderer {
           res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);
         }
         res.getImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        if (flame.getBGImageFilename().length() > 0) {
+          try {
+            res.getImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
       }
       if (renderHDR) {
         res.getHDRImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        try {
+          res.getHDRImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
       return res;
     }
@@ -463,7 +478,7 @@ public class FlameRenderer {
       for (int i = 0; i < pImage.getImageHeight(); i++) {
         for (int j = 0; j < pImage.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
           pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
@@ -514,7 +529,7 @@ public class FlameRenderer {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
           int x = j * renderScale;
           int y = i * renderScale;
 
@@ -555,7 +570,7 @@ public class FlameRenderer {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
           img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }
@@ -581,7 +596,7 @@ public class FlameRenderer {
         for (int i = 0; i < pImage.getImageHeight(); i++) {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
             logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
             int x = j * renderScale;
             int y = i * renderScale;
 
@@ -631,7 +646,7 @@ public class FlameRenderer {
         for (int i = 0; i < pImage.getImageHeight(); i++) {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
             logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
             pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
           }
         }
@@ -1054,7 +1069,7 @@ public class FlameRenderer {
           for (int i = 0; i < img.getImageHeight(); i++) {
             for (int j = 0; j < img.getImageWidth(); j++) {
               logDensityFilter.transformPoint(logDensityPnt, j, i);
-              gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+              gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
               img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
             }
           }

@@ -167,9 +167,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
         p.color = 0.0;
       else if (p.color >= 1)
         p.color = 1;
-
-      int colorIdx = (int) (p.color * paletteIdxScl + 0.5);
-      RenderColor color = colorMap[colorIdx];
+      RenderColor color = colorProvider.getColor(q);
       plotRed = color.red;
       plotGreen = color.green;
       plotBlue = color.blue;

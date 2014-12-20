@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.io;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_BACKGROUND_IMAGE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_FADE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM1;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM2;
@@ -30,8 +31,16 @@ import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_SHAP
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_X;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Y;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_POS_Z;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_HOFFSET;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_HSCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_LCOLOR_ADD;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_LCOLOR_SCALE;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_VOFFSET;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_GRADIENT_MAP_VSCALE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_LAYER_NAME;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SATURATION;
+import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_SMOOTH_GRADIENT;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_WHITE_LEVEL;
 
 import java.util.ArrayList;
@@ -178,11 +187,27 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("name", fName));
     }
 
+    String bgImagefilename = pFlame.getBGImageFilename().replaceAll("\"", "");
+    if (!bgImagefilename.equals("")) {
+      attrList.add(xb.createAttr(ATTR_BACKGROUND_IMAGE, bgImagefilename));
+    }
+
     if (pFlame.getLayers().size() == 1) {
       String name = pFlame.getFirstLayer().getName().replaceAll("\"", "");
       if (!name.equals("")) {
         attrList.add(xb.createAttr(ATTR_LAYER_NAME, name));
       }
+      String gradientMapFilename = pFlame.getFirstLayer().getGradientMapFilename().replaceAll("\"", "");
+      if (!gradientMapFilename.equals("")) {
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP, gradientMapFilename));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_HOFFSET, pFlame.getFirstLayer().getGradientMapHorizOffset()));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_HSCALE, pFlame.getFirstLayer().getGradientMapHorizScale()));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_VOFFSET, pFlame.getFirstLayer().getGradientMapVertOffset()));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_VSCALE, pFlame.getFirstLayer().getGradientMapVertScale()));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_LCOLOR_ADD, pFlame.getFirstLayer().getGradientMapLocalColorAdd()));
+        attrList.add(xb.createAttr(ATTR_GRADIENT_MAP_LCOLOR_SCALE, pFlame.getFirstLayer().getGradientMapLocalColorScale()));
+      }
+      attrList.add(xb.createAttr(ATTR_SMOOTH_GRADIENT, pFlame.getFirstLayer().isSmoothGradient() ? "1" : "0"));
     }
 
     attrList.add(xb.createAttr("version", Tools.APP_TITLE + " " + Tools.APP_VERSION));

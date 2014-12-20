@@ -16,9 +16,11 @@
 */
 package org.jwildfire.image;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 
 public class SimpleHDRImage implements WFImage {
+  private Pixel toolPixel = new Pixel();
   private int imageWidth = -1;
   private int imageHeight = -1;
   private float rBuffer[], gBuffer[], bBuffer[];
@@ -262,6 +264,50 @@ public class SimpleHDRImage implements WFImage {
     }
     else {
       return 0;
+    }
+  }
+
+  public void fillBackground(SimpleImage pImage) {
+    if (pImage.getImageWidth() == imageWidth && pImage.getImageHeight() == imageHeight) {
+      for (int i = 0; i < imageHeight; i++) {
+        for (int j = 0; j < imageWidth; j++) {
+          toolPixel.setARGBValue(pImage.getARGBValue(j, i));
+          setRGB(j, i, toolPixel.r, toolPixel.g, toolPixel.b);
+        }
+      }
+    }
+    else {
+      for (int i = 0; i < imageHeight; i++) {
+        for (int j = 0; j < imageWidth; j++) {
+          double xCoord = (double) j * (double) (pImage.getImageWidth() - 1) / (double) (imageWidth - 1);
+          double yCoord = (double) i * (double) (pImage.getImageHeight() - 1) / (double) (imageHeight - 1);
+
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
+          int luR = toolPixel.r;
+          int luG = toolPixel.g;
+          int luB = toolPixel.b;
+
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, (int) yCoord));
+          int ruR = toolPixel.r;
+          int ruG = toolPixel.g;
+          int ruB = toolPixel.b;
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds((int) xCoord, ((int) yCoord) + 1));
+          int lbR = toolPixel.r;
+          int lbG = toolPixel.g;
+          int lbB = toolPixel.b;
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, ((int) yCoord) + 1));
+          int rbR = toolPixel.r;
+          int rbG = toolPixel.g;
+          int rbB = toolPixel.b;
+
+          double x = MathLib.frac(xCoord);
+          double y = MathLib.frac(yCoord);
+          float r = (float) Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y)) / 255.0f;
+          float g = (float) Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y)) / 255.f;
+          float b = (float) Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y)) / 255.f;
+          setRGB(j, i, r, g, b);
+        }
+      }
     }
   }
 

@@ -46,6 +46,16 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   private String name = "";
 
+  private String gradientMapFilename = "";
+  private double gradientMapHorizOffset = 0.0;
+  private double gradientMapHorizScale = 1.0;
+  private double gradientMapVertOffset = 0.0;
+  private double gradientMapVertScale = 1.0;
+  private double gradientMapLocalColorAdd = 0.8;
+  private double gradientMapLocalColorScale = 0.2;
+
+  private boolean smoothGradient = false;
+
   public List<XForm> getXForms() {
     return xForms;
   }
@@ -138,6 +148,14 @@ public class Layer implements Assignable<Layer>, Serializable {
     weight = pSrc.weight;
     visible = pSrc.visible;
     name = pSrc.name;
+    gradientMapFilename = pSrc.gradientMapFilename;
+    gradientMapHorizOffset = pSrc.gradientMapHorizOffset;
+    gradientMapHorizScale = pSrc.gradientMapHorizScale;
+    gradientMapVertOffset = pSrc.gradientMapVertOffset;
+    gradientMapVertScale = pSrc.gradientMapVertScale;
+    gradientMapLocalColorAdd = pSrc.gradientMapLocalColorAdd;
+    gradientMapLocalColorScale = pSrc.gradientMapLocalColorScale;
+    smoothGradient = pSrc.smoothGradient;
     palette = pSrc.palette.makeCopy();
     xForms.clear();
     for (XForm xForm : pSrc.getXForms()) {
@@ -159,7 +177,12 @@ public class Layer implements Assignable<Layer>, Serializable {
   @Override
   public boolean isEqual(Layer pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) ||
+        (fabs(gradientMapHorizOffset - pSrc.gradientMapHorizOffset) > EPSILON) || (fabs(gradientMapHorizScale - pSrc.gradientMapHorizScale) > EPSILON) ||
+        (fabs(gradientMapVertOffset - pSrc.gradientMapVertOffset) > EPSILON) || (fabs(gradientMapVertScale - pSrc.gradientMapVertScale) > EPSILON) ||
+        (fabs(gradientMapLocalColorAdd - pSrc.gradientMapLocalColorAdd) > EPSILON) || (fabs(gradientMapLocalColorScale - pSrc.gradientMapLocalColorScale) > EPSILON) ||
         !name.equals(pSrc.name) ||
+        !gradientMapFilename.equals(pSrc.gradientMapFilename) ||
+        smoothGradient != pSrc.smoothGradient ||
         !palette.isEqual(pSrc.palette) || (visible != pSrc.visible) ||
         (xForms.size() != pSrc.xForms.size()) || (finalXForms.size() != pSrc.finalXForms.size())) {
       return false;
@@ -181,16 +204,16 @@ public class Layer implements Assignable<Layer>, Serializable {
     return weight;
   }
 
-  public void setWeight(double weight) {
-    this.weight = weight;
+  public void setWeight(double pWeight) {
+    weight = pWeight;
   }
 
   public boolean isVisible() {
     return visible;
   }
 
-  public void setVisible(boolean visible) {
-    this.visible = visible;
+  public void setVisible(boolean pVisible) {
+    visible = pVisible;
   }
 
   public boolean isRenderable() {
@@ -205,6 +228,14 @@ public class Layer implements Assignable<Layer>, Serializable {
     this.name = name != null ? name : "";
   }
 
+  public String getGradientMapFilename() {
+    return gradientMapFilename;
+  }
+
+  public void setGradientMapFilename(String gradientMapFilename) {
+    this.gradientMapFilename = gradientMapFilename != null ? gradientMapFilename : "";
+  }
+
   public void setOwner(Flame pOwner) {
     owner = pOwner;
   }
@@ -212,4 +243,61 @@ public class Layer implements Assignable<Layer>, Serializable {
   public Flame getOwner() {
     return owner;
   }
+
+  public boolean isSmoothGradient() {
+    return smoothGradient;
+  }
+
+  public void setSmoothGradient(boolean pSmoothGradient) {
+    smoothGradient = pSmoothGradient;
+  }
+
+  public double getGradientMapHorizOffset() {
+    return gradientMapHorizOffset;
+  }
+
+  public void setGradientMapHorizOffset(double pGradientMapHorizOffset) {
+    gradientMapHorizOffset = pGradientMapHorizOffset;
+  }
+
+  public double getGradientMapHorizScale() {
+    return gradientMapHorizScale;
+  }
+
+  public void setGradientMapHorizScale(double pGradientMapHorizScale) {
+    gradientMapHorizScale = pGradientMapHorizScale;
+  }
+
+  public double getGradientMapVertOffset() {
+    return gradientMapVertOffset;
+  }
+
+  public void setGradientMapVertOffset(double pGradientMapVertOffset) {
+    gradientMapVertOffset = pGradientMapVertOffset;
+  }
+
+  public double getGradientMapVertScale() {
+    return gradientMapVertScale;
+  }
+
+  public void setGradientMapVertScale(double pGradientMapVertScale) {
+    gradientMapVertScale = pGradientMapVertScale;
+  }
+
+  public double getGradientMapLocalColorAdd() {
+    return gradientMapLocalColorAdd;
+  }
+
+  public void setGradientMapLocalColorAdd(double pGradientMapLocalColorAdd) {
+    gradientMapLocalColorAdd = pGradientMapLocalColorAdd;
+  }
+
+  public double getGradientMapLocalColorScale() {
+    return gradientMapLocalColorScale;
+  }
+
+  public void setGradientMapLocalColorScale(double pGradientMapLocalColorScale) {
+    gradientMapLocalColorScale = pGradientMapLocalColorScale;
+  }
+
 }

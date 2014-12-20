@@ -294,6 +294,10 @@ public class DetachedPreviewController implements IterationObserver {
 
     @Override
     public void run() {
+      {
+        AbstractRenderThread thread = threads.getRenderThreads().get(0);
+        initImage(thread.getBgRed(), thread.getBgGreen(), thread.getBgBlue(), thread.getBgImagefile());
+      }
       finished = cancelSignalled = false;
       try {
         while (!cancelSignalled) {
@@ -325,6 +329,10 @@ public class DetachedPreviewController implements IterationObserver {
       finally {
         finished = true;
       }
+    }
+
+    private void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
+      displayUpdater.initImage(pBGRed, pBGGreen, pBGBlue, pBGImagefile);
     }
 
     public void cancel() {

@@ -34,6 +34,15 @@ public class AbstractFlameReader {
 
   public static final String ATTR_NAME = "name";
   public static final String ATTR_LAYER_NAME = "layer_name";
+  public static final String ATTR_GRADIENT_MAP = "gradient_map";
+  public static final String ATTR_GRADIENT_MAP_HOFFSET = "gradient_map_hoffset";
+  public static final String ATTR_GRADIENT_MAP_HSCALE = "gradient_map_hscale";
+  public static final String ATTR_GRADIENT_MAP_VOFFSET = "gradient_map_voffset";
+  public static final String ATTR_GRADIENT_MAP_VSCALE = "gradient_map_vscale";
+  public static final String ATTR_GRADIENT_MAP_LCOLOR_ADD = "gradient_map_lcolor_add";
+  public static final String ATTR_GRADIENT_MAP_LCOLOR_SCALE = "gradient_map_lcolor_scale";
+  public static final String ATTR_BACKGROUND_IMAGE = "background_image";
+  public static final String ATTR_SMOOTH_GRADIENT = "smooth_gradient";
   public static final String ATTR_SIZE = "size";
   public static final String ATTR_CENTER = "center";
   public static final String ATTR_SCALE = "scale";
@@ -151,8 +160,35 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pFlame.setName(hs);
     }
+    if ((hs = atts.get(ATTR_BACKGROUND_IMAGE)) != null) {
+      pFlame.setBGImageFilename(hs);
+    }
     if ((hs = atts.get(ATTR_LAYER_NAME)) != null && pFlame.getLayers().size() == 1) {
       pFlame.getFirstLayer().setName(hs);
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapFilename(hs);
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_HOFFSET)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapHorizOffset(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_HSCALE)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapHorizScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_VOFFSET)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapVertOffset(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_VSCALE)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapVertScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_LCOLOR_ADD)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapLocalColorAdd(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_LCOLOR_SCALE)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setGradientMapLocalColorScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SMOOTH_GRADIENT)) != null && pFlame.getLayers().size() == 1) {
+      pFlame.getFirstLayer().setSmoothGradient("1".equals(hs));
     }
     if ((hs = atts.get(ATTR_SIZE)) != null) {
       String s[] = hs.split(" ");

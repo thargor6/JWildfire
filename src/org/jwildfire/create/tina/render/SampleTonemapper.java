@@ -42,18 +42,18 @@ public class SampleTonemapper {
     randGen = pRandGen;
     rbgPoint = new GammaCorrectedRGBPoint();
     logDensityFilter = new LogDensityFilter(pFlame, randGen);
-    gammaCorrectionFilter = new GammaCorrectionFilter(pFlame, false);
+    imageWidth = pImageWidth;
+    imageHeight = pImageHeight;
+    gammaCorrectionFilter = new GammaCorrectionFilter(pFlame, false, imageWidth, imageHeight);
     raster = pRaster;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
-    imageWidth = pImageWidth;
-    imageHeight = pImageHeight;
     logDensityFilter.setRaster(pRaster, pRasterWidth, pRasterHeight, pImageWidth, pImageHeight);
   }
 
   public int tonemapSample(int pX, int pY) {
     logDensityFilter.transformPoint(logDensityPnt, pX, pY);
-    gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint);
+    gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, pX, pY);
     toolPixel.r = rbgPoint.red;
     toolPixel.g = rbgPoint.green;
     toolPixel.b = rbgPoint.blue;
@@ -69,7 +69,7 @@ public class SampleTonemapper {
     flame.setSampleDensity(quality);
 
     LogDensityFilter newLogDensityFilter = new LogDensityFilter(flame, randGen);
-    GammaCorrectionFilter newGammaCorrectionFilter = new GammaCorrectionFilter(flame, false);
+    GammaCorrectionFilter newGammaCorrectionFilter = new GammaCorrectionFilter(flame, false, imageWidth, imageHeight);
     newLogDensityFilter.setRaster(raster, rasterWidth, rasterHeight, imageWidth, imageHeight);
 
     gammaCorrectionFilter = newGammaCorrectionFilter;

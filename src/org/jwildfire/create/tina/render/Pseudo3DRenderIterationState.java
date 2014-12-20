@@ -131,7 +131,7 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
       plotBlue = pA[0].blueColor;
     }
     else {
-      RenderColor color = colorMap[(int) (pA[0].color * paletteIdxScl + 0.5)];
+      RenderColor color = colorProvider.getColor(qA[0]);
       plotRed = color.red;
       plotGreen = color.green;
       plotBlue = color.blue;

@@ -21,19 +21,22 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleImage;
 
 public class GammaCorrectionFilter {
   private final HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
   private final Flame flame;
   private int vibInt;
   private int inverseVibInt;
-  private double vibDouble;
-  private double inverseVibDouble;
   private double gamma;
   private double sclGamma;
   private int bgRed, bgGreen, bgBlue;
+  private SimpleImage bgImage;
   private boolean withAlpha;
   private double modSaturation;
+  private final int rasterWidth, rasterHeight;
 
   public static class ColorF {
     public double r, g, b;
@@ -43,9 +46,11 @@ public class GammaCorrectionFilter {
     public int r, g, b;
   }
 
-  public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha) {
+  public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha, int pRasterWidth, int pRasterHeight) {
     flame = pFlame;
     withAlpha = pWithAlpha;
+    rasterWidth = pRasterWidth;
+    rasterHeight = pRasterHeight;
     initFilter();
   }
 
@@ -61,29 +66,36 @@ public class GammaCorrectionFilter {
     }
     inverseVibInt = 256 - vibInt;
 
-    vibDouble = flame.getVibrancy();
-    if (vibDouble < 0.0) {
-      vibDouble = 0.0;
-    }
-    else if (vibDouble > 1.0) {
-      vibDouble = 1.0;
-    }
-
     sclGamma = 0.0;
     if (flame.getGammaThreshold() != 0.0) {
       sclGamma = pow(flame.getGammaThreshold(), gamma - 1);
     }
 
-    bgRed = flame.getBGColorRed();
-    bgGreen = flame.getBGColorGreen();
-    bgBlue = flame.getBGColorBlue();
+    if (flame.getBGImageFilename().length() > 0) {
+      try {
+        bgImage = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
+        if (bgImage.getImageWidth() < 2 || bgImage.getImageHeight() < 2) {
+          bgImage = null;
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    if (bgImage == null) {
+      bgRed = flame.getBGColorRed();
+      bgGreen = flame.getBGColorGreen();
+      bgBlue = flame.getBGColorBlue();
+    }
 
     modSaturation = flame.getSaturation() - 1.0;
     if (modSaturation < -1.0)
       modSaturation = -1.0;
   }
 
-  public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint) {
+  public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint, int pX, int pY) {
+    calculateBGColor(pX, pY);
     double logScl;
     int inverseAlphaInt;
     if (logDensityPnt.intensity > 0.0) {
@@ -120,6 +132,47 @@ public class GammaCorrectionFilter {
 
     if (modSaturation != 0) {
       applyModSaturation(pRGBPoint, modSaturation);
+    }
+  }
+
+  private final Pixel toolPixel = new Pixel();
+
+  private void calculateBGColor(int pX, int pY) {
+    if (bgImage != null) {
+      if (rasterWidth == bgImage.getImageWidth() && rasterHeight == bgImage.getImageHeight()) {
+        toolPixel.setARGBValue(bgImage.getARGBValue(pX, pY));
+        bgRed = toolPixel.r;
+        bgGreen = toolPixel.g;
+        bgBlue = toolPixel.b;
+      }
+      else {
+        double xCoord = (double) pX * (double) (bgImage.getImageWidth() - 1) / (double) (rasterWidth - 1);
+        double yCoord = (double) pY * (double) (bgImage.getImageHeight() - 1) / (double) (rasterHeight - 1);
+
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
+        int luR = toolPixel.r;
+        int luG = toolPixel.g;
+        int luB = toolPixel.b;
+
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, (int) yCoord));
+        int ruR = toolPixel.r;
+        int ruG = toolPixel.g;
+        int ruB = toolPixel.b;
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, ((int) yCoord) + 1));
+        int lbR = toolPixel.r;
+        int lbG = toolPixel.g;
+        int lbB = toolPixel.b;
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, ((int) yCoord) + 1));
+        int rbR = toolPixel.r;
+        int rbG = toolPixel.g;
+        int rbB = toolPixel.b;
+
+        double x = MathLib.frac(xCoord);
+        double y = MathLib.frac(yCoord);
+        bgRed = Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y));
+        bgGreen = Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y));
+        bgBlue = Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y));
+      }
     }
   }
 

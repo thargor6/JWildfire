@@ -49,7 +49,7 @@ public class SubFlameDOFBlurShape extends AbstractDOFBlurShape {
     d.x = (d.x - pSrc.x) * Math.abs(dr) + pSrc.x;
     d.y = (d.y - pSrc.y) * Math.abs(dr) + pSrc.y;
 
-    rotate(s, d);
+    rotate(pSrc, d);
     pDest.x = d.x / pZR;
     pDest.y = d.y / pZR;
     if (useColor) {

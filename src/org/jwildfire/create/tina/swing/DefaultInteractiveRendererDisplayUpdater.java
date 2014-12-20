@@ -19,17 +19,22 @@ package org.jwildfire.create.tina.swing;
 import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.render.AbstractRenderThread;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 
 public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
   private long sampleCount;
   private final JPanel imageRootPanel;
   private final SimpleImage image;
+  private final int imageWidth;
+  private final int imageHeight;
   private boolean showPreview;
 
   public DefaultInteractiveRendererDisplayUpdater(JPanel pImageRootPanel, SimpleImage pImage, boolean pShowPreview) {
     imageRootPanel = pImageRootPanel;
     image = pImage;
+    imageWidth = image.getImageWidth();
+    imageHeight = image.getImageHeight();
     showPreview = pShowPreview;
   }
 
@@ -61,5 +66,23 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
   @Override
   public void setShowPreview(boolean pShowPreview) {
     showPreview = pShowPreview;
+  }
+
+  @Override
+  public void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
+    if (pBGRed > 0 || pBGGreen > 0 || pBGBlue > 0) {
+      SimpleImage img = new SimpleImage(image.getBufferedImg(), imageWidth, imageHeight);
+      img.fillBackground(pBGRed, pBGGreen, pBGBlue);
+    }
+    if (pBGImagefile != null && pBGImagefile.length() > 0) {
+      try {
+        SimpleImage img = new SimpleImage(image.getBufferedImg(), imageWidth, imageHeight);
+        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
+        img.fillBackground(bgImg);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 }

@@ -38,12 +38,12 @@ public class FlowerDOFBlurShape extends AbstractDOFBlurShape {
   public void applyDOFAndCamera(XYZPoint pSrc, XYZPoint pDest, double pZDist, double pZR) {
     s.assign(pSrc);
     d.assign(pSrc);
-    double dr = Math.abs(camDOF_10 * pZDist * scale * doFade());
+    double dr = Math.abs(camDOF_10 * pZDist * scale * doFade()) * 2;
     s.clear();
     s.x = (1.0 - 2.0 * Math.random());
     s.y = (1.0 - 2.0 * Math.random());
     fnc.transform(flameTransformationContext, xform, s, d, dr);
-    //    rotate(s, d);
+    rotate(pSrc, d);
     pDest.x = d.x / pZR;
     pDest.y = d.y / pZR;
   }

@@ -97,6 +97,30 @@ public class JWFFlameReader extends AbstractFlameReader {
     if ((hs = atts.get(ATTR_NAME)) != null) {
       pLayer.setName(hs);
     }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP)) != null) {
+      pLayer.setGradientMapFilename(hs);
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_HOFFSET)) != null) {
+      pLayer.setGradientMapHorizOffset(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_HSCALE)) != null) {
+      pLayer.setGradientMapHorizScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_VOFFSET)) != null) {
+      pLayer.setGradientMapVertOffset(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_VSCALE)) != null) {
+      pLayer.setGradientMapVertScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_LCOLOR_ADD)) != null) {
+      pLayer.setGradientMapLocalColorAdd(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_GRADIENT_MAP_LCOLOR_SCALE)) != null) {
+      pLayer.setGradientMapLocalColorScale(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_SMOOTH_GRADIENT)) != null) {
+      pLayer.setSmoothGradient("1".equals(hs));
+    }
     readMotionCurves(pLayer, atts, "");
     return atts;
   }

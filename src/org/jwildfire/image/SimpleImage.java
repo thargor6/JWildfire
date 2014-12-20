@@ -20,6 +20,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+
 public class SimpleImage implements WFImage {
   private Pixel toolPixel = new Pixel();
   private int imageWidth = -1;
@@ -196,6 +199,49 @@ public class SimpleImage implements WFImage {
   public void setLine(int pY, int[] pLine) {
     for (int i = 0; i < imageWidth; i++) {
       setARGBValue(i, pY, pLine[i]);
+    }
+  }
+
+  public void fillBackground(SimpleImage pImage) {
+    if (pImage.getImageWidth() == imageWidth && pImage.getImageHeight() == imageHeight) {
+      for (int i = 0; i < imageHeight; i++) {
+        for (int j = 0; j < imageWidth; j++) {
+          setARGB(j, i, pImage.getARGBValue(j, i));
+        }
+      }
+    }
+    else {
+      for (int i = 0; i < imageHeight; i++) {
+        for (int j = 0; j < imageWidth; j++) {
+          double xCoord = (double) j * (double) (pImage.getImageWidth() - 1) / (double) (imageWidth - 1);
+          double yCoord = (double) i * (double) (pImage.getImageHeight() - 1) / (double) (imageHeight - 1);
+
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
+          int luR = toolPixel.r;
+          int luG = toolPixel.g;
+          int luB = toolPixel.b;
+
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, (int) yCoord));
+          int ruR = toolPixel.r;
+          int ruG = toolPixel.g;
+          int ruB = toolPixel.b;
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds((int) xCoord, ((int) yCoord) + 1));
+          int lbR = toolPixel.r;
+          int lbG = toolPixel.g;
+          int lbB = toolPixel.b;
+          toolPixel.setARGBValue(pImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, ((int) yCoord) + 1));
+          int rbR = toolPixel.r;
+          int rbG = toolPixel.g;
+          int rbB = toolPixel.b;
+
+          double x = MathLib.frac(xCoord);
+          double y = MathLib.frac(yCoord);
+          int r = Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y));
+          int g = Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y));
+          int b = Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y));
+          setRGB(j, i, r, g, b);
+        }
+      }
     }
   }
 }
