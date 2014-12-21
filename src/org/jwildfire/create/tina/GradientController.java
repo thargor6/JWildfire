@@ -382,6 +382,31 @@ public class GradientController {
     return selNode != null && selNode instanceof AbstractGradientNode ? (AbstractGradientNode) selNode : null;
   }
 
+  public void selectRandomGradient() {
+    try {
+      AbstractGradientNode selNode = getSelGradientNode();
+      if (selNode != null && selNode.getGradientLibraryList().size() > 0) {
+        if (selNode.getGradientLibraryList().size() > 1) {
+          int oldIdx = gradientsList.getSelectedIndex();
+          while (true) {
+            int idx = (int) (Math.random() * selNode.getGradientLibraryList().size());
+            if (idx != oldIdx) {
+              gradientsList.setSelectedIndex(idx);
+              //gradientLibraryGradientChanged();
+              break;
+            }
+          }
+        }
+      }
+      else {
+        throw new Exception("Please selected a non-empty gradient folder first");
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
   public void gradientTree_changed(TreeSelectionEvent e) {
     enableControls();
     cmbRefreshing = true;

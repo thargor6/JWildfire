@@ -3700,8 +3700,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (distributeColorsButton == null) {
       distributeColorsButton = new JButton();
       distributeColorsButton.setToolTipText("Distribute colors");
-      distributeColorsButton.setBounds(217, 58, 105, 24);
-      distributeColorsButton.setText("Distrib colors");
+      distributeColorsButton.setBounds(243, 58, 79, 24);
+      distributeColorsButton.setText("Distrib clr");
       distributeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
       distributeColorsButton.setPreferredSize(new Dimension(190, 24));
       distributeColorsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -3774,10 +3774,10 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       randomizeColorSpeedButton.setToolTipText("Randomize color speed");
-      randomizeColorSpeedButton.setText("Rnd speed");
+      randomizeColorSpeedButton.setText("Rnd spd");
       randomizeColorSpeedButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorSpeedButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomizeColorSpeedButton.setBounds(111, 58, 105, 24);
+      randomizeColorSpeedButton.setBounds(111, 58, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeColorSpeedButton);
 
       JButton randomizeColorShiftButton = new JButton();
@@ -3790,8 +3790,21 @@ public class TinaInternalFrame extends JInternalFrame {
       randomizeColorShiftButton.setText("Rnd shift");
       randomizeColorShiftButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorShiftButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomizeColorShiftButton.setBounds(217, 6, 105, 24);
+      randomizeColorShiftButton.setBounds(243, 6, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeColorShiftButton);
+
+      JButton randomizeGradientButton = new JButton();
+      randomizeGradientButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getGradientController().selectRandomGradient();
+        }
+      });
+      randomizeGradientButton.setToolTipText("Randomly select a gradient from the currently selected folder");
+      randomizeGradientButton.setText("Rnd grd");
+      randomizeGradientButton.setPreferredSize(new Dimension(190, 24));
+      randomizeGradientButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeGradientButton.setBounds(6, 6, 79, 24);
+      tinaPaletteSubSouthPanel.add(randomizeGradientButton);
     }
     return tinaPaletteSubSouthPanel;
   }
@@ -12098,9 +12111,9 @@ public class TinaInternalFrame extends JInternalFrame {
     if (randomizeColorsButton == null) {
       randomizeColorsButton = new JButton();
       randomizeColorsButton.setToolTipText("Randomize colors");
-      randomizeColorsButton.setBounds(6, 58, 105, 24);
+      randomizeColorsButton.setBounds(6, 58, 79, 24);
       randomizeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomizeColorsButton.setText("Rnd colors");
+      randomizeColorsButton.setText("Rnd clr");
       randomizeColorsButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
