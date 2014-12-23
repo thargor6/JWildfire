@@ -1,3 +1,31 @@
+V2.22 XMAS-EDITION (22.12.2014):
+ - ability to use images as 2D-gradient fore awesome "natural" looking fractals
+ - experimental simple way to create 3d-flames by just specifying 3 affine transforms in 3 planes, needs nearly no change in the editor, but can be very powerful
+ - first implementation of iflames in form the "iflames_wf"-variation (please stay tuned for a tutorial) 
+ - new button to switch on/off progressive preview in the interactive renderer
+ - new Bokeh-shapes:
+    - CannabisCurve
+    - Cloverleaf
+    - Flower
+    - Perlin Noise
+    - SubFlame (use ANY fractal as shape, even SVG-shapes. Save the flame as "_dof_<number>.flame" into your flame folder, where number is a zero padded nummber starting from 1, e.g. "0001", "0002", .... Choose this flame by specifying the "flame"-param of the DOF-Shape)
+    - Taurus        
+ - new "Bokeh"-random-flame-generator
+ - new "Duality"-random-flame-generator
+ - some options in the Preferences to customize the "Duality"-random-flame-generator
+ - new "vogel"-variation by Victor Ganora
+ - Gradients:
+    - new button to randomly select a gradient from the currently selected folder
+    - new button to randomize color shift on the gradient tab
+    - new button to randomize color speed on the gradient tab
+ - new "Affine3D"-mutation for the MutaGen
+ - new "Bokeh"-mutation for the MutaGen
+ - many optimizations, especially made the renderer more smooth, i. e. reduced the amount of thread collisions
+ - fixed the "rings2"-variation, was buggy from the first time
+ - "new dof" is off per default (as is was off in any other version) 
+ - removed the experimental "responsiveness" setting
+ - removed the "cross2"-variation (which works exactly like the "cross"-variation), some small fixes
+
 V2.00 R2 (12.10.2014):
  - fixed some problems with the detached preview:
      - rendering should now always been suspended when then window is closed

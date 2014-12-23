@@ -392,7 +392,6 @@ public class GradientController {
             int idx = (int) (Math.random() * selNode.getGradientLibraryList().size());
             if (idx != oldIdx) {
               gradientsList.setSelectedIndex(idx);
-              //gradientLibraryGradientChanged();
               break;
             }
           }

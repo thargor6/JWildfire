@@ -4893,9 +4893,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(DOFBlurShapeType.SINEBLUR);
     pCmb.addItem(DOFBlurShapeType.STARBLUR);
     pCmb.addItem(DOFBlurShapeType.TAURUS);
-    if (Prefs.getPrefs().isAllowExperimentalFeatures()) {
-      pCmb.addItem(DOFBlurShapeType.SUB_FLAME);
-    }
+    pCmb.addItem(DOFBlurShapeType.SUB_FLAME);
     pCmb.setSelectedItem(DOFBlurShapeType.BUBBLE);
   }
 
