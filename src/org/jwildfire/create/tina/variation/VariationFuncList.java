@@ -423,6 +423,7 @@ public class VariationFuncList {
     registerVariationFunc(CurlSpFunc.class);
     registerVariationFunc(DCLinearFunc.class);
     registerVariationFunc(DCCarpetFunc.class);
+    registerVariationFunc(DCBubbleFunc.class);
   }
 
   private static void registerVariationFunc(
