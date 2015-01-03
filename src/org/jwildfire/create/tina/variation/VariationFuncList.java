@@ -420,6 +420,7 @@ public class VariationFuncList {
     registerVariationFunc(PreBlur3DFunc.class);
     registerVariationFunc(VogelFunc.class);
     registerVariationFunc(IFlamesFunc.class);
+    registerVariationFunc(CurlSpFunc.class);
   }
 
   private static void registerVariationFunc(

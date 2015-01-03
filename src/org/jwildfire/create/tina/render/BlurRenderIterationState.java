@@ -41,7 +41,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
       plotBlue = p.blueColor;
     }
     else {
-      RenderColor color = colorProvider.getColor(q);
+      RenderColor color = colorProvider.getColor(p, q);
       plotRed = color.red;
       plotGreen = color.green;
       plotBlue = color.blue;

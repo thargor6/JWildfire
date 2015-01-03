@@ -263,19 +263,19 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected PlotSample[] plotBuffer = initPlotBuffer();
 
   interface ColorProvider extends Serializable {
-    RenderColor getColor(XYZPoint pPoint);
+    RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint);
   }
 
   private class DefaultColorProvider implements ColorProvider {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public RenderColor getColor(XYZPoint pPoint) {
-      int colorIdx = (int) (pPoint.color * paletteIdxScl + 0.5);
+    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
+      int colorIdx = (int) (pTPoint.color * paletteIdxScl + 0.5);
       if (colorIdx < 0)
         colorIdx = 0;
-      else if (colorIdx > RGBPalette.PALETTE_SIZE)
-        colorIdx = RGBPalette.PALETTE_SIZE;
+      else if (colorIdx >= RGBPalette.PALETTE_SIZE)
+        colorIdx = RGBPalette.PALETTE_SIZE - 1;
       return colorMap[colorIdx];
     }
 
@@ -287,8 +287,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
     private final RenderColor rc = new RenderColor();
 
     @Override
-    public RenderColor getColor(XYZPoint pPoint) {
-      double colorIdx = pPoint.color * paletteIdxScl;
+    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
+      double colorIdx = pTPoint.color * paletteIdxScl;
       int lIdx = (int) colorIdx;
       double lR, lG, lB;
       if (lIdx >= 0 && lIdx < RGBPalette.PALETTE_SIZE) {
@@ -344,12 +344,12 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
 
     @Override
-    public RenderColor getColor(XYZPoint pPoint) {
+    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
       double localColorAdd = layer.getGradientMapLocalColorAdd();
       double localColorMultiply = layer.getGradientMapLocalColorScale();
 
-      double x = (pPoint.x * (1.0 - localColorMultiply) + pPoint.x * localColorMultiply * pPoint.color + localColorAdd * pPoint.color) * layer.getGradientMapHorizScale() + layer.getGradientMapHorizOffset();
-      double y = (pPoint.y * (1.0 - localColorMultiply) + pPoint.y * localColorMultiply * pPoint.color + localColorAdd * pPoint.color) * layer.getGradientMapVertScale() + layer.getGradientMapVertOffset();
+      double x = (pFPoint.x * (1.0 - localColorMultiply) + pFPoint.x * localColorMultiply * pFPoint.color + localColorAdd * pFPoint.color) * layer.getGradientMapHorizScale() + layer.getGradientMapHorizOffset();
+      double y = (pFPoint.y * (1.0 - localColorMultiply) + pFPoint.y * localColorMultiply * pFPoint.color + localColorAdd * pFPoint.color) * layer.getGradientMapVertScale() + layer.getGradientMapVertOffset();
 
       double width = map.getImageWidth() - 2;
       double height = map.getImageHeight() - 2;
@@ -403,7 +403,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotBlue = q.blueColor;
     }
     else {
-      RenderColor color = colorProvider.getColor(q);
+      RenderColor color = colorProvider.getColor(p, q);
       plotRed = color.red;
       plotGreen = color.green;
       plotBlue = color.blue;
@@ -414,7 +414,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
-    //    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
+    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
 
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {

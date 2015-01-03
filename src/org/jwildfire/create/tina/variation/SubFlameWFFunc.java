@@ -45,11 +45,14 @@ public class SubFlameWFFunc extends VariationFunc {
   private XForm xf;
   private XYZPoint p;
   private XYZPoint q = new XYZPoint();
+  private XYZPoint a = new XYZPoint();
+  private XYZPoint v = new XYZPoint();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     int iter = 0;
     final int MAX_ITER = 1000;
+
     while (xf != null) {
       if (++iter > MAX_ITER) {
         return;
@@ -59,7 +62,9 @@ public class SubFlameWFFunc extends VariationFunc {
         return;
       }
       //      double parentColor = pAffineTP.color;
-      xf.transformPoint(pContext, pAffineTP, pVarTP, p, p);
+      a.clear();
+      v.clear();
+      xf.transformPoint(pContext, a, v, p, p);
       if (xf.getDrawMode() == DrawMode.HIDDEN)
         continue;
       else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (pContext.random() > xf.getOpacity()))
@@ -73,6 +78,9 @@ public class SubFlameWFFunc extends VariationFunc {
           finalXForms.get(i).transformPoint(pContext, pAffineTP, pVarTP, q, q);
         }
       }
+      else {
+        q.assign(p);
+      }
       //      pVarTP.color += parentColor;
       //      while (pVarTP.color < 0.0)
       //        pVarTP.color += 1.0;
@@ -81,9 +89,9 @@ public class SubFlameWFFunc extends VariationFunc {
       break;
     }
 
-    pVarTP.x += offset_x;
-    pVarTP.y += offset_y;
-    pVarTP.z += offset_z;
+    pVarTP.x += q.x + offset_x;
+    pVarTP.y += q.y + offset_y;
+    pVarTP.z += q.z + offset_z;
   }
 
   @Override
@@ -142,6 +150,16 @@ public class SubFlameWFFunc extends VariationFunc {
       p.y = 2.0 * pContext.random() - 1.0;
       p.z = 0.0;
       p.color = pContext.random();
+
+      for (int i = 0; i < 42; i++) {
+        xf = xf.getNextAppliedXFormTable()[pContext.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+        if (xf == null) {
+          return;
+        }
+        a.clear();
+        v.clear();
+        xf.transformPoint(pContext, a, v, p, p);
+      }
     }
   }
 
