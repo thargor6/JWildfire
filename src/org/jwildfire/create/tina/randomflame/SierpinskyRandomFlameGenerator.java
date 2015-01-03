@@ -49,19 +49,29 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.scale(xForm, 1.0, true, true);
       if (i == posx.length - 1) {
         if (Math.random() < 0.5) {
-          xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance("linear3D", true));
+          xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(Math.random() < 0.25 ? "dc_linear" : "linear3D", true));
           XFormTransformService.rotate(xForm, 5.0 - 10.0 * Math.random());
           XFormTransformService.localTranslate(xForm, 0.1 - 0.2 * Math.random(), 0.1 - 0.2 * Math.random());
           XFormTransformService.scale(xForm, 1.0 - 0.1 * Math.random(), Math.random() < 0.75, Math.random() > 0.25);
         }
         String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
-        xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(fncName, true));
+        double amount;
+        if (Math.random() < 0.33) {
+          amount = 0.5 - Math.random();
+        }
+        else if (Math.random() < 0.67) {
+          amount = 0.25 + 0.5 * Math.random();
+        }
+        else {
+          amount = 0.5;
+        }
+        xForm.addVariation(amount, VariationFuncList.getVariationFuncInstance(fncName, true));
         if (Math.random() < 0.5) {
           XFormTransformService.scale(xForm, 1.0 - 0.1 * Math.random(), Math.random() < 0.75, Math.random() > 0.25);
         }
       }
       else {
-        xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance("linear3D", true));
+        xForm.addVariation(0.5, VariationFuncList.getVariationFuncInstance(Math.random() < 0.25 ? "dc_linear" : "linear3D", true));
       }
     }
     return flame;
