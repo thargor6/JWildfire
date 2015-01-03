@@ -424,6 +424,7 @@ public class VariationFuncList {
     registerVariationFunc(DCLinearFunc.class);
     registerVariationFunc(DCCarpetFunc.class);
     registerVariationFunc(DCBubbleFunc.class);
+    registerVariationFunc(DCTriangleFunc.class);
   }
 
   private static void registerVariationFunc(
