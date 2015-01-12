@@ -57,6 +57,7 @@ public class DetachedPreviewController implements IterationObserver {
 
   }
 
+  private final TinaController tinaController;
   private final DetachedPreviewWindow detachedPreviewWindow;
   private final Prefs prefs;
   private final JPanel imageRootPanel;
@@ -77,7 +78,8 @@ public class DetachedPreviewController implements IterationObserver {
   private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
   private UpdateDisplayThread updateDisplayThread;
 
-  public DetachedPreviewController(DetachedPreviewWindow pDetachedPreviewWindow, JToggleButton pToggleDetachedPreviewButton) {
+  public DetachedPreviewController(TinaController pTinaController, DetachedPreviewWindow pDetachedPreviewWindow, JToggleButton pToggleDetachedPreviewButton) {
+    tinaController = pTinaController;
     detachedPreviewWindow = pDetachedPreviewWindow;
     imageRootPanel = detachedPreviewWindow.getImageRootPanel();
     prefs = Prefs.getPrefs();
@@ -181,8 +183,10 @@ public class DetachedPreviewController implements IterationObserver {
           break;
         }
       }
+      threads = null;
 
       if (updateDisplayThread != null) {
+        updateDisplayThread.cancel();
         while (!updateDisplayThread.isFinished()) {
           try {
             updateDisplayThread.cancel();
@@ -256,7 +260,8 @@ public class DetachedPreviewController implements IterationObserver {
         refreshing = oldRefreshing;
       }
     }
-    cancelRender();
+    tinaController.closeDetachedPreview();
+    //cancelRender();
   }
 
   public void togglePause() {

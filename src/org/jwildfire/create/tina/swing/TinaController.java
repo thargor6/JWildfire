@@ -5651,7 +5651,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void openDetachedPreview() {
     closeDetachedPreview();
     detachedPreviewWindow = new DetachedPreviewWindow();
-    detachedPreviewController = new DetachedPreviewController(detachedPreviewWindow, data.toggleDetachedPreviewButton);
+    detachedPreviewController = new DetachedPreviewController(this, detachedPreviewWindow, data.toggleDetachedPreviewButton);
     detachedPreviewWindow.setController(detachedPreviewController);
     detachedPreviewWindow.getFrame().setVisible(true);
     detachedPreviewController.setFlame(getCurrFlame());
