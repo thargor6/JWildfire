@@ -53,12 +53,20 @@ public final class FastMathLibImpl implements BaseMathLib {
 
   @Override
   public double sqrt(double a) {
-    return Math.sqrt(a);
+    return FastMath.sqrt(a);
   }
 
   @Override
   public double pow(double value, double power) {
     return FastMath.pow(value, power);
+  }
+
+  // fast approximation from Martin Ankerl's blog: http://martin.ankerl.com/2007/10/04/optimized-pow-approximation-for-java-and-c-c/
+  // maybe for fast preview?
+  public double fastpow(double value, double power) {
+    final long tmp = Double.doubleToLongBits(value);
+    final long tmp2 = (long) (power * (tmp - 4606921280493453312L)) + 4606921280493453312L;
+    return Double.longBitsToDouble(tmp2);
   }
 
   @Override

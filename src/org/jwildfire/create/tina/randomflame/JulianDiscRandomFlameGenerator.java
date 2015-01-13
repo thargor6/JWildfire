@@ -29,7 +29,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
   private String getNonBlurRandomFunc() {
     while (true) {
       String res = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
-      if (res.indexOf("blur") < 0) {
+      if (res.indexOf("blur") < 0 && res.indexOf("pre_") < 0 && res.indexOf("post_") < 0 && res.indexOf("inflate") < 0) {
         return res;
       }
     }
@@ -52,9 +52,9 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.5);
+      xForm.setWeight(0.5 + Math.random() * 0.5);
       VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julian", true);
-      int power = Tools.FTOI(100.0 - Math.random() * 200.0);
+      int power = Tools.FTOI(200.0 - Math.random() * 400.0);
       if (power == 0 || power == 1 || power == -1) {
         power = -30;
       }
@@ -68,6 +68,30 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       }
       xForm.setColorSymmetry(-1.0);
       xForm.setColor(0.0);
+
+      if (Math.random() < 0.33) {
+        XFormTransformService.globalTranslate(xForm, -0.0125 + 0.025 * Math.random(), -0.0125 + 0.025 * Math.random(), false);
+      }
+      else if (Math.random() < 0.75) {
+        XFormTransformService.globalTranslate(xForm, -0.125 + 0.25 * Math.random(), -0.125 + 0.25 * Math.random(), false);
+      }
+      if (Math.random() < 0.15) {
+        XFormTransformService.rotate(xForm, 6.0 - Math.random() * 12.0, false);
+      }
+      else if (Math.random() < 0.3) {
+        XFormTransformService.rotate(xForm, -45.0, false);
+      }
+      else if (Math.random() < 0.75) {
+        XFormTransformService.rotate(xForm, 90.0 - Math.random() * 180.0, false);
+      }
+
+      if (Math.random() < 0.5) {
+        XFormTransformService.scale(xForm, 1.2 - Math.random() * 0.4, true, true, false);
+      }
+      if (Math.random() < 0.5) {
+        XFormTransformService.scale(xForm, 1.2 - Math.random() * 0.4, true, true, true);
+      }
+
     }
     // 2nd xForm
     {
@@ -96,7 +120,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
       else if (Math.random() < 0.75) {
         XFormTransformService.rotate(xForm, 90.0 - Math.random() * 180.0, false);
       }
-      xForm.setColorSymmetry(Math.random());
+
     }
     // final
     if (Math.random() < 0.15) {
