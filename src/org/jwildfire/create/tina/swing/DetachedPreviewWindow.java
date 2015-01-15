@@ -3,13 +3,17 @@ package org.jwildfire.create.tina.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -67,6 +71,22 @@ public class DetachedPreviewWindow {
       }
     });
     frame.getContentPane().add(imageRootPanel, BorderLayout.CENTER);
+
+    configureHotKeys();
+  }
+
+  private void configureHotKeys() {
+    frame.getRootPane().getInputMap().put(KeyStroke.getKeyStroke("SPACE"),
+        "toggleRender");
+    Action toggleRender = new AbstractAction() {
+      private static final long serialVersionUID = 1L;
+
+      public void actionPerformed(ActionEvent e) {
+        getController().togglePause();
+      }
+    };
+    frame.getRootPane().getActionMap().put("toggleRender",
+        toggleRender);
   }
 
   protected void onClose(boolean doNotify) {
@@ -105,10 +125,10 @@ public class DetachedPreviewWindow {
   public void setTitle(DetachedPreviewController.State pState, double pQuality) {
     switch (pState) {
       case PAUSE:
-        getFrame().setTitle("Quality " + Tools.doubleToString(Tools.FTOI(pQuality)) + " (dbl-click to continue)");
+        getFrame().setTitle("Quality " + Tools.doubleToString(Tools.FTOI(pQuality)) + " (dbl-click/SPACE to continue)");
         break;
       case RENDER:
-        getFrame().setTitle("Quality " + Tools.doubleToString(Tools.FTOI(pQuality)) + " (dbl-click to pause)");
+        getFrame().setTitle("Quality " + Tools.doubleToString(Tools.FTOI(pQuality)) + " (dbl-click/SPACE to pause)");
         break;
       default:
         getFrame().setTitle(DFLT_TITLE);
