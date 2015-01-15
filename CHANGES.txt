@@ -1,3 +1,17 @@
+V2.23 (15.01.2015):
+ - MutaGen: three user-defined meta-mutation-types which can be customized in the Prefs (i. e., you may specify which mutations should be applied)
+ - MutaGen: new options in the Prefs to specify the four initial mutation-types to be used
+ - new "dc_triangle"-variation by Xyrus02
+ - new "dc_bubble"-variation by Xyrus02
+ - new "dc_carpet"-variation by Xyrus02
+ - new "dc_linear"-variation by Xyrus02
+ - new "curl_sp"-variation by Xyrus02
+ - improved the "Sierpinsky"-random-flame-generator
+ - improved the "Julian Disc"-random-flame-generator
+ - added a SPACE-hotkey to toggle rendering of detached preview on/off
+ - fixed a problem regarding the closing of the detached preview-window where the application still consumed a lot of CPU-power
+ - some small optimizations
+
 V2.22 XMAS-EDITION (22.12.2014):
  - ability to use images as 2D-gradient fore awesome "natural" looking fractals
  - experimental simple way to create 3d-flames by just specifying 3 affine transforms in 3 planes, needs nearly no change in the editor, but can be very powerful
