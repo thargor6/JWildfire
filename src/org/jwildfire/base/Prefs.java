@@ -113,6 +113,10 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MACRO_TOOLBAR_WIDTH = "tina.toolbar.macro.width";
   public static final String KEY_TINA_MACRO_TOOLBAR_HEIGHT = "tina.toolbar.macro.height";
 
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER1 = "tina.mutagen.mutationtypes_user1";
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2 = "tina.mutagen.mutationtypes_user2";
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3 = "tina.mutagen.mutationtypes_user3";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -191,6 +195,13 @@ public class Prefs extends ManagedObject {
   private boolean tinaOptimizedRenderingIR = true;
 
   private boolean tinaUseExperimentalOpenClCode = false;
+
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER1", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypesUser1 = "ADD_TRANSFORM, CHANGE_WEIGHT, AFFINE, RANDOM_PARAMETER";
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER2", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypesUser2 = "RANDOM_GRADIENT, LOCAL_GAMMA";
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER3", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypesUser3 = "AFFINE_3D, BOKEH, RANDOM_FLAME";
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -587,6 +598,10 @@ public class Prefs extends ManagedObject {
     tinaEditorGuidesRuleOfThirdsColor = new Color(pSrc.tinaEditorGuidesRuleOfThirdsColor.getRed(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getGreen(), pSrc.tinaEditorGuidesRuleOfThirdsColor.getBlue());
     tinaEditorGuidesGoldenRatioColor = new Color(pSrc.tinaEditorGuidesGoldenRatioColor.getRed(), pSrc.tinaEditorGuidesGoldenRatioColor.getGreen(), pSrc.tinaEditorGuidesGoldenRatioColor.getBlue());
     tinaEditorGuidesLineWidth = pSrc.tinaEditorGuidesLineWidth;
+
+    tinaMutaGenMutationTypesUser1 = pSrc.tinaMutaGenMutationTypesUser1;
+    tinaMutaGenMutationTypesUser2 = pSrc.tinaMutaGenMutationTypesUser2;
+    tinaMutaGenMutationTypesUser3 = pSrc.tinaMutaGenMutationTypesUser3;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1070,6 +1085,30 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRandGenDualityPreferedVariationProbability2(double pTinaRandGenDualityPreferedVariationProbability2) {
     tinaRandGenDualityPreferedVariationProbability2 = pTinaRandGenDualityPreferedVariationProbability2;
+  }
+
+  public String getTinaMutaGenMutationTypesUser1() {
+    return tinaMutaGenMutationTypesUser1;
+  }
+
+  public void setTinaMutaGenMutationTypesUser1(String pTinaMutaGenMutationTypesUser1) {
+    tinaMutaGenMutationTypesUser1 = pTinaMutaGenMutationTypesUser1;
+  }
+
+  public String getTinaMutaGenMutationTypesUser2() {
+    return tinaMutaGenMutationTypesUser2;
+  }
+
+  public void setTinaMutaGenMutationTypesUser2(String pTinaMutaGenMutationTypesUser2) {
+    tinaMutaGenMutationTypesUser2 = pTinaMutaGenMutationTypesUser2;
+  }
+
+  public String getTinaMutaGenMutationTypesUser3() {
+    return tinaMutaGenMutationTypesUser3;
+  }
+
+  public void setTinaMutaGenMutationTypesUser3(String pTinaMutaGenMutationTypesUser3) {
+    tinaMutaGenMutationTypesUser3 = pTinaMutaGenMutationTypesUser3;
   }
 
 }

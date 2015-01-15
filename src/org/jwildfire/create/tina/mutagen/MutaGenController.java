@@ -173,6 +173,9 @@ public class MutaGenController {
   private void refreshTrendCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(MutationType.ALL);
+    pCmb.addItem(MutationType.USER1);
+    pCmb.addItem(MutationType.USER2);
+    pCmb.addItem(MutationType.USER3);
     pCmb.addItem(MutationType.ADD_TRANSFORM);
     pCmb.addItem(MutationType.ADD_VARIATION);
     pCmb.addItem(MutationType.AFFINE);

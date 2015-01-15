@@ -134,6 +134,10 @@ public class PrefsReader {
         pPrefs.setTinaRandGenDualityPreferedVariationProbability1(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1, pPrefs.getTinaRandGenDualityPreferedVariationProbability1()));
         pPrefs.setTinaRandGenDualityPreferedVariationProbability2(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2()));
 
+        pPrefs.setTinaMutaGenMutationTypesUser1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER1, pPrefs.getTinaMutaGenMutationTypesUser1()));
+        pPrefs.setTinaMutaGenMutationTypesUser2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2, pPrefs.getTinaMutaGenMutationTypesUser2()));
+        pPrefs.setTinaMutaGenMutationTypesUser3(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3, pPrefs.getTinaMutaGenMutationTypesUser3()));
+
         try {
           FlamePanelControlStyle style = FlamePanelControlStyle.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_STYLE, pPrefs.getTinaEditorControlsStyle().toString()));
           pPrefs.setTinaEditorControlsStyle(style);

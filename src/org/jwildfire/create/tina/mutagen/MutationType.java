@@ -23,6 +23,24 @@ public enum MutationType {
       return AllMutation.class;
     }
   },
+  USER1 {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return User1Mutation.class;
+    }
+  },
+  USER2 {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return User2Mutation.class;
+    }
+  },
+  USER3 {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return User3Mutation.class;
+    }
+  },
   ADD_TRANSFORM {
     @Override
     protected Class<? extends Mutation> getMutationClass() {
