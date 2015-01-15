@@ -138,6 +138,11 @@ public class PrefsReader {
         pPrefs.setTinaMutaGenMutationTypesUser2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2, pPrefs.getTinaMutaGenMutationTypesUser2()));
         pPrefs.setTinaMutaGenMutationTypesUser3(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3, pPrefs.getTinaMutaGenMutationTypesUser3()));
 
+        pPrefs.setTinaMutaGenMutationTypeHoriz1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ1, pPrefs.getTinaMutaGenMutationTypeHoriz1()));
+        pPrefs.setTinaMutaGenMutationTypeHoriz2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ2, pPrefs.getTinaMutaGenMutationTypeHoriz2()));
+        pPrefs.setTinaMutaGenMutationTypeVert1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1, pPrefs.getTinaMutaGenMutationTypeVert1()));
+        pPrefs.setTinaMutaGenMutationTypeVert2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2, pPrefs.getTinaMutaGenMutationTypeVert2()));
+
         try {
           FlamePanelControlStyle style = FlamePanelControlStyle.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_STYLE, pPrefs.getTinaEditorControlsStyle().toString()));
           pPrefs.setTinaEditorControlsStyle(style);

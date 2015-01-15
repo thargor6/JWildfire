@@ -117,6 +117,11 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2 = "tina.mutagen.mutationtypes_user2";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3 = "tina.mutagen.mutationtypes_user3";
 
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ1 = "tina.mutagen.mutationtype_horiz1";
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ2 = "tina.mutagen.mutationtype_horiz2";
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
+  public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -196,12 +201,21 @@ public class Prefs extends ManagedObject {
 
   private boolean tinaUseExperimentalOpenClCode = false;
 
-  @Property(description = "User-defined mutation-sub-types for mutation-type USER1", category = PropertyCategory.TINA)
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER1 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser1 = "ADD_TRANSFORM, CHANGE_WEIGHT, AFFINE, RANDOM_PARAMETER";
-  @Property(description = "User-defined mutation-sub-types for mutation-type USER2", category = PropertyCategory.TINA)
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER2 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser2 = "RANDOM_GRADIENT, LOCAL_GAMMA";
-  @Property(description = "User-defined mutation-sub-types for mutation-type USER3", category = PropertyCategory.TINA)
+  @Property(description = "User-defined mutation-sub-types for mutation-type USER3 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser3 = "AFFINE_3D, BOKEH, RANDOM_FLAME";
+
+  @Property(description = "Default mutation-type at category \"Horiz 1\" in the MutaGen", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypeHoriz1 = "USER1";
+  @Property(description = "Default mutation-type at category \"Horiz 2\" in the MutaGen", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypeHoriz2 = "USER2";
+  @Property(description = "Default mutation-type at category \"Vert 1\" in the MutaGen", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypeVert1 = "ALL";
+  @Property(description = "Default mutation-type at category \"Vert 2\" in the MutaGen", category = PropertyCategory.TINA)
+  private String tinaMutaGenMutationTypeVert2 = "USER3";
 
   @Property(description = "Sunflow scene file drawer", category = PropertyCategory.SUNFLOW)
   private String sunflowScenePath = null;
@@ -602,6 +616,11 @@ public class Prefs extends ManagedObject {
     tinaMutaGenMutationTypesUser1 = pSrc.tinaMutaGenMutationTypesUser1;
     tinaMutaGenMutationTypesUser2 = pSrc.tinaMutaGenMutationTypesUser2;
     tinaMutaGenMutationTypesUser3 = pSrc.tinaMutaGenMutationTypesUser3;
+
+    tinaMutaGenMutationTypeHoriz1 = pSrc.tinaMutaGenMutationTypeHoriz1;
+    tinaMutaGenMutationTypeHoriz2 = pSrc.tinaMutaGenMutationTypeHoriz2;
+    tinaMutaGenMutationTypeVert1 = pSrc.tinaMutaGenMutationTypeVert1;
+    tinaMutaGenMutationTypeVert2 = pSrc.tinaMutaGenMutationTypeVert2;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1109,6 +1128,38 @@ public class Prefs extends ManagedObject {
 
   public void setTinaMutaGenMutationTypesUser3(String pTinaMutaGenMutationTypesUser3) {
     tinaMutaGenMutationTypesUser3 = pTinaMutaGenMutationTypesUser3;
+  }
+
+  public String getTinaMutaGenMutationTypeHoriz1() {
+    return tinaMutaGenMutationTypeHoriz1;
+  }
+
+  public void setTinaMutaGenMutationTypeHoriz1(String pTinaMutaGenMutationTypeHoriz1) {
+    tinaMutaGenMutationTypeHoriz1 = pTinaMutaGenMutationTypeHoriz1;
+  }
+
+  public String getTinaMutaGenMutationTypeHoriz2() {
+    return tinaMutaGenMutationTypeHoriz2;
+  }
+
+  public void setTinaMutaGenMutationTypeHoriz2(String pTinaMutaGenMutationTypeHoriz2) {
+    tinaMutaGenMutationTypeHoriz2 = pTinaMutaGenMutationTypeHoriz2;
+  }
+
+  public String getTinaMutaGenMutationTypeVert1() {
+    return tinaMutaGenMutationTypeVert1;
+  }
+
+  public void setTinaMutaGenMutationTypeVert1(String pTinaMutaGenMutationTypeVert1) {
+    tinaMutaGenMutationTypeVert1 = pTinaMutaGenMutationTypeVert1;
+  }
+
+  public String getTinaMutaGenMutationTypeVert2() {
+    return tinaMutaGenMutationTypeVert2;
+  }
+
+  public void setTinaMutaGenMutationTypeVert2(String pTinaMutaGenMutationTypeVert2) {
+    tinaMutaGenMutationTypeVert2 = pTinaMutaGenMutationTypeVert2;
   }
 
 }

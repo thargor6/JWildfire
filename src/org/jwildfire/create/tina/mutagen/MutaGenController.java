@@ -162,15 +162,15 @@ public class MutaGenController {
     saveFlameToEditorBtn = pSaveFlameToEditorBtn;
     saveFlameToFileBtn = pSaveFlameToFileBtn;
 
-    refreshTrendCmb(horizontalTrend1Cmb);
-    refreshTrendCmb(horizontalTrend2Cmb);
-    refreshTrendCmb(verticalTrend1Cmb);
-    refreshTrendCmb(verticalTrend2Cmb);
+    refreshTrendCmb(horizontalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz1());
+    refreshTrendCmb(horizontalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeHoriz2());
+    refreshTrendCmb(verticalTrend1Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert1());
+    refreshTrendCmb(verticalTrend2Cmb, Prefs.getPrefs().getTinaMutaGenMutationTypeVert2());
     amountREd.setValue(1.0);
     initHintsPane();
   }
 
-  private void refreshTrendCmb(JComboBox pCmb) {
+  private void refreshTrendCmb(JComboBox pCmb, String pInitialValue) {
     pCmb.removeAllItems();
     pCmb.addItem(MutationType.ALL);
     pCmb.addItem(MutationType.USER1);
@@ -187,7 +187,14 @@ public class MutaGenController {
     pCmb.addItem(MutationType.RANDOM_FLAME);
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
-    pCmb.setSelectedIndex(0);
+    MutationType initialValue;
+    try {
+      initialValue = MutationType.valueOf(pInitialValue.trim().toUpperCase());
+    }
+    catch (Exception ex) {
+      initialValue = MutationType.ALL;
+    }
+    pCmb.setSelectedItem(initialValue);
   }
 
   public void importFlame(Flame pFlame) {
