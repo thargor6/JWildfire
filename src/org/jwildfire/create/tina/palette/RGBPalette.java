@@ -359,6 +359,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
   public RGBPalette makeCopy() {
     RGBPalette res = new RGBPalette();
     res.assign(this);
+    res.assignRawColors(this);
     return res;
   }
 
