@@ -858,14 +858,14 @@ public class BenoitCreator extends ImageCreator {
           push(0.0, cy);
           break;
 
-        case 0xb2: /* "²" */
+        case 0xb2: /* ^2 */
           hx = pop();
           hy = pop();
           sx = hx * hx - hy * hy;
           sy = 2.0 * hx * hy;
           push(sx, sy);
           break;
-        case 0xb3: /* "³" */
+        case 0xb3: /* ^3 */
           hx = pop();
           hy = pop();
           sx = hx * hx * hx - 3.0 * hx * hy * hy;
