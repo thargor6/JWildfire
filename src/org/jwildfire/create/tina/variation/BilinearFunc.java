@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class BiLinearFunc extends SimpleVariationFunc {
+public class BilinearFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
