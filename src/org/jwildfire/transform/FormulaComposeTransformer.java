@@ -134,8 +134,8 @@ public class FormulaComposeTransformer extends Mesh2DTransformer {
             parser.setVarValue("fgG", (double) fgPixel.g / 255.0);
             parser.setVarValue("fgB", (double) fgPixel.b / 255.0);
 
-            // TODO Genlock: z. B. Testen, ob Intensität 0 oder größer 0
-            // genlockFormula, genlockOperator (gleich, größer), genlockRefValue
+            // TODO Genlock: z. B. Testen, ob Intensitat 0 oder grober 0
+            // genlockFormula, genlockOperator (gleich, grober), genlockRefValue
 
             bgPixel.r = Tools.roundColor((Double) parser.evaluate(redNode) * 255.0);
             bgPixel.g = Tools.roundColor((Double) parser.evaluate(greenNode) * 255.0);
