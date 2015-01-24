@@ -163,7 +163,7 @@ public final class MathLib {
   }
 
   // Quick erf code taken from http://introcs.cs.princeton.edu/java/21function/ErrorFunction.java.html
-  // Copyright © 2000–2010, Robert Sedgewick and Kevin Wayne. 
+  // Copyright (C) 2000-2010, Robert Sedgewick and Kevin Wayne. 
   //fractional error in math formula less than 1.2 * 10 ^ -7.
   // although subject to catastrophic cancellation when z in very close to 0
   // from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
