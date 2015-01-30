@@ -71,6 +71,41 @@ public class FlamePreviewHelper {
 
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
+
+    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
+    if (img != null) {
+      imgPanel.setImage(img);
+      if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
+        Flame flame = flameHolder.getFlame();
+        List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
+        for (int i = 0; i < randomBatch.size(); i++) {
+          Flame bFlame = randomBatch.get(i).getFlame();
+          if (bFlame == flame) {
+            randomBatch.get(i).preview = null;
+            ImagePanel pnl = randomBatch.get(i).getImgPanel();
+            if (pnl != null) {
+              pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
+              pnl.repaint();
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    if (!cfg.isNoControls()) {
+      centerPanel.getParent().validate();
+      centerPanel.repaint();
+    }
+    else {
+      imgPanel.repaint();
+    }
+  }
+
+  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
+
     Rectangle panelBounds = imgPanel.getImageBounds();
     Rectangle bounds;
     if (pDownScale != 1) {
@@ -224,10 +259,11 @@ public class FlamePreviewHelper {
               img = background;
             }
 
-            imgPanel.setImage(img);
             if (!cfg.isNoControls() && messageHelper != null) {
               messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
             }
+
+            return img;
           }
           catch (Throwable ex) {
             errorHandler.handleError(ex);
@@ -238,29 +274,12 @@ public class FlamePreviewHelper {
           flame.setSampleDensity(oldSampleDensity);
         }
       }
-      if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
-        List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
-        for (int i = 0; i < randomBatch.size(); i++) {
-          Flame bFlame = randomBatch.get(i).getFlame();
-          if (bFlame == flame) {
-            randomBatch.get(i).preview = null;
-            ImagePanel pnl = randomBatch.get(i).getImgPanel();
-            if (pnl != null) {
-              pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
-              pnl.repaint();
-            }
-            break;
-          }
-        }
-      }
     }
+    return null;
+  }
 
-    if (!cfg.isNoControls()) {
-      centerPanel.getParent().validate();
-      centerPanel.repaint();
-    }
-    else {
-      imgPanel.repaint();
-    }
+  public void setImage(SimpleImage pImage) {
+    FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+    imgPanel.setImage(pImage);
   }
 }

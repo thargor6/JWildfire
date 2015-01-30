@@ -63,6 +63,7 @@ import org.jwildfire.create.tina.swing.FlamePanelProvider;
 import org.jwildfire.create.tina.swing.FlamePreviewHelper;
 import org.jwildfire.create.tina.swing.FlameThumbnail;
 import org.jwildfire.create.tina.swing.ImageThumbnail;
+import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.RenderProgressBarHolder;
 import org.jwildfire.create.tina.swing.RenderProgressUpdater;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
@@ -71,7 +72,9 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.iflames.BaseFlameListCreator;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.iflames.ShapeDistribution;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.swing.ErrorHandler;
@@ -101,6 +104,23 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JComboBox baseFlameCmb;
   private final JPanel baseFlamePreviewRootPnl;
   private final JComboBox resolutionProfileCmb;
+  private final JToggleButton edgesNorthButton;
+  private final JToggleButton edgesWestButton;
+  private final JToggleButton edgesEastButton;
+  private final JToggleButton edgesSouthButton;
+  private final JToggleButton erodeButton;
+  private final JToggleButton displayPreprocessedImageButton;
+  private final JWFNumberField erodeSizeField;
+  private final JWFNumberField maxImageWidthField;
+  private final JWFNumberField structureThresholdField;
+  private final JWFNumberField structureDensityField;
+  private final JWFNumberField globalScaleXField;
+  private final JWFNumberField globalScaleYField;
+  private final JWFNumberField globalScaleZField;
+  private final JWFNumberField globalOffsetXField;
+  private final JWFNumberField globalOffsetYField;
+  private final JWFNumberField globalOffsetZField;
+  private final JComboBox shapeDistributionCmb;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -119,7 +139,13 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JPanel pFlameStackPanel, JButton pLoadIFlameButton, JButton pLoadIFlameFromClipboardButton,
       JButton pSaveIFlameToClipboardButton, JButton pSaveIFlameButton, JButton pRefreshIFlameButton,
       JProgressBar pMainProgressBar, JToggleButton pAutoRefreshButton, JComboBox pBaseFlameCmb,
-      JPanel pBaseFlamePreviewRootPnl, JComboBox pResolutionProfileCmb) {
+      JPanel pBaseFlamePreviewRootPnl, JComboBox pResolutionProfileCmb, JToggleButton pEdgesNorthButton,
+      JToggleButton pEdgesWestButton, JToggleButton pEdgesEastButton, JToggleButton pEdgesSouthButton,
+      JToggleButton pErodeButton, JToggleButton pDisplayPreprocessedImageButton, JWFNumberField pErodeSizeField,
+      JWFNumberField pMaxImageWidthField, JWFNumberField pStructureThresholdField, JWFNumberField pStructureDensityField,
+      JWFNumberField pGlobalScaleXField, JWFNumberField pGlobalScaleYField, JWFNumberField pGlobalScaleZField,
+      JWFNumberField pGlobalOffsetXField, JWFNumberField pGlobalOffsetYField, JWFNumberField pGlobalOffsetZField,
+      JComboBox pShapeDistributionCmb) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -141,6 +167,25 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameCmb = pBaseFlameCmb;
     baseFlamePreviewRootPnl = pBaseFlamePreviewRootPnl;
     resolutionProfileCmb = pResolutionProfileCmb;
+    edgesNorthButton = pEdgesNorthButton;
+    edgesWestButton = pEdgesWestButton;
+    edgesEastButton = pEdgesEastButton;
+    edgesSouthButton = pEdgesSouthButton;
+    erodeButton = pErodeButton;
+    displayPreprocessedImageButton = pDisplayPreprocessedImageButton;
+    erodeSizeField = pErodeSizeField;
+    maxImageWidthField = pMaxImageWidthField;
+
+    structureThresholdField = pStructureThresholdField;
+    structureDensityField = pStructureDensityField;
+    globalScaleXField = pGlobalScaleXField;
+    globalScaleYField = pGlobalScaleYField;
+    globalScaleZField = pGlobalScaleZField;
+    globalOffsetXField = pGlobalOffsetXField;
+    globalOffsetYField = pGlobalOffsetYField;
+    globalOffsetZField = pGlobalOffsetZField;
+    shapeDistributionCmb = pShapeDistributionCmb;
+
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
 
@@ -149,11 +194,21 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     enableControls();
 
     refreshResolutionProfileCmb(resolutionProfileCmb, null);
-    baseFlameCmb.removeAllItems();
-    for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
-      baseFlameCmb.addItem("Flame " + (i + 1));
+    {
+      baseFlameCmb.removeAllItems();
+      for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+        baseFlameCmb.addItem("Flame " + (i + 1));
+      }
+      baseFlameCmb.setSelectedIndex(0);
     }
-    baseFlameCmb.setSelectedIndex(0);
+    {
+      shapeDistributionCmb.removeAllItems();
+      shapeDistributionCmb.addItem(ShapeDistribution.HUE);
+      shapeDistributionCmb.addItem(ShapeDistribution.RANDOM);
+      shapeDistributionCmb.setSelectedItem(ShapeDistribution.HUE);
+    }
+
+    displayPreprocessedImageButton.setSelected(false);
 
     noRefresh = false;
   }
@@ -223,10 +278,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     flame.setHeight(600);
     flame.setCamZoom(1);
     {
-      Layer layer = new Layer();
-      flame.getLayers().add(layer);
-      layer.setWeight(1);
-      layer.setVisible(true);
+      Layer layer = flame.getFirstLayer();
       new RandomGradientMutation().execute(layer);
 
       XForm xForm = new XForm();
@@ -239,10 +291,19 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   private void refreshPreview() {
+    if (displayPreprocessedImageButton.isSelected()) {
+      flamePreviewHelper.renderFlameImage(true, true, 1);
+      SimpleImage img = (SimpleImage) RessourceManager.getRessource(BaseFlameListCreator.LAST_PREPROCESSED_IMAGE);
+      if (img != null) {
+        flamePreviewHelper.setImage(img);
+        return;
+      }
+    }
     flamePreviewHelper.refreshFlameImage(true, false, 1);
   }
 
   public void enableControls() {
+    // TODO
     enableUndoControls();
     boolean hasFlame = getFlame() != null;
     boolean hasIFlame = hasFlame && getIFlamesFunc() != null;
@@ -250,7 +311,26 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     loadIFlameFromClipboardButton.setEnabled(true);
     saveIFlameToClipboardButton.setEnabled(hasIFlame);
     saveIFlameButton.setEnabled(hasIFlame);
-    // TODO
+    edgesNorthButton.setEnabled(hasIFlame);
+    edgesWestButton.setEnabled(hasIFlame);
+    edgesEastButton.setEnabled(hasIFlame);
+    edgesSouthButton.setEnabled(hasIFlame);
+    erodeButton.setEnabled(hasIFlame);
+    displayPreprocessedImageButton.setEnabled(hasIFlame);
+    autoRefreshButton.setEnabled(hasIFlame);
+    refreshIFlameButton.setEnabled(hasIFlame);
+    erodeSizeField.setEnabled(erodeButton.isEnabled() && erodeButton.isSelected());
+    maxImageWidthField.setEnabled(hasIFlame);
+    baseFlameCmb.setEnabled(hasIFlame);
+    structureThresholdField.setEnabled(hasIFlame);
+    structureDensityField.setEnabled(hasIFlame);
+    globalScaleXField.setEnabled(hasIFlame);
+    globalScaleYField.setEnabled(hasIFlame);
+    globalScaleZField.setEnabled(hasIFlame);
+    globalOffsetXField.setEnabled(hasIFlame);
+    globalOffsetYField.setEnabled(hasIFlame);
+    globalOffsetZField.setEnabled(hasIFlame);
+    shapeDistributionCmb.setEnabled(hasIFlame);
   }
 
   public void saveUndoPoint() {
@@ -317,6 +397,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         undoManager.saveUndoPoint(getFlame());
         undoManager.undo(getFlame());
         enableUndoControls();
+        refreshIFlame();
+        enableControls();
         refreshUI();
       }
       finally {
@@ -327,6 +409,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
 
   private void refreshUI() {
     refreshBaseFlamePreview();
+    refreshImageFields();
     refreshBaseFlameFields();
     refreshPreview();
   }
@@ -337,6 +420,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       try {
         undoManager.redo(getFlame());
         enableUndoControls();
+        refreshIFlame();
+        enableControls();
         refreshUI();
       }
       finally {
@@ -741,9 +826,56 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlamePreviewRootPnl.repaint();
   }
 
+  private void refreshImageFields() {
+    // TODO Auto-generated method stub
+    IFlamesFunc iflame = getIFlamesFunc();
+    if (iflame == null) {
+      edgesNorthButton.setSelected(false);
+      edgesWestButton.setSelected(false);
+      edgesEastButton.setSelected(false);
+      edgesSouthButton.setSelected(false);
+      erodeButton.setSelected(false);
+      erodeSizeField.setValue(0.0);
+      maxImageWidthField.setValue(0.0);
+      structureThresholdField.setValue(0.0);
+      structureDensityField.setValue(0.0);
+      globalScaleXField.setValue(0.0);
+      globalScaleYField.setValue(0.0);
+      globalScaleZField.setValue(0.0);
+      globalOffsetXField.setValue(0.0);
+      globalOffsetYField.setValue(0.0);
+      globalOffsetZField.setValue(0.0);
+      shapeDistributionCmb.setSelectedIndex(-1);
+    }
+    else {
+      edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);
+      edgesWestButton.setSelected(iflame.getImageParams().getConv_west() == 1);
+      edgesEastButton.setSelected(iflame.getImageParams().getConv_east() == 1);
+      edgesSouthButton.setSelected(iflame.getImageParams().getConv_south() == 1);
+      erodeButton.setSelected(iflame.getImageParams().getErode() == 1);
+      erodeSizeField.setValue(iflame.getImageParams().getErodeSize());
+      maxImageWidthField.setValue(iflame.getImageParams().getMaxImgWidth());
+      structureThresholdField.setValue(iflame.getImageParams().getStructure_threshold());
+      structureDensityField.setValue(iflame.getImageParams().getStructure_density());
+      globalScaleXField.setValue(iflame.getImageParams().getScaleX());
+      globalScaleYField.setValue(iflame.getImageParams().getScaleY());
+      globalScaleZField.setValue(iflame.getImageParams().getScaleZ());
+      globalOffsetXField.setValue(iflame.getImageParams().getOffsetX());
+      globalOffsetYField.setValue(iflame.getImageParams().getOffsetY());
+      globalOffsetZField.setValue(iflame.getImageParams().getOffsetZ());
+      shapeDistributionCmb.setSelectedItem(iflame.getImageParams().getShape_distribution());
+    }
+  }
+
   private void refreshBaseFlameFields() {
     // TODO Auto-generated method stub
+    IFlamesFunc iflame = getIFlamesFunc();
+    if (iflame == null) {
 
+    }
+    else {
+
+    }
   }
 
   public void loadIFlameFromClipboardButton_clicked() {
@@ -863,4 +995,125 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public JProgressBar getRenderProgressBar() {
     return mainProgressBar;
   }
+
+  public void edgesNorthButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setConv_north(edgesNorthButton.isSelected() ? 1 : 0);
+    refreshIFlame();
+  }
+
+  public void edgesEastButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setConv_east(edgesNorthButton.isSelected() ? 1 : 0);
+    refreshIFlame();
+  }
+
+  public void edgesSouthButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setConv_south(edgesSouthButton.isSelected() ? 1 : 0);
+    refreshIFlame();
+  }
+
+  public void edgesWestButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setConv_west(edgesWestButton.isSelected() ? 1 : 0);
+    refreshIFlame();
+  }
+
+  public void erodeButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setErode(erodeButton.isSelected() ? 1 : 0);
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void displayPreprocessedImageButton_clicked() {
+    refreshPreview();
+  }
+
+  public void refreshIFlameButton_clicked() {
+    RessourceManager.clearRessources(IFlamesFunc.KEY_PREFIX);
+    refreshPreview();
+  }
+
+  public void erodeSizeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setErodeSize(erodeSizeField.getIntValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void maxImageWidthField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setMaxImgWidth(maxImageWidthField.getIntValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void shapeDistributionCmb_changed() {
+    if (noRefresh || getIFlamesFunc() == null) {
+      return;
+    }
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setShape_distribution((ShapeDistribution) shapeDistributionCmb.getSelectedItem());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void structureThresholdField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setStructure_threshold(structureThresholdField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void structureDensityField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setStructure_density(structureDensityField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalScaleXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setScaleX(globalScaleXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalScaleYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setScaleY(globalScaleYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalScaleZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setScaleZ(globalScaleZField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalOffsetXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setOffsetX(globalOffsetXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalOffsetYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setOffsetY(globalOffsetYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void globalOffsetZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setOffsetZ(globalOffsetZField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
 }

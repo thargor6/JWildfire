@@ -36,6 +36,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.swing.MainController;
@@ -79,6 +81,17 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JPanel panel_5;
   private JPanel panel_6;
   private JToggleButton displayPreprocessedImageButton;
+  private JWFNumberField erodeSizeField;
+  private JWFNumberField maxImageWidthField;
+  private JWFNumberField globalScaleXField;
+  private JWFNumberField globalScaleYField;
+  private JWFNumberField globalScaleZField;
+  private JWFNumberField globalOffsetXField;
+  private JWFNumberField globalOffsetYField;
+  private JWFNumberField globalOffsetZField;
+  private JWFNumberField structureThresholdField;
+  private JWFNumberField structureDensityField;
+  private JComboBox shapeDistributionCmb;
 
   public IFlamesInternalFrame() {
     super();
@@ -310,19 +323,25 @@ public class IFlamesInternalFrame extends JInternalFrame {
       tabbedPane.addTab("Edge Finding", null, panel_3, null);
       panel_3.setLayout(null);
 
-      JWFNumberField erodeSizeField = new JWFNumberField();
+      erodeSizeField = new JWFNumberField();
+      erodeSizeField.setHasMinValue(true);
+      erodeSizeField.setHasMaxValue(true);
       erodeSizeField.setMinValue(3.0);
       erodeSizeField.setMaxValue(9.0);
       erodeSizeField.setOnlyIntegers(true);
       erodeSizeField.setBounds(157, 108, 100, 24);
       panel_3.add(erodeSizeField);
-      erodeSizeField.setValueStep(0.05);
+      erodeSizeField.setValueStep(2.0);
       erodeSizeField.setText("");
       erodeSizeField.setPreferredSize(new Dimension(100, 24));
-      erodeSizeField.setMotionPropertyName("camPosX");
-      erodeSizeField.setLinkedMotionControlName("tinaCameraCamPosXSlider");
-      erodeSizeField.setLinkedLabelControlName("tinaCameraCamPosXLbl");
       erodeSizeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      erodeSizeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.erodeSizeField_changed();
+          }
+        }
+      });
 
       JLabel lblSize = new JLabel();
       lblSize.setBounds(124, 108, 35, 22);
@@ -339,6 +358,12 @@ public class IFlamesInternalFrame extends JInternalFrame {
       edgesNorthButton.setPreferredSize(new Dimension(136, 24));
       edgesNorthButton.setFont(new Font("Dialog", Font.BOLD, 10));
       edgesNorthButton.setBounds(80, 6, 105, 24);
+      edgesNorthButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.edgesNorthButton_clicked();
+        }
+      });
+
       panel_3.add(edgesNorthButton);
 
       edgesWestButton = new JToggleButton();
@@ -347,6 +372,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
       edgesWestButton.setPreferredSize(new Dimension(136, 24));
       edgesWestButton.setFont(new Font("Dialog", Font.BOLD, 10));
       edgesWestButton.setBounds(6, 32, 105, 24);
+      edgesWestButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.edgesWestButton_clicked();
+        }
+      });
       panel_3.add(edgesWestButton);
 
       edgesEastButton = new JToggleButton();
@@ -355,6 +385,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
       edgesEastButton.setPreferredSize(new Dimension(136, 24));
       edgesEastButton.setFont(new Font("Dialog", Font.BOLD, 10));
       edgesEastButton.setBounds(152, 32, 105, 24);
+      edgesEastButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.edgesEastButton_clicked();
+        }
+      });
       panel_3.add(edgesEastButton);
 
       edgesSouthButton = new JToggleButton();
@@ -363,6 +398,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
       edgesSouthButton.setPreferredSize(new Dimension(136, 24));
       edgesSouthButton.setFont(new Font("Dialog", Font.BOLD, 10));
       edgesSouthButton.setBounds(80, 58, 105, 24);
+      edgesSouthButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.edgesSouthButton_clicked();
+        }
+      });
       panel_3.add(edgesSouthButton);
 
       erodeButton = new JToggleButton();
@@ -371,42 +411,277 @@ public class IFlamesInternalFrame extends JInternalFrame {
       erodeButton.setPreferredSize(new Dimension(136, 24));
       erodeButton.setFont(new Font("Dialog", Font.BOLD, 10));
       erodeButton.setBounds(7, 108, 105, 24);
+      erodeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.erodeButton_clicked();
+        }
+      });
       panel_3.add(erodeButton);
 
       displayPreprocessedImageButton = new JToggleButton();
+      displayPreprocessedImageButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.displayPreprocessedImageButton_clicked();
+        }
+      });
       displayPreprocessedImageButton.setToolTipText("Display the pre-processed image");
-      displayPreprocessedImageButton.setText("Dsp Preprocessed");
+      displayPreprocessedImageButton.setText("Display Preprocessed Image");
       displayPreprocessedImageButton.setPreferredSize(new Dimension(136, 24));
       displayPreprocessedImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      displayPreprocessedImageButton.setBounds(372, 55, 136, 24);
+      displayPreprocessedImageButton.setBounds(372, 32, 227, 24);
       panel_3.add(displayPreprocessedImageButton);
+
+      maxImageWidthField = new JWFNumberField();
+      maxImageWidthField.setHasMinValue(true);
+      maxImageWidthField.setHasMaxValue(true);
+      maxImageWidthField.setValueStep(50.0);
+      maxImageWidthField.setText("");
+      maxImageWidthField.setPreferredSize(new Dimension(100, 24));
+      maxImageWidthField.setOnlyIntegers(true);
+      maxImageWidthField.setMinValue(32.0);
+      maxImageWidthField.setMaxValue(4096.0);
+      maxImageWidthField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      maxImageWidthField.setBounds(499, 6, 100, 24);
+      maxImageWidthField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.maxImageWidthField_changed();
+          }
+        }
+      });
+      panel_3.add(maxImageWidthField);
+
+      JLabel lblMaximalImageSize = new JLabel();
+      lblMaximalImageSize.setToolTipText("Reduce the image-width for faster preprocessing, ");
+      lblMaximalImageSize.setText("Maximum Image Width");
+      lblMaximalImageSize.setPreferredSize(new Dimension(94, 22));
+      lblMaximalImageSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMaximalImageSize.setBounds(372, 6, 125, 22);
+      panel_3.add(lblMaximalImageSize);
 
       panel_5 = new JPanel();
       tabbedPane.addTab("Global Structure", null, panel_5, null);
       panel_5.setLayout(null);
 
-      JWFNumberField numberField = new JWFNumberField();
-      numberField.setValueStep(0.05);
-      numberField.setText("");
-      numberField.setPreferredSize(new Dimension(100, 24));
-      numberField.setOnlyIntegers(true);
-      numberField.setMotionPropertyName("camPosX");
-      numberField.setMinValue(3.0);
-      numberField.setMaxValue(9.0);
-      numberField.setLinkedMotionControlName("tinaCameraCamPosXSlider");
-      numberField.setLinkedLabelControlName("tinaCameraCamPosXLbl");
-      numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      numberField.setBounds(101, 4, 100, 24);
-      panel_5.add(numberField);
+      globalScaleXField = new JWFNumberField();
+      globalScaleXField.setValueStep(0.05);
+      globalScaleXField.setText("");
+      globalScaleXField.setPreferredSize(new Dimension(100, 24));
+      globalScaleXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalScaleXField.setBounds(330, 6, 100, 24);
+      globalScaleXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalScaleXField_changed();
+          }
+        }
+      });
+      panel_5.add(globalScaleXField);
 
-      JLabel label = new JLabel();
-      label.setToolTipText("");
-      label.setText("Size");
-      label.setPreferredSize(new Dimension(94, 22));
-      label.setName("tinaCameraCamPosXLbl");
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(6, 6, 93, 22);
-      panel_5.add(label);
+      JLabel lblScalex = new JLabel();
+      lblScalex.setToolTipText("");
+      lblScalex.setText("ScaleX");
+      lblScalex.setPreferredSize(new Dimension(94, 22));
+      lblScalex.setName("tinaCameraCamPosXLbl");
+      lblScalex.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScalex.setBounds(235, 8, 93, 22);
+      panel_5.add(lblScalex);
+
+      JLabel lblScaley = new JLabel();
+      lblScaley.setToolTipText("");
+      lblScaley.setText("ScaleY");
+      lblScaley.setPreferredSize(new Dimension(94, 22));
+      lblScaley.setName("tinaCameraCamPosXLbl");
+      lblScaley.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScaley.setBounds(235, 32, 93, 22);
+      panel_5.add(lblScaley);
+
+      globalScaleYField = new JWFNumberField();
+      globalScaleYField.setValueStep(0.05);
+      globalScaleYField.setText("");
+      globalScaleYField.setPreferredSize(new Dimension(100, 24));
+      globalScaleYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalScaleYField.setBounds(330, 30, 100, 24);
+      globalScaleYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalScaleYField_changed();
+          }
+        }
+      });
+      panel_5.add(globalScaleYField);
+
+      JLabel lblScalez = new JLabel();
+      lblScalez.setToolTipText("");
+      lblScalez.setText("ScaleZ");
+      lblScalez.setPreferredSize(new Dimension(94, 22));
+      lblScalez.setName("tinaCameraCamPosXLbl");
+      lblScalez.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScalez.setBounds(235, 56, 93, 22);
+      panel_5.add(lblScalez);
+
+      globalScaleZField = new JWFNumberField();
+      globalScaleZField.setValueStep(0.05);
+      globalScaleZField.setText("");
+      globalScaleZField.setPreferredSize(new Dimension(100, 24));
+      globalScaleZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalScaleZField.setBounds(330, 54, 100, 24);
+      globalScaleZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalScaleZField_changed();
+          }
+        }
+      });
+      panel_5.add(globalScaleZField);
+
+      globalOffsetXField = new JWFNumberField();
+      globalOffsetXField.setValueStep(0.05);
+      globalOffsetXField.setText("");
+      globalOffsetXField.setPreferredSize(new Dimension(100, 24));
+      globalOffsetXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalOffsetXField.setBounds(566, 6, 100, 24);
+      globalOffsetXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalOffsetXField_changed();
+          }
+        }
+      });
+      panel_5.add(globalOffsetXField);
+
+      JLabel lblOffsetx = new JLabel();
+      lblOffsetx.setToolTipText("");
+      lblOffsetx.setText("OffsetX");
+      lblOffsetx.setPreferredSize(new Dimension(94, 22));
+      lblOffsetx.setName("tinaCameraCamPosXLbl");
+      lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetx.setBounds(471, 8, 93, 22);
+      panel_5.add(lblOffsetx);
+
+      JLabel lblOffsety = new JLabel();
+      lblOffsety.setToolTipText("");
+      lblOffsety.setText("OffsetY");
+      lblOffsety.setPreferredSize(new Dimension(94, 22));
+      lblOffsety.setName("tinaCameraCamPosXLbl");
+      lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsety.setBounds(471, 32, 93, 22);
+      panel_5.add(lblOffsety);
+
+      globalOffsetYField = new JWFNumberField();
+      globalOffsetYField.setValueStep(0.05);
+      globalOffsetYField.setText("");
+      globalOffsetYField.setPreferredSize(new Dimension(100, 24));
+      globalOffsetYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalOffsetYField.setBounds(566, 30, 100, 24);
+      globalOffsetYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalOffsetYField_changed();
+          }
+        }
+      });
+      panel_5.add(globalOffsetYField);
+
+      JLabel lblOffsetz = new JLabel();
+      lblOffsetz.setToolTipText("");
+      lblOffsetz.setText("OffsetZ");
+      lblOffsetz.setPreferredSize(new Dimension(94, 22));
+      lblOffsetz.setName("tinaCameraCamPosXLbl");
+      lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetz.setBounds(471, 56, 93, 22);
+      panel_5.add(lblOffsetz);
+
+      globalOffsetZField = new JWFNumberField();
+      globalOffsetZField.setValueStep(0.05);
+      globalOffsetZField.setText("");
+      globalOffsetZField.setPreferredSize(new Dimension(100, 24));
+      globalOffsetZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      globalOffsetZField.setBounds(566, 54, 100, 24);
+      globalOffsetZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.globalOffsetZField_changed();
+          }
+        }
+      });
+      panel_5.add(globalOffsetZField);
+
+      structureThresholdField = new JWFNumberField();
+      structureThresholdField.setMaxValue(1.0);
+      structureThresholdField.setHasMinValue(true);
+      structureThresholdField.setHasMaxValue(true);
+      structureThresholdField.setValueStep(0.05);
+      structureThresholdField.setText("");
+      structureThresholdField.setPreferredSize(new Dimension(100, 24));
+      structureThresholdField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      structureThresholdField.setBounds(101, 6, 100, 24);
+      structureThresholdField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.structureThresholdField_changed();
+          }
+        }
+      });
+      panel_5.add(structureThresholdField);
+
+      JLabel lblThreshold = new JLabel();
+      lblThreshold.setToolTipText("");
+      lblThreshold.setText("Threshold");
+      lblThreshold.setPreferredSize(new Dimension(94, 22));
+      lblThreshold.setName("tinaCameraCamPosXLbl");
+      lblThreshold.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblThreshold.setBounds(6, 8, 93, 22);
+      panel_5.add(lblThreshold);
+
+      JLabel lblDensity = new JLabel();
+      lblDensity.setToolTipText("");
+      lblDensity.setText("Density");
+      lblDensity.setPreferredSize(new Dimension(94, 22));
+      lblDensity.setName("tinaCameraCamPosXLbl");
+      lblDensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDensity.setBounds(6, 34, 93, 22);
+      panel_5.add(lblDensity);
+
+      structureDensityField = new JWFNumberField();
+      structureDensityField.setHasMinValue(true);
+      structureDensityField.setHasMaxValue(true);
+      structureDensityField.setMaxValue(1.0);
+      structureDensityField.setValueStep(0.05);
+      structureDensityField.setText("");
+      structureDensityField.setPreferredSize(new Dimension(100, 24));
+      structureDensityField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      structureDensityField.setBounds(101, 32, 100, 24);
+      structureDensityField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.structureDensityField_changed();
+          }
+        }
+      });
+      panel_5.add(structureDensityField);
+
+      shapeDistributionCmb = new JComboBox();
+      shapeDistributionCmb.setPreferredSize(new Dimension(125, 22));
+      shapeDistributionCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      shapeDistributionCmb.setBounds(101, 56, 100, 22);
+      shapeDistributionCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (iflamesController != null) {
+            iflamesController.shapeDistributionCmb_changed();
+          }
+        }
+      });
+      panel_5.add(shapeDistributionCmb);
+
+      JLabel lblShapeDistribution = new JLabel();
+      lblShapeDistribution.setToolTipText("");
+      lblShapeDistribution.setText("Shape distribution");
+      lblShapeDistribution.setPreferredSize(new Dimension(94, 22));
+      lblShapeDistribution.setName("tinaCameraCamPosXLbl");
+      lblShapeDistribution.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblShapeDistribution.setBounds(6, 58, 93, 22);
+      panel_5.add(lblShapeDistribution);
 
       panel_6 = new JPanel();
       panel_6.setPreferredSize(new Dimension(128, 10));
@@ -414,6 +689,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
       panel_6.setLayout(null);
 
       refreshIFlameButton = new JButton();
+      refreshIFlameButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.refreshIFlameButton_clicked();
+        }
+      });
       refreshIFlameButton.setBounds(6, 42, 105, 24);
       panel_6.add(refreshIFlameButton);
       refreshIFlameButton.setToolTipText("Rebuild and refresh IFlame");
@@ -499,7 +779,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getUndoButton(), getRedoButton(), getRenderFlameButton(), getImageStackRootPanel(), getFlameStackRootPanel(),
         getLoadIFlameButton(), getLoadIFlameFromClipboardButton(), getSaveIFlameToClipboardButton(),
         getSaveIFlameButton(), getRefreshIFlameButton(), getMainProgressBar(), getAutoRefreshButton(),
-        getBaseFlameCmb(), getBaseFlamePreviewRootPnl(), getResolutionProfileCmb());
+        getBaseFlameCmb(), getBaseFlamePreviewRootPnl(), getResolutionProfileCmb(), getEdgesNorthButton(),
+        getEdgesWestButton(), getEdgesEastButton(), getEdgesSouthButton(), getErodeButton(), getDisplayPreprocessedImageButton(),
+        getErodeSizeField(), getMaxImageWidthField(), getStructureThresholdField(), getStructureDensityField(),
+        getGlobalScaleXField(), getGlobalScaleYField(), getGlobalScaleZField(), getGlobalOffsetXField(),
+        getGlobalOffsetYField(), getGlobalOffsetZField(), getShapeDistributionCmb());
   }
 
   public JPanel getMainLeftPanel() {
@@ -616,5 +900,49 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JToggleButton getDisplayPreprocessedImageButton() {
     return displayPreprocessedImageButton;
+  }
+
+  public JWFNumberField getErodeSizeField() {
+    return erodeSizeField;
+  }
+
+  public JWFNumberField getMaxImageWidthField() {
+    return maxImageWidthField;
+  }
+
+  public JWFNumberField getGlobalScaleXField() {
+    return globalScaleXField;
+  }
+
+  public JWFNumberField getGlobalScaleYField() {
+    return globalScaleYField;
+  }
+
+  public JWFNumberField getGlobalScaleZField() {
+    return globalScaleZField;
+  }
+
+  public JWFNumberField getGlobalOffsetXField() {
+    return globalOffsetXField;
+  }
+
+  public JWFNumberField getGlobalOffsetYField() {
+    return globalOffsetYField;
+  }
+
+  public JWFNumberField getGlobalOffsetZField() {
+    return globalOffsetZField;
+  }
+
+  public JWFNumberField getStructureThresholdField() {
+    return structureThresholdField;
+  }
+
+  public JWFNumberField getStructureDensityField() {
+    return structureDensityField;
+  }
+
+  public JComboBox getShapeDistributionCmb() {
+    return shapeDistributionCmb;
   }
 }

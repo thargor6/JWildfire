@@ -38,7 +38,7 @@ src/org/jocl/samples
 src/org/sunflow
 FasterMath*
 MathTest*
-DiscretePixel*
+BaseFlame*
 DynamicProperties*
 FlameParams*
 IFlamesAnimator*
@@ -49,6 +49,7 @@ MotionParams*
 Params*
 Particle*
 ParticleList*
+ShapeDistribution*
 
 
 
