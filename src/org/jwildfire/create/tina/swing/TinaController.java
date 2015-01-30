@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -107,7 +107,6 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
-import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -133,19 +132,13 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
-import org.jwildfire.transform.ComposeTransformer;
-import org.jwildfire.transform.RectangleTransformer;
-import org.jwildfire.transform.TextTransformer;
-import org.jwildfire.transform.TextTransformer.FontStyle;
-import org.jwildfire.transform.TextTransformer.HAlignment;
-import org.jwildfire.transform.TextTransformer.Mode;
-import org.jwildfire.transform.TextTransformer.VAlignment;
 
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
 import com.l2fprod.common.util.ResourceManager;
 
-public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider {
+public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
+    DetachedPreviewProvider, FlamePanelProvider, MessageHelper, RandomBatchHolder {
   public static final int PAGE_INDEX = 0;
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -184,6 +177,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final JInternalFrame tinaFrame;
   private final String tinaFrameTitle;
   private final JPanel centerPanel;
+  private final FlamePreviewHelper flamePreviewHelper;
   private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
@@ -712,6 +706,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     gradientControls = new GradientControlsDelegate(this, data, rootTabbedPane);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
 
+    flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, data.toggleTransparencyButton,
+        data.layerAppendBtn, data.layerPreviewBtn, mainProgressUpdater, this, this,
+        this, this, this, this);
+
     registerMotionPropertyControls();
 
     qsaveFilenameGen = new QuickSaveFilenameGen(prefs);
@@ -889,7 +887,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private boolean dragging = false;
   private boolean keypressing = false;
 
-  private FlamePanel getFlamePanel() {
+  @Override
+  public FlamePanel getFlamePanel() {
     if (flamePanel == null) {
       int width = centerPanel.getWidth();
       int height = centerPanel.getHeight();
@@ -1189,207 +1188,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  @Override
   public FlamePanelConfig getFlamePanelConfig() {
     return getFlamePanel().getConfig();
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
-    if (pQuickRender && detachedPreviewController != null && pDownScale == 1) {
-      detachedPreviewController.setFlame(getCurrFlame());
-    }
-
-    FlamePanel imgPanel = getFlamePanel();
-    FlamePanelConfig cfg = getFlamePanelConfig();
-    Rectangle panelBounds = imgPanel.getImageBounds();
-    Rectangle bounds;
-    if (pDownScale != 1) {
-      bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
-    }
-    else {
-      bounds = panelBounds;
-    }
-
-    int renderScale = pQuickRender && pMouseDown ? 2 : 1;
-    int width = bounds.width / renderScale;
-    int height = bounds.height / renderScale;
-    if (width >= 16 && height >= 16) {
-      RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
-        double oldSampleDensity = flame.getSampleDensity();
-        try {
-          double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
-          double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
-          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-          flame.setWidth(info.getImageWidth());
-          flame.setHeight(info.getImageHeight());
-          try {
-            FlameRenderer renderer;
-            if (!cfg.isNoControls() && imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
-              renderer = new DrawFocusPointFlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected());
-            }
-            else {
-              renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
-            }
-            if (pQuickRender) {
-              renderer.setProgressUpdater(null);
-              flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-              flame.setSpatialFilterRadius(0.0);
-            }
-            else {
-              renderer.setProgressUpdater(mainProgressUpdater);
-              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-            }
-            renderer.setRenderScale(renderScale);
-            long t0 = System.currentTimeMillis();
-            RenderedFlame res = renderer.renderFlame(info);
-            long t1 = System.currentTimeMillis();
-            SimpleImage img = res.getImage();
-            img.getBufferedImg().setAccelerationPriority(1.0f);
-
-            if (data.layerAppendBtn.isSelected() && !pMouseDown) {
-              TextTransformer txt = new TextTransformer();
-              txt.setText1("layer-append-mode active");
-              txt.setAntialiasing(true);
-              txt.setColor(Color.RED);
-              txt.setMode(Mode.NORMAL);
-              txt.setFontStyle(FontStyle.BOLD);
-              txt.setFontName("Arial");
-              txt.setFontSize(16);
-              txt.setHAlign(HAlignment.RIGHT);
-              txt.setVAlign(VAlignment.BOTTOM);
-              txt.transformImage(img);
-            }
-
-            if (data.layerPreviewBtn.isSelected()) {
-              Layer onlyVisibleLayer = null;
-              for (Layer layer : getCurrFlame().getLayers()) {
-                if (layer.isVisible()) {
-                  if (onlyVisibleLayer == null) {
-                    onlyVisibleLayer = layer;
-                  }
-                  else {
-                    onlyVisibleLayer = null;
-                    break;
-                  }
-                }
-              }
-              boolean drawSubLayer = flame.getLayers().size() > 1 && getCurrLayer() != null && getCurrLayer() != onlyVisibleLayer && !cfg.isNoControls();
-
-              if (drawSubLayer) {
-                Flame singleLayerFlame = new Flame();
-                singleLayerFlame.assign(flame);
-                singleLayerFlame.getLayers().clear();
-                singleLayerFlame.getLayers().add(getCurrLayer().makeCopy());
-                singleLayerFlame.getFirstLayer().setVisible(true);
-                singleLayerFlame.getFirstLayer().setWeight(1.0);
-                RenderInfo lInfo = new RenderInfo(width / 4 * renderScale, height / 4 * renderScale, RenderMode.PREVIEW);
-                double lWScl = (double) lInfo.getImageWidth() / (double) singleLayerFlame.getWidth();
-                double lHScl = (double) lInfo.getImageHeight() / (double) singleLayerFlame.getHeight();
-                singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
-                singleLayerFlame.setWidth(lInfo.getImageWidth());
-                singleLayerFlame.setHeight(lInfo.getImageHeight());
-                FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
-                RenderedFlame lRes = lRenderer.renderFlame(lInfo);
-                SimpleImage layerImg = lRes.getImage();
-
-                boolean drawLayerNumber = true;
-                if (drawLayerNumber) {
-                  RectangleTransformer rT = new RectangleTransformer();
-                  int textWidth = 28;
-                  int textHeight = 22;
-                  int margin = 2;
-
-                  rT.setColor(new java.awt.Color(0, 0, 0));
-                  rT.setLeft(layerImg.getImageWidth() - textWidth - 2 * margin);
-                  rT.setTop(layerImg.getImageHeight() - textHeight - 2 * margin);
-                  rT.setThickness(textHeight / 2 + 1);
-                  rT.setWidth(textWidth);
-                  rT.setHeight(textHeight);
-                  rT.transformImage(layerImg);
-
-                  TextTransformer txt = new TextTransformer();
-                  txt.setText1("  " + (flame.getLayers().indexOf(getCurrLayer()) + 1) + "  ");
-                  txt.setAntialiasing(true);
-                  txt.setColor(new java.awt.Color(200, 200, 200));
-                  txt.setMode(Mode.NORMAL);
-                  txt.setFontStyle(FontStyle.BOLD);
-                  txt.setFontName("Arial");
-                  txt.setFontSize(16);
-                  txt.setHAlign(HAlignment.NONE);
-                  txt.setPosX(layerImg.getImageWidth() - textWidth - margin);
-                  txt.setPosY(layerImg.getImageHeight() - textHeight - margin);
-                  txt.setVAlign(VAlignment.NONE);
-                  txt.transformImage(layerImg);
-                }
-
-                RectangleTransformer rT = new RectangleTransformer();
-                rT.setColor(new java.awt.Color(200, 200, 200));
-                rT.setLeft(0);
-                rT.setTop(0);
-                rT.setThickness(3);
-                rT.setWidth(lInfo.getImageWidth());
-                rT.setHeight(lInfo.getImageHeight());
-                rT.transformImage(layerImg);
-
-                ComposeTransformer cT = new ComposeTransformer();
-                cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
-                cT.setVAlign(ComposeTransformer.VAlignment.BOTTOM);
-                cT.setTop(10);
-                cT.setLeft(10);
-                cT.setForegroundImage(layerImg);
-                cT.transformImage(img);
-              }
-            }
-
-            if (pDownScale != 1) {
-              SimpleImage background = new SimpleImage(panelBounds.width, panelBounds.height);
-              ComposeTransformer cT = new ComposeTransformer();
-              cT.setHAlign(ComposeTransformer.HAlignment.CENTRE);
-              cT.setVAlign(ComposeTransformer.VAlignment.CENTRE);
-              cT.setForegroundImage(img);
-              cT.transformImage(background);
-              img = background;
-            }
-
-            imgPanel.setImage(img);
-            if (!cfg.isNoControls()) {
-              showStatusMessage(flame, "render time: " + Tools.doubleToString((t1 - t0) * 0.001) + "s");
-            }
-          }
-          catch (Throwable ex) {
-            errorHandler.handleError(ex);
-          }
-        }
-        finally {
-          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
-          flame.setSampleDensity(oldSampleDensity);
-        }
-      }
-      if (!pMouseDown && !cfg.isNoControls()) {
-        for (int i = 0; i < randomBatch.size(); i++) {
-          Flame bFlame = randomBatch.get(i).getFlame();
-          if (bFlame == flame) {
-            randomBatch.get(i).preview = null;
-            ImagePanel pnl = randomBatch.get(i).getImgPanel();
-            if (pnl != null) {
-              pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
-              pnl.repaint();
-            }
-            break;
-          }
-        }
-      }
-    }
-
-    if (!cfg.isNoControls()) {
-      centerPanel.getParent().validate();
-      centerPanel.repaint();
-    }
-    else {
-      imgPanel.repaint();
-    }
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
   }
 
   @Override
@@ -2864,65 +2669,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private class FlameThumbnail {
-    private Flame flame;
-    private SimpleImage preview;
-    private ImagePanel imgPanel;
-
-    public FlameThumbnail(Flame pFlame, SimpleImage pPreview) {
-      flame = pFlame;
-      preview = pPreview;
-    }
-
-    private void generatePreview(int pQuality) {
-      RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
-      Flame renderFlame = flame.makeCopy();
-      double wScl = (double) info.getImageWidth() / (double) renderFlame.getWidth();
-      double hScl = (double) info.getImageHeight() / (double) renderFlame.getHeight();
-      renderFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * renderFlame.getPixelsPerUnit());
-      renderFlame.setWidth(IMG_WIDTH);
-      renderFlame.setHeight(IMG_HEIGHT);
-      renderFlame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
-      renderFlame.setSpatialFilterRadius(0.0);
-      FlameRenderer renderer = new FlameRenderer(renderFlame, prefs, false, false);
-      renderFlame.setSampleDensity(pQuality);
-      RenderedFlame res = renderer.renderFlame(info);
-      preview = res.getImage();
-    }
-
-    public SimpleImage getPreview(int pQuality) {
-      if (preview == null) {
-        generatePreview(pQuality);
-      }
-      return preview;
-    }
-
-    public Flame getFlame() {
-      return flame;
-    }
-
-    public ImagePanel getImgPanel() {
-      return imgPanel;
-    }
-
-    public void setImgPanel(ImagePanel imgPanel) {
-      this.imgPanel = imgPanel;
-    }
-  }
-
   private List<FlameThumbnail> randomBatch = new ArrayList<FlameThumbnail>();
 
-  private final int IMG_WIDTH = 90;
-  private final int IMG_HEIGHT = 68;
-  private final int BORDER_SIZE = 8;
+  public List<FlameThumbnail> getRandomBatch() {
+    return randomBatch;
+  }
 
   public void updateThumbnails() {
     if (data.randomBatchScrollPane != null) {
       data.randomBatchPanel.remove(data.randomBatchScrollPane);
       data.randomBatchScrollPane = null;
     }
-    int panelWidth = IMG_WIDTH + 2 * BORDER_SIZE;
-    int panelHeight = (IMG_HEIGHT + BORDER_SIZE) * randomBatch.size();
+    int panelWidth = FlameThumbnail.IMG_WIDTH + 2 * FlameThumbnail.BORDER_SIZE;
+    int panelHeight = (FlameThumbnail.IMG_HEIGHT + FlameThumbnail.BORDER_SIZE) * randomBatch.size();
     JPanel batchPanel = new JPanel();
     batchPanel.setLayout(null);
     batchPanel.setSize(panelWidth, panelHeight);
@@ -2932,7 +2691,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
-      imgPanel.setLocation(BORDER_SIZE, i * IMG_HEIGHT + (i + 1) * BORDER_SIZE);
+      imgPanel.setLocation(FlameThumbnail.BORDER_SIZE, i * FlameThumbnail.IMG_HEIGHT + (i + 1) * FlameThumbnail.BORDER_SIZE);
       randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
       addRemoveButton(imgPanel, idx);
@@ -2969,7 +2728,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (int i = 0; i < maxCount; i++) {
       int palettePoints = 7 + (int) (Math.random() * 24.0);
       boolean fadePaletteColors = Math.random() > 0.06;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH / 2, IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
       thumbnail = new FlameThumbnail(sample.getFlame(), null);
@@ -4476,10 +4235,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  @Override
   public void showStatusMessage(String pStatus) {
     tinaFrame.setTitle((pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
 
+  @Override
   public void showStatusMessage(Flame pFlame, String pStatus) {
     if (pFlame == null)
       return;
@@ -4499,6 +4260,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
   }
 
+  @Override
   public void showStatusMessage(RGBPalette pGradient, String pStatus) {
     if (pGradient == null)
       return;
@@ -5647,6 +5409,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   DetachedPreviewWindow detachedPreviewWindow;
   DetachedPreviewController detachedPreviewController;
+
+  @Override
+  public DetachedPreviewController getDetachedPreviewController() {
+    return detachedPreviewController;
+  }
 
   public void openDetachedPreview() {
     closeDetachedPreview();

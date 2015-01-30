@@ -456,11 +456,13 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         (rawColors.size() != pSrc.rawColors.size())) {
       return false;
     }
-    for (int i = 0; i < PALETTE_SIZE; i++) {
-      RGBColor color = rawColors.get(i);
-      RGBColor srcColor = pSrc.rawColors.get(i);
-      if (!color.isEqual(srcColor)) {
-        return false;
+    if (rawColors.size() > 0) {
+      for (int i = 0; i < PALETTE_SIZE; i++) {
+        RGBColor color = rawColors.get(i);
+        RGBColor srcColor = pSrc.rawColors.get(i);
+        if (!color.isEqual(srcColor)) {
+          return false;
+        }
       }
     }
     return true;

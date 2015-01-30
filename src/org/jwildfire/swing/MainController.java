@@ -331,7 +331,7 @@ public class MainController {
     errorHandler.handleError(pThrowable);
   }
 
-  private final static int DESIGNED_WINDOW_MENU_COUNT = 7;
+  private final static int DESIGNED_WINDOW_MENU_COUNT = 8;
 
   public void refreshWindowMenu() {
     while (windowMenu.getItemCount() > DESIGNED_WINDOW_MENU_COUNT)

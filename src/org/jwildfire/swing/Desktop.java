@@ -59,6 +59,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.eden.swing.EDENInternalFrame;
+import org.jwildfire.create.iflames.swing.IFlamesInternalFrame;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
@@ -86,6 +87,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem operatorsMenuItem = null;
   private JCheckBoxMenuItem tinaMenuItem = null;
   private JCheckBoxMenuItem edenMenuItem = null;
+  private JCheckBoxMenuItem iflamesMenuItem = null;
   private JMenuItem openMenuItem = null;
   private Prefs prefs = null;
 
@@ -103,6 +105,7 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
+      mainDesktopPane.add(getIFlamesInternalFrame(), null);
       mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
       mainDesktopPane.add(getWelcomeInternalFrame(), null);
@@ -169,6 +172,9 @@ public class Desktop extends JApplet {
       EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
       edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
 
+      IFlamesInternalFrame iflamesInternalFrame = (IFlamesInternalFrame) getIFlamesInternalFrame();
+      iflamesInternalFrame.createController(mainController, errorHandler);
+
       tinaController.setMainController(mainController);
 
       scriptFrame.setMainController(mainController);
@@ -217,6 +223,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
+      windowMenu.add(getIFlamesMenuItem());
       windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
       windowMenu.add(getLookAndFeelMenuItem());
@@ -280,6 +287,20 @@ public class Desktop extends JApplet {
       });
     }
     return edenMenuItem;
+  }
+
+  private JCheckBoxMenuItem getIFlamesMenuItem() {
+    if (iflamesMenuItem == null) {
+      iflamesMenuItem = new JCheckBoxMenuItem();
+      iflamesMenuItem.setText("IFlames");
+      iflamesMenuItem.setEnabled(true);
+      iflamesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          iflamesMenuItem_actionPerformed(e);
+        }
+      });
+    }
+    return iflamesMenuItem;
   }
 
   /**
@@ -1438,6 +1459,28 @@ public class Desktop extends JApplet {
     return edenInternalFrame;
   }
 
+  private JInternalFrame getIFlamesInternalFrame() {
+    if (iflamesInternalFrame == null) {
+      iflamesInternalFrame = new IFlamesInternalFrame();
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_IFLAMES);
+      iflamesInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
+      iflamesInternalFrame.setSize(wPrefs.getWidth(800), wPrefs.getHeight(600));
+      iflamesInternalFrame
+          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            public void internalFrameDeactivated(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+
+            public void internalFrameClosed(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+          });
+    }
+    return iflamesInternalFrame;
+  }
+
   /**
    * @param args
    */
@@ -1834,6 +1877,21 @@ public class Desktop extends JApplet {
     }
   }
 
+  private void iflamesMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
+    if (iflamesMenuItem.isSelected()) {
+      iflamesInternalFrame.setVisible(true);
+      try {
+        iflamesInternalFrame.setSelected(true);
+      }
+      catch (PropertyVetoException ex) {
+        ex.printStackTrace();
+      }
+    }
+    else {
+      iflamesInternalFrame.setVisible(false);
+    }
+  }
+
   private void openMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     try {
       mainController.loadImage(true);
@@ -1986,12 +2044,14 @@ public class Desktop extends JApplet {
   private JInternalFrame tinaInternalFrame = null;
 
   private JInternalFrame edenInternalFrame = null;
+  private JInternalFrame iflamesInternalFrame = null;
   private JInternalFrame welcomeInternalFrame = null;
   private JInternalFrame systemInfoInternalFrame = null;
   private JInternalFrame lookAndFeelInternalFrame = null;
 
   void enableControls() {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
+    iflamesMenuItem.setSelected(iflamesInternalFrame.isVisible());
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
@@ -2144,6 +2204,16 @@ public class Desktop extends JApplet {
       wPrefs.setWidth(size.width);
       wPrefs.setHeight(size.height);
       wPrefs.setMaximized(tinaInternalFrame.isMaximum());
+    }
+    if (iflamesInternalFrame != null && iflamesInternalFrame.isVisible()) {
+      Dimension size = iflamesInternalFrame.getSize();
+      Point pos = iflamesInternalFrame.getLocation();
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_IFLAMES);
+      wPrefs.setLeft(pos.x);
+      wPrefs.setTop(pos.y);
+      wPrefs.setWidth(size.width);
+      wPrefs.setHeight(size.height);
+      wPrefs.setMaximized(iflamesInternalFrame.isMaximum());
     }
     try {
       prefs.saveToFromFile();

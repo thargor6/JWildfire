@@ -16,8 +16,9 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.base.Flame;
+import java.util.List;
 
-public interface FlameHolder {
-  public Flame getFlame();
+public interface RandomBatchHolder {
+  List<FlameThumbnail> getRandomBatch();
+
 }

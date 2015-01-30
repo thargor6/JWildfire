@@ -17,7 +17,12 @@
 package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.palette.RGBPalette;
 
-public interface FlameHolder {
-  public Flame getFlame();
+public interface MessageHelper {
+  void showStatusMessage(String pStatus);
+
+  void showStatusMessage(Flame pFlame, String pStatus);
+
+  void showStatusMessage(RGBPalette pGradient, String pStatus);
 }

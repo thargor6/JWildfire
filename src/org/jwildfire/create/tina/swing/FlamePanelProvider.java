@@ -16,8 +16,11 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
+import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 
-public interface FlameHolder {
-  public Flame getFlame();
+public interface FlamePanelProvider {
+  FlamePanel getFlamePanel();
+
+  FlamePanelConfig getFlamePanelConfig();
 }
