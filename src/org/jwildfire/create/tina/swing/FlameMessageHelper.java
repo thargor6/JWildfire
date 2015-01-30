@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.swing;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
-public interface MessageHelper {
+public interface FlameMessageHelper {
   void showStatusMessage(String pStatus);
 
   void showStatusMessage(Flame pFlame, String pStatus);

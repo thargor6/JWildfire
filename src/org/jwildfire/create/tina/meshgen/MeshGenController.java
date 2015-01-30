@@ -880,7 +880,7 @@ public class MeshGenController {
             @Override
             public void succeeded(double pElapsedTime) {
               try {
-                tinaController.showStatusMessage(currBaseFlame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                tinaController.getMessageHelper().showStatusMessage(currBaseFlame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);
@@ -1023,7 +1023,7 @@ public class MeshGenController {
             @Override
             public void succeeded(double pElapsedTime) {
               try {
-                tinaController.showStatusMessage("Mesh creation time: " + Tools.doubleToString(pElapsedTime) + "s");
+                tinaController.getMessageHelper().showStatusMessage("Mesh creation time: " + Tools.doubleToString(pElapsedTime) + "s");
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);
@@ -1240,7 +1240,7 @@ public class MeshGenController {
       Tools.writeUTF8Textfile(pFilename, scene.getProduct());
       long t1 = System.currentTimeMillis();
       double elapsedTime = (t1 - t0) / 1000.0;
-      tinaController.showStatusMessage(currBaseFlame, "Scene \"" + new File(pFilename).getName() + "\" exported, elapsed time: " + Tools.doubleToString(elapsedTime) + "s");
+      tinaController.getMessageHelper().showStatusMessage(currBaseFlame, "Scene \"" + new File(pFilename).getName() + "\" exported, elapsed time: " + Tools.doubleToString(elapsedTime) + "s");
     }
     catch (Exception ex) {
       errorHandler.handleError(ex);

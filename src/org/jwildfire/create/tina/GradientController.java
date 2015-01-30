@@ -514,7 +514,7 @@ public class GradientController {
           RGBPalette gradient = layer.getPalette().makeCopy();
           gradient.setFlam3Name(file.getName());
           new MapGradientWriter().writeGradient(gradient, file.getAbsolutePath());
-          tinaController.showStatusMessage(gradient, "gradient saved to disc");
+          tinaController.getMessageHelper().showStatusMessage(gradient, "gradient saved to disc");
         }
       }
     }

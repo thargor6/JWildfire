@@ -42,13 +42,13 @@ public class FlamePreviewHelper {
   private final ErrorHandler errorHandler;
   private final DetachedPreviewProvider detachedPreviewProvider;
   private final FlamePanelProvider flamePanelProvider;
-  private final MessageHelper messageHelper;
+  private final FlameMessageHelper messageHelper;
   private final RandomBatchHolder randomBatchHolder;
 
   public FlamePreviewHelper(ErrorHandler pErrorHandler, JPanel pCenterPanel, JToggleButton pToggleTransparencyButton, JToggleButton pLayerAppendBtn, JToggleButton pLayerPreviewBtn,
       ProgressUpdater pMainProgressUpdater, FlameHolder pFlameHolder, LayerHolder pLayerHolder,
       DetachedPreviewProvider pDetachedPreviewProvider, FlamePanelProvider pFlamePanelProvider,
-      MessageHelper pMessageHelper, RandomBatchHolder pRandomBatchHolder) {
+      FlameMessageHelper pMessageHelper, RandomBatchHolder pRandomBatchHolder) {
     prefs = Prefs.getPrefs();
     errorHandler = pErrorHandler;
     centerPanel = pCenterPanel;

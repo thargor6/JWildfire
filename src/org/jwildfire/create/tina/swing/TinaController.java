@@ -50,8 +50,8 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
@@ -68,6 +68,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.iflames.swing.JInternalFrameFlameMessageHelper;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.JWFScriptController;
@@ -138,7 +139,7 @@ import com.l2fprod.common.swing.JFontChooser;
 import com.l2fprod.common.util.ResourceManager;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
-    DetachedPreviewProvider, FlamePanelProvider, MessageHelper, RandomBatchHolder {
+    DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder {
   public static final int PAGE_INDEX = 0;
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
@@ -174,9 +175,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
 
-  private final JInternalFrame tinaFrame;
+  private final TinaInternalFrame tinaFrame;
   private final String tinaFrameTitle;
   private final JPanel centerPanel;
+  private final FlameMessageHelper messageHelper;
   private final FlamePreviewHelper flamePreviewHelper;
   private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
@@ -545,7 +547,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.toggleVariationsButton = parameterObject.pToggleVariationsButton;
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
     data.randomizeButton = parameterObject.randomizeButton;
-    mainProgressUpdater = parameterObject.pMainProgressUpdater;
+    mainProgressUpdater = new RenderProgressUpdater(this);
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
     data.shadingCmb = parameterObject.pShadingCmb;
@@ -706,9 +708,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     gradientControls = new GradientControlsDelegate(this, data, rootTabbedPane);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
 
+    messageHelper = new JInternalFrameFlameMessageHelper(tinaFrame);
+
     flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, data.toggleTransparencyButton,
         data.layerAppendBtn, data.layerPreviewBtn, mainProgressUpdater, this, this,
-        this, this, this, this);
+        this, this, messageHelper, this);
 
     registerMotionPropertyControls();
 
@@ -1975,7 +1979,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
           if (appendToFlame(flame)) {
             refreshUI();
-            showStatusMessage(getCurrFlame(), "opened from disc and added as new layers");
+            messageHelper.showStatusMessage(getCurrFlame(), "opened from disc and added as new layers");
           }
         }
         else {
@@ -1989,7 +1993,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           updateThumbnails();
           setupProfiles(getCurrFlame());
           refreshUI();
-          showStatusMessage(getCurrFlame(), "opened from disc");
+          messageHelper.showStatusMessage(getCurrFlame(), "opened from disc");
         }
       }
     }
@@ -2134,7 +2138,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           File file = chooser.getSelectedFile();
           new FlameWriter().writeFlame(getCurrFlame(), file.getAbsolutePath());
           getCurrFlame().setLastFilename(file.getName());
-          showStatusMessage(getCurrFlame(), "flame saved to disc");
+          messageHelper.showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
       }
@@ -3627,7 +3631,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           setupProfiles(getCurrFlame());
           updateThumbnails();
           refreshUI();
-          showStatusMessage(getCurrFlame(), "opened from clipboard");
+          messageHelper.showStatusMessage(getCurrFlame(), "opened from clipboard");
         }
       }
     }
@@ -3639,7 +3643,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
     if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
       if (appendToFlame(pFlame)) {
-        showStatusMessage(pFlame, "added as new layers");
+        messageHelper.showStatusMessage(pFlame, "added as new layers");
         setLastGradient(getCurrLayer().getPalette());
       }
     }
@@ -3653,13 +3657,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         setupProfiles(getCurrFlame());
         randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
         updateThumbnails();
-        showStatusMessage(getCurrFlame(), "imported into editor");
+        messageHelper.showStatusMessage(getCurrFlame(), "imported into editor");
       }
       else {
         _currFlame = pFlame;
         undoManager.initUndoStack(_currFlame);
         setupProfiles(getCurrFlame());
-        showStatusMessage(getCurrFlame(), "imported into editor");
+        messageHelper.showStatusMessage(getCurrFlame(), "imported into editor");
       }
       setLastGradient(getCurrLayer().getPalette());
     }
@@ -3688,7 +3692,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         //        catch (Throwable ex) {
         //          ex.printStackTrace();
         //        }
-        showStatusMessage(getCurrFlame(), "flame saved to clipboard");
+        messageHelper.showStatusMessage(getCurrFlame(), "flame saved to clipboard");
       }
     }
     catch (Throwable ex) {
@@ -4235,45 +4239,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  @Override
-  public void showStatusMessage(String pStatus) {
-    tinaFrame.setTitle((pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
-  }
-
-  @Override
-  public void showStatusMessage(Flame pFlame, String pStatus) {
-    if (pFlame == null)
-      return;
-    String prefix;
-    if (pFlame.getName() != null && pFlame.getName().length() > 0) {
-      prefix = "Flame \"" + pFlame.getName() + "\"";
-    }
-    else {
-      prefix = "Unnamed flame";
-    }
-    if (pFlame.getLastFilename() != null && pFlame.getLastFilename().length() > 0) {
-      prefix += " (" + pFlame.getLastFilename() + ") ";
-    }
-    else {
-      prefix += " ";
-    }
-    tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
-  }
-
-  @Override
-  public void showStatusMessage(RGBPalette pGradient, String pStatus) {
-    if (pGradient == null)
-      return;
-    String prefix;
-    if (pGradient.getFlam3Name() != null && pGradient.getFlam3Name().length() > 0) {
-      prefix = "Gradient \"" + pGradient.getFlam3Name() + "\"";
-    }
-    else {
-      prefix = "Unnamed gradient";
-    }
-    tinaFrame.setTitle(prefix + (pStatus != null && pStatus.length() > 0 ? ": " + pStatus : ""));
-  }
-
   public void snapshotButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
@@ -4289,7 +4254,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (getCurrFlame() != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
         new FlameWriter().writeFlame(getCurrFlame(), filename);
-        showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
+        messageHelper.showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
       }
     }
     catch (Throwable ex) {
@@ -4361,7 +4326,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             @Override
             public void succeeded(double pElapsedTime) {
               try {
-                showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
+                messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
                 mainController.loadImage(file.getAbsolutePath(), false);
               }
               catch (Throwable ex) {
@@ -4442,7 +4407,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
       if (s != null) {
         flame.setName(s);
-        showStatusMessage(flame, "Title changed");
+        messageHelper.showStatusMessage(flame, "Title changed");
       }
     }
   }
@@ -5543,5 +5508,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void gradientColorMapLocalColorScaleSlider_changed() {
     layerSliderChanged(data.gradientColorMapLocalColorScaleSlider, data.gradientColorMapLocalColorScaleREd, "gradientMapLocalColorScale", TinaController.SLIDER_SCALE_CENTRE);
+  }
+
+  public FlameMessageHelper getMessageHelper() {
+    return messageHelper;
+  }
+
+  @Override
+  public JProgressBar getRenderProgressBar() {
+    return tinaFrame.getRenderProgressBar();
   }
 }

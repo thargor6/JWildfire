@@ -4627,7 +4627,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformMoveTrianglesButton(),
         getMouseTransformEditFocusPointButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
-        new MainProgressUpdater(this), getAffineResetTransformButton(), getCreatePaletteColorsTable(),
+        getAffineResetTransformButton(), getCreatePaletteColorsTable(),
         getShadingCmb(), getShadingAmbientREd(), getShadingAmbientSlider(), getShadingDiffuseREd(), getShadingDiffuseSlider(),
         getShadingPhongREd(), getShadingPhongSlider(), getShadingPhongSizeREd(), getShadingPhongSizeSlider(), getShadingLightCmb(),
         getShadingLightXREd(), getShadingLightXSlider(), getShadingLightYREd(), getShadingLightYSlider(), getShadingLightZREd(),
@@ -7592,7 +7592,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return affineEditPostTransformSmallButton;
   }
 
-  JProgressBar getRenderProgressBar() {
+  public JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);

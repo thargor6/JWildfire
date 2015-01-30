@@ -38,7 +38,19 @@ src/org/jocl/samples
 src/org/sunflow
 FasterMath*
 MathTest*
-IFlame*
+DiscretePixel*
+DynamicProperties*
+FlameParams*
+IFlamesAnimator*
+IFlamesFunc*
+IFlamesIterator*
+ImageParams*
+MotionParams*
+Params*
+Particle*
+ParticleList*
+
+
 
 
 lib/colt*

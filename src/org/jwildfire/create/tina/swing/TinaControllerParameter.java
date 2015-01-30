@@ -19,7 +19,6 @@ package org.jwildfire.create.tina.swing;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -39,7 +38,7 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.swing.ErrorHandler;
 
 public class TinaControllerParameter {
-  public JInternalFrame pTinaFrame;
+  public TinaInternalFrame pTinaFrame;
   public ErrorHandler pErrorHandler;
   public Prefs pPrefs;
   public JPanel pCenterPanel;
@@ -187,7 +186,6 @@ public class TinaControllerParameter {
   public JToggleButton mouseTransformEditTriangleViewButton;
   public JButton affineRotateEditMotionCurveBtn;
   public JButton affineScaleEditMotionCurveBtn;
-  public ProgressUpdater pMainProgressUpdater;
   public JButton pAffineResetTransformButton;
   public JTable pCreatePaletteColorsTable;
   public JComboBox pShadingCmb;
@@ -588,13 +586,13 @@ public class TinaControllerParameter {
   public JWFNumberField gradientColorMapLocalColorScaleREd;
   public JSlider gradientColorMapLocalColorScaleSlider;
 
-  public void setParams1(JInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
+  public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
       JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
       JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider, JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd, JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JWFNumberField pPaletteFrequencyREd, JSlider pPaletteFrequencySlider, JWFNumberField pPaletteBlurREd, JSlider pPaletteBlurSlider, JButton pPaletteInvertBtn, JButton pPaletteReverseBtn, JTable pTransformationsTable, JWFNumberField pAffineC00REd, JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd, JWFNumberField pAffineRotateAmountREd,
       JWFNumberField pAffineScaleAmountREd, JWFNumberField pAffineMoveHorizAmountREd, JButton pAffineRotateLeftButton, JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton, JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pAddLinkedTransformationButton, JButton pDuplicateTransformationButton, JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, TinaNonlinearControlsRow[] pTinaNonlinearControlsRows, JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider,
-      JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, ProgressUpdater pMainProgressUpdater, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable, JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider, JWFNumberField pShadingPhongREd,
+      JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable, JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider, JWFNumberField pShadingPhongREd,
       JSlider pShadingPhongSlider, JWFNumberField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider, JComboBox pShadingLightCmb, JWFNumberField pShadingLightXREd, JSlider pShadingLightXSlider, JWFNumberField pShadingLightYREd, JSlider pShadingLightYSlider, JWFNumberField pShadingLightZREd, JSlider pShadingLightZSlider, JWFNumberField pShadingLightRedREd, JSlider pShadingLightRedSlider, JWFNumberField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JWFNumberField pShadingLightBlueREd, JSlider pShadingLightBlueSlider, JWFNumberField pShadingDistanceColorRadiusREd, JSlider pShadingDistanceColorRadiusSlider, JWFNumberField pShadingDistanceColorScaleREd, JSlider pShadingDistanceColorScaleSlider, JWFNumberField pShadingDistanceColorExponentREd,
       JSlider pShadingDistanceColorExponentSlider, JWFNumberField pShadingDistanceColorOffsetXREd, JSlider pShadingDistanceColorOffsetXSlider, JWFNumberField pShadingDistanceColorOffsetYREd, JSlider pShadingDistanceColorOffsetYSlider, JWFNumberField pShadingDistanceColorOffsetZREd, JSlider pShadingDistanceColorOffsetZSlider, JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar, JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton, JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton, JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton,
       JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JWFNumberField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider, JWFNumberField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JTextPane pHelpPane, JTextPane pFAQPane, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb,
@@ -723,7 +721,6 @@ public class TinaControllerParameter {
     this.pMouseTransformViewButton = pMouseTransformViewButton;
     this.pAffineEditPostTransformButton = pAffineEditPostTransformButton;
     this.pAffineEditPostTransformSmallButton = pAffineEditPostTransformSmallButton;
-    this.pMainProgressUpdater = pMainProgressUpdater;
     this.pAffineResetTransformButton = pAffineResetTransformButton;
     this.pCreatePaletteColorsTable = pCreatePaletteColorsTable;
     this.pShadingCmb = pShadingCmb;
