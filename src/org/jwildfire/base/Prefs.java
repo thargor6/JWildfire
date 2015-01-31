@@ -122,6 +122,10 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
 
+  static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
+  static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
+  static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -151,6 +155,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
+
+  @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
+  private String iflamesFlameLibraryPath = null;
+
+  @Property(description = "Path to the images building the image-library for the IFlames", category = PropertyCategory.IFLAMES)
+  private String iflamesImageLibraryPath = null;
+
+  @Property(description = "Automatically load the flame- and image-library when opening the IFlames-window", category = PropertyCategory.IFLAMES)
+  private boolean iflamesLoadLibraryAtStartup = false;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -643,6 +656,10 @@ public class Prefs extends ManagedObject {
     for (MacroButton macroButton : pSrc.tinaMacroButtons) {
       tinaMacroButtons.add((MacroButton) macroButton.makeCopy());
     }
+
+    iflamesFlameLibraryPath = pSrc.iflamesFlameLibraryPath;
+    iflamesImageLibraryPath = pSrc.iflamesImageLibraryPath;
+    iflamesLoadLibraryAtStartup = pSrc.iflamesLoadLibraryAtStartup;
   }
 
   public int getTinaRenderThreads() {
@@ -1161,6 +1178,30 @@ public class Prefs extends ManagedObject {
 
   public void setTinaMutaGenMutationTypeVert2(String pTinaMutaGenMutationTypeVert2) {
     tinaMutaGenMutationTypeVert2 = pTinaMutaGenMutationTypeVert2;
+  }
+
+  public String getIflamesFlameLibraryPath() {
+    return iflamesFlameLibraryPath;
+  }
+
+  public void setIflamesFlameLibraryPath(String pIflamesFlameLibraryPath) {
+    iflamesFlameLibraryPath = pIflamesFlameLibraryPath;
+  }
+
+  public String getIflamesImageLibraryPath() {
+    return iflamesImageLibraryPath;
+  }
+
+  public void setIflamesImageLibraryPath(String pIflamesImageLibraryPath) {
+    iflamesImageLibraryPath = pIflamesImageLibraryPath;
+  }
+
+  public boolean isIflamesLoadLibraryAtStartup() {
+    return iflamesLoadLibraryAtStartup;
+  }
+
+  public void setIflamesLoadLibraryAtStartup(boolean pIflamesLoadLibraryAtStartup) {
+    iflamesLoadLibraryAtStartup = pIflamesLoadLibraryAtStartup;
   }
 
 }

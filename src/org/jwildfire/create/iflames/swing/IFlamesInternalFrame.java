@@ -92,6 +92,27 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField structureThresholdField;
   private JWFNumberField structureDensityField;
   private JComboBox shapeDistributionCmb;
+  private JButton refreshLibraryButton;
+  private JPanel panel_4;
+  private JWFNumberField iflameBrightnessField;
+  private JWFNumberField imageBrightnessField;
+  private JWFNumberField iflameDensityField;
+  private JPanel panel_7;
+  private JWFNumberField baseFlameSizeField;
+  private JWFNumberField baseFlameSizeVariationField;
+  private JWFNumberField baseFlameRotateAlphaField;
+  private JWFNumberField baseFlameRotateAlphaVariationField;
+  private JWFNumberField baseFlameCentreXField;
+  private JWFNumberField baseFlameCentreYField;
+  private JWFNumberField baseFlameRotateBetaField;
+  private JWFNumberField baseFlameRotateBetaVariationField;
+  private JWFNumberField baseFlameRotateGammaField;
+  private JWFNumberField baseFlameRotateGammaVariationField;
+  private JWFNumberField baseFlameCentreZField;
+  private JButton baseFlameFromClipboardButton;
+  private JButton baseFlameToClipboardButton;
+  private JButton baseFlameClearButton;
+  private JButton baseFlameClearAllButton;
 
   public IFlamesInternalFrame() {
     super();
@@ -140,7 +161,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       newButton.setActionCommand("New from scratch");
       newButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/document-new-7.png")));
 
-      newButton.setBounds(205, 10, 143, 48);
+      newButton.setBounds(215, 10, 143, 48);
       mainTopPanel.add(newButton);
 
       loadIFlameFromClipboardButton = new JButton();
@@ -154,7 +175,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       loadIFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
       loadIFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
       loadIFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      loadIFlameFromClipboardButton.setBounds(360, 10, 143, 24);
+      loadIFlameFromClipboardButton.setBounds(370, 10, 143, 24);
       mainTopPanel.add(loadIFlameFromClipboardButton);
 
       saveIFlameToClipboardButton = new JButton();
@@ -169,7 +190,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       saveIFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
       saveIFlameToClipboardButton.setIconTextGap(2);
       saveIFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      saveIFlameToClipboardButton.setBounds(503, 10, 143, 24);
+      saveIFlameToClipboardButton.setBounds(513, 10, 143, 24);
       mainTopPanel.add(saveIFlameToClipboardButton);
 
       loadIFlameButton = new JButton();
@@ -183,7 +204,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       loadIFlameButton.setMinimumSize(new Dimension(100, 24));
       loadIFlameButton.setMaximumSize(new Dimension(32000, 24));
       loadIFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      loadIFlameButton.setBounds(360, 34, 143, 24);
+      loadIFlameButton.setBounds(370, 34, 143, 24);
       mainTopPanel.add(loadIFlameButton);
 
       saveIFlameButton = new JButton();
@@ -198,7 +219,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       saveIFlameButton.setMaximumSize(new Dimension(32000, 24));
       saveIFlameButton.setIconTextGap(2);
       saveIFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      saveIFlameButton.setBounds(503, 34, 143, 24);
+      saveIFlameButton.setBounds(513, 34, 143, 24);
       mainTopPanel.add(saveIFlameButton);
 
       resolutionProfileCmb = new JComboBox();
@@ -224,6 +245,22 @@ public class IFlamesInternalFrame extends JInternalFrame {
       mainProgressBar.setValue(0);
       mainProgressBar.setStringPainted(true);
       mainProgressBar.setPreferredSize(new Dimension(169, 14));
+
+      refreshLibraryButton = new JButton();
+      refreshLibraryButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.reloadLibraryButton_clicked();
+        }
+      });
+      refreshLibraryButton.setText("Refresh Library");
+      refreshLibraryButton.setPreferredSize(new Dimension(125, 52));
+      refreshLibraryButton.setMnemonic(KeyEvent.VK_N);
+      refreshLibraryButton.setMinimumSize(new Dimension(100, 52));
+      refreshLibraryButton.setMaximumSize(new Dimension(32000, 52));
+      refreshLibraryButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      refreshLibraryButton.setActionCommand("New from scratch");
+      refreshLibraryButton.setBounds(60, 10, 143, 48);
+      mainTopPanel.add(refreshLibraryButton);
 
       mainLeftPanel = new JPanel();
       mainLeftPanel.setBorder(new TitledBorder(null, "Image Library", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -286,35 +323,96 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       mainBottomPanel = new JPanel();
       mainBottomPanel.setBorder(new TitledBorder(null, "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      mainBottomPanel.setPreferredSize(new Dimension(10, 200));
+      mainBottomPanel.setPreferredSize(new Dimension(10, 220));
       jContentPane.add(mainBottomPanel, BorderLayout.SOUTH);
       mainBottomPanel.setLayout(new BorderLayout(0, 0));
 
       panel_2 = new JPanel();
-      panel_2.setPreferredSize(new Dimension(240, 10));
+      panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_2.setPreferredSize(new Dimension(346, 10));
       mainBottomPanel.add(panel_2, BorderLayout.WEST);
       panel_2.setLayout(null);
 
       JLabel lblFlame = new JLabel();
-      lblFlame.setBounds(6, 6, 94, 22);
+      lblFlame.setBounds(18, 6, 82, 22);
       panel_2.add(lblFlame);
       lblFlame.setText("Base-Flame");
       lblFlame.setPreferredSize(new Dimension(94, 22));
       lblFlame.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlameCmb = new JComboBox();
-      baseFlameCmb.setBounds(94, 6, 125, 22);
+      baseFlameCmb.setBounds(98, 6, 125, 22);
       panel_2.add(baseFlameCmb);
       baseFlameCmb.setPreferredSize(new Dimension(125, 22));
       baseFlameCmb.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlamePreviewRootPnl = new JPanel();
-      baseFlamePreviewRootPnl.setBounds(6, 33, 213, 131);
+      baseFlamePreviewRootPnl.setBounds(18, 33, 204, 137);
       panel_2.add(baseFlamePreviewRootPnl);
       baseFlamePreviewRootPnl.setPreferredSize(new Dimension(240, 130));
       baseFlamePreviewRootPnl.setMinimumSize(new Dimension(160, 100));
       baseFlamePreviewRootPnl.setMaximumSize(new Dimension(32767, 160));
       baseFlamePreviewRootPnl.setLayout(new BorderLayout(0, 0));
+
+      baseFlameFromClipboardButton = new JButton();
+      baseFlameFromClipboardButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.baseFlameFromClipboardButton_clicked();
+        }
+      });
+      baseFlameFromClipboardButton.setToolTipText("Replace the currently selected base-flame with the content of the clipboard");
+      baseFlameFromClipboardButton.setText("From Clipboard");
+      baseFlameFromClipboardButton.setPreferredSize(new Dimension(125, 24));
+      baseFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
+      baseFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
+      baseFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameFromClipboardButton.setBounds(229, 27, 105, 24);
+      panel_2.add(baseFlameFromClipboardButton);
+
+      baseFlameToClipboardButton = new JButton();
+      baseFlameToClipboardButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.baseFlameToClipboardButton_clicked();
+        }
+      });
+      baseFlameToClipboardButton.setToolTipText("Copy the currently select base-flame to the clipboard");
+      baseFlameToClipboardButton.setText("To Clipboard");
+      baseFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
+      baseFlameToClipboardButton.setMinimumSize(new Dimension(100, 24));
+      baseFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
+      baseFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameToClipboardButton.setBounds(229, 54, 105, 24);
+      panel_2.add(baseFlameToClipboardButton);
+
+      baseFlameClearButton = new JButton();
+      baseFlameClearButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.baseFlameClearButton_clicked();
+        }
+      });
+      baseFlameClearButton.setToolTipText("Clear the currently selected base-flame");
+      baseFlameClearButton.setText("Clear");
+      baseFlameClearButton.setPreferredSize(new Dimension(125, 24));
+      baseFlameClearButton.setMinimumSize(new Dimension(100, 24));
+      baseFlameClearButton.setMaximumSize(new Dimension(32000, 24));
+      baseFlameClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameClearButton.setBounds(229, 100, 105, 24);
+      panel_2.add(baseFlameClearButton);
+
+      baseFlameClearAllButton = new JButton();
+      baseFlameClearAllButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.baseFlameClearAllButton_clicked();
+        }
+      });
+      baseFlameClearAllButton.setToolTipText("Clear all base-flames");
+      baseFlameClearAllButton.setText("Clear all");
+      baseFlameClearAllButton.setPreferredSize(new Dimension(125, 24));
+      baseFlameClearAllButton.setMinimumSize(new Dimension(100, 24));
+      baseFlameClearAllButton.setMaximumSize(new Dimension(32000, 24));
+      baseFlameClearAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameClearAllButton.setBounds(229, 127, 105, 24);
+      panel_2.add(baseFlameClearAllButton);
 
       JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
       mainBottomPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -349,7 +447,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSize.setToolTipText("");
       lblSize.setText("Size");
       lblSize.setPreferredSize(new Dimension(94, 22));
-      lblSize.setName("tinaCameraCamPosXLbl");
       lblSize.setFont(new Font("Dialog", Font.BOLD, 10));
 
       edgesNorthButton = new JToggleButton();
@@ -482,7 +579,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblScalex.setToolTipText("");
       lblScalex.setText("ScaleX");
       lblScalex.setPreferredSize(new Dimension(94, 22));
-      lblScalex.setName("tinaCameraCamPosXLbl");
       lblScalex.setFont(new Font("Dialog", Font.BOLD, 10));
       lblScalex.setBounds(235, 8, 93, 22);
       panel_5.add(lblScalex);
@@ -491,7 +587,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblScaley.setToolTipText("");
       lblScaley.setText("ScaleY");
       lblScaley.setPreferredSize(new Dimension(94, 22));
-      lblScaley.setName("tinaCameraCamPosXLbl");
       lblScaley.setFont(new Font("Dialog", Font.BOLD, 10));
       lblScaley.setBounds(235, 32, 93, 22);
       panel_5.add(lblScaley);
@@ -515,7 +610,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblScalez.setToolTipText("");
       lblScalez.setText("ScaleZ");
       lblScalez.setPreferredSize(new Dimension(94, 22));
-      lblScalez.setName("tinaCameraCamPosXLbl");
       lblScalez.setFont(new Font("Dialog", Font.BOLD, 10));
       lblScalez.setBounds(235, 56, 93, 22);
       panel_5.add(lblScalez);
@@ -554,7 +648,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblOffsetx.setToolTipText("");
       lblOffsetx.setText("OffsetX");
       lblOffsetx.setPreferredSize(new Dimension(94, 22));
-      lblOffsetx.setName("tinaCameraCamPosXLbl");
       lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
       lblOffsetx.setBounds(471, 8, 93, 22);
       panel_5.add(lblOffsetx);
@@ -563,7 +656,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblOffsety.setToolTipText("");
       lblOffsety.setText("OffsetY");
       lblOffsety.setPreferredSize(new Dimension(94, 22));
-      lblOffsety.setName("tinaCameraCamPosXLbl");
       lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
       lblOffsety.setBounds(471, 32, 93, 22);
       panel_5.add(lblOffsety);
@@ -587,7 +679,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblOffsetz.setToolTipText("");
       lblOffsetz.setText("OffsetZ");
       lblOffsetz.setPreferredSize(new Dimension(94, 22));
-      lblOffsetz.setName("tinaCameraCamPosXLbl");
       lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
       lblOffsetz.setBounds(471, 56, 93, 22);
       panel_5.add(lblOffsetz);
@@ -629,7 +720,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblThreshold.setToolTipText("");
       lblThreshold.setText("Threshold");
       lblThreshold.setPreferredSize(new Dimension(94, 22));
-      lblThreshold.setName("tinaCameraCamPosXLbl");
       lblThreshold.setFont(new Font("Dialog", Font.BOLD, 10));
       lblThreshold.setBounds(6, 8, 93, 22);
       panel_5.add(lblThreshold);
@@ -638,7 +728,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblDensity.setToolTipText("");
       lblDensity.setText("Density");
       lblDensity.setPreferredSize(new Dimension(94, 22));
-      lblDensity.setName("tinaCameraCamPosXLbl");
       lblDensity.setFont(new Font("Dialog", Font.BOLD, 10));
       lblDensity.setBounds(6, 34, 93, 22);
       panel_5.add(lblDensity);
@@ -678,10 +767,359 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblShapeDistribution.setToolTipText("");
       lblShapeDistribution.setText("Shape distribution");
       lblShapeDistribution.setPreferredSize(new Dimension(94, 22));
-      lblShapeDistribution.setName("tinaCameraCamPosXLbl");
       lblShapeDistribution.setFont(new Font("Dialog", Font.BOLD, 10));
       lblShapeDistribution.setBounds(6, 58, 93, 22);
       panel_5.add(lblShapeDistribution);
+
+      panel_4 = new JPanel();
+      tabbedPane.addTab("Blending", null, panel_4, null);
+      panel_4.setLayout(null);
+
+      iflameBrightnessField = new JWFNumberField();
+      iflameBrightnessField.setHasMinValue(true);
+      iflameBrightnessField.setValueStep(0.05);
+      iflameBrightnessField.setText("");
+      iflameBrightnessField.setPreferredSize(new Dimension(100, 24));
+      iflameBrightnessField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      iflameBrightnessField.setBounds(101, 6, 100, 24);
+      iflameBrightnessField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.iflameBrightnessField_changed();
+          }
+        }
+      });
+      panel_4.add(iflameBrightnessField);
+
+      JLabel lblIflameBrightness = new JLabel();
+      lblIflameBrightness.setToolTipText("");
+      lblIflameBrightness.setText("IFlame brightness");
+      lblIflameBrightness.setPreferredSize(new Dimension(94, 22));
+      lblIflameBrightness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblIflameBrightness.setBounds(6, 8, 93, 22);
+      panel_4.add(lblIflameBrightness);
+
+      JLabel lblImageBrightness = new JLabel();
+      lblImageBrightness.setToolTipText("");
+      lblImageBrightness.setText("Image brightness");
+      lblImageBrightness.setPreferredSize(new Dimension(94, 22));
+      lblImageBrightness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageBrightness.setBounds(6, 32, 93, 22);
+      panel_4.add(lblImageBrightness);
+
+      imageBrightnessField = new JWFNumberField();
+      imageBrightnessField.setHasMinValue(true);
+      imageBrightnessField.setValueStep(0.05);
+      imageBrightnessField.setText("");
+      imageBrightnessField.setPreferredSize(new Dimension(100, 24));
+      imageBrightnessField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      imageBrightnessField.setBounds(101, 30, 100, 24);
+      imageBrightnessField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.imageBrightnessField_changed();
+          }
+        }
+      });
+      panel_4.add(imageBrightnessField);
+
+      JLabel lblIflameDensity = new JLabel();
+      lblIflameDensity.setToolTipText("");
+      lblIflameDensity.setText("IFlame density");
+      lblIflameDensity.setPreferredSize(new Dimension(94, 22));
+      lblIflameDensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblIflameDensity.setBounds(6, 56, 93, 22);
+      panel_4.add(lblIflameDensity);
+
+      iflameDensityField = new JWFNumberField();
+      iflameDensityField.setMaxValue(1.0);
+      iflameDensityField.setHasMinValue(true);
+      iflameDensityField.setHasMaxValue(true);
+      iflameDensityField.setValueStep(0.05);
+      iflameDensityField.setText("");
+      iflameDensityField.setPreferredSize(new Dimension(100, 24));
+      iflameDensityField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      iflameDensityField.setBounds(101, 54, 100, 24);
+      iflameDensityField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.iflameDensityField_changed();
+          }
+        }
+      });
+      panel_4.add(iflameDensityField);
+
+      panel_7 = new JPanel();
+      tabbedPane.addTab("Base Flame Appearance", null, panel_7, null);
+      panel_7.setLayout(null);
+
+      baseFlameSizeField = new JWFNumberField();
+      baseFlameSizeField.setValueStep(0.05);
+      baseFlameSizeField.setText("");
+      baseFlameSizeField.setPreferredSize(new Dimension(100, 24));
+      baseFlameSizeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameSizeField.setBounds(101, 6, 100, 24);
+      baseFlameSizeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameSizeField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameSizeField);
+
+      JLabel lblSize_1 = new JLabel();
+      lblSize_1.setToolTipText("");
+      lblSize_1.setText("Size");
+      lblSize_1.setPreferredSize(new Dimension(94, 22));
+      lblSize_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSize_1.setBounds(6, 8, 93, 22);
+      panel_7.add(lblSize_1);
+
+      baseFlameSizeVariationField = new JWFNumberField();
+      baseFlameSizeVariationField.setValueStep(0.05);
+      baseFlameSizeVariationField.setText("");
+      baseFlameSizeVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameSizeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameSizeVariationField.setBounds(101, 30, 100, 24);
+      baseFlameSizeVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameSizeVariationField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameSizeVariationField);
+
+      JLabel lblSizeVariaton = new JLabel();
+      lblSizeVariaton.setToolTipText("");
+      lblSizeVariaton.setText("Size variaton");
+      lblSizeVariaton.setPreferredSize(new Dimension(94, 22));
+      lblSizeVariaton.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSizeVariaton.setBounds(6, 32, 93, 22);
+      panel_7.add(lblSizeVariaton);
+
+      JLabel lblRotate = new JLabel();
+      lblRotate.setToolTipText("");
+      lblRotate.setText("Rotate alpha");
+      lblRotate.setPreferredSize(new Dimension(94, 22));
+      lblRotate.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotate.setBounds(229, 8, 130, 22);
+      panel_7.add(lblRotate);
+
+      baseFlameRotateAlphaField = new JWFNumberField();
+      baseFlameRotateAlphaField.setValueStep(0.05);
+      baseFlameRotateAlphaField.setText("");
+      baseFlameRotateAlphaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateAlphaField.setMaxValue(1.0);
+      baseFlameRotateAlphaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateAlphaField.setBounds(361, 6, 100, 24);
+      baseFlameRotateAlphaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateAlphaField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateAlphaField);
+
+      baseFlameRotateAlphaVariationField = new JWFNumberField();
+      baseFlameRotateAlphaVariationField.setValueStep(0.05);
+      baseFlameRotateAlphaVariationField.setText("");
+      baseFlameRotateAlphaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateAlphaVariationField.setMaxValue(1.0);
+      baseFlameRotateAlphaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateAlphaVariationField.setBounds(361, 30, 100, 24);
+      baseFlameRotateAlphaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateAlphaVariationField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateAlphaVariationField);
+
+      JLabel lblRotateVariation = new JLabel();
+      lblRotateVariation.setToolTipText("");
+      lblRotateVariation.setText("Rotate alpha variation");
+      lblRotateVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateVariation.setBounds(229, 32, 130, 22);
+      panel_7.add(lblRotateVariation);
+
+      JLabel lblCentrex = new JLabel();
+      lblCentrex.setToolTipText("");
+      lblCentrex.setText("CentreX");
+      lblCentrex.setPreferredSize(new Dimension(94, 22));
+      lblCentrex.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentrex.setBounds(6, 83, 93, 22);
+      panel_7.add(lblCentrex);
+
+      baseFlameCentreXField = new JWFNumberField();
+      baseFlameCentreXField.setValueStep(0.05);
+      baseFlameCentreXField.setText("");
+      baseFlameCentreXField.setPreferredSize(new Dimension(100, 24));
+      baseFlameCentreXField.setMaxValue(1.0);
+      baseFlameCentreXField.setHasMinValue(true);
+      baseFlameCentreXField.setHasMaxValue(true);
+      baseFlameCentreXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameCentreXField.setBounds(101, 81, 100, 24);
+      baseFlameCentreXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameCentreXField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameCentreXField);
+
+      JLabel lblCentrey = new JLabel();
+      lblCentrey.setToolTipText("");
+      lblCentrey.setText("CentreY");
+      lblCentrey.setPreferredSize(new Dimension(94, 22));
+      lblCentrey.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentrey.setBounds(6, 107, 93, 22);
+      panel_7.add(lblCentrey);
+
+      baseFlameCentreYField = new JWFNumberField();
+      baseFlameCentreYField.setValueStep(0.05);
+      baseFlameCentreYField.setText("");
+      baseFlameCentreYField.setPreferredSize(new Dimension(100, 24));
+      baseFlameCentreYField.setMaxValue(1.0);
+      baseFlameCentreYField.setHasMinValue(true);
+      baseFlameCentreYField.setHasMaxValue(true);
+      baseFlameCentreYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameCentreYField.setBounds(101, 105, 100, 24);
+      baseFlameCentreYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameCentreYField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameCentreYField);
+
+      baseFlameRotateBetaField = new JWFNumberField();
+      baseFlameRotateBetaField.setValueStep(0.05);
+      baseFlameRotateBetaField.setText("");
+      baseFlameRotateBetaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateBetaField.setMaxValue(1.0);
+      baseFlameRotateBetaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateBetaField.setBounds(361, 55, 100, 24);
+      baseFlameRotateBetaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateBetaField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateBetaField);
+
+      JLabel lblRotateBeta = new JLabel();
+      lblRotateBeta.setToolTipText("");
+      lblRotateBeta.setText("Rotate beta");
+      lblRotateBeta.setPreferredSize(new Dimension(94, 22));
+      lblRotateBeta.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateBeta.setBounds(229, 57, 130, 22);
+      panel_7.add(lblRotateBeta);
+
+      JLabel lblRotateBetaVariation = new JLabel();
+      lblRotateBetaVariation.setToolTipText("");
+      lblRotateBetaVariation.setText("Rotate beta variation");
+      lblRotateBetaVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateBetaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateBetaVariation.setBounds(229, 81, 130, 22);
+      panel_7.add(lblRotateBetaVariation);
+
+      baseFlameRotateBetaVariationField = new JWFNumberField();
+      baseFlameRotateBetaVariationField.setValueStep(0.05);
+      baseFlameRotateBetaVariationField.setText("");
+      baseFlameRotateBetaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateBetaVariationField.setMaxValue(1.0);
+      baseFlameRotateBetaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateBetaVariationField.setBounds(361, 79, 100, 24);
+      baseFlameRotateBetaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateBetaVariationField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateBetaVariationField);
+
+      baseFlameRotateGammaField = new JWFNumberField();
+      baseFlameRotateGammaField.setValueStep(0.05);
+      baseFlameRotateGammaField.setText("");
+      baseFlameRotateGammaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateGammaField.setMaxValue(1.0);
+      baseFlameRotateGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateGammaField.setBounds(361, 104, 100, 24);
+      baseFlameRotateGammaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateGammaField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateGammaField);
+
+      JLabel lblRotateGamma = new JLabel();
+      lblRotateGamma.setToolTipText("");
+      lblRotateGamma.setText("Rotate gamma");
+      lblRotateGamma.setPreferredSize(new Dimension(94, 22));
+      lblRotateGamma.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateGamma.setBounds(229, 106, 130, 22);
+      panel_7.add(lblRotateGamma);
+
+      JLabel lblRotateGammaVariation = new JLabel();
+      lblRotateGammaVariation.setToolTipText("");
+      lblRotateGammaVariation.setText("Rotate gamma variation");
+      lblRotateGammaVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateGammaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateGammaVariation.setBounds(229, 130, 130, 22);
+      panel_7.add(lblRotateGammaVariation);
+
+      baseFlameRotateGammaVariationField = new JWFNumberField();
+      baseFlameRotateGammaVariationField.setValueStep(0.05);
+      baseFlameRotateGammaVariationField.setText("");
+      baseFlameRotateGammaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateGammaVariationField.setMaxValue(1.0);
+      baseFlameRotateGammaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameRotateGammaVariationField.setBounds(361, 128, 100, 24);
+      baseFlameRotateGammaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateGammaVariationField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameRotateGammaVariationField);
+
+      baseFlameCentreZField = new JWFNumberField();
+      baseFlameCentreZField.setValueStep(0.05);
+      baseFlameCentreZField.setText("");
+      baseFlameCentreZField.setPreferredSize(new Dimension(100, 24));
+      baseFlameCentreZField.setMaxValue(1.0);
+      baseFlameCentreZField.setHasMinValue(true);
+      baseFlameCentreZField.setHasMaxValue(true);
+      baseFlameCentreZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameCentreZField.setBounds(101, 128, 100, 24);
+      baseFlameCentreZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameCentreZField_changed();
+          }
+        }
+      });
+      panel_7.add(baseFlameCentreZField);
+
+      JLabel lblCentrez = new JLabel();
+      lblCentrez.setToolTipText("");
+      lblCentrez.setText("CentreZ");
+      lblCentrez.setPreferredSize(new Dimension(94, 22));
+      lblCentrez.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentrez.setBounds(6, 130, 93, 22);
+      panel_7.add(lblCentrez);
 
       panel_6 = new JPanel();
       panel_6.setPreferredSize(new Dimension(128, 10));
@@ -783,7 +1221,12 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getEdgesWestButton(), getEdgesEastButton(), getEdgesSouthButton(), getErodeButton(), getDisplayPreprocessedImageButton(),
         getErodeSizeField(), getMaxImageWidthField(), getStructureThresholdField(), getStructureDensityField(),
         getGlobalScaleXField(), getGlobalScaleYField(), getGlobalScaleZField(), getGlobalOffsetXField(),
-        getGlobalOffsetYField(), getGlobalOffsetZField(), getShapeDistributionCmb());
+        getGlobalOffsetYField(), getGlobalOffsetZField(), getShapeDistributionCmb(), getIflameBrightnessField(),
+        getImageBrightnessField(), getIflameDensityField(), getBaseFlameSizeField(), getBaseFlameSizeVariationField(),
+        getBaseFlameRotateAlphaField(), getBaseFlameRotateAlphaVariationField(), getBaseFlameRotateBetaField(),
+        getBaseFlameRotateBetaVariationField(), getBaseFlameRotateGammaField(), getBaseFlameRotateGammaVariationField(),
+        getBaseFlameCentreXField(), getBaseFlameCentreYField(), getBaseFlameCentreZField(), getBaseFlameFromClipboardButton(),
+        getBaseFlameToClipboardButton(), getBaseFlameClearButton(), getBaseFlameClearAllButton());
   }
 
   public JPanel getMainLeftPanel() {
@@ -944,5 +1387,85 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JComboBox getShapeDistributionCmb() {
     return shapeDistributionCmb;
+  }
+
+  public JButton getRefreshLibraryButton() {
+    return refreshLibraryButton;
+  }
+
+  public IFlamesController getIflamesController() {
+    return iflamesController;
+  }
+
+  public JWFNumberField getIflameBrightnessField() {
+    return iflameBrightnessField;
+  }
+
+  public JWFNumberField getImageBrightnessField() {
+    return imageBrightnessField;
+  }
+
+  public JWFNumberField getIflameDensityField() {
+    return iflameDensityField;
+  }
+
+  public JWFNumberField getBaseFlameSizeField() {
+    return baseFlameSizeField;
+  }
+
+  public JWFNumberField getBaseFlameSizeVariationField() {
+    return baseFlameSizeVariationField;
+  }
+
+  public JWFNumberField getBaseFlameCentreXField() {
+    return baseFlameCentreXField;
+  }
+
+  public JWFNumberField getBaseFlameCentreYField() {
+    return baseFlameCentreYField;
+  }
+
+  public JWFNumberField getBaseFlameRotateAlphaField() {
+    return baseFlameRotateAlphaField;
+  }
+
+  public JWFNumberField getBaseFlameRotateAlphaVariationField() {
+    return baseFlameRotateAlphaVariationField;
+  }
+
+  public JWFNumberField getBaseFlameRotateBetaField() {
+    return baseFlameRotateBetaField;
+  }
+
+  public JWFNumberField getBaseFlameRotateBetaVariationField() {
+    return baseFlameRotateBetaVariationField;
+  }
+
+  public JWFNumberField getBaseFlameRotateGammaField() {
+    return baseFlameRotateGammaField;
+  }
+
+  public JWFNumberField getBaseFlameRotateGammaVariationField() {
+    return baseFlameRotateGammaVariationField;
+  }
+
+  public JWFNumberField getBaseFlameCentreZField() {
+    return baseFlameCentreZField;
+  }
+
+  public JButton getBaseFlameFromClipboardButton() {
+    return baseFlameFromClipboardButton;
+  }
+
+  public JButton getBaseFlameToClipboardButton() {
+    return baseFlameToClipboardButton;
+  }
+
+  public JButton getBaseFlameClearButton() {
+    return baseFlameClearButton;
+  }
+
+  public JButton getBaseFlameClearAllButton() {
+    return baseFlameClearAllButton;
   }
 }

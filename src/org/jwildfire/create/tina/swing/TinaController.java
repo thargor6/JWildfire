@@ -1988,7 +1988,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           undoManager.initUndoStack(getCurrFlameStack());
 
           for (int i = flames.size() - 1; i >= 1; i--) {
-            randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
+            randomBatch.add(0, new FlameThumbnail(flames.get(i), null, null));
           }
           updateThumbnails();
           setupProfiles(getCurrFlame());
@@ -2735,7 +2735,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
-      thumbnail = new FlameThumbnail(sample.getFlame(), null);
+      thumbnail = new FlameThumbnail(sample.getFlame(), null, null);
       SimpleImage img = thumbnail.getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
       if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
         randomBatch.add(0, thumbnail);
@@ -3626,7 +3626,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           setCurrFlame(flame);
           undoManager.initUndoStack(getCurrFlame());
           for (int i = flames.size() - 1; i >= 1; i--) {
-            randomBatch.add(0, new FlameThumbnail(flames.get(i), null));
+            randomBatch.add(0, new FlameThumbnail(flames.get(i), null, null));
           }
           setupProfiles(getCurrFlame());
           updateThumbnails();
@@ -3655,7 +3655,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         _currFlame = pFlame.makeCopy();
         undoManager.initUndoStack(_currFlame);
         setupProfiles(getCurrFlame());
-        randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null));
+        randomBatch.add(0, new FlameThumbnail(getCurrFlame(), null, null));
         updateThumbnails();
         messageHelper.showStatusMessage(getCurrFlame(), "imported into editor");
       }
@@ -4244,7 +4244,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       Flame storedFlame = flame.makeCopy();
       undoManager.initUndoStack(storedFlame);
-      randomBatch.add(0, new FlameThumbnail(storedFlame, null));
+      randomBatch.add(0, new FlameThumbnail(storedFlame, null, null));
       updateThumbnails();
     }
   }

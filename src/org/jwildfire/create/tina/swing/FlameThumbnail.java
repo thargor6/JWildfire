@@ -31,15 +31,24 @@ public class FlameThumbnail {
   public static final int BORDER_SIZE = 8;
 
   private Flame flame;
-  SimpleImage preview;
+  private SimpleImage preview;
   private ImagePanel imgPanel;
+  private final ThumbnailCacheKey cacheKey;
 
-  public FlameThumbnail(Flame pFlame, SimpleImage pPreview) {
+  public FlameThumbnail(Flame pFlame, SimpleImage pPreview, ThumbnailCacheKey pCacheKey) {
+    cacheKey = pCacheKey;
     flame = pFlame;
     preview = pPreview;
   }
 
   private void generatePreview(int pQuality) {
+    if (cacheKey != null) {
+      preview = ThumbnailCacheProvider.getThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality);
+      if (preview != null) {
+        return;
+      }
+    }
+
     Prefs prefs = Prefs.getPrefs();
     RenderInfo info = new RenderInfo(IMG_WIDTH, IMG_HEIGHT, RenderMode.PREVIEW);
     Flame renderFlame = flame.makeCopy();
@@ -54,6 +63,9 @@ public class FlameThumbnail {
     renderFlame.setSampleDensity(pQuality);
     RenderedFlame res = renderer.renderFlame(info);
     preview = res.getImage();
+    if (cacheKey != null) {
+      ThumbnailCacheProvider.storeThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality, preview);
+    }
   }
 
   public SimpleImage getPreview(int pQuality) {
@@ -73,6 +85,10 @@ public class FlameThumbnail {
 
   public void setImgPanel(ImagePanel imgPanel) {
     this.imgPanel = imgPanel;
+  }
+
+  public void setPreview(SimpleImage pPreview) {
+    preview = pPreview;
   }
 
 }

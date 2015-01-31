@@ -32,20 +32,34 @@ public class ImageThumbnail {
   private Flame flame;
   private SimpleImage preview;
   private ImagePanel imgPanel;
+  private final ThumbnailCacheKey cacheKey;
 
-  public ImageThumbnail(String pFilename, SimpleImage pPreview) {
+  public ImageThumbnail(String pFilename, SimpleImage pPreview, ThumbnailCacheKey pCacheKey) {
     filename = pFilename;
     preview = pPreview;
+    cacheKey = pCacheKey;
   }
 
   private SimpleImage generatePreview() {
+    if (cacheKey != null) {
+      SimpleImage img = ThumbnailCacheProvider.getThumbnail(cacheKey, IMG_WIDTH);
+      if (img != null) {
+        return img;
+      }
+    }
+
     SimpleImage image;
     try {
-      image = ((SimpleImage) RessourceManager.getImage(filename)).clone();
+      image = ((SimpleImage) RessourceManager.getImage(filename));
+      RessourceManager.clearImage(filename);
       ScaleTransformer scaleT = new ScaleTransformer();
       scaleT.setScaleWidth(IMG_WIDTH);
       scaleT.setAspect(ScaleAspect.KEEP_WIDTH);
       scaleT.transformImage(image);
+
+      if (cacheKey != null) {
+        ThumbnailCacheProvider.storeThumbnail(cacheKey, IMG_WIDTH, image);
+      }
       return image;
     }
     catch (Exception e) {

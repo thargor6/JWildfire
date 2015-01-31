@@ -28,6 +28,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -66,14 +68,16 @@ import org.jwildfire.create.tina.swing.ImageThumbnail;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.RenderProgressBarHolder;
 import org.jwildfire.create.tina.swing.RenderProgressUpdater;
+import org.jwildfire.create.tina.swing.ThumbnailCacheKey;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
-import org.jwildfire.create.tina.variation.iflames.BaseFlameListCreator;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.iflames.ImageParams;
 import org.jwildfire.create.tina.variation.iflames.ShapeDistribution;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -92,8 +96,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JButton undoButton;
   private final JButton redoButton;
   private final JButton renderButton;
-  private final JPanel imageStackPanel;
-  private final JPanel flameStackPanel;
+  private final JPanel imageLibraryPanel;
+  private final JPanel flameLibraryPanel;
   private final JButton loadIFlameButton;
   private final JButton loadIFlameFromClipboardButton;
   private final JButton saveIFlameToClipboardButton;
@@ -120,7 +124,26 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField globalOffsetXField;
   private final JWFNumberField globalOffsetYField;
   private final JWFNumberField globalOffsetZField;
+  @SuppressWarnings("rawtypes")
   private final JComboBox shapeDistributionCmb;
+  private final JWFNumberField iflameBrightnessField;
+  private final JWFNumberField imageBrightnessField;
+  private final JWFNumberField iflameDensityField;
+  private final JWFNumberField baseFlameSizeField;
+  private final JWFNumberField baseFlameSizeVariationField;
+  private final JWFNumberField baseFlameRotateAlphaField;
+  private final JWFNumberField baseFlameRotateAlphaVariationField;
+  private final JWFNumberField baseFlameRotateBetaField;
+  private final JWFNumberField baseFlameRotateBetaVariationField;
+  private final JWFNumberField baseFlameRotateGammaField;
+  private final JWFNumberField baseFlameRotateGammaVariationField;
+  private final JWFNumberField baseFlameCentreXField;
+  private final JWFNumberField baseFlameCentreYField;
+  private final JWFNumberField baseFlameCentreZField;
+  private final JButton baseFlameFromClipboardButton;
+  private final JButton baseFlameToClipboardButton;
+  private final JButton baseFlameClearButton;
+  private final JButton baseFlameClearAllButton;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -135,8 +158,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   @SuppressWarnings("unchecked")
   public IFlamesController(MainController pMainController, ErrorHandler pErrorHandler,
       JInternalFrame pIflamesFrame, JPanel pCenterPanel,
-      JButton pUndoButton, JButton pRedoButton, JButton pRenderButton, JPanel pImageStackPanel,
-      JPanel pFlameStackPanel, JButton pLoadIFlameButton, JButton pLoadIFlameFromClipboardButton,
+      JButton pUndoButton, JButton pRedoButton, JButton pRenderButton, JPanel pImageLibraryPanel,
+      JPanel pFlameLibraryPanel, JButton pLoadIFlameButton, JButton pLoadIFlameFromClipboardButton,
       JButton pSaveIFlameToClipboardButton, JButton pSaveIFlameButton, JButton pRefreshIFlameButton,
       JProgressBar pMainProgressBar, JToggleButton pAutoRefreshButton, JComboBox pBaseFlameCmb,
       JPanel pBaseFlamePreviewRootPnl, JComboBox pResolutionProfileCmb, JToggleButton pEdgesNorthButton,
@@ -145,7 +168,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pMaxImageWidthField, JWFNumberField pStructureThresholdField, JWFNumberField pStructureDensityField,
       JWFNumberField pGlobalScaleXField, JWFNumberField pGlobalScaleYField, JWFNumberField pGlobalScaleZField,
       JWFNumberField pGlobalOffsetXField, JWFNumberField pGlobalOffsetYField, JWFNumberField pGlobalOffsetZField,
-      JComboBox pShapeDistributionCmb) {
+      JComboBox pShapeDistributionCmb, JWFNumberField pIflameBrightnessField, JWFNumberField pImageBrightnessField,
+      JWFNumberField pIflameDensityField, JWFNumberField pBaseFlameSizeField, JWFNumberField pBaseFlameSizeVariationField,
+      JWFNumberField pBaseFlameRotateAlphaField, JWFNumberField pBaseFlameRotateAlphaVariationField,
+      JWFNumberField pBaseFlameRotateBetaField, JWFNumberField pBaseFlameRotateBetaVariationField,
+      JWFNumberField pBaseFlameRotateGammaField, JWFNumberField pBaseFlameRotateGammaVariationField,
+      JWFNumberField pBaseFlameCentreXField, JWFNumberField pBaseFlameCentreYField, JWFNumberField pBaseFlameCentreZField,
+      JButton pBaseFlameFromClipboardButton, JButton pBaseFlameToClipboardButton, JButton pBaseFlameClearButton,
+      JButton pBaseFlameClearAllButton) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -155,8 +185,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     undoButton = pUndoButton;
     redoButton = pRedoButton;
     renderButton = pRenderButton;
-    imageStackPanel = pImageStackPanel;
-    flameStackPanel = pFlameStackPanel;
+    imageLibraryPanel = pImageLibraryPanel;
+    flameLibraryPanel = pFlameLibraryPanel;
     loadIFlameButton = pLoadIFlameButton;
     loadIFlameFromClipboardButton = pLoadIFlameFromClipboardButton;
     saveIFlameToClipboardButton = pSaveIFlameToClipboardButton;
@@ -175,7 +205,20 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     displayPreprocessedImageButton = pDisplayPreprocessedImageButton;
     erodeSizeField = pErodeSizeField;
     maxImageWidthField = pMaxImageWidthField;
-
+    iflameBrightnessField = pIflameBrightnessField;
+    imageBrightnessField = pImageBrightnessField;
+    iflameDensityField = pIflameDensityField;
+    baseFlameSizeField = pBaseFlameSizeField;
+    baseFlameSizeVariationField = pBaseFlameSizeVariationField;
+    baseFlameRotateAlphaField = pBaseFlameRotateAlphaField;
+    baseFlameRotateAlphaVariationField = pBaseFlameRotateAlphaVariationField;
+    baseFlameRotateBetaField = pBaseFlameRotateBetaField;
+    baseFlameRotateBetaVariationField = pBaseFlameRotateBetaVariationField;
+    baseFlameRotateGammaField = pBaseFlameRotateGammaField;
+    baseFlameRotateGammaVariationField = pBaseFlameRotateGammaVariationField;
+    baseFlameCentreXField = pBaseFlameCentreXField;
+    baseFlameCentreYField = pBaseFlameCentreYField;
+    baseFlameCentreZField = pBaseFlameCentreZField;
     structureThresholdField = pStructureThresholdField;
     structureDensityField = pStructureDensityField;
     globalScaleXField = pGlobalScaleXField;
@@ -185,6 +228,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     globalOffsetYField = pGlobalOffsetYField;
     globalOffsetZField = pGlobalOffsetZField;
     shapeDistributionCmb = pShapeDistributionCmb;
+    baseFlameFromClipboardButton = pBaseFlameFromClipboardButton;
+    baseFlameToClipboardButton = pBaseFlameToClipboardButton;
+    baseFlameClearButton = pBaseFlameClearButton;
+    baseFlameClearAllButton = pBaseFlameClearAllButton;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -211,6 +258,17 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     displayPreprocessedImageButton.setSelected(false);
 
     noRefresh = false;
+  }
+
+  private boolean initFlag = false;
+
+  public void init() {
+    if (!initFlag) {
+      if (prefs.isIflamesLoadLibraryAtStartup()) {
+        reloadLibraryButton_clicked();
+      }
+      initFlag = true;
+    }
   }
 
   public void setFlame(Flame pFlame) {
@@ -293,7 +351,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private void refreshPreview() {
     if (displayPreprocessedImageButton.isSelected()) {
       flamePreviewHelper.renderFlameImage(true, true, 1);
-      SimpleImage img = (SimpleImage) RessourceManager.getRessource(BaseFlameListCreator.LAST_PREPROCESSED_IMAGE);
+      ImageParams imageParams = getIFlamesFunc().getImageParams();
+      imageParams.init(new FlameTransformationContext(null, null, 0));
+      SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
       if (img != null) {
         flamePreviewHelper.setImage(img);
         return;
@@ -306,11 +366,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     // TODO
     enableUndoControls();
     boolean hasFlame = getFlame() != null;
-    boolean hasIFlame = hasFlame && getIFlamesFunc() != null;
+    IFlamesFunc iflames = getIFlamesFunc();
+    boolean hasIFlame = iflames != null;
+    String baseFlameXML = hasIFlame ? iflames.getFlameParams(getCurrFlameIndex()).getFlameXML() : null;
+    boolean hasBaseFlame = baseFlameXML != null && baseFlameXML.length() > 0;
     loadIFlameButton.setEnabled(true);
     loadIFlameFromClipboardButton.setEnabled(true);
-    saveIFlameToClipboardButton.setEnabled(hasIFlame);
-    saveIFlameButton.setEnabled(hasIFlame);
+    saveIFlameToClipboardButton.setEnabled(hasFlame);
+    saveIFlameButton.setEnabled(hasFlame);
     edgesNorthButton.setEnabled(hasIFlame);
     edgesWestButton.setEnabled(hasIFlame);
     edgesEastButton.setEnabled(hasIFlame);
@@ -331,6 +394,24 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     globalOffsetYField.setEnabled(hasIFlame);
     globalOffsetZField.setEnabled(hasIFlame);
     shapeDistributionCmb.setEnabled(hasIFlame);
+    iflameBrightnessField.setEnabled(hasIFlame);
+    imageBrightnessField.setEnabled(hasIFlame);
+    iflameDensityField.setEnabled(hasIFlame);
+    baseFlameSizeField.setEnabled(hasIFlame);
+    baseFlameSizeVariationField.setEnabled(hasIFlame);
+    baseFlameRotateAlphaField.setEnabled(hasIFlame);
+    baseFlameRotateAlphaVariationField.setEnabled(hasIFlame);
+    baseFlameRotateBetaField.setEnabled(hasIFlame);
+    baseFlameRotateBetaVariationField.setEnabled(hasIFlame);
+    baseFlameRotateGammaField.setEnabled(hasIFlame);
+    baseFlameRotateGammaVariationField.setEnabled(hasIFlame);
+    baseFlameCentreXField.setEnabled(hasIFlame);
+    baseFlameCentreYField.setEnabled(hasIFlame);
+    baseFlameCentreZField.setEnabled(hasIFlame);
+    baseFlameFromClipboardButton.setEnabled(hasIFlame);
+    baseFlameToClipboardButton.setEnabled(hasBaseFlame);
+    baseFlameClearButton.setEnabled(hasBaseFlame);
+    baseFlameClearAllButton.setEnabled(hasIFlame);
   }
 
   public void saveUndoPoint() {
@@ -455,13 +536,13 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
             throw new Exception("Invalid image");
           }
           prefs.setLastInputImageFile(file);
-          addImageToImageStack(filename);
+          addImageToImageLibrary(filename, new ThumbnailCacheKey(filename));
         }
         catch (Throwable ex) {
           lastError = ex;
         }
       }
-      refreshImageStack();
+      refreshImageLibrary();
       if (lastError != null) {
         errorHandler.handleError(lastError);
       }
@@ -486,66 +567,66 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
           prefs.setLastInputFlameFile(file);
           for (int i = flames.size() - 1; i >= 0; i--) {
-            addFlameToFlameStack(flames.get(i));
+            addFlameToFlameLibrary(flames.get(i), new ThumbnailCacheKey(file.getAbsolutePath(), String.valueOf(i)));
           }
         }
         catch (Throwable ex) {
           lastError = ex;
         }
       }
-      refreshFlameStack();
+      refreshFlameLibrary();
       if (lastError != null) {
         errorHandler.handleError(lastError);
       }
     }
   }
 
-  private final List<ImageThumbnail> imageStack = new ArrayList<ImageThumbnail>();
-  private JScrollPane imageStackScrollPane;
+  private final List<ImageThumbnail> imageLibrary = new ArrayList<ImageThumbnail>();
+  private JScrollPane imageLibraryScrollPane;
 
-  private void refreshImageStack() {
-    if (imageStackScrollPane != null) {
-      imageStackPanel.remove(imageStackScrollPane);
-      imageStackScrollPane = null;
+  private void refreshImageLibrary() {
+    if (imageLibraryScrollPane != null) {
+      imageLibraryPanel.remove(imageLibraryScrollPane);
+      imageLibraryScrollPane = null;
     }
     int panelWidth = ImageThumbnail.IMG_WIDTH + 2 * ImageThumbnail.BORDER_SIZE;
     int panelHeight = 0;
-    for (int i = 0; i < imageStack.size(); i++) {
-      panelHeight += ImageThumbnail.BORDER_SIZE + imageStack.get(i).getPreview().getImageHeight();
+    for (int i = 0; i < imageLibrary.size(); i++) {
+      panelHeight += ImageThumbnail.BORDER_SIZE + imageLibrary.get(i).getPreview().getImageHeight();
     }
     JPanel batchPanel = new JPanel();
     batchPanel.setLayout(null);
     batchPanel.setSize(panelWidth, panelHeight);
     batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
     int yOff = ImageThumbnail.BORDER_SIZE;
-    for (int i = 0; i < imageStack.size(); i++) {
-      SimpleImage img = imageStack.get(i).getPreview();
+    for (int i = 0; i < imageLibrary.size(); i++) {
+      SimpleImage img = imageLibrary.get(i).getPreview();
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(ImageThumbnail.BORDER_SIZE, yOff);
       yOff += img.getImageHeight() + ImageThumbnail.BORDER_SIZE;
-      imageStack.get(i).setImgPanel(imgPanel);
+      imageLibrary.get(i).setImgPanel(imgPanel);
       final int idx = i;
-      addRemoveImageFromStackButton(imgPanel, idx);
+      addRemoveImageFromLibraryButton(imgPanel, idx);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromImageStack(idx);
+            importFromImageLibrary(idx);
           }
         }
       });
       batchPanel.add(imgPanel);
     }
-    imageStackScrollPane = new JScrollPane(batchPanel);
-    imageStackScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    imageStackScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    imageLibraryScrollPane = new JScrollPane(batchPanel);
+    imageLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    imageLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-    imageStackPanel.add(imageStackScrollPane, BorderLayout.CENTER);
-    imageStackScrollPane.validate();
-    imageStackScrollPane.getParent().validate();
+    imageLibraryPanel.add(imageLibraryScrollPane, BorderLayout.CENTER);
+    imageLibraryScrollPane.validate();
+    imageLibraryScrollPane.getParent().validate();
   }
 
-  private void addRemoveImageFromStackButton(ImagePanel pImgPanel, final int pIdx) {
+  private void addRemoveImageFromLibraryButton(ImagePanel pImgPanel, final int pIdx) {
     final int BTN_WIDTH = 20;
     final int BTN_HEIGHT = 20;
     final int BORDER = 0;
@@ -556,7 +637,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     btn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
     btn.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent e) {
-        removeImageFromStack(pIdx);
+        removeImageFromLibrary(pIdx);
       }
     });
     pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
@@ -564,70 +645,70 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     pImgPanel.invalidate();
   }
 
-  public void importFromImageStack(int pIdx) {
-    if (pIdx >= 0 && pIdx < imageStack.size() && getIFlamesFunc() != null) {
-      String filename = imageStack.get(pIdx).getFilename();
+  public void importFromImageLibrary(int pIdx) {
+    if (pIdx >= 0 && pIdx < imageLibrary.size() && getIFlamesFunc() != null) {
+      String filename = imageLibrary.get(pIdx).getFilename();
       saveUndoPoint();
       getIFlamesFunc().getImageParams().setImageFilename(filename);
       refreshIFlame();
     }
   }
 
-  protected void removeImageFromStack(int pIdx) {
-    imageStack.remove(pIdx);
-    refreshImageStack();
+  protected void removeImageFromLibrary(int pIdx) {
+    imageLibrary.remove(pIdx);
+    refreshImageLibrary();
   }
 
-  private void addImageToImageStack(String pFilename) {
-    imageStack.add(0, new ImageThumbnail(pFilename, null));
+  private void addImageToImageLibrary(String pFilename, ThumbnailCacheKey pCacheKey) {
+    imageLibrary.add(0, new ImageThumbnail(pFilename, null, pCacheKey));
   }
 
-  private final List<FlameThumbnail> flameStack = new ArrayList<FlameThumbnail>();
-  private JScrollPane flameStackScrollPane;
+  private final List<FlameThumbnail> flameLibrary = new ArrayList<FlameThumbnail>();
+  private JScrollPane flameLibraryScrollPane;
 
-  private void refreshFlameStack() {
-    if (flameStackScrollPane != null) {
-      flameStackPanel.remove(flameStackScrollPane);
-      flameStackScrollPane = null;
+  private void refreshFlameLibrary() {
+    if (flameLibraryScrollPane != null) {
+      flameLibraryPanel.remove(flameLibraryScrollPane);
+      flameLibraryScrollPane = null;
     }
     int panelWidth = FlameThumbnail.IMG_WIDTH + 2 * FlameThumbnail.BORDER_SIZE;
-    int panelHeight = (FlameThumbnail.IMG_HEIGHT + FlameThumbnail.BORDER_SIZE) * flameStack.size();
+    int panelHeight = (FlameThumbnail.IMG_HEIGHT + FlameThumbnail.BORDER_SIZE) * flameLibrary.size();
     JPanel batchPanel = new JPanel();
     batchPanel.setLayout(null);
     batchPanel.setSize(panelWidth, panelHeight);
     batchPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-    for (int i = 0; i < flameStack.size(); i++) {
-      SimpleImage img = flameStack.get(i).getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
+    for (int i = 0; i < flameLibrary.size(); i++) {
+      SimpleImage img = flameLibrary.get(i).getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
       // add it to the main panel
       ImagePanel imgPanel = new ImagePanel(img, 0, 0, img.getImageWidth());
       imgPanel.setImage(img);
       imgPanel.setLocation(FlameThumbnail.BORDER_SIZE, i * FlameThumbnail.IMG_HEIGHT + (i + 1) * FlameThumbnail.BORDER_SIZE);
-      flameStack.get(i).setImgPanel(imgPanel);
+      flameLibrary.get(i).setImgPanel(imgPanel);
       final int idx = i;
-      addRemoveFlameFromStackButton(imgPanel, idx);
+      addRemoveFlameFromLibraryButton(imgPanel, idx);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromFlameStack(idx);
+            importFromFlameLibrary(idx);
           }
         }
       });
       batchPanel.add(imgPanel);
     }
-    flameStackScrollPane = new JScrollPane(batchPanel);
-    flameStackScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    flameStackScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    flameLibraryScrollPane = new JScrollPane(batchPanel);
+    flameLibraryScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    flameLibraryScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-    flameStackPanel.add(flameStackScrollPane, BorderLayout.CENTER);
-    flameStackScrollPane.validate();
-    flameStackScrollPane.getParent().validate();
+    flameLibraryPanel.add(flameLibraryScrollPane, BorderLayout.CENTER);
+    flameLibraryScrollPane.validate();
+    flameLibraryScrollPane.getParent().validate();
   }
 
-  private void addFlameToFlameStack(Flame pFlame) {
-    flameStack.add(0, new FlameThumbnail(pFlame, null));
+  private void addFlameToFlameLibrary(Flame pFlame, ThumbnailCacheKey pCacheKey) {
+    flameLibrary.add(0, new FlameThumbnail(pFlame, null, pCacheKey));
   }
 
-  private void addRemoveFlameFromStackButton(ImagePanel pImgPanel, final int pIdx) {
+  private void addRemoveFlameFromLibraryButton(ImagePanel pImgPanel, final int pIdx) {
     final int BTN_WIDTH = 20;
     final int BTN_HEIGHT = 20;
     final int BORDER = 0;
@@ -638,7 +719,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     btn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/removeThumbnail.gif")));
     btn.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent e) {
-        removeFlameFromStack(pIdx);
+        removeFlameFromLibrary(pIdx);
       }
     });
     pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
@@ -646,14 +727,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     pImgPanel.invalidate();
   }
 
-  protected void removeFlameFromStack(int pIdx) {
-    flameStack.remove(pIdx);
-    refreshFlameStack();
+  protected void removeFlameFromLibrary(int pIdx) {
+    flameLibrary.remove(pIdx);
+    refreshFlameLibrary();
   }
 
-  public void importFromFlameStack(int pIdx) {
-    if (pIdx >= 0 && pIdx < flameStack.size() && getIFlamesFunc() != null) {
-      Flame flame = flameStack.get(pIdx).getFlame();
+  public void importFromFlameLibrary(int pIdx) {
+    if (pIdx >= 0 && pIdx < flameLibrary.size() && getIFlamesFunc() != null) {
+      Flame flame = flameLibrary.get(pIdx).getFlame();
       saveUndoPoint();
       try {
         String flameXML = new FlameWriter().getFlameXML(flame);
@@ -763,6 +844,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     if (noRefresh || getFlame() == null) {
       return;
     }
+    enableControls();
     refreshBaseFlamePreview();
     refreshBaseFlameFields();
   }
@@ -819,6 +901,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           flame.setSampleDensity(oldSampleDensity);
         }
       }
+      else {
+        imgPanel.setImage(new SimpleImage(width, height));
+      }
     }
     else {
       imgPanel.setImage(new SimpleImage(width, height));
@@ -846,6 +931,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       globalOffsetYField.setValue(0.0);
       globalOffsetZField.setValue(0.0);
       shapeDistributionCmb.setSelectedIndex(-1);
+      iflameBrightnessField.setValue(0.0);
+      imageBrightnessField.setValue(0.0);
+      iflameDensityField.setValue(0.0);
     }
     else {
       edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);
@@ -864,6 +952,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       globalOffsetYField.setValue(iflame.getImageParams().getOffsetY());
       globalOffsetZField.setValue(iflame.getImageParams().getOffsetZ());
       shapeDistributionCmb.setSelectedItem(iflame.getImageParams().getShape_distribution());
+      iflameBrightnessField.setValue(iflame.getImageParams().getIFlame_brightness());
+      imageBrightnessField.setValue(iflame.getImageParams().getImage_brightness());
+      iflameDensityField.setValue(iflame.getImageParams().getIFlame_density());
     }
   }
 
@@ -871,10 +962,30 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     // TODO Auto-generated method stub
     IFlamesFunc iflame = getIFlamesFunc();
     if (iflame == null) {
-
+      baseFlameSizeField.setValue(0.0);
+      baseFlameSizeVariationField.setValue(0.0);
+      baseFlameRotateAlphaField.setValue(0.0);
+      baseFlameRotateAlphaVariationField.setValue(0.0);
+      baseFlameRotateBetaField.setValue(0.0);
+      baseFlameRotateBetaVariationField.setValue(0.0);
+      baseFlameRotateGammaField.setValue(0.0);
+      baseFlameRotateGammaVariationField.setValue(0.0);
+      baseFlameCentreXField.setValue(0.0);
+      baseFlameCentreYField.setValue(0.0);
+      baseFlameCentreZField.setValue(0.0);
     }
     else {
-
+      baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
+      baseFlameSizeVariationField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSizeVar());
+      baseFlameRotateAlphaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateAlpha());
+      baseFlameRotateAlphaVariationField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateAlphaVar());
+      baseFlameRotateBetaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateBeta());
+      baseFlameRotateBetaVariationField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateBetaVar());
+      baseFlameRotateGammaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateGamma());
+      baseFlameRotateGammaVariationField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateGammaVar());
+      baseFlameCentreXField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreX());
+      baseFlameCentreYField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreY());
+      baseFlameCentreZField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreZ());
     }
   }
 
@@ -1116,4 +1227,228 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     enableControls();
   }
 
+  public void reloadLibraryButton_clicked() {
+    reloadFlameLibrary();
+    reloadImageLibrary();
+  }
+
+  private void reloadFlameLibrary() {
+    flameLibrary.clear();
+    if (prefs.getIflamesFlameLibraryPath() != null && prefs.getIflamesFlameLibraryPath().length() > 0) {
+      List<String> filenames = new ArrayList<String>();
+      _scanFiles(prefs.getIflamesFlameLibraryPath(), filenames);
+      for (String filename : filenames) {
+        if (filename.endsWith("." + Tools.FILEEXT_FLAME)) {
+          try {
+            List<Flame> flames = new FlameReader(prefs).readFlames(filename);
+            for (int i = flames.size() - 1; i >= 0; i--) {
+              addFlameToFlameLibrary(flames.get(i), new ThumbnailCacheKey(filename, String.valueOf(i)));
+            }
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+    }
+    refreshFlameLibrary();
+    flameLibraryScrollPane.getParent().repaint();
+  }
+
+  private void reloadImageLibrary() {
+    imageLibrary.clear();
+    if (prefs.getIflamesImageLibraryPath() != null && prefs.getIflamesImageLibraryPath().length() > 0) {
+      List<String> filenames = new ArrayList<String>();
+      _scanFiles(prefs.getIflamesImageLibraryPath(), filenames);
+      for (String filename : filenames) {
+        if (filename.endsWith("." + Tools.FILEEXT_PNG) || filename.endsWith("." + Tools.FILEEXT_JPG)) {
+          try {
+            addImageToImageLibrary(filename, new ThumbnailCacheKey(filename));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+    }
+    refreshImageLibrary();
+    imageLibraryScrollPane.getParent().repaint();
+  }
+
+  public void _scanFiles(String pPath, List<String> pFilenames) {
+    File root = new File(pPath);
+    File[] list = root.listFiles();
+    try {
+      Arrays.sort(list, new Comparator<File>() {
+
+        @Override
+        public int compare(File o1, File o2) {
+          return o1.getName().compareTo(o2.getName());
+        }
+
+      });
+    }
+    catch (Exception ex) {
+      // ex.printStackTrace();
+    }
+    if (list != null) {
+      for (File f : list) {
+        if (f.isDirectory()) {
+          _scanFiles(f.getAbsolutePath(), pFilenames);
+        }
+        else {
+          pFilenames.add(f.getAbsolutePath());
+        }
+      }
+    }
+  }
+
+  public void iflameBrightnessField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setIflame_brightness(iflameBrightnessField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageBrightnessField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setImage_brightness(imageBrightnessField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void iflameDensityField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setIflame_density(iflameDensityField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameSizeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSize(baseFlameSizeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameSizeVariationField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSizeVar(baseFlameSizeVariationField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateAlphaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateAlpha(baseFlameRotateAlphaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateAlphaVariationField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateAlphaVar(baseFlameRotateAlphaVariationField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateBetaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateBeta(baseFlameRotateBetaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateBetaVariationField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateBetaVar(baseFlameRotateBetaVariationField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateGammaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateGamma(baseFlameRotateGammaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameRotateGammaVariationField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateGammaVar(baseFlameRotateGammaVariationField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameCentreXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setCentreX(baseFlameCentreXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameCentreYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setCentreY(baseFlameCentreYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameCentreZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setCentreZ(baseFlameCentreZField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameFromClipboardButton_clicked() {
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String xml = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          saveUndoPoint();
+          getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameXML(xml);
+          refreshBaseFlamePreview();
+          refreshIFlame();
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void baseFlameToClipboardButton_clicked() {
+    try {
+      String xml = getIFlamesFunc().getFlameParams(getCurrFlameIndex()).getFlameXML();
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      StringSelection data = new StringSelection(xml);
+      clipboard.setContents(data, data);
+      messageHelper.showStatusMessage(getFlame(), "flame saved to clipboard");
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void baseFlameClearButton_clicked() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameXML(null);
+    enableControls();
+    refreshBaseFlamePreview();
+    refreshIFlame();
+  }
+
+  public void baseFlameClearAllButton_clicked() {
+    saveUndoPoint();
+    for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+      getIFlamesFunc().getFlameParams(i).setFlameXML(null);
+    }
+    enableControls();
+    refreshBaseFlamePreview();
+    refreshIFlame();
+  }
 }

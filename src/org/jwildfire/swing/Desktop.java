@@ -1880,6 +1880,7 @@ public class Desktop extends JApplet {
   private void iflamesMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     if (iflamesMenuItem.isSelected()) {
       iflamesInternalFrame.setVisible(true);
+      ((IFlamesInternalFrame) iflamesInternalFrame).getIflamesController().init();
       try {
         iflamesInternalFrame.setSelected(true);
       }

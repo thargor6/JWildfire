@@ -81,7 +81,7 @@ public class FlamePreviewHelper {
         for (int i = 0; i < randomBatch.size(); i++) {
           Flame bFlame = randomBatch.get(i).getFlame();
           if (bFlame == flame) {
-            randomBatch.get(i).preview = null;
+            randomBatch.get(i).setPreview(null);
             ImagePanel pnl = randomBatch.get(i).getImgPanel();
             if (pnl != null) {
               pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));

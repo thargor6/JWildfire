@@ -63,6 +63,10 @@ public class RessourceManager {
     return res;
   }
 
+  public static void clearImage(String pFilename) {
+    imageMapByName.remove(pFilename);
+  }
+
   public static Object getRessource(String pKey) {
     return ressourceMap.get(pKey);
   }
