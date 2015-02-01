@@ -74,8 +74,8 @@ import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.Variation;
-import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.create.tina.variation.iflames.CreationStatistics;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.iflames.ImageParams;
 import org.jwildfire.create.tina.variation.iflames.ShapeDistribution;
@@ -144,6 +144,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JButton baseFlameToClipboardButton;
   private final JButton baseFlameClearButton;
   private final JButton baseFlameClearAllButton;
+  private final JToggleButton previewButton;
+  private final JButton renderFlameButton;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -153,6 +155,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final ProgressUpdater mainProgressUpdater;
   private final FlameMessageHelper messageHelper;
   private boolean undoDebug = true;
+  private final CreationStatistics creationStatistics = new CreationStatistics();
   private boolean noRefresh;
 
   @SuppressWarnings("unchecked")
@@ -175,7 +178,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pBaseFlameRotateGammaField, JWFNumberField pBaseFlameRotateGammaVariationField,
       JWFNumberField pBaseFlameCentreXField, JWFNumberField pBaseFlameCentreYField, JWFNumberField pBaseFlameCentreZField,
       JButton pBaseFlameFromClipboardButton, JButton pBaseFlameToClipboardButton, JButton pBaseFlameClearButton,
-      JButton pBaseFlameClearAllButton) {
+      JButton pBaseFlameClearAllButton, JToggleButton pPreviewButton, JButton pRenderFlameButton) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -232,6 +235,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameToClipboardButton = pBaseFlameToClipboardButton;
     baseFlameClearButton = pBaseFlameClearButton;
     baseFlameClearAllButton = pBaseFlameClearAllButton;
+    previewButton = pPreviewButton;
+    renderFlameButton = pRenderFlameButton;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -328,6 +333,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
 
   private Flame createNewFlame() {
     Flame flame = new Flame();
+    flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     flame.setCamRoll(0);
     flame.setCamPitch(0);
     flame.setCamYaw(0);
@@ -342,24 +348,76 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("iflames_wf", true);
-      xForm.addVariation(1.0, varFunc);
+      IFlamesFunc iflames = (IFlamesFunc) VariationFuncList.getVariationFuncInstance("iflames_wf", true);
+      if (imageLibrary.size() > 0) {
+        iflames.getImageParams().setImageFilename(imageLibrary.get((int) (Math.random() * imageLibrary.size())).getFilename());
+      }
+      if (flameLibrary.size() > 0) {
+        for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+          if (i > 1 && Math.random() < 0.33) {
+            iflames.getFlameParams(i).setFlameXML(null);
+          }
+          else if (Math.random() < 0.50) {
+            Flame libFlame = flameLibrary.get((int) (Math.random() * flameLibrary.size())).getFlame();
+            String libFlameXML;
+            try {
+              libFlameXML = new FlameWriter().getFlameXML(libFlame);
+            }
+            catch (Exception e) {
+              libFlameXML = null;
+              e.printStackTrace();
+            }
+            iflames.getFlameParams(i).setFlameXML(libFlameXML);
+          }
+        }
+      }
+      if (Math.random() < 0.5) {
+        iflames.getImageParams().setShape_distribution(ShapeDistribution.HUE);
+      }
+      else {
+        iflames.getImageParams().setShape_distribution(ShapeDistribution.RANDOM);
+      }
+      for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+        iflames.getFlameParams(i).setSize(2.0 + Math.random() * 4.0);
+      }
+      iflames.getMotionParams().setPreview(previewButton.isSelected() ? 1 : 0);
+
+      xForm.addVariation(1.0, iflames);
     }
     return flame.makeCopy();
   }
 
   private void refreshPreview() {
-    if (displayPreprocessedImageButton.isSelected()) {
-      flamePreviewHelper.renderFlameImage(true, true, 1);
-      ImageParams imageParams = getIFlamesFunc().getImageParams();
-      imageParams.init(new FlameTransformationContext(null, null, 0));
-      SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
-      if (img != null) {
-        flamePreviewHelper.setImage(img);
-        return;
+    int renderId = prepareIFlame();
+    try {
+      if (displayPreprocessedImageButton.isSelected()) {
+        flamePreviewHelper.renderFlameImage(true, true, 1);
+        ImageParams imageParams = getIFlamesFunc().getImageParams();
+        imageParams.init(new FlameTransformationContext(null, null, 0));
+        SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
+        if (img != null) {
+          flamePreviewHelper.setImage(img);
+          return;
+        }
       }
+      flamePreviewHelper.refreshFlameImage(true, false, 1);
     }
-    flamePreviewHelper.refreshFlameImage(true, false, 1);
+    finally {
+      unprepareIFlame(renderId);
+    }
+  }
+
+  private void unprepareIFlame(int pRenderId) {
+    RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + pRenderId);
+    RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + pRenderId);
+  }
+
+  private int prepareIFlame() {
+    int renderId = Long.valueOf(System.currentTimeMillis()).intValue();
+    creationStatistics.clear();
+    RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + renderId, creationStatistics);
+    RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + renderId, mainProgressUpdater);
+    return renderId;
   }
 
   public void enableControls() {
@@ -412,6 +470,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameToClipboardButton.setEnabled(hasBaseFlame);
     baseFlameClearButton.setEnabled(hasBaseFlame);
     baseFlameClearAllButton.setEnabled(hasIFlame);
+    previewButton.setEnabled(true);
+    renderFlameButton.setEnabled(hasFlame);
   }
 
   public void saveUndoPoint() {
@@ -934,6 +994,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       iflameBrightnessField.setValue(0.0);
       imageBrightnessField.setValue(0.0);
       iflameDensityField.setValue(0.0);
+      previewButton.setSelected(false);
     }
     else {
       edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);
@@ -955,6 +1016,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       iflameBrightnessField.setValue(iflame.getImageParams().getIFlame_brightness());
       imageBrightnessField.setValue(iflame.getImageParams().getImage_brightness());
       iflameDensityField.setValue(iflame.getImageParams().getIFlame_density());
+      previewButton.setSelected(iflame.getMotionParams().getPreview() == 1);
     }
   }
 
@@ -1450,5 +1512,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     enableControls();
     refreshBaseFlamePreview();
     refreshIFlame();
+  }
+
+  public void previewButton_clicked() {
+    getIFlamesFunc().getMotionParams().setPreview(previewButton.isSelected() ? 1 : 0);
+    refreshPreview();
   }
 }

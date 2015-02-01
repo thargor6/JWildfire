@@ -113,6 +113,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JButton baseFlameToClipboardButton;
   private JButton baseFlameClearButton;
   private JButton baseFlameClearAllButton;
+  private JPanel panel_8;
+  private JToggleButton previewButton;
 
   public IFlamesInternalFrame() {
     super();
@@ -161,7 +163,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       newButton.setActionCommand("New from scratch");
       newButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/document-new-7.png")));
 
-      newButton.setBounds(215, 10, 143, 48);
+      newButton.setBounds(160, 10, 143, 48);
       mainTopPanel.add(newButton);
 
       loadIFlameFromClipboardButton = new JButton();
@@ -228,7 +230,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       resolutionProfileCmb.setMaximumSize(new Dimension(32767, 24));
       resolutionProfileCmb.setMaximumRowCount(32);
       resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      resolutionProfileCmb.setBounds(837, 22, 143, 24);
+      resolutionProfileCmb.setBounds(878, 22, 143, 24);
       resolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (iflamesController != null) {
@@ -238,13 +240,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
         }
       });
       mainTopPanel.add(resolutionProfileCmb);
-
-      mainProgressBar = new JProgressBar();
-      mainProgressBar.setBounds(988, 26, 169, 14);
-      mainTopPanel.add(mainProgressBar);
-      mainProgressBar.setValue(0);
-      mainProgressBar.setStringPainted(true);
-      mainProgressBar.setPreferredSize(new Dimension(169, 14));
 
       refreshLibraryButton = new JButton();
       refreshLibraryButton.addActionListener(new ActionListener() {
@@ -259,7 +254,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       refreshLibraryButton.setMaximumSize(new Dimension(32000, 52));
       refreshLibraryButton.setFont(new Font("Dialog", Font.BOLD, 10));
       refreshLibraryButton.setActionCommand("New from scratch");
-      refreshLibraryButton.setBounds(60, 10, 143, 48);
+      refreshLibraryButton.setBounds(1027, 10, 143, 48);
       mainTopPanel.add(refreshLibraryButton);
 
       mainLeftPanel = new JPanel();
@@ -290,6 +285,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       imageStackRootPanel = new JPanel();
       mainLeftPanel.add(imageStackRootPanel, BorderLayout.CENTER);
+      imageStackRootPanel.setLayout(new BorderLayout(0, 0));
 
       mainRightPanel = new JPanel();
       mainRightPanel.setBorder(new TitledBorder(null, "Flame Library", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -323,7 +319,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       mainBottomPanel = new JPanel();
       mainBottomPanel.setBorder(new TitledBorder(null, "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      mainBottomPanel.setPreferredSize(new Dimension(10, 220));
+      mainBottomPanel.setPreferredSize(new Dimension(10, 236));
       jContentPane.add(mainBottomPanel, BorderLayout.SOUTH);
       mainBottomPanel.setLayout(new BorderLayout(0, 0));
 
@@ -1132,7 +1128,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
           iflamesController.refreshIFlameButton_clicked();
         }
       });
-      refreshIFlameButton.setBounds(6, 42, 105, 24);
+      refreshIFlameButton.setBounds(6, 66, 105, 24);
       panel_6.add(refreshIFlameButton);
       refreshIFlameButton.setToolTipText("Rebuild and refresh IFlame");
       refreshIFlameButton.setText("Refresh");
@@ -1142,7 +1138,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       refreshIFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       autoRefreshButton = new JToggleButton();
-      autoRefreshButton.setBounds(6, 70, 105, 24);
+      autoRefreshButton.setBounds(6, 92, 105, 24);
       panel_6.add(autoRefreshButton);
       autoRefreshButton.setSelected(true);
       autoRefreshButton.setToolTipText("Automatically rebuild the IFlame after changes, which may be slow");
@@ -1151,7 +1147,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       autoRefreshButton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       undoButton = new JButton();
-      undoButton.setBounds(6, 115, 105, 24);
+      undoButton.setBounds(6, 130, 105, 24);
       panel_6.add(undoButton);
       undoButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1167,7 +1163,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       undoButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
 
       redoButton = new JButton();
-      redoButton.setBounds(6, 138, 105, 24);
+      redoButton.setBounds(6, 156, 105, 24);
       panel_6.add(redoButton);
       redoButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1196,6 +1192,31 @@ public class IFlamesInternalFrame extends JInternalFrame {
       renderFlameButton.setIconTextGap(0);
       renderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
       renderFlameButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+
+      previewButton = new JToggleButton();
+      previewButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.previewButton_clicked();
+        }
+      });
+      previewButton.setToolTipText("Draw circles instead of real fractals");
+      previewButton.setText("Preview");
+      previewButton.setSelected(true);
+      previewButton.setPreferredSize(new Dimension(136, 24));
+      previewButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      previewButton.setBounds(6, 32, 105, 24);
+      panel_6.add(previewButton);
+
+      panel_8 = new JPanel();
+      panel_8.setPreferredSize(new Dimension(10, 20));
+      mainBottomPanel.add(panel_8, BorderLayout.NORTH);
+      panel_8.setLayout(new BorderLayout(0, 0));
+
+      mainProgressBar = new JProgressBar();
+      panel_8.add(mainProgressBar, BorderLayout.CENTER);
+      mainProgressBar.setValue(0);
+      mainProgressBar.setStringPainted(true);
+      mainProgressBar.setPreferredSize(new Dimension(169, 14));
       baseFlameCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (iflamesController != null) {
@@ -1226,7 +1247,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getBaseFlameRotateAlphaField(), getBaseFlameRotateAlphaVariationField(), getBaseFlameRotateBetaField(),
         getBaseFlameRotateBetaVariationField(), getBaseFlameRotateGammaField(), getBaseFlameRotateGammaVariationField(),
         getBaseFlameCentreXField(), getBaseFlameCentreYField(), getBaseFlameCentreZField(), getBaseFlameFromClipboardButton(),
-        getBaseFlameToClipboardButton(), getBaseFlameClearButton(), getBaseFlameClearAllButton());
+        getBaseFlameToClipboardButton(), getBaseFlameClearButton(), getBaseFlameClearAllButton(), getPreviewButton(),
+        getRenderFlameButton());
   }
 
   public JPanel getMainLeftPanel() {
@@ -1467,5 +1489,9 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JButton getBaseFlameClearAllButton() {
     return baseFlameClearAllButton;
+  }
+
+  public JToggleButton getPreviewButton() {
+    return previewButton;
   }
 }

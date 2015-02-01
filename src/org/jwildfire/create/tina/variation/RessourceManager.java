@@ -140,4 +140,8 @@ public class RessourceManager {
       ressourceMap.remove(key);
     }
   }
+
+  public static void removeRessource(String pKey) {
+    ressourceMap.remove(pKey);
+  }
 }
