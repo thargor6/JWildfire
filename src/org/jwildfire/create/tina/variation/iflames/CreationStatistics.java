@@ -16,11 +16,77 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreationStatistics {
+  private final List<Action> actions = new ArrayList<Action>();
+  private int structureMapWidth, structureMapHeight;
+  private int flameCount;
 
-  public void clear() {
-    // TODO Auto-generated method stub
-
+  public enum ActionType {
+    SCALE, ERODE, CONV_NORTH, CONV_EAST, CONV_SOUTH, CONV_WEST, CONV_MERGE, CREATE_STRUCTURE
   }
 
+  public class Action {
+    private final ActionType actionType;
+    private long duration;
+
+    public Action(ActionType pActionType) {
+      actionType = pActionType;
+    }
+
+    public long getDuration() {
+      return duration;
+    }
+
+    public void setDuration(long pDuration) {
+      duration = pDuration;
+    }
+
+    public ActionType getActionType() {
+      return actionType;
+    }
+  }
+
+  public void clear() {
+    actions.clear();
+  }
+
+  public void addAction(ActionType pActionType) {
+    actions.add(new Action(pActionType));
+  }
+
+  public int getStructureMapWidth() {
+    return structureMapWidth;
+  }
+
+  public void setStructureMapWidth(int pStructureMapWidth) {
+    structureMapWidth = pStructureMapWidth;
+  }
+
+  public int getStructureMapHeight() {
+    return structureMapHeight;
+  }
+
+  public void setStructureMapHeight(int pStructureMapHeight) {
+    structureMapHeight = pStructureMapHeight;
+  }
+
+  public List<Action> getActions() {
+    return actions;
+  }
+
+  public Action getAction(ActionType pActionType) {
+    for (Action action : actions) {
+      if (action.getActionType().equals(pActionType)) {
+        return action;
+      }
+    }
+    return null;
+  }
+
+  public void setFlameCount(int pFlameCount) {
+    flameCount = pFlameCount;
+  }
 }

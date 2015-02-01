@@ -408,12 +408,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   private void unprepareIFlame(int pRenderId) {
+    getIFlamesFunc().getImageParams().setRenderId(0);
     RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + pRenderId);
     RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + pRenderId);
   }
 
   private int prepareIFlame() {
     int renderId = Long.valueOf(System.currentTimeMillis()).intValue();
+    getIFlamesFunc().getImageParams().setRenderId(renderId);
     creationStatistics.clear();
     RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + renderId, creationStatistics);
     RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + renderId, mainProgressUpdater);

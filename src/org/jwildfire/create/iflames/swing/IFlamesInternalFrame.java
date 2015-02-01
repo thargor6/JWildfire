@@ -1201,7 +1201,6 @@ public class IFlamesInternalFrame extends JInternalFrame {
       });
       previewButton.setToolTipText("Draw circles instead of real fractals");
       previewButton.setText("Preview");
-      previewButton.setSelected(true);
       previewButton.setPreferredSize(new Dimension(136, 24));
       previewButton.setFont(new Font("Dialog", Font.BOLD, 10));
       previewButton.setBounds(6, 32, 105, 24);
