@@ -37,7 +37,7 @@ public class CacheRendererThread implements Runnable {
             break;
           }
           SimpleImage img = renderFlame(job.getFlame(), job.getRenderWidth(), job.getRenderHeight());
-          renderCache.putImage(job.getFlame(), img);
+          renderCache.putImage(job.getFlame(), img, job.getRenderWidth(), job.getRenderHeight());
           job.getDestPnl().setImage(img);
           job.getDestPnl().setLocation(job.getLocationX(), job.getLocationY());
           redraw((JPanel) job.getDestPnl());

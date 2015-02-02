@@ -253,7 +253,7 @@ public class FlameBrowserController {
           // image
           final FlameFlatNode node = pFlames.get(flameIdx++);
           ImagePanel imgPanel;
-          SimpleImage img = renderCache.getImage(node);
+          SimpleImage img = renderCache.getImage(node, IMG_WIDTH, IMG_HEIGHT);
           if (img == null) {
             img = new SimpleImage(IMG_WIDTH, IMG_HEIGHT);
             img.fillBackground(0, 0, 0);
