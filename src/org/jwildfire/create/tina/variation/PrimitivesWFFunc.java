@@ -29,11 +29,11 @@ public class PrimitivesWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHAPE = "shape";
-  private static final String PARAM_SCALEY = "scaley";
-  private static final String PARAM_FREQX = "freqx";
-  private static final String PARAM_FREQY = "freqy";
+  private static final String PARAM_A = "a";
+  private static final String PARAM_B = "b";
+  private static final String PARAM_C = "c";
   private static final String PARAM_FILLED = "filled";
-  private static final String[] paramNames = { PARAM_SHAPE, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_FILLED };
+  private static final String[] paramNames = { PARAM_SHAPE, PARAM_A, PARAM_B, PARAM_C, PARAM_FILLED };
 
   private static final int SHAPE_DISC = 0;
   private static final int SHAPE_SPHERE = 1;
@@ -41,11 +41,12 @@ public class PrimitivesWFFunc extends VariationFunc {
   private static final int SHAPE_SQUARE = 3;
   private static final int SHAPE_TRIANGLE = 4;
   private static final int SHAPE_PYRAMID = 5;
+  private static final int SHAPE_TORUS = 6;
 
   private int shape = SHAPE_SPHERE;
-  private double scaley = 0.5;
-  private double freqx = M_PI / 2;
-  private double freqy = M_PI / 4;
+  private double a = 1.0;
+  private double b = 1.0;
+  private double c = 1.0;
   private int filled = 0;
 
   @Override
@@ -65,6 +66,9 @@ public class PrimitivesWFFunc extends VariationFunc {
         break;
       case SHAPE_PYRAMID:
         createPyramid(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+        break;
+      case SHAPE_TORUS:
+        createTorus(pContext, pXForm, pAffineTP, pVarTP, pAmount);
         break;
       case SHAPE_SPHERE:
       default:
@@ -280,6 +284,20 @@ public class PrimitivesWFFunc extends VariationFunc {
     }
   }
 
+  private void createTorus(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double radius = filled == 0 ? a : pContext.random() < 0.05 ? a : a * pContext.random();
+    double alpha = pContext.random() * 2 * M_PI;
+
+    double x = radius * cos(alpha);
+    double y = radius * sin(alpha);
+
+    double beta = pContext.random() * 2 * M_PI;
+
+    pVarTP.y += x * pAmount;
+    pVarTP.x += (y + b + b) * sin(beta) * pAmount;
+    pVarTP.z += (y + b + b) * cos(beta) * pAmount;
+  }
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -287,19 +305,19 @@ public class PrimitivesWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shape, scaley, freqx, freqy, filled };
+    return new Object[] { shape, a, b, c, filled };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SHAPE.equalsIgnoreCase(pName))
       shape = Tools.FTOI(pValue);
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName))
-      scaley = pValue;
-    else if (PARAM_FREQX.equalsIgnoreCase(pName))
-      freqx = pValue;
-    else if (PARAM_FREQY.equalsIgnoreCase(pName))
-      freqy = pValue;
+    else if (PARAM_A.equalsIgnoreCase(pName))
+      a = pValue;
+    else if (PARAM_B.equalsIgnoreCase(pName))
+      b = pValue;
+    else if (PARAM_C.equalsIgnoreCase(pName))
+      c = pValue;
     else if (PARAM_FILLED.equalsIgnoreCase(pName))
       filled = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
