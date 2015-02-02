@@ -19,6 +19,7 @@ package org.jwildfire.create.iflames.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -26,7 +27,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -40,6 +45,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 
@@ -146,6 +152,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JButton baseFlameClearAllButton;
   private final JToggleButton previewButton;
   private final JButton renderFlameButton;
+  private final JTextPane introductionTextPane;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -178,7 +185,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pBaseFlameRotateGammaField, JWFNumberField pBaseFlameRotateGammaVariationField,
       JWFNumberField pBaseFlameCentreXField, JWFNumberField pBaseFlameCentreYField, JWFNumberField pBaseFlameCentreZField,
       JButton pBaseFlameFromClipboardButton, JButton pBaseFlameToClipboardButton, JButton pBaseFlameClearButton,
-      JButton pBaseFlameClearAllButton, JToggleButton pPreviewButton, JButton pRenderFlameButton) {
+      JButton pBaseFlameClearAllButton, JToggleButton pPreviewButton, JButton pRenderFlameButton,
+      JTextPane pIntroductionTextPane) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -237,6 +245,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameClearAllButton = pBaseFlameClearAllButton;
     previewButton = pPreviewButton;
     renderFlameButton = pRenderFlameButton;
+    introductionTextPane = pIntroductionTextPane;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -263,6 +272,35 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     displayPreprocessedImageButton.setSelected(false);
 
     noRefresh = false;
+
+    initIntroductionTextPane();
+  }
+
+  private void initIntroductionTextPane() {
+    introductionTextPane.setContentType("text/html");
+    try {
+      Font f = new Font(Font.SANS_SERIF, 3, 10);
+      introductionTextPane.setFont(f);
+
+      InputStream is = this.getClass().getResourceAsStream("iflames.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      introductionTextPane.setText(content.toString());
+      introductionTextPane.setSelectionStart(0);
+      introductionTextPane.setSelectionEnd(0);
+
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private boolean initFlag = false;
@@ -285,6 +323,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     return _currFlame;
   }
 
+  private boolean firstFlamePanel = true;
+
   @Override
   public FlamePanel getFlamePanel() {
     if (flamePanel == null) {
@@ -302,7 +342,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       flamePanel.setRenderWidth(resProfile.getWidth());
       flamePanel.setRenderHeight(resProfile.getHeight());
       flamePanel.setFocusable(true);
-
+      if (firstFlamePanel) {
+        centerPanel.remove(0);
+        firstFlamePanel = false;
+      }
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();

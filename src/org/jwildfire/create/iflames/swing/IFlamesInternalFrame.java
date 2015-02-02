@@ -32,7 +32,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
@@ -115,6 +117,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JButton baseFlameClearAllButton;
   private JPanel panel_8;
   private JToggleButton previewButton;
+  private JScrollPane scrollPane;
+  private JTextPane introductionTextPane;
 
   public IFlamesInternalFrame() {
     super();
@@ -1228,6 +1232,13 @@ public class IFlamesInternalFrame extends JInternalFrame {
       mainCenterPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       jContentPane.add(mainCenterPanel, BorderLayout.CENTER);
       mainCenterPanel.setLayout(new BorderLayout(0, 0));
+
+      scrollPane = new JScrollPane();
+      mainCenterPanel.add(scrollPane, BorderLayout.CENTER);
+
+      introductionTextPane = new JTextPane();
+      introductionTextPane.setEditable(false);
+      scrollPane.setViewportView(introductionTextPane);
     }
     return jContentPane;
   }
@@ -1247,7 +1258,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getBaseFlameRotateBetaVariationField(), getBaseFlameRotateGammaField(), getBaseFlameRotateGammaVariationField(),
         getBaseFlameCentreXField(), getBaseFlameCentreYField(), getBaseFlameCentreZField(), getBaseFlameFromClipboardButton(),
         getBaseFlameToClipboardButton(), getBaseFlameClearButton(), getBaseFlameClearAllButton(), getPreviewButton(),
-        getRenderFlameButton());
+        getRenderFlameButton(), getIntroductionTextPane());
   }
 
   public JPanel getMainLeftPanel() {
@@ -1492,5 +1503,9 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JToggleButton getPreviewButton() {
     return previewButton;
+  }
+
+  public JTextPane getIntroductionTextPane() {
+    return introductionTextPane;
   }
 }
