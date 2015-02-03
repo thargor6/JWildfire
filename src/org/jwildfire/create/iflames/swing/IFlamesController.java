@@ -42,9 +42,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
@@ -153,6 +155,16 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JToggleButton previewButton;
   private final JButton renderFlameButton;
   private final JTextPane introductionTextPane;
+  private final JWFNumberField baseFlameMinValueField;
+  private final JLabel baseFlameMinValueLabel;
+  private final JWFNumberField baseFlameMaxValueField;
+  private final JLabel baseFlameMaxValueLabel;
+  private final JTextArea statisticsTextArea;
+  private final JWFNumberField baseFlameWeightField;
+  private final JWFNumberField baseFlameGridXOffsetField;
+  private final JWFNumberField baseFlameGridYOffsetField;
+  private final JWFNumberField baseFlameGridXSizeField;
+  private final JWFNumberField baseFlameGridYSizeField;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -162,7 +174,6 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final ProgressUpdater mainProgressUpdater;
   private final FlameMessageHelper messageHelper;
   private boolean undoDebug = true;
-  private final CreationStatistics creationStatistics = new CreationStatistics();
   private boolean noRefresh;
 
   @SuppressWarnings("unchecked")
@@ -186,7 +197,11 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pBaseFlameCentreXField, JWFNumberField pBaseFlameCentreYField, JWFNumberField pBaseFlameCentreZField,
       JButton pBaseFlameFromClipboardButton, JButton pBaseFlameToClipboardButton, JButton pBaseFlameClearButton,
       JButton pBaseFlameClearAllButton, JToggleButton pPreviewButton, JButton pRenderFlameButton,
-      JTextPane pIntroductionTextPane) {
+      JTextPane pIntroductionTextPane, JWFNumberField pBaseFlameMinValueField, JLabel pBaseFlameMinValueLabel,
+      JWFNumberField pBaseFlameMaxValueField, JLabel pBaseFlameMaxValueLabel, JTextArea pStatisticsTextArea,
+      JWFNumberField pBaseFlameWeightField, JWFNumberField pBaseFlameGridXOffsetField,
+      JWFNumberField pBaseFlameGridYOffsetField, JWFNumberField pBaseFlameGridXSizeField,
+      JWFNumberField pBaseFlameGridYSizeField) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -246,6 +261,16 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     previewButton = pPreviewButton;
     renderFlameButton = pRenderFlameButton;
     introductionTextPane = pIntroductionTextPane;
+    baseFlameMinValueField = pBaseFlameMinValueField;
+    baseFlameMinValueLabel = pBaseFlameMinValueLabel;
+    baseFlameMaxValueField = pBaseFlameMaxValueField;
+    baseFlameMaxValueLabel = pBaseFlameMaxValueLabel;
+    statisticsTextArea = pStatisticsTextArea;
+    baseFlameWeightField = pBaseFlameWeightField;
+    baseFlameGridXOffsetField = pBaseFlameGridXOffsetField;
+    baseFlameGridYOffsetField = pBaseFlameGridYOffsetField;
+    baseFlameGridXSizeField = pBaseFlameGridXSizeField;
+    baseFlameGridYSizeField = pBaseFlameGridYSizeField;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -266,6 +291,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       shapeDistributionCmb.removeAllItems();
       shapeDistributionCmb.addItem(ShapeDistribution.HUE);
       shapeDistributionCmb.addItem(ShapeDistribution.RANDOM);
+      shapeDistributionCmb.addItem(ShapeDistribution.LUMINOSITY);
+      shapeDistributionCmb.addItem(ShapeDistribution.BRIGHTNESS);
+      shapeDistributionCmb.addItem(ShapeDistribution.GRID);
       shapeDistributionCmb.setSelectedItem(ShapeDistribution.HUE);
     }
 
@@ -452,15 +480,18 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
 
   private void unprepareIFlame(int pRenderId) {
     getIFlamesFunc().getImageParams().setRenderId(0);
+    CreationStatistics statistics = (CreationStatistics) RessourceManager.getRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + pRenderId);
     RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + pRenderId);
     RessourceManager.removeRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + pRenderId);
+    if (statistics != null && statistics.getActions().size() > 0) {
+      statisticsTextArea.setText(statistics.toString());
+    }
   }
 
   private int prepareIFlame() {
     int renderId = Long.valueOf(System.currentTimeMillis()).intValue();
     getIFlamesFunc().getImageParams().setRenderId(renderId);
-    creationStatistics.clear();
-    RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + renderId, creationStatistics);
+    RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_STATISTICS + "#" + renderId, new CreationStatistics());
     RessourceManager.putRessource(ImageParams.CACHE_KEY_PREFIX_PROGRESS_UPDATER + "#" + renderId, mainProgressUpdater);
     return renderId;
   }
@@ -517,6 +548,20 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameClearAllButton.setEnabled(hasIFlame);
     previewButton.setEnabled(true);
     renderFlameButton.setEnabled(hasFlame);
+
+    boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
+        ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
+    baseFlameMinValueField.setEnabled(minMaxFields);
+    baseFlameMaxValueField.setEnabled(minMaxFields);
+
+    boolean weightFields = hasIFlame && ShapeDistribution.RANDOM.equals(iflames.getImageParams().getShape_distribution());
+    baseFlameWeightField.setEnabled(weightFields);
+
+    boolean gridFields = hasIFlame && ShapeDistribution.GRID.equals(iflames.getImageParams().getShape_distribution());
+    baseFlameGridXOffsetField.setEnabled(gridFields);
+    baseFlameGridYOffsetField.setEnabled(gridFields);
+    baseFlameGridXSizeField.setEnabled(gridFields);
+    baseFlameGridYSizeField.setEnabled(gridFields);
   }
 
   public void saveUndoPoint() {
@@ -1040,6 +1085,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       imageBrightnessField.setValue(0.0);
       iflameDensityField.setValue(0.0);
       previewButton.setSelected(false);
+      statisticsTextArea.setText("");
     }
     else {
       edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);
@@ -1080,6 +1126,13 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameCentreXField.setValue(0.0);
       baseFlameCentreYField.setValue(0.0);
       baseFlameCentreZField.setValue(0.0);
+      baseFlameMinValueField.setValue(0.0);
+      baseFlameMaxValueField.setValue(0.0);
+      baseFlameWeightField.setValue(0.0);
+      baseFlameGridXOffsetField.setValue(0.0);
+      baseFlameGridYOffsetField.setValue(0.0);
+      baseFlameGridXSizeField.setValue(0.0);
+      baseFlameGridYSizeField.setValue(0.0);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1093,6 +1146,31 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameCentreXField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreX());
       baseFlameCentreYField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreY());
       baseFlameCentreZField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getCentreZ());
+      baseFlameMinValueField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getMinVal());
+      baseFlameMaxValueField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getMaxVal());
+      baseFlameWeightField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getWeight());
+      baseFlameGridXOffsetField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridXOffset());
+      baseFlameGridYOffsetField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridYOffset());
+      baseFlameGridXSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridXSize());
+      baseFlameGridYSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridYSize());
+      switch (iflame.getImageParams().getShape_distribution()) {
+        case BRIGHTNESS:
+          baseFlameMinValueLabel.setText("Min Brightness");
+          baseFlameMaxValueLabel.setText("Max Brightness");
+          break;
+        case LUMINOSITY:
+          baseFlameMinValueLabel.setText("Min Luminosity");
+          baseFlameMaxValueLabel.setText("Max Luminosity");
+          break;
+        case HUE:
+          baseFlameMinValueLabel.setText("Min Hue");
+          baseFlameMaxValueLabel.setText("Max Hue");
+          break;
+        default:
+          baseFlameMinValueLabel.setText("Min Value");
+          baseFlameMaxValueLabel.setText("Max Value");
+          break;
+      }
     }
   }
 
@@ -1562,5 +1640,54 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void previewButton_clicked() {
     getIFlamesFunc().getMotionParams().setPreview(previewButton.isSelected() ? 1 : 0);
     refreshPreview();
+  }
+
+  public void baseFlameMinValueField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setMinVal(baseFlameMinValueField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameMaxValueField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setMaxVal(baseFlameMaxValueField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameWeightField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setWeight(baseFlameWeightField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameGridXOffsetField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setGridXOffset(baseFlameGridXOffsetField.getIntValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameGridYOffsetField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setGridYOffset(baseFlameGridYOffsetField.getIntValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameGridXSizeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setGridXSize(baseFlameGridXSizeField.getIntValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameGridYSizeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setGridYSize(baseFlameGridYSizeField.getIntValue());
+    refreshIFlame();
+    enableControls();
   }
 }

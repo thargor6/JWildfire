@@ -1,3 +1,10 @@
+V2.34 ALPHA (03.02.2015):
+ - powerful new sub-application to create iflames (you can reach it form the main window-menu) 
+ - Thumbnails in the Flame-Browser are now permanently cached which means a significant speed improvement
+ - new "donut"-style for the "primitives_wf"-variation (set shape=6 and play with the a- and b-parameters)
+ - new experimental "waveblur_wf"-variation
+ - fixed a problem regarding the duplication of the gradient when duplicating a flame
+
 V2.23 (15.01.2015):
  - MutaGen: three user-defined meta-mutation-types which can be customized in the Prefs (i. e., you may specify which mutations should be applied)
  - MutaGen: new options in the Prefs to specify the four initial mutation-types to be used

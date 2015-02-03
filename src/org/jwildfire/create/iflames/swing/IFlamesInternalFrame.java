@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
@@ -119,6 +120,21 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JToggleButton previewButton;
   private JScrollPane scrollPane;
   private JTextPane introductionTextPane;
+  private JTabbedPane tabbedPane_1;
+  private JPanel panel_9;
+  private JPanel panel_10;
+  private JPanel panel_11;
+  private JScrollPane scrollPane_1;
+  private JTextArea statisticsTextArea;
+  private JLabel baseFlameMinValueLabel;
+  private JLabel baseFlameMaxValueLabel;
+  private JWFNumberField baseFlameMinValueField;
+  private JWFNumberField baseFlameMaxValueField;
+  private JWFNumberField baseFlameWeightField;
+  private JWFNumberField baseFlameGridXOffsetField;
+  private JWFNumberField baseFlameGridYOffsetField;
+  private JWFNumberField baseFlameGridXSizeField;
+  private JWFNumberField baseFlameGridYSizeField;
 
   public IFlamesInternalFrame() {
     super();
@@ -323,7 +339,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       mainBottomPanel = new JPanel();
       mainBottomPanel.setBorder(new TitledBorder(null, "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      mainBottomPanel.setPreferredSize(new Dimension(10, 236));
+      mainBottomPanel.setPreferredSize(new Dimension(10, 264));
       jContentPane.add(mainBottomPanel, BorderLayout.SOUTH);
       mainBottomPanel.setLayout(new BorderLayout(0, 0));
 
@@ -851,111 +867,50 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       panel_7 = new JPanel();
       tabbedPane.addTab("Base Flame Appearance", null, panel_7, null);
-      panel_7.setLayout(null);
+      panel_7.setLayout(new BorderLayout(0, 0));
+
+      tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+      panel_7.add(tabbedPane_1);
+
+      panel_9 = new JPanel();
+      tabbedPane_1.addTab("Size and orientation", null, panel_9, null);
+      panel_9.setLayout(null);
 
       baseFlameSizeField = new JWFNumberField();
+      baseFlameSizeField.setBounds(101, 6, 100, 24);
+      panel_9.add(baseFlameSizeField);
       baseFlameSizeField.setValueStep(0.05);
       baseFlameSizeField.setText("");
       baseFlameSizeField.setPreferredSize(new Dimension(100, 24));
       baseFlameSizeField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameSizeField.setBounds(101, 6, 100, 24);
-      baseFlameSizeField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameSizeField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameSizeField);
 
       JLabel lblSize_1 = new JLabel();
+      lblSize_1.setBounds(6, 8, 93, 22);
+      panel_9.add(lblSize_1);
       lblSize_1.setToolTipText("");
       lblSize_1.setText("Size");
       lblSize_1.setPreferredSize(new Dimension(94, 22));
       lblSize_1.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSize_1.setBounds(6, 8, 93, 22);
-      panel_7.add(lblSize_1);
-
-      baseFlameSizeVariationField = new JWFNumberField();
-      baseFlameSizeVariationField.setValueStep(0.05);
-      baseFlameSizeVariationField.setText("");
-      baseFlameSizeVariationField.setPreferredSize(new Dimension(100, 24));
-      baseFlameSizeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameSizeVariationField.setBounds(101, 30, 100, 24);
-      baseFlameSizeVariationField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameSizeVariationField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameSizeVariationField);
 
       JLabel lblSizeVariaton = new JLabel();
+      lblSizeVariaton.setBounds(6, 32, 93, 22);
+      panel_9.add(lblSizeVariaton);
       lblSizeVariaton.setToolTipText("");
       lblSizeVariaton.setText("Size variaton");
       lblSizeVariaton.setPreferredSize(new Dimension(94, 22));
       lblSizeVariaton.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSizeVariaton.setBounds(6, 32, 93, 22);
-      panel_7.add(lblSizeVariaton);
 
-      JLabel lblRotate = new JLabel();
-      lblRotate.setToolTipText("");
-      lblRotate.setText("Rotate alpha");
-      lblRotate.setPreferredSize(new Dimension(94, 22));
-      lblRotate.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotate.setBounds(229, 8, 130, 22);
-      panel_7.add(lblRotate);
-
-      baseFlameRotateAlphaField = new JWFNumberField();
-      baseFlameRotateAlphaField.setValueStep(0.05);
-      baseFlameRotateAlphaField.setText("");
-      baseFlameRotateAlphaField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateAlphaField.setMaxValue(1.0);
-      baseFlameRotateAlphaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateAlphaField.setBounds(361, 6, 100, 24);
-      baseFlameRotateAlphaField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateAlphaField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateAlphaField);
-
-      baseFlameRotateAlphaVariationField = new JWFNumberField();
-      baseFlameRotateAlphaVariationField.setValueStep(0.05);
-      baseFlameRotateAlphaVariationField.setText("");
-      baseFlameRotateAlphaVariationField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateAlphaVariationField.setMaxValue(1.0);
-      baseFlameRotateAlphaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateAlphaVariationField.setBounds(361, 30, 100, 24);
-      baseFlameRotateAlphaVariationField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateAlphaVariationField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateAlphaVariationField);
-
-      JLabel lblRotateVariation = new JLabel();
-      lblRotateVariation.setToolTipText("");
-      lblRotateVariation.setText("Rotate alpha variation");
-      lblRotateVariation.setPreferredSize(new Dimension(94, 22));
-      lblRotateVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotateVariation.setBounds(229, 32, 130, 22);
-      panel_7.add(lblRotateVariation);
-
-      JLabel lblCentrex = new JLabel();
-      lblCentrex.setToolTipText("");
-      lblCentrex.setText("CentreX");
-      lblCentrex.setPreferredSize(new Dimension(94, 22));
-      lblCentrex.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblCentrex.setBounds(6, 83, 93, 22);
-      panel_7.add(lblCentrex);
+      baseFlameSizeVariationField = new JWFNumberField();
+      baseFlameSizeVariationField.setBounds(101, 30, 100, 24);
+      panel_9.add(baseFlameSizeVariationField);
+      baseFlameSizeVariationField.setValueStep(0.05);
+      baseFlameSizeVariationField.setText("");
+      baseFlameSizeVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameSizeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
 
       baseFlameCentreXField = new JWFNumberField();
+      baseFlameCentreXField.setBounds(101, 79, 100, 24);
+      panel_9.add(baseFlameCentreXField);
       baseFlameCentreXField.setValueStep(0.05);
       baseFlameCentreXField.setText("");
       baseFlameCentreXField.setPreferredSize(new Dimension(100, 24));
@@ -963,25 +918,26 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameCentreXField.setHasMinValue(true);
       baseFlameCentreXField.setHasMaxValue(true);
       baseFlameCentreXField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameCentreXField.setBounds(101, 81, 100, 24);
-      baseFlameCentreXField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameCentreXField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameCentreXField);
+
+      JLabel lblCentrex = new JLabel();
+      lblCentrex.setBounds(6, 81, 93, 22);
+      panel_9.add(lblCentrex);
+      lblCentrex.setToolTipText("");
+      lblCentrex.setText("CentreX");
+      lblCentrex.setPreferredSize(new Dimension(94, 22));
+      lblCentrex.setFont(new Font("Dialog", Font.BOLD, 10));
 
       JLabel lblCentrey = new JLabel();
+      lblCentrey.setBounds(6, 105, 93, 22);
+      panel_9.add(lblCentrey);
       lblCentrey.setToolTipText("");
       lblCentrey.setText("CentreY");
       lblCentrey.setPreferredSize(new Dimension(94, 22));
       lblCentrey.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblCentrey.setBounds(6, 107, 93, 22);
-      panel_7.add(lblCentrey);
 
       baseFlameCentreYField = new JWFNumberField();
+      baseFlameCentreYField.setBounds(101, 103, 100, 24);
+      panel_9.add(baseFlameCentreYField);
       baseFlameCentreYField.setValueStep(0.05);
       baseFlameCentreYField.setText("");
       baseFlameCentreYField.setPreferredSize(new Dimension(100, 24));
@@ -989,113 +945,18 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameCentreYField.setHasMinValue(true);
       baseFlameCentreYField.setHasMaxValue(true);
       baseFlameCentreYField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameCentreYField.setBounds(101, 105, 100, 24);
-      baseFlameCentreYField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameCentreYField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameCentreYField);
 
-      baseFlameRotateBetaField = new JWFNumberField();
-      baseFlameRotateBetaField.setValueStep(0.05);
-      baseFlameRotateBetaField.setText("");
-      baseFlameRotateBetaField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateBetaField.setMaxValue(1.0);
-      baseFlameRotateBetaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateBetaField.setBounds(361, 55, 100, 24);
-      baseFlameRotateBetaField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateBetaField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateBetaField);
-
-      JLabel lblRotateBeta = new JLabel();
-      lblRotateBeta.setToolTipText("");
-      lblRotateBeta.setText("Rotate beta");
-      lblRotateBeta.setPreferredSize(new Dimension(94, 22));
-      lblRotateBeta.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotateBeta.setBounds(229, 57, 130, 22);
-      panel_7.add(lblRotateBeta);
-
-      JLabel lblRotateBetaVariation = new JLabel();
-      lblRotateBetaVariation.setToolTipText("");
-      lblRotateBetaVariation.setText("Rotate beta variation");
-      lblRotateBetaVariation.setPreferredSize(new Dimension(94, 22));
-      lblRotateBetaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotateBetaVariation.setBounds(229, 81, 130, 22);
-      panel_7.add(lblRotateBetaVariation);
-
-      baseFlameRotateBetaVariationField = new JWFNumberField();
-      baseFlameRotateBetaVariationField.setValueStep(0.05);
-      baseFlameRotateBetaVariationField.setText("");
-      baseFlameRotateBetaVariationField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateBetaVariationField.setMaxValue(1.0);
-      baseFlameRotateBetaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateBetaVariationField.setBounds(361, 79, 100, 24);
-      baseFlameRotateBetaVariationField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateBetaVariationField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateBetaVariationField);
-
-      baseFlameRotateGammaField = new JWFNumberField();
-      baseFlameRotateGammaField.setValueStep(0.05);
-      baseFlameRotateGammaField.setText("");
-      baseFlameRotateGammaField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateGammaField.setMaxValue(1.0);
-      baseFlameRotateGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateGammaField.setBounds(361, 104, 100, 24);
-      baseFlameRotateGammaField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateGammaField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateGammaField);
-
-      JLabel lblRotateGamma = new JLabel();
-      lblRotateGamma.setToolTipText("");
-      lblRotateGamma.setText("Rotate gamma");
-      lblRotateGamma.setPreferredSize(new Dimension(94, 22));
-      lblRotateGamma.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotateGamma.setBounds(229, 106, 130, 22);
-      panel_7.add(lblRotateGamma);
-
-      JLabel lblRotateGammaVariation = new JLabel();
-      lblRotateGammaVariation.setToolTipText("");
-      lblRotateGammaVariation.setText("Rotate gamma variation");
-      lblRotateGammaVariation.setPreferredSize(new Dimension(94, 22));
-      lblRotateGammaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRotateGammaVariation.setBounds(229, 130, 130, 22);
-      panel_7.add(lblRotateGammaVariation);
-
-      baseFlameRotateGammaVariationField = new JWFNumberField();
-      baseFlameRotateGammaVariationField.setValueStep(0.05);
-      baseFlameRotateGammaVariationField.setText("");
-      baseFlameRotateGammaVariationField.setPreferredSize(new Dimension(100, 24));
-      baseFlameRotateGammaVariationField.setMaxValue(1.0);
-      baseFlameRotateGammaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameRotateGammaVariationField.setBounds(361, 128, 100, 24);
-      baseFlameRotateGammaVariationField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.baseFlameRotateGammaVariationField_changed();
-          }
-        }
-      });
-      panel_7.add(baseFlameRotateGammaVariationField);
+      JLabel lblCentrez = new JLabel();
+      lblCentrez.setBounds(6, 128, 93, 22);
+      panel_9.add(lblCentrez);
+      lblCentrez.setToolTipText("");
+      lblCentrez.setText("CentreZ");
+      lblCentrez.setPreferredSize(new Dimension(94, 22));
+      lblCentrez.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlameCentreZField = new JWFNumberField();
+      baseFlameCentreZField.setBounds(101, 126, 100, 24);
+      panel_9.add(baseFlameCentreZField);
       baseFlameCentreZField.setValueStep(0.05);
       baseFlameCentreZField.setText("");
       baseFlameCentreZField.setPreferredSize(new Dimension(100, 24));
@@ -1103,7 +964,342 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameCentreZField.setHasMinValue(true);
       baseFlameCentreZField.setHasMaxValue(true);
       baseFlameCentreZField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      baseFlameCentreZField.setBounds(101, 128, 100, 24);
+
+      baseFlameRotateAlphaField = new JWFNumberField();
+      baseFlameRotateAlphaField.setBounds(345, 6, 100, 24);
+      panel_9.add(baseFlameRotateAlphaField);
+      baseFlameRotateAlphaField.setValueStep(0.05);
+      baseFlameRotateAlphaField.setText("");
+      baseFlameRotateAlphaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateAlphaField.setMaxValue(1.0);
+      baseFlameRotateAlphaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblRotate = new JLabel();
+      lblRotate.setBounds(213, 8, 130, 22);
+      panel_9.add(lblRotate);
+      lblRotate.setToolTipText("");
+      lblRotate.setText("Rotate alpha");
+      lblRotate.setPreferredSize(new Dimension(94, 22));
+      lblRotate.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblRotateVariation = new JLabel();
+      lblRotateVariation.setBounds(213, 32, 130, 22);
+      panel_9.add(lblRotateVariation);
+      lblRotateVariation.setToolTipText("");
+      lblRotateVariation.setText("Rotate alpha variation");
+      lblRotateVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      baseFlameRotateAlphaVariationField = new JWFNumberField();
+      baseFlameRotateAlphaVariationField.setBounds(345, 30, 100, 24);
+      panel_9.add(baseFlameRotateAlphaVariationField);
+      baseFlameRotateAlphaVariationField.setValueStep(0.05);
+      baseFlameRotateAlphaVariationField.setText("");
+      baseFlameRotateAlphaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateAlphaVariationField.setMaxValue(1.0);
+      baseFlameRotateAlphaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      baseFlameRotateBetaField = new JWFNumberField();
+      baseFlameRotateBetaField.setBounds(345, 55, 100, 24);
+      panel_9.add(baseFlameRotateBetaField);
+      baseFlameRotateBetaField.setValueStep(0.05);
+      baseFlameRotateBetaField.setText("");
+      baseFlameRotateBetaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateBetaField.setMaxValue(1.0);
+      baseFlameRotateBetaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblRotateBeta = new JLabel();
+      lblRotateBeta.setBounds(213, 57, 130, 22);
+      panel_9.add(lblRotateBeta);
+      lblRotateBeta.setToolTipText("");
+      lblRotateBeta.setText("Rotate beta");
+      lblRotateBeta.setPreferredSize(new Dimension(94, 22));
+      lblRotateBeta.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      JLabel lblRotateBetaVariation = new JLabel();
+      lblRotateBetaVariation.setBounds(213, 81, 130, 22);
+      panel_9.add(lblRotateBetaVariation);
+      lblRotateBetaVariation.setToolTipText("");
+      lblRotateBetaVariation.setText("Rotate beta variation");
+      lblRotateBetaVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateBetaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      baseFlameRotateBetaVariationField = new JWFNumberField();
+      baseFlameRotateBetaVariationField.setBounds(345, 79, 100, 24);
+      panel_9.add(baseFlameRotateBetaVariationField);
+      baseFlameRotateBetaVariationField.setValueStep(0.05);
+      baseFlameRotateBetaVariationField.setText("");
+      baseFlameRotateBetaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateBetaVariationField.setMaxValue(1.0);
+      baseFlameRotateBetaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblRotateGamma = new JLabel();
+      lblRotateGamma.setBounds(213, 106, 130, 22);
+      panel_9.add(lblRotateGamma);
+      lblRotateGamma.setToolTipText("");
+      lblRotateGamma.setText("Rotate gamma");
+      lblRotateGamma.setPreferredSize(new Dimension(94, 22));
+      lblRotateGamma.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      baseFlameRotateGammaField = new JWFNumberField();
+      baseFlameRotateGammaField.setBounds(345, 104, 100, 24);
+      panel_9.add(baseFlameRotateGammaField);
+      baseFlameRotateGammaField.setValueStep(0.05);
+      baseFlameRotateGammaField.setText("");
+      baseFlameRotateGammaField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateGammaField.setMaxValue(1.0);
+      baseFlameRotateGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      baseFlameRotateGammaVariationField = new JWFNumberField();
+      baseFlameRotateGammaVariationField.setBounds(345, 128, 100, 24);
+      panel_9.add(baseFlameRotateGammaVariationField);
+      baseFlameRotateGammaVariationField.setValueStep(0.05);
+      baseFlameRotateGammaVariationField.setText("");
+      baseFlameRotateGammaVariationField.setPreferredSize(new Dimension(100, 24));
+      baseFlameRotateGammaVariationField.setMaxValue(1.0);
+      baseFlameRotateGammaVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblRotateGammaVariation = new JLabel();
+      lblRotateGammaVariation.setBounds(213, 130, 130, 22);
+      panel_9.add(lblRotateGammaVariation);
+      lblRotateGammaVariation.setToolTipText("");
+      lblRotateGammaVariation.setText("Rotate gamma variation");
+      lblRotateGammaVariation.setPreferredSize(new Dimension(94, 22));
+      lblRotateGammaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      panel_10 = new JPanel();
+      tabbedPane_1.addTab("Distribution", null, panel_10, null);
+      panel_10.setLayout(null);
+
+      baseFlameMinValueField = new JWFNumberField();
+      baseFlameMinValueField.setMaxValue(1.0);
+      baseFlameMinValueField.setHasMinValue(true);
+      baseFlameMinValueField.setHasMaxValue(true);
+      baseFlameMinValueField.setValueStep(0.05);
+      baseFlameMinValueField.setText("");
+      baseFlameMinValueField.setPreferredSize(new Dimension(100, 24));
+      baseFlameMinValueField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameMinValueField.setBounds(101, 6, 100, 24);
+      baseFlameMinValueField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameMinValueField_changed();
+          }
+        }
+      });
+
+      panel_10.add(baseFlameMinValueField);
+
+      baseFlameMinValueLabel = new JLabel();
+      baseFlameMinValueLabel.setToolTipText("");
+      baseFlameMinValueLabel.setText("Min Value");
+      baseFlameMinValueLabel.setPreferredSize(new Dimension(94, 22));
+      baseFlameMinValueLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameMinValueLabel.setBounds(6, 8, 93, 22);
+      panel_10.add(baseFlameMinValueLabel);
+
+      baseFlameMaxValueLabel = new JLabel();
+      baseFlameMaxValueLabel.setToolTipText("");
+      baseFlameMaxValueLabel.setText("Max Value");
+      baseFlameMaxValueLabel.setPreferredSize(new Dimension(94, 22));
+      baseFlameMaxValueLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameMaxValueLabel.setBounds(6, 32, 93, 22);
+      panel_10.add(baseFlameMaxValueLabel);
+
+      baseFlameMaxValueField = new JWFNumberField();
+      baseFlameMaxValueField.setHasMinValue(true);
+      baseFlameMaxValueField.setHasMaxValue(true);
+      baseFlameMaxValueField.setMaxValue(1.0);
+      baseFlameMaxValueField.setValueStep(0.05);
+      baseFlameMaxValueField.setText("");
+      baseFlameMaxValueField.setPreferredSize(new Dimension(100, 24));
+      baseFlameMaxValueField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameMaxValueField.setBounds(101, 30, 100, 24);
+      baseFlameMaxValueField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameMaxValueField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameMaxValueField);
+
+      baseFlameWeightField = new JWFNumberField();
+      baseFlameWeightField.setHasMinValue(true);
+      baseFlameWeightField.setValueStep(0.05);
+      baseFlameWeightField.setText("");
+      baseFlameWeightField.setPreferredSize(new Dimension(100, 24));
+      baseFlameWeightField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameWeightField.setBounds(101, 66, 100, 24);
+      baseFlameWeightField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameWeightField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameWeightField);
+
+      JLabel lblWeight = new JLabel();
+      lblWeight.setToolTipText("");
+      lblWeight.setText("Weight");
+      lblWeight.setPreferredSize(new Dimension(94, 22));
+      lblWeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblWeight.setBounds(6, 68, 93, 22);
+      panel_10.add(lblWeight);
+
+      baseFlameGridXOffsetField = new JWFNumberField();
+      baseFlameGridXOffsetField.setOnlyIntegers(true);
+      baseFlameGridXOffsetField.setValueStep(1.0);
+      baseFlameGridXOffsetField.setText("");
+      baseFlameGridXOffsetField.setPreferredSize(new Dimension(100, 24));
+      baseFlameGridXOffsetField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameGridXOffsetField.setBounds(327, 6, 100, 24);
+      baseFlameGridXOffsetField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameGridXOffsetField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameGridXOffsetField);
+
+      JLabel lblGridXOff = new JLabel();
+      lblGridXOff.setToolTipText("");
+      lblGridXOff.setText("Grid X Offset");
+      lblGridXOff.setPreferredSize(new Dimension(94, 22));
+      lblGridXOff.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGridXOff.setBounds(232, 8, 93, 22);
+      panel_10.add(lblGridXOff);
+
+      JLabel lblGridYOffset = new JLabel();
+      lblGridYOffset.setToolTipText("");
+      lblGridYOffset.setText("Grid Y Offset");
+      lblGridYOffset.setPreferredSize(new Dimension(94, 22));
+      lblGridYOffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGridYOffset.setBounds(232, 32, 93, 22);
+      panel_10.add(lblGridYOffset);
+
+      baseFlameGridYOffsetField = new JWFNumberField();
+      baseFlameGridYOffsetField.setValueStep(1.0);
+      baseFlameGridYOffsetField.setText("");
+      baseFlameGridYOffsetField.setPreferredSize(new Dimension(100, 24));
+      baseFlameGridYOffsetField.setOnlyIntegers(true);
+      baseFlameGridYOffsetField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameGridYOffsetField.setBounds(327, 30, 100, 24);
+      baseFlameGridYOffsetField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameGridYOffsetField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameGridYOffsetField);
+
+      JLabel lblGridXSize = new JLabel();
+      lblGridXSize.setToolTipText("");
+      lblGridXSize.setText("Grid X Size");
+      lblGridXSize.setPreferredSize(new Dimension(94, 22));
+      lblGridXSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGridXSize.setBounds(232, 68, 93, 22);
+      panel_10.add(lblGridXSize);
+
+      baseFlameGridXSizeField = new JWFNumberField();
+      baseFlameGridXSizeField.setMinValue(1.0);
+      baseFlameGridXSizeField.setHasMinValue(true);
+      baseFlameGridXSizeField.setValueStep(1.0);
+      baseFlameGridXSizeField.setText("");
+      baseFlameGridXSizeField.setPreferredSize(new Dimension(100, 24));
+      baseFlameGridXSizeField.setOnlyIntegers(true);
+      baseFlameGridXSizeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameGridXSizeField.setBounds(327, 66, 100, 24);
+      baseFlameGridXSizeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameGridXSizeField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameGridXSizeField);
+
+      JLabel lblGridYSize = new JLabel();
+      lblGridYSize.setToolTipText("");
+      lblGridYSize.setText("Grid Y Size");
+      lblGridYSize.setPreferredSize(new Dimension(94, 22));
+      lblGridYSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGridYSize.setBounds(232, 92, 93, 22);
+      panel_10.add(lblGridYSize);
+
+      baseFlameGridYSizeField = new JWFNumberField();
+      baseFlameGridYSizeField.setMinValue(1.0);
+      baseFlameGridYSizeField.setValueStep(1.0);
+      baseFlameGridYSizeField.setText("");
+      baseFlameGridYSizeField.setPreferredSize(new Dimension(100, 24));
+      baseFlameGridYSizeField.setOnlyIntegers(true);
+      baseFlameGridYSizeField.setHasMinValue(true);
+      baseFlameGridYSizeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      baseFlameGridYSizeField.setBounds(327, 90, 100, 24);
+      baseFlameGridYSizeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameGridYSizeField_changed();
+          }
+        }
+      });
+      panel_10.add(baseFlameGridYSizeField);
+
+      panel_11 = new JPanel();
+      tabbedPane.addTab("Statistics", null, panel_11, null);
+      panel_11.setLayout(new BorderLayout(0, 0));
+
+      scrollPane_1 = new JScrollPane();
+      panel_11.add(scrollPane_1, BorderLayout.CENTER);
+
+      statisticsTextArea = new JTextArea();
+      statisticsTextArea.setEditable(false);
+      scrollPane_1.setViewportView(statisticsTextArea);
+      baseFlameRotateGammaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateGammaVariationField_changed();
+          }
+        }
+      });
+      baseFlameRotateGammaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateGammaField_changed();
+          }
+        }
+      });
+      baseFlameRotateBetaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateBetaVariationField_changed();
+          }
+        }
+      });
+      baseFlameRotateBetaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateBetaField_changed();
+          }
+        }
+      });
+      baseFlameRotateAlphaVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateAlphaVariationField_changed();
+          }
+        }
+      });
+      baseFlameRotateAlphaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameRotateAlphaField_changed();
+          }
+        }
+      });
       baseFlameCentreZField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1111,15 +1307,34 @@ public class IFlamesInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_7.add(baseFlameCentreZField);
-
-      JLabel lblCentrez = new JLabel();
-      lblCentrez.setToolTipText("");
-      lblCentrez.setText("CentreZ");
-      lblCentrez.setPreferredSize(new Dimension(94, 22));
-      lblCentrez.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblCentrez.setBounds(6, 130, 93, 22);
-      panel_7.add(lblCentrez);
+      baseFlameCentreYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameCentreYField_changed();
+          }
+        }
+      });
+      baseFlameCentreXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameCentreXField_changed();
+          }
+        }
+      });
+      baseFlameSizeVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameSizeVariationField_changed();
+          }
+        }
+      });
+      baseFlameSizeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameSizeField_changed();
+          }
+        }
+      });
 
       panel_6 = new JPanel();
       panel_6.setPreferredSize(new Dimension(128, 10));
@@ -1258,7 +1473,10 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getBaseFlameRotateBetaVariationField(), getBaseFlameRotateGammaField(), getBaseFlameRotateGammaVariationField(),
         getBaseFlameCentreXField(), getBaseFlameCentreYField(), getBaseFlameCentreZField(), getBaseFlameFromClipboardButton(),
         getBaseFlameToClipboardButton(), getBaseFlameClearButton(), getBaseFlameClearAllButton(), getPreviewButton(),
-        getRenderFlameButton(), getIntroductionTextPane());
+        getRenderFlameButton(), getIntroductionTextPane(), getBaseFlameMinValueField(), getBaseFlameMinValueLabel(),
+        getBaseFlameMaxValueField(), getBaseFlameMaxValueLabel(), getStatisticsTextArea(), getBaseFlameWeightField(),
+        getBaseFlameGridXOffsetField(), getBaseFlameGridYOffsetField(), getBaseFlameGridXSizeField(),
+        getBaseFlameGridYSizeField());
   }
 
   public JPanel getMainLeftPanel() {
@@ -1507,5 +1725,45 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JTextPane getIntroductionTextPane() {
     return introductionTextPane;
+  }
+
+  public JTextArea getStatisticsTextArea() {
+    return statisticsTextArea;
+  }
+
+  public JLabel getBaseFlameMinValueLabel() {
+    return baseFlameMinValueLabel;
+  }
+
+  public JLabel getBaseFlameMaxValueLabel() {
+    return baseFlameMaxValueLabel;
+  }
+
+  public JWFNumberField getBaseFlameMinValueField() {
+    return baseFlameMinValueField;
+  }
+
+  public JWFNumberField getBaseFlameMaxValueField() {
+    return baseFlameMaxValueField;
+  }
+
+  public JWFNumberField getBaseFlameWeightField() {
+    return baseFlameWeightField;
+  }
+
+  public JWFNumberField getBaseFlameGridXOffsetField() {
+    return baseFlameGridXOffsetField;
+  }
+
+  public JWFNumberField getBaseFlameGridYOffsetField() {
+    return baseFlameGridYOffsetField;
+  }
+
+  public JWFNumberField getBaseFlameGridXSizeField() {
+    return baseFlameGridXSizeField;
+  }
+
+  public JWFNumberField getBaseFlameGridYSizeField() {
+    return baseFlameGridYSizeField;
   }
 }

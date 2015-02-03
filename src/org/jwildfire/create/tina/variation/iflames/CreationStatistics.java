@@ -23,6 +23,7 @@ public class CreationStatistics {
   private final List<Action> actions = new ArrayList<Action>();
   private int structureMapWidth, structureMapHeight;
   private int flameCount;
+  private long totalDuration;
 
   public enum ActionType {
     SCALE, ERODE, CONV_NORTH, CONV_EAST, CONV_SOUTH, CONV_WEST, CONV_MERGE, CREATE_STRUCTURE
@@ -89,4 +90,26 @@ public class CreationStatistics {
   public void setFlameCount(int pFlameCount) {
     flameCount = pFlameCount;
   }
+
+  public void setTotalDuration(long pTotalDuration) {
+    totalDuration = pTotalDuration;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("iflame-generation statistics\n");
+    sb.append("------------------------------------------\n");
+    sb.append("structure width: " + structureMapWidth + "\n");
+    sb.append("structure height: " + structureMapHeight + "\n");
+    sb.append("number of flames: " + flameCount + "\n");
+    sb.append("total duration: " + totalDuration / 1000.0 + "s\n");
+    sb.append("actions:\n");
+    for (Action action : actions) {
+      sb.append("  " + action.getActionType() + ": " + action.getDuration() / 1000.0 + "s\n");
+    }
+
+    return sb.toString();
+  }
+
 }
