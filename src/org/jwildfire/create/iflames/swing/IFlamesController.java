@@ -49,6 +49,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
 
 import org.jwildfire.base.Prefs;
@@ -57,6 +58,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.dance.FlamePropertiesTreeService;
+import org.jwildfire.create.tina.dance.model.FlamePropertyPath;
 import org.jwildfire.create.tina.edit.UndoManager;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -84,6 +87,7 @@ import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.iflames.CreationStatistics;
+import org.jwildfire.create.tina.variation.iflames.FlameParams;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.iflames.ImageParams;
 import org.jwildfire.create.tina.variation.iflames.ShapeDistribution;
@@ -165,6 +169,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField baseFlameGridYOffsetField;
   private final JWFNumberField baseFlameGridXSizeField;
   private final JWFNumberField baseFlameGridYSizeField;
+  private final JComboBox selectedMutationCmb;
+  private final JWFNumberField paramMinValueField;
+  private final JWFNumberField paramMaxValueField;
+  private final JTree paramPropertyPathTree;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -175,6 +183,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final FlameMessageHelper messageHelper;
   private boolean undoDebug = true;
   private boolean noRefresh;
+  private final FlamePropertiesTreeService flamePropertiesTreeService;
 
   @SuppressWarnings("unchecked")
   public IFlamesController(MainController pMainController, ErrorHandler pErrorHandler,
@@ -201,7 +210,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pBaseFlameMaxValueField, JLabel pBaseFlameMaxValueLabel, JTextArea pStatisticsTextArea,
       JWFNumberField pBaseFlameWeightField, JWFNumberField pBaseFlameGridXOffsetField,
       JWFNumberField pBaseFlameGridYOffsetField, JWFNumberField pBaseFlameGridXSizeField,
-      JWFNumberField pBaseFlameGridYSizeField) {
+      JWFNumberField pBaseFlameGridYSizeField, JComboBox pSelectedMutationCmb, JWFNumberField pParamMinValueField,
+      JWFNumberField pParamMaxValueField, JTree pParamPropertyPathTree) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -271,9 +281,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameGridYOffsetField = pBaseFlameGridYOffsetField;
     baseFlameGridXSizeField = pBaseFlameGridXSizeField;
     baseFlameGridYSizeField = pBaseFlameGridYSizeField;
+    selectedMutationCmb = pSelectedMutationCmb;
+    paramMinValueField = pParamMinValueField;
+    paramMaxValueField = pParamMaxValueField;
+    paramPropertyPathTree = pParamPropertyPathTree;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
+    flamePropertiesTreeService = new FlamePropertiesTreeService();
 
     flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, null,
         null, null, mainProgressUpdater, this, null, null, this, messageHelper, null);
@@ -287,6 +302,14 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       }
       baseFlameCmb.setSelectedIndex(0);
     }
+    {
+      selectedMutationCmb.removeAllItems();
+      for (int i = 0; i < FlameParams.MAX_MUTATION_COUNT; i++) {
+        selectedMutationCmb.addItem("Mutation " + (i + 1));
+      }
+      selectedMutationCmb.setSelectedIndex(0);
+    }
+
     {
       shapeDistributionCmb.removeAllItems();
       shapeDistributionCmb.addItem(ShapeDistribution.HUE);
@@ -548,6 +571,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     baseFlameClearAllButton.setEnabled(hasIFlame);
     previewButton.setEnabled(true);
     renderFlameButton.setEnabled(hasFlame);
+    selectedMutationCmb.setEnabled(hasBaseFlame);
+    paramMinValueField.setEnabled(hasBaseFlame);
+    paramMaxValueField.setEnabled(hasBaseFlame);
+    paramPropertyPathTree.setEnabled(hasBaseFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -893,6 +920,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       catch (Exception e) {
         errorHandler.handleError(e);
       }
+      enableControls();
       refreshBaseFlamePreview();
       refreshIFlame();
     }
@@ -931,6 +959,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
 
   private int getCurrFlameIndex() {
     return baseFlameCmb.getSelectedIndex();
+  }
+
+  private int getCurrMutationIndex() {
+    return selectedMutationCmb.getSelectedIndex();
   }
 
   @SuppressWarnings("unchecked")
@@ -1018,6 +1050,12 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     return baseFlamePreviewPanel;
   }
 
+  private Flame getBaseFlame() {
+    IFlamesFunc iflame = getIFlamesFunc();
+    String flameXML = iflame != null ? iflame.getFlameParams(getCurrFlameIndex()).getFlameXML() : null;
+    return flameXML != null && flameXML.length() > 0 ? new FlameReader(prefs).readFlamesfromXML(flameXML).get(0) : null;
+  }
+
   private void refreshBaseFlamePreview() {
     FlamePanel imgPanel = getBaseFlamePreviewPanel();
     Rectangle bounds = imgPanel.getImageBounds();
@@ -1025,10 +1063,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     int height = bounds.height;
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
-      IFlamesFunc iflame = getIFlamesFunc();
-
-      String flameXML = iflame != null ? iflame.getFlameParams(getCurrFlameIndex()).getFlameXML() : null;
-      Flame flame = flameXML != null && flameXML.length() > 0 ? new FlameReader(prefs).readFlamesfromXML(flameXML).get(0) : null;
+      Flame flame = getBaseFlame();
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
@@ -1133,6 +1168,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameGridYOffsetField.setValue(0.0);
       baseFlameGridXSizeField.setValue(0.0);
       baseFlameGridYSizeField.setValue(0.0);
+      selectedMutationCmb.setSelectedIndex(0);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1171,6 +1207,57 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           baseFlameMaxValueLabel.setText("Max Value");
           break;
       }
+    }
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      flamePropertiesTreeService.refreshFlamePropertiesTree(paramPropertyPathTree, getBaseFlame());
+    }
+    finally {
+      noRefresh = oldNoRefresh;
+    }
+    refreshMutationFields();
+  }
+
+  private void refreshMutationFields() {
+    IFlamesFunc iflame = getIFlamesFunc();
+    if (iflame == null) {
+      paramMinValueField.setValue(0.0);
+      paramMaxValueField.setValue(0.0);
+      paramPropertyPathTree.clearSelection();
+    }
+    else {
+      FlameParams flameParams = iflame.getFlameParams(getCurrFlameIndex());
+      switch (getCurrMutationIndex()) {
+        case 0:
+          fillMutationFields(getBaseFlame(), flameParams.getFlameParam1Min(), flameParams.getFlameParam1Max(), flameParams.getFlameParam1());
+          break;
+        case 1:
+          fillMutationFields(getBaseFlame(), flameParams.getFlameParam2Min(), flameParams.getFlameParam2Max(), flameParams.getFlameParam2());
+          break;
+        case 2:
+          fillMutationFields(getBaseFlame(), flameParams.getFlameParam3Min(), flameParams.getFlameParam3Max(), flameParams.getFlameParam3());
+          break;
+      }
+    }
+  }
+
+  private void fillMutationFields(Flame pFlame, double pParamMin, double pParamMax, String pParamPath) {
+    paramMinValueField.setValue(pParamMin);
+    paramMaxValueField.setValue(pParamMax);
+    boolean oldNoRefresh = noRefresh;
+    noRefresh = true;
+    try {
+      if (pParamPath == null || pParamPath.length() == 0 || pFlame == null) {
+        paramPropertyPathTree.clearSelection();
+      }
+      else {
+        FlamePropertyPath path = new FlamePropertyPath(pFlame, pParamPath);
+        flamePropertiesTreeService.selectPropertyPath(paramPropertyPathTree, path);
+      }
+    }
+    finally {
+      noRefresh = oldNoRefresh;
     }
   }
 
@@ -1690,4 +1777,76 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     refreshIFlame();
     enableControls();
   }
+
+  public void paramPropertyPathTree_changed() {
+    if (noRefresh || getFlame() == null) {
+      return;
+    }
+    boolean plainPropertySelected = flamePropertiesTreeService.isPlainPropertySelected(paramPropertyPathTree);
+    String path;
+    if (plainPropertySelected) {
+      FlamePropertyPath selPath = flamePropertiesTreeService.getSelectedPropertyPath(paramPropertyPathTree);
+      path = selPath.getPath();
+    }
+    else {
+      path = null;
+    }
+    saveUndoPoint();
+    switch (getCurrMutationIndex()) {
+      case 0:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam1(path);
+        break;
+      case 1:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam2(path);
+        break;
+      case 2:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3(path);
+        break;
+    }
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void selectedMutationCmb_changed() {
+    if (noRefresh || getFlame() == null) {
+      return;
+    }
+    enableControls();
+    refreshMutationFields();
+  }
+
+  public void paramMinValueField_changed() {
+    saveUndoPoint();
+    switch (getCurrMutationIndex()) {
+      case 0:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam1Min(paramMinValueField.getDoubleValue());
+        break;
+      case 1:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam2Min(paramMinValueField.getDoubleValue());
+        break;
+      case 2:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Min(paramMinValueField.getDoubleValue());
+        break;
+    }
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void paramMaxValueField_changed() {
+    saveUndoPoint();
+    switch (getCurrMutationIndex()) {
+      case 0:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam1Max(paramMaxValueField.getDoubleValue());
+        break;
+      case 1:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam2Max(paramMaxValueField.getDoubleValue());
+        break;
+      case 2:
+        getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Max(paramMaxValueField.getDoubleValue());
+        break;
+    }
+    refreshIFlame();
+    enableControls();
+  }
+
 }

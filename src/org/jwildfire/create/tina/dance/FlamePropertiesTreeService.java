@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.dance.model.AbstractProperty;
@@ -44,6 +46,17 @@ public class FlamePropertiesTreeService {
       root.add(flameNode);
     }
     pFlamePropertiesTree.setModel(new DefaultTreeModel(root));
+  }
+
+  public void refreshFlamePropertiesTree(JTree pFlamePropertiesTree, Flame pFlame) {
+    FlamePropertiesTreeNode<Object> root = new FlamePropertiesTreeNode<Object>("Flames", null, true);
+    if (pFlame != null) {
+      FlamePropertiesTreeNode<Flame> flameNode = new FlamePropertiesTreeNode<Flame>(getFlameCaption(pFlame), pFlame, true);
+      PropertyModel model = AnimationModelService.createModel(pFlame);
+      addNodesToTree(model, flameNode);
+      root.add(flameNode);
+      pFlamePropertiesTree.setModel(new DefaultTreeModel(root));
+    }
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -96,4 +109,43 @@ public class FlamePropertiesTreeService {
     return null;
   }
 
+  public void selectPropertyPath(JTree pTree, FlamePropertyPath pPath) {
+    if (pPath != null) {
+      TreeNode selNode = null;
+      TreeNode root = (TreeNode) pTree.getModel().getRoot();
+      List<String> pathNodes = pPath.getPathComponents();
+      // skip root
+      if (pathNodes.size() > 0 && root != null && root.getChildCount() == 1) {
+        root = root.getChildAt(0);
+        int d = 0;
+        while (d < pathNodes.size()) {
+          boolean found = false;
+          for (int i = 0; i < root.getChildCount(); i++) {
+            TreeNode node = root.getChildAt(i);
+            if (node instanceof FlamePropertiesTreeNode) {
+              FlamePropertiesTreeNode<?> fNode = (FlamePropertiesTreeNode<?>) node;
+              if (pathNodes.get(d).equals(fNode.getUserObject())) {
+                root = node;
+                found = true;
+                break;
+              }
+            }
+          }
+          if (!found) {
+            break;
+          }
+          else if (d == pathNodes.size() - 1) {
+            selNode = root;
+          }
+          d++;
+        }
+        if (selNode != null) {
+          TreeNode[] nodes = ((DefaultTreeModel) pTree.getModel()).getPathToRoot(selNode);
+          TreePath path = new TreePath(nodes);
+          pTree.expandPath(path);
+          pTree.setSelectionPath(path);
+        }
+      }
+    }
+  }
 }

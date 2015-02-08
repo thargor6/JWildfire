@@ -37,10 +37,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.swing.MainController;
@@ -135,6 +138,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField baseFlameGridYOffsetField;
   private JWFNumberField baseFlameGridXSizeField;
   private JWFNumberField baseFlameGridYSizeField;
+  private JPanel panel_12;
+  private JComboBox selectedMutationCmb;
+  private JWFNumberField paramMaxValueField;
+  private JTree paramPropertyPathTree;
+  private JWFNumberField paramMinValueField;
 
   public IFlamesInternalFrame() {
     super();
@@ -1248,6 +1256,92 @@ public class IFlamesInternalFrame extends JInternalFrame {
       });
       panel_10.add(baseFlameGridYSizeField);
 
+      panel_12 = new JPanel();
+      tabbedPane_1.addTab("Mutations", null, panel_12, null);
+      panel_12.setLayout(null);
+
+      paramMinValueField = new JWFNumberField();
+      paramMinValueField.setValueStep(0.05);
+      paramMinValueField.setText("");
+      paramMinValueField.setPreferredSize(new Dimension(100, 24));
+      paramMinValueField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      paramMinValueField.setBounds(101, 98, 100, 24);
+      paramMinValueField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.paramMinValueField_changed();
+          }
+        }
+      });
+      panel_12.add(paramMinValueField);
+
+      JLabel label = new JLabel();
+      label.setToolTipText("");
+      label.setText("Min Value");
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(6, 100, 93, 22);
+      panel_12.add(label);
+
+      JLabel label_1 = new JLabel();
+      label_1.setToolTipText("");
+      label_1.setText("Max Value");
+      label_1.setPreferredSize(new Dimension(94, 22));
+      label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_1.setBounds(6, 124, 93, 22);
+      panel_12.add(label_1);
+
+      paramMaxValueField = new JWFNumberField();
+      paramMaxValueField.setValueStep(0.05);
+      paramMaxValueField.setText("");
+      paramMaxValueField.setPreferredSize(new Dimension(100, 24));
+      paramMaxValueField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      paramMaxValueField.setBounds(101, 122, 100, 24);
+      paramMaxValueField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.paramMaxValueField_changed();
+          }
+        }
+      });
+      panel_12.add(paramMaxValueField);
+
+      selectedMutationCmb = new JComboBox();
+      selectedMutationCmb.setPreferredSize(new Dimension(125, 22));
+      selectedMutationCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      selectedMutationCmb.setBounds(101, 6, 100, 22);
+      selectedMutationCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (iflamesController != null) {
+            iflamesController.selectedMutationCmb_changed();
+          }
+        }
+      });
+      panel_12.add(selectedMutationCmb);
+
+      JLabel lblMutation = new JLabel();
+      lblMutation.setText("Mutation");
+      lblMutation.setPreferredSize(new Dimension(94, 22));
+      lblMutation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMutation.setBounds(6, 6, 82, 22);
+      panel_12.add(lblMutation);
+
+      JScrollPane scrollPane_2 = new JScrollPane();
+      scrollPane_2.setBounds(210, 6, 279, 140);
+      panel_12.add(scrollPane_2);
+
+      paramPropertyPathTree = new JTree();
+      paramPropertyPathTree.addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          if (iflamesController != null) {
+            iflamesController.paramPropertyPathTree_changed();
+          }
+        }
+      });
+      paramPropertyPathTree.setRootVisible(false);
+
+      scrollPane_2.setViewportView(paramPropertyPathTree);
+
       panel_11 = new JPanel();
       tabbedPane.addTab("Statistics", null, panel_11, null);
       panel_11.setLayout(new BorderLayout(0, 0));
@@ -1476,7 +1570,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getRenderFlameButton(), getIntroductionTextPane(), getBaseFlameMinValueField(), getBaseFlameMinValueLabel(),
         getBaseFlameMaxValueField(), getBaseFlameMaxValueLabel(), getStatisticsTextArea(), getBaseFlameWeightField(),
         getBaseFlameGridXOffsetField(), getBaseFlameGridYOffsetField(), getBaseFlameGridXSizeField(),
-        getBaseFlameGridYSizeField());
+        getBaseFlameGridYSizeField(), getSelectedMutationCmb(), getParamMinValueField(), getParamMaxValueField(),
+        getParamPropertyPathTree());
   }
 
   public JPanel getMainLeftPanel() {
@@ -1765,5 +1860,21 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getBaseFlameGridYSizeField() {
     return baseFlameGridYSizeField;
+  }
+
+  public JComboBox getSelectedMutationCmb() {
+    return selectedMutationCmb;
+  }
+
+  public JWFNumberField getParamMaxValueField() {
+    return paramMaxValueField;
+  }
+
+  public JTree getParamPropertyPathTree() {
+    return paramPropertyPathTree;
+  }
+
+  public JWFNumberField getParamMinValueField() {
+    return paramMinValueField;
   }
 }
