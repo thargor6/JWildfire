@@ -173,7 +173,7 @@ public class Desktop extends JApplet {
       edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
 
       IFlamesInternalFrame iflamesInternalFrame = (IFlamesInternalFrame) getIFlamesInternalFrame();
-      iflamesInternalFrame.createController(mainController, errorHandler);
+      iflamesInternalFrame.createController(mainController, tinaController, errorHandler);
 
       tinaController.setMainController(mainController);
 

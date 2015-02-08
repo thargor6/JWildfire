@@ -80,6 +80,7 @@ import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.RenderProgressBarHolder;
 import org.jwildfire.create.tina.swing.RenderProgressUpdater;
 import org.jwildfire.create.tina.swing.ThumbnailCacheKey;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -101,6 +102,7 @@ import org.jwildfire.swing.MainController;
 public class IFlamesController implements FlameHolder, FlamePanelProvider, RenderProgressBarHolder {
   private final Prefs prefs;
   private final MainController mainController;
+  private final TinaController tinaController;
   private final JInternalFrame iflamesFrame;
   private final ErrorHandler errorHandler;
   private final JPanel centerPanel;
@@ -173,6 +175,25 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField paramMinValueField;
   private final JWFNumberField paramMaxValueField;
   private final JTree paramPropertyPathTree;
+  private final JButton iflameToEditorButton;
+  private final JWFNumberField motionTimeField;
+  private final JWFNumberField motionLifeTimeField;
+  private final JWFNumberField motionLifeTimeVariationField;
+  private final JWFNumberField motionForceXField;
+  private final JWFNumberField motionForceYField;
+  private final JWFNumberField motionForceZField;
+  private final JWFNumberField speedXField;
+  private final JWFNumberField speedYField;
+  private final JWFNumberField speedZField;
+  private final JWFNumberField speedXVarField;
+  private final JWFNumberField speedYVarField;
+  private final JWFNumberField speedZVarField;
+  private final JWFNumberField speedAlphaField;
+  private final JWFNumberField speedBetaField;
+  private final JWFNumberField speedGammaField;
+  private final JWFNumberField speedAlphaVarField;
+  private final JWFNumberField speedBetaVarField;
+  private final JWFNumberField speedGammaVarField;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -186,8 +207,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final FlamePropertiesTreeService flamePropertiesTreeService;
 
   @SuppressWarnings("unchecked")
-  public IFlamesController(MainController pMainController, ErrorHandler pErrorHandler,
-      JInternalFrame pIflamesFrame, JPanel pCenterPanel,
+  public IFlamesController(MainController pMainController, TinaController pTinaController,
+      ErrorHandler pErrorHandler, JInternalFrame pIflamesFrame, JPanel pCenterPanel,
       JButton pUndoButton, JButton pRedoButton, JButton pRenderButton, JPanel pImageLibraryPanel,
       JPanel pFlameLibraryPanel, JButton pLoadIFlameButton, JButton pLoadIFlameFromClipboardButton,
       JButton pSaveIFlameToClipboardButton, JButton pSaveIFlameButton, JButton pRefreshIFlameButton,
@@ -211,10 +232,17 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pBaseFlameWeightField, JWFNumberField pBaseFlameGridXOffsetField,
       JWFNumberField pBaseFlameGridYOffsetField, JWFNumberField pBaseFlameGridXSizeField,
       JWFNumberField pBaseFlameGridYSizeField, JComboBox pSelectedMutationCmb, JWFNumberField pParamMinValueField,
-      JWFNumberField pParamMaxValueField, JTree pParamPropertyPathTree) {
+      JWFNumberField pParamMaxValueField, JTree pParamPropertyPathTree, JButton pIflameToEditorButton,
+      JWFNumberField pMotionTimeField, JWFNumberField pMotionLifeTimeField, JWFNumberField pMotionLifeTimeVariationField,
+      JWFNumberField pMotionForceXField, JWFNumberField pMotionForceYField, JWFNumberField pMotionForceZField,
+      JWFNumberField pSpeedXField, JWFNumberField pSpeedYField, JWFNumberField pSpeedZField,
+      JWFNumberField pSpeedXVarField, JWFNumberField pSpeedYVarField, JWFNumberField pSpeedZVarField,
+      JWFNumberField pSpeedAlphaField, JWFNumberField pSpeedBetaField, JWFNumberField pSpeedGammaField,
+      JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
+    tinaController = pTinaController;
     errorHandler = pErrorHandler;
     iflamesFrame = pIflamesFrame;
     centerPanel = pCenterPanel;
@@ -285,6 +313,25 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     paramMinValueField = pParamMinValueField;
     paramMaxValueField = pParamMaxValueField;
     paramPropertyPathTree = pParamPropertyPathTree;
+    iflameToEditorButton = pIflameToEditorButton;
+    motionTimeField = pMotionTimeField;
+    motionLifeTimeField = pMotionLifeTimeField;
+    motionLifeTimeVariationField = pMotionLifeTimeVariationField;
+    motionForceXField = pMotionForceXField;
+    motionForceYField = pMotionForceYField;
+    motionForceZField = pMotionForceZField;
+    speedXField = pSpeedXField;
+    speedYField = pSpeedYField;
+    speedZField = pSpeedZField;
+    speedXVarField = pSpeedXVarField;
+    speedYVarField = pSpeedYVarField;
+    speedZVarField = pSpeedZVarField;
+    speedAlphaField = pSpeedAlphaField;
+    speedBetaField = pSpeedBetaField;
+    speedGammaField = pSpeedGammaField;
+    speedAlphaVarField = pSpeedAlphaVarField;
+    speedBetaVarField = pSpeedBetaVarField;
+    speedGammaVarField = pSpeedGammaVarField;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -575,6 +622,25 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     paramMinValueField.setEnabled(hasBaseFlame);
     paramMaxValueField.setEnabled(hasBaseFlame);
     paramPropertyPathTree.setEnabled(hasBaseFlame);
+    iflameToEditorButton.setEnabled(hasFlame);
+    motionTimeField.setEnabled(hasIFlame);
+    motionLifeTimeField.setEnabled(hasIFlame);
+    motionLifeTimeVariationField.setEnabled(hasIFlame);
+    motionForceXField.setEnabled(hasIFlame);
+    motionForceYField.setEnabled(hasIFlame);
+    motionForceZField.setEnabled(hasIFlame);
+    speedXField.setEnabled(hasBaseFlame);
+    speedYField.setEnabled(hasBaseFlame);
+    speedZField.setEnabled(hasBaseFlame);
+    speedXVarField.setEnabled(hasBaseFlame);
+    speedYVarField.setEnabled(hasBaseFlame);
+    speedZVarField.setEnabled(hasBaseFlame);
+    speedAlphaField.setEnabled(hasBaseFlame);
+    speedBetaField.setEnabled(hasBaseFlame);
+    speedGammaField.setEnabled(hasBaseFlame);
+    speedAlphaVarField.setEnabled(hasBaseFlame);
+    speedBetaVarField.setEnabled(hasBaseFlame);
+    speedGammaVarField.setEnabled(hasBaseFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -668,6 +734,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private void refreshUI() {
     refreshBaseFlamePreview();
     refreshImageFields();
+    refreshMotionFields();
     refreshBaseFlameFields();
     refreshPreview();
   }
@@ -1146,6 +1213,27 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     }
   }
 
+  private void refreshMotionFields() {
+    // TODO Auto-generated method stub
+    IFlamesFunc iflame = getIFlamesFunc();
+    if (iflame == null) {
+      motionTimeField.setValue(0.0);
+      motionLifeTimeField.setValue(0.0);
+      motionLifeTimeVariationField.setValue(0.0);
+      motionForceXField.setValue(0.0);
+      motionForceYField.setValue(0.0);
+      motionForceZField.setValue(0.0);
+    }
+    else {
+      motionTimeField.setValue(iflame.getMotionParams().getTime());
+      motionLifeTimeField.setValue(iflame.getMotionParams().getLife());
+      motionLifeTimeVariationField.setValue(iflame.getMotionParams().getLifeVar());
+      motionForceXField.setValue(iflame.getMotionParams().getForceX0());
+      motionForceYField.setValue(iflame.getMotionParams().getForceY0());
+      motionForceZField.setValue(iflame.getMotionParams().getForceZ0());
+    }
+  }
+
   private void refreshBaseFlameFields() {
     // TODO Auto-generated method stub
     IFlamesFunc iflame = getIFlamesFunc();
@@ -1169,6 +1257,18 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameGridXSizeField.setValue(0.0);
       baseFlameGridYSizeField.setValue(0.0);
       selectedMutationCmb.setSelectedIndex(0);
+      speedXField.setValue(0.0);
+      speedYField.setValue(0.0);
+      speedZField.setValue(0.0);
+      speedXVarField.setValue(0.0);
+      speedYVarField.setValue(0.0);
+      speedZVarField.setValue(0.0);
+      speedAlphaField.setValue(0.0);
+      speedBetaField.setValue(0.0);
+      speedGammaField.setValue(0.0);
+      speedAlphaVarField.setValue(0.0);
+      speedBetaVarField.setValue(0.0);
+      speedGammaVarField.setValue(0.0);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1189,6 +1289,19 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameGridYOffsetField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridYOffset());
       baseFlameGridXSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridXSize());
       baseFlameGridYSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getGridYSize());
+      speedXField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedX());
+      speedYField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedY());
+      speedZField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedZ());
+      speedXVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedXVar());
+      speedYVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedYVar());
+      speedZVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSpeedZVar());
+      speedAlphaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateAlphaSpeed());
+      speedBetaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateBetaSpeed());
+      speedGammaField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateGammaSpeed());
+      speedAlphaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateAlphaSpeedVar());
+      speedBetaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateBetaSpeedVar());
+      speedGammaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateGammaSpeedVar());
+
       switch (iflame.getImageParams().getShape_distribution()) {
         case BRIGHTNESS:
           baseFlameMinValueLabel.setText("Min Brightness");
@@ -1845,6 +1958,136 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Max(paramMaxValueField.getDoubleValue());
         break;
     }
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void iflameToEditorButton_clicked() {
+    tinaController.importFlame(getFlame(), true);
+  }
+
+  public void motionForceZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceZ0(motionForceZField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void motionForceYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceY0(motionForceYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void motionForceXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceX0(motionForceXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void motionLifeTimeVariationField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setLifeVar(motionLifeTimeVariationField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void motionLifeTimeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setLife(motionLifeTimeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void motionTimeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setTime(motionTimeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedX(speedXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedY(speedYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedAlphaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateAlphaSpeed(speedAlphaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedBetaVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateBetaSpeedVar(speedBetaVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedGammaVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateGammaSpeedVar(speedGammaVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedXVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedXVar(speedXVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedZ(speedZField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedZVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedZVar(speedZVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedBetaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateBetaSpeed(speedBetaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedYVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setSpeedYVar(speedYVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedGammaField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateGammaSpeed(speedGammaField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void speedAlphaVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateAlphaSpeedVar(speedAlphaVarField.getDoubleValue());
     refreshIFlame();
     enableControls();
   }

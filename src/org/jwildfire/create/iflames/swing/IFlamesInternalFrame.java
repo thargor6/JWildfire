@@ -46,6 +46,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.swing.MainController;
 import org.jwildfire.swing.StandardErrorHandler;
 
@@ -143,6 +144,27 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField paramMaxValueField;
   private JTree paramPropertyPathTree;
   private JWFNumberField paramMinValueField;
+  private JPanel panel_13;
+  private JWFNumberField motionTimeField;
+  private JWFNumberField motionLifeTimeField;
+  private JWFNumberField motionLifeTimeVariationField;
+  private JWFNumberField motionForceXField;
+  private JWFNumberField motionForceYField;
+  private JWFNumberField motionForceZField;
+  private JButton iflameToEditorButton;
+  private JPanel panel_17;
+  private JWFNumberField speedXField;
+  private JWFNumberField speedYField;
+  private JWFNumberField speedZField;
+  private JWFNumberField speedAlphaField;
+  private JWFNumberField speedBetaField;
+  private JWFNumberField speedGammaField;
+  private JWFNumberField speedXVarField;
+  private JWFNumberField speedYVarField;
+  private JWFNumberField speedZVarField;
+  private JWFNumberField speedAlphaVarField;
+  private JWFNumberField speedBetaVarField;
+  private JWFNumberField speedGammaVarField;
 
   public IFlamesInternalFrame() {
     super();
@@ -284,6 +306,23 @@ public class IFlamesInternalFrame extends JInternalFrame {
       refreshLibraryButton.setActionCommand("New from scratch");
       refreshLibraryButton.setBounds(1027, 10, 143, 48);
       mainTopPanel.add(refreshLibraryButton);
+
+      iflameToEditorButton = new JButton();
+      iflameToEditorButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.iflameToEditorButton_clicked();
+        }
+      });
+      iflameToEditorButton.setText("To Flames Editor");
+      iflameToEditorButton.setPreferredSize(new Dimension(125, 52));
+      iflameToEditorButton.setMnemonic(KeyEvent.VK_N);
+      iflameToEditorButton.setMinimumSize(new Dimension(100, 52));
+      iflameToEditorButton.setMaximumSize(new Dimension(32000, 52));
+      iflameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      iflameToEditorButton.setActionCommand("New from scratch");
+      iflameToEditorButton.setBounds(693, 10, 143, 48);
+      iflameToEditorButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/brick2.png")));
+      mainTopPanel.add(iflameToEditorButton);
 
       mainLeftPanel = new JPanel();
       mainLeftPanel.setBorder(new TitledBorder(null, "Image Library", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -881,7 +920,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       panel_7.add(tabbedPane_1);
 
       panel_9 = new JPanel();
-      tabbedPane_1.addTab("Size and orientation", null, panel_9, null);
+      tabbedPane_1.addTab("Size and Orientation", null, panel_9, null);
       panel_9.setLayout(null);
 
       baseFlameSizeField = new JWFNumberField();
@@ -904,11 +943,12 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSizeVariaton.setBounds(6, 32, 93, 22);
       panel_9.add(lblSizeVariaton);
       lblSizeVariaton.setToolTipText("");
-      lblSizeVariaton.setText("Size variaton");
+      lblSizeVariaton.setText("Size Variaton");
       lblSizeVariaton.setPreferredSize(new Dimension(94, 22));
       lblSizeVariaton.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlameSizeVariationField = new JWFNumberField();
+      baseFlameSizeVariationField.setHasMinValue(true);
       baseFlameSizeVariationField.setBounds(101, 30, 100, 24);
       panel_9.add(baseFlameSizeVariationField);
       baseFlameSizeVariationField.setValueStep(0.05);
@@ -986,7 +1026,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotate.setBounds(213, 8, 130, 22);
       panel_9.add(lblRotate);
       lblRotate.setToolTipText("");
-      lblRotate.setText("Rotate alpha");
+      lblRotate.setText("Rotate Alpha");
       lblRotate.setPreferredSize(new Dimension(94, 22));
       lblRotate.setFont(new Font("Dialog", Font.BOLD, 10));
 
@@ -994,11 +1034,12 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateVariation.setBounds(213, 32, 130, 22);
       panel_9.add(lblRotateVariation);
       lblRotateVariation.setToolTipText("");
-      lblRotateVariation.setText("Rotate alpha variation");
+      lblRotateVariation.setText("Rotate Alpha Variation");
       lblRotateVariation.setPreferredSize(new Dimension(94, 22));
       lblRotateVariation.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlameRotateAlphaVariationField = new JWFNumberField();
+      baseFlameRotateAlphaVariationField.setHasMinValue(true);
       baseFlameRotateAlphaVariationField.setBounds(345, 30, 100, 24);
       panel_9.add(baseFlameRotateAlphaVariationField);
       baseFlameRotateAlphaVariationField.setValueStep(0.05);
@@ -1020,7 +1061,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateBeta.setBounds(213, 57, 130, 22);
       panel_9.add(lblRotateBeta);
       lblRotateBeta.setToolTipText("");
-      lblRotateBeta.setText("Rotate beta");
+      lblRotateBeta.setText("Rotate Beta");
       lblRotateBeta.setPreferredSize(new Dimension(94, 22));
       lblRotateBeta.setFont(new Font("Dialog", Font.BOLD, 10));
 
@@ -1028,11 +1069,12 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateBetaVariation.setBounds(213, 81, 130, 22);
       panel_9.add(lblRotateBetaVariation);
       lblRotateBetaVariation.setToolTipText("");
-      lblRotateBetaVariation.setText("Rotate beta variation");
+      lblRotateBetaVariation.setText("Rotate Beta Variation");
       lblRotateBetaVariation.setPreferredSize(new Dimension(94, 22));
       lblRotateBetaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
 
       baseFlameRotateBetaVariationField = new JWFNumberField();
+      baseFlameRotateBetaVariationField.setHasMinValue(true);
       baseFlameRotateBetaVariationField.setBounds(345, 79, 100, 24);
       panel_9.add(baseFlameRotateBetaVariationField);
       baseFlameRotateBetaVariationField.setValueStep(0.05);
@@ -1045,7 +1087,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateGamma.setBounds(213, 106, 130, 22);
       panel_9.add(lblRotateGamma);
       lblRotateGamma.setToolTipText("");
-      lblRotateGamma.setText("Rotate gamma");
+      lblRotateGamma.setText("Rotate Gamma");
       lblRotateGamma.setPreferredSize(new Dimension(94, 22));
       lblRotateGamma.setFont(new Font("Dialog", Font.BOLD, 10));
 
@@ -1059,6 +1101,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameRotateGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
 
       baseFlameRotateGammaVariationField = new JWFNumberField();
+      baseFlameRotateGammaVariationField.setHasMinValue(true);
       baseFlameRotateGammaVariationField.setBounds(345, 128, 100, 24);
       panel_9.add(baseFlameRotateGammaVariationField);
       baseFlameRotateGammaVariationField.setValueStep(0.05);
@@ -1071,7 +1114,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateGammaVariation.setBounds(213, 130, 130, 22);
       panel_9.add(lblRotateGammaVariation);
       lblRotateGammaVariation.setToolTipText("");
-      lblRotateGammaVariation.setText("Rotate gamma variation");
+      lblRotateGammaVariation.setText("Rotate Gamma Variation");
       lblRotateGammaVariation.setPreferredSize(new Dimension(94, 22));
       lblRotateGammaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
 
@@ -1342,6 +1385,453 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       scrollPane_2.setViewportView(paramPropertyPathTree);
 
+      panel_17 = new JPanel();
+      tabbedPane_1.addTab("Dynamics", null, panel_17, null);
+      panel_17.setLayout(null);
+
+      speedXField = new JWFNumberField();
+      speedXField.setValueStep(0.05);
+      speedXField.setText("");
+      speedXField.setPreferredSize(new Dimension(100, 24));
+      speedXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedXField.setBounds(101, 6, 100, 24);
+      speedXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedXField_changed();
+          }
+        }
+      });
+      panel_17.add(speedXField);
+
+      JLabel lblSpeedX = new JLabel();
+      lblSpeedX.setToolTipText("");
+      lblSpeedX.setText("Speed X");
+      lblSpeedX.setPreferredSize(new Dimension(94, 22));
+      lblSpeedX.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedX.setBounds(6, 8, 93, 22);
+      panel_17.add(lblSpeedX);
+
+      JLabel lblSpeedY = new JLabel();
+      lblSpeedY.setToolTipText("");
+      lblSpeedY.setText("Speed Y");
+      lblSpeedY.setPreferredSize(new Dimension(94, 22));
+      lblSpeedY.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedY.setBounds(6, 32, 93, 22);
+      panel_17.add(lblSpeedY);
+
+      speedYField = new JWFNumberField();
+      speedYField.setValueStep(0.05);
+      speedYField.setText("");
+      speedYField.setPreferredSize(new Dimension(100, 24));
+      speedYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedYField.setBounds(101, 30, 100, 24);
+      speedYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedYField_changed();
+          }
+        }
+      });
+      panel_17.add(speedYField);
+
+      JLabel lblSpeedZ = new JLabel();
+      lblSpeedZ.setToolTipText("");
+      lblSpeedZ.setText("Speed Z");
+      lblSpeedZ.setPreferredSize(new Dimension(94, 22));
+      lblSpeedZ.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedZ.setBounds(6, 56, 93, 22);
+      panel_17.add(lblSpeedZ);
+
+      speedZField = new JWFNumberField();
+      speedZField.setValueStep(0.05);
+      speedZField.setText("");
+      speedZField.setPreferredSize(new Dimension(100, 24));
+      speedZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedZField.setBounds(101, 54, 100, 24);
+      speedZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedZField_changed();
+          }
+        }
+      });
+      panel_17.add(speedZField);
+
+      speedXVarField = new JWFNumberField();
+      speedXVarField.setHasMinValue(true);
+      speedXVarField.setValueStep(0.05);
+      speedXVarField.setText("");
+      speedXVarField.setPreferredSize(new Dimension(100, 24));
+      speedXVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedXVarField.setBounds(318, 6, 100, 24);
+      speedXVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedXVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedXVarField);
+
+      JLabel lblSpeedXVariation = new JLabel();
+      lblSpeedXVariation.setToolTipText("");
+      lblSpeedXVariation.setText("Speed X Variation");
+      lblSpeedXVariation.setPreferredSize(new Dimension(94, 22));
+      lblSpeedXVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedXVariation.setBounds(223, 8, 93, 22);
+      panel_17.add(lblSpeedXVariation);
+
+      JLabel lblSpeedYVariation = new JLabel();
+      lblSpeedYVariation.setToolTipText("");
+      lblSpeedYVariation.setText("Speed Y Variation");
+      lblSpeedYVariation.setPreferredSize(new Dimension(94, 22));
+      lblSpeedYVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedYVariation.setBounds(223, 32, 93, 22);
+      panel_17.add(lblSpeedYVariation);
+
+      speedYVarField = new JWFNumberField();
+      speedYVarField.setHasMinValue(true);
+      speedYVarField.setValueStep(0.05);
+      speedYVarField.setText("");
+      speedYVarField.setPreferredSize(new Dimension(100, 24));
+      speedYVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedYVarField.setBounds(318, 30, 100, 24);
+      speedYVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedYVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedYVarField);
+
+      JLabel lblSpeedZVariation = new JLabel();
+      lblSpeedZVariation.setToolTipText("");
+      lblSpeedZVariation.setText("Speed Z Variation");
+      lblSpeedZVariation.setPreferredSize(new Dimension(94, 22));
+      lblSpeedZVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedZVariation.setBounds(223, 56, 93, 22);
+      panel_17.add(lblSpeedZVariation);
+
+      speedZVarField = new JWFNumberField();
+      speedZVarField.setHasMinValue(true);
+      speedZVarField.setValueStep(0.05);
+      speedZVarField.setText("");
+      speedZVarField.setPreferredSize(new Dimension(100, 24));
+      speedZVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedZVarField.setBounds(318, 54, 100, 24);
+      speedZVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedZVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedZVarField);
+
+      speedAlphaField = new JWFNumberField();
+      speedAlphaField.setValueStep(0.05);
+      speedAlphaField.setText("");
+      speedAlphaField.setPreferredSize(new Dimension(100, 24));
+      speedAlphaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedAlphaField.setBounds(101, 80, 100, 24);
+      speedAlphaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedAlphaField_changed();
+          }
+        }
+      });
+      panel_17.add(speedAlphaField);
+
+      JLabel lblSpeedAlpha = new JLabel();
+      lblSpeedAlpha.setToolTipText("");
+      lblSpeedAlpha.setText("Speed Alpha");
+      lblSpeedAlpha.setPreferredSize(new Dimension(94, 22));
+      lblSpeedAlpha.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedAlpha.setBounds(6, 82, 93, 22);
+      panel_17.add(lblSpeedAlpha);
+
+      JLabel lblSpeedBeta = new JLabel();
+      lblSpeedBeta.setToolTipText("");
+      lblSpeedBeta.setText("Speed Beta");
+      lblSpeedBeta.setPreferredSize(new Dimension(94, 22));
+      lblSpeedBeta.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedBeta.setBounds(6, 106, 93, 22);
+      panel_17.add(lblSpeedBeta);
+
+      speedBetaField = new JWFNumberField();
+      speedBetaField.setValueStep(0.05);
+      speedBetaField.setText("");
+      speedBetaField.setPreferredSize(new Dimension(100, 24));
+      speedBetaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedBetaField.setBounds(101, 104, 100, 24);
+      speedBetaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedBetaField_changed();
+          }
+        }
+      });
+      panel_17.add(speedBetaField);
+
+      JLabel lblSpeedGamma = new JLabel();
+      lblSpeedGamma.setToolTipText("");
+      lblSpeedGamma.setText("Speed Gamma");
+      lblSpeedGamma.setPreferredSize(new Dimension(94, 22));
+      lblSpeedGamma.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedGamma.setBounds(6, 130, 93, 22);
+      panel_17.add(lblSpeedGamma);
+
+      speedGammaField = new JWFNumberField();
+      speedGammaField.setValueStep(0.05);
+      speedGammaField.setText("");
+      speedGammaField.setPreferredSize(new Dimension(100, 24));
+      speedGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedGammaField.setBounds(101, 128, 100, 24);
+      speedGammaField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedGammaField_changed();
+          }
+        }
+      });
+      panel_17.add(speedGammaField);
+
+      JLabel lblSpeedAlphaVar = new JLabel();
+      lblSpeedAlphaVar.setToolTipText("Speed Alpha Variation");
+      lblSpeedAlphaVar.setText("Speed Alpha Var");
+      lblSpeedAlphaVar.setPreferredSize(new Dimension(94, 22));
+      lblSpeedAlphaVar.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedAlphaVar.setBounds(223, 82, 93, 22);
+      panel_17.add(lblSpeedAlphaVar);
+
+      JLabel lblSpeedBetaVar = new JLabel();
+      lblSpeedBetaVar.setToolTipText("");
+      lblSpeedBetaVar.setText("Speed Beta Var");
+      lblSpeedBetaVar.setPreferredSize(new Dimension(94, 22));
+      lblSpeedBetaVar.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedBetaVar.setBounds(223, 106, 93, 22);
+      panel_17.add(lblSpeedBetaVar);
+
+      JLabel lblSpeedGammaVar = new JLabel();
+      lblSpeedGammaVar.setToolTipText("");
+      lblSpeedGammaVar.setText("Speed Gamma Var");
+      lblSpeedGammaVar.setPreferredSize(new Dimension(94, 22));
+      lblSpeedGammaVar.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpeedGammaVar.setBounds(223, 130, 93, 22);
+      panel_17.add(lblSpeedGammaVar);
+
+      speedAlphaVarField = new JWFNumberField();
+      speedAlphaVarField.setHasMinValue(true);
+      speedAlphaVarField.setValueStep(0.05);
+      speedAlphaVarField.setText("");
+      speedAlphaVarField.setPreferredSize(new Dimension(100, 24));
+      speedAlphaVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedAlphaVarField.setBounds(318, 80, 100, 24);
+      speedAlphaVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedAlphaVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedAlphaVarField);
+
+      speedBetaVarField = new JWFNumberField();
+      speedBetaVarField.setHasMinValue(true);
+      speedBetaVarField.setValueStep(0.05);
+      speedBetaVarField.setText("");
+      speedBetaVarField.setPreferredSize(new Dimension(100, 24));
+      speedBetaVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedBetaVarField.setBounds(318, 104, 100, 24);
+      speedBetaVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedBetaVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedBetaVarField);
+
+      speedGammaVarField = new JWFNumberField();
+      speedGammaVarField.setHasMinValue(true);
+      speedGammaVarField.setValueStep(0.05);
+      speedGammaVarField.setText("");
+      speedGammaVarField.setPreferredSize(new Dimension(100, 24));
+      speedGammaVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      speedGammaVarField.setBounds(318, 128, 100, 24);
+      speedGammaVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.speedGammaVarField_changed();
+          }
+        }
+      });
+      panel_17.add(speedGammaVarField);
+
+      panel_13 = new JPanel();
+      tabbedPane.addTab("Dynamics", null, panel_13, null);
+      panel_13.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_14 = new JPanel();
+      panel_14.setPreferredSize(new Dimension(10, 64));
+      panel_13.add(panel_14, BorderLayout.NORTH);
+      panel_14.setLayout(null);
+
+      motionTimeField = new JWFNumberField();
+      motionTimeField.setHasMinValue(true);
+      motionTimeField.setValueStep(0.05);
+      motionTimeField.setText("");
+      motionTimeField.setPreferredSize(new Dimension(100, 24));
+      motionTimeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionTimeField.setBounds(101, 6, 100, 24);
+      motionTimeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionTimeField_changed();
+          }
+        }
+      });
+      panel_14.add(motionTimeField);
+
+      JLabel lblTime = new JLabel();
+      lblTime.setToolTipText("");
+      lblTime.setText("Time");
+      lblTime.setPreferredSize(new Dimension(94, 22));
+      lblTime.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTime.setBounds(6, 8, 93, 22);
+      panel_14.add(lblTime);
+
+      motionLifeTimeField = new JWFNumberField();
+      motionLifeTimeField.setHasMinValue(true);
+      motionLifeTimeField.setValueStep(0.05);
+      motionLifeTimeField.setText("");
+      motionLifeTimeField.setPreferredSize(new Dimension(100, 24));
+      motionLifeTimeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionLifeTimeField.setBounds(308, 6, 100, 24);
+      motionLifeTimeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionLifeTimeField_changed();
+          }
+        }
+      });
+      panel_14.add(motionLifeTimeField);
+
+      JLabel lblLifeTime = new JLabel();
+      lblLifeTime.setToolTipText("");
+      lblLifeTime.setText("Life time");
+      lblLifeTime.setPreferredSize(new Dimension(94, 22));
+      lblLifeTime.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLifeTime.setBounds(213, 8, 93, 22);
+      panel_14.add(lblLifeTime);
+
+      JLabel lblLifeTimeVariation = new JLabel();
+      lblLifeTimeVariation.setToolTipText("");
+      lblLifeTimeVariation.setText("Life time variation");
+      lblLifeTimeVariation.setPreferredSize(new Dimension(94, 22));
+      lblLifeTimeVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLifeTimeVariation.setBounds(213, 32, 93, 22);
+      panel_14.add(lblLifeTimeVariation);
+
+      motionLifeTimeVariationField = new JWFNumberField();
+      motionLifeTimeVariationField.setHasMinValue(true);
+      motionLifeTimeVariationField.setValueStep(0.05);
+      motionLifeTimeVariationField.setText("");
+      motionLifeTimeVariationField.setPreferredSize(new Dimension(100, 24));
+      motionLifeTimeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionLifeTimeVariationField.setBounds(308, 30, 100, 24);
+      motionLifeTimeVariationField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionLifeTimeVariationField_changed();
+          }
+        }
+      });
+      panel_14.add(motionLifeTimeVariationField);
+
+      JPanel panel_15 = new JPanel();
+      panel_13.add(panel_15, BorderLayout.CENTER);
+      panel_15.setLayout(new BorderLayout(0, 0));
+
+      JTabbedPane tabbedPane_2 = new JTabbedPane(JTabbedPane.TOP);
+      panel_15.add(tabbedPane_2, BorderLayout.CENTER);
+
+      JPanel panel_16 = new JPanel();
+      tabbedPane_2.addTab("Static force", null, panel_16, null);
+      panel_16.setLayout(null);
+
+      motionForceXField = new JWFNumberField();
+      motionForceXField.setValueStep(0.05);
+      motionForceXField.setText("");
+      motionForceXField.setPreferredSize(new Dimension(100, 24));
+      motionForceXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionForceXField.setBounds(101, 6, 100, 24);
+      motionForceXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionForceXField_changed();
+          }
+        }
+      });
+      panel_16.add(motionForceXField);
+
+      motionForceYField = new JWFNumberField();
+      motionForceYField.setValueStep(0.05);
+      motionForceYField.setText("");
+      motionForceYField.setPreferredSize(new Dimension(100, 24));
+      motionForceYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionForceYField.setBounds(101, 30, 100, 24);
+      motionForceYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionForceYField_changed();
+          }
+        }
+      });
+      panel_16.add(motionForceYField);
+
+      JLabel lblForceX = new JLabel();
+      lblForceX.setToolTipText("");
+      lblForceX.setText("Force X");
+      lblForceX.setPreferredSize(new Dimension(94, 22));
+      lblForceX.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblForceX.setBounds(6, 8, 93, 22);
+      panel_16.add(lblForceX);
+
+      JLabel lblForceY = new JLabel();
+      lblForceY.setToolTipText("");
+      lblForceY.setText("Force Y");
+      lblForceY.setPreferredSize(new Dimension(94, 22));
+      lblForceY.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblForceY.setBounds(6, 32, 93, 22);
+      panel_16.add(lblForceY);
+
+      JLabel lblForceZ = new JLabel();
+      lblForceZ.setToolTipText("");
+      lblForceZ.setText("Force Z");
+      lblForceZ.setPreferredSize(new Dimension(94, 22));
+      lblForceZ.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblForceZ.setBounds(6, 56, 93, 22);
+      panel_16.add(lblForceZ);
+
+      motionForceZField = new JWFNumberField();
+      motionForceZField.setValueStep(0.05);
+      motionForceZField.setText("");
+      motionForceZField.setPreferredSize(new Dimension(100, 24));
+      motionForceZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionForceZField.setBounds(101, 54, 100, 24);
+      motionForceZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionForceZField_changed();
+          }
+        }
+      });
+      panel_16.add(motionForceZField);
+
       panel_11 = new JPanel();
       tabbedPane.addTab("Statistics", null, panel_11, null);
       panel_11.setLayout(new BorderLayout(0, 0));
@@ -1552,8 +2042,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
     return jContentPane;
   }
 
-  public void createController(MainController pMainController, StandardErrorHandler pErrorHandler) {
-    iflamesController = new IFlamesController(pMainController, pErrorHandler, this, getMainCenterPanel(),
+  public void createController(MainController pMainController, TinaController pTinaController, StandardErrorHandler pErrorHandler) {
+    iflamesController = new IFlamesController(pMainController, pTinaController, pErrorHandler, this, getMainCenterPanel(),
         getUndoButton(), getRedoButton(), getRenderFlameButton(), getImageStackRootPanel(), getFlameStackRootPanel(),
         getLoadIFlameButton(), getLoadIFlameFromClipboardButton(), getSaveIFlameToClipboardButton(),
         getSaveIFlameButton(), getRefreshIFlameButton(), getMainProgressBar(), getAutoRefreshButton(),
@@ -1571,7 +2061,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getBaseFlameMaxValueField(), getBaseFlameMaxValueLabel(), getStatisticsTextArea(), getBaseFlameWeightField(),
         getBaseFlameGridXOffsetField(), getBaseFlameGridYOffsetField(), getBaseFlameGridXSizeField(),
         getBaseFlameGridYSizeField(), getSelectedMutationCmb(), getParamMinValueField(), getParamMaxValueField(),
-        getParamPropertyPathTree());
+        getParamPropertyPathTree(), getIflameToEditorButton(), getMotionTimeField(), getMotionLifeTimeField(),
+        getMotionLifeTimeVariationField(), getMotionForceXField(), getMotionForceYField(), getMotionForceZField(),
+        getSpeedXField(), getSpeedYField(), getSpeedZField(), getSpeedXVarField(), getSpeedYVarField(), getSpeedZVarField(),
+        getSpeedAlphaField(), getSpeedBetaField(), getSpeedGammaField(), getSpeedAlphaVarField(), getSpeedBetaVarField(),
+        getSpeedGammaVarField());
   }
 
   public JPanel getMainLeftPanel() {
@@ -1876,5 +2370,81 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getParamMinValueField() {
     return paramMinValueField;
+  }
+
+  public JWFNumberField getMotionTimeField() {
+    return motionTimeField;
+  }
+
+  public JWFNumberField getMotionLifeTimeField() {
+    return motionLifeTimeField;
+  }
+
+  public JWFNumberField getMotionLifeTimeVariationField() {
+    return motionLifeTimeVariationField;
+  }
+
+  public JWFNumberField getMotionForceXField() {
+    return motionForceXField;
+  }
+
+  public JWFNumberField getMotionForceYField() {
+    return motionForceYField;
+  }
+
+  public JWFNumberField getMotionForceZField() {
+    return motionForceZField;
+  }
+
+  public JButton getIflameToEditorButton() {
+    return iflameToEditorButton;
+  }
+
+  public JWFNumberField getSpeedXField() {
+    return speedXField;
+  }
+
+  public JWFNumberField getSpeedYField() {
+    return speedYField;
+  }
+
+  public JWFNumberField getSpeedZField() {
+    return speedZField;
+  }
+
+  public JWFNumberField getSpeedAlphaField() {
+    return speedAlphaField;
+  }
+
+  public JWFNumberField getSpeedBetaField() {
+    return speedBetaField;
+  }
+
+  public JWFNumberField getSpeedGammaField() {
+    return speedGammaField;
+  }
+
+  public JWFNumberField getSpeedXVarField() {
+    return speedXVarField;
+  }
+
+  public JWFNumberField getSpeedYVarField() {
+    return speedYVarField;
+  }
+
+  public JWFNumberField getSpeedZVarField() {
+    return speedZVarField;
+  }
+
+  public JWFNumberField getSpeedAlphaVarField() {
+    return speedAlphaVarField;
+  }
+
+  public JWFNumberField getSpeedBetaVarField() {
+    return speedBetaVarField;
+  }
+
+  public JWFNumberField getSpeedGammaVarField() {
+    return speedGammaVarField;
   }
 }
