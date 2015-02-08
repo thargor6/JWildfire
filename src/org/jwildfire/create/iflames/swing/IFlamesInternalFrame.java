@@ -165,6 +165,11 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField speedAlphaVarField;
   private JWFNumberField speedBetaVarField;
   private JWFNumberField speedGammaVarField;
+  private JWFNumberField radialAccelField;
+  private JWFNumberField radialAccelVarField;
+  private JWFNumberField tangentialAccelField;
+  private JWFNumberField tangentialAccelVarField;
+  private JPanel panel_18;
 
   public IFlamesInternalFrame() {
     super();
@@ -1417,7 +1422,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedY.setText("Speed Y");
       lblSpeedY.setPreferredSize(new Dimension(94, 22));
       lblSpeedY.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedY.setBounds(6, 32, 93, 22);
+      lblSpeedY.setBounds(6, 58, 93, 22);
       panel_17.add(lblSpeedY);
 
       speedYField = new JWFNumberField();
@@ -1425,7 +1430,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedYField.setText("");
       speedYField.setPreferredSize(new Dimension(100, 24));
       speedYField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedYField.setBounds(101, 30, 100, 24);
+      speedYField.setBounds(101, 56, 100, 24);
       speedYField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1440,7 +1445,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedZ.setText("Speed Z");
       lblSpeedZ.setPreferredSize(new Dimension(94, 22));
       lblSpeedZ.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedZ.setBounds(6, 56, 93, 22);
+      lblSpeedZ.setBounds(6, 106, 93, 22);
       panel_17.add(lblSpeedZ);
 
       speedZField = new JWFNumberField();
@@ -1448,7 +1453,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedZField.setText("");
       speedZField.setPreferredSize(new Dimension(100, 24));
       speedZField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedZField.setBounds(101, 54, 100, 24);
+      speedZField.setBounds(101, 104, 100, 24);
       speedZField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1464,7 +1469,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedXVarField.setText("");
       speedXVarField.setPreferredSize(new Dimension(100, 24));
       speedXVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedXVarField.setBounds(318, 6, 100, 24);
+      speedXVarField.setBounds(101, 30, 100, 24);
       speedXVarField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1479,7 +1484,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedXVariation.setText("Speed X Variation");
       lblSpeedXVariation.setPreferredSize(new Dimension(94, 22));
       lblSpeedXVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedXVariation.setBounds(223, 8, 93, 22);
+      lblSpeedXVariation.setBounds(6, 32, 93, 22);
       panel_17.add(lblSpeedXVariation);
 
       JLabel lblSpeedYVariation = new JLabel();
@@ -1487,7 +1492,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedYVariation.setText("Speed Y Variation");
       lblSpeedYVariation.setPreferredSize(new Dimension(94, 22));
       lblSpeedYVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedYVariation.setBounds(223, 32, 93, 22);
+      lblSpeedYVariation.setBounds(6, 82, 93, 22);
       panel_17.add(lblSpeedYVariation);
 
       speedYVarField = new JWFNumberField();
@@ -1496,7 +1501,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedYVarField.setText("");
       speedYVarField.setPreferredSize(new Dimension(100, 24));
       speedYVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedYVarField.setBounds(318, 30, 100, 24);
+      speedYVarField.setBounds(101, 80, 100, 24);
       speedYVarField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1511,7 +1516,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedZVariation.setText("Speed Z Variation");
       lblSpeedZVariation.setPreferredSize(new Dimension(94, 22));
       lblSpeedZVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedZVariation.setBounds(223, 56, 93, 22);
+      lblSpeedZVariation.setBounds(6, 130, 93, 22);
       panel_17.add(lblSpeedZVariation);
 
       speedZVarField = new JWFNumberField();
@@ -1520,7 +1525,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedZVarField.setText("");
       speedZVarField.setPreferredSize(new Dimension(100, 24));
       speedZVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedZVarField.setBounds(318, 54, 100, 24);
+      speedZVarField.setBounds(101, 128, 100, 24);
       speedZVarField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1535,7 +1540,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedAlphaField.setText("");
       speedAlphaField.setPreferredSize(new Dimension(100, 24));
       speedAlphaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedAlphaField.setBounds(101, 80, 100, 24);
+      speedAlphaField.setBounds(318, 6, 100, 24);
       speedAlphaField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1550,7 +1555,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedAlpha.setText("Speed Alpha");
       lblSpeedAlpha.setPreferredSize(new Dimension(94, 22));
       lblSpeedAlpha.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedAlpha.setBounds(6, 82, 93, 22);
+      lblSpeedAlpha.setBounds(223, 8, 93, 22);
       panel_17.add(lblSpeedAlpha);
 
       JLabel lblSpeedBeta = new JLabel();
@@ -1558,7 +1563,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedBeta.setText("Speed Beta");
       lblSpeedBeta.setPreferredSize(new Dimension(94, 22));
       lblSpeedBeta.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedBeta.setBounds(6, 106, 93, 22);
+      lblSpeedBeta.setBounds(223, 58, 93, 22);
       panel_17.add(lblSpeedBeta);
 
       speedBetaField = new JWFNumberField();
@@ -1566,7 +1571,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedBetaField.setText("");
       speedBetaField.setPreferredSize(new Dimension(100, 24));
       speedBetaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedBetaField.setBounds(101, 104, 100, 24);
+      speedBetaField.setBounds(318, 56, 100, 24);
       speedBetaField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1581,7 +1586,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedGamma.setText("Speed Gamma");
       lblSpeedGamma.setPreferredSize(new Dimension(94, 22));
       lblSpeedGamma.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedGamma.setBounds(6, 130, 93, 22);
+      lblSpeedGamma.setBounds(223, 108, 93, 22);
       panel_17.add(lblSpeedGamma);
 
       speedGammaField = new JWFNumberField();
@@ -1589,7 +1594,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedGammaField.setText("");
       speedGammaField.setPreferredSize(new Dimension(100, 24));
       speedGammaField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedGammaField.setBounds(101, 128, 100, 24);
+      speedGammaField.setBounds(318, 106, 100, 24);
       speedGammaField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1604,7 +1609,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedAlphaVar.setText("Speed Alpha Var");
       lblSpeedAlphaVar.setPreferredSize(new Dimension(94, 22));
       lblSpeedAlphaVar.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedAlphaVar.setBounds(223, 82, 93, 22);
+      lblSpeedAlphaVar.setBounds(223, 32, 93, 22);
       panel_17.add(lblSpeedAlphaVar);
 
       JLabel lblSpeedBetaVar = new JLabel();
@@ -1612,7 +1617,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblSpeedBetaVar.setText("Speed Beta Var");
       lblSpeedBetaVar.setPreferredSize(new Dimension(94, 22));
       lblSpeedBetaVar.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSpeedBetaVar.setBounds(223, 106, 93, 22);
+      lblSpeedBetaVar.setBounds(223, 84, 93, 22);
       panel_17.add(lblSpeedBetaVar);
 
       JLabel lblSpeedGammaVar = new JLabel();
@@ -1629,7 +1634,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedAlphaVarField.setText("");
       speedAlphaVarField.setPreferredSize(new Dimension(100, 24));
       speedAlphaVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedAlphaVarField.setBounds(318, 80, 100, 24);
+      speedAlphaVarField.setBounds(318, 30, 100, 24);
       speedAlphaVarField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1645,7 +1650,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       speedBetaVarField.setText("");
       speedBetaVarField.setPreferredSize(new Dimension(100, 24));
       speedBetaVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      speedBetaVarField.setBounds(318, 104, 100, 24);
+      speedBetaVarField.setBounds(318, 82, 100, 24);
       speedBetaVarField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1671,38 +1676,108 @@ public class IFlamesInternalFrame extends JInternalFrame {
       });
       panel_17.add(speedGammaVarField);
 
+      JLabel lblRadialAccel = new JLabel();
+      lblRadialAccel.setToolTipText("");
+      lblRadialAccel.setText("Radial Accel");
+      lblRadialAccel.setPreferredSize(new Dimension(94, 22));
+      lblRadialAccel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRadialAccel.setBounds(440, 8, 93, 22);
+      panel_17.add(lblRadialAccel);
+
+      radialAccelField = new JWFNumberField();
+      radialAccelField.setValueStep(0.05);
+      radialAccelField.setText("");
+      radialAccelField.setPreferredSize(new Dimension(100, 24));
+      radialAccelField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      radialAccelField.setBounds(535, 6, 100, 24);
+      radialAccelField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.radialAccelField_changed();
+          }
+        }
+      });
+      panel_17.add(radialAccelField);
+
+      JLabel lblRadialAccelVar = new JLabel();
+      lblRadialAccelVar.setToolTipText("");
+      lblRadialAccelVar.setText("Radial Accel Var");
+      lblRadialAccelVar.setPreferredSize(new Dimension(94, 22));
+      lblRadialAccelVar.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRadialAccelVar.setBounds(440, 32, 93, 22);
+      panel_17.add(lblRadialAccelVar);
+
+      radialAccelVarField = new JWFNumberField();
+      radialAccelVarField.setValueStep(0.05);
+      radialAccelVarField.setText("");
+      radialAccelVarField.setPreferredSize(new Dimension(100, 24));
+      radialAccelVarField.setHasMinValue(true);
+      radialAccelVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      radialAccelVarField.setBounds(535, 30, 100, 24);
+      radialAccelVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.radialAccelVarField_changed();
+          }
+        }
+      });
+      panel_17.add(radialAccelVarField);
+
+      JLabel lblTangentialAccel = new JLabel();
+      lblTangentialAccel.setToolTipText("");
+      lblTangentialAccel.setText("Tangential Accel");
+      lblTangentialAccel.setPreferredSize(new Dimension(94, 22));
+      lblTangentialAccel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTangentialAccel.setBounds(440, 60, 93, 22);
+      panel_17.add(lblTangentialAccel);
+
+      tangentialAccelField = new JWFNumberField();
+      tangentialAccelField.setValueStep(0.05);
+      tangentialAccelField.setText("");
+      tangentialAccelField.setPreferredSize(new Dimension(100, 24));
+      tangentialAccelField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tangentialAccelField.setBounds(535, 58, 100, 24);
+      tangentialAccelField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.tangentialAccelField_changed();
+          }
+        }
+      });
+      panel_17.add(tangentialAccelField);
+
+      JLabel lblTangentAccelVar = new JLabel();
+      lblTangentAccelVar.setToolTipText("");
+      lblTangentAccelVar.setText("Tangent Accel Var");
+      lblTangentAccelVar.setPreferredSize(new Dimension(94, 22));
+      lblTangentAccelVar.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTangentAccelVar.setBounds(440, 84, 93, 22);
+      panel_17.add(lblTangentAccelVar);
+
+      tangentialAccelVarField = new JWFNumberField();
+      tangentialAccelVarField.setValueStep(0.05);
+      tangentialAccelVarField.setText("");
+      tangentialAccelVarField.setPreferredSize(new Dimension(100, 24));
+      tangentialAccelVarField.setHasMinValue(true);
+      tangentialAccelVarField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tangentialAccelVarField.setBounds(535, 82, 100, 24);
+      tangentialAccelVarField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.tangentialAccelVarField_changed();
+          }
+        }
+      });
+      panel_17.add(tangentialAccelVarField);
+
       panel_13 = new JPanel();
       tabbedPane.addTab("Dynamics", null, panel_13, null);
       panel_13.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_14 = new JPanel();
-      panel_14.setPreferredSize(new Dimension(10, 64));
+      panel_14.setPreferredSize(new Dimension(10, 32));
       panel_13.add(panel_14, BorderLayout.NORTH);
       panel_14.setLayout(null);
-
-      motionTimeField = new JWFNumberField();
-      motionTimeField.setHasMinValue(true);
-      motionTimeField.setValueStep(0.05);
-      motionTimeField.setText("");
-      motionTimeField.setPreferredSize(new Dimension(100, 24));
-      motionTimeField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      motionTimeField.setBounds(101, 6, 100, 24);
-      motionTimeField.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (iflamesController != null) {
-            iflamesController.motionTimeField_changed();
-          }
-        }
-      });
-      panel_14.add(motionTimeField);
-
-      JLabel lblTime = new JLabel();
-      lblTime.setToolTipText("");
-      lblTime.setText("Time");
-      lblTime.setPreferredSize(new Dimension(94, 22));
-      lblTime.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblTime.setBounds(6, 8, 93, 22);
-      panel_14.add(lblTime);
 
       motionLifeTimeField = new JWFNumberField();
       motionLifeTimeField.setHasMinValue(true);
@@ -1710,7 +1785,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       motionLifeTimeField.setText("");
       motionLifeTimeField.setPreferredSize(new Dimension(100, 24));
       motionLifeTimeField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      motionLifeTimeField.setBounds(308, 6, 100, 24);
+      motionLifeTimeField.setBounds(101, 6, 100, 24);
       motionLifeTimeField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1725,7 +1800,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblLifeTime.setText("Life time");
       lblLifeTime.setPreferredSize(new Dimension(94, 22));
       lblLifeTime.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblLifeTime.setBounds(213, 8, 93, 22);
+      lblLifeTime.setBounds(6, 8, 93, 22);
       panel_14.add(lblLifeTime);
 
       JLabel lblLifeTimeVariation = new JLabel();
@@ -1733,7 +1808,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblLifeTimeVariation.setText("Life time variation");
       lblLifeTimeVariation.setPreferredSize(new Dimension(94, 22));
       lblLifeTimeVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblLifeTimeVariation.setBounds(213, 32, 93, 22);
+      lblLifeTimeVariation.setBounds(225, 8, 93, 22);
       panel_14.add(lblLifeTimeVariation);
 
       motionLifeTimeVariationField = new JWFNumberField();
@@ -1742,7 +1817,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       motionLifeTimeVariationField.setText("");
       motionLifeTimeVariationField.setPreferredSize(new Dimension(100, 24));
       motionLifeTimeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      motionLifeTimeVariationField.setBounds(308, 30, 100, 24);
+      motionLifeTimeVariationField.setBounds(320, 6, 100, 24);
       motionLifeTimeVariationField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -2010,15 +2085,45 @@ public class IFlamesInternalFrame extends JInternalFrame {
       panel_6.add(previewButton);
 
       panel_8 = new JPanel();
-      panel_8.setPreferredSize(new Dimension(10, 20));
+      panel_8.setPreferredSize(new Dimension(10, 26));
       mainBottomPanel.add(panel_8, BorderLayout.NORTH);
       panel_8.setLayout(new BorderLayout(0, 0));
 
       mainProgressBar = new JProgressBar();
+      mainProgressBar.setBorder(null);
       panel_8.add(mainProgressBar, BorderLayout.CENTER);
       mainProgressBar.setValue(0);
       mainProgressBar.setStringPainted(true);
       mainProgressBar.setPreferredSize(new Dimension(169, 14));
+
+      panel_18 = new JPanel();
+      panel_18.setPreferredSize(new Dimension(346, 10));
+      panel_8.add(panel_18, BorderLayout.WEST);
+      panel_18.setLayout(null);
+
+      motionTimeField = new JWFNumberField();
+      motionTimeField.setBounds(240, 0, 100, 24);
+      panel_18.add(motionTimeField);
+      motionTimeField.setHasMinValue(true);
+      motionTimeField.setValueStep(0.05);
+      motionTimeField.setText("");
+      motionTimeField.setPreferredSize(new Dimension(100, 24));
+      motionTimeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+      JLabel lblTime = new JLabel();
+      lblTime.setBounds(145, 2, 93, 22);
+      panel_18.add(lblTime);
+      lblTime.setToolTipText("");
+      lblTime.setText("Time");
+      lblTime.setPreferredSize(new Dimension(94, 22));
+      lblTime.setFont(new Font("Dialog", Font.BOLD, 10));
+      motionTimeField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.motionTimeField_changed();
+          }
+        }
+      });
       baseFlameCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (iflamesController != null) {
@@ -2065,7 +2170,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getMotionLifeTimeVariationField(), getMotionForceXField(), getMotionForceYField(), getMotionForceZField(),
         getSpeedXField(), getSpeedYField(), getSpeedZField(), getSpeedXVarField(), getSpeedYVarField(), getSpeedZVarField(),
         getSpeedAlphaField(), getSpeedBetaField(), getSpeedGammaField(), getSpeedAlphaVarField(), getSpeedBetaVarField(),
-        getSpeedGammaVarField());
+        getSpeedGammaVarField(), getRadialAccelField(), getRadialAccelVarField(), getTangentialAccelField(),
+        getTangentialAccelVarField());
   }
 
   public JPanel getMainLeftPanel() {
@@ -2446,5 +2552,21 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getSpeedGammaVarField() {
     return speedGammaVarField;
+  }
+
+  public JWFNumberField getRadialAccelField() {
+    return radialAccelField;
+  }
+
+  public JWFNumberField getRadialAccelVarField() {
+    return radialAccelVarField;
+  }
+
+  public JWFNumberField getTangentialAccelField() {
+    return tangentialAccelField;
+  }
+
+  public JWFNumberField getTangentialAccelVarField() {
+    return tangentialAccelVarField;
   }
 }

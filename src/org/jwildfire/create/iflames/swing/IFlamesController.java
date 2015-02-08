@@ -194,6 +194,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField speedAlphaVarField;
   private final JWFNumberField speedBetaVarField;
   private final JWFNumberField speedGammaVarField;
+  private final JWFNumberField radialAccelField;
+  private final JWFNumberField radialAccelVarField;
+  private final JWFNumberField tangentialAccelField;
+  private final JWFNumberField tangentialAccelVarField;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -238,7 +242,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pSpeedXField, JWFNumberField pSpeedYField, JWFNumberField pSpeedZField,
       JWFNumberField pSpeedXVarField, JWFNumberField pSpeedYVarField, JWFNumberField pSpeedZVarField,
       JWFNumberField pSpeedAlphaField, JWFNumberField pSpeedBetaField, JWFNumberField pSpeedGammaField,
-      JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField) {
+      JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField,
+      JWFNumberField pRadialAccelField, JWFNumberField pRadialAccelVarField, JWFNumberField pTangentialAccelField,
+      JWFNumberField pTangentialAccelVarField) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -332,6 +338,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     speedAlphaVarField = pSpeedAlphaVarField;
     speedBetaVarField = pSpeedBetaVarField;
     speedGammaVarField = pSpeedGammaVarField;
+    radialAccelField = pRadialAccelField;
+    radialAccelVarField = pRadialAccelVarField;
+    tangentialAccelField = pTangentialAccelField;
+    tangentialAccelVarField = pTangentialAccelVarField;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -641,6 +651,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     speedAlphaVarField.setEnabled(hasBaseFlame);
     speedBetaVarField.setEnabled(hasBaseFlame);
     speedGammaVarField.setEnabled(hasBaseFlame);
+    radialAccelField.setEnabled(hasBaseFlame);
+    radialAccelVarField.setEnabled(hasBaseFlame);
+    tangentialAccelField.setEnabled(hasBaseFlame);
+    tangentialAccelVarField.setEnabled(hasBaseFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -1269,6 +1283,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       speedAlphaVarField.setValue(0.0);
       speedBetaVarField.setValue(0.0);
       speedGammaVarField.setValue(0.0);
+      radialAccelField.setValue(0.0);
+      radialAccelVarField.setValue(0.0);
+      tangentialAccelField.setValue(0.0);
+      tangentialAccelVarField.setValue(0.0);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1301,6 +1319,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       speedAlphaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateAlphaSpeedVar());
       speedBetaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateBetaSpeedVar());
       speedGammaVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRotateGammaSpeedVar());
+      radialAccelField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRadialAcceleration());
+      radialAccelVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRadialAccelerationVar());
+      tangentialAccelField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getTangentialAcceleration());
+      tangentialAccelVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getTangentialAccelerationVar());
 
       switch (iflame.getImageParams().getShape_distribution()) {
         case BRIGHTNESS:
@@ -2088,6 +2110,34 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void speedAlphaVarField_changed() {
     saveUndoPoint();
     getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRotateAlphaSpeedVar(speedAlphaVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void tangentialAccelVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setTangentialAccelerationVar(tangentialAccelVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void tangentialAccelField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setTangentialAcceleration(tangentialAccelField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void radialAccelVarField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRadialAccelerationVar(radialAccelVarField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void radialAccelField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRadialAcceleration(radialAccelField.getDoubleValue());
     refreshIFlame();
     enableControls();
   }
