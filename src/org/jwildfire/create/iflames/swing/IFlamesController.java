@@ -198,6 +198,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField radialAccelVarField;
   private final JWFNumberField tangentialAccelField;
   private final JWFNumberField tangentialAccelVarField;
+  private final JWFNumberField forceCentreXField;
+  private final JWFNumberField forceCentreYField;
+  private final JWFNumberField forceCentreZField;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -244,7 +247,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pSpeedAlphaField, JWFNumberField pSpeedBetaField, JWFNumberField pSpeedGammaField,
       JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField,
       JWFNumberField pRadialAccelField, JWFNumberField pRadialAccelVarField, JWFNumberField pTangentialAccelField,
-      JWFNumberField pTangentialAccelVarField) {
+      JWFNumberField pTangentialAccelVarField, JWFNumberField pForceCentreXField, JWFNumberField pForceCentreYField,
+      JWFNumberField pForceCentreZField) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -342,6 +346,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     radialAccelVarField = pRadialAccelVarField;
     tangentialAccelField = pTangentialAccelField;
     tangentialAccelVarField = pTangentialAccelVarField;
+    forceCentreXField = pForceCentreXField;
+    forceCentreYField = pForceCentreYField;
+    forceCentreZField = pForceCentreZField;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -655,6 +662,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     radialAccelVarField.setEnabled(hasBaseFlame);
     tangentialAccelField.setEnabled(hasBaseFlame);
     tangentialAccelVarField.setEnabled(hasBaseFlame);
+    forceCentreXField.setEnabled(hasIFlame);
+    forceCentreYField.setEnabled(hasIFlame);
+    forceCentreZField.setEnabled(hasIFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -1002,7 +1012,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         errorHandler.handleError(e);
       }
       enableControls();
-      refreshBaseFlamePreview();
+      baseFlameCmb_changed();
       refreshIFlame();
     }
   }
@@ -1237,6 +1247,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       motionForceXField.setValue(0.0);
       motionForceYField.setValue(0.0);
       motionForceZField.setValue(0.0);
+      forceCentreXField.setValue(0.0);
+      forceCentreYField.setValue(0.0);
+      forceCentreZField.setValue(0.0);
     }
     else {
       motionTimeField.setValue(iflame.getMotionParams().getTime());
@@ -1245,6 +1258,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       motionForceXField.setValue(iflame.getMotionParams().getForceX0());
       motionForceYField.setValue(iflame.getMotionParams().getForceY0());
       motionForceZField.setValue(iflame.getMotionParams().getForceZ0());
+      forceCentreXField.setValue(iflame.getMotionParams().getForceCentreX());
+      forceCentreYField.setValue(iflame.getMotionParams().getForceCentreY());
+      forceCentreZField.setValue(iflame.getMotionParams().getForceCentreZ());
     }
   }
 
@@ -2138,6 +2154,27 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void radialAccelField_changed() {
     saveUndoPoint();
     getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setRadialAcceleration(radialAccelField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void forceCentreXField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceCentreX(forceCentreXField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void forceCentreYField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceCentreY(forceCentreYField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void forceCentreZField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getMotionParams().setForceCentreZ(forceCentreZField.getDoubleValue());
     refreshIFlame();
     enableControls();
   }

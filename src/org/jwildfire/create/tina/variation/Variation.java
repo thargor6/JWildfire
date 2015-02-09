@@ -214,4 +214,15 @@ public class Variation implements Assignable<Variation>, Serializable {
     motionCurves.put(pName, curve);
     return curve;
   }
+
+  public Map<String, MotionCurve> getClonedMotionCurves() {
+    Map<String, MotionCurve> res = new HashMap<String, MotionCurve>();
+    for (String name : motionCurves.keySet()) {
+      MotionCurve copy = new MotionCurve();
+      copy.assign(motionCurves.get(name));
+      res.put(name, copy);
+    }
+    return res;
+  }
+
 }

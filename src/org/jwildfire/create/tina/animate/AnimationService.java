@@ -245,7 +245,7 @@ public class AnimationService {
     }
   }
 
-  private static double evalCurve(double pFrame, MotionCurve curve) {
+  public static double evalCurve(double pFrame, MotionCurve curve) {
     MotionCurve currCurve = curve;
     double value = 0.0;
     while (currCurve != null) {

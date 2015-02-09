@@ -5044,7 +5044,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             curve = var.createMotionCurve(propertyname);
           }
           variationControlsDelegates[pIdx].editMotionCurve(curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
-          variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
+          // Doesnt work after changing parameter -> now enable it always
+          // variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
           refreshFlameImage(false);
         }
       }

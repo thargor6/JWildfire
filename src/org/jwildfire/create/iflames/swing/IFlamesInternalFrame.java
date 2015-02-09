@@ -170,6 +170,10 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField tangentialAccelField;
   private JWFNumberField tangentialAccelVarField;
   private JPanel panel_18;
+  private JPanel panel_19;
+  private JWFNumberField forceCentreXField;
+  private JWFNumberField forceCentreYField;
+  private JWFNumberField forceCentreZField;
 
   public IFlamesInternalFrame() {
     super();
@@ -1775,7 +1779,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       panel_13.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_14 = new JPanel();
-      panel_14.setPreferredSize(new Dimension(10, 32));
+      panel_14.setPreferredSize(new Dimension(10, 64));
       panel_13.add(panel_14, BorderLayout.NORTH);
       panel_14.setLayout(null);
 
@@ -1808,7 +1812,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblLifeTimeVariation.setText("Life time variation");
       lblLifeTimeVariation.setPreferredSize(new Dimension(94, 22));
       lblLifeTimeVariation.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblLifeTimeVariation.setBounds(225, 8, 93, 22);
+      lblLifeTimeVariation.setBounds(6, 32, 93, 22);
       panel_14.add(lblLifeTimeVariation);
 
       motionLifeTimeVariationField = new JWFNumberField();
@@ -1817,7 +1821,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       motionLifeTimeVariationField.setText("");
       motionLifeTimeVariationField.setPreferredSize(new Dimension(100, 24));
       motionLifeTimeVariationField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      motionLifeTimeVariationField.setBounds(320, 6, 100, 24);
+      motionLifeTimeVariationField.setBounds(101, 30, 100, 24);
       motionLifeTimeVariationField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (iflamesController != null) {
@@ -1827,6 +1831,14 @@ public class IFlamesInternalFrame extends JInternalFrame {
       });
       panel_14.add(motionLifeTimeVariationField);
 
+      JLabel lblPropertiesIndicatedBy = new JLabel();
+      lblPropertiesIndicatedBy.setToolTipText("");
+      lblPropertiesIndicatedBy.setText("Properties indicated by a star-symbol may be animated by using motion-curves");
+      lblPropertiesIndicatedBy.setPreferredSize(new Dimension(94, 22));
+      lblPropertiesIndicatedBy.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPropertiesIndicatedBy.setBounds(213, 8, 399, 22);
+      panel_14.add(lblPropertiesIndicatedBy);
+
       JPanel panel_15 = new JPanel();
       panel_13.add(panel_15, BorderLayout.CENTER);
       panel_15.setLayout(new BorderLayout(0, 0));
@@ -1835,7 +1847,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       panel_15.add(tabbedPane_2, BorderLayout.CENTER);
 
       JPanel panel_16 = new JPanel();
-      tabbedPane_2.addTab("Static force", null, panel_16, null);
+      tabbedPane_2.addTab("Force", null, panel_16, null);
       panel_16.setLayout(null);
 
       motionForceXField = new JWFNumberField();
@@ -1870,7 +1882,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       JLabel lblForceX = new JLabel();
       lblForceX.setToolTipText("");
-      lblForceX.setText("Force X");
+      lblForceX.setText("Force X*");
       lblForceX.setPreferredSize(new Dimension(94, 22));
       lblForceX.setFont(new Font("Dialog", Font.BOLD, 10));
       lblForceX.setBounds(6, 8, 93, 22);
@@ -1878,7 +1890,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       JLabel lblForceY = new JLabel();
       lblForceY.setToolTipText("");
-      lblForceY.setText("Force Y");
+      lblForceY.setText("Force Y*");
       lblForceY.setPreferredSize(new Dimension(94, 22));
       lblForceY.setFont(new Font("Dialog", Font.BOLD, 10));
       lblForceY.setBounds(6, 32, 93, 22);
@@ -1886,7 +1898,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       JLabel lblForceZ = new JLabel();
       lblForceZ.setToolTipText("");
-      lblForceZ.setText("Force Z");
+      lblForceZ.setText("Force Z*");
       lblForceZ.setPreferredSize(new Dimension(94, 22));
       lblForceZ.setFont(new Font("Dialog", Font.BOLD, 10));
       lblForceZ.setBounds(6, 56, 93, 22);
@@ -1906,6 +1918,79 @@ public class IFlamesInternalFrame extends JInternalFrame {
         }
       });
       panel_16.add(motionForceZField);
+
+      panel_19 = new JPanel();
+      tabbedPane_2.addTab("Center of Radial Forces", null, panel_19, null);
+      panel_19.setLayout(null);
+
+      forceCentreXField = new JWFNumberField();
+      forceCentreXField.setValueStep(0.05);
+      forceCentreXField.setText("");
+      forceCentreXField.setPreferredSize(new Dimension(100, 24));
+      forceCentreXField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      forceCentreXField.setBounds(101, 6, 100, 24);
+      forceCentreXField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.forceCentreXField_changed();
+          }
+        }
+      });
+      panel_19.add(forceCentreXField);
+
+      JLabel lblCentreX = new JLabel();
+      lblCentreX.setToolTipText("");
+      lblCentreX.setText("Centre X*");
+      lblCentreX.setPreferredSize(new Dimension(94, 22));
+      lblCentreX.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentreX.setBounds(6, 8, 93, 22);
+      panel_19.add(lblCentreX);
+
+      JLabel lblCentreY = new JLabel();
+      lblCentreY.setToolTipText("");
+      lblCentreY.setText("Centre Y*");
+      lblCentreY.setPreferredSize(new Dimension(94, 22));
+      lblCentreY.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentreY.setBounds(6, 32, 93, 22);
+      panel_19.add(lblCentreY);
+
+      forceCentreYField = new JWFNumberField();
+      forceCentreYField.setValueStep(0.05);
+      forceCentreYField.setText("");
+      forceCentreYField.setPreferredSize(new Dimension(100, 24));
+      forceCentreYField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      forceCentreYField.setBounds(101, 30, 100, 24);
+      forceCentreYField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.forceCentreYField_changed();
+          }
+        }
+      });
+      panel_19.add(forceCentreYField);
+
+      JLabel lblCentreZ = new JLabel();
+      lblCentreZ.setToolTipText("");
+      lblCentreZ.setText("Centre Z*");
+      lblCentreZ.setPreferredSize(new Dimension(94, 22));
+      lblCentreZ.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCentreZ.setBounds(6, 56, 93, 22);
+      panel_19.add(lblCentreZ);
+
+      forceCentreZField = new JWFNumberField();
+      forceCentreZField.setValueStep(0.05);
+      forceCentreZField.setText("");
+      forceCentreZField.setPreferredSize(new Dimension(100, 24));
+      forceCentreZField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      forceCentreZField.setBounds(101, 54, 100, 24);
+      forceCentreZField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (iflamesController != null) {
+            iflamesController.forceCentreZField_changed();
+          }
+        }
+      });
+      panel_19.add(forceCentreZField);
 
       panel_11 = new JPanel();
       tabbedPane.addTab("Statistics", null, panel_11, null);
@@ -2171,7 +2256,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getSpeedXField(), getSpeedYField(), getSpeedZField(), getSpeedXVarField(), getSpeedYVarField(), getSpeedZVarField(),
         getSpeedAlphaField(), getSpeedBetaField(), getSpeedGammaField(), getSpeedAlphaVarField(), getSpeedBetaVarField(),
         getSpeedGammaVarField(), getRadialAccelField(), getRadialAccelVarField(), getTangentialAccelField(),
-        getTangentialAccelVarField());
+        getTangentialAccelVarField(), getForceCentreXField(), getForceCentreYField(), getForceCentreZField());
   }
 
   public JPanel getMainLeftPanel() {
@@ -2568,5 +2653,17 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getTangentialAccelVarField() {
     return tangentialAccelVarField;
+  }
+
+  public JWFNumberField getForceCentreXField() {
+    return forceCentreXField;
+  }
+
+  public JWFNumberField getForceCentreYField() {
+    return forceCentreYField;
+  }
+
+  public JWFNumberField getForceCentreZField() {
+    return forceCentreZField;
   }
 }
