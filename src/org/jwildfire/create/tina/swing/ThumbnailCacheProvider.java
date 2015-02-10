@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JLabel;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -11,6 +12,7 @@ import org.jwildfire.io.ImageWriter;
 
 public class ThumbnailCacheProvider {
 
+  private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
   private static final String JWILDFIRE_DRAWER = "j-wildfire";
 
   public static SimpleImage getThumbnail(ThumbnailCacheKey pCacheKey, int pWidth) {
@@ -76,17 +78,20 @@ public class ThumbnailCacheProvider {
   private static File rootDrawer;
 
   static {
-    try {
-      rootDrawer = new File(System.getProperty("java.io.tmpdir"), JWILDFIRE_DRAWER);
-      if (!rootDrawer.exists()) {
-        if (!rootDrawer.mkdirs()) {
-          rootDrawer = new File(System.getProperty("java.io.tmpdir"));
+    String path = Prefs.getPrefs().getThumbnailPath();
+    if (path == null || path.length() == 0) {
+      rootDrawer = new File(System.getProperty(JAVA_IO_TMPDIR), JWILDFIRE_DRAWER);
+    }
+    else {
+      rootDrawer = new File(path);
+    }
+    if (!rootDrawer.exists()) {
+      if (!rootDrawer.mkdirs()) {
+        rootDrawer = new File(System.getProperty(JAVA_IO_TMPDIR));
+        if (!rootDrawer.exists()) {
+          rootDrawer.mkdirs();
         }
       }
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-      rootDrawer = new File(System.getProperty("java.io.tmpdir"));
     }
   }
 

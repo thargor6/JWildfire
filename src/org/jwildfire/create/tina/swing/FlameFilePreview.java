@@ -38,6 +38,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.image.SimpleImage;
 
 public class FlameFilePreview extends JPanel implements PropertyChangeListener {
   private static final long serialVersionUID = 1L;
@@ -95,24 +96,34 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
     }
     try {
       if (currFile.exists()) {
-        List<Flame> flames = new FlameReader(prefs).readFlames(currFile.getAbsolutePath());
-        Flame flame = flames.get(0);
         int imgWidth = this.getPreferredSize().width;
         int imgHeight = this.getPreferredSize().height - BUTTON_HEIGHT;
+        int quality = 50;
+        SimpleImage preview;
+        String filename = currFile.getAbsolutePath();
+        ThumbnailCacheKey cacheKey = new ThumbnailCacheKey(filename);
 
-        double wScl = (double) imgWidth / (double) flame.getWidth();
-        double hScl = (double) imgHeight / (double) flame.getHeight();
-        flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
-        flame.setWidth(imgWidth);
-        flame.setHeight(imgHeight);
+        preview = ThumbnailCacheProvider.getThumbnail(cacheKey, imgWidth, imgHeight, quality);
+        if (preview == null) {
+          List<Flame> flames = new FlameReader(prefs).readFlames(filename);
+          Flame flame = flames.get(0);
 
-        FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
-        renderer.setProgressUpdater(null);
-        flame.setSampleDensity(50);
-        flame.setSpatialFilterRadius(0.0);
-        RenderInfo info = new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
-        RenderedFlame res = renderer.renderFlame(info);
-        currThumbnail = new ImageIcon(res.getImage().getBufferedImg());
+          double wScl = (double) imgWidth / (double) flame.getWidth();
+          double hScl = (double) imgHeight / (double) flame.getHeight();
+          flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+          flame.setWidth(imgWidth);
+          flame.setHeight(imgHeight);
+
+          FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
+          renderer.setProgressUpdater(null);
+          flame.setSampleDensity(quality);
+          flame.setSpatialFilterRadius(0.0);
+          RenderInfo info = new RenderInfo(imgWidth, imgHeight, RenderMode.PREVIEW);
+          RenderedFlame res = renderer.renderFlame(info);
+          preview = res.getImage();
+          ThumbnailCacheProvider.storeThumbnail(cacheKey, imgWidth, imgHeight, quality, preview);
+        }
+        currThumbnail = new ImageIcon(preview.getBufferedImg());
       }
     }
     catch (Exception ex) {
