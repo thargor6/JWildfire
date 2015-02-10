@@ -44,6 +44,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
+  static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
 
@@ -130,6 +131,9 @@ public class Prefs extends ManagedObject {
   private String scriptPath = null;
   private String lastInputScriptPath = null;
   private String lastOutputScriptPath = null;
+
+  @Property(description = "Drawer for thumbnail-cache (restart of program after change required)", category = PropertyCategory.GENERAL)
+  private String thumbnailPath = null;
 
   @Property(description = "Image drawer", category = PropertyCategory.GENERAL)
   private String imagePath = null;
@@ -557,6 +561,7 @@ public class Prefs extends ManagedObject {
   }
 
   public void assign(Prefs pSrc) {
+    thumbnailPath = pSrc.thumbnailPath;
     scriptPath = pSrc.scriptPath;
     lastInputScriptPath = pSrc.lastInputScriptPath;
     lastOutputScriptPath = pSrc.lastOutputScriptPath;
@@ -1202,6 +1207,14 @@ public class Prefs extends ManagedObject {
 
   public void setIflamesLoadLibraryAtStartup(boolean pIflamesLoadLibraryAtStartup) {
     iflamesLoadLibraryAtStartup = pIflamesLoadLibraryAtStartup;
+  }
+
+  public String getThumbnailPath() {
+    return thumbnailPath;
+  }
+
+  public void setThumbnailPath(String pThumbnailPath) {
+    thumbnailPath = pThumbnailPath;
   }
 
 }
