@@ -799,9 +799,10 @@ public class EnvelopeDlgController {
           else if (y[i] > ymax)
             ymax = y[i];
         }
-        double xwidth = xmax - xmin;
+        //        double xwidth = xmax - xmin;
         double ywidth = ymax - ymin;
-        double cx = xmin + xwidth / 2.0;
+        //double cx = xmin + xwidth / 2.0;
+        double cx = 0.0;
         double cy = ymin + ywidth / 2.0;
 
         int newx[] = new int[x.length];
