@@ -108,6 +108,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
+  public static final String KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER = "tina.free_cache_in_batch_renderer";
 
   public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.6";
   public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
@@ -185,6 +186,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Associate profile information with flame files", category = PropertyCategory.TINA)
   private boolean tinaAssociateProfilesWithFlames = false;
+
+  @Property(description = "Free the cacher after each rendered image in the batch-renderer", category = PropertyCategory.TINA)
+  private boolean tinaFreeCacheInBatchRenderer = false;
 
   @Property(description = "Generate and save HDR images in the interactive renderer", category = PropertyCategory.TINA)
   private boolean tinaSaveHDRInIR = false;
@@ -621,6 +625,7 @@ public class Prefs extends ManagedObject {
     tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
     tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
+    tinaFreeCacheInBatchRenderer = pSrc.tinaFreeCacheInBatchRenderer;
 
     tinaRandGenDualityPreferedVariation = pSrc.tinaRandGenDualityPreferedVariation;
     tinaRandGenDualityPreferedVariationProbability1 = pSrc.tinaRandGenDualityPreferedVariationProbability1;
@@ -1215,6 +1220,14 @@ public class Prefs extends ManagedObject {
 
   public void setThumbnailPath(String pThumbnailPath) {
     thumbnailPath = pThumbnailPath;
+  }
+
+  public boolean isTinaFreeCacheInBatchRenderer() {
+    return tinaFreeCacheInBatchRenderer;
+  }
+
+  public void setTinaFreeCacheInBatchRenderer(boolean pTinaFreeCacheInBatchRenderer) {
+    tinaFreeCacheInBatchRenderer = pTinaFreeCacheInBatchRenderer;
   }
 
 }

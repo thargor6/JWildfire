@@ -174,6 +174,9 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField forceCentreXField;
   private JWFNumberField forceCentreYField;
   private JWFNumberField forceCentreZField;
+  private JButton copyDynamicsParamsToOthersButton;
+  private JButton baseFlameClearOthersButton;
+  private JButton clearCacheButton;
 
   public IFlamesInternalFrame() {
     super();
@@ -222,7 +225,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       newButton.setActionCommand("New from scratch");
       newButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/document-new-7.png")));
 
-      newButton.setBounds(160, 10, 143, 48);
+      newButton.setBounds(12, 10, 143, 48);
       mainTopPanel.add(newButton);
 
       loadIFlameFromClipboardButton = new JButton();
@@ -236,7 +239,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       loadIFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
       loadIFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
       loadIFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      loadIFlameFromClipboardButton.setBounds(370, 10, 143, 24);
+      loadIFlameFromClipboardButton.setBounds(223, 10, 143, 24);
       mainTopPanel.add(loadIFlameFromClipboardButton);
 
       saveIFlameToClipboardButton = new JButton();
@@ -251,7 +254,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       saveIFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
       saveIFlameToClipboardButton.setIconTextGap(2);
       saveIFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      saveIFlameToClipboardButton.setBounds(513, 10, 143, 24);
+      saveIFlameToClipboardButton.setBounds(366, 10, 143, 24);
       mainTopPanel.add(saveIFlameToClipboardButton);
 
       loadIFlameButton = new JButton();
@@ -265,7 +268,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       loadIFlameButton.setMinimumSize(new Dimension(100, 24));
       loadIFlameButton.setMaximumSize(new Dimension(32000, 24));
       loadIFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      loadIFlameButton.setBounds(370, 34, 143, 24);
+      loadIFlameButton.setBounds(223, 34, 143, 24);
       mainTopPanel.add(loadIFlameButton);
 
       saveIFlameButton = new JButton();
@@ -280,7 +283,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       saveIFlameButton.setMaximumSize(new Dimension(32000, 24));
       saveIFlameButton.setIconTextGap(2);
       saveIFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      saveIFlameButton.setBounds(513, 34, 143, 24);
+      saveIFlameButton.setBounds(366, 34, 143, 24);
       mainTopPanel.add(saveIFlameButton);
 
       resolutionProfileCmb = new JComboBox();
@@ -289,7 +292,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       resolutionProfileCmb.setMaximumSize(new Dimension(32767, 24));
       resolutionProfileCmb.setMaximumRowCount(32);
       resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      resolutionProfileCmb.setBounds(878, 22, 143, 24);
+      resolutionProfileCmb.setBounds(882, 34, 143, 24);
       resolutionProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (iflamesController != null) {
@@ -329,9 +332,25 @@ public class IFlamesInternalFrame extends JInternalFrame {
       iflameToEditorButton.setMaximumSize(new Dimension(32000, 52));
       iflameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
       iflameToEditorButton.setActionCommand("New from scratch");
-      iflameToEditorButton.setBounds(693, 10, 143, 48);
+      iflameToEditorButton.setBounds(557, 10, 143, 48);
       iflameToEditorButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/brick2.png")));
       mainTopPanel.add(iflameToEditorButton);
+
+      clearCacheButton = new JButton();
+      clearCacheButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.clearCacheButton_clicked();
+        }
+      });
+      clearCacheButton.setToolTipText("Remove all cached data to free memory");
+      clearCacheButton.setText("Clear cache");
+      clearCacheButton.setPreferredSize(new Dimension(125, 24));
+      clearCacheButton.setMinimumSize(new Dimension(100, 24));
+      clearCacheButton.setMaximumSize(new Dimension(32000, 24));
+      clearCacheButton.setIconTextGap(2);
+      clearCacheButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      clearCacheButton.setBounds(882, 10, 143, 24);
+      mainTopPanel.add(clearCacheButton);
 
       mainLeftPanel = new JPanel();
       mainLeftPanel.setBorder(new TitledBorder(null, "Image Library", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -395,7 +414,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
       mainBottomPanel = new JPanel();
       mainBottomPanel.setBorder(new TitledBorder(null, "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-      mainBottomPanel.setPreferredSize(new Dimension(10, 264));
+      mainBottomPanel.setPreferredSize(new Dimension(10, 272));
       jContentPane.add(mainBottomPanel, BorderLayout.SOUTH);
       mainBottomPanel.setLayout(new BorderLayout(0, 0));
 
@@ -438,7 +457,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
       baseFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
       baseFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      baseFlameFromClipboardButton.setBounds(229, 27, 105, 24);
+      baseFlameFromClipboardButton.setBounds(229, 26, 105, 24);
       panel_2.add(baseFlameFromClipboardButton);
 
       baseFlameToClipboardButton = new JButton();
@@ -453,7 +472,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameToClipboardButton.setMinimumSize(new Dimension(100, 24));
       baseFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
       baseFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      baseFlameToClipboardButton.setBounds(229, 54, 105, 24);
+      baseFlameToClipboardButton.setBounds(229, 52, 105, 24);
       panel_2.add(baseFlameToClipboardButton);
 
       baseFlameClearButton = new JButton();
@@ -483,8 +502,23 @@ public class IFlamesInternalFrame extends JInternalFrame {
       baseFlameClearAllButton.setMinimumSize(new Dimension(100, 24));
       baseFlameClearAllButton.setMaximumSize(new Dimension(32000, 24));
       baseFlameClearAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      baseFlameClearAllButton.setBounds(229, 127, 105, 24);
+      baseFlameClearAllButton.setBounds(229, 126, 105, 24);
       panel_2.add(baseFlameClearAllButton);
+
+      baseFlameClearOthersButton = new JButton();
+      baseFlameClearOthersButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.baseFlameClearOthersButton_clicked();
+        }
+      });
+      baseFlameClearOthersButton.setToolTipText("Clear all other flames except the current one");
+      baseFlameClearOthersButton.setText("Clear others");
+      baseFlameClearOthersButton.setPreferredSize(new Dimension(125, 24));
+      baseFlameClearOthersButton.setMinimumSize(new Dimension(100, 24));
+      baseFlameClearOthersButton.setMaximumSize(new Dimension(32000, 24));
+      baseFlameClearOthersButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      baseFlameClearOthersButton.setBounds(229, 152, 105, 24);
+      panel_2.add(baseFlameClearOthersButton);
 
       JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
       mainBottomPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -1774,6 +1808,21 @@ public class IFlamesInternalFrame extends JInternalFrame {
       });
       panel_17.add(tangentialAccelVarField);
 
+      copyDynamicsParamsToOthersButton = new JButton();
+      copyDynamicsParamsToOthersButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.copyDynamicsParamsToOthersButton_clicked();
+        }
+      });
+      copyDynamicsParamsToOthersButton.setBounds(440, 129, 192, 24);
+      panel_17.add(copyDynamicsParamsToOthersButton);
+      copyDynamicsParamsToOthersButton.setToolTipText("Copy the parameters of this base-flame to all other flames");
+      copyDynamicsParamsToOthersButton.setText("Copy params to others");
+      copyDynamicsParamsToOthersButton.setPreferredSize(new Dimension(125, 24));
+      copyDynamicsParamsToOthersButton.setMinimumSize(new Dimension(100, 24));
+      copyDynamicsParamsToOthersButton.setMaximumSize(new Dimension(32000, 24));
+      copyDynamicsParamsToOthersButton.setFont(new Font("Dialog", Font.BOLD, 10));
+
       panel_13 = new JPanel();
       tabbedPane.addTab("Dynamics", null, panel_13, null);
       panel_13.setLayout(new BorderLayout(0, 0));
@@ -2256,7 +2305,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getSpeedXField(), getSpeedYField(), getSpeedZField(), getSpeedXVarField(), getSpeedYVarField(), getSpeedZVarField(),
         getSpeedAlphaField(), getSpeedBetaField(), getSpeedGammaField(), getSpeedAlphaVarField(), getSpeedBetaVarField(),
         getSpeedGammaVarField(), getRadialAccelField(), getRadialAccelVarField(), getTangentialAccelField(),
-        getTangentialAccelVarField(), getForceCentreXField(), getForceCentreYField(), getForceCentreZField());
+        getTangentialAccelVarField(), getForceCentreXField(), getForceCentreYField(), getForceCentreZField(),
+        getBaseFlameClearOthersButton(), getCopyDynamicsParamsToOthersButton());
   }
 
   public JPanel getMainLeftPanel() {
@@ -2665,5 +2715,17 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getForceCentreZField() {
     return forceCentreZField;
+  }
+
+  public JButton getCopyDynamicsParamsToOthersButton() {
+    return copyDynamicsParamsToOthersButton;
+  }
+
+  public JButton getBaseFlameClearOthersButton() {
+    return baseFlameClearOthersButton;
+  }
+
+  public JButton getClearCacheButton() {
+    return clearCacheButton;
   }
 }

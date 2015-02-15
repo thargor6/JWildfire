@@ -30,6 +30,7 @@ import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.io.ImageWriter;
 
 public class JobRenderThread implements Runnable {
@@ -107,6 +108,10 @@ public class JobRenderThread implements Runnable {
                 }
               }
               job.setFinished(true);
+              if (Prefs.getPrefs().isTinaFreeCacheInBatchRenderer()) {
+                RessourceManager.clearAll();
+                System.gc();
+              }
               try {
                 {
                   controller.refreshRenderBatchJobsTable();

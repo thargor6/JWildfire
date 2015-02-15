@@ -77,6 +77,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO, pPrefs.getTinaEditorGuidesGoldenRatioColor());
     addValue(sb, Prefs.KEY_TINA_EDITOR_GUIDES_LINE_WIDTH, pPrefs.getTinaEditorGuidesLineWidth());
     addValue(sb, Prefs.KEY_TINA_VERTICAL_MACRO_BUTTONS, pPrefs.isTinaMacroButtonsVertical());
+    addValue(sb, Prefs.KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER, pPrefs.isTinaFreeCacheInBatchRenderer());
 
     addValue(sb, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER1, pPrefs.getTinaMutaGenMutationTypesUser1());
     addValue(sb, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2, pPrefs.getTinaMutaGenMutationTypesUser2());

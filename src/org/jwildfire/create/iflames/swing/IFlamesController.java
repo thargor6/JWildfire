@@ -201,6 +201,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField forceCentreXField;
   private final JWFNumberField forceCentreYField;
   private final JWFNumberField forceCentreZField;
+  private final JButton baseFlameClearOthersButton;
+  private final JButton copyDynamicsParamsToOthersButton;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -248,7 +250,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField,
       JWFNumberField pRadialAccelField, JWFNumberField pRadialAccelVarField, JWFNumberField pTangentialAccelField,
       JWFNumberField pTangentialAccelVarField, JWFNumberField pForceCentreXField, JWFNumberField pForceCentreYField,
-      JWFNumberField pForceCentreZField) {
+      JWFNumberField pForceCentreZField, JButton pBaseFlameClearOthersButton, JButton pCopyDynamicsParamsToOthersButton) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -349,6 +351,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     forceCentreXField = pForceCentreXField;
     forceCentreYField = pForceCentreYField;
     forceCentreZField = pForceCentreZField;
+    baseFlameClearOthersButton = pBaseFlameClearOthersButton;
+    copyDynamicsParamsToOthersButton = pCopyDynamicsParamsToOthersButton;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -665,6 +669,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     forceCentreXField.setEnabled(hasIFlame);
     forceCentreYField.setEnabled(hasIFlame);
     forceCentreZField.setEnabled(hasIFlame);
+    baseFlameClearOthersButton.setEnabled(hasIFlame);
+    copyDynamicsParamsToOthersButton.setEnabled(hasBaseFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -2177,6 +2183,55 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     getIFlamesFunc().getMotionParams().setForceCentreZ(forceCentreZField.getDoubleValue());
     refreshIFlame();
     enableControls();
+  }
+
+  public void baseFlameClearOthersButton_clicked() {
+    saveUndoPoint();
+    int currIdx = getCurrFlameIndex();
+    for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+      if (i != currIdx) {
+        getIFlamesFunc().getFlameParams(i).setFlameXML(null);
+      }
+    }
+    enableControls();
+    refreshBaseFlamePreview();
+    refreshIFlame();
+  }
+
+  public void copyDynamicsParamsToOthersButton_clicked() {
+    saveUndoPoint();
+    int currIdx = getCurrFlameIndex();
+    FlameParams src = getIFlamesFunc().getFlameParams(getCurrFlameIndex());
+
+    for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+      if (i != currIdx) {
+        FlameParams dst = getIFlamesFunc().getFlameParams(i);
+        dst.setRadialAcceleration(src.getRadialAcceleration());
+        dst.setRadialAccelerationVar(src.getRadialAccelerationVar());
+        dst.setTangentialAcceleration(src.getTangentialAcceleration());
+        dst.setTangentialAccelerationVar(src.getTangentialAccelerationVar());
+        dst.setSpeedX(src.getSpeedX());
+        dst.setSpeedXVar(src.getSpeedXVar());
+        dst.setSpeedY(src.getSpeedY());
+        dst.setSpeedYVar(src.getSpeedYVar());
+        dst.setSpeedZ(src.getSpeedZ());
+        dst.setSpeedZVar(src.getSpeedZVar());
+        dst.setRotateAlphaSpeed(src.getRotateAlphaSpeed());
+        dst.setRotateAlphaSpeedVar(src.getRotateAlphaSpeedVar());
+        dst.setRotateBetaSpeed(src.getRotateBetaSpeed());
+        dst.setRotateBetaSpeedVar(src.getRotateBetaSpeedVar());
+        dst.setRotateGammaSpeed(src.getRotateGammaSpeed());
+        dst.setRotateGammaSpeedVar(src.getRotateGammaSpeedVar());
+      }
+    }
+    enableControls();
+    refreshBaseFlamePreview();
+    refreshIFlame();
+  }
+
+  public void clearCacheButton_clicked() {
+    RessourceManager.clearAll();
+    System.gc();
   }
 
 }
