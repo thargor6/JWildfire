@@ -77,7 +77,6 @@ public class EnvelopePanel extends JPanel {
   private void drawGrid(Graphics g, EnvelopeView pEnvelopeView) {
     g.setColor(GRID_COLOR);
     int xnum = 20, ynum = 12;
-    int fl = 0;
 
     /* lines */
     int lineMax = 1000;
@@ -102,18 +101,8 @@ public class EnvelopePanel extends JPanel {
 
     {
       double dy = envelope.getViewYMax() - envelope.getViewYMin();
-      double step = Tools.FTOI(dy / (double) ynum);
-      if (step < 1.0) {
-        step = dy / (double) ynum;
-        if (step >= 0.5) {
-          step = 0.5;
-          fl = 1;
-        }
-        else {
-          step = 0.25;
-          fl = 2;
-        }
-      }
+      double step = calcSteps(ynum, dy);
+
       int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
       double y = (double) div * step;
       int lineCount = 0;
@@ -165,19 +154,8 @@ public class EnvelopePanel extends JPanel {
         while (x < envelope.getViewXMax() && ++tickCount < lineMax);
       }
       {
-        double dx = envelope.getViewYMax() - envelope.getViewYMin();
-        double step = Tools.FTOI(dx / (double) ynum);
-        if (step < 1.0) {
-          step = dx / (double) ynum;
-          if (step >= 0.5) {
-            step = 0.5;
-            fl = 1;
-          }
-          else {
-            step = 0.25;
-            fl = 2;
-          }
-        }
+        double dy = envelope.getViewYMax() - envelope.getViewYMin();
+        double step = calcSteps(ynum, dy);
         int div = Tools.FTOI((double) (envelope.getViewYMin() / step));
         double x = (double) div * step;
         int cnt = 0;
@@ -187,11 +165,7 @@ public class EnvelopePanel extends JPanel {
           int dxl = Tools.FTOI(fx);
           cnt++;
           if (cnt % 2 == 0) {
-            String hs;
-            if (fl == 0)
-              hs = String.valueOf(Tools.FTOI(x));
-            else
-              hs = String.valueOf(x);
+            String hs = Tools.doubleToString(x);
             int topEdge = dxl - (yFontOffset / 2) - 1;
             if (topEdge >= pEnvelopeView.getEnvelopeTop()) {
               int leftEdge = pEnvelopeView.getEnvelopeLeft() + 3;
@@ -203,6 +177,40 @@ public class EnvelopePanel extends JPanel {
         while (x < envelope.getViewYMax() && ++tickCount < lineMax);
       }
     }
+  }
+
+  private double calcSteps(int ynum, double dy) {
+    double step = dy / (double) ynum;
+    if (step > 1.0) {
+      step = Tools.FTOI(step);
+    }
+    else if (step > 0.5) {
+      step = 0.5;
+    }
+    else if (step > 0.25) {
+      step = 0.25;
+    }
+    else if (step > 0.125) {
+      step = 0.125;
+    }
+    else if (step > 0.01) {
+      step = 0.01;
+    }
+    else if (step > 0.001) {
+      step = 0.001;
+    }
+    else if (step > 0.0001) {
+      step = 0.0001;
+    }
+    else {
+      step = 0.0001;
+    }
+
+    while (dy / step > 2 * ynum) {
+      step += step;
+    }
+
+    return step;
   }
 
   private void drawLines(Graphics g, EnvelopeView pEnvelopeView) {

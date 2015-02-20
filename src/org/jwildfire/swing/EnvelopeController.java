@@ -57,6 +57,7 @@ public class EnvelopeController {
   private final JTextField yREd;
   private final JComboBox interpolationCmb;
   private final JCheckBox lockedCBx;
+  private final JCheckBox autofitCBx;
   private final EnvelopePanel envelopePanel;
 
   private Envelope currEnvelope = null;
@@ -69,7 +70,8 @@ public class EnvelopeController {
       JTextField pXMinREd, JTextField pXMaxREd, JTextField pYMinREd, JTextField pYMaxREd,
       JTextField pXREd, JTextField pYREd, JComboBox pInterpolationCmb, JButton pViewAllButton,
       JButton pViewLeftButton, JButton pViewRightButton, JButton pViewUpButton,
-      JButton pViewDownButton, JCheckBox pLockedCBx, EnvelopePanel pEnvelopePanel) {
+      JButton pViewDownButton, JCheckBox pLockedCBx, EnvelopePanel pEnvelopePanel,
+      JCheckBox pAutofitCBx) {
     propertyCmb = pPropertyCmb;
     createButton = pCreateButton;
     removeButton = pRemoveButton;
@@ -89,6 +91,7 @@ public class EnvelopeController {
     viewUpButton = pViewUpButton;
     viewDownButton = pViewDownButton;
     lockedCBx = pLockedCBx;
+    autofitCBx = pAutofitCBx;
     envelopePanel = pEnvelopePanel;
     envelopePanel.addMouseListener(new java.awt.event.MouseAdapter() {
 

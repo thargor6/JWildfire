@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -131,7 +132,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeYMinREd.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         if (ctrl != null)
-          ctrl.editFieldChanged();
+          ctrl.editFieldChanged(false);
       }
     });
     envelopeYMinREd.setPreferredSize(new Dimension(80, 26));
@@ -143,7 +144,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeXMaxREd.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         if (ctrl != null)
-          ctrl.editFieldChanged();
+          ctrl.editFieldChanged(false);
       }
     });
     envelopeXMaxREd.setPreferredSize(new Dimension(80, 26));
@@ -155,7 +156,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeYMaxREd.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         if (ctrl != null)
-          ctrl.editFieldChanged();
+          ctrl.editFieldChanged(false);
       }
     });
     envelopeYMaxREd.setPreferredSize(new Dimension(80, 26));
@@ -201,7 +202,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeXREd.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         if (ctrl != null)
-          ctrl.editFieldChanged();
+          ctrl.editFieldChanged(true);
       }
     });
     envelopeXREd.setPreferredSize(new Dimension(80, 26));
@@ -221,7 +222,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeYREd.addChangeListener(new ChangeListener() {
       public void stateChanged(ChangeEvent e) {
         if (ctrl != null)
-          ctrl.editFieldChanged();
+          ctrl.editFieldChanged(true);
       }
     });
     envelopeYREd.setPreferredSize(new Dimension(80, 26));
@@ -494,7 +495,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
         getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
         getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
         getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
-        errorHandler);
+        errorHandler, getAutofitCBx());
     ctrl.setNoRefresh(true);
 
     EnvelopeChangeListener changeListener = new EnvelopeChangeListener() {
@@ -770,6 +771,11 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeViewAllButton.setLocation(new Point(5, 190));
       envelopeViewAllButton.setBounds(6, 280, 141, 26);
       panel.add(envelopeViewAllButton);
+
+      autofitCBx = new JCheckBox("Auto fit to view");
+      autofitCBx.setSelected(true);
+      autofitCBx.setBounds(6, 6, 141, 18);
+      panel.add(autofitCBx);
     }
     return panel;
   }
@@ -804,7 +810,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       envelopeXMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (ctrl != null)
-            ctrl.editFieldChanged();
+            ctrl.editFieldChanged(false);
         }
       });
       envelopeXMinREd.setPreferredSize(new Dimension(80, 26));
@@ -1015,6 +1021,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JWFNumberField envelopeMP3FPSREd;
   private JWFNumberField envelopeMP3OffsetREd;
   private JWFNumberField envelopeMP3DurationREd;
+  private JCheckBox autofitCBx;
 
   private String findProperty(Object pObject, Object pProperty, String pPath) {
     if (pObject == pProperty) {
@@ -1207,5 +1214,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public JWFNumberField getEnvelopeMP3DurationREd() {
     return envelopeMP3DurationREd;
+  }
+
+  public JCheckBox getAutofitCBx() {
+    return autofitCBx;
   }
 }

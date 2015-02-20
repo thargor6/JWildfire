@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.RootPaneContainer;
@@ -69,6 +70,7 @@ public class EnvelopeDlgController {
   private final JWFNumberField mp3OffsetREd;
   private final JWFNumberField mp3DurationREd;
   private final ErrorHandler errorHandler;
+  private final JCheckBox autofitCBx;
 
   private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
@@ -82,7 +84,7 @@ public class EnvelopeDlgController {
 
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
-        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler);
+        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -93,7 +95,7 @@ public class EnvelopeDlgController {
       JWFNumberField pXScaleREd, JWFNumberField pXOffsetREd, JWFNumberField pYScaleREd, JWFNumberField pYOffsetREd,
       JButton pApplyTransformBtn, JButton pApplyTransformReverseBtn, JButton pMp3ImportBtn,
       JWFNumberField pMp3ChannelREd, JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
-      JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler) {
+      JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -122,6 +124,7 @@ public class EnvelopeDlgController {
     mp3OffsetREd = pMp3OffsetREd;
     mp3DurationREd = pMp3DurationREd;
     errorHandler = pErrorHandler;
+    autofitCBx = pAutofitCBx;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -138,6 +141,10 @@ public class EnvelopeDlgController {
     });
     envelopePanel.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(java.awt.event.MouseEvent e) {
+        if (e.getClickCount() > 1) {
+          viewAll();
+          return;
+        }
         try {
           switch (mouseClickWaitMode) {
             case ADD_POINT:
@@ -356,10 +363,10 @@ public class EnvelopeDlgController {
 
   public void clearEnvelope() {
     envelope.clear();
-    refreshEnvelope();
+    refreshWithAutoFit();
   }
 
-  public void editFieldChanged() {
+  public void editFieldChanged(boolean pAutoFit) {
     if (!noRefresh) {
       envelope.setViewXMin(getIntValue(xMinREd));
       envelope.setViewXMax(getIntValue(xMaxREd));
@@ -371,7 +378,12 @@ public class EnvelopeDlgController {
         envelope.setViewXMax(envelope.getViewXMin() + 1);
       if ((envelope.getViewYMax() - envelope.getViewYMin()) < 0.001)
         envelope.setViewYMax(envelope.getViewYMin() + 0.001);
-      refreshEnvelope();
+      if (pAutoFit) {
+        refreshWithAutoFit();
+      }
+      else {
+        refreshEnvelope();
+      }
     }
   }
 
@@ -435,7 +447,8 @@ public class EnvelopeDlgController {
         }
       }
       envelope.setValues(xVals, yVals);
-      refreshEnvelope();
+      //      refreshEnvelope();
+      refreshWithAutoFit();
       enableControls();
     }
   }
@@ -525,7 +538,8 @@ public class EnvelopeDlgController {
       envelope.select(pred + 1);
       notifySelectionChange(envelope.getSelectedIdx(), envelope.getSelectedX(), envelope.getSelectedY());
 
-      refreshEnvelope();
+      //      refreshEnvelope();
+      refreshWithAutoFit();
       enableControls();
     }
   }
@@ -683,8 +697,8 @@ public class EnvelopeDlgController {
         ymin = ymin - dy;
         ymax = ymax + dy;
       }
-      if ((xmax - xmin) < 3.0)
-        xmax = xmin + 3.0;
+      if ((xmax - xmin) < 10.0)
+        xmax = xmin + 10.0;
       if ((ymax - ymin) < 0.00005)
         ymax = ymin + 0.00005;
 
@@ -814,11 +828,20 @@ public class EnvelopeDlgController {
           newy[i] = dy * yscale + yoffset + cy;
         }
         envelope.setValues(newx, newy);
-        refreshEnvelope();
+        refreshWithAutoFit();
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  private void refreshWithAutoFit() {
+    if (autofitCBx != null && autofitCBx.isSelected()) {
+      viewAll();
+    }
+    else {
+      refreshEnvelope();
     }
   }
 

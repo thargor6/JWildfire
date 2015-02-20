@@ -21,23 +21,23 @@ import java.io.Serializable;
 public class Vector implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private final double x, y, z;
+  private final float x, y, z;
 
-  public Vector(double pX, double pY, double pZ) {
+  public Vector(float pX, float pY, float pZ) {
     x = pX;
     y = pY;
     z = pZ;
   }
 
-  public double getX() {
+  public float getX() {
     return x;
   }
 
-  public double getY() {
+  public float getY() {
     return y;
   }
 
-  public double getZ() {
+  public float getZ() {
     return z;
   }
 
@@ -46,17 +46,17 @@ public class Vector implements Serializable {
     return "Vector [x=" + x + ", y=" + y + ", z=" + z + "]";
   }
 
+  public Vector makeCopy() {
+    return new Vector(x, y, z);
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(x);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(y);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(z);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + Float.floatToIntBits(x);
+    result = prime * result + Float.floatToIntBits(y);
+    result = prime * result + Float.floatToIntBits(z);
     return result;
   }
 
@@ -69,16 +69,12 @@ public class Vector implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Vector other = (Vector) obj;
-    if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+    if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
       return false;
-    if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+    if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
       return false;
-    if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+    if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
       return false;
     return true;
-  }
-
-  public Vector makeCopy() {
-    return new Vector(x, y, z);
   }
 }

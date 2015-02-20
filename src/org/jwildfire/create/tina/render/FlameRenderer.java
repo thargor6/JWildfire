@@ -890,7 +890,6 @@ public class FlameRenderer {
         res.add(new RenderPacket(newFlame, newView));
       }
     }
-
     return res;
   }
 

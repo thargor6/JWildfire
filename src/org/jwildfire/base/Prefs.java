@@ -128,6 +128,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
 
+  public static final String KEY_TINA_OVERWRITE_MOTIONBLUR_TIMESTEP = "tina.overwrite.motionblur_timestep";
+  public static final String KEY_TINA_OVERWRITE_MOTIONBLUR_LENGTH = "tina.overwrite.motionblur_length";
+
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
@@ -216,6 +219,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
+
+  @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
+  private double tinaOverwriteMotionBlurTimeStep = 0.0;
+
+  @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
+  private int tinaOverwriteMotionBlurLength = 0;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
@@ -626,6 +635,8 @@ public class Prefs extends ManagedObject {
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
     tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
     tinaFreeCacheInBatchRenderer = pSrc.tinaFreeCacheInBatchRenderer;
+    tinaOverwriteMotionBlurTimeStep = pSrc.tinaOverwriteMotionBlurTimeStep;
+    tinaOverwriteMotionBlurLength = pSrc.tinaOverwriteMotionBlurLength;
 
     tinaRandGenDualityPreferedVariation = pSrc.tinaRandGenDualityPreferedVariation;
     tinaRandGenDualityPreferedVariationProbability1 = pSrc.tinaRandGenDualityPreferedVariationProbability1;
@@ -1228,6 +1239,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFreeCacheInBatchRenderer(boolean pTinaFreeCacheInBatchRenderer) {
     tinaFreeCacheInBatchRenderer = pTinaFreeCacheInBatchRenderer;
+  }
+
+  public double getTinaOverwriteMotionBlurTimeStep() {
+    return tinaOverwriteMotionBlurTimeStep;
+  }
+
+  public void setTinaOverwriteMotionBlurTimeStep(double pTinaOverwriteMotionBlurTimeStep) {
+    tinaOverwriteMotionBlurTimeStep = pTinaOverwriteMotionBlurTimeStep;
+  }
+
+  public int getTinaOverwriteMotionBlurLength() {
+    return tinaOverwriteMotionBlurLength;
+  }
+
+  public void setTinaOverwriteMotionBlurLength(int pTinaOverwriteMotionBlurLength) {
+    tinaOverwriteMotionBlurLength = pTinaOverwriteMotionBlurLength;
   }
 
 }

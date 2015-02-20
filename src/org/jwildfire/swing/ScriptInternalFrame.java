@@ -227,7 +227,7 @@ public class ScriptInternalFrame extends JInternalFrame {
           getEnvelopeViewLeftButton(), getEnvelopeViewRightButton(),
           getEnvelopeViewUpButton(), getEnvelopeViewDownButton(),
           getEnvelopeLockCheckBox(),
-          (EnvelopePanel) getEnvelopePanel());
+          (EnvelopePanel) getEnvelopePanel(), null);
     }
     return scriptContentPane;
   }
@@ -1435,5 +1435,4 @@ public class ScriptInternalFrame extends JInternalFrame {
   public void setOperatorsFrame(OperatorsInternalFrame pOperatorsFrame) {
     operatorsFrame = pOperatorsFrame;
   }
-
 } //  @jve:decl-index=0:visual-constraint="21,13"

@@ -429,10 +429,18 @@ public class AbstractFlameReader {
     }
 
     if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
-      pFlame.setMotionBlurLength(Integer.parseInt(hs));
+      int blurLen = Integer.parseInt(hs);
+      if (blurLen > 0 && prefs.getTinaOverwriteMotionBlurLength() > 0) {
+        blurLen = prefs.getTinaOverwriteMotionBlurLength();
+      }
+      pFlame.setMotionBlurLength(blurLen);
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
-      pFlame.setMotionBlurTimeStep(Double.parseDouble(hs));
+      double timestep = Double.parseDouble(hs);
+      if (timestep > MathLib.EPSILON && prefs.getTinaOverwriteMotionBlurTimeStep() > MathLib.EPSILON) {
+        timestep = prefs.getTinaOverwriteMotionBlurTimeStep();
+      }
+      pFlame.setMotionBlurTimeStep(timestep);
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {
       pFlame.setMotionBlurDecay(Double.parseDouble(hs));

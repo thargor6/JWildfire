@@ -146,8 +146,8 @@ public class SubFlameWFFunc extends VariationFunc {
       layer.refreshModWeightTables(pContext);
       xf = layer.getXForms().get(0);
       p = new XYZPoint();
-      p.x = 2.0 * pContext.random() - 1.0;
-      p.y = 2.0 * pContext.random() - 1.0;
+      p.x = pContext.random() - 0.5;
+      p.y = pContext.random() - 0.5;
       p.z = 0.0;
       p.color = pContext.random();
 
