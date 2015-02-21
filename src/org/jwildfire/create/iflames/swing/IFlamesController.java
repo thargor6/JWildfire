@@ -203,6 +203,15 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField forceCentreZField;
   private final JButton baseFlameClearOthersButton;
   private final JButton copyDynamicsParamsToOthersButton;
+  private final JWFNumberField baseFlameBrightnessMinField;
+  private final JWFNumberField baseFlameBrightnessMaxField;
+  private final JWFNumberField baseFlameBrightnessChangeField;
+  private final JWFNumberField imageRedChangeField;
+  private final JWFNumberField imageGreenChangeField;
+  private final JWFNumberField imageBlueChangeField;
+  private final JWFNumberField imageHueChangeField;
+  private final JWFNumberField imageSaturationChangeField;
+  private final JWFNumberField imageLightnessChangeField;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -250,7 +259,10 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pSpeedAlphaVarField, JWFNumberField pSpeedBetaVarField, JWFNumberField pSpeedGammaVarField,
       JWFNumberField pRadialAccelField, JWFNumberField pRadialAccelVarField, JWFNumberField pTangentialAccelField,
       JWFNumberField pTangentialAccelVarField, JWFNumberField pForceCentreXField, JWFNumberField pForceCentreYField,
-      JWFNumberField pForceCentreZField, JButton pBaseFlameClearOthersButton, JButton pCopyDynamicsParamsToOthersButton) {
+      JWFNumberField pForceCentreZField, JButton pBaseFlameClearOthersButton, JButton pCopyDynamicsParamsToOthersButton,
+      JWFNumberField pBaseFlameBrightnessMinField, JWFNumberField pBaseFlameBrightnessMaxField, JWFNumberField pBaseFlameBrightnessChangeField,
+      JWFNumberField pImageRedChangeField, JWFNumberField pImageGreenChangeField, JWFNumberField pImageBlueChangeField,
+      JWFNumberField pImageHueChangeField, JWFNumberField pImageSaturationChangeField, JWFNumberField pImageLightnessChangeField) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -353,6 +365,15 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     forceCentreZField = pForceCentreZField;
     baseFlameClearOthersButton = pBaseFlameClearOthersButton;
     copyDynamicsParamsToOthersButton = pCopyDynamicsParamsToOthersButton;
+    baseFlameBrightnessMinField = pBaseFlameBrightnessMinField;
+    baseFlameBrightnessMaxField = pBaseFlameBrightnessMaxField;
+    baseFlameBrightnessChangeField = pBaseFlameBrightnessChangeField;
+    imageRedChangeField = pImageRedChangeField;
+    imageGreenChangeField = pImageGreenChangeField;
+    imageBlueChangeField = pImageBlueChangeField;
+    imageHueChangeField = pImageHueChangeField;
+    imageSaturationChangeField = pImageSaturationChangeField;
+    imageLightnessChangeField = pImageLightnessChangeField;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -671,6 +692,15 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     forceCentreZField.setEnabled(hasIFlame);
     baseFlameClearOthersButton.setEnabled(hasIFlame);
     copyDynamicsParamsToOthersButton.setEnabled(hasBaseFlame);
+    baseFlameBrightnessMinField.setEnabled(hasBaseFlame);
+    baseFlameBrightnessMaxField.setEnabled(hasBaseFlame);
+    baseFlameBrightnessChangeField.setEnabled(hasBaseFlame);
+    imageRedChangeField.setEnabled(hasIFlame);
+    imageGreenChangeField.setEnabled(hasIFlame);
+    imageBlueChangeField.setEnabled(hasIFlame);
+    imageHueChangeField.setEnabled(hasIFlame);
+    imageSaturationChangeField.setEnabled(hasIFlame);
+    imageLightnessChangeField.setEnabled(hasIFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -1218,6 +1248,12 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       iflameDensityField.setValue(0.0);
       previewButton.setSelected(false);
       statisticsTextArea.setText("");
+      imageRedChangeField.setValue(0.0);
+      imageGreenChangeField.setValue(0.0);
+      imageBlueChangeField.setValue(0.0);
+      imageHueChangeField.setValue(0.0);
+      imageSaturationChangeField.setValue(0.0);
+      imageLightnessChangeField.setValue(0.0);
     }
     else {
       edgesNorthButton.setSelected(iflame.getImageParams().getConv_north() == 1);
@@ -1240,6 +1276,12 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       imageBrightnessField.setValue(iflame.getImageParams().getImage_brightness());
       iflameDensityField.setValue(iflame.getImageParams().getIFlame_density());
       previewButton.setSelected(iflame.getMotionParams().getPreview() == 1);
+      imageRedChangeField.setValue(iflame.getImageParams().getColorChangeRed());
+      imageGreenChangeField.setValue(iflame.getImageParams().getColorChangeGreen());
+      imageBlueChangeField.setValue(iflame.getImageParams().getColorChangeBlue());
+      imageHueChangeField.setValue(iflame.getImageParams().getColorChangeHue());
+      imageSaturationChangeField.setValue(iflame.getImageParams().getColorChangeSaturation());
+      imageLightnessChangeField.setValue(iflame.getImageParams().getColorChangeLightness());
     }
   }
 
@@ -1309,6 +1351,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       radialAccelVarField.setValue(0.0);
       tangentialAccelField.setValue(0.0);
       tangentialAccelVarField.setValue(0.0);
+      baseFlameBrightnessMinField.setValue(0.0);
+      baseFlameBrightnessMaxField.setValue(0.0);
+      baseFlameBrightnessChangeField.setValue(0.0);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1345,6 +1390,9 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       radialAccelVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getRadialAccelerationVar());
       tangentialAccelField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getTangentialAcceleration());
       tangentialAccelVarField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getTangentialAccelerationVar());
+      baseFlameBrightnessMinField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessMin());
+      baseFlameBrightnessMaxField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessMax());
+      baseFlameBrightnessChangeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessChange());
 
       switch (iflame.getImageParams().getShape_distribution()) {
         case BRIGHTNESS:
@@ -2232,6 +2280,69 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void clearCacheButton_clicked() {
     RessourceManager.clearAll();
     System.gc();
+  }
+
+  public void baseFlameBrightnessMinField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setBrightnessMin(baseFlameBrightnessMinField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameBrightnessMaxField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setBrightnessMax(baseFlameBrightnessMaxField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void baseFlameBrightnessChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setBrightnessChange(baseFlameBrightnessChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageRedChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeRed(imageRedChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageGreenChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeGreen(imageGreenChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageBlueChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeBlue(imageBlueChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageHueChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeHue(imageHueChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageSaturationChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeSaturation(imageSaturationChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void imageLightnessChangeField_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getImageParams().setColorChangeLightness(imageLightnessChangeField.getDoubleValue());
+    refreshIFlame();
+    enableControls();
   }
 
 }

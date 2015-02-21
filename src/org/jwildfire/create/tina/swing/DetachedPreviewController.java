@@ -299,12 +299,12 @@ public class DetachedPreviewController implements IterationObserver {
 
     @Override
     public void run() {
-      {
-        AbstractRenderThread thread = threads.getRenderThreads().get(0);
-        initImage(thread.getBgRed(), thread.getBgGreen(), thread.getBgBlue(), thread.getBgImagefile());
-      }
       finished = cancelSignalled = false;
       try {
+        {
+          AbstractRenderThread thread = threads.getRenderThreads().get(0);
+          initImage(thread.getBgRed(), thread.getBgGreen(), thread.getBgBlue(), thread.getBgImagefile());
+        }
         while (!cancelSignalled) {
           try {
             if (--nextImageUpdate <= 0) {
