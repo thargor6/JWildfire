@@ -1,9 +1,27 @@
-V2.34 ALPHA (03.02.2015):
- - powerful new sub-application to create iflames (you can reach it form the main window-menu) 
- - Thumbnails in the Flame-Browser are now permanently cached which means a significant speed improvement
+V2.34 (21.02.2015):
+ - powerful new sub-application to create iflames (you can reach it form the main window-menu), including a particle-simulation 
+   to animate them, but please beware that this new application needs a very powerful computer, 
+   especially when you want to animate the iflames. 
+   There are about 350-parameters to change, many of them may be animated:
+     - "Edge-finding": controls where to place base-shapes
+     - "Global structure": controls the global structure of the resulting iflame
+     - "Blending": controls coloring
+     - "Dynamics": controls global settings affecting dynamics aspects, like gravity
+     - "Base Flame Appearance: controls the base-shapes inside an iflame (you may have upto 6 different base-shapes)
+       - "Size and orientation": The size and oriantation of the base-shapes
+       - "Distribution": how to place which base-shape
+       - "Blending": local coloring
+       - "Mutations": controls how to create mutations from the base-shapes
+       - "Dynamics": dynamic properties (like speed in a certain direction) of base-shapes          
+ - thumbnails in the Flame-Browser are now permanently cached which means a significant speed improvement
+ - using the Thumbnail-Cache also in the flame-file-dialog
+ - (Optional) user-defined path for thumbnail-cache in the Prefs
  - new "donut"-style for the "primitives_wf"-variation (set shape=6 and play with the a- and b-parameters)
- - new experimental "waveblur_wf"-variation
+ - new "waveblur_wf"-variation
+ - changed the frame-scale behaviour in the Envelope-window to scale around 0 (and not the centre)
+ - several other improvements to the motion-curve-editor
  - fixed a problem regarding the duplication of the gradient when duplicating a flame
+ - added a new option to automatically clear te cache in the batch renderer after rendering each image
 
 V2.23 (15.01.2015):
  - MutaGen: three user-defined meta-mutation-types which can be customized in the Prefs (i. e., you may specify which mutations should be applied)

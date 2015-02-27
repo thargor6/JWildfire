@@ -178,4 +178,11 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     return true;
   }
 
+  public boolean isNaN() {
+    return Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z);
+  }
+
+  public boolean isInfinite() {
+    return Double.isInfinite(x) || Double.isInfinite(y) || Double.isInfinite(z);
+  }
 }
