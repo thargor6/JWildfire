@@ -533,7 +533,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       xForm.setWeight(0.5);
       IFlamesFunc iflames = (IFlamesFunc) VariationFuncList.getVariationFuncInstance("iflames_wf", true);
       if (imageLibrary.size() > 0) {
-        iflames.getImageParams().setImageFilename(imageLibrary.get((int) (Math.random() * imageLibrary.size())).getFilename());
+        String imgFilename = imageLibrary.get((int) (Math.random() * imageLibrary.size())).getFilename();
+        iflames.getImageParams().setImageFilename(imgFilename);
       }
       if (flameLibrary.size() > 0) {
         for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
