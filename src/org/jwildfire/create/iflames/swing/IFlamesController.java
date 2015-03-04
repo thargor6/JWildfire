@@ -39,6 +39,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -212,6 +213,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final JWFNumberField imageHueChangeField;
   private final JWFNumberField imageSaturationChangeField;
   private final JWFNumberField imageLightnessChangeField;
+  private final JCheckBox baseFlameInstancingCBx;
 
   private Flame _currFlame;
   private FlamePanel flamePanel;
@@ -262,7 +264,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       JWFNumberField pForceCentreZField, JButton pBaseFlameClearOthersButton, JButton pCopyDynamicsParamsToOthersButton,
       JWFNumberField pBaseFlameBrightnessMinField, JWFNumberField pBaseFlameBrightnessMaxField, JWFNumberField pBaseFlameBrightnessChangeField,
       JWFNumberField pImageRedChangeField, JWFNumberField pImageGreenChangeField, JWFNumberField pImageBlueChangeField,
-      JWFNumberField pImageHueChangeField, JWFNumberField pImageSaturationChangeField, JWFNumberField pImageLightnessChangeField) {
+      JWFNumberField pImageHueChangeField, JWFNumberField pImageSaturationChangeField, JWFNumberField pImageLightnessChangeField,
+      JCheckBox pBaseFlameInstancingCBx) {
     noRefresh = true;
     prefs = Prefs.getPrefs();
     mainController = pMainController;
@@ -374,6 +377,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     imageHueChangeField = pImageHueChangeField;
     imageSaturationChangeField = pImageSaturationChangeField;
     imageLightnessChangeField = pImageLightnessChangeField;
+    baseFlameInstancingCBx = pBaseFlameInstancingCBx;
 
     messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
@@ -702,6 +706,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     imageHueChangeField.setEnabled(hasIFlame);
     imageSaturationChangeField.setEnabled(hasIFlame);
     imageLightnessChangeField.setEnabled(hasIFlame);
+    baseFlameInstancingCBx.setEnabled(hasIFlame);
 
     boolean minMaxFields = hasIFlame && (ShapeDistribution.HUE.equals(iflames.getImageParams().getShape_distribution()) || ShapeDistribution.BRIGHTNESS.equals(iflames.getImageParams().getShape_distribution()) ||
         ShapeDistribution.LUMINOSITY.equals(iflames.getImageParams().getShape_distribution()));
@@ -1355,6 +1360,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameBrightnessMinField.setValue(0.0);
       baseFlameBrightnessMaxField.setValue(0.0);
       baseFlameBrightnessChangeField.setValue(0.0);
+      baseFlameInstancingCBx.setSelected(false);
     }
     else {
       baseFlameSizeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getSize());
@@ -1394,6 +1400,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       baseFlameBrightnessMinField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessMin());
       baseFlameBrightnessMaxField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessMax());
       baseFlameBrightnessChangeField.setValue(iflame.getFlameParams(getCurrFlameIndex()).getBrightnessChange());
+      baseFlameInstancingCBx.setSelected(iflame.getFlameParams(getCurrFlameIndex()).isInstancing());
 
       switch (iflame.getImageParams().getShape_distribution()) {
         case BRIGHTNESS:
@@ -2346,4 +2353,37 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     enableControls();
   }
 
+  public void baseFlameInstancingCbx_changed() {
+    saveUndoPoint();
+    getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setInstancing(baseFlameInstancingCBx.isSelected());
+    refreshIFlame();
+    enableControls();
+  }
+
+  public void copyBaseFlameParamsToOthersButton_clicked() {
+    saveUndoPoint();
+    int currIdx = getCurrFlameIndex();
+    FlameParams src = getIFlamesFunc().getFlameParams(getCurrFlameIndex());
+
+    for (int i = 0; i < IFlamesFunc.MAX_FLAME_COUNT; i++) {
+      if (i != currIdx) {
+        FlameParams dst = getIFlamesFunc().getFlameParams(i);
+        dst.setSize(src.getSize());
+        dst.setSizeVar(src.getSizeVar());
+        dst.setCentreX(src.getCentreX());
+        dst.setCentreY(src.getCentreY());
+        dst.setCentreZ(src.getCentreZ());
+        dst.setRotateAlpha(src.getRotateAlpha());
+        dst.setRotateAlphaVar(src.getRotateAlphaVar());
+        dst.setRotateBeta(src.getRotateBeta());
+        dst.setRotateBetaVar(src.getRotateBetaVar());
+        dst.setRotateGamma(src.getRotateGamma());
+        dst.setRotateGammaVar(src.getRotateGammaVar());
+        dst.setInstancing(src.isInstancing());
+      }
+    }
+    enableControls();
+    refreshBaseFlamePreview();
+    refreshIFlame();
+  }
 }

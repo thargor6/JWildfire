@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -188,6 +189,8 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JWFNumberField imageSaturationChangeField;
   private JWFNumberField imageLightnessChangeField;
   private JWFNumberField baseFlameBrightnessChangeField;
+  private JCheckBox baseFlameInstancingCBx;
+  private JButton copyBaseFlameParamsToOthersButton;
 
   public IFlamesInternalFrame() {
     super();
@@ -1334,6 +1337,32 @@ public class IFlamesInternalFrame extends JInternalFrame {
       lblRotateGammaVariation.setText("Rotate Gamma Variation");
       lblRotateGammaVariation.setPreferredSize(new Dimension(94, 22));
       lblRotateGammaVariation.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      baseFlameInstancingCBx = new JCheckBox("Instancing");
+      baseFlameInstancingCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (iflamesController != null) {
+            iflamesController.baseFlameInstancingCbx_changed();
+          }
+        }
+      });
+      baseFlameInstancingCBx.setBounds(464, 6, 104, 18);
+      panel_9.add(baseFlameInstancingCBx);
+
+      copyBaseFlameParamsToOthersButton = new JButton();
+      copyBaseFlameParamsToOthersButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          iflamesController.copyBaseFlameParamsToOthersButton_clicked();
+        }
+      });
+      copyBaseFlameParamsToOthersButton.setToolTipText("Copy the parameters of this base-flame to all other flames");
+      copyBaseFlameParamsToOthersButton.setText("Copy params to others");
+      copyBaseFlameParamsToOthersButton.setPreferredSize(new Dimension(125, 24));
+      copyBaseFlameParamsToOthersButton.setMinimumSize(new Dimension(100, 24));
+      copyBaseFlameParamsToOthersButton.setMaximumSize(new Dimension(32000, 24));
+      copyBaseFlameParamsToOthersButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      copyBaseFlameParamsToOthersButton.setBounds(464, 128, 192, 24);
+      panel_9.add(copyBaseFlameParamsToOthersButton);
 
       panel_10 = new JPanel();
       tabbedPane_1.addTab("Distribution", null, panel_10, null);
@@ -2563,7 +2592,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
         getBaseFlameClearOthersButton(), getCopyDynamicsParamsToOthersButton(), getBaseFlameBrightnessMinField(),
         getBaseFlameBrightnessMaxField(), getBaseFlameBrightnessChangeField(), getImageRedChangeField(),
         getImageGreenChangeField(), getImageBlueChangeField(), getImageHueChangeField(), getImageSaturationChangeField(),
-        getImageLightnessChangeField());
+        getImageLightnessChangeField(), getBaseFlameInstancingCBx());
   }
 
   public JPanel getMainLeftPanel() {
@@ -3020,5 +3049,13 @@ public class IFlamesInternalFrame extends JInternalFrame {
 
   public JWFNumberField getBaseFlameBrightnessChangeField() {
     return baseFlameBrightnessChangeField;
+  }
+
+  public JCheckBox getBaseFlameInstancingCBx() {
+    return baseFlameInstancingCBx;
+  }
+
+  public JButton getCopyBaseFlameParamsToOthersButton() {
+    return copyBaseFlameParamsToOthersButton;
   }
 }

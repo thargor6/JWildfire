@@ -23,6 +23,7 @@ public class CreationStatistics {
   private final List<Action> actions = new ArrayList<Action>();
   private int structureMapWidth, structureMapHeight;
   private int flameCount;
+  private int iteratorCount;
   private long totalDuration;
 
   public enum ActionType {
@@ -103,6 +104,7 @@ public class CreationStatistics {
     sb.append("structure width: " + structureMapWidth + "\n");
     sb.append("structure height: " + structureMapHeight + "\n");
     sb.append("number of flames: " + flameCount + "\n");
+    sb.append("number of iterators: " + iteratorCount + "\n");
     sb.append("total duration: " + totalDuration / 1000.0 + "s\n");
     sb.append("actions:\n");
     for (Action action : actions) {
@@ -110,6 +112,10 @@ public class CreationStatistics {
     }
 
     return sb.toString();
+  }
+
+  public void setIteratorCount(int pIteratorCount) {
+    iteratorCount = pIteratorCount;
   }
 
 }

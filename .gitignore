@@ -38,18 +38,6 @@ src/org/jocl/samples
 src/org/sunflow
 FasterMath*
 MathTest*
-BaseFlame*
-DynamicProperties*
-FlameParams*
-IFlamesAnimator*
-IFlamesFunc*
-IFlamesIterator*
-ImageParams*
-MotionParams*
-Params*
-Particle*
-ParticleList*
-ShapeDistribution*
 
 
 
