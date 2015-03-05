@@ -278,6 +278,7 @@ public class VariationFuncList {
     registerVariationFunc(BSwirlFunc.class);
     registerVariationFunc(BTransformFunc.class);
     registerVariationFunc(GlynniaFunc.class);
+    registerVariationFunc(Glynnia3Func.class);
     registerVariationFunc(CylinderApoFunc.class);
     registerVariationFunc(ECollideFunc.class);
     registerVariationFunc(EJuliaFunc.class);
