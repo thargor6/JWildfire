@@ -16,10 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.tan;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.create.tina.base.XForm;
@@ -28,6 +24,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 /**
  * Mask Apophysis plugin by Raykoid666
  * ported to JWildfire variation by CozyG
+ *   (used chronologicaldot's JWildfire variation BSplitFunc.java as initial template)
  */
 public class MaskFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -52,6 +49,9 @@ public class MaskFunc extends VariationFunc {
       double d = pAffineTP.getPrecalcSumsq();
       pVarTP.x = (pAmount / d) * sin(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
       pVarTP.y += (pAmount / d) * cos(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
+    }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
     }
   }
 
