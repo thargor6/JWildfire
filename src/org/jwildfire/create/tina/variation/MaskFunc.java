@@ -32,17 +32,17 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class MaskFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_SHIFTX = "xshift";
-  private static final String PARAM_SHIFTY = "yshift";
-  private static final String[] paramNames = { PARAM_SHIFTX, PARAM_SHIFTY };
+  private static final String PARAM_XSHIFT = "xshift";
+  private static final String PARAM_YSHIFT = "yshift";
+  private static final String[] paramNames = { PARAM_XSHIFT, PARAM_YSHIFT };
 
-  double shiftx = 0.0;
-  double shifty = 0.0;
+  double xshift = 0.0;
+  double yshift = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Prevent divide by zero error
-    if (pAffineTP.x + shiftx == 0 || pAffineTP.x + shiftx == M_PI) {
+    if (pAffineTP.x + xshift == 0 || pAffineTP.x + xshift == M_PI) {
       pVarTP.doHide = true;
     }
     else {
@@ -50,8 +50,8 @@ public class MaskFunc extends VariationFunc {
       // FPx = (VVAR/d)*sin(FTx)*(cosh(FTy)+1)*sqr(sin(FTx));
       // FPy = (VVAR/d)*cos(FTx)*(cosh(FTy)+1)*sqr(sin(FTx));
       double d = pAffineTP.getPrecalcSumsq();
-      pVarTP.x = (pAmount / d) * sin(pAffineTP.x + shiftx) * (cosh(pAffineTP.y + shifty) + 1) * sqr(sin(pAffineTP.x + shiftx)); 
-      pVarTP.y += (pAmount / d) * cos(pAffineTP.x + shiftx) * (cosh(pAffineTP.y + shifty) + 1) * sqr(sin(pAffineTP.x + shiftx)); 
+      pVarTP.x = (pAmount / d) * sin(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
+      pVarTP.y += (pAmount / d) * cos(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
     }
   }
 
@@ -67,16 +67,16 @@ public class MaskFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shiftx, shifty };
+    return new Object[] { xshift, yshift };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_XSHIFT)) {
-      shiftx = pValue;
+      xshift = pValue;
     }
     else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
-      shifty = pValue;
+      yshift = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
