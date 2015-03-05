@@ -155,6 +155,7 @@ public class VariationFuncList {
     registerVariationFunc(BoardersFunc.class);
     registerVariationFunc(CellFunc.class);
     registerVariationFunc(CPowFunc.class);
+    registerVariationFunc(CPow3Func.class);
     registerVariationFunc(CurveFunc.class);
     registerVariationFunc(EDiscFunc.class);
     registerVariationFunc(EscherFunc.class);
