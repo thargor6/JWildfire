@@ -55,6 +55,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.FlameMorphType;
@@ -64,6 +65,7 @@ import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThread;
 import org.jwildfire.create.tina.animate.SWFAnimationRenderThreadController;
+import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
@@ -100,6 +102,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   private final JWFNumberField swfAnimatorFramesPerSecondREd;
   private final JButton swfAnimatorGenerateButton;
   private final JComboBox swfAnimatorResolutionProfileCmb;
+  private final JComboBox swfAnimatorQualityProfileCmb;
+  private final JComboBox swfAnimatorOutputTypeCmb;
   private final JButton swfAnimatorLoadFlameFromMainButton;
   private final JButton swfAnimatorLoadFlameFromClipboardButton;
   private final JButton swfAnimatorLoadFlameButton;
@@ -167,7 +171,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       JButton pSWFAnimatorRemoveFlameButton, JButton pSWFAnimatorRemoveAllFlamesButton, JButton pSWFAnimatorMovieFromClipboardButton,
       JButton pSWFAnimatorMovieFromDiskButton, JButton pSWFAnimatorMovieToClipboardButton, JButton pSWFAnimatorMovieToDiskButton,
       JButton pSWFAnimatorFrameToEditorBtn, JButton pSWFAnimatorPlayButton, JWFNumberField pSwfAnimatorMotionBlurLengthREd,
-      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel) {
+      JWFNumberField pSwfAnimatorMotionBlurTimeStepREd, JPanel pRandomMoviePanel, JComboBox pSWFAnimatorQualityProfileCmb,
+      JComboBox pSWFAnimatorOutputTypeCmb) {
     noRefresh = true;
     try {
       parentCtrl = pParentCtrl;
@@ -218,6 +223,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorPlayButton = pSWFAnimatorPlayButton;
       swfAnimatorMotionBlurLengthREd = pSwfAnimatorMotionBlurLengthREd;
       swfAnimatorMotionBlurTimeStepREd = pSwfAnimatorMotionBlurTimeStepREd;
+      swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
+      swfAnimatorOutputTypeCmb = pSWFAnimatorOutputTypeCmb;
 
       int frameCount = prefs.getTinaRenderMovieFrames();
       swfAnimatorFrameSlider.setValue(1);
@@ -259,6 +266,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     swfAnimatorGenerateButton.setVisible(!rendering);
     swfAnimatorPlayButton.setEnabled(swfAnimatorGenerateButton.isEnabled());
     swfAnimatorResolutionProfileCmb.setEnabled(!rendering);
+    swfAnimatorQualityProfileCmb.setEnabled(!rendering);
+    swfAnimatorOutputTypeCmb.setEnabled(!rendering);
     swfAnimatorLoadFlameFromMainButton.setEnabled(!rendering);
     swfAnimatorLoadFlameFromClipboardButton.setEnabled(!rendering);
     swfAnimatorLoadFlameButton.setEnabled(!rendering);
@@ -657,9 +666,11 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
     currMovie.setFrameWidth(frameWidth);
     currMovie.setFrameHeight(frameHeight);
+    currMovie.setQuality(getQualityProfile().getQuality());
     currMovie.setFramesPerSecond(framesPerSecond);
     currMovie.setMotionBlurLength(swfAnimatorMotionBlurLengthREd.getIntValue());
     currMovie.setMotionBlurTimeStep(swfAnimatorMotionBlurTimeStepREd.getDoubleValue());
+    currMovie.setSequenceOutputType((SequenceOutputType) swfAnimatorOutputTypeCmb.getSelectedItem());
   }
 
   public void generateButton_clicked() {
@@ -718,6 +729,14 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     ResolutionProfile res = (ResolutionProfile) swfAnimatorResolutionProfileCmb.getSelectedItem();
     if (res == null) {
       res = new ResolutionProfile(false, 800, 600);
+    }
+    return res;
+  }
+
+  private QualityProfile getQualityProfile() {
+    QualityProfile res = (QualityProfile) swfAnimatorQualityProfileCmb.getSelectedItem();
+    if (res == null) {
+      res = new QualityProfile(false, "200", 200, false, false);
     }
     return res;
   }
@@ -1071,6 +1090,23 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
           swfAnimatorResolutionProfileCmb.setSelectedItem(doubleProfile);
         }
       }
+      {
+        QualityProfile qualityProfile = null;
+        for (int i = 0; i < swfAnimatorQualityProfileCmb.getItemCount(); i++) {
+          QualityProfile profile = (QualityProfile) swfAnimatorQualityProfileCmb.getItemAt(i);
+          if (qualityProfile == null) {
+            qualityProfile = profile;
+          }
+          else if (profile.getQuality() == currMovie.getQuality()) {
+            qualityProfile = profile;
+            break;
+          }
+        }
+        if (qualityProfile != null) {
+          swfAnimatorQualityProfileCmb.setSelectedItem(qualityProfile);
+        }
+      }
+      swfAnimatorOutputTypeCmb.setSelectedItem(currMovie.getSequenceOutputType());
 
       for (JPanel panel : flamePartPanelList) {
         swfAnimatorFlamesPanel.remove(panel);

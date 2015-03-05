@@ -81,6 +81,7 @@ import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
+import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
@@ -4728,7 +4729,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientColorMapHorizOffsetREd(), getGradientColorMapHorizOffsetSlider(), getGradientColorMapHorizScaleREd(),
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
-        getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider());
+        getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider(),
+        getSwfAnimatorQualityProfileCmb());
 
     tinaController = new TinaController(params);
 
@@ -4800,6 +4802,8 @@ public class TinaInternalFrame extends JInternalFrame {
       initXFormScriptCmb(getSwfAnimatorXFormScript11Cmb());
       initXFormScriptCmb(getSwfAnimatorXFormScript12Cmb());
 
+      initSequenceOutputType(getSwfAnimatorOutputTypeCmb());
+
       tinaController.setInteractiveRendererCtrl(new TinaInteractiveRendererController(tinaController, pErrorHandler, pPrefs,
           getInteractiveLoadFlameButton(), getInteractiveLoadFlameFromClipboardButton(), getInteractiveNextButton(), getInteractiveStopButton(),
           getInteractiveFlameToClipboardButton(), getInteractiveSaveImageButton(),
@@ -4843,7 +4847,7 @@ public class TinaInternalFrame extends JInternalFrame {
           getSwfAnimatorRemoveAllFlamesButton(), getSwfAnimatorMovieFromClipboardButton(), getSwfAnimatorMovieFromDiscButton(),
           getSwfAnimatorMovieToClipboardButton(), getSwfAnimatorMovieToDiscButton(), getSwfAnimatorFrameToEditorBtn(),
           getSwfAnimatorPlayButton(), getSwfAnimatorMotionBlurLengthREd(),
-          getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel()));
+          getSwfAnimatorMotionBlurTimeStepREd(), getRandomMoviePanel(), getSwfAnimatorQualityProfileCmb(), getSwfAnimatorOutputTypeCmb()));
       tinaController.getSwfAnimatorCtrl().enableControls();
       tinaController.getSwfAnimatorCtrl().refreshControls();
       getToggleTriangleWithColorsButton().setSelected(pPrefs.isTinaEditorControlsWithColor());
@@ -4915,6 +4919,13 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(EditPlane.YZ);
     pCmb.addItem(EditPlane.ZX);
     pCmb.setSelectedItem(EditPlane.XY);
+  }
+
+  private void initSequenceOutputType(JComboBox pCmb) {
+    pCmb.addItem(SequenceOutputType.FLAMES);
+    pCmb.addItem(SequenceOutputType.PNG_IMAGES);
+    pCmb.addItem(SequenceOutputType.ANB);
+    pCmb.setSelectedItem(SequenceOutputType.FLAMES);
   }
 
   private void initTriangleStyleCmb(JComboBox pCmb, Prefs pPrefs) {
@@ -7106,14 +7117,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getSwfAnimatorGenerateButton() {
     if (swfAnimatorGenerateButton == null) {
       swfAnimatorGenerateButton = new JButton();
-      swfAnimatorGenerateButton.setBounds(921, 5, 125, 52);
+      swfAnimatorGenerateButton.setBounds(993, 32, 177, 26);
       swfAnimatorGenerateButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getSwfAnimatorCtrl().generateButton_clicked();
         }
       });
       swfAnimatorGenerateButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorGenerateButton.setText("Generate flames");
+      swfAnimatorGenerateButton.setText("Generate sequence");
       swfAnimatorGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorGenerateButton;
@@ -10850,6 +10861,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider gradientColorMapVertScaleSlider;
   private JSlider slider_6;
   private JSlider slider_7;
+  private JComboBox swfAnimatorQualityProfileCmb;
+  private JComboBox swfAnimatorOutputTypeCmb;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12485,7 +12498,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.setLayout(null);
 
       swfAnimatorProgressBar = new JProgressBar();
-      swfAnimatorProgressBar.setBounds(578, 36, 331, 21);
+      swfAnimatorProgressBar.setBounds(578, 35, 369, 21);
       panel_5.add(swfAnimatorProgressBar);
       swfAnimatorProgressBar.setValue(0);
       swfAnimatorProgressBar.setStringPainted(true);
@@ -12493,7 +12506,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_5.add(getSwfAnimatorGenerateButton());
 
       swfAnimatorCancelButton = new JButton();
-      swfAnimatorCancelButton.setBounds(921, 5, 125, 52);
+      swfAnimatorCancelButton.setBounds(993, 32, 177, 26);
       panel_5.add(swfAnimatorCancelButton);
       swfAnimatorCancelButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -12545,6 +12558,51 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorRandGenCmb.setMaximumSize(new Dimension(32767, 24));
       swfAnimatorRandGenCmb.setMaximumRowCount(32);
       swfAnimatorRandGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+
+      swfAnimatorOutputTypeCmb = new JComboBox();
+      swfAnimatorOutputTypeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorOutputTypeCmb.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorOutputTypeCmb.setMinimumSize(new Dimension(33, 24));
+      swfAnimatorOutputTypeCmb.setMaximumRowCount(32);
+      swfAnimatorOutputTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorOutputTypeCmb.setBounds(1045, 5, 125, 24);
+      panel_5.add(swfAnimatorOutputTypeCmb);
+
+      JLabel lblOutput = new JLabel();
+      lblOutput.setText("Output");
+      lblOutput.setPreferredSize(new Dimension(94, 22));
+      lblOutput.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOutput.setBounds(994, 6, 52, 22);
+      panel_5.add(lblOutput);
+
+      swfAnimatorQualityProfileCmb = new JComboBox();
+      swfAnimatorQualityProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
+            tinaController.getSwfAnimatorCtrl().moviePropertyChanged();
+          }
+        }
+      });
+      swfAnimatorQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
+      swfAnimatorQualityProfileCmb.setMinimumSize(new Dimension(33, 24));
+      swfAnimatorQualityProfileCmb.setMaximumRowCount(32);
+      swfAnimatorQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorQualityProfileCmb.setBounds(822, 6, 125, 24);
+
+      panel_5.add(swfAnimatorQualityProfileCmb);
+
+      JLabel lblQuality = new JLabel();
+      lblQuality.setText("Quality");
+      lblQuality.setPreferredSize(new Dimension(94, 22));
+      lblQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblQuality.setBounds(772, 6, 45, 22);
+      panel_5.add(lblQuality);
     }
     return panel_5;
   }
@@ -12619,7 +12677,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       swfAnimatorResolutionProfileCmb.setMinimumSize(new Dimension(33, 24));
-      swfAnimatorResolutionProfileCmb.setBounds(646, 6, 125, 24);
+      swfAnimatorResolutionProfileCmb.setBounds(644, 6, 125, 24);
       swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorResolutionProfileCmb.setMaximumRowCount(32);
       swfAnimatorResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -12630,7 +12688,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLabel_3() {
     if (label_3 == null) {
       label_3 = new JLabel();
-      label_3.setBounds(578, 5, 71, 22);
+      label_3.setBounds(578, 6, 65, 22);
       label_3.setText("Resolution");
       label_3.setPreferredSize(new Dimension(94, 22));
       label_3.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -23151,6 +23209,14 @@ public class TinaInternalFrame extends JInternalFrame {
       slider_7.setBounds(446, 114, 204, 22);
     }
     return slider_7;
+  }
+
+  public JComboBox getSwfAnimatorQualityProfileCmb() {
+    return swfAnimatorQualityProfileCmb;
+  }
+
+  public JComboBox getSwfAnimatorOutputTypeCmb() {
+    return swfAnimatorOutputTypeCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

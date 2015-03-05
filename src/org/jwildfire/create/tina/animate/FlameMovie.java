@@ -36,6 +36,8 @@ public class FlameMovie {
   private int motionBlurLength = 12;
   private double motionBlurTimeStep = 0.015;
   private String name = "";
+  private SequenceOutputType sequenceOutputType = SequenceOutputType.FLAMES;
+  private int quality = 100;
 
   public FlameMovie(Prefs pPrefs) {
     prefs = pPrefs;
@@ -161,5 +163,21 @@ public class FlameMovie {
 
   public XFormScript[] getxFormScripts() {
     return xFormScripts;
+  }
+
+  public SequenceOutputType getSequenceOutputType() {
+    return sequenceOutputType;
+  }
+
+  public void setSequenceOutputType(SequenceOutputType pSequenceOutputType) {
+    sequenceOutputType = pSequenceOutputType;
+  }
+
+  public int getQuality() {
+    return quality;
+  }
+
+  public void setQuality(int pQuality) {
+    quality = pQuality;
   }
 }

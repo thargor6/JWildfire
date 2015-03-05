@@ -264,6 +264,7 @@ public class TinaControllerParameter {
   public JComboBox pBatchResolutionProfileCmb;
   public JComboBox pInteractiveResolutionProfileCmb;
   public JComboBox pSWFAnimatorResolutionProfileCmb;
+  public JComboBox swfAnimatorQualityProfileCmb;
   public JButton pRenderFlameButton;
   public JButton pRenderMainButton;
   public JButton pAppendToMovieButton;
@@ -1092,7 +1093,8 @@ public class TinaControllerParameter {
       JWFNumberField pGradientColorMapHorizOffsetREd, JSlider pGradientColorMapHorizOffsetSlider, JWFNumberField pGradientColorMapHorizScaleREd,
       JSlider pGradientColorMapHorizScaleSlider, JWFNumberField pGradientColorMapVertOffsetREd, JSlider pGradientColorMapVertOffsetSlider,
       JWFNumberField pGradientColorMapVertScaleREd, JSlider pGradientColorMapVertScaleSlider, JWFNumberField pGradientColorMapLocalColorAddREd,
-      JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider) {
+      JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider,
+      JComboBox pSWFAnimatorQualityProfileCmb) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1232,5 +1234,6 @@ public class TinaControllerParameter {
     gradientColorMapLocalColorAddSlider = pGradientColorMapLocalColorAddSlider;
     gradientColorMapLocalColorScaleREd = pGradientColorMapLocalColorScaleREd;
     gradientColorMapLocalColorScaleSlider = pGradientColorMapLocalColorScaleSlider;
+    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
   }
 }
