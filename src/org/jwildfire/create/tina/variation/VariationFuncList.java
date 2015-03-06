@@ -426,6 +426,8 @@ public class VariationFuncList {
     registerVariationFunc(DCBubbleFunc.class);
     registerVariationFunc(DCTriangleFunc.class);
     registerVariationFunc(WaveBlurWFFunc.class);
+    
+    registerVariationFunc(FDiscFunc.class);
   }
 
   private static void registerVariationFunc(
