@@ -49,7 +49,7 @@ public class Rational3Func extends VariationFunc {
   private static final String PARAM_H = "h";
   private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D,  
                                                PARAM_E, PARAM_F, PARAM_G, PARAM_H };
-  private double a = 1.0; 
+  private double a = 0.5; 
   private double b = 0.0; 
   private double c = 0.0; 
   private double d = 1.0; 
