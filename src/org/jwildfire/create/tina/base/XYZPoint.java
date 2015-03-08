@@ -42,8 +42,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public double blueColor;
   // supress sample from drawing
   public boolean doHide;
-  // some tag which may be used freely
-  public int tag;
   // often (but not always) used properties, calculation only if needed
   protected double sumsq;
   protected boolean validSumsq;
@@ -92,7 +90,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     greenColor = p.greenColor;
     blueColor = p.blueColor;
     doHide = p.doHide;
-    tag = p.tag;
   }
 
   @Override
@@ -108,7 +105,6 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
 
   public void clear() {
     rgbColor = doHide = false;
-    tag = 0;
     redColor = greenColor = blueColor = 0.0;
     x = y = z = color = modGamma = modContrast = modSaturation = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
@@ -172,7 +168,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
         fabs(modSaturation - pSrc.modSaturation) > EPSILON ||
         rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
         fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON ||
-        doHide != pSrc.doHide || tag != pSrc.tag) {
+        doHide != pSrc.doHide) {
       return false;
     }
     return true;

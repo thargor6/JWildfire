@@ -248,12 +248,11 @@ public class IFlamesFunc extends VariationFunc {
     pVarTP.y += dy;
     pVarTP.z += dz;
 
-    pVarTP.tag = -1;
-
     toolPixel.setARGBValue(((SimpleImage) imageParams.getColorMap()).getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
     int luR = toolPixel.r;
     int luG = toolPixel.g;
     int luB = toolPixel.b;
+    pVarTP.doHide = false;
     if (luR == 0 && luG == 0 && luB == 0) {
       pVarTP.doHide = true;
       return;
