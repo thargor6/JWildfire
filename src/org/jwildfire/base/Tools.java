@@ -55,6 +55,7 @@ public class Tools {
 
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
+  public static final String FILEEXT_ANB = "anb";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILEEXT_GRADIENT = "gradient";
   public static final String FILEEXT_GIF = "gif";

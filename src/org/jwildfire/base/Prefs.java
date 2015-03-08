@@ -148,7 +148,7 @@ public class Prefs extends ManagedObject {
   private String soundFilePath = null;
   private String lastInputSoundFilePath = null;
 
-  @Property(description = "Movie flames drawer", category = PropertyCategory.GENERAL)
+  @Property(description = "Movie flames drawer", category = PropertyCategory.TINA)
   private String movieFlamesPath = null;
   private String lastOutputMovieFlamesPath = null;
 

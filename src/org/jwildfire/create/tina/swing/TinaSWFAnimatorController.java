@@ -57,6 +57,7 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.FlameMorphType;
 import org.jwildfire.create.tina.animate.FlameMovie;
@@ -82,7 +83,9 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.swing.ANBFileFilter;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.transform.ComposeTransformer;
 
@@ -675,16 +678,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   public void generateButton_clicked() {
     try {
-      JFileChooser chooser = new FlameFileChooser(prefs);
-
-      if (prefs.getMovieFlamesPath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getMovieFlamesPath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
+      JFileChooser chooser = createOutputFileChooser();
       if (chooser.showSaveDialog(swfAnimatorPreviewRootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         prefs.setLastOutputMovieFlamesFile(file);
@@ -703,6 +697,48 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     catch (Throwable ex) {
       errorHandler.handleError(ex);
       enableControls();
+    }
+  }
+
+  private JFileChooser createOutputFileChooser() {
+    switch (currMovie.getSequenceOutputType()) {
+      case ANB: {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new ANBFileFilter());
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        return chooser;
+      }
+      case PNG_IMAGES: {
+        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        return chooser;
+      }
+      default: {
+        JFileChooser chooser = new FlameFileChooser(prefs);
+        if (prefs.getMovieFlamesPath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getMovieFlamesPath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        return chooser;
+      }
     }
   }
 
