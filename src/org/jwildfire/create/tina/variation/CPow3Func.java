@@ -71,7 +71,7 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-  /* CPow2 
+  /* CPow2 PluginVarCalc
     double sn, cs;
     double a = atan2(FTy, FTx);
     int n = rand() % VAR(cpow2_spread);
@@ -147,7 +147,7 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    /*
+    /* CPow2 PluginVarPrepare()
     VAR(ang) = 2*M_PI / ((double) VAR(cpow2_divisor));
     VAR(c) = VAR(cpow2_r) * cos(M_PI/2*VAR(cpow2_a)) / ((double) VAR(cpow2_divisor));
     VAR(d) = VAR(cpow2_r) * sin(M_PI/2*VAR(cpow2_a)) / ((double) VAR(cpow2_divisor));
