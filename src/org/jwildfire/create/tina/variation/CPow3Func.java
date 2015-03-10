@@ -42,18 +42,18 @@ public class CPow3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R = "r";
-  private static final String PARAM_CA = "ca";
+  private static final String PARAM_A = "a";
   private static final String PARAM_DIVISOR = "divisor";
   private static final String PARAM_SPREAD = "spread";
   private static final String PARAM_DISCRETE_SPREAD = "discrete_spread";
   private static final String PARAM_SPREAD2 = "spread2";
   private static final String PARAM_OFFSET2 = "offset2";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_CA, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
+  private static final String[] paramNames = { PARAM_R, PARAM_A, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
   
   // Parameters
   private double r = 1.0;
-  private double ca = 0.1;
+  private double a = 0.1;
   private double divisor = 1.0;
   private double spread = 1.0;
   private double discrete_spread = 1.0;
@@ -87,19 +87,19 @@ public class CPow3Func extends VariationFunc {
     FPy += r * sn;
     */
 
-    double a = pAffineTP.getPrecalcAtanYX();
+    double ai = pAffineTP.getPrecalcAtanYX();
     double n = pContext.random() * spread;
     if (discrete_spread >= 1.0) { n = (int)n; }
-    if (a < 0) { n++; }
-    a += 2 * M_PI * n;
-    if (cos(a * inv_spread) < (pContext.random() * 2.0 - 1.0)) {
-      a -= full_spread;
+    if (ai < 0) { n++; }
+    ai += 2 * M_PI * n;
+    if (cos(ai * inv_spread) < (pContext.random() * 2.0 - 1.0)) {
+      ai -= full_spread;
     }
     double lnr2 = log(pAffineTP.getPrecalcSumsq());
-    double r = pAmount * exp(half_c * lnr2 - d * a);
-    double ang2 = c * a * half_d * lnr2 * ang * (pContext.random() * spread2 + offset2);
-    pVarTP.x += r * cos(ang2);
-    pVarTP.y += r * sin(ang2);
+    double ri = pAmount * exp(half_c * lnr2 - d * ai);
+    double ang2 = c * ai * half_d * lnr2 * ang * (pContext.random() * spread2 + offset2);
+    pVarTP.x += ri * cos(ang2);
+    pVarTP.y += ri * sin(ang2);
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -113,15 +113,15 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, ca, divisor, spread, discrete_spread, spread2, offset2 };
+    return new Object[] { r, a, divisor, spread, discrete_spread, spread2, offset2 };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_R.equalsIgnoreCase(pName))
       r = pValue;
-    else if (PARAM_CA.equalsIgnoreCase(pName))
-      ca = pValue;
+    else if (PARAM_A.equalsIgnoreCase(pName))
+      a = pValue;
     else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
       divisor = pValue;
     else if (PARAM_SPREAD.equalsIgnoreCase(pName)) {
@@ -156,11 +156,11 @@ public class CPow3Func extends VariationFunc {
     VAR(inv_spread) = 0.5 / VAR(cpow2_spread);
     VAR(full_spread) = 2*M_PI*VAR(cpow2_spread);
     */
-    c = r * cos(M_PI / 2 * ca) / divisor;
-    d = r * sin(M_PI / 2 * ca) / divisor;
+    ang = 2.0 * M_PI / divisor;
+    c = r * cos(M_PI / 2 * a) / divisor;
+    d = r * sin(M_PI / 2 * a) / divisor;
     half_c = c / 2;
     half_d = d / 2;
-    ang = 2.0 * M_PI / divisor;
     inv_spread = 0.5 / spread;
     full_spread = 2 * M_PI * spread;
   }
