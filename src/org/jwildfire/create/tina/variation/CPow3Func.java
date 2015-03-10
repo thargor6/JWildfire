@@ -42,14 +42,18 @@ public class CPow3Func extends VariationFunc {
   private static final String PARAM_CA = "ca";
   private static final String PARAM_DIVISOR = "divisor";
   private static final String PARAM_SPREAD = "spread";
+  private static final String PARAM_SPREAD2 = "spread2";
+  private static final String PARAM_OFFSET2 = "offset2";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_CA, PARAM_DIVISOR, PARAM_SPREAD };
+    private static final String[] paramNames = { PARAM_R, PARAM_CA, PARAM_DIVISOR, PARAM_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
   
   // Parameters
   private double r = 1.0;
   private double ca = 0.1;
   private int divisor = 1;
   private int spread = 1;
+  private double spread2 = 0.0;
+  private double offset2 = 1.0;
 
   // Internal fields set in init (based on parameters)
   double c;
@@ -88,7 +92,8 @@ public class CPow3Func extends VariationFunc {
     double lnr2 = log(pAffineTP.getPrecalcSumsq());
     double r = pAmount * exp(half_c * lnr2 - d * a);
     
-    double ang2 = c * a * half_d * lnr2 * ang * pContext.random();
+    // double ang2 = c * a * half_d * lnr2 * ang * pContext.random();
+    double ang2 = c * a * half_d * lnr2 * ang * (pContext.random() * spread2 + offset2);
     pVarTP.x += r * cos(ang2);
     pVarTP.y += r * sin(ang2);
 
@@ -105,7 +110,7 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, ca, divisor, spread };
+    return new Object[] { r, ca, divisor, spread, spread2, offset2 };
   }
 
   @Override
@@ -119,6 +124,12 @@ public class CPow3Func extends VariationFunc {
       divisor = Tools.FTOI(pValue);
     else if (PARAM_SPREAD.equalsIgnoreCase(pName)) {
       spread = Tools.FTOI(pValue);
+    }
+    else if (PARAM_SPREAD2.equalsIgnoreCase(pName)) {
+      spread2 = pValue;
+    }
+    else if (PARAM_OFFSET2.equalsIgnoreCase(pName)) {
+      offset2 = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
