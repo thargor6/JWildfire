@@ -3716,11 +3716,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public void runScript() throws Exception {
-    ScriptRunner script = compileScript();
-    saveUndoPoint();
-    script.run(this);
+      System.out.println("WARNING: called TinaController.runScript()");
+      jwfScriptController.scriptRunBtn_clicked();
   }
-
+  
   public void compileScriptButton_clicked() {
     try {
       compileScript();
@@ -5361,8 +5360,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         script = Tools.readUTF8Textfile(filename);
       }
+      runScript(filename, script);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 
-      ScriptRunner scriptRunner = ScriptRunner.compile(script);
+  public void runScript(String scriptPath, String scriptText) {
+    try  {
+      ScriptRunner scriptRunner = ScriptRunner.compile(scriptText);
+      scriptRunner.setScriptPath(scriptPath);
+      System.out.println("running script: " + scriptRunner.getScriptPath());
       saveUndoPoint();
       scriptRunner.run(this);
     }
