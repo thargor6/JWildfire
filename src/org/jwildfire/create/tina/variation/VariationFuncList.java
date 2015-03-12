@@ -427,7 +427,6 @@ public class VariationFuncList {
     registerVariationFunc(DCTriangleFunc.class);
     registerVariationFunc(WaveBlurWFFunc.class);
     registerVariationFunc(PostHeatFunc.class);
-
     registerVariationFunc(CPow3Func.class);
   }
 

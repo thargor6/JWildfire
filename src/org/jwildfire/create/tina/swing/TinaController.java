@@ -3366,7 +3366,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void flamePanel_mouseClicked(MouseEvent e) {
     if (e.getClickCount() == 2) {
-      renderFlameButton_actionPerformed(null);
+      flamePanel_doubleClicked();
     }
     else if (e.getClickCount() == 1) {
       Flame flame = getCurrFlame();
@@ -3404,6 +3404,32 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
       }
 
+    }
+  }
+
+  private void flamePanel_doubleClicked() {
+    switch (prefs.getTinaEditorDoubleClickAction()) {
+      case ACTIVATE_TRIANGLE_EDIT:
+        if (!data.mouseTransformMoveTrianglesButton.isSelected()) {
+          data.mouseTransformMoveTrianglesButton.setSelected(true);
+          mouseTransformMoveTrianglesButton_clicked();
+        }
+        break;
+      case SWITCH_TRIANGLE_CAM_EDIT:
+        if (data.mouseTransformMoveTrianglesButton.isSelected()) {
+          data.mouseTransformEditViewButton.setSelected(true);
+          mouseTransformViewButton_clicked();
+        }
+        else {
+          data.mouseTransformMoveTrianglesButton.setSelected(true);
+          mouseTransformMoveTrianglesButton_clicked();
+        }
+        break;
+      case RENDER_FLAME:
+        renderFlameButton_actionPerformed(null);
+        break;
+      case NONE:
+        break;
     }
   }
 

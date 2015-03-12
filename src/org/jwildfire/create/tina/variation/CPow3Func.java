@@ -28,13 +28,10 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -50,7 +47,7 @@ public class CPow3Func extends VariationFunc {
   private static final String PARAM_OFFSET2 = "offset2";
 
   private static final String[] paramNames = { PARAM_R, PARAM_A, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
-  
+
   // Parameters
   private double r = 1.0;
   private double a = 0.1;
@@ -71,26 +68,30 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-  /* CPow2 PluginVarCalc
-    double sn, cs;
-    double a = atan2(FTy, FTx);
-    int n = rand() % VAR(cpow2_spread);
-    if (a < 0) n++;
-    a += 2*M_PI*n;
-    if (cos(a*VAR(inv_spread)) < rand()*2.0/RAND_MAX - 1.0)
-        a -= VAR(full_spread);
-    double lnr2 = log(FTx*FTx + FTy*FTy); // logarithm * 2
-    double r = VVAR * exp(VAR(half_c) * lnr2 - VAR(d) * a);
-    fsincos(VAR(c) * a + VAR(half_d) * lnr2 + VAR(ang) * rand(),
-        &sn, &cs);
-    FPx += r * cs;
-    FPy += r * sn;
-    */
+    /* CPow2 PluginVarCalc
+      double sn, cs;
+      double a = atan2(FTy, FTx);
+      int n = rand() % VAR(cpow2_spread);
+      if (a < 0) n++;
+      a += 2*M_PI*n;
+      if (cos(a*VAR(inv_spread)) < rand()*2.0/RAND_MAX - 1.0)
+          a -= VAR(full_spread);
+      double lnr2 = log(FTx*FTx + FTy*FTy); // logarithm * 2
+      double r = VVAR * exp(VAR(half_c) * lnr2 - VAR(d) * a);
+      fsincos(VAR(c) * a + VAR(half_d) * lnr2 + VAR(ang) * rand(),
+          &sn, &cs);
+      FPx += r * cs;
+      FPy += r * sn;
+      */
 
     double ai = pAffineTP.getPrecalcAtanYX();
     double n = pContext.random() * spread;
-    if (discrete_spread >= 1.0) { n = (int)n; }
-    if (ai < 0) { n++; }
+    if (discrete_spread >= 1.0) {
+      n = (int) n;
+    }
+    if (ai < 0) {
+      n++;
+    }
     ai += 2 * M_PI * n;
     if (cos(ai * inv_spread) < (pContext.random() * 2.0 - 1.0)) {
       ai -= full_spread;

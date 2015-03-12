@@ -222,7 +222,7 @@ public class Prefs extends ManagedObject {
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
 
   @Property(description = "Action which is performed when you double-click at the editor-panel", category = PropertyCategory.TINA, editorClass = EditorDoubleClickActionTypeEditor.class)
-  private EditorDoubleClickActionType tinaEditorDoubleClickAction = EditorDoubleClickActionType.ACTIVATE_EDIT;
+  private EditorDoubleClickActionType tinaEditorDoubleClickAction = EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT;
 
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
@@ -341,7 +341,7 @@ public class Prefs extends ManagedObject {
   public static class EditorDoubleClickActionTypeEditor extends ComboBoxPropertyEditor {
     public EditorDoubleClickActionTypeEditor() {
       super();
-      setAvailableValues(new EditorDoubleClickActionType[] { EditorDoubleClickActionType.ACTIVATE_EDIT, EditorDoubleClickActionType.RENDER_FLAME });
+      setAvailableValues(new EditorDoubleClickActionType[] { EditorDoubleClickActionType.ACTIVATE_TRIANGLE_EDIT, EditorDoubleClickActionType.RENDER_FLAME, EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT, EditorDoubleClickActionType.NONE });
     }
   }
 
