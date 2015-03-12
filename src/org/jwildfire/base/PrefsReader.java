@@ -27,6 +27,7 @@ import java.util.StringTokenizer;
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.LookAndFeelType;
@@ -158,6 +159,15 @@ public class PrefsReader {
         catch (Exception ex) {
           ex.printStackTrace();
         }
+
+        try {
+          EditorDoubleClickActionType action = EditorDoubleClickActionType.valueOf(getProperty(props, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString()));
+          pPrefs.setTinaEditorDoubleClickAction(action);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+        pPrefs.setTinaDefaultFadeToWhiteLevel(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel()));
 
         pPrefs.setTinaRandGenColorMapImagePath(getProperty(props, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath()));
 
