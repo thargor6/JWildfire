@@ -48,6 +48,8 @@ public class FlameMovieWriter {
   public static final String ATTR_MOVIE_VERSION = "movie_version";
   public static final String ATTR_SCRIPT_GLOBAL = "script_global";
   public static final String ATTR_SCRIPT_XFORM = "script_xform";
+  public static final String ATTR_QUALITY = "quality";
+  public static final String ATTR_SEQUENCE_OUTPUT_TYPE = "sequence_output_type";
   public static final String AMPLITUDE_POSTFIX = "_amplitude";
   public static final String AMPLITUDE_CURVE_POSTFIX = "_amplitudeCurve";
   public static final String ATTR_MOTIONBLUR_LENGTH = "motion_blur_length";
@@ -77,6 +79,8 @@ public class FlameMovieWriter {
     attrList.add(xb.createAttr(ATTR_FRAME_WIDTH, pMovie.getFrameWidth()));
     attrList.add(xb.createAttr(ATTR_FRAME_HEIGHT, pMovie.getFrameHeight()));
     attrList.add(xb.createAttr(ATTR_FPS, pMovie.getFramesPerSecond()));
+    attrList.add(xb.createAttr(ATTR_QUALITY, pMovie.getQuality()));
+    attrList.add(xb.createAttr(ATTR_SEQUENCE_OUTPUT_TYPE, pMovie.getSequenceOutputType().toString()));
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pMovie.getMotionBlurLength()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pMovie.getMotionBlurTimeStep()));

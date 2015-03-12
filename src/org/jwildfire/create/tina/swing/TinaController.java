@@ -401,6 +401,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.batchResolutionProfileCmb = parameterObject.pBatchResolutionProfileCmb;
     data.interactiveResolutionProfileCmb = parameterObject.pInteractiveResolutionProfileCmb;
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
+    data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
     data.transformationsTable = parameterObject.pTransformationsTable;
     data.affineC00REd = parameterObject.pAffineC00REd;
     data.affineC01REd = parameterObject.pAffineC01REd;
@@ -738,6 +739,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, null);
     refreshQualityProfileCmb(data.qualityProfileCmb, null);
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
+    refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
   }
@@ -3943,6 +3945,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
+        refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, profile);
         qualityProfileCmb_changed();
       }
       catch (Throwable ex) {
