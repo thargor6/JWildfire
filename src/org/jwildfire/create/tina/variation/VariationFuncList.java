@@ -155,7 +155,6 @@ public class VariationFuncList {
     registerVariationFunc(BoardersFunc.class);
     registerVariationFunc(CellFunc.class);
     registerVariationFunc(CPowFunc.class);
-    registerVariationFunc(CPow3Func.class);
     registerVariationFunc(CurveFunc.class);
     registerVariationFunc(EDiscFunc.class);
     registerVariationFunc(EscherFunc.class);
@@ -428,6 +427,8 @@ public class VariationFuncList {
     registerVariationFunc(DCTriangleFunc.class);
     registerVariationFunc(WaveBlurWFFunc.class);
     registerVariationFunc(PostHeatFunc.class);
+
+    registerVariationFunc(CPow3Func.class);
   }
 
   private static void registerVariationFunc(
