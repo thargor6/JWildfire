@@ -839,6 +839,8 @@ public class EnvelopeDlgController {
   private void refreshWithAutoFit() {
     if (autofitCBx != null && autofitCBx.isSelected()) {
       viewAll();
+      refreshXField();
+      refreshYField();
     }
     else {
       refreshEnvelope();
