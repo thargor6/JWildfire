@@ -75,8 +75,9 @@ public class RhodoneaFunc extends VariationFunc {
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_OFFSET = "offset";
+  private static final String PARAM_FILL = "fill";
   
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_CYCLES, PARAM_OFFSET };
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_CYCLES, PARAM_OFFSET, PARAM_FILL };
 
   //private double amp = 0.5;
   //  private int waves = 4;
@@ -84,6 +85,7 @@ public class RhodoneaFunc extends VariationFunc {
   private double kd = 4;    // denominator of k
   private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
   private double offset = 0;  // offset c from equations
+  private double fill = 0;
 
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
@@ -141,10 +143,10 @@ public class RhodoneaFunc extends VariationFunc {
         x = cos(kt)cos(t)
         y = cos(kt)sin(t)
     */
-    // double theta = (pContext.random() * cycles * 2 * M_PI);
     double t = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double theta = cycles * t;
     double r = cos(k * theta) + offset;
+    if (fill != 0) { r = r + fill * (0.5 - pContext.random()); }
     double x = r * cos(theta);
     double y = r * sin(theta);
     pVarTP.x += pAmount * x;
@@ -162,7 +164,7 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, cyclesParam, offset };
+    return new Object[] { kn, kd, cyclesParam, offset, fill };
   }
 
   @Override
@@ -175,6 +177,8 @@ public class RhodoneaFunc extends VariationFunc {
       cyclesParam = pValue;
     else if (PARAM_OFFSET.equalsIgnoreCase(pName))
       offset = pValue;
+    else if (PARAM_FILL.equalsIgnoreCase(pName))
+      fill = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
