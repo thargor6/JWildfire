@@ -428,6 +428,8 @@ public class VariationFuncList {
     registerVariationFunc(WaveBlurWFFunc.class);
     registerVariationFunc(PostHeatFunc.class);
     registerVariationFunc(CPow3Func.class);
+    
+    registerVariationFunc(Butterfly2Func.class);
   }
 
   private static void registerVariationFunc(
