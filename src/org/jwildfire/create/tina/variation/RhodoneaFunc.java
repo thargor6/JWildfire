@@ -25,12 +25,14 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+/**
+  Rhodonea curves (also known as rose curves)
+  Implemented by CozyG, March 2015
+  For references, see http://en.wikipedia.org/wiki/Rose_%28mathematics%29
+  There are other JWildfire variations (RoseWF, PRose3D) that implement the class of rose curves 
+  where k is an integer and cycles = 1, but Rhodonea implements a fuller range of possibilities (within the 2D plane)
 
-/*
- * Rhodonea (also known as rose) curves
- * Implemented by CozyG, March 2015
- * For references, see http://en.wikipedia.org/wiki/Rose_%28mathematics%29
-
+   From reference literature:
    Up to similarity(?), these curves can all be expressed by a polar equation of the form
         r = cos(k * theta)   
 
@@ -58,6 +60,10 @@ import org.jwildfire.create.tina.base.XYZPoint;
     Furthermore, the graph of the rose in this case forms a dense set 
     (i.e., it comes arbitrarily close to every point in the unit disk).
 
+    Adding an offset parameter c, so the polar equation becomes
+       r = cos(k * theta) + c
+    In the case where the parameter k is an odd integer, the two overlapping halves of the curve separate as the offset changes from zero.
+
     Rhodonea curves were named by the Italian mathematician Guido Grandi between the year 1723 and 1728.[2]
 */
 public class RhodoneaFunc extends VariationFunc {
@@ -65,17 +71,20 @@ public class RhodoneaFunc extends VariationFunc {
 
   private static final String PARAM_KN = "kn";
   private static final String PARAM_KD = "kd";
-
   // if cycles is set to 0, function will make best effort to calculate minimum number of cycles needed 
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_CYCLES = "cycles";
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_CYCLES };
+  private static final String PARAM_OFFSET = "offset";
+  
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_CYCLES, PARAM_OFFSET };
 
   //private double amp = 0.5;
   //  private int waves = 4;
   private double kn = 3;    // numerator of k
   private double kd = 4;    // denominator of k
   private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
+  private double offset = 0;  // offset c from equations
+
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
 
@@ -88,8 +97,9 @@ public class RhodoneaFunc extends VariationFunc {
         if ((k % 2) == 0) { // k is even integer, will have 2k petals
           cycles = 1;  // (2PI)
         }
-        else  { // k is odd integer, will have k petals
-          cycles = 0.5;  // (1PI)
+        else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
+          if (offset != 0) { cycles = 1; }  // if adding an offset, need a full cycle
+          else { cycles = 0.5; }  // (1PI)
         }
       }
       else if (((k * 2) % 1) == 0) { // k is a half-integer (1/2, 3/2, 5/2, etc.), will have 4k petals
@@ -134,7 +144,7 @@ public class RhodoneaFunc extends VariationFunc {
     // double theta = (pContext.random() * cycles * 2 * M_PI);
     double t = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double theta = cycles * t;
-    double r = cos(k * theta);
+    double r = cos(k * theta) + offset;
     double x = r * cos(theta);
     double y = r * sin(theta);
     pVarTP.x += pAmount * x;
@@ -152,7 +162,7 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, cyclesParam };
+    return new Object[] { kn, kd, cyclesParam, offset };
   }
 
   @Override
@@ -163,6 +173,8 @@ public class RhodoneaFunc extends VariationFunc {
       kd = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))
       cyclesParam = pValue;
+    else if (PARAM_OFFSET.equalsIgnoreCase(pName))
+      offset = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
