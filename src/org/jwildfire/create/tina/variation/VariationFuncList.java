@@ -430,6 +430,7 @@ public class VariationFuncList {
 
     registerVariationFunc(CPow3Func.class);
     registerVariationFunc(RhodoneaFunc.class);
+
   }
 
   private static void registerVariationFunc(

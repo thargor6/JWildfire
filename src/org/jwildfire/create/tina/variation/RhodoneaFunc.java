@@ -143,16 +143,16 @@ public class RhodoneaFunc extends VariationFunc {
         x = cos(kt)cos(t)
         y = cos(kt)sin(t)
     */
-    double t = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
-    double theta = cycles * t;
-    double r = cos(k * theta) + offset;
+    double theta = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
+    double t = cycles * theta;
+    double r = cos(k * t) + offset;
 
     if (fill != 0) { 
       r = r + (fill * (pContext.random() - 0.5));
     }
 
-    double x = r * cos(theta);
-    double y = r * sin(theta);
+    double x = r * cos(t);
+    double y = r * sin(t);
     pVarTP.x += pAmount * (x + (stretch * stretchRatio * pAffineTP.x));
     pVarTP.y += pAmount * (y + (stretch * pAffineTP.y));
 
