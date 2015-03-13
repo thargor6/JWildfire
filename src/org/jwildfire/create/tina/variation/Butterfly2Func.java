@@ -28,25 +28,62 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 /**
-  Butterfly curve, discovered ~1988 by Temple H. Fay
+  Butterfly2, a variation based on the Butterfly curve, discovered ~1988 by Temple H. Fay
   Implemented by CozyG, March 2015
   For references, see http://en.wikipedia.org/wiki/Butterfly_curve_%28transcendental%29
-
 */
 public class Butterfly2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
+  private static final String PARAM_M1 = "m1";
+  private static final String PARAM_M2 = "m2";
+  private static final String PARAM_M3 = "m3";
+  private static final String PARAM_M4 = "m4";
+  private static final String PARAM_M5 = "m5";
+  private static final String PARAM_M6 = "m6";
+  private static final String PARAM_M7 = "m7";
+  private static final String PARAM_M8 = "m8";
+
+  private static final String PARAM_B1 = "b1";
+  private static final String PARAM_B2 = "b2";
+  private static final String PARAM_B3 = "b3";
+  private static final String PARAM_B4 = "b4";
+  private static final String PARAM_B5 = "b5";
+  private static final String PARAM_B6 = "b6";
+  private static final String PARAM_B7 = "b7";
+
+
+  private static final String PARAM_OFFSET = "offset";
+  private static final String PARAM_STRETCH = "stretch";
+  private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
+  private static final String PARAM_FILL = "fill";
 
   // my standard approach if there is a cycles variable is that if cycles is set to 0, 
   //     that means function should decide cycle value automatically
   //     for curves, function will make best effort to calculate minimum number of cycles needed 
   //     to close curve, or a somewhat arbitrary number if cannot 
-  private static final String PARAM_OFFSET = "offset";
-  private static final String PARAM_STRETCH = "stretch";
-  private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
   private static final String PARAM_CYCLES = "cycles";
-  private static final String PARAM_FILL = "fill";
 
-  private static final String[] paramNames = { PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, PARAM_CYCLES, PARAM_FILL };
+
+  private static final String[] paramNames = { PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, PARAM_CYCLES, PARAM_FILL, 
+                                               PARAM_M1, PARAM_M2, PARAM_M3, PARAM_M4, PARAM_M5, PARAM_M6, PARAM_M7, PARAM_M8, 
+                                               PARAM_B1, PARAM_B2, PARAM_B3, PARAM_B4, PARAM_B5, PARAM_B6, PARAM_B7 };
+  
+  private double m1 = 1;
+  private double m2 = 1;
+  private double m3 = 1;
+  private double m4 = 1;
+  private double m5 = 1;
+  private double m6 = 1;
+  private double m7 = 1;
+  private double m8 = 1;
+  private double b1 = 0;
+  private double b2 = 0;
+  private double b3 = 0;
+  private double b4 = 0;
+  private double b5 = 0;
+  private double b6 = 0;
+  private double b7 = 0;
 
   private double cyclesParam = 1;  // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
   private double offset = 0;  // offset c from equations
@@ -86,7 +123,10 @@ public class Butterfly2Func extends VariationFunc {
     double theta = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double t = cycles * theta;
     // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
-    double r = 0.5 * (exp(cos(t)) - (2 * cos(4*t)) - pow(sin(t/12), 5) + offset);
+    // double r = 0.5 * (exp(cos(t)) - (2 * cos(4*t)) - pow(sin(t/12), 5) + offset);
+    //
+    // parameterized version:
+    double r = 0.5 * ( (m1 * exp(m4 * cos(t + b1) + b4)) - (m2 * 2 * (cos(m5*4*t + b2) + b5)) - (m3 * pow(m6 * (sin(m7 * t/12 + b3) + b6), (m8 * 5 + b7))) + offset);
     if (fill != 0) { 
       r = r + (fill * (pContext.random() - 0.5));
     }
@@ -108,7 +148,9 @@ public class Butterfly2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset, stretch, stretchRatio, cyclesParam, fill };
+    return new Object[] { offset, stretch, stretchRatio, cyclesParam, fill, 
+                          m1, m2, m3, m4, m5, m6, m7, m8, 
+                          b1, b2, b3, b4, b5, b6, b7 };
   }
 
   @Override
@@ -123,6 +165,37 @@ public class Butterfly2Func extends VariationFunc {
       cyclesParam = pValue;
     else if (PARAM_FILL.equalsIgnoreCase(pName))
       fill = pValue;
+    else if (PARAM_M1.equalsIgnoreCase(pName))
+      m1 = pValue;
+    else if (PARAM_M2.equalsIgnoreCase(pName))
+      m2 = pValue;
+    else if (PARAM_M3.equalsIgnoreCase(pName))
+      m3 = pValue;
+    else if (PARAM_M4.equalsIgnoreCase(pName))
+      m4 = pValue;
+    else if (PARAM_M5.equalsIgnoreCase(pName))
+      m5 = pValue;
+    else if (PARAM_M6.equalsIgnoreCase(pName))
+      m6 = pValue;
+    else if (PARAM_M7.equalsIgnoreCase(pName))
+      m7 = pValue;
+    else if (PARAM_M8.equalsIgnoreCase(pName))
+      m8 = pValue;
+
+    else if (PARAM_B1.equalsIgnoreCase(pName))
+      b1 = pValue;
+    else if (PARAM_B2.equalsIgnoreCase(pName))
+      b2 = pValue;
+    else if (PARAM_B3.equalsIgnoreCase(pName))
+      b3 = pValue;
+    else if (PARAM_B4.equalsIgnoreCase(pName))
+      b4 = pValue;
+    else if (PARAM_B5.equalsIgnoreCase(pName))
+      b5 = pValue;
+    else if (PARAM_B6.equalsIgnoreCase(pName))
+      b6 = pValue;
+    else if (PARAM_B7.equalsIgnoreCase(pName))
+      b7 = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
