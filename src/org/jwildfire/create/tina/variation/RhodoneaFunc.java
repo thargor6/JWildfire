@@ -73,19 +73,19 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_KD = "kd";
   // if cycles is set to 0, function will make best effort to calculate minimum number of cycles needed 
   //     to close curve, or a somewhat arbitrary number if cannot 
-  private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_OFFSET = "offset";
+  private static final String PARAM_STRETCH = "stretch";
+  private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_FILL = "fill";
-  
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_CYCLES, PARAM_OFFSET, PARAM_FILL };
 
-  //private double amp = 0.5;
-  //  private int waves = 4;
-  private double kn = 3;    // numerator of k
-  private double kd = 4;    // denominator of k
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_CYCLES, PARAM_FILL };
+
+  private double kn = 3;    // numerator of k,   k = kn/kd
+  private double kd = 4;    // denominator of k, k = kn/kd
   private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
   private double offset = 0;  // offset c from equations
   private double fill = 0;
+  private double stretch = 0;
 
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
@@ -100,7 +100,7 @@ public class RhodoneaFunc extends VariationFunc {
           cycles = 1;  // (2PI)
         }
         else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
-          if (offset != 0) { cycles = 1; }  // if adding an offset, need a full cycle
+          if (offset != 0 || stretch != 0) { cycles = 1; }  // if adding an offset or stretch, need a full cycle
           else { cycles = 0.5; }  // (1PI)
         }
       }
@@ -146,11 +146,15 @@ public class RhodoneaFunc extends VariationFunc {
     double t = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double theta = cycles * t;
     double r = cos(k * theta) + offset;
-    if (fill != 0) { r = r + fill * (0.5 - pContext.random()); }
+
+    if (fill != 0) { 
+      r = r + (fill * (pContext.random() - 0.5));
+    }
+
     double x = r * cos(theta);
     double y = r * sin(theta);
-    pVarTP.x += pAmount * x;
-    pVarTP.y += pAmount * y;
+    pVarTP.x += pAmount * (x + stretch * pAffineTP.x);
+    pVarTP.y += pAmount * (y + stretch * pAffineTP.y);
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -164,7 +168,7 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, cyclesParam, offset, fill };
+    return new Object[] { kn, kd, offset, stretch, cyclesParam, fill };
   }
 
   @Override
@@ -173,10 +177,12 @@ public class RhodoneaFunc extends VariationFunc {
       kn = pValue;
     else if (PARAM_KD.equalsIgnoreCase(pName))
       kd = pValue;
-    else if (PARAM_CYCLES.equalsIgnoreCase(pName))
-      cyclesParam = pValue;
     else if (PARAM_OFFSET.equalsIgnoreCase(pName))
       offset = pValue;
+    else if (PARAM_STRETCH.equalsIgnoreCase(pName))
+      stretch = pValue;
+    else if (PARAM_CYCLES.equalsIgnoreCase(pName))
+      cyclesParam = pValue;
     else if (PARAM_FILL.equalsIgnoreCase(pName))
       fill = pValue;
     else
