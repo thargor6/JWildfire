@@ -19,7 +19,6 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -64,7 +63,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
        r = cos(k * theta) + c
     In the case where the parameter k is an odd integer, the two overlapping halves of the curve separate as the offset changes from zero.
 
-    Rhodonea curves were named by the Italian mathematician Guido Grandi between the year 1723 and 1728.[2]
+    Rhodonea curves were named by the Italian mathematician Guido Grandi between the year 1723 and 1728
 */
 public class RhodoneaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -75,17 +74,19 @@ public class RhodoneaFunc extends VariationFunc {
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_OFFSET = "offset";
   private static final String PARAM_STRETCH = "stretch";
+  private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_FILL = "fill";
 
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_CYCLES, PARAM_FILL };
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, PARAM_CYCLES, PARAM_FILL };
 
   private double kn = 3;    // numerator of k,   k = kn/kd
   private double kd = 4;    // denominator of k, k = kn/kd
   private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
   private double offset = 0;  // offset c from equations
+  private double stretch = 0; // deform based on original x/y
+  private double stretchRatio = 1; // how much stretch applies to x relative to y
   private double fill = 0;
-  private double stretch = 0;
 
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
@@ -100,7 +101,7 @@ public class RhodoneaFunc extends VariationFunc {
           cycles = 1;  // (2PI)
         }
         else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
-          if (offset != 0 || stretch != 0) { cycles = 1; }  // if adding an offset or stretch, need a full cycle
+          if (offset != 0 || stretch != 0 || fill != 0) { cycles = 1; }  // if adding an offset or stretch, need a full cycle
           else { cycles = 0.5; }  // (1PI)
         }
       }
@@ -115,19 +116,18 @@ public class RhodoneaFunc extends VariationFunc {
         if (((kn % 1) == 0) && ((kd % 1) == 0))  {
           cycles = kn * kd;
         }
-        //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be rational) but haven't 
+        //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
         //          figured out a way to determine this.
         //    could restrict kn and kd to integers to simplify, but that would exclude a huge space of interesting patterns
         //    could set cycles extremely high, but if k is truly irrational this will just approarch a uniform distribution across a circle, 
         //                and also exclude a large space of interesting patterns with non-closed curves
         //    so for now keep kn and kd as continuous doubles, and just pick a large but not huge number for cycles
-
         // 
         //    realistically in this case it is better for user to fiddle with manual cycles setting to get a pattern they like
         //        
         else  {
           cycles = 2 * kn * kd;
-          if (cycles < 32) { cycles = 32; } // ???  just want to keep number higher if kn and kd are small but potentially irrational
+          if (cycles < 16) { cycles = 16; } // ???  just want to keep number higher if kn and kd are small but potentially irrational
         }
       }
     }
@@ -153,8 +153,8 @@ public class RhodoneaFunc extends VariationFunc {
 
     double x = r * cos(theta);
     double y = r * sin(theta);
-    pVarTP.x += pAmount * (x + stretch * pAffineTP.x);
-    pVarTP.y += pAmount * (y + stretch * pAffineTP.y);
+    pVarTP.x += pAmount * (x + (stretch * stretchRatio * pAffineTP.x));
+    pVarTP.y += pAmount * (y + (stretch * pAffineTP.y));
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -168,7 +168,7 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, offset, stretch, cyclesParam, fill };
+    return new Object[] { kn, kd, offset, stretch, stretchRatio, cyclesParam, fill };
   }
 
   @Override
@@ -181,6 +181,8 @@ public class RhodoneaFunc extends VariationFunc {
       offset = pValue;
     else if (PARAM_STRETCH.equalsIgnoreCase(pName))
       stretch = pValue;
+    else if (PARAM_STRETCH_RATIO.equalsIgnoreCase(pName))
+      stretchRatio = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))
       cyclesParam = pValue;
     else if (PARAM_FILL.equalsIgnoreCase(pName))
