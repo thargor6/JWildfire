@@ -128,11 +128,12 @@ public class WelcomeInternalFrame extends JInternalFrame {
     youtubeVideosBtn.setBounds(338, 34, 134, 28);
     southPanel.add(youtubeVideosBtn);
 
-    JButton pdfTutorialsBtn = new JButton("Video tutorials");
+    JButton pdfTutorialsBtn = new JButton("Documentation");
     pdfTutorialsBtn.setDefaultCapable(false);
     pdfTutorialsBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        browse("http://www.andreas-maschke.com/?page_id=875");
+        // "http://www.andreas-maschke.com/?page_id=875"
+        browse("http://wiki.jwildfire.org/");
       }
     });
     pdfTutorialsBtn.setPreferredSize(new Dimension(128, 24));
