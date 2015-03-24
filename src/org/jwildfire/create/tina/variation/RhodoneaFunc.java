@@ -19,6 +19,8 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -77,8 +79,14 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_FILL = "fill";
+  private static final String PARAM_CYCLE_OFFSET = "cycle_offset";
+  private static final String PARAM_METACYCLES = "metacycles"; // only in effect when cycles = 0 (automatic cycle calculations in effect)
+  private static final String PARAM_METACYCLE_EXPANSION = "metacycle_expansion";
 
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, PARAM_CYCLES, PARAM_FILL };
+
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, 
+                                               PARAM_CYCLES, PARAM_FILL, PARAM_CYCLE_OFFSET, 
+                                               PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION };
 
   private double kn = 3;    // numerator of k,   k = kn/kd
   private double kd = 4;    // denominator of k, k = kn/kd
@@ -87,50 +95,75 @@ public class RhodoneaFunc extends VariationFunc {
   private double stretch = 0; // deform based on original x/y
   private double stretchRatio = 1; // how much stretch applies to x relative to y
   private double fill = 0;
+  private double cycle_offset = 0.5;
+  private double metacycle_expansion = 0;
+  private double metacycles = 1;
 
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
+  private double cycles_to_close;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     k = kn/kd;
-    if (cyclesParam != 0) { cycles = cyclesParam; } // cycles manually set
-    else { // attempt to calculate minimum cycles manually, or reasonable upper bound if unsure
-      if ((k % 1) == 0) {  // k is integer 
-        if ((k % 2) == 0) { // k is even integer, will have 2k petals
-          cycles = 1;  // (2PI)
-        }
-        else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
-          if (offset != 0 || stretch != 0 || fill != 0) { cycles = 1; }  // if adding an offset or stretch, need a full cycle
-          else { cycles = 0.5; }  // (1PI)
-        }
+    // attempt to calculate minimum cycles manually, or reasonable upper bound if unsure
+    if ((k % 1) == 0) {  // k is integer 
+      if ((k % 2) == 0) { // k is even integer, will have 2k petals
+        cycles_to_close = 1;  // (2PI)
       }
-      else if (((k * 2) % 1) == 0) { // k is a half-integer (1/2, 3/2, 5/2, etc.), will have 4k petals
-        cycles = 2;  // (4PI)
-      }
-      else {
-        // if kn and kd are both integers, just multiply kn * kd, 
-        // I don't have a mathematical proof, but observationally:
-        //      if kn and kd are both integers (therefore k is rational, therefore curve is closed)
-        //          then kn * kd establishes an upper bound on number of cycles needed to close the curve
-        if (((kn % 1) == 0) && ((kd % 1) == 0))  {
-          cycles = kn * kd;
-        }
-        //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
-        //          figured out a way to determine this.
-        //    could restrict kn and kd to integers to simplify, but that would exclude a huge space of interesting patterns
-        //    could set cycles extremely high, but if k is truly irrational this will just approarch a uniform distribution across a circle, 
-        //                and also exclude a large space of interesting patterns with non-closed curves
-        //    so for now keep kn and kd as continuous doubles, and just pick a large but not huge number for cycles
-        // 
-        //    realistically in this case it is better for user to fiddle with manual cycles setting to get a pattern they like
-        //        
-        else  {
-          cycles = 2 * kn * kd;
-          if (cycles < 16) { cycles = 16; } // ???  just want to keep number higher if kn and kd are small but potentially irrational
-        }
+      else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
+        if (offset != 0 || stretch != 0 || fill != 0) { cycles_to_close = 1; }  // if adding an offset or stretch, need a full cycle
+        else { cycles_to_close = 0.5; }  // (1PI)
       }
     }
+    else if (((k * 2) % 1) == 0) { // k is a half-integer (1/2, 3/2, 5/2, etc.), will have 4k petals
+      cycles_to_close = 2;  // (4PI)
+    }
+    // kn and kd are both integers
+    else if (((kn % 1) == 0) && ((kd % 1) == 0))  {
+      // if no other rules apply, then assume relative primes???
+      // if kn + kd even, then radians = kd * PI (so cycles = kd/2)
+      // if kn + kd odd, then  radians = kd * 2 * PI (so cycles = kd)
+      if (((kn + kd) % 2) == 0)  { // kn + kd is even
+        cycles_to_close = kd/2;
+      }
+      else  { // kn + kd is odd
+        cycles_to_close = kd;
+      }
+
+      // if kn and kd are both integers, just multiply kn * kd, 
+      // I don't have a mathematical proof, but observationally:
+      //      if kn and kd are both integers (therefore k is rational, therefore curve is closed)
+      //          then kn * kd establishes an upper bound on number of cycles needed to close the curve
+      // cycles = kn * kd;
+
+      //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
+      //          figured out a way to determine this.
+      //    could restrict kn and kd to integers to simplify, but that would exclude a huge space of interesting patterns
+      //    could set cycles extremely high, but if k is truly irrational this will just approarch a uniform distribution across a circle, 
+      //                and also exclude a large space of interesting patterns with non-closed curves
+      //    so for now keep kn and kd as continuous doubles, and just pick a large but not huge number for cycles
+      // 
+      //    realistically in this case it is better for user to fiddle with manual cycles setting to get a pattern they like
+      //        
+    }
+    else {
+      cycles_to_close = 2 * kn * kd;
+      if (cycles < 16) { cycles_to_close = 16; } // ???  just want to keep number higher if kn and kd are small but potentially irrational
+    }
+    if (cyclesParam == 0) { 
+      // use auto-calculation of cycles (2*PI*radians) to close the curve, 
+      //     and metacycles for how many closed curves to cycle through
+      cycles = cycles_to_close * metacycles;
+    } 
+    else  { 
+      // manually set number of cycles (cycles are specified in 2*PI*radians)
+      cycles = cyclesParam; 
+    }
+    System.out.println("cycles to close: " + cycles_to_close);
+    System.out.println("metacycles: " + metacycles);
+    System.out.println("total cycles: " + cycles);
+
   }
 
   @Override
@@ -143,18 +176,42 @@ public class RhodoneaFunc extends VariationFunc {
         x = cos(kt)cos(t)
         y = cos(kt)sin(t)
     */
-    double theta = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
+    double theta = atan2(pAffineTP.y, pAffineTP.x) + (cycle_offset * 2 * M_PI);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double t = cycles * theta;
     double r = cos(k * t) + offset;
+    // double r = sin(k * t) + offset;
 
     if (fill != 0) { 
       r = r + (fill * (pContext.random() - 0.5));
     }
 
+    /*
     double x = r * cos(t);
     double y = r * sin(t);
-    pVarTP.x += pAmount * (x + (stretch * stretchRatio * pAffineTP.x));
-    pVarTP.y += pAmount * (y + (stretch * pAffineTP.y));
+    double xin = Math.abs(pAffineTP.x);
+    double yin = Math.abs(pAffineTP.y);
+    if (x<0) { xin = xin * -1; }
+    if (y<0) { yin = yin * -1; }
+
+    double adjustedAmount = pAmount + (floor(t/(2*M_PI)) * cycle_expansion);
+    pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
+    pVarTP.y += adjustedAmount * (y + (stretch * yin));
+    */
+
+    double x = r * cos(t);
+    double y = r * sin(t);
+    double xin = Math.abs(pAffineTP.x);
+    double yin = Math.abs(pAffineTP.y);
+    if (x<0) { xin = xin * -1; }
+    if (y<0) { yin = yin * -1; }
+
+    double expansion = floor(t/(cycles_to_close * 2 * M_PI));
+    double adjustedAmount = pAmount + (expansion * metacycle_expansion);
+    // double adjustedAmount = pAmount + (floor(t/(cycles_to_close)) * 2 * M_PI * metacycle_expansion);
+    // double adjustedAmount = pAmount;
+    pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
+    pVarTP.y += adjustedAmount * (y + (stretch * yin));
+
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -168,7 +225,7 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, offset, stretch, stretchRatio, cyclesParam, fill };
+    return new Object[] { kn, kd, offset, stretch, stretchRatio, cyclesParam, fill, cycle_offset, metacycles, metacycle_expansion };
   }
 
   @Override
@@ -187,6 +244,12 @@ public class RhodoneaFunc extends VariationFunc {
       cyclesParam = pValue;
     else if (PARAM_FILL.equalsIgnoreCase(pName))
       fill = pValue;
+    else if (PARAM_CYCLE_OFFSET.equalsIgnoreCase(pName))
+      cycle_offset = pValue;
+    else if (PARAM_METACYCLES.equalsIgnoreCase(pName))
+      metacycles = pValue;
+    else if (PARAM_METACYCLE_EXPANSION.equalsIgnoreCase(pName))
+      metacycle_expansion = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
