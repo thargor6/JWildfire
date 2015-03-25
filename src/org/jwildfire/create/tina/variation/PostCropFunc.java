@@ -54,6 +54,7 @@ public class PostCropFunc extends VariationFunc {
       return;
     }
     else {
+      pVarTP.doHide = false;
       if (x < xmin)
         x = xmin + pContext.random() * w;
       else if (x > xmax)

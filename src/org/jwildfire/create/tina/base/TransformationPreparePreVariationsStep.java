@@ -40,6 +40,5 @@ public final class TransformationPreparePreVariationsStep extends AbstractTransf
     pVarT.greenColor = pAffineT.greenColor;
     pVarT.blueColor = pAffineT.blueColor;
     pVarT.doHide = pAffineT.doHide;
-    pVarT.tag = pAffineT.tag;
   }
 }

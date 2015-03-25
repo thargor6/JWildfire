@@ -16,9 +16,20 @@
 */
 package org.jwildfire.create.tina.animate;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameWriter;
+import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
 
 public class SWFAnimationRenderThread implements Runnable {
   private final SWFAnimationRenderThreadController controller;
@@ -26,6 +37,7 @@ public class SWFAnimationRenderThread implements Runnable {
   private boolean cancelSignalled;
   private FlameMovie flameMovie;
   private Throwable lastError;
+  private final List<SimpleImage> renderedImages = new ArrayList<SimpleImage>();
 
   public SWFAnimationRenderThread(SWFAnimationRenderThreadController pController, FlameMovie pAnimation, String pOutputFilename) {
     controller = pController;
@@ -39,6 +51,7 @@ public class SWFAnimationRenderThread implements Runnable {
       try {
         cancelSignalled = false;
         lastError = null;
+        renderedImages.clear();
         controller.getProgressUpdater().initProgress(flameMovie.getFrameCount());
         int startFrame = 1;
         int endFrame = flameMovie.getFrameCount();
@@ -47,9 +60,10 @@ public class SWFAnimationRenderThread implements Runnable {
             break;
           }
           Flame currFlame = createFlame(i);
-          saveFlame(currFlame, i);
+          processFlame(currFlame, i);
           controller.getProgressUpdater().updateProgress(i);
         }
+        finishSequence();
       }
       catch (Throwable ex) {
         lastError = ex;
@@ -61,6 +75,139 @@ public class SWFAnimationRenderThread implements Runnable {
     }
   }
 
+  private void finishSequence() throws Exception {
+    switch (flameMovie.getSequenceOutputType()) {
+      case ANB:
+        createANB();
+        break;
+    }
+  }
+
+  private void createANB() throws Exception {
+    int width = renderedImages.get(0).getImageWidth();
+    int height = renderedImages.get(0).getImageHeight();
+
+    int frameCount = renderedImages.size();
+    int size = (width + 1) * (height + 1);
+    int totalSize = 16 + 20 + 4 * frameCount * size; // header + (r + g + b + alpha) * frameCount 
+    int direction = 1;
+    int endBehaviour = 0;
+    int step = 16;
+    int reserved1 = 0;
+    int reserved2 = 0;
+
+    byte buffer[] = new byte[totalSize];
+    int offset = 0;
+    buffer[offset++] = 'A';
+    buffer[offset++] = 'N';
+    buffer[offset++] = 'B';
+    buffer[offset++] = 'R';
+    buffer[offset++] = (byte) ((width << 32));
+    buffer[offset++] = (byte) ((width << 32) >> 8);
+    buffer[offset++] = (byte) ((width << 32) >> 16);
+    buffer[offset++] = (byte) ((width << 32) >> 24);
+    buffer[offset++] = (byte) ((height << 32));
+    buffer[offset++] = (byte) ((height << 32) >> 8);
+    buffer[offset++] = (byte) ((height << 32) >> 16);
+    buffer[offset++] = (byte) ((height << 32) >> 24);
+    buffer[offset++] = (byte) (((frameCount - 1) << 32));
+    buffer[offset++] = (byte) (((frameCount - 1) << 32) >> 8);
+    buffer[offset++] = (byte) (((frameCount - 1) << 32) >> 16);
+    buffer[offset++] = (byte) (((frameCount - 1) << 32) >> 24);
+    buffer[offset++] = (byte) ((direction << 32));
+    buffer[offset++] = (byte) ((direction << 32) >> 8);
+    buffer[offset++] = (byte) ((direction << 32) >> 16);
+    buffer[offset++] = (byte) ((direction << 32) >> 24);
+    buffer[offset++] = (byte) ((endBehaviour << 32));
+    buffer[offset++] = (byte) ((endBehaviour << 32) >> 8);
+    buffer[offset++] = (byte) ((endBehaviour << 32) >> 16);
+    buffer[offset++] = (byte) ((endBehaviour << 32) >> 24);
+    buffer[offset++] = (byte) ((step << 32));
+    buffer[offset++] = (byte) ((step << 32) >> 8);
+    buffer[offset++] = (byte) ((step << 32) >> 16);
+    buffer[offset++] = (byte) ((step << 32) >> 24);
+    buffer[offset++] = (byte) ((reserved1 << 32));
+    buffer[offset++] = (byte) ((reserved1 << 32) >> 8);
+    buffer[offset++] = (byte) ((reserved1 << 32) >> 16);
+    buffer[offset++] = (byte) ((reserved1 << 32) >> 24);
+    buffer[offset++] = (byte) ((reserved2 << 32));
+    buffer[offset++] = (byte) ((reserved2 << 32) >> 8);
+    buffer[offset++] = (byte) ((reserved2 << 32) >> 16);
+    buffer[offset++] = (byte) ((reserved2 << 32) >> 24);
+    for (int channel = 0; channel < 4; channel++) {
+      for (int i = 0; i < frameCount; i++) {
+        fillBuffer(buffer, offset, renderedImages.get(i), channel);
+        offset += size;
+      }
+    }
+    String filename = outputFilename;
+    if (!filename.endsWith(Tools.FILEEXT_ANB)) {
+      filename = filename + "." + Tools.FILEEXT_ANB;
+    }
+    Tools.writeFile(filename, buffer);
+  }
+
+  private void fillBuffer(byte[] pBuffer, int pOffset, SimpleImage pImage, int pChannel) {
+    Pixel p = new Pixel();
+    int offset = pOffset;
+    int lineWidth = pImage.getImageWidth() + 1;
+    for (int i = 0; i < pImage.getImageHeight(); i++) {
+      for (int j = 0; j < pImage.getImageWidth(); j++) {
+        p.setARGBValue(pImage.getARGBValue(j, i));
+        switch (pChannel) {
+          case 0:
+            pBuffer[offset + j] = (byte) p.r;
+            break;
+          case 1:
+            pBuffer[offset + j] = (byte) p.g;
+            break;
+          case 2:
+            pBuffer[offset + j] = (byte) p.b;
+            break;
+          default:
+            pBuffer[offset + j] = (byte) p.a;
+            break;
+        }
+      }
+      offset += lineWidth;
+    }
+  }
+
+  private void processFlame(Flame pCurrFlame, int pFrame) throws Exception {
+    switch (flameMovie.getSequenceOutputType()) {
+      case FLAMES:
+        saveFlame(pCurrFlame, pFrame);
+        break;
+      case PNG_IMAGES:
+        saveImage(renderFlame(pCurrFlame), pFrame);
+        break;
+      case ANB:
+        pCurrFlame.setBGTransparency(true);
+        renderedImages.add(renderFlame(pCurrFlame));
+        break;
+    }
+  }
+
+  private void saveImage(SimpleImage pImage, int pFrame) throws Exception {
+    String filename = generateFilename(pFrame, Tools.FILEEXT_PNG);
+    new ImageWriter().saveAsPNG(pImage, filename);
+  }
+
+  private SimpleImage renderFlame(Flame pFlame) {
+    RenderInfo info = new RenderInfo(flameMovie.getFrameWidth(), flameMovie.getFrameHeight(), RenderMode.PRODUCTION);
+    double wScl = (double) info.getImageWidth() / (double) pFlame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) pFlame.getHeight();
+    pFlame.setPixelsPerUnit((wScl + hScl) * 0.5 * pFlame.getPixelsPerUnit());
+    pFlame.setWidth(info.getImageWidth());
+    pFlame.setHeight(info.getImageHeight());
+
+    FlameRenderer renderer = new FlameRenderer(pFlame, Prefs.getPrefs(), pFlame.isBGTransparency(), false);
+    renderer.setProgressUpdater(null);
+    pFlame.setSampleDensity(flameMovie.getQuality());
+    RenderedFlame res = renderer.renderFlame(info);
+    return res.getImage();
+  }
+
   private Flame createFlame(int pFrame) throws Exception {
     Flame flame1 = flameMovie.getFlame(pFrame);
     Flame res = flameMovie.createAnimatedFlame(flame1, pFrame);
@@ -68,6 +215,11 @@ public class SWFAnimationRenderThread implements Runnable {
   }
 
   private void saveFlame(Flame pFlame, int pFrame) throws Exception {
+    String filename = generateFilename(pFrame, Tools.FILEEXT_FLAME);
+    new FlameWriter().writeFlame(pFlame, filename);
+  }
+
+  private String generateFilename(int pFrame, String pFileExt) {
     String filename = outputFilename;
     {
       int pSlash = filename.lastIndexOf("/");
@@ -85,8 +237,8 @@ public class SWFAnimationRenderThread implements Runnable {
     while (hs.length() < length) {
       hs = "0" + hs;
     }
-    filename += hs + "." + Tools.FILEEXT_FLAME;
-    new FlameWriter().writeFlame(pFlame, filename);
+    filename += hs + "." + pFileExt;
+    return filename;
   }
 
   private int calcFrameNumberLength() {
