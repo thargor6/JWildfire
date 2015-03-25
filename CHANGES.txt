@@ -1,3 +1,34 @@
+V2.40 (14.03.2015):
+ - now with offical documentation-Wiki! See the "Documentation"-button at the Welcome-window or just visit it directly: http://wiki.jwildfire.org/
+ - 4 new beginners tutorials in the Wiki (Basic flame-editing, Basic color-editing, Basic formula-editing, More on formula-editing)
+ 
+ - ability to create animated brushes (to be used in a painting-program) from within the Easy Movie Maker. Currently the ANB-format from the super-cool painting-software PD Howler (http://www.thebest3d.com/howler/)is supported.
+ - added the possibility to have different types of output in the Easy-Movie-Maker, there are currently three choices:
+     - FLAMES (create flames)
+     - PNG_IMAGES (create flames and render them as PNG-images)
+     - ANB (animbrush in PD Howler's format)
+   Maybe I will add direct video-encoding as additional option, currently looking for a component who can do this job...   
+ - advanced tutorial for creating animbrushes in the Wiki (not only for PD Howler)
+ 
+ - the action performed at a double-click in the main-flame-editor can now be changed in the prefs. There are the following choices: 
+     - RENDER_FLAME: render the current flame, this was the default behaviour until now
+     - ACTIVATE_TRIANGLE_EDIT: activate "triangle"-editing 
+     - SWITCH_TRIANGLE_CAM_EDIT: switch between triangle- and camera editing (this is the new default) 
+     - NONE: do nothing at all
+ 
+ - the default fade-to-white-level for flames was increased from 200 to 220 to create more smooth defaults. You can change this in the prefs by 
+   modifying the value the property tinaDefaultFadeToWhiteLevel
+ - new "cpow3"-variation by Gregg Helt
+ - new "post_heat"-variation by zephyrtronium, transcribed by chronologicaldot
+ - added an instancing-option the the IFlames-editor, does not wortk for all flames, but when it works, much less ressources are needed
+ - removed the FAQ-section from the software
+     
+ - FIXED: some fixes the startup scripts on Mac by Gregg Helt 
+ - FIXED: a bug regarding the hiding of samples (affected only "crop"-like-variations)
+ - FIXED: after cancelling the Batch-renderer the cancelled image was saved, though (and was in the most cases a blank image)
+ - FIXED: a problem regarding saving render-state of iflames
+ - FIXED: a problem regarding projecting invalid points (which sometimes appeared at points with random color at coordinate (0,0)), thanks to chronologicaldot for the reminder!  
+
 V2.34 (21.02.2015):
  - powerful new sub-application to create iflames (you can reach it form the main window-menu), including a particle-simulation 
    to animate them, but please beware that this new application needs a very powerful computer, 
