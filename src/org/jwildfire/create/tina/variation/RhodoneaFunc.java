@@ -16,11 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -75,29 +78,34 @@ public class RhodoneaFunc extends VariationFunc {
   // if cycles is set to 0, function will make best effort to calculate minimum number of cycles needed 
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_OFFSET = "offset";
-  private static final String PARAM_STRETCH = "stretch";
+  private static final String PARAM_INNER_STRETCH = "inner_stretch";
+  private static final String PARAM_OUTER_STRETCH = "outer_stretch";
   private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_FILL = "fill";
   private static final String PARAM_CYCLE_OFFSET = "cycle_offset";
   private static final String PARAM_METACYCLES = "metacycles"; // only in effect when cycles = 0 (automatic cycle calculations in effect)
   private static final String PARAM_METACYCLE_EXPANSION = "metacycle_expansion";
+  private static final String PARAM_STRETCH_MODE = "stretch_mode";
 
 
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, PARAM_STRETCH, PARAM_STRETCH_RATIO, 
-                                               PARAM_CYCLES, PARAM_FILL, PARAM_CYCLE_OFFSET, 
-                                               PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION };
+  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, 
+                                               PARAM_STRETCH_MODE, PARAM_INNER_STRETCH, PARAM_OUTER_STRETCH, PARAM_STRETCH_RATIO, 
+                                               PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION, 
+                                               PARAM_FILL  };
 
   private double kn = 3;    // numerator of k,   k = kn/kd
   private double kd = 4;    // denominator of k, k = kn/kd
-  private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
   private double offset = 0;  // offset c from equations
-  private double stretch = 0; // deform based on original x/y
+  private double stretch_mode = 1;
+  private double inner_stretch = 0; // deform based on original x/y
+  private double outer_stretch = 0; // deform based on original x/y
   private double stretchRatio = 1; // how much stretch applies to x relative to y
-  private double fill = 0;
+  private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
   private double cycle_offset = 0.5;
   private double metacycle_expansion = 0;
   private double metacycles = 1;
+  private double fill = 0;
 
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
@@ -112,7 +120,7 @@ public class RhodoneaFunc extends VariationFunc {
         cycles_to_close = 1;  // (2PI)
       }
       else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
-        if (offset != 0 || stretch != 0 || fill != 0) { cycles_to_close = 1; }  // if adding an offset or stretch, need a full cycle
+        if (offset != 0 || inner_stretch != 0 || outer_stretch != 0 || fill != 0) { cycles_to_close = 1; }  // if adding an offset or stretch, need a full cycle
         else { cycles_to_close = 0.5; }  // (1PI)
       }
     }
@@ -120,15 +128,17 @@ public class RhodoneaFunc extends VariationFunc {
       cycles_to_close = 2;  // (4PI)
     }
     // kn and kd are both integers
+    // from http://mathworld.wolfram.com/Rose.html:
+    //   if k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
     else if (((kn % 1) == 0) && ((kd % 1) == 0))  {
       // if no other rules apply, then assume relative primes???
-      // if kn + kd even, then radians = kd * PI (so cycles = kd/2)
-      // if kn + kd odd, then  radians = kd * 2 * PI (so cycles = kd)
-      if (((kn + kd) % 2) == 0)  { // kn + kd is even
-        cycles_to_close = kd/2;
-      }
-      else  { // kn + kd is odd
+      // if kn * kd even, then radians = kd * 2 * PI (so cycles = kd)
+      // if kn * kd odd, then  radians = kd * PI (so cycles = kd/2)
+      if (((kn * kd) % 2) == 0)  { // kn * kd is even
         cycles_to_close = kd;
+      }
+      else  { // kn * kd is odd
+        cycles_to_close = kd/2;
       }
 
       // if kn and kd are both integers, just multiply kn * kd, 
@@ -160,9 +170,9 @@ public class RhodoneaFunc extends VariationFunc {
       // manually set number of cycles (cycles are specified in 2*PI*radians)
       cycles = cyclesParam; 
     }
-    System.out.println("cycles to close: " + cycles_to_close);
-    System.out.println("metacycles: " + metacycles);
-    System.out.println("total cycles: " + cycles);
+    // System.out.println("cycles to close: " + cycles_to_close);
+    // System.out.println("metacycles: " + metacycles);
+    // System.out.println("total cycles: " + cycles);
 
   }
 
@@ -176,42 +186,126 @@ public class RhodoneaFunc extends VariationFunc {
         x = cos(kt)cos(t)
         y = cos(kt)sin(t)
     */
-    double theta = atan2(pAffineTP.y, pAffineTP.x) + (cycle_offset * 2 * M_PI);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
-    double t = cycles * theta;
-    double r = cos(k * t) + offset;
+    // double rin = pAffineTP.getPrecalcSqrt(); // polar coordinate radius of incoming point
+    double rin = sqrt((pAffineTP.x  * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
+    // atan2 range is [-PI, PI], so rtheta covers 2PI, or 1 cycle
+    double tin = atan2(pAffineTP.y, pAffineTP.x); // polar coordinate angle (theta in radians) of incoming point
+    // double theta = atan2(pAffineTP.x, pAffineTP.y) + (cycle_offset * 2 * M_PI);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
+    double t = cycles * (tin + (cycle_offset * 2 * M_PI));  // angle of rose curve
+    double r = cos(k * t) + offset;  // radius of rose curve 
     // double r = sin(k * t) + offset;
-
     if (fill != 0) { 
       r = r + (fill * (pContext.random() - 0.5));
     }
-
-    /*
     double x = r * cos(t);
     double y = r * sin(t);
-    double xin = Math.abs(pAffineTP.x);
-    double yin = Math.abs(pAffineTP.y);
-    if (x<0) { xin = xin * -1; }
-    if (y<0) { yin = yin * -1; }
-
-    double adjustedAmount = pAmount + (floor(t/(2*M_PI)) * cycle_expansion);
-    pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
-    pVarTP.y += adjustedAmount * (y + (stretch * yin));
-    */
-
-    double x = r * cos(t);
-    double y = r * sin(t);
-    double xin = Math.abs(pAffineTP.x);
-    double yin = Math.abs(pAffineTP.y);
-    if (x<0) { xin = xin * -1; }
-    if (y<0) { yin = yin * -1; }
-
     double expansion = floor(t/(cycles_to_close * 2 * M_PI));
     double adjustedAmount = pAmount + (expansion * metacycle_expansion);
     // double adjustedAmount = pAmount + (floor(t/(cycles_to_close)) * 2 * M_PI * metacycle_expansion);
     // double adjustedAmount = pAmount;
-    pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
-    pVarTP.y += adjustedAmount * (y + (stretch * yin));
 
+    if (stretch_mode == 1) {
+      if (abs(rin) > abs(r))  {   // incoming point lies outside of current petal of rose curve
+        rin = (rin * outer_stretch) - outer_stretch + 1; 
+        pVarTP.x += adjustedAmount * rin * x;
+        pVarTP.y += adjustedAmount * rin * y;       
+        // pVarTP.x += pAffineTP.x;
+        // pVarTP.y += pAffineTP.y;
+      }
+      else  { // incoming point lies inside current petal of rose curve
+        rin = (rin * inner_stretch) - inner_stretch + 1;
+        pVarTP.x += adjustedAmount * rin * x;
+        pVarTP.y += adjustedAmount * rin * y;       
+        // pVarTP.x += pAffineTP.x;
+        // pVarTP.y += pAffineTP.y;
+      }
+      if (pVarTP.y == 0)  { pVarTP.x = 0; }
+    }
+    else if (stretch_mode == 2) {
+      if (abs(rin) > abs(r))  {   // incoming point lies outside of current petal of rose curve
+        rin = (rin * outer_stretch);
+        pVarTP.x += adjustedAmount * rin * x;
+        pVarTP.y += adjustedAmount * rin * y;       
+        // pVarTP.x += pAffineTP.x;
+        // pVarTP.y += pAffineTP.y;
+      }
+      else  { // incoming point lies inside current petal of rose curve
+        rin = (rin * inner_stretch);
+        pVarTP.x += adjustedAmount * rin * x;
+        pVarTP.y += adjustedAmount * rin * y;       
+        // pVarTP.x += pAffineTP.x;
+        // pVarTP.y += pAffineTP.y;
+      }
+    }
+    else if (stretch_mode == 3)  {
+      double xin = Math.abs(pAffineTP.x);
+      double yin = Math.abs(pAffineTP.y);
+      if (x<0) { xin = xin * -1; }
+      if (y<0) { yin = yin * -1; }
+
+      if (abs(rin) > abs(r)) {  // incoming point lies outside current petal of rose curve
+        //pVarTP.x += adjustedAmount * x + ((rin - r) * outer_stretch * stretchRatio);
+        pVarTP.x += adjustedAmount * (x + (outer_stretch * stretchRatio * xin));
+        pVarTP.y += adjustedAmount * (y + (outer_stretch * yin));
+      }
+      else  { // incoming point lies inside current petal of rose curve
+        pVarTP.x += adjustedAmount * (x + (inner_stretch * stretchRatio * xin));
+        pVarTP.y += adjustedAmount * (y + (inner_stretch * yin));
+      }
+    }
+    else if (stretch_mode == 4) {
+      double xin = Math.abs(pAffineTP.x);
+      double yin = Math.abs(pAffineTP.y);
+      if (x<0) { xin = xin * -1; }
+      if (y<0) { yin = yin * -1; }
+
+      if (abs(rin) > abs(r)) {  // incoming point lies outside current petal of rose curve
+        //pVarTP.x += adjustedAmount * x + ((rin - r) * outer_stretch * stretchRatio);
+        pVarTP.x += adjustedAmount * (x + (outer_stretch * stretchRatio * (x-xin)));
+        pVarTP.y += adjustedAmount * (y + (outer_stretch * (y-yin)));
+      }
+      else  { // incoming point lies inside current petal of rose curve
+        pVarTP.x += adjustedAmount * (x + (inner_stretch * stretchRatio * xin));
+        pVarTP.y += adjustedAmount * (y + (inner_stretch * yin));
+      }
+    }
+    else  {
+      pVarTP.x += adjustedAmount * x;
+      pVarTP.y += adjustedAmount * y;
+    }
+
+    boolean draw_diagnostics = false;
+    if (draw_diagnostics)  {
+      double diagnostic = pContext.random() * 100;
+      // draw diagnostic unit circles
+      if (diagnostic == 0) {   
+        // ignore zero
+      }
+      if (diagnostic <= 3)  {  // diagnostic = (0-3]
+        double radius = ceil(diagnostic); // radius = 1, 2, 3
+        double angle = diagnostic * 2 * M_PI; // in radians, ensures coverage of unit circles
+        pVarTP.x = radius * cos(angle);
+        pVarTP.y = radius * sin(angle);
+      }
+      // draw diagnostic unit squares
+      else if (diagnostic <= 6)  { // diagnostic = (3-6]
+        double unit = ceil(diagnostic) - 3;  // unit = 1, 2, 3
+        int side = (int)ceil(4 * (ceil(diagnostic) - diagnostic)); // side = 1, 2, 3, 4
+        double varpos = (pContext.random()* unit * 2) - unit;
+        double sx = 0, sy = 0;
+        if (side == 1) { sx = unit; sy = varpos; }
+        else if (side == 2) { sx = varpos; sy = unit; }
+        else if (side == 3) { sx = -1 * unit; sy = varpos; }
+        else if (side == 4) { sx = varpos; sy = -1 * unit; }
+        pVarTP.x = sx;
+        pVarTP.y = sy;
+      }
+    }
+
+    
+
+    // pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
+    // pVarTP.y += adjustedAmount * (y + (stretch * yin));
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -225,7 +319,9 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, offset, stretch, stretchRatio, cyclesParam, fill, cycle_offset, metacycles, metacycle_expansion };
+    return new Object[] { kn, kd, offset, 
+                          stretch_mode, inner_stretch, outer_stretch, stretchRatio, 
+                          cyclesParam, cycle_offset, metacycles, metacycle_expansion, fill };
   }
 
   @Override
@@ -236,20 +332,24 @@ public class RhodoneaFunc extends VariationFunc {
       kd = pValue;
     else if (PARAM_OFFSET.equalsIgnoreCase(pName))
       offset = pValue;
-    else if (PARAM_STRETCH.equalsIgnoreCase(pName))
-      stretch = pValue;
+    else if (PARAM_STRETCH_MODE.equalsIgnoreCase(pName))
+      stretch_mode = floor(pValue);
+    else if (PARAM_INNER_STRETCH.equalsIgnoreCase(pName))
+      inner_stretch = pValue;
+    else if (PARAM_OUTER_STRETCH.equalsIgnoreCase(pName))
+      outer_stretch = pValue;
     else if (PARAM_STRETCH_RATIO.equalsIgnoreCase(pName))
       stretchRatio = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))
       cyclesParam = pValue;
-    else if (PARAM_FILL.equalsIgnoreCase(pName))
-      fill = pValue;
     else if (PARAM_CYCLE_OFFSET.equalsIgnoreCase(pName))
       cycle_offset = pValue;
     else if (PARAM_METACYCLES.equalsIgnoreCase(pName))
       metacycles = pValue;
     else if (PARAM_METACYCLE_EXPANSION.equalsIgnoreCase(pName))
       metacycle_expansion = pValue;
+    else if (PARAM_FILL.equalsIgnoreCase(pName))
+      fill = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
