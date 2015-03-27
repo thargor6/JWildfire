@@ -31,6 +31,15 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+
+// Rosoni JWildfire variation by DarkBeam, July 2014
+// (for more details, see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=23&t=1449)
+// From dark-beam's post:
+//      In some situations (if you mangle with values a bit and sweetiter is = 0) some pixels will turn black.
+//      It's not a common situation and I think it's ok. It should never happen if you choose a correct sweetiter value.
+//      Commonly sweetiter should be = maxiter / 2. But different ones can be tried.
+//
+// minor changes by CozyG
 public class RosoniFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -54,7 +63,6 @@ public class RosoniFunc extends VariationFunc {
   
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // rosoni. DarkBeam 2014 JWildfire transform
     double x =  pAffineTP.x;
     double y =  pAffineTP.y;
     double r = sqrt(sqr(x)+ sqr(y)) - cutoff;
