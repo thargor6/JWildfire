@@ -430,6 +430,8 @@ public class VariationFuncList {
     registerVariationFunc(PostHeatFunc.class);
     registerVariationFunc(CPow3Func.class);
     registerVariationFunc(Rational3Func.class);
+    
+    registerVariationFunc(STwinFunc.class);
   }
 
   private static void registerVariationFunc(
