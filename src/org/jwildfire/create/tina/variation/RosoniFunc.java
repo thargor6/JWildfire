@@ -16,23 +16,27 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Tools;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
 
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class Boarders2Func extends VariationFunc {
+public class RosoniFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_MAXITER = "maxiter";
   private static final String PARAM_SWEETITER = "sweetiter";
-  private static final String PARAM_ALTSHAPES = "alt. shapes";
+  private static final String PARAM_ALTSHAPES = "altshapes";
   private static final String PARAM_CUTOFF = "cutoff";
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_DX = "dx";
