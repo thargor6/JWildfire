@@ -24,7 +24,7 @@ public class FlowerDbFunc extends VariationFunc {
   
   private static final String[] paramNames = { PARAM_PETALS, PARAM_THICKNESS, PARAM_SPREAD };
 
-  private double petals = 6;
+  private double petals = 8;
   private double thickness = 1;
   private double spread = 1;
 
