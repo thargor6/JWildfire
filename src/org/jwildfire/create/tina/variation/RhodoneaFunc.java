@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
+import java.math.BigInteger;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
@@ -110,7 +111,13 @@ public class RhodoneaFunc extends VariationFunc {
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
   private double cycles_to_close;
+  private double petal_count = 0;   // petal_count = 0 means petal count is unknown
 
+  // want to figure out (when possible):
+  //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
+  //     number of petals in the curve
+  //     given those, can also calculate: for a given input x and y, which petal will it map to.
+  //         
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     k = kn/kd;
@@ -118,20 +125,23 @@ public class RhodoneaFunc extends VariationFunc {
     if ((k % 1) == 0) {  // k is integer 
       if ((k % 2) == 0) { // k is even integer, will have 2k petals
         cycles_to_close = 1;  // (2PI)
+        petal_count = 2*k;
       }
       else  { // k is odd integer, will have k petals (or sometimes 2k with offset)
         if (offset != 0 || inner_stretch != 0 || outer_stretch != 0 || fill != 0) { cycles_to_close = 1; }  // if adding an offset or stretch, need a full cycle
         else { cycles_to_close = 0.5; }  // (1PI)
+        petal_count = k;
       }
     }
     else if (((k * 2) % 1) == 0) { // k is a half-integer (1/2, 3/2, 5/2, etc.), will have 4k petals
       cycles_to_close = 2;  // (4PI)
+      petal_count = 4*k;
     }
     // kn and kd are both integers
     // from http://mathworld.wolfram.com/Rose.html:
     //   if k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
     else if (((kn % 1) == 0) && ((kd % 1) == 0))  {
-      // if no other rules apply, then assume relative primes???
+
       // if kn * kd even, then radians = kd * 2 * PI (so cycles = kd)
       // if kn * kd odd, then  radians = kd * PI (so cycles = kd/2)
       if (((kn * kd) % 2) == 0)  { // kn * kd is even
@@ -141,12 +151,23 @@ public class RhodoneaFunc extends VariationFunc {
         cycles_to_close = kd/2;
       }
 
-      // if kn and kd are both integers, just multiply kn * kd, 
-      // I don't have a mathematical proof, but observationally:
-      //      if kn and kd are both integers (therefore k is rational, therefore curve is closed)
-      //          then kn * kd establishes an upper bound on number of cycles needed to close the curve
-      // cycles = kn * kd;
-
+      // determine if kn and kd are relatively prime (their greatest common denominator is 1)
+      // using builtin gcd() function for BigIntegers in Java
+      BigInteger bigkn = BigInteger.valueOf((long)kn);
+      BigInteger bigkd = BigInteger.valueOf((int)kd);
+      int gcd = bigkn.gcd(bigkd).intValueExact();
+      if (gcd == 1)  {
+        // kn and kd are relatively prime
+        // If kn and kd are relatively prime, then the rose consists of kn petals if both kn and kd are odd, and 2*kn either kn or kd are even
+        if ((kn % 2 == 0) || (kd % 2 == 0))  {
+          petal_count = 2*kn;
+        }
+        else {
+          petal_count = kn;
+        }
+      }
+    }
+    else {
       //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
       //          figured out a way to determine this.
       //    could restrict kn and kd to integers to simplify, but that would exclude a huge space of interesting patterns
@@ -156,8 +177,6 @@ public class RhodoneaFunc extends VariationFunc {
       // 
       //    realistically in this case it is better for user to fiddle with manual cycles setting to get a pattern they like
       //        
-    }
-    else {
       cycles_to_close = 2 * kn * kd;
       if (cycles < 16) { cycles_to_close = 16; } // ???  just want to keep number higher if kn and kd are small but potentially irrational
     }
