@@ -10,11 +10,12 @@ import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 /*
- *  Original author dark-beam
- *  code snippets relayed by Don Town
+ *  Original author dark-beam 
+*       (see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=18&t=1444&p=3032)
+ *  suggested/requested as full variation by Don Town
  *  transcribed, extended, and turned into full variation by CozyG
  *  
- *  Currently only behaves if no translation in pre-transform?
+ *  WARNING: assumes centered on (0,0,0), can disapear if move too far off in pre-transforms etc.
  */
 public class FlowerDbFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -26,9 +27,10 @@ public class FlowerDbFunc extends VariationFunc {
   private static final String PARAM_STEM_LENGTH = "stem_length";
   private static final String PARAM_PETAL_FOLD_STRENGTH = "petal_fold_strength";
   private static final String PARAM_PETAL_FOLD_RADIUS = "petal_fold_radius";
-  
-  private static final String[] paramNames = { PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD, PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH,
-                                               PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS };
+    
+  private static final String[] paramNames = { PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD,
+                                               PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH,
+                                               PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS};
 
   // non-integer petals is possible, changes relative size of petals
   private double petals = 6;
@@ -37,11 +39,11 @@ public class FlowerDbFunc extends VariationFunc {
   private double petal_spread = 1;
   private double stem_thickness = 1;
   // default stem_length of 0 is considered special case,
-  // if stem_length = 0, then stem length doesn't truncate, so extends "infinitely" while fading away
+  //   if stem_length = 0, then stem length doesn't truncate, so extends "infinitely" while fading away
   private double stem_length = 0;
   // how strong (added angle) the fold is, positive value fold up, negative values fold down
   private double petal_fold_strength = 0;
-  // how far out 
+  // how far out along the petals the fold happens
   private double petal_fold_radius= 1;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
