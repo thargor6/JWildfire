@@ -432,6 +432,7 @@ public class VariationFuncList {
     registerVariationFunc(Rational3Func.class);
     
     registerVariationFunc(STwinFunc.class);
+    registerVariationFunc(FlowerDbFunc.class);
   }
 
   private static void registerVariationFunc(
