@@ -74,8 +74,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class RhodoneaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_KN = "kn";
-  private static final String PARAM_KD = "kd";
+  private static final String PARAM_KNUMER = "knumer";
+  private static final String PARAM_KDENOM = "kdenom";
   // if cycles is set to 0, function will make best effort to calculate minimum number of cycles needed 
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_OFFSET = "offset";
@@ -90,13 +90,13 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_STRETCH_MODE = "stretch_mode";
 
 
-  private static final String[] paramNames = { PARAM_KN, PARAM_KD, PARAM_OFFSET, 
+  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_OFFSET, 
                                                PARAM_STRETCH_MODE, PARAM_INNER_STRETCH, PARAM_OUTER_STRETCH, PARAM_STRETCH_RATIO, 
                                                PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION, 
                                                PARAM_FILL  };
 
-  private double kn = 3;    // numerator of k,   k = kn/kd
-  private double kd = 4;    // denominator of k, k = kn/kd
+  private double knumer = 3;    // numerator of k,   k = kn/kd
+  private double kdenom = 4;    // denominator of k, k = kn/kd
   private double offset = 0;  // offset c from equations
   private double stretch_mode = 1;
   private double inner_stretch = 0; // deform based on original x/y
@@ -108,6 +108,7 @@ public class RhodoneaFunc extends VariationFunc {
   private double metacycles = 1;
   private double fill = 0;
 
+  private double kn, kd;
   private double k;  // k = kn/kd
   private double cycles;  // 1 cycle = 2*PI
   private double cycles_to_close;
@@ -120,7 +121,10 @@ public class RhodoneaFunc extends VariationFunc {
   //         
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    k = kn/kd;
+    kn = knumer;
+    kd = kdenom;
+    k = kn / kd;
+
     // attempt to calculate minimum cycles manually, or reasonable upper bound if unsure
     if ((k % 1) == 0) {  // k is integer 
       if ((k % 2) == 0) { // k is even integer, will have 2k petals
@@ -133,40 +137,69 @@ public class RhodoneaFunc extends VariationFunc {
         petal_count = k;
       }
     }
+    else if ( (kn % 1 == 0) && (kd % 1 == 0) ) {
+      // if kn and kd are integers,
+      //   determine if kn and kd are relatively prime (their greatest common denominator is 1)
+      //   using builtin gcd() function for BigIntegers in Java
+      // and if they're not, make them
+      BigInteger bigkn = BigInteger.valueOf((long)kn);
+      BigInteger bigkd = BigInteger.valueOf((int)kd);
+      int gcd = bigkn.gcd(bigkd).intValueExact();
+      if (gcd != 1) {
+        kn = kn / gcd;
+        kd = kd / gcd;
+      }
+
+      // kn and kd are both integers
+      //
+      // paraphrased from http://www.encyclopediaofmath.org/index.php/Roses_%28curves%29:
+      //    If kn and kd are relatively prime, then the rose consists of 2*kn petals if either kn or kd are even, and kn petals if both kn and kd are odd
+      //
+      // paraphrased from http://mathworld.wolfram.com/Rose.html:
+      //    If k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
+      if ((kn % 2 == 0) || (kd % 2 == 0))  {
+        petal_count = 2*kn;
+        cycles_to_close = kd;  // 2 * PI * kd
+      }
+      else {
+        petal_count = kn;
+        cycles_to_close = kd/2; // PI * kd
+      }
+    }
+
+
+    /* 
+    // superceded by relative prime conditional?
     else if (((k * 2) % 1) == 0) { // k is a half-integer (1/2, 3/2, 5/2, etc.), will have 4k petals
       cycles_to_close = 2;  // (4PI)
       petal_count = 4*k;
     }
-    // kn and kd are both integers
-    // from http://mathworld.wolfram.com/Rose.html:
-    //   if k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
-    else if (((kn % 1) == 0) && ((kd % 1) == 0))  {
-
-      // if kn * kd even, then radians = kd * 2 * PI (so cycles = kd)
-      // if kn * kd odd, then  radians = kd * PI (so cycles = kd/2)
-      if (((kn * kd) % 2) == 0)  { // kn * kd is even
-        cycles_to_close = kd;
+    */
+    /*
+    // superceded by relative prime conditional?
+    //
+    // If k can be expressed as kn/3, where n is an integer not divisible by 3, the curve will be rose-shaped with n petals if n is odd and 2n petals if n is even.
+    //    (case where kn is integer divisible by three is already handled above, where k is integer)
+    else if (((k * 3) % 1) == 0) {
+      double basekn = k * 3;
+      if ((basekn % 2) == 0) {
+        cycles_to_close = 3;
+        petal_count = 2 * basekn;
       }
-      else  { // kn * kd is odd
-        cycles_to_close = kd/2;
-      }
-
-      // determine if kn and kd are relatively prime (their greatest common denominator is 1)
-      // using builtin gcd() function for BigIntegers in Java
-      BigInteger bigkn = BigInteger.valueOf((long)kn);
-      BigInteger bigkd = BigInteger.valueOf((int)kd);
-      int gcd = bigkn.gcd(bigkd).intValueExact();
-      if (gcd == 1)  {
-        // kn and kd are relatively prime
-        // If kn and kd are relatively prime, then the rose consists of kn petals if both kn and kd are odd, and 2*kn either kn or kd are even
-        if ((kn % 2 == 0) || (kd % 2 == 0))  {
-          petal_count = 2*kn;
-        }
-        else {
-          petal_count = kn;
-        }
+      else  {
+        cycles_to_close = 1.5;
+          petal_count = basekn;
       }
     }
+    */
+    /*
+    // superceded by relative prime conditional????
+      If k can be expressed as n±1/6, where n is a nonzero integer, the curve will be rose-shaped with 12k petals.
+      else if {
+ 
+      }
+    */
+
     else {
       //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
       //          figured out a way to determine this.
@@ -338,17 +371,17 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { kn, kd, offset, 
+    return new Object[] { knumer, kdenom, offset, 
                           stretch_mode, inner_stretch, outer_stretch, stretchRatio, 
                           cyclesParam, cycle_offset, metacycles, metacycle_expansion, fill };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_KN.equalsIgnoreCase(pName))
-      kn = pValue;
-    else if (PARAM_KD.equalsIgnoreCase(pName))
-      kd = pValue;
+    if (PARAM_KNUMER.equalsIgnoreCase(pName))
+      knumer = pValue;
+    else if (PARAM_KDENOM.equalsIgnoreCase(pName))
+      kdenom = pValue;
     else if (PARAM_OFFSET.equalsIgnoreCase(pName))
       offset = pValue;
     else if (PARAM_STRETCH_MODE.equalsIgnoreCase(pName))
