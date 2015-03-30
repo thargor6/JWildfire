@@ -616,7 +616,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     rootTabbedPane = parameterObject.pRootTabbedPane;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
-    data.faqPane = parameterObject.pFAQPane;
 
     data.undoButton = parameterObject.pUndoButton;
     data.redoButton = parameterObject.pRedoButton;
@@ -723,7 +722,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     initHelpPane();
     initApophysisHintsPane();
-    initFAQPane();
 
     refreshPaletteColorsTable();
     getBatchRendererController().refreshRenderBatchJobsTable();
@@ -799,29 +797,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.helpPane.setText(content.toString());
       data.helpPane.setSelectionStart(0);
       data.helpPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  private void initFAQPane() {
-    data.faqPane.setContentType("text/html");
-    try {
-      InputStream is = this.getClass().getResourceAsStream("FAQ.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
-
-      data.faqPane.setText(content.toString());
-      data.faqPane.setSelectionStart(0);
-      data.faqPane.setSelectionEnd(0);
     }
     catch (Exception ex) {
       ex.printStackTrace();

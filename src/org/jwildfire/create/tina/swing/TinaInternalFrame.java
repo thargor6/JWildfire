@@ -4644,7 +4644,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getHelpPane(),
-        getFaqPane(), getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
@@ -10162,7 +10162,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(getScrollPane(), BorderLayout.CENTER);
       tabbedPane_1.addTab("Tips for Apophysis users ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_103(), null);
       tabbedPane_1.addTab("3DMesh Generation tips ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_105(), null);
-      tabbedPane_1.addTab("FAQ ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_104(), null);
     }
     return rootTabbedPane;
   }
@@ -10229,8 +10228,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane scrollPane;
   private JTextPane helpPane;
   private JPanel panel;
-  private JScrollPane scrollPane_1;
-  private JTextPane faqPane;
   private JToggleButton mouseTransformEditPointsButton;
   private JButton undoButton;
   private JLabel label_5;
@@ -10738,7 +10735,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenPreviewPolygonsREd;
   private JButton meshGenRefreshPreviewBtn;
   private JPanel panel_103;
-  private JPanel panel_104;
   private JPanel panel_105;
   private JButton meshGenPreviewSunflowExportBtn;
   private JScrollPane scrollPane_11;
@@ -12966,40 +12962,6 @@ public class TinaInternalFrame extends JInternalFrame {
       helpPane.setEditable(false);
     }
     return helpPane;
-  }
-
-  private JScrollPane getScrollPane_1() {
-    if (scrollPane_1 == null) {
-      scrollPane_1 = new JScrollPane();
-      scrollPane_1.setViewportView(getTextPane_1());
-    }
-    return scrollPane_1;
-  }
-
-  private JTextPane getTextPane_1() {
-    if (faqPane == null) {
-      faqPane = new JTextPane();
-      faqPane.setBackground(SystemColor.menu);
-      faqPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
-      faqPane.addHyperlinkListener(new HyperlinkListener() {
-        public void hyperlinkUpdate(HyperlinkEvent e) {
-          if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-            try {
-              java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
-            }
-            catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      });
-      faqPane.setEditable(false);
-    }
-    return faqPane;
-  }
-
-  public JTextPane getFaqPane() {
-    return getTextPane_1();
   }
 
   public JToggleButton getMouseTransformShearButton() {
@@ -21128,15 +21090,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_103.add(getScrollPane_11(), BorderLayout.CENTER);
     }
     return panel_103;
-  }
-
-  private JPanel getPanel_104() {
-    if (panel_104 == null) {
-      panel_104 = new JPanel();
-      panel_104.setLayout(new BorderLayout(0, 0));
-      panel_104.add(getScrollPane_1(), BorderLayout.CENTER);
-    }
-    return panel_104;
   }
 
   private JPanel getPanel_105() {
