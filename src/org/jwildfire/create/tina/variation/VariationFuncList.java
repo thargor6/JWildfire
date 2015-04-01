@@ -431,8 +431,9 @@ public class VariationFuncList {
     
     registerVariationFunc(Rational3Func.class);
     registerVariationFunc(STwinFunc.class);
-    registerVariationFunc(RosoniFunc.class);
     registerVariationFunc(FlowerDbFunc.class);
+    registerVariationFunc(RosoniFunc.class);
+    registerVariationFunc(Glynnia3Func.class);
   }
 
   private static void registerVariationFunc(
