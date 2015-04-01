@@ -428,6 +428,12 @@ public class VariationFuncList {
     registerVariationFunc(WaveBlurWFFunc.class);
     registerVariationFunc(PostHeatFunc.class);
     registerVariationFunc(CPow3Func.class);
+    
+    registerVariationFunc(Rational3Func.class);
+    registerVariationFunc(STwinFunc.class);
+    registerVariationFunc(FlowerDbFunc.class);
+    registerVariationFunc(RosoniFunc.class);
+    registerVariationFunc(Glynnia3Func.class);
   }
 
   private static void registerVariationFunc(

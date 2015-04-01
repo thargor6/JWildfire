@@ -114,8 +114,11 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.script.ui.FormBuilder;
+import org.jwildfire.create.tina.script.ui.ScriptParamsForm;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
@@ -1941,10 +1944,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1);
-  }
-
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     try {
       JFileChooser chooser = new FlameFileChooser(prefs);
@@ -3725,8 +3724,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public void runScript() throws Exception {
-      System.out.println("WARNING: called TinaController.runScript()");
-      jwfScriptController.scriptRunBtn_clicked();
+    System.out.println("WARNING: called TinaController.runScript()");
+    // jwfScriptController.scriptRunBtn_clicked();
+    ScriptRunner script = compileScript();
+    saveUndoPoint();
+    runJWFScript(script);
   }
   
   public void compileScriptButton_clicked() {
@@ -5382,7 +5384,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       scriptRunner.setScriptPath(scriptPath);
       System.out.println("running script: " + scriptRunner.getScriptPath());
       saveUndoPoint();
-      scriptRunner.run(this);
+      runJWFScript(scriptRunner);
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
@@ -5584,4 +5586,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return propVal;
   }
 //    public String getProperty(ScriptRunner runner, String propName, String defaultVal) {
+
+  public void renderFlameButton_actionPerformed(ActionEvent e) {
+    refreshFlameImage(false, false, 1);
+  }
+
+  private void runJWFScript(ScriptRunner pScript) {
+    FormBuilder formBuilder = pScript.createScriptForm();
+    if (formBuilder == null) {
+      pScript.run(this);
+    }
+    else {
+      ScriptParamsForm form = formBuilder.getProduct(tinaFrame, errorHandler);
+      form.showModal(this, pScript);
+    }
+  }
+
+  @Override
+  public ScriptParam getParamByName(String pName) {
+    return new ScriptParam("");
+  }
+
 }
