@@ -50,8 +50,6 @@ public class Glynnia3Func extends VariationFunc {
     double r = rscale * (sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)));
     double d;
 
-    //  if (r >= 1.0) {
-    // if (r > 0.0 && pAffineTP.y > 0.0) {
     if (r > rthresh && pAffineTP.y > ythresh) {
       if (pContext.random() > 0.5) {
         d = dscale * sqrt(r + pAffineTP.x);
@@ -59,7 +57,7 @@ public class Glynnia3Func extends VariationFunc {
           return;
         }
         pVarTP.x += _vvar2 * d;
-        pVarTP.y -= _vvar2 / d * pAffineTP.y; //+= _vvar2 / d * pAffineTP.y;
+        pVarTP.y -= _vvar2 / d * pAffineTP.y; 
       }
       else {
         d = dscale * (r + pAffineTP.x);
@@ -69,7 +67,7 @@ public class Glynnia3Func extends VariationFunc {
         }
         r = pAmount / dx;
         pVarTP.x += r * d;
-        pVarTP.y += r * pAffineTP.y; //-= r * pAffineTP.y; 
+        pVarTP.y += r * pAffineTP.y; 
       }
     }
     else {
