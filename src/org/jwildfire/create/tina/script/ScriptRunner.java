@@ -20,6 +20,7 @@ import java.io.StringReader;
 
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
+import org.jwildfire.create.tina.script.ui.FormBuilder;
 
 public class ScriptRunner {
   public static ScriptRunner compile(String pScript) throws Exception {
@@ -29,5 +30,9 @@ public class ScriptRunner {
 
   public void run(ScriptRunnerEnvironment pEnv) {
 
+  }
+
+  public FormBuilder createScriptForm() {
+    return null;
   }
 }
