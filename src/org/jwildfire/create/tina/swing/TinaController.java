@@ -140,6 +140,9 @@ import org.jwildfire.swing.MainController;
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
 import com.l2fprod.common.util.ResourceManager;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
     DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder {
@@ -204,6 +207,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
   private RGBPalette _lastGradient;
+  
+  static final String SCRIPT_PROPS_FILE = "j-wildfire-scripts.properties";
+  private Properties scriptProps = new Properties();
+  private File scriptPropFile = new File(System.getProperty("user.home"), SCRIPT_PROPS_FILE);
 
   public TinaController(TinaControllerParameter parameterObject) {
     tinaFrame = parameterObject.pTinaFrame;
@@ -743,6 +750,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
+    loadScriptProps();
   }
 
   private void enableLayerControls() {
@@ -3716,11 +3724,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public void runScript() throws Exception {
+    System.out.println("WARNING: called TinaController.runScript()");
+    // jwfScriptController.scriptRunBtn_clicked();
     ScriptRunner script = compileScript();
     saveUndoPoint();
     runJWFScript(script);
   }
-
+  
   public void compileScriptButton_clicked() {
     try {
       compileScript();
@@ -5361,8 +5371,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         script = Tools.readUTF8Textfile(filename);
       }
+      runScript(filename, script);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 
-      ScriptRunner scriptRunner = ScriptRunner.compile(script);
+  public void runScript(String scriptPath, String scriptText) {
+    try  {
+      ScriptRunner scriptRunner = ScriptRunner.compile(scriptText);
+      scriptRunner.setScriptPath(scriptPath);
       saveUndoPoint();
       runJWFScript(scriptRunner);
     }
@@ -5522,7 +5541,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public JProgressBar getRenderProgressBar() {
     return tinaFrame.getRenderProgressBar();
   }
-
+  
   public void renderFlameButton_actionPerformed(ActionEvent e) {
     refreshFlameImage(false, false, 1);
   }
@@ -5542,4 +5561,58 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public ScriptParam getParamByName(String pName) {
     return new ScriptParam("");
   }
+
+  public void loadScriptProps()  {
+    try  {
+      if (scriptPropFile.exists()) {
+        FileInputStream fis = new FileInputStream(scriptPropFile);
+        scriptProps.load(fis);
+        fis.close();
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+  
+  public void saveScriptProps()  {
+    try {
+      FileOutputStream fos = new FileOutputStream(scriptPropFile);
+      scriptProps.store(fos, "JWildfire script properties");
+      fos.close();
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+  
+  @Override
+  public void setScriptProperty(ScriptRunner runner, String propName, String propVal) {
+    String path = runner.getScriptPath();
+    String name = path + "." + propName;
+    String normalizedName = name.replaceAll("[\\s=:]", ".");
+    scriptProps.setProperty(normalizedName, propVal);
+  }
+  
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName) {
+    String path = runner.getScriptPath();
+    String name = path + "." + propName;
+    String normalizedName = name.replaceAll("[\\s=:]", ".");
+    String propVal = scriptProps.getProperty(normalizedName);
+    return propVal;
+  }
+
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal) {
+    String propVal = getScriptProperty(runner, propName);
+    if (propVal == null) {
+      return defaultVal;
+    }
+    else {
+      return propVal;
+    }
+  }
+
+
 }

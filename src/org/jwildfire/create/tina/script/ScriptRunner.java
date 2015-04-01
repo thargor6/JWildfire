@@ -23,6 +23,9 @@ import org.codehaus.janino.Scanner;
 import org.jwildfire.create.tina.script.ui.FormBuilder;
 
 public class ScriptRunner {
+  
+  private String scriptPath;
+  
   public static ScriptRunner compile(String pScript) throws Exception {
     ScriptRunner res = (ScriptRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), ScriptRunner.class, (ClassLoader) null);
     return res;
@@ -31,8 +34,15 @@ public class ScriptRunner {
   public void run(ScriptRunnerEnvironment pEnv) {
 
   }
-
+  
   public FormBuilder createScriptForm() {
     return null;
   }
+  
+  public void setScriptPath(String sPath) {
+      scriptPath = sPath;
+  }
+  
+  public String getScriptPath() { return scriptPath; }
+
 }

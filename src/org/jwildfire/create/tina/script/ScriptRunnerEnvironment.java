@@ -29,6 +29,13 @@ public interface ScriptRunnerEnvironment {
   public Layer getCurrLayer();
 
   public void refreshUI();
-
+  
   public ScriptParam getParamByName(String pName);
+  
+  public void setScriptProperty(ScriptRunner runner, String propName, String propVal);
+  
+  public String getScriptProperty(ScriptRunner runner, String propName);
+  
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal);
+
 }
