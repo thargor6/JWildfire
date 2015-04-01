@@ -5382,7 +5382,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try  {
       ScriptRunner scriptRunner = ScriptRunner.compile(scriptText);
       scriptRunner.setScriptPath(scriptPath);
-      System.out.println("running script: " + scriptRunner.getScriptPath());
       saveUndoPoint();
       runJWFScript(scriptRunner);
     }
@@ -5600,8 +5599,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     String path = runner.getScriptPath();
     String name = path + "." + propName;
     String normalizedName = name.replaceAll("[\\s=:]", ".");
-    System.out.println("path: " + path);
-    System.out.println("norm: " + normalizedName);
     String propVal = scriptProps.getProperty(normalizedName);
     return propVal;
   }
