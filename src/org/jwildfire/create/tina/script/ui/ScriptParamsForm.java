@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.script.ui;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,8 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -47,6 +51,15 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
   public ScriptParamsForm(JInternalFrame pParent, ErrorHandler pErrorHandler) {
     errorHandler = pErrorHandler;
     dialog = new ScriptParamsDialog();
+    Rectangle parentBounds = pParent.getBounds();
+
+    int dialogWidth = 500;
+    int dialogHeight = 400;
+    int x = parentBounds.x + (parentBounds.width - dialogWidth) / 2;
+    int y = parentBounds.y + (parentBounds.height - dialogHeight) / 2;
+
+    dialog.setBounds(x, y, dialogWidth, dialogHeight);
+
     dialog.getRunScriptButton().addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         runScript();
@@ -57,8 +70,8 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
   protected void runScript() {
     try {
       collectFieldValues();
-      if (scriptRunner != null && scriptRunnerEnvironment != null) {
-        scriptRunner.run(scriptRunnerEnvironment);
+      if (scriptRunner != null) {
+        scriptRunner.run(this);
       }
     }
     catch (Exception ex) {
@@ -81,6 +94,21 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
         JWFNumberField numberField = (JWFNumberField) control;
         params.put(numberField.getName(), new ScriptParam(numberField.getDoubleValue()));
       }
+      else if (control instanceof JTextField) {
+        JTextField textField = (JTextField) control;
+        params.put(textField.getName(), new ScriptParam(textField.getText()));
+      }
+      else if (control instanceof JComboBox) {
+        JComboBox comboBox = (JComboBox) control;
+        params.put(comboBox.getName(), new ScriptParam((String) comboBox.getSelectedItem()));
+      }
+      else if (control instanceof JCheckBox) {
+        JCheckBox checkBox = (JCheckBox) control;
+        params.put(checkBox.getName(), new ScriptParam(checkBox.isSelected()));
+      }
+      else {
+        throw new IllegalStateException(control.getClass().getName());
+      }
     }
   }
 
@@ -91,9 +119,9 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
     return panel;
   }
 
-  public void registerNamedControl(JWFNumberField pNumberField) {
-    if (!namedControls.contains(pNumberField)) {
-      namedControls.add(pNumberField);
+  public void registerNamedControl(Object pField) {
+    if (!namedControls.contains(pField)) {
+      namedControls.add(pField);
     }
   }
 
@@ -142,6 +170,5 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
   public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal) {
     return scriptRunnerEnvironment.getScriptProperty(runner, propName, defaultVal);
   }
-  
 
 }

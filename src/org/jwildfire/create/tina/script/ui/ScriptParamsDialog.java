@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
+import org.jwildfire.base.Tools;
+
 public class ScriptParamsDialog extends JDialog {
   private static final long serialVersionUID = 1L;
   private final JPanel contentPanel = new JPanel();
@@ -18,7 +20,8 @@ public class ScriptParamsDialog extends JDialog {
   private JButton runScriptButton;
 
   public ScriptParamsDialog() {
-    setBounds(100, 100, 450, 300);
+    setTitle(Tools.APP_TITLE);
+    setBounds(100, 100, 539, 339);
     getContentPane().setLayout(new BorderLayout());
     contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
     getContentPane().add(contentPanel, BorderLayout.CENTER);

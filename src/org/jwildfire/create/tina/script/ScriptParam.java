@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.script;
 import java.io.Serializable;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 
 public class ScriptParam implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -34,7 +35,11 @@ public class ScriptParam implements Serializable {
       return Integer.valueOf(0);
     }
     else if (value instanceof String) {
-      return Integer.parseInt((String) value);
+      String valStr = (String) value;
+      return valStr.length() > 0 ? Integer.parseInt(valStr) : Integer.valueOf(0);
+    }
+    else if (value instanceof Boolean) {
+      return ((Boolean) value).booleanValue() ? Integer.valueOf(1) : Integer.valueOf(0);
     }
     else if (value instanceof Double) {
       return Integer.valueOf(Tools.FTOI((Double) value));
@@ -49,10 +54,14 @@ public class ScriptParam implements Serializable {
       return Double.valueOf(0.0);
     }
     else if (value instanceof String) {
-      return Double.parseDouble((String) value);
+      String valStr = (String) value;
+      return valStr.length() > 0 ? Double.parseDouble(valStr) : Double.valueOf(0.0);
     }
     else if (value instanceof Integer) {
       return Double.valueOf((Integer) value);
+    }
+    else if (value instanceof Boolean) {
+      return ((Boolean) value).booleanValue() ? Double.valueOf(1.0) : Double.valueOf(0);
     }
     else {
       return (Double) value;
@@ -69,8 +78,30 @@ public class ScriptParam implements Serializable {
     else if (value instanceof Integer) {
       return String.valueOf((Integer) value);
     }
+    else if (value instanceof Boolean) {
+      return String.valueOf(((Boolean) value).booleanValue() ? 1 : 0);
+    }
     else {
       return (String) value;
+    }
+  }
+
+  public Boolean asBoolean() {
+    if (value == null) {
+      return Boolean.FALSE;
+    }
+    else if (value instanceof Double) {
+      return MathLib.fabs(((Double) value).doubleValue() - 1.0) < MathLib.EPSILON ? Boolean.TRUE : Boolean.FALSE;
+    }
+    else if (value instanceof Integer) {
+      return ((Integer) value).intValue() == 1 ? Boolean.TRUE : Boolean.FALSE;
+    }
+    else if (value instanceof String) {
+      String valStr = (String) value;
+      return valStr.length() > 0 && MathLib.fabs((Tools.stringToDouble(valStr)) - 1.0) < MathLib.EPSILON ? Boolean.TRUE : Boolean.FALSE;
+    }
+    else {
+      return (Boolean) value;
     }
   }
 }

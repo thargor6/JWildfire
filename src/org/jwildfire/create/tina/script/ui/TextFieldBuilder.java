@@ -21,54 +21,49 @@ import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import org.jwildfire.create.tina.swing.JWFNumberField;
+public class TextFieldBuilder extends FieldBuilder {
+  private String initialValue = "";
 
-public class NumberFieldBuilder extends FieldBuilder {
-  private Double initialValue = Double.valueOf(0.0);
-
-  protected NumberFieldBuilder(ContainerBuilder pParent) {
+  protected TextFieldBuilder(ContainerBuilder pParent) {
     super(pParent);
   }
 
   @Override
-  public NumberFieldBuilder withCaption(String pCaption) {
+  public TextFieldBuilder withCaption(String pCaption) {
     super.withCaption(pCaption);
     return this;
   }
 
   @Override
-  public NumberFieldBuilder withPropertyName(String pPropertyName) {
+  public TextFieldBuilder withPropertyName(String pPropertyName) {
     super.withPropertyName(pPropertyName);
     return this;
   }
 
-  public ContainerBuilder closeNumberField() {
+  public ContainerBuilder closeTextField() {
     return parent;
   }
 
-  public NumberFieldBuilder withInitialValue(Double pInitialValue) {
+  public TextFieldBuilder withInitialValue(String pInitialValue) {
     initialValue = pInitialValue;
     return this;
   }
 
   @Override
-  public JWFNumberField buildPart(ScriptParamsForm pForm, JPanel pPanel, int xOff, int yOff) {
+  public JTextField buildPart(ScriptParamsForm pForm, JPanel pPanel, int xOff, int yOff) {
     createLabel(pPanel, xOff, yOff);
-    JWFNumberField numberField = new JWFNumberField();
-    numberField.setValueStep(1.0);
-    numberField.setText("");
-    numberField.setSize(new Dimension(EDITFIELD_WIDTH, FIELD_HEIGHT));
-    numberField.setPreferredSize(new Dimension(100, 24));
-    numberField.setLocation(new Point(xOff + LABEL_WIDTH + H_BORDER, yOff));
-    numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-    numberField.setBounds(xOff + LABEL_WIDTH + H_BORDER, yOff, EDITFIELD_WIDTH, FIELD_HEIGHT);
-    numberField.setName(propertyName);
-    if (initialValue != null) {
-      numberField.setValue(initialValue.doubleValue());
-    }
-    pPanel.add(numberField);
-    return numberField;
+    JTextField textField = new JTextField();
+    textField.setText(initialValue);
+    textField.setSize(new Dimension(EDITFIELD_WIDTH, FIELD_HEIGHT));
+    textField.setPreferredSize(new Dimension(100, 24));
+    textField.setLocation(new Point(xOff + LABEL_WIDTH + H_BORDER, yOff));
+    textField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    textField.setBounds(xOff + LABEL_WIDTH + H_BORDER, yOff, EDITFIELD_WIDTH, FIELD_HEIGHT);
+    textField.setName(propertyName);
+    pPanel.add(textField);
+    return textField;
   }
 
 }

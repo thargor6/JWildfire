@@ -21,12 +21,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.jwildfire.create.tina.swing.JWFNumberField;
-
 public class ContainerBuilder {
   private final FormBuilder parent;
   private String caption;
-  private final List<NumberFieldBuilder> editFields = new ArrayList<NumberFieldBuilder>();
+  private final List<FieldBuilder> editFields = new ArrayList<FieldBuilder>();
 
   public ContainerBuilder(FormBuilder pParent) {
     parent = pParent;
@@ -42,15 +40,59 @@ public class ContainerBuilder {
   }
 
   public NumberFieldBuilder openNumberField(String pPropertyName, String pCaption) {
-    NumberFieldBuilder editField = new NumberFieldBuilder(this);
-    editField.withPropertyName(pPropertyName);
-    editField.withCaption(pCaption);
-    editFields.add(editField);
-    return editField;
+    NumberFieldBuilder numberField = new NumberFieldBuilder(this);
+    numberField.withPropertyName(pPropertyName);
+    numberField.withCaption(pCaption);
+    editFields.add(numberField);
+    return numberField;
   }
 
-  public ContainerBuilder withNumberField(String pPropertyName, String pCaption) {
-    openNumberField(pPropertyName, pCaption);
+  public ContainerBuilder withNumberField(String pPropertyName, String pCaption, Double pInitialValue) {
+    NumberFieldBuilder builder = openNumberField(pPropertyName, pCaption);
+    builder.withInitialValue(pInitialValue);
+    return this;
+  }
+
+  public TextFieldBuilder openTextField(String pPropertyName, String pCaption) {
+    TextFieldBuilder textField = new TextFieldBuilder(this);
+    textField.withPropertyName(pPropertyName);
+    textField.withCaption(pCaption);
+    editFields.add(textField);
+    return textField;
+  }
+
+  public ContainerBuilder withTextField(String pPropertyName, String pCaption, String pInitialValue) {
+    TextFieldBuilder builder = openTextField(pPropertyName, pCaption);
+    builder.withInitialValue(pInitialValue);
+    return this;
+  }
+
+  public ComboBoxBuilder openComboBox(String pPropertyName, String pCaption) {
+    ComboBoxBuilder comboBox = new ComboBoxBuilder(this);
+    comboBox.withPropertyName(pPropertyName);
+    comboBox.withCaption(pCaption);
+    editFields.add(comboBox);
+    return comboBox;
+  }
+
+  public ContainerBuilder withComboBox(String pPropertyName, String pCaption, String[] pChoices, String pInitialValue) {
+    ComboBoxBuilder builder = openComboBox(pPropertyName, pCaption);
+    builder.withChoices(pChoices);
+    builder.withInitialValue(pInitialValue);
+    return this;
+  }
+
+  public CheckBoxBuilder openCheckBox(String pPropertyName, String pCaption) {
+    CheckBoxBuilder checkBox = new CheckBoxBuilder(this);
+    checkBox.withPropertyName(pPropertyName);
+    checkBox.withCaption(pCaption);
+    editFields.add(checkBox);
+    return checkBox;
+  }
+
+  public ContainerBuilder withCheckBox(String pPropertyName, String pCaption, Boolean pInitialValue) {
+    CheckBoxBuilder builder = openCheckBox(pPropertyName, pCaption);
+    builder.withInitialValue(pInitialValue);
     return this;
   }
 
@@ -63,16 +105,16 @@ public class ContainerBuilder {
     int boxWidth = 200;
     int boxHeight = 24;
     int border = 8;
+    int innerBorder = 4;
     int x0 = border;
     int y0 = border;
     int colCount = 2;
 
     for (int i = 0; i < editFields.size(); i++) {
-      NumberFieldBuilder editField = editFields.get(i);
-      int x = x0 + (i % colCount) * (boxWidth + border);
-      int y = y0 + (i / colCount) * (boxHeight + border);
-      JWFNumberField numberField = editField.buildPart(pForm, panel, x, y);
-      pForm.registerNamedControl(numberField);
+      FieldBuilder fieldBuilder = editFields.get(i);
+      int x = x0 + (i % colCount) * (boxWidth + innerBorder);
+      int y = y0 + (i / colCount) * (boxHeight + innerBorder);
+      pForm.registerNamedControl(fieldBuilder.buildPart(pForm, panel, x, y));
     }
   }
 }

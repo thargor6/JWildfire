@@ -20,55 +20,50 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import org.jwildfire.create.tina.swing.JWFNumberField;
+public class CheckBoxBuilder extends FieldBuilder {
+  private Boolean initialValue = false;
 
-public class NumberFieldBuilder extends FieldBuilder {
-  private Double initialValue = Double.valueOf(0.0);
-
-  protected NumberFieldBuilder(ContainerBuilder pParent) {
+  protected CheckBoxBuilder(ContainerBuilder pParent) {
     super(pParent);
   }
 
   @Override
-  public NumberFieldBuilder withCaption(String pCaption) {
+  public CheckBoxBuilder withCaption(String pCaption) {
     super.withCaption(pCaption);
     return this;
   }
 
   @Override
-  public NumberFieldBuilder withPropertyName(String pPropertyName) {
+  public CheckBoxBuilder withPropertyName(String pPropertyName) {
     super.withPropertyName(pPropertyName);
     return this;
   }
 
-  public ContainerBuilder closeNumberField() {
+  public ContainerBuilder closeCheckBox() {
     return parent;
   }
 
-  public NumberFieldBuilder withInitialValue(Double pInitialValue) {
+  public CheckBoxBuilder withInitialValue(Boolean pInitialValue) {
     initialValue = pInitialValue;
     return this;
   }
 
-  @Override
-  public JWFNumberField buildPart(ScriptParamsForm pForm, JPanel pPanel, int xOff, int yOff) {
-    createLabel(pPanel, xOff, yOff);
-    JWFNumberField numberField = new JWFNumberField();
-    numberField.setValueStep(1.0);
-    numberField.setText("");
-    numberField.setSize(new Dimension(EDITFIELD_WIDTH, FIELD_HEIGHT));
-    numberField.setPreferredSize(new Dimension(100, 24));
-    numberField.setLocation(new Point(xOff + LABEL_WIDTH + H_BORDER, yOff));
-    numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-    numberField.setBounds(xOff + LABEL_WIDTH + H_BORDER, yOff, EDITFIELD_WIDTH, FIELD_HEIGHT);
-    numberField.setName(propertyName);
+  public JCheckBox buildPart(ScriptParamsForm pForm, JPanel pPanel, int xOff, int yOff) {
+    JCheckBox checkBox = new JCheckBox(caption);
+    checkBox.setSize(new Dimension(CHECKBOX_WIDTH, FIELD_HEIGHT));
+    checkBox.setPreferredSize(new Dimension(100, 24));
+    checkBox.setLocation(new Point(xOff, yOff));
+    checkBox.setFont(new Font("Dialog", Font.PLAIN, 10));
+    checkBox.setBounds(xOff, yOff, CHECKBOX_WIDTH, FIELD_HEIGHT);
+    checkBox.setName(propertyName);
     if (initialValue != null) {
-      numberField.setValue(initialValue.doubleValue());
+      checkBox.setSelected(initialValue);
     }
-    pPanel.add(numberField);
-    return numberField;
+    pPanel.add(checkBox);
+    return checkBox;
   }
 
 }
