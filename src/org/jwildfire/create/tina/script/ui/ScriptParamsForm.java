@@ -127,4 +127,21 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
     ScriptParam res = params.get(pName);
     return res != null ? res : emptyParam;
   }
+
+  @Override
+  public void setScriptProperty(ScriptRunner runner, String propName, String propVal) {
+    scriptRunnerEnvironment.setScriptProperty(runner, propName, propVal);
+  }
+
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName) {
+    return scriptRunnerEnvironment.getScriptProperty(runner, propName);
+  }
+
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal) {
+    return scriptRunnerEnvironment.getScriptProperty(runner, propName, defaultVal);
+  }
+  
+
 }

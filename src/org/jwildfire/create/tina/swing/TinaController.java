@@ -5542,6 +5542,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public JProgressBar getRenderProgressBar() {
     return tinaFrame.getRenderProgressBar();
   }
+  
+  public void renderFlameButton_actionPerformed(ActionEvent e) {
+    refreshFlameImage(false, false, 1);
+  }
+
+  private void runJWFScript(ScriptRunner pScript) {
+    FormBuilder formBuilder = pScript.createScriptForm();
+    if (formBuilder == null) {
+      pScript.run(this);
+    }
+    else {
+      ScriptParamsForm form = formBuilder.getProduct(tinaFrame, errorHandler);
+      form.showModal(this, pScript);
+    }
+  }
+
+  @Override
+  public ScriptParam getParamByName(String pName) {
+    return new ScriptParam("");
+  }
 
   public void loadScriptProps()  {
     try  {
@@ -5585,26 +5605,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     String propVal = scriptProps.getProperty(normalizedName);
     return propVal;
   }
-//    public String getProperty(ScriptRunner runner, String propName, String defaultVal) {
-
-  public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1);
-  }
-
-  private void runJWFScript(ScriptRunner pScript) {
-    FormBuilder formBuilder = pScript.createScriptForm();
-    if (formBuilder == null) {
-      pScript.run(this);
-    }
-    else {
-      ScriptParamsForm form = formBuilder.getProduct(tinaFrame, errorHandler);
-      form.showModal(this, pScript);
-    }
-  }
 
   @Override
-  public ScriptParam getParamByName(String pName) {
-    return new ScriptParam("");
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal) {
+    String propVal = getScriptProperty(runner, propName);
+    if (propVal == null) {
+      return defaultVal;
+    }
+    else {
+      return propVal;
+    }
   }
+
 
 }
