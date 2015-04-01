@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import java.io.Serializable;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.mathlib.MathLib;
@@ -266,7 +267,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     gammaThreshold = 0.01;
     vibrancy = 1;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
-    whiteLevel = 200.0;
+    whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
   }
 

@@ -401,6 +401,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.batchResolutionProfileCmb = parameterObject.pBatchResolutionProfileCmb;
     data.interactiveResolutionProfileCmb = parameterObject.pInteractiveResolutionProfileCmb;
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
+    data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
     data.transformationsTable = parameterObject.pTransformationsTable;
     data.affineC00REd = parameterObject.pAffineC00REd;
     data.affineC01REd = parameterObject.pAffineC01REd;
@@ -615,7 +616,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     rootTabbedPane = parameterObject.pRootTabbedPane;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
-    data.faqPane = parameterObject.pFAQPane;
 
     data.undoButton = parameterObject.pUndoButton;
     data.redoButton = parameterObject.pRedoButton;
@@ -722,7 +722,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     initHelpPane();
     initApophysisHintsPane();
-    initFAQPane();
 
     refreshPaletteColorsTable();
     getBatchRendererController().refreshRenderBatchJobsTable();
@@ -738,6 +737,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, null);
     refreshQualityProfileCmb(data.qualityProfileCmb, null);
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
+    refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
   }
@@ -797,29 +797,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.helpPane.setText(content.toString());
       data.helpPane.setSelectionStart(0);
       data.helpPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  private void initFAQPane() {
-    data.faqPane.setContentType("text/html");
-    try {
-      InputStream is = this.getClass().getResourceAsStream("FAQ.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
-
-      data.faqPane.setText(content.toString());
-      data.faqPane.setSelectionStart(0);
-      data.faqPane.setSelectionEnd(0);
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -3364,7 +3341,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void flamePanel_mouseClicked(MouseEvent e) {
     if (e.getClickCount() == 2) {
-      renderFlameButton_actionPerformed(null);
+      flamePanel_doubleClicked();
     }
     else if (e.getClickCount() == 1) {
       Flame flame = getCurrFlame();
@@ -3402,6 +3379,32 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
       }
 
+    }
+  }
+
+  private void flamePanel_doubleClicked() {
+    switch (prefs.getTinaEditorDoubleClickAction()) {
+      case ACTIVATE_TRIANGLE_EDIT:
+        if (!data.mouseTransformMoveTrianglesButton.isSelected()) {
+          data.mouseTransformMoveTrianglesButton.setSelected(true);
+          mouseTransformMoveTrianglesButton_clicked();
+        }
+        break;
+      case SWITCH_TRIANGLE_CAM_EDIT:
+        if (data.mouseTransformMoveTrianglesButton.isSelected()) {
+          data.mouseTransformEditViewButton.setSelected(true);
+          mouseTransformViewButton_clicked();
+        }
+        else {
+          data.mouseTransformMoveTrianglesButton.setSelected(true);
+          mouseTransformMoveTrianglesButton_clicked();
+        }
+        break;
+      case RENDER_FLAME:
+        renderFlameButton_actionPerformed(null);
+        break;
+      case NONE:
+        break;
     }
   }
 
@@ -3943,6 +3946,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
+        refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, profile);
         qualityProfileCmb_changed();
       }
       catch (Throwable ex) {

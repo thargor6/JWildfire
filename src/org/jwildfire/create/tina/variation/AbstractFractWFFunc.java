@@ -174,6 +174,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   }
 
   public void transformIterate(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    pVarTP.doHide = false;
     Iterator iterator = getIterator();
     double x0 = 0.0, y0 = 0.0;
     int iterCount = 0;

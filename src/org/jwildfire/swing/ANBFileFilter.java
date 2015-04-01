@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,20 +14,36 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.swing;
 
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import java.io.File;
 
-public final class TransformationPrepareVariationsStep extends AbstractTransformationStep {
-  private static final long serialVersionUID = 1L;
+import javax.swing.filechooser.FileFilter;
 
-  public TransformationPrepareVariationsStep(XForm pXForm) {
-    super(pXForm);
+import org.jwildfire.base.Tools;
+
+public class ANBFileFilter extends FileFilter {
+
+  @Override
+  public boolean accept(File pFile) {
+    if (pFile.isDirectory())
+      return true;
+    String extension = getExtension(pFile);
+    return (extension != null) && (extension.equals(Tools.FILEEXT_ANB));
   }
 
   @Override
-  public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    pVarT.doHide = pAffineT.doHide;
+  public String getDescription() {
+    return "ANB (PD Howler AnimBrush) files";
+  }
+
+  private String getExtension(File pFile) {
+    String name = pFile.getName();
+    int idx = name.lastIndexOf('.');
+    if (idx > 0 && idx < name.length() - 1) {
+      return name.substring(idx + 1).toLowerCase();
+    }
+    return null;
   }
 
 }

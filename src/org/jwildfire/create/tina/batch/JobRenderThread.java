@@ -97,17 +97,22 @@ public class JobRenderThread implements Runnable {
                 renderer.setProgressUpdater(controller.getJobProgressUpdater());
                 long t0 = Calendar.getInstance().getTimeInMillis();
                 RenderedFlame res = renderer.renderFlame(info);
-                long t1 = Calendar.getInstance().getTimeInMillis();
-                job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-                new ImageWriter().saveImage(res.getImage(), primaryFilename);
-                if (res.getHDRImage() != null) {
-                  new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
-                }
-                if (res.getHDRIntensityMap() != null) {
-                  new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
+                if (!cancelSignalled) {
+                  long t1 = Calendar.getInstance().getTimeInMillis();
+                  job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                  new ImageWriter().saveImage(res.getImage(), primaryFilename);
+                  if (res.getHDRImage() != null) {
+                    new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
+                  }
+                  if (res.getHDRIntensityMap() != null) {
+                    new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
+                  }
                 }
               }
-              job.setFinished(true);
+
+              if (!cancelSignalled) {
+                job.setFinished(true);
+              }
               if (Prefs.getPrefs().isTinaFreeCacheInBatchRenderer()) {
                 RessourceManager.clearAll();
                 System.gc();
@@ -133,7 +138,7 @@ public class JobRenderThread implements Runnable {
                 }
               }
               catch (Throwable ex) {
-                //                ex.printStackTrace();
+                // ex.printStackTrace();
               }
             }
             finally {
@@ -143,7 +148,7 @@ public class JobRenderThread implements Runnable {
           }
           catch (Throwable ex) {
             job.setLastError(ex);
-            //            ex.printStackTrace();
+            // ex.printStackTrace();
           }
         }
         try {
@@ -151,7 +156,7 @@ public class JobRenderThread implements Runnable {
           controller.getJobProgressBar().setValue(0);
         }
         catch (Throwable ex) {
-          //          ex.printStackTrace();
+          // ex.printStackTrace();
         }
       }
       catch (Throwable ex) {

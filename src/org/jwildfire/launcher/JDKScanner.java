@@ -28,7 +28,8 @@ public class JDKScanner {
   public void scan() {
     jdks.clear();
     currentVersionIdx = -1;
-
+    String osname = System.getProperty("os.name");
+    if (osname.startsWith("Windows")) {
     try {
       {
         List<String> keys = readStringSubKeys(HKEY_LOCAL_MACHINE, "SOFTWARE\\Javasoft\\Java Runtime Environment");
@@ -65,6 +66,7 @@ public class JDKScanner {
       catch (Throwable ex) {
 
       }
+    }
     }
 
     if (jdks.size() == 0) {
@@ -135,6 +137,9 @@ public class JDKScanner {
   }
 
   static {
+      
+    String osname = System.getProperty("os.name");
+    if (osname.startsWith("Windows")) {
     try {
       regOpenKey = userClass.getDeclaredMethod("WindowsRegOpenKey", new Class[] { int.class, byte[].class, int.class });
       regOpenKey.setAccessible(true);
@@ -149,6 +154,7 @@ public class JDKScanner {
     }
     catch (Exception e) {
       e.printStackTrace();
+    }
     }
   }
 

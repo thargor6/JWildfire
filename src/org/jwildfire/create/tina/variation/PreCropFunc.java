@@ -54,6 +54,7 @@ public class PreCropFunc extends VariationFunc {
       return;
     }
     else {
+      pAffineTP.doHide = false;
       if (x < xmin)
         x = xmin + pContext.random() * w;
       else if (x > xmax)
