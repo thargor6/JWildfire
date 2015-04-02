@@ -5547,7 +5547,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private void runJWFScript(ScriptRunner pScript) {
-    FormBuilder formBuilder = pScript.createScriptForm();
+    FormBuilder formBuilder = pScript.createScriptForm(this);
     if (formBuilder == null) {
       pScript.run(this);
     }
