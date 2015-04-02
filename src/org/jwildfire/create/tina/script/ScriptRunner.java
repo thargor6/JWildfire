@@ -35,7 +35,7 @@ public class ScriptRunner {
 
   }
   
-  public FormBuilder createScriptForm() {
+  public FormBuilder createScriptForm(ScriptRunnerEnvironment pEnv) {
     return null;
   }
   
