@@ -435,6 +435,7 @@ public class VariationFuncList {
     registerVariationFunc(RosoniFunc.class);
     registerVariationFunc(Glynnia3Func.class);
     registerVariationFunc(MaskFunc.class);
+    registerVariationFunc(FDiscFunc.class);
 
   }
 
