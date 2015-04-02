@@ -28,7 +28,6 @@ public final class TransformationPrepareVariationsStep extends AbstractTransform
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pVarT.doHide = pAffineT.doHide;
-    pVarT.tag = pAffineT.tag;
   }
 
 }

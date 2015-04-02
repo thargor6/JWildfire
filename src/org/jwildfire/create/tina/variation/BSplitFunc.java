@@ -45,6 +45,7 @@ public class BSplitFunc extends VariationFunc {
       pVarTP.doHide = true;
     }
     else {
+      pVarTP.doHide = false;
       pVarTP.x += pAmount / tan(pAffineTP.x + shiftx) * cos(pAffineTP.y + shifty);
       pVarTP.y += pAmount / sin(pAffineTP.x + shiftx) * (-1 * pAffineTP.y + shifty);
     }

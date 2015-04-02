@@ -27,8 +27,10 @@ import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MORPH_TYPE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_LENGTH;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_MOTIONBLUR_TIMESTEP;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_NAME;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_QUALITY;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_GLOBAL;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SCRIPT_XFORM;
+import static org.jwildfire.create.tina.io.FlameMovieWriter.ATTR_SEQUENCE_OUTPUT_TYPE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE;
 import static org.jwildfire.create.tina.io.FlameMovieWriter.TAG_JWF_MOVIE_PART;
 
@@ -40,6 +42,7 @@ import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.animate.FlameMoviePart;
 import org.jwildfire.create.tina.animate.GlobalScript;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
+import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScript;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.Flame;
@@ -187,6 +190,17 @@ public class FlameMovieReader {
     }
     if ((hs = atts.get(ATTR_FPS)) != null) {
       pMovie.setFramesPerSecond(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_QUALITY)) != null) {
+      pMovie.setQuality(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SEQUENCE_OUTPUT_TYPE)) != null) {
+      try {
+        pMovie.setSequenceOutputType(SequenceOutputType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
       pMovie.setMotionBlurLength(Integer.parseInt(hs));

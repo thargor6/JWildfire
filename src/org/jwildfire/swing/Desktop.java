@@ -781,7 +781,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem getScriptMenuItem() {
     if (scriptMenuItem == null) {
       scriptMenuItem = new JCheckBoxMenuItem();
-      scriptMenuItem.setText("Script");
+      scriptMenuItem.setText("Operators Script");
       scriptMenuItem.setSelected(true);
       scriptMenuItem
           .addActionListener(new java.awt.event.ActionListener() {
@@ -2218,6 +2218,7 @@ public class Desktop extends JApplet {
     }
     try {
       prefs.saveToFromFile();
+      tinaController.saveScriptProps();
     }
     catch (Exception ex) {
       ex.printStackTrace();

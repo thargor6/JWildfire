@@ -69,6 +69,7 @@ public class PostCircleCropFunc extends VariationFunc {
     double s = sin(ang);
     double c = cos(ang);
 
+    pVarTP.doHide = false;
     if (cr0 && esc) {
       //      pVarTP.x = pVarTP.y = 0;
       pVarTP.doHide = true;
