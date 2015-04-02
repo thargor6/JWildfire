@@ -869,6 +869,9 @@ public class AbstractFlameReader {
           if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
             sb.append(c);
           }
+          else if (c >= 'a' && c <= 'z') {
+            sb.append(Character.toUpperCase(c));
+          }
         }
         hs = sb.toString();
         if ((hs.length() % 6) != 0)

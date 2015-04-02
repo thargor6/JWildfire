@@ -28,6 +28,7 @@ public final class TransformationInitStep extends AbstractTransformationStep {
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
+    pAffineT.doHide = pSrcPoint.doHide;
     pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
     pAffineT.modGamma = pSrcPoint.modGamma * xform.modGamma1 + xform.modGamma2;
     pAffineT.modContrast = pSrcPoint.modContrast * xform.modContrast1 + xform.modContrast2;

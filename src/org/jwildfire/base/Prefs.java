@@ -26,6 +26,7 @@ import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.LookAndFeelType;
@@ -102,6 +103,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
+  public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
+  public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
+
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.2";
@@ -148,7 +152,7 @@ public class Prefs extends ManagedObject {
   private String soundFilePath = null;
   private String lastInputSoundFilePath = null;
 
-  @Property(description = "Movie flames drawer", category = PropertyCategory.GENERAL)
+  @Property(description = "Movie flames drawer", category = PropertyCategory.TINA)
   private String movieFlamesPath = null;
   private String lastOutputMovieFlamesPath = null;
 
@@ -217,8 +221,14 @@ public class Prefs extends ManagedObject {
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
 
+  @Property(description = "Action which is performed when you double-click at the editor-panel", category = PropertyCategory.TINA, editorClass = EditorDoubleClickActionTypeEditor.class)
+  private EditorDoubleClickActionType tinaEditorDoubleClickAction = EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT;
+
   @Property(description = "Grid size (distance between two grid-lines) in the editor", category = PropertyCategory.TINA)
   private double tinaEditorGridSize = 0.5;
+
+  @Property(description = "Default Fade-to-white-level of new generated flames", category = PropertyCategory.TINA)
+  private double tinaDefaultFadeToWhiteLevel = 220.0;
 
   @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
   private double tinaOverwriteMotionBlurTimeStep = 0.0;
@@ -325,6 +335,13 @@ public class Prefs extends ManagedObject {
     public RasterPointPrecisionEditor() {
       super();
       setAvailableValues(new RasterPointPrecision[] { RasterPointPrecision.DOUBLE_PRECISION, RasterPointPrecision.SINGLE_PRECISION });
+    }
+  }
+
+  public static class EditorDoubleClickActionTypeEditor extends ComboBoxPropertyEditor {
+    public EditorDoubleClickActionTypeEditor() {
+      super();
+      setAvailableValues(new EditorDoubleClickActionType[] { EditorDoubleClickActionType.ACTIVATE_TRIANGLE_EDIT, EditorDoubleClickActionType.RENDER_FLAME, EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT, EditorDoubleClickActionType.NONE });
     }
   }
 
@@ -655,6 +672,9 @@ public class Prefs extends ManagedObject {
     tinaMutaGenMutationTypeHoriz2 = pSrc.tinaMutaGenMutationTypeHoriz2;
     tinaMutaGenMutationTypeVert1 = pSrc.tinaMutaGenMutationTypeVert1;
     tinaMutaGenMutationTypeVert2 = pSrc.tinaMutaGenMutationTypeVert2;
+
+    tinaDefaultFadeToWhiteLevel = pSrc.tinaDefaultFadeToWhiteLevel;
+    tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1255,6 +1275,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaOverwriteMotionBlurLength(int pTinaOverwriteMotionBlurLength) {
     tinaOverwriteMotionBlurLength = pTinaOverwriteMotionBlurLength;
+  }
+
+  public EditorDoubleClickActionType getTinaEditorDoubleClickAction() {
+    return tinaEditorDoubleClickAction;
+  }
+
+  public void setTinaEditorDoubleClickAction(EditorDoubleClickActionType pTinaEditorDoubleClickAction) {
+    tinaEditorDoubleClickAction = pTinaEditorDoubleClickAction;
+  }
+
+  public double getTinaDefaultFadeToWhiteLevel() {
+    return tinaDefaultFadeToWhiteLevel;
+  }
+
+  public void setTinaDefaultFadeToWhiteLevel(double pTinaDefaultFadeToWhiteLevel) {
+    tinaDefaultFadeToWhiteLevel = pTinaDefaultFadeToWhiteLevel;
   }
 
 }
