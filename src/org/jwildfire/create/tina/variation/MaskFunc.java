@@ -22,33 +22,39 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 /**
- * Mask Apophysis plugin by Raykoid666
- * ported to JWildfire variation by CozyG
- *   (used chronologicaldot's JWildfire variation BSplitFunc.java as initial template)
+ * port of Mask Apophysis plugin
+ * original Apophysis plugin by Raykoid666
+ * ported to JWildfire variation by CozyG (and enhanced with several user-adjustable parameters)
+ *   [used chronologicaldot's JWildfire variation BSplitFunc.java as initial template]
  */
 public class MaskFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XSHIFT = "xshift";
   private static final String PARAM_YSHIFT = "yshift";
-  private static final String[] paramNames = { PARAM_XSHIFT, PARAM_YSHIFT };
+  private static final String PARAM_USHIFT = "ushift";
+  private static final String PARAM_XSCALE = "xscale";
+  private static final String PARAM_YSCALE = "yscale";
+  private static final String[] paramNames = { PARAM_XSHIFT, PARAM_YSHIFT, PARAM_USHIFT, PARAM_XSCALE, PARAM_YSCALE };
 
   double xshift = 0.0;
   double yshift = 0.0;
+  double ushift = 1.0;
+  double xscale = 1.0;
+  double yscale = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    double sumsq = pAffineTP.getPrecalcSumsq();
     // Prevent divide by zero error
-    if (pAffineTP.x + xshift == 0 || pAffineTP.x + xshift == M_PI) {
+    if (sumsq == 0) {
       pVarTP.doHide = true;
     }
     else {
-      // d = FTx*FTx+FTy*FTy;
-      // FPx = (VVAR/d)*sin(FTx)*(cosh(FTy)+1)*sqr(sin(FTx));
-      // FPy = (VVAR/d)*cos(FTx)*(cosh(FTy)+1)*sqr(sin(FTx));
-      double d = pAffineTP.getPrecalcSumsq();
-      pVarTP.x = (pAmount / d) * sin(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
-      pVarTP.y += (pAmount / d) * cos(pAffineTP.x + xshift) * (cosh(pAffineTP.y + yshift) + 1) * sqr(sin(pAffineTP.x + xshift)); 
+      double xfactor = xscale * pAffineTP.x + xshift;
+      double yfactor = yscale * pAffineTP.y + yshift;
+      pVarTP.x = (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor)); 
+      pVarTP.y += (pAmount / sumsq) * cos(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor)); 
     }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -67,7 +73,7 @@ public class MaskFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xshift, yshift };
+    return new Object[] { xshift, yshift, ushift, xscale, yscale };
   }
 
   @Override
@@ -77,6 +83,15 @@ public class MaskFunc extends VariationFunc {
     }
     else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
       yshift = pValue;
+    }
+    else if (pName.equalsIgnoreCase(PARAM_USHIFT)) {
+      ushift = pValue;
+    }
+    else if (pName.equalsIgnoreCase(PARAM_XSCALE)) {
+      xscale = pValue;
+    }
+    else if (pName.equalsIgnoreCase(PARAM_YSCALE)) {
+      yscale = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
