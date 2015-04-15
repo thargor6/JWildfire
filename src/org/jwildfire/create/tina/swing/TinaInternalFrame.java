@@ -7266,6 +7266,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
+      previewEastDefaultPanel.add(getExportToChaosBtn());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
       editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -10859,6 +10860,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider slider_7;
   private JComboBox swfAnimatorQualityProfileCmb;
   private JComboBox swfAnimatorOutputTypeCmb;
+  private JButton exportToChaosBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23170,6 +23172,22 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getSwfAnimatorOutputTypeCmb() {
     return swfAnimatorOutputTypeCmb;
+  }
+
+  private JButton getExportToChaosBtn() {
+    if (exportToChaosBtn == null) {
+      exportToChaosBtn = new JButton();
+      exportToChaosBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.exportToChaotica();
+        }
+      });
+      exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and put it into Clipboard");
+      exportToChaosBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/chaotica_jw.png")));
+      exportToChaosBtn.setPreferredSize(new Dimension(42, 24));
+      exportToChaosBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return exportToChaosBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
