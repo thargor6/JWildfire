@@ -82,6 +82,7 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_INNER_STRETCH = "inner_stretch";
   private static final String PARAM_OUTER_STRETCH = "outer_stretch";
   private static final String PARAM_STRETCH_RATIO = "stretch_ratio";
+  private static final String PARAM_STRETCH_SPLIT = "stretch_split";
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_FILL = "fill";
   private static final String PARAM_CYCLE_OFFSET = "cycle_offset";
@@ -91,7 +92,7 @@ public class RhodoneaFunc extends VariationFunc {
 
 
   private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_OFFSET, 
-                                               PARAM_STRETCH_MODE, PARAM_INNER_STRETCH, PARAM_OUTER_STRETCH, PARAM_STRETCH_RATIO, 
+                                               PARAM_STRETCH_MODE, PARAM_INNER_STRETCH, PARAM_OUTER_STRETCH, PARAM_STRETCH_RATIO, PARAM_STRETCH_SPLIT, 
                                                PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION, 
                                                PARAM_FILL  };
 
@@ -102,10 +103,11 @@ public class RhodoneaFunc extends VariationFunc {
   private double inner_stretch = 0; // deform based on original x/y
   private double outer_stretch = 0; // deform based on original x/y
   private double stretchRatio = 1; // how much stretch applies to x relative to y
-  private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically
-  private double cycle_offset = 0.5;
-  private double metacycle_expansion = 0;
-  private double metacycles = 1;
+  private double stretchSplit = 1; // scaling of input point radius to determine inner/outer threshold
+  private double cyclesParam = 0;  // number of cycles (roughly circle loops?), if set to 0 then number of cycles is calculated automatically to close curve (if possible)
+  private double cycle_offset = 0;
+  private double metacycle_expansion = 0;  // expansion factor for each metacycle
+  private double metacycles = 1; // if cycles is calculated automatically to close the curve, metacycles is number of times to loop over closed curve
   private double fill = 0;
 
   private double kn, kd;
@@ -150,8 +152,6 @@ public class RhodoneaFunc extends VariationFunc {
         kd = kd / gcd;
       }
 
-      // kn and kd are both integers
-      //
       // paraphrased from http://www.encyclopediaofmath.org/index.php/Roses_%28curves%29:
       //    If kn and kd are relatively prime, then the rose consists of 2*kn petals if either kn or kd are even, and kn petals if both kn and kd are odd
       //
@@ -201,7 +201,7 @@ public class RhodoneaFunc extends VariationFunc {
     */
 
     else {
-      //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] irrational) but haven't 
+      //     if one or both of kn and kd are non-integers, then the above may still be true (k may still be [effectively] rational) but haven't 
       //          figured out a way to determine this.
       //    could restrict kn and kd to integers to simplify, but that would exclude a huge space of interesting patterns
       //    could set cycles extremely high, but if k is truly irrational this will just approarch a uniform distribution across a circle, 
@@ -239,11 +239,17 @@ public class RhodoneaFunc extends VariationFunc {
         y = cos(kt)sin(t)
     */
     // double rin = pAffineTP.getPrecalcSqrt(); // polar coordinate radius of incoming point
-    double rin = sqrt((pAffineTP.x  * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
-    // atan2 range is [-PI, PI], so rtheta covers 2PI, or 1 cycle
+    double rin = stretchSplit * sqrt((pAffineTP.x  * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
+    // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
     double tin = atan2(pAffineTP.y, pAffineTP.x); // polar coordinate angle (theta in radians) of incoming point
+    // double tin = atan2(pAffineTP.y, pAffineTP.x) + (cycle_offset * 2 * M_PI); // polar coordinate angle (theta in radians) of incoming point
     // double theta = atan2(pAffineTP.x, pAffineTP.y) + (cycle_offset * 2 * M_PI);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
-    double t = cycles * (tin + (cycle_offset * 2 * M_PI));  // angle of rose curve
+    double tc = cycles * tin;
+    double t = tc + (cycles * cycle_offset * 2 * M_PI);   // angle of rose curve
+    //    double t = cycles * (tin + (cycle_offset * 2 * M_PI));  
+
+    // double t = (cycles * tin) + (cycle_offset * 2 * M_PI);  // angle of rose curve
+    // double t = cycles * tin;
     double r = cos(k * t) + offset;  // radius of rose curve 
     // double r = sin(k * t) + offset;
     if (fill != 0) { 
@@ -251,7 +257,7 @@ public class RhodoneaFunc extends VariationFunc {
     }
     double x = r * cos(t);
     double y = r * sin(t);
-    double expansion = floor(t/(cycles_to_close * 2 * M_PI));
+    double expansion = floor(tc/(cycles_to_close * 2 * M_PI));
     double adjustedAmount = pAmount + (expansion * metacycle_expansion);
     // double adjustedAmount = pAmount + (floor(t/(cycles_to_close)) * 2 * M_PI * metacycle_expansion);
     // double adjustedAmount = pAmount;
@@ -372,7 +378,7 @@ public class RhodoneaFunc extends VariationFunc {
   @Override
   public Object[] getParameterValues() {
     return new Object[] { knumer, kdenom, offset, 
-                          stretch_mode, inner_stretch, outer_stretch, stretchRatio, 
+                          stretch_mode, inner_stretch, outer_stretch, stretchRatio, stretchSplit, 
                           cyclesParam, cycle_offset, metacycles, metacycle_expansion, fill };
   }
 
@@ -392,6 +398,8 @@ public class RhodoneaFunc extends VariationFunc {
       outer_stretch = pValue;
     else if (PARAM_STRETCH_RATIO.equalsIgnoreCase(pName))
       stretchRatio = pValue;
+    else if (PARAM_STRETCH_SPLIT.equalsIgnoreCase(pName))
+      stretchSplit = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))
       cyclesParam = pValue;
     else if (PARAM_CYCLE_OFFSET.equalsIgnoreCase(pName))
