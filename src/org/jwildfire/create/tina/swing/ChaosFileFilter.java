@@ -16,41 +16,42 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.Dimension;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.filechooser.FileFilter;
 
-import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.swing.DefaultFileChooser;
 
-public class FlameFileChooser extends DefaultFileChooser {
-  private final String defaultExt;
-  private static final long serialVersionUID = 1L;
+public class ChaosFileFilter extends FileFilter {
+  private Collection formats;
+
+  public ChaosFileFilter() {
+    formats = Arrays.asList(new String[] { Tools.FILEEXT_CHAOS });
+  }
 
   @Override
-  protected String getDefaultExtension() {
-    return defaultExt;
+  public boolean accept(File pFile) {
+    if (pFile.isDirectory()) {
+      return true;
+    }
+    String extension = getExtension(pFile);
+    return formats.contains(extension);
   }
 
-  public FlameFileChooser(Prefs pPrefs) {
-    this(pPrefs, false);
+  @Override
+  public String getDescription() {
+    return "Chaotica world files (*.chaos)";
   }
 
-  public FlameFileChooser(Prefs pPrefs, boolean pWithChaos) {
-    setPreferredSize(new Dimension(960, 600));
-    FileFilter filter = new FlameFileFilter();
-    addChoosableFileFilter(filter);
-    if (pWithChaos) {
-      addChoosableFileFilter(new ChaosFileFilter());
-      defaultExt = null;
+  private String getExtension(File pFile) {
+    String name = pFile.getName();
+    int idx = name.lastIndexOf('.');
+    if (idx > 0 && idx < name.length() - 1) {
+      return name.substring(idx + 1).toLowerCase();
     }
-    else {
-      defaultExt = Tools.FILEEXT_FLAME;
-    }
-    setFileFilter(filter);
-    setAcceptAllFileFilterUsed(false);
-    setAccessory(new FlameFilePreview(this, pPrefs));
+    return null;
   }
 
 }

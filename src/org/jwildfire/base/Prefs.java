@@ -128,6 +128,11 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
 
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DISABLED = "tina.integration.chaotica.disabled";
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DRAWER = "tina.integration.chaotica.drawer";
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE = "tina.integration.chaotica.executable";
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER = "tina.integration.chaotica.flame_drawer";
+
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
@@ -295,6 +300,18 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Create a vertical toolbar to hold macro-buttons instead of the horizontal one (restart of program after change required)", category = PropertyCategory.TINA)
   private boolean tinaMacroButtonsVertical = false;
+
+  @Property(description = "Disable the Chaotica-support inside the flame-module", category = PropertyCategory.TINA)
+  private boolean tinaIntegrationChaoticaDisabled = false;
+
+  @Property(description = "Installation drawer where the Chaotica-software resides", category = PropertyCategory.TINA)
+  private String tinaIntegrationChaoticaDrawer = "C:\\Program Files\\Chaotica";
+
+  @Property(description = "Executable which is invoked when launching Chaotica from with the flame-editor (typically chaotica.exe under Windows)", category = PropertyCategory.TINA)
+  private String tinaIntegrationChaoticaExecutable = "chaotica.exe";
+
+  @Property(description = "Drawer to store flames in the Chaotica-format", category = PropertyCategory.TINA)
+  private String tinaIntegrationChaoticaFlameDrawer = "C:\\Program Files\\Chaotica\\JWF-flames";
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
@@ -675,6 +692,11 @@ public class Prefs extends ManagedObject {
 
     tinaDefaultFadeToWhiteLevel = pSrc.tinaDefaultFadeToWhiteLevel;
     tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
+
+    tinaIntegrationChaoticaDisabled = pSrc.tinaIntegrationChaoticaDisabled;
+    tinaIntegrationChaoticaDrawer = pSrc.tinaIntegrationChaoticaDrawer;
+    tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
+    tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1291,6 +1313,38 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultFadeToWhiteLevel(double pTinaDefaultFadeToWhiteLevel) {
     tinaDefaultFadeToWhiteLevel = pTinaDefaultFadeToWhiteLevel;
+  }
+
+  public boolean isTinaIntegrationChaoticaDisabled() {
+    return tinaIntegrationChaoticaDisabled;
+  }
+
+  public void setTinaIntegrationChaoticaDisabled(boolean pTinaIntegrationChaoticaDisabled) {
+    tinaIntegrationChaoticaDisabled = pTinaIntegrationChaoticaDisabled;
+  }
+
+  public String getTinaIntegrationChaoticaDrawer() {
+    return tinaIntegrationChaoticaDrawer;
+  }
+
+  public void setTinaIntegrationChaoticaDrawer(String pTinaIntegrationChaoticaDrawer) {
+    tinaIntegrationChaoticaDrawer = pTinaIntegrationChaoticaDrawer;
+  }
+
+  public String getTinaIntegrationChaoticaExecutable() {
+    return tinaIntegrationChaoticaExecutable;
+  }
+
+  public void setTinaIntegrationChaoticaExecutable(String pTinaIntegrationChaoticaExecutable) {
+    tinaIntegrationChaoticaExecutable = pTinaIntegrationChaoticaExecutable;
+  }
+
+  public String getTinaIntegrationChaoticaFlameDrawer() {
+    return tinaIntegrationChaoticaFlameDrawer;
+  }
+
+  public void setTinaIntegrationChaoticaFlameDrawer(String pTinaIntegrationChaoticaFlameDrawer) {
+    tinaIntegrationChaoticaFlameDrawer = pTinaIntegrationChaoticaFlameDrawer;
   }
 
 }

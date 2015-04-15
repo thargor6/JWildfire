@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.XForm;
 
 public class XFormTransformService {
 
-  private static Matrix3x3 multiply(Matrix3x3 pMatrix1, Matrix3x3 pMatrix2) {
+  public static Matrix3x3 multiply(Matrix3x3 pMatrix1, Matrix3x3 pMatrix2) {
     Matrix3x3 res = new Matrix3x3();
     res.val[0][0] = pMatrix1.val[0][0] * pMatrix2.val[0][0] + pMatrix1.val[0][1] * pMatrix2.val[1][0] + pMatrix1.val[0][2] * pMatrix2.val[2][0];
     res.val[0][1] = pMatrix1.val[0][0] * pMatrix2.val[0][1] + pMatrix1.val[0][1] * pMatrix2.val[1][1] + pMatrix1.val[0][2] * pMatrix2.val[2][1];
