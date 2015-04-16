@@ -1423,4 +1423,52 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.owner = owner;
   }
 
+  public MotionCurve getXYCoeff00Curve() {
+    return xyCoeff00Curve;
+  }
+
+  public MotionCurve getXYCoeff01Curve() {
+    return xyCoeff01Curve;
+  }
+
+  public MotionCurve getXYCoeff10Curve() {
+    return xyCoeff10Curve;
+  }
+
+  public MotionCurve getXYCoeff11Curve() {
+    return xyCoeff11Curve;
+  }
+
+  public MotionCurve getXYCoeff20Curve() {
+    return xyCoeff20Curve;
+  }
+
+  public MotionCurve getXYCoeff21Curve() {
+    return xyCoeff21Curve;
+  }
+
+  public MotionCurve getXYPostCoeff00Curve() {
+    return xyPostCoeff00Curve;
+  }
+
+  public MotionCurve getXYPostCoeff01Curve() {
+    return xyPostCoeff01Curve;
+  }
+
+  public MotionCurve getXYPostCoeff10Curve() {
+    return xyPostCoeff10Curve;
+  }
+
+  public MotionCurve getXYPostCoeff11Curve() {
+    return xyPostCoeff11Curve;
+  }
+
+  public MotionCurve getXYPostCoeff20Curve() {
+    return xyPostCoeff20Curve;
+  }
+
+  public MotionCurve getXYPostCoeff21Curve() {
+    return xyPostCoeff21Curve;
+  }
+
 }

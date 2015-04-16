@@ -225,4 +225,8 @@ public class Variation implements Assignable<Variation>, Serializable {
     return res;
   }
 
+  public MotionCurve getAmountCurve() {
+    return amountCurve;
+  }
+
 }

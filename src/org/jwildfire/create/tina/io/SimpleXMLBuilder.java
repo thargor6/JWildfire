@@ -16,12 +16,18 @@
 */
 package org.jwildfire.create.tina.io;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SimpleXMLBuilder {
   private StringBuilder sb = new StringBuilder();
   private int currIdentLevel = 0;
   private int identSize = 2;
+
+  public List<Attribute<?>> createAttrList(Attribute<?>... pAttributes) {
+    return new ArrayList<Attribute<?>>(Arrays.asList(pAttributes));
+  }
 
   public Attribute<String> createAttr(String pName, String pValue) {
     return new Attribute<String>(pName, pValue);
@@ -66,15 +72,21 @@ public class SimpleXMLBuilder {
       sb.append(attr[i].getName() + "=\"");
       String value = String.valueOf(attr[i].getValue());
       sb.append(value.replaceAll("\"", "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&", "&amp;"));
-      sb.append("\" ");
+      if (i < attr.length - 1) {
+        sb.append("\" ");
+      }
+      else {
+        sb.append("\"");
+      }
     }
   }
 
   public void endElement(String pElement) {
+    currIdentLevel--;
+    doIdent();
     sb.append("</");
     sb.append(pElement);
     sb.append(">\n");
-    currIdentLevel++;
   }
 
   public void emptyElement(String pElement, List<Attribute<?>> attrList) {
@@ -100,6 +112,37 @@ public class SimpleXMLBuilder {
       sb.append(pElement);
       sb.append("/>\n");
     }
+  }
+
+  public void simpleElement(String pElement, String pContent, List<Attribute<?>> attrList) {
+    Attribute<?>[] pAttrArray = new Attribute<?>[attrList.size()];
+    int idx = 0;
+    for (Attribute<?> attr : attrList) {
+      pAttrArray[idx++] = attr;
+    }
+    simpleElement(pElement, pContent, pAttrArray);
+  }
+
+  public void simpleElement(String pElement, String pContent, Attribute<?>... pAttr) {
+    doIdent();
+    if (pAttr != null && pAttr.length > 0) {
+      sb.append("<");
+      sb.append(pElement);
+      sb.append(" ");
+      addAttributes(pAttr);
+      sb.append(">");
+    }
+    else {
+      sb.append("<");
+      sb.append(pElement);
+      sb.append(">");
+    }
+    if (pContent != null) {
+      sb.append(pContent);
+    }
+    sb.append("</");
+    sb.append(pElement);
+    sb.append(">\n");
   }
 
   private void doIdent() {
