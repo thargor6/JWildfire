@@ -225,7 +225,6 @@ public class RhodoneaFunc extends VariationFunc {
     // System.out.println("cycles to close: " + cycles_to_close);
     // System.out.println("metacycles: " + metacycles);
     // System.out.println("total cycles: " + cycles);
-
   }
 
   @Override
@@ -242,22 +241,15 @@ public class RhodoneaFunc extends VariationFunc {
     double rin = stretchSplit * sqrt((pAffineTP.x  * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
     double tin = atan2(pAffineTP.y, pAffineTP.x); // polar coordinate angle (theta in radians) of incoming point
-    // double tin = atan2(pAffineTP.y, pAffineTP.x) + (cycle_offset * 2 * M_PI); // polar coordinate angle (theta in radians) of incoming point
-    // double theta = atan2(pAffineTP.x, pAffineTP.y) + (cycle_offset * 2 * M_PI);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
-    double tc = cycles * tin;
-    double t = tc + (cycles * cycle_offset * 2 * M_PI);   // angle of rose curve
-    //    double t = cycles * (tin + (cycle_offset * 2 * M_PI));  
-
-    // double t = (cycles * tin) + (cycle_offset * 2 * M_PI);  // angle of rose curve
-    // double t = cycles * tin;
+    double t = cycles * (tin + (cycle_offset * 2 * M_PI));  // angle of rose curve
     double r = cos(k * t) + offset;  // radius of rose curve 
-    // double r = sin(k * t) + offset;
+    // double r = sin(k * t) + offset;  // to rotate by PI/(2*k) radians
     if (fill != 0) { 
       r = r + (fill * (pContext.random() - 0.5));
     }
     double x = r * cos(t);
     double y = r * sin(t);
-    double expansion = floor(tc/(cycles_to_close * 2 * M_PI));
+    double expansion = floor((cycles * (tin + M_PI))/(cycles_to_close * 2 * M_PI));
     double adjustedAmount = pAmount + (expansion * metacycle_expansion);
     // double adjustedAmount = pAmount + (floor(t/(cycles_to_close)) * 2 * M_PI * metacycle_expansion);
     // double adjustedAmount = pAmount;
@@ -359,12 +351,6 @@ public class RhodoneaFunc extends VariationFunc {
         pVarTP.y = sy;
       }
     }
-
-    
-
-    // pVarTP.x += adjustedAmount * (x + (stretch * stretchRatio * xin));
-    // pVarTP.y += adjustedAmount * (y + (stretch * yin));
-
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
