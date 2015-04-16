@@ -34,11 +34,13 @@ import org.jwildfire.create.tina.base.XYZPoint;
   Rhodonea curves (also known as rose curves)
   Implemented by CozyG, March 2015
   For references, see http://en.wikipedia.org/wiki/Rose_%28mathematics%29
-  There are other JWildfire variations (RoseWF, PRose3D) that implement the class of rose curves 
-  where k is an integer and cycles = 1, but Rhodonea implements a fuller range of possibilities (within the 2D plane)
+  There are other JWildfire variations (RoseWF, PRose3D), and an Apophysis rose plugin (http://fardareismai.deviantart.com/art/Apophysis-Plugin-Rose-246324281)
+     that implement the class of rose curves where k is an integer and cycles = 1, 
+     but Rhodonea implements a fuller range of possibilities (at least within the 2D plane)
 
    From reference literature:
-   Up to similarity(?), these curves can all be expressed by a polar equation of the form
+   Rhodonea curves were studied and named by the Italian mathematician Guido Grandi between the year 1723 and 1728
+   These curves can all be expressed by a polar equation of the form
         r = cos(k * theta)   
 
    or, alternatively, as a pair of Cartesian parametric equations of the form
@@ -69,7 +71,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
        r = cos(k * theta) + c
     In the case where the parameter k is an odd integer, the two overlapping halves of the curve separate as the offset changes from zero.
 
-    Rhodonea curves were named by the Italian mathematician Guido Grandi between the year 1723 and 1728
 */
 public class RhodoneaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
