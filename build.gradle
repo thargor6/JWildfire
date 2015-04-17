@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'jacoco'
 repositories {
     mavenCentral()
     maven {
@@ -40,5 +41,17 @@ sourceSets {
    		java {
         	srcDir 'test/src'
         }
+    }
+}
+
+jacoco {
+    toolVersion = "0.7.4.201502262128"
+    reportsDir = file("build/test-results")
+}
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "build/codecovHtml"
     }
 }
