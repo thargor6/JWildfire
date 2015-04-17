@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+repositories {
+    mavenCentral()
+    maven {
+    	url 'https://raw.github.com/Ekito/maven-repo/master/releases'
+    }
+}
+
+sourceCompatibility = 1.8
+version = 'latest-SNAPSHOT'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'JWildFire',
+                   'Implementation-Version': version
+    }
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile 'com.l2fprod:l2fprod-common-all:7.3'
+    compile 'com.kitfox.svg:svg-salamander:1.0'
+    compile 'colt:colt:1.2.0'
+    compile 'org.jocl:jocl:0.1.9'
+    compile 'javazoom:jlayer:1.0.1'
+    compile 'edu.emory.mathcs:JTransforms:2.4'
+    compile 'org.scijava:jep:2.4.2'
+    compile 'com.jtattoo:JTattoo:1.6.11'
+    compile fileTree(dir: 'lib')
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
