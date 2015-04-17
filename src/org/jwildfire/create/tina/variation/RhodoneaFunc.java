@@ -255,7 +255,7 @@ public class RhodoneaFunc extends VariationFunc {
       pVarTP.x += adjustedAmount * x;
       pVarTP.y += adjustedAmount * y; 
     }
-    if (stretch_mode == 1) {
+    else if (stretch_mode == 1) {
       if (abs(rin) > abs(r))  {   // incoming point lies outside of current petal of rose curve
         rin = (rin * outer_stretch) - outer_stretch + 1; 
         pVarTP.x += adjustedAmount * rin * x;
@@ -276,12 +276,12 @@ public class RhodoneaFunc extends VariationFunc {
 
       if (abs(rin) > abs(r)) {  // incoming point lies outside current petal of rose curve
         //pVarTP.x += adjustedAmount * x + ((rin - r) * outer_stretch * stretchRatio);
-        pVarTP.x += adjustedAmount * (x + (outer_stretch * stretch_ratio * (x-xin)));
-        pVarTP.y += adjustedAmount * (y + (outer_stretch * (y-yin)));
+        pVarTP.x += adjustedAmount * (x + (outer_stretch * stretch_ratio * (xin-x)));
+        pVarTP.y += adjustedAmount * (y + (outer_stretch * (yin-y)));
       }
       else  { // incoming point lies inside current petal of rose curve
-        pVarTP.x += adjustedAmount * (x + (inner_stretch * stretch_ratio * xin));
-        pVarTP.y += adjustedAmount * (y + (inner_stretch * yin));
+        pVarTP.x += adjustedAmount * (x - (inner_stretch * stretch_ratio * xin));
+        pVarTP.y += adjustedAmount * (y - (inner_stretch * yin));
       }
     }
     else if (stretch_mode == 3)  {
@@ -294,18 +294,18 @@ public class RhodoneaFunc extends VariationFunc {
         pVarTP.y += adjustedAmount * (y + (outer_stretch * yin));
       }
       else  { // incoming point lies inside current petal of rose curve
-        pVarTP.x += adjustedAmount * (x + (inner_stretch * stretch_ratio * xin));
-        pVarTP.y += adjustedAmount * (y + (inner_stretch * yin));
+        pVarTP.x += adjustedAmount * (x - (inner_stretch * stretch_ratio * xin));
+        pVarTP.y += adjustedAmount * (y - (inner_stretch * yin));
       }
     }
     else if (stretch_mode == 4) {
       if (abs(rin) > abs(r))  {   // incoming point lies outside of current petal of rose curve
-        rin = (rin * outer_stretch);
+        rin = (0.5 * rin) + outer_stretch;
         pVarTP.x += adjustedAmount * rin * x;
         pVarTP.y += adjustedAmount * rin * y;       
       }
       else  { // incoming point lies inside current petal of rose curve
-        rin = (rin * inner_stretch);
+        rin = (0.5 * rin) + inner_stretch;
         pVarTP.x += adjustedAmount * rin * x;
         pVarTP.y += adjustedAmount * rin * y;       
       }
@@ -370,7 +370,7 @@ public class RhodoneaFunc extends VariationFunc {
       r_offset = pValue;
     else if (PARAM_STRETCH_MODE.equalsIgnoreCase(pName)) {
       stretch_mode = floor(pValue);
-      if (stretch_mode > 4) { stretch_mode = 0; }
+      if (stretch_mode > 4 || stretch_mode < 0) { stretch_mode = 0; }
     }
     else if (PARAM_INNER_STRETCH.equalsIgnoreCase(pName))
       inner_stretch = pValue;
