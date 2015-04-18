@@ -310,7 +310,21 @@ public class RhodoneaFunc extends VariationFunc {
         pVarTP.y += adjustedAmount * rin * y;       
       }
     }
-    else  {  // shouldn't reach here (spread_mode is constrained to be 0-4), but just in case...
+    else if (spread_mode == 5)  {
+      if (abs(rin) <= abs(r))  { // incoming point lies on or inside current petal of rose curve
+        pVarTP.doHide = true;
+      }
+      pVarTP.x += pAffineTP.x;
+      pVarTP.y += pAffineTP.y;
+    }
+    else if (spread_mode == 6)  {
+      if (abs(rin) >= abs(r))  { // incoming point lies on or outside current petal of rose curve
+        pVarTP.doHide = true;
+      }
+      pVarTP.x += pAffineTP.x;
+      pVarTP.y += pAffineTP.y;
+    }
+    else  {  // shouldn't reach here (spread_mode is constrained to be 0-6), but just in case...
       pVarTP.x += adjustedAmount * x;
       pVarTP.y += adjustedAmount * y; 
     }
@@ -370,7 +384,7 @@ public class RhodoneaFunc extends VariationFunc {
       radial_offset = pValue;
     else if (PARAM_SPREAD_MODE.equalsIgnoreCase(pName)) {
       spread_mode = floor(pValue);
-      if (spread_mode > 4 || spread_mode < 0) { spread_mode = 0; }
+      if (spread_mode > 6 || spread_mode < 0) { spread_mode = 0; }
     }
     else if (PARAM_INNER_SPREAD.equalsIgnoreCase(pName))
       inner_spread = pValue;
