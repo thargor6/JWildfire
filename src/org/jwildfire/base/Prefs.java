@@ -344,7 +344,7 @@ public class Prefs extends ManagedObject {
   public static class RandomGeneratorTypeEditor extends ComboBoxPropertyEditor {
     public RandomGeneratorTypeEditor() {
       super();
-      setAvailableValues(new RandomGeneratorType[] { RandomGeneratorType.SIMPLE, RandomGeneratorType.MARSAGLIA, RandomGeneratorType.MERSENNE_TWISTER, RandomGeneratorType.JAVA_INTERNAL });
+      setAvailableValues(RandomGeneratorType.values());
     }
   }
 

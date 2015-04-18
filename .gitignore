@@ -53,3 +53,5 @@ lib/sunflow*old*
 lib/svg*
 
 
+/bin/
+/build/
