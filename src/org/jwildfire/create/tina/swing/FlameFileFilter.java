@@ -17,10 +17,19 @@
 package org.jwildfire.create.tina.swing;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.filechooser.FileFilter;
 
+import org.jwildfire.base.Tools;
+
 public class FlameFileFilter extends FileFilter {
+  private Collection formats;
+
+  public FlameFileFilter() {
+    formats = Arrays.asList(new String[] { Tools.FILEEXT_FLAME, Tools.FILEEXT_XML });
+  }
 
   @Override
   public boolean accept(File pFile) {
@@ -28,13 +37,12 @@ public class FlameFileFilter extends FileFilter {
       return true;
     }
     String extension = getExtension(pFile);
-    return (extension != null)
-        && (extension.equals("flame") || extension.equals("xml"));
+    return formats.contains(extension);
   }
 
   @Override
   public String getDescription() {
-    return "Supported flame files";
+    return "Flame files (*.flame|*.xml)";
   }
 
   private String getExtension(File pFile) {

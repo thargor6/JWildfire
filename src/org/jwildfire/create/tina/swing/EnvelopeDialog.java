@@ -773,7 +773,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       panel.add(envelopeViewAllButton);
 
       autofitCBx = new JCheckBox("Auto fit to view");
-      autofitCBx.setSelected(true);
       autofitCBx.setBounds(6, 6, 141, 18);
       panel.add(autofitCBx);
     }

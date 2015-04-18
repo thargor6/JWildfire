@@ -25,18 +25,29 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.swing.DefaultFileChooser;
 
 public class FlameFileChooser extends DefaultFileChooser {
-
+  private final String defaultExt;
   private static final long serialVersionUID = 1L;
 
   @Override
   protected String getDefaultExtension() {
-    return Tools.FILEEXT_FLAME;
+    return defaultExt;
   }
 
   public FlameFileChooser(Prefs pPrefs) {
+    this(pPrefs, false);
+  }
+
+  public FlameFileChooser(Prefs pPrefs, boolean pWithChaos) {
     setPreferredSize(new Dimension(960, 600));
     FileFilter filter = new FlameFileFilter();
     addChoosableFileFilter(filter);
+    if (pWithChaos) {
+      addChoosableFileFilter(new ChaosFileFilter());
+      defaultExt = null;
+    }
+    else {
+      defaultExt = Tools.FILEEXT_FLAME;
+    }
     setFileFilter(filter);
     setAcceptAllFileFilterUsed(false);
     setAccessory(new FlameFilePreview(this, pPrefs));

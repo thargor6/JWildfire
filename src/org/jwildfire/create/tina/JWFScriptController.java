@@ -540,7 +540,17 @@ public class JWFScriptController {
 
   public void scriptRunBtn_clicked() {
     try {
-      tinaController.runScript();
+      String scriptPath = null;
+      DefaultMutableTreeNode selNode = this.getSelNode();
+      if (selNode != null) {
+          if (selNode instanceof ScriptUserNode) {
+              scriptPath = ((ScriptUserNode)selNode).getFilename();
+          }
+          else if (selNode instanceof ScriptInternalNode) {
+              scriptPath = ((ScriptInternalNode)selNode).getResFilename();
+          }
+      }
+      tinaController.runScript(scriptPath, scriptTextArea.getText());
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);

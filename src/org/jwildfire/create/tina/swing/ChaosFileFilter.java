@@ -14,35 +14,44 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.script;
+package org.jwildfire.create.tina.swing;
 
-import java.io.StringReader;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
-import org.codehaus.janino.ClassBodyEvaluator;
-import org.codehaus.janino.Scanner;
-import org.jwildfire.create.tina.script.ui.FormBuilder;
+import javax.swing.filechooser.FileFilter;
 
-public class ScriptRunner {
-  
-  private String scriptPath;
-  
-  public static ScriptRunner compile(String pScript) throws Exception {
-    ScriptRunner res = (ScriptRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), ScriptRunner.class, (ClassLoader) null);
-    return res;
+import org.jwildfire.base.Tools;
+
+public class ChaosFileFilter extends FileFilter {
+  private Collection formats;
+
+  public ChaosFileFilter() {
+    formats = Arrays.asList(new String[] { Tools.FILEEXT_CHAOS });
   }
 
-  public void run(ScriptRunnerEnvironment pEnv) {
-
+  @Override
+  public boolean accept(File pFile) {
+    if (pFile.isDirectory()) {
+      return true;
+    }
+    String extension = getExtension(pFile);
+    return formats.contains(extension);
   }
-  
-  public FormBuilder createScriptForm(ScriptRunnerEnvironment pEnv) {
+
+  @Override
+  public String getDescription() {
+    return "Chaotica world files (*.chaos)";
+  }
+
+  private String getExtension(File pFile) {
+    String name = pFile.getName();
+    int idx = name.lastIndexOf('.');
+    if (idx > 0 && idx < name.length() - 1) {
+      return name.substring(idx + 1).toLowerCase();
+    }
     return null;
   }
-  
-  public void setScriptPath(String sPath) {
-      scriptPath = sPath;
-  }
-  
-  public String getScriptPath() { return scriptPath; }
 
 }

@@ -38,12 +38,15 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -59,6 +62,7 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -84,6 +88,7 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
+import org.jwildfire.create.tina.io.ChaosFlameWriter;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -114,8 +119,11 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.script.ui.FormBuilder;
+import org.jwildfire.create.tina.script.ui.ScriptParamsForm;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
@@ -201,6 +209,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
   private RGBPalette _lastGradient;
+
+  static final String SCRIPT_PROPS_FILE = "j-wildfire-scripts.properties";
+  private Properties scriptProps = new Properties();
+  private File scriptPropFile = new File(System.getProperty("user.home"), SCRIPT_PROPS_FILE);
 
   public TinaController(TinaControllerParameter parameterObject) {
     tinaFrame = parameterObject.pTinaFrame;
@@ -616,7 +628,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     rootTabbedPane = parameterObject.pRootTabbedPane;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
-    data.faqPane = parameterObject.pFAQPane;
 
     data.undoButton = parameterObject.pUndoButton;
     data.redoButton = parameterObject.pRedoButton;
@@ -723,7 +734,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     initHelpPane();
     initApophysisHintsPane();
-    initFAQPane();
 
     refreshPaletteColorsTable();
     getBatchRendererController().refreshRenderBatchJobsTable();
@@ -742,6 +752,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
+    loadScriptProps();
   }
 
   private void enableLayerControls() {
@@ -799,29 +810,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.helpPane.setText(content.toString());
       data.helpPane.setSelectionStart(0);
       data.helpPane.setSelectionEnd(0);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  private void initFAQPane() {
-    data.faqPane.setContentType("text/html");
-    try {
-      InputStream is = this.getClass().getResourceAsStream("FAQ.html");
-      StringBuffer content = new StringBuffer();
-      String lineFeed = System.getProperty("line.separator");
-      String line;
-      Reader r = new InputStreamReader(is, "utf-8");
-      BufferedReader in = new BufferedReader(r);
-      while ((line = in.readLine()) != null) {
-        content.append(line).append(lineFeed);
-      }
-      in.close();
-
-      data.faqPane.setText(content.toString());
-      data.faqPane.setSelectionStart(0);
-      data.faqPane.setSelectionEnd(0);
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1958,10 +1946,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1);
-  }
-
   public void loadFlameButton_actionPerformed(ActionEvent e) {
     try {
       JFileChooser chooser = new FlameFileChooser(prefs);
@@ -2127,7 +2111,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
       if (getCurrFlame() != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs);
+        JFileChooser chooser = new FlameFileChooser(prefs, !prefs.isTinaIntegrationChaoticaDisabled());
         if (prefs.getOutputFlamePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
@@ -2138,8 +2122,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          new FlameWriter().writeFlame(getCurrFlame(), file.getAbsolutePath());
-          getCurrFlame().setLastFilename(file.getName());
+          FileFilter filter = chooser.getFileFilter();
+          String filename = file.getAbsolutePath();
+          if ((filter != null && filter instanceof ChaosFileFilter) || filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
+            if (!filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
+              filename += "." + Tools.FILEEXT_CHAOS;
+            }
+            new ChaosFlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
+          }
+          else {
+            if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
+              filename += "." + Tools.FILEEXT_FLAME;
+            }
+            new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
+            getCurrFlame().setLastFilename(file.getName());
+          }
           messageHelper.showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
@@ -3711,21 +3708,27 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       if (getCurrFlame() != null) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new FlameWriter().getFlameXML(getCurrFlame());
+        String xml = new FlameWriter().getFlameXML(generateExportFlame(getCurrFlame()));
         StringSelection data = new StringSelection(xml);
         clipboard.setContents(data, data);
-        //        try {
-        //          System.out.println(new ScriptGenerator(getCurrFlame()).generateScript());
-        //        }
-        //        catch (Throwable ex) {
-        //          ex.printStackTrace();
-        //        }
         messageHelper.showStatusMessage(getCurrFlame(), "flame saved to clipboard");
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  private Flame generateExportFlame(Flame pFlame) {
+    Flame res = pFlame.makeCopy();
+    ResolutionProfile resProfile = getResolutionProfile();
+
+    double wScl = (double) resProfile.getWidth() / (double) res.getWidth();
+    double hScl = (double) resProfile.getHeight() / (double) res.getHeight();
+    res.setPixelsPerUnit((wScl + hScl) * 0.5 * res.getPixelsPerUnit());
+    res.setWidth(resProfile.getWidth());
+    res.setHeight(resProfile.getHeight());
+    return res;
   }
 
   public void mouseTransformSlowButton_clicked() {
@@ -3742,9 +3745,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public void runScript() throws Exception {
+    System.out.println("WARNING: called TinaController.runScript()");
+    // jwfScriptController.scriptRunBtn_clicked();
     ScriptRunner script = compileScript();
     saveUndoPoint();
-    script.run(this);
+    runJWFScript(script);
   }
 
   public void compileScriptButton_clicked() {
@@ -4271,7 +4276,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void snapshotButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      Flame storedFlame = flame.makeCopy();
+      Flame storedFlame = generateExportFlame(flame);
       undoManager.initUndoStack(storedFlame);
       randomBatch.add(0, new FlameThumbnail(storedFlame, null, null));
       updateThumbnails();
@@ -4282,7 +4287,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       if (getCurrFlame() != null) {
         String filename = qsaveFilenameGen.generateNextFilename();
-        new FlameWriter().writeFlame(getCurrFlame(), filename);
+        new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
         messageHelper.showStatusMessage(getCurrFlame(), "quicksave <" + new File(filename).getName() + "> saved");
       }
     }
@@ -5387,10 +5392,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         script = Tools.readUTF8Textfile(filename);
       }
+      runScript(filename, script);
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 
-      ScriptRunner scriptRunner = ScriptRunner.compile(script);
+  public void runScript(String scriptPath, String scriptText) {
+    try {
+      ScriptRunner scriptRunner = ScriptRunner.compile(scriptText);
+      scriptRunner.setScriptPath(scriptPath);
       saveUndoPoint();
-      scriptRunner.run(this);
+      runJWFScript(scriptRunner);
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
@@ -5547,5 +5561,92 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   @Override
   public JProgressBar getRenderProgressBar() {
     return tinaFrame.getRenderProgressBar();
+  }
+
+  public void renderFlameButton_actionPerformed(ActionEvent e) {
+    refreshFlameImage(false, false, 1);
+  }
+
+  private void runJWFScript(ScriptRunner pScript) {
+    FormBuilder formBuilder = pScript.createScriptForm(this);
+    if (formBuilder == null) {
+      pScript.run(this);
+    }
+    else {
+      ScriptParamsForm form = formBuilder.getProduct(tinaFrame, errorHandler);
+      form.showModal(this, pScript);
+    }
+  }
+
+  @Override
+  public ScriptParam getParamByName(String pName) {
+    return new ScriptParam("");
+  }
+
+  public void loadScriptProps() {
+    try {
+      if (scriptPropFile.exists()) {
+        FileInputStream fis = new FileInputStream(scriptPropFile);
+        scriptProps.load(fis);
+        fis.close();
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void saveScriptProps() {
+    try {
+      FileOutputStream fos = new FileOutputStream(scriptPropFile);
+      scriptProps.store(fos, "JWildfire script properties");
+      fos.close();
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Override
+  public void setScriptProperty(ScriptRunner runner, String propName, String propVal) {
+    String path = runner.getScriptPath();
+    String name = path + "." + propName;
+    String normalizedName = name.replaceAll("[\\s=:]", ".");
+    scriptProps.setProperty(normalizedName, propVal);
+  }
+
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName) {
+    String path = runner.getScriptPath();
+    String name = path + "." + propName;
+    String normalizedName = name.replaceAll("[\\s=:]", ".");
+    String propVal = scriptProps.getProperty(normalizedName);
+    return propVal;
+  }
+
+  @Override
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal) {
+    String propVal = getScriptProperty(runner, propName);
+    if (propVal == null) {
+      return defaultVal;
+    }
+    else {
+      return propVal;
+    }
+  }
+
+  public void exportToChaotica() {
+    try {
+      if (getCurrFlame() != null) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        String xml = new ChaosFlameWriter().getFlameXML(generateExportFlame(getCurrFlame()));
+        StringSelection data = new StringSelection(xml);
+        clipboard.setContents(data, data);
+        messageHelper.showStatusMessage(getCurrFlame(), "flame converted and saved to the clipboard");
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
   }
 }

@@ -227,4 +227,15 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     return y;
   }
 
+  public void appendKeyFrame(Integer pKeyFrame, double pValue) {
+    int newX[] = new int[x.length + 1];
+    System.arraycopy(x, 0, newX, 0, x.length);
+    newX[x.length] = pKeyFrame;
+    x = newX;
+    double newY[] = new double[y.length + 1];
+    System.arraycopy(y, 0, newY, 0, y.length);
+    newY[y.length] = pValue;
+    y = newY;
+  }
+
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,35 +14,18 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.script;
+package org.jwildfire.create.tina.io;
 
-import java.io.StringReader;
+import org.jwildfire.create.tina.base.Flame;
 
-import org.codehaus.janino.ClassBodyEvaluator;
-import org.codehaus.janino.Scanner;
-import org.jwildfire.create.tina.script.ui.FormBuilder;
+public class ChaosFlameWriter {
 
-public class ScriptRunner {
-  
-  private String scriptPath;
-  
-  public static ScriptRunner compile(String pScript) throws Exception {
-    ScriptRunner res = (ScriptRunner) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), ScriptRunner.class, (ClassLoader) null);
-    return res;
+  public void writeFlame(Flame pFlame, String pFilename) throws Exception {
   }
 
-  public void run(ScriptRunnerEnvironment pEnv) {
-
-  }
-  
-  public FormBuilder createScriptForm(ScriptRunnerEnvironment pEnv) {
+  public String getFlameXML(Flame generateExportFlame) {
+    // TODO Auto-generated method stub
     return null;
   }
-  
-  public void setScriptPath(String sPath) {
-      scriptPath = sPath;
-  }
-  
-  public String getScriptPath() { return scriptPath; }
 
 }

@@ -429,7 +429,16 @@ public class VariationFuncList {
     registerVariationFunc(PostHeatFunc.class);
     registerVariationFunc(CPow3Func.class);
     
+    registerVariationFunc(Rational3Func.class);
+    registerVariationFunc(STwinFunc.class);
+    registerVariationFunc(FlowerDbFunc.class);
+    registerVariationFunc(RosoniFunc.class);
+    registerVariationFunc(Glynnia3Func.class);
+    registerVariationFunc(MaskFunc.class);
+    registerVariationFunc(FDiscFunc.class);
+    registerVariationFunc(RhodoneaFunc.class);
     registerVariationFunc(Butterfly2Func.class);
+
   }
 
   private static void registerVariationFunc(

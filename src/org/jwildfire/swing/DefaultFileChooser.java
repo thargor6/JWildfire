@@ -14,8 +14,9 @@ public abstract class DefaultFileChooser extends JFileChooser {
     File f = getSelectedFile();
 
     FileFilter ff = getFileFilter();
-    if (!ff.accept(f)) {
-      f = new File(f.getPath() + "." + getDefaultExtension());
+    String fileExt = getDefaultExtension();
+    if (!ff.accept(f) && (fileExt != null && fileExt.length() > 0)) {
+      f = new File(f.getPath() + "." + fileExt);
     }
     super.setSelectedFile(f);
     if (f.exists() && getDialogType() == SAVE_DIALOG) {

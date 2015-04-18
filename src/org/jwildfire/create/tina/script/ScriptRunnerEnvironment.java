@@ -20,7 +20,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
 public interface ScriptRunnerEnvironment {
-
   public Flame getCurrFlame();
 
   public Flame getCurrFlame(boolean autoGenerateIfEmpty);
@@ -30,4 +29,13 @@ public interface ScriptRunnerEnvironment {
   public Layer getCurrLayer();
 
   public void refreshUI();
+  
+  public ScriptParam getParamByName(String pName);
+  
+  public void setScriptProperty(ScriptRunner runner, String propName, String propVal);
+  
+  public String getScriptProperty(ScriptRunner runner, String propName);
+  
+  public String getScriptProperty(ScriptRunner runner, String propName, String defaultVal);
+
 }
