@@ -44,7 +44,14 @@ public enum RandomGeneratorType {
     }
 
   },
+  ZIGGURAT {
 
+	    @Override
+	    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+	      return pPrefs.isTinaUseExperimentalOpenClCode() ? ZigguratRandomGenerator.class : ZigguratRandomGenerator.class;
+	    }
+
+	  },
   JAVA_INTERNAL {
 
     @Override
