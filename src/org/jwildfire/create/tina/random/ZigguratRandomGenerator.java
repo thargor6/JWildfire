@@ -21,7 +21,7 @@ public class ZigguratRandomGenerator extends AbstractRandomGenerator {
 
   @Override
   public void randomize(long pSeed) {
-    random.setSeed(128);
+    random.setSeed(pSeed);
   }
 
   @Override
