@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.random;
 
-public class JavaInternalRandomGenerator extends AbstractRandomGenerator {
+public class ZigguratRandomGenerator extends AbstractRandomGenerator {
   private final ZigguratRandom random = new ZigguratRandom();
 
   @Override
   public void randomize(long pSeed) {
-    random.setSeed(pSeed);
+    random.setSeed(128);
   }
 
   @Override
