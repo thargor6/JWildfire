@@ -311,7 +311,7 @@ public class Prefs extends ManagedObject {
   private String tinaIntegrationChaoticaExecutable = "chaotica.exe";
 
   @Property(description = "Drawer to store flames in the Chaotica-format", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaFlameDrawer = "C:\\Program Files\\Chaotica\\JWF-flames";
+  private String tinaIntegrationChaoticaFlameDrawer = "";
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
