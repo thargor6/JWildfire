@@ -437,7 +437,7 @@ public class VariationFuncList {
     registerVariationFunc(MaskFunc.class);
     registerVariationFunc(FDiscFunc.class);
     registerVariationFunc(RhodoneaFunc.class);
-    registerVariationFunc(Butterfly2Func.class);
+    registerVariationFunc(ButterflyFayFunc.class);
 
   }
 

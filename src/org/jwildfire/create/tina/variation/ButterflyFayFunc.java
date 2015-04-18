@@ -32,7 +32,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
   Implemented by CozyG, March 2015
   For references, see http://en.wikipedia.org/wiki/Butterfly_curve_%28transcendental%29
 */
-public class Butterfly2Func extends VariationFunc {
+public class ButterflyFayFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_M1 = "m1";
@@ -202,7 +202,7 @@ public class Butterfly2Func extends VariationFunc {
 
   @Override
   public String getName() {
-    return "butterfly2";
+    return "butterfly_fay";
   }
 
 }
