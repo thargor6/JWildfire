@@ -15,6 +15,7 @@ gitlog.sh
 bin/*
 build/dist/*
 build/installer/*
+build/*
 tptpParseError.log
 src/odk/*
 build/j-wildfire/*
@@ -53,3 +54,5 @@ lib/sunflow*old*
 lib/svg*
 
 
+/bin/
+/build/
