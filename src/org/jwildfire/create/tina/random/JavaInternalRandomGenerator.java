@@ -16,8 +16,10 @@
 */
 package org.jwildfire.create.tina.random;
 
+import java.util.Random;
+
 public class JavaInternalRandomGenerator extends AbstractRandomGenerator {
-  private final ZigguratRandom random = new ZigguratRandom();
+  private final Random random = new Random();
 
   @Override
   public void randomize(long pSeed) {
