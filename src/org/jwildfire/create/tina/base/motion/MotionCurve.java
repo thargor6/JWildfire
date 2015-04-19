@@ -238,4 +238,12 @@ public class MotionCurve implements Serializable, Assignable<MotionCurve> {
     y = newY;
   }
 
+  public MotionCurve multiplyValue(double pScale) {
+    MotionCurve res = this.makeCopy();
+    for (int i = 0; i < y.length; i++) {
+      y[i] *= pScale;
+    }
+    return res;
+  }
+
 }

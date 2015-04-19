@@ -96,23 +96,28 @@ public class ChaosFlameWriter {
   private static final String PROPERTY_Y_AXIS_ANGLE = "y_axis_angle";
   private static final String PROPERTY_Y_AXIS_LENGTH = "y_axis_length";
 
+  private static final int AA_LEVEL = 2;
+
   private ChaoticaPluginTranslators translator = new ChaoticaPluginTranslators();
+  private final Flame flame;
 
-  private static final int FPS = 25;
-
-  public void writeFlame(Flame pFlame, String pFilename) throws Exception {
-    Tools.writeUTF8Textfile(pFilename, getFlameXML(pFlame));
+  public ChaosFlameWriter(Flame pFlame) {
+    flame = pFlame;
   }
 
-  public String getFlameXML(Flame pFlame) throws Exception {
+  public void writeFlame(String pFilename) throws Exception {
+    Tools.writeUTF8Textfile(pFilename, getFlameXML());
+  }
+
+  public String getFlameXML() throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
     xb.addContent("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-    Layer layer = pFlame.getFirstLayer();
+    Layer layer = flame.getFirstLayer();
     xb.beginElement(ELEM_WORLD, xb.createAttrList(xb.createAttr(ATTR_NAME, "World")));
     addIntProperty(xb, PROPERTY_FORMAT_VERSION, 2);
-    xb.beginElement(ELEM_IFS, xb.createAttrList(xb.createAttr(ATTR_NAME, pFlame.getName())));
-    addImaging(xb, pFlame);
-    addAnimAndCamera(xb, pFlame);
+    xb.beginElement(ELEM_IFS, xb.createAttrList(xb.createAttr(ATTR_NAME, flame.getName())));
+    addImaging(xb, flame);
+    addAnimAndCamera(xb, flame);
 
     xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, "iterators")));
     IdProvider iteratorIdProvider = new IdProvider();
@@ -147,12 +152,13 @@ public class ChaosFlameWriter {
       xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, "transforms")));
       for (int i = 0; i < xform.getVariationCount(); i++) {
         Variation var = xform.getVariation(i);
-        String varName = translator.translateVarName(var.getFunc().getName());
-        if (varName != null) {
+        String varName = var.getFunc().getName();
+        String translatedVarName = translator.translateVarName(varName);
+        if (translatedVarName != null) {
           xb.beginElement(ELEM_FLAM3_VARIATION, xb.createAttrList(xb.createAttr(ATTR_NAME, "Transform " + variatonIdProvider.getNextId())));
-          addStringProperty(xb, PROPERTY_VARIATION_NAME, varName);
+          addStringProperty(xb, PROPERTY_VARIATION_NAME, translatedVarName);
           xb.beginElement(ELEM_PARAMS, xb.createAttrList());
-          addRealProperty(xb, varName, var.getAmount(), var.getAmountCurve());
+          addRealProperty(xb, translatedVarName, var.getAmount(), var.getAmountCurve());
           for (String name : var.getFunc().getParameterNames()) {
             Object param = var.getFunc().getParameter(name);
             if (param != null) {
@@ -163,11 +169,14 @@ public class ChaosFlameWriter {
               else if (param instanceof Integer) {
                 value = ((Integer) param).intValue();
               }
-              String propertyName = translator.translatePropertyName(var.getFunc().getName(), name);
-              if (name != null) {
+              String propertyName = translator.translatePropertyName(varName, name);
+              if (propertyName != null) {
                 addRealProperty(xb, propertyName, value, var.getMotionCurve(name));
               }
             }
+          }
+          for (String fixedValue : translator.getFixedValueNames(varName)) {
+            addRealProperty(xb, translator.translatePropertyName(varName, fixedValue), translator.getFixedValue(varName, fixedValue), null);
           }
           xb.endElement(ELEM_PARAMS);
           xb.endElement(ELEM_FLAM3_VARIATION);
@@ -504,7 +513,7 @@ public class ChaosFlameWriter {
     xb.beginElement(ELEM_IMAGING, xb.createAttrList(xb.createAttr(ATTR_NAME, "img")));
     addIntProperty(xb, PROPERTY_IMAGE_WIDTH, pFlame.getWidth());
     addIntProperty(xb, PROPERTY_IMAGE_HEIGHT, pFlame.getHeight());
-    addIntProperty(xb, PROPERTY_IMAGE_AA_LEVEL, 2);
+    addIntProperty(xb, PROPERTY_IMAGE_AA_LEVEL, AA_LEVEL);
     addIntProperty(xb, PROPERTY_IMAGE_LAYERS, 1);
     addIntProperty(xb, PROPERTY_IMAGE_QUALITY, 0);
     addStringProperty(xb, PROPERTY_ANTIALIASING_MODE, "strong");
@@ -521,16 +530,16 @@ public class ChaosFlameWriter {
   }
 
   private void addAnimAndCamera(SimpleXMLBuilder xb, Flame pFlame) {
-    addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) FPS));
-    addIntProperty(xb, PROPERTY_ANIM_FPS, FPS);
-    // TODO calc
-    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 0.1833, null);
+    addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()));
+    addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps());
+    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep(), null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
     xb.beginElement(ELEM_CAMERA, xb.createAttrList(xb.createAttr(ATTR_NAME, PROPERTY_FLAM3_CAMERA)));
-    addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), pFlame.getCentreY(), pFlame.getCentreXCurve(), pFlame.getCentreYCurve());
+    addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), pFlame.getCentreXCurve(), pFlame.getCentreYCurve() != null ? pFlame.getCentreYCurve().multiplyValue(-1.0) : null);
     addRealProperty(xb, PROPERTY_ROTATE, pFlame.getCamRoll(), pFlame.getCamRollCurve());
-    // TODO calc
-    addRealProperty(xb, PROPERTY_SENSOR_WIDTH, 5.16046679555566, null);
+    double final_scale = pFlame.getPixelsPerUnit() * pFlame.getCamZoom() * 2.0;
+    double sensor_width = (double) (pFlame.getWidth() * AA_LEVEL) / final_scale;
+    addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensor_width, null);
     xb.endElement(ELEM_CAMERA);
   }
 
@@ -563,7 +572,7 @@ public class ChaosFlameWriter {
   }
 
   private Double convertFrameToTime(int frame) {
-    return (double) frame / (double) FPS;
+    return (double) frame / (double) flame.getFps();
   }
 
   private void addVec4Property(SimpleXMLBuilder xb, String property, double v1, double v2, double v3, double v4) {

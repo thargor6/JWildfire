@@ -31,7 +31,7 @@ import org.jwildfire.launcher.StreamRedirector;
 public class ChaoticaLauncher {
 
   public void launchChaotica(Flame pFlame) throws Exception {
-    String xml = new ChaosFlameWriter().getFlameXML(pFlame);
+    String xml = new ChaosFlameWriter(pFlame).getFlameXML();
 
     storeToClipboard(xml);
 

@@ -350,6 +350,7 @@ public class AbstractFlameWriter {
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FPS, pFlame.getFps()));
 
     writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
 

@@ -2129,7 +2129,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             if (!filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
               filename += "." + Tools.FILEEXT_CHAOS;
             }
-            new ChaosFlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
+            new ChaosFlameWriter(generateExportFlame(getCurrFlame())).writeFlame(filename);
           }
           else {
             if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {

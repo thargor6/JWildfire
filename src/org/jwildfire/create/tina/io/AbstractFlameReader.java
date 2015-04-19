@@ -136,6 +136,7 @@ public class AbstractFlameReader {
   public static final String ATTR_STEREO3D_SWAP_SIDES = "stereo3d_swap_sides";
   public static final String ATTR_FRAME_COUNT = "frame_count";
   public static final String ATTR_FRAME = "frame";
+  public static final String ATTR_FPS = "fps";
 
   public static final String CURVE_ATTR_ENABLED = "enabled";
   public static final String CURVE_ATTR_VIEW_XMIN = "view_xmin";
@@ -551,6 +552,11 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_FRAME_COUNT)) != null) {
       pFlame.setFrameCount(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_FPS)) != null) {
+      int fps = Integer.parseInt(hs);
+      if (fps >= 1)
+        pFlame.setFps(fps);
     }
     readMotionCurves(pFlame, atts, null);
 

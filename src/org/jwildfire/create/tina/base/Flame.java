@@ -167,6 +167,7 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   private int frame = 1;
   private int frameCount = 300;
+  private int fps = 30;
 
   private PostSymmetryType postSymmetryType;
   private int postSymmetryOrder;
@@ -1366,6 +1367,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setBGImageFilename(String pBGImageFilename) {
     bgImageFilename = pBGImageFilename != null ? pBGImageFilename : "";
+  }
+
+  public int getFps() {
+    return fps;
+  }
+
+  public void setFps(int pFps) {
+    fps = pFps;
   }
 
 }
