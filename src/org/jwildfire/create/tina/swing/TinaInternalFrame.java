@@ -7262,11 +7262,12 @@ public class TinaInternalFrame extends JInternalFrame {
       previewEastDefaultPanel.add(editorFractalBrightnessSlider);
       editorFractalBrightnessSlider.setOrientation(SwingConstants.VERTICAL);
       editorFractalBrightnessSlider.setValue(100);
-      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 66));
+      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 48));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
+      previewEastDefaultPanel.add(getExportToChaosBtn());
+      previewEastDefaultPanel.add(getPanel_104());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
-      previewEastDefaultPanel.add(getExportToChaosBtn());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
       editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -10861,6 +10862,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorQualityProfileCmb;
   private JComboBox swfAnimatorOutputTypeCmb;
   private JButton exportToChaosBtn;
+  private JPanel panel_104;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23182,12 +23184,19 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.exportToChaotica();
         }
       });
-      exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and put it into Clipboard");
+      exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and launch Chaotica to render it");
       exportToChaosBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/chaotica_jw.png")));
       exportToChaosBtn.setPreferredSize(new Dimension(42, 24));
       exportToChaosBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return exportToChaosBtn;
+  }
+
+  private JPanel getPanel_104() {
+    if (panel_104 == null) {
+      panel_104 = new JPanel();
+    }
+    return panel_104;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -88,7 +88,8 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.io.ChaosFlameWriter;
+import org.jwildfire.create.tina.integration.chaotica.ChaosFlameWriter;
+import org.jwildfire.create.tina.integration.chaotica.ChaoticaLauncher;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -5638,11 +5639,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void exportToChaotica() {
     try {
       if (getCurrFlame() != null) {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        String xml = new ChaosFlameWriter().getFlameXML(generateExportFlame(getCurrFlame()));
-        StringSelection data = new StringSelection(xml);
-        clipboard.setContents(data, data);
-        messageHelper.showStatusMessage(getCurrFlame(), "flame converted and saved to the clipboard");
+        new ChaoticaLauncher().launchChaotica(generateExportFlame(getCurrFlame()));
+        messageHelper.showStatusMessage(getCurrFlame(), "flame sucessfully exported");
       }
     }
     catch (Throwable ex) {
