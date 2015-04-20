@@ -389,11 +389,11 @@ public class ChaosFlameWriter {
             lCoeff[1][1] = evalCurve(coeffCurve[1][1], keyFrame, coeff[1][1]);
             double lRotate = evalCurve(rotateCurve, keyFrame, 0.0);
             double lScale = evalCurve(scaleCurve, keyFrame, 1.0);
-            AffineBaseParam lBaseParam = calculateBaseParam(lCoeff, lRotate, lScale);
+            AffineBaseParam lBaseParam = calculateBaseParam(lCoeff, 0.0, lScale);
 
-            xAxisAngleCurve.appendKeyFrame(keyFrame, lBaseParam.getXAxisAngle());
+            xAxisAngleCurve.appendKeyFrame(keyFrame, lBaseParam.getXAxisAngle() - lRotate);
             xAxisLengthCurve.appendKeyFrame(keyFrame, lBaseParam.getXAxisLength());
-            yAxisAngleCurve.appendKeyFrame(keyFrame, lBaseParam.getYAxisAngle());
+            yAxisAngleCurve.appendKeyFrame(keyFrame, lBaseParam.getYAxisAngle() - lRotate);
             yAxisLengthCurve.appendKeyFrame(keyFrame, lBaseParam.getYAxisLength());
           }
         }
