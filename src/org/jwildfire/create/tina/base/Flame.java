@@ -226,6 +226,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     motionBlurLength = 0;
     motionBlurTimeStep = 0.15;
     motionBlurDecay = 0.03;
+    fps = Prefs.getPrefs().getTinaDefaultFPS();
   }
 
   public void resetPostSymmetrySettings() {
@@ -690,6 +691,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
     motionBlurDecay = pFlame.motionBlurDecay;
+    fps = pFlame.fps;
 
     frame = pFlame.frame;
     frameCount = pFlame.frameCount;
@@ -721,9 +723,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     mixerBRCurve.assign(pFlame.mixerBRCurve);
     mixerBGCurve.assign(pFlame.mixerBGCurve);
     mixerBBCurve.assign(pFlame.mixerBBCurve);
-
     editPlane = pFlame.editPlane;
-
     layers.clear();
     for (Layer layer : pFlame.getLayers()) {
       layers.add(layer.makeCopy());
@@ -786,7 +786,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
-        (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) ||
+        (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
         (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||

@@ -145,9 +145,10 @@ public class ChaosFlameWriter {
     xb.beginElement(ELEM_ITERATOR, xb.createAttrList(xb.createAttr(ATTR_NAME, "Iterator " + iteratorId)));
     xb.beginElement(ELEM_FLAM3_TRANSFORM, xb.createAttrList(xb.createAttr(ATTR_NAME, "flam3_xform " + iteratorId)));
     addAffine(xb, xform, false);
-    if (xform.isHasXYPostCoeffs()) {
-      addAffine(xb, xform, true);
-    }
+    // TODO optimize, isHasXYPostCoeffs does not work, as it does not take curves into account for now
+    //if (xform.isHasXYPostCoeffs()) {
+    addAffine(xb, xform, true);
+    //}
     if (xform.getVariationCount() > 0) {
       xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, "transforms")));
       for (int i = 0; i < xform.getVariationCount(); i++) {
@@ -532,7 +533,7 @@ public class ChaosFlameWriter {
   private void addAnimAndCamera(SimpleXMLBuilder xb, Flame pFlame) {
     addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()));
     addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps());
-    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep(), null);
+    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep() * 0.1, null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
     xb.beginElement(ELEM_CAMERA, xb.createAttrList(xb.createAttr(ATTR_NAME, PROPERTY_FLAM3_CAMERA)));
     addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), pFlame.getCentreXCurve(), pFlame.getCentreYCurve() != null ? pFlame.getCentreYCurve().multiplyValue(-1.0) : null);

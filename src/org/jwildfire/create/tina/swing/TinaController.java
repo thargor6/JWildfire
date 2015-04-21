@@ -530,6 +530,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.motionBlurTimeStepSlider = parameterObject.motionBlurTimeStepSlider;
     data.motionBlurDecayField = parameterObject.motionBlurDecayField;
     data.motionBlurDecaySlider = parameterObject.motionBlurDecaySlider;
+    data.flameFPSField = parameterObject.flameFPSField;
 
     data.postSymmetryTypeCmb = parameterObject.postSymmetryTypeCmb;
     data.postSymmetryDistanceREd = parameterObject.postSymmetryDistanceREd;

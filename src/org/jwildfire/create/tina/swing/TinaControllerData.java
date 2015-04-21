@@ -419,5 +419,6 @@ public class TinaControllerData {
   public JSlider gradientColorMapLocalColorAddSlider;
   public JWFNumberField gradientColorMapLocalColorScaleREd;
   public JSlider gradientColorMapLocalColorScaleSlider;
+  public JWFNumberField flameFPSField;
 
 }

@@ -585,6 +585,7 @@ public class TinaControllerParameter {
   public JSlider gradientColorMapLocalColorAddSlider;
   public JWFNumberField gradientColorMapLocalColorScaleREd;
   public JSlider gradientColorMapLocalColorScaleSlider;
+  public JWFNumberField flameFPSField;
 
   public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1092,7 +1093,7 @@ public class TinaControllerParameter {
       JSlider pGradientColorMapHorizScaleSlider, JWFNumberField pGradientColorMapVertOffsetREd, JSlider pGradientColorMapVertOffsetSlider,
       JWFNumberField pGradientColorMapVertScaleREd, JSlider pGradientColorMapVertScaleSlider, JWFNumberField pGradientColorMapLocalColorAddREd,
       JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider,
-      JComboBox pSWFAnimatorQualityProfileCmb) {
+      JComboBox pSWFAnimatorQualityProfileCmb, JWFNumberField pFlameFPSField) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1233,5 +1234,6 @@ public class TinaControllerParameter {
     gradientColorMapLocalColorScaleREd = pGradientColorMapLocalColorScaleREd;
     gradientColorMapLocalColorScaleSlider = pGradientColorMapLocalColorScaleSlider;
     swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
+    flameFPSField = pFlameFPSField;
   }
 }

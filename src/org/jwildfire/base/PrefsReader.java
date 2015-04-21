@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -173,6 +173,7 @@ public class PrefsReader {
           ex.printStackTrace();
         }
         pPrefs.setTinaDefaultFadeToWhiteLevel(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel()));
+        pPrefs.setTinaDefaultFPS(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_FPS, pPrefs.getTinaDefaultFPS()));
 
         pPrefs.setTinaRandGenColorMapImagePath(getProperty(props, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath()));
 

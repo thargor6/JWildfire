@@ -1301,7 +1301,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaSouthTabbedPane.addTab("Stereo3d rendering ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layer-novisible.png")), getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
-      tinaSouthTabbedPane.addTab("Motion blur", null, getMotionBlurPanel(), null);
+      tinaSouthTabbedPane.addTab("FPS / Motion blur", null, getMotionBlurPanel(), null);
       tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
       tinaSouthTabbedPane.addTab("Channel mixer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-fill.png")), getChannelMixerPanel(), null);
 
@@ -4730,7 +4730,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
         getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider(),
-        getSwfAnimatorQualityProfileCmb());
+        getSwfAnimatorQualityProfileCmb(), getFlameFPSField());
 
     tinaController = new TinaController(params);
 
@@ -10863,6 +10863,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox swfAnimatorOutputTypeCmb;
   private JButton exportToChaosBtn;
   private JPanel panel_104;
+  private JWFNumberField flameFPSField;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -17230,6 +17231,42 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecaySlider.setBounds(204, 54, 220, 19);
       motionBlurPanel.add(motionBlurDecaySlider);
       motionBlurPanel.add(getResetMotionBlurSettingsBtn());
+
+      flameFPSField = new JWFNumberField();
+      flameFPSField.setHasMinValue(true);
+      flameFPSField.setHasMaxValue(true);
+      flameFPSField.setMaxValue(500.0);
+      flameFPSField.setMinValue(1.0);
+      flameFPSField.setOnlyIntegers(true);
+      flameFPSField.setValueStep(1.0);
+      flameFPSField.setText("");
+      flameFPSField.setSize(new Dimension(100, 24));
+      flameFPSField.setPreferredSize(new Dimension(100, 24));
+      flameFPSField.setLocation(new Point(100, 52));
+      flameFPSField.setLinkedMotionControlName("motionBlurDecaySlider");
+      flameFPSField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      flameFPSField.setBounds(625, 6, 100, 24);
+      flameFPSField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!flameFPSField.isMouseAdjusting() || flameFPSField.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
+            tinaController.getFlameControls().flameFPSField_changed();
+          }
+        }
+      });
+      motionBlurPanel.add(flameFPSField);
+
+      JLabel lblFps = new JLabel();
+      lblFps.setText("FPS");
+      lblFps.setSize(new Dimension(94, 22));
+      lblFps.setPreferredSize(new Dimension(94, 22));
+      lblFps.setName("");
+      lblFps.setLocation(new Point(4, 52));
+      lblFps.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFps.setBounds(529, 6, 94, 22);
+      motionBlurPanel.add(lblFps);
     }
     return motionBlurPanel;
   }
@@ -17314,7 +17351,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
-      keyframesFrameCountLbl.setBounds(58, 0, 82, 22);
+      keyframesFrameCountLbl.setBounds(70, 0, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
 
       motionCurvePlayPreviewButton = new JButton();
@@ -22376,7 +22413,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetMotionBlurSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetMotionBlurSettingsBtn.setIconTextGap(2);
       resetMotionBlurSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      resetMotionBlurSettingsBtn.setBounds(102, 77, 100, 24);
+      resetMotionBlurSettingsBtn.setBounds(102, 99, 100, 24);
       resetMotionBlurSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetMotionBlurSettingsBtn;
@@ -23197,6 +23234,10 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_104 = new JPanel();
     }
     return panel_104;
+  }
+
+  public JWFNumberField getFlameFPSField() {
+    return flameFPSField;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

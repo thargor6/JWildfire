@@ -105,6 +105,7 @@ public class Prefs extends ManagedObject {
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
+  public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
 
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
@@ -234,6 +235,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default Fade-to-white-level of new generated flames", category = PropertyCategory.TINA)
   private double tinaDefaultFadeToWhiteLevel = 220.0;
+
+  @Property(description = "Default FPS of new generated flames", category = PropertyCategory.TINA)
+  private int tinaDefaultFPS = 30;
 
   @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
   private double tinaOverwriteMotionBlurTimeStep = 0.0;
@@ -697,6 +701,7 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaDrawer = pSrc.tinaIntegrationChaoticaDrawer;
     tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
     tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
+    tinaDefaultFPS = pSrc.tinaDefaultFPS;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1345,6 +1350,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaIntegrationChaoticaFlameDrawer(String pTinaIntegrationChaoticaFlameDrawer) {
     tinaIntegrationChaoticaFlameDrawer = pTinaIntegrationChaoticaFlameDrawer;
+  }
+
+  public int getTinaDefaultFPS() {
+    return tinaDefaultFPS;
+  }
+
+  public void setTinaDefaultFPS(int pTinaDefaultFPS) {
+    tinaDefaultFPS = pTinaDefaultFPS;
   }
 
 }

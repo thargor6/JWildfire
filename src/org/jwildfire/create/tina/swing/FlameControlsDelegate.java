@@ -159,6 +159,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.motionBlurLengthField, false);
     enableControl(data.motionBlurTimeStepField, false);
     enableControl(data.motionBlurDecayField, false);
+    enableControl(data.flameFPSField, false);
 
     enableControl(data.brightnessREd, false);
     enableControl(data.contrastREd, false);
@@ -669,6 +670,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.motionBlurTimeStepSlider.setValue(Tools.FTOI(getCurrFlame().getMotionBlurTimeStep() * TinaController.SLIDER_SCALE_COLOR));
       data.motionBlurDecayField.setText(Tools.doubleToString(getCurrFlame().getMotionBlurDecay()));
       data.motionBlurDecaySlider.setValue(Tools.FTOI(getCurrFlame().getMotionBlurDecay() * TinaController.SLIDER_SCALE_ZOOM));
+      data.flameFPSField.setValue(getCurrFlame().getFps());
 
       data.postSymmetryTypeCmb.setSelectedItem(getCurrFlame().getPostSymmetryType());
       enablePostSymmetryUI();
@@ -1208,6 +1210,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void motionBlurLengthREd_changed() {
     flameTextFieldChanged(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0);
+  }
+
+  public void flameFPSField_changed() {
+    if (isNoRefresh() || getCurrFlame() == null) {
+      return;
+    }
+    getCurrFlame().setFps(data.flameFPSField.getIntValue());
   }
 
   public void motionBlurLengthSlider_changed(ChangeEvent e) {
