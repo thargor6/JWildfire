@@ -30,6 +30,10 @@ public class Envelope implements Serializable {
     SPLINE, BEZIER, LINEAR
   }
 
+  public enum EditMode {
+    DRAG_POINTS, DRAG_CURVE_HORIZ, DRAG_CURVE_VERT, SCALE_CURVE_HORIZ, SCALE_CURVE_VERT
+  }
+
   private int viewXMin = -10;
   private int viewXMax = 70;
   private double viewYMin = -120.0;
@@ -418,7 +422,26 @@ public class Envelope implements Serializable {
     return "Envelope [" + x.length + "]";
   }
 
-  public void setUseBisection(boolean useBisection) {
-    this.useBisection = useBisection;
+  public void setUseBisection(boolean pUseBisection) {
+    useBisection = pUseBisection;
+  }
+
+  public void smooth(int pSize) {
+    if (pSize >= 3 && y != null && y.length > pSize) {
+      double newY[] = new double[y.length];
+      int s = pSize / 2;
+      for (int i = 0; i < y.length; i++) {
+        double v = 0.0;
+        int w = 0;
+        for (int j = i - s; j <= i + s; j++) {
+          if (j >= 0 && j < y.length) {
+            v += y[j];
+            w++;
+          }
+        }
+        newY[i] = v / (double) w;
+      }
+      y = newY;
+    }
   }
 }

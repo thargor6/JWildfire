@@ -32,6 +32,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.envelope.Envelope;
+import org.jwildfire.envelope.Envelope.EditMode;
 import org.jwildfire.envelope.EnvelopePanel;
 import org.jwildfire.envelope.EnvelopeView;
 import org.jwildfire.swing.ErrorHandler;
@@ -39,6 +40,10 @@ import org.jwildfire.swing.ErrorHandler;
 public class EnvelopeDlgController {
   private enum MouseClickWaitMode {
     ADD_POINT, REMOVE_POINT, NONE
+  }
+
+  private enum Direction {
+    HORIZ, VERT
   }
 
   private final JButton addPointButton;
@@ -71,6 +76,9 @@ public class EnvelopeDlgController {
   private final JWFNumberField mp3DurationREd;
   private final ErrorHandler errorHandler;
   private final JCheckBox autofitCBx;
+  private final JWFNumberField curveFPSField;
+  private final JComboBox editModeCmb;
+  private final JButton smoothCurveBtn;
 
   private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
@@ -82,9 +90,11 @@ public class EnvelopeDlgController {
 
   private MouseClickWaitMode mouseClickWaitMode = MouseClickWaitMode.NONE;
 
+  private int lastMouseX, lastMouseY;
+
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
-        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null);
+        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -95,7 +105,8 @@ public class EnvelopeDlgController {
       JWFNumberField pXScaleREd, JWFNumberField pXOffsetREd, JWFNumberField pYScaleREd, JWFNumberField pYOffsetREd,
       JButton pApplyTransformBtn, JButton pApplyTransformReverseBtn, JButton pMp3ImportBtn,
       JWFNumberField pMp3ChannelREd, JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
-      JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx) {
+      JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx,
+      JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -125,6 +136,9 @@ public class EnvelopeDlgController {
     mp3DurationREd = pMp3DurationREd;
     errorHandler = pErrorHandler;
     autofitCBx = pAutofitCBx;
+    curveFPSField = pCurveFPSField;
+    editModeCmb = pEditModeCmb;
+    smoothCurveBtn = pSmoothCurveBtn;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -141,6 +155,7 @@ public class EnvelopeDlgController {
     });
     envelopePanel.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(java.awt.event.MouseEvent e) {
+        editModeChanged();
         if (e.getClickCount() > 1) {
           viewAll();
           return;
@@ -167,11 +182,50 @@ public class EnvelopeDlgController {
     envelopePanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
       public void mouseDragged(java.awt.event.MouseEvent e) {
         if (mouseClickWaitMode == MouseClickWaitMode.NONE) {
-          movePoint(e);
+          if (lastMouseX < 0) {
+            lastMouseX = e.getX();
+            lastMouseY = e.getY();
+          }
+          switch (getEditMode()) {
+            case DRAG_POINTS:
+              movePoint(e);
+              break;
+            case DRAG_CURVE_HORIZ:
+              moveCurve(e, Direction.HORIZ);
+              break;
+            case DRAG_CURVE_VERT:
+              moveCurve(e, Direction.VERT);
+              break;
+            case SCALE_CURVE_HORIZ:
+              scaleCurve(e, Direction.HORIZ);
+              break;
+            case SCALE_CURVE_VERT:
+              scaleCurve(e, Direction.VERT);
+              break;
+          }
+          lastMouseX = e.getX();
+          lastMouseY = e.getY();
         }
       }
+
     });
 
+  }
+
+  private void resetEditMode() {
+    if (editModeCmb != null) {
+      editModeCmb.setSelectedItem(EditMode.DRAG_POINTS);
+      editModeChanged();
+    }
+  }
+
+  private Envelope.EditMode getEditMode() {
+    if (editModeCmb != null && editModeCmb.getSelectedItem() != null) {
+      return (EditMode) editModeCmb.getSelectedItem();
+    }
+    else {
+      return EditMode.DRAG_POINTS;
+    }
   }
 
   public Envelope getCurrEnvelope() {
@@ -343,11 +397,13 @@ public class EnvelopeDlgController {
   }
 
   public void removePoint() {
+    resetEditMode();
     setCrosshairCursor();
     mouseClickWaitMode = MouseClickWaitMode.REMOVE_POINT;
   }
 
   public void addPoint() {
+    resetEditMode();
     setCrosshairCursor();
     mouseClickWaitMode = MouseClickWaitMode.ADD_POINT;
   }
@@ -363,6 +419,11 @@ public class EnvelopeDlgController {
 
   public void clearEnvelope() {
     envelope.clear();
+    refreshWithAutoFit();
+  }
+
+  public void smoothEnvelope() {
+    envelope.smooth(3);
     refreshWithAutoFit();
   }
 
@@ -541,6 +602,59 @@ public class EnvelopeDlgController {
       //      refreshEnvelope();
       refreshWithAutoFit();
       enableControls();
+    }
+  }
+
+  private void scaleCurve(MouseEvent e, Direction vert) {
+    // TODO Auto-generated method stub
+
+  }
+
+  private void moveCurve(java.awt.event.MouseEvent e, Direction pDirection) {
+    if (envelope != null && !envelope.isLocked()) {
+      int lx = pDirection == Direction.HORIZ ? (e.getX() - lastMouseX) : 0;
+      int ly = pDirection == Direction.VERT ? (e.getY() - lastMouseY) : 0;
+
+      double viewXMin = xMinREd.getDoubleValue();
+      double viewXMax = xMaxREd.getDoubleValue();
+      double viewYMin = yMinREd.getDoubleValue();
+      double viewYMax = yMaxREd.getDoubleValue();
+      double X_SCALE = 75.0;
+      double Y_SCALE = X_SCALE * 0.666;
+
+      if (viewXMax > viewXMin && viewYMax > viewYMin) {
+        double dx = 0.0, dy = 0.0;
+        if (lx > 0) {
+          dx = (viewXMax - viewXMin) / X_SCALE;
+          if (dx < 1.0) {
+            dx = 1.0;
+          }
+        }
+        else if (lx < 0) {
+          dx = -(viewXMax - viewXMin) / X_SCALE;
+          if (dx > -1.0) {
+            dx = -1.0;
+          }
+        }
+        if (ly > 0) {
+          dy = -(viewYMax - viewYMin) / Y_SCALE;
+        }
+        else if (ly < 0) {
+          dy = (viewYMax - viewYMin) / Y_SCALE;
+        }
+        if (MathLib.fabs(dx) > 0 || MathLib.fabs(dy) > 0) {
+          for (int i = 0; i < envelope.getX().length; i++) {
+            envelope.getX()[i] += dx;
+            envelope.getY()[i] += dy;
+          }
+          refreshXMaxField();
+          refreshYMaxField();
+          refreshXField();
+          refreshYField();
+          notifySelectionChange(envelope.getSelectedIdx(), envelope.getSelectedX(), envelope.getSelectedY());
+          envelopePanel.repaint();
+        }
+      }
     }
   }
 
@@ -814,10 +928,11 @@ public class EnvelopeDlgController {
             ymax = y[i];
         }
         //        double xwidth = xmax - xmin;
-        double ywidth = ymax - ymin;
+        //        double ywidth = ymax - ymin;
         //double cx = xmin + xwidth / 2.0;
         double cx = 0.0;
-        double cy = ymin + ywidth / 2.0;
+        //        double cy = ymin + ywidth / 2.0;
+        double cy = 0.0;
 
         int newx[] = new int[x.length];
         double newy[] = new double[y.length];
@@ -857,5 +972,9 @@ public class EnvelopeDlgController {
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void editModeChanged() {
+    lastMouseX = lastMouseY = -1;
   }
 }
