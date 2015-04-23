@@ -533,7 +533,7 @@ public class ChaosFlameWriter {
   private void addAnimAndCamera(SimpleXMLBuilder xb, Flame pFlame) {
     addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()));
     addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps());
-    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, pFlame.getMotionBlurLength() * pFlame.getMotionBlurTimeStep() * 0.1, null);
+    addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 1.0 / (double) pFlame.getFps(), null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
     xb.beginElement(ELEM_CAMERA, xb.createAttrList(xb.createAttr(ATTR_NAME, PROPERTY_FLAM3_CAMERA)));
     addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), pFlame.getCentreXCurve(), pFlame.getCentreYCurve() != null ? pFlame.getCentreYCurve().multiplyValue(-1.0) : null);

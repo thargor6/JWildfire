@@ -50,7 +50,6 @@ public class EnvelopeMP3Data {
     for (int frame = frameoffset; frame < points; frame++) {
       long time = ((long) frame * (long) 1000) / (long) fps;
       x[idx] = frame;
-
       double fftValue = 0.0;
       for (int sample = 0; sample < samplesPerFrame; sample++) {
         fftValue += (double) fft.getDataByTimeOffset(time + sample * dt)[channel] * scale;
@@ -70,6 +69,5 @@ public class EnvelopeMP3Data {
     envelope.setViewYMax(ymax + (ymax - ymin) * 0.04);
     envelope.setInterpolation(Interpolation.LINEAR);
     envelope.setLocked(true);
-
   }
 }

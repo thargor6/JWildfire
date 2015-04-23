@@ -279,11 +279,12 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeClearButton.setText("Reset curve");
     envelopeClearButton.setPreferredSize(new Dimension(141, 26));
 
-    JWFNumberField numberField = new JWFNumberField();
-    numberField.setPreferredSize(new Dimension(80, 26));
-    numberField.setFont(new Font("Dialog", Font.PLAIN, 10));
-    numberField.setBounds(207, 132, 80, 26);
-    panel_3.add(numberField);
+    timeField = new JWFNumberField();
+    timeField.setEditable(false);
+    timeField.setPreferredSize(new Dimension(80, 26));
+    timeField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    timeField.setBounds(207, 132, 80, 26);
+    panel_3.add(timeField);
 
     JLabel lblTime = new JLabel();
     lblTime.setText("Time");
@@ -294,6 +295,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     panel_3.add(lblTime);
 
     curveFPSField = new JWFNumberField();
+    curveFPSField.setEditable(false);
     curveFPSField.setText("25");
     curveFPSField.setPreferredSize(new Dimension(80, 26));
     curveFPSField.setOnlyIntegers(true);
@@ -549,7 +551,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
         getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
         getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
         getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
-        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn());
+        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField());
 
     JLabel lblMode = new JLabel();
     lblMode.setText("Editing-Mode");
@@ -612,7 +614,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JButton envelopeViewDownButton;
   private JComboBox envelopeInterpolationCmb;
   private JButton btnRemove;
-  private JPanel previewRootPanel;
+  private JPanel previewPanel;
 
   public EnvelopePanel getEnvelopePanel() {
     if (envelopePanel == null) {
@@ -870,9 +872,13 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       panel_1.add(panel_2);
       panel_2.setLayout(new BorderLayout(0, 0));
 
+      previewPanel = new JPanel();
+      panel_2.add(previewPanel);
+      previewPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.ABOVE_TOP, null, null));
+      previewPanel.setLayout(new BorderLayout(0, 0));
+
       previewRootPanel = new JPanel();
-      panel_2.add(previewRootPanel);
-      previewRootPanel.setBorder(new TitledBorder(null, "Preview", TitledBorder.LEADING, TitledBorder.ABOVE_TOP, null, null));
+      previewPanel.add(previewRootPanel, BorderLayout.CENTER);
       previewRootPanel.setLayout(new BorderLayout(0, 0));
 
       panel_3 = new JPanel();
@@ -972,10 +978,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     return btnRemove;
   }
 
-  public JPanel getPreviewRootPanel() {
-    return previewRootPanel;
-  }
-
   private FlamePanel flamePanel;
 
   private FlamePanel getFlamePanel() {
@@ -989,9 +991,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       flamePanel.setRenderHeight(600);
       flamePanel.setFocusable(true);
       getPreviewRootPanel().add(flamePanel, BorderLayout.CENTER);
-      getPreviewRootPanel().getParent().validate();
-      getPreviewRootPanel().repaint();
-      flamePanel.requestFocusInWindow();
+      //      getPreviewRootPanel().getParent().validate();
+      //      getPreviewRootPanel().repaint();
+      //      flamePanel.requestFocusInWindow();
     }
     return flamePanel;
   }
@@ -1070,7 +1072,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     curveToPreview = pCurveToPreview;
     curveValueToPreview = 0.0;
     curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
-
+    getCurveFPSField().setValue(pFlameToPreview.getFps());
     //    System.out.println("PATH: " + curveToPreviewPropertyPath);
     //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
     //    System.out.println("CURVE: " + curve);
@@ -1106,6 +1108,8 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JComboBox editModeCmb;
   private JWFNumberField curveFPSField;
   private JButton smoothCurveBtn;
+  private JWFNumberField timeField;
+  private JPanel previewRootPanel;
 
   private String findProperty(Object pObject, Object pProperty, String pPath) {
     if (pObject == pProperty) {
@@ -1314,5 +1318,13 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public JButton getSmoothCurveBtn() {
     return smoothCurveBtn;
+  }
+
+  public JWFNumberField getTimeField() {
+    return timeField;
+  }
+
+  public JPanel getPreviewRootPanel() {
+    return previewRootPanel;
   }
 }

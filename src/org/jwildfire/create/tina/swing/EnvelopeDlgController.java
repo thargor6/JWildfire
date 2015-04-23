@@ -77,6 +77,7 @@ public class EnvelopeDlgController {
   private final ErrorHandler errorHandler;
   private final JCheckBox autofitCBx;
   private final JWFNumberField curveFPSField;
+  private final JWFNumberField timeField;
   private final JComboBox editModeCmb;
   private final JButton smoothCurveBtn;
 
@@ -94,7 +95,7 @@ public class EnvelopeDlgController {
 
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
-        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null);
+        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -106,7 +107,7 @@ public class EnvelopeDlgController {
       JButton pApplyTransformBtn, JButton pApplyTransformReverseBtn, JButton pMp3ImportBtn,
       JWFNumberField pMp3ChannelREd, JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
       JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx,
-      JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn) {
+      JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn, JWFNumberField pTimeField) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -139,6 +140,7 @@ public class EnvelopeDlgController {
     curveFPSField = pCurveFPSField;
     editModeCmb = pEditModeCmb;
     smoothCurveBtn = pSmoothCurveBtn;
+    timeField = pTimeField;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -352,6 +354,7 @@ public class EnvelopeDlgController {
       noRefresh = true;
       try {
         xREd.setValue(envelope.getSelectedX());
+        timeField.setValue((double) envelope.getSelectedX() / curveFPSField.getDoubleValue());
       }
       finally {
         noRefresh = oldNoRefresh;
@@ -605,13 +608,64 @@ public class EnvelopeDlgController {
     }
   }
 
-  private void scaleCurve(MouseEvent e, Direction vert) {
-    // TODO Auto-generated method stub
+  private void scaleCurve(MouseEvent e, Direction pDirection) {
+    if (envelope != null) {
+      int lx = pDirection == Direction.HORIZ ? (e.getX() - lastMouseX) : 0;
+      int ly = pDirection == Direction.VERT ? (e.getY() - lastMouseY) : 0;
 
+      double viewXMin = xMinREd.getDoubleValue();
+      double viewXMax = xMaxREd.getDoubleValue();
+      double viewYMin = yMinREd.getDoubleValue();
+      double viewYMax = yMaxREd.getDoubleValue();
+
+      if (viewXMax > viewXMin && viewYMax > viewYMin) {
+        double scl = 1.1;
+        double dx = 1.0, dy = 1.0;
+        if (lx > 0) {
+          dx = scl;
+        }
+        else if (lx < 0) {
+          if (allowFrameDownScale()) {
+            dx = 1.0 / scl;
+          }
+        }
+        if (ly > 0) {
+          dy = 1.0 / scl;
+        }
+        else if (ly < 0) {
+          dy = scl;
+        }
+
+        if (MathLib.fabs(dx) > 0 || MathLib.fabs(dy) > 0) {
+          for (int i = 0; i < envelope.getX().length; i++) {
+            envelope.getX()[i] = Tools.FTOI(dx * envelope.getX()[i]);
+            envelope.getY()[i] *= dy;
+          }
+          refreshXMaxField();
+          refreshYMaxField();
+          refreshXField();
+          refreshYField();
+          notifySelectionChange(envelope.getSelectedIdx(), envelope.getSelectedX(), envelope.getSelectedY());
+          envelopePanel.repaint();
+        }
+      }
+    }
+  }
+
+  private boolean allowFrameDownScale() {
+    if (envelope != null && envelope.getX().length > 1) {
+      for (int i = 0; i < envelope.getX().length - 1; i++) {
+        if ((envelope.getX()[i] + 1) == envelope.getX()[i + 1]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   private void moveCurve(java.awt.event.MouseEvent e, Direction pDirection) {
-    if (envelope != null && !envelope.isLocked()) {
+    if (envelope != null) {
       int lx = pDirection == Direction.HORIZ ? (e.getX() - lastMouseX) : 0;
       int ly = pDirection == Direction.VERT ? (e.getY() - lastMouseY) : 0;
 
@@ -927,11 +981,7 @@ public class EnvelopeDlgController {
           else if (y[i] > ymax)
             ymax = y[i];
         }
-        //        double xwidth = xmax - xmin;
-        //        double ywidth = ymax - ymin;
-        //double cx = xmin + xwidth / 2.0;
         double cx = 0.0;
-        //        double cy = ymin + ywidth / 2.0;
         double cy = 0.0;
 
         int newx[] = new int[x.length];

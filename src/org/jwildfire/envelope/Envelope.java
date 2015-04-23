@@ -45,8 +45,6 @@ public class Envelope implements Serializable {
   private double y[];
   private boolean locked;
   private boolean useBisection = false;
-  private double yscale = 1.0;
-  private double yoffset = 0.0;
 
   public Envelope clone() {
     Envelope res = new Envelope();
