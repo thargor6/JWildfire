@@ -21,80 +21,71 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 public class SystemInfoInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
-
+  private JTextPane textPane;
+  /**
+   * give components names so we can test them
+   * This frame displays system info from the help menu, and should disappear when ok is clicked
+   */
   public SystemInfoInternalFrame() {
-    JPanel northPanel = new JPanel();
-
-    northPanel.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        setVisible(false);
-      }
-    });
-    northPanel.setPreferredSize(new Dimension(10, 8));
-    getContentPane().add(northPanel, BorderLayout.NORTH);
-    northPanel.setLayout(null);
-
-    JPanel southPanel = new JPanel();
-    southPanel.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        setVisible(false);
-      }
-    });
-    southPanel.setPreferredSize(new Dimension(36, 36));
-    getContentPane().add(southPanel, BorderLayout.SOUTH);
-    southPanel.setLayout(null);
-
-    JPanel panel_2 = new JPanel();
-    panel_2.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        setVisible(false);
-      }
-    });
-    getContentPane().add(panel_2, BorderLayout.CENTER);
-    panel_2.setLayout(new BorderLayout(0, 0));
-
+	setName("siif");
+    JPanel mainPane = new JPanel();
+    mainPane.setName("siif.sysInfoPanel");
+    getContentPane().add(mainPane, BorderLayout.CENTER);
+    mainPane.setLayout(new BorderLayout(0, 0));
+    
     JScrollPane scrollPane = new JScrollPane();
-    panel_2.add(scrollPane, BorderLayout.CENTER);
-
-    JTextPane textPane = new JTextPane();
-    textPane.addHyperlinkListener(new HyperlinkListener() {
-      public void hyperlinkUpdate(HyperlinkEvent e) {
-        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-          try {
-            java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
-          }
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-        }
-      }
-    });
+    scrollPane.setName("siif.scrollPane");
+    mainPane.add(scrollPane, BorderLayout.CENTER);
+    
+    textPane = new JTextPane();
+    textPane.setEditable(false);
+    textPane.setName("siif.text");
     scrollPane.setViewportView(textPane);
     setTitle("System Information");
     setBounds(320, 140, 641, 499);
+    textPane.setText(collectInfo());
+    
+    JButton button = new JButton("Ok");
+    button.setName("siif.okbutton");
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        setVisible(false);
+      }
+    });
+    button.setPreferredSize(new Dimension(36, 36));
+    getContentPane().add(button, BorderLayout.SOUTH);
+    //southPanel.setLayout(null);
 
-    collectInfo();
+    button.addMouseListener(new MouseAdapter() {
+    	
+      @Override
+      public void mouseClicked(MouseEvent e) {
+    	  setVisible(false);
+      }
+    });
+    pack();
   }
-
-  private void collectInfo() {
+  public void refresh() {
+	  textPane.setText(collectInfo());
+  }
+  private String collectInfo() {
     SystemInfo sysInfo = new SystemInfo();
 
     StringBuffer sb = new StringBuffer();
-    sb.append("<html><body>");
-    sb.append("<h1>System Information: </h1>");
-    sb.append("</body></html>");
-
+    sb.append("OS: "+sysInfo.getOsName()+" "+sysInfo.getOsVersion() +"["+sysInfo.getOsArch()+"]\n");
+    sb.append("Committed Memory: "+sysInfo.getTotalMemMB()+" MB\n");
+    sb.append("Max Memory: "+sysInfo.getMaxMemMB()+" MB\n");
+    sb.append("Used Memory: "+sysInfo.getUsedMemMB()+" MB\n");
+    sb.append("CPU count(incl hyperthread): "+sysInfo.getProcessors()+" core\n\n");
+    return sb.toString();
   }
 }
