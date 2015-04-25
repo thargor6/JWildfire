@@ -23,24 +23,18 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class CircleLinearFunc extends VariationFunc {
+public class CircleRandFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "Sc";
-  private static final String PARAM_K = "K";
-  private static final String PARAM_DENS1 = "Dens1";
-  private static final String PARAM_DENS2 = "Dens2";
-  private static final String PARAM_REVERSE = "Reverse";
+  private static final String PARAM_DENS = "Dens";
   private static final String PARAM_X = "X";
   private static final String PARAM_Y = "Y";
   private static final String PARAM_SEED = "Seed";
-  private static final String[] paramNames = { PARAM_SC, PARAM_K, PARAM_DENS1, PARAM_DENS2, PARAM_REVERSE, PARAM_X, PARAM_Y, PARAM_SEED };
+  private static final String[] paramNames = { PARAM_SC, PARAM_DENS, PARAM_X, PARAM_Y, PARAM_SEED };
 
   private double Sc = 1.0;
-  private double K = 0.5;
-  private double Dens1 = 0.5;
-  private double Dens2 = 0.5;
-  private double Reverse = 1.0;
+  private double Dens = 0.5;
   private double X = 10.0;
   private double Y = 10.0;
   private int Seed = 0;
@@ -55,46 +49,27 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* CircleLinear by eralex, http://eralex61.deviantart.com/art/Circles-Plugins-126273412 */
-
-    double X, Y, Z, Z1, U, V;
+    /* CircleRand by eralex, http://eralex61.deviantart.com/art/Circles-Plugins-126273412 */
+    double X, Y, U;
     int M, N;
-
-    M = (int) floor(0.5 * pAffineTP.x / this.Sc);
-    N = (int) floor(0.5 * pAffineTP.y / this.Sc);
-    X = pAffineTP.x - (M * 2 + 1) * this.Sc;
-    Y = pAffineTP.y - (N * 2 + 1) * this.Sc;
-    U = sqrt(X * X + Y * Y);
-    V = (0.3 + 0.7 * DiscretNoise2(M + 10, N + 3)) * this.Sc;
-    Z1 = DiscretNoise2(M + this.Seed, N);
-    if ((Z1 < this.Dens1) && (U < V)) {
-      if (this.Reverse > 0) {
-        if (Z1 < this.Dens1 * this.Dens2) {
-          X = this.K * X;
-          Y = this.K * Y;
-        }
-        else {
-          Z = V / U * (1 - this.K) + this.K;
-          X = Z * X;
-          Y = Z * Y;
-        }
-      }
-      else {
-        if (Z1 > this.Dens1 * this.Dens2) {
-          X = this.K * X;
-          Y = this.K * Y;
-        }
-        else {
-          Z = V / U * (1 - this.K) + this.K;
-          X = Z * X;
-          Y = Z * Y;
-        }
+    final int maxIter = 100;
+    int iter = 0;
+    do {
+      X = this.X * (1.0 - 2.0 * pContext.random());
+      Y = this.Y * (1.0 - 2.0 * pContext.random());
+      M = (int) floor(0.5 * X / this.Sc);
+      N = (int) floor(0.5 * Y / this.Sc);
+      X = X - (M * 2 + 1) * this.Sc;
+      Y = Y - (N * 2 + 1) * this.Sc;
+      U = sqrt(X * X + Y * Y);
+      if (++iter > maxIter) {
+        break;
       }
     }
+    while ((DiscretNoise2(M + this.Seed, N) > this.Dens) || (U > (0.3 + 0.7 * DiscretNoise2(M + 10, N + 3)) * this.Sc));
 
     pVarTP.x += pAmount * (X + (M * 2 + 1) * this.Sc);
     pVarTP.y += pAmount * (Y + (N * 2 + 1) * this.Sc);
-
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -107,21 +82,15 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { Sc, K, Dens1, Dens2, Reverse, X, Y, Seed };
+    return new Object[] { Sc, Dens, X, Y, Seed };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SC.equalsIgnoreCase(pName))
       Sc = pValue;
-    else if (PARAM_K.equalsIgnoreCase(pName))
-      K = pValue;
-    else if (PARAM_DENS1.equalsIgnoreCase(pName))
-      Dens1 = pValue;
-    else if (PARAM_DENS2.equalsIgnoreCase(pName))
-      Dens2 = pValue;
-    else if (PARAM_REVERSE.equalsIgnoreCase(pName))
-      Reverse = pValue;
+    else if (PARAM_DENS.equalsIgnoreCase(pName))
+      Dens = pValue;
     else if (PARAM_X.equalsIgnoreCase(pName))
       X = pValue;
     else if (PARAM_Y.equalsIgnoreCase(pName))
@@ -134,7 +103,7 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "CircleLinear";
+    return "CircleRand";
   }
 
 }
