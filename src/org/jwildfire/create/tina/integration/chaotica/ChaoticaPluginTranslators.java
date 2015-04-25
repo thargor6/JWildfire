@@ -39,6 +39,7 @@ import org.jwildfire.create.tina.variation.Curl3DFunc;
 import org.jwildfire.create.tina.variation.CylinderApoFunc;
 import org.jwildfire.create.tina.variation.DCLinearFunc;
 import org.jwildfire.create.tina.variation.DCZTranslFunc;
+import org.jwildfire.create.tina.variation.DLAWFFunc;
 import org.jwildfire.create.tina.variation.Disc3DFunc;
 import org.jwildfire.create.tina.variation.EpispiralFunc;
 import org.jwildfire.create.tina.variation.EpispiralWFFunc;
@@ -134,6 +135,7 @@ public class ChaoticaPluginTranslators {
     translators.put(new DCLinearFunc().getName(), new ChaoticaPluginTranslator("linear"));
     translators.put(new DCZTranslFunc().getName(), emptyTranslator);
     translators.put(new Disc3DFunc().getName(), new ChaoticaPluginTranslator("disc"));
+    translators.put(new DLAWFFunc().getName(), new ChaoticaPluginTranslator("disc"));
     translators.put(new EpispiralWFFunc().getName(), new ChaoticaPluginTranslator("Epispiral", namePair("waves", "n"), fixedValue("thickness", 0.0), fixedValue("holes", 1.0)));
     translators.put(new EpispiralFunc().getName(), new ChaoticaPluginTranslator("Epispiral", namePair("waves", "n"), fixedValue("thickness", 0.0), fixedValue("holes", 1.0)));
     translators.put(new EpispiralWFFunc().getName(), new ChaoticaPluginTranslator("cross"));

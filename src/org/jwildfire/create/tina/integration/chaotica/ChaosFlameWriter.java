@@ -149,42 +149,25 @@ public class ChaosFlameWriter {
     //if (xform.isHasXYPostCoeffs()) {
     addAffine(xb, xform, true);
     //}
-    if (xform.getVariationCount() > 0) {
-      xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, "transforms")));
-      for (int i = 0; i < xform.getVariationCount(); i++) {
-        Variation var = xform.getVariation(i);
-        String varName = var.getFunc().getName();
-        String translatedVarName = translator.translateVarName(varName);
-        if (translatedVarName != null) {
-          xb.beginElement(ELEM_FLAM3_VARIATION, xb.createAttrList(xb.createAttr(ATTR_NAME, "Transform " + variatonIdProvider.getNextId())));
-          addStringProperty(xb, PROPERTY_VARIATION_NAME, translatedVarName);
-          xb.beginElement(ELEM_PARAMS, xb.createAttrList());
-          addRealProperty(xb, translatedVarName, var.getAmount(), var.getAmountCurve());
-          for (String name : var.getFunc().getParameterNames()) {
-            Object param = var.getFunc().getParameter(name);
-            if (param != null) {
-              double value = 0.0;
-              if (param instanceof Double) {
-                value = ((Double) param).doubleValue();
-              }
-              else if (param instanceof Integer) {
-                value = ((Integer) param).intValue();
-              }
-              String propertyName = translator.translatePropertyName(varName, name);
-              if (propertyName != null) {
-                addRealProperty(xb, propertyName, value, var.getMotionCurve(name));
-              }
-            }
-          }
-          for (String fixedValue : translator.getFixedValueNames(varName)) {
-            addRealProperty(xb, translator.translatePropertyName(varName, fixedValue), translator.getFixedValue(varName, fixedValue), null);
-          }
-          xb.endElement(ELEM_PARAMS);
-          xb.endElement(ELEM_FLAM3_VARIATION);
-        }
+    {
+      List<Variation> preTransforms = getPreTransforms(xform);
+      if (preTransforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, preTransforms, "pre_transforms");
       }
-      xb.endElement(ELEM_NODE);
     }
+    {
+      List<Variation> transforms = getTransforms(xform);
+      if (transforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, transforms, "transforms");
+      }
+    }
+    {
+      List<Variation> postTransforms = getPostTransforms(xform);
+      if (postTransforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, postTransforms, "post_transforms");
+      }
+    }
+
     xb.endElement(ELEM_FLAM3_TRANSFORM);
 
     xb.beginElement(ELEM_FLAM3_SHADER, xb.createAttrList(xb.createAttr(ATTR_NAME, "flam3 shader")));
@@ -218,6 +201,75 @@ public class ChaosFlameWriter {
     }
     addRealProperty(xb, PROPERTY_TIME_SCALE, 1.0, null);
     xb.endElement(ELEM_ITERATOR);
+  }
+
+  private List<Variation> getPreTransforms(XForm xform) {
+    List<Variation> res = new ArrayList<Variation>();
+    for (int i = 0; i < xform.getVariationCount(); i++) {
+      Variation var = xform.getVariation(i);
+      if (var.getFunc().getName().startsWith("pre_")) {
+        res.add(var);
+      }
+    }
+    return res;
+  }
+
+  private List<Variation> getTransforms(XForm xform) {
+    List<Variation> res = new ArrayList<Variation>();
+    for (int i = 0; i < xform.getVariationCount(); i++) {
+      Variation var = xform.getVariation(i);
+      if (!var.getFunc().getName().startsWith("pre_") && !var.getFunc().getName().startsWith("post_")) {
+        res.add(var);
+      }
+    }
+    return res;
+  }
+
+  private List<Variation> getPostTransforms(XForm xform) {
+    List<Variation> res = new ArrayList<Variation>();
+    for (int i = 0; i < xform.getVariationCount(); i++) {
+      Variation var = xform.getVariation(i);
+      if (var.getFunc().getName().startsWith("post_")) {
+        res.add(var);
+      }
+    }
+    return res;
+  }
+
+  private void addVariations(SimpleXMLBuilder xb, XForm xform, IdProvider variatonIdProvider, List<Variation> variations, String kind) {
+    xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, kind)));
+    for (Variation var : variations) {
+      String varName = var.getFunc().getName();
+      String translatedVarName = translator.translateVarName(varName);
+      if (translatedVarName != null) {
+        xb.beginElement(ELEM_FLAM3_VARIATION, xb.createAttrList(xb.createAttr(ATTR_NAME, "Transform " + variatonIdProvider.getNextId())));
+        addStringProperty(xb, PROPERTY_VARIATION_NAME, translatedVarName);
+        xb.beginElement(ELEM_PARAMS, xb.createAttrList());
+        addRealProperty(xb, translatedVarName, var.getAmount(), var.getAmountCurve());
+        for (String name : var.getFunc().getParameterNames()) {
+          Object param = var.getFunc().getParameter(name);
+          if (param != null) {
+            double value = 0.0;
+            if (param instanceof Double) {
+              value = ((Double) param).doubleValue();
+            }
+            else if (param instanceof Integer) {
+              value = ((Integer) param).intValue();
+            }
+            String propertyName = translator.translatePropertyName(varName, name);
+            if (propertyName != null) {
+              addRealProperty(xb, propertyName, value, var.getMotionCurve(name));
+            }
+          }
+        }
+        for (String fixedValue : translator.getFixedValueNames(varName)) {
+          addRealProperty(xb, translator.translatePropertyName(varName, fixedValue), translator.getFixedValue(varName, fixedValue), null);
+        }
+        xb.endElement(ELEM_PARAMS);
+        xb.endElement(ELEM_FLAM3_VARIATION);
+      }
+    }
+    xb.endElement(ELEM_NODE);
   }
 
   public class AffineBaseParam {
