@@ -446,6 +446,7 @@ public class VariationFuncList {
     registerVariationFunc(CircleTrans1Func.class);
     registerVariationFunc(IDiscFunc.class);
     registerVariationFunc(DeltaAFunc.class);
+    registerVariationFunc(WDiscFunc.class);
   }
 
   private static void registerVariationFunc(
