@@ -14,12 +14,23 @@ public class ZigguratRandom extends Random
 	 * 
 	 * This class implements the ziggurat algorithm for normal distributed random numbers as provided by George Marsaglia and Wai Wan Tsang in 2000.
 	 * 
-	 * @author Andreas Schouten (andreas@schouten-blog.de)
+	 * @author Andreas Schouten (andreas@schouten-blog.de) ?
+	 * @author George Marsaglia
+	 * @author Wai Wan Tsang
+	 * 
+	 * The constants seem to be based on the original paper here, so this fits the JWildFire license
+	 * Credit / Citation:
+	 * [Oct 2000 George Marsaglia, Wai Wan Tsang] The ziggurat method for generating random variables 
+	 * http://www.jstatsoft.org/v05/i08
+	 * http://creativecommons.org/licenses/by/3.0/
+	 * 
+	 * === enhancements to original ===
+	 * Converted from int to long in SHR3, stripped out methods not needed by JWildFire
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public ZigguratRandom() {
-		this(System.currentTimeMillis());
+		this(System.nanoTime());
 	}
 
 	public ZigguratRandom(long seed) {
@@ -28,28 +39,8 @@ public class ZigguratRandom extends Random
 		zigset();
 	}
 
-	protected int next(int bits) {
-		return (bits == 32) ? SHR3() : super.next(bits);
-	}
-
-	public boolean nextBoolean() {
-		return SHR3() > 0;
-	}
-
 	public double nextDouble() {
 		return UNI();
-	}
-
-	public float nextFloat() {
-		return (float) UNI();
-	}
-
-	public double nextGaussian() {
-		return RNOR();
-	}
-
-	public int nextInt() {
-		return SHR3();
 	}
 
 	public void setSeed(long seed) {
@@ -57,22 +48,16 @@ public class ZigguratRandom extends Random
 		super.setSeed(seed);
 	}
 
-	private int jsr = 123456768;
+	private long jsr = 123456768;
 
 	private static int[] kn;
 
 	private static double[] wn, fn;
 	private static boolean initialized = false;
 
-	private double RNOR() {
-		int hz = SHR3();
-		int iz = hz & 127;
-		return (Math.abs(hz) < kn[iz]) ? hz * wn[iz] : nfix(hz, iz);
-	}
-
-	private int SHR3() {
-		int jz = jsr;
-		int jzr = jsr;
+	private long SHR3() {
+		long jz = jsr;
+		long jzr = jsr;
 		jzr ^= (jzr << 13);
 		jzr ^= (jzr >>> 17);
 		jzr ^= (jzr << 5);
@@ -80,35 +65,9 @@ public class ZigguratRandom extends Random
 		return jz + jzr;
 	}
 
-	private double nfix(int hz, int iz) {
-		double r = 3.442619855899; /* The start of the right tail */
-		double r1 = 1 / r;
-		double x, y;
-		for (;;) {
-			x = hz * wn[iz]; /* iz==0, handles the base strip */
-			if (iz == 0) {
-				do {
-					x = (-Math.log(UNI()) * r1);
-					y = -Math.log(UNI());
-				} while (y + y < x * x);
-				return (hz > 0) ? r + x : -r - x;
-			}
-			/* iz>0, handle the wedges of other strips */
-			if (fn[iz] + UNI() * (fn[iz - 1] - fn[iz]) < Math.exp(-.5 * x * x))
-				return x;
-
-			/* initiate, try to exit for(;;) for loop */
-			hz = SHR3();
-			iz = hz & 127;
-
-			if (Math.abs(hz) < kn[iz])
-				return (hz * wn[iz]);
-		}
-
-	}
 
 	private double UNI() {
-		return 0.5 * (1 + (double) SHR3() / (double) Integer.MIN_VALUE);
+		return 0.5 * (1.0 + (double)SHR3() / (double)Long.MIN_VALUE);
 	}
 
 	private static synchronized void zigset() {
@@ -135,7 +94,7 @@ public class ZigguratRandom extends Random
 		fn[0] = 1.;
 		fn[127] = Math.exp(-.5 * dn * dn);
 
-		for (i = 126; i >= 1; i--) {
+		for (i = 126; i >= 0; i--) {
 			dn = Math.sqrt(-2. * Math.log(vn / dn + Math.exp(-.5 * dn * dn)));
 			kn[i + 1] = (int) ((dn / tn) * m1);
 			tn = dn;
