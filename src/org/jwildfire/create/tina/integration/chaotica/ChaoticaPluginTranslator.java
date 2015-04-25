@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class ChaoticaPluginTranslator {
   private final String translatedName;
+  private String parameterPrefix = null;
   private final Map<String, String> propertyNames = new HashMap<String, String>();
   private final Map<String, Double> fixedValues = new HashMap<String, Double>();
 
@@ -47,11 +48,20 @@ public class ChaoticaPluginTranslator {
 
   public String translatePropertyName(String propertyName) {
     if (propertyNames.isEmpty()) {
-      return translatedName + "_" + propertyName;
+      return addPrefix(propertyName);
     }
     else {
       String translatedProperty = propertyNames.get(propertyName);
-      return translatedProperty != null ? translatedName + "_" + translatedProperty : null;
+      return translatedProperty != null ? addPrefix(translatedProperty) : null;
+    }
+  }
+
+  private String addPrefix(String propertyName) {
+    if ((parameterPrefix != null && propertyName.startsWith(parameterPrefix + "_")) || propertyName.startsWith(translatedName + "_")) {
+      return propertyName;
+    }
+    else {
+      return translatedName + "_" + propertyName;
     }
   }
 
@@ -61,5 +71,9 @@ public class ChaoticaPluginTranslator {
 
   public Double getFixedValue(String pName) {
     return fixedValues.get(pName);
+  }
+
+  public void setParameterPrefix(String pParameterPrefix) {
+    parameterPrefix = pParameterPrefix;
   }
 }

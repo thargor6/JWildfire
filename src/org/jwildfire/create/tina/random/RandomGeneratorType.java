@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,7 +23,7 @@ public enum RandomGeneratorType {
 
     @Override
     public Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
-      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : SimpleRandomGenerator.class;
+      return SimpleRandomGenerator.class;
     }
   },
 
@@ -31,7 +31,7 @@ public enum RandomGeneratorType {
 
     @Override
     protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
-      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : MarsagliaRandomGenerator.class;
+      return MarsagliaRandomGenerator.class;
     }
 
   },
@@ -40,23 +40,23 @@ public enum RandomGeneratorType {
 
     @Override
     protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
-      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : MersenneTwisterRandomGenerator.class;
+      return MersenneTwisterRandomGenerator.class;
     }
 
   },
   ZIGGURAT {
 
-	    @Override
-	    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
-	      return pPrefs.isTinaUseExperimentalOpenClCode() ? ZigguratRandomGenerator.class : ZigguratRandomGenerator.class;
-	    }
+    @Override
+    protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
+      return ZigguratRandomGenerator.class;
+    }
 
-	  },
+  },
   JAVA_INTERNAL {
 
     @Override
     protected Class<? extends AbstractRandomGenerator> getGeneratorClass(Prefs pPrefs) {
-      return pPrefs.isTinaUseExperimentalOpenClCode() ? MarsagliaOpenCLRandomGenerator.class : JavaInternalRandomGenerator.class;
+      return JavaInternalRandomGenerator.class;
     }
 
   };
