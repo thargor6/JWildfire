@@ -112,7 +112,9 @@ public class RandomFlameGeneratorSampler {
       Flame flame;
       try {
         flame = randGen.createFlame(prefs, randGenState);
-        randSymmGen.addSymmetry(flame);
+        if (randGen.supportsSymmetry()) {
+          randSymmGen.addSymmetry(flame);
+        }
       }
       catch (Exception ex) {
         flame = new Flame();

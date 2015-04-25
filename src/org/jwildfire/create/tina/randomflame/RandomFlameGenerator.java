@@ -47,4 +47,8 @@ public abstract class RandomFlameGenerator {
 
   public abstract boolean isUseFilter(RandomFlameGeneratorState pState);
 
+  public boolean supportsSymmetry() {
+    return true;
+  }
+
 }
