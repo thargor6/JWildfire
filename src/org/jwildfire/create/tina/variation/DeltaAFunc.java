@@ -16,19 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import odk.lang.DoubleWrapper;
 
-import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class IDiscFunc extends SimpleVariationFunc {
+public class DeltaAFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   private DoubleWrapper sina = new DoubleWrapper();
@@ -36,14 +33,13 @@ public class IDiscFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // idisc my Michael Faber, http://michaelfaber.deviantart.com/art/The-Lost-Variations-258913970 */
-    double a = M_PI / (sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)) + 1.0);
-    double r = atan2(pAffineTP.y, pAffineTP.x) * _v;
+    // deltaA my Michael Faber, http://michaelfaber.deviantart.com/art/The-Lost-Variations-258913970 */
+    double avgr = pAmount * (sqrt(sqr(pAffineTP.y) + sqr(pAffineTP.x + 1.0)) / sqrt(sqr(pAffineTP.y) + sqr(pAffineTP.x - 1.0)));
+    double avga = (atan2(pAffineTP.y, pAffineTP.x - 1.0) - atan2(pAffineTP.y, pAffineTP.x + 1.0)) / 2.0;
+    sinAndCos(avga, sina, cosa);
 
-    sinAndCos(a, sina, cosa);
-
-    pVarTP.x += r * cosa.value;
-    pVarTP.y += r * sina.value;
+    pVarTP.x += avgr * cosa.value;
+    pVarTP.y += avgr * sina.value;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -51,14 +47,7 @@ public class IDiscFunc extends SimpleVariationFunc {
 
   @Override
   public String getName() {
-    return "idisc";
-  }
-
-  private double _v;
-
-  @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _v = pAmount * M_1_PI;
+    return "deltaA";
   }
 
 }
