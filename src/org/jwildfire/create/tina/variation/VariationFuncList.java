@@ -441,6 +441,7 @@ public class VariationFuncList {
 
     registerVariationFunc(BlurCircleFunc.class);
     registerVariationFunc(BlurPixelizeFunc.class);
+    registerVariationFunc(CircleLinearFunc.class);
 
   }
 
