@@ -95,7 +95,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Prefs prefs = Prefs.getPrefs();
 
     AllRandomFlameGenerator randGen = new AllRandomFlameGenerator();

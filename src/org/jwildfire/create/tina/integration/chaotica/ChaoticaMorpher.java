@@ -10,7 +10,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public class Chaotifier {
+public class ChaoticaMorpher {
   private ChaoticaPluginTranslators translator = new ChaoticaPluginTranslators();
 
   public void chaotify(Flame pFlame) {

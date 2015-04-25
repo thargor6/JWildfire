@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.transform.XFormTransformService;
 public class ExperimentalBubbles3DRandomFlameGenerator extends Bubbles3DRandomFlameGenerator {
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = super.prepareFlame(pState);
     Layer layer = flame.getFirstLayer();
     // modify last xForm

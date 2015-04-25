@@ -78,7 +78,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     RandomFlameGenerator generator = createRandGen(pState);
     RandomFlameGeneratorState subState = generator.initState(pState.getPrefs(), pState.getGradientGenerator());
     Flame flame = generator.prepareFlame(subState);

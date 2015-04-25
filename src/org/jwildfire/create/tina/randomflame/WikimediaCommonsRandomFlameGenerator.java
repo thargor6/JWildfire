@@ -46,7 +46,7 @@ import org.jwildfire.io.ImageReader;
 public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Prefs prefs = Prefs.getPrefs();
     Flame flame = createSubFlame(prefs);
     flame.setPixelsPerUnit(200);

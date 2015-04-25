@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class SynthRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     // Bases loosely on the SynthRandomBatch Script by slobo777, http://slobo777.deviantart.com/art/Synth-V2-128594088 */ 
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();

@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.swing.RandomBatchQuality;
 public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Prefs prefs = Prefs.getPrefs();
     Flame flame = createSubFlame(pState);
     int layerCount = 2 + ((Math.random() > 0.66) ? 1 : 0);

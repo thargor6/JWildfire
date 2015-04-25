@@ -26,7 +26,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
-  protected Flame prepareFlame(RandomFlameGeneratorState pState) {
+  public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
 public abstract class RandomFlameGenerator {
 
-  protected abstract Flame prepareFlame(RandomFlameGeneratorState pState);
+  public abstract Flame prepareFlame(RandomFlameGeneratorState pState);
 
   protected abstract Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame);
 
