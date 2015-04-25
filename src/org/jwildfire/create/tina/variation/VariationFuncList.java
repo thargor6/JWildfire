@@ -443,6 +443,7 @@ public class VariationFuncList {
     registerVariationFunc(BlurPixelizeFunc.class);
     registerVariationFunc(CircleLinearFunc.class);
     registerVariationFunc(CircleRandFunc.class);
+    registerVariationFunc(CircleTrans1Func.class);
 
   }
 
