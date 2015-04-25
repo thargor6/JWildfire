@@ -444,7 +444,7 @@ public class VariationFuncList {
     registerVariationFunc(CircleLinearFunc.class);
     registerVariationFunc(CircleRandFunc.class);
     registerVariationFunc(CircleTrans1Func.class);
-
+    registerVariationFunc(IDiscFunc.class);
   }
 
   private static void registerVariationFunc(
