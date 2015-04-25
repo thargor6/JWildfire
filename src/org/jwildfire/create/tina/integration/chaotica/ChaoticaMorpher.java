@@ -35,10 +35,6 @@ public class ChaoticaMorpher {
     for (XForm xForm : layer.getFinalXForms()) {
       chaotifyXForm(xForm);
     }
-
-    // TODO only for now
-    layer.getFinalXForms().clear();
-
   }
 
   private void chaotifyXForm(XForm xForm) {

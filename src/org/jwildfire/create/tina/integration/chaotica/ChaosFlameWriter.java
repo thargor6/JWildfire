@@ -111,19 +111,20 @@ public class ChaosFlameWriter {
 
   public String getFlameXML() throws Exception {
     SimpleXMLBuilder xb = new SimpleXMLBuilder();
+    IdProvider iteratorIdProvider = new IdProvider();
+    IdProvider variatonIdProvider = new IdProvider();
+
     xb.addContent("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     Layer layer = flame.getFirstLayer();
     xb.beginElement(ELEM_WORLD, xb.createAttrList(xb.createAttr(ATTR_NAME, "World")));
     addIntProperty(xb, PROPERTY_FORMAT_VERSION, 2);
     xb.beginElement(ELEM_IFS, xb.createAttrList(xb.createAttr(ATTR_NAME, flame.getName())));
     addImaging(xb, flame);
-    addAnimAndCamera(xb, flame);
+    addAnimAndCamera(xb, variatonIdProvider, flame);
 
     xb.beginElement(ELEM_NODE, xb.createAttrList(xb.createAttr(ATTR_NAME, "iterators")));
-    IdProvider iteratorIdProvider = new IdProvider();
-    IdProvider variatonIdProvider = new IdProvider();
     for (XForm xform : layer.getXForms()) {
-      addXForm(xb, layer, xform, false, iteratorIdProvider, variatonIdProvider);
+      addIterator(xb, layer, xform, false, iteratorIdProvider, variatonIdProvider);
     }
     xb.endElement(ELEM_NODE);
     addGradient(xb, layer);
@@ -140,35 +141,10 @@ public class ChaosFlameWriter {
     }
   }
 
-  private void addXForm(SimpleXMLBuilder xb, Layer layer, XForm xform, boolean isFinal, IdProvider iteratorIdProvider, IdProvider variatonIdProvider) {
+  private void addIterator(SimpleXMLBuilder xb, Layer layer, XForm xform, boolean isFinal, IdProvider iteratorIdProvider, IdProvider variatonIdProvider) {
     int iteratorId = iteratorIdProvider.getNextId();
     xb.beginElement(ELEM_ITERATOR, xb.createAttrList(xb.createAttr(ATTR_NAME, "Iterator " + iteratorId)));
-    xb.beginElement(ELEM_FLAM3_TRANSFORM, xb.createAttrList(xb.createAttr(ATTR_NAME, "flam3_xform " + iteratorId)));
-    addAffine(xb, xform, false);
-    // TODO optimize, isHasXYPostCoeffs does not work, as it does not take curves into account for now
-    //if (xform.isHasXYPostCoeffs()) {
-    addAffine(xb, xform, true);
-    //}
-    {
-      List<Variation> preTransforms = getPreTransforms(xform);
-      if (preTransforms.size() > 0) {
-        addVariations(xb, xform, variatonIdProvider, preTransforms, "pre_transforms");
-      }
-    }
-    {
-      List<Variation> transforms = getTransforms(xform);
-      if (transforms.size() > 0) {
-        addVariations(xb, xform, variatonIdProvider, transforms, "transforms");
-      }
-    }
-    {
-      List<Variation> postTransforms = getPostTransforms(xform);
-      if (postTransforms.size() > 0) {
-        addVariations(xb, xform, variatonIdProvider, postTransforms, "post_transforms");
-      }
-    }
-
-    xb.endElement(ELEM_FLAM3_TRANSFORM);
+    addTransform(xb, xform, variatonIdProvider, "flam3_xform " + iteratorId);
 
     xb.beginElement(ELEM_FLAM3_SHADER, xb.createAttrList(xb.createAttr(ATTR_NAME, "flam3 shader")));
     addRealProperty(xb, PROPERTY_PALETTE_INDEX, xform.getColor(), null);
@@ -201,6 +177,31 @@ public class ChaosFlameWriter {
     }
     addRealProperty(xb, PROPERTY_TIME_SCALE, 1.0, null);
     xb.endElement(ELEM_ITERATOR);
+  }
+
+  private void addTransform(SimpleXMLBuilder xb, XForm xform, IdProvider variatonIdProvider, String name) {
+    xb.beginElement(ELEM_FLAM3_TRANSFORM, xb.createAttrList(xb.createAttr(ATTR_NAME, name)));
+    addAffine(xb, xform, false);
+    addAffine(xb, xform, true);
+    {
+      List<Variation> preTransforms = getPreTransforms(xform);
+      if (preTransforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, preTransforms, "pre_transforms");
+      }
+    }
+    {
+      List<Variation> transforms = getTransforms(xform);
+      if (transforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, transforms, "transforms");
+      }
+    }
+    {
+      List<Variation> postTransforms = getPostTransforms(xform);
+      if (postTransforms.size() > 0) {
+        addVariations(xb, xform, variatonIdProvider, postTransforms, "post_transforms");
+      }
+    }
+    xb.endElement(ELEM_FLAM3_TRANSFORM);
   }
 
   private List<Variation> getPreTransforms(XForm xform) {
@@ -582,7 +583,7 @@ public class ChaosFlameWriter {
     xb.endElement(ELEM_IMAGING);
   }
 
-  private void addAnimAndCamera(SimpleXMLBuilder xb, Flame pFlame) {
+  private void addAnimAndCamera(SimpleXMLBuilder xb, IdProvider variatonIdProvider, Flame pFlame) {
     addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()));
     addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps());
     addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 1.0 / (double) pFlame.getFps(), null);
@@ -593,6 +594,10 @@ public class ChaosFlameWriter {
     double final_scale = pFlame.getPixelsPerUnit() * pFlame.getCamZoom() * 2.0;
     double sensor_width = (double) (pFlame.getWidth() * AA_LEVEL) / final_scale;
     addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensor_width, null);
+    Layer layer = pFlame.getFirstLayer();
+    if (layer.getFinalXForms().size() > 0) {
+      addTransform(xb, layer.getFinalXForms().get(0), variatonIdProvider, "Viewing transform");
+    }
     xb.endElement(ELEM_CAMERA);
   }
 
