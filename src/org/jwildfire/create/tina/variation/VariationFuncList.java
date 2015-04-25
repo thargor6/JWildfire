@@ -428,7 +428,7 @@ public class VariationFuncList {
     registerVariationFunc(WaveBlurWFFunc.class);
     registerVariationFunc(PostHeatFunc.class);
     registerVariationFunc(CPow3Func.class);
-    
+
     registerVariationFunc(Rational3Func.class);
     registerVariationFunc(STwinFunc.class);
     registerVariationFunc(FlowerDbFunc.class);
@@ -438,6 +438,8 @@ public class VariationFuncList {
     registerVariationFunc(FDiscFunc.class);
     registerVariationFunc(RhodoneaFunc.class);
     registerVariationFunc(ButterflyFayFunc.class);
+
+    registerVariationFunc(BlurCircleFunc.class);
 
   }
 
