@@ -68,6 +68,5 @@ public class EnvelopeMP3Data {
     envelope.setViewYMin(ymin - (ymax - ymin) * 0.04);
     envelope.setViewYMax(ymax + (ymax - ymin) * 0.04);
     envelope.setInterpolation(Interpolation.LINEAR);
-    envelope.setLocked(true);
   }
 }

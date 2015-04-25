@@ -609,7 +609,7 @@ public class EnvelopeDlgController {
   }
 
   private void scaleCurve(MouseEvent e, Direction pDirection) {
-    if (envelope != null) {
+    if (envelope != null && !envelope.isLocked()) {
       int lx = pDirection == Direction.HORIZ ? (e.getX() - lastMouseX) : 0;
       int ly = pDirection == Direction.VERT ? (e.getY() - lastMouseY) : 0;
 
@@ -665,7 +665,7 @@ public class EnvelopeDlgController {
   }
 
   private void moveCurve(java.awt.event.MouseEvent e, Direction pDirection) {
-    if (envelope != null) {
+    if (envelope != null && !envelope.isLocked()) {
       int lx = pDirection == Direction.HORIZ ? (e.getX() - lastMouseX) : 0;
       int ly = pDirection == Direction.VERT ? (e.getY() - lastMouseY) : 0;
 
@@ -713,7 +713,7 @@ public class EnvelopeDlgController {
   }
 
   private void movePoint(java.awt.event.MouseEvent e) {
-    if ((envelope != null) && (!envelope.isLocked())) {
+    if (envelope != null && !envelope.isLocked()) {
       int lx = e.getX();
       int ly = e.getY();
       EnvelopeView envelopeView = new EnvelopeView(envelopePanel);

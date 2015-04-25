@@ -630,7 +630,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
    * @return void
    */
   private void initialize() {
-    this.setSize(1200, 624);
+    this.setSize(1200, 696);
     this.setContentPane(getJContentPane());
     getCenterPanel().add((Component) getEnvelopePanel(), BorderLayout.CENTER);
   }
@@ -865,7 +865,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JPanel getPanel_1() {
     if (panel_1 == null) {
       panel_1 = new JPanel();
-      panel_1.setPreferredSize(new Dimension(10, 200));
+      panel_1.setPreferredSize(new Dimension(10, 240));
       panel_1.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_2 = new JPanel();
@@ -1073,6 +1073,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     curveValueToPreview = 0.0;
     curveToPreviewPropertyPath = getPropertyPath(flameToPreview, curveToPreview);
     getCurveFPSField().setValue(pFlameToPreview.getFps());
+    getEnvelopeMP3FPSREd().setValue(pFlameToPreview.getFps());
     //    System.out.println("PATH: " + curveToPreviewPropertyPath);
     //    MotionCurve curve = getMotionCurve(flameToPreview, curveToPreviewPropertyPath);
     //    System.out.println("CURVE: " + curve);
