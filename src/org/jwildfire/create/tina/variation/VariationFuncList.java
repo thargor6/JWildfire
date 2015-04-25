@@ -440,6 +440,7 @@ public class VariationFuncList {
     registerVariationFunc(ButterflyFayFunc.class);
 
     registerVariationFunc(BlurCircleFunc.class);
+    registerVariationFunc(BlurPixelizeFunc.class);
 
   }
 
