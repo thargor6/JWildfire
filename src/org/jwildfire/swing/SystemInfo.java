@@ -1,5 +1,7 @@
 package org.jwildfire.swing;
 
+import java.lang.management.ManagementFactory;
+
 public class SystemInfo {
   private final String osName;
   private final String osVersion;
@@ -26,15 +28,15 @@ public class SystemInfo {
   }
 
   public long getTotalMemMB() {
-    return Runtime.getRuntime().totalMemory() / 1024 / 1024;
+    return ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted() / 1024 /1024;
   }
 
   public long getMaxMemMB() {
-    return Runtime.getRuntime().maxMemory() / 1024 / 1024;
+    return ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax() / 1024 /1024;
   }
 
   public long getUsedMemMB() {
-    return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+    return ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1024 / 1024;
   }
 
   public int getProcessors() {

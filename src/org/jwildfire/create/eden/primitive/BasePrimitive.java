@@ -17,7 +17,7 @@
 package org.jwildfire.create.eden.primitive;
 
 public class BasePrimitive implements Primitive {
-  protected final static double DFLT_SIZE = 10;
+  public final static double DFLT_SIZE = 10;
 
   private final Point position = new Point();
   private final Point rotate = new Point();
