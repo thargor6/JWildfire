@@ -447,6 +447,7 @@ public class VariationFuncList {
     registerVariationFunc(IDiscFunc.class);
     registerVariationFunc(DeltaAFunc.class);
     registerVariationFunc(WDiscFunc.class);
+    registerVariationFunc(TradeFunc.class);
   }
 
   private static void registerVariationFunc(
