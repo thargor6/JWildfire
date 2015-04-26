@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaMorpherRandomFlameGenerator;
+import org.jwildfire.create.tina.integration.chaotica.ChaoticaExporterRandomFlameGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
@@ -37,7 +37,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Brokat3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
-    allGenerators.add(new ChaoticaMorpherRandomFlameGenerator());
+    allGenerators.add(new ChaoticaExporterRandomFlameGenerator());
     allGenerators.add(new CrossRandomFlameGenerator());
     allGenerators.add(new DualityRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());

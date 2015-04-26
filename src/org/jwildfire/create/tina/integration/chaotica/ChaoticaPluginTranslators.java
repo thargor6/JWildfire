@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.variation.Blob3DFunc;
 import org.jwildfire.create.tina.variation.Blur3DFunc;
 import org.jwildfire.create.tina.variation.BlurCircleFunc;
 import org.jwildfire.create.tina.variation.Bubble2Func;
+import org.jwildfire.create.tina.variation.BubbleWFFunc;
 import org.jwildfire.create.tina.variation.Butterfly3DFunc;
 import org.jwildfire.create.tina.variation.CannabisCurveWFFunc;
 import org.jwildfire.create.tina.variation.CircleBlurFunc;
@@ -123,6 +124,7 @@ public class ChaoticaPluginTranslators {
     translators.put(new Blur3DFunc().getName(), new ChaoticaPluginTranslator("gaussian_blur"));
     translators.put(new BlurCircleFunc().getName(), new ChaoticaPluginTranslator("blur"));
     translators.put(new Bubble2Func().getName(), new ChaoticaPluginTranslator("bubble"));
+    translators.put(new BubbleWFFunc().getName(), new ChaoticaPluginTranslator("bubble"));
     translators.put(new Butterfly3DFunc().getName(), new ChaoticaPluginTranslator("butterfly"));
     translators.put(new CannabisCurveWFFunc().getName(), new ChaoticaPluginTranslator("flower", fixedValue("holes", 0.4), fixedValue("petals", 7.0)));
     translators.put(new CircleBlurFunc().getName(), new ChaoticaPluginTranslator("disc"));
