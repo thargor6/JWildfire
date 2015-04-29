@@ -448,6 +448,8 @@ public class VariationFuncList {
     registerVariationFunc(DeltaAFunc.class);
     registerVariationFunc(WDiscFunc.class);
     registerVariationFunc(TradeFunc.class);
+    
+    registerVariationFunc(CustomFullVariationWrapperFunc.class);
   }
 
   private static void registerVariationFunc(

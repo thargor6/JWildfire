@@ -139,4 +139,33 @@ public abstract class VariationFunc implements Serializable {
 
   }
 
+  public VariationFunc makeCopy() {
+    VariationFunc varCopy = VariationFuncList.getVariationFuncInstance(this.getName());
+    // params
+    String[] paramNames = this.getParameterNames();
+    if (paramNames != null) {
+      for (int i = 0; i < paramNames.length; i++) {
+        Object val = this.getParameterValues()[i];
+        if (val instanceof Double) {
+          varCopy.setParameter(paramNames[i], (Double) val);
+        }
+        else if (val instanceof Integer) {
+          varCopy.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
+        }
+        else {
+          throw new IllegalStateException();
+        }
+      }
+    }
+    // ressources
+    String[] ressNames = this.getRessourceNames();
+    if (ressNames != null) {
+      for (int i = 0; i < ressNames.length; i++) {
+        byte[] val = this.getRessourceValues()[i];
+        varCopy.setRessource(ressNames[i], val);
+      }
+    }
+    return varCopy;
+  }
+
 }

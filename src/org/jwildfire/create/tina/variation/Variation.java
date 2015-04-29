@@ -77,7 +77,6 @@ public class Variation implements Assignable<Variation>, Serializable {
   public void assign(Variation var) {
     amount = var.amount;
     amountCurve.assign(var.amountCurve);
-    func = VariationFuncList.getVariationFuncInstance(var.func.getName());
 
     // motionCurves
     motionCurves.clear();
@@ -86,36 +85,9 @@ public class Variation implements Assignable<Variation>, Serializable {
       copy.assign(var.motionCurves.get(name));
       motionCurves.put(name, copy);
     }
-
-    // params
-    {
-      String[] paramNames = var.func.getParameterNames();
-      if (paramNames != null) {
-        for (int i = 0; i < paramNames.length; i++) {
-          Object val = var.func.getParameterValues()[i];
-          if (val instanceof Double) {
-            func.setParameter(paramNames[i], (Double) val);
-          }
-          else if (val instanceof Integer) {
-            func.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
-          }
-          else {
-            throw new IllegalStateException();
-          }
-        }
-      }
-    }
-    // ressources
-    {
-      String[] ressNames = var.func.getRessourceNames();
-      if (ressNames != null) {
-        for (int i = 0; i < ressNames.length; i++) {
-          byte[] val = var.func.getRessourceValues()[i];
-          func.setRessource(ressNames[i], val);
-        }
-      }
-    }
-
+    
+    // variation function
+    func = var.func.makeCopy();
   }
 
   @Override
