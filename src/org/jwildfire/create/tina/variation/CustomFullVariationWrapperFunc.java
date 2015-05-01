@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.variation;
 
 import java.lang.reflect.Field;
 import java.util.AbstractCollection;
+import java.util.Arrays;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,9 +35,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   public static boolean DEBUG = false;
-  private static final String RESSOURCE_CODE = "code";
-  private static final String[] ressourceNames = { RESSOURCE_CODE };
-  
+  private static final String RESSOURCE_CODE = "code_full_variation";
+
   private static HashMap<String, Class> builtin_variations;
   private static String classDeclRegex = "\\s*public\\s+class\\s+(\\S+?Func)\\s+(.*)";
   private static Pattern classDecl = Pattern.compile(classDeclRegex);
@@ -62,6 +62,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   private String code = default_code;
   private String filtered_code = code;
   private VariationFunc full_variation = null;
+  private String[] ressourceNames = { RESSOURCE_CODE };
   
   static {
     builtin_variations = new HashMap<String, Class>();
@@ -102,6 +103,15 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     }
   }
 
+  public int getParameterIndex(String pName) {
+    if (full_variation != null)  {
+      return full_variation.getParameterIndex(pName);
+    }
+    else {
+      return -1;
+    }
+  }
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (full_variation != null)  {
@@ -113,13 +123,40 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
 
   @Override
   public String[] getRessourceNames() {
+    // ressourceNames gets recreated in compile() to include inner full_variation resources (after the RESSOURCE_CODE name)
     return ressourceNames;
   }
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (code != null ? code.getBytes() : null) };
+    byte[] codeval =  (code != null ? code.getBytes() : null);
+    if (ressourceNames.length == 1)  {  // only one resource, the RESSOURCE_CODE, so no resources for inner full_variation
+       return new byte[][] { codeval };
+    }
+    else  {
+      byte[][] inner_resvals = full_variation.getRessourceValues();
+      byte[][] all_vals = new byte[inner_resvals.length+1][];    // ressourceNames.length should be = inner_resvals.length + 1
+      all_vals[0] = codeval;
+      for (int i=0; i<inner_resvals.length; i++) {
+        all_vals[i+1] = inner_resvals[i];
+      }
+      return all_vals;
+    }
+  //    return new byte[][] { (code != null ? code.getBytes() : null) };
   }
+
+  // public int getResourceIndex(String pName) // method inherited from VariationFunc should work
+  // public byt[] getResource(String pName) // method inherited from VariationFunc should work
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (pName.equals(RESSOURCE_CODE))  {
+      return RessourceType.BYTEARRAY;
+    }
+    else  {
+      return full_variation.getRessourceType(pName);
+    }
+  }
+    
 
   /* 
   *  setting resource
@@ -285,6 +322,20 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         if (VariationFunc.class.isAssignableFrom(varClass)) {
           full_variation = null;
           full_variation = (VariationFunc)varClass.newInstance();
+          String[] inner_resource_names = full_variation.getRessourceNames();
+          // redo ressourceNames to include any resources of the inner full_variation (added after the RESSOURCE_CODE name)
+          if (inner_resource_names == null) { 
+            ressourceNames = new String[1]; 
+            ressourceNames[0] = RESSOURCE_CODE; 
+          }
+          else {
+            ressourceNames = new String[inner_resource_names.length+1];
+            ressourceNames[0] = RESSOURCE_CODE; 
+            for (int k=0; k<inner_resource_names.length; k++) {
+              ressourceNames[k+1] = inner_resource_names[k];
+            }
+            if (DEBUG) { System.out.println("new ressourceNames: " + Arrays.toString(ressourceNames)); }
+          }
           if (DEBUG)  {
             System.out.println("full_variation: " + full_variation);
             System.out.println("variation name: " + full_variation.getName());
@@ -296,7 +347,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       if (full_variation != null && prev_variation != null)  {
         // copy shared params from prev_variation
         if (full_variation.getClass().getName().equals(prev_variation.getClass().getName())){
-          System.out.println("variations compatible, copying params: " + full_variation.getClass().getName());
+          if (DEBUG) { System.out.println("variations compatible, copying params: " + full_variation.getClass().getName()); }
           String[] prev_params = prev_variation.getParameterNames();
           for (String prev_param : prev_params) {
             Object prev_val = prev_variation.getParameter(prev_param);
@@ -362,7 +413,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
           }
         }
         else {
-          System.out.println("Copying, got a null for param " + paramName + ", prev = " + val + ", new = " + copyVal);
+          if (DEBUG) { System.out.println("Copying, got a null for param " + paramName + ", prev = " + val + ", new = " + copyVal); }
         }
       }
     }
@@ -371,5 +422,11 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
 
   @Override
   public boolean ressourceCanModifyParams()  { return true; }
+  
+  @Override
+  public int getPriority()  {
+    if (full_variation == null) { return 0; }
+    else { return full_variation.getPriority(); }
+  }
 
 }
