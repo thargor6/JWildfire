@@ -19,9 +19,13 @@ package org.jwildfire.create.tina.variation;
 import java.lang.reflect.Field;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.codehaus.janino.SimpleCompiler;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -34,12 +38,25 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final String RESSOURCE_CODE = "code";
 
   private static final String[] ressourceNames = { RESSOURCE_CODE };
+  
+  private static HashMap<String, Class> builtin_variations;
+  
+  private static String classDeclRegex = "\\s*public\\s+class\\s+(\\S+?Func)\\s+(.*)";
+  private static Pattern classDecl = Pattern.compile(classDeclRegex);
 
   private String code = "";
   private String filtered_code = code;
   
   private VariationFunc full_variation = new AsteriaFunc();
   //  private CustomFullVariationWrapperRunner runner = null;
+  
+  static {
+    builtin_variations = new HashMap<String, Class>();
+    List<Class<? extends VariationFunc>> varClasses = VariationFuncList.getVariationClasses();
+    for (Class varClass : varClasses) {
+      builtin_variations.put(varClass.getSimpleName(), varClass);
+    }
+  }
   
   public CustomFullVariationWrapperFunc()  {
     if (DEBUG) { System.out.println("called CustomFullVariationWrapperFunc constructor"); }
@@ -118,12 +135,38 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         
         while (codescanner.hasNextLine()) {
           String line = codescanner.nextLine();
-          if (! line.matches("\\s*@.*")) { 
-            bufcode.append(line);
+          // filter out Java annotation lines (lines that start with "@"), since Janino compiler will throw error on annotations
+          if (line.matches("\\s*@.*")) { 
+            if (DEBUG) { System.out.println("filtering out: " + line); }
+          }
+         // else if (line.matches("\\s*public\\s+class\\s+\\S+?Func\\s+.*")) {
+          else if (line.matches(classDeclRegex)) {
+            // extract name of class, make it Dynamic instead
+            Matcher mtch = classDecl.matcher(line);
+            String modline = line;
+            if (mtch.find()) {
+              String funcClass = mtch.group(1);
+              String remainder = mtch.group(2);
+              if (DEBUG) {
+                System.out.println("found class declaration: " + line);
+                System.out.println("variation class: " + funcClass);
+                System.out.println("remainder: " + remainder);
+              }
+              if (builtin_variations.get(funcClass) != null) {
+                String newClassName = "DynamicCompiled" + funcClass;
+                modline = "public class " + newClassName + " " + remainder;
+                if (DEBUG) {
+                  System.out.println("found existing variation: " + ((Class)builtin_variations.get(funcClass)).getName());
+                  System.out.println("REVISED LINE: " + modline);
+                }
+              }
+            }
+            bufcode.append(modline);
             bufcode.append("\n");
           }
-          else { // filter out Java annotation lines (lines that start with "@"), since Janino compiler will throw error on annotations
-            if (DEBUG) { System.out.println("filtering out: " + line); }
+          else { 
+            bufcode.append(line);
+            bufcode.append("\n");
           }
         }
         filtered_code = bufcode.toString();
@@ -237,14 +280,31 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
           break;
         }
       }
-      if (full_variation != null)  {
+      if (full_variation != null && prev_variation != null)  {
         // copy shared params from prev_variation
-        String[] prev_params = prev_variation.getParameterNames();
-        for (String prev_param : prev_params) {
-          Object param = full_variation.getParameter(prev_param);
-          if (param != null) {
-            full_variation.setParameter(prev_param, (Double)prev_variation.getParameter(prev_param));
-            if (DEBUG) { System.out.println("param: " + prev_param + ", value: " + (Double)full_variation.getParameter(prev_param)); }
+        
+        if (full_variation.getClass().getName().equals(prev_variation.getClass().getName())){
+          System.out.println("variations compatible, copying params: " + full_variation.getClass().getName());
+          String[] prev_params = prev_variation.getParameterNames();
+          for (String prev_param : prev_params) {
+            Object prev_val = prev_variation.getParameter(prev_param);
+            Object cur_val = full_variation.getParameter(prev_param);
+            if (prev_val != null && cur_val != null) {
+              if (prev_val instanceof Number) { 
+                full_variation.setParameter(prev_param, ((Number)prev_val).doubleValue());
+                if (DEBUG) { System.out.println("param: " + prev_param + ", value: " + (Number)full_variation.getParameter(prev_param)); }
+              }
+              else  {
+                if (DEBUG) {
+                  System.out.println("prev_val not a number: " + prev_val + ", " + prev_val.getClass().getName());
+                }
+              }
+            }
+          }
+        }
+        else {
+          if (DEBUG) {
+            System.out.println("variations not compatible: " + full_variation.getClass().getName() + ", " + prev_variation.getClass().getName());
           }
         }
         // should also copy shared resources??
@@ -253,6 +313,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     catch (Throwable ex) {
       System.out.println("##############################################################");
       System.out.println(ex.getMessage());
+      ex.printStackTrace();
       System.out.println("##############################################################");
       System.out.println(filtered_code);
       System.out.println("##############################################################");
@@ -279,19 +340,22 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     String[] paramNames = this.getParameterNames();
     if (paramNames != null) {
       for (int i = 0; i < paramNames.length; i++) {
-        Object val = this.getParameterValues()[i];
-        if (val instanceof Double) {
-          varCopy.setParameter(paramNames[i], (Double) val);
-        }
-        else if (val instanceof Integer) {
-          varCopy.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
+        String paramName = paramNames[i];
+        Object val = this.getParameter(paramName);
+        Object copyVal = varCopy.getParameter(paramName);
+        if (val != null && copyVal != null) {
+          if (val instanceof Number) {
+            varCopy.setParameter(paramName, ((Number)val).doubleValue());
+          }
+          else {
+            throw new IllegalStateException();
+          }
         }
         else {
-          throw new IllegalStateException();
+          System.out.println("Copying, got a null for param " + paramName + ", prev = " + val + ", new = " + copyVal);
         }
       }
     }
- 
     return varCopy;
   }
 
