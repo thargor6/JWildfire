@@ -146,11 +146,8 @@ public abstract class VariationFunc implements Serializable {
     if (paramNames != null) {
       for (int i = 0; i < paramNames.length; i++) {
         Object val = this.getParameterValues()[i];
-        if (val instanceof Double) {
-          varCopy.setParameter(paramNames[i], (Double) val);
-        }
-        else if (val instanceof Integer) {
-          varCopy.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
+        if (val instanceof Number) {
+          varCopy.setParameter(paramNames[i], ((Number)val).doubleValue());
         }
         else {
           throw new IllegalStateException();
