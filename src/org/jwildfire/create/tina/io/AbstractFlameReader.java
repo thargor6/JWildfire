@@ -769,7 +769,6 @@ public class AbstractFlameReader {
             String ressNames[] = variation.getFunc().getRessourceNames();
             if (ressNames != null) {
               for (String pName : ressNames) {
-                System.out.println("getting variation resource: " + name);
                 String pHs;
                 if ((pHs = atts.get(name + "_" + pName)) != null) {
                   variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));

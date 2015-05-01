@@ -43,7 +43,6 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   
   public CustomFullVariationWrapperFunc()  {
     if (DEBUG) { System.out.println("called CustomFullVariationWrapperFunc constructor"); }
-
   }
   
   @Override
@@ -99,9 +98,21 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   */
   @Override
   public void setRessource(String pName, byte[] pValue) {
+    if (DEBUG)  { System.out.println("called setRessource: " + pName); }
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
-      if (pValue != null)  {
-        code = new String(pValue);
+      if (pValue == null)  {
+        if (DEBUG) { System.out.println(" code resource null, setting full_variation to null"); }
+        filtered_code = "";
+        full_variation = null;
+        return;
+      }
+      else {
+        String new_code = new String(pValue);
+        if (new_code.equals(code))  {
+          if (DEBUG) { System.out.println(" code resource unchanged, returning without filtering/validating/compiling"); }
+          return;
+        }
+        code = new_code;
         StringBuffer bufcode = new StringBuffer(code.length());
         Scanner codescanner = new Scanner(code);
         
@@ -112,15 +123,12 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
             bufcode.append("\n");
           }
           else { // filter out Java annotation lines (lines that start with "@"), since Janino compiler will throw error on annotations
-            System.out.println("filtering @: " + line);
+            if (DEBUG) { System.out.println("filtering out: " + line); }
           }
         }
         filtered_code = bufcode.toString();
+        validate();  // compiles
       }
-      else {
-        filtered_code = "";
-      }
-      validate();  // compiles
     }
     else if (full_variation != null)  {
       full_variation.setRessource(pName, pValue);
@@ -168,11 +176,11 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   *    in order to update TinaNonlinearControlsRow to reflect changed param names and values when code  changes
   */
   public void compile() {
+    if (DEBUG) { System.out.println("called compile()"); }
     // if there was a previous full_variation, keep it to try and copy shared params
     VariationFunc prev_variation = full_variation;
     try {
       SimpleCompiler compiler = new SimpleCompiler();
-      if (DEBUG) { System.out.println("called compile()"); }
       compiler.cook(filtered_code);
       ClassLoader cloader = compiler.getClassLoader();    
       Class varClass = null;
