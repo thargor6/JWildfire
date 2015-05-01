@@ -126,6 +126,7 @@ public class Variation implements Assignable<Variation>, Serializable {
       Object vals[] = func.getParameterValues();
       if (vals != null) {
         Object srcVals[] = pSrc.func.getParameterValues();
+        if (vals.length != srcVals.length) { return false; }
         for (int i = 0; i < vals.length; i++) {
           Object o = vals[i];
           Object s = srcVals[i];
@@ -134,11 +135,13 @@ public class Variation implements Assignable<Variation>, Serializable {
           }
           else if (o != null && s != null) {
             if (o instanceof Integer) {
+              if (! (s instanceof Integer)) { return false; }
               if (((Integer) o).intValue() != ((Integer) s).intValue()) {
                 return false;
               }
             }
             else if (o instanceof Double) {
+              if (! (s instanceof Double)) { return false; }
               if (fabs(((Double) o).doubleValue() - ((Double) s).doubleValue()) > EPSILON) {
                 return false;
               }
