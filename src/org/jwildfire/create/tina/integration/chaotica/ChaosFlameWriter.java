@@ -117,7 +117,7 @@ public class ChaosFlameWriter {
     xb.addContent("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     Layer layer = flame.getFirstLayer();
     xb.beginElement(ELEM_WORLD, xb.createAttrList(xb.createAttr(ATTR_NAME, "World")));
-    addIntProperty(xb, PROPERTY_FORMAT_VERSION, 2);
+    addIntProperty(xb, PROPERTY_FORMAT_VERSION, 2, null);
     xb.beginElement(ELEM_IFS, xb.createAttrList(xb.createAttr(ATTR_NAME, flame.getName())));
     addImaging(xb, flame);
     addAnimAndCamera(xb, variatonIdProvider, flame);
@@ -250,16 +250,19 @@ public class ChaosFlameWriter {
         for (String name : var.getFunc().getParameterNames()) {
           Object param = var.getFunc().getParameter(name);
           if (param != null) {
-            double value = 0.0;
             if (param instanceof Double) {
-              value = ((Double) param).doubleValue();
+              double value = ((Double) param).doubleValue();
+              String propertyName = translator.translatePropertyName(varName, name);
+              if (propertyName != null) {
+                addRealProperty(xb, propertyName, value, var.getMotionCurve(name));
+              }
             }
             else if (param instanceof Integer) {
-              value = ((Integer) param).intValue();
-            }
-            String propertyName = translator.translatePropertyName(varName, name);
-            if (propertyName != null) {
-              addRealProperty(xb, propertyName, value, var.getMotionCurve(name));
+              int value = ((Integer) param).intValue();
+              String propertyName = translator.translatePropertyName(varName, name);
+              if (propertyName != null) {
+                addIntProperty(xb, propertyName, value, var.getMotionCurve(name));
+              }
             }
           }
         }
@@ -565,11 +568,11 @@ public class ChaosFlameWriter {
 
   private void addImaging(SimpleXMLBuilder xb, Flame pFlame) {
     xb.beginElement(ELEM_IMAGING, xb.createAttrList(xb.createAttr(ATTR_NAME, "img")));
-    addIntProperty(xb, PROPERTY_IMAGE_WIDTH, pFlame.getWidth());
-    addIntProperty(xb, PROPERTY_IMAGE_HEIGHT, pFlame.getHeight());
-    addIntProperty(xb, PROPERTY_IMAGE_AA_LEVEL, AA_LEVEL);
-    addIntProperty(xb, PROPERTY_IMAGE_LAYERS, 1);
-    addIntProperty(xb, PROPERTY_IMAGE_QUALITY, 0);
+    addIntProperty(xb, PROPERTY_IMAGE_WIDTH, pFlame.getWidth(), null);
+    addIntProperty(xb, PROPERTY_IMAGE_HEIGHT, pFlame.getHeight(), null);
+    addIntProperty(xb, PROPERTY_IMAGE_AA_LEVEL, AA_LEVEL, null);
+    addIntProperty(xb, PROPERTY_IMAGE_LAYERS, 1, null);
+    addIntProperty(xb, PROPERTY_IMAGE_QUALITY, 0, null);
     addStringProperty(xb, PROPERTY_ANTIALIASING_MODE, "strong");
     addRealProperty(xb, PROPERTY_BRIGHTNESS, pFlame.getBrightness(), null);
     addVec4Property(xb, PROPERTY_BACKGROUND_COLOR, convertColorValue(pFlame.getBGColorRed()), convertColorValue(pFlame.getBGColorGreen()), convertColorValue(pFlame.getBGColorBlue()), convertColorValue(255));
@@ -584,8 +587,8 @@ public class ChaosFlameWriter {
   }
 
   private void addAnimAndCamera(SimpleXMLBuilder xb, IdProvider variatonIdProvider, Flame pFlame) {
-    addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()));
-    addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps());
+    addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()), null);
+    addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps(), null);
     addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 1.0 / (double) pFlame.getFps(), null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
     xb.beginElement(ELEM_CAMERA, xb.createAttrList(xb.createAttr(ATTR_NAME, PROPERTY_FLAM3_CAMERA)));
@@ -601,8 +604,25 @@ public class ChaosFlameWriter {
     xb.endElement(ELEM_CAMERA);
   }
 
-  private void addIntProperty(SimpleXMLBuilder xb, String property, int value) {
-    xb.simpleElement(ELEM_INT, String.valueOf(value), xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
+  private void addIntProperty(SimpleXMLBuilder xb, String property, int value, MotionCurve pCurve) {
+    if (pCurve == null || pCurve.isEmpty() || !pCurve.isEnabled()) {
+      xb.simpleElement(ELEM_INT, String.valueOf(value), xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
+    }
+    else {
+      xb.beginElement(ELEM_INT, xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
+      xb.beginElement(ELEM_CURVE, xb.createAttrList(xb.createAttr(ATTR_NAME, "val_curve")));
+      List<Double> time = new ArrayList<Double>();
+      List<Double> amp = new ArrayList<Double>();
+      for (int i = 0; i < pCurve.getX().length; i++) {
+        time.add(convertFrameToTime(pCurve.getX()[i]));
+        amp.add(pCurve.getY()[i]);
+      }
+      addTableProperty(xb, "knots", time.toArray(new Double[time.size()]));
+      addTableProperty(xb, "values", amp.toArray(new Double[amp.size()]));
+      xb.endElement(ELEM_CURVE);
+      xb.endElement(ELEM_INT);
+    }
+
   }
 
   private void addStringProperty(SimpleXMLBuilder xb, String property, String value) {

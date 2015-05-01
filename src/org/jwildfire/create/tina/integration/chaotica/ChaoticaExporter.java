@@ -13,7 +13,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 public class ChaoticaExporter {
   private ChaoticaPluginTranslators translator = new ChaoticaPluginTranslators();
 
-  public void chaotify(Flame pFlame) {
+  public void doExport(Flame pFlame) {
     pFlame.resetCameraSettings();
     pFlame.resetBokehSettings();
     pFlame.resetDOFSettings();
@@ -21,7 +21,6 @@ public class ChaoticaExporter {
     pFlame.resetPostSymmetrySettings();
     pFlame.resetShadingSettings();
     pFlame.resetStereo3DSettings();
-    pFlame.setPreserveZ(false);
     while (pFlame.getLayers().size() > 1) {
       pFlame.getLayers().remove(pFlame.getLayers().size() - 1);
     }
