@@ -69,9 +69,7 @@ public class JuliaScopeFunc extends VariationFunc {
 
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y + r * sina;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   public void transformPowerMinus2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -85,26 +83,20 @@ public class JuliaScopeFunc extends VariationFunc {
     double r = pAmount / sqrt(sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)));
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y - r * sina;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x = pVarTP.x + pAmount * pAffineTP.x;
     pVarTP.y = pVarTP.y + pAmount * pAffineTP.y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   public void transformPowerMinus1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
     pVarTP.x = pVarTP.x + r * pAffineTP.x;
     pVarTP.y = pVarTP.y + r * pAffineTP.y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   public void transformFunction(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -120,9 +112,7 @@ public class JuliaScopeFunc extends VariationFunc {
     double r = pAmount * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), cPower);
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y + r * sina;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

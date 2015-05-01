@@ -35,9 +35,7 @@ public class SpiralFunc extends SimpleVariationFunc {
     r = pAmount / r;
     pVarTP.x += (cosA + sinr) * r;
     pVarTP.y += (sinA - cosr) * r;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

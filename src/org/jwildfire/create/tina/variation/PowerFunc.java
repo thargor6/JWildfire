@@ -29,9 +29,8 @@ public class PowerFunc extends SimpleVariationFunc {
     double r = pAmount * pow(pAffineTP.getPrecalcSqrt(), pAffineTP.getPrecalcSinA());
     pVarTP.x += r * pAffineTP.getPrecalcCosA();
     pVarTP.y += r * pAffineTP.getPrecalcSinA();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

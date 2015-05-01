@@ -445,7 +445,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineRotateEditMotionCurveBtn = parameterObject.affineRotateEditMotionCurveBtn;
     data.affineScaleEditMotionCurveBtn = parameterObject.affineScaleEditMotionCurveBtn;
     data.affineEditPostTransformSmallButton = parameterObject.pAffineEditPostTransformSmallButton;
-    data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
 
@@ -1228,8 +1227,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flameControls.refreshFlameValues();
 
       refreshBGColorIndicator();
-
-      data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
       gridRefreshing = true;
       try {
@@ -3918,17 +3915,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void setInteractiveRendererCtrl(TinaInteractiveRendererController interactiveRendererCtrl) {
     this.interactiveRendererCtrl = interactiveRendererCtrl;
-  }
-
-  public void affinePreserveZButton_clicked() {
-    if (gridRefreshing || cmbRefreshing) {
-      return;
-    }
-    if (getCurrFlame() != null) {
-      saveUndoPoint();
-      getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
-      refreshFlameImage(false);
-    }
   }
 
   private void setupProfiles(Flame pFlame) {

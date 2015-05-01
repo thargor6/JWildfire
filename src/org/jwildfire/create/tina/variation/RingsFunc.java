@@ -31,9 +31,7 @@ public class RingsFunc extends SimpleVariationFunc {
     r = r + dx - ((int) ((r + dx) / (2 * dx))) * 2 * dx - dx + r * (1 - dx);
     pVarTP.x += r * pAffineTP.getPrecalcCosA();
     pVarTP.y += r * pAffineTP.getPrecalcSinA();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

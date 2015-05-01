@@ -43,9 +43,7 @@ public class FlowerFunc extends VariationFunc {
     double r = pAmount * (pContext.random() - holes) * cos(petals * theta) / d;
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

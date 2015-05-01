@@ -57,9 +57,7 @@ public class NPolarFunc extends VariationFunc {
     y = (this._isodd != 0) ? sina : (this._vvar * atan2(cosa, sina));
     pVarTP.x += x;
     pVarTP.y += y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

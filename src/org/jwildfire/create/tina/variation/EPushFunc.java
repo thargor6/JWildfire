@@ -78,10 +78,7 @@ public class EPushFunc extends VariationFunc {
 
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

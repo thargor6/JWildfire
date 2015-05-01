@@ -16,21 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.base.Tools;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-
 
 // Rosoni JWildfire variation by DarkBeam, July 2014
 // (for more details, see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=23&t=1449)
@@ -51,8 +49,8 @@ public class RosoniFunc extends VariationFunc {
   private static final String PARAM_DX = "dx";
   private static final String PARAM_DY = "dy";
   private static final String[] paramNames = { PARAM_MAXITER, PARAM_SWEETITER,
-   PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY };
-  
+      PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY };
+
   private int maxiter = 25;
   private int sweetiter = 3;
   private int ashp = 0;
@@ -60,69 +58,69 @@ public class RosoniFunc extends VariationFunc {
   private double radius = 0.4;
   private double dx = 0.6;
   private double dy = 0.0;
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x =  pAffineTP.x;
-    double y =  pAffineTP.y;
-    double r = sqrt(sqr(x)+ sqr(y)) - cutoff;
-    if (cutoff < 0.0) r = Math.max(fabs(x), fabs(y)) + cutoff;
+    double x = pAffineTP.x;
+    double y = pAffineTP.y;
+    double r = sqrt(sqr(x) + sqr(y)) - cutoff;
+    if (cutoff < 0.0)
+      r = Math.max(fabs(x), fabs(y)) + cutoff;
     boolean cerc = r > 0.0;
-    
+
     if (cerc) {
       pVarTP.x += pAmount * x;
-      if (pContext.isPreserveZCoordinate()) {
-       pVarTP.z += pAmount * pAffineTP.z;
-      } 
       pVarTP.y += pAmount * y;
+      pVarTP.z = pAmount * pAffineTP.z;
       return;
-     }
+    }
 
     cerc = (dx > 0.0);
     int i;
-    double xrt = x, yrt = y,swp,r2=xrt;
+    double xrt = x, yrt = y, swp, r2 = xrt;
     double sweetx = xrt, sweety = yrt;
-    
+
     for (i = 0; i < maxiter; i++) {
-        if (ashp == 0) {
-           r2 =  sqr(xrt-dx)+ sqr(yrt-dy) - sqr(radius); // circle
-           if (radius < 0.0) r2 = Math.max(fabs(xrt-dx), fabs(y-dy)) + radius; // square
-        } else { 
-          r2 = ((xrt-dx)<0.0)?-(xrt-dx):((sqr(yrt-dy))-sqr(xrt-dx)*(sqr(radius)-sqr(xrt-dx))); // lemniscate
-          if (radius < 0.0) r2 = fabs(atan2(y-dy,xrt-dx))*M_1_PI + radius; // angle
-        }
-        cerc ^= (r2 <= 0.0);
-        // rotate around to get the the sides!!! :D
-        if (i == sweetiter) {
-           sweetx = xrt; sweety = yrt;
-        }
-        swp = xrt * _cosa - yrt * _sina;
-        yrt = xrt * _sina + yrt * _cosa;
-        xrt = swp;
-    } 
-       
+      if (ashp == 0) {
+        r2 = sqr(xrt - dx) + sqr(yrt - dy) - sqr(radius); // circle
+        if (radius < 0.0)
+          r2 = Math.max(fabs(xrt - dx), fabs(y - dy)) + radius; // square
+      }
+      else {
+        r2 = ((xrt - dx) < 0.0) ? -(xrt - dx) : ((sqr(yrt - dy)) - sqr(xrt - dx) * (sqr(radius) - sqr(xrt - dx))); // lemniscate
+        if (radius < 0.0)
+          r2 = fabs(atan2(y - dy, xrt - dx)) * M_1_PI + radius; // angle
+      }
+      cerc ^= (r2 <= 0.0);
+      // rotate around to get the the sides!!! :D
+      if (i == sweetiter) {
+        sweetx = xrt;
+        sweety = yrt;
+      }
+      swp = xrt * _cosa - yrt * _sina;
+      yrt = xrt * _sina + yrt * _cosa;
+      xrt = swp;
+    }
+
     if (cerc) {
       if (sweetiter == 0) {
-          if (dy != 0) pVarTP.x -= pAmount * sweetx;
-          else pVarTP.x += pAmount * sweetx;
-          pVarTP.y -= pAmount * sweety;
+        if (dy != 0)
+          pVarTP.x -= pAmount * sweetx;
+        else
+          pVarTP.x += pAmount * sweetx;
+        pVarTP.y -= pAmount * sweety;
       }
       else
       {
-          pVarTP.x += pAmount * sweetx;
-          pVarTP.y += pAmount * sweety;
+        pVarTP.x += pAmount * sweetx;
+        pVarTP.y += pAmount * sweety;
       }
-      if (pContext.isPreserveZCoordinate()) {
-       pVarTP.z += pAmount * pAffineTP.z;
-      } 
+      pVarTP.z = pAmount * pAffineTP.z;
       return;
     }
     pVarTP.x += pAmount * x;
-    if (pContext.isPreserveZCoordinate()) {
-     pVarTP.z += pAmount * pAffineTP.z;
-    } 
-    pVarTP.y += pAmount * y;  
-    
+    pVarTP.y += pAmount * y;
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override
@@ -134,7 +132,7 @@ public class RosoniFunc extends VariationFunc {
   public Object[] getParameterValues() {
     return new Object[] { maxiter, sweetiter, ashp, cutoff, radius, dx, dy };
   }
- 
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_MAXITER.equalsIgnoreCase(pName))
@@ -164,7 +162,7 @@ public class RosoniFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-     double phi = M_2PI / (double)maxiter;
+    double phi = M_2PI / (double) maxiter;
     _sina = sin(phi);
     _cosa = cos(phi);
   }

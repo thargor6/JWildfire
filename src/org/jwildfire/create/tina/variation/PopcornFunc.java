@@ -37,9 +37,7 @@ public class PopcornFunc extends SimpleVariationFunc {
     double ny = pAffineTP.y + pXForm.getCoeff21() * sin(dy);
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

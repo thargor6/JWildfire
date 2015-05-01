@@ -41,9 +41,7 @@ public class Waves2Func extends VariationFunc {
     /* waves2 from Joel F */
     pVarTP.x += pAmount * (pAffineTP.x + scalex * sin(pAffineTP.y * freqx));
     pVarTP.y += pAmount * (pAffineTP.y + scaley * sin(pAffineTP.x * freqy));
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

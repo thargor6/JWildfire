@@ -74,9 +74,7 @@ public class BarycentroidFunc extends VariationFunc {
 
     pVarTP.x += pAmount * um;
     pVarTP.y += pAmount * vm;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   private double sgn(double v) {

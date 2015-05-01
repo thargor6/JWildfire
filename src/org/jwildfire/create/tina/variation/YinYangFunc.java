@@ -88,9 +88,9 @@ public class YinYangFunc extends VariationFunc {
       pVarTP.x += 0.0; // out!
       pVarTP.y += 0.0; // out!
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

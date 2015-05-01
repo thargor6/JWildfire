@@ -41,9 +41,7 @@ public class ParabolaFunc extends VariationFunc {
     double cr = cos(r);
     pVarTP.x += height * pAmount * sr * sr * pContext.random();
     pVarTP.y += width * pAmount * cr * pContext.random();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

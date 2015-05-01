@@ -80,9 +80,7 @@ public class RippleFunc extends VariationFunc {
     pVarTP.x = pAmount * (lerp(u1, u2, _p)) * _is;
     pVarTP.y = pAmount * (lerp(v1, v2, _p)) * _is;
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

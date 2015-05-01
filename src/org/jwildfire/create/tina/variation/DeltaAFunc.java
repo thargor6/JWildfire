@@ -40,9 +40,7 @@ public class DeltaAFunc extends SimpleVariationFunc {
 
     pVarTP.x += avgr * cosa.value;
     pVarTP.y += avgr * sina.value;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

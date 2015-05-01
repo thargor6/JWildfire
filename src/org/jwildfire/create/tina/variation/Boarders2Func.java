@@ -69,9 +69,7 @@ public class Boarders2Func extends VariationFunc {
         }
       }
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

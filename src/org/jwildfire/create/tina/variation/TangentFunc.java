@@ -41,9 +41,7 @@ public class TangentFunc extends SimpleVariationFunc {
     }
     pVarTP.x += pAmount * sin(pAffineTP.x) / d;
     pVarTP.y += pAmount * tan(pAffineTP.y);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

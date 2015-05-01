@@ -16,7 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -38,9 +42,8 @@ public class FDiscFunc extends VariationFunc {
   private static final String PARAM_TERM3 = "term3";
   private static final String PARAM_TERM4 = "term4";
 
-
-  private static final String[] paramNames = { PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT, 
-                                               PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4 };
+  private static final String[] paramNames = { PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT,
+      PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4 };
 
   private double ashift = 1.0;
   private double rshift = 1.0;
@@ -50,7 +53,7 @@ public class FDiscFunc extends VariationFunc {
   private double term2 = 0;
   private double term3 = 0;
   private double term4 = 0;
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* calcs from Apophysis7X plugin
@@ -69,16 +72,13 @@ public class FDiscFunc extends VariationFunc {
     double pr = pAmount * r;
     double prx = pr * xfactor;
     double pry = pr * yfactor;
-    
 
-    pVarTP.x += (term1 * prx) +  (term2 * pAffineTP.x * prx) + (term3 * pAffineTP.x * pr) + (term4 * pAffineTP.x);
-    pVarTP.y += (term1 * pry) +  (term2 * pAffineTP.y * pry) + (term3 * pAffineTP.y * pr) + (term4 * pAffineTP.y);
+    pVarTP.x += (term1 * prx) + (term2 * pAffineTP.x * prx) + (term3 * pAffineTP.x * pr) + (term4 * pAffineTP.x);
+    pVarTP.y += (term1 * pry) + (term2 * pAffineTP.y * pry) + (term3 * pAffineTP.y * pr) + (term4 * pAffineTP.y);
     // pVarTP.x += pAffineTP.x * pAmount * r * xfactor;
     // pVarTP.y += pAffineTP.y * pAmount * r * yfactor;
-    
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

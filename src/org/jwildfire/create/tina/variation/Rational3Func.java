@@ -16,9 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -47,16 +44,16 @@ public class Rational3Func extends VariationFunc {
   private static final String PARAM_F = "f";
   private static final String PARAM_G = "g";
   private static final String PARAM_H = "h";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D,  
-                                               PARAM_E, PARAM_F, PARAM_G, PARAM_H };
-  private double a = 0.5; 
-  private double b = 0.0; 
-  private double c = 0.0; 
-  private double d = 1.0; 
-  private double e = 0.0; 
-  private double f = 1.0; 
-  private double g = 0.0; 
-  private double h = 1.0; 
+  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D,
+      PARAM_E, PARAM_F, PARAM_G, PARAM_H };
+  private double a = 0.5;
+  private double b = 0.0;
+  private double c = 0.0;
+  private double d = 1.0;
+  private double e = 0.0;
+  private double f = 1.0;
+  private double g = 0.0;
+  private double h = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -71,23 +68,21 @@ public class Rational3Func extends VariationFunc {
     double zb2 = 2 * pAffineTP.x * pAffineTP.y;
 
     double tr = (a * zt3) + (b * zt2) + (c * pAffineTP.x) + d;
-    double ti = (a * zb3)+ (b * zb2) + (c * pAffineTP.y);
+    double ti = (a * zb3) + (b * zb2) + (c * pAffineTP.y);
 
     double br = (e * zt3) + (f * zt2) + (g * pAffineTP.x) + h;
     double bi = (e * zb3) + (f * zb2) + (g * pAffineTP.y);
 
-    double r3den = 1/(br * br + bi * bi);
+    double r3den = 1 / (br * br + bi * bi);
 
     pVarTP.x += pAmount * (tr * br + ti * bi) * r3den;
     pVarTP.y += pAmount * (ti * br - tr * bi) * r3den;
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 
-@Override
+  @Override
   public String[] getParameterNames() {
     return paramNames;
   }

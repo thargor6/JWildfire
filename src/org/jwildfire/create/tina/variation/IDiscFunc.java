@@ -44,9 +44,8 @@ public class IDiscFunc extends SimpleVariationFunc {
 
     pVarTP.x += r * cosa.value;
     pVarTP.y += r * sina.value;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

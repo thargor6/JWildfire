@@ -62,9 +62,7 @@ public class StarBlurFunc extends VariationFunc {
 
     pVarTP.x += pAmount * z * c;
     pVarTP.y += pAmount * z * s;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

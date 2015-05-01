@@ -29,10 +29,7 @@ public class EnnepersFunc extends SimpleVariationFunc {
     // ennepers by Raykoid666, http://raykoid666.deviantart.com/art/re-pack-1-new-plugins-100092186 
     pVarTP.x = pAmount * (pAffineTP.x - ((sqr(pAffineTP.x) * pAffineTP.x) / 3.0)) + pAffineTP.x * sqr(pAffineTP.y);
     pVarTP.y = pAmount * (pAffineTP.y - ((sqr(pAffineTP.y) * pAffineTP.y) / 3.0)) + pAffineTP.y * sqr(pAffineTP.x);
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

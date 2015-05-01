@@ -46,7 +46,6 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
-    flame.setPreserveZ(true);
 
     VariationFunc varFunc;
     // 1st xForm

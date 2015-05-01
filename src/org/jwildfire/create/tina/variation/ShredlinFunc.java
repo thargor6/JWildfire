@@ -51,9 +51,7 @@ public class ShredlinFunc extends VariationFunc {
     pVarTP.x = vv * sxd * ((xrng - (int) xrng) * sxw + (int) xrng + (0.5 - xpos) * (1 - sxw));
     pVarTP.y = vv * syd * ((yrng - (int) yrng) * syw + (int) yrng + (0.5 - ypos) * (1 - syw));
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

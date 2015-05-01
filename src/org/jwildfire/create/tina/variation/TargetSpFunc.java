@@ -40,8 +40,8 @@ public class TargetSpFunc extends VariationFunc {
   private static final String PARAM_TIGHTNESS = "tightness";
   private static final String[] paramNames = { PARAM_EVEN, PARAM_NUMSP, PARAM_SIZE, PARAM_TIGHTNESS };
 
-  private double even = 0.0;
-  private int nofsp = 1;
+  private double twist = 0.0;
+  private int n_of_sp = 1;
   private double size = 0.5 + Math.random() * 3.0;
   private double tightness = 0.5 + Math.random() * 0.25;
 
@@ -51,7 +51,7 @@ public class TargetSpFunc extends VariationFunc {
     double a = atan2(pAffineTP.y, pAffineTP.x);
     double r = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
     //double t = log(r);
-    double t = tightness * log(r) + nofsp * M_1_PI * (a + M_PI);
+    double t = tightness * log(r) + n_of_sp * M_1_PI * (a + M_PI);
     if (t < 0.0)
       t -= t_size_2;
 
@@ -67,10 +67,7 @@ public class TargetSpFunc extends VariationFunc {
 
     pVarTP.x += r * c;
     pVarTP.y += r * s;
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override
@@ -80,15 +77,15 @@ public class TargetSpFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { even, nofsp, size, tightness };
+    return new Object[] { twist, n_of_sp, size, tightness };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_EVEN.equalsIgnoreCase(pName))
-      even = pValue;
+      twist = pValue;
     else if (PARAM_NUMSP.equalsIgnoreCase(pName))
-      nofsp = (int) pValue;
+      n_of_sp = (int) pValue;
     else if (PARAM_SIZE.equalsIgnoreCase(pName))
       size = pValue;
     else if (PARAM_TIGHTNESS.equalsIgnoreCase(pName))
@@ -109,7 +106,7 @@ public class TargetSpFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     t_size_2 = 0.5 * size;
-    _rota = M_PI * even;
+    _rota = M_PI * twist;
     _rotb = -M_PI + _rota;
   }
 

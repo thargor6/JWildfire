@@ -197,7 +197,6 @@ public class FlameMorphService {
     res.setPixelsPerUnit(morphValue(pFlame1.getPixelsPerUnit(), pFlame2.getPixelsPerUnit(), fScl));
     res.setWidth(morphValue(pFlame1.getWidth(), pFlame2.getWidth(), fScl));
     res.setHeight(morphValue(pFlame1.getHeight(), pFlame2.getHeight(), fScl));
-    res.setPreserveZ(morphValue(pFlame1.isPreserveZ(), pFlame2.isPreserveZ(), fScl));
     res.setSpatialFilterRadius(morphValue(pFlame1.getSpatialFilterRadius(), pFlame2.getSpatialFilterRadius(), fScl));
     res.setVibrancy(morphValue(pFlame1.getVibrancy(), pFlame2.getVibrancy(), fScl));
     res.setWhiteLevel(morphValue(pFlame1.getWhiteLevel(), pFlame2.getWhiteLevel(), fScl));

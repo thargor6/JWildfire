@@ -124,9 +124,8 @@ public class OrthoFunc extends VariationFunc {
       }
     }
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

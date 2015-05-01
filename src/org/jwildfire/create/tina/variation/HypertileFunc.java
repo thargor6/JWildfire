@@ -53,10 +53,7 @@ public class HypertileFunc extends VariationFunc {
 
     pVarTP.x += vr * (a * c + b * d);
     pVarTP.y += vr * (b * c - a * d);
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

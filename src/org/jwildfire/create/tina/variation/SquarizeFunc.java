@@ -64,9 +64,7 @@ public class SquarizeFunc extends SimpleVariationFunc {
       pVarTP.y -= pAmount * (8.0 * s - p);
     }
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

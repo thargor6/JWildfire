@@ -77,9 +77,7 @@ public class ECollideFunc extends VariationFunc {
     cosnu = cos(nu);
     pVarTP.x += pAmount * xmax * cosnu;
     pVarTP.y += pAmount * sqrt(xmax - 1.0) * sqrt(xmax + 1.0) * sinnu;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

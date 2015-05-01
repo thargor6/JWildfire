@@ -120,9 +120,9 @@ public class LazyJessFunc extends VariationFunc {
         pVarTP.y += pAmount * modulus * y;
       }
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

@@ -36,9 +36,7 @@ public class ExpFunc extends SimpleVariationFunc {
     double expcos = cos(pAffineTP.y);
     pVarTP.x += pAmount * expe * expcos;
     pVarTP.y += pAmount * expe * expsin;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

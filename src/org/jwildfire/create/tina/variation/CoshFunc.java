@@ -38,9 +38,7 @@ public class CoshFunc extends SimpleVariationFunc {
     double coshcosh = cosh(pAffineTP.x);
     pVarTP.x += pAmount * coshcosh * coshcos;
     pVarTP.y += pAmount * coshsinh * coshsin;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

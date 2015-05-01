@@ -37,9 +37,7 @@ public class ConicFunc extends VariationFunc {
     double r = pAmount * (pContext.random() - holes) * eccentricity / (1 + eccentricity * ct) / pAffineTP.getPrecalcSqrt();
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

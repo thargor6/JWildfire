@@ -90,9 +90,7 @@ public class SplitBrdrFunc extends VariationFunc {
     }
     pVarTP.x += pAffineTP.x * this.px;
     pVarTP.y += pAffineTP.y * this.py;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

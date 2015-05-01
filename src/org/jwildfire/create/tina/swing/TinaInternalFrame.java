@@ -3477,21 +3477,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineScaleXButton(), null);
       tinaAffineTransformationPanel.add(getAffineScaleYButton(), null);
 
-      affinePreserveZButton = new JToggleButton();
-      affinePreserveZButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.affinePreserveZButton_clicked();
-        }
-      });
-      affinePreserveZButton.setToolTipText("Preserve the Z-coordinate (applies only if 2D- and 3D-variations are mixed)");
-      affinePreserveZButton.setText("Preserve Z");
-      affinePreserveZButton.setSize(new Dimension(138, 24));
-      affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
-      affinePreserveZButton.setLocation(new Point(4, 181));
-      affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      affinePreserveZButton.setBounds(218, 155, 104, 24);
-      tinaAffineTransformationPanel.add(affinePreserveZButton);
-
       affineRotateEditMotionCurveBtn = new JButton();
       affineRotateEditMotionCurveBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -4644,7 +4629,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getHelpPane(),
-        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getToggleVariationsButton(), getToggleTransparencyButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
@@ -10186,7 +10171,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea interactiveStatsTextArea;
   private JComboBox interactiveRandomStyleCmb;
   private JToggleButton interactiveHalfSizeButton;
-  private JToggleButton affinePreserveZButton;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
   private JComboBox interactiveResolutionProfileCmb;
@@ -12395,10 +12379,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getInteractiveHalveSizeButton() {
     return interactiveHalfSizeButton;
-  }
-
-  public JToggleButton getAffinePreserveZButton() {
-    return affinePreserveZButton;
   }
 
   private JButton getQualityProfileBtn() {

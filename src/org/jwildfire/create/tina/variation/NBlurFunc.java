@@ -102,9 +102,9 @@ public class NBlurFunc extends VariationFunc {
 
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   private static class RandXYData implements Serializable {

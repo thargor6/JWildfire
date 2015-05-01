@@ -49,10 +49,7 @@ public class EllipticFunc extends SimpleVariationFunc {
       pVarTP.y += _v * log(xmax + sqrt_safe(xmax - 1.0));
     else
       pVarTP.y -= _v * log(xmax + sqrt_safe(xmax - 1.0));
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override
