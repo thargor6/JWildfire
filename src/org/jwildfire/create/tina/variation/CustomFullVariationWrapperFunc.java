@@ -34,21 +34,34 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   public static boolean DEBUG = false;
-
   private static final String RESSOURCE_CODE = "code";
-
   private static final String[] ressourceNames = { RESSOURCE_CODE };
   
   private static HashMap<String, Class> builtin_variations;
-  
   private static String classDeclRegex = "\\s*public\\s+class\\s+(\\S+?Func)\\s+(.*)";
   private static Pattern classDecl = Pattern.compile(classDeclRegex);
 
-  private String code = "";
-  private String filtered_code = code;
+  private static String default_code =
+    "package org.jwildfire.create.tina.variation;\n" + 
+    "import org.jwildfire.create.tina.base.XForm;\n" + 
+    "import org.jwildfire.create.tina.base.XYZPoint;\n" +
+    "\n" + 
+    "public class DynamicCompiledLinear3DFunc extends SimpleVariationFunc {\n" + 
+    "  private static final long serialVersionUID = 1L;\n" + 
+    "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\n" + 
+    "    pVarTP.x += pAmount * pAffineTP.x;\n" + 
+    "    pVarTP.y += pAmount * pAffineTP.y;\n" + 
+    "    pVarTP.z += pAmount * pAffineTP.z;\n" + 
+    "  }\n" +
+    "\n" + 
+    "  public String getName() {\n" + 
+    "    return \"linear3D_dynamic\";\n" + 
+    "  }\n" + 
+    "}\n";
   
-  private VariationFunc full_variation = new AsteriaFunc();
-  //  private CustomFullVariationWrapperRunner runner = null;
+  private String code = default_code;
+  private String filtered_code = code;
+  private VariationFunc full_variation = null;
   
   static {
     builtin_variations = new HashMap<String, Class>();
@@ -183,7 +196,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "custom_full";
+    return "custom_wf_full";
   }
 
   @Override
@@ -258,7 +271,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
           else if (me.getKey() instanceof Class) { varClassName = ((Class)me.getKey()).getName(); }
           else if (me.getValue() instanceof Class) { varClassName = ((Class)me.getValue()).getName(); }
           else { varClassName = me.getValue().toString(); }
-        }
+        }  
         else { 
           varClassName = val.toString(); 
         }
@@ -282,7 +295,6 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       }
       if (full_variation != null && prev_variation != null)  {
         // copy shared params from prev_variation
-        
         if (full_variation.getClass().getName().equals(prev_variation.getClass().getName())){
           System.out.println("variations compatible, copying params: " + full_variation.getClass().getName());
           String[] prev_params = prev_variation.getParameterNames();
@@ -314,8 +326,6 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       System.out.println("##############################################################");
       System.out.println(ex.getMessage());
       ex.printStackTrace();
-      System.out.println("##############################################################");
-      System.out.println(filtered_code);
       System.out.println("##############################################################");
       // full_variation = null;
     }
