@@ -61,6 +61,9 @@ public class VariationFuncList {
     aliasMap.put(JuliaCFunc.class, "Juliac");
     aliasMap.put(VoronFunc.class, "Voron");
     aliasMap.put(CrossFunc.class, "cross2");
+    aliasMap.put(CircleLinearFunc.class, "CircleLinear");
+    aliasMap.put(CircleRandFunc.class, "CircleRand");
+    aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -448,6 +451,10 @@ public class VariationFuncList {
     registerVariationFunc(DeltaAFunc.class);
     registerVariationFunc(WDiscFunc.class);
     registerVariationFunc(TradeFunc.class);
+    registerVariationFunc(WFunc.class);
+    registerVariationFunc(XFunc.class);
+    registerVariationFunc(YFunc.class);
+    registerVariationFunc(ZFunc.class);
   }
 
   private static void registerVariationFunc(
