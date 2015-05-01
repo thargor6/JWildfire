@@ -21,6 +21,7 @@ import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import org.codehaus.janino.SimpleCompiler;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -35,7 +36,8 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final String[] ressourceNames = { RESSOURCE_CODE };
 
   private String code = "";
-
+  private String filtered_code = code;
+  
   private VariationFunc full_variation = new AsteriaFunc();
   //  private CustomFullVariationWrapperRunner runner = null;
   
@@ -91,17 +93,41 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   }
 
   /* 
-  *  Still need to figure out a way to trigger TinaController.refreshParamCmb(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar)
-  *    in order to update TinaNonlinearControlsRow to reflect changed param names and values when code  changes
+  *  setting resource
+  *  if setting RESSOURCE_CODE, then filter out Java annotation lines (since Janino compiler throws error on these)
+  *  otherwise pass through to wrapped VariationFunc
   */
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
-      code = pValue != null ? new String(pValue) : "";
+      if (pValue != null)  {
+        code = new String(pValue);
+        StringBuffer bufcode = new StringBuffer(code.length());
+        Scanner codescanner = new Scanner(code);
+        
+        while (codescanner.hasNextLine()) {
+          String line = codescanner.nextLine();
+          if (! line.matches("\\s*@.*")) { 
+            bufcode.append(line);
+            bufcode.append("\n");
+          }
+          else { // filter out Java annotation lines (lines that start with "@"), since Janino compiler will throw error on annotations
+            System.out.println("filtering @: " + line);
+          }
+        }
+        filtered_code = bufcode.toString();
+      }
+      else {
+        filtered_code = "";
+      }
       validate();  // compiles
     }
-    else
+    else if (full_variation != null)  {
+      full_variation.setRessource(pName, pValue);
+    }
+    else  {
       throw new IllegalArgumentException(pName);
+    }
   }
 
   @Override
@@ -147,10 +173,10 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     try {
       SimpleCompiler compiler = new SimpleCompiler();
       if (DEBUG) { System.out.println("called compile()"); }
-      compiler.cook(code);
+      compiler.cook(filtered_code);
       ClassLoader cloader = compiler.getClassLoader();    
       Class varClass = null;
-      // a bunch of mucking about to find all classes compiled by compiler.cook(code)
+      // a bunch of mucking about to find all classes compiled by compiler.cook(filtered_code)
       // based on suggestion in 
       //     https://stolenkid.wordpress.com/2009/03/11/browse-classloader/
       // and 
@@ -168,6 +194,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       else if (classesLoaded instanceof AbstractCollection) {
         classIter =((AbstractCollection)classesLoaded).iterator();
       }
+      // construct full_variation as instance of first Class from classloader that is a subclass of VariationFunc
       while (classIter.hasNext()) {
         Object val = classIter.next();
         String varClassName = null;
@@ -212,13 +239,14 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
             if (DEBUG) { System.out.println("param: " + prev_param + ", value: " + (Double)full_variation.getParameter(prev_param)); }
           }
         }
+        // should also copy shared resources??
       }
     }
     catch (Throwable ex) {
       System.out.println("##############################################################");
       System.out.println(ex.getMessage());
       System.out.println("##############################################################");
-      System.out.println(code);
+      System.out.println(filtered_code);
       System.out.println("##############################################################");
       // full_variation = null;
     }
