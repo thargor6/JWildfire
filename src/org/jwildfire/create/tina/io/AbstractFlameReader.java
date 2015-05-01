@@ -764,6 +764,19 @@ public class AbstractFlameReader {
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
+          // ressources 
+          {
+            String ressNames[] = variation.getFunc().getRessourceNames();
+            if (ressNames != null) {
+              for (String pName : ressNames) {
+                System.out.println("getting variation resource: " + name);
+                String pHs;
+                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                  variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
+                }
+              }
+            }
+          }
           // params
           {
             String paramNames[] = variation.getFunc().getParameterNames();
@@ -798,18 +811,6 @@ public class AbstractFlameReader {
           }
           // curves
           readMotionCurves(variation, atts, rawName + "_");
-          // ressources 
-          {
-            String ressNames[] = variation.getFunc().getRessourceNames();
-            if (ressNames != null) {
-              for (String pName : ressNames) {
-                String pHs;
-                if ((pHs = atts.get(name + "_" + pName)) != null) {
-                  variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
-                }
-              }
-            }
-          }
           //
         }
       }
