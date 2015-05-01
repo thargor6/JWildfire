@@ -28,9 +28,7 @@ public class HorseshoeFunc extends SimpleVariationFunc {
     double cosA = pAffineTP.getPrecalcCosA();
     pVarTP.x += pAmount * (sinA * pAffineTP.x - cosA * pAffineTP.y);
     pVarTP.y += pAmount * (cosA * pAffineTP.x + sinA * pAffineTP.y);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

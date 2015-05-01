@@ -39,9 +39,7 @@ public class LoonieFunc extends SimpleVariationFunc {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

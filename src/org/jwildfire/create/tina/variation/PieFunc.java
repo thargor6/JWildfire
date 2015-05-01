@@ -44,9 +44,7 @@ public class PieFunc extends VariationFunc {
     double cosa = cos(a);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

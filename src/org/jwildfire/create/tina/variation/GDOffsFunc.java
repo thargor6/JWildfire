@@ -68,9 +68,7 @@ public class GDOffsFunc extends VariationFunc {
 
     pVarTP.x += pAmount * out_x;
     pVarTP.y += pAmount * out_y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

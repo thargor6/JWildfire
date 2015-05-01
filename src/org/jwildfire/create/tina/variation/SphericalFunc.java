@@ -29,9 +29,7 @@ public class SphericalFunc extends SimpleVariationFunc {
     double r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + EPSILON);
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

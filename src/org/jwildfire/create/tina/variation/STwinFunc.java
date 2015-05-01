@@ -16,8 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -35,7 +35,7 @@ public class STwinFunc extends VariationFunc {
   private static final String PARAM_OFFSET_XY = "offset_xy";
   private static final String PARAM_OFFSET_X2 = "offset_x2";
   private static final String PARAM_OFFSET_Y2 = "offset_y2";
-  private static final String[] paramNames = { PARAM_DISTORT, PARAM_OFFSET_XY, PARAM_OFFSET_X2, PARAM_OFFSET_Y2  };
+  private static final String[] paramNames = { PARAM_DISTORT, PARAM_OFFSET_XY, PARAM_OFFSET_X2, PARAM_OFFSET_Y2 };
 
   private double distort = 1.0;
   private double offset_xy = 0.0;
@@ -52,20 +52,18 @@ public class STwinFunc extends VariationFunc {
     double y = pAffineTP.y * pAmount * multiplier;
     double x2 = x * x + (offset_x2 * multiplier2);
     double y2 = y * y + (offset_y2 * multiplier2);
-    
+
     double result = (x2 - y2) * sin(M_2PI * distort * (x + y + (offset_xy * multiplier3)));
     double divident = x2 + y2;
-    if (divident == 0)  {
+    if (divident == 0) {
       divident = 1.0;
     }
-    
-    result = result/divident;
+
+    result = result / divident;
 
     pVarTP.x += (pAmount * pAffineTP.x) + result;
     pVarTP.y += (pAmount * pAffineTP.y) + result;
-    if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

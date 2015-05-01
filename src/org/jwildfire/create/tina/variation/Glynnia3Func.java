@@ -27,12 +27,12 @@ public class Glynnia3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RSCALE = "rscale";
-  private static final String PARAM_DSCALE= "dscale";
-  private static final String PARAM_RTHRESH= "rthresh";
-  private static final String PARAM_YTHRESH= "ythresh";
+  private static final String PARAM_DSCALE = "dscale";
+  private static final String PARAM_RTHRESH = "rthresh";
+  private static final String PARAM_YTHRESH = "ythresh";
 
-  private static final String[] paramNames = { PARAM_RSCALE, PARAM_DSCALE, 
-                                               PARAM_RTHRESH, PARAM_YTHRESH };
+  private static final String[] paramNames = { PARAM_RSCALE, PARAM_DSCALE,
+      PARAM_RTHRESH, PARAM_YTHRESH };
 
   private double rscale = 1.0;
   private double dscale = 1.0;
@@ -46,7 +46,7 @@ public class Glynnia3Func extends VariationFunc {
   */
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-  
+
     double r = rscale * (sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)));
     double d;
 
@@ -57,7 +57,7 @@ public class Glynnia3Func extends VariationFunc {
           return;
         }
         pVarTP.x += _vvar2 * d;
-        pVarTP.y -= _vvar2 / d * pAffineTP.y; 
+        pVarTP.y -= _vvar2 / d * pAffineTP.y;
       }
       else {
         d = dscale * (r + pAffineTP.x);
@@ -67,7 +67,7 @@ public class Glynnia3Func extends VariationFunc {
         }
         r = pAmount / dx;
         pVarTP.x += r * d;
-        pVarTP.y += r * pAffineTP.y; 
+        pVarTP.y += r * pAffineTP.y;
       }
     }
     else {
@@ -90,19 +90,17 @@ public class Glynnia3Func extends VariationFunc {
         pVarTP.y += r * pAffineTP.y;
       }
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
-@Override
+  @Override
   public String[] getParameterNames() {
     return paramNames;
   }
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rscale, dscale, rthresh, ythresh } ;
+    return new Object[] { rscale, dscale, rthresh, ythresh };
   }
 
   @Override

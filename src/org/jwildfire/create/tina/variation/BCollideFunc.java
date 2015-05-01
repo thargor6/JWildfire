@@ -67,9 +67,7 @@ public class BCollideFunc extends VariationFunc {
     temp = cosht - coss;
     pVarTP.x += pAmount * sinht / temp;
     pVarTP.y += pAmount * sins / temp;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

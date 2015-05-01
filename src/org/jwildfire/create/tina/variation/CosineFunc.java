@@ -35,9 +35,7 @@ public class CosineFunc extends SimpleVariationFunc {
     double cosr = cos(r);
     pVarTP.x += pAmount * cosr * cosh(pAffineTP.y);
     pVarTP.y -= pAmount * sinr * sinh(pAffineTP.y);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

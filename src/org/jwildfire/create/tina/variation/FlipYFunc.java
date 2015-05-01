@@ -31,9 +31,7 @@ public class FlipYFunc extends SimpleVariationFunc {
       pVarTP.y += pAmount * pAffineTP.y;
 
     pVarTP.x += pAmount * pAffineTP.x;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

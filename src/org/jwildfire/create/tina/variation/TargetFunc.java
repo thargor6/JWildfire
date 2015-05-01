@@ -65,9 +65,8 @@ public class TargetFunc extends VariationFunc {
     pVarTP.x += r * c;
     pVarTP.y += r * s;
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

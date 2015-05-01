@@ -65,9 +65,9 @@ public class BlurCircleFunc extends SimpleVariationFunc {
     sinAndCos(M_PI_4 * perimeter / side - M_PI_4, sina, cosa);
     pVarTP.x += r * cosa.value;
     pVarTP.y += r * sina.value;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

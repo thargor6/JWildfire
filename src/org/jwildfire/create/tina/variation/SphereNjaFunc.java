@@ -76,7 +76,7 @@ public class SphereNjaFunc extends VariationFunc {
     pVarTP.y += r * (ini.y / ini.getPrecalcSqrt());
     pVarTP.z += z;
 
-    if (pContext.isPreserveZCoordinate()) {
+    {
       // (this should cause positive z values to curl inside the sphere)
 
       /* Treating z as a vector that is split into two components, one being

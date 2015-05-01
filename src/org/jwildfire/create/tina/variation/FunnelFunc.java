@@ -37,9 +37,7 @@ public class FunnelFunc extends VariationFunc {
     // funnel by Raykoid666, http://raykoid666.deviantart.com/art/re-pack-1-new-plugins-100092186 
     pVarTP.x += pAmount * tanh(pAffineTP.x) * (1.0 / cos(pAffineTP.x) + effect * M_PI);
     pVarTP.y += pAmount * tanh(pAffineTP.y) * (1.0 / cos(pAffineTP.y) + effect * M_PI);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

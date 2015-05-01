@@ -17,13 +17,13 @@
 package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.pow;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import org.jwildfire.create.tina.base.Layer;
@@ -56,14 +56,13 @@ public class ButterflyFayFunc extends VariationFunc {
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_CYCLES = "cycles";
 
-
   private static final String[] paramNames = { PARAM_OFFSET, PARAM_UNIFIED_INNER_OUTER, PARAM_OUTER_MODE, PARAM_INNER_MODE,
-                                               PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD,
-                                               PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT,
-                                               PARAM_CYCLES, PARAM_FILL }; 
+      PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD,
+      PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT,
+      PARAM_CYCLES, PARAM_FILL };
 
-  private double cyclesParam = 0;  // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
-  private double offset = 0;  // offset c from equations
+  private double cyclesParam = 0; // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
+  private double offset = 0; // offset c from equations
   private int unified_inner_outer = 1;
   private int outer_mode = 1;
   private int inner_mode = 1;
@@ -81,11 +80,11 @@ public class ButterflyFayFunc extends VariationFunc {
   // side note: 
   //      at 2*PI (1 cycle) appears to be closed, but really isn't, this is just a matter of resolution
   //      2nd cycle almost exactly follows path of 1rst cycle, then with start of 3rd cycle starts to diverge more obviously
-  private double cycles;  // 1 cycle = 2*PI
+  private double cycles; // 1 cycle = 2*PI
 
   private double cycle_length = 2 * M_PI; // 2(PI)
-  private double radians_to_close = 2 * M_PI * M_PI * M_PI;  // 2(PI)^3
-  private double cycles_to_close = radians_to_close / cycle_length;  // = PI^2
+  private double radians_to_close = 2 * M_PI * M_PI * M_PI; // 2(PI)^3
+  private double cycles_to_close = radians_to_close / cycle_length; // = PI^2
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
@@ -93,7 +92,7 @@ public class ButterflyFayFunc extends VariationFunc {
     //     (actually setting cycles = 0 will just yield a single point)
     //  for the butterfly curve I am taking that to mean closing the curve, which as noted above 
     //      I have observationally determined is at exactly 2(PI)^3 radians, which is same as (PI)^2 cycles
-    if (cyclesParam == 0) {  
+    if (cyclesParam == 0) {
       cycles = cycles_to_close;
     }
     else {
@@ -103,27 +102,27 @@ public class ButterflyFayFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double theta = atan2(pAffineTP.y, pAffineTP.x);  // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
+    double theta = atan2(pAffineTP.y, pAffineTP.x); // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
     double t = cycles * theta;
     // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
     // y = sin(t)*r
     // x = cos(t)*r
-    double rin = spread_split * sqrt((pAffineTP.x  * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
-    double r = 0.5 * (exp(cos(t)) - (2 * cos(4*t)) - pow(sin(t/12), 5) + offset);
+    double rin = spread_split * sqrt((pAffineTP.x * pAffineTP.x) + (pAffineTP.y * pAffineTP.y));
+    double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5) + offset);
     // a "fully" parameterized version:
     // double r = 0.5 * ( (m1 * exp(m4 * cos(t + b1) + b4)) - (m2 * 2 * (cos(m5*4*t + b2) + b5)) - (m3 * pow(m6 * (sin(m7 * t/12 + b3) + b6), (m8 * 5 + b7))) + offset);
 
-    if (fill != 0) { 
+    if (fill != 0) {
       r = r + (fill * (pContext.random() - 0.5));
     }
 
     double x = r * sin(t);
-    double y = -1 * r * cos(t);   // adding -1 to flip butterfly to point up
+    double y = -1 * r * cos(t); // adding -1 to flip butterfly to point up
     double xin, yin;
     double rinx, riny;
 
-    if ((abs(rin) > abs(r)) || (unified_inner_outer == 1))  { // incoming point lies "outside" of curve OR ignoring inner_outer distinction
-      switch(outer_mode) {
+    if ((abs(rin) > abs(r)) || (unified_inner_outer == 1)) { // incoming point lies "outside" of curve OR ignoring inner_outer distinction
+      switch (outer_mode) {
         case 0: // no spread
           pVarTP.x += pAmount * x;
           pVarTP.y += pAmount * y;
@@ -137,16 +136,24 @@ public class ButterflyFayFunc extends VariationFunc {
         case 2:
           xin = Math.abs(pAffineTP.x);
           yin = Math.abs(pAffineTP.y);
-          if (x<0) { xin = xin * -1; }
-          if (y<0) { yin = yin * -1; }
-          pVarTP.x += pAmount * (x + (outer_spread * outer_spread_ratio * (xin-x)));
-          pVarTP.y += pAmount * (y + (outer_spread * (yin-y)));
+          if (x < 0) {
+            xin = xin * -1;
+          }
+          if (y < 0) {
+            yin = yin * -1;
+          }
+          pVarTP.x += pAmount * (x + (outer_spread * outer_spread_ratio * (xin - x)));
+          pVarTP.y += pAmount * (y + (outer_spread * (yin - y)));
           break;
         case 3:
           xin = Math.abs(pAffineTP.x);
           yin = Math.abs(pAffineTP.y);
-          if (x<0) { xin = xin * -1; }
-          if (y<0) { yin = yin * -1; }
+          if (x < 0) {
+            xin = xin * -1;
+          }
+          if (y < 0) {
+            yin = yin * -1;
+          }
           pVarTP.x += pAmount * (x + (outer_spread * outer_spread_ratio * xin));
           pVarTP.y += pAmount * (y + (outer_spread * yin));
           break;
@@ -166,8 +173,8 @@ public class ButterflyFayFunc extends VariationFunc {
           break;
       }
     }
-    else  { // incoming point lies "inside" or "on" curve
-      switch(inner_mode) {
+    else { // incoming point lies "inside" or "on" curve
+      switch (inner_mode) {
         case 0: // no spread
           pVarTP.x += pAmount * x;
           pVarTP.y += pAmount * y;
@@ -181,16 +188,24 @@ public class ButterflyFayFunc extends VariationFunc {
         case 2:
           xin = Math.abs(pAffineTP.x);
           yin = Math.abs(pAffineTP.y);
-          if (x<0) { xin = xin * -1; }
-          if (y<0) { yin = yin * -1; }
-          pVarTP.x += pAmount * (x - (inner_spread * inner_spread_ratio * (x-xin)));
-          pVarTP.y += pAmount * (y - (inner_spread * (y-yin)));
+          if (x < 0) {
+            xin = xin * -1;
+          }
+          if (y < 0) {
+            yin = yin * -1;
+          }
+          pVarTP.x += pAmount * (x - (inner_spread * inner_spread_ratio * (x - xin)));
+          pVarTP.y += pAmount * (y - (inner_spread * (y - yin)));
           break;
         case 3:
           xin = Math.abs(pAffineTP.x);
           yin = Math.abs(pAffineTP.y);
-          if (x<0) { xin = xin * -1; }
-          if (y<0) { yin = yin * -1; }
+          if (x < 0) {
+            xin = xin * -1;
+          }
+          if (y < 0) {
+            yin = yin * -1;
+          }
           pVarTP.x += pAmount * (x - (inner_spread * inner_spread_ratio * xin));
           pVarTP.y += pAmount * (y - (inner_spread * yin));
           break;
@@ -210,9 +225,7 @@ public class ButterflyFayFunc extends VariationFunc {
           break;
       }
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override
@@ -233,12 +246,16 @@ public class ButterflyFayFunc extends VariationFunc {
       unified_inner_outer = (pValue == 0 ? 0 : 1);
     }
     else if (PARAM_OUTER_MODE.equalsIgnoreCase(pName)) {
-      outer_mode = (int)floor(pValue);
-      if (outer_mode > 5 || outer_mode < 0) { outer_mode = 0; }
+      outer_mode = (int) floor(pValue);
+      if (outer_mode > 5 || outer_mode < 0) {
+        outer_mode = 0;
+      }
     }
     else if (PARAM_INNER_MODE.equalsIgnoreCase(pName)) {
-      inner_mode = (int)floor(pValue);
-      if (inner_mode > 5 || inner_mode < 0) { inner_mode = 0; }
+      inner_mode = (int) floor(pValue);
+      if (inner_mode > 5 || inner_mode < 0) {
+        inner_mode = 0;
+      }
     }
     else if (PARAM_OUTER_SPREAD.equalsIgnoreCase(pName))
       outer_spread = pValue;
@@ -247,7 +264,7 @@ public class ButterflyFayFunc extends VariationFunc {
     else if (PARAM_OUTER_SPREAD_RATIO.equalsIgnoreCase(pName))
       outer_spread_ratio = pValue;
     else if (PARAM_INNER_SPREAD_RATIO.equalsIgnoreCase(pName))
-      inner_spread_ratio = pValue;    
+      inner_spread_ratio = pValue;
     else if (PARAM_SPREAD_SPLIT.equalsIgnoreCase(pName))
       spread_split = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))

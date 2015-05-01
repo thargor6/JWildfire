@@ -43,9 +43,7 @@ public class SecFunc extends SimpleVariationFunc {
     double secden = 2.0 / d;
     pVarTP.x += pAmount * secden * seccos * seccosh;
     pVarTP.y += pAmount * secden * secsin * secsinh;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

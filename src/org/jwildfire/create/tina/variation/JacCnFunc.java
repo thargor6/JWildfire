@@ -52,9 +52,7 @@ public class JacCnFunc extends VariationFunc {
     Denom = pAmount / (EPSILON + Denom);
     pVarTP.x += Denom * NumX;
     pVarTP.y += Denom * NumY;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

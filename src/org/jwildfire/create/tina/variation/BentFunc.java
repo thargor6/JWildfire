@@ -32,9 +32,7 @@ public class BentFunc extends SimpleVariationFunc {
       ny = ny * 0.5;
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

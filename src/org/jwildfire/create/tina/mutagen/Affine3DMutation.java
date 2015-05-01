@@ -36,9 +36,6 @@ public class Affine3DMutation implements Mutation {
     flame.setCamYaw(15 - Math.random() * 30.0);
     flame.setCamPerspective(0.05 + Math.random() * 0.2);
     flame.setCamDOFArea(0.2 + Math.random() * 0.5);
-    if (!flame.isPreserveZ() && Math.random() > 0.33) {
-      flame.setPreserveZ(true);
-    }
     EditPlane editPlane = flame.getEditPlane();
     try {
       flame.setEditPlane(Math.random() < 0.5 ? EditPlane.YZ : EditPlane.ZX);
@@ -61,7 +58,7 @@ public class Affine3DMutation implements Mutation {
     else {
       xForm = pLayer.getFinalXForms().get((int) (pLayer.getFinalXForms().size() * Math.random()));
     }
-    if (pLayer.getOwner().isPreserveZ() && Math.random() > 0.25) {
+    if (Math.random() > 0.25) {
       boolean hasZScale = false;
       for (Variation var : xForm.getVariations()) {
         if (PostZScaleWFFunc.VAR_NAME.equals(var.getFunc().getName())) {

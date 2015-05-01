@@ -30,9 +30,7 @@ public class FisheyeFunc extends SimpleVariationFunc {
     r = 2.0 * r / (r + 1.0);
     pVarTP.x += pAmount * r * pAffineTP.getPrecalcCosA();
     pVarTP.y += pAmount * r * pAffineTP.getPrecalcSinA();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

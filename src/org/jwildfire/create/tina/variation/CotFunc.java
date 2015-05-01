@@ -39,9 +39,8 @@ public class CotFunc extends SimpleVariationFunc {
     double cotden = 1.0 / (cotcosh - cotcos);
     pVarTP.x += pAmount * cotden * cotsin;
     pVarTP.y += pAmount * cotden * -1 * cotsinh;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

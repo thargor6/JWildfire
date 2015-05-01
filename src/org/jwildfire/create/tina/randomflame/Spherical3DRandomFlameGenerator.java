@@ -38,7 +38,6 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
-    flame.setPreserveZ(Math.random() < 0.5);
 
     boolean invert = Math.random() > 0.5;
     VariationFunc varFunc;

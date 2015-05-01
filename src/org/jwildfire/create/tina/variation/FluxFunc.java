@@ -43,9 +43,9 @@ public class FluxFunc extends VariationFunc {
 
     pVarTP.x += avgr * cos(avga);
     pVarTP.y += avgr * sin(avga);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

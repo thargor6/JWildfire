@@ -132,7 +132,7 @@ public class ChaoticaExporterRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
-    chaotifier.chaotify(pFlame);
+    chaotifier.doExport(pFlame);
     return pFlame;
   }
 

@@ -56,9 +56,7 @@ public class PowBlockFunc extends VariationFunc {
 
     pVarTP.x += r2 * cos(ran);
     pVarTP.y += r2 * sin(ran);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

@@ -28,9 +28,7 @@ public class CylinderFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * sin(pAffineTP.x);
     pVarTP.y += pAmount * pAffineTP.y;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

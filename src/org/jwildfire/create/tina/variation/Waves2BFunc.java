@@ -90,9 +90,7 @@ public class Waves2BFunc extends VariationFunc {
     else { // NORMAL!             
       pVarTP.y += pAmount * (pAffineTP.y + CsY * sin(sgn(pAffineTP.x) * pow(fabs(pAffineTP.x) + 1e-10, pwy) * freqy));
     }
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

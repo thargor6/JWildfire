@@ -26,9 +26,7 @@ public class SquareFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * (pContext.random() - 0.5);
     pVarTP.y += pAmount * (pContext.random() - 0.5);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

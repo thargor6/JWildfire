@@ -101,9 +101,8 @@ public class CPow3Func extends VariationFunc {
     double ang2 = c * ai * half_d * lnr2 * ang * (pContext.random() * spread2 + offset2);
     pVarTP.x += ri * cos(ang2);
     pVarTP.y += ri * sin(ang2);
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
 
   }
 

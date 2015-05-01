@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -85,9 +85,7 @@ public class BWRandsFunc extends VariationFunc {
       // Linear if cells are too small
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
-      if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pAmount * pAffineTP.z;
-      }
+      pVarTP.z = pAmount * pAffineTP.z;
       return;
     }
 
@@ -146,9 +144,7 @@ public class BWRandsFunc extends VariationFunc {
       // Linear if outside the bubble
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
-      if (pContext.isPreserveZCoordinate()) {
-        pVarTP.z += pAmount * pAffineTP.z;
-      }
+      pVarTP.z = pAmount * pAffineTP.z;
       return;
     }
 
@@ -212,9 +208,7 @@ public class BWRandsFunc extends VariationFunc {
     // Finally add values in
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

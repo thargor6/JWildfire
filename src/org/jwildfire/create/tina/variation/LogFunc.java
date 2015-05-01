@@ -32,9 +32,9 @@ public class LogFunc extends SimpleVariationFunc {
     // needs precalc_atanyx and precalc_sumsq
     pVarTP.x += pAmount * 0.5 * log(pAffineTP.getPrecalcSumsq());
     pVarTP.y += pAmount * pAffineTP.getPrecalcAtanYX();
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

@@ -34,9 +34,8 @@ public class TanCosFunc extends SimpleVariationFunc {
     double d2 = pAmount / d1;
     pVarTP.x += d2 * (tanh(d1) * (2.0 * pAffineTP.x));
     pVarTP.y += d2 * (cos(d1) * (2.0 * pAffineTP.y));
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override

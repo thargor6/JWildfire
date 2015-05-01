@@ -36,9 +36,7 @@ public class ButterflyFunc extends SimpleVariationFunc {
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * y2;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

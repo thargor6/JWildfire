@@ -95,9 +95,8 @@ public class CircleLinearFunc extends VariationFunc {
     pVarTP.x += pAmount * (X + (M * 2 + 1) * this.Sc);
     pVarTP.y += pAmount * (Y + (N * 2 + 1) * this.Sc);
 
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.z = pAmount * pAffineTP.z;
+
   }
 
   @Override
@@ -134,7 +133,7 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "CircleLinear";
+    return "circleLinear";
   }
 
 }
