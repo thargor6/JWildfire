@@ -556,4 +556,10 @@ public class VariationFuncList {
     return null;
   }
 
+  public static List<Class<? extends VariationFunc>> getVariationClasses() {
+    return items;
+  }
+
+
+
 }
