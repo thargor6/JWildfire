@@ -369,5 +369,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
     return varCopy;
   }
 
+  @Override
+  public boolean ressourceCanModifyParams()  { return true; }
 
 }

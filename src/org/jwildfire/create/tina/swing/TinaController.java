@@ -3066,8 +3066,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     String valStr = dlg.getRessourceValue();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
                     var.getFunc().setRessource(rName, valByteArray);
-                     // forcing refresh of params UI in case setting resource changes available params or param values
-                    this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                    if (var.getFunc().ressourceCanModifyParams()) {
+                      // forcing refresh of params UI in case setting resource changes available params or param values
+                      System.out.println("refreshing params for: " + var.getFunc().getName());
+                      this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                    }
                   }
                   catch (Throwable ex) {
                     errorHandler.handleError(ex);

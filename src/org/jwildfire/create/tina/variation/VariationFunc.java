@@ -165,4 +165,6 @@ public abstract class VariationFunc implements Serializable {
     return varCopy;
   }
 
+  public boolean ressourceCanModifyParams()  { return false; }
+
 }
