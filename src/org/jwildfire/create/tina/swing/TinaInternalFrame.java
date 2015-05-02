@@ -4718,6 +4718,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getSwfAnimatorQualityProfileCmb(), getFlameFPSField());
 
     tinaController = new TinaController(params);
+    if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
+      getChaoticaButtonSeparator().setVisible(false);
+      getExportToChaoticaBtn().setVisible(false);
+    }
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
     for (int i = 0; i < variationControlsDelegates.length; i++) {
@@ -7249,8 +7253,8 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setValue(100);
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 48));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
-      previewEastDefaultPanel.add(getExportToChaosBtn());
-      previewEastDefaultPanel.add(getPanel_104());
+      previewEastDefaultPanel.add(getExportToChaoticaBtn());
+      previewEastDefaultPanel.add(getChaoticaButtonSeparator());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
@@ -23193,7 +23197,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return swfAnimatorOutputTypeCmb;
   }
 
-  private JButton getExportToChaosBtn() {
+  private JButton getExportToChaoticaBtn() {
     if (exportToChaosBtn == null) {
       exportToChaosBtn = new JButton();
       exportToChaosBtn.addActionListener(new ActionListener() {
@@ -23209,7 +23213,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return exportToChaosBtn;
   }
 
-  private JPanel getPanel_104() {
+  private JPanel getChaoticaButtonSeparator() {
     if (panel_104 == null) {
       panel_104 = new JPanel();
     }
