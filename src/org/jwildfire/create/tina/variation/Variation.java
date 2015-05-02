@@ -77,7 +77,6 @@ public class Variation implements Assignable<Variation>, Serializable {
   public void assign(Variation var) {
     amount = var.amount;
     amountCurve.assign(var.amountCurve);
-    func = VariationFuncList.getVariationFuncInstance(var.func.getName());
 
     // motionCurves
     motionCurves.clear();
@@ -86,36 +85,9 @@ public class Variation implements Assignable<Variation>, Serializable {
       copy.assign(var.motionCurves.get(name));
       motionCurves.put(name, copy);
     }
-
-    // params
-    {
-      String[] paramNames = var.func.getParameterNames();
-      if (paramNames != null) {
-        for (int i = 0; i < paramNames.length; i++) {
-          Object val = var.func.getParameterValues()[i];
-          if (val instanceof Double) {
-            func.setParameter(paramNames[i], (Double) val);
-          }
-          else if (val instanceof Integer) {
-            func.setParameter(paramNames[i], Double.valueOf(((Integer) val)));
-          }
-          else {
-            throw new IllegalStateException();
-          }
-        }
-      }
-    }
-    // ressources
-    {
-      String[] ressNames = var.func.getRessourceNames();
-      if (ressNames != null) {
-        for (int i = 0; i < ressNames.length; i++) {
-          byte[] val = var.func.getRessourceValues()[i];
-          func.setRessource(ressNames[i], val);
-        }
-      }
-    }
-
+    
+    // variation function
+    func = var.func.makeCopy();
   }
 
   @Override
@@ -154,6 +126,7 @@ public class Variation implements Assignable<Variation>, Serializable {
       Object vals[] = func.getParameterValues();
       if (vals != null) {
         Object srcVals[] = pSrc.func.getParameterValues();
+        if (vals.length != srcVals.length) { return false; }
         for (int i = 0; i < vals.length; i++) {
           Object o = vals[i];
           Object s = srcVals[i];
@@ -162,11 +135,13 @@ public class Variation implements Assignable<Variation>, Serializable {
           }
           else if (o != null && s != null) {
             if (o instanceof Integer) {
+              if (! (s instanceof Integer)) { return false; }
               if (((Integer) o).intValue() != ((Integer) s).intValue()) {
                 return false;
               }
             }
             else if (o instanceof Double) {
+              if (! (s instanceof Double)) { return false; }
               if (fabs(((Double) o).doubleValue() - ((Double) s).doubleValue()) > EPSILON) {
                 return false;
               }
