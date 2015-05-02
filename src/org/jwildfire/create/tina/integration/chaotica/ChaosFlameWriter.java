@@ -366,6 +366,30 @@ public class ChaosFlameWriter {
 
   }
 
+  private List<Integer> collectKeyFrames(MotionCurve... curves) {
+    List<Integer> res = new ArrayList<Integer>();
+    for (MotionCurve curve : curves) {
+      if (curve != null && !curve.isEmpty() && curve.isEnabled()) {
+        for (int i = 0; i < curve.getX().length; i++) {
+          Integer keyFrame = Integer.valueOf(curve.getX()[i]);
+          if (!res.contains(keyFrame)) {
+            res.add(keyFrame);
+          }
+        }
+      }
+    }
+    return res;
+  }
+
+  private double evalCurve(MotionCurve curve, Integer keyFrame, double defaultValue) {
+    if (curve == null || curve.isEmpty() || !curve.isEnabled()) {
+      return defaultValue;
+    }
+    else {
+      return curve.toEnvelope().evaluate(keyFrame);
+    }
+  }
+
   public class AffineParamCalculator {
     private final double coeff[][];
     private final MotionCurve coeffCurve[][];
@@ -407,21 +431,6 @@ public class ChaosFlameWriter {
         rotateCurve = xform.getXYRotateCurve();
         scaleCurve = xform.getXYScaleCurve();
       }
-    }
-
-    private List<Integer> collectKeyFrames(MotionCurve... curves) {
-      List<Integer> res = new ArrayList<Integer>();
-      for (MotionCurve curve : curves) {
-        if (!curve.isEmpty() && curve.isEnabled()) {
-          for (int i = 0; i < curve.getX().length; i++) {
-            Integer keyFrame = Integer.valueOf(curve.getX()[i]);
-            if (!res.contains(keyFrame)) {
-              res.add(keyFrame);
-            }
-          }
-        }
-      }
-      return res;
     }
 
     public AffineParam calculate() {
@@ -476,15 +485,6 @@ public class ChaosFlameWriter {
           baseParams.getXAxisAngle(), xAxisAngleCurve, baseParams.getXAxisLength(), xAxisLengthCurve,
           baseParams.getYAxisAngle(), yAxisAngleCurve, baseParams.getYAxisLength(), yAxisLengthCurve,
           baseParams.getXOffset(), xOffsetCurve, baseParams.getYOffset(), yOffsetCurve);
-    }
-
-    private double evalCurve(MotionCurve curve, Integer keyFrame, double defaultValue) {
-      if (curve == null || curve.isEmpty() || !curve.isEnabled()) {
-        return defaultValue;
-      }
-      else {
-        return curve.toEnvelope().evaluate(keyFrame);
-      }
     }
 
     private AffineBaseParam calculateBaseParam(double coeff[][], double rotate, double scale) {
@@ -592,7 +592,41 @@ public class ChaosFlameWriter {
     addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 1.0 / (double) pFlame.getFps(), null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
     xb.beginElement(ELEM_CAMERA, xb.createAttrList(xb.createAttr(ATTR_NAME, PROPERTY_FLAM3_CAMERA)));
-    addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), pFlame.getCentreXCurve(), pFlame.getCentreYCurve() != null ? pFlame.getCentreYCurve().multiplyValue(-1.0) : null);
+
+    List<Integer> keyFrames = collectKeyFrames(pFlame.getCentreXCurve(), pFlame.getCentreYCurve());
+    MotionCurve cxCurve, cyCurve;
+    if (keyFrames.size() > 0) {
+      MotionCurve cxSrcCurve, cySrcCurve;
+      if (pFlame.getCentreXCurve() != null && pFlame.getCentreXCurve().isEnabled() && !pFlame.getCentreXCurve().isEmpty()) {
+        cxSrcCurve = pFlame.getCentreXCurve();
+      }
+      else {
+        cxSrcCurve = new MotionCurve();
+        cxSrcCurve.setEnabled(true);
+        cxSrcCurve.appendKeyFrame(0, pFlame.getCentreX());
+      }
+      if (pFlame.getCentreYCurve() != null && pFlame.getCentreYCurve().isEnabled() && !pFlame.getCentreYCurve().isEmpty()) {
+        cySrcCurve = pFlame.getCentreYCurve();
+      }
+      else {
+        cySrcCurve = new MotionCurve();
+        cySrcCurve.setEnabled(true);
+        cySrcCurve.appendKeyFrame(0, pFlame.getCentreY());
+      }
+
+      cxCurve = new MotionCurve();
+      cxCurve.setEnabled(true);
+      cyCurve = new MotionCurve();
+      cyCurve.setEnabled(true);
+      for (Integer keyFrame : keyFrames) {
+        cxCurve.appendKeyFrame(keyFrame, evalCurve(cxSrcCurve, keyFrame, pFlame.getCentreX()));
+        cyCurve.appendKeyFrame(keyFrame, -evalCurve(cySrcCurve, keyFrame, pFlame.getCentreY()));
+      }
+    }
+    else {
+      cxCurve = cyCurve = null;
+    }
+    addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), cxCurve, cyCurve);
     addRealProperty(xb, PROPERTY_ROTATE, pFlame.getCamRoll(), pFlame.getCamRollCurve());
     double final_scale = pFlame.getPixelsPerUnit() * pFlame.getCamZoom() * 2.0;
     double sensor_width = (double) (pFlame.getWidth() * AA_LEVEL) / final_scale;
