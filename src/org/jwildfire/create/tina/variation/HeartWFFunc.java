@@ -38,8 +38,8 @@ public class HeartWFFunc extends VariationFunc {
   private double scale_x = 1.0;
   private double scale_t = 1.0;
   private double shift_t = 0.0;
-  private double scale_t_left = 1.0;
-  private double scale_t_right = 1.0;
+  private double scale_r_left = 1.0;
+  private double scale_r_right = 1.0;
 
   private static final double T_MAX = 60.0;
 
@@ -49,14 +49,14 @@ public class HeartWFFunc extends VariationFunc {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double nx, t;
     if (a < 0) {
-      t = -a / M_PI * T_MAX * scale_t_left - shift_t;
+      t = -a / M_PI * T_MAX * scale_r_left - shift_t;
       if (t > T_MAX) {
         t = T_MAX;
       }
       nx = -0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
     }
     else {
-      t = a / M_PI * T_MAX * scale_t_right - shift_t;
+      t = a / M_PI * T_MAX * scale_r_right - shift_t;
       if (t > T_MAX) {
         t = T_MAX;
       }
@@ -76,7 +76,7 @@ public class HeartWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale_x, scale_t, shift_t, scale_t_left, scale_t_right };
+    return new Object[] { scale_x, scale_t, shift_t, scale_r_left, scale_r_right };
   }
 
   @Override
@@ -88,9 +88,9 @@ public class HeartWFFunc extends VariationFunc {
     else if (PARAM_SHIFTT.equalsIgnoreCase(pName))
       shift_t = pValue;
     else if (PARAM_SCALE_T_LEFT.equalsIgnoreCase(pName))
-      scale_t_left = pValue;
+      scale_r_left = pValue;
     else if (PARAM_SCALE_T_RIGHT.equalsIgnoreCase(pName))
-      scale_t_right = pValue;
+      scale_r_right = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

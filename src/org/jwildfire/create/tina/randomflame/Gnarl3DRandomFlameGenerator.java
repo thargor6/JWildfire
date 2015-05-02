@@ -47,7 +47,7 @@ public class Gnarl3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGen
     Layer layer = pFlame.getFirstLayer();
     if (Math.random() > 0.33) {
       for (Variation var : layer.getFinalXForms().get(0).getVariations()) {
-        if (var.getFunc().getName().equalsIgnoreCase(PostDCZTranslFunc.VARNAME)) {
+        if (var.getFunc().getName().equalsIgnoreCase(PostDCZTranslFunc.VAR_NAME)) {
           double factor = (Double) var.getFunc().getParameter("factor");
           var.getFunc().setParameter("factor", factor * 2.0);
         }

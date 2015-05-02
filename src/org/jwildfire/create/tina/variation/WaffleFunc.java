@@ -35,8 +35,8 @@ public class WaffleFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_SLICES, PARAM_XTHICKNESS, PARAM_YTHICKNESS, PARAM_ROTATION };
 
   private int slices = 6;
-  private double xThickness = 0.5;
-  private double yThickness = 0.5;
+  private double xthickness = 0.5;
+  private double ythickness = 0.5;
   private double rotation = 0.0;
 
   @Override
@@ -45,23 +45,23 @@ public class WaffleFunc extends VariationFunc {
     double a = 0.0, r = 0.0;
     switch (pContext.random(5)) {
       case 0:
-        a = (pContext.random(slices) + pContext.random() * xThickness) / slices;
-        r = (pContext.random(slices) + pContext.random() * yThickness) / slices;
+        a = (pContext.random(slices) + pContext.random() * xthickness) / slices;
+        r = (pContext.random(slices) + pContext.random() * ythickness) / slices;
         break;
       case 1:
         a = (pContext.random(slices) + pContext.random()) / slices;
-        r = (pContext.random(slices) + yThickness) / slices;
+        r = (pContext.random(slices) + ythickness) / slices;
         break;
       case 2:
-        a = (pContext.random(slices) + xThickness) / slices;
+        a = (pContext.random(slices) + xthickness) / slices;
         r = (pContext.random(slices) + pContext.random()) / slices;
         break;
       case 3:
         a = pContext.random();
-        r = (pContext.random(slices) + yThickness + pContext.random() * (1 - yThickness)) / slices;
+        r = (pContext.random(slices) + ythickness + pContext.random() * (1 - ythickness)) / slices;
         break;
       case 4:
-        a = (pContext.random(slices) + xThickness + pContext.random() * (1 - xThickness)) / slices;
+        a = (pContext.random(slices) + xthickness + pContext.random() * (1 - xthickness)) / slices;
         r = pContext.random();
         break;
     }
@@ -77,7 +77,7 @@ public class WaffleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { slices, xThickness, yThickness, rotation };
+    return new Object[] { slices, xthickness, ythickness, rotation };
   }
 
   @Override
@@ -85,9 +85,9 @@ public class WaffleFunc extends VariationFunc {
     if (PARAM_SLICES.equalsIgnoreCase(pName))
       slices = Tools.FTOI(pValue);
     else if (PARAM_XTHICKNESS.equalsIgnoreCase(pName))
-      xThickness = pValue;
+      xthickness = pValue;
     else if (PARAM_YTHICKNESS.equalsIgnoreCase(pName))
-      yThickness = pValue;
+      ythickness = pValue;
     else if (PARAM_ROTATION.equalsIgnoreCase(pName))
       rotation = pValue;
     else

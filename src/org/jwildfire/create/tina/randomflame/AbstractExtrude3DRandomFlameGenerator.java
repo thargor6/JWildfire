@@ -47,7 +47,7 @@ public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameG
     XForm xForm = new XForm();
     layer.getFinalXForms().add(xForm);
     xForm.addVariation(0.25 + Math.random() * 0.25, VariationFuncList.getVariationFuncInstance("linear3D", true));
-    VariationFunc post_dcztransl = VariationFuncList.getVariationFuncInstance(PostDCZTranslFunc.VARNAME, true);
+    VariationFunc post_dcztransl = VariationFuncList.getVariationFuncInstance(PostDCZTranslFunc.VAR_NAME, true);
     xForm.addVariation(0.75 + Math.random() * 0.25, post_dcztransl);
     double factor = 0.5 + Math.random() * 2.0;
     if (Math.random() < 0.42) {

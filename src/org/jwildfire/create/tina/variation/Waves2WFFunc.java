@@ -45,21 +45,21 @@ public class Waves2WFFunc extends VariationFunc {
   private double scaley = 0.5;
   private double freqx = M_PI / 2;
   private double freqy = M_PI / 4;
-  private int useCosX = 1;
-  private int useCosY = 0;
-  private double dampX = 0.0;
-  private double dampY = 0.0;
+  private int use_cos_x = 1;
+  private int use_cos_y = 0;
+  private double dampx = 0.0;
+  private double dampy = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Modified version of waves2 from Joel F */
-    if (useCosX == 1) {
+    if (use_cos_x == 1) {
       pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * cos(pAffineTP.y * freqx)) * _dampingX;
     }
     else {
       pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * sin(pAffineTP.y * freqx)) * _dampingX;
     }
-    if (useCosY == 1) {
+    if (use_cos_y == 1) {
       pVarTP.y += pAmount * (pAffineTP.y + _dampingY * scaley * cos(pAffineTP.x * freqy)) * _dampingY;
     }
     else {
@@ -75,7 +75,7 @@ public class Waves2WFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scalex, scaley, freqx, freqy, useCosX, useCosY, dampX, dampY };
+    return new Object[] { scalex, scaley, freqx, freqy, use_cos_x, use_cos_y, dampx, dampy };
   }
 
   @Override
@@ -89,13 +89,13 @@ public class Waves2WFFunc extends VariationFunc {
     else if (PARAM_FREQY.equalsIgnoreCase(pName))
       freqy = pValue;
     else if (PARAM_USECOSX.equalsIgnoreCase(pName))
-      useCosX = Tools.FTOI(pValue);
+      use_cos_x = Tools.FTOI(pValue);
     else if (PARAM_USECOSY.equalsIgnoreCase(pName))
-      useCosY = Tools.FTOI(pValue);
+      use_cos_y = Tools.FTOI(pValue);
     else if (PARAM_DAMPX.equalsIgnoreCase(pName))
-      dampX = pValue;
+      dampx = pValue;
     else if (PARAM_DAMPY.equalsIgnoreCase(pName))
-      dampY = pValue;
+      dampy = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -109,8 +109,8 @@ public class Waves2WFFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _dampingX = fabs(dampX) < EPSILON ? 1.0 : exp(dampX);
-    _dampingY = fabs(dampY) < EPSILON ? 1.0 : exp(dampY);
+    _dampingX = fabs(dampx) < EPSILON ? 1.0 : exp(dampx);
+    _dampingY = fabs(dampy) < EPSILON ? 1.0 : exp(dampy);
   }
 
 }

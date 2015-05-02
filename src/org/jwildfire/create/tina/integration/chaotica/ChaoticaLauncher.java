@@ -33,7 +33,7 @@ public class ChaoticaLauncher {
   public void launchChaotica(Flame pFlame) throws Exception {
     String xml = new ChaosFlameWriter(pFlame).getFlameXML();
 
-    storeToClipboard(xml);
+    //    storeToClipboard(xml);
 
     File tempFile = storeToTempFile(pFlame, xml);
 
