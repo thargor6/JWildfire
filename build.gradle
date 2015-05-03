@@ -1,13 +1,21 @@
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.1'
+  }
+}
+
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
+apply plugin: 'com.github.johnrengelman.shadow'
 repositories {
     mavenCentral()
     maven {
     	url 'https://raw.github.com/Ekito/maven-repo/master/releases'
     }
 }
-
 sourceCompatibility = 1.8
 version = 'latest-SNAPSHOT'
 jar {
@@ -60,4 +68,7 @@ test {
   maxParallelForks=4
   forkEvery=1
   maxHeapSize = "512m"
+}
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
 }
