@@ -29,6 +29,7 @@ dependencies {
     compile 'com.jtattoo:JTattoo:1.6.11'
     compile fileTree(dir: 'lib')
     testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile 'commons-io:commons-io:2.4'
 }
 
 sourceSets {
@@ -54,4 +55,9 @@ jacocoTestReport {
         csv.enabled false
         html.destination "build/codecovHtml"
     }
+}
+test {
+  maxParallelForks=4
+  forkEvery=1
+  maxHeapSize = "512m"
 }
