@@ -305,17 +305,24 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private void addFlame(Flame pFlame) {
     boolean firstPart = currMovie.getParts().size() == 0;
+    int frameCount, frameMorphCount;
     if (firstPart) {
       if (pFlame.getMotionBlurLength() > 0) {
         swfAnimatorMotionBlurLengthREd.setValue(pFlame.getMotionBlurLength());
         swfAnimatorMotionBlurTimeStepREd.setValue(pFlame.getMotionBlurTimeStep());
       }
-
+      frameCount = 120;
+      frameMorphCount = 60;
+    }
+    else {
+      FlameMoviePart prevPart = currMovie.getParts().get(currMovie.getParts().size() - 1);
+      frameCount = prevPart.getFrameCount();
+      frameMorphCount = prevPart.getFrameMorphCount();
     }
     FlameMoviePart part = new FlameMoviePart();
     part.setFlame(pFlame);
-    part.setFrameCount(120);
-    part.setFrameMorphCount(60);
+    part.setFrameCount(frameCount);
+    part.setFrameMorphCount(frameMorphCount);
     addFlameToFlamePanel(part);
     currMovie.addPart(part);
     refreshFrameCount();
