@@ -5630,6 +5630,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void exportToChaotica() {
     try {
       if (getCurrFlame() != null) {
+        closeDetachedPreview();
         new ChaoticaLauncher().launchChaotica(generateExportFlame(getCurrFlame()));
         messageHelper.showStatusMessage(getCurrFlame(), "flame sucessfully exported");
       }
@@ -5638,4 +5639,5 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       errorHandler.handleError(ex);
     }
   }
+
 }

@@ -39,7 +39,9 @@ src/org/sunflow
 FasterMath*
 MathTest*
 plugin_log.txt
-
+C/*
+src/org/jwildfire/create/tina/variation/converter/*
+Sample.java
 
 
 lib/colt*

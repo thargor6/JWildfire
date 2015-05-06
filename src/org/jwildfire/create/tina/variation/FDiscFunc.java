@@ -42,8 +42,7 @@ public class FDiscFunc extends VariationFunc {
   private static final String PARAM_TERM3 = "term3";
   private static final String PARAM_TERM4 = "term4";
 
-  private static final String[] paramNames = { PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT,
-      PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4 };
+  private static final String[] paramNames = { PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4 };
 
   private double ashift = 1.0;
   private double rshift = 1.0;

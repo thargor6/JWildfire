@@ -78,6 +78,11 @@
 
     </pack>
     
+    <pack name="Chaotica plugins" required="no" preselected="true">
+      <description>Plugins for the JWildfire-Chaotica-bridge</description>      
+      <fileset dir="plugins" targetdir="$INSTALL_PATH/plugins"/>
+    </pack>
+    
     <pack name="JWildfire applet" required="no" preselected="true">
       <description>An optional program to play around</description>
       <singlefile src="j-wildfire-applet.jar" target="$INSTALL_PATH/j-wildfire-applet.jar"/>

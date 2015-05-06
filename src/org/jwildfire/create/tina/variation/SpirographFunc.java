@@ -41,15 +41,15 @@ public class SpirographFunc extends VariationFunc {
   private double d = 0.0;
   private double c1 = 0.0;
   private double c2 = 0.0;
-  private double tMin = -1.0;
-  private double tMax = 1.0;
-  private double yMin = -1.0;
-  private double yMax = 1.0;
+  private double tmin = -1.0;
+  private double tmax = 1.0;
+  private double ymin = -1.0;
+  private double ymax = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double t = (tMax - tMin) * pContext.random() + tMin;
-    double y = (yMax - yMin) * pContext.random() + yMin;
+    double t = (tmax - tmin) * pContext.random() + tmin;
+    double y = (ymax - ymin) * pContext.random() + ymin;
     double x1 = (a + b) * cos(t) - c1 * cos((a + b) / b * t);
     double y1 = (a + b) * sin(t) - c2 * sin((a + b) / b * t);
     pVarTP.x += pAmount * (x1 + d * cos(t) + y);
@@ -64,7 +64,7 @@ public class SpirographFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, d, tMin, tMax, yMin, yMax, c1, c2 };
+    return new Object[] { a, b, d, tmin, tmax, ymin, ymax, c1, c2 };
   }
 
   @Override
@@ -76,15 +76,15 @@ public class SpirographFunc extends VariationFunc {
     else if (PARAM_D.equalsIgnoreCase(pName))
       d = pValue;
     else if (PARAM_TMIN.equalsIgnoreCase(pName))
-      tMin = pValue;
+      tmin = pValue;
     else if (PARAM_TMAX.equalsIgnoreCase(pName))
-      tMax = pValue;
+      tmax = pValue;
     else if (PARAM_YMIN.equalsIgnoreCase(pName))
-      yMin = pValue;
+      ymin = pValue;
     else if (PARAM_YMAX.equalsIgnoreCase(pName))
-      yMax = pValue;
+      ymax = pValue;
     else if (PARAM_TMIN.equalsIgnoreCase(pName))
-      tMin = pValue;
+      tmin = pValue;
     else if (PARAM_C1.equalsIgnoreCase(pName))
       c1 = pValue;
     else if (PARAM_C2.equalsIgnoreCase(pName))

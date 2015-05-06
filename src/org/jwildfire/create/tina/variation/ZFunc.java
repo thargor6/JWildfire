@@ -50,8 +50,7 @@ public class ZFunc extends VariationFunc {
   private static final String PARAM_SUPER_N2 = "super_n2";
   private static final String PARAM_SUPER_N3 = "super_n3";
 
-  private static final String[] paramNames = { PARAM_HYPERGON, PARAM_HYPERGON_N, PARAM_HYPERGON_R, PARAM_STAR, PARAM_STAR_N, PARAM_STAR_SLOPE,
-      PARAM_LITUUS, PARAM_LITUUS_A, PARAM_SUPER, PARAM_SUPER_M, PARAM_SUPER_N1, PARAM_SUPER_N2, PARAM_SUPER_N3 };
+  private static final String[] paramNames = { PARAM_HYPERGON, PARAM_HYPERGON_N, PARAM_HYPERGON_R, PARAM_STAR, PARAM_STAR_N, PARAM_STAR_SLOPE, PARAM_LITUUS, PARAM_LITUUS_A, PARAM_SUPER, PARAM_SUPER_M, PARAM_SUPER_N1, PARAM_SUPER_N2, PARAM_SUPER_N3 };
 
   private double hypergon = Math.random();
   private int hypergon_n = 4;

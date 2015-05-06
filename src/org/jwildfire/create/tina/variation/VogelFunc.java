@@ -53,8 +53,7 @@ public class VogelFunc extends VariationFunc {
   }
 
   @Override
-  public void transform(final FlameTransformationContext pContext, final XForm pXForm, final XYZPoint pAffineTP,
-      final XYZPoint pVarTP, final double pAmount) {
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Vogel function by Victor Ganora
     final int i = pContext.random(n) + 1;
     final double a = i * M_2PI_PHI2;

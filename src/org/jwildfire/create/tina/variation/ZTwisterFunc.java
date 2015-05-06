@@ -47,7 +47,7 @@ public class ZTwisterFunc extends VariationFunc {
 
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
-    //not sure what to do with z :/
+    pVarTP.z = pAmount * pAffineTP.z;
   }
 
   @Override

@@ -35,19 +35,19 @@ public class BSplitFunc extends VariationFunc {
   private static final String PARAM_SHIFT_Y = "y";
   private static final String[] paramNames = { PARAM_SHIFT_X, PARAM_SHIFT_Y };
 
-  double shiftx = 0.0;
-  double shifty = 0.0;
+  double x = 0.0;
+  double y = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // Prevent divide by zero error
-    if (pAffineTP.x + shiftx == 0 || pAffineTP.x + shiftx == M_PI) {
+    if (pAffineTP.x + x == 0 || pAffineTP.x + x == M_PI) {
       pVarTP.doHide = true;
     }
     else {
       pVarTP.doHide = false;
-      pVarTP.x += pAmount / tan(pAffineTP.x + shiftx) * cos(pAffineTP.y + shifty);
-      pVarTP.y += pAmount / sin(pAffineTP.x + shiftx) * (-1 * pAffineTP.y + shifty);
+      pVarTP.x += pAmount / tan(pAffineTP.x + x) * cos(pAffineTP.y + y);
+      pVarTP.y += pAmount / sin(pAffineTP.x + x) * (-1 * pAffineTP.y + y);
     }
   }
 
@@ -63,16 +63,16 @@ public class BSplitFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shiftx, shifty };
+    return new Object[] { x, y };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_SHIFT_X)) {
-      shiftx = pValue;
+      x = pValue;
     }
     else if (pName.equalsIgnoreCase(PARAM_SHIFT_Y)) {
-      shifty = pValue;
+      y = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
