@@ -255,8 +255,10 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void resetAntialiasingSettings() {
-    antialiasAmount = 0.75;
-    antialiasRadius = 0.36;
+    //    antialiasAmount = 0.75;
+    //    antialiasRadius = 0.36;
+    antialiasAmount = 0.5;
+    antialiasRadius = 0.16;
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
   }
