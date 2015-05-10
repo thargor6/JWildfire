@@ -52,7 +52,7 @@ public class PRose3DFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_L, PARAM_K, PARAM_C, PARAM_Z1, PARAM_Z2, PARAM_REF_SC, PARAM_OPT, PARAM_OPT_SC, PARAM_OPT3, PARAM_TRANSP, PARAM_DIST, PARAM_WAGSC, PARAM_CRVSC, PARAM_F, PARAM_WIGSC, PARAM_OFFSET };
 
   private double l = 1.0;
-  private double k = 3.0;
+  private double k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : (int) (Math.random() * 15.0));
   private double c = 0.0;
   private double z1 = 1.0;
   private double z2 = 1.0;
@@ -101,12 +101,12 @@ public class PRose3DFunc extends VariationFunc {
     th = atan2(pAffineTP.y, pAffineTP.x); // returns the angle this point has with the axis
     sth = sin(th);
     cth = cos(th);
-    this.optDir = Math.copySign(1.0, this.opt);
-    this.petalsSign = Math.copySign(1.0, this.k);
+    this._optDir = Math.copySign(1.0, this.opt);
+    this._petalsSign = Math.copySign(1.0, this.k);
 
     if (this.opt3 < 0.0)
     {
-      this.optDir = -1.0;
+      this._optDir = -1.0;
     }
     if (smooth3 > 1.0)
     {
@@ -119,7 +119,7 @@ public class PRose3DFunc extends VariationFunc {
 
     if (fabs(numPetals) < 0.0001)
     {
-      numPetals = 0.0001 * this.petalsSign; // need a non-zero minimum
+      numPetals = 0.0001 * this._petalsSign; // need a non-zero minimum
     }
 
     if (pContext.getRandGen().random() < 0.5)
@@ -127,20 +127,20 @@ public class PRose3DFunc extends VariationFunc {
       posNeg = -1;
     }
 
-    if (this.cycle == 0.0)
+    if (this._cycle == 0.0)
     {
-      pang = th / this.cycle + EPSILON; // point's angle location relative to which petal it belongs to
+      pang = th / this._cycle + EPSILON; // point's angle location relative to which petal it belongs to
     }
     else
     {
-      pang = th / this.cycle; // point's angle location relative to which petal it belongs to
+      pang = th / this._cycle; // point's angle location relative to which petal it belongs to
     }
 
     // circumference relative offset, with high frequency values, this causes the ripples to progress along the perimeter
-    wig = pang * frequency * 0.5 + this.offset * this.cycle;
+    wig = pang * frequency * 0.5 + this.offset * this._cycle;
 
     //  Develop means to structure Z 
-    if (this.optDir < 0.0)
+    if (this._optDir < 0.0)
     {
       wag = sin(curve1 * M_PI * opScale) + wagScale * 0.4 * rad + curveScale * 0.5 * (sin(curve2 * M_PI)); //  length anchored
       wag3 = sin(curve4 * M_PI * opScale) + wagScale * sqr(rad) * 0.4 + curveScale * 0.5 * (cos(curve3 * M_PI)); //  length anchored
@@ -185,7 +185,7 @@ public class PRose3DFunc extends VariationFunc {
     //pVarTP.x += pAmount*0.5*(length*cos(numPetals*th+constant))*cth; 
     //pVarTP.y += pAmount*0.5*(length*cos(numPetals*th+constant))*sth; 
 
-    if (this.optDir > 0.0)
+    if (this._optDir > 0.0)
     {
       ghost = 0.0;
     }
@@ -277,21 +277,21 @@ public class PRose3DFunc extends VariationFunc {
     return "pRose3D";
   }
 
-  private double cycle, optDir, petalsSign;
+  private double _cycle, _optDir, _petalsSign;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     // divide in pre-calc, multiply in calc, 
     if (k == 0.0)
     {
-      cycle = M_2PI / (k + 0.000001); // describes the segment of a full circle used for each petal
+      _cycle = M_2PI / (k + 0.000001); // describes the segment of a full circle used for each petal
     }
     else
     {
-      cycle = M_2PI / (k); // describes the segment of a full circle used for each petal
+      _cycle = M_2PI / (k); // describes the segment of a full circle used for each petal
     }
-    optDir = 0.0;
-    petalsSign = 0.0;
+    _optDir = 0.0;
+    _petalsSign = 0.0;
   }
 
 }

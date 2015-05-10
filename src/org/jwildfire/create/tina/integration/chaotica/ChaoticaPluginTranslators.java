@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.variation.BubbleWFFunc;
 import org.jwildfire.create.tina.variation.Butterfly3DFunc;
 import org.jwildfire.create.tina.variation.ColorMapWFFunc;
 import org.jwildfire.create.tina.variation.ConicFunc;
+import org.jwildfire.create.tina.variation.CropFunc;
 import org.jwildfire.create.tina.variation.CustomWFFunc;
 import org.jwildfire.create.tina.variation.CylinderApoFunc;
 import org.jwildfire.create.tina.variation.DCBubbleFunc;
@@ -35,12 +36,15 @@ import org.jwildfire.create.tina.variation.DCCrackleWFFunc;
 import org.jwildfire.create.tina.variation.DCHexesWFFunc;
 import org.jwildfire.create.tina.variation.DCLinearFunc;
 import org.jwildfire.create.tina.variation.DCZTranslFunc;
+import org.jwildfire.create.tina.variation.Disc2Func;
 import org.jwildfire.create.tina.variation.DisplacementMapWFFunc;
 import org.jwildfire.create.tina.variation.EllipticFunc;
 import org.jwildfire.create.tina.variation.EpispiralFunc;
 import org.jwildfire.create.tina.variation.ExtrudeFunc;
 import org.jwildfire.create.tina.variation.Fan2Func;
 import org.jwildfire.create.tina.variation.FlattenFunc;
+import org.jwildfire.create.tina.variation.FractFormulaJuliaWFFunc;
+import org.jwildfire.create.tina.variation.FractFormulaMandWFFunc;
 import org.jwildfire.create.tina.variation.InflateZ_1Func;
 import org.jwildfire.create.tina.variation.InflateZ_2Func;
 import org.jwildfire.create.tina.variation.InflateZ_3Func;
@@ -50,17 +54,25 @@ import org.jwildfire.create.tina.variation.InflateZ_6Func;
 import org.jwildfire.create.tina.variation.LogApoFunc;
 import org.jwildfire.create.tina.variation.LogFunc;
 import org.jwildfire.create.tina.variation.MobiusFunc;
+import org.jwildfire.create.tina.variation.NgonFunc;
+import org.jwildfire.create.tina.variation.PerspectiveFunc;
+import org.jwildfire.create.tina.variation.Pie3DFunc;
+import org.jwildfire.create.tina.variation.PieFunc;
+import org.jwildfire.create.tina.variation.PostBumpMapWFFunc;
 import org.jwildfire.create.tina.variation.PostColorMapWFFunc;
 import org.jwildfire.create.tina.variation.PostCustomWFFunc;
 import org.jwildfire.create.tina.variation.PostDCZTranslFunc;
 import org.jwildfire.create.tina.variation.PostDepthFunc;
 import org.jwildfire.create.tina.variation.PostDisplacementMapWFFunc;
+import org.jwildfire.create.tina.variation.PostZTranslateWFFunc;
 import org.jwildfire.create.tina.variation.PreCustomWFFunc;
 import org.jwildfire.create.tina.variation.PreDCZTranslFunc;
 import org.jwildfire.create.tina.variation.PreSubFlameWFFunc;
+import org.jwildfire.create.tina.variation.PreWave3DWFFunc;
 import org.jwildfire.create.tina.variation.PreZScaleFunc;
 import org.jwildfire.create.tina.variation.PreZTranslateFunc;
 import org.jwildfire.create.tina.variation.SVGWFFunc;
+import org.jwildfire.create.tina.variation.SeparationFunc;
 import org.jwildfire.create.tina.variation.Sinusoidal3DFunc;
 import org.jwildfire.create.tina.variation.Spherical3DFunc;
 import org.jwildfire.create.tina.variation.Splits3DFunc;
@@ -90,6 +102,8 @@ public class ChaoticaPluginTranslators {
     translators.put(new Butterfly3DFunc().getName(), new ChaoticaPluginTranslator("butterfly"));
     translators.put(new ColorMapWFFunc().getName(), emptyTranslator);
     translators.put(new ConicFunc().getName(), new ChaoticaPluginTranslator("conic_wf", name("eccentricity"), name("holes")));
+    translators.put(new CropFunc().getName(), new ChaoticaPluginTranslator("crop_wf", name("left"), name("right"), name("top"), name("bottom"),
+        name("scatter_area"), name("zero")));
     translators.put(new CustomWFFunc().getName(), emptyTranslator);
     translators.put(new CylinderApoFunc().getName(), new ChaoticaPluginTranslator("cylinder"));
     translators.put(new DCBubbleFunc().getName(), emptyTranslator);
@@ -97,12 +111,25 @@ public class ChaoticaPluginTranslators {
     translators.put(new DCLinearFunc().getName(), new ChaoticaPluginTranslator("linear"));
     translators.put(new DCHexesWFFunc().getName(), new ChaoticaPluginTranslator("hexes", name("cellsize"), name("power"), name("rotate"), name("scale")));
     translators.put(new DCZTranslFunc().getName(), new ChaoticaPluginTranslator("linear3D"));
+    translators.put(new Disc2Func().getName(), new ChaoticaPluginTranslator("disc2_wf", name("rot"), name("twist")));
     translators.put(new DisplacementMapWFFunc().getName(), emptyTranslator);
     translators.put(new EllipticFunc().getName(), new ChaoticaPluginTranslator("elliptic_wf"));
     translators.put(new EpispiralFunc().getName(), new ChaoticaPluginTranslator("Epispiral", name("n"), name("thickness"), name("holes")));
     translators.put(new ExtrudeFunc().getName(), emptyTranslator);
     translators.put(new Fan2Func().getName(), new ChaoticaPluginTranslator("fan2_wf", name("x"), name("y")));
-    translators.put(new FlattenFunc().getName(), new ChaoticaPluginTranslator("linear"));
+    translators.put(new FlattenFunc().getName(), emptyTranslator);
+    translators.put(new FractFormulaMandWFFunc().getName(), new ChaoticaPluginTranslator("fract_mandelbrot_wf", name("x"),
+        name("max_iter"), name("xmin"), name("xmax"), name("ymin"), name("ymax"), name("buddhabrot_mode"),
+        name("buddhabrot_min_iter"), name("direct_color"), name("scalez"), name("clip_iter_min"),
+        name("clip_iter_max"), name("max_clip_iter"), name("scale"), name("offsetx"), name("offsety"),
+        name("offsetz"), name("z_fill"), name("z_logscale"),
+        name("power")));
+    translators.put(new FractFormulaJuliaWFFunc().getName(), new ChaoticaPluginTranslator("fract_julia_wf",
+        name("max_iter"), name("xmin"), name("xmax"), name("ymin"), name("ymax"), name("buddhabrot_mode"),
+        name("buddhabrot_min_iter"), name("direct_color"), name("scalez"), name("clip_iter_min"),
+        name("clip_iter_max"), name("max_clip_iter"), name("scale"), name("offsetx"), name("offsety"),
+        name("offsetz"), name("z_fill"), name("z_logscale"),
+        name("power"), name("xseed"), name("yseed")));
     translators.put(new IFlamesFunc().getName(), emptyTranslator);
     translators.put(new InflateZ_1Func().getName(), emptyTranslator);
     translators.put(new InflateZ_2Func().getName(), emptyTranslator);
@@ -113,16 +140,24 @@ public class ChaoticaPluginTranslators {
     translators.put(new LogApoFunc().getName(), new ChaoticaPluginTranslator("log", name("base")));
     translators.put(new LogFunc().getName(), new ChaoticaPluginTranslator("log", fixedValue("base", 2.71828182845905)));
     translators.put(new MobiusFunc().getName(), new ChaoticaPluginTranslator("mobius_wf", name("re_a"), name("re_b"), name("re_c"), name("re_d"), name("im_a"), name("im_b"), name("im_c"), name("im_d")));
+    translators.put(new NgonFunc().getName(), new ChaoticaPluginTranslator("ngon_wf", name("circle"), name("corners"), name("power"), name("sides")));
+    translators.put(new PerspectiveFunc().getName(), new ChaoticaPluginTranslator("perspective_wf", name("angle"), name("dist")));
+    translators.put(new PieFunc().getName(), new ChaoticaPluginTranslator("pie_wf", name("slices"), name("rotation"), name("thickness")));
+    translators.put(new Pie3DFunc().getName(), new ChaoticaPluginTranslator("pie_wf", name("slices"), name("rotation"), name("thickness")));
+    translators.put(new PostBumpMapWFFunc().getName(), emptyTranslator);
     translators.put(new PostColorMapWFFunc().getName(), emptyTranslator);
     translators.put(new PostCustomWFFunc().getName(), emptyTranslator);
     translators.put(new PostDepthFunc().getName(), new ChaoticaPluginTranslator("linear3D"));
     translators.put(new PostDCZTranslFunc().getName(), new ChaoticaPluginTranslator("linear3D"));
     translators.put(new PostDisplacementMapWFFunc().getName(), emptyTranslator);
+    translators.put(new PostZTranslateWFFunc().getName(), emptyTranslator);
     translators.put(new PreCustomWFFunc().getName(), emptyTranslator);
     translators.put(new PreDCZTranslFunc().getName(), new ChaoticaPluginTranslator("linear3D"));
     translators.put(new PreSubFlameWFFunc().getName(), new ChaoticaPluginTranslator("pre_blur"));
+    translators.put(new PreWave3DWFFunc().getName(), emptyTranslator);
     translators.put(new PreZScaleFunc().getName(), emptyTranslator);
     translators.put(new PreZTranslateFunc().getName(), emptyTranslator);
+    translators.put(new SeparationFunc().getName(), new ChaoticaPluginTranslator("separation_wf", name("x"), name("xinside"), name("y"), name("yinside")));
     translators.put(new Sinusoidal3DFunc().getName(), new ChaoticaPluginTranslator("sinusoidal"));
     translators.put(new Spherical3DFunc().getName(), new ChaoticaPluginTranslator("spherical"));
     translators.put(new Splits3DFunc().getName(), new ChaoticaPluginTranslator("splits", name("x"), name("y")));

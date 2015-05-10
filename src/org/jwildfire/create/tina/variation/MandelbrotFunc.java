@@ -90,7 +90,7 @@ public class MandelbrotFunc extends VariationFunc {
         if (max_points > 0) {
           if (xP.size() >= max_points) {
             _x0 = xP.get(_pIdx);
-            _y0 = yP.get(_pIdx++);
+            _y0 = yP.get(_pIdx);
             _z0 = zP.get(_pIdx++);
             if (_pIdx >= max_points) {
               _pIdx = 0;

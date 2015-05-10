@@ -43,15 +43,9 @@ public class Onion2Func extends VariationFunc {
   private static final String PN_TOP_CROP = "top_crop";
   private static final String PN_STRETCH = "stretch";
 
-  private static final String[] params = {
-      PN_MEETING_PT,
-      PN_CIRCLE_A, PN_CIRCLE_B,
-      PN_SHIFT_X, PN_SHIFT_Y, PN_SHIFT_Z,
-      PN_TOP_CROP,
-      PN_STRETCH
-  };
+  private static final String[] paramNames = { PN_MEETING_PT, PN_CIRCLE_A, PN_CIRCLE_B, PN_SHIFT_X, PN_SHIFT_Y, PN_SHIFT_Z, PN_TOP_CROP, PN_STRETCH };
 
-  private double meetingPt = 0.5;
+  private double meeting_pt = 0.5;
   private double circle_a = 1.0;
   private double circle_b = 1.0;
   private double shift_x = 0.0;
@@ -117,13 +111,13 @@ public class Onion2Func extends VariationFunc {
 
     /* NOTE: "t" and "meetingPt" are in radians */
 
-    if (t > meetingPt) {
+    if (t > meeting_pt) {
       // exponential curve
       r = cos(t);
-      if (tan(meetingPt) != 0.0) {
-        z = exp(cos(meetingPt) - r) / tan(meetingPt)
-            + sin(meetingPt)
-            - 1 / tan(meetingPt);
+      if (tan(meeting_pt) != 0.0) {
+        z = exp(cos(meeting_pt) - r) / tan(meeting_pt)
+            + sin(meeting_pt)
+            - 1 / tan(meeting_pt);
 
         if (z > top_crop && top_crop > 0) { /* FIX ADDED. top_crop could start at -1 for cropping below middle. */
           z = top_crop;
@@ -177,13 +171,13 @@ public class Onion2Func extends VariationFunc {
 
   @Override
   public String[] getParameterNames() {
-    return params;
+    return paramNames;
   }
 
   @Override
   public Object[] getParameterValues() {
     return new Object[] {
-        meetingPt,
+        meeting_pt,
         circle_a,
         circle_b,
         shift_x,
@@ -198,7 +192,7 @@ public class Onion2Func extends VariationFunc {
   public void setParameter(String pName, double pValue) {
 
     if (PN_MEETING_PT.equalsIgnoreCase(pName)) {
-      meetingPt = pValue;
+      meeting_pt = pValue;
     }
     else if (PN_CIRCLE_A.equalsIgnoreCase(pName)) {
       circle_a = pValue;

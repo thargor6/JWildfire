@@ -451,7 +451,7 @@ public class VariationFuncList {
     registerVariationFunc(DeltaAFunc.class);
     registerVariationFunc(WDiscFunc.class);
     registerVariationFunc(TradeFunc.class);
-    
+
     registerVariationFunc(WFunc.class);
     registerVariationFunc(XFunc.class);
     registerVariationFunc(YFunc.class);
@@ -567,7 +567,5 @@ public class VariationFuncList {
   public static List<Class<? extends VariationFunc>> getVariationClasses() {
     return items;
   }
-
-
 
 }

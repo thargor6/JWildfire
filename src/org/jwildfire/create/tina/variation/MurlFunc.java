@@ -33,39 +33,40 @@ public class MurlFunc extends VariationFunc {
    Transcribed into Java by Nic Anderson (chronologicaldot)
    */
 
-  private double murl_c;
-  private int murl_power;
-  private double c, p2, vp;
+  private double _c, _p2, _vp;
 
   // temp variables (instantiated here to speed up processing)
-  private double sina, cosa, a, r, re, im, rl;
+  private double _sina, _cosa, _a, _r, _re, _im, _rl;
 
   private static final String PARAM_C = "c";
-  public static final String PARAM_POWER = "power";
+  private static final String PARAM_POWER = "power";
 
   private static final String[] paramNames = { PARAM_C, PARAM_POWER };
 
+  private double c = 0.1;
+  private int power = 1;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    c = murl_c;
-    if (murl_power != 1) {
-      c /= ((double) murl_power - 1);
+    _c = c;
+    if (power != 1) {
+      _c /= ((double) power - 1);
     }
-    p2 = (double) murl_power / 2.0;
-    vp = pAmount * (c + 1);
+    _p2 = (double) power / 2.0;
+    _vp = pAmount * (_c + 1);
 
-    a = atan2(pAffineTP.y, pAffineTP.x) * (double) murl_power;
-    sina = sin(a);
-    cosa = cos(a);
+    _a = atan2(pAffineTP.y, pAffineTP.x) * (double) power;
+    _sina = sin(_a);
+    _cosa = cos(_a);
 
-    r = c * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), p2);
+    _r = _c * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), _p2);
 
-    re = r * cosa + 1;
-    im = r * sina;
-    rl = vp / (sqr(re) + sqr(im));
+    _re = _r * _cosa + 1;
+    _im = _r * _sina;
+    _rl = _vp / (sqr(_re) + sqr(_im));
 
-    pVarTP.x += rl * (pAffineTP.x * re + pAffineTP.y * im);
-    pVarTP.y += rl * (pAffineTP.y * re - pAffineTP.x * im);
+    pVarTP.x += _rl * (pAffineTP.x * _re + pAffineTP.y * _im);
+    pVarTP.y += _rl * (pAffineTP.y * _re - pAffineTP.x * _im);
     pVarTP.z = pAmount * pAffineTP.z;
   }
 
@@ -81,15 +82,15 @@ public class MurlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { murl_c, murl_power };
+    return new Object[] { c, power };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName))
-      murl_power = (int) pValue;
+      power = (int) pValue;
     else if (PARAM_C.equalsIgnoreCase(pName))
-      murl_c = pValue;
+      c = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

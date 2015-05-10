@@ -1,13 +1,13 @@
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.Layer;
-
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 
 /*
  *  Original author dark-beam 
@@ -27,10 +27,8 @@ public class FlowerDbFunc extends VariationFunc {
   private static final String PARAM_STEM_LENGTH = "stem_length";
   private static final String PARAM_PETAL_FOLD_STRENGTH = "petal_fold_strength";
   private static final String PARAM_PETAL_FOLD_RADIUS = "petal_fold_radius";
-    
-  private static final String[] paramNames = { PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD,
-                                               PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH,
-                                               PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS};
+
+  private static final String[] paramNames = { PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD, PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH, PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS };
 
   // non-integer petals is possible, changes relative size of petals
   private double petals = 6;
@@ -44,31 +42,31 @@ public class FlowerDbFunc extends VariationFunc {
   // how strong (added angle) the fold is, positive value fold up, negative values fold down
   private double petal_fold_strength = 0;
   // how far out along the petals the fold happens
-  private double petal_fold_radius= 1;
+  private double petal_fold_radius = 1;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double r =  pAmount * sqrt(pAffineTP.getPrecalcSumsq());
+    double r = pAmount * sqrt(pAffineTP.getPrecalcSumsq());
     double t = pAffineTP.getPrecalcAtanYX();
-    r = r * (fabs ( (petal_spread + sin(petals * t)) * cos(petal_split * petals * t) ) );
-       
+    r = r * (fabs((petal_spread + sin(petals * t)) * cos(petal_split * petals * t)));
+
     pVarTP.x += sin(t) * r;
     pVarTP.y += cos(t) * r;
     pVarTP.z -= stem_thickness * ((2.0 / r) - 1.0);
     double rnew = sqrt((pVarTP.x * pVarTP.x) + (pVarTP.y * pVarTP.y));
     if (rnew > petal_fold_radius) {
-      pVarTP.z +=  (rnew - petal_fold_radius) * petal_fold_strength;
+      pVarTP.z += (rnew - petal_fold_radius) * petal_fold_strength;
     }
     if ((stem_length != 0) && (pVarTP.z <= (-1 * stem_length))) {
       pVarTP.z = (-1 * stem_length);
     }
-          
+
   }
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
 
   }
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -103,5 +101,5 @@ public class FlowerDbFunc extends VariationFunc {
   public String getName() {
     return "flower_db";
   }
-  
+
 }

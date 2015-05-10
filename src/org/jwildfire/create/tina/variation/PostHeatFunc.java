@@ -47,17 +47,7 @@ public class PostHeatFunc extends VariationFunc {
   private static final String PARAM_R_PHASE = "r_phase";
   private static final String PARAM_R_AMPLITUDE = "r_amp";
 
-  private static final String[] paramNames = {
-      PARAM_THETA_PERIOD,
-      PARAM_THETA_PHASE,
-      PARAM_THETA_AMPLITUDE,
-      PARAM_PHI_PERIOD,
-      PARAM_PHI_PHASE,
-      PARAM_PHI_AMPLITUDE,
-      PARAM_R_PERIOD,
-      PARAM_R_PHASE,
-      PARAM_R_AMPLITUDE
-  };
+  private static final String[] paramNames = { PARAM_THETA_PERIOD, PARAM_THETA_PHASE, PARAM_THETA_AMPLITUDE, PARAM_PHI_PERIOD, PARAM_PHI_PHASE, PARAM_PHI_AMPLITUDE, PARAM_R_PERIOD, PARAM_R_PHASE, PARAM_R_AMPLITUDE };
 
   double theta_period = 0.0;
   double theta_phase = 0.0;

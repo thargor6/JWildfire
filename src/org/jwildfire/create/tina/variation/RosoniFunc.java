@@ -48,12 +48,11 @@ public class RosoniFunc extends VariationFunc {
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_DX = "dx";
   private static final String PARAM_DY = "dy";
-  private static final String[] paramNames = { PARAM_MAXITER, PARAM_SWEETITER,
-      PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY };
+  private static final String[] paramNames = { PARAM_MAXITER, PARAM_SWEETITER, PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY };
 
   private int maxiter = 25;
   private int sweetiter = 3;
-  private int ashp = 0;
+  private int altshapes = 0;
   private double cutoff = 1.0;
   private double radius = 0.4;
   private double dx = 0.6;
@@ -81,7 +80,7 @@ public class RosoniFunc extends VariationFunc {
     double sweetx = xrt, sweety = yrt;
 
     for (i = 0; i < maxiter; i++) {
-      if (ashp == 0) {
+      if (altshapes == 0) {
         r2 = sqr(xrt - dx) + sqr(yrt - dy) - sqr(radius); // circle
         if (radius < 0.0)
           r2 = Math.max(fabs(xrt - dx), fabs(y - dy)) + radius; // square
@@ -130,7 +129,7 @@ public class RosoniFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { maxiter, sweetiter, ashp, cutoff, radius, dx, dy };
+    return new Object[] { maxiter, sweetiter, altshapes, cutoff, radius, dx, dy };
   }
 
   @Override
@@ -140,7 +139,7 @@ public class RosoniFunc extends VariationFunc {
     else if (PARAM_SWEETITER.equalsIgnoreCase(pName))
       sweetiter = limitIntVal(Tools.FTOI(pValue), 0, 1023);
     else if (PARAM_ALTSHAPES.equalsIgnoreCase(pName))
-      ashp = Tools.FTOI(pValue);
+      altshapes = Tools.FTOI(pValue);
     else if (PARAM_CUTOFF.equalsIgnoreCase(pName))
       cutoff = pValue;
     else if (PARAM_RADIUS.equalsIgnoreCase(pName))

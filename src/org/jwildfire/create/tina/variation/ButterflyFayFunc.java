@@ -56,12 +56,9 @@ public class ButterflyFayFunc extends VariationFunc {
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_CYCLES = "cycles";
 
-  private static final String[] paramNames = { PARAM_OFFSET, PARAM_UNIFIED_INNER_OUTER, PARAM_OUTER_MODE, PARAM_INNER_MODE,
-      PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD,
-      PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT,
-      PARAM_CYCLES, PARAM_FILL };
+  private static final String[] paramNames = { PARAM_OFFSET, PARAM_UNIFIED_INNER_OUTER, PARAM_OUTER_MODE, PARAM_INNER_MODE, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_CYCLES, PARAM_FILL };
 
-  private double cyclesParam = 0; // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
+  private double cycles = 0; // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
   private double offset = 0; // offset c from equations
   private int unified_inner_outer = 1;
   private int outer_mode = 1;
@@ -80,7 +77,7 @@ public class ButterflyFayFunc extends VariationFunc {
   // side note: 
   //      at 2*PI (1 cycle) appears to be closed, but really isn't, this is just a matter of resolution
   //      2nd cycle almost exactly follows path of 1rst cycle, then with start of 3rd cycle starts to diverge more obviously
-  private double cycles; // 1 cycle = 2*PI
+  private double number_of_cycles; // 1 cycle = 2*PI
 
   private double cycle_length = 2 * M_PI; // 2(PI)
   private double radians_to_close = 2 * M_PI * M_PI * M_PI; // 2(PI)^3
@@ -92,18 +89,18 @@ public class ButterflyFayFunc extends VariationFunc {
     //     (actually setting cycles = 0 will just yield a single point)
     //  for the butterfly curve I am taking that to mean closing the curve, which as noted above 
     //      I have observationally determined is at exactly 2(PI)^3 radians, which is same as (PI)^2 cycles
-    if (cyclesParam == 0) {
-      cycles = cycles_to_close;
+    if (cycles == 0) {
+      number_of_cycles = cycles_to_close;
     }
     else {
-      cycles = cyclesParam;
+      number_of_cycles = cycles;
     }
   }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double theta = atan2(pAffineTP.y, pAffineTP.x); // atan2 range is [-PI, PI], so covers 2PI, or 1 cycle
-    double t = cycles * theta;
+    double t = number_of_cycles * theta;
     // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
     // y = sin(t)*r
     // x = cos(t)*r
@@ -235,7 +232,7 @@ public class ButterflyFayFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset, unified_inner_outer, outer_mode, inner_mode, outer_spread, inner_spread, outer_spread_ratio, inner_spread_ratio, spread_split, cyclesParam, fill };
+    return new Object[] { offset, unified_inner_outer, outer_mode, inner_mode, outer_spread, inner_spread, outer_spread_ratio, inner_spread_ratio, spread_split, cycles, fill };
   }
 
   @Override
@@ -268,7 +265,7 @@ public class ButterflyFayFunc extends VariationFunc {
     else if (PARAM_SPREAD_SPLIT.equalsIgnoreCase(pName))
       spread_split = pValue;
     else if (PARAM_CYCLES.equalsIgnoreCase(pName))
-      cyclesParam = pValue;
+      cycles = pValue;
     else if (PARAM_FILL.equalsIgnoreCase(pName))
       fill = pValue;
     else

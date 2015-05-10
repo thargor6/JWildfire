@@ -55,7 +55,7 @@ public class PostSmartCropFunc extends VariationFunc {
   private double scatter = 0.0;
   private double offset = 0.0;
   private int cropmode = 1;
-  private int _static = 1;
+  private int _static = 2;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

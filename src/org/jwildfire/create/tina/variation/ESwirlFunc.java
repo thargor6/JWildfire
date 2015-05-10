@@ -35,8 +35,8 @@ public class ESwirlFunc extends VariationFunc {
 
   private static final String[] paramNames = { PARAM_IN, PARAM_OUT };
 
-  private double in = 0.0;
-  private double out = 0.0;
+  private double in = 1.2;
+  private double out = 0.2;
 
   //Taking the square root of numbers close to zero is dangerous.  If x is negative
   //due to floating point errors we get NaN results.

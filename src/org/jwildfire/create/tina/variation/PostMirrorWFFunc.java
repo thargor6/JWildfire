@@ -32,25 +32,25 @@ public class PostMirrorWFFunc extends VariationFunc {
 
   private static final String[] paramNames = { PARAM_XAXIS, PARAM_YAXIS, PARAM_ZAXIS, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_ZSHIFT };
 
-  private int xAxis = 1;
-  private int yAxis = 0;
-  private int zAxis = 0;
-  private double xShift = 0.0;
-  private double yShift = 0.0;
-  private double zShift = 0.0;
+  private int xaxis = 1;
+  private int yaxis = 0;
+  private int zaxis = 0;
+  private double xshift = 0.0;
+  private double yshift = 0.0;
+  private double zshift = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    if (xAxis > 0 && pContext.random() < 0.5) {
-      pVarTP.x = -pVarTP.x - xShift;
+    if (xaxis > 0 && pContext.random() < 0.5) {
+      pVarTP.x = -pVarTP.x - xshift;
     }
 
-    if (yAxis > 0 && pContext.random() < 0.5) {
-      pVarTP.y = -pVarTP.y - yShift;
+    if (yaxis > 0 && pContext.random() < 0.5) {
+      pVarTP.y = -pVarTP.y - yshift;
     }
 
-    if (zAxis > 0 && pContext.random() < 0.5) {
-      pVarTP.z = -pVarTP.z - zShift;
+    if (zaxis > 0 && pContext.random() < 0.5) {
+      pVarTP.z = -pVarTP.z - zshift;
     }
   }
 
@@ -61,23 +61,23 @@ public class PostMirrorWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xAxis, yAxis, zAxis, xShift, yShift, zShift };
+    return new Object[] { xaxis, yaxis, zaxis, xshift, yshift, zshift };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_XAXIS.equalsIgnoreCase(pName))
-      xAxis = Tools.FTOI(pValue);
+      xaxis = Tools.FTOI(pValue);
     else if (PARAM_YAXIS.equalsIgnoreCase(pName))
-      yAxis = Tools.FTOI(pValue);
+      yaxis = Tools.FTOI(pValue);
     else if (PARAM_ZAXIS.equalsIgnoreCase(pName))
-      zAxis = Tools.FTOI(pValue);
+      zaxis = Tools.FTOI(pValue);
     else if (PARAM_XSHIFT.equalsIgnoreCase(pName))
-      xShift = pValue;
+      xshift = pValue;
     else if (PARAM_YSHIFT.equalsIgnoreCase(pName))
-      yShift = pValue;
+      yshift = pValue;
     else if (PARAM_ZSHIFT.equalsIgnoreCase(pName))
-      zShift = pValue;
+      zshift = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
