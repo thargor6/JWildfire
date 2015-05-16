@@ -66,7 +66,9 @@ public class BModFunc extends VariationFunc {
     }
     pVarTP.x += pAmount * sinht / temp;
     pVarTP.y += pAmount * sins / temp;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

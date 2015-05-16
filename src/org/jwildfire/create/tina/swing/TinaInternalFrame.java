@@ -3477,6 +3477,21 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAffineTransformationPanel.add(getAffineScaleXButton(), null);
       tinaAffineTransformationPanel.add(getAffineScaleYButton(), null);
 
+      affinePreserveZButton = new JToggleButton();
+      affinePreserveZButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.affinePreserveZButton_clicked();
+        }
+      });
+      affinePreserveZButton.setToolTipText("Preserve the Z-coordinate (applies only if 2D- and 3D-variations are mixed)");
+      affinePreserveZButton.setText("Preserve Z");
+      affinePreserveZButton.setSize(new Dimension(138, 24));
+      affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
+      affinePreserveZButton.setLocation(new Point(4, 181));
+      affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affinePreserveZButton.setBounds(218, 155, 104, 24);
+      tinaAffineTransformationPanel.add(affinePreserveZButton);
+
       affineRotateEditMotionCurveBtn = new JButton();
       affineRotateEditMotionCurveBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -4629,7 +4644,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(), getShadingBlurRadiusREd(), getShadingBlurRadiusSlider(), getShadingBlurFadeREd(),
         getShadingBlurFadeSlider(), getShadingBlurFallOffREd(), getShadingBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getHelpPane(),
-        getToggleVariationsButton(), getToggleTransparencyButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
@@ -4715,7 +4730,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
         getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider(),
-        getSwfAnimatorQualityProfileCmb(), getFlameFPSField());
+        getSwfAnimatorQualityProfileCmb(), getFlameFPSField(), getLeapMotionToggleButton());
 
     tinaController = new TinaController(params);
     if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
@@ -7251,7 +7266,7 @@ public class TinaInternalFrame extends JInternalFrame {
       previewEastDefaultPanel.add(editorFractalBrightnessSlider);
       editorFractalBrightnessSlider.setOrientation(SwingConstants.VERTICAL);
       editorFractalBrightnessSlider.setValue(100);
-      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 48));
+      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 42));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
       previewEastDefaultPanel.add(getExportToChaoticaBtn());
       previewEastDefaultPanel.add(getChaoticaButtonSeparator());
@@ -7505,6 +7520,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+      centerWestPanel.add(getLeapMotionToggleButton());
     }
     return centerWestPanel;
   }
@@ -10175,6 +10191,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea interactiveStatsTextArea;
   private JComboBox interactiveRandomStyleCmb;
   private JToggleButton interactiveHalfSizeButton;
+  private JToggleButton affinePreserveZButton;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
   private JComboBox interactiveResolutionProfileCmb;
@@ -10852,6 +10869,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton exportToChaosBtn;
   private JPanel panel_104;
   private JWFNumberField flameFPSField;
+  private JToggleButton leapMotionToggleButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -12383,6 +12401,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getInteractiveHalveSizeButton() {
     return interactiveHalfSizeButton;
+  }
+
+  public JToggleButton getAffinePreserveZButton() {
+    return affinePreserveZButton;
   }
 
   private JButton getQualityProfileBtn() {
@@ -23216,12 +23238,29 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getChaoticaButtonSeparator() {
     if (panel_104 == null) {
       panel_104 = new JPanel();
+      panel_104.setPreferredSize(new Dimension(10, 16));
     }
     return panel_104;
   }
 
   public JWFNumberField getFlameFPSField() {
     return flameFPSField;
+  }
+
+  private JToggleButton getLeapMotionToggleButton() {
+    if (leapMotionToggleButton == null) {
+      leapMotionToggleButton = new JToggleButton();
+      leapMotionToggleButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getAnimationController().toggleLeapMotionMode();
+        }
+      });
+      leapMotionToggleButton.setToolTipText("Control the current fractal by using the Leap Motion controller");
+      leapMotionToggleButton.setPreferredSize(new Dimension(72, 42));
+      leapMotionToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+      leapMotionToggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return leapMotionToggleButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -207,7 +207,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
-  private TinaControllerData data = new TinaControllerData();
+  public TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
   private RGBPalette _lastGradient;
 
@@ -315,7 +315,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController = new AnimationController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
         parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField,
         parameterObject.frameSliderPanel, parameterObject.keyframesFrameLbl, parameterObject.keyframesFrameCountLbl,
-        parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton);
+        parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton,
+        parameterObject.leapMotionToggleButton);
 
     data.toggleDetachedPreviewButton = parameterObject.toggleDetachedPreviewButton;
     data.cameraRollREd = parameterObject.pCameraRollREd;
@@ -445,6 +446,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineRotateEditMotionCurveBtn = parameterObject.affineRotateEditMotionCurveBtn;
     data.affineScaleEditMotionCurveBtn = parameterObject.affineScaleEditMotionCurveBtn;
     data.affineEditPostTransformSmallButton = parameterObject.pAffineEditPostTransformSmallButton;
+    data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
 
@@ -1192,6 +1194,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
   }
 
+  public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+    flamePreviewHelper.fastRefreshFlameImage(pQuickRender, pMouseDown, pDownScale);
+  }
+
   @Override
   public void refreshUI() {
     gridRefreshing = true;
@@ -1227,6 +1233,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flameControls.refreshFlameValues();
 
       refreshBGColorIndicator();
+
+      data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
       gridRefreshing = true;
       try {
@@ -3921,6 +3929,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     this.interactiveRendererCtrl = interactiveRendererCtrl;
   }
 
+  public void affinePreserveZButton_clicked() {
+    if (gridRefreshing || cmbRefreshing) {
+      return;
+    }
+    if (getCurrFlame() != null) {
+      saveUndoPoint();
+      getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
+      refreshFlameImage(false);
+    }
+  }
+
   private void setupProfiles(Flame pFlame) {
     if (prefs.isTinaAssociateProfilesWithFlames()) {
       if (pFlame.getResolutionProfile() != null) {
@@ -5631,6 +5650,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       if (getCurrFlame() != null) {
         closeDetachedPreview();
+        data.toggleDetachedPreviewButton.setSelected(false);
         new ChaoticaLauncher().launchChaotica(generateExportFlame(getCurrFlame()));
         messageHelper.showStatusMessage(getCurrFlame(), "flame sucessfully exported");
       }

@@ -41,6 +41,7 @@ public class CrossRandomFlameGenerator extends RandomFlameGenerator {
       flame.setCamDOF(Math.random() * 0.2);
     }
     flame.setCamPitch(10 + Math.random() * 50);
+    flame.setPreserveZ(Math.random() > 0.33);
     flame.setCamPerspective(0.10 + Math.random() * 0.5);
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();

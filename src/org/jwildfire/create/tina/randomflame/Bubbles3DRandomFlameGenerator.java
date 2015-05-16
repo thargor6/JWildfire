@@ -130,7 +130,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.rotate(xForm, -20.0 + Math.random() * 40.0, false);
       XFormTransformService.scale(xForm, 0.8 + Math.random() * 0.4, true, true);
     }
-
+    flame.setPreserveZ(Math.random() > 0.5);
     flame.getLayers().get(0).randomizeColors();
     return flame;
   }

@@ -85,7 +85,9 @@ public class BWRandsFunc extends VariationFunc {
       // Linear if cells are too small
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
       return;
     }
 
@@ -144,7 +146,9 @@ public class BWRandsFunc extends VariationFunc {
       // Linear if outside the bubble
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
       return;
     }
 
@@ -208,7 +212,9 @@ public class BWRandsFunc extends VariationFunc {
     // Finally add values in
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

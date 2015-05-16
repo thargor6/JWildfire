@@ -34,7 +34,6 @@ import org.jwildfire.create.tina.variation.CylinderApoFunc;
 import org.jwildfire.create.tina.variation.DCBubbleFunc;
 import org.jwildfire.create.tina.variation.DCCrackleWFFunc;
 import org.jwildfire.create.tina.variation.DCHexesWFFunc;
-import org.jwildfire.create.tina.variation.DCLinearFunc;
 import org.jwildfire.create.tina.variation.DCZTranslFunc;
 import org.jwildfire.create.tina.variation.Disc2Func;
 import org.jwildfire.create.tina.variation.DisplacementMapWFFunc;
@@ -108,7 +107,6 @@ public class ChaoticaPluginTranslators {
     translators.put(new CylinderApoFunc().getName(), new ChaoticaPluginTranslator("cylinder"));
     translators.put(new DCBubbleFunc().getName(), emptyTranslator);
     translators.put(new DCCrackleWFFunc().getName(), new ChaoticaPluginTranslator("crackle", name("cellsize"), name("power"), name("distort"), name("scale"), name("z")));
-    translators.put(new DCLinearFunc().getName(), new ChaoticaPluginTranslator("linear"));
     translators.put(new DCHexesWFFunc().getName(), new ChaoticaPluginTranslator("hexes", name("cellsize"), name("power"), name("rotate"), name("scale")));
     translators.put(new DCZTranslFunc().getName(), new ChaoticaPluginTranslator("linear3D"));
     translators.put(new Disc2Func().getName(), new ChaoticaPluginTranslator("disc2_wf", name("rot"), name("twist")));

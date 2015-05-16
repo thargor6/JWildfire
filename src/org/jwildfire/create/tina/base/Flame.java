@@ -147,6 +147,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double vibrancy;
   private final MotionCurve vibrancyCurve = new MotionCurve();
+  private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
   private String name = "";
@@ -671,6 +672,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     contrastCurve.assign(pFlame.contrastCurve);
     vibrancy = pFlame.vibrancy;
     vibrancyCurve.assign(pFlame.vibrancyCurve);
+    preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
     shadingInfo.assign(pFlame.shadingInfo);
@@ -770,6 +772,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
+        (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
@@ -1368,4 +1371,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     fps = pFps;
   }
 
+  public boolean isPreserveZ() {
+    return preserveZ;
+  }
+
+  public void setPreserveZ(boolean preserveZ) {
+    this.preserveZ = preserveZ;
+  }
 }

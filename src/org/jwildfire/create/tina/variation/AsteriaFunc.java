@@ -55,7 +55,9 @@ public class AsteriaFunc extends VariationFunc {
     if (in1) { // linear
       pVarTP.x += x0;
       pVarTP.y += y0;
-      pVarTP.z += pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     }
     else { // asteria
       xx = x0 * cosa - y0 * sina;
@@ -65,7 +67,9 @@ public class AsteriaFunc extends VariationFunc {
       yy = -nx * sina + yy * cosa;
       pVarTP.x += xx;
       pVarTP.y += yy;
-      pVarTP.z += pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     }
   }
 

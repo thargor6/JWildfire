@@ -45,7 +45,9 @@ public class CustomWFFuncRunner {
     // defaults to linear3D transformation
     pVarTP.x += pAmount * pAffineTP.x;
     pVarTP.y += pAmount * pAffineTP.y;
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   public void setA(double a) {
