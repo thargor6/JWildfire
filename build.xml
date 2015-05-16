@@ -62,6 +62,8 @@
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
+      <fileset dir="." includes="lib/x64/**/*.dll"/>
+      <fileset dir="." includes="lib/x86/**/*.dll"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
       <zipfileset src="lib/janino.jar"/>
@@ -71,6 +73,7 @@
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
+      <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
       </manifest>			
@@ -122,8 +125,11 @@
     <copy todir="${dist.dir}/">
        <fileset file="${applet.jar.name}"/>
      </copy>
-    <copy todir="${dist.dir}/plugins">
-      <fileset dir="${src.dir}/../plugins" includes="*.dll"/>
+    <copy todir="${dist.dir}/plugins32">
+      <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
+     </copy>
+    <copy todir="${dist.dir}/plugins64">
+      <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
      </copy>
     <copy todir="${dist.dir}/">
        <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>

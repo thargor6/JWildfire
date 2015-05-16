@@ -78,9 +78,13 @@
 
     </pack>
     
-    <pack name="Chaotica plugins" required="no" preselected="true">
-      <description>Plugins for the JWildfire-Chaotica-bridge</description>      
-      <fileset dir="plugins" targetdir="$INSTALL_PATH/plugins"/>
+    <pack name="Chaotica-plugins 64 Bit" required="no" preselected="true">
+      <description>Plugins for the JWildfire-Chaotica-bridge (64 Bit)</description>      
+      <fileset dir="plugins64" targetdir="$INSTALL_PATH/plugins64"/>
+    </pack>
+    <pack name="Chaotica-plugins 32 Bit" required="no" preselected="false">
+      <description>Plugins for the JWildfire-Chaotica-bridge (32 Bit)</description>      
+      <fileset dir="plugins32" targetdir="$INSTALL_PATH/plugins32"/>
     </pack>
     
     <pack name="JWildfire applet" required="no" preselected="true">
