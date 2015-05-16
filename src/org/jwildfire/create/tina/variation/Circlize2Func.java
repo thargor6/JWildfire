@@ -71,7 +71,9 @@ public class Circlize2Func extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

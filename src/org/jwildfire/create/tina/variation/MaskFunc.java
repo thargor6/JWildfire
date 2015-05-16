@@ -59,7 +59,9 @@ public class MaskFunc extends VariationFunc {
       pVarTP.x = (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
       pVarTP.y += (pAmount / sumsq) * cos(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

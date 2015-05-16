@@ -40,7 +40,9 @@ public class BlurPixelizeFunc extends VariationFunc {
 
     pVarTP.x += _v * (x + (this.scale) * (pContext.random() - 0.5) + 0.5);
     pVarTP.y += _v * (y + (this.scale) * (pContext.random() - 0.5) + 0.5);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

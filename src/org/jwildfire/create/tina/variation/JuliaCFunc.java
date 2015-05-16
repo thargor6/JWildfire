@@ -55,7 +55,9 @@ public class JuliaCFunc extends VariationFunc {
     pVarTP.x += pAmount * mod2 * c;
     pVarTP.y += pAmount * mod2 * s;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

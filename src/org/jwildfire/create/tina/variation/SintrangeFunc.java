@@ -36,7 +36,9 @@ public class SintrangeFunc extends VariationFunc {
     double v = ((sqr(pAffineTP.x) + sqr(pAffineTP.y)) * w);
     pVarTP.x = pAmount * (sin(pAffineTP.x)) * (pAffineTP.x * pAffineTP.x + w - v);
     pVarTP.y = pAmount * (sin(pAffineTP.y)) * (pAffineTP.y * pAffineTP.y + w - v);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

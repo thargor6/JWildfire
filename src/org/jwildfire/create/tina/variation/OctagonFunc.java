@@ -47,7 +47,9 @@ public class OctagonFunc extends VariationFunc {
     else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
-      pVarTP.z += pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     }
     double t = pAmount / ((sqrt(pAffineTP.x * pAffineTP.x) + sqrt(pAffineTP.z) + sqrt(pAffineTP.y * pAffineTP.y) + sqrt(pAffineTP.z)) + EPSILON);
     if (r >= 0) {
@@ -58,7 +60,9 @@ public class OctagonFunc extends VariationFunc {
     else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
-      pVarTP.z += pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
     }
     if (pAffineTP.x >= 0.0)

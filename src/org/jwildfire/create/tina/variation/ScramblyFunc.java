@@ -77,7 +77,9 @@ public class ScramblyFunc extends VariationFunc {
       pVarTP.y += pAmount * Vy;
     }
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

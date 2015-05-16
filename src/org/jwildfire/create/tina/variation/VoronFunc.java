@@ -72,7 +72,9 @@ public class VoronFunc extends VariationFunc {
     pVarTP.x += pAmount * (k * (pAffineTP.x - X0) + X0);
     pVarTP.y += pAmount * (k * (pAffineTP.y - Y0) + Y0);
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

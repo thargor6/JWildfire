@@ -131,7 +131,9 @@ public class LazyTravisFunc extends VariationFunc {
         pVarTP.y -= pAmount * s;
       }
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

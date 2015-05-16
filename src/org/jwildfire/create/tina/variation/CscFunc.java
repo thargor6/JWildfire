@@ -43,7 +43,9 @@ public class CscFunc extends SimpleVariationFunc {
     double cscden = 2.0 / d;
     pVarTP.x += pAmount * cscden * cscsin * csccosh;
     pVarTP.y -= pAmount * cscden * csccos * cscsinh;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

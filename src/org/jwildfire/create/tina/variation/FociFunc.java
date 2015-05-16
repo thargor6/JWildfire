@@ -46,7 +46,9 @@ public class FociFunc extends SimpleVariationFunc {
 
     pVarTP.x += (expx - expnx) * tmp;
     pVarTP.y += siny * tmp;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

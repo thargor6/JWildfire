@@ -77,7 +77,9 @@ public class FDiscFunc extends VariationFunc {
     // pVarTP.x += pAffineTP.x * pAmount * r * xfactor;
     // pVarTP.y += pAffineTP.y * pAmount * r * yfactor;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

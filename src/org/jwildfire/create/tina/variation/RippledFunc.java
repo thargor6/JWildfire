@@ -33,7 +33,9 @@ public class RippledFunc extends SimpleVariationFunc {
     double d = sqr(pAffineTP.x) + sqr(pAffineTP.y);
     pVarTP.x += pAmount / 2 * (tanh(d + EPSILON) * (2.0 * pAffineTP.x));
     pVarTP.y += pAmount / 2 * (cos(d + EPSILON) * (2.0 * pAffineTP.y));
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

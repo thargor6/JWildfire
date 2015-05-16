@@ -32,7 +32,9 @@ public class HandkerchiefFunc extends SimpleVariationFunc {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     pVarTP.x += pAmount * (sin(angle + r) * r);
     pVarTP.y += pAmount * (cos(angle - r) * r);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

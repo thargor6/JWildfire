@@ -54,7 +54,9 @@ public class SpirographFunc extends VariationFunc {
     double y1 = (a + b) * sin(t) - c2 * sin((a + b) / b * t);
     pVarTP.x += pAmount * (x1 + d * cos(t) + y);
     pVarTP.y += pAmount * (y1 + d * sin(t) + y);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

@@ -41,7 +41,9 @@ public class LayeredSpiralFunc extends VariationFunc {
     pVarTP.x += pAmount * a * cos(t);
     pVarTP.y += pAmount * a * sin(t);
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

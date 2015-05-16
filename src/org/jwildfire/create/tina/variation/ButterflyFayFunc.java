@@ -222,7 +222,9 @@ public class ButterflyFayFunc extends VariationFunc {
           break;
       }
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

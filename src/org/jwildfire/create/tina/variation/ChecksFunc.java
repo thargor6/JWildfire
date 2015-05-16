@@ -61,7 +61,9 @@ public class ChecksFunc extends VariationFunc {
     pVarTP.y += pAmount * (pAffineTP.y + dy);
     // -X- and as a little goodie, I pass through FTz so that
     //     neat lil variation does not kill 3Dness in hack & 7X
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

@@ -67,7 +67,9 @@ public class Fibonacci2Func extends VariationFunc {
 
     pVarTP.x += pAmount * (eradius1 * cnum1 - eradius2 * cnum2) * ffive;
     pVarTP.y += pAmount * (eradius1 * snum1 - eradius2 * snum2) * ffive;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

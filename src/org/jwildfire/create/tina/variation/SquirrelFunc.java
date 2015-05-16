@@ -45,7 +45,9 @@ public class SquirrelFunc extends VariationFunc {
     pVarTP.x = cos(sqrt(u)) * tan(pAffineTP.x) * pAmount;
     pVarTP.y = sin(sqrt(u)) * tan(pAffineTP.y) * pAmount;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

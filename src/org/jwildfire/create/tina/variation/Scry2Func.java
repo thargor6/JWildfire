@@ -77,7 +77,9 @@ public class Scry2Func extends VariationFunc {
     double r = 1.0 / d;
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

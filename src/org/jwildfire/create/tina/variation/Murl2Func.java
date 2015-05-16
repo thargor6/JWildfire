@@ -83,7 +83,9 @@ public class Murl2Func extends VariationFunc {
 
     pVarTP.x += _rl * (pAffineTP.x * _re + pAffineTP.y * _im);
     pVarTP.y += _rl * (pAffineTP.y * _re - pAffineTP.x * _im);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

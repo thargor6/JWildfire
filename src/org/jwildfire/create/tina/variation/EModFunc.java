@@ -80,7 +80,9 @@ public class EModFunc extends VariationFunc {
 
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

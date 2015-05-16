@@ -31,7 +31,9 @@ public class PolarFunc extends SimpleVariationFunc {
     double ny = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) - 1.0;
     pVarTP.x += pAmount * (pAffineTP.getPrecalcAtan() * R_PI);
     pVarTP.y += pAmount * ny;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

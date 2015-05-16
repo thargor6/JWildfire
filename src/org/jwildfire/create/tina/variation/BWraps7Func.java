@@ -64,7 +64,9 @@ public class BWraps7Func extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
 
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
       return;
     }
@@ -80,7 +82,9 @@ public class BWraps7Func extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
 
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
       return;
     }
@@ -108,7 +112,9 @@ public class BWraps7Func extends VariationFunc {
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

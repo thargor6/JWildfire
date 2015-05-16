@@ -94,12 +94,7 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_METACYCLES = "metacycles"; // only in effect when cycles = 0 (automatic cycle calculations in effect)
   private static final String PARAM_METACYCLE_EXPANSION = "metacycle_expansion";
 
-  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM,
-      PARAM_INNER_MODE, PARAM_OUTER_MODE,
-      PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD_RATIO, PARAM_OUTER_SPREAD_RATIO, PARAM_SPREAD_SPLIT,
-      PARAM_FILL, PARAM_RADIAL_OFFSET,
-      PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION,
-  };
+  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_INNER_MODE, PARAM_OUTER_MODE, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD_RATIO, PARAM_OUTER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_FILL, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION };
 
   private double knumer = 3; // numerator of k in rose curve equations,   k = kn/kd
   private double kdenom = 4; // denominator of k in rose curve equations, k = kn/kd
@@ -121,7 +116,6 @@ public class RhodoneaFunc extends VariationFunc {
   private double k; // k = kn/kd
   private double cycles; // 1 cycle = 2*PI
   private double cycles_to_close;
-  private double petal_count = 0; // petal_count = 0 means petal count is unknown
 
   // want to figure out (when possible):
   //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
@@ -138,7 +132,6 @@ public class RhodoneaFunc extends VariationFunc {
     if ((k % 1) == 0) { // k is integer 
       if ((k % 2) == 0) { // k is even integer, will have 2k petals
         cycles_to_close = 1; // (2PI)
-        petal_count = 2 * k;
       }
       else { // k is odd integer, will have k petals (or sometimes 2k with offset)
         if (radial_offset != 0 || inner_spread != 0 || outer_spread != 0 || fill != 0) {
@@ -147,7 +140,6 @@ public class RhodoneaFunc extends VariationFunc {
         else {
           cycles_to_close = 0.5;
         } // (1PI)
-        petal_count = k;
       }
     }
     else if ((kn % 1 == 0) && (kd % 1 == 0)) {
@@ -169,11 +161,9 @@ public class RhodoneaFunc extends VariationFunc {
       // paraphrased from http://mathworld.wolfram.com/Rose.html:
       //    If k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
       if ((kn % 2 == 0) || (kd % 2 == 0)) {
-        petal_count = 2 * kn;
         cycles_to_close = kd; // 2 * PI * kd
       }
       else {
-        petal_count = kn;
         cycles_to_close = kd / 2; // PI * kd
       }
     }
@@ -424,7 +414,9 @@ public class RhodoneaFunc extends VariationFunc {
         pVarTP.y = sy;
       }
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

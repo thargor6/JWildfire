@@ -45,7 +45,9 @@ public class BladeFunc extends SimpleVariationFunc {
     double cosr = cos(r);
     pVarTP.x += pAmount * pAffineTP.x * (cosr + sinr);
     pVarTP.y += pAmount * pAffineTP.x * (cosr - sinr);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

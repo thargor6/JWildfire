@@ -33,7 +33,9 @@ public class RoundSpherFunc extends SimpleVariationFunc {
 
     pVarTP.x += pAmount * (pAmount / d * pAffineTP.x / e);
     pVarTP.y += pAmount * (pAmount / d * pAffineTP.y / e);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

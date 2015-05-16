@@ -84,14 +84,14 @@ public class Julia3DZFunc extends VariationFunc {
   public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x = pVarTP.x + pAmount * pAffineTP.x;
     pVarTP.y = pVarTP.y + pAmount * pAffineTP.y;
-    pVarTP.z = pVarTP.z + pAmount * pAffineTP.z;
+    pVarTP.z += pVarTP.z + pAmount * pAffineTP.z;
   }
 
   public void transformPowerMinus1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
     pVarTP.x = pVarTP.x + r * pAffineTP.x;
     pVarTP.y = pVarTP.y + r * pAffineTP.y;
-    pVarTP.z = pVarTP.z + r * pAffineTP.z;
+    pVarTP.z += pVarTP.z + r * pAffineTP.z;
   }
 
   public void transformFunction(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

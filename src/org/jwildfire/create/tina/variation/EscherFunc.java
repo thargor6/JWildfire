@@ -54,7 +54,9 @@ public class EscherFunc extends VariationFunc {
 
     pVarTP.x += m * cn;
     pVarTP.y += m * sn;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

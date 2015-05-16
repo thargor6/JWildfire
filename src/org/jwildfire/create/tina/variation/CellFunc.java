@@ -69,7 +69,9 @@ public class CellFunc extends VariationFunc {
     pVarTP.x += pAmount * (dx + x * size);
     pVarTP.y -= pAmount * (dy + y * size);
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

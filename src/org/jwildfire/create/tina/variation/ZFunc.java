@@ -112,7 +112,9 @@ public class ZFunc extends VariationFunc {
 
     pVarTP.x += r * c;
     pVarTP.y += r * s;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

@@ -66,7 +66,9 @@ public class LogDbFunc extends VariationFunc {
     fix_atan_period *= _fixpe;
     pVarTP.x += _denom * log(pAffineTP.getPrecalcSumsq());
     pVarTP.y += pAmount * (pAffineTP.getPrecalcAtanYX() + fix_atan_period);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

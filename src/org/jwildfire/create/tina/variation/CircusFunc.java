@@ -48,7 +48,9 @@ public class CircusFunc extends VariationFunc {
 
     pVarTP.x += pAmount * r * c;
     pVarTP.y += pAmount * r * s;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

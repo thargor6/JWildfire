@@ -61,6 +61,8 @@ public class VogelFunc extends VariationFunc {
     final double r = pAmount * (pAffineTP.getPrecalcSqrt() + sqrt(i));
     pVarTP.x += r * (cosa.value + (scale * pAffineTP.x));
     pVarTP.y += r * (sina.value + (scale * pAffineTP.y));
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 }

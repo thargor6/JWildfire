@@ -535,7 +535,7 @@ public class VariationFuncList {
     while (true) {
       int idx = (int) (Math.random() * getNameList().size());
       String name = getNameList().get(idx);
-      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) && !(name.indexOf("iflames_wf") > 0)) {
+      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) && !name.equals("iflames_wf")) {
         return name;
       }
     }

@@ -103,7 +103,9 @@ public class FourthFunc extends VariationFunc {
       pVarTP.y += pAmount * pAffineTP.y;
     }
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

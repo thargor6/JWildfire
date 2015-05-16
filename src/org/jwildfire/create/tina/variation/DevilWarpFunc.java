@@ -52,7 +52,9 @@ public class DevilWarpFunc extends VariationFunc {
     r = effect * (r);
     pVarTP.x += xx * (1 + r);
     pVarTP.y += yy * (1 + r);
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

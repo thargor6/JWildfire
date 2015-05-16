@@ -70,7 +70,9 @@ public class RosoniFunc extends VariationFunc {
     if (cerc) {
       pVarTP.x += pAmount * x;
       pVarTP.y += pAmount * y;
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
       return;
     }
 
@@ -114,12 +116,16 @@ public class RosoniFunc extends VariationFunc {
         pVarTP.x += pAmount * sweetx;
         pVarTP.y += pAmount * sweety;
       }
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
       return;
     }
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

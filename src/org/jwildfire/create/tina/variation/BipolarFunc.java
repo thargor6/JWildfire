@@ -58,7 +58,9 @@ public class BipolarFunc extends VariationFunc {
       return;
     pVarTP.x += pAmount * 0.25 * M_2_PI * log((t + x2) / (t - x2));
     pVarTP.y += pAmount * M_2_PI * y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

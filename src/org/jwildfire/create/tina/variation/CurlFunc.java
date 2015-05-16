@@ -40,7 +40,9 @@ public class CurlFunc extends VariationFunc {
 
     pVarTP.x += (pAffineTP.x * re + pAffineTP.y * im) * r;
     pVarTP.y += (pAffineTP.y * re - pAffineTP.x * im) * r;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

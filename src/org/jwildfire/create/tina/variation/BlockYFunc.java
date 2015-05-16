@@ -56,7 +56,9 @@ public class BlockYFunc extends VariationFunc {
     a = pAffineTP.y / ymax;
     b = sqrt_safe(1.0 - sqr(a));
     pVarTP.y += this.v * atan2(a, b) * r * this.y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   private double sqrt_safe(double x) {

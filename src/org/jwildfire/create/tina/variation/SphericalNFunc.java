@@ -55,7 +55,9 @@ public class SphericalNFunc extends VariationFunc {
       pVarTP.x += pAmount * cosa / R;
       pVarTP.y += pAmount * sina / R;
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

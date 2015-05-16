@@ -90,7 +90,9 @@ public class EJuliaFunc extends VariationFunc {
     pVarTP.x += pAmount * coshmu * cosnu;
     pVarTP.y += pAmount * sinhmu * sinnu;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

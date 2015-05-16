@@ -48,7 +48,9 @@ public class JuliaNFunc extends VariationFunc {
 
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y + r * sina;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

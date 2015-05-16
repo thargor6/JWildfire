@@ -72,7 +72,9 @@ public class GlynniaFunc extends SimpleVariationFunc {
         pVarTP.y += r * pAffineTP.y;
       }
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

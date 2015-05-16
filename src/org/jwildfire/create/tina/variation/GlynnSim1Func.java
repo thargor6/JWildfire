@@ -93,7 +93,9 @@ public class GlynnSim1Func extends VariationFunc {
         pVarTP.y += pAmount * toolPoint.y;
       }
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

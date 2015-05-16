@@ -59,7 +59,9 @@ public class WedgeSphFunc extends VariationFunc {
 
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

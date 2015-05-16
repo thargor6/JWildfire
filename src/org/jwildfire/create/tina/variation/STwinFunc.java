@@ -63,7 +63,9 @@ public class STwinFunc extends VariationFunc {
 
     pVarTP.x += (pAmount * pAffineTP.x) + result;
     pVarTP.y += (pAmount * pAffineTP.y) + result;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

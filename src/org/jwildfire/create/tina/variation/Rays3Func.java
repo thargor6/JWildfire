@@ -37,7 +37,9 @@ public class Rays3Func extends SimpleVariationFunc {
 
     pVarTP.x = (pAmount / 10.0) * u * cos(t) * t / pAffineTP.x;
     pVarTP.y = (pAmount / 10.0) * u * tan(t) * t / pAffineTP.y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

@@ -27,7 +27,9 @@ public class HyperbolicFunc extends SimpleVariationFunc {
     double r = pAffineTP.getPrecalcSqrt();
     pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() / r;
     pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

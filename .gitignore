@@ -42,7 +42,8 @@ plugin_log.txt
 C/*
 src/org/jwildfire/create/tina/variation/converter/*
 Sample.java
-plugins/*
+plugins32/*
+plugins64/*
 
 
 lib/colt*

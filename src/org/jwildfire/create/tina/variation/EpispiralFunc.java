@@ -58,7 +58,9 @@ public class EpispiralFunc extends VariationFunc {
     }
     pVarTP.x += pAmount * t * cos(theta);
     pVarTP.y += pAmount * t * sin(theta);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

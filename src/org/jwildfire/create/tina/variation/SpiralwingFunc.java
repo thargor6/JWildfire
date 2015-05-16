@@ -38,7 +38,9 @@ public class SpiralwingFunc extends SimpleVariationFunc {
     pVarTP.x += d * cos(c1) * c2;
     pVarTP.y += d * sin(c1) * c2;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

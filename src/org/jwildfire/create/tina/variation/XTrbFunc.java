@@ -97,7 +97,9 @@ public class XTrbFunc extends VariationFunc {
     }
     pVarTP.x += pAmount * X;
     pVarTP.y += pAmount * Y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

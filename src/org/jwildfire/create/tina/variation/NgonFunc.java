@@ -59,7 +59,9 @@ public class NgonFunc extends VariationFunc {
 
     pVarTP.x += pAmount * pAffineTP.x * amp;
     pVarTP.y += pAmount * pAffineTP.y * amp;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

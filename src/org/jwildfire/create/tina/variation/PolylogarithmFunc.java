@@ -94,7 +94,9 @@ public class PolylogarithmFunc extends VariationFunc {
     LiN.Add(z);
     pVarTP.x += vv * LiN.re;
     pVarTP.y += vv * LiN.im;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

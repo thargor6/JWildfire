@@ -36,7 +36,9 @@ public class ExFunc extends SimpleVariationFunc {
     r = r * pAmount;
     pVarTP.x += r * (m0 + m1);
     pVarTP.y += r * (m0 - m1);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

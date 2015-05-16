@@ -111,7 +111,9 @@ public class PrimitivesWFFunc extends VariationFunc {
     pVarTP.x += dx;
     pVarTP.y += dy;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   private boolean insideUnitTriangle(double pX, double pY) {
@@ -150,7 +152,9 @@ public class PrimitivesWFFunc extends VariationFunc {
     }
     pVarTP.x += pContext.random() < 0.5 ? dx : -dx;
     pVarTP.y += -dy;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   private void createCube(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -275,7 +279,9 @@ public class PrimitivesWFFunc extends VariationFunc {
 
     pVarTP.x += radius * cosa;
     pVarTP.y += radius * sina;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   private void createTorus(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

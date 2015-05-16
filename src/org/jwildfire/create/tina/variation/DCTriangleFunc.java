@@ -108,7 +108,9 @@ public class DCTriangleFunc extends VariationFunc {
     // set output
     pVarTP.x += pAmount * (ox + u * xx + v * yx);
     pVarTP.y += pAmount * (oy + u * xy + v * yy);
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     pVarTP.color = fmod(fabs(u + v), 1.0);
   }
 

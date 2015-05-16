@@ -39,7 +39,9 @@ public class Popcorn2Func extends VariationFunc {
     /* popcorn2 from the apophysis plugin pack */
     pVarTP.x += pAmount * (pAffineTP.x + x * sin(tan(pAffineTP.y * c)));
     pVarTP.y += pAmount * (pAffineTP.y + y * sin(tan(pAffineTP.x * c)));
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

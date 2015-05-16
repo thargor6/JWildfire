@@ -108,7 +108,9 @@ public class CircleTrans1Func extends VariationFunc {
     }
     pVarTP.x += pAmount * Uxy.x;
     pVarTP.y += pAmount * Uxy.y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

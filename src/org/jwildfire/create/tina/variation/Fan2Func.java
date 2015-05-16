@@ -62,7 +62,9 @@ public class Fan2Func extends VariationFunc {
 
     pVarTP.x += pAmount * r * sin(a);
     pVarTP.y += pAmount * r * cos(a);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

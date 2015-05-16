@@ -41,7 +41,9 @@ public class Rings2Func extends VariationFunc {
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

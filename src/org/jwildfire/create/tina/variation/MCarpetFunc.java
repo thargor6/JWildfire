@@ -44,7 +44,9 @@ public class MCarpetFunc extends VariationFunc {
     pVarTP.y += pAffineTP.y * r * this.y;
     pVarTP.x += (1.0 - (this.twist * sqr(pAffineTP.x)) + pAffineTP.y) * pAmount;
     pVarTP.y += this.tilt * pAffineTP.x * pAmount;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

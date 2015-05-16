@@ -47,7 +47,9 @@ public class DLAWFFunc extends VariationFunc {
     Point point = getRandomPoint();
     pVarTP.x += pAmount * point.x;
     pVarTP.y += pAmount * point.y;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

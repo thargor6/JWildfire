@@ -102,7 +102,9 @@ public class CPow3Func extends VariationFunc {
     pVarTP.x += ri * cos(ang2);
     pVarTP.y += ri * sin(ang2);
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

@@ -34,7 +34,9 @@ public class GaussianBlurFunc extends SimpleVariationFunc {
     r = pAmount * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2.0);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

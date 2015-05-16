@@ -85,7 +85,9 @@ public class EMotionFunc extends VariationFunc {
     coshmu = cosh(mu);
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

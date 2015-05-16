@@ -64,7 +64,9 @@ public class LazySusanFunc extends VariationFunc {
       pVarTP.x += rr * xx + x;
       pVarTP.y += rr * yy - y;
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

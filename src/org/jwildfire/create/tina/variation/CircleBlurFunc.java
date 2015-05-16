@@ -39,7 +39,9 @@ public class CircleBlurFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * c * rad;
     pVarTP.y += pAmount * s * rad;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

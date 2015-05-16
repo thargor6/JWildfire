@@ -24,6 +24,7 @@ public class FlameTransformationContext {
   private final FlameRenderer flameRenderer;
   private final int frame;
   private boolean preview;
+  private boolean preserveZCoordinate;
 
   public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen, int pFrame) {
     randGen = pRandGen;
@@ -59,4 +60,11 @@ public class FlameTransformationContext {
     return frame;
   }
 
+  public boolean isPreserveZCoordinate() {
+    return preserveZCoordinate;
+  }
+
+  public void setPreserveZCoordinate(boolean pPreserveZCoordinate) {
+    preserveZCoordinate = pPreserveZCoordinate;
+  }
 }

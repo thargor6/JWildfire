@@ -40,7 +40,9 @@ public class Secant2Func extends SimpleVariationFunc {
     else {
       pVarTP.y += pAmount * (icr - 1);
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

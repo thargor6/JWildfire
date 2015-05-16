@@ -165,7 +165,9 @@ public class TruchetFunc extends VariationFunc {
     if (r < 1.0) {
       pVarTP.x += size * (x + floor(pAffineTP.x));
       pVarTP.y += size * (y + floor(pAffineTP.y));
-      pVarTP.z = pAmount * pAffineTP.z;
+      if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     }
   }
 

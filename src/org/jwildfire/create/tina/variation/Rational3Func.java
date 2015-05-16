@@ -77,7 +77,9 @@ public class Rational3Func extends VariationFunc {
     pVarTP.x += pAmount * (tr * br + ti * bi) * r3den;
     pVarTP.y += pAmount * (ti * br - tr * bi) * r3den;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

@@ -47,7 +47,9 @@ public class WDiscFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * r * cosa.value;
     pVarTP.y += pAmount * r * sina.value;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

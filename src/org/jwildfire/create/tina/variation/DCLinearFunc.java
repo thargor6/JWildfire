@@ -44,7 +44,9 @@ public class DCLinearFunc extends VariationFunc {
     /* dc_linear by Xyrus02, http://apophysis-7x.org/extensions */
     pVarTP.x += pAmount * pAffineTP.x;
     pVarTP.y += pAmount * pAffineTP.y;
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
     double s = sin(angle);
     double c = cos(angle);
     pVarTP.color = fmod(fabs(0.5 * (ldcs * ((c * pVarTP.x + s * pVarTP.y + offset)) + 1.0)), 1.0);

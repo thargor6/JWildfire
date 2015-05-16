@@ -40,7 +40,9 @@ public class CotFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * cotden * cotsin;
     pVarTP.y += pAmount * cotden * -1 * cotsinh;
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

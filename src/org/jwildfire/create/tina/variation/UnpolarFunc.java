@@ -35,7 +35,9 @@ public class UnpolarFunc extends SimpleVariationFunc {
     double c = cos(pAffineTP.x);
     pVarTP.y += vvar_2 * r * c;
     pVarTP.x += vvar_2 * r * s;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

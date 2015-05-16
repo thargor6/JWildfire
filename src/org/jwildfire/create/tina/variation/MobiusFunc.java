@@ -59,7 +59,9 @@ public class MobiusFunc extends VariationFunc {
     pVarTP.x += rad_v * (re_u * re_v + im_u * im_v);
     pVarTP.y += rad_v * (im_u * re_v - re_u * im_v);
 
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
   }
 

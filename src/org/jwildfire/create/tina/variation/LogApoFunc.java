@@ -37,7 +37,9 @@ public class LogApoFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x += pAmount * log(sqr(pAffineTP.x) + sqr(pAffineTP.y)) * _denom;
     pVarTP.y += pAmount * atan2(pAffineTP.y, pAffineTP.x);
-    pVarTP.z += pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

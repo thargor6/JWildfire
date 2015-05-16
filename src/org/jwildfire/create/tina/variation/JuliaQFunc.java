@@ -47,7 +47,9 @@ public class JuliaQFunc extends VariationFunc {
     double r = pAmount * pow(sqr(pAffineTP.x) + sqr(pAffineTP.y), half_inv_power);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

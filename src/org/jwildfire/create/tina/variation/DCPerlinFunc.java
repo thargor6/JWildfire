@@ -191,7 +191,9 @@ public class DCPerlinFunc extends VariationFunc {
     // Add blur effect to transform
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
 
     // Calculate and add direct colour   
     Col = this.centre + this.range * p;

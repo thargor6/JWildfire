@@ -51,7 +51,9 @@ public class KaleidoscopeFunc extends VariationFunc {
     else {
       pVarTP.y += (_w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) - _q - _e;
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

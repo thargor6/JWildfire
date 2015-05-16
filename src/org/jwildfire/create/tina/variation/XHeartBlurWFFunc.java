@@ -57,7 +57,9 @@ public class XHeartBlurWFFunc extends VariationFunc {
       pVarTP.x += pAmount * x;
       pVarTP.y += -pAmount * y;
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

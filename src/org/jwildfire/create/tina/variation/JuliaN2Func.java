@@ -66,7 +66,9 @@ public class JuliaN2Func extends VariationFunc {
     cosa = cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override

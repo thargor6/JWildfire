@@ -55,7 +55,9 @@ public class SeparationFunc extends VariationFunc {
     else {
       pVarTP.y -= pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yinside);
     }
-    pVarTP.z = pAmount * pAffineTP.z;
+    if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override
