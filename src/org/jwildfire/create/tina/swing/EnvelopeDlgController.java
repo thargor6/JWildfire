@@ -17,10 +17,16 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.Cursor;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -80,6 +86,14 @@ public class EnvelopeDlgController {
   private final JWFNumberField timeField;
   private final JComboBox editModeCmb;
   private final JButton smoothCurveBtn;
+  private final JButton rawDataImportFromFileButton;
+  private final JButton rawDataImportFromClipboardButton;
+  private final JButton rawDataExportToFileButton;
+  private final JButton rawDataExportToClipboardButton;
+  private final JWFNumberField rawDataFrameColumnField;
+  private final JWFNumberField rawDataFrameScaleField;
+  private final JWFNumberField rawDataAmplitudeColumnField;
+  private final JWFNumberField rawDataAmplitudeScaleField;
 
   private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
@@ -95,7 +109,8 @@ public class EnvelopeDlgController {
 
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
-        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null);
+        null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null,
+        null, null, null, null, null, null, null, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -107,7 +122,10 @@ public class EnvelopeDlgController {
       JButton pApplyTransformBtn, JButton pApplyTransformReverseBtn, JButton pMp3ImportBtn,
       JWFNumberField pMp3ChannelREd, JWFNumberField pMp3FPSREd, JWFNumberField pMp3OffsetREd,
       JWFNumberField pMp3DurationREd, ErrorHandler pErrorHandler, JCheckBox pAutofitCBx,
-      JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn, JWFNumberField pTimeField) {
+      JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn, JWFNumberField pTimeField,
+      JButton pRawDataImportFromFileButton, JButton pRawDataImportFromClipboardButton,
+      JButton pRawDataExportToFileButton, JButton pRawDataExportToClipboardButton, JWFNumberField pRawDataFrameColumnField,
+      JWFNumberField pRawDataFrameScaleField, JWFNumberField pRawDataAmplitudeColumnField, JWFNumberField pRawDataAmplitudeScaleField) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -141,6 +159,14 @@ public class EnvelopeDlgController {
     editModeCmb = pEditModeCmb;
     smoothCurveBtn = pSmoothCurveBtn;
     timeField = pTimeField;
+    rawDataImportFromFileButton = pRawDataImportFromFileButton;
+    rawDataImportFromClipboardButton = pRawDataImportFromClipboardButton;
+    rawDataExportToFileButton = pRawDataExportToFileButton;
+    rawDataExportToClipboardButton = pRawDataExportToClipboardButton;
+    rawDataFrameColumnField = pRawDataFrameColumnField;
+    rawDataFrameScaleField = pRawDataFrameScaleField;
+    rawDataAmplitudeColumnField = pRawDataAmplitudeColumnField;
+    rawDataAmplitudeScaleField = pRawDataAmplitudeScaleField;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -1026,5 +1052,148 @@ public class EnvelopeDlgController {
 
   public void editModeChanged() {
     lastMouseX = lastMouseY = -1;
+  }
+
+  public void importRawDataFromFile() {
+    try {
+      Prefs prefs = Prefs.getPrefs();
+      JFileChooser chooser = new TxtFileChooser(prefs);
+      if (prefs.getTinaRawMotionDataPath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getTinaRawMotionDataPath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      else if (prefs.getTinaFlamePath() != null) {
+        try {
+          chooser.setCurrentDirectory(new File(prefs.getTinaFlamePath()));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(envelopePanel) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        String data = Tools.readUTF8Textfile(file.getAbsolutePath());
+        importRawMotionData(data);
+        enableControls();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  public void importRawDataFromClipboard() {
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable clipData = clipboard.getContents(clipboard);
+      if (clipData != null) {
+        if (clipData.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+          String data = (String) (clipData.getTransferData(
+              DataFlavor.stringFlavor));
+          importRawMotionData(data);
+          enableControls();
+        }
+        else {
+          throw new Exception("No text-data in the clipboard");
+        }
+      }
+      else {
+        throw new RuntimeException("No data in the clipboard");
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void importRawMotionData(String pData) {
+    List<List<Double>> rows = new ArrayList<List<Double>>();
+    StringTokenizer rowTokenizer = new StringTokenizer(pData, "\n\r");
+    while (rowTokenizer.hasMoreElements()) {
+      String row = rowTokenizer.nextToken().trim();
+      if (row.length() > 0 && !row.startsWith("#") && !row.startsWith(";")) {
+        List<Double> col = new ArrayList<Double>();
+        rows.add(col);
+        StringTokenizer colTokenizer = new StringTokenizer(row, " \t");
+        while (colTokenizer.hasMoreElements()) {
+          String colData = colTokenizer.nextToken().trim();
+          Double vlaue = Double.parseDouble(colData);
+          col.add(vlaue);
+        }
+      }
+    }
+    int frameIndex = rawDataFrameColumnField.getIntValue() - 1;
+    int amplitudeIndex = rawDataAmplitudeColumnField.getIntValue() - 1;
+    double frameScale = rawDataFrameScaleField.getDoubleValue();
+    double amplitudeScale = rawDataAmplitudeScaleField.getDoubleValue();
+    if (rows.size() > 0) {
+      int newx[] = new int[rows.size()];
+      double newy[] = new double[rows.size()];
+      for (int i = 0; i < rows.size(); i++) {
+        List<Double> row = rows.get(i);
+        double frame = frameIndex >= 0 && frameIndex < row.size() ? row.get(frameIndex) : 0.0;
+        double amplitude = amplitudeIndex >= 0 && amplitudeIndex < row.size() ? row.get(amplitudeIndex) : 0.0;
+        newx[i] = Tools.FTOI(frame * frameScale);
+        newy[i] = amplitude * amplitudeScale;
+      }
+      envelope.setValues(newx, newy);
+      viewAll();
+      refreshXField();
+      refreshYField();
+    }
+  }
+
+  public void exportRawDataToFile() {
+    Prefs prefs = Prefs.getPrefs();
+    JFileChooser chooser = new TxtFileChooser(prefs);
+    if (prefs.getTinaRawMotionDataPath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getTinaRawMotionDataPath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    else if (prefs.getTinaFlamePath() != null) {
+      try {
+        chooser.setCurrentDirectory(new File(prefs.getTinaFlamePath()));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if (chooser.showOpenDialog(envelopePanel) == JFileChooser.APPROVE_OPTION) {
+      try {
+        String motionData = getRawMotionData();
+        Tools.writeUTF8Textfile(chooser.getSelectedFile().getAbsolutePath(), motionData);
+      }
+      catch (Exception ex) {
+        errorHandler.handleError(ex);
+      }
+    }
+  }
+
+  public void exportRawDataToClipboard() {
+    String motionData = getRawMotionData();
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    StringSelection data = new StringSelection(motionData);
+    clipboard.setContents(data, data);
+  }
+
+  private String getRawMotionData() {
+    StringBuilder sb = new StringBuilder();
+    int x[] = envelope.getX();
+    double y[] = envelope.getY();
+    for (int i = 0; i < x.length; i++) {
+      sb.append(String.valueOf(x[i]));
+      sb.append(" ");
+      sb.append(Tools.doubleToString(y[i]));
+      sb.append("\n");
+    }
+    return sb.toString();
   }
 }

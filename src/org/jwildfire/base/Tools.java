@@ -45,7 +45,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "2.50 BETA (09.05.2015)";
+  public static final String APP_VERSION = "2.50 OPEN BETA (17.05.2015)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -77,6 +77,7 @@ public class Tools {
   public static final String FILEEXT_SUNFLOW_SCENE = "sc";
   public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";
+  public static final String FILEEXT_TEXT = "text";
   public static final String FILEEXT_UGR = "ugr";
   public static final String FILEEXT_WAV = "wav";
   public static final String FILEEXT_XML = "xml";

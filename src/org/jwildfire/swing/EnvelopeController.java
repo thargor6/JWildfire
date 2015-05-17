@@ -92,6 +92,7 @@ public class EnvelopeController {
     viewDownButton = pViewDownButton;
     lockedCBx = pLockedCBx;
     autofitCBx = pAutofitCBx;
+
     envelopePanel = pEnvelopePanel;
     envelopePanel.addMouseListener(new java.awt.event.MouseAdapter() {
 

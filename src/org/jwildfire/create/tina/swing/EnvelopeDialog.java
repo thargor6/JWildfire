@@ -435,6 +435,132 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     lblFps.setBounds(202, 6, 102, 26);
     panel_7.add(lblFps);
 
+    JPanel panel_2 = new JPanel();
+    tabbedPane.addTab("Raw data", null, panel_2, null);
+    panel_2.setLayout(null);
+
+    rawDataImportFromFileButton = new JButton();
+    rawDataImportFromFileButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (ctrl != null)
+          ctrl.importRawDataFromFile();
+      }
+    });
+    rawDataImportFromFileButton.setText("Import from file...");
+    rawDataImportFromFileButton.setPreferredSize(new Dimension(141, 26));
+    rawDataImportFromFileButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    rawDataImportFromFileButton.setBounds(6, 6, 184, 26);
+    panel_2.add(rawDataImportFromFileButton);
+
+    rawDataFrameColumnField = new JWFNumberField();
+    rawDataFrameColumnField.setText("1");
+    rawDataFrameColumnField.setPreferredSize(new Dimension(80, 26));
+    rawDataFrameColumnField.setOnlyIntegers(true);
+    rawDataFrameColumnField.setMinValue(1.0);
+    rawDataFrameColumnField.setMaxValue(64.0);
+    rawDataFrameColumnField.setHasMinValue(true);
+    rawDataFrameColumnField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    rawDataFrameColumnField.setBounds(102, 74, 80, 26);
+    panel_2.add(rawDataFrameColumnField);
+
+    JLabel lblXcolumn = new JLabel();
+    lblXcolumn.setToolTipText("Choose the column in the raw-data-file which should interpreted as frame-numbers");
+    lblXcolumn.setText("Frame-Column");
+    lblXcolumn.setPreferredSize(new Dimension(38, 26));
+    lblXcolumn.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblXcolumn.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblXcolumn.setBounds(7, 74, 93, 26);
+    panel_2.add(lblXcolumn);
+
+    rawDataAmplitudeColumnField = new JWFNumberField();
+    rawDataAmplitudeColumnField.setText("2");
+    rawDataAmplitudeColumnField.setPreferredSize(new Dimension(80, 26));
+    rawDataAmplitudeColumnField.setOnlyIntegers(true);
+    rawDataAmplitudeColumnField.setMinValue(1.0);
+    rawDataAmplitudeColumnField.setMaxValue(64.0);
+    rawDataAmplitudeColumnField.setHasMinValue(true);
+    rawDataAmplitudeColumnField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    rawDataAmplitudeColumnField.setBounds(101, 99, 80, 26);
+    panel_2.add(rawDataAmplitudeColumnField);
+
+    JLabel lblYcolumn = new JLabel();
+    lblYcolumn.setToolTipText("Choose the column in the raw-data-file which should interpreted as values");
+    lblYcolumn.setText("Amplitude-Column");
+    lblYcolumn.setPreferredSize(new Dimension(38, 26));
+    lblYcolumn.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblYcolumn.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblYcolumn.setBounds(6, 99, 93, 26);
+    panel_2.add(lblYcolumn);
+
+    rawDataImportFromClipboardButton = new JButton();
+    rawDataImportFromClipboardButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (ctrl != null)
+          ctrl.importRawDataFromClipboard();
+      }
+    });
+    rawDataImportFromClipboardButton.setText("Import from Clipboard");
+    rawDataImportFromClipboardButton.setPreferredSize(new Dimension(141, 26));
+    rawDataImportFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    rawDataImportFromClipboardButton.setBounds(6, 36, 184, 26);
+    panel_2.add(rawDataImportFromClipboardButton);
+
+    rawDataExportToFileButton = new JButton();
+    rawDataExportToFileButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (ctrl != null)
+          ctrl.exportRawDataToFile();
+      }
+    });
+    rawDataExportToFileButton.setText("Export to file...");
+    rawDataExportToFileButton.setPreferredSize(new Dimension(141, 26));
+    rawDataExportToFileButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    rawDataExportToFileButton.setBounds(382, 6, 184, 26);
+    panel_2.add(rawDataExportToFileButton);
+
+    rawDataExportToClipboardButton = new JButton();
+    rawDataExportToClipboardButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (ctrl != null)
+          ctrl.exportRawDataToClipboard();
+      }
+    });
+    rawDataExportToClipboardButton.setText("Export to Clipboard");
+    rawDataExportToClipboardButton.setPreferredSize(new Dimension(141, 26));
+    rawDataExportToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+    rawDataExportToClipboardButton.setBounds(382, 34, 184, 26);
+    panel_2.add(rawDataExportToClipboardButton);
+
+    rawDataFrameScaleField = new JWFNumberField();
+    rawDataFrameScaleField.setText("1");
+    rawDataFrameScaleField.setPreferredSize(new Dimension(80, 26));
+    rawDataFrameScaleField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    rawDataFrameScaleField.setBounds(289, 74, 80, 26);
+    panel_2.add(rawDataFrameScaleField);
+
+    JLabel label_1 = new JLabel();
+    label_1.setText("Frame Scale");
+    label_1.setPreferredSize(new Dimension(38, 26));
+    label_1.setHorizontalAlignment(SwingConstants.RIGHT);
+    label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+    label_1.setBounds(194, 74, 93, 26);
+    panel_2.add(label_1);
+
+    rawDataAmplitudeScaleField = new JWFNumberField();
+    rawDataAmplitudeScaleField.setText("1");
+    rawDataAmplitudeScaleField.setPreferredSize(new Dimension(80, 26));
+    rawDataAmplitudeScaleField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    rawDataAmplitudeScaleField.setBounds(289, 99, 80, 26);
+    panel_2.add(rawDataAmplitudeScaleField);
+
+    JLabel label_2 = new JLabel();
+    label_2.setText("Amplitude Scale");
+    label_2.setPreferredSize(new Dimension(38, 26));
+    label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+    label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+    label_2.setBounds(194, 99, 93, 26);
+    panel_2.add(label_2);
+
     JPanel panel_6 = new JPanel();
     tabbedPane.addTab("Transform", null, panel_6, null);
     panel_6.setPreferredSize(new Dimension(204, 10));
@@ -551,7 +677,10 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
         getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
         getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
         getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
-        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField());
+        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField(),
+        getRawDataImportFromFileButton(), getRawDataImportFromClipboardButton(), getRawDataExportToFileButton(),
+        getRawDataExportToClipboardButton(), getRawDataFrameColumnField(), getRawDataFrameScaleField(),
+        getRawDataAmplitudeColumnField(), getRawDataAmplitudeScaleField());
 
     JLabel lblMode = new JLabel();
     lblMode.setText("Editing-Mode");
@@ -1111,6 +1240,14 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JButton smoothCurveBtn;
   private JWFNumberField timeField;
   private JPanel previewRootPanel;
+  private JButton rawDataImportFromFileButton;
+  private JButton rawDataImportFromClipboardButton;
+  private JButton rawDataExportToFileButton;
+  private JButton rawDataExportToClipboardButton;
+  private JWFNumberField rawDataFrameColumnField;
+  private JWFNumberField rawDataFrameScaleField;
+  private JWFNumberField rawDataAmplitudeColumnField;
+  private JWFNumberField rawDataAmplitudeScaleField;
 
   private String findProperty(Object pObject, Object pProperty, String pPath) {
     if (pObject == pProperty) {
@@ -1327,5 +1464,37 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public JPanel getPreviewRootPanel() {
     return previewRootPanel;
+  }
+
+  public JButton getRawDataImportFromFileButton() {
+    return rawDataImportFromFileButton;
+  }
+
+  public JButton getRawDataImportFromClipboardButton() {
+    return rawDataImportFromClipboardButton;
+  }
+
+  public JButton getRawDataExportToFileButton() {
+    return rawDataExportToFileButton;
+  }
+
+  public JButton getRawDataExportToClipboardButton() {
+    return rawDataExportToClipboardButton;
+  }
+
+  public JWFNumberField getRawDataFrameColumnField() {
+    return rawDataFrameColumnField;
+  }
+
+  public JWFNumberField getRawDataFrameScaleField() {
+    return rawDataFrameScaleField;
+  }
+
+  public JWFNumberField getRawDataAmplitudeColumnField() {
+    return rawDataAmplitudeColumnField;
+  }
+
+  public JWFNumberField getRawDataAmplitudeScaleField() {
+    return rawDataAmplitudeScaleField;
   }
 }

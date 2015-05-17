@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina;
 
 public class LeapMotionEditorHandEvent {
+  private long timestamp;
   private double roll;
   private double pitch;
   private double yaw;
@@ -70,5 +71,13 @@ public class LeapMotionEditorHandEvent {
 
   public void setPosZ(double pPosZ) {
     posZ = pPosZ;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(long pTimestamp) {
+    timestamp = pTimestamp;
   }
 }

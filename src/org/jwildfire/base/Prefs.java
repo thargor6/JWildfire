@@ -72,6 +72,8 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_SVG = "tina.path.svg";
 
+  static final String KEY_TINA_PATH_RAW_MOTION_DATA = "tina.path.raw_motion_data";
+
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
@@ -190,6 +192,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "JWFScript file drawer", category = PropertyCategory.TINA)
   private String tinaJWFScriptPath = null;
+
+  @Property(description = "Drawer for raw motion data", category = PropertyCategory.TINA)
+  private String tinaRawMotionDataPath = null;
 
   @Property(description = "Gradient file drawer", category = PropertyCategory.TINA)
   private String tinaGradientPath = null;
@@ -702,6 +707,7 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
     tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
+    tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1358,6 +1364,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultFPS(int pTinaDefaultFPS) {
     tinaDefaultFPS = pTinaDefaultFPS;
+  }
+
+  public String getTinaRawMotionDataPath() {
+    return tinaRawMotionDataPath;
+  }
+
+  public void setTinaRawMotionDataPath(String pTinaRawMotionDataPath) {
+    tinaRawMotionDataPath = pTinaRawMotionDataPath;
   }
 
 }
