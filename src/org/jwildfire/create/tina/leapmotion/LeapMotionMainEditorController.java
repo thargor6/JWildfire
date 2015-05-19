@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
@@ -29,16 +32,40 @@ public class LeapMotionMainEditorController {
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
   private final JPanel rootPanel;
-  private final JToggleButton leapMotionToggleButton;
   private final JWFNumberField flameFPSField;
+  private final JToggleButton leapMotionToggleButton;
+  private final JTable leapMotionConfigTable;
+  private final JComboBox leapMotionHandCmb;
+  private final JComboBox leapMotionInputChannelCmb;
+  private final JComboBox leapMotionOutputChannelCmb;
+  private final JWFNumberField leapMotionIndexField;
+  private final JWFNumberField leapMotionInvScaleField;
+  private final JWFNumberField leapMotionOffsetField;
+  private final JButton leapMotionAddButton;
+  private final JButton leapMotionDuplicateButton;
+  private final JButton leapMotionDeleteButton;
 
-  public LeapMotionMainEditorController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JToggleButton pLeapMotionToggleButton, JWFNumberField pFlameFPSField) {
+  public LeapMotionMainEditorController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
+      JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton, JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb,
+      JComboBox pLeapMotionInputChannelCmb, JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndexField,
+      JWFNumberField pLeapMotionInvScaleField, JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton,
+      JButton pLeapMotionDuplicateButton, JButton pLeapMotionDeleteButton) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
     rootPanel = pRootPanel;
     leapMotionToggleButton = pLeapMotionToggleButton;
     flameFPSField = pFlameFPSField;
+    leapMotionConfigTable = pLeapMotionConfigTable;
+    leapMotionHandCmb = pLeapMotionHandCmb;
+    leapMotionInputChannelCmb = pLeapMotionInputChannelCmb;
+    leapMotionOutputChannelCmb = pLeapMotionOutputChannelCmb;
+    leapMotionIndexField = pLeapMotionIndexField;
+    leapMotionInvScaleField = pLeapMotionIndexField;
+    leapMotionOffsetField = pLeapMotionOffsetField;
+    leapMotionAddButton = pLeapMotionAddButton;
+    leapMotionDuplicateButton = pLeapMotionDuplicateButton;
+    leapMotionDeleteButton = pLeapMotionDeleteButton;
     enableControls();
   }
 
@@ -63,6 +90,61 @@ public class LeapMotionMainEditorController {
         leapMotionControllerHolder.stopLeapMotionListener();
       }
     }
+  }
+
+  public void configTableClicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionIndexField_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionInvScaleField_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionOffsetField_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionOutputChannelCmb_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionInputChannelCmb_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionHandCmb_changed() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void resetConfigButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionDeleteButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionDuplicateButton_clicked() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void leapMotionAddButton_clicked() {
+    // TODO Auto-generated method stub
+
   }
 
 }

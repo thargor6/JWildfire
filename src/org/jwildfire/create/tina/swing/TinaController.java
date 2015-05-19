@@ -320,8 +320,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton,
         parameterObject.flameFPSField);
 
-    leapMotionMainEditorController = new LeapMotionMainEditorController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
-        parameterObject.leapMotionToggleButton, parameterObject.flameFPSField);
+    leapMotionMainEditorController = new LeapMotionMainEditorController(this, parameterObject.pErrorHandler, prefs,
+        parameterObject.pCenterPanel, parameterObject.flameFPSField, parameterObject.leapMotionToggleButton,
+        parameterObject.leapMotionConfigTable, parameterObject.leapMotionHandCmb, parameterObject.leapMotionInputChannelCmb,
+        parameterObject.leapMotionOutputChannelCmb, parameterObject.leapMotionIndexField, parameterObject.leapMotionInvScaleField,
+        parameterObject.leapMotionOffsetField, parameterObject.leapMotionAddButton, parameterObject.leapMotionDuplicateButton,
+        parameterObject.leapMotionDeleteButton);
 
     data.toggleDetachedPreviewButton = parameterObject.toggleDetachedPreviewButton;
     data.cameraRollREd = parameterObject.pCameraRollREd;

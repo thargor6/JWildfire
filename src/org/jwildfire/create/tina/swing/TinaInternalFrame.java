@@ -1305,6 +1305,86 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Layerz ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")), getPanel_74(), null);
       tinaSouthTabbedPane.addTab("Channel mixer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/color-fill.png")), getChannelMixerPanel(), null);
 
+      JPanel panel_1 = new JPanel();
+      tinaSouthTabbedPane.addTab("Leap Motion", null, panel_1, null);
+      panel_1.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_2 = new JPanel();
+      panel_2.setPreferredSize(new Dimension(114, 10));
+      panel_1.add(panel_2, BorderLayout.WEST);
+      panel_2.setLayout(null);
+
+      JButton leapMotionResetConfigButton = new JButton();
+      leapMotionResetConfigButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLeapMotionMainEditorController().resetConfigButton_clicked();
+        }
+      });
+      leapMotionResetConfigButton.setToolTipText("Reset the post-symmetry-options to the defaults");
+      leapMotionResetConfigButton.setText("Reset");
+      leapMotionResetConfigButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      leapMotionResetConfigButton.setPreferredSize(new Dimension(125, 24));
+      leapMotionResetConfigButton.setMinimumSize(new Dimension(100, 24));
+      leapMotionResetConfigButton.setMaximumSize(new Dimension(32000, 24));
+      leapMotionResetConfigButton.setIconTextGap(2);
+      leapMotionResetConfigButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionResetConfigButton.setBounds(6, 114, 100, 24);
+      panel_2.add(leapMotionResetConfigButton);
+      panel_2.add(getLeapMotionToggleButton());
+
+      JPanel panel_3 = new JPanel();
+      panel_3.setPreferredSize(new Dimension(340, 10));
+      panel_1.add(panel_3, BorderLayout.EAST);
+      panel_3.setLayout(null);
+
+      leapMotionAddButton = new JButton();
+      leapMotionAddButton.setToolTipText("Add new motion listener");
+      leapMotionAddButton.setText("Add");
+      leapMotionAddButton.setPreferredSize(new Dimension(56, 24));
+      leapMotionAddButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionAddButton.setBounds(6, 6, 90, 24);
+      leapMotionAddButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLeapMotionMainEditorController().leapMotionAddButton_clicked();
+        }
+      });
+      panel_3.add(leapMotionAddButton);
+
+      leapMotionDeleteButton = new JButton();
+      leapMotionDeleteButton.setToolTipText("Delete motion listener");
+      leapMotionDeleteButton.setText("Delete");
+      leapMotionDeleteButton.setPreferredSize(new Dimension(90, 24));
+      leapMotionDeleteButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionDeleteButton.setBounds(6, 80, 90, 24);
+      leapMotionDeleteButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLeapMotionMainEditorController().leapMotionDeleteButton_clicked();
+        }
+      });
+      panel_3.add(leapMotionDeleteButton);
+
+      leapMotionDuplicateButton = new JButton();
+      leapMotionDuplicateButton.setToolTipText("Duplicate motion listener");
+      leapMotionDuplicateButton.setText("Duplicate");
+      leapMotionDuplicateButton.setPreferredSize(new Dimension(90, 24));
+      leapMotionDuplicateButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionDuplicateButton.setBounds(6, 32, 90, 24);
+      leapMotionDuplicateButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLeapMotionMainEditorController().leapMotionDuplicateButton_clicked();
+        }
+      });
+      panel_3.add(leapMotionDuplicateButton);
+
+      JTextArea txtrPleaseNoteThat = new JTextArea();
+      txtrPleaseNoteThat.setEditable(false);
+      txtrPleaseNoteThat.setLineWrap(true);
+      txtrPleaseNoteThat.setWrapStyleWord(true);
+      txtrPleaseNoteThat.setText("Please note that all the settings here do NOT belong to a certain flame and are NOT saved when you save a flame. Currently, they can NOT be saved at all.");
+      txtrPleaseNoteThat.setBounds(108, 3, 226, 122);
+      panel_3.add(txtrPleaseNoteThat);
+      panel_1.add(getPanel_111(), BorderLayout.CENTER);
+
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -4730,7 +4810,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
         getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider(),
-        getSwfAnimatorQualityProfileCmb(), getFlameFPSField(), getLeapMotionToggleButton());
+        getSwfAnimatorQualityProfileCmb(), getFlameFPSField(), getLeapMotionToggleButton(), getLeapMotionConfigTable(),
+        getLeapMotionHandCmb(), getLeapMotionInputChannelCmb(), getLeapMotionOutputChannelCmb(), getLeapMotionIndexField(),
+        getLeapMotionInvScaleField(), getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
+        getLeapMotionDeleteButton());
 
     tinaController = new TinaController(params);
     if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
@@ -7520,7 +7603,6 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
-      centerWestPanel.add(getLeapMotionToggleButton());
     }
     return centerWestPanel;
   }
@@ -10870,6 +10952,22 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_104;
   private JWFNumberField flameFPSField;
   private JToggleButton leapMotionToggleButton;
+  private JPanel panel_111;
+  private JPanel panel_112;
+  private JTable leapMotionConfigTable;
+  private JComboBox leapMotionHandCmb;
+  private JComboBox leapMotionInputChannelCmb;
+  private JLabel lblInputChannel;
+  private JLabel lblFlameproperty;
+  private JComboBox leapMotionOutputChannelCmb;
+  private JLabel lblFlamepropertyindex;
+  private JLabel lblHand;
+  private JWFNumberField leapMotionIndexField;
+  private JWFNumberField leapMotionInvScaleField;
+  private JWFNumberField leapMotionOffsetField;
+  private JButton leapMotionAddButton;
+  private JButton leapMotionDuplicateButton;
+  private JButton leapMotionDeleteButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23250,6 +23348,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getLeapMotionToggleButton() {
     if (leapMotionToggleButton == null) {
       leapMotionToggleButton = new JToggleButton();
+      leapMotionToggleButton.setText("Record");
+      leapMotionToggleButton.setBounds(6, 6, 100, 42);
       leapMotionToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getLeapMotionMainEditorController().toggleLeapMotionMode();
@@ -23261,6 +23361,259 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionToggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return leapMotionToggleButton;
+  }
+
+  private JPanel getPanel_111() {
+    if (panel_111 == null) {
+      panel_111 = new JPanel();
+      panel_111.setLayout(new BorderLayout(0, 0));
+      panel_111.add(getPanel_112(), BorderLayout.NORTH);
+
+      JScrollPane scrollPane_1 = new JScrollPane();
+      panel_111.add(scrollPane_1, BorderLayout.CENTER);
+
+      leapMotionConfigTable = new JTable();
+      layersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+          if (!e.getValueIsAdjusting() && tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().configTableClicked();
+          }
+        }
+
+      });
+
+      scrollPane_1.setViewportView(leapMotionConfigTable);
+    }
+    return panel_111;
+  }
+
+  private JPanel getPanel_112() {
+    if (panel_112 == null) {
+      panel_112 = new JPanel();
+      panel_112.setPreferredSize(new Dimension(10, 64));
+      panel_112.setLayout(null);
+
+      leapMotionIndexField = new JWFNumberField();
+      leapMotionIndexField.setHasMinValue(true);
+      leapMotionIndexField.setOnlyIntegers(true);
+      leapMotionIndexField.setValueStep(0.05);
+      leapMotionIndexField.setText("");
+      leapMotionIndexField.setSize(new Dimension(100, 24));
+      leapMotionIndexField.setPreferredSize(new Dimension(100, 24));
+      leapMotionIndexField.setLocation(new Point(584, 2));
+      leapMotionIndexField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndexField.setEditable(true);
+      leapMotionIndexField.setBounds(357, 34, 100, 24);
+      leapMotionIndexField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionIndexField_changed();
+          }
+        }
+      });
+
+      panel_112.add(leapMotionIndexField);
+
+      leapMotionHandCmb = new JComboBox();
+      leapMotionHandCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionHandCmb_changed();
+          }
+        }
+      });
+      leapMotionHandCmb.setSize(new Dimension(125, 22));
+      leapMotionHandCmb.setPreferredSize(new Dimension(125, 22));
+      leapMotionHandCmb.setLocation(new Point(100, 4));
+      leapMotionHandCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionHandCmb.setBounds(96, 7, 135, 24);
+      panel_112.add(leapMotionHandCmb);
+      panel_112.add(getLeapMotionInputChannelCmb());
+      panel_112.add(getLblInputChannel());
+      panel_112.add(getLblFlameproperty());
+      panel_112.add(getLeapMotionOutputChannelCmb());
+      panel_112.add(getLblFlamepropertyindex());
+      panel_112.add(getLblHand());
+
+      leapMotionInvScaleField = new JWFNumberField();
+      leapMotionInvScaleField.setValueStep(0.05);
+      leapMotionInvScaleField.setText("");
+      leapMotionInvScaleField.setSize(new Dimension(100, 24));
+      leapMotionInvScaleField.setPreferredSize(new Dimension(100, 24));
+      leapMotionInvScaleField.setLocation(new Point(584, 2));
+      leapMotionInvScaleField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionInvScaleField.setEditable(true);
+      leapMotionInvScaleField.setBounds(562, 7, 100, 24);
+      leapMotionInvScaleField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionInvScaleField_changed();
+          }
+        }
+      });
+      panel_112.add(leapMotionInvScaleField);
+
+      JLabel lblAmplitude = new JLabel();
+      lblAmplitude.setText("1/Intensity");
+      lblAmplitude.setSize(new Dimension(94, 22));
+      lblAmplitude.setPreferredSize(new Dimension(94, 22));
+      lblAmplitude.setLocation(new Point(488, 2));
+      lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAmplitude.setBounds(501, 9, 60, 22);
+      panel_112.add(lblAmplitude);
+
+      JLabel lblBias = new JLabel();
+      lblBias.setText("Bias");
+      lblBias.setSize(new Dimension(94, 22));
+      lblBias.setPreferredSize(new Dimension(94, 22));
+      lblBias.setLocation(new Point(488, 2));
+      lblBias.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBias.setBounds(501, 36, 60, 22);
+      panel_112.add(lblBias);
+
+      leapMotionOffsetField = new JWFNumberField();
+      leapMotionOffsetField.setValueStep(0.05);
+      leapMotionOffsetField.setText("");
+      leapMotionOffsetField.setSize(new Dimension(100, 24));
+      leapMotionOffsetField.setPreferredSize(new Dimension(100, 24));
+      leapMotionOffsetField.setLocation(new Point(584, 2));
+      leapMotionOffsetField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionOffsetField.setEditable(true);
+      leapMotionOffsetField.setBounds(562, 34, 100, 24);
+      leapMotionOffsetField.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionOffsetField_changed();
+          }
+        }
+      });
+      panel_112.add(leapMotionOffsetField);
+    }
+    return panel_112;
+  }
+
+  public JTable getLeapMotionConfigTable() {
+    return leapMotionConfigTable;
+  }
+
+  public JComboBox getLeapMotionHandCmb() {
+    return leapMotionHandCmb;
+  }
+
+  private JComboBox getLeapMotionInputChannelCmb() {
+    if (leapMotionInputChannelCmb == null) {
+      leapMotionInputChannelCmb = new JComboBox();
+      leapMotionInputChannelCmb.setSize(new Dimension(125, 22));
+      leapMotionInputChannelCmb.setPreferredSize(new Dimension(125, 22));
+      leapMotionInputChannelCmb.setLocation(new Point(100, 4));
+      leapMotionInputChannelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionInputChannelCmb.setBounds(96, 34, 135, 24);
+      leapMotionInputChannelCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionInputChannelCmb_changed();
+          }
+        }
+      });
+    }
+    return leapMotionInputChannelCmb;
+  }
+
+  private JLabel getLblInputChannel() {
+    if (lblInputChannel == null) {
+      lblInputChannel = new JLabel();
+      lblInputChannel.setText("Motion-property");
+      lblInputChannel.setSize(new Dimension(94, 22));
+      lblInputChannel.setPreferredSize(new Dimension(94, 22));
+      lblInputChannel.setLocation(new Point(488, 2));
+      lblInputChannel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblInputChannel.setBounds(4, 36, 86, 22);
+    }
+    return lblInputChannel;
+  }
+
+  private JLabel getLblFlameproperty() {
+    if (lblFlameproperty == null) {
+      lblFlameproperty = new JLabel();
+      lblFlameproperty.setText("Linked Flame-property");
+      lblFlameproperty.setSize(new Dimension(94, 22));
+      lblFlameproperty.setPreferredSize(new Dimension(94, 22));
+      lblFlameproperty.setLocation(new Point(488, 2));
+      lblFlameproperty.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlameproperty.setBounds(242, 9, 114, 22);
+    }
+    return lblFlameproperty;
+  }
+
+  private JComboBox getLeapMotionOutputChannelCmb() {
+    if (leapMotionOutputChannelCmb == null) {
+      leapMotionOutputChannelCmb = new JComboBox();
+      leapMotionOutputChannelCmb.setSize(new Dimension(125, 22));
+      leapMotionOutputChannelCmb.setPreferredSize(new Dimension(125, 22));
+      leapMotionOutputChannelCmb.setLocation(new Point(100, 4));
+      leapMotionOutputChannelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionOutputChannelCmb.setBounds(357, 7, 135, 24);
+      leapMotionOutputChannelCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionOutputChannelCmb_changed();
+          }
+        }
+      });
+    }
+    return leapMotionOutputChannelCmb;
+  }
+
+  private JLabel getLblFlamepropertyindex() {
+    if (lblFlamepropertyindex == null) {
+      lblFlamepropertyindex = new JLabel();
+      lblFlamepropertyindex.setText("Flame-property-index");
+      lblFlamepropertyindex.setSize(new Dimension(94, 22));
+      lblFlamepropertyindex.setPreferredSize(new Dimension(94, 22));
+      lblFlamepropertyindex.setLocation(new Point(488, 2));
+      lblFlamepropertyindex.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlamepropertyindex.setBounds(242, 36, 114, 22);
+    }
+    return lblFlamepropertyindex;
+  }
+
+  private JLabel getLblHand() {
+    if (lblHand == null) {
+      lblHand = new JLabel();
+      lblHand.setText("Hand");
+      lblHand.setSize(new Dimension(94, 22));
+      lblHand.setPreferredSize(new Dimension(94, 22));
+      lblHand.setLocation(new Point(488, 2));
+      lblHand.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHand.setBounds(4, 8, 86, 22);
+    }
+    return lblHand;
+  }
+
+  public JWFNumberField getLeapMotionIndexField() {
+    return leapMotionIndexField;
+  }
+
+  public JWFNumberField getLeapMotionInvScaleField() {
+    return leapMotionInvScaleField;
+  }
+
+  public JWFNumberField getLeapMotionOffsetField() {
+    return leapMotionOffsetField;
+  }
+
+  public JButton getLeapMotionAddButton() {
+    return leapMotionAddButton;
+  }
+
+  public JButton getLeapMotionDuplicateButton() {
+    return leapMotionDuplicateButton;
+  }
+
+  public JButton getLeapMotionDeleteButton() {
+    return leapMotionDeleteButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
