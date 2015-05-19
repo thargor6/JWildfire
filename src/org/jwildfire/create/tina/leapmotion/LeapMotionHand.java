@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,21 +16,19 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
+public enum LeapMotionHand {
+  LEFT {
+    @Override
+    public LeapMotionEditorHandEvent getHandEvent(LeapMotionEditorEvent pEvent) {
+      return pEvent.getLeftHand();
+    }
+  },
+  RIGHT {
+    @Override
+    public LeapMotionEditorHandEvent getHandEvent(LeapMotionEditorEvent pEvent) {
+      return pEvent.getRightHand();
+    }
+  };
 
-public class LeapMotionEditorEvent {
-  private final LeapMotionEditorHandEvent leftHand;
-  private final LeapMotionEditorHandEvent rightHand;
-
-  public LeapMotionEditorEvent(LeapMotionEditorHandEvent pLeftHand, LeapMotionEditorHandEvent pRightHand) {
-    leftHand = pLeftHand;
-    rightHand = pRightHand;
-  }
-
-  public LeapMotionEditorHandEvent getLeftHand() {
-    return leftHand;
-  }
-
-  public LeapMotionEditorHandEvent getRightHand() {
-    return rightHand;
-  }
+  public abstract LeapMotionEditorHandEvent getHandEvent(LeapMotionEditorEvent pEvent);
 }

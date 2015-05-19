@@ -160,6 +160,6 @@ public class ChaoticaLauncher {
   }
 
   private void throwError(String pMessage) throws Exception {
-    throw new Exception(pMessage + "\nPlease note that the params were also put to the clipbaord, you may paste them manually into Chaotica.");
+    throw new Exception(pMessage /*+ "\nPlease note that the params were also put to the clipbaord, you may paste them manually into Chaotica."*/);
   }
 }

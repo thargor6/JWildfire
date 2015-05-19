@@ -27,7 +27,6 @@ import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.leapmotion.LeapMotionControllerHolder;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MotionCurveEditor;
 import org.jwildfire.create.tina.swing.RenderMainFlameThreadFinishEvent;
@@ -50,12 +49,12 @@ public class AnimationController {
   private final JLabel keyframesFrameCountLbl;
   private final JPanel motionBlurPanel;
   private final JButton motionCurvePlayPreviewButton;
-  private final JToggleButton leapMotionToggleButton;
+  private final JWFNumberField flameFPSField;
 
   public AnimationController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
-      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton, JPanel pMotionBlurPanel,
-      JButton pMotionCurvePlayPreviewButton, JToggleButton pLeapMotionToggleButton) {
+      JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl, JToggleButton pMotionCurveEditModeButton,
+      JPanel pMotionBlurPanel, JButton pMotionCurvePlayPreviewButton, JWFNumberField pFlameFPSField) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -69,7 +68,7 @@ public class AnimationController {
     motionCurveEditModeButton = pMotionCurveEditModeButton;
     motionBlurPanel = pMotionBlurPanel;
     motionCurvePlayPreviewButton = pMotionCurvePlayPreviewButton;
-    leapMotionToggleButton = pLeapMotionToggleButton;
+    flameFPSField = pFlameFPSField;
     enableControls();
   }
 
@@ -299,21 +298,4 @@ public class AnimationController {
       new Thread(playPreviewThread).start();
     }
   }
-
-  private LeapMotionControllerHolder leapMotionControllerHolder;
-
-  public void toggleLeapMotionMode() {
-    if (leapMotionToggleButton.isSelected()) {
-      if (leapMotionControllerHolder == null) {
-        leapMotionControllerHolder = new LeapMotionControllerHolder(tinaController, errorHandler);
-      }
-      leapMotionControllerHolder.startLeapMotionListener();
-    }
-    else {
-      if (leapMotionControllerHolder != null) {
-        leapMotionControllerHolder.stopLeapMotionListener();
-      }
-    }
-  }
-
 }

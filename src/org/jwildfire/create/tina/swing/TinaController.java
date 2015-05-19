@@ -94,6 +94,7 @@ import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
+import org.jwildfire.create.tina.leapmotion.LeapMotionMainEditorController;
 import org.jwildfire.create.tina.meshgen.MeshGenController;
 import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
@@ -178,6 +179,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private FlameBrowserController flameBrowserController;
   private GradientController gradientController;
   private AnimationController animationController;
+  private LeapMotionMainEditorController leapMotionMainEditorController;
 
   private FlameControlsDelegate flameControls;
   private GradientControlsDelegate gradientControls;
@@ -316,6 +318,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.keyframesFrameField, parameterObject.keyframesFrameSlider, parameterObject.keyframesFrameCountField,
         parameterObject.frameSliderPanel, parameterObject.keyframesFrameLbl, parameterObject.keyframesFrameCountLbl,
         parameterObject.motionCurveEditModeButton, parameterObject.motionBlurPanel, parameterObject.motionCurvePlayPreviewButton,
+        parameterObject.flameFPSField);
+
+    leapMotionMainEditorController = new LeapMotionMainEditorController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel,
         parameterObject.leapMotionToggleButton, parameterObject.flameFPSField);
 
     data.toggleDetachedPreviewButton = parameterObject.toggleDetachedPreviewButton;
@@ -2253,6 +2258,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     enableUndoControls();
     getBatchRendererController().enableJobRenderControls();
     getAnimationController().enableControls();
+    getLeapMotionMainEditorController().enableControls();
     getJwfScriptController().enableControls();
     getGradientController().enableControls();
     getFlameBrowserController().enableControls();
@@ -4536,6 +4542,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public AnimationController getAnimationController() {
     return animationController;
+  }
+
+  public LeapMotionMainEditorController getLeapMotionMainEditorController() {
+    return leapMotionMainEditorController;
   }
 
   public void mouseTransformEditGradientButton_clicked() {

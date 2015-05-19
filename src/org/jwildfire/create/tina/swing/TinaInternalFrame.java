@@ -23252,7 +23252,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionToggleButton = new JToggleButton();
       leapMotionToggleButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getAnimationController().toggleLeapMotionMode();
+          tinaController.getLeapMotionMainEditorController().toggleLeapMotionMode();
         }
       });
       leapMotionToggleButton.setToolTipText("Control the current fractal by using the Leap Motion controller");

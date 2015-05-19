@@ -25,7 +25,10 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
@@ -1131,14 +1134,21 @@ public class EnvelopeDlgController {
     double frameScale = rawDataFrameScaleField.getDoubleValue();
     double amplitudeScale = rawDataAmplitudeScaleField.getDoubleValue();
     if (rows.size() > 0) {
-      int newx[] = new int[rows.size()];
-      double newy[] = new double[rows.size()];
+      Map<Integer, Double> keyFrames = new HashMap<Integer, Double>();
       for (int i = 0; i < rows.size(); i++) {
         List<Double> row = rows.get(i);
         double frame = frameIndex >= 0 && frameIndex < row.size() ? row.get(frameIndex) : 0.0;
         double amplitude = amplitudeIndex >= 0 && amplitudeIndex < row.size() ? row.get(amplitudeIndex) : 0.0;
-        newx[i] = Tools.FTOI(frame * frameScale);
-        newy[i] = amplitude * amplitudeScale;
+        keyFrames.put(Tools.FTOI(frame * frameScale), amplitude * amplitudeScale);
+      }
+
+      List<Integer> sortedKeys = new ArrayList<Integer>(keyFrames.keySet());
+      Collections.sort(sortedKeys);
+      int newx[] = new int[sortedKeys.size()];
+      double newy[] = new double[sortedKeys.size()];
+      for (int i = 0; i < sortedKeys.size(); i++) {
+        newx[i] = sortedKeys.get(i);
+        newy[i] = keyFrames.get(newx[i]);
       }
       envelope.setValues(newx, newy);
       viewAll();

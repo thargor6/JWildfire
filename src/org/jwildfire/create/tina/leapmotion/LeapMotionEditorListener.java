@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
-import org.jwildfire.create.tina.LeapMotionEditorHandEvent;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
@@ -26,13 +25,18 @@ import com.leapmotion.leap.Vector;
 
 public class LeapMotionEditorListener extends Listener {
   private final LeapMotionEditorListenerThread leapMotionEditorListenerThread;
+  private final LeapMotionEditorListenerRecorder recorder;
+  private boolean initFlag;
+  private long refTime;
 
-  public LeapMotionEditorListener(LeapMotionEditorListenerThread pLeapMotionEditorListenerThread) {
+  public LeapMotionEditorListener(LeapMotionEditorListenerThread pLeapMotionEditorListenerThread, LeapMotionEditorListenerRecorder pRecorder) {
     leapMotionEditorListenerThread = pLeapMotionEditorListenerThread;
+    recorder = pRecorder;
   }
 
   public void onInit(Controller controller) {
     // EMPTY for now
+    initFlag = true;
   }
 
   public void onConnect(Controller controller) {
@@ -53,6 +57,11 @@ public class LeapMotionEditorListener extends Listener {
   public void onFrame(Controller controller) {
     Frame frame = controller.frame();
     if (frame != null && frame.hands().count() > 0) {
+      long currTime = System.currentTimeMillis();
+      if (initFlag) {
+        initFlag = false;
+        refTime = currTime;
+      }
       LeapMotionEditorHandEvent leftHand = null;
       LeapMotionEditorHandEvent rightHand = null;
       for (Hand hand : frame.hands()) {
@@ -72,8 +81,13 @@ public class LeapMotionEditorListener extends Listener {
         handEvent.setPitch(Math.toDegrees(direction.pitch()));
         handEvent.setRoll(Math.toDegrees(normal.roll()));
         handEvent.setYaw(Math.toDegrees(direction.yaw()));
+        handEvent.setTimestamp(currTime - refTime);
       }
-      leapMotionEditorListenerThread.signalEvent(new LeapMotionEditorEvent(leftHand, rightHand));
+      LeapMotionEditorEvent event = new LeapMotionEditorEvent(leftHand, rightHand);
+      if (recorder != null) {
+        recorder.recordEvent(event);
+      }
+      leapMotionEditorListenerThread.signalEvent(event);
     }
   }
 

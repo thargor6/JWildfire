@@ -16,7 +16,16 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TxtFileChooser;
 import org.jwildfire.swing.ErrorHandler;
 
 import com.leapmotion.leap.Controller;
@@ -24,13 +33,16 @@ import com.leapmotion.leap.Controller;
 public class LeapMotionControllerHolder {
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
+  private final JPanel rootPanel;
   private Controller leapMotionController = null;
   private LeapMotionEditorListener listener = null;
   private LeapMotionEditorListenerThread leapMotionEditorListenerThread = null;
+  private LeapMotionEditorListenerRecorder recorder;
 
-  public LeapMotionControllerHolder(TinaController pTinaController, ErrorHandler pErrorHandler) {
+  public LeapMotionControllerHolder(TinaController pTinaController, ErrorHandler pErrorHandler, JPanel pRootPanel) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
+    rootPanel = pRootPanel;
   }
 
   public void stopLeapMotionListener() {
@@ -47,20 +59,55 @@ public class LeapMotionControllerHolder {
         leapMotionEditorListenerThread.signalCancel();
         leapMotionEditorListenerThread = null;
       }
+      if (recorder != null && !recorder.isEmpty()) {
+        if (StandardDialogs.confirm(rootPanel, "Do you want to save the recorded motion-data?")) {
+          Prefs prefs = Prefs.getPrefs();
+          JFileChooser chooser = new TxtFileChooser(prefs);
+          if (prefs.getTinaRawMotionDataPath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getTinaRawMotionDataPath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+          else if (prefs.getTinaFlamePath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getTinaFlamePath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+          if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
+            try {
+              exportMotion(chooser.getSelectedFile());
+            }
+            catch (Exception ex) {
+              errorHandler.handleError(ex);
+            }
+          }
+        }
+      }
     }
     catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 
-  public void startLeapMotionListener() {
+  private void exportMotion(File pFile) throws Exception {
+    Tools.writeUTF8Textfile(pFile.getAbsolutePath(), recorder.getDataAsString());
+  }
+
+  public void startLeapMotionListener(LeapMotionConnectedProperties pConfig, int pFps) {
     try {
       tinaController.saveUndoPoint();
       if (leapMotionController == null) {
         leapMotionController = new Controller();
       }
-      leapMotionEditorListenerThread = new LeapMotionEditorListenerThread(tinaController);
-      listener = new LeapMotionEditorListener(leapMotionEditorListenerThread);
+      recorder = new LeapMotionEditorListenerRecorder(pFps);
+      leapMotionEditorListenerThread = new LeapMotionEditorListenerThread(pConfig, tinaController);
+      listener = new LeapMotionEditorListener(leapMotionEditorListenerThread, recorder);
       new Thread(leapMotionEditorListenerThread).start();
       leapMotionController.addListener(listener);
     }

@@ -97,6 +97,9 @@ public class ChaosFlameWriter {
   private static final String PROPERTY_Y_AXIS_LENGTH = "y_axis_length";
 
   private static final int AA_LEVEL = 2;
+  private static final String PROPERTY_MITCHELL_NETRAVALI_BLUR = "mitchell_netravali_blur";
+  private static final String PROPERTY_MITCHELL_NETRAVALI_RING = "mitchell_netravali_ring";
+  private static final String PROPERTY_MITCHELL_NETRAVALI_WIDTH = "mitchell_netravali_width";
 
   private ChaoticaPluginTranslators translator = new ChaoticaPluginTranslators();
   private final Flame flame;
@@ -574,6 +577,10 @@ public class ChaosFlameWriter {
     addIntProperty(xb, PROPERTY_IMAGE_LAYERS, 1, null);
     addIntProperty(xb, PROPERTY_IMAGE_QUALITY, 0, null);
     addStringProperty(xb, PROPERTY_ANTIALIASING_MODE, "strong");
+    //    addStringProperty(xb, PROPERTY_ANTIALIASING_MODE, "mitchell-netravali");
+    //    addRealProperty(xb, PROPERTY_MITCHELL_NETRAVALI_BLUR, 0.33, null);
+    //    addRealProperty(xb, PROPERTY_MITCHELL_NETRAVALI_RING, 0.33, null);
+    //    addRealProperty(xb, PROPERTY_MITCHELL_NETRAVALI_WIDTH, 4, null);
     addRealProperty(xb, PROPERTY_BRIGHTNESS, pFlame.getBrightness(), null);
     addVec4Property(xb, PROPERTY_BACKGROUND_COLOR, convertColorValue(pFlame.getBGColorRed()), convertColorValue(pFlame.getBGColorGreen()), convertColorValue(pFlame.getBGColorBlue()), convertColorValue(255));
     addBoolProperty(xb, PROPERTY_APPLY_BG_BEFORE_CURVES, false);
