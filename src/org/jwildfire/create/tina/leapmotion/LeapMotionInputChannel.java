@@ -58,7 +58,7 @@ public enum LeapMotionInputChannel {
     public double getValue(LeapMotionHand pHand, LeapMotionEditorEvent pEvent) {
       LeapMotionEditorHandEvent handEvent = pHand.getHandEvent(pEvent);
       if (handEvent != null) {
-        return handEvent.getRoll();
+        return -handEvent.getRoll();
       }
       else {
         return 0.0;
@@ -70,7 +70,7 @@ public enum LeapMotionInputChannel {
     public double getValue(LeapMotionHand pHand, LeapMotionEditorEvent pEvent) {
       LeapMotionEditorHandEvent handEvent = pHand.getHandEvent(pEvent);
       if (handEvent != null) {
-        return handEvent.getPitch();
+        return -handEvent.getPitch();
       }
       else {
         return 0.0;
@@ -82,7 +82,7 @@ public enum LeapMotionInputChannel {
     public double getValue(LeapMotionHand pHand, LeapMotionEditorEvent pEvent) {
       LeapMotionEditorHandEvent handEvent = pHand.getHandEvent(pEvent);
       if (handEvent != null) {
-        return handEvent.getYaw();
+        return -handEvent.getYaw();
       }
       else {
         return 0.0;

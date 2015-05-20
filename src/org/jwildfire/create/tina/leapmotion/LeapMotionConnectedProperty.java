@@ -27,6 +27,10 @@ public class LeapMotionConnectedProperty {
   private double invScale = 1.0;
   private boolean enabled = true;
 
+  public LeapMotionConnectedProperty() {
+
+  }
+
   public LeapMotionConnectedProperty(LeapMotionHand pLeapMotionHand, LeapMotionInputChannel pInputChannel, LeapMotionOutputChannel pOutputChannel, int pIndex, double pOffset, double pInvScale) {
     leapMotionHand = pLeapMotionHand;
     inputChannel = pInputChannel;

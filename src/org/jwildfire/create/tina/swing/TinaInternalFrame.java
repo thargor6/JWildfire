@@ -1383,6 +1383,19 @@ public class TinaInternalFrame extends JInternalFrame {
       txtrPleaseNoteThat.setText("Please note that all the settings here do NOT belong to a certain flame and are NOT saved when you save a flame. Currently, they can NOT be saved at all.");
       txtrPleaseNoteThat.setBounds(108, 3, 226, 122);
       panel_3.add(txtrPleaseNoteThat);
+
+      leapMotionClearButton = new JButton();
+      leapMotionClearButton.setToolTipText("Clear all motion listeners");
+      leapMotionClearButton.setText("Clear");
+      leapMotionClearButton.setPreferredSize(new Dimension(90, 24));
+      leapMotionClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionClearButton.setBounds(6, 106, 90, 24);
+      leapMotionClearButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLeapMotionMainEditorController().leapMotionClearButton_clicked();
+        }
+      });
+      panel_3.add(leapMotionClearButton);
       panel_1.add(getPanel_111(), BorderLayout.CENTER);
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
@@ -4813,7 +4826,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getSwfAnimatorQualityProfileCmb(), getFlameFPSField(), getLeapMotionToggleButton(), getLeapMotionConfigTable(),
         getLeapMotionHandCmb(), getLeapMotionInputChannelCmb(), getLeapMotionOutputChannelCmb(), getLeapMotionIndexField(),
         getLeapMotionInvScaleField(), getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
-        getLeapMotionDeleteButton());
+        getLeapMotionDeleteButton(), getLeapMotionClearButton());
 
     tinaController = new TinaController(params);
     if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
@@ -10968,6 +10981,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton leapMotionAddButton;
   private JButton leapMotionDuplicateButton;
   private JButton leapMotionDeleteButton;
+  private JButton leapMotionClearButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23369,11 +23383,15 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_111.setLayout(new BorderLayout(0, 0));
       panel_111.add(getPanel_112(), BorderLayout.NORTH);
 
+      JPanel panel_1 = new JPanel();
+      panel_1.setPreferredSize(new Dimension(10, 8));
+      panel_111.add(panel_1, BorderLayout.SOUTH);
+
       JScrollPane scrollPane_1 = new JScrollPane();
       panel_111.add(scrollPane_1, BorderLayout.CENTER);
 
       leapMotionConfigTable = new JTable();
-      layersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      leapMotionConfigTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -23614,6 +23632,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getLeapMotionDeleteButton() {
     return leapMotionDeleteButton;
+  }
+
+  public JButton getLeapMotionClearButton() {
+    return leapMotionClearButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
