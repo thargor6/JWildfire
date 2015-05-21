@@ -40,7 +40,9 @@ public class LeapMotionMainEditorController {
   private final JComboBox leapMotionHandCmb;
   private final JComboBox leapMotionInputChannelCmb;
   private final JComboBox leapMotionOutputChannelCmb;
-  private final JWFNumberField leapMotionIndexField;
+  private final JWFNumberField leapMotionIndex1Field;
+  private final JWFNumberField leapMotionIndex2Field;
+  private final JWFNumberField leapMotionIndex3Field;
   private final JWFNumberField leapMotionInvScaleField;
   private final JWFNumberField leapMotionOffsetField;
   private final JButton leapMotionAddButton;
@@ -52,7 +54,8 @@ public class LeapMotionMainEditorController {
 
   public LeapMotionMainEditorController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton, JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb,
-      JComboBox pLeapMotionInputChannelCmb, JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndexField,
+      JComboBox pLeapMotionInputChannelCmb, JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndex1Field,
+      JWFNumberField pLeapMotionIndex2Field, JWFNumberField pLeapMotionIndex3Field,
       JWFNumberField pLeapMotionInvScaleField, JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton,
       JButton pLeapMotionDuplicateButton, JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton) {
     gridRefreshing = cmbRefreshing = true;
@@ -67,7 +70,9 @@ public class LeapMotionMainEditorController {
       leapMotionHandCmb = pLeapMotionHandCmb;
       leapMotionInputChannelCmb = pLeapMotionInputChannelCmb;
       leapMotionOutputChannelCmb = pLeapMotionOutputChannelCmb;
-      leapMotionIndexField = pLeapMotionIndexField;
+      leapMotionIndex1Field = pLeapMotionIndex1Field;
+      leapMotionIndex2Field = pLeapMotionIndex2Field;
+      leapMotionIndex3Field = pLeapMotionIndex3Field;
       leapMotionInvScaleField = pLeapMotionInvScaleField;
       leapMotionOffsetField = pLeapMotionOffsetField;
       leapMotionAddButton = pLeapMotionAddButton;
@@ -115,11 +120,29 @@ public class LeapMotionMainEditorController {
     }
   }
 
-  public void leapMotionIndexField_changed() {
+  public void leapMotionIndex1Field_changed() {
     value_changed(new PropertySetter() {
       @Override
       public void doSet(LeapMotionConnectedProperty pProperty) {
-        pProperty.setIndex(leapMotionIndexField.getIntValue());
+        pProperty.setIndex1(leapMotionIndex1Field.getIntValue());
+      }
+    });
+  }
+
+  public void leapMotionIndex2Field_changed() {
+    value_changed(new PropertySetter() {
+      @Override
+      public void doSet(LeapMotionConnectedProperty pProperty) {
+        pProperty.setIndex2(leapMotionIndex2Field.getIntValue());
+      }
+    });
+  }
+
+  public void leapMotionIndex3Field_changed() {
+    value_changed(new PropertySetter() {
+      @Override
+      public void doSet(LeapMotionConnectedProperty pProperty) {
+        pProperty.setIndex3(leapMotionIndex3Field.getIntValue());
       }
     });
   }
@@ -236,7 +259,8 @@ public class LeapMotionMainEditorController {
   public void leapMotionDuplicateButton_clicked() {
     int row = leapMotionConfigTable.getSelectedRow();
     LeapMotionConnectedProperty src = config.getProperties().get(row);
-    LeapMotionConnectedProperty newProperty = new LeapMotionConnectedProperty(src.getLeapMotionHand(), src.getInputChannel(), src.getOutputChannel(), src.getIndex(), src.getOffset(), src.getInvScale());
+    LeapMotionConnectedProperty newProperty = new LeapMotionConnectedProperty(src.getLeapMotionHand(), src.getInputChannel(),
+        src.getOutputChannel(), src.getIndex1(), src.getIndex2(), src.getIndex3(), src.getOffset(), src.getInvScale());
     addProperty(newProperty);
   }
 
@@ -259,12 +283,13 @@ public class LeapMotionMainEditorController {
   }
 
   private void refreshConfigTable() {
-    final int COL_HAND = 0;
-    final int COL_INPUT_CHANNEL = 1;
-    final int COL_OUTPUT_CHANNEL = 2;
-    final int COL_INDEX = 3;
-    final int COL_INVSCALE = 4;
-    final int COL_OFFSET = 5;
+    final int COL_LISTENER_ID = 0;
+    final int COL_HAND = 1;
+    final int COL_INPUT_CHANNEL = 2;
+    final int COL_OUTPUT_CHANNEL = 3;
+    final int COL_INDEX = 4;
+    final int COL_INVSCALE = 5;
+    final int COL_OFFSET = 6;
     leapMotionConfigTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -275,12 +300,14 @@ public class LeapMotionMainEditorController {
 
       @Override
       public int getColumnCount() {
-        return 6;
+        return 7;
       }
 
       @Override
       public String getColumnName(int columnIndex) {
         switch (columnIndex) {
+          case COL_LISTENER_ID:
+            return "Id";
           case COL_HAND:
             return "Hand";
           case COL_INPUT_CHANNEL:
@@ -302,6 +329,8 @@ public class LeapMotionMainEditorController {
         LeapMotionConnectedProperty property = rowIndex >= 0 && rowIndex < config.getProperties().size() ? config.getProperties().get(rowIndex) : null;
         if (property != null) {
           switch (columnIndex) {
+            case COL_LISTENER_ID:
+              return rowIndex + 1;
             case COL_HAND:
               return property.getLeapMotionHand();
             case COL_INPUT_CHANNEL:
@@ -309,7 +338,7 @@ public class LeapMotionMainEditorController {
             case COL_OUTPUT_CHANNEL:
               return property.getOutputChannel();
             case COL_INDEX:
-              return Integer.valueOf(property.getIndex());
+              return getIndexAsDisplayString(property);
             case COL_INVSCALE:
               return Tools.doubleToString(property.getInvScale());
             case COL_OFFSET:
@@ -317,6 +346,19 @@ public class LeapMotionMainEditorController {
           }
         }
         return null;
+      }
+
+      private Object getIndexAsDisplayString(LeapMotionConnectedProperty pProperty) {
+        switch (pProperty.getIndexCount()) {
+          case 3:
+            return pProperty.getIndex1() + " / " + pProperty.getIndex2() + " / " + pProperty.getIndex3();
+          case 2:
+            return pProperty.getIndex1() + " / " + pProperty.getIndex2();
+          case 1:
+            return pProperty.getIndex1();
+          default:
+            return null;
+        }
       }
 
       @Override
@@ -336,7 +378,9 @@ public class LeapMotionMainEditorController {
     leapMotionHandCmb.setEnabled(property != null);
     leapMotionInputChannelCmb.setEnabled(property != null);
     leapMotionOutputChannelCmb.setEnabled(property != null);
-    leapMotionIndexField.setEnabled(property != null);
+    leapMotionIndex1Field.setEnabled(property != null && property.getIndexCount() > 0);
+    leapMotionIndex2Field.setEnabled(property != null && property.getIndexCount() > 1);
+    leapMotionIndex3Field.setEnabled(property != null && property.getIndexCount() > 2);
     leapMotionInvScaleField.setEnabled(property != null);
     leapMotionOffsetField.setEnabled(property != null);
     leapMotionAddButton.setEnabled(true);
@@ -354,7 +398,9 @@ public class LeapMotionMainEditorController {
         leapMotionHandCmb.setSelectedItem(property.getLeapMotionHand());
         leapMotionInputChannelCmb.setSelectedItem(property.getInputChannel());
         leapMotionOutputChannelCmb.setSelectedItem(property.getOutputChannel());
-        leapMotionIndexField.setValue(property.getIndex());
+        leapMotionIndex1Field.setValue(property.getIndex1());
+        leapMotionIndex2Field.setValue(property.getIndex2());
+        leapMotionIndex3Field.setValue(property.getIndex3());
         leapMotionInvScaleField.setValue(property.getInvScale());
         leapMotionOffsetField.setValue(property.getOffset());
       }
@@ -362,7 +408,9 @@ public class LeapMotionMainEditorController {
         leapMotionHandCmb.setSelectedItem(null);
         leapMotionInputChannelCmb.setSelectedItem(null);
         leapMotionOutputChannelCmb.setSelectedItem(null);
-        leapMotionIndexField.setValue(0.0);
+        leapMotionIndex1Field.setValue(0.0);
+        leapMotionIndex2Field.setValue(0.0);
+        leapMotionIndex3Field.setValue(0.0);
         leapMotionInvScaleField.setValue(1.0);
         leapMotionOffsetField.setValue(0.0);
       }

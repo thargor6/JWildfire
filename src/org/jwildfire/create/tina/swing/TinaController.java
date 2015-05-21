@@ -323,7 +323,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     leapMotionMainEditorController = new LeapMotionMainEditorController(this, parameterObject.pErrorHandler, prefs,
         parameterObject.pCenterPanel, parameterObject.flameFPSField, parameterObject.leapMotionToggleButton,
         parameterObject.leapMotionConfigTable, parameterObject.leapMotionHandCmb, parameterObject.leapMotionInputChannelCmb,
-        parameterObject.leapMotionOutputChannelCmb, parameterObject.leapMotionIndexField, parameterObject.leapMotionInvScaleField,
+        parameterObject.leapMotionOutputChannelCmb, parameterObject.leapMotionIndex1Field, parameterObject.leapMotionIndex2Field,
+        parameterObject.leapMotionIndex3Field, parameterObject.leapMotionInvScaleField,
         parameterObject.leapMotionOffsetField, parameterObject.leapMotionAddButton, parameterObject.leapMotionDuplicateButton,
         parameterObject.leapMotionDeleteButton, parameterObject.leapMotionClearButton);
 

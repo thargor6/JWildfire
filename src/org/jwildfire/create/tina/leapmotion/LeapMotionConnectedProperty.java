@@ -22,7 +22,9 @@ public class LeapMotionConnectedProperty {
   private LeapMotionHand leapMotionHand = LeapMotionHand.RIGHT;
   private LeapMotionInputChannel inputChannel = LeapMotionInputChannel.POSITION_X;
   private LeapMotionOutputChannel outputChannel = LeapMotionOutputChannel.XFORM_MOVE_X;
-  private int index = 0;
+  private int index1 = 0;
+  private int index2 = 0;
+  private int index3 = 0;
   private double offset = 0.0;
   private double invScale = 1.0;
   private boolean enabled = true;
@@ -31,11 +33,13 @@ public class LeapMotionConnectedProperty {
 
   }
 
-  public LeapMotionConnectedProperty(LeapMotionHand pLeapMotionHand, LeapMotionInputChannel pInputChannel, LeapMotionOutputChannel pOutputChannel, int pIndex, double pOffset, double pInvScale) {
+  public LeapMotionConnectedProperty(LeapMotionHand pLeapMotionHand, LeapMotionInputChannel pInputChannel, LeapMotionOutputChannel pOutputChannel, int pIndex1, int pIndex2, int pIndex3, double pOffset, double pInvScale) {
     leapMotionHand = pLeapMotionHand;
     inputChannel = pInputChannel;
     outputChannel = pOutputChannel;
-    index = pIndex;
+    index1 = pIndex1;
+    index2 = pIndex2;
+    index3 = pIndex3;
     offset = pOffset;
     invScale = pInvScale;
   }
@@ -72,12 +76,28 @@ public class LeapMotionConnectedProperty {
     offset = pOffset;
   }
 
-  public int getIndex() {
-    return index;
+  public int getIndex1() {
+    return index1;
   }
 
-  public void setIndex(int pIndex) {
-    index = pIndex;
+  public void setIndex1(int pIndex1) {
+    index1 = pIndex1;
+  }
+
+  public int getIndex2() {
+    return index2;
+  }
+
+  public void setIndex2(int pIndex2) {
+    index2 = pIndex2;
+  }
+
+  public int getIndex3() {
+    return index3;
+  }
+
+  public void setIndex3(int pIndex3) {
+    index3 = pIndex3;
   }
 
   public double getInvScale() {
@@ -100,9 +120,17 @@ public class LeapMotionConnectedProperty {
     enabled = pEnabled;
   }
 
+  public double transformInputValue(double pValue) {
+    return pValue / invScale + offset;
+  }
+
   public void apply(LeapMotionEditorEvent pEvent, Flame pFlame) {
-    double value = inputChannel.getValue(leapMotionHand, pEvent) / invScale + offset;
+    double value = transformInputValue(inputChannel.getValue(leapMotionHand, pEvent));
     outputChannel.apply(this, pFlame, value);
+  }
+
+  public int getIndexCount() {
+    return outputChannel.getIndexCount();
   }
 
 }

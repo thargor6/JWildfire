@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.leapmotion;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
 public enum LeapMotionOutputChannel {
@@ -44,6 +45,16 @@ public enum LeapMotionOutputChannel {
         xform.setCoeff11(1.0);
       }
     }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return null;
+    }
   },
   XFORM_MOVE_X {
     @Override
@@ -65,6 +76,23 @@ public enum LeapMotionOutputChannel {
         xform.setCoeff20(pValue);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYCoeff20Curve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
+
   },
   XFORM_MOVE_Y {
     @Override
@@ -86,6 +114,22 @@ public enum LeapMotionOutputChannel {
         xform.setCoeff21(pValue);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYCoeff21Curve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
   },
   XFORM_ROTATE {
     @Override
@@ -106,6 +150,22 @@ public enum LeapMotionOutputChannel {
         XFormTransformService.rotate(xform, pValue, false);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYRotateCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
   },
   XFORM_SCALE {
     @Override
@@ -125,6 +185,22 @@ public enum LeapMotionOutputChannel {
       if (xform != null) {
         XFormTransformService.scale(xform, pValue, true, true, false);
       }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYScaleCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
     }
   },
   XFORM_RESET_POST {
@@ -149,6 +225,16 @@ public enum LeapMotionOutputChannel {
         xform.setPostCoeff11(1.0);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return null;
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
   },
   XFORM_MOVE_X_POST {
     @Override
@@ -169,6 +255,22 @@ public enum LeapMotionOutputChannel {
       if (xform != null) {
         xform.setPostCoeff20(pValue);
       }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYPostCoeff20Curve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
     }
   },
   XFORM_MOVE_Y_POST {
@@ -191,6 +293,22 @@ public enum LeapMotionOutputChannel {
         xform.setPostCoeff21(pValue);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYPostCoeff21Curve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
   },
   XFORM_ROTATE_POST {
     @Override
@@ -210,6 +328,22 @@ public enum LeapMotionOutputChannel {
       if (xform != null) {
         XFormTransformService.rotate(xform, pValue, true);
       }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYPostRotateCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
     }
   },
   XFORM_SCALE_POST {
@@ -231,6 +365,22 @@ public enum LeapMotionOutputChannel {
         XFormTransformService.scale(xform, pValue, true, true, true);
       }
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getXYPostScaleCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
   },
   CAM_MOVE_X {
     @Override
@@ -242,6 +392,16 @@ public enum LeapMotionOutputChannel {
     @Override
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setCamPosX(pValue);
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getCamPosXCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
     }
   },
   CAM_MOVE_Y {
@@ -255,6 +415,16 @@ public enum LeapMotionOutputChannel {
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setCamPosY(pValue);
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getCamPosYCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
+    }
   },
   CAM_ZOOM {
     @Override
@@ -266,6 +436,16 @@ public enum LeapMotionOutputChannel {
     @Override
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setPixelsPerUnit(pValue);
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getPixelsPerUnitCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
     }
   },
   CAM_ROLL {
@@ -279,6 +459,16 @@ public enum LeapMotionOutputChannel {
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setCamRoll(pValue);
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getCamRollCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
+    }
   },
   CAM_PITCH {
     @Override
@@ -290,6 +480,16 @@ public enum LeapMotionOutputChannel {
     @Override
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setCamPitch(pValue);
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getCamPitchCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
     }
   },
   CAM_YAW {
@@ -303,14 +503,24 @@ public enum LeapMotionOutputChannel {
     public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
       pFlame.setCamYaw(pValue);
     }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      return pFlame.getCamYawCurve();
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 0;
+    }
   };
 
   public abstract void init(LeapMotionConnectedProperty pProperty, Flame pFlame);
 
   private static XForm getXFormByIndex(LeapMotionConnectedProperty pProperty, Flame pFlame) {
     Layer layer = pFlame.getFirstLayer();
-    if (pProperty.getIndex() >= 0 && pProperty.getIndex() < layer.getXForms().size()) {
-      return layer.getXForms().get(pProperty.getIndex());
+    if (pProperty.getIndex1() >= 0 && pProperty.getIndex1() < layer.getXForms().size()) {
+      return layer.getXForms().get(pProperty.getIndex1());
     }
     else {
       return null;
@@ -318,5 +528,9 @@ public enum LeapMotionOutputChannel {
   }
 
   public abstract void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue);
+
+  public abstract int getIndexCount();
+
+  public abstract MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame);
 
 }

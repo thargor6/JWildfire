@@ -27,11 +27,13 @@ import java.util.Set;
 import org.jwildfire.base.Tools;
 
 public class LeapMotionEditorListenerRecorder {
+  private final LeapMotionConnectedProperties config;
   private final int fps;
   private List<LeapMotionEditorHandEvent> leftHandMotion = new ArrayList<LeapMotionEditorHandEvent>();
   private List<LeapMotionEditorHandEvent> rightHandMotion = new ArrayList<LeapMotionEditorHandEvent>();
 
-  public LeapMotionEditorListenerRecorder(int pFps) {
+  public LeapMotionEditorListenerRecorder(LeapMotionConnectedProperties pConfig, int pFps) {
+    config = pConfig;
     fps = pFps;
   }
 
@@ -48,8 +50,24 @@ public class LeapMotionEditorListenerRecorder {
     return leftHandMotion.isEmpty() && rightHandMotion.isEmpty();
   }
 
-  public String getDataAsString() {
-    StringBuilder sb = new StringBuilder();
+  public static class LeapMotionEditorEventWithFrame extends LeapMotionEditorEvent {
+
+    public LeapMotionEditorEventWithFrame() {
+      super(new LeapMotionEditorHandEvent(), new LeapMotionEditorHandEvent());
+    }
+
+    private double frame;
+
+    public double getFrame() {
+      return frame;
+    }
+
+    public void setFrame(double pFrame) {
+      frame = pFrame;
+    }
+  }
+
+  public List<LeapMotionEditorEventWithFrame> getTransformedData() {
     Set<Long> keyFrames = new HashSet<Long>();
     Map<Long, LeapMotionEditorHandEvent> leftMap = new HashMap<Long, LeapMotionEditorHandEvent>();
     Map<Long, LeapMotionEditorHandEvent> rightMap = new HashMap<Long, LeapMotionEditorHandEvent>();
@@ -63,9 +81,10 @@ public class LeapMotionEditorListenerRecorder {
     }
     List<Long> sortedKeyFrames = new ArrayList<Long>(keyFrames);
     Collections.sort(sortedKeyFrames);
-    addHeader(sb);
+
     LeapMotionEditorHandEvent lastLeftEvent = new LeapMotionEditorHandEvent();
     LeapMotionEditorHandEvent lastRightEvent = new LeapMotionEditorHandEvent();
+    List<LeapMotionEditorEventWithFrame> res = new ArrayList<LeapMotionEditorEventWithFrame>();
     for (Long keyFrame : sortedKeyFrames) {
       LeapMotionEditorHandEvent leftEvent = leftMap.get(keyFrame);
       if (leftEvent == null) {
@@ -81,27 +100,53 @@ public class LeapMotionEditorListenerRecorder {
       else {
         lastRightEvent = rightEvent;
       }
-      addKeyFrame(sb, keyFrame, leftEvent, rightEvent);
+      LeapMotionEditorEventWithFrame data = new LeapMotionEditorEventWithFrame();
+      data.setFrame(((double) keyFrame * fps) / 1000.0);
+
+      data.getLeftHand().setPosX(leftEvent.getPosX());
+      data.getLeftHand().setPosY(leftEvent.getPosY());
+      data.getLeftHand().setPosZ(leftEvent.getPosZ());
+      data.getLeftHand().setRoll(leftEvent.getRoll());
+      data.getLeftHand().setPitch(leftEvent.getPitch());
+      data.getLeftHand().setYaw(leftEvent.getYaw());
+
+      data.getRightHand().setPosX(rightEvent.getPosX());
+      data.getRightHand().setPosY(rightEvent.getPosY());
+      data.getRightHand().setPosZ(rightEvent.getPosZ());
+      data.getRightHand().setRoll(rightEvent.getRoll());
+      data.getRightHand().setPitch(rightEvent.getPitch());
+      data.getRightHand().setYaw(rightEvent.getYaw());
+
+      res.add(data);
+    }
+    return res;
+  }
+
+  public String getDataAsString() {
+    StringBuilder sb = new StringBuilder();
+    addHeader(sb);
+    for (LeapMotionEditorEventWithFrame data : getTransformedData()) {
+      addKeyFrame(sb, data);
     }
     return sb.toString();
   }
 
-  private void addKeyFrame(StringBuilder pSb, Long pKeyFrame, LeapMotionEditorHandEvent pLeftEvent, LeapMotionEditorHandEvent pRightEvent) {
-    pSb.append(Tools.doubleToString(((double) pKeyFrame * fps) / 1000.0) + " ");
+  private void addKeyFrame(StringBuilder pSb, LeapMotionEditorEventWithFrame pData) {
+    pSb.append(Tools.doubleToString(pData.getFrame()) + " ");
 
-    pSb.append(Tools.doubleToString(pLeftEvent.getPosX()) + " ");
-    pSb.append(Tools.doubleToString(pLeftEvent.getPosY()) + " ");
-    pSb.append(Tools.doubleToString(pLeftEvent.getPosZ()) + " ");
-    pSb.append(Tools.doubleToString(pLeftEvent.getRoll()) + " ");
-    pSb.append(Tools.doubleToString(pLeftEvent.getPitch()) + " ");
-    pSb.append(Tools.doubleToString(pLeftEvent.getYaw()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getPosX()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getPosY()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getPosZ()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getRoll()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getPitch()) + " ");
+    pSb.append(Tools.doubleToString(pData.getLeftHand().getYaw()) + " ");
 
-    pSb.append(Tools.doubleToString(pRightEvent.getPosX()) + " ");
-    pSb.append(Tools.doubleToString(pRightEvent.getPosY()) + " ");
-    pSb.append(Tools.doubleToString(pRightEvent.getPosZ()) + " ");
-    pSb.append(Tools.doubleToString(pRightEvent.getRoll()) + " ");
-    pSb.append(Tools.doubleToString(pRightEvent.getPitch()) + " ");
-    pSb.append(Tools.doubleToString(pRightEvent.getYaw()) + "\n");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getPosX()) + " ");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getPosY()) + " ");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getPosZ()) + " ");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getRoll()) + " ");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getPitch()) + " ");
+    pSb.append(Tools.doubleToString(pData.getRightHand().getYaw()) + "\n");
   }
 
   private void addHeader(StringBuilder pSb) {
@@ -121,6 +166,14 @@ public class LeapMotionEditorListenerRecorder {
     pSb.append("rightRoll ");
     pSb.append("rightPitch ");
     pSb.append("rightYaw\n");
+  }
+
+  public LeapMotionConnectedProperties getConfig() {
+    return config;
+  }
+
+  public int getFps() {
+    return fps;
   }
 
 }

@@ -591,7 +591,9 @@ public class TinaControllerParameter {
   public JComboBox leapMotionHandCmb;
   public JComboBox leapMotionInputChannelCmb;
   public JComboBox leapMotionOutputChannelCmb;
-  public JWFNumberField leapMotionIndexField;
+  public JWFNumberField leapMotionIndex1Field;
+  public JWFNumberField leapMotionIndex2Field;
+  public JWFNumberField leapMotionIndex3Field;
   public JWFNumberField leapMotionInvScaleField;
   public JWFNumberField leapMotionOffsetField;
   public JButton leapMotionAddButton;
@@ -1107,7 +1109,8 @@ public class TinaControllerParameter {
       JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider,
       JComboBox pSWFAnimatorQualityProfileCmb, JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton,
       JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb, JComboBox pLeapMotionInputChannelCmb,
-      JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndexField, JWFNumberField pLeapMotionInvScaleField,
+      JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndex1Field, JWFNumberField pLeapMotionIndex2Field,
+      JWFNumberField pLeapMotionIndex3Field, JWFNumberField pLeapMotionInvScaleField,
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
@@ -1256,7 +1259,9 @@ public class TinaControllerParameter {
     leapMotionHandCmb = pLeapMotionHandCmb;
     leapMotionInputChannelCmb = pLeapMotionInputChannelCmb;
     leapMotionOutputChannelCmb = pLeapMotionOutputChannelCmb;
-    leapMotionIndexField = pLeapMotionIndexField;
+    leapMotionIndex1Field = pLeapMotionIndex1Field;
+    leapMotionIndex2Field = pLeapMotionIndex2Field;
+    leapMotionIndex3Field = pLeapMotionIndex3Field;
     leapMotionInvScaleField = pLeapMotionInvScaleField;
     leapMotionOffsetField = pLeapMotionOffsetField;
     leapMotionAddButton = pLeapMotionAddButton;

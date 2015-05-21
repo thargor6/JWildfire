@@ -4824,8 +4824,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
         getGradientColorMapLocalColorAddSlider(), getGradientColorMapLocalColorScaleREd(), getGradientColorMapLocalColorScaleSlider(),
         getSwfAnimatorQualityProfileCmb(), getFlameFPSField(), getLeapMotionToggleButton(), getLeapMotionConfigTable(),
-        getLeapMotionHandCmb(), getLeapMotionInputChannelCmb(), getLeapMotionOutputChannelCmb(), getLeapMotionIndexField(),
-        getLeapMotionInvScaleField(), getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
+        getLeapMotionHandCmb(), getLeapMotionInputChannelCmb(), getLeapMotionOutputChannelCmb(), getLeapMotionIndex1Field(),
+        getLeapMotionIndex2Field(), getLeapMotionIndex3Field(), getLeapMotionInvScaleField(),
+        getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
         getLeapMotionDeleteButton(), getLeapMotionClearButton());
 
     tinaController = new TinaController(params);
@@ -10975,13 +10976,15 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox leapMotionOutputChannelCmb;
   private JLabel lblFlamepropertyindex;
   private JLabel lblHand;
-  private JWFNumberField leapMotionIndexField;
+  private JWFNumberField leapMotionIndex1Field;
   private JWFNumberField leapMotionInvScaleField;
   private JWFNumberField leapMotionOffsetField;
   private JButton leapMotionAddButton;
   private JButton leapMotionDuplicateButton;
   private JButton leapMotionDeleteButton;
   private JButton leapMotionClearButton;
+  private JWFNumberField leapMotionIndex2Field;
+  private JWFNumberField leapMotionIndex3Field;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23413,26 +23416,26 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.setPreferredSize(new Dimension(10, 64));
       panel_112.setLayout(null);
 
-      leapMotionIndexField = new JWFNumberField();
-      leapMotionIndexField.setHasMinValue(true);
-      leapMotionIndexField.setOnlyIntegers(true);
-      leapMotionIndexField.setValueStep(0.05);
-      leapMotionIndexField.setText("");
-      leapMotionIndexField.setSize(new Dimension(100, 24));
-      leapMotionIndexField.setPreferredSize(new Dimension(100, 24));
-      leapMotionIndexField.setLocation(new Point(584, 2));
-      leapMotionIndexField.setFont(new Font("Dialog", Font.PLAIN, 10));
-      leapMotionIndexField.setEditable(true);
-      leapMotionIndexField.setBounds(357, 34, 100, 24);
-      leapMotionIndexField.addChangeListener(new ChangeListener() {
+      leapMotionIndex1Field = new JWFNumberField();
+      leapMotionIndex1Field.setHasMinValue(true);
+      leapMotionIndex1Field.setOnlyIntegers(true);
+      leapMotionIndex1Field.setValueStep(0.05);
+      leapMotionIndex1Field.setText("");
+      leapMotionIndex1Field.setSize(new Dimension(100, 24));
+      leapMotionIndex1Field.setPreferredSize(new Dimension(100, 24));
+      leapMotionIndex1Field.setLocation(new Point(584, 2));
+      leapMotionIndex1Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex1Field.setEditable(true);
+      leapMotionIndex1Field.setBounds(357, 34, 60, 24);
+      leapMotionIndex1Field.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
-            tinaController.getLeapMotionMainEditorController().leapMotionIndexField_changed();
+            tinaController.getLeapMotionMainEditorController().leapMotionIndex1Field_changed();
           }
         }
       });
 
-      panel_112.add(leapMotionIndexField);
+      panel_112.add(leapMotionIndex1Field);
 
       leapMotionHandCmb = new JComboBox();
       leapMotionHandCmb.addItemListener(new ItemListener() {
@@ -23463,7 +23466,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionInvScaleField.setLocation(new Point(584, 2));
       leapMotionInvScaleField.setFont(new Font("Dialog", Font.PLAIN, 10));
       leapMotionInvScaleField.setEditable(true);
-      leapMotionInvScaleField.setBounds(562, 7, 100, 24);
+      leapMotionInvScaleField.setBounds(616, 7, 100, 24);
       leapMotionInvScaleField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
@@ -23479,7 +23482,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblAmplitude.setPreferredSize(new Dimension(94, 22));
       lblAmplitude.setLocation(new Point(488, 2));
       lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblAmplitude.setBounds(501, 9, 60, 22);
+      lblAmplitude.setBounds(555, 9, 60, 22);
       panel_112.add(lblAmplitude);
 
       JLabel lblBias = new JLabel();
@@ -23488,7 +23491,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBias.setPreferredSize(new Dimension(94, 22));
       lblBias.setLocation(new Point(488, 2));
       lblBias.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblBias.setBounds(501, 36, 60, 22);
+      lblBias.setBounds(555, 36, 60, 22);
       panel_112.add(lblBias);
 
       leapMotionOffsetField = new JWFNumberField();
@@ -23499,7 +23502,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionOffsetField.setLocation(new Point(584, 2));
       leapMotionOffsetField.setFont(new Font("Dialog", Font.PLAIN, 10));
       leapMotionOffsetField.setEditable(true);
-      leapMotionOffsetField.setBounds(562, 34, 100, 24);
+      leapMotionOffsetField.setBounds(616, 34, 100, 24);
       leapMotionOffsetField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
@@ -23508,6 +23511,32 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_112.add(leapMotionOffsetField);
+
+      leapMotionIndex2Field = new JWFNumberField();
+      leapMotionIndex2Field.setValueStep(0.05);
+      leapMotionIndex2Field.setText("");
+      leapMotionIndex2Field.setSize(new Dimension(100, 24));
+      leapMotionIndex2Field.setPreferredSize(new Dimension(100, 24));
+      leapMotionIndex2Field.setOnlyIntegers(true);
+      leapMotionIndex2Field.setLocation(new Point(584, 2));
+      leapMotionIndex2Field.setHasMinValue(true);
+      leapMotionIndex2Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex2Field.setEditable(true);
+      leapMotionIndex2Field.setBounds(417, 34, 60, 24);
+      panel_112.add(leapMotionIndex2Field);
+
+      leapMotionIndex3Field = new JWFNumberField();
+      leapMotionIndex3Field.setValueStep(0.05);
+      leapMotionIndex3Field.setText("");
+      leapMotionIndex3Field.setSize(new Dimension(100, 24));
+      leapMotionIndex3Field.setPreferredSize(new Dimension(100, 24));
+      leapMotionIndex3Field.setOnlyIntegers(true);
+      leapMotionIndex3Field.setLocation(new Point(584, 2));
+      leapMotionIndex3Field.setHasMinValue(true);
+      leapMotionIndex3Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex3Field.setEditable(true);
+      leapMotionIndex3Field.setBounds(477, 34, 60, 24);
+      panel_112.add(leapMotionIndex3Field);
     }
     return panel_112;
   }
@@ -23572,7 +23601,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionOutputChannelCmb.setPreferredSize(new Dimension(125, 22));
       leapMotionOutputChannelCmb.setLocation(new Point(100, 4));
       leapMotionOutputChannelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      leapMotionOutputChannelCmb.setBounds(357, 7, 135, 24);
+      leapMotionOutputChannelCmb.setBounds(357, 7, 180, 24);
       leapMotionOutputChannelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
@@ -23610,8 +23639,8 @@ public class TinaInternalFrame extends JInternalFrame {
     return lblHand;
   }
 
-  public JWFNumberField getLeapMotionIndexField() {
-    return leapMotionIndexField;
+  public JWFNumberField getLeapMotionIndex1Field() {
+    return leapMotionIndex1Field;
   }
 
   public JWFNumberField getLeapMotionInvScaleField() {
@@ -23636,6 +23665,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getLeapMotionClearButton() {
     return leapMotionClearButton;
+  }
+
+  public JWFNumberField getLeapMotionIndex2Field() {
+    return leapMotionIndex2Field;
+  }
+
+  public JWFNumberField getLeapMotionIndex3Field() {
+    return leapMotionIndex3Field;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

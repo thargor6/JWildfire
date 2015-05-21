@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
+
 public enum LeapMotionInputChannel {
   POSITION_X {
     @Override
@@ -97,4 +98,5 @@ public enum LeapMotionInputChannel {
   };
 
   public abstract double getValue(LeapMotionHand pHand, LeapMotionEditorEvent pEvent);
+
 }
