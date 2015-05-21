@@ -97,6 +97,7 @@ public class EnvelopeDlgController {
   private final JWFNumberField rawDataFrameScaleField;
   private final JWFNumberField rawDataAmplitudeColumnField;
   private final JWFNumberField rawDataAmplitudeScaleField;
+  private final JWFNumberField smoothCurveAmountField;
 
   private final List<EnvelopeChangeListener> valueChangeListeners = new ArrayList<EnvelopeChangeListener>();
   private final List<EnvelopeChangeListener> selectionChangeListeners = new ArrayList<EnvelopeChangeListener>();
@@ -113,7 +114,7 @@ public class EnvelopeDlgController {
   public EnvelopeDlgController(EnvelopePanel pEnvelopePanel, ErrorHandler pErrorHandler) {
     this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, pEnvelopePanel,
         null, null, null, null, null, null, null, null, null, null, null, null, pErrorHandler, null, null, null, null, null,
-        null, null, null, null, null, null, null, null);
+        null, null, null, null, null, null, null, null, null);
   }
 
   public EnvelopeDlgController(Envelope pEnvelope, JButton pAddPointButton, JButton pRemovePointButton, JButton pClearButton,
@@ -128,7 +129,8 @@ public class EnvelopeDlgController {
       JWFNumberField pCurveFPSField, JComboBox pEditModeCmb, JButton pSmoothCurveBtn, JWFNumberField pTimeField,
       JButton pRawDataImportFromFileButton, JButton pRawDataImportFromClipboardButton,
       JButton pRawDataExportToFileButton, JButton pRawDataExportToClipboardButton, JWFNumberField pRawDataFrameColumnField,
-      JWFNumberField pRawDataFrameScaleField, JWFNumberField pRawDataAmplitudeColumnField, JWFNumberField pRawDataAmplitudeScaleField) {
+      JWFNumberField pRawDataFrameScaleField, JWFNumberField pRawDataAmplitudeColumnField, JWFNumberField pRawDataAmplitudeScaleField,
+      JWFNumberField pSmoothCurveAmountField) {
     envelope = pEnvelope;
     addPointButton = pAddPointButton;
     removePointButton = pRemovePointButton;
@@ -170,6 +172,7 @@ public class EnvelopeDlgController {
     rawDataFrameScaleField = pRawDataFrameScaleField;
     rawDataAmplitudeColumnField = pRawDataAmplitudeColumnField;
     rawDataAmplitudeScaleField = pRawDataAmplitudeScaleField;
+    smoothCurveAmountField = pSmoothCurveAmountField;
 
     envelopePanel = pEnvelopePanel;
     envelopeInterpolationCmb = pEnvelopeInterpolationCmb;
@@ -455,7 +458,16 @@ public class EnvelopeDlgController {
   }
 
   public void smoothEnvelope() {
-    envelope.smooth(3);
+    int times = smoothCurveAmountField.getIntValue();
+    if (times < 1) {
+      times = 1;
+    }
+    else if (times > 1000) {
+      times = 1000;
+    }
+    for (int i = 0; i < times; i++) {
+      envelope.smooth(3);
+    }
     refreshWithAutoFit();
   }
 

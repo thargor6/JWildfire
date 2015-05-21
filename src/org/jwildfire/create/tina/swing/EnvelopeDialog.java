@@ -670,18 +670,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     editModeCmb.addItem(Envelope.EditMode.SCALE_CURVE_VERT);
     panel_5.add(editModeCmb);
 
-    ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
-        getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
-        getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
-        getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb(),
-        getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
-        getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
-        getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
-        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField(),
-        getRawDataImportFromFileButton(), getRawDataImportFromClipboardButton(), getRawDataExportToFileButton(),
-        getRawDataExportToClipboardButton(), getRawDataFrameColumnField(), getRawDataFrameScaleField(),
-        getRawDataAmplitudeColumnField(), getRawDataAmplitudeScaleField());
-
     JLabel lblMode = new JLabel();
     lblMode.setText("Editing-Mode");
     lblMode.setPreferredSize(new Dimension(81, 26));
@@ -704,6 +692,37 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     smoothCurveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     smoothCurveBtn.setBounds(425, 6, 141, 50);
     panel_5.add(smoothCurveBtn);
+
+    smoothCurveAmountField = new JWFNumberField();
+    smoothCurveAmountField.setText("1");
+    smoothCurveAmountField.setOnlyIntegers(true);
+    smoothCurveAmountField.setMaxValue(1000.0);
+    smoothCurveAmountField.setMinValue(1.0);
+    smoothCurveAmountField.setPreferredSize(new Dimension(80, 26));
+    smoothCurveAmountField.setFont(new Font("Dialog", Font.PLAIN, 10));
+    smoothCurveAmountField.setBounds(486, 54, 80, 26);
+    panel_5.add(smoothCurveAmountField);
+
+    JLabel lblSmoothStrength = new JLabel();
+    lblSmoothStrength.setText("Strength");
+    lblSmoothStrength.setPreferredSize(new Dimension(38, 26));
+    lblSmoothStrength.setHorizontalAlignment(SwingConstants.RIGHT);
+    lblSmoothStrength.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblSmoothStrength.setBounds(408, 54, 74, 26);
+    panel_5.add(lblSmoothStrength);
+
+    ctrl = new EnvelopeDlgController(pEnvelope, getEnvelopeAddPointButton(), getEnvelopeRemovePointButton(), getEnvelopeClearButton(),
+        getEnvelopeXMinREd(), getEnvelopeXMaxREd(), getEnvelopeYMinREd(), getEnvelopeYMaxREd(), getEnvelopeXREd(),
+        getEnvelopeYREd(), getEnvelopeInterpolationCmb(), getEnvelopeViewAllButton(), getEnvelopeViewLeftButton(),
+        getEnvelopeViewRightButton(), getEnvelopeViewUpButton(), getEnvelopeViewDownButton(), getEnvelopePanel(), getEnvelopeInterpolationCmb(),
+        getEnvelopeXScaleREd(), getEnvelopeXOffsetREd(), getEnvelopeYScaleREd(), getEnvelopeYOffsetREd(),
+        getEnvelopeApplyTransformBtn(), getEnvelopeApplyTransformReverseBtn(), getEnvelopeImportMP3Button(),
+        getEnvelopeMP3ChannelREd(), getEnvelopeMP3FPSREd(), getEnvelopeMP3OffsetREd(), getEnvelopeMP3DurationREd(),
+        errorHandler, getAutofitCBx(), getCurveFPSField(), getEditModeCmb(), getSmoothCurveBtn(), getTimeField(),
+        getRawDataImportFromFileButton(), getRawDataImportFromClipboardButton(), getRawDataExportToFileButton(),
+        getRawDataExportToClipboardButton(), getRawDataFrameColumnField(), getRawDataFrameScaleField(),
+        getRawDataAmplitudeColumnField(), getRawDataAmplitudeScaleField(), getSmoothCurveAmountField());
+
     ctrl.setNoRefresh(true);
 
     EnvelopeChangeListener changeListener = new EnvelopeChangeListener() {
@@ -714,6 +733,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
       }
 
     };
+
     ctrl.registerSelectionChangeListener(changeListener);
     ctrl.registerValueChangeListener(changeListener);
     try {
@@ -1248,6 +1268,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
   private JWFNumberField rawDataFrameScaleField;
   private JWFNumberField rawDataAmplitudeColumnField;
   private JWFNumberField rawDataAmplitudeScaleField;
+  private JWFNumberField smoothCurveAmountField;
 
   private String findProperty(Object pObject, Object pProperty, String pPath) {
     if (pObject == pProperty) {
@@ -1496,5 +1517,9 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
   public JWFNumberField getRawDataAmplitudeScaleField() {
     return rawDataAmplitudeScaleField;
+  }
+
+  public JWFNumberField getSmoothCurveAmountField() {
+    return smoothCurveAmountField;
   }
 }
