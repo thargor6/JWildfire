@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppLauncher {
   private final LauncherPrefs prefs;
@@ -64,15 +66,26 @@ public class AppLauncher {
     }
 
     //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
-    String cmd[];
+    List<String> cmd = new ArrayList<String>();
+    cmd.add(javaCmd);
+    cmd.add(minMemOption);
+    cmd.add(maxMemOption);
+    String os = System.getProperty("os.name").toLowerCase();
+    if (os.startsWith("win")) {
+      boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
+      String libPath = new File(new File(currentDir.getParentFile().getAbsolutePath(), "lib"), (is64bit ? "x64" : "x86")).getAbsolutePath();
+      String libraryPathOption = "-Djava.library.path=" + libPath;
+      cmd.add(libraryPathOption);
+    }
+
+    cmd.add("-cp");
+    cmd.add(cp);
+    cmd.add(JWILDFIRE_MAIN_CLASS);
     if (prefs.isWithOpenCL()) {
       String openClOption = "-D" + PROPERTY_OPENCL + "=true";
-      cmd = new String[] { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS, openClOption };
+      cmd.add(openClOption);
     }
-    else {
-      cmd = new String[] { javaCmd, minMemOption, maxMemOption, "-cp", cp, JWILDFIRE_MAIN_CLASS };
-    }
-    return cmd;
+    return cmd.toArray(new String[cmd.size()]);
   }
 
   public void launchSync(String[] pCmd) throws Exception {
