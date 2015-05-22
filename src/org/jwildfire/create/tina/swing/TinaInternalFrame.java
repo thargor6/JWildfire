@@ -23526,6 +23526,13 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex2Field.setFont(new Font("Dialog", Font.PLAIN, 10));
       leapMotionIndex2Field.setEditable(true);
       leapMotionIndex2Field.setBounds(417, 34, 60, 24);
+      leapMotionIndex2Field.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionIndex2Field_changed();
+          }
+        }
+      });
       panel_112.add(leapMotionIndex2Field);
 
       leapMotionIndex3Field = new JWFNumberField();
@@ -23539,6 +23546,13 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex3Field.setFont(new Font("Dialog", Font.PLAIN, 10));
       leapMotionIndex3Field.setEditable(true);
       leapMotionIndex3Field.setBounds(477, 34, 60, 24);
+      leapMotionIndex3Field.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+            tinaController.getLeapMotionMainEditorController().leapMotionIndex3Field_changed();
+          }
+        }
+      });
       panel_112.add(leapMotionIndex3Field);
     }
     return panel_112;

@@ -615,6 +615,9 @@ public enum LeapMotionOutputChannel {
     if (pProperty.getIndex1() >= 0 && pProperty.getIndex1() < layer.getXForms().size()) {
       return layer.getXForms().get(pProperty.getIndex1());
     }
+    else if (pProperty.getIndex1() >= layer.getXForms().size() && pProperty.getIndex1() < (layer.getXForms().size() + layer.getFinalXForms().size())) {
+      return layer.getFinalXForms().get(pProperty.getIndex1() - layer.getXForms().size());
+    }
     else {
       return null;
     }

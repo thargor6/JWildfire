@@ -1378,4 +1378,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setPreserveZ(boolean preserveZ) {
     this.preserveZ = preserveZ;
   }
+
+  public MotionCurve getCamZoomCurve() {
+    return camZoomCurve;
+  }
 }

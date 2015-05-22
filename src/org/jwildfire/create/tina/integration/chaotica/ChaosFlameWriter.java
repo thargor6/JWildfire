@@ -635,14 +635,33 @@ public class ChaosFlameWriter {
     }
     addVec2Property(xb, PROPERTY_POS, pFlame.getCentreX(), -pFlame.getCentreY(), cxCurve, cyCurve);
     addRealProperty(xb, PROPERTY_ROTATE, pFlame.getCamRoll(), pFlame.getCamRollCurve());
-    double final_scale = pFlame.getPixelsPerUnit() * pFlame.getCamZoom() * 2.0;
-    double sensor_width = (double) (pFlame.getWidth() * AA_LEVEL) / final_scale;
-    addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensor_width, null);
+
+    double sensorWidth = calcSensorWidth(pFlame, pFlame.getPixelsPerUnit(), pFlame.getCamZoom());
+    addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, null);
+    //    List<Integer> camKeyFrames = collectKeyFrames(pFlame.getPixelsPerUnitCurve(), pFlame.getCamZoomCurve());
+    //    if (camKeyFrames.size() > 0) {
+    //      MotionCurve sensorWidthCurve = new MotionCurve();
+    //      sensorWidthCurve.setEnabled(true);
+    //      for (Integer keyFrame : camKeyFrames) {
+    //        double pixelsPerUnit = evalCurve(pFlame.getPixelsPerUnitCurve(), keyFrame, pFlame.getPixelsPerUnit());
+    //        double camZoom = evalCurve(pFlame.getCamZoomCurve(), keyFrame, pFlame.getCamZoom());
+    //        sensorWidthCurve.appendKeyFrame(keyFrame, calcSensorWidth(pFlame, pixelsPerUnit, camZoom));
+    //      }
+    //      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, sensorWidthCurve);
+    //    }
+    //    else {
+    //      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, null);
+    //    }
     Layer layer = pFlame.getFirstLayer();
     if (layer.getFinalXForms().size() > 0) {
       addTransform(xb, layer.getFinalXForms().get(0), variatonIdProvider, "Viewing transform");
     }
     xb.endElement(ELEM_CAMERA);
+  }
+
+  private double calcSensorWidth(Flame pFlame, double pPixelsPerUnit, double pCamZoom) {
+    double final_scale = pPixelsPerUnit * pCamZoom * 2.0;
+    return (double) (pFlame.getWidth() * AA_LEVEL) / final_scale;
   }
 
   private void addIntProperty(SimpleXMLBuilder xb, String property, int value, MotionCurve pCurve) {
