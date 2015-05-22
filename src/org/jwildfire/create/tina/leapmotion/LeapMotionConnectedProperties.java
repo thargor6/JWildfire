@@ -28,13 +28,13 @@ public class LeapMotionConnectedProperties {
 
   public static LeapMotionConnectedProperties getDefaultConfig() {
     LeapMotionConnectedProperties res = new LeapMotionConnectedProperties();
-    res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.NULL, LeapMotionOutputChannel.XFORM_RESET, 0, 0, 0, 0.0, 1.0));
+    res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.NULL, LeapMotionOutputChannel.XFORM_RESET_ANGLES, 0, 0, 0, 0.0, 1.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.ROLL, LeapMotionOutputChannel.XFORM_ROTATE, 0, 0, 0, 0.0, 3.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.PITCH, LeapMotionOutputChannel.XFORM_SCALE, 0, 0, 0, 1.0, 270.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.POSITION_X, LeapMotionOutputChannel.XFORM_MOVE_X, 0, 0, 0, 0, 150.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.RIGHT, LeapMotionInputChannel.POSITION_Y, LeapMotionOutputChannel.XFORM_MOVE_Y, 0, 0, 0, 0, -150.0));
 
-    res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.LEFT, LeapMotionInputChannel.NULL, LeapMotionOutputChannel.XFORM_RESET, 1, 0, 0, 0.0, 1.0));
+    res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.LEFT, LeapMotionInputChannel.NULL, LeapMotionOutputChannel.XFORM_RESET_ANGLES, 1, 0, 0, 0.0, 1.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.LEFT, LeapMotionInputChannel.ROLL, LeapMotionOutputChannel.XFORM_ROTATE, 1, 0, 0, 0.0, 3.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.LEFT, LeapMotionInputChannel.PITCH, LeapMotionOutputChannel.XFORM_SCALE, 1, 0, 0, 1.0, 270.0));
     res.getProperties().add(new LeapMotionConnectedProperty(LeapMotionHand.LEFT, LeapMotionInputChannel.POSITION_X, LeapMotionOutputChannel.XFORM_MOVE_X, 1, 0, 0, 0, 150.0));

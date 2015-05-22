@@ -352,4 +352,17 @@ public class FlamePreviewHelper {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     imgPanel.setImage(pImage);
   }
+
+  public void forceRepaint() {
+    try {
+      flamePanelProvider.getFlamePanel().paint(flamePanelProvider.getFlamePanel().getGraphics());
+    }
+    catch (Exception ex) {
+
+    }
+  }
+
+  public Rectangle getPanelBounds() {
+    return flamePanelProvider.getFlamePanel().getBounds();
+  }
 }

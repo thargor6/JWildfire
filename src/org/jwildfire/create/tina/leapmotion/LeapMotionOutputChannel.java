@@ -21,9 +21,10 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.Variation;
 
 public enum LeapMotionOutputChannel {
-  XFORM_RESET {
+  XFORM_RESET_ANGLES {
     @Override
     public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
       XForm xform = getXFormByIndex(pProperty, pFlame);
@@ -382,6 +383,83 @@ public enum LeapMotionOutputChannel {
       return 1;
     }
   },
+
+  XFORM_WEIGHT {
+    @Override
+    public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        pProperty.setEnabled(true);
+        pProperty.setOffset(xform.getWeight());
+      }
+      else {
+        pProperty.setEnabled(false);
+      }
+    }
+
+    @Override
+    public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        xform.setWeight(pValue);
+      }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      XForm xform = getXFormByIndex(pProperty, pFlame);
+      if (xform != null) {
+        return xform.getWeightCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 1;
+    }
+  },
+
+  FORMULA_AMOUNT {
+    @Override
+    public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null) {
+        pProperty.setEnabled(true);
+        pProperty.setOffset(var.getAmount());
+      }
+      else {
+        pProperty.setEnabled(false);
+      }
+    }
+
+    @Override
+    public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null) {
+        var.setAmount(pValue);
+      }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null) {
+        return var.getAmountCurve();
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 2;
+    }
+  },
+
   CAM_MOVE_X {
     @Override
     public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
@@ -516,6 +594,21 @@ public enum LeapMotionOutputChannel {
   };
 
   public abstract void init(LeapMotionConnectedProperty pProperty, Flame pFlame);
+
+  private static Variation getVariationByIndex(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+    XForm xform = getXFormByIndex(pProperty, pFlame);
+    if (xform != null) {
+      if (pProperty.getIndex2() >= 0 && pProperty.getIndex2() < xform.getVariationCount()) {
+        return xform.getVariation(pProperty.getIndex2());
+      }
+      else {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
 
   private static XForm getXFormByIndex(LeapMotionConnectedProperty pProperty, Flame pFlame) {
     Layer layer = pFlame.getFirstLayer();

@@ -200,6 +200,7 @@ public class LeapMotionControllerHolder {
   public void startLeapMotionListener(LeapMotionConnectedProperties pConfig, int pFps) {
     try {
       tinaController.saveUndoPoint();
+      tinaController.countDown(3);
       if (leapMotionController == null) {
         leapMotionController = new Controller();
       }

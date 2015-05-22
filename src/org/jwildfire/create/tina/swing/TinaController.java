@@ -143,6 +143,11 @@ import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 import org.jwildfire.swing.MainController;
+import org.jwildfire.transform.TextTransformer;
+import org.jwildfire.transform.TextTransformer.FontStyle;
+import org.jwildfire.transform.TextTransformer.HAlignment;
+import org.jwildfire.transform.TextTransformer.Mode;
+import org.jwildfire.transform.TextTransformer.VAlignment;
 
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.swing.JFontChooser;
@@ -326,7 +331,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.leapMotionOutputChannelCmb, parameterObject.leapMotionIndex1Field, parameterObject.leapMotionIndex2Field,
         parameterObject.leapMotionIndex3Field, parameterObject.leapMotionInvScaleField,
         parameterObject.leapMotionOffsetField, parameterObject.leapMotionAddButton, parameterObject.leapMotionDuplicateButton,
-        parameterObject.leapMotionDeleteButton, parameterObject.leapMotionClearButton);
+        parameterObject.leapMotionDeleteButton, parameterObject.leapMotionClearButton, parameterObject.leapMotionResetConfigButton);
 
     data.toggleDetachedPreviewButton = parameterObject.toggleDetachedPreviewButton;
     data.cameraRollREd = parameterObject.pCameraRollREd;
@@ -5672,6 +5677,32 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void countDown(int pTime) {
+    for (int i = pTime; i >= 0; i--) {
+      Rectangle bounds = flamePreviewHelper.getPanelBounds();
+      SimpleImage img = new SimpleImage((int) bounds.getWidth(), (int) bounds.getHeight());
+      TextTransformer txt = new TextTransformer();
+      txt.setText1(i > 0 ? String.valueOf(i) : "go!");
+      txt.setAntialiasing(true);
+      txt.setColor(Color.RED);
+      txt.setMode(Mode.NORMAL);
+      txt.setFontStyle(FontStyle.BOLD);
+      txt.setFontName("Arial");
+      txt.setFontSize(64);
+      txt.setHAlign(HAlignment.CENTRE);
+      txt.setVAlign(VAlignment.CENTRE);
+      txt.transformImage(img);
+      flamePreviewHelper.setImage(img);
+      flamePreviewHelper.forceRepaint();
+      try {
+        Thread.sleep(i > 0 ? 500 : 50);
+      }
+      catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
   }
 

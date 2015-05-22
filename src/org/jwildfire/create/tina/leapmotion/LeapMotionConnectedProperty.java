@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.leapmotion;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class LeapMotionConnectedProperty {
   private LeapMotionHand leapMotionHand = LeapMotionHand.RIGHT;
@@ -110,6 +111,10 @@ public class LeapMotionConnectedProperty {
 
   public void init(Flame pFlame) {
     outputChannel.init(this, pFlame);
+    MotionCurve curve = outputChannel.getMotionCurve(this, pFlame);
+    if (curve != null && curve.isEnabled()) {
+      curve.setEnabled(false);
+    }
   }
 
   public boolean isEnabled() {

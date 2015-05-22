@@ -1314,7 +1314,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(panel_2, BorderLayout.WEST);
       panel_2.setLayout(null);
 
-      JButton leapMotionResetConfigButton = new JButton();
+      leapMotionResetConfigButton = new JButton();
       leapMotionResetConfigButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getLeapMotionMainEditorController().resetConfigButton_clicked();
@@ -4827,7 +4827,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getLeapMotionHandCmb(), getLeapMotionInputChannelCmb(), getLeapMotionOutputChannelCmb(), getLeapMotionIndex1Field(),
         getLeapMotionIndex2Field(), getLeapMotionIndex3Field(), getLeapMotionInvScaleField(),
         getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
-        getLeapMotionDeleteButton(), getLeapMotionClearButton());
+        getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton());
 
     tinaController = new TinaController(params);
     if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
@@ -10985,6 +10985,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton leapMotionClearButton;
   private JWFNumberField leapMotionIndex2Field;
   private JWFNumberField leapMotionIndex3Field;
+  private JButton leapMotionResetConfigButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23419,7 +23420,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex1Field = new JWFNumberField();
       leapMotionIndex1Field.setHasMinValue(true);
       leapMotionIndex1Field.setOnlyIntegers(true);
-      leapMotionIndex1Field.setValueStep(0.05);
+      leapMotionIndex1Field.setValueStep(1.0);
       leapMotionIndex1Field.setText("");
       leapMotionIndex1Field.setSize(new Dimension(100, 24));
       leapMotionIndex1Field.setPreferredSize(new Dimension(100, 24));
@@ -23459,7 +23460,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.add(getLblHand());
 
       leapMotionInvScaleField = new JWFNumberField();
-      leapMotionInvScaleField.setValueStep(0.05);
+      leapMotionInvScaleField.setValueStep(10.0);
       leapMotionInvScaleField.setText("");
       leapMotionInvScaleField.setSize(new Dimension(100, 24));
       leapMotionInvScaleField.setPreferredSize(new Dimension(100, 24));
@@ -23486,6 +23487,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.add(lblAmplitude);
 
       JLabel lblBias = new JLabel();
+      lblBias.setVisible(false);
       lblBias.setText("Bias");
       lblBias.setSize(new Dimension(94, 22));
       lblBias.setPreferredSize(new Dimension(94, 22));
@@ -23495,6 +23497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.add(lblBias);
 
       leapMotionOffsetField = new JWFNumberField();
+      leapMotionOffsetField.setVisible(false);
       leapMotionOffsetField.setValueStep(0.05);
       leapMotionOffsetField.setText("");
       leapMotionOffsetField.setSize(new Dimension(100, 24));
@@ -23513,7 +23516,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.add(leapMotionOffsetField);
 
       leapMotionIndex2Field = new JWFNumberField();
-      leapMotionIndex2Field.setValueStep(0.05);
+      leapMotionIndex2Field.setValueStep(1.0);
       leapMotionIndex2Field.setText("");
       leapMotionIndex2Field.setSize(new Dimension(100, 24));
       leapMotionIndex2Field.setPreferredSize(new Dimension(100, 24));
@@ -23526,7 +23529,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_112.add(leapMotionIndex2Field);
 
       leapMotionIndex3Field = new JWFNumberField();
-      leapMotionIndex3Field.setValueStep(0.05);
+      leapMotionIndex3Field.setValueStep(1.0);
       leapMotionIndex3Field.setText("");
       leapMotionIndex3Field.setSize(new Dimension(100, 24));
       leapMotionIndex3Field.setPreferredSize(new Dimension(100, 24));
@@ -23673,6 +23676,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getLeapMotionIndex3Field() {
     return leapMotionIndex3Field;
+  }
+
+  public JButton getLeapMotionResetConfigButton() {
+    return leapMotionResetConfigButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

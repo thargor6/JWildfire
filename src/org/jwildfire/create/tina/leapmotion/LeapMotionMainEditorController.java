@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.leapmotion;
 
+import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -49,15 +51,18 @@ public class LeapMotionMainEditorController {
   private final JButton leapMotionDuplicateButton;
   private final JButton leapMotionDeleteButton;
   private final JButton leapMotionClearButton;
+  private final JButton leapMotionResetConfigButton;
   private boolean gridRefreshing;
   private boolean cmbRefreshing;
+  private boolean leapMotionEnabled;
 
   public LeapMotionMainEditorController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton, JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb,
       JComboBox pLeapMotionInputChannelCmb, JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndex1Field,
       JWFNumberField pLeapMotionIndex2Field, JWFNumberField pLeapMotionIndex3Field,
       JWFNumberField pLeapMotionInvScaleField, JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton,
-      JButton pLeapMotionDuplicateButton, JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton) {
+      JButton pLeapMotionDuplicateButton, JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton,
+      JButton pLeapMotionResetConfigButton) {
     gridRefreshing = cmbRefreshing = true;
     try {
       tinaController = pTinaController;
@@ -79,6 +84,7 @@ public class LeapMotionMainEditorController {
       leapMotionDuplicateButton = pLeapMotionDuplicateButton;
       leapMotionDeleteButton = pLeapMotionDeleteButton;
       leapMotionClearButton = pLeapMotionClearButton;
+      leapMotionResetConfigButton = pLeapMotionResetConfigButton;
 
       leapMotionHandCmb.removeAllItems();
       for (LeapMotionHand value : LeapMotionHand.values()) {
@@ -91,6 +97,15 @@ public class LeapMotionMainEditorController {
       leapMotionOutputChannelCmb.removeAllItems();
       for (LeapMotionOutputChannel value : LeapMotionOutputChannel.values()) {
         leapMotionOutputChannelCmb.addItem(value);
+      }
+
+      try {
+        String libPath = System.getProperty("java.library.path").trim();
+        leapMotionEnabled = libPath.length() > 0 && new File(libPath).exists();
+      }
+      catch (Exception ex) {
+        leapMotionEnabled = false;
+        ex.printStackTrace();
       }
 
       refreshConfigTable();
@@ -160,7 +175,7 @@ public class LeapMotionMainEditorController {
     value_changed(new PropertySetter() {
       @Override
       public void doSet(LeapMotionConnectedProperty pProperty) {
-        pProperty.setOffset(leapMotionOffsetField.getDoubleValue());
+        //        pProperty.setOffset(leapMotionOffsetField.getDoubleValue());
       }
     });
   }
@@ -289,7 +304,7 @@ public class LeapMotionMainEditorController {
     final int COL_OUTPUT_CHANNEL = 3;
     final int COL_INDEX = 4;
     final int COL_INVSCALE = 5;
-    final int COL_OFFSET = 6;
+    //    final int COL_OFFSET = 6;
     leapMotionConfigTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -300,7 +315,7 @@ public class LeapMotionMainEditorController {
 
       @Override
       public int getColumnCount() {
-        return 7;
+        return 6;
       }
 
       @Override
@@ -318,8 +333,8 @@ public class LeapMotionMainEditorController {
             return "Flame-property-index";
           case COL_INVSCALE:
             return "1/Intensity";
-          case COL_OFFSET:
-            return "Bias";
+            //          case COL_OFFSET:
+            //            return "Bias";
         }
         return null;
       }
@@ -341,8 +356,8 @@ public class LeapMotionMainEditorController {
               return getIndexAsDisplayString(property);
             case COL_INVSCALE:
               return Tools.doubleToString(property.getInvScale());
-            case COL_OFFSET:
-              return Tools.doubleToString(property.getOffset());
+              //            case COL_OFFSET:
+              //              return Tools.doubleToString(property.getOffset());
           }
         }
         return null;
@@ -372,21 +387,21 @@ public class LeapMotionMainEditorController {
 
   public void enableControls() {
     LeapMotionConnectedProperty property = getCurrProperty();
-    // TODO
-    leapMotionToggleButton.setEnabled(true);
-    //
-    leapMotionHandCmb.setEnabled(property != null);
-    leapMotionInputChannelCmb.setEnabled(property != null);
-    leapMotionOutputChannelCmb.setEnabled(property != null);
-    leapMotionIndex1Field.setEnabled(property != null && property.getIndexCount() > 0);
-    leapMotionIndex2Field.setEnabled(property != null && property.getIndexCount() > 1);
-    leapMotionIndex3Field.setEnabled(property != null && property.getIndexCount() > 2);
-    leapMotionInvScaleField.setEnabled(property != null);
-    leapMotionOffsetField.setEnabled(property != null);
-    leapMotionAddButton.setEnabled(true);
-    leapMotionDuplicateButton.setEnabled(property != null);
-    leapMotionDeleteButton.setEnabled(property != null);
-    leapMotionClearButton.setEnabled(config.getProperties().size() > 0);
+    leapMotionToggleButton.setEnabled(leapMotionEnabled);
+    leapMotionHandCmb.setEnabled(leapMotionEnabled && property != null);
+    leapMotionInputChannelCmb.setEnabled(leapMotionEnabled && property != null);
+    leapMotionOutputChannelCmb.setEnabled(leapMotionEnabled && property != null);
+    leapMotionIndex1Field.setEnabled(leapMotionEnabled && property != null && property.getIndexCount() > 0);
+    leapMotionIndex2Field.setEnabled(leapMotionEnabled && property != null && property.getIndexCount() > 1);
+    leapMotionIndex3Field.setEnabled(leapMotionEnabled && property != null && property.getIndexCount() > 2);
+    leapMotionInvScaleField.setEnabled(leapMotionEnabled && property != null);
+    //    leapMotionOffsetField.setEnabled(leapMotionEnabled && property != null);
+    leapMotionAddButton.setEnabled(leapMotionEnabled);
+    leapMotionDuplicateButton.setEnabled(leapMotionEnabled && property != null);
+    leapMotionDeleteButton.setEnabled(leapMotionEnabled && property != null);
+    leapMotionClearButton.setEnabled(leapMotionEnabled && config.getProperties().size() > 0);
+    leapMotionResetConfigButton.setEnabled(leapMotionEnabled);
+    leapMotionConfigTable.setEnabled(leapMotionEnabled);
   }
 
   public void configTableClicked() {
@@ -402,7 +417,7 @@ public class LeapMotionMainEditorController {
         leapMotionIndex2Field.setValue(property.getIndex2());
         leapMotionIndex3Field.setValue(property.getIndex3());
         leapMotionInvScaleField.setValue(property.getInvScale());
-        leapMotionOffsetField.setValue(property.getOffset());
+        //        leapMotionOffsetField.setValue(property.getOffset());
       }
       else {
         leapMotionHandCmb.setSelectedItem(null);
@@ -412,7 +427,7 @@ public class LeapMotionMainEditorController {
         leapMotionIndex2Field.setValue(0.0);
         leapMotionIndex3Field.setValue(0.0);
         leapMotionInvScaleField.setValue(1.0);
-        leapMotionOffsetField.setValue(0.0);
+        //        leapMotionOffsetField.setValue(0.0);
       }
       enableControls();
     }

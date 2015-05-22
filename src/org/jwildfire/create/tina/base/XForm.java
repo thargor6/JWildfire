@@ -1471,4 +1471,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyPostCoeff21Curve;
   }
 
+  public MotionCurve getWeightCurve() {
+    return weightCurve;
+  }
+
+  public MotionCurve getColorCurve() {
+    return colorCurve;
+  }
+
 }
