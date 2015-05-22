@@ -62,8 +62,6 @@
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
-      <fileset dir="." includes="lib/x64/**/*.dll"/>
-      <fileset dir="." includes="lib/x86/**/*.dll"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
       <zipfileset src="lib/janino.jar"/>
@@ -141,8 +139,14 @@
        <fileset file="README_SUPPORT.txt" />
        <fileset file="README_APPLET.txt" />
       <fileset file="Delphi/JWildfire.exe" />
-     </copy>    
-    <zip destfile="${dist.name}">
+    </copy>    
+    <copy todir="${dist.dir}/lib/x64">
+       <fileset file="${src.dir}/../lib/x64/*.dll" />
+    </copy>    
+    <copy todir="${dist.dir}/lib/x86">
+       <fileset file="${src.dir}/../lib/x86/*.dll" />
+    </copy>    
+    	<zip destfile="${dist.name}">
       <zipfileset dir="${dist.dir}/" excludes="start_*" />
       <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
     </zip>

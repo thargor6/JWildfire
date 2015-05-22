@@ -86,6 +86,16 @@
       <description>Plugins for the JWildfire-Chaotica-bridge (32 Bit)</description>      
       <fileset dir="plugins32" targetdir="$INSTALL_PATH/plugins32"/>
     </pack>
+
+    <pack name="Leap Motion drivers 64 Bit" required="no" preselected="true">
+      <description>Native drivers for the Leap Motion controller (64 Bit)</description>      
+      <fileset dir="lib/x64/" targetdir="$INSTALL_PATH/lib/x64"/>
+    </pack>
+    <pack name="Leap Motion drivers 32 Bit" required="no" preselected="false">
+      <description>Native drivers for the Leap Motion controller (32 Bit)</description>      
+      <fileset dir="lib/x86/" targetdir="$INSTALL_PATH/lib/x86"/>
+    </pack>
+    
     
     <pack name="JWildfire applet" required="no" preselected="true">
       <description>An optional program to play around</description>
