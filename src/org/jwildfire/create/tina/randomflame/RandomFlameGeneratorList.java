@@ -47,6 +47,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
     registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
+    registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
@@ -59,6 +60,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(SubFlameRandomFlameGenerator.class);
     registerRandomFlameGenerator(SynthRandomFlameGenerator.class);
     registerRandomFlameGenerator(TentacleRandomFlameGenerator.class);
+    registerRandomFlameGenerator(TileBallRandomFlameGenerator.class);
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
     registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
     //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);

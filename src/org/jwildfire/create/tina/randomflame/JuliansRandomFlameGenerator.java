@@ -15,7 +15,7 @@
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 /*
- Based one the script Julians.lua of Fractal Architect:
+ Based on the script Julians.lua of Fractal Architect:
  --[[
  Copyright 2015 Steven Brodhead, Sr., Centcom Inc.
  
@@ -100,13 +100,11 @@ randomPostMatrix(xform)
 
 package org.jwildfire.create.tina.randomflame;
 
-import static org.jwildfire.create.tina.randomflame.RandomFlameGeneratorUtils.randInRange;
-import static org.jwildfire.create.tina.randomflame.RandomFlameGeneratorUtils.randomAffine;
-import static org.jwildfire.create.tina.randomflame.RandomFlameGeneratorUtils.randomPostAffine;
-
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
@@ -122,16 +120,19 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
     Layer layer = flame.getFirstLayer();
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
+
+    String primary = Math.random() < 0.666 ? "julian" : "juliascope";
+
     // 1st xForm
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.00001 + Math.random() * 12.0);
+      xForm.setWeight(0.00001 + Math.random() * 20.0);
       xForm.setColor(Math.random());
       if (Math.random() < 0.5) {
         xForm.addVariation(-1.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       }
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julian", true);
+      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(primary, true);
       varFunc.setParameter("power", randInRange(1, 7));
       varFunc.setParameter("dist", -2.0 + 4.0 * Math.random());
       xForm.addVariation(-2.0 + Math.random() * 4.0, varFunc);
@@ -141,9 +142,9 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
     {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.00001 + Math.random() * 2.0);
+      xForm.setWeight(0.00001 + Math.random() * 6.0);
       xForm.setColor(Math.random());
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julian", true);
+      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(primary, true);
       varFunc.setParameter("power", randInRange(1, 7));
       varFunc.setParameter("dist", -2.0 + 4.0 * Math.random());
       xForm.addVariation(-2.0 + Math.random() * 4.0, varFunc);
@@ -151,6 +152,7 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(-1.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance("linear", true));
         xForm.addVariation(-1.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       }
+      xForm.getModifiedWeights()[1] = Math.random() < 0.5 ? 0.0 : Math.random();
       randomAffine(xForm);
     }
 
@@ -160,7 +162,7 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
       layer.getXForms().add(xForm);
       xForm.setWeight(0.00001 + Math.random() * 2.0);
       xForm.setColor(Math.random());
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("julian", true);
+      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(primary, true);
       varFunc.setParameter("power", randInRange(1, 5));
       varFunc.setParameter("dist", -2.0 + 4.0 * Math.random());
       xForm.addVariation(-2.0 + Math.random() * 4.0, varFunc);
@@ -185,4 +187,47 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
     return pFlame;
   }
 
+  private void randomAffine(XForm pXForm) {
+    double affineSelect = Math.random();
+    if (affineSelect > 0.2 && affineSelect <= 0.4) {
+      XFormTransformService.rotate(pXForm, randInRange(0., 360.0), false);
+    }
+    if (affineSelect > 0.4 && affineSelect <= 0.6) {
+      XFormTransformService.localTranslate(pXForm, randInRange(0., 1.5), randInRange(0., 1.5), false);
+    }
+    if (affineSelect > 0.6 && affineSelect <= 0.8) {
+      XFormTransformService.scale(pXForm, randInRange(0.25, 1.5), true, true, false);
+    }
+    else if (affineSelect > 0.8) {
+      XFormTransformService.rotate(pXForm, randInRange(0., 360.0), false);
+      XFormTransformService.localTranslate(pXForm, randInRange(0., 1.5), randInRange(0., 1.5), false);
+      XFormTransformService.scale(pXForm, randInRange(0., 1.2), true, true, false);
+    }
+  }
+
+  private void randomPostAffine(XForm pXForm) {
+    double affineSelect = Math.random();
+    if (affineSelect > 0.6 && affineSelect <= 0.7) {
+      XFormTransformService.rotate(pXForm, randInRange(0.0, 360.0), true);
+    }
+    if (affineSelect > 0.7 && affineSelect <= 0.8) {
+      XFormTransformService.localTranslate(pXForm, randInRange(0., 1.5), randInRange(0.0, 1.5), true);
+    }
+    if (affineSelect > 0.8 && affineSelect <= 0.9) {
+      XFormTransformService.scale(pXForm, randInRange(0.25, 1.5), true, true);
+    }
+    else if (affineSelect > 0.9) {
+      XFormTransformService.rotate(pXForm, randInRange(0.0, 360.0), true);
+      XFormTransformService.localTranslate(pXForm, randInRange(0.0, 1.5), randInRange(0.0, 1.5), true);
+      XFormTransformService.scale(pXForm, randInRange(0., 1.2), true, true, true);
+    }
+  }
+
+  private double randInRange(double pMin, double pMax) {
+    return pMin + Math.random() * (pMax - pMin);
+  }
+
+  private double randInRange(int pMin, int pMax) {
+    return Tools.FTOI(pMin + Math.random() * (pMax - pMin));
+  }
 }
