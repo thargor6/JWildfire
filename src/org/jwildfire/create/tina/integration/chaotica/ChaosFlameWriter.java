@@ -637,21 +637,20 @@ public class ChaosFlameWriter {
     addRealProperty(xb, PROPERTY_ROTATE, pFlame.getCamRoll(), pFlame.getCamRollCurve());
 
     double sensorWidth = calcSensorWidth(pFlame, pFlame.getPixelsPerUnit(), pFlame.getCamZoom());
-    addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, null);
-    //    List<Integer> camKeyFrames = collectKeyFrames(pFlame.getPixelsPerUnitCurve(), pFlame.getCamZoomCurve());
-    //    if (camKeyFrames.size() > 0) {
-    //      MotionCurve sensorWidthCurve = new MotionCurve();
-    //      sensorWidthCurve.setEnabled(true);
-    //      for (Integer keyFrame : camKeyFrames) {
-    //        double pixelsPerUnit = evalCurve(pFlame.getPixelsPerUnitCurve(), keyFrame, pFlame.getPixelsPerUnit());
-    //        double camZoom = evalCurve(pFlame.getCamZoomCurve(), keyFrame, pFlame.getCamZoom());
-    //        sensorWidthCurve.appendKeyFrame(keyFrame, calcSensorWidth(pFlame, pixelsPerUnit, camZoom));
-    //      }
-    //      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, sensorWidthCurve);
-    //    }
-    //    else {
-    //      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, null);
-    //    }
+    List<Integer> camKeyFrames = collectKeyFrames(pFlame.getPixelsPerUnitCurve(), pFlame.getCamZoomCurve());
+    if (camKeyFrames.size() > 0) {
+      MotionCurve sensorWidthCurve = new MotionCurve();
+      sensorWidthCurve.setEnabled(true);
+      for (Integer keyFrame : camKeyFrames) {
+        double pixelsPerUnit = evalCurve(pFlame.getPixelsPerUnitCurve(), keyFrame, pFlame.getPixelsPerUnit());
+        double camZoom = evalCurve(pFlame.getCamZoomCurve(), keyFrame, pFlame.getCamZoom());
+        sensorWidthCurve.appendKeyFrame(keyFrame, calcSensorWidth(pFlame, pixelsPerUnit, camZoom));
+      }
+      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, sensorWidthCurve);
+    }
+    else {
+      addRealProperty(xb, PROPERTY_SENSOR_WIDTH, sensorWidth, null);
+    }
     Layer layer = pFlame.getFirstLayer();
     if (layer.getFinalXForms().size() > 0) {
       addTransform(xb, layer.getFinalXForms().get(0), variatonIdProvider, "Viewing transform");
