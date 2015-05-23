@@ -1,7 +1,7 @@
 Welcome to JWildfire!
 
 If you are new to the software and/or have problems with the launching,
-please read the file README_LAUNCH.txt.
+please read the file README_LAUNCHING_JWILDFIRE.txt.
 
 If you need additional support please read the file README_SUPPORT.txt
 

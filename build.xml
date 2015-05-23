@@ -134,11 +134,13 @@
      </copy>
   	<copy todir="${dist.dir}/">
        <fileset file="CHANGES.txt" />
-       <fileset file="README_LAUNCH.txt" />
+       <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
        <fileset file="README_SUPPORT.txt" />
        <fileset file="README_APPLET.txt" />
-      <fileset file="Delphi/JWildfire.exe" />
+       <fileset file="README_CHAOTICA_SUPPORT.txt" />
+       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
+       <fileset file="Delphi/JWildfire.exe" />
     </copy>    
     <copy todir="${dist.dir}/lib/x64">
        <fileset file="${src.dir}/../lib/x64/*.dll" />

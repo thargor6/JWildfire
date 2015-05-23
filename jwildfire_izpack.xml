@@ -59,8 +59,10 @@
       <singlefile src="lib/j-wildfire.jar" target="$INSTALL_PATH/lib/j-wildfire.jar"/>
       <singlefile src="CHANGES.txt" target="$INSTALL_PATH/CHANGES.txt"/>
       <singlefile src="j-wildfire-launcher.jar" target="$INSTALL_PATH/j-wildfire-launcher.jar"/>
-      <singlefile src="README_LAUNCH.txt" target="$INSTALL_PATH/README_LAUNCH.txt"/>
+      <singlefile src="README_LAUNCHING_JWILDFIRE.txt" target="$INSTALL_PATH/README_LAUNCHING_JWILDFIRE.txt"/>
       <singlefile src="README_SUPPORT.txt" target="$INSTALL_PATH/README_SUPPORT.txt"/>
+      <singlefile src="README_CHAOTICA_SUPPORT.txt" target="$INSTALL_PATH/README_CHAOTICA_SUPPORT.txt"/>
+      <singlefile src="README_LEAP_MOTION_SUPPORT.txt" target="$INSTALL_PATH/README_LEAP_MOTION_SUPPORT.txt"/>
       <singlefile src="README!!!.txt" target="$INSTALL_PATH/README!!!.txt"/>
 
       <singlefile src="JWildfire.exe" target="$INSTALL_PATH/JWildfire.exe">

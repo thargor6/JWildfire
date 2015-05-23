@@ -1,0 +1,1 @@
+Please see the official Wiki-page http://wiki.jwildfire.org/index.php?title=Manual_LeapMotionIntegration
