@@ -1,3 +1,48 @@
+V2.50 (24.05.2015):
+ - support for Chaotica as additional rendering-solution for the high-end-user, please see the official documentation at http://wiki.jwildfire.org/index.php?title=Manual_ChaoticaIntegration for details
+
+ - support for the Leap Motion Controller for animating flame-fractals, please see the official documentation at http://wiki.jwildfire.org/index.php?title=Manual_LeapMotionIntegration for details  
+
+ - new random-flame-generators:
+    - "Tile Ball"-, inspired by the 3D Tile Ball Script made by Shortgreenpigg
+    - "Julians"-random-flame-generator, based on a script created by Steven Brodhead
+ - new variations/plugins :
+    - "custom_wf_full" by Gregg Helt to allow to generate and test complete Variations at runtime
+    - "w" by Michael Faber
+    - "y" by Michael Faber
+    - "x" by Michael Faber
+    - "z" by Michael Faber
+    - "trade" by Michael Faber
+    - "wdisc" by Michael Faber
+    - "deltaA" by Michael Faber
+    - "idisc" by Michael Faber
+    - "CircleTrans1" by eralex
+    - "CircleRand" by eralex
+    - "CircleLinear" by eralex
+    - "blur_pixelize" by Xyrus02
+    - "blur_circle" by Xyrus02
+    - "rhodonea" by Gregg Helt
+    - "butterfly_fay" by Gregg Helt
+    - "flower_db" by Darkbeam and Gregg Helt
+    - "rosoni" by Darkbeam and Gregg Helt
+    - "stwin" transcribed by Gregg Helt    
+  
+ - additions the Motion-Curves-Editor:
+    - smoothing-function
+    - import/export of raw motion-data
+    - new editing-mode for motion-curves (drag curve horizontal/vertical), some changes in the UI of the motion-curve-editor, smoothing for motion-curves
+
+ - additions to the Scripting-interface:
+    - API for managing persistent settings for scripts, see ScriptRunnerEnvironment::getScriptProperty, examples to come
+    - API for generating rich user-interfaces for scripts, examples to come
+
+ - changed the default antialiasing-settings in order to create images with more details
+ - inherit the settings of "Duration" and "Morph"-count in the Easy Movie Maker from the previous movie part
+ - new "Ziggurat"-random-generator, added by boleslaw, which is the new default
+ - new FPS-setting for flames, with customizable default-value in the Prefs
+ 
+ - renamed the main-menu-item "Script" into "Operators Script" to avoid confusions with flame-scripts    
+
 V2.40 (14.03.2015):
  - now with offical documentation-Wiki! See the "Documentation"-button at the Welcome-window or just visit it directly: http://wiki.jwildfire.org/
  - 4 new beginners tutorials in the Wiki (Basic flame-editing, Basic color-editing, Basic formula-editing, More on formula-editing)

@@ -153,6 +153,7 @@ public class JuliansRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(-1.0 + Math.random() * 2.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       }
       xForm.getModifiedWeights()[1] = Math.random() < 0.5 ? 0.0 : Math.random();
+      XFormTransformService.scale(xForm, 0.5 + Math.random() * 0.5, Math.random() < 0.5, Math.random() < 0.5);
       randomAffine(xForm);
     }
 

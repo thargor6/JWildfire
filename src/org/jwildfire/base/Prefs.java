@@ -81,7 +81,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.2";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
-  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator";
+  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
@@ -878,8 +878,8 @@ public class Prefs extends ManagedObject {
     return tinaRandomNumberGenerator;
   }
 
-  public void setTinaRandomNumberGenerator(RandomGeneratorType tinaRandomNumberGenerator) {
-    this.tinaRandomNumberGenerator = tinaRandomNumberGenerator;
+  public void setTinaRandomNumberGenerator(RandomGeneratorType pTinaRandomNumberGenerator) {
+    tinaRandomNumberGenerator = pTinaRandomNumberGenerator;
   }
 
   public BaseMathLibType getBaseMathLibType() {

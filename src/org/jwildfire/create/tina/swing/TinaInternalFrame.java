@@ -7655,7 +7655,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb.setMinimumSize(new Dimension(110, 24));
       randomStyleCmb.setPreferredSize(new Dimension(110, 24));
       randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
-      randomStyleCmb.setMaximumRowCount(32);
+      randomStyleCmb.setMaximumRowCount(48);
     }
     return randomStyleCmb;
   }
