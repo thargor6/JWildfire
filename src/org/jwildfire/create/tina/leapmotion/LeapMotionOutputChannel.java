@@ -460,6 +460,56 @@ public enum LeapMotionOutputChannel {
     }
   },
 
+  FORMULA_PARAM_AMOUNT {
+    @Override
+    public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null && pProperty.getIndex3() >= 0 && pProperty.getIndex3() < var.getFunc().getParameterNames().length) {
+        pProperty.setEnabled(true);
+        Object value = var.getFunc().getParameterValues()[pProperty.getIndex3()];
+        if (value instanceof Double) {
+          pProperty.setOffset((Double) value);
+        }
+        else if (value instanceof Integer) {
+          pProperty.setOffset((Integer) value);
+        }
+      }
+      else {
+        pProperty.setEnabled(false);
+      }
+    }
+
+    @Override
+    public void apply(LeapMotionConnectedProperty pProperty, Flame pFlame, double pValue) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null && pProperty.getIndex3() >= 0 && pProperty.getIndex3() < var.getFunc().getParameterNames().length) {
+        String paramName = var.getFunc().getParameterNames()[pProperty.getIndex3()];
+        var.getFunc().setParameter(paramName, pValue);
+      }
+    }
+
+    @Override
+    public MotionCurve getMotionCurve(LeapMotionConnectedProperty pProperty, Flame pFlame) {
+      Variation var = getVariationByIndex(pProperty, pFlame);
+      if (var != null && pProperty.getIndex3() >= 0 && pProperty.getIndex3() < var.getFunc().getParameterNames().length) {
+        String paramName = var.getFunc().getParameterNames()[pProperty.getIndex3()];
+        MotionCurve curve = var.getMotionCurve(paramName);
+        if (curve == null) {
+          curve = var.createMotionCurve(paramName);
+        }
+        return curve;
+      }
+      else {
+        return null;
+      }
+    }
+
+    @Override
+    public int getIndexCount() {
+      return 3;
+    }
+  },
+
   CAM_MOVE_X {
     @Override
     public void init(LeapMotionConnectedProperty pProperty, Flame pFlame) {
