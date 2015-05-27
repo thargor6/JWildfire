@@ -96,6 +96,7 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2());
 
     addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DISABLED, pPrefs.isTinaIntegrationChaoticaDisabled());
+    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT, pPrefs.isTinaIntegrationChaoticaAnimationExport());
     addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DRAWER, pPrefs.getTinaIntegrationChaoticaDrawer());
     addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE, pPrefs.getTinaIntegrationChaoticaExecutable());
     addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER, pPrefs.getTinaIntegrationChaoticaFlameDrawer());

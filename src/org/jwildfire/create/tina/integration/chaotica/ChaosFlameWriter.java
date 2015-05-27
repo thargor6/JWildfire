@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.integration.chaotica;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
@@ -594,7 +595,12 @@ public class ChaosFlameWriter {
   }
 
   private void addAnimAndCamera(SimpleXMLBuilder xb, IdProvider variatonIdProvider, Flame pFlame) {
-    addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()), null);
+    if (Prefs.getPrefs().isTinaIntegrationChaoticaAnimationExport()) {
+      addIntProperty(xb, PROPERTY_ANIM_LENGTH, Tools.FTOI((double) pFlame.getFrameCount() / (double) pFlame.getFps()), null);
+    }
+    else {
+      addIntProperty(xb, PROPERTY_ANIM_LENGTH, 0, null);
+    }
     addIntProperty(xb, PROPERTY_ANIM_FPS, pFlame.getFps(), null);
     addRealProperty(xb, PROPERTY_ANIM_EXPOSURE_TIME, 1.0 / (double) pFlame.getFps(), null);
     addStringProperty(xb, PROPERTY_ANIM_EXPOSURE_SHAPE, "uniform");
@@ -664,7 +670,7 @@ public class ChaosFlameWriter {
   }
 
   private void addIntProperty(SimpleXMLBuilder xb, String property, int value, MotionCurve pCurve) {
-    if (pCurve == null || pCurve.isEmpty() || !pCurve.isEnabled()) {
+    if (pCurve == null || pCurve.isEmpty() || !pCurve.isEnabled() || !Prefs.getPrefs().isTinaIntegrationChaoticaAnimationExport()) {
       xb.simpleElement(ELEM_INT, String.valueOf(value), xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
     }
     else {
@@ -689,7 +695,7 @@ public class ChaosFlameWriter {
   }
 
   private void addRealProperty(SimpleXMLBuilder xb, String property, double value, MotionCurve pCurve) {
-    if (pCurve == null || pCurve.isEmpty() || !pCurve.isEnabled()) {
+    if (pCurve == null || pCurve.isEmpty() || !pCurve.isEnabled() || !Prefs.getPrefs().isTinaIntegrationChaoticaAnimationExport()) {
       xb.simpleElement(ELEM_REAL, Tools.doubleToString(value), xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
     }
     else {
@@ -717,7 +723,7 @@ public class ChaosFlameWriter {
   }
 
   private void addVec2Property(SimpleXMLBuilder xb, String property, double v1, double v2, MotionCurve v1Curve, MotionCurve v2Curve) {
-    if ((v1Curve == null || v1Curve.isEmpty() || !v1Curve.isEnabled()) && (v2Curve == null || v2Curve.isEmpty() || !v2Curve.isEnabled())) {
+    if ((v1Curve == null || v1Curve.isEmpty() || !v1Curve.isEnabled() || !Prefs.getPrefs().isTinaIntegrationChaoticaAnimationExport()) && (v2Curve == null || v2Curve.isEmpty() || !v2Curve.isEnabled() || !Prefs.getPrefs().isTinaIntegrationChaoticaAnimationExport())) {
       xb.simpleElement(ELEM_VEC2, Tools.doubleToString(v1) + " " + Tools.doubleToString(v2), xb.createAttrList(xb.createAttr(ATTR_NAME, property)));
     }
     else {

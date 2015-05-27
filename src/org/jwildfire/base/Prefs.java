@@ -135,6 +135,7 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_DRAWER = "tina.integration.chaotica.drawer";
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE = "tina.integration.chaotica.executable";
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER = "tina.integration.chaotica.flame_drawer";
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT = "tina.integration.chaotica.animation_export";
 
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
@@ -312,6 +313,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Disable the Chaotica-support inside the flame-module", category = PropertyCategory.TINA)
   private boolean tinaIntegrationChaoticaDisabled = false;
+
+  @Property(description = "Allow the animation-export from with the Chaotica-bridge. Please note that this reduces the maximum possible resolution in Chaotica when you do not have a Studio licence", category = PropertyCategory.TINA)
+  private boolean tinaIntegrationChaoticaAnimationExport = false;
 
   @Property(description = "Installation drawer where the Chaotica-software resides", category = PropertyCategory.TINA)
   private String tinaIntegrationChaoticaDrawer = "C:\\Program Files\\Chaotica";
@@ -706,6 +710,7 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaDrawer = pSrc.tinaIntegrationChaoticaDrawer;
     tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
     tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
+    tinaIntegrationChaoticaAnimationExport = pSrc.tinaIntegrationChaoticaAnimationExport;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
 
@@ -1372,6 +1377,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRawMotionDataPath(String pTinaRawMotionDataPath) {
     tinaRawMotionDataPath = pTinaRawMotionDataPath;
+  }
+
+  public boolean isTinaIntegrationChaoticaAnimationExport() {
+    return tinaIntegrationChaoticaAnimationExport;
+  }
+
+  public void setTinaIntegrationChaoticaAnimationExport(boolean pTinaIntegrationChaoticaAnimationExport) {
+    tinaIntegrationChaoticaAnimationExport = pTinaIntegrationChaoticaAnimationExport;
   }
 
 }

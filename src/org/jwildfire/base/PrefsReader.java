@@ -150,6 +150,7 @@ public class PrefsReader {
         pPrefs.setTinaFreeCacheInBatchRenderer(getBooleanProperty(props, Prefs.KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER, pPrefs.isTinaFreeCacheInBatchRenderer()));
 
         pPrefs.setTinaIntegrationChaoticaDisabled(getBooleanProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DISABLED, pPrefs.isTinaIntegrationChaoticaDisabled()));
+        pPrefs.setTinaIntegrationChaoticaAnimationExport(getBooleanProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT, pPrefs.isTinaIntegrationChaoticaAnimationExport()));
         pPrefs.setTinaIntegrationChaoticaDrawer(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DRAWER, pPrefs.getTinaIntegrationChaoticaDrawer()));
         pPrefs.setTinaIntegrationChaoticaExecutable(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE, pPrefs.getTinaIntegrationChaoticaExecutable()));
         pPrefs.setTinaIntegrationChaoticaFlameDrawer(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER, pPrefs.getTinaIntegrationChaoticaFlameDrawer()));
