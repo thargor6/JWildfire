@@ -74,7 +74,13 @@ public class AppLauncher {
     if (os.startsWith("win")) {
       boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
       String libPath = new File(new File(currentDir.getParentFile().getAbsolutePath(), "lib"), (is64bit ? "x64" : "x86")).getAbsolutePath();
-      String libraryPathOption = "-Djava.library.path=" + libPath;
+      String libraryPathOption;
+      if (libPath.contains(" ")) {
+        libraryPathOption = "\"-Djava.library.path=" + libPath + "\"";
+      }
+      else {
+        libraryPathOption = "-Djava.library.path=" + libPath;
+      }
       cmd.add(libraryPathOption);
     }
 
