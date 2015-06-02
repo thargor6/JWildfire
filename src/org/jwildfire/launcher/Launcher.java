@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -109,7 +110,37 @@ public class Launcher {
     initialize();
     loadImages();
     scanForJDKs();
+    checkForIncludedJRE();
     updateControls();
+  }
+
+  private void checkForIncludedJRE() {
+    String jdk = locateIncludedJRE();
+    if (jdk != null && jdk.length() > 0) {
+      getJdkCmb().addItem(jdk);
+      getJdkCmb().setSelectedItem(jdk);
+      getJdkCmb().setEnabled(false);
+      getBtnAddJavaRuntime().setEnabled(false);
+    }
+  }
+
+  private String locateIncludedJRE() {
+    try {
+      String path = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+      String decodedPath = URLDecoder.decode(path, "UTF-8");
+      if (decodedPath.endsWith(".jar")) {
+        File jrePath = new File(new File(decodedPath).getParentFile(), "jre");
+        if (jrePath.exists() && jrePath.isDirectory()) {
+          getLogTextArea().setText("Included JRE found in \"" + jrePath.getAbsolutePath() + "\"");
+          return jrePath.getAbsolutePath();
+        }
+      }
+      getLogTextArea().setText("No JRE found in \"" + decodedPath + "\"");
+      return null;
+    }
+    catch (Exception ex) {
+      return null;
+    }
   }
 
   private JTextArea logTextArea;
@@ -120,6 +151,7 @@ public class Launcher {
   private JTabbedPane mainTabbedPane;
   private JCheckBox debugCmb;
   private JCheckBox openCLCmb;
+  private JButton btnAddJavaRuntime;
 
   private void loadImages() {
     frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
@@ -283,7 +315,7 @@ public class Launcher {
     lblMemoryToUse.setPreferredSize(new Dimension(94, 22));
     lblMemoryToUse.setFont(new Font("Dialog", Font.BOLD, 10));
 
-    JButton btnAddJavaRuntime = new JButton("Add Java runtime...");
+    btnAddJavaRuntime = new JButton("Add Java runtime...");
     btnAddJavaRuntime.setToolTipText("Manually add the path of a Java runtime which is installed on this system andwas not detected by the launcher");
     btnAddJavaRuntime.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -598,5 +630,9 @@ public class Launcher {
 
   public JCheckBox getOpenCLCmb() {
     return openCLCmb;
+  }
+
+  public JButton getBtnAddJavaRuntime() {
+    return btnAddJavaRuntime;
   }
 }

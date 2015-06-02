@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 
-<project name="JWildfire" basedir="." default="packageDist">
+<project name="JWildfire" basedir="." default="packageAll">
 
-  <property name="dist.dir" location="build/dist" />
+  <property name="dist.base.dir" location="build/dist-base" />
+  <property name="dist.win32.dir" location="build/dist-win32" />
+  <property name="dist.win64.dir" location="build/dist-win64" />
+  <property name="dist.dll32.dir" location="build/dist-dlls-win32" />
+  <property name="dist.dll64.dir" location="build/dist-dlls-win64" />
   <property name="izpack.dir" location="F:/DEV" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -11,8 +15,10 @@
 	<property name="jwildfire.jar.name" value="build/j-wildfire.jar" />
   <property name="applet.jar.name" value="build/j-wildfire-applet.jar" />
   <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar" />
-  <property name="dist.name" value="build/j-wildfire.zip" />
-	
+  <property name="dist.base.name" value="build/j-wildfire-base.zip" />
+  <property name="dist.dll32.name" value="build/j-wildfire-dlls-win32.zip" />
+  <property name="dist.dll64.name" value="build/j-wildfire-dlls-win64.zip" />
+  
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -27,9 +33,17 @@
 	<target name="init">
       <delete dir="${build.dir}" />
   		<mkdir dir="${build.dir}" />
-    <delete dir="${dist.dir}" />
-    <mkdir dir="${dist.dir}" />
-	</target>
+    <delete dir="${dist.base.dir}" />
+    <delete dir="${dist.win32.dir}" />
+    <delete dir="${dist.win64.dir}" />
+    <delete dir="${dist.dll32.dir}" />    
+    <delete dir="${dist.dll64.dir}" />    
+    <mkdir dir="${dist.base.dir}" />
+    <mkdir dir="${dist.win32.dir}" />
+    <mkdir dir="${dist.win64.dir}" />
+    <mkdir dir="${dist.dll32.dir}" />
+    <mkdir dir="${dist.dll64.dir}" />
+ 	</target>
 
 	<target name="compile" depends="init" 
           description="Compile main source tree java files">
@@ -113,26 +127,20 @@
     </jar>
   </target>
 
-  <target name="packageDist" depends="packageJWildfireJar, packageLauncherJar, packageJWildfireAppletJar" description="Package the distributable zip file">
-    <copy todir="${dist.dir}/lib">
+  <target name="packageDistBase" depends="packageJWildfireJar, packageLauncherJar, packageJWildfireAppletJar" description="Package the distributable zip file">
+    <copy todir="${dist.base.dir}/lib">
        <fileset file="${jwildfire.jar.name}"/>
      </copy>  	
-    <copy todir="${dist.dir}/">
+    <copy todir="${dist.base.dir}/">
        <fileset file="${launcher.jar.name}"/>
      </copy>    
-    <copy todir="${dist.dir}/">
+    <copy todir="${dist.base.dir}/">
        <fileset file="${applet.jar.name}"/>
      </copy>
-    <copy todir="${dist.dir}/plugins32">
-      <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
-     </copy>
-    <copy todir="${dist.dir}/plugins64">
-      <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
-     </copy>
-    <copy todir="${dist.dir}/">
+    <copy todir="${dist.base.dir}/">
        <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
      </copy>
-  	<copy todir="${dist.dir}/">
+  	<copy todir="${dist.base.dir}/">
        <fileset file="CHANGES.txt" />
        <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
@@ -141,24 +149,100 @@
        <fileset file="README_CHAOTICA_SUPPORT.txt" />
        <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
        <fileset file="Delphi/JWildfire.exe" />
-    </copy>    
-    <copy todir="${dist.dir}/lib/x64">
-       <fileset file="${src.dir}/../lib/x64/*.dll" />
-    </copy>    
-    <copy todir="${dist.dir}/lib/x86">
-       <fileset file="${src.dir}/../lib/x86/*.dll" />
-    </copy>    
-    	<zip destfile="${dist.name}">
-      <zipfileset dir="${dist.dir}/" excludes="start_*" />
-      <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
+    </copy>      
+    <zip destfile="${dist.base.name}">
+      <zipfileset dir="${dist.base.dir}/" excludes="start_*" />
+      <zipfileset filemode="755" dir="${dist.base.dir}/" includes="start_*" />
     </zip>
   </target>
 
-	 <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />	
+  <target name="packageDistWin32" depends="packageJWildfireJar, packageLauncherJar, packageJWildfireAppletJar" description="Package the distributable zip file for Win32">
+     <copy todir="${dist.win32.dir}/">
+      <fileset dir="${src.dir}/../jres/win32" />
+     </copy>    
+    <copy todir="${dist.win32.dir}/lib">
+       <fileset file="${jwildfire.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win32.dir}/">
+       <fileset file="${launcher.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win32.dir}/">
+       <fileset file="${applet.jar.name}"/>
+     </copy>
+    <copy todir="${dist.win32.dir}/">
+       <fileset file="CHANGES.txt" />
+       <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
+       <fileset file="README!!!.txt" />
+       <fileset file="README_SUPPORT.txt" />
+       <fileset file="README_APPLET.txt" />
+       <fileset file="README_CHAOTICA_SUPPORT.txt" />
+       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
+       <fileset file="Delphi/JWildfire.exe" />
+    </copy>      
+    <zip destfile="${dist.dll32.name}">
+      <zipfileset dir="${dist.win32.dir}/" excludes="start_*" />
+    </zip>
+  </target>
+  
+  <target name="packageDistWin64" depends="packageJWildfireJar, packageLauncherJar, packageJWildfireAppletJar" description="Package the distributable zip file for Win64">
+     <copy todir="${dist.win64.dir}/">
+      <fileset dir="${src.dir}/../jres/win64" />
+     </copy>    
+    <copy todir="${dist.win64.dir}/lib">
+       <fileset file="${jwildfire.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="${launcher.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="${applet.jar.name}"/>
+     </copy>
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="CHANGES.txt" />
+       <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
+       <fileset file="README!!!.txt" />
+       <fileset file="README_SUPPORT.txt" />
+       <fileset file="README_APPLET.txt" />
+       <fileset file="README_CHAOTICA_SUPPORT.txt" />
+       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
+       <fileset file="Delphi/JWildfire.exe" />
+    </copy>      
+    <zip destfile="${dist.dll64.name}">
+      <zipfileset dir="${dist.win64.dir}/" excludes="start_*" />
+    </zip>
+  </target>
+  
+  <target name="packageDlls32" description="Package the Win32-dlls">
+    <copy todir="${dist.dll32.dir}/plugins32">
+      <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
+     </copy>
+    <copy todir="${dist.dll32.dir}/lib/x86">
+       <fileset file="${src.dir}/../lib/x86/*.dll" />
+    </copy>    
+    <zip destfile="${dist.dll32.name}">
+      <zipfileset dir="${dist.dll32.dir}/" />
+    </zip>
+  </target>
+  
+  <target name="packageDlls64" description="Package the Win64-dlls">
+    <copy todir="${dist.dll64.dir}/plugins64">
+      <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
+     </copy>
+    <copy todir="${dist.dll64.dir}/lib/x64">
+       <fileset file="${src.dir}/../lib/x64/*.dll" />
+    </copy>    
+    <zip destfile="${dist.dll64.name}">
+      <zipfileset dir="${dist.dll64.dir}/" />
+    </zip>
+  </target>
+   
+  <target name="packageAll" depends="packageDistBase,packageDlls32,packageDlls64,packageDistWin32,packageDistWin64" description="Package all"/>
+  
+	<taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />	
 	
   <target name="izpack">
 	  <izpack input="jwildfire_izpack.xml"
-	    output="${installer.dir}/jwildfire-installer.jar" installerType="standard" inheritAll="true" basedir="${dist.dir}" izPackDir="${izpack.dir}/IzPack/" />
+	    output="${installer.dir}/jwildfire-installer.jar" installerType="standard" inheritAll="true" basedir="${dist.base.dir}" izPackDir="${izpack.dir}/IzPack/" />
   </target>
 	
 </project>
