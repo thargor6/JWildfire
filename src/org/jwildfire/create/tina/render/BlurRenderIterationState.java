@@ -74,10 +74,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
     }
     else {
       AbstractRasterPoint rp = raster[yIdx][xIdx];
-      rp.setRed(rp.getRed() + plotRed * prj.intensity);
-      rp.setGreen(rp.getGreen() + plotGreen * prj.intensity);
-      rp.setBlue(rp.getBlue() + plotBlue * prj.intensity);
-      rp.incCount();
+      rp.addSample(plotRed * prj.intensity, plotGreen * prj.intensity, plotBlue * prj.intensity);
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
           observer.notifyIterationFinished(renderThread, xIdx, yIdx);

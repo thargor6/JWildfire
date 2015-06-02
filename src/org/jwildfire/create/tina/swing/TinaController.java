@@ -4407,7 +4407,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           };
           mainRenderThread = new RenderMainFlameThread(prefs, flame, file, qualProfile, resProfile, finishEvent, mainProgressUpdater);
           enableMainRenderControls();
-          new Thread(mainRenderThread).start();
+          Thread worker = new Thread(mainRenderThread);
+          worker.setPriority(Thread.MIN_PRIORITY);
+          worker.start();
         }
       }
       catch (Throwable ex) {

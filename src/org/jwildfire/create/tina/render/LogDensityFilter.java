@@ -121,7 +121,7 @@ public class LogDensityFilter {
         pFilteredPnt.green = logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
         pFilteredPnt.blue = logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
       }
-      pFilteredPnt.intensity = logScale * point.getCount() * flame.getWhiteLevel();
+      pFilteredPnt.intensity = logScale * pCount * flame.getWhiteLevel();
     }
     else {
       pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
