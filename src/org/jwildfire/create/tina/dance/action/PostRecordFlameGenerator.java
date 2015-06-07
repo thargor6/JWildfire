@@ -75,15 +75,19 @@ public class PostRecordFlameGenerator {
         DancingFlame dancingFlame = flameStack.getFlame();
 
         Flame renderFlame;
-        if (fftData != null) {
-          long currTime = time - timeRenderStarted;
-          short currFFT[] = fftData.getDataByTimeOffset(currTime);
-          Flame transforedFlame = transformer.createTransformedFlame(dancingFlame, currFFT, currTime, thread.getFramesPerSecond());
-          renderFlame = new FlamePreparer(prefs).createRenderFlame(transforedFlame);
+        long currTime = time - timeRenderStarted;
+        short currFFT[];
+        if (fftData == null) {
+          // t.createTransformedFlame() --> motion.computeValue() handles null currFFT values
+          //     if _using_ fftMotion, currFFT == null will result in no change from base offset
+          //     if _not_using_ fftMotion, currFFT is ignored
+          currFFT = null;
         }
         else {
-          renderFlame = new FlamePreparer(prefs).createRenderFlame(dancingFlame.getFlame());
+          currFFT = fftData.getDataByTimeOffset(currTime);
         }
+        Flame transformedFlame = transformer.createTransformedFlame(dancingFlame, currFFT, currTime, thread.getFramesPerSecond());
+        renderFlame = new FlamePreparer(prefs).createRenderFlame(transformedFlame);
 
         flames.add(renderFlame);
         if (time >= timeRenderStarted + nextAction.getTime()) {
