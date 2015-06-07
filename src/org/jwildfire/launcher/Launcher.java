@@ -117,10 +117,11 @@ public class Launcher {
   private void checkForIncludedJRE() {
     String jdk = locateIncludedJRE();
     if (jdk != null && jdk.length() > 0) {
+      getJdkCmb().removeAllItems();
       getJdkCmb().addItem(jdk);
-      getJdkCmb().setSelectedItem(jdk);
-      getJdkCmb().setEnabled(false);
-      getBtnAddJavaRuntime().setEnabled(false);
+      getJdkCmb().setSelectedIndex(0);
+      //      getJdkCmb().setEnabled(false);
+      //      getBtnAddJavaRuntime().setEnabled(false);
     }
   }
 

@@ -579,7 +579,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     int renderId = prepareIFlame();
     try {
       if (displayPreprocessedImageButton.isSelected()) {
-        flamePreviewHelper.renderFlameImage(true, true, 1);
+        flamePreviewHelper.renderFlameImage(true, true, 1, false);
         ImageParams imageParams = getIFlamesFunc().getImageParams();
         imageParams.init(new FlameTransformationContext(null, null, 0));
         SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
@@ -588,7 +588,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           return;
         }
       }
-      flamePreviewHelper.refreshFlameImage(true, false, 1);
+      flamePreviewHelper.refreshFlameImage(true, false, 1, false);
     }
     finally {
       unprepareIFlame(renderId);
@@ -822,7 +822,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   public void renderFlameButton_clicked() {
-    flamePreviewHelper.refreshFlameImage(false, false, 1);
+    flamePreviewHelper.refreshFlameImage(false, false, 1, false);
   }
 
   public void loadImagesButton_clicked() {

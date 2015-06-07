@@ -548,6 +548,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.motionBlurDecaySlider = parameterObject.motionBlurDecaySlider;
     data.flameFPSField = parameterObject.flameFPSField;
 
+    data.tinaOversamplingREd = parameterObject.tinaOversamplingREd;
+    data.tinaOversamplingSlider = parameterObject.tinaOversamplingSlider;
+    data.tinaOversamplingPreviewBtn = parameterObject.tinaOversamplingPreviewBtn;
+
     data.postSymmetryTypeCmb = parameterObject.postSymmetryTypeCmb;
     data.postSymmetryDistanceREd = parameterObject.postSymmetryDistanceREd;
     data.postSymmetryDistanceSlider = parameterObject.postSymmetryDistanceSlider;
@@ -1206,7 +1210,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
-    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, data.tinaOversamplingPreviewBtn.isSelected());
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {

@@ -105,6 +105,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
+  static final String KEY_TINA_EDITOR_SHOW_OVERSAMPLING_IN_PREVIEWS = "tina.editor.show_oversampling_in_previews";
+  static final String KEY_TINA_DEFAULT_OVERSAMPLING = "tina.editor.default_oversampling";
+
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
   public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
@@ -229,6 +232,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Add small shadows to the controls, to increase contrast with background, in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithShadows = true;
+
+  @Property(description = "Show oversampling in preview-renderings, which may slow down preview-rendering a lot", category = PropertyCategory.TINA)
+  private boolean tinaEditorShowOversamplingInPreviews = true;
+
+  @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
+  private int tinaDefaultOversampling = 2;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
@@ -713,6 +722,8 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaAnimationExport = pSrc.tinaIntegrationChaoticaAnimationExport;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
+    tinaEditorShowOversamplingInPreviews = pSrc.tinaEditorShowOversamplingInPreviews;
+    tinaDefaultOversampling = pSrc.tinaDefaultOversampling;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1385,6 +1396,28 @@ public class Prefs extends ManagedObject {
 
   public void setTinaIntegrationChaoticaAnimationExport(boolean pTinaIntegrationChaoticaAnimationExport) {
     tinaIntegrationChaoticaAnimationExport = pTinaIntegrationChaoticaAnimationExport;
+  }
+
+  public boolean isTinaEditorShowOversamplingInPreviews() {
+    return tinaEditorShowOversamplingInPreviews;
+  }
+
+  public void setTinaEditorShowOversamplingInPreviews(boolean pTinaEditorShowOversamplingInPreviews) {
+    tinaEditorShowOversamplingInPreviews = pTinaEditorShowOversamplingInPreviews;
+  }
+
+  public int getTinaDefaultOversampling() {
+    return tinaDefaultOversampling;
+  }
+
+  public void setTinaDefaultOversampling(int pTinaDefaultOversampling) {
+    tinaDefaultOversampling = pTinaDefaultOversampling;
+    if (tinaDefaultOversampling < 1) {
+      tinaDefaultOversampling = 1;
+    }
+    else if (tinaDefaultOversampling > Tools.MAX_OVERSAMPLING) {
+      tinaDefaultOversampling = Tools.MAX_OVERSAMPLING;
+    }
   }
 
 }

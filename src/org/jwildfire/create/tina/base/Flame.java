@@ -25,6 +25,7 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -118,6 +119,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camDOFArea;
   private final MotionCurve camDOFAreaCurve = new MotionCurve();
   private boolean newCamDOF;
+  private int oversampling;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
   private double sampleDensity;
@@ -262,6 +264,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     antialiasRadius = 0.16;
     spatialFilterRadius = 0.0;
     spatialFilterKernel = FilterKernelType.GAUSSIAN;
+    oversampling = Prefs.getPrefs().getTinaDefaultOversampling();
   }
 
   public void resetColoringSettings() {
@@ -681,6 +684,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     lastFilename = pFlame.lastFilename;
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
+    oversampling = pFlame.oversampling;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -744,7 +748,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
-        (camDOFShape != pFlame.camDOFShape) ||
+        (camDOFShape != pFlame.camDOFShape) || (oversampling != pFlame.oversampling) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
         (fabs(camDOFFade - pFlame.camDOFFade) > EPSILON) || !camDOFFadeCurve.isEqual(pFlame.camDOFFadeCurve) ||
@@ -1382,4 +1386,19 @@ public class Flame implements Assignable<Flame>, Serializable {
   public MotionCurve getCamZoomCurve() {
     return camZoomCurve;
   }
+
+  public int getOversampling() {
+    return oversampling;
+  }
+
+  public void setOversampling(int pOversampling) {
+    oversampling = pOversampling;
+    if (oversampling < 1) {
+      oversampling = 1;
+    }
+    else if (oversampling > Tools.MAX_OVERSAMPLING) {
+      oversampling = Tools.MAX_OVERSAMPLING;
+    }
+  }
+
 }

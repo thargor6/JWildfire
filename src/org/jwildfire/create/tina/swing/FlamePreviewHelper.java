@@ -73,7 +73,7 @@ public class FlamePreviewHelper {
     imgPanel.repaint();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pOversamplingInPreview) {
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
     }
@@ -81,7 +81,7 @@ public class FlamePreviewHelper {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
-    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
+    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pOversamplingInPreview);
     if (img != null) {
       imgPanel.setImage(img);
       if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
@@ -111,7 +111,7 @@ public class FlamePreviewHelper {
     }
   }
 
-  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pOversamplingInPreview) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
@@ -133,6 +133,7 @@ public class FlamePreviewHelper {
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
+        int oldOversampling = flame.getOversampling();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -141,21 +142,32 @@ public class FlamePreviewHelper {
           flame.setHeight(info.getImageHeight());
           try {
             FlameRenderer renderer;
+            if (pQuickRender) {
+              flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+              flame.setSpatialFilterRadius(0.0);
+              if (!pOversamplingInPreview) {
+                flame.setOversampling(1);
+              }
+            }
+            else {
+              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
+            }
+
             if (!cfg.isNoControls() && imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
               renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected());
             }
             else {
               renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected(), false);
             }
+
             if (pQuickRender) {
               renderer.setProgressUpdater(null);
-              flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-              flame.setSpatialFilterRadius(0.0);
             }
             else {
               renderer.setProgressUpdater(mainProgressUpdater);
-              flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
             }
+
+            System.err.println(flame.getOversampling());
             renderer.setRenderScale(renderScale);
             long t0 = System.currentTimeMillis();
             RenderedFlame res = renderer.renderFlame(info);
@@ -281,6 +293,7 @@ public class FlamePreviewHelper {
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
+          flame.setOversampling(oldOversampling);
         }
       }
     }

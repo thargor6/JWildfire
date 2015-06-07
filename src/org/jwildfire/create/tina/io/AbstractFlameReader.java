@@ -48,6 +48,7 @@ public class AbstractFlameReader {
   public static final String ATTR_SCALE = "scale";
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
+  public static final String ATTR_OVERSAMPLE = "oversample";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
@@ -219,6 +220,9 @@ public class AbstractFlameReader {
       catch (Exception ex) {
         ex.printStackTrace();
       }
+    }
+    if ((hs = atts.get(ATTR_OVERSAMPLE)) != null) {
+      pFlame.setOversampling(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));

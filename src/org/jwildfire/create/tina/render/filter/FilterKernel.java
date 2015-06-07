@@ -32,12 +32,12 @@ public abstract class FilterKernel {
     return (1.0);
   }
 
-  public double getFilterAdjust(double pFilterRadius) {
+  public double getFilterAdjust(double pFilterRadius, int pOversample) {
     if (pFilterRadius < EPSILON) {
       return 0.0;
     }
     else {
-      int fw = (int) (2.0 * getSpatialSupport() * pFilterRadius);
+      int fw = (int) (2.0 * pOversample * getSpatialSupport() * pFilterRadius);
       int filterSize = fw + 1;
       if (filterSize % 2 == 0)
         filterSize++;
@@ -50,14 +50,14 @@ public abstract class FilterKernel {
     }
   }
 
-  public int getFilterSize(double pFilterRadius) {
+  public int getFilterSize(double pFilterRadius, int pOversample) {
     if (pFilterRadius < EPSILON) {
       return 0;
     }
     else {
-      int fw = (int) (2.0 * getSpatialSupport() * pFilterRadius);
+      int fw = (int) (2.0 * pOversample * getSpatialSupport() * pFilterRadius);
       int filterSize = fw + 1;
-      if (filterSize % 2 == 0)
+      if ((filterSize + pOversample) % 2 != 0)
         filterSize++;
       return filterSize;
     }

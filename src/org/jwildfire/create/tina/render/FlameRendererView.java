@@ -104,10 +104,11 @@ public class FlameRendererView {
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
-    double t0 = borderWidth / pixelsPerUnit;
-    double t1 = borderWidth / pixelsPerUnit;
-    double t2 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
-    double t3 = (2 * maxBorderWidth - borderWidth) / pixelsPerUnit;
+    int oversample = flame.getOversampling();
+    double t0 = borderWidth / (oversample * pixelsPerUnit);
+    double t1 = borderWidth / (oversample * pixelsPerUnit);
+    double t2 = (2 * maxBorderWidth - borderWidth) / (oversample * pixelsPerUnit);
+    double t3 = (2 * maxBorderWidth - borderWidth) / (oversample * pixelsPerUnit);
 
     camX0 = corner_x - t0;
     camY0 = corner_y - t1;

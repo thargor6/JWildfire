@@ -529,6 +529,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void enableDEFilterUI() {
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
+    enableControl(data.tinaOversamplingREd, false);
   }
 
   public void enableShadingUI() {
@@ -653,6 +654,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
+
+      data.tinaOversamplingREd.setText(String.valueOf(getCurrFlame().getOversampling()));
+      data.tinaOversamplingSlider.setValue(getCurrFlame().getOversampling());
 
       data.gammaThresholdREd.setText(String.valueOf(getCurrFlame().getGammaThreshold()));
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
@@ -1490,5 +1494,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void dofDOFParam6REd_changed() {
     flameTextFieldChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
+  }
+
+  public void oversamplingSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
+  }
+
+  public void oversamplingREd_changed() {
+    flameTextFieldChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
   }
 }

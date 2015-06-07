@@ -138,11 +138,11 @@ public class PrefsReader {
         pPrefs.setTinaRandGenDualityPreferedVariationProbability2(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2()));
         pPrefs.setTinaOverwriteMotionBlurTimeStep(getDoubleProperty(props, Prefs.KEY_TINA_OVERWRITE_MOTIONBLUR_TIMESTEP, pPrefs.getTinaOverwriteMotionBlurTimeStep()));
         pPrefs.setTinaOverwriteMotionBlurLength(getIntProperty(props, Prefs.KEY_TINA_OVERWRITE_MOTIONBLUR_LENGTH, pPrefs.getTinaOverwriteMotionBlurLength()));
-
+        pPrefs.setTinaDefaultOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_OVERSAMPLING, pPrefs.getTinaDefaultOversampling()));
+        pPrefs.setTinaEditorShowOversamplingInPreviews(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_SHOW_OVERSAMPLING_IN_PREVIEWS, pPrefs.isTinaEditorShowOversamplingInPreviews()));
         pPrefs.setTinaMutaGenMutationTypesUser1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER1, pPrefs.getTinaMutaGenMutationTypesUser1()));
         pPrefs.setTinaMutaGenMutationTypesUser2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2, pPrefs.getTinaMutaGenMutationTypesUser2()));
         pPrefs.setTinaMutaGenMutationTypesUser3(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3, pPrefs.getTinaMutaGenMutationTypesUser3()));
-
         pPrefs.setTinaMutaGenMutationTypeHoriz1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ1, pPrefs.getTinaMutaGenMutationTypeHoriz1()));
         pPrefs.setTinaMutaGenMutationTypeHoriz2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ2, pPrefs.getTinaMutaGenMutationTypeHoriz2()));
         pPrefs.setTinaMutaGenMutationTypeVert1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1, pPrefs.getTinaMutaGenMutationTypeVert1()));
