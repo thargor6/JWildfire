@@ -188,7 +188,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     if (currFlame != null) {
       try {
         String filename = qsaveFilenameGen.generateFilename("jwf_ir_current.flame");
-        new FlameWriter().writeFlame(currFlame, filename);
+        if (filename != null) {
+          new FlameWriter().writeFlame(currFlame, filename);
+        }
       }
       catch (Exception ex) {
         errorHandler.handleError(ex);

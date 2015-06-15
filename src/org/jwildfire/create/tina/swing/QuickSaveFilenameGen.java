@@ -36,6 +36,9 @@ public class QuickSaveFilenameGen {
 
   public String generateFilename(String pFilename) {
     String res = prefs.getOutputFlamePath();
+    if (res == null) {
+      return null;
+    }
     if (res != null && res.length() > 0 && res.charAt(res.length() - 1) != '\\' && res.charAt(res.length() - 1) != '/' && res.charAt(res.length() - 1) != ':')
       res += File.separator;
     return res + pFilename;
