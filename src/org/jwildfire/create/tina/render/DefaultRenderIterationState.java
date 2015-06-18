@@ -109,13 +109,17 @@ public class DefaultRenderIterationState extends RenderIterationState {
     xf = layer.getXForms().get(0);
     transformPoint();
     for (int i = 0; i <= Constants.INITIAL_ITERATIONS; i++) {
-      xf = xf.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
+      xf = selectNextXForm(xf);
       if (xf == null) {
         xf = layer.getXForms().get(0);
         return;
       }
       transformPoint();
     }
+  }
+
+  protected XForm selectNextXForm(XForm pFrom) {
+    return pFrom.getNextAppliedXFormTable()[randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE)];
   }
 
   public void validateState() {
@@ -125,14 +129,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
-    int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
-    if (xf == null) {
-      return;
-    }
-    xf = xf.getNextAppliedXFormTable()[nextXForm];
-    if (xf == null) {
-      return;
-    }
+    xf = selectNextXForm(xf);
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
       return;
@@ -414,8 +411,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
-    raster[yIdx][xIdx].addSample(plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
-
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);
@@ -423,12 +418,24 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
+  long t0 = System.currentTimeMillis();
+
   protected void applySamplesToRaster() {
     for (int i = 0; i < plotBufferIdx; i++) {
       PlotSample sample = plotBuffer[i];
       raster[sample.y][sample.x].addSample(sample.r, sample.g, sample.b);
     }
     plotBufferIdx = 0;
+    long t1 = System.currentTimeMillis();
+    if (t1 - t0 > 250) {
+      try {
+        Thread.sleep(3);
+      }
+      catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      t0 = t1;
+    }
   }
 
   private PlotSample[] initPlotBuffer() {

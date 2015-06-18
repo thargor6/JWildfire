@@ -1,7 +1,6 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -73,8 +72,10 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
       }
     }
     else {
-      AbstractRasterPoint rp = raster[yIdx][xIdx];
-      rp.addSample(plotRed * prj.intensity, plotGreen * prj.intensity, plotBlue * prj.intensity);
+      plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * prj.intensity, plotGreen * prj.intensity, plotBlue * prj.intensity);
+      if (plotBufferIdx >= plotBuffer.length) {
+        applySamplesToRaster();
+      }
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
           observer.notifyIterationFinished(renderThread, xIdx, yIdx);
