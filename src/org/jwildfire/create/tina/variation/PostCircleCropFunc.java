@@ -71,7 +71,7 @@ public class PostCircleCropFunc extends VariationFunc {
 
     pVarTP.doHide = false;
     if (cr0 && esc) {
-      //      pVarTP.x = pVarTP.y = 0;
+      pVarTP.x = pVarTP.y = 0;
       pVarTP.doHide = true;
     }
     else if (cr0 && !esc) {

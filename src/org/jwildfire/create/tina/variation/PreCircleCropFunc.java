@@ -71,7 +71,7 @@ public class PreCircleCropFunc extends VariationFunc {
 
     pAffineTP.doHide = false;
     if (cr0 && esc) {
-      //      pAffineTP.x = pAffineTP.y = 0;
+      pAffineTP.x = pAffineTP.y = 0;
       pAffineTP.doHide = true;
     }
     else if (cr0 && !esc) {
