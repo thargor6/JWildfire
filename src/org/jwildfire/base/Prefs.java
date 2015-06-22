@@ -77,8 +77,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
-  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.2";
-  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.2";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.3";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.3";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
@@ -114,7 +114,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
-  static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.2";
+  static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.3";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -234,7 +234,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Show oversampling in preview-renderings, which may slow down preview-rendering a lot", category = PropertyCategory.TINA)
-  private boolean tinaEditorShowOversamplingInPreviews = true;
+  private boolean tinaEditorShowOversamplingInPreviews = false;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
   private int tinaDefaultOversampling = 2;
@@ -418,10 +418,10 @@ public class Prefs extends ManagedObject {
   private boolean tinaDefaultBGTransparency = false;
 
   @Property(description = "Default antialiasing amount (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
-  private double tinaDefaultAntialiasingAmount = 0.5;
+  private double tinaDefaultAntialiasingAmount = 0.2;
 
   @Property(description = "Default antialiasing radius (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
-  private double tinaDefaultAntialiasingRadius = 0.16;
+  private double tinaDefaultAntialiasingRadius = 0.05;
 
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
