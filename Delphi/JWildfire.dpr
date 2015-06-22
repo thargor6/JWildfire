@@ -13,15 +13,35 @@ var
   JarPath: String;
   JavaOptions: String;
   Cmd: String;
+  DebugMode: Boolean;
+  JavaCmd, LocalJava: String;
+
 begin
+  DebugMode := (ParamCount > 0) and (AnsiLowerCase(ParamStr(1))='-debug');
   WorkingDir := ExtractFilePath(Application.ExeName);
   JarPath := WorkingDir+JarName;
+  JavaCmd := 'java.exe';
+  LocalJava := WorkingDir+'jre\bin\'+JavaCmd;
+
+  if FileExists(LocalJava) then begin
+    if Pos(' ', LocalJava) > 0 then
+      JavaCmd := '"'+LocalJava+'"'
+    else
+      JavaCmd := LocalJava;
+  end;
+
+
+  if Pos(' ', JarPath) > 1 then
+    Cmd := JavaCmd+' -jar "'+JarPath+'"'
+  else
+    Cmd := JavaCmd+' -jar '+JarPath;
+
+  if(DebugMode) then
+    ShowMessage(Cmd);
+
   if not FileExists(JarPath) then
     raise Exception.Create('JWildfire launcher archive not found (Expected path: <'+JarPath+'>)');
-  if Pos(' ', JarPath) > 1 then
-    Cmd := 'java -jar "'+JarPath+'"'
-  else
-    Cmd := 'java -jar '+JarPath;
+
   if ShellExecute(Application.Handle,
                  'open',
                  PChar('cmd'),

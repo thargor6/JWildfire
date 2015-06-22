@@ -29,6 +29,9 @@ JWildfireC/*.txt
 JWildfireC/*.bat
 JWildfireC/*.flame
 JWildfireC/src/jwf_FastMath.cpp
+Delphi/
+Delphi/old/
+Delphi/new/
 Delphi/JWildfire.cfg
 Delphi/JWildfire.dof
 Delphi/JWildfire.dsk
@@ -44,6 +47,7 @@ src/org/jwildfire/create/tina/variation/converter/*
 Sample.java
 plugins32/*
 plugins64/*
+jres/*
 
 
 lib/colt*
@@ -55,6 +59,12 @@ lib/JTatt*
 lib/jtrans*
 lib/sunflow*old*
 lib/svg*
+
+src/demos/*
+
+
+JWildfire.sh
+build_new.xml
 
 
 /bin/
