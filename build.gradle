@@ -35,7 +35,7 @@ dependencies {
     compile 'edu.emory.mathcs:JTransforms:2.4'
     compile 'org.scijava:jep:2.4.2'
     compile 'com.jtattoo:JTattoo:1.6.11'
-    compile fileTree(dir: 'lib')
+    compile fileTree(dir: 'lib').matching { include '*.jar'}
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile 'commons-io:commons-io:2.4'
 }
@@ -70,5 +70,5 @@ test {
   maxHeapSize = "512m"
 }
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.4'
 }
