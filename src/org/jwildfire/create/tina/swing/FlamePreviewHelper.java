@@ -144,8 +144,8 @@ public class FlamePreviewHelper {
             FlameRenderer renderer;
             if (pQuickRender) {
               flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-              flame.setSpatialFilterRadius(0.0);
               if (!pOversamplingInPreview) {
+                flame.setSpatialFilterRadius(0.0);
                 flame.setOversampling(1);
               }
             }
@@ -167,7 +167,6 @@ public class FlamePreviewHelper {
               renderer.setProgressUpdater(mainProgressUpdater);
             }
 
-            System.err.println(flame.getOversampling());
             renderer.setRenderScale(renderScale);
             long t0 = System.currentTimeMillis();
             RenderedFlame res = renderer.renderFlame(info);
@@ -322,7 +321,7 @@ public class FlamePreviewHelper {
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
-        double oldAntialiasAmount = flame.getAntialiasAmount();
+        // TODO XXX
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -340,7 +339,6 @@ public class FlamePreviewHelper {
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
             flame.setSpatialFilterRadius(0.0);
-            flame.setAntialiasAmount(0.0);
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
@@ -354,7 +352,6 @@ public class FlamePreviewHelper {
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
-          flame.setAntialiasAmount(oldAntialiasAmount);
         }
       }
     }

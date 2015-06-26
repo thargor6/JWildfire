@@ -29,7 +29,7 @@ import org.jwildfire.create.tina.meshgen.marchingcubes.GenerateFacesThread;
 import org.jwildfire.create.tina.meshgen.marchingcubes.ImageStackSampler;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshWriter;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point;
+import org.jwildfire.create.tina.meshgen.marchingcubes.Point3f;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
 public class GenerateMeshThread implements Runnable {
@@ -169,10 +169,10 @@ public class GenerateMeshThread implements Runnable {
     }
 
     // Merge result
-    List<Point> faces = new ArrayList<Point>();
-    List<Point> normals;
+    List<Point3f> faces = new ArrayList<Point3f>();
+    List<Point3f> normals;
     if (withNormals) {
-      normals = new ArrayList<Point>();
+      normals = new ArrayList<Point3f>();
       for (GenerateFacesThread thread : threads) {
         faces.addAll(thread.getFaces());
         normals.addAll(thread.getNormals());
