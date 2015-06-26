@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,66 +18,43 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.log10;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
+import org.jwildfire.create.tina.base.raster.RasterPointFloat;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-import org.jwildfire.create.tina.render.filter.FilterKernel;
+import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
-public class LogDensityFilter {
-  private final Flame flame;
+public class LogDensityFilter extends FilterHolder {
   private final ColorFunc colorFunc;
 
   private AbstractRasterPoint[][] raster;
   private int rasterWidth, rasterHeight, rasterSize;
   private final int PRECALC_LOG_ARRAY_SIZE = 512;
-  private double filter[][];
-  private int noiseFilterSize;
   private double precalcLogArray[];
   private double k1, k2;
-  private final FilterKernel filterKernel;
   private double motionBlurScl;
-  private final int oversample;
+  private final AbstractRandomGenerator randGen;
+  private final boolean jitter;
+  private final int colorOversampling;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
-    flame = pFlame;
-    oversample = pFlame.getOversampling();
+    super(pFlame);
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
-    filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
-    noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius(), oversample);
-    filter = new double[noiseFilterSize][noiseFilterSize];
-    initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
     motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
-  }
-
-  private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
-    double adjust = filterKernel.getFilterAdjust(pFilterRadius, oversample);
-    for (int i = 0; i < pFilterSize; i++) {
-      for (int j = 0; j < pFilterSize; j++) {
-        double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
-        double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
-      }
+    // TODO
+    jitter = true;
+    colorOversampling = 3;
+    // 
+    if (jitter) {
+      randGen = new MarsagliaRandomGenerator();
+      randGen.randomize(pFlame.hashCode());
     }
-    // normalize
-    {
-      double t = 0.0;
-      for (int i = 0; i < pFilterSize; i++) {
-        for (int j = 0; j < pFilterSize; j++) {
-          t += pFilter[i][j];
-        }
-      }
-      for (int i = 0; i < pFilterSize; i++) {
-        for (int j = 0; j < pFilterSize; j++) {
-          pFilter[i][j] = pFilter[i][j] / t;
-        }
-      }
+    else {
+      randGen = null;
     }
-  }
-
-  public int getNoiseFilterSize() {
-    return noiseFilterSize;
   }
 
   public void setRaster(AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
@@ -97,46 +74,12 @@ public class LogDensityFilter {
     }
   }
 
-  //  public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
-  //    AbstractRasterPoint point = getRasterPoint(pX, pY);
-  //    double logScale;
-  //    long pCount = point.getCount();
-  //    if (pCount < precalcLogArray.length) {
-  //      logScale = precalcLogArray[(int) pCount];
-  //    }
-  //    else {
-  //      logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
-  //    }
-  //    if (pCount > 0) {
-  //      if (colorFunc == ColorFunc.NULL) {
-  //        pFilteredPnt.red = logScale * point.getRed();
-  //        pFilteredPnt.green = logScale * point.getGreen();
-  //        pFilteredPnt.blue = logScale * point.getBlue();
-  //      }
-  //      else {
-  //        final double scale = ChannelMixerCurves.FILTER_SCALE;
-  //        double rawR = point.getRed() * scale / pCount;
-  //        double rawG = point.getGreen() * scale / pCount;
-  //        double rawB = point.getBlue() * scale / pCount;
-  //
-  //        pFilteredPnt.red = logScale * colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
-  //        pFilteredPnt.green = logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
-  //        pFilteredPnt.blue = logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
-  //      }
-  //      pFilteredPnt.intensity = logScale * pCount * flame.getWhiteLevel();
-  //    }
-  //    else {
-  //      pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
-  //      pFilteredPnt.intensity = 0;
-  //    }
-  //  }
-
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
     pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
     pFilteredPnt.intensity = 0;
     for (int px = 0; px < oversample; px++) {
       for (int py = 0; py < oversample; py++) {
-        AbstractRasterPoint point = getRasterPoint(pX * oversample + px, pY * oversample + py);
+        AbstractRasterPoint point = getSample(pX * oversample + px, pY * oversample + py);
         double logScale;
         long pCount = point.getCount();
         if (pCount < precalcLogArray.length) {
@@ -169,11 +112,32 @@ public class LogDensityFilter {
 
   private AbstractRasterPoint emptyRasterPoint = new RasterPoint();
 
-  private AbstractRasterPoint getRasterPoint(int pX, int pY) {
+  private AbstractRasterPoint readSample(int pX, int pY) {
     if (pX < 0 || pX >= rasterWidth || pY < 0 || pY >= rasterHeight)
       return emptyRasterPoint;
     else
       return raster[pY][pX];
+  }
+
+  private AbstractRasterPoint getSample(int pX, int pY) {
+    if (jitter) {
+      final double epsilon = 0.01;
+      double x = epsilon + randGen.random() * (0.5 - 2 * epsilon);
+      double y = epsilon + randGen.random() * (0.5 - 2 * epsilon);
+      AbstractRasterPoint lu = readSample(pX, pY);
+      AbstractRasterPoint ru = readSample(pX + 1, pY);
+      AbstractRasterPoint lb = readSample(pX, pY + 1);
+      AbstractRasterPoint rb = readSample(pX + 1, pY + 1);
+      AbstractRasterPoint res = new RasterPointFloat();
+      res.setRed(Tools.blerp(lu.getRed(), ru.getRed(), lb.getRed(), rb.getRed(), x, y));
+      res.setGreen(Tools.blerp(lu.getGreen(), ru.getGreen(), lb.getGreen(), rb.getGreen(), x, y));
+      res.setBlue(Tools.blerp(lu.getBlue(), ru.getBlue(), lb.getBlue(), rb.getBlue(), x, y));
+      res.setCount(Math.round(Tools.blerp(lu.getCount(), ru.getCount(), lb.getCount(), rb.getCount(), x, y)));
+      return res;
+    }
+    else {
+      return readSample(pX, pY);
+    }
   }
 
   public double calcDensity(long pSampleCount, long pRasterSize) {
@@ -193,24 +157,27 @@ public class LogDensityFilter {
         pFilteredPnt.clear();
         for (int i = 0; i < noiseFilterSize; i++) {
           for (int j = 0; j < noiseFilterSize; j++) {
-            AbstractRasterPoint point = getRasterPoint(pX * oversample + j, pY * oversample + i);
-            long count = point.getCount();
-            int pIdx = (int) count;
-            if (pIdx > 0) {
-              double logScale;
-              if (pIdx < precalcLogArray.length) {
-                logScale = precalcLogArray[pIdx];
+            for (int c = 0; c < colorOversampling; c++) {
+              AbstractRasterPoint point = getSample(pX * oversample + j, pY * oversample + i);
+              long count = point.getCount();
+              int pIdx = (int) count;
+              if (pIdx > 0) {
+                double logScale;
+                if (pIdx < precalcLogArray.length) {
+                  logScale = precalcLogArray[pIdx];
+                }
+                else {
+                  logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
+                }
+                pFilteredPnt.red += filter[i][j] * logScale * point.getRed() / (double) colorOversampling;
+                pFilteredPnt.green += filter[i][j] * logScale * point.getGreen() / (double) colorOversampling;
+                pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue() / (double) colorOversampling;
+                pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel() / (double) colorOversampling;
               }
-              else {
-                logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
-              }
-              pFilteredPnt.red += filter[i][j] * logScale * point.getRed();
-              pFilteredPnt.green += filter[i][j] * logScale * point.getGreen();
-              pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue();
-              pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel();
             }
           }
         }
+        pFilteredPnt.clip();
       }
       else {
         pFilteredPnt.clear();
@@ -218,7 +185,7 @@ public class LogDensityFilter {
         double pCount = 0.0, avgLogScale = 0.0;
         for (int i = 0; i < noiseFilterSize; i++) {
           for (int j = 0; j < noiseFilterSize; j++) {
-            AbstractRasterPoint point = getRasterPoint(pX + j, pY + i);
+            AbstractRasterPoint point = getSample(pX + j, pY + i);
             long count = point.getCount();
             int pIdx = (int) count;
             if (pIdx > 0) {
@@ -253,7 +220,7 @@ public class LogDensityFilter {
       pFilteredPnt.intensity = 0;
       for (int px = 0; px < oversample; px++) {
         for (int py = 0; py < oversample; py++) {
-          AbstractRasterPoint point = getRasterPoint(pX * oversample + px, pY * oversample + py);
+          AbstractRasterPoint point = getSample(pX * oversample + px, pY * oversample + py);
           double logScale;
           long pCount = point.getCount();
           if (pCount < precalcLogArray.length) {

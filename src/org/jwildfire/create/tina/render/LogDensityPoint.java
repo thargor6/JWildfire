@@ -26,4 +26,19 @@ public class LogDensityPoint {
     red = green = blue = intensity = 0.0;
   }
 
+  public void clip() {
+    if (red < 0.0) {
+      red = 0.0;
+    }
+    if (green < 0.0) {
+      green = 0.0;
+    }
+    if (blue < 0.0) {
+      blue = 0.0;
+    }
+    if (intensity < 0.0) {
+      intensity = 0.0;
+    }
+  }
+
 }
