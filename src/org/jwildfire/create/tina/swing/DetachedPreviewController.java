@@ -353,11 +353,10 @@ public class DetachedPreviewController implements IterationObserver {
   private final static int STATS_UPDATE_INTERVAL = 24;
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 3;
   private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
-  private final static int MAX_UPDATE_INC_INTERVAL = 20;
+  private final static int MAX_UPDATE_INC_INTERVAL = 200;
 
   private InteractiveRendererDisplayUpdater createDisplayUpdater() {
-    //    return new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
-    return new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
+    return prefs.isTinaOptimizedRenderingIR() ? new BufferedInteractiveRendererDisplayUpdater(imageRootPanel, image, true) : new DefaultInteractiveRendererDisplayUpdater(imageRootPanel, image, true);
   }
 
 }

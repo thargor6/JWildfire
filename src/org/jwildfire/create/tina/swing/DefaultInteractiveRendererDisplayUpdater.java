@@ -40,9 +40,11 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
 
   @Override
   public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+    int x = pX / pEventSource.getOversample();
+    int y = pY / pEventSource.getOversample();
     sampleCount++;
-    if (showPreview && pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
-      image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
+    if (showPreview && x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
+      image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(x, y));
     }
   }
 

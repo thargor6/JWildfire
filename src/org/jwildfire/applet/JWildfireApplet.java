@@ -256,8 +256,10 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   @Override
   public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     incSampleCount();
-    if (pX >= 0 && pX < image.getImageWidth() && pY >= 0 && pY < image.getImageHeight()) {
-      image.setARGB(pX, pY, pEventSource.getTonemapper().tonemapSample(pX, pY));
+    int x = pX / pEventSource.getOversample();
+    int y = pY / pEventSource.getOversample();
+    if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
+      image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(x, y));
       if (sampleCount % 2000 == 0) {
         updateImage();
       }

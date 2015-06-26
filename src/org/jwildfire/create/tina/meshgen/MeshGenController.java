@@ -47,6 +47,8 @@ import javax.swing.JTextPane;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.eden.sunflow.ExampleScenes;
+import org.jwildfire.create.eden.sunflow.SunflowSceneBuilder;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Shading;
@@ -57,8 +59,6 @@ import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshPreviewRenderer;
-import org.jwildfire.create.tina.meshgen.sunflow.ExampleScenes;
-import org.jwildfire.create.tina.meshgen.sunflow.SceneBuilder;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -595,8 +595,8 @@ public class MeshGenController {
       gradient.setColor(i, 225, 225, 225);
     }
     res.getFirstLayer().setPalette(gradient);
-    res.setAntialiasAmount(RenderSlicesThread.DFLT_ANTIALIAS_AMOUNT);
-    res.setAntialiasRadius(RenderSlicesThread.DFLT_ANTIALIAS_RADIUS);
+    // TODO XXX
+    //res.setAntialiasAmount(RenderSlicesThread.DFLT_ANTIALIAS_AMOUNT);
     return res;
   }
 
@@ -1232,7 +1232,7 @@ public class MeshGenController {
   private void exportMeshToSunflow(Mesh pMesh, String pFilename) {
     try {
       long t0 = System.currentTimeMillis();
-      SceneBuilder scene = ExampleScenes.getExampleScene1();
+      SunflowSceneBuilder scene = ExampleScenes.getExampleScene1();
       scene.addMesh()
           .withMesh(pMesh)
           .withName("generated mesh")

@@ -108,7 +108,7 @@ public class GammaCorrectionFilter {
         alpha = pow(logDensityPnt.intensity, gamma);
       }
       logScl = vibInt * alpha / logDensityPnt.intensity;
-      int alphaInt = (int) (alpha * 256 + 0.5);
+      int alphaInt = (int) (alpha * 255 + 0.5);
       if (alphaInt < 0)
         alphaInt = 0;
       else if (alphaInt > 255)

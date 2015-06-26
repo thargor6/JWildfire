@@ -219,7 +219,6 @@ public class BatchRendererController implements JobRenderThreadController {
   @Override
   public void onJobFinished() {
     jobRenderThread = null;
-    System.err.println("JOB FINISHED");
     enableJobRenderControls();
   }
 

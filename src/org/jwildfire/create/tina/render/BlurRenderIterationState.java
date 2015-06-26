@@ -63,7 +63,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
 
               if (observers != null && observers.size() > 0) {
                 for (IterationObserver observer : observers) {
-                  observer.notifyIterationFinished(renderThread, k, l);
+                  observer.notifyIterationFinished(renderThread, l, k);
                 }
               }
             }
