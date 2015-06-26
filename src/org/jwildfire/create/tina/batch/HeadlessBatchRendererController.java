@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.batch;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +30,6 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.ProgressUpdater;
-
-import cern.colt.Arrays;
 
 /**
  * This is a headless controller used for commandline or web server based rendering (Swing components not needed)
