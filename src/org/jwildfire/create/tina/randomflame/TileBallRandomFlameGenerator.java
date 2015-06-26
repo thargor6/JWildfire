@@ -295,7 +295,7 @@ public class TileBallRandomFlameGenerator extends RandomFlameGenerator {
   private void randomizeParams(VariationFunc var) {
     int rndParams = Tools.FTOI(Math.random() * var.getParameterNames().length);
     for (int i = 0; i < rndParams; i++) {
-      int idx = (int) Math.random() * var.getParameterNames().length;
+      int idx = (int) (Math.random() * var.getParameterNames().length);
       Object oldVal = var.getParameterValues()[idx];
       double pAmount = 0.1 + Math.random();
       if (oldVal instanceof Integer) {
