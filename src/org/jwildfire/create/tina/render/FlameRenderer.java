@@ -442,7 +442,7 @@ public class FlameRenderer {
       forceAbort = false;
       iterate(0, 1, renderFlames, null, 1.0, 1);
       if (!forceAbort) {
-        if (flame.getSampleDensity() <= 10.0 || renderScale > 1) {
+        if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
           renderImageSimple(img);
         }
         else {
@@ -474,17 +474,23 @@ public class FlameRenderer {
       throw new IllegalStateException();
     }
 
-    if (pImage != null) {
-      GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
-      for (int i = 0; i < pImage.getImageHeight(); i++) {
-        for (int j = 0; j < pImage.getImageWidth(); j++) {
+    renderImage(pImage, logDensityPnt);
+    renderHDRImage(pHDRImage, logDensityPnt);
+    renderHDRIntensityMap(pHDRIntensityMap, logDensityPnt);
+  }
+
+  private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap, LogDensityPoint logDensityPnt) {
+    if (pHDRIntensityMap != null) {
+      for (int i = 0; i < pHDRIntensityMap.getImageHeight(); i++) {
+        for (int j = 0; j < pHDRIntensityMap.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-          pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          pHDRIntensityMap.setRGB(j, i, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity);
         }
       }
     }
+  }
 
+  private void renderHDRImage(SimpleHDRImage pHDRImage, LogDensityPoint logDensityPnt) {
     if (pHDRImage != null) {
       GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
       for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
@@ -495,15 +501,89 @@ public class FlameRenderer {
         }
       }
     }
+  }
 
-    if (pHDRIntensityMap != null) {
-      for (int i = 0; i < pHDRIntensityMap.getImageHeight(); i++) {
-        for (int j = 0; j < pHDRIntensityMap.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          pHDRIntensityMap.setRGB(j, i, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity);
+  private void renderImage(SimpleImage pImage, LogDensityPoint logDensityPnt) {
+    if (pImage != null) {
+      int threadCount = prefs.getTinaRenderThreads() - 1;
+      if (threadCount < 1)
+        threadCount = 1;
+      if (threadCount == 1 || pImage.getImageHeight() < 32 * threadCount) {
+        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
+        for (int i = 0; i < pImage.getImageHeight(); i++) {
+          for (int j = 0; j < pImage.getImageWidth(); j++) {
+            logDensityFilter.transformPoint(logDensityPnt, j, i);
+            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
+            pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          }
+        }
+      }
+      else {
+        int rowsPerThread = pImage.getImageHeight() / threadCount;
+        List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
+        for (int i = 0; i < threadCount; i++) {
+          int startRow = i * rowsPerThread;
+          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+          RenderImageThread thread = new RenderImageThread(startRow, endRow, pImage);
+          threads.add(thread);
+          thread.run();
+        }
+        while (true) {
+          boolean ready = true;
+          for (RenderImageThread t : threads) {
+            if (!t.isDone()) {
+              ready = false;
+              break;
+            }
+          }
+          if (!ready) {
+            try {
+              Thread.sleep(1);
+            }
+            catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+          }
+          else
+            break;
         }
       }
     }
+  }
+
+  public class RenderImageThread implements Runnable {
+    private final int startRow, endRow;
+    private final LogDensityPoint logDensityPnt;
+    private final GammaCorrectedRGBPoint rbgPoint;
+    private final SimpleImage img;
+    private boolean done;
+
+    public RenderImageThread(int pStartRow, int pEndRow, SimpleImage pImg) {
+      startRow = pStartRow;
+      endRow = pEndRow;
+      logDensityPnt = new LogDensityPoint();
+      rbgPoint = new GammaCorrectedRGBPoint();
+      img = pImg;
+      done = false;
+    }
+
+    @Override
+    public void run() {
+      done = false;
+      for (int i = startRow; i < endRow; i++) {
+        for (int j = 0; j < img.getImageWidth(); j++) {
+          logDensityFilter.transformPoint(logDensityPnt, j, i);
+          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
+          img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+        }
+      }
+      done = true;
+    }
+
+    public boolean isDone() {
+      return done;
+    }
+
   }
 
   public class RenderImageSimpleScaledThread implements Runnable {
@@ -705,9 +785,8 @@ public class FlameRenderer {
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     int SliceThicknessMultiplier = pSliceThicknessMod > MathLib.EPSILON && pSliceThicknessSamples > 0 ? pSliceThicknessSamples : 1;
-    int oversample = flame.getOversampling();
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier + 0.5)) / (long) (oversample);
-    int PROGRESS_STEPS = 25;
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier + 0.5));
+    int PROGRESS_STEPS = 75;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
       progressUpdater.initProgress(progressChangePerPhase * progressDisplayPhaseCount);

@@ -20,11 +20,8 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -427,9 +424,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
     plotBufferIdx = 0;
     long t1 = System.currentTimeMillis();
-    if (t1 - t0 > 250) {
+    if (t1 - t0 > 100) {
       try {
-        Thread.sleep(3);
+        Thread.sleep(2);
       }
       catch (InterruptedException e) {
         e.printStackTrace();
@@ -620,24 +617,12 @@ public class DefaultRenderIterationState extends RenderIterationState {
       if (q.doHide || !view.project(q, prj) || q.isNaN())
         return;
       int xIdx, yIdx;
-      if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
-        double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
-        double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-          return;
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-        if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-          return;
-      }
-      else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        if (xIdx < 0 || xIdx >= renderer.rasterWidth)
-          return;
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-        if (yIdx < 0 || yIdx >= renderer.rasterHeight)
-          return;
-      }
+      xIdx = (int) (view.bws * prj.x + 0.5);
+      if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+        return;
+      yIdx = (int) (view.bhs * prj.y + 0.5);
+      if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+        return;
       double intensity = prj.intensity * layer.getWeight();
       plotPoint(xIdx, yIdx, intensity);
     }

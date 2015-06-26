@@ -33,6 +33,7 @@ public abstract class AbstractRenderThread implements Runnable {
   protected final double sliceThicknessMod;
   protected final int sliceThicknessSamples;
   protected final long samples;
+  protected final int oversample;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
   protected boolean forceAbort;
@@ -58,6 +59,7 @@ public abstract class AbstractRenderThread implements Runnable {
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
     bgImagefile = flame.getBGImageFilename();
+    oversample = flame.getOversampling();
     ctx = new FlameTransformationContext(pRenderer, randGen, flame.getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());
@@ -157,5 +159,9 @@ public abstract class AbstractRenderThread implements Runnable {
 
   public String getBgImagefile() {
     return bgImagefile;
+  }
+
+  public int getOversample() {
+    return oversample;
   }
 }
