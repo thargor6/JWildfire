@@ -16,21 +16,31 @@
 */
 package org.jwildfire.create.eden.scene;
 
-import java.util.List;
+import org.jwildfire.create.eden.scene.material.Material;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class VisibleSceneElement extends PositionableSceneElement implements Cloneable {
+  private String material = Material.MATERIAL_SHINY;
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public VisibleSceneElement(PositionableSceneElement pParent) {
+    super(pParent);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public String getMaterial() {
+    return material;
   }
 
+  public void setMaterial(String pMaterial) {
+    material = pMaterial;
+  }
+
+  @Override
+  public VisibleSceneElement clone() throws CloneNotSupportedException {
+    VisibleSceneElement copy = (VisibleSceneElement) super.clone();
+    PositionableSceneElement parent = getParent();
+    while (!(parent instanceof SceneElementGroup)) {
+      parent = parent.getParent();
+    }
+    ((SceneElementGroup) parent).getElements().add(copy);
+    return copy;
+  }
 }

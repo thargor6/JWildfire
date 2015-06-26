@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,16 +14,20 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.primitive;
+package org.jwildfire.create.eden.scene.primitive;
 
-import org.jwildfire.create.eden.group.GroupMember;
+import org.jwildfire.create.eden.base.Size3f;
+import org.jwildfire.create.eden.scene.PositionableSceneElement;
+import org.jwildfire.create.eden.scene.VisibleSceneElement;
 
-public interface Primitive extends GroupMember {
+public class Sphere extends VisibleSceneElement {
 
-  public Point getPosition();
+  public Sphere(PositionableSceneElement pParent) {
+    super(pParent);
+  }
 
-  public Point getRotate();
-
-  public Point getSize();
+  public void setRadius(float pRadius) {
+    setSize(new Size3f(pRadius, pRadius, pRadius));
+  }
 
 }

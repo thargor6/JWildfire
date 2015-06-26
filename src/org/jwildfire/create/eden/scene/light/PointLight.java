@@ -14,23 +14,33 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.scene.light;
 
-import java.util.List;
+import org.jwildfire.create.eden.base.Color3f;
+import org.jwildfire.create.eden.scene.PositionableSceneElement;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class PointLight extends PositionableSceneElement {
+  private Color3f color = new Color3f(1.0, 1.0, 1.0);
+  private double intensity = 1.0;
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public PointLight(PositionableSceneElement pParent) {
+    super(pParent);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public Color3f getColor() {
+    return color;
+  }
+
+  public void setColor(Color3f pColor) {
+    color = pColor;
+  }
+
+  public double getIntensity() {
+    return intensity;
+  }
+
+  public void setIntensity(double pIntensity) {
+    intensity = pIntensity;
   }
 
 }

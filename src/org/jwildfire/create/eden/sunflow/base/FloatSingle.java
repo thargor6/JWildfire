@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,12 +14,29 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.primitive;
+package org.jwildfire.create.eden.sunflow.base;
 
-public class Sphere extends BasePrimitive implements Primitive {
+public class FloatSingle implements SceneElement {
+  private final boolean empty;
+  private final double a;
 
-  public Sphere() {
-    getSize().setValue(DFLT_SIZE);
+  public FloatSingle() {
+    empty = true;
+    a = 0.0;
   }
 
+  public FloatSingle(double pA) {
+    a = pA;
+    empty = false;
+  }
+
+  @Override
+  public String toSceneStringPart() {
+    return String.valueOf(a);
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return empty;
+  }
 }

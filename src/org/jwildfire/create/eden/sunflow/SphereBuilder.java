@@ -14,23 +14,27 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.sunflow;
 
-import java.util.List;
+import org.jwildfire.create.eden.sunflow.base.PartBuilder;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class SphereBuilder extends PrimitiveBuilder<SphereBuilder> implements PartBuilder {
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public SphereBuilder(SunflowSceneBuilder pParent) {
+    super(pParent);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  @Override
+  public void buildPart(StringBuilder pTarget) {
+    pTarget.append("object {\n");
+
+    if (!shader.isEmpty())
+      pTarget.append("  shader " + shader.toSceneStringPart() + "\n");
+    if (!name.isEmpty())
+      pTarget.append("  name " + name.toSceneStringPart() + "\n");
+    transform.buildPart(pTarget);
+    pTarget.append("  type sphere\n");
+    pTarget.append("}\n");
   }
 
 }

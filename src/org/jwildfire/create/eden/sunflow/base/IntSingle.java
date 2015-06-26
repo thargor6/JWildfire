@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,32 +14,29 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.group;
+package org.jwildfire.create.eden.sunflow.base;
 
-import java.util.ArrayList;
-import java.util.List;
+public class IntSingle implements SceneElement {
+  private final int a;
+  private final boolean empty;
 
-import org.jwildfire.create.eden.primitive.Point;
-
-public class Group {
-  private final Point centre = new Point();
-  private String name;
-  private final List<GroupMember> members = new ArrayList<GroupMember>();
-
-  public List<GroupMember> getMembers() {
-    return members;
+  public IntSingle() {
+    empty = true;
+    a = 0;
   }
 
-  public String getName() {
-    return name;
+  public IntSingle(int pA) {
+    a = pA;
+    empty = false;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  @Override
+  public String toSceneStringPart() {
+    return String.valueOf(a);
   }
 
-  public Point getCentre() {
-    return centre;
+  @Override
+  public boolean isEmpty() {
+    return empty;
   }
-
 }

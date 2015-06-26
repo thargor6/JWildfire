@@ -16,21 +16,6 @@
 */
 package org.jwildfire.create.eden.scene;
 
-import java.util.List;
-
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
-
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
-  }
-
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
-  }
-
+public interface Visitable {
+  public void accept(SceneElementVisitor pVisitor);
 }

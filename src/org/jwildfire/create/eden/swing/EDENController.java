@@ -19,7 +19,13 @@ package org.jwildfire.create.eden.swing;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -29,11 +35,16 @@ import javax.swing.SwingUtilities;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.Unchecker;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.eden.io.SunflowWriter;
-import org.jwildfire.create.eden.primitive.Point;
-import org.jwildfire.create.eden.primitive.Torus;
+import org.jwildfire.create.eden.export.SunflowExporter;
 import org.jwildfire.create.eden.scene.Scene;
+import org.jwildfire.create.eden.scene.SceneElementGroup;
+import org.jwildfire.create.eden.scene.VisibleSceneElement;
+import org.jwildfire.create.eden.scene.material.Material;
+import org.jwildfire.create.eden.scene.primitive.Box;
+import org.jwildfire.create.eden.scene.primitive.Cylinder;
+import org.jwildfire.create.eden.scene.primitive.Sphere;
 import org.jwildfire.create.tina.swing.SunflowSceneFileChooser;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.MainController;
@@ -113,7 +124,8 @@ public class EDENController implements UserInterface {
     sceneType = SceneType.SC;
     currentFile = "new" + genNewFileId() + ".sc";
     // TODO
-    String template = edenCreateSunflowScene();
+    //    String template = edenCreateSunflowScene();
+    String template = edenCreateSurfaceScene();
     editorTextArea.setText(template);
     enableControls();
   }
@@ -341,199 +353,171 @@ public class EDENController implements UserInterface {
     }
   }
 
-  public static class Worker {
-    private final Scene scene;
-    private final Point deltaSize = new Point(0.02, 0.02, 0.02);
-    private final Point deltaRotate = new Point(6, 0, 18);
+  public abstract class Creator {
+    protected final Scene scene;
 
-    private final Point position = new Point(-150.0, 50.0, 0.0);
-    private final Point direction = new Point(16.0, 0, 0);
-    private final Point rotate = new Point(0.0, 0.0, 0.0);
-    private final Point size = new Point(3.0, 3.0, 3.0);
+    public abstract void create();
 
-    public Worker(Scene pScene, double pX, double pY, double pZ) {
+    public Creator(Scene pScene) {
       scene = pScene;
-      //      position.setValue(pX, pY, pZ);
-    }
-
-    public void performStep() {
-      position.setX(position.getX() + direction.getX());
-      position.setY(position.getY() + direction.getY());
-      position.setZ(position.getZ() + direction.getZ());
-      //      System.out.println("POS " + position.getX() + " " + position.getY() + " " + position.getZ());
-      direction.rotate(deltaRotate.getX(), deltaRotate.getY(), deltaRotate.getZ());
-      rotate.setX(rotate.getX() + deltaRotate.getX());
-      rotate.setY(rotate.getY() + deltaRotate.getY());
-      rotate.setZ(rotate.getZ() + deltaRotate.getZ());
-
-      //      System.out.println("  ROT " + rotate.getX() + " " + rotate.getY() + " " + rotate.getZ());
-
-      size.setX(size.getX() + deltaSize.getX());
-      size.setY(size.getY() + deltaSize.getY());
-      size.setZ(size.getZ() + deltaSize.getZ());
-      //      System.out.println("  SIZE " + size.getX() + " " + size.getY() + " " + size.getZ());
-
-      Torus box = new Torus();
-      box.getPosition().assign(position);
-      box.getSize().assign(size);
-      box.getRotate().assign(rotate);
-      scene.addObject(box);
-
-      deltaRotate.setZ(deltaRotate.getZ() - 0.1 * (0.5 + Math.random()));
     }
   }
 
-  private String edenCreateSunflowScene() {
-    Scene scene = new Scene();
-    // A
-    //    for (int i = 0; i < 3300; i++) {
-    //      Sphere sphere = new Sphere();
-    //      sphere.setCentre((-50.0 + Math.random() * 94.0) * 2.5, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 920.0));
-    //      sphere.setRadius(3.6 + Math.random() * 11.4);
-    //      scene.addObject(sphere);
-    //    }
-    // B
-    //    for (int i = 0; i < 6666; i++) {
-    //      double shape = Math.random();
-    //      if (shape < 0.25) {
-    //        Sphere sphere = new Sphere();
-    //        sphere.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
-    //        sphere.getSize().setValue((8 + Math.random() * 11.4) * 10);
-    //        scene.addObject(sphere);
-    //      }
-    //      else if (shape < 0.5) {
-    //        Box box = new Box();
-    //        box.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
-    //        box.getSize().setValue((8 + Math.random() * 11.4) * 10);
-    //        box.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
-    //        scene.addObject(box);
-    //      }
-    //      else if (shape < 0.75) {
-    //        Torus torus = new Torus();
-    //        torus.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
-    //        torus.getSize().setValue((8 + Math.random() * 11.4) * 10);
-    //        torus.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
-    //        scene.addObject(torus);
-    //      }
-    //      else {
-    //        Cylinder cylinder = new Cylinder();
-    //        cylinder.getPosition().setValue((-50.0 + Math.random() * 94.0) * 2, 1.0 + Math.random() * 128.0, (-3.0 + Math.random() * 92.0));
-    //        cylinder.getSize().setValue((8 + Math.random() * 11.4) * 10);
-    //        cylinder.getRotate().setValue(Math.random() * 90.0, Math.random() * 90.0, Math.random() * 90.0);
-    //        scene.addObject(cylinder);
-    //      }
-    // C
-    //    Worker worker1 = new Worker(scene, 0, 0, 0);
-    //    for (int i = 0; i < 100; i++) {
-    //      worker1.performStep();
-    //    }
-    // D
-    fillDLAScene(scene);
-    return new SunflowWriter().createSunflowScene(scene);
+  public abstract class Transformer {
+    protected final Scene scene;
+
+    public abstract void transform(VisibleSceneElement pElement);
+
+    public Transformer(Scene pScene) {
+      scene = pScene;
+    }
   }
 
-  private void fillDLAScene(Scene pScene) {
-    int width = 100;
-    int height = 100;
-    int maxIter = 20000;
-    int seed = 123;
-    double gridSize = 4.0;
-    double maxSize = 10.0;
-    double minSize = 1.0;
-    double xOffset = 0;
-    double yOffset = 0.0;
-    double zOffset = 33.0;
+  public class SphereCreator extends Creator {
 
-    short q[][] = new short[width][height];
-    iterateDLA(q, width, height, maxIter, seed);
-    double maxR = Math.sqrt(width * width + height * height) * 0.5;
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-        if (q[i][j] != 0) {
-          double dx = i - (width - 1) * 0.5;
-          double dy = j - (height - 1) * 0.5;
-          double r = Math.sqrt(dx * dx + dy * dy) / maxR + MathLib.EPSILON;
-          double size = minSize + (maxSize - minSize) * r;
-          Torus sphere = new Torus();
-          sphere.getPosition().setValue(dx * gridSize + xOffset, dy * gridSize + yOffset, zOffset);
-          sphere.getSize().setValue(size);
-          sphere.getRotate().setValue(90 + Math.random() * 12.0 - 6.0, Math.random() * 12.0 - 6.0, Math.random() * 12.0 - 6.0);
-          pScene.addObject(sphere);
-        }
+    public SphereCreator(Scene pScene) {
+      super(pScene);
+    }
+
+    @Override
+    public void create() {
+      Sphere sphere = scene.addSphere(-10, -10, -1, 0.4);
+      sphere.setMaterial(Material.MATERIAL_MIRROR);
+    }
+
+  }
+
+  public class BoxCreator extends Creator {
+
+    public BoxCreator(Scene pScene) {
+      super(pScene);
+    }
+
+    @Override
+    public void create() {
+      Box box = scene.addBox(-10, -10, 0, 3);
+      box.setMaterial(Material.MATERIAL_SHINY_RED);
+    }
+
+  }
+
+  public class Transformer1 extends Transformer {
+
+    public Transformer1(Scene pScene) {
+      super(pScene);
+    }
+
+    @Override
+    public void transform(VisibleSceneElement pElement) {
+      pElement.getPosition().setX(pElement.getPosition().getX() + 2.0 * (1.0 + Math.random()));
+      pElement.getOrientation().setGamma(pElement.getOrientation().getGamma() + 3.0 * (1.0 + Math.random()));
+      if (Math.random() < 0.5) {
+        pElement.setMaterial(Material.MATERIAL_SHINY_GREEN);
+      }
+      else {
+        pElement.setMaterial(Material.MATERIAL_SHINY_BLUE);
       }
     }
 
   }
 
-  private void iterateDLA(short pQ[][], int pWidth, int pHeight, int pMaxIter, int pSeed) {
-    int cx = pWidth / 2;
-    int cy = pHeight / 2;
-    double pi2 = 2.0 * Math.PI;
-    int w2 = pWidth - 2;
-    int h2 = pHeight - 2;
-    Tools.srand123(pSeed);
-    /* create the cluster */
-    pQ[cy][cx] = 1;
-    double r1 = 3.0;
-    double r2 = 3.0 * r1;
-    for (int i = 0; i < pMaxIter; i++) {
-      double phi = pi2 * Tools.drand();
-      double ri = r1 * Math.cos(phi);
-      double rj = r1 * Math.sin(phi);
-      int ci = cy + (int) (ri + 0.5);
-      int cj = cx + (int) (rj + 0.5);
-      short qt = 0;
-      while (qt == 0) {
-        double rr = Tools.drand();
-        rr += rr;
-        rr += rr;
-        int rd = (int) rr;
-        switch (rd) {
-          case 0:
-            ci++;
-            break;
-          case 1:
-            cj--;
-            break;
-          case 2:
-            ci--;
-            break;
-          default:
-            cj++;
-        }
-        if ((ci < 1) || (ci > h2) || (cj < 1) || (cj > w2)) {
-          qt = 1;
-          i--;
-        }
-        else {
-          int sum = pQ[ci - 1][cj] + pQ[ci + 1][cj] + pQ[ci][cj - 1] + pQ[ci][cj + 1];
-          if (sum != 0) {
-            pQ[ci][cj] = qt = 1;
-            double r3 = (double) (ci - cy);
-            double r4 = (double) (cj - cx);
-            r3 *= r3;
-            r4 *= r4;
-            r3 += r4;
-            r3 = Math.sqrt(r3);
-            if (r3 > r1) {
-              r1 = r3;
-              r2 = 2.1 * r1;
-            }
+  public class Transformer2 extends Transformer {
+
+    public Transformer2(Scene pScene) {
+      super(pScene);
+    }
+
+    @Override
+    public void transform(VisibleSceneElement pElement) {
+      pElement.getPosition().setY(pElement.getPosition().getY() + 1);
+      pElement.getOrientation().setBeta(pElement.getOrientation().getBeta() + 6 * (1.0 + Math.random()));
+      pElement.getOrientation().setAlpha(pElement.getOrientation().getAlpha() + 3 * (1.0 + Math.random()));
+      if (Math.random() < 0.5) {
+        pElement.setMaterial(Material.MATERIAL_SHINY_GREEN);
+      }
+      else {
+        pElement.setMaterial(Material.MATERIAL_SHINY_BLUE);
+      }
+    }
+
+  }
+
+  private String edenCreateSurfaceScene() {
+    try {
+      Scene scene = new Scene();
+      scene.addPointLight(0, 0, -200, 0.6);
+      scene.addPointLight(-100, 20, -160, 0.8);
+      scene.addPointLight(-10, 200, -60, 0.5);
+
+      int width = 800;
+      int height = 600;
+
+      double surfWidth = width / 25.0;
+      double surfHeight = height / 25.0;
+      double surfDepth = MathLib.sqrt(surfWidth * surfWidth + surfHeight * surfHeight) / 100.0;
+
+      List<Creator> creators = new ArrayList<Creator>();
+      //      creators.add(new SphereCreator(scene));
+      creators.add(new BoxCreator(scene));
+      List<Transformer> transformers = new ArrayList<Transformer>();
+      transformers.add(new Transformer1(scene));
+      transformers.add(new Transformer2(scene));
+
+      for (Creator creator : creators) {
+        creator.create();
+      }
+      Map<Transformer, Set<VisibleSceneElement>> expandedMap = new HashMap<Transformer, Set<VisibleSceneElement>>();
+
+      for (int i = 0; i < 7; i++) {
+        for (Transformer transformer : transformers) {
+          Set<VisibleSceneElement> expandedSet = expandedMap.get(transformer);
+          if (expandedSet == null) {
+            expandedSet = new HashSet<VisibleSceneElement>();
+            expandedMap.put(transformer, expandedSet);
           }
-          else {
-            double r3 = (double) (ci - cy);
-            double r4 = (double) (cj - cx);
-            r3 *= r3;
-            r4 *= r4;
-            r3 += r4;
-            r3 = Math.sqrt(r3);
-            if (r3 > r2) {
-              qt = 1;
-              i--;
+
+          List<VisibleSceneElement> elements = scene.getAllVisibleElements();
+          for (VisibleSceneElement element : elements) {
+            if (!expandedSet.contains(element)) {
+              VisibleSceneElement copy = element.clone();
+              transformer.transform(copy);
+              expandedSet.add(element);
             }
           }
         }
       }
+
+      System.out.println("ELEMENTS: " + scene.getAllVisibleElements().size());
+
+      return new SunflowExporter().exportScene(scene);
+    }
+    catch (Exception ex) {
+      Unchecker.rethrow(ex);
+      return null;
     }
   }
+
+  private SceneElementGroup createGroup(org.jwildfire.create.eden.scene.Scene pScene, double size) {
+    SceneElementGroup group = pScene.addGroup();
+    {
+      Sphere sphere = group.addSphere(-2 * size, 0, 1, size);
+      sphere.setMaterial(Material.MATERIAL_MIRROR);
+    }
+    {
+      Sphere sphere = group.addSphere(2 * size, 0, 1, size);
+      sphere.setMaterial(Material.MATERIAL_GLASS);
+    }
+    {
+      Cylinder cylinder = group.addCylinder(0, 0, 1, size / 4.0, size * 2.0);
+      cylinder.setMaterial(Material.MATERIAL_MIRROR);
+      cylinder.setOrientation(90.0, 0.0, 90.0);
+    }
+    {
+      Box box = group.addBox(0, 3 * size, 0, size);
+      box.setMaterial(Material.MATERIAL_SHINY_RED);
+      box.setOrientation(45.0, 45.0, 45.0);
+    }
+    return group;
+  }
+
 }

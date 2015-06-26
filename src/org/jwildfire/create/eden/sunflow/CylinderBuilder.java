@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,8 +14,25 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.group;
+package org.jwildfire.create.eden.sunflow;
 
-public interface GroupMember {
+import org.jwildfire.create.eden.sunflow.base.PartBuilder;
 
+public class CylinderBuilder extends PrimitiveBuilder<CylinderBuilder> implements PartBuilder {
+
+  public CylinderBuilder(SunflowSceneBuilder pParent) {
+    super(pParent);
+  }
+
+  @Override
+  public void buildPart(StringBuilder pTarget) {
+    pTarget.append("object {\n");
+    if (!shader.isEmpty())
+      pTarget.append("  shader " + shader.toSceneStringPart() + "\n");
+    if (!name.isEmpty())
+      pTarget.append("  name " + name.toSceneStringPart() + "\n");
+    transform.buildPart(pTarget);
+    pTarget.append("  type cylinder\n");
+    pTarget.append("}\n");
+  }
 }

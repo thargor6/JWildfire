@@ -14,23 +14,25 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.scene.material;
 
-import java.util.List;
+import org.jwildfire.create.eden.base.Color3f;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class Shiny extends Material {
+  private double refl;
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public Shiny(String pName) {
+    setColor(new Color3f(0.8, 0.8, 0.8));
+    refl = 0.1;
+    setName(pName);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public double getRefl() {
+    return refl;
+  }
+
+  public void setRefl(double pRefl) {
+    refl = pRefl;
   }
 
 }

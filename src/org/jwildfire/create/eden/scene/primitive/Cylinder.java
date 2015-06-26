@@ -14,23 +14,24 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.scene.primitive;
 
-import java.util.List;
+import org.jwildfire.create.eden.base.Size3f;
+import org.jwildfire.create.eden.scene.PositionableSceneElement;
+import org.jwildfire.create.eden.scene.VisibleSceneElement;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class Cylinder extends VisibleSceneElement {
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public Cylinder(PositionableSceneElement pParent) {
+    super(pParent);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public void setRadius(float pRadius) {
+    setSize(new Size3f(pRadius, pRadius, getSize().getZ()));
+  }
+
+  public void setHeight(float pHeight) {
+    setSize(new Size3f(getSize().getX(), getSize().getY(), pHeight));
   }
 
 }

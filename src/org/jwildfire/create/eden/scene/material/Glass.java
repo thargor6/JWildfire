@@ -14,23 +14,35 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.scene.material;
 
-import java.util.List;
+import org.jwildfire.create.eden.base.Color3f;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+public class Glass extends Material {
+  private double eta;
+  private Color3f absorptionColor;
 
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public Glass(String pName) {
+    setEta(1.33);
+    setAbsorptionColor(new Color3f(0.7, 0.7, 0.7));
+    setColor(new Color3f(0.8, 0.8, 0.8));
+    setName(pName);
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public double getEta() {
+    return eta;
+  }
+
+  public void setEta(double eta) {
+    this.eta = eta;
+  }
+
+  public Color3f getAbsorptionColor() {
+    return absorptionColor;
+  }
+
+  public void setAbsorptionColor(Color3f pAbsorptionColor) {
+    absorptionColor = pAbsorptionColor;
   }
 
 }

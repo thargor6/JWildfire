@@ -16,21 +16,21 @@
 */
 package org.jwildfire.create.eden.scene;
 
-import java.util.List;
+public class SceneElement implements Visitable {
+  private String name = "";
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
-
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public String getName() {
+    return name;
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public void setName(String pName) {
+    name = pName != null ? pName : "";
+  }
+
+  @Override
+  public void accept(SceneElementVisitor pVisitor) {
+    pVisitor.visitBefore(this);
+    pVisitor.visitAfter(this);
   }
 
 }

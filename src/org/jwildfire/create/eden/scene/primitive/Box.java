@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,21 +14,15 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.primitive;
+package org.jwildfire.create.eden.scene.primitive;
 
-public class Torus extends BasePrimitive implements Primitive {
-  private double innerRadius = 0.7;
+import org.jwildfire.create.eden.scene.PositionableSceneElement;
+import org.jwildfire.create.eden.scene.VisibleSceneElement;
 
-  public Torus() {
-    getSize().setValue(DFLT_SIZE);
-  }
+public class Box extends VisibleSceneElement {
 
-  public void setInnerRadius(double pInnerRadius) {
-    innerRadius = pInnerRadius;
-  }
-
-  public double getInnerRadius() {
-    return innerRadius;
+  public Box(PositionableSceneElement pParent) {
+    super(pParent);
   }
 
 }

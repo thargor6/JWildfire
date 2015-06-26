@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2014 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,23 +14,32 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.sunflow.base;
 
-import java.util.List;
+public class RGBColor implements SceneElement {
+  private final double r, g, b;
+  private final boolean empty;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
-
-public class Scene extends SceneElementGroup {
-
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  public RGBColor() {
+    empty = true;
+    r = g = b = 0;
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  public RGBColor(double pR, double pG, double pB) {
+    r = pR;
+    g = pG;
+    b = pB;
+    empty = false;
+  }
+
+  @Override
+  public String toSceneStringPart() {
+    return "{ \"sRGB nonlinear\" " + r + " " + g + " " + b + " }";
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return empty;
   }
 
 }

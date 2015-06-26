@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,28 +14,51 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.primitive;
+package org.jwildfire.create.eden.base;
 
-public class BasePrimitive implements Primitive {
-  public final static double DFLT_SIZE = 10;
+public class Color3f {
+  private float r, g, b;
 
-  private final Point position = new Point();
-  private final Point rotate = new Point();
-  private final Point size = new Point(1.0, 1.0, 1.0);
+  public static final Color3f OPTIONAL = new Color3f(0.75f, 0.75f, 0.75f);
 
-  @Override
-  public Point getPosition() {
-    return position;
+  public Color3f() {
+
   }
 
-  @Override
-  public Point getRotate() {
-    return rotate;
+  public Color3f(float pR, float pG, float pB) {
+    r = pR;
+    g = pG;
+    b = pB;
   }
 
-  @Override
-  public Point getSize() {
-    return size;
+  public Color3f(double pR, double pG, double pB) {
+    r = (float) pR;
+    g = (float) pG;
+    b = (float) pB;
+  }
+
+  public float getR() {
+    return r;
+  }
+
+  public void setR(float pR) {
+    r = pR;
+  }
+
+  public float getG() {
+    return g;
+  }
+
+  public void setG(float pG) {
+    g = pG;
+  }
+
+  public float getB() {
+    return b;
+  }
+
+  public void setB(float pB) {
+    b = pB;
   }
 
 }

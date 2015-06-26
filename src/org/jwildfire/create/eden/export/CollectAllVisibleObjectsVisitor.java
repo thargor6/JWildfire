@@ -14,23 +14,32 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.eden.scene;
+package org.jwildfire.create.eden.export;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+import org.jwildfire.create.eden.scene.SceneElement;
+import org.jwildfire.create.eden.scene.SceneElementVisitor;
+import org.jwildfire.create.eden.scene.VisibleSceneElement;
 
-public class Scene extends SceneElementGroup {
+public class CollectAllVisibleObjectsVisitor implements SceneElementVisitor {
+  private final List<VisibleSceneElement> elements = new ArrayList<VisibleSceneElement>();
 
-  public Scene() {
-    super(null);
-    getElements().add(new MaterialGroup(this));
+  @Override
+  public void visitBefore(SceneElement pSceneElement) {
+    if (pSceneElement instanceof VisibleSceneElement) {
+      elements.add((VisibleSceneElement) pSceneElement);
+    }
   }
 
-  public List<VisibleSceneElement> getAllVisibleElements() {
-    CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
-    accept(visitor);
-    return visitor.getElements();
+  @Override
+  public void visitAfter(SceneElement pSceneElement) {
+    // EMPTY
+  }
+
+  public List<VisibleSceneElement> getElements() {
+    return elements;
   }
 
 }
