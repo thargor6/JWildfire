@@ -77,8 +77,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
-  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.3";
-  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.3";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
@@ -417,12 +415,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = false;
 
-  @Property(description = "Default antialiasing amount (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
-  private double tinaDefaultAntialiasingAmount = 0.2;
-
-  @Property(description = "Default antialiasing radius (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
-  private double tinaDefaultAntialiasingRadius = 0.05;
-
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
 
@@ -656,8 +648,6 @@ public class Prefs extends ManagedObject {
     lookAndFeelTheme = pSrc.lookAndFeelTheme;
     developmentMode = pSrc.developmentMode;
     tinaRandomNumberGenerator = pSrc.tinaRandomNumberGenerator;
-    tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
-    tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
     tinaPreserveFreeCPUs = pSrc.tinaPreserveFreeCPUs;
     tinaDisableWikimediaCommonsWarning = pSrc.tinaDisableWikimediaCommonsWarning;
     tinaEditorControlsWithColor = pSrc.tinaEditorControlsWithColor;
@@ -905,22 +895,6 @@ public class Prefs extends ManagedObject {
   public void setBaseMathLibType(BaseMathLibType baseMathLibType) {
     MathLib.setBaseMathLibType(baseMathLibType);
     this.baseMathLibType = baseMathLibType;
-  }
-
-  public double getTinaDefaultAntialiasingAmount() {
-    return tinaDefaultAntialiasingAmount;
-  }
-
-  public void setTinaDefaultAntialiasingAmount(double tinaDefaultAntialiasingAmount) {
-    this.tinaDefaultAntialiasingAmount = tinaDefaultAntialiasingAmount;
-  }
-
-  public double getTinaDefaultAntialiasingRadius() {
-    return tinaDefaultAntialiasingRadius;
-  }
-
-  public void setTinaDefaultAntialiasingRadius(double tinaDefaultAntialiasingRadius) {
-    this.tinaDefaultAntialiasingRadius = tinaDefaultAntialiasingRadius;
   }
 
   public RasterPointPrecision getTinaRasterPointPrecision() {

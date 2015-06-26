@@ -260,22 +260,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
   }
 
-  public void xFormAntialiasAmountSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasRadiusSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasAmountREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
-  }
-
-  public void xFormAntialiasRadiusREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
-  }
-
   public void focusZSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS);
   }
@@ -338,6 +322,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+    owner.refreshFilterKernelPreviewImg();
   }
 
   public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
@@ -408,6 +393,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void filterRadiusREd_changed() {
     flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+    owner.refreshFilterKernelPreviewImg();
   }
 
   public void gammaREd_changed() {
@@ -662,11 +648,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
 
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
-
-      data.xFormAntialiasAmountREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasAmount()));
-      data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasAmount() * TinaController.SLIDER_SCALE_COLOR));
-      data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasRadius()));
-      data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasRadius() * TinaController.SLIDER_SCALE_COLOR));
 
       data.motionBlurLengthField.setText(String.valueOf(getCurrFlame().getMotionBlurLength()));
       data.motionBlurLengthSlider.setValue(getCurrFlame().getMotionBlurLength());
@@ -1498,9 +1479,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void oversamplingSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
+    owner.refreshFilterKernelPreviewImg();
   }
 
   public void oversamplingREd_changed() {
     flameTextFieldChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
+    owner.refreshFilterKernelPreviewImg();
   }
 }

@@ -155,6 +155,7 @@ public class TinaControllerData {
   public JPanel colorChooserPaletteImgPanel;
   public ImagePanel palettePanel;
   public ImagePanel colorChooserPalettePanel;
+  public ImagePanel filterKernelPreviewPanel;
   public JWFNumberField paletteShiftREd;
   public JSlider paletteShiftSlider;
   public JWFNumberField paletteRedREd;
@@ -247,10 +248,6 @@ public class TinaControllerData {
   public JWFNumberField xFormOpacityREd;
   public JSlider xFormOpacitySlider;
   public JComboBox xFormDrawModeCmb;
-  public JWFNumberField xFormAntialiasAmountREd;
-  public JSlider xFormAntialiasAmountSlider;
-  public JWFNumberField xFormAntialiasRadiusREd;
-  public JSlider xFormAntialiasRadiusSlider;
   public JTable relWeightsTable;
   public JButton relWeightsZeroButton;
   public JButton relWeightsOneButton;
@@ -423,4 +420,5 @@ public class TinaControllerData {
   public JWFNumberField tinaOversamplingREd;
   public JSlider tinaOversamplingSlider;
   public JToggleButton tinaOversamplingPreviewBtn;
+  public JPanel filterKernelPreviewRootPnl;
 }

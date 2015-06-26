@@ -4741,7 +4741,6 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
         getSwfAnimatorResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
-        getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getRealtimeFlamePnl(), getRealtimeGraph1Pnl(), getDancingFlamesLoadSoundBtn(), getDancingFlamesAddFromClipboardBtn(),
         getDancingFlamesAddFromEditorBtn(), getDancingFlamesAddFromDiscBtn(), getDancingFlamesRandomCountIEd(), getDancingFlamesGenRandFlamesBtn(),
         getDancingFlamesRandomGenCmb(), getDancingFlamesPoolFlamePreviewPnl(), getDancingFlamesBorderSizeSlider(),
@@ -4828,7 +4827,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getLeapMotionIndex2Field(), getLeapMotionIndex3Field(), getLeapMotionInvScaleField(),
         getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
         getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton(),
-        getTinaOversamplingREd(), getTinaOversamplingSlider(), getTinaOversamplingPreviewBtn());
+        getTinaOversamplingREd(), getTinaOversamplingSlider(), getTinaOversamplingPreviewBtn(),
+        getFilterKernelPreviewRootPnl());
     getTinaOversamplingPreviewBtn().setSelected(Prefs.getPrefs().isTinaEditorShowOversamplingInPreviews());
 
     tinaController = new TinaController(params);
@@ -10991,6 +10991,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField tinaOversamplingREd;
   private JSlider tinaOversamplingSlider;
   private JToggleButton tinaOversamplingPreviewBtn;
+  private JPanel filterKernelPreviewRootPnl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -13222,7 +13223,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusSlider.setSize(new Dimension(220, 19));
       tinaFilterRadiusSlider.setPreferredSize(new Dimension(220, 19));
       tinaFilterRadiusSlider.setMinimum(0);
-      tinaFilterRadiusSlider.setMaximum(500);
+      tinaFilterRadiusSlider.setMaximum(200);
       tinaFilterRadiusSlider.setLocation(new Point(686, 2));
       tinaFilterRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaFilterRadiusSlider.setBounds(648, 6, 220, 24);
@@ -13347,6 +13348,11 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       antialiasPanel.add(tinaOversamplingSlider);
+
+      filterKernelPreviewRootPnl = new JPanel();
+      filterKernelPreviewRootPnl.setBounds(899, 6, 130, 102);
+      antialiasPanel.add(filterKernelPreviewRootPnl);
+      filterKernelPreviewRootPnl.setLayout(new BorderLayout(0, 0));
     }
     return antialiasPanel;
   }
@@ -13362,7 +13368,6 @@ public class TinaInternalFrame extends JInternalFrame {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.getFlameControls().xFormAntialiasAmountREd_changed();
           }
         }
       });
@@ -13399,7 +13404,6 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
-            tinaController.getFlameControls().xFormAntialiasAmountSlider_changed();
           }
         }
       });
@@ -13432,7 +13436,6 @@ public class TinaInternalFrame extends JInternalFrame {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.getFlameControls().xFormAntialiasRadiusREd_changed();
           }
         }
       });
@@ -13469,7 +13472,6 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
-            tinaController.getFlameControls().xFormAntialiasRadiusSlider_changed();
           }
         }
       });
@@ -23789,6 +23791,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getTinaOversamplingPreviewBtn() {
     return tinaOversamplingPreviewBtn;
+  }
+
+  public JPanel getFilterKernelPreviewRootPnl() {
+    return filterKernelPreviewRootPnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

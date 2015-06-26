@@ -160,8 +160,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private ShadingInfo shadingInfo;
   private String lastFilename = null;
-  private double antialiasAmount;
-  private double antialiasRadius;
 
   private int motionBlurLength;
   private double motionBlurTimeStep;
@@ -258,12 +256,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void resetAntialiasingSettings() {
-    //    antialiasAmount = 0.75;
-    //    antialiasRadius = 0.36;
-    antialiasAmount = 0.5;
-    antialiasRadius = 0.16;
-    spatialFilterRadius = 0.0;
-    spatialFilterKernel = FilterKernelType.GAUSSIAN;
+    spatialFilterRadius = 0.75;
+    spatialFilterKernel = FilterKernelType.MITCHELL;
     oversampling = Prefs.getPrefs().getTinaDefaultOversampling();
   }
 
@@ -682,8 +676,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     name = pFlame.name;
     bgImageFilename = pFlame.bgImageFilename;
     lastFilename = pFlame.lastFilename;
-    antialiasAmount = pFlame.antialiasAmount;
-    antialiasRadius = pFlame.antialiasRadius;
     oversampling = pFlame.oversampling;
 
     motionBlurLength = pFlame.motionBlurLength;
@@ -783,7 +775,6 @@ public class Flame implements Assignable<Flame>, Serializable {
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
         !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
-        (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||
         (fabs(motionBlurTimeStep - pFlame.motionBlurTimeStep) > EPSILON) || (fabs(motionBlurDecay - pFlame.motionBlurDecay) > EPSILON) ||
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
@@ -906,28 +897,23 @@ public class Flame implements Assignable<Flame>, Serializable {
     return false;
   }
 
-  public double getAntialiasAmount() {
-    return antialiasAmount;
+  // only for script-compatibility
+  @Deprecated
+  public void setAntialiasAmount(double pAntialiasAmount) {
+    // EMPTY
   }
 
-  public void setAntialiasAmount(double antialiasAmount) {
-    this.antialiasAmount = antialiasAmount;
-  }
-
-  public double getAntialiasRadius() {
-    return antialiasRadius;
-  }
-
-  public void setAntialiasRadius(double antialiasRadius) {
-    this.antialiasRadius = antialiasRadius;
+  @Deprecated
+  public void setAntialiasRadius(double pAntialiasRadius) {
+    // EMPTY
   }
 
   public int getMotionBlurLength() {
     return motionBlurLength;
   }
 
-  public void setMotionBlurLength(int motionBlurLength) {
-    this.motionBlurLength = motionBlurLength;
+  public void setMotionBlurLength(int pMotionBlurLength) {
+    motionBlurLength = pMotionBlurLength;
   }
 
   public double getMotionBlurTimeStep() {

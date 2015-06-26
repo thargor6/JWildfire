@@ -40,8 +40,8 @@ public abstract class RandomFlameGenerator {
     flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
     flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
     flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
-    flame.setAntialiasAmount(pPrefs.getTinaDefaultAntialiasingAmount());
-    flame.setAntialiasRadius(pPrefs.getTinaDefaultAntialiasingRadius());
+    // TODO XXX
+    //flame.setAntialiasAmount(pPrefs.getTinaDefaultAntialiasingAmount());
     return flame;
   }
 

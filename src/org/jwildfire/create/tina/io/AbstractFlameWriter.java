@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.io;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_BACKGROUND_IMAGE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_FADE;
 import static org.jwildfire.create.tina.io.AbstractFlameReader.ATTR_CAM_DOF_PARAM1;
@@ -316,10 +315,6 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_STYLE, shadingInfo.getDistanceColorStyle()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_COORDINATE, shadingInfo.getDistanceColorCoordinate()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SHIFT, shadingInfo.getDistanceColorShift()));
-    }
-    if (pFlame.getAntialiasAmount() > EPSILON) {
-      attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
-      attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
     }
     if (pFlame.getMotionBlurLength() > 0) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pFlame.getMotionBlurLength()));

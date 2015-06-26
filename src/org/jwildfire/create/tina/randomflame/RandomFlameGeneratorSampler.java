@@ -123,7 +123,6 @@ public class RandomFlameGeneratorSampler {
       flame.setWidth(imageWidth);
       flame.setHeight(imageHeight);
       flame.setPixelsPerUnit(10);
-      flame.setSpatialFilterRadius(0.0);
       for (Layer layer : flame.getLayers()) {
         RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors);
         layer.setPalette(palette);
@@ -132,14 +131,16 @@ public class RandomFlameGeneratorSampler {
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
-      flame.setAntialiasAmount(0.0);
+      // TODO XXX
+      // flame.setAntialiasAmount(0.0);
 
       try {
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
         renderedFlame = renderer.renderFlame(info);
       }
       finally {
-        flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+        // TODO XXX
+        // flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
       }
       if (j == quality.getMaxSamples() - 1) {
         renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);

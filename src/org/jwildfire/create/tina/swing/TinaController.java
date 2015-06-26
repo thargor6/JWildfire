@@ -121,6 +121,7 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -496,11 +497,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
 
-    data.xFormAntialiasAmountREd = parameterObject.pXFormAntialiasAmountREd;
-    data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
-    data.xFormAntialiasRadiusREd = parameterObject.pXFormAntialiasRadiusREd;
-    data.xFormAntialiasRadiusSlider = parameterObject.pXFormAntialiasRadiusSlider;
-
     data.relWeightsTable = parameterObject.pRelWeightsTable;
     data.relWeightsZeroButton = parameterObject.pRelWeightsZeroButton;
     data.relWeightsOneButton = parameterObject.pRelWeightsOneButton;
@@ -551,6 +547,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaOversamplingREd = parameterObject.tinaOversamplingREd;
     data.tinaOversamplingSlider = parameterObject.tinaOversamplingSlider;
     data.tinaOversamplingPreviewBtn = parameterObject.tinaOversamplingPreviewBtn;
+    data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
 
     data.postSymmetryTypeCmb = parameterObject.postSymmetryTypeCmb;
     data.postSymmetryDistanceREd = parameterObject.postSymmetryDistanceREd;
@@ -1226,11 +1223,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (row < 0 && getCurrFlame() != null && getCurrFlame().getLayers().size() > 0) {
         data.layersTable.getSelectionModel().setSelectionInterval(0, 0);
       }
-
     }
     finally {
       gridRefreshing = false;
     }
+    refreshFilterKernelPreviewImg();
     refreshLayerUI();
     refreshLayerControls(getCurrLayer());
     refreshKeyFramesUI();
@@ -3314,8 +3311,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
-    flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-    flame.setAntialiasRadius(prefs.getTinaDefaultAntialiasingRadius());
+    // TODO XXX
     RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
     RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
@@ -4428,6 +4424,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flame != null) {
         saveUndoPoint();
         flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
+        refreshFlameImage(false);
+        refreshFilterKernelPreviewImg();
       }
     }
   }
@@ -5712,4 +5710,35 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  private ImagePanel getFilterKernelPreviewPanel() {
+    if (data.filterKernelPreviewPanel == null) {
+      int width = data.filterKernelPreviewRootPnl.getWidth();
+      int height = data.filterKernelPreviewRootPnl.getHeight();
+      SimpleImage img = new SimpleImage(width, height);
+      img.fillBackground(0, 0, 0);
+      data.filterKernelPreviewPanel = new ImagePanel(img, 0, 0, data.filterKernelPreviewRootPnl.getWidth());
+      data.filterKernelPreviewRootPnl.add(data.filterKernelPreviewPanel, BorderLayout.CENTER);
+      data.filterKernelPreviewRootPnl.getParent().validate();
+    }
+    return data.filterKernelPreviewPanel;
+  }
+
+  protected void refreshFilterKernelPreviewImg() {
+    try {
+      if (getCurrFlame() != null) {
+        ImagePanel imgPanel = getFilterKernelPreviewPanel();
+        int width = imgPanel.getWidth();
+        int height = imgPanel.getHeight();
+        if (width >= 16 && height >= 4) {
+          SimpleImage img = new FilterKernelVisualisationRenderer(getCurrFlame()).createKernelVisualisation(width, height);
+          imgPanel.setImage(img);
+        }
+        imgPanel.getParent().validate();
+        imgPanel.repaint();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 }
