@@ -121,7 +121,7 @@ public class Action {
               else if (cls == double.class)
                 val = Double.parseDouble(strVal);
               else if (cls == Boolean.class)
-                val = new Boolean(Boolean.parseBoolean(strVal));
+                val = Boolean.valueOf(strVal);
               else if (cls == boolean.class)
                 val = Boolean.parseBoolean(strVal);
               else if (cls.isEnum())

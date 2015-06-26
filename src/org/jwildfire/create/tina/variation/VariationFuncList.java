@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 
@@ -521,10 +522,10 @@ public class VariationFuncList {
   public static Map<String, String> getAliasMap() {
     if (resolvedAliasMap == null) {
       resolvedAliasMap = new HashMap<String, String>();
-      for (Class<? extends VariationFunc> funcCls : aliasMap.keySet()) {
-        String vName = getVariationName(funcCls, false);
+      for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
+        String vName = getVariationName(funcCls.getKey(), false);
         if (vName != null) {
-          resolvedAliasMap.put(aliasMap.get(funcCls), vName);
+          resolvedAliasMap.put(funcCls.getValue(), vName);
         }
       }
     }
