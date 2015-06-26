@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Face;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point;
+import org.jwildfire.create.tina.meshgen.marchingcubes.Point3f;
 
 public class SimpleWavefrontObjLoader {
 
@@ -32,8 +32,8 @@ public class SimpleWavefrontObjLoader {
       long t0 = System.currentTimeMillis();
       String file = Tools.readUTF8Textfile(pFilename);
 
-      List<Point> vertices = new ArrayList<Point>();
-      List<Point> vertexNormals = new ArrayList<Point>();
+      List<Point3f> vertices = new ArrayList<Point3f>();
+      List<Point3f> vertexNormals = new ArrayList<Point3f>();
       List<Face> faces = new ArrayList<Face>();
 
       StringTokenizer fileTokenizer = new StringTokenizer(file, "\n\r");
@@ -48,14 +48,14 @@ public class SimpleWavefrontObjLoader {
               String x = lineTokenizer.nextToken();
               String y = lineTokenizer.nextToken();
               String z = lineTokenizer.nextToken();
-              Point point = new Point(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
+              Point3f point = new Point3f(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
               vertices.add(point);
             }
             else if ("vn".equals(key)) {
               String x = lineTokenizer.nextToken();
               String y = lineTokenizer.nextToken();
               String z = lineTokenizer.nextToken();
-              Point point = new Point(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
+              Point3f point = new Point3f(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(z));
               vertexNormals.add(point);
             }
             else if ("f".equals(key)) {

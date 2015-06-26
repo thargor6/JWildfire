@@ -25,8 +25,8 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 public class GenerateFacesThread implements Runnable {
   private int zmin, zmax;
   private boolean done;
-  private List<Point> faces = new ArrayList<Point>();
-  private List<Point> normals = new ArrayList<Point>();
+  private List<Point3f> faces = new ArrayList<Point3f>();
+  private List<Point3f> normals = new ArrayList<Point3f>();
   private final ImageStackSampler sampler;
   private final int threshold;
   private boolean forceAbort;
@@ -82,7 +82,7 @@ public class GenerateFacesThread implements Runnable {
     return done;
   }
 
-  public List<Point> getFaces() {
+  public List<Point3f> getFaces() {
     return faces;
   }
 
@@ -99,7 +99,7 @@ public class GenerateFacesThread implements Runnable {
     withNormals = pWithNormals;
   }
 
-  public List<Point> getNormals() {
+  public List<Point3f> getNormals() {
     return normals;
   }
 

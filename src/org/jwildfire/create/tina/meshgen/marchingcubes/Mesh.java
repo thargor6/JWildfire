@@ -20,38 +20,42 @@ import java.util.Collections;
 import java.util.List;
 
 public class Mesh {
-  private List<Point> vertices;
-  private List<Point> vertexNormals;
+  private List<Point3f> vertices;
+  private List<Point3f> vertexNormals;
   private List<Face> faces;
+  private List<Point2f> textureCoords;
   private boolean dirty;
-  private Point[] bounds = null;
+  private Point3f[] bounds = null;
 
   public Mesh() {
     setVertices(null);
     setVertexNormals(null);
     setFaces(null);
+    setTextureCoords(null);
     dirty = true;
   }
 
-  public Mesh(List<Point> pVertices, List<Face> pFaces) {
+  public Mesh(List<Point3f> pVertices, List<Face> pFaces) {
     setVertices(pVertices);
     setVertexNormals(null);
     setFaces(pFaces);
+    setTextureCoords(null);
     dirty = true;
   }
 
-  public Mesh(List<Point> pVertices, List<Point> pVertexNormals, List<Face> pFaces) {
+  public Mesh(List<Point3f> pVertices, List<Point3f> pVertexNormals, List<Face> pFaces) {
     setVertices(pVertices);
     setVertexNormals(pVertexNormals);
     setFaces(pFaces);
+    setTextureCoords(null);
     dirty = true;
   }
 
-  public List<Point> getVertices() {
+  public List<Point3f> getVertices() {
     return vertices;
   }
 
-  public void setVertices(List<Point> pVertices) {
+  public void setVertices(List<Point3f> pVertices) {
     if (pVertices != null) {
       vertices = pVertices;
     }
@@ -75,19 +79,19 @@ public class Mesh {
     dirty = true;
   }
 
-  private Point[] getBounds() {
+  private Point3f[] getBounds() {
     if (dirty) {
-      Point min, max;
-      bounds = new Point[2];
-      bounds[0] = min = new Point();
-      bounds[1] = max = new Point();
+      Point3f min, max;
+      bounds = new Point3f[2];
+      bounds[0] = min = new Point3f();
+      bounds[1] = max = new Point3f();
       if (vertices.size() > 0) {
-        Point first = vertices.get(0);
+        Point3f first = vertices.get(0);
         bounds[0].x = bounds[1].x = first.x;
         bounds[0].y = bounds[1].y = first.y;
         bounds[0].z = bounds[1].z = first.z;
         for (int i = 1; i < vertices.size(); i++) {
-          Point vertex = vertices.get(i);
+          Point3f vertex = vertices.get(i);
           if (vertex.x < min.x)
             min.x = vertex.x;
           else if (vertex.x > max.x)
@@ -107,24 +111,38 @@ public class Mesh {
     return bounds;
   }
 
-  public Point getPMin() {
+  public Point3f getPMin() {
     return getBounds()[0];
   }
 
-  public Point getPMax() {
+  public Point3f getPMax() {
     return getBounds()[1];
   }
 
-  public List<Point> getVertexNormals() {
+  public List<Point3f> getVertexNormals() {
     return vertexNormals;
   }
 
-  public void setVertexNormals(List<Point> pVertexNormals) {
+  public void setVertexNormals(List<Point3f> pVertexNormals) {
     if (pVertexNormals != null) {
       vertexNormals = pVertexNormals;
     }
     else {
       vertexNormals = Collections.emptyList();
     }
+  }
+
+  public List<Point2f> getTextureCoords() {
+    return textureCoords;
+  }
+
+  public void setTextureCoords(List<Point2f> pTextureCoords) {
+    if (pTextureCoords != null) {
+      textureCoords = pTextureCoords;
+    }
+    else {
+      textureCoords = Collections.emptyList();
+    }
+    dirty = true;
   }
 }

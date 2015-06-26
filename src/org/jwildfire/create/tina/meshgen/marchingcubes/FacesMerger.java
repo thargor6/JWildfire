@@ -29,17 +29,17 @@ public class FacesMerger {
 
   private static final float DLFT_OBJSIZE = 10.0f;
 
-  private static class AvgNormal extends Point {
+  private static class AvgNormal extends Point3f {
     public int count;
 
-    public AvgNormal(Point pPoint) {
+    public AvgNormal(Point3f pPoint) {
       x = pPoint.x;
       y = pPoint.y;
       z = pPoint.z;
       count = 1;
     }
 
-    public void addPoint(Point pPoint) {
+    public void addPoint(Point3f pPoint) {
       x += pPoint.x;
       y += pPoint.y;
       z += pPoint.z;
@@ -61,13 +61,13 @@ public class FacesMerger {
   }
 
   public static Mesh generateMesh(RawFaces pRawFaces) {
-    List<Point> vertices = pRawFaces.getVertices();
-    List<Point> faceNormals = pRawFaces.getNormals();
+    List<Point3f> vertices = pRawFaces.getVertices();
+    List<Point3f> faceNormals = pRawFaces.getNormals();
 
-    Map<Point, Integer> index = new HashMap<Point, Integer>();
-    List<Point> points = new ArrayList<Point>();
+    Map<Point3f, Integer> index = new HashMap<Point3f, Integer>();
+    List<Point3f> points = new ArrayList<Point3f>();
 
-    Point first = vertices.size() > 0 ? vertices.get(0) : new Point();
+    Point3f first = vertices.size() > 0 ? vertices.get(0) : new Point3f();
     float xmin = first.x, xmax = first.x;
     float ymin = first.y, ymax = first.y;
     float zmin = first.z, zmax = first.z;
@@ -75,7 +75,7 @@ public class FacesMerger {
     long t0, t1;
 
     t0 = System.currentTimeMillis();
-    for (Point point : vertices) {
+    for (Point3f point : vertices) {
       if (index.get(point) == null) {
         index.put(point, points.size());
         points.add(point);
@@ -113,7 +113,7 @@ public class FacesMerger {
           facesSet.add(face);
           faces.add(face);
           if (faceNormals != null) {
-            Point faceNormal = faceNormals.get(i / 3);
+            Point3f faceNormal = faceNormals.get(i / 3);
             addFaceNormalToNormalMap(normalMap, a, faceNormal);
             addFaceNormalToNormalMap(normalMap, b, faceNormal);
             addFaceNormalToNormalMap(normalMap, c, faceNormal);
@@ -136,15 +136,15 @@ public class FacesMerger {
     float scale = DLFT_OBJSIZE / size;
 
     if (faceNormals != null) {
-      List<Point> vertexNormals = new ArrayList<Point>();
+      List<Point3f> vertexNormals = new ArrayList<Point3f>();
       for (int i = 0; i < points.size(); i++) {
-        Point point = points.get(i);
+        Point3f point = points.get(i);
         AvgNormal avgNormal = normalMap.get(i);
         if (avgNormal != null) {
-          vertexNormals.add(new Point(avgNormal.getAvgX(), avgNormal.getAvgY(), avgNormal.getAvgZ()));
+          vertexNormals.add(new Point3f(avgNormal.getAvgX(), avgNormal.getAvgY(), avgNormal.getAvgZ()));
         }
         else {
-          vertexNormals.add(new Point());
+          vertexNormals.add(new Point3f());
         }
         point.x = (point.x + dx) * scale;
         point.y = (point.y + dy) * scale;
@@ -155,7 +155,7 @@ public class FacesMerger {
       return new Mesh(points, vertexNormals, faces);
     }
     else {
-      for (Point point : points) {
+      for (Point3f point : points) {
         point.x = (point.x + dx) * scale;
         point.y = (point.y + dy) * scale;
         point.z = (point.z + dz) * scale;
@@ -167,7 +167,7 @@ public class FacesMerger {
 
   }
 
-  private static void addFaceNormalToNormalMap(Map<Integer, AvgNormal> pNormalMap, int pPointIndex, Point pFaceNormal) {
+  private static void addFaceNormalToNormalMap(Map<Integer, AvgNormal> pNormalMap, int pPointIndex, Point3f pFaceNormal) {
     Integer key = Integer.valueOf(pPointIndex);
     AvgNormal avg = pNormalMap.get(key);
     if (avg == null) {

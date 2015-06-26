@@ -51,7 +51,7 @@ public class MeshPreviewRenderer {
     double zmax = pMesh.getPMax().z;
     double size = (xmax - xmin + ymax - ymin + zmax - zmin) / 3.0;
 
-    for (Point point : pMesh.getVertices()) {
+    for (Point3f point : pMesh.getVertices()) {
       double currX = (point.x - xmin) / size * pWidth - cx;
       double currY = (point.y - ymin) / size * pHeight - cy;
       double currZ = pScaleZ * (point.z - zmin) / size * pHeight;

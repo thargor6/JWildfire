@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,40 +16,32 @@
 */
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
-public class Point {
-  public float x, y, z;
+public class Point2f {
+  public float u, v;
 
-  public Point() {
+  public Point2f() {
 
   }
 
-  public Point(Point pSrc) {
-    x = pSrc.x;
-    y = pSrc.y;
-    z = pSrc.z;
+  public Point2f(double pU, double pV) {
+    set((float) pU, (float) pV);
   }
 
-  public Point(double pX, double pY, double pZ) {
-    set((float) pX, (float) pY, (float) pZ);
+  public Point2f(float pU, float pV) {
+    set(pU, pV);
   }
 
-  public Point(float pX, float pY, float pZ) {
-    set(pX, pY, pZ);
-  }
-
-  public void set(float pX, float pY, float pZ) {
-    x = pX;
-    y = pY;
-    z = pZ;
+  public void set(float pU, float pV) {
+    u = pU;
+    v = pV;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Float.floatToIntBits(x);
-    result = prime * result + Float.floatToIntBits(y);
-    result = prime * result + Float.floatToIntBits(z);
+    result = prime * result + Float.floatToIntBits(u);
+    result = prime * result + Float.floatToIntBits(v);
     return result;
   }
 
@@ -61,12 +53,10 @@ public class Point {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Point other = (Point) obj;
-    if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+    Point2f other = (Point2f) obj;
+    if (Float.floatToIntBits(u) != Float.floatToIntBits(other.u))
       return false;
-    if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
-      return false;
-    if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+    if (Float.floatToIntBits(v) != Float.floatToIntBits(other.v))
       return false;
     return true;
   }

@@ -28,15 +28,15 @@ import java.util.List;
 
 public class FacesCalculator {
 
-  public static void getFaces(Cube pCube, List<Point> pVertices, List<Point> pNormals, ImageStackSampler pSampler, int pSeekValue) {
+  public static void getFaces(Cube pCube, List<Point3f> pVertices, List<Point3f> pNormals, ImageStackSampler pSampler, int pSeekValue) {
     int cn = caseNumber(pCube, pSampler, pSeekValue);
     boolean directTable = !(isAmbigous(cn));
     // address in the table
     int offset = directTable ? cn * 15 : (255 - cn) * 15;
     InvalidatablePoint[] edges = pCube.getEdges();
 
-    Point v1 = new Point();
-    Point v2 = new Point();
+    Point3f v1 = new Point3f();
+    Point3f v2 = new Point3f();
 
     for (int index = 0; index < 5; index++) {
       // if there's a triangle
@@ -50,11 +50,11 @@ public class FacesCalculator {
 
         }
         else {
-          pVertices.add(new Point(edge1));
-          pVertices.add(new Point(edge2));
-          pVertices.add(new Point(edge3));
+          pVertices.add(new Point3f(edge1));
+          pVertices.add(new Point3f(edge2));
+          pVertices.add(new Point3f(edge3));
           if (pNormals != null) {
-            Point normal = new Point();
+            Point3f normal = new Point3f();
             v1.x = edge2.x - edge1.x;
             v1.y = edge2.y - edge1.y;
             v1.z = edge2.z - edge1.z;
@@ -79,7 +79,7 @@ public class FacesCalculator {
     }
   }
 
-  private static void normalize(Point pPoint) {
+  private static void normalize(Point3f pPoint) {
     double r = sqrt(pPoint.x * pPoint.x + pPoint.y * pPoint.y + pPoint.z * pPoint.z);
     if (r != 0) {
       pPoint.x /= r;
@@ -88,7 +88,7 @@ public class FacesCalculator {
     }
   }
 
-  private static void crossProduct(Point pA, Point pB, Point pTarget) {
+  private static void crossProduct(Point3f pA, Point3f pB, Point3f pTarget) {
     pTarget.x = pA.y * pB.z - pA.z * pB.y;
     pTarget.y = pA.z * pB.x - pA.x * pB.z;
     pTarget.z = pA.x * pB.y - pA.y * pB.x;

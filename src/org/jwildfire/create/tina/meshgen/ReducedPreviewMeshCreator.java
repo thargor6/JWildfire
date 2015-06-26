@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.jwildfire.create.tina.meshgen.marchingcubes.Face;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point;
+import org.jwildfire.create.tina.meshgen.marchingcubes.Point3f;
 
 public class ReducedPreviewMeshCreator {
 
@@ -32,11 +32,11 @@ public class ReducedPreviewMeshCreator {
       return pMesh;
     }
 
-    List<Point> points = new ArrayList<Point>();
+    List<Point3f> points = new ArrayList<Point3f>();
     List<Face> faces = new ArrayList<Face>();
 
     List<Face> allFaces = new ArrayList<Face>(pMesh.getFaces());
-    List<Point> allPoints = pMesh.getVertices();
+    List<Point3f> allPoints = pMesh.getVertices();
     long t0 = System.currentTimeMillis();
     Set<Integer> indexSet = new HashSet<Integer>();
 
@@ -52,9 +52,9 @@ public class ReducedPreviewMeshCreator {
       }
       if (fIdx >= 0) {
         Face face = new Face(allFaces.get(fIdx));
-        Point p1 = new Point(allPoints.get(face.a));
-        Point p2 = new Point(allPoints.get(face.b));
-        Point p3 = new Point(allPoints.get(face.c));
+        Point3f p1 = new Point3f(allPoints.get(face.a));
+        Point3f p2 = new Point3f(allPoints.get(face.b));
+        Point3f p3 = new Point3f(allPoints.get(face.c));
         face.a = points.size();
         face.b = points.size() + 1;
         face.c = points.size() + 2;

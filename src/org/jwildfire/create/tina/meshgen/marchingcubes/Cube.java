@@ -23,13 +23,13 @@
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
 public class Cube {
-  protected final Point[] vertices;
+  protected final Point3f[] vertices;
   protected final InvalidatablePoint[] edges;
 
   public Cube() {
-    vertices = new Point[8];
+    vertices = new Point3f[8];
     for (int i = 0; i < 8; i++)
-      vertices[i] = new Point();
+      vertices[i] = new Point3f();
 
     edges = new InvalidatablePoint[12];
     for (int i = 0; i < 12; i++)
@@ -56,7 +56,7 @@ public class Cube {
     vertices[7].set(x, y + 1, z + 1);
   }
 
-  public Point[] getVertices() {
+  public Point3f[] getVertices() {
     return vertices;
   }
 

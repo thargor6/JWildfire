@@ -31,7 +31,7 @@ public class EdgesCalculator {
    * @param pTargetEdge stores the resulting edge, gets invalidated when the interpolated point is beyond edge boundaries
    */
 
-  private static void computeEdge(Point pVertex1, int pIntensity1, Point pVertex2, int pIntensity2, ImageStackSampler pSampler, int pSeekValue, InvalidatablePoint pTargetEdge) {
+  private static void computeEdge(Point3f pVertex1, int pIntensity1, Point3f pVertex2, int pIntensity2, ImageStackSampler pSampler, int pSeekValue, InvalidatablePoint pTargetEdge) {
     if (pIntensity2 < pIntensity1) {
       computeEdge(pVertex2, pIntensity2, pVertex1, pIntensity1, pSampler, pSeekValue, pTargetEdge);
     }
@@ -52,7 +52,7 @@ public class EdgesCalculator {
    * (invalidates the target if interpolated value doesn't belong to the edge)
    */
   public static void computeEdges(Cube pCube, ImageStackSampler pSampler, int pSeekValue) {
-    Point[] vertices = pCube.getVertices();
+    Point3f[] vertices = pCube.getVertices();
     InvalidatablePoint[] edges = pCube.getEdges();
 
     int intensity0 = pSampler.getIntensity(vertices[0]);

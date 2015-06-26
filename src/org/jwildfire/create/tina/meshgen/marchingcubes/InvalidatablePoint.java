@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
-public class InvalidatablePoint extends Point {
+public class InvalidatablePoint extends Point3f {
   public boolean invalid;
 
   public InvalidatablePoint() {

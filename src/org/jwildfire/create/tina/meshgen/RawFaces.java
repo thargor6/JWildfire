@@ -18,22 +18,22 @@ package org.jwildfire.create.tina.meshgen;
 
 import java.util.List;
 
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point;
+import org.jwildfire.create.tina.meshgen.marchingcubes.Point3f;
 
 public class RawFaces {
-  private final List<Point> vertices;
-  private final List<Point> normals;
+  private final List<Point3f> vertices;
+  private final List<Point3f> normals;
 
-  public RawFaces(List<Point> pVertices, List<Point> pNormals) {
+  public RawFaces(List<Point3f> pVertices, List<Point3f> pNormals) {
     vertices = pVertices;
     normals = pNormals;
   }
 
-  public List<Point> getVertices() {
+  public List<Point3f> getVertices() {
     return vertices;
   }
 
-  public List<Point> getNormals() {
+  public List<Point3f> getNormals() {
     return normals;
   }
 

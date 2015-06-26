@@ -71,13 +71,13 @@ public class ImageStackSampler {
 
     spatialFilterRadius = pSpatialFilterRadius < MIN_SPATIAL_FILTER_RADIUS ? MIN_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius > MAX_SPATIAL_FILTER_RADIUS ? MAX_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius;
 
-    noiseFilterSize = filterKernel.getFilterSize(spatialFilterRadius);
+    noiseFilterSize = filterKernel.getFilterSize(spatialFilterRadius, 1);
 
     filter = new double[noiseFilterSize][noiseFilterSize][noiseFilterSize];
     initFilter(spatialFilterRadius, noiseFilterSize, filter);
   }
 
-  public int getIntensity(Point pPoint) {
+  public int getIntensity(Point3f pPoint) {
     return getIntensity((int) pPoint.x, (int) pPoint.y, (int) pPoint.z);
   }
 
@@ -99,7 +99,7 @@ public class ImageStackSampler {
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][][] pFilter) {
-    double adjust = filterKernel.getFilterAdjust(pFilterRadius);
+    double adjust = filterKernel.getFilterAdjust(pFilterRadius, 1);
     for (int i = 0; i < pFilterSize; i++) {
       for (int j = 0; j < pFilterSize; j++) {
         for (int k = 0; k < pFilterSize; k++) {
