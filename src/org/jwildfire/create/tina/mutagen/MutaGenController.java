@@ -76,10 +76,10 @@ public class MutaGenController {
   private final JButton loadFlameFromFileBtn;
   private final JProgressBar progressBar;
   private final JWFNumberField amountREd;
-  private final JComboBox horizontalTrend1Cmb;
-  private final JComboBox horizontalTrend2Cmb;
-  private final JComboBox verticalTrend1Cmb;
-  private final JComboBox verticalTrend2Cmb;
+  private final JComboBox<MutationType> horizontalTrend1Cmb;
+  private final JComboBox<MutationType> horizontalTrend2Cmb;
+  private final JComboBox<MutationType> verticalTrend1Cmb;
+  private final JComboBox<MutationType> verticalTrend2Cmb;
   private final JButton backButton;
   private final JButton forwardButton;
   private final JButton saveFlameToEditorBtn;
@@ -87,8 +87,8 @@ public class MutaGenController {
   private final JTextPane hintPane;
 
   private ImagePanel imagePanels[][];
-  private final int MUTA_ROWS = 5;
-  private final int MUTA_COLS = 5;
+  private final static int MUTA_ROWS = 5;
+  private final static int MUTA_COLS = 5;
   private final List<MutationSet> mutationList = new ArrayList<MutationSet>();
   private int selectedGenerationIdx = -1;
   private int selRow = -1, selCol = -1;
@@ -140,8 +140,8 @@ public class MutaGenController {
 
   public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane, JPanel pFlamePanels[],
       JButton pLoadFlameFromEditorBtn, JButton pLoadFlameFromFileBtn,
-      JProgressBar pProgressBar, JWFNumberField pAmountREd, JComboBox pHorizontalTrend1Cmb, JComboBox pHorizontalTrend2Cmb,
-      JComboBox pVerticalTrend1Cmb, JComboBox pVerticalTrend2Cmb, JButton pBackButton, JButton pForwardButton, JTextPane pHintPane,
+      JProgressBar pProgressBar, JWFNumberField pAmountREd, JComboBox<MutationType> pHorizontalTrend1Cmb, JComboBox<MutationType> pHorizontalTrend2Cmb,
+      JComboBox<MutationType> pVerticalTrend1Cmb, JComboBox<MutationType> pVerticalTrend2Cmb, JButton pBackButton, JButton pForwardButton, JTextPane pHintPane,
       JButton pSaveFlameToEditorBtn, JButton pSaveFlameToFileBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
@@ -170,7 +170,7 @@ public class MutaGenController {
     initHintsPane();
   }
 
-  private void refreshTrendCmb(JComboBox pCmb, String pInitialValue) {
+  private void refreshTrendCmb(JComboBox<MutationType> pCmb, String pInitialValue) {
     pCmb.removeAllItems();
     pCmb.addItem(MutationType.ALL);
     pCmb.addItem(MutationType.USER1);

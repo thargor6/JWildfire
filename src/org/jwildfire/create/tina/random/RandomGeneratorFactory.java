@@ -41,8 +41,7 @@ public class RandomGeneratorFactory {
   }
 
   public static void cleanup() {
-    for (String key : generatorMap.keySet()) {
-      AbstractRandomGenerator gen = generatorMap.get(key);
+    for (AbstractRandomGenerator gen : generatorMap.values()) {
       try {
         gen.cleanup();
       }

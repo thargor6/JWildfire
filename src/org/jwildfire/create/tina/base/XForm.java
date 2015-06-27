@@ -382,11 +382,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return hasZXCoeffs;
   }
 
-  private TransformationStep[] transformations;
-  private int transformationsCount;
+  private List<TransformationStep> t = new ArrayList<>();
 
   private void createTransformations() {
-    List<TransformationStep> t = new ArrayList<TransformationStep>();
+    t = new ArrayList<TransformationStep>();
     t.add(new TransformationInitStep(this));
     if (!isHasXYCoeffs() && !isHasYZCoeffs() && !isHasZXCoeffs()) {
       t.add(new TransformationAffineNoneStep(this));
@@ -429,14 +428,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationPostAffineStep(this));
     }
-
-    transformations = t.toArray(new TransformationStep[0]);
-    transformationsCount = transformations.length;
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    for (int i = 0; i < transformationsCount; i++) {
-      transformations[i].transform(pContext, pAffineT, pVarT, pSrcPoint, pDstPoint);
+	for (TransformationStep transformation:t) {
+    	transformation.transform(pContext, pAffineT, pVarT, pSrcPoint, pDstPoint);
     }
   }
 

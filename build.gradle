@@ -10,6 +10,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'findbugs'
 repositories {
     mavenCentral()
     maven {
@@ -24,7 +25,10 @@ jar {
                    'Implementation-Version': version
     }
 }
-
+findbugs{
+	sourceSets = [sourceSets.main]
+	ignoreFailures = true
+}
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile 'com.l2fprod:l2fprod-common-all:7.3'
