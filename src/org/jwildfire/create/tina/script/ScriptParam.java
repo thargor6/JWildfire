@@ -36,7 +36,7 @@ public class ScriptParam implements Serializable {
     }
     else if (value instanceof String) {
       String valStr = (String) value;
-      return valStr.length() > 0 ? Integer.parseInt(valStr) : Integer.valueOf(0);
+      return valStr.length() > 0 ? Integer.valueOf(valStr) : Integer.valueOf(0);
     }
     else if (value instanceof Boolean) {
       return ((Boolean) value).booleanValue() ? Integer.valueOf(1) : Integer.valueOf(0);
@@ -55,7 +55,7 @@ public class ScriptParam implements Serializable {
     }
     else if (value instanceof String) {
       String valStr = (String) value;
-      return valStr.length() > 0 ? Double.parseDouble(valStr) : Double.valueOf(0.0);
+      return valStr.length() > 0 ? Double.valueOf(valStr) : Double.valueOf(0.0);
     }
     else if (value instanceof Integer) {
       return Double.valueOf((Integer) value);
