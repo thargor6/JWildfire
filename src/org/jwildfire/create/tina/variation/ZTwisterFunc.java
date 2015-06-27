@@ -31,7 +31,7 @@ public class ZTwisterFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_TWIST, PARAM_BASE };
 
   private double twist = 4.2;
-  private double base = 2.71828;
+  private double base = Math.E;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

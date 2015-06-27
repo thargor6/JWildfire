@@ -315,7 +315,7 @@ public class Complex {
 
   public void PerFix(double v) {
     // fix atan2() period, set v to a random integer
-    per_fix = 3.141592654 * v;
+    per_fix = Math.PI * v;
   }
 
   public void Pow(double exp) {
@@ -501,7 +501,7 @@ public class Complex {
     this.Flip();
     this.AsinH();
     this.Flip(); // this is Asin()
-    re = 1.570796327 - re;
+    re = (Math.PI/2) - re;
     im = -im; // Acos = pi/2 - Asin
   }
 
