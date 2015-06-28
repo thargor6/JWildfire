@@ -691,7 +691,7 @@ public class BenoitCreator extends ImageCreator {
     }
   }
 
-  private class Complex {
+  private static class Complex {
     public double re;
     public double im;
   }

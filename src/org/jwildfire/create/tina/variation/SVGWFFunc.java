@@ -425,7 +425,7 @@ public class SVGWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  private class Point {
+  private static class Point {
     private final double x, y;
     private final int r, g, b;
 

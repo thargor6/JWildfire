@@ -102,6 +102,16 @@ public class PerlinNoiseCreator extends ImageCreator {
         cB.setG(highColor.getGreen());
         cB.setB(highColor.getBlue());
         break;
+      case GREY:
+    	double dA= Tools.drand();
+    	cA.setR(dA);
+    	cA.setG(dA);
+    	cA.setB(dA);
+    	double dB= Tools.drand();
+    	cB.setR(dB);
+    	cB.setG(dB);
+    	cB.setB(dB);
+    	break;
     }
     initShape();
     int width = res.getImageWidth();
@@ -155,7 +165,7 @@ public class PerlinNoiseCreator extends ImageCreator {
     return res;
   }
 
-  private class RGBVal {
+  private static class RGBVal {
     private double r;
     private double g;
     private double b;
