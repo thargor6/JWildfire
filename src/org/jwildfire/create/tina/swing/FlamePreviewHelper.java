@@ -73,7 +73,7 @@ public class FlamePreviewHelper {
     imgPanel.repaint();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pOversamplingInPreview) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
     }
@@ -81,7 +81,7 @@ public class FlamePreviewHelper {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
-    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pOversamplingInPreview);
+    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
     if (img != null) {
       imgPanel.setImage(img);
       if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
@@ -111,7 +111,7 @@ public class FlamePreviewHelper {
     }
   }
 
-  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pOversamplingInPreview) {
+  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
@@ -133,7 +133,9 @@ public class FlamePreviewHelper {
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
-        int oldOversampling = flame.getOversampling();
+        int oldSpatialOversampling = flame.getSpatialOversampling();
+        int oldColorOversampling = flame.getColorOversampling();
+        boolean oldSampleJittering = flame.isSampleJittering();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -144,10 +146,7 @@ public class FlamePreviewHelper {
             FlameRenderer renderer;
             if (pQuickRender) {
               flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-              if (!pOversamplingInPreview) {
-                flame.setSpatialFilterRadius(0.0);
-                flame.setOversampling(1);
-              }
+              flame.applyFastOversamplingSettings();
             }
             else {
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
@@ -292,7 +291,9 @@ public class FlamePreviewHelper {
         finally {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
-          flame.setOversampling(oldOversampling);
+          flame.setSpatialOversampling(oldSpatialOversampling);
+          flame.setColorOversampling(oldColorOversampling);
+          flame.setSampleJittering(oldSampleJittering);
         }
       }
     }
@@ -321,7 +322,9 @@ public class FlamePreviewHelper {
       if (flame != null) {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
-        // TODO XXX
+        int oldSpatialOversampling = flame.getSpatialOversampling();
+        int oldColorOversampling = flame.getColorOversampling();
+        boolean oldSampleJittering = flame.isSampleJittering();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -338,7 +341,7 @@ public class FlamePreviewHelper {
             }
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
-            flame.setSpatialFilterRadius(0.0);
+            flame.applyFastOversamplingSettings();
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
@@ -350,8 +353,11 @@ public class FlamePreviewHelper {
           }
         }
         finally {
-          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
+          flame.setSpatialFilterRadius(oldSpatialFilterRadius);
+          flame.setSpatialOversampling(oldSpatialOversampling);
+          flame.setColorOversampling(oldColorOversampling);
+          flame.setSampleJittering(oldSampleJittering);
         }
       }
     }

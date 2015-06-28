@@ -59,7 +59,7 @@ public abstract class AbstractRenderThread implements Runnable {
     bgGreen = flame.getBGColorGreen();
     bgBlue = flame.getBGColorBlue();
     bgImagefile = flame.getBGImageFilename();
-    oversample = flame.getOversampling();
+    oversample = flame.getSpatialOversampling();
     ctx = new FlameTransformationContext(pRenderer, randGen, flame.getFrame());
     ctx.setPreserveZCoordinate(pRenderPackets.get(0).getFlame().isPreserveZ());
     ctx.setPreview(renderer.isPreview());

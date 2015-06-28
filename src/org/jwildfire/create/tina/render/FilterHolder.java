@@ -28,7 +28,7 @@ public abstract class FilterHolder {
 
   public FilterHolder(Flame pFlame) {
     flame = pFlame;
-    oversample = pFlame.getOversampling();
+    oversample = pFlame.getSpatialOversampling();
     filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius(), oversample);
     filter = new double[noiseFilterSize][noiseFilterSize];

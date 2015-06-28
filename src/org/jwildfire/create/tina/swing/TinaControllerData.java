@@ -417,8 +417,10 @@ public class TinaControllerData {
   public JWFNumberField gradientColorMapLocalColorScaleREd;
   public JSlider gradientColorMapLocalColorScaleSlider;
   public JWFNumberField flameFPSField;
-  public JWFNumberField tinaOversamplingREd;
-  public JSlider tinaOversamplingSlider;
-  public JToggleButton tinaOversamplingPreviewBtn;
   public JPanel filterKernelPreviewRootPnl;
+  public JWFNumberField tinaSpatialOversamplingREd;
+  public JSlider tinaSpatialOversamplingSlider;
+  public JWFNumberField tinaColorOversamplingREd;
+  public JSlider tinaColorOversamplingSlider;
+  public JCheckBox tinaSampleJitteringCheckBox;
 }

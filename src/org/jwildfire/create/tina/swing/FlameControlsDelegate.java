@@ -515,7 +515,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void enableDEFilterUI() {
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
-    enableControl(data.tinaOversamplingREd, false);
+    enableControl(data.tinaSpatialOversamplingREd, false);
+    enableControl(data.tinaColorOversamplingREd, false);
+    enableControl(data.tinaSampleJitteringCheckBox, false);
   }
 
   public void enableShadingUI() {
@@ -641,8 +643,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
 
-      data.tinaOversamplingREd.setText(String.valueOf(getCurrFlame().getOversampling()));
-      data.tinaOversamplingSlider.setValue(getCurrFlame().getOversampling());
+      data.tinaSpatialOversamplingREd.setText(String.valueOf(getCurrFlame().getSpatialOversampling()));
+      data.tinaSpatialOversamplingSlider.setValue(getCurrFlame().getSpatialOversampling());
+      data.tinaColorOversamplingREd.setText(String.valueOf(getCurrFlame().getColorOversampling()));
+      data.tinaColorOversamplingSlider.setValue(getCurrFlame().getColorOversampling());
+      data.tinaSampleJitteringCheckBox.setSelected(getCurrFlame().isSampleJittering());
 
       data.gammaThresholdREd.setText(String.valueOf(getCurrFlame().getGammaThreshold()));
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
@@ -1477,13 +1482,21 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
   }
 
-  public void oversamplingSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
+  public void spatialOversamplingSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
     owner.refreshFilterKernelPreviewImg();
   }
 
-  public void oversamplingREd_changed() {
-    flameTextFieldChanged(data.tinaOversamplingSlider, data.tinaOversamplingREd, "oversampling", 1.0);
+  public void spatialOversamplingREd_changed() {
+    flameTextFieldChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
     owner.refreshFilterKernelPreviewImg();
+  }
+
+  public void colorOversamplingSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0);
+  }
+
+  public void colorOversamplingREd_changed() {
+    flameTextFieldChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0);
   }
 }

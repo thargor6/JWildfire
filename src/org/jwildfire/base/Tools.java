@@ -49,7 +49,8 @@ public class Tools {
 
   public static boolean SPECIAL_VERSION = false;
 
-  public static final int MAX_OVERSAMPLING = 10;
+  public static final int MAX_SPATIAL_OVERSAMPLING = 6;
+  public static final int MAX_COLOR_OVERSAMPLING = 10;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;

@@ -597,10 +597,12 @@ public class TinaControllerParameter {
   public JButton leapMotionDeleteButton;
   public JButton leapMotionClearButton;
   public JButton leapMotionResetConfigButton;
-  public JWFNumberField tinaOversamplingREd;
-  public JSlider tinaOversamplingSlider;
-  public JToggleButton tinaOversamplingPreviewBtn;
   public JPanel filterKernelPreviewRootPnl;
+  public JWFNumberField tinaSpatialOversamplingREd;
+  public JSlider tinaSpatialOversamplingSlider;
+  public JWFNumberField tinaColorOversamplingREd;
+  public JSlider tinaColorOversamplingSlider;
+  public JCheckBox tinaSampleJitteringCheckBox;
 
   public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1110,8 +1112,8 @@ public class TinaControllerParameter {
       JWFNumberField pLeapMotionIndex3Field, JWFNumberField pLeapMotionInvScaleField,
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
-      JWFNumberField pTinaOversamplingREd, JSlider pTinaOversamplingSlider, JToggleButton pTinaOversamplingPreviewBtn,
-      JPanel pFilterKernelPreviewRootPnl) {
+      JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
+      JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1268,9 +1270,11 @@ public class TinaControllerParameter {
     leapMotionDeleteButton = pLeapMotionDeleteButton;
     leapMotionClearButton = pLeapMotionClearButton;
     leapMotionResetConfigButton = pLeapMotionResetConfigButton;
-    tinaOversamplingREd = pTinaOversamplingREd;
-    tinaOversamplingSlider = pTinaOversamplingSlider;
-    tinaOversamplingPreviewBtn = pTinaOversamplingPreviewBtn;
     filterKernelPreviewRootPnl = pFilterKernelPreviewRootPnl;
+    tinaSpatialOversamplingREd = pTinaSpatialOversamplingREd;
+    tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
+    tinaColorOversamplingREd = pTinaColorOversamplingREd;
+    tinaColorOversamplingSlider = pTinaColorOversamplingSlider;
+    tinaSampleJitteringCheckBox = pTinaSampleJitteringCheckBox;
   }
 }

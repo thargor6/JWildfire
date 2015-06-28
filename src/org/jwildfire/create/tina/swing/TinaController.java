@@ -543,12 +543,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.motionBlurDecayField = parameterObject.motionBlurDecayField;
     data.motionBlurDecaySlider = parameterObject.motionBlurDecaySlider;
     data.flameFPSField = parameterObject.flameFPSField;
-
-    data.tinaOversamplingREd = parameterObject.tinaOversamplingREd;
-    data.tinaOversamplingSlider = parameterObject.tinaOversamplingSlider;
-    data.tinaOversamplingPreviewBtn = parameterObject.tinaOversamplingPreviewBtn;
-    data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
-
     data.postSymmetryTypeCmb = parameterObject.postSymmetryTypeCmb;
     data.postSymmetryDistanceREd = parameterObject.postSymmetryDistanceREd;
     data.postSymmetryDistanceSlider = parameterObject.postSymmetryDistanceSlider;
@@ -630,6 +624,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.shadingDistanceColorCoordinateSlider = parameterObject.pShadingDistanceColorCoordinateSlider;
     data.shadingDistanceColorShiftREd = parameterObject.pShadingDistanceColorShiftREd;
     data.shadingDistanceColorShiftSlider = parameterObject.pShadingDistanceColorShiftSlider;
+
+    data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
+    data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
+    data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
+    data.tinaColorOversamplingREd = parameterObject.tinaColorOversamplingREd;
+    data.tinaColorOversamplingSlider = parameterObject.tinaColorOversamplingSlider;
+    data.tinaSampleJitteringCheckBox = parameterObject.tinaSampleJitteringCheckBox;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
@@ -1207,7 +1208,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
-    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, data.tinaOversamplingPreviewBtn.isSelected());
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -5739,6 +5740,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  public void sampleJitteringCbx_changed() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
+      refreshFlameImage(false);
     }
   }
 }

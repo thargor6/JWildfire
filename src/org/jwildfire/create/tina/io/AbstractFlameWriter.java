@@ -216,7 +216,7 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("rotate", pFlame.getCamRoll()));
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
     attrList.add(xb.createAttr("filter_kernel", pFlame.getSpatialFilterKernel().toString()));
-    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_OVERSAMPLE, pFlame.getOversampling()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_OVERSAMPLE, pFlame.getSpatialOversampling()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
     attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));

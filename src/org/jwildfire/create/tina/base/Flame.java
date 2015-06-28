@@ -119,7 +119,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private double camDOFArea;
   private final MotionCurve camDOFAreaCurve = new MotionCurve();
   private boolean newCamDOF;
-  private int oversampling;
+  private int spatialOversampling;
+  private int colorOversampling;
+  private boolean sampleJittering;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
   private double sampleDensity;
@@ -256,9 +258,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void resetAntialiasingSettings() {
-    spatialFilterRadius = 0.75;
-    spatialFilterKernel = FilterKernelType.MITCHELL;
-    oversampling = Prefs.getPrefs().getTinaDefaultOversampling();
+    spatialFilterRadius = Prefs.getPrefs().getTinaDefaultSpatialFilterRadius();
+    spatialFilterKernel = Prefs.getPrefs().getTinaDefaultSpatialFilterKernel();
+    spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
+    colorOversampling = Prefs.getPrefs().getTinaDefaultColorOversampling();
+    sampleJittering = Prefs.getPrefs().isTinaDefaultSampleJittering();
   }
 
   public void resetColoringSettings() {
@@ -676,7 +680,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     name = pFlame.name;
     bgImageFilename = pFlame.bgImageFilename;
     lastFilename = pFlame.lastFilename;
-    oversampling = pFlame.oversampling;
+    spatialOversampling = pFlame.spatialOversampling;
+    colorOversampling = pFlame.colorOversampling;
+    sampleJittering = pFlame.sampleJittering;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -740,7 +746,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
-        (camDOFShape != pFlame.camDOFShape) || (oversampling != pFlame.oversampling) ||
+        (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
+        (colorOversampling != pFlame.colorOversampling) || (sampleJittering != pFlame.sampleJittering) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
         (fabs(camDOFFade - pFlame.camDOFFade) > EPSILON) || !camDOFFadeCurve.isEqual(pFlame.camDOFFadeCurve) ||
@@ -1373,18 +1380,47 @@ public class Flame implements Assignable<Flame>, Serializable {
     return camZoomCurve;
   }
 
-  public int getOversampling() {
-    return oversampling;
+  public int getSpatialOversampling() {
+    return spatialOversampling;
   }
 
-  public void setOversampling(int pOversampling) {
-    oversampling = pOversampling;
-    if (oversampling < 1) {
-      oversampling = 1;
+  public void setSpatialOversampling(int pSpatialOversampling) {
+    spatialOversampling = pSpatialOversampling;
+    if (spatialOversampling < 1) {
+      spatialOversampling = 1;
     }
-    else if (oversampling > Tools.MAX_OVERSAMPLING) {
-      oversampling = Tools.MAX_OVERSAMPLING;
+    else if (spatialOversampling > Tools.MAX_SPATIAL_OVERSAMPLING) {
+      spatialOversampling = Tools.MAX_SPATIAL_OVERSAMPLING;
     }
+  }
+
+  public int getColorOversampling() {
+    return colorOversampling;
+  }
+
+  public void setColorOversampling(int pColorOversampling) {
+    colorOversampling = pColorOversampling;
+    if (colorOversampling < 1) {
+      colorOversampling = 1;
+    }
+    else if (colorOversampling > Tools.MAX_COLOR_OVERSAMPLING) {
+      colorOversampling = Tools.MAX_COLOR_OVERSAMPLING;
+    }
+  }
+
+  public boolean isSampleJittering() {
+    return sampleJittering;
+  }
+
+  public void setSampleJittering(boolean pSampleJittering) {
+    sampleJittering = pSampleJittering;
+  }
+
+  public void applyFastOversamplingSettings() {
+    setSpatialFilterRadius(0.0);
+    setSpatialOversampling(1);
+    setColorOversampling(1);
+    setSampleJittering(false);
   }
 
 }

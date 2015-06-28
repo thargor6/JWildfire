@@ -222,7 +222,7 @@ public class AbstractFlameReader {
       }
     }
     if ((hs = atts.get(ATTR_OVERSAMPLE)) != null) {
-      pFlame.setOversampling(Integer.parseInt(hs));
+      pFlame.setSpatialOversampling(Integer.parseInt(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
