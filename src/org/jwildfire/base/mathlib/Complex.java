@@ -436,7 +436,7 @@ public class Complex {
     lab.Div(zz);
     lab.Log();
     dab.Div(lab);
-    this.Copy(lab);
+    this.Copy(dab);
   }
 
   public void AtanH() {
