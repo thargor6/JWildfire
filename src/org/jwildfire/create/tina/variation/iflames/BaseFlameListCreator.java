@@ -245,7 +245,7 @@ public class BaseFlameListCreator {
           List<String> paramNames = new ArrayList<String>();
           List<Double> paramValues = new ArrayList<Double>();
           if (param1 != null) {
-            SimpleImage paramMap1 = params != null ? paramMaps1.get(shapeIndex) : null;
+            SimpleImage paramMap1 = paramMaps1 != null ? paramMaps1.get(shapeIndex) : null;
             double value;
             if (paramMap1 != null) {
               toolPixel.setARGBValue(paramMap1.getARGBValueIgnoreBounds(j, i));

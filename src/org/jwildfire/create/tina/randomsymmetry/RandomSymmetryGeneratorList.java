@@ -22,7 +22,7 @@ import java.util.List;
 public class RandomSymmetryGeneratorList {
   public static final String DEFAULT_GENERATOR_NAME = new AllSparseRandomSymmetryGenerator().getName();
   private static List<Class<? extends RandomSymmetryGenerator>> items = new ArrayList<Class<? extends RandomSymmetryGenerator>>();
-  private static List<String> nameList = new ArrayList<String>();
+  private static final List<String> nameList;
 
   public static final RandomSymmetryGenerator NONE = new NoneRandomSymmetryGenerator();
   public static final RandomSymmetryGenerator SPARSE = new AllSparseRandomSymmetryGenerator();
@@ -34,28 +34,25 @@ public class RandomSymmetryGeneratorList {
     registerRandomSymmetryGenerator(XAxisRandomSymmetryGenerator.class);
     registerRandomSymmetryGenerator(YAxisRandomSymmetryGenerator.class);
     registerRandomSymmetryGenerator(PointRandomSymmetryGenerator.class);
+    nameList = new ArrayList<>();
+    for (Class<? extends RandomSymmetryGenerator> funcCls : items) {
+      try {
+        nameList.add(funcCls.newInstance().getName());
+      }
+      catch (InstantiationException e) {
+        e.printStackTrace();
+      }
+      catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private static void registerRandomSymmetryGenerator(Class<? extends RandomSymmetryGenerator> pRandomSymmetryGenerator) {
     items.add(pRandomSymmetryGenerator);
-    nameList = null;
   }
 
   public static List<String> getNameList() {
-    if (nameList == null) {
-      nameList = new ArrayList<String>();
-      for (Class<? extends RandomSymmetryGenerator> funcCls : items) {
-        try {
-          nameList.add(funcCls.newInstance().getName());
-        }
-        catch (InstantiationException e) {
-          e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      }
-    }
     return nameList;
   }
 
