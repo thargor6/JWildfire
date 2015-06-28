@@ -103,8 +103,11 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_IFLAMES_LIBRARY_PATH_IMAGES, pPrefs.getIflamesImageLibraryPath());
     addValue(sb, Prefs.KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP, pPrefs.isIflamesLoadLibraryAtStartup());
 
-    addValue(sb, Prefs.KEY_TINA_EDITOR_SHOW_OVERSAMPLING_IN_PREVIEWS, pPrefs.isTinaEditorShowOversamplingInPreviews());
-    addValue(sb, Prefs.KEY_TINA_DEFAULT_OVERSAMPLING, pPrefs.getTinaDefaultOversampling());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_COLOR_OVERSAMPLING, pPrefs.getTinaDefaultColorOversampling());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_SAMPLE_JITTERING, pPrefs.isTinaDefaultSampleJittering());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_FILTER_KERNEL, pPrefs.getTinaDefaultSpatialFilterKernel().toString());
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_FILTER_RADIUS, pPrefs.getTinaDefaultSpatialFilterRadius());
 
     addValue(sb, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel());

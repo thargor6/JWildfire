@@ -27,6 +27,7 @@ import java.util.StringTokenizer;
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
@@ -136,8 +137,18 @@ public class PrefsReader {
         pPrefs.setTinaRandGenDualityPreferedVariationProbability2(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2()));
         pPrefs.setTinaOverwriteMotionBlurTimeStep(getDoubleProperty(props, Prefs.KEY_TINA_OVERWRITE_MOTIONBLUR_TIMESTEP, pPrefs.getTinaOverwriteMotionBlurTimeStep()));
         pPrefs.setTinaOverwriteMotionBlurLength(getIntProperty(props, Prefs.KEY_TINA_OVERWRITE_MOTIONBLUR_LENGTH, pPrefs.getTinaOverwriteMotionBlurLength()));
-        pPrefs.setTinaDefaultOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_OVERSAMPLING, pPrefs.getTinaDefaultOversampling()));
-        pPrefs.setTinaEditorShowOversamplingInPreviews(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_SHOW_OVERSAMPLING_IN_PREVIEWS, pPrefs.isTinaEditorShowOversamplingInPreviews()));
+
+        pPrefs.setTinaDefaultSpatialOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling()));
+        pPrefs.setTinaDefaultColorOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_COLOR_OVERSAMPLING, pPrefs.getTinaDefaultColorOversampling()));
+        pPrefs.setTinaDefaultSampleJittering(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_SAMPLE_JITTERING, pPrefs.isTinaDefaultSampleJittering()));
+        try {
+          pPrefs.setTinaDefaultSpatialFilterKernel(FilterKernelType.valueOf(getProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_KERNEL, pPrefs.getTinaDefaultSpatialFilterKernel().toString())));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+        pPrefs.setTinaDefaultSpatialFilterRadius(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_RADIUS, pPrefs.getTinaDefaultSpatialFilterRadius()));
+
         pPrefs.setTinaMutaGenMutationTypesUser1(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER1, pPrefs.getTinaMutaGenMutationTypesUser1()));
         pPrefs.setTinaMutaGenMutationTypesUser2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER2, pPrefs.getTinaMutaGenMutationTypesUser2()));
         pPrefs.setTinaMutaGenMutationTypesUser3(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPES_USER3, pPrefs.getTinaMutaGenMutationTypesUser3()));

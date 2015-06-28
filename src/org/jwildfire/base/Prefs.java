@@ -26,6 +26,7 @@ import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
 import org.jwildfire.create.tina.swing.RandomBatchRefreshType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
@@ -103,8 +104,11 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_EDITOR_SHOW_OVERSAMPLING_IN_PREVIEWS = "tina.editor.show_oversampling_in_previews";
-  static final String KEY_TINA_DEFAULT_OVERSAMPLING = "tina.editor.default_oversampling";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling";
+  static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling";
+  static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering";
+  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel";
+  static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
@@ -231,11 +235,20 @@ public class Prefs extends ManagedObject {
   @Property(description = "Add small shadows to the controls, to increase contrast with background, in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithShadows = true;
 
-  @Property(description = "Show oversampling in preview-renderings, which may slow down preview-rendering a lot", category = PropertyCategory.TINA)
-  private boolean tinaEditorShowOversamplingInPreviews = false;
-
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultOversampling = 2;
+  private int tinaDefaultSpatialOversampling = 2;
+
+  @Property(description = "Default color oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
+  private int tinaDefaultColorOversampling = 3;
+
+  @Property(description = "Default jitter setting for reducing aliasing artifacts, used when creating a new flame", category = PropertyCategory.TINA)
+  private boolean tinaDefaultSampleJittering = true;
+
+  @Property(description = "Default spatial filter-kernel, used when creating a new flame", category = PropertyCategory.TINA, editorClass = FilterKernelTypeEditor.class)
+  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL;
+
+  @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
+  private double tinaDefaultSpatialFilterRadius = 0.8;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
@@ -379,6 +392,13 @@ public class Prefs extends ManagedObject {
     public EditorDoubleClickActionTypeEditor() {
       super();
       setAvailableValues(new EditorDoubleClickActionType[] { EditorDoubleClickActionType.ACTIVATE_TRIANGLE_EDIT, EditorDoubleClickActionType.RENDER_FLAME, EditorDoubleClickActionType.SWITCH_TRIANGLE_CAM_EDIT, EditorDoubleClickActionType.NONE });
+    }
+  }
+
+  public static class FilterKernelTypeEditor extends ComboBoxPropertyEditor {
+    public FilterKernelTypeEditor() {
+      super();
+      setAvailableValues(FilterKernelType.values());
     }
   }
 
@@ -712,8 +732,11 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaAnimationExport = pSrc.tinaIntegrationChaoticaAnimationExport;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
-    tinaEditorShowOversamplingInPreviews = pSrc.tinaEditorShowOversamplingInPreviews;
-    tinaDefaultOversampling = pSrc.tinaDefaultOversampling;
+    tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
+    tinaDefaultColorOversampling = pSrc.tinaDefaultColorOversampling;
+    tinaDefaultSampleJittering = pSrc.tinaDefaultSampleJittering;
+    tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
+    tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1372,26 +1395,56 @@ public class Prefs extends ManagedObject {
     tinaIntegrationChaoticaAnimationExport = pTinaIntegrationChaoticaAnimationExport;
   }
 
-  public boolean isTinaEditorShowOversamplingInPreviews() {
-    return tinaEditorShowOversamplingInPreviews;
+  public int getTinaDefaultSpatialOversampling() {
+    return tinaDefaultSpatialOversampling;
   }
 
-  public void setTinaEditorShowOversamplingInPreviews(boolean pTinaEditorShowOversamplingInPreviews) {
-    tinaEditorShowOversamplingInPreviews = pTinaEditorShowOversamplingInPreviews;
-  }
-
-  public int getTinaDefaultOversampling() {
-    return tinaDefaultOversampling;
-  }
-
-  public void setTinaDefaultOversampling(int pTinaDefaultOversampling) {
-    tinaDefaultOversampling = pTinaDefaultOversampling;
-    if (tinaDefaultOversampling < 1) {
-      tinaDefaultOversampling = 1;
+  public void setTinaDefaultSpatialOversampling(int pTinaDefaultSpatialOversampling) {
+    tinaDefaultSpatialOversampling = pTinaDefaultSpatialOversampling;
+    if (tinaDefaultSpatialOversampling < 1) {
+      tinaDefaultSpatialOversampling = 1;
     }
-    else if (tinaDefaultOversampling > Tools.MAX_OVERSAMPLING) {
-      tinaDefaultOversampling = Tools.MAX_OVERSAMPLING;
+    else if (tinaDefaultSpatialOversampling > Tools.MAX_SPATIAL_OVERSAMPLING) {
+      tinaDefaultSpatialOversampling = Tools.MAX_SPATIAL_OVERSAMPLING;
     }
+  }
+
+  public int getTinaDefaultColorOversampling() {
+    return tinaDefaultColorOversampling;
+  }
+
+  public void setTinaDefaultColorOversampling(int pTinaDefaultColorOversampling) {
+    tinaDefaultColorOversampling = pTinaDefaultColorOversampling;
+    if (tinaDefaultColorOversampling < 1) {
+      tinaDefaultColorOversampling = 1;
+    }
+    else if (tinaDefaultColorOversampling > Tools.MAX_COLOR_OVERSAMPLING) {
+      tinaDefaultColorOversampling = Tools.MAX_COLOR_OVERSAMPLING;
+    }
+  }
+
+  public boolean isTinaDefaultSampleJittering() {
+    return tinaDefaultSampleJittering;
+  }
+
+  public void setTinaDefaultSampleJittering(boolean pTinaDefaultSampleJittering) {
+    tinaDefaultSampleJittering = pTinaDefaultSampleJittering;
+  }
+
+  public FilterKernelType getTinaDefaultSpatialFilterKernel() {
+    return tinaDefaultSpatialFilterKernel;
+  }
+
+  public void setTinaDefaultSpatialFilterKernel(FilterKernelType pTinaDefaultSpatialFilterKernel) {
+    tinaDefaultSpatialFilterKernel = pTinaDefaultSpatialFilterKernel;
+  }
+
+  public double getTinaDefaultSpatialFilterRadius() {
+    return tinaDefaultSpatialFilterRadius;
+  }
+
+  public void setTinaDefaultSpatialFilterRadius(double pTinaDefaultSpatialFilterRadius) {
+    tinaDefaultSpatialFilterRadius = pTinaDefaultSpatialFilterRadius;
   }
 
 }
