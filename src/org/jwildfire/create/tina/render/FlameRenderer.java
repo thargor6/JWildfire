@@ -505,7 +505,7 @@ public class FlameRenderer {
 
   private void renderImage(SimpleImage pImage, LogDensityPoint logDensityPnt) {
     if (pImage != null) {
-      int threadCount = prefs.getTinaRenderThreads() - 1;
+      int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1)
         threadCount = 1;
       if (threadCount == 1 || pImage.getImageHeight() < 8 * threadCount) {
