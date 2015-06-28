@@ -23,7 +23,7 @@ import java.util.Vector;
 
 public class TransformersList {
   private static List<Class<? extends Transformer>> items = new ArrayList<Class<? extends Transformer>>();
-  private static Vector<String> itemVector = null;
+  private static final Vector<String> itemVector;
 
   private static void registerCreator(Class<? extends Transformer> pCreator) {
     items.add(pCreator);
@@ -97,16 +97,14 @@ public class TransformersList {
     registerCreator(FormulaComposeTransformer.class);
     registerCreator(Pixelize3DTransformer.class);
     registerCreator(HDRComposeTransformer.class);
+    itemVector = new Vector<String>();
+    for (Class<? extends Transformer> creator : items) {
+      itemVector.add(creator.getSimpleName());
+    }
+    Collections.sort(itemVector);
   }
 
   public static Vector<String> getItemVector() {
-    if (itemVector == null) {
-      itemVector = new Vector<String>();
-      for (Class<? extends Transformer> creator : items) {
-        itemVector.add(creator.getSimpleName());
-      }
-      Collections.sort(itemVector);
-    }
     return itemVector;
   }
 

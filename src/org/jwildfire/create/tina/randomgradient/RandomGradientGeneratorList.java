@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RandomGradientGeneratorList {
   private static List<Class<? extends RandomGradientGenerator>> items = new ArrayList<Class<? extends RandomGradientGenerator>>();
-  private static List<String> nameList = new ArrayList<String>();
+  private static final List<String> nameList;
 
   public static final RandomGradientGenerator DEFAULT = new StrongHueRandomGradientGenerator();
   public static final String DEFAULT_GENERATOR_NAME = DEFAULT.getName();
@@ -33,28 +33,25 @@ public class RandomGradientGeneratorList {
     registerRandomGradientGenerator(MonochromeRandomGradientGenerator.class);
     registerRandomGradientGenerator(SmoothRandomGradientGenerator.class);
     registerRandomGradientGenerator(TwoColorsRandomGradientGenerator.class);
+    nameList = new ArrayList<String>();
+    for (Class<? extends RandomGradientGenerator> funcCls : items) {
+      try {
+        nameList.add(funcCls.newInstance().getName());
+      }
+      catch (InstantiationException e) {
+        e.printStackTrace();
+      }
+      catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private static void registerRandomGradientGenerator(Class<? extends RandomGradientGenerator> pRandomMovieGenerator) {
     items.add(pRandomMovieGenerator);
-    nameList = null;
   }
 
   public static List<String> getNameList() {
-    if (nameList == null) {
-      nameList = new ArrayList<String>();
-      for (Class<? extends RandomGradientGenerator> funcCls : items) {
-        try {
-          nameList.add(funcCls.newInstance().getName());
-        }
-        catch (InstantiationException e) {
-          e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      }
-    }
     return nameList;
   }
 

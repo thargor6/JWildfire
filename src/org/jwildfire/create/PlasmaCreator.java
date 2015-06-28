@@ -192,7 +192,7 @@ public class PlasmaCreator extends ImageCreator {
     }
   }
 
-  private class PixelColor {
+  private static class PixelColor {
     public double r;
     public double g;
     public double b;

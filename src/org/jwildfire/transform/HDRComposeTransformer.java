@@ -239,7 +239,7 @@ public class HDRComposeTransformer extends Transformer {
     this.intensity = intensity;
   }
 
-  public class HSLTransformer {
+  public static class HSLTransformer {
     private float red, green, blue, amp;
     private float hue, saturation, luminosity;
     private static final float EPSILON = 0.000001f;

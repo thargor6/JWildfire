@@ -45,7 +45,7 @@ public class CircleTrans1Func extends VariationFunc {
 
   private static final double AM = 1.0 / 2147483647;
 
-  private class vec2 {
+  private static class vec2 {
     public double x, y;
   }
 

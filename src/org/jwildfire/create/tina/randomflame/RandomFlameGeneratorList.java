@@ -24,7 +24,7 @@ import org.jwildfire.create.tina.integration.chaotica.ChaoticaBridgeRandomFlameG
 public class RandomFlameGeneratorList {
   public static final String DEFAULT_GENERATOR_NAME = new AllRandomFlameGenerator().getName();
   private static List<Class<? extends RandomFlameGenerator>> items = new ArrayList<Class<? extends RandomFlameGenerator>>();
-  private static List<String> nameList = new ArrayList<String>();
+  private static final List<String> nameList;
 
   static {
     registerRandomFlameGenerator(AllRandomFlameGenerator.class);
@@ -64,28 +64,26 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
     registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
     //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
+    
+    nameList = new ArrayList<>();
+    for (Class<? extends RandomFlameGenerator> funcCls : items) {
+      try {
+        nameList.add(funcCls.newInstance().getName());
+      }
+      catch (InstantiationException e) {
+        e.printStackTrace();
+      }
+      catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private static void registerRandomFlameGenerator(Class<? extends RandomFlameGenerator> pRandomFlameGenerator) {
     items.add(pRandomFlameGenerator);
-    nameList = null;
   }
 
   public static List<String> getNameList() {
-    if (nameList == null) {
-      nameList = new ArrayList<String>();
-      for (Class<? extends RandomFlameGenerator> funcCls : items) {
-        try {
-          nameList.add(funcCls.newInstance().getName());
-        }
-        catch (InstantiationException e) {
-          e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      }
-    }
     return nameList;
   }
 

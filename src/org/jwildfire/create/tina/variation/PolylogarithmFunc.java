@@ -135,7 +135,7 @@ public class PolylogarithmFunc extends VariationFunc {
     return Hs;
   }
 
-  public class RiemannInt { // with table lookups (TLDR) :D
+  public static class RiemannInt { // with table lookups (TLDR) :D
     private double[] RzNegOdd = { -0.08333333333333333, // zeta(-(2n+1)) because zeta (-2), zeta(-4) etc are zero
         0.008333333333333333, // zeta(-3)
         -0.003968253968253968, // zeta(-5)
