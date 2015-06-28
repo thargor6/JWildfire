@@ -124,7 +124,7 @@ public class FlameRenderer {
 
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
-    int oversample = flame.getOversampling();
+    int oversample = flame.getSpatialOversampling();
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
     maxBorderWidth = (MAX_FILTER_WIDTH - oversample) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - oversample) / 2;
@@ -508,7 +508,7 @@ public class FlameRenderer {
       int threadCount = prefs.getTinaRenderThreads() - 1;
       if (threadCount < 1)
         threadCount = 1;
-      if (threadCount == 1 || pImage.getImageHeight() < 32 * threadCount) {
+      if (threadCount == 1 || pImage.getImageHeight() < 8 * threadCount) {
         GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
         for (int i = 0; i < pImage.getImageHeight(); i++) {
           for (int j = 0; j < pImage.getImageWidth(); j++) {
@@ -523,10 +523,10 @@ public class FlameRenderer {
         List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
         for (int i = 0; i < threadCount; i++) {
           int startRow = i * rowsPerThread;
-          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+          int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
           RenderImageThread thread = new RenderImageThread(startRow, endRow, pImage);
           threads.add(thread);
-          thread.run();
+          new Thread(thread).start();
         }
         while (true) {
           boolean ready = true;
@@ -693,10 +693,10 @@ public class FlameRenderer {
         List<RenderImageSimpleScaledThread> threads = new ArrayList<RenderImageSimpleScaledThread>();
         for (int i = 0; i < threadCount; i++) {
           int startRow = i * rowsPerThread;
-          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+          int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
           RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(startRow, endRow, pImage, newImg);
           threads.add(thread);
-          thread.run();
+          new Thread(thread).start();
         }
         while (true) {
           boolean ready = true;
