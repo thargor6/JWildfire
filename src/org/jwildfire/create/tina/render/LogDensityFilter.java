@@ -18,13 +18,10 @@ package org.jwildfire.create.tina.render;
 
 import static org.jwildfire.base.mathlib.MathLib.log10;
 
-import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
-import org.jwildfire.create.tina.base.raster.RasterPointFloat;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class LogDensityFilter extends FilterHolder {
@@ -36,23 +33,11 @@ public class LogDensityFilter extends FilterHolder {
   private double precalcLogArray[];
   private double k1, k2;
   private double motionBlurScl;
-  private final AbstractRandomGenerator randGen;
-  private final boolean jitter;
-  private final int colorOversampling;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
     super(pFlame);
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
     motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
-    jitter = pFlame.isSampleJittering();
-    colorOversampling = pFlame.getColorOversampling();
-    if (jitter) {
-      randGen = new MarsagliaRandomGenerator();
-      randGen.randomize(pFlame.hashCode());
-    }
-    else {
-      randGen = null;
-    }
   }
 
   public void setRaster(AbstractRasterPoint[][] pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight) {
@@ -73,69 +58,46 @@ public class LogDensityFilter extends FilterHolder {
   }
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
-    pFilteredPnt.intensity = 0;
-    for (int px = 0; px < oversample; px++) {
-      for (int py = 0; py < oversample; py++) {
-        AbstractRasterPoint point = getSample(pX * oversample + px, pY * oversample + py);
-        double logScale;
-        long pCount = point.getCount();
-        if (pCount < precalcLogArray.length) {
-          logScale = precalcLogArray[(int) pCount];
-        }
-        else {
-          logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
-        }
-        if (pCount > 0) {
-          if (colorFunc == ColorFunc.NULL) {
-            pFilteredPnt.red += logScale * point.getRed();
-            pFilteredPnt.green += logScale * point.getGreen();
-            pFilteredPnt.blue += logScale * point.getBlue();
-          }
-          else {
-            final double scale = ChannelMixerCurves.FILTER_SCALE;
-            double rawR = point.getRed() * scale / pCount;
-            double rawG = point.getGreen() * scale / pCount;
-            double rawB = point.getBlue() * scale / pCount;
-
-            pFilteredPnt.red += logScale * colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
-            pFilteredPnt.green += logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
-            pFilteredPnt.blue += logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
-          }
-          pFilteredPnt.intensity += logScale * pCount * flame.getWhiteLevel();
-        }
+    AbstractRasterPoint point = getRasterPoint(pX, pY);
+    double logScale;
+    long pCount = point.getCount();
+    if (pCount < precalcLogArray.length) {
+      logScale = precalcLogArray[(int) pCount];
+    }
+    else {
+      logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
+    }
+    if (pCount > 0) {
+      if (colorFunc == ColorFunc.NULL) {
+        pFilteredPnt.red = logScale * point.getRed();
+        pFilteredPnt.green = logScale * point.getGreen();
+        pFilteredPnt.blue = logScale * point.getBlue();
       }
+      else {
+        final double scale = ChannelMixerCurves.FILTER_SCALE;
+        double rawR = point.getRed() * scale / pCount;
+        double rawG = point.getGreen() * scale / pCount;
+        double rawB = point.getBlue() * scale / pCount;
+
+        pFilteredPnt.red = logScale * colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
+        pFilteredPnt.green = logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
+        pFilteredPnt.blue = logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
+      }
+      pFilteredPnt.intensity = logScale * pCount * flame.getWhiteLevel();
+    }
+    else {
+      pFilteredPnt.red = pFilteredPnt.green = pFilteredPnt.blue = 0;
+      pFilteredPnt.intensity = 0;
     }
   }
 
   private AbstractRasterPoint emptyRasterPoint = new RasterPoint();
 
-  private AbstractRasterPoint readSample(int pX, int pY) {
+  private AbstractRasterPoint getRasterPoint(int pX, int pY) {
     if (pX < 0 || pX >= rasterWidth || pY < 0 || pY >= rasterHeight)
       return emptyRasterPoint;
     else
       return raster[pY][pX];
-  }
-
-  private AbstractRasterPoint getSample(int pX, int pY) {
-    if (jitter) {
-      final double epsilon = 0.01;
-      double x = epsilon + randGen.random() * (0.5 - 2 * epsilon);
-      double y = epsilon + randGen.random() * (0.5 - 2 * epsilon);
-      AbstractRasterPoint lu = readSample(pX, pY);
-      AbstractRasterPoint ru = readSample(pX + 1, pY);
-      AbstractRasterPoint lb = readSample(pX, pY + 1);
-      AbstractRasterPoint rb = readSample(pX + 1, pY + 1);
-      AbstractRasterPoint res = new RasterPointFloat();
-      res.setRed(Tools.blerp(lu.getRed(), ru.getRed(), lb.getRed(), rb.getRed(), x, y));
-      res.setGreen(Tools.blerp(lu.getGreen(), ru.getGreen(), lb.getGreen(), rb.getGreen(), x, y));
-      res.setBlue(Tools.blerp(lu.getBlue(), ru.getBlue(), lb.getBlue(), rb.getBlue(), x, y));
-      res.setCount(Math.round(Tools.blerp(lu.getCount(), ru.getCount(), lb.getCount(), rb.getCount(), x, y)));
-      return res;
-    }
-    else {
-      return readSample(pX, pY);
-    }
   }
 
   public double calcDensity(long pSampleCount, long pRasterSize) {
@@ -150,98 +112,7 @@ public class LogDensityFilter extends FilterHolder {
   }
 
   public void transformPoint(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    pFilteredPnt.clear();
-    if (noiseFilterSize > 1) {
-      if (colorFunc == ColorFunc.NULL) {
-        for (int c = 0; c < colorOversampling; c++) {
-          for (int i = 0; i < noiseFilterSize; i++) {
-            for (int j = 0; j < noiseFilterSize; j++) {
-              AbstractRasterPoint point = getSample(pX * oversample + j, pY * oversample + i);
-              long count = point.getCount();
-              int pIdx = (int) count;
-              if (pIdx > 0) {
-                double logScale;
-                if (pIdx < precalcLogArray.length) {
-                  logScale = precalcLogArray[pIdx];
-                }
-                else {
-                  logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
-                }
-                pFilteredPnt.red += filter[i][j] * logScale * point.getRed() / (double) colorOversampling;
-                pFilteredPnt.green += filter[i][j] * logScale * point.getGreen() / (double) colorOversampling;
-                pFilteredPnt.blue += filter[i][j] * logScale * point.getBlue() / (double) colorOversampling;
-                pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel() / (double) colorOversampling;
-              }
-            }
-          }
-        }
-      }
-      else {
-        for (int c = 0; c < colorOversampling; c++) {
-          for (int i = 0; i < noiseFilterSize; i++) {
-            for (int j = 0; j < noiseFilterSize; j++) {
-              AbstractRasterPoint point = getSample(pX * oversample + j, pY * oversample + i);
-              long count = point.getCount();
-              int pIdx = (int) count;
-              if (pIdx > 0) {
-                double logScale;
-                if (pIdx < precalcLogArray.length) {
-                  logScale = precalcLogArray[pIdx];
-                }
-                else {
-                  logScale = (k1 * log10(1.0 + count * motionBlurScl * k2)) / (flame.getWhiteLevel() * count * motionBlurScl);
-                }
-                final double scale = ChannelMixerCurves.FILTER_SCALE;
-                double rawR = point.getRed() * scale / (double) count;
-                double rawG = point.getGreen() * scale / (double) count;
-                double rawB = point.getBlue() * scale / (double) count;
-                double transR = colorFunc.mapRGBToR(rawR, rawG, rawB) * count / scale;
-                double transG = colorFunc.mapRGBToG(rawR, rawG, rawB) * count / scale;
-                double transB = colorFunc.mapRGBToB(rawR, rawG, rawB) * count / scale;
-                pFilteredPnt.red += filter[i][j] * logScale * transR / (double) colorOversampling;
-                pFilteredPnt.green += filter[i][j] * logScale * transG / (double) colorOversampling;
-                pFilteredPnt.blue += filter[i][j] * logScale * transB / (double) colorOversampling;
-                pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel() / (double) colorOversampling;
-              }
-            }
-          }
-        }
-      }
-    }
-    else {
-      for (int px = 0; px < oversample; px++) {
-        for (int py = 0; py < oversample; py++) {
-          AbstractRasterPoint point = getSample(pX * oversample + px, pY * oversample + py);
-          double logScale;
-          long pCount = point.getCount();
-          if (pCount < precalcLogArray.length) {
-            logScale = precalcLogArray[(int) pCount];
-          }
-          else {
-            logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
-          }
-          if (pCount > 0) {
-            if (colorFunc == ColorFunc.NULL) {
-              pFilteredPnt.red += logScale * point.getRed();
-              pFilteredPnt.green += logScale * point.getGreen();
-              pFilteredPnt.blue += logScale * point.getBlue();
-            }
-            else {
-              final double scale = ChannelMixerCurves.FILTER_SCALE;
-              double rawR = point.getRed() * scale / pCount;
-              double rawG = point.getGreen() * scale / pCount;
-              double rawB = point.getBlue() * scale / pCount;
-
-              pFilteredPnt.red += logScale * colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount / scale;
-              pFilteredPnt.green += logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount / scale;
-              pFilteredPnt.blue += logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount / scale;
-            }
-            pFilteredPnt.intensity += logScale * point.getCount() * flame.getWhiteLevel();
-          }
-        }
-      }
-    }
-    pFilteredPnt.clip();
+    transformPointSimple(pFilteredPnt, pX, pY);
   }
 
 }
