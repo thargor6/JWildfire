@@ -4828,13 +4828,14 @@ public class TinaInternalFrame extends JInternalFrame {
         getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
         getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton(),
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(), getTinaColorOversamplingREd(),
-        getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox());
+        getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox(), getFilterKernelFlatPreviewBtn());
 
     tinaController = new TinaController(params);
     if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
       getChaoticaButtonSeparator().setVisible(false);
       getExportToChaoticaBtn().setVisible(false);
     }
+    getFilterKernelFlatPreviewBtn().setSelected(Prefs.getPrefs().isTinaDefaultFilterVisualisationFlat());
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
     for (int i = 0; i < variationControlsDelegates.length; i++) {
@@ -10987,6 +10988,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox tinaSampleJitteringCheckBox;
   private JWFNumberField tinaColorOversamplingREd;
   private JSlider tinaColorOversamplingSlider;
+  private JToggleButton filterKernelFlatPreviewBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -13324,7 +13326,7 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(tinaSpatialOversamplingSlider);
 
       filterKernelPreviewRootPnl = new JPanel();
-      filterKernelPreviewRootPnl.setBounds(880, 6, 124, 124);
+      filterKernelPreviewRootPnl.setBounds(880, 6, 104, 104);
       antialiasPanel.add(filterKernelPreviewRootPnl);
       filterKernelPreviewRootPnl.setLayout(new BorderLayout(0, 0));
 
@@ -13405,6 +13407,24 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       antialiasPanel.add(tinaSampleJitteringCheckBox);
+
+      filterKernelFlatPreviewBtn = new JToggleButton();
+      filterKernelFlatPreviewBtn.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.filterKernelFlatPreviewBtn_clicked();
+          }
+        }
+      });
+      filterKernelFlatPreviewBtn.setToolTipText("Draw a flat (and faster) visualization of the filter kernel, red parts indicate negative values");
+      filterKernelFlatPreviewBtn.setText("Flat preview");
+      filterKernelFlatPreviewBtn.setSize(new Dimension(32, 24));
+      filterKernelFlatPreviewBtn.setPreferredSize(new Dimension(26, 24));
+      filterKernelFlatPreviewBtn.setMnemonic(KeyEvent.VK_P);
+      filterKernelFlatPreviewBtn.setLocation(new Point(92, 127));
+      filterKernelFlatPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      filterKernelFlatPreviewBtn.setBounds(880, 114, 107, 24);
+      antialiasPanel.add(filterKernelFlatPreviewBtn);
     }
     return antialiasPanel;
   }
@@ -23719,6 +23739,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaColorOversamplingSlider() {
     return tinaColorOversamplingSlider;
+  }
+
+  public JToggleButton getFilterKernelFlatPreviewBtn() {
+    return filterKernelFlatPreviewBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

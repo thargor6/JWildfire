@@ -121,6 +121,8 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRenderer;
+import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
@@ -631,6 +633,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaColorOversamplingREd = parameterObject.tinaColorOversamplingREd;
     data.tinaColorOversamplingSlider = parameterObject.tinaColorOversamplingSlider;
     data.tinaSampleJitteringCheckBox = parameterObject.tinaSampleJitteringCheckBox;
+    data.filterKernelFlatPreviewBtn = parameterObject.filterKernelFlatPreviewBtn;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
@@ -5724,6 +5727,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return data.filterKernelPreviewPanel;
   }
 
+  private FilterKernelVisualisationRenderer getFilterKernelVisualisationRenderer(boolean pFlatMode) {
+    if (pFlatMode) {
+      return new FilterKernelVisualisationFlatRenderer(getCurrFlame());
+    }
+    else {
+      return new FilterKernelVisualisation3dRenderer(getCurrFlame());
+    }
+  }
+
   protected void refreshFilterKernelPreviewImg() {
     try {
       if (getCurrFlame() != null) {
@@ -5731,7 +5743,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int width = imgPanel.getWidth();
         int height = imgPanel.getHeight();
         if (width >= 16 && height >= 4) {
-          SimpleImage img = new FilterKernelVisualisationRenderer(getCurrFlame()).createKernelVisualisation(width, height);
+          SimpleImage img = getFilterKernelVisualisationRenderer(data.filterKernelFlatPreviewBtn.isSelected()).createKernelVisualisation(width, height);
           imgPanel.setImage(img);
         }
         imgPanel.getParent().validate();
@@ -5748,7 +5760,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       saveUndoPoint();
       flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
-      refreshFlameImage(false);
     }
+  }
+
+  public void filterKernelFlatPreviewBtn_clicked() {
+    refreshFilterKernelPreviewImg();
   }
 }

@@ -109,6 +109,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel";
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
+  static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
@@ -243,6 +244,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default jitter setting for reducing aliasing artifacts, used when creating a new flame", category = PropertyCategory.TINA)
   private boolean tinaDefaultSampleJittering = true;
+
+  @Property(description = "Use flat (and faster) rendering to visualize filter-kernels", category = PropertyCategory.TINA)
+  private boolean tinaDefaultFilterVisualisationFlat = false;
 
   @Property(description = "Default spatial filter-kernel, used when creating a new flame", category = PropertyCategory.TINA, editorClass = FilterKernelTypeEditor.class)
   private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL;
@@ -737,6 +741,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultSampleJittering = pSrc.tinaDefaultSampleJittering;
     tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
     tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
+    tinaDefaultFilterVisualisationFlat = pSrc.tinaDefaultFilterVisualisationFlat;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1445,6 +1450,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultSpatialFilterRadius(double pTinaDefaultSpatialFilterRadius) {
     tinaDefaultSpatialFilterRadius = pTinaDefaultSpatialFilterRadius;
+  }
+
+  public boolean isTinaDefaultFilterVisualisationFlat() {
+    return tinaDefaultFilterVisualisationFlat;
+  }
+
+  public void setTinaDefaultFilterVisualisationFlat(boolean pTinaDefaultFilterVisualisationFlat) {
+    tinaDefaultFilterVisualisationFlat = pTinaDefaultFilterVisualisationFlat;
   }
 
 }

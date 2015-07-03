@@ -423,4 +423,5 @@ public class TinaControllerData {
   public JWFNumberField tinaColorOversamplingREd;
   public JSlider tinaColorOversamplingSlider;
   public JCheckBox tinaSampleJitteringCheckBox;
+  public JToggleButton filterKernelFlatPreviewBtn;
 }

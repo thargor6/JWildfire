@@ -141,6 +141,7 @@ public class PrefsReader {
         pPrefs.setTinaDefaultSpatialOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling()));
         pPrefs.setTinaDefaultColorOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_COLOR_OVERSAMPLING, pPrefs.getTinaDefaultColorOversampling()));
         pPrefs.setTinaDefaultSampleJittering(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_SAMPLE_JITTERING, pPrefs.isTinaDefaultSampleJittering()));
+        pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
         try {
           pPrefs.setTinaDefaultSpatialFilterKernel(FilterKernelType.valueOf(getProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_KERNEL, pPrefs.getTinaDefaultSpatialFilterKernel().toString())));
         }

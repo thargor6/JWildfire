@@ -39,7 +39,7 @@ public abstract class FilterKernel {
     else {
       int fw = (int) (2.0 * pOversample * getSpatialSupport() * pFilterRadius);
       int filterSize = fw + 1;
-      if ((filterSize + pOversample) % 2 != 0)
+      if (filterSize % 2 == 0)
         filterSize++;
       if (fw > 0) {
         return (1.0 * getSpatialSupport() * filterSize) / fw;
@@ -57,7 +57,7 @@ public abstract class FilterKernel {
     else {
       int fw = (int) (2.0 * pOversample * getSpatialSupport() * pFilterRadius);
       int filterSize = fw + 1;
-      if ((filterSize + pOversample) % 2 != 0)
+      if (filterSize % 2 == 0)
         filterSize++;
       return filterSize;
     }
