@@ -136,7 +136,7 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
 
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DISABLED = "tina.integration.chaotica.disabled";
+  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DISABLED = "tina.integration.chaotica.disabled.2";
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_DRAWER = "tina.integration.chaotica.drawer";
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE = "tina.integration.chaotica.executable";
   public static final String KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER = "tina.integration.chaotica.flame_drawer";
@@ -248,7 +248,7 @@ public class Prefs extends ManagedObject {
   private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL;
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
-  private double tinaDefaultSpatialFilterRadius = 0.8;
+  private double tinaDefaultSpatialFilterRadius = 1.0;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
@@ -332,7 +332,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaMacroButtonsVertical = false;
 
   @Property(description = "Disable the Chaotica-support inside the flame-module", category = PropertyCategory.TINA)
-  private boolean tinaIntegrationChaoticaDisabled = false;
+  private boolean tinaIntegrationChaoticaDisabled = true;
 
   @Property(description = "Allow the animation-export from with the Chaotica-bridge. Please note that this reduces the maximum possible resolution in Chaotica when you do not have a Studio licence", category = PropertyCategory.TINA)
   private boolean tinaIntegrationChaoticaAnimationExport = false;
