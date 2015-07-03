@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.XForm;
@@ -116,8 +117,8 @@ public class Variation implements Assignable<Variation>, Serializable {
         if (!motionCurves.containsKey(name))
           return false;
       }
-      for (String name : motionCurves.keySet()) {
-        if (!motionCurves.get(name).isEqual(pSrc.motionCurves.get(name)))
+      for (Entry<String, MotionCurve> entry : motionCurves.entrySet()) {
+        if (!entry.getValue().isEqual(pSrc.motionCurves.get(entry.getKey())))
           return false;
       }
     }
@@ -192,10 +193,10 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   public Map<String, MotionCurve> getClonedMotionCurves() {
     Map<String, MotionCurve> res = new HashMap<String, MotionCurve>();
-    for (String name : motionCurves.keySet()) {
+    for (Entry<String, MotionCurve> curveToCopy : motionCurves.entrySet()) {
       MotionCurve copy = new MotionCurve();
-      copy.assign(motionCurves.get(name));
-      res.put(name, copy);
+      copy.assign(curveToCopy.getValue());
+      res.put(curveToCopy.getKey(), copy);
     }
     return res;
   }

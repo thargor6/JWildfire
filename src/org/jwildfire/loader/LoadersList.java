@@ -26,7 +26,7 @@ import javax.swing.JDesktopPane;
 
 public class LoadersList {
   private static List<Class<? extends ImageLoader>> items = new ArrayList<Class<? extends ImageLoader>>();
-  private static Vector<String> itemVector = null;
+  private static final Vector<String> itemVector;
 
   private static void registerLoader(Class<? extends ImageLoader> pLoader) {
     items.add(pLoader);
@@ -34,16 +34,14 @@ public class LoadersList {
 
   static {
     registerLoader(ImageSequenceLoader.class);
+    itemVector = new Vector<>();
+    for (Class<? extends ImageLoader> loader : items) {
+      itemVector.add(loader.getSimpleName());
+    }
+    Collections.sort(itemVector);
   }
 
   public static Vector<String> getItemVector() {
-    if (itemVector == null) {
-      itemVector = new Vector<String>();
-      for (Class<? extends ImageLoader> loader : items) {
-        itemVector.add(loader.getSimpleName());
-      }
-      Collections.sort(itemVector);
-    }
     return itemVector;
   }
 

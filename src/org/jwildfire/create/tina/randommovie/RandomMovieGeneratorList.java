@@ -22,35 +22,32 @@ import java.util.List;
 public class RandomMovieGeneratorList {
   public static final String DEFAULT_GENERATOR_NAME = new AllRandomMovieGenerator().getName();
   private static List<Class<? extends RandomMovieGenerator>> items = new ArrayList<Class<? extends RandomMovieGenerator>>();
-  private static List<String> nameList = new ArrayList<String>();
+  private static final List<String> nameList;
 
   static {
     registerRandomMovieGenerator(AllRandomMovieGenerator.class);
     registerRandomMovieGenerator(TransformingBubblesRandomMovieGenerator.class);
     registerRandomMovieGenerator(TransformingDuckiesRandomMovieGenerator.class);
     registerRandomMovieGenerator(RotatingMandelbrotRandomMovieGenerator.class);
+    nameList = new ArrayList<>();
+    for (Class<? extends RandomMovieGenerator> funcCls : items) {
+      try {
+        nameList.add(funcCls.newInstance().getName());
+      }
+      catch (InstantiationException e) {
+        e.printStackTrace();
+      }
+      catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private static void registerRandomMovieGenerator(Class<? extends RandomMovieGenerator> pRandomMovieGenerator) {
     items.add(pRandomMovieGenerator);
-    nameList = null;
   }
 
   public static List<String> getNameList() {
-    if (nameList == null) {
-      nameList = new ArrayList<String>();
-      for (Class<? extends RandomMovieGenerator> funcCls : items) {
-        try {
-          nameList.add(funcCls.newInstance().getName());
-        }
-        catch (InstantiationException e) {
-          e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-          e.printStackTrace();
-        }
-      }
-    }
     return nameList;
   }
 

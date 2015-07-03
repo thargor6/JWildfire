@@ -113,7 +113,7 @@ public class TextTransformer extends Mesh2DTransformer {
   @Property(description = "Enable antialiasing")
   private boolean antialiasing;
 
-  private class TextRenderInfo {
+  private static class TextRenderInfo {
     private Font font;
     int maxWidth = 0, maxHeight = 0, maxRow = 0;
     int yOffset = 0;
@@ -303,7 +303,7 @@ public class TextTransformer extends Mesh2DTransformer {
     return res;
   }
 
-  private class TextRow {
+  private static class TextRow {
     public int row;
     public String text;
     public int width;

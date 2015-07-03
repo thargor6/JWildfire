@@ -161,6 +161,7 @@ public class ChaosFlameWriter {
           break;
         case OPAQUE:
           opacity = xform.getOpacity();
+          break;
         default:
           opacity = 1.0;
           break;

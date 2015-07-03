@@ -166,7 +166,7 @@ public class Tools {
   }
 
   public static void writeUTF8Textfile(String pTextFileName, String pContent) throws Exception {
-    String line, lineFeed = new String("\r\n");
+    String line, lineFeed = "\r\n";
     BufferedReader in = new BufferedReader(new StringReader(pContent));
     Writer w = new OutputStreamWriter(new FileOutputStream(pTextFileName), "utf-8");
     BufferedWriter out = new BufferedWriter(w);

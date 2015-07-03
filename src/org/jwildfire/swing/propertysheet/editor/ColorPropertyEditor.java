@@ -19,7 +19,7 @@ package org.jwildfire.swing.propertysheet.editor;
 
 import java.awt.Color;
 
-import javax.swing.JButton;
+//import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
@@ -38,7 +38,7 @@ import com.l2fprod.common.util.ResourceManager;
 public class ColorPropertyEditor extends AbstractPropertyEditor {
 
   private ColorCellRenderer label;
-  private JButton button;
+  //private JButton button;
   private Color color;
 
   public ColorPropertyEditor() {
@@ -108,16 +108,16 @@ public class ColorPropertyEditor extends AbstractPropertyEditor {
         return null;
       }
       else {
-        return new Integer(((Color) value).getRGB());
+        return Integer.valueOf(((Color) value).getRGB());
       }
     }
 
     protected void firePropertyChange(Object oldValue, Object newValue) {
       if (oldValue instanceof Color) {
-        oldValue = new Integer(((Color) oldValue).getRGB());
+        oldValue = Integer.valueOf(((Color) oldValue).getRGB());
       }
       if (newValue instanceof Color) {
-        newValue = new Integer(((Color) newValue).getRGB());
+        newValue = Integer.valueOf(((Color) newValue).getRGB());
       }
       super.firePropertyChange(oldValue, newValue);
     }

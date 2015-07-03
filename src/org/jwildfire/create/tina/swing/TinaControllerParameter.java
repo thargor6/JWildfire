@@ -34,6 +34,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JTree;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -334,10 +335,10 @@ public class TinaControllerParameter {
   public JButton mutaGenLoadFlameFromFileBtn;
   public JProgressBar mutaGenProgressBar;
   public JWFNumberField mutaGenAmountREd;
-  public JComboBox mutaGenHorizontalTrend1Cmb;
-  public JComboBox mutaGenHorizontalTrend2Cmb;
-  public JComboBox mutaGenVerticalTrend1Cmb;
-  public JComboBox mutaGenVerticalTrend2Cmb;
+  public JComboBox<MutationType> mutaGenHorizontalTrend1Cmb;
+  public JComboBox<MutationType> mutaGenHorizontalTrend2Cmb;
+  public JComboBox<MutationType> mutaGenVerticalTrend1Cmb;
+  public JComboBox<MutationType> mutaGenVerticalTrend2Cmb;
   public JButton mutaGenBackBtn;
   public JButton mutaGenForwardBtn;
   public JTextPane mutaGenHintPane;

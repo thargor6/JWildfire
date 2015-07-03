@@ -49,7 +49,7 @@ public class GlynnSim1Func extends VariationFunc {
   private double pow = 1.5;
   private double contrast = 0.5;
 
-  private class Point implements Serializable {
+  private static class Point implements Serializable {
     private static final long serialVersionUID = 1L;
     private double x, y;
   }

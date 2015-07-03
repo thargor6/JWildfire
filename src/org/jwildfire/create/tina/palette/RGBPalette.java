@@ -434,7 +434,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
         return flam3Number + " - " + flam3Name;
       }
       else {
-        return flam3Name;
+        return flam3Number;
       }
     }
     else if (flam3Name != null && flam3Name.length() > 0) {

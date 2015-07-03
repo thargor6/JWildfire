@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jwildfire.base.ManagedObject;
 
@@ -44,8 +45,8 @@ public class PropertyPanel extends PropertySheetPanel {
       managedObject = pManagedObject;
       if (pEditors != null) {
         PropertyEditorRegistry registry = (PropertyEditorRegistry) getEditorFactory();
-        for (Class key : pEditors.keySet()) {
-          registry.registerEditor(key, pEditors.get(key));
+        for (Entry<Class, PropertyEditor> pedit : pEditors.entrySet()) {
+          registry.registerEditor(pedit.getKey(), pedit.getValue());
         }
       }
       setMode(PropertySheet.VIEW_AS_CATEGORIES);
