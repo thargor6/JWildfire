@@ -19,18 +19,44 @@ package org.jwildfire.create.eden.scene;
 import java.util.List;
 
 import org.jwildfire.create.eden.export.CollectAllVisibleObjectsVisitor;
+import org.jwildfire.create.eden.scene.camera.Camera;
 
 public class Scene extends SceneElementGroup {
+  private int imageWidth = 256;
+  private int imageHeight = 256;
+  private Camera camera;
 
   public Scene() {
     super(null);
     getElements().add(new MaterialGroup(this));
+    camera = new Camera(this);
+    getElements().add(camera);
   }
 
   public List<VisibleSceneElement> getAllVisibleElements() {
     CollectAllVisibleObjectsVisitor visitor = new CollectAllVisibleObjectsVisitor();
     accept(visitor);
     return visitor.getElements();
+  }
+
+  public Camera getCamera() {
+    return camera;
+  }
+
+  public int getImageWidth() {
+    return imageWidth;
+  }
+
+  public void setImageWidth(int pImageWidth) {
+    imageWidth = pImageWidth;
+  }
+
+  public int getImageHeight() {
+    return imageHeight;
+  }
+
+  public void setImageHeight(int pImageHeight) {
+    imageHeight = pImageHeight;
   }
 
 }

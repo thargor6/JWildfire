@@ -28,6 +28,7 @@ public class SunflowSceneBuilder implements PartBuilder {
   private final List<LightBuilder> lightBuilders = new ArrayList<LightBuilder>();
   private final List<SunSkyLightBuilder> sunSkyLightBuilders = new ArrayList<SunSkyLightBuilder>();
   private final List<ShaderBuilder> shaderBuilders = new ArrayList<ShaderBuilder>();
+  private final List<LegacyMeshBuilder> legacyMeshBuilders = new ArrayList<LegacyMeshBuilder>();
   private final List<MeshBuilder> meshBuilders = new ArrayList<MeshBuilder>();
   private final List<SphereBuilder> sphereBuilders = new ArrayList<SphereBuilder>();
   private final List<BoxBuilder> boxBuilders = new ArrayList<BoxBuilder>();
@@ -62,7 +63,7 @@ public class SunflowSceneBuilder implements PartBuilder {
     return lightBuilder;
   }
 
-  public SunSkyLightBuilder addSunSkyLight() {
+  public SunSkyLightBuilder addSkyLight() {
     SunSkyLightBuilder sunSkyLightBuilder = new SunSkyLightBuilder(this);
     sunSkyLightBuilders.add(sunSkyLightBuilder);
     return sunSkyLightBuilder;
@@ -72,6 +73,13 @@ public class SunflowSceneBuilder implements PartBuilder {
     ShaderBuilder shaderBuilder = new ShaderBuilder(this);
     shaderBuilders.add(shaderBuilder);
     return shaderBuilder;
+  }
+
+  @Deprecated
+  public LegacyMeshBuilder addLegacyMesh() {
+    LegacyMeshBuilder meshBuilder = new LegacyMeshBuilder(this);
+    legacyMeshBuilders.add(meshBuilder);
+    return meshBuilder;
   }
 
   public MeshBuilder addMesh() {
@@ -141,6 +149,9 @@ public class SunflowSceneBuilder implements PartBuilder {
     }
     for (ShaderBuilder shaderBuilder : shaderBuilders) {
       shaderBuilder.buildPart(pTarget);
+    }
+    for (LegacyMeshBuilder legacyMeshBuilder : legacyMeshBuilders) {
+      legacyMeshBuilder.buildPart(pTarget);
     }
     for (MeshBuilder meshBuilder : meshBuilders) {
       meshBuilder.buildPart(pTarget);

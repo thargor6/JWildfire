@@ -16,14 +16,13 @@
 */
 package org.jwildfire.create.eden.sunflow;
 
+import org.jwildfire.create.eden.base.Face3i;
+import org.jwildfire.create.eden.base.Point3f;
+import org.jwildfire.create.eden.scene.primitive.Mesh;
 import org.jwildfire.create.eden.sunflow.base.PartBuilder;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Face;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point2f;
-import org.jwildfire.create.tina.meshgen.marchingcubes.Point3f;
 
 public class MeshBuilder extends PrimitiveBuilder<MeshBuilder> implements PartBuilder {
-  private Mesh mesh = new Mesh();
+  private Mesh mesh;
 
   public MeshBuilder(SunflowSceneBuilder pParent) {
     super(pParent);
@@ -31,47 +30,31 @@ public class MeshBuilder extends PrimitiveBuilder<MeshBuilder> implements PartBu
 
   @Override
   public void buildPart(StringBuilder pTarget) {
-    pTarget.append("object {\n");
+    if (mesh != null && mesh.getPoints().size() > 0 && mesh.getFaces().size() > 0) {
+      pTarget.append("object {\n");
 
-    if (!shader.isEmpty())
-      pTarget.append("  shader " + shader.toSceneStringPart() + "\n");
-    transform.buildPart(pTarget);
+      if (!shader.isEmpty())
+        pTarget.append("  shader " + shader.toSceneStringPart() + "\n");
+      transform.buildPart(pTarget);
 
-    pTarget.append("  type generic-mesh\n");
+      pTarget.append("  type generic-mesh\n");
 
-    if (!name.isEmpty())
-      pTarget.append("  name " + name.toSceneStringPart() + "\n");
+      if (!name.isEmpty())
+        pTarget.append("  name " + name.toSceneStringPart() + "\n");
 
-    pTarget.append("  points " + mesh.getVertices().size() + "\n");
-    for (Point3f point : mesh.getVertices()) {
-      pTarget.append("    " + point.x + " " + point.y + " " + point.z + "\n");
-    }
-
-    pTarget.append("  triangles " + mesh.getFaces().size() + "\n");
-    for (Face face : mesh.getFaces()) {
-      pTarget.append("    " + face.a + " " + face.b + " " + face.c + "\n");
-    }
-
-    if (mesh.getVertexNormals() != null && mesh.getVertexNormals().size() == mesh.getVertices().size()) {
-      pTarget.append("  normals vertex\n");
-      for (Point3f point : mesh.getVertexNormals()) {
-        pTarget.append("    " + point.x + " " + point.y + " " + point.z + "\n");
+      pTarget.append("  points " + mesh.getPoints().size() + "\n");
+      for (Point3f point : mesh.getPoints()) {
+        pTarget.append("    " + point.getX() + " " + point.getY() + " " + point.getZ() + "\n");
       }
-    }
-    else {
+
+      pTarget.append("  triangles " + mesh.getFaces().size() + "\n");
+      for (Face3i face : mesh.getFaces()) {
+        pTarget.append("    " + face.getA() + " " + face.getC() + " " + face.getB() + "\n");
+      }
       pTarget.append("  normals none\n");
-    }
-    if (mesh.getTextureCoords() != null && mesh.getTextureCoords().size() == mesh.getVertices().size()) {
-      pTarget.append("   uvs vertex\n");
-      for (Point2f uv : mesh.getTextureCoords()) {
-        pTarget.append("    " + uv.u + " " + uv.v + "\n");
-      }
-    }
-    else {
       pTarget.append("  uvs none\n");
+      pTarget.append("}\n");
     }
-
-    pTarget.append("}\n");
   }
 
   public MeshBuilder withMesh(Mesh pMesh) {

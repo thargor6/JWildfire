@@ -123,8 +123,6 @@ public class EDENController implements UserInterface {
     api = null;
     sceneType = SceneType.SC;
     currentFile = "new" + genNewFileId() + ".sc";
-    // TODO
-    //    String template = edenCreateSunflowScene();
     String template = edenCreateSurfaceScene();
     editorTextArea.setText(template);
     enableControls();

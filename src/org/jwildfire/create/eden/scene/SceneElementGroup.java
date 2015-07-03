@@ -21,8 +21,10 @@ import java.util.List;
 
 import org.jwildfire.create.eden.base.Point3f;
 import org.jwildfire.create.eden.scene.light.PointLight;
+import org.jwildfire.create.eden.scene.light.SkyLight;
 import org.jwildfire.create.eden.scene.primitive.Box;
 import org.jwildfire.create.eden.scene.primitive.Cylinder;
+import org.jwildfire.create.eden.scene.primitive.Mesh;
 import org.jwildfire.create.eden.scene.primitive.Sphere;
 
 public class SceneElementGroup extends PositionableSceneElement {
@@ -61,12 +63,24 @@ public class SceneElementGroup extends PositionableSceneElement {
     return light;
   }
 
+  public SkyLight addSkyLight() {
+    SkyLight light = new SkyLight(this);
+    elements.add(light);
+    return light;
+  }
+
   public Box addBox(double pOriginX, double pOriginY, double pOriginZ, double pSize) {
     Box box = new Box(this);
     box.setSize(pSize, pSize, pSize);
     box.setPosition(new Point3f(pOriginX, pOriginY, pOriginZ));
     elements.add(box);
     return box;
+  }
+
+  public Mesh addMesh() {
+    Mesh mesh = new Mesh(this);
+    elements.add(mesh);
+    return mesh;
   }
 
   public SceneElementGroup addGroup() {

@@ -57,12 +57,20 @@ public class Point3f {
     y = pY;
   }
 
+  public void setY(double pY) {
+    y = (float) pY;
+  }
+
   public float getZ() {
     return z;
   }
 
   public void setZ(float pZ) {
     z = pZ;
+  }
+
+  public void setZ(double pZ) {
+    z = (float) pZ;
   }
 
   public void assign(Point3f pSource) {

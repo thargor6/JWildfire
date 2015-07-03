@@ -75,7 +75,7 @@ public class ExampleScenes {
         .withAspect(1)
         .close()
 
-        .addSunSkyLight()
+        .addSkyLight()
         .withUp(0, 0, 1)
         .withEast(0, 1, 0)
         .withSundir(1, -1, 0.31)
@@ -96,7 +96,7 @@ public class ExampleScenes {
         .withRefl(0.1)
         .close()
 
-        .addMesh()
+        .addLegacyMesh()
         .withName("Plane")
         .withShader("ground")
         .withMesh(mesh)

@@ -1233,7 +1233,7 @@ public class MeshGenController {
     try {
       long t0 = System.currentTimeMillis();
       SunflowSceneBuilder scene = ExampleScenes.getExampleScene1();
-      scene.addMesh()
+      scene.addLegacyMesh()
           .withMesh(pMesh)
           .withName("generated mesh")
           .withShader(ExampleScenes.SHADER_SHINY);
