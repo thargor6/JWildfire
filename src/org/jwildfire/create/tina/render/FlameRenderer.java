@@ -38,6 +38,13 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
+import org.jwildfire.create.tina.render.image.PostFilterImageThread;
+import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
+import org.jwildfire.create.tina.render.image.RenderHDRIntensityMapThread;
+import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
+import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
+import org.jwildfire.create.tina.render.image.RenderImageThread;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
@@ -475,293 +482,172 @@ public class FlameRenderer {
     }
 
     renderImage(pImage, logDensityPnt);
+    postFilterImage(pImage);
     renderHDRImage(pHDRImage, logDensityPnt);
     renderHDRIntensityMap(pHDRIntensityMap, logDensityPnt);
   }
 
   private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap, LogDensityPoint logDensityPnt) {
     if (pHDRIntensityMap != null) {
-      for (int i = 0; i < pHDRIntensityMap.getImageHeight(); i++) {
-        for (int j = 0; j < pHDRIntensityMap.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          pHDRIntensityMap.setRGB(j, i, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity, (float) logDensityPnt.intensity);
+      int threadCount = prefs.getTinaRenderThreads();
+      if (threadCount < 1 || pHDRIntensityMap.getImageHeight() < 8 * threadCount) {
+        threadCount = 1;
+      }
+      int rowsPerThread = pHDRIntensityMap.getImageHeight() / threadCount;
+      List<RenderHDRIntensityMapThread> threads = new ArrayList<>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRIntensityMap.getImageHeight();
+        RenderHDRIntensityMapThread thread = new RenderHDRIntensityMapThread(logDensityFilter, startRow, endRow, pHDRIntensityMap);
+        threads.add(thread);
+        if (threadCount > 1) {
+          new Thread(thread).start();
         }
+        else {
+          thread.run();
+        }
+      }
+      waitForThreads(threadCount, threads);
+    }
+  }
+
+  private void waitForThreads(int threadCount, List<? extends AbstractImageRenderThread> threads) {
+    if (threadCount > 1) {
+      while (true) {
+        boolean ready = true;
+        for (AbstractImageRenderThread t : threads) {
+          if (!t.isDone()) {
+            ready = false;
+            break;
+          }
+        }
+        if (!ready) {
+          try {
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        else
+          break;
       }
     }
   }
 
   private void renderHDRImage(SimpleHDRImage pHDRImage, LogDensityPoint logDensityPnt) {
     if (pHDRImage != null) {
-      GammaCorrectedHDRPoint rbgPoint = new GammaCorrectedHDRPoint();
-      for (int i = 0; i < pHDRImage.getImageHeight(); i++) {
-        for (int j = 0; j < pHDRImage.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
-          pHDRImage.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+      int threadCount = prefs.getTinaRenderThreads();
+      if (threadCount < 1 || pHDRImage.getImageHeight() < 8 * threadCount) {
+        threadCount = 1;
+      }
+      int rowsPerThread = pHDRImage.getImageHeight() / threadCount;
+      List<RenderHDRImageThread> threads = new ArrayList<>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRImage.getImageHeight();
+        RenderHDRImageThread thread = new RenderHDRImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage);
+        threads.add(thread);
+        if (threadCount > 1) {
+          new Thread(thread).start();
+        }
+        else {
+          thread.run();
         }
       }
+      waitForThreads(threadCount, threads);
     }
   }
 
   private void renderImage(SimpleImage pImage, LogDensityPoint logDensityPnt) {
     if (pImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
-      if (threadCount < 1)
+      if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
-      if (threadCount == 1 || pImage.getImageHeight() < 8 * threadCount) {
-        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
-        for (int i = 0; i < pImage.getImageHeight(); i++) {
-          for (int j = 0; j < pImage.getImageWidth(); j++) {
-            logDensityFilter.transformPoint(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-            pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          }
-        }
       }
-      else {
-        int rowsPerThread = pImage.getImageHeight() / threadCount;
-        List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
-        for (int i = 0; i < threadCount; i++) {
-          int startRow = i * rowsPerThread;
-          int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-          RenderImageThread thread = new RenderImageThread(startRow, endRow, pImage);
-          threads.add(thread);
+      int rowsPerThread = pImage.getImageHeight() / threadCount;
+      List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+        RenderImageThread thread = new RenderImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        threads.add(thread);
+        if (threadCount > 1) {
           new Thread(thread).start();
         }
-        while (true) {
-          boolean ready = true;
-          for (RenderImageThread t : threads) {
-            if (!t.isDone()) {
-              ready = false;
-              break;
-            }
-          }
-          if (!ready) {
-            try {
-              Thread.sleep(1);
-            }
-            catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-          }
-          else
-            break;
+        else {
+          thread.run();
         }
       }
+      waitForThreads(threadCount, threads);
     }
   }
 
-  public class RenderImageThread implements Runnable {
-    private final int startRow, endRow;
-    private final LogDensityPoint logDensityPnt;
-    private final GammaCorrectedRGBPoint rbgPoint;
-    private final SimpleImage img;
-    private boolean done;
-
-    public RenderImageThread(int pStartRow, int pEndRow, SimpleImage pImg) {
-      startRow = pStartRow;
-      endRow = pEndRow;
-      logDensityPnt = new LogDensityPoint();
-      rbgPoint = new GammaCorrectedRGBPoint();
-      img = pImg;
-      done = false;
-    }
-
-    @Override
-    public void run() {
-      done = false;
-      for (int i = startRow; i < endRow; i++) {
-        for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-          img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+  private void postFilterImage(SimpleImage pImage) {
+    if (pImage != null) {
+      int threadCount = prefs.getTinaRenderThreads();
+      if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
+        threadCount = 1;
+      }
+      int rowsPerThread = pImage.getImageHeight() / threadCount;
+      SimpleImage input = pImage.clone();
+      List<PostFilterImageThread> threads = new ArrayList<PostFilterImageThread>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+        PostFilterImageThread thread = new PostFilterImageThread(startRow, endRow, input, pImage);
+        threads.add(thread);
+        if (threadCount > 1) {
+          new Thread(thread).start();
+        }
+        else {
+          thread.run();
         }
       }
-      done = true;
+      waitForThreads(threadCount, threads);
     }
-
-    public boolean isDone() {
-      return done;
-    }
-
-  }
-
-  public class RenderImageSimpleScaledThread implements Runnable {
-    private final int startRow, endRow;
-    private final LogDensityPoint logDensityPnt;
-    private final GammaCorrectedRGBPoint rbgPoint;
-    private final SimpleImage img;
-    private final SimpleImage newImg;
-    private boolean done;
-
-    public RenderImageSimpleScaledThread(int pStartRow, int pEndRow, SimpleImage pImg, SimpleImage pNewImg) {
-      startRow = pStartRow;
-      endRow = pEndRow;
-      logDensityPnt = new LogDensityPoint();
-      rbgPoint = new GammaCorrectedRGBPoint();
-      img = pImg;
-      newImg = pNewImg;
-      done = false;
-    }
-
-    @Override
-    public void run() {
-      done = false;
-      for (int i = startRow; i < endRow; i++) {
-        for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-          int x = j * renderScale;
-          int y = i * renderScale;
-
-          newImg.setARGB(x, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setARGB(x + 1, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setARGB(x, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          newImg.setARGB(x + 1, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-        }
-      }
-      done = true;
-    }
-
-    public boolean isDone() {
-      return done;
-    }
-
-  }
-
-  public class RenderImageSimpleThread implements Runnable {
-    private final int startRow, endRow;
-    private final LogDensityPoint logDensityPnt;
-    private final GammaCorrectedRGBPoint rbgPoint;
-    private final SimpleImage img;
-    private boolean done;
-
-    public RenderImageSimpleThread(int pStartRow, int pEndRow, SimpleImage pImg) {
-      startRow = pStartRow;
-      endRow = pEndRow;
-      logDensityPnt = new LogDensityPoint();
-      rbgPoint = new GammaCorrectedRGBPoint();
-      img = pImg;
-      done = false;
-    }
-
-    @Override
-    public void run() {
-      done = false;
-      for (int i = startRow; i < endRow; i++) {
-        for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-          img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-        }
-      }
-      done = true;
-    }
-
-    public boolean isDone() {
-      return done;
-    }
-
   }
 
   private void renderImageSimple(SimpleImage pImage) {
-    int threadCount = prefs.getTinaRenderThreads() - 1;
+    int threadCount = prefs.getTinaRenderThreads();
     if (threadCount < 1)
       threadCount = 1;
     logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     if (renderScale == 2) {
       SimpleImage newImg = new SimpleImage(pImage.getImageWidth() * renderScale, pImage.getImageHeight() * renderScale);
-      if (threadCount == 1) {
-        LogDensityPoint logDensityPnt = new LogDensityPoint();
-        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
-        for (int i = 0; i < pImage.getImageHeight(); i++) {
-          for (int j = 0; j < pImage.getImageWidth(); j++) {
-            logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-            int x = j * renderScale;
-            int y = i * renderScale;
-
-            newImg.setARGB(x, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setARGB(x + 1, y, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setARGB(x, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-            newImg.setARGB(x + 1, y + 1, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          }
-        }
-      }
-      else {
-        int rowsPerThread = pImage.getImageHeight() / threadCount;
-        List<RenderImageSimpleScaledThread> threads = new ArrayList<RenderImageSimpleScaledThread>();
-        for (int i = 0; i < threadCount; i++) {
-          int startRow = i * rowsPerThread;
-          int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-          RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(startRow, endRow, pImage, newImg);
-          threads.add(thread);
+      int rowsPerThread = pImage.getImageHeight() / threadCount;
+      List<RenderImageSimpleScaledThread> threads = new ArrayList<RenderImageSimpleScaledThread>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+        RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg);
+        threads.add(thread);
+        if (threadCount > 1) {
           new Thread(thread).start();
         }
-        while (true) {
-          boolean ready = true;
-          for (RenderImageSimpleScaledThread t : threads) {
-            if (!t.isDone()) {
-              ready = false;
-              break;
-            }
-          }
-          if (!ready) {
-            try {
-              Thread.sleep(1);
-            }
-            catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-          }
-          else
-            break;
+        else {
+          thread.run();
         }
       }
+      waitForThreads(threadCount, threads);
       pImage.setBufferedImage(newImg.getBufferedImg(), newImg.getImageWidth(), newImg.getImageHeight());
     }
     else if (renderScale == 1) {
-      if (threadCount == 1) {
-        LogDensityPoint logDensityPnt = new LogDensityPoint();
-        GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();
-        for (int i = 0; i < pImage.getImageHeight(); i++) {
-          for (int j = 0; j < pImage.getImageWidth(); j++) {
-            logDensityFilter.transformPointSimple(logDensityPnt, j, i);
-            gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
-            pImage.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-          }
+      int rowsPerThread = pImage.getImageHeight() / threadCount;
+      List<RenderImageSimpleThread> threads = new ArrayList<RenderImageSimpleThread>();
+      for (int i = 0; i < threadCount; i++) {
+        int startRow = i * rowsPerThread;
+        int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
+        RenderImageSimpleThread thread = new RenderImageSimpleThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        threads.add(thread);
+        if (threadCount > 1) {
+          new Thread(thread).start();
         }
-      }
-      else {
-        int rowsPerThread = pImage.getImageHeight() / threadCount;
-        List<RenderImageSimpleThread> threads = new ArrayList<RenderImageSimpleThread>();
-        for (int i = 0; i < threadCount; i++) {
-          int startRow = i * rowsPerThread;
-          int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-          RenderImageSimpleThread thread = new RenderImageSimpleThread(startRow, endRow, pImage);
-          threads.add(thread);
+        else {
           thread.run();
         }
-        while (true) {
-          boolean ready = true;
-          for (RenderImageSimpleThread t : threads) {
-            if (!t.isDone()) {
-              ready = false;
-              break;
-            }
-          }
-          if (!ready) {
-            try {
-              Thread.sleep(1);
-            }
-            catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-          }
-          else
-            break;
-        }
       }
+      waitForThreads(threadCount, threads);
     }
     else {
       throw new IllegalArgumentException("renderScale " + renderScale);

@@ -50,7 +50,6 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Gnarl3DRandomFlameGenerator());
     allGenerators.add(new JulianDiscRandomFlameGenerator());
     allGenerators.add(new JuliansRandomFlameGenerator());
-    allGenerators.add(new LayerzRandomFlameGenerator());
     allGenerators.add(new LinearRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
     allGenerators.add(new RaysRandomFlameGenerator());
@@ -65,8 +64,6 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new TentacleRandomFlameGenerator());
     allGenerators.add(new TileBallRandomFlameGenerator());
     allGenerators.add(new XenomorphRandomFlameGenerator());
-    //    allGenerators.add(new ColorMapRandomFlameGenerator());
-    // allGenerators.add(new WikimediaCommonsRandomFlameGenerator());
 
     simpleGenerators = new ArrayList<RandomFlameGenerator>();
     simpleGenerators.addAll(allGenerators);
