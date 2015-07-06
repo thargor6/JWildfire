@@ -2064,7 +2064,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPerspectiveREd.setLinkedMotionControlName("tinaCameraPerspectiveSlider");
       tinaCameraPerspectiveREd.setValueStep(0.01);
       tinaCameraPerspectiveREd.setMaxValue(1.0);
-      tinaCameraPerspectiveREd.setHasMinValue(true);
       tinaCameraPerspectiveREd.setHasMaxValue(true);
       tinaCameraPerspectiveREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
