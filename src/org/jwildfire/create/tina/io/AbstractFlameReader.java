@@ -48,7 +48,11 @@ public class AbstractFlameReader {
   public static final String ATTR_SCALE = "scale";
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
-  public static final String ATTR_OVERSAMPLE = "oversample";
+  public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
+  public static final String ATTR_COLOR_OVERSAMPLE = "color_oversample";
+  public static final String ATTR_SAMPLE_JITTERING = "sample_jittering";
+  public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
+  public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
@@ -221,8 +225,20 @@ public class AbstractFlameReader {
         ex.printStackTrace();
       }
     }
-    if ((hs = atts.get(ATTR_OVERSAMPLE)) != null) {
+    if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversampling(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLE)) != null) {
+      pFlame.setColorOversampling(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_SAMPLE_JITTERING)) != null) {
+      pFlame.setSampleJittering(Integer.parseInt(hs) == 1);
+    }
+    if ((hs = atts.get(ATTR_POST_NOISE_FILTER)) != null) {
+      pFlame.setPostNoiseFilter(Integer.parseInt(hs) == 1);
+    }
+    if ((hs = atts.get(ATTR_POST_NOISE_FILTER_THRESHOLD)) != null) {
+      pFlame.setPostNoiseFilterThreshold(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
@@ -428,16 +444,10 @@ public class AbstractFlameReader {
 
     if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
       int blurLen = Integer.parseInt(hs);
-      if (blurLen > 0 && prefs.getTinaOverwriteMotionBlurLength() > 0) {
-        blurLen = prefs.getTinaOverwriteMotionBlurLength();
-      }
       pFlame.setMotionBlurLength(blurLen);
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_TIMESTEP)) != null) {
       double timestep = Double.parseDouble(hs);
-      if (timestep > MathLib.EPSILON && prefs.getTinaOverwriteMotionBlurTimeStep() > MathLib.EPSILON) {
-        timestep = prefs.getTinaOverwriteMotionBlurTimeStep();
-      }
       pFlame.setMotionBlurTimeStep(timestep);
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {

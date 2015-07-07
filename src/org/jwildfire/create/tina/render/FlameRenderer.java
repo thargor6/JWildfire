@@ -482,7 +482,9 @@ public class FlameRenderer {
     }
 
     renderImage(pImage, logDensityPnt);
-    postFilterImage(pImage);
+    if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
+      postFilterImage(pImage);
+    }
     renderHDRImage(pHDRImage, logDensityPnt);
     renderHDRIntensityMap(pHDRIntensityMap, logDensityPnt);
   }
@@ -595,7 +597,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        PostFilterImageThread thread = new PostFilterImageThread(startRow, endRow, input, pImage);
+        PostFilterImageThread thread = new PostFilterImageThread(startRow, endRow, input, pImage, flame.getPostNoiseFilterThreshold());
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();

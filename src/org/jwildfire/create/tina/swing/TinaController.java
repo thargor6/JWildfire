@@ -167,6 +167,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   static final double SLIDER_SCALE_GAMMA = 100.0;
   static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
   static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
+  static final double SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD = 1000.0;
   static final double SLIDER_SCALE_COLOR = 100.0;
   static final double SLIDER_SCALE_ZPOS = 50.0;
   static final double SLIDER_SCALE_DOF = 100.0;
@@ -634,6 +635,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaColorOversamplingSlider = parameterObject.tinaColorOversamplingSlider;
     data.tinaSampleJitteringCheckBox = parameterObject.tinaSampleJitteringCheckBox;
     data.filterKernelFlatPreviewBtn = parameterObject.filterKernelFlatPreviewBtn;
+    data.tinaPostNoiseFilterCheckBox = parameterObject.tinaPostNoiseFilterCheckBox;
+    data.tinaPostNoiseThresholdField = parameterObject.tinaPostNoiseThresholdField;
+    data.tinaPostNoiseThresholdSlider = parameterObject.tinaPostNoiseThresholdSlider;
+    data.foregroundOpacityField = parameterObject.foregroundOpacityField;
+    data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
@@ -3315,7 +3321,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flame.setHeight(600);
     flame.setPixelsPerUnit(50);
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
-    // TODO XXX
     RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
     RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
@@ -4334,13 +4339,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flamePanel != null) {
       flamePanel.setShowTransparency(data.toggleTransparencyButton.isSelected());
       refreshFlameImage(false);
-    }
-  }
-
-  public void flameTransparencyCbx_changed() {
-    if (getCurrFlame() != null) {
-      getCurrFlame().setBGTransparency(data.bgTransparencyCBx.isSelected());
-      flameControls.enableDOFUI();
     }
   }
 
@@ -5752,14 +5750,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
-    }
-  }
-
-  public void sampleJitteringCbx_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      saveUndoPoint();
-      flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
     }
   }
 

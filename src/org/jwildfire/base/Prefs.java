@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -107,6 +107,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling";
   static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling";
   static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering";
+  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter";
+  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
+  static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel";
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
@@ -146,9 +149,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
-
-  public static final String KEY_TINA_OVERWRITE_MOTIONBLUR_TIMESTEP = "tina.overwrite.motionblur_timestep";
-  public static final String KEY_TINA_OVERWRITE_MOTIONBLUR_LENGTH = "tina.overwrite.motionblur_length";
 
   @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
   private String scriptPath = null;
@@ -245,6 +245,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Default jitter setting for reducing aliasing artifacts, used when creating a new flame", category = PropertyCategory.TINA)
   private boolean tinaDefaultSampleJittering = true;
 
+  @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
+  private boolean tinaDefaultPostNoiseFilter = true;
+
+  @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
+  private double tinaDefaultPostNoiseFilterThreshold = 0.15;
+
+  @Property(description = "Default foreground-opacity when rendering images with transparent background", category = PropertyCategory.TINA)
+  private double tinaDefaultForegroundOpacity = 1.0;
+
   @Property(description = "Use flat (and faster) rendering to visualize filter-kernels", category = PropertyCategory.TINA)
   private boolean tinaDefaultFilterVisualisationFlat = false;
 
@@ -252,7 +261,7 @@ public class Prefs extends ManagedObject {
   private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL;
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
-  private double tinaDefaultSpatialFilterRadius = 1.0;
+  private double tinaDefaultSpatialFilterRadius = 0.75;
 
   @Property(description = "Style of the controls (\"triangles\") in the editor", category = PropertyCategory.TINA, editorClass = FlamePanelTriangleStyleEditor.class)
   private FlamePanelControlStyle tinaEditorControlsStyle = FlamePanelControlStyle.TRIANGLE;
@@ -269,16 +278,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Default FPS of new generated flames", category = PropertyCategory.TINA)
   private int tinaDefaultFPS = 30;
 
-  @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
-  private double tinaOverwriteMotionBlurTimeStep = 0.0;
-
-  @Property(description = "Overwrite the time-step for motion-blur when loading a flame (may be usefull to force that all flames use the sames settings in larger projects)", category = PropertyCategory.TINA)
-  private int tinaOverwriteMotionBlurLength = 0;
-
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
   private boolean tinaOptimizedRenderingIR = true;
-
-  private boolean tinaUseExperimentalOpenClCode = false;
 
   @Property(description = "User-defined mutation-sub-types for mutation-type USER1 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser1 = "ADD_TRANSFORM, CHANGE_WEIGHT, AFFINE, RANDOM_PARAMETER";
@@ -311,7 +312,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Image-input-path for the \"Color map\"-random-flame-generator (is scanned recursively, so BEWARE)", category = PropertyCategory.TINA)
   private String tinaRandGenColorMapImagePath = null;
 
-  @Property(description = "Development mode", category = PropertyCategory.GENERAL)
+  @Property(description = "Activate development mode", category = PropertyCategory.GENERAL)
   private boolean developmentMode = false;
 
   @Property(description = "Implementation of basic mathematical functions to use", category = PropertyCategory.GENERAL, editorClass = BaseMathLibTypeEditor.class)
@@ -701,12 +702,9 @@ public class Prefs extends ManagedObject {
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
     tinaOptimizedRenderingIR = pSrc.tinaOptimizedRenderingIR;
-    tinaUseExperimentalOpenClCode = pSrc.tinaUseExperimentalOpenClCode;
     tinaMacroButtonsVertical = pSrc.tinaMacroButtonsVertical;
     tinaMacroToolbarHeight = pSrc.tinaMacroToolbarHeight;
     tinaFreeCacheInBatchRenderer = pSrc.tinaFreeCacheInBatchRenderer;
-    tinaOverwriteMotionBlurTimeStep = pSrc.tinaOverwriteMotionBlurTimeStep;
-    tinaOverwriteMotionBlurLength = pSrc.tinaOverwriteMotionBlurLength;
 
     tinaRandGenDualityPreferedVariation = pSrc.tinaRandGenDualityPreferedVariation;
     tinaRandGenDualityPreferedVariationProbability1 = pSrc.tinaRandGenDualityPreferedVariationProbability1;
@@ -742,6 +740,9 @@ public class Prefs extends ManagedObject {
     tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
     tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
     tinaDefaultFilterVisualisationFlat = pSrc.tinaDefaultFilterVisualisationFlat;
+    tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
+    tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
+    tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -772,8 +773,6 @@ public class Prefs extends ManagedObject {
 
   public int getTinaRenderThreads() {
     int numThreads = tinaRenderThreads - tinaPreserveFreeCPUs;
-    if (tinaUseExperimentalOpenClCode)
-      numThreads--;
     return numThreads > 1 ? numThreads : 1;
   }
 
@@ -1092,14 +1091,6 @@ public class Prefs extends ManagedObject {
     tinaOptimizedRenderingIR = pTinaOptimizedRenderingIR;
   }
 
-  public boolean isTinaUseExperimentalOpenClCode() {
-    return tinaUseExperimentalOpenClCode;
-  }
-
-  public void setTinaUseExperimentalOpenClCode(boolean pTinaUseExperimentalOpenClCode) {
-    tinaUseExperimentalOpenClCode = pTinaUseExperimentalOpenClCode;
-  }
-
   public static Prefs newInstance() {
     return new Prefs();
   }
@@ -1312,22 +1303,6 @@ public class Prefs extends ManagedObject {
     tinaFreeCacheInBatchRenderer = pTinaFreeCacheInBatchRenderer;
   }
 
-  public double getTinaOverwriteMotionBlurTimeStep() {
-    return tinaOverwriteMotionBlurTimeStep;
-  }
-
-  public void setTinaOverwriteMotionBlurTimeStep(double pTinaOverwriteMotionBlurTimeStep) {
-    tinaOverwriteMotionBlurTimeStep = pTinaOverwriteMotionBlurTimeStep;
-  }
-
-  public int getTinaOverwriteMotionBlurLength() {
-    return tinaOverwriteMotionBlurLength;
-  }
-
-  public void setTinaOverwriteMotionBlurLength(int pTinaOverwriteMotionBlurLength) {
-    tinaOverwriteMotionBlurLength = pTinaOverwriteMotionBlurLength;
-  }
-
   public EditorDoubleClickActionType getTinaEditorDoubleClickAction() {
     return tinaEditorDoubleClickAction;
   }
@@ -1458,6 +1433,30 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultFilterVisualisationFlat(boolean pTinaDefaultFilterVisualisationFlat) {
     tinaDefaultFilterVisualisationFlat = pTinaDefaultFilterVisualisationFlat;
+  }
+
+  public boolean isTinaDefaultPostNoiseFilter() {
+    return tinaDefaultPostNoiseFilter;
+  }
+
+  public void setTinaDefaultPostNoiseFilter(boolean pTinaDefaultPostNoiseFilter) {
+    tinaDefaultPostNoiseFilter = pTinaDefaultPostNoiseFilter;
+  }
+
+  public double getTinaDefaultPostNoiseFilterThreshold() {
+    return tinaDefaultPostNoiseFilterThreshold;
+  }
+
+  public void setTinaDefaultPostNoiseFilterThreshold(double pTinaDefaultPostNoiseFilterThreshold) {
+    tinaDefaultPostNoiseFilterThreshold = pTinaDefaultPostNoiseFilterThreshold;
+  }
+
+  public double getTinaDefaultForegroundOpacity() {
+    return tinaDefaultForegroundOpacity;
+  }
+
+  public void setTinaDefaultForegroundOpacity(double pTinaDefaultForegroundOpacity) {
+    tinaDefaultForegroundOpacity = pTinaDefaultForegroundOpacity;
   }
 
 }

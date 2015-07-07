@@ -605,6 +605,11 @@ public class TinaControllerParameter {
   public JSlider tinaColorOversamplingSlider;
   public JCheckBox tinaSampleJitteringCheckBox;
   public JToggleButton filterKernelFlatPreviewBtn;
+  public JCheckBox tinaPostNoiseFilterCheckBox;
+  public JWFNumberField tinaPostNoiseThresholdField;
+  public JSlider tinaPostNoiseThresholdSlider;
+  public JWFNumberField foregroundOpacityField;
+  public JSlider foregroundOpacitySlider;
 
   public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1116,7 +1121,8 @@ public class TinaControllerParameter {
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
       JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
-      JToggleButton pFilterKernelFlatPreviewBtn) {
+      JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
+      JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1280,5 +1286,10 @@ public class TinaControllerParameter {
     tinaColorOversamplingSlider = pTinaColorOversamplingSlider;
     tinaSampleJitteringCheckBox = pTinaSampleJitteringCheckBox;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
+    tinaPostNoiseFilterCheckBox = pTinaPostNoiseFilterCheckBox;
+    tinaPostNoiseThresholdField = pTinaPostNoiseThresholdField;
+    tinaPostNoiseThresholdSlider = pTinaPostNoiseThresholdSlider;
+    foregroundOpacityField = pForegroundOpacityField;
+    foregroundOpacitySlider = pForegroundOpacitySlider;
   }
 }

@@ -6,6 +6,7 @@ public class ThumbnailCacheKey {
   private final String filename;
   private final String keyExt;
   private final long modificationtime;
+  private static final int version = 2;
 
   public ThumbnailCacheKey(String pFilename) {
     this(pFilename, "");
@@ -18,7 +19,7 @@ public class ThumbnailCacheKey {
   }
 
   public String getCacheKey(int pThumbnailWidth) {
-    return filename.hashCode() + "#" + modificationtime + "#" + keyExt + "#" + pThumbnailWidth;
+    return filename.hashCode() + "#" + modificationtime + "#" + keyExt + "#" + pThumbnailWidth + "#" + version;
   }
 
   public String getCacheKey(int pThumbnailWidth, int pThumbnailHeight) {

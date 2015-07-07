@@ -136,6 +136,7 @@ public class FlamePreviewHelper {
         int oldSpatialOversampling = flame.getSpatialOversampling();
         int oldColorOversampling = flame.getColorOversampling();
         boolean oldSampleJittering = flame.isSampleJittering();
+        boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -294,6 +295,7 @@ public class FlamePreviewHelper {
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setColorOversampling(oldColorOversampling);
           flame.setSampleJittering(oldSampleJittering);
+          flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }
     }
@@ -325,6 +327,7 @@ public class FlamePreviewHelper {
         int oldSpatialOversampling = flame.getSpatialOversampling();
         int oldColorOversampling = flame.getColorOversampling();
         boolean oldSampleJittering = flame.isSampleJittering();
+        boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
           double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
@@ -358,6 +361,7 @@ public class FlamePreviewHelper {
           flame.setSpatialOversampling(oldSpatialOversampling);
           flame.setColorOversampling(oldColorOversampling);
           flame.setSampleJittering(oldSampleJittering);
+          flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }
     }

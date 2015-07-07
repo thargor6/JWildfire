@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,8 +27,6 @@ public class AppLauncher {
   private final LauncherPrefs prefs;
   private final String JWFILDFIRE_JAR = "j-wildfire.jar";
   private final String JWILDFIRE_MAIN_CLASS = "org.jwildfire.swing.Desktop";
-
-  public static final String PROPERTY_OPENCL = "org.jwildfire.experimental_opencl";
 
   public AppLauncher(LauncherPrefs pPrefs) {
     prefs = pPrefs;
@@ -87,10 +85,6 @@ public class AppLauncher {
     cmd.add("-cp");
     cmd.add(cp);
     cmd.add(JWILDFIRE_MAIN_CLASS);
-    if (prefs.isWithOpenCL()) {
-      String openClOption = "-D" + PROPERTY_OPENCL + "=true";
-      cmd.add(openClOption);
-    }
     return cmd.toArray(new String[cmd.size()]);
   }
 

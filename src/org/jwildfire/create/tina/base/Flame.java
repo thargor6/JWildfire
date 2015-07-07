@@ -126,6 +126,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private FilterKernelType spatialFilterKernel;
   private double sampleDensity;
   private boolean bgTransparency;
+  private boolean postNoiseFilter;
+  private double postNoiseFilterThreshold;
+  private double foregroundOpacity;
   @AnimAware
   private int bgColorRed;
   @AnimAware
@@ -263,6 +266,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
     colorOversampling = Prefs.getPrefs().getTinaDefaultColorOversampling();
     sampleJittering = Prefs.getPrefs().isTinaDefaultSampleJittering();
+    postNoiseFilter = Prefs.getPrefs().isTinaDefaultPostNoiseFilter();
+    postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
   }
 
   public void resetColoringSettings() {
@@ -274,6 +279,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
+    foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
   }
 
   public void resetBokehSettings() {
@@ -683,6 +689,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialOversampling = pFlame.spatialOversampling;
     colorOversampling = pFlame.colorOversampling;
     sampleJittering = pFlame.sampleJittering;
+    postNoiseFilter = pFlame.postNoiseFilter;
+    postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
+    foregroundOpacity = pFlame.foregroundOpacity;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -748,6 +757,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (colorOversampling != pFlame.colorOversampling) || (sampleJittering != pFlame.sampleJittering) ||
+        (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
+        (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
         (fabs(camDOFAngle - pFlame.camDOFAngle) > EPSILON) || !camDOFAngleCurve.isEqual(pFlame.camDOFAngleCurve) ||
         (fabs(camDOFFade - pFlame.camDOFFade) > EPSILON) || !camDOFFadeCurve.isEqual(pFlame.camDOFFadeCurve) ||
@@ -1421,6 +1432,31 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialOversampling(1);
     setColorOversampling(1);
     setSampleJittering(false);
+    setPostNoiseFilter(false);
+  }
+
+  public boolean isPostNoiseFilter() {
+    return postNoiseFilter;
+  }
+
+  public void setPostNoiseFilter(boolean pPostNoiseFilter) {
+    postNoiseFilter = pPostNoiseFilter;
+  }
+
+  public double getPostNoiseFilterThreshold() {
+    return postNoiseFilterThreshold;
+  }
+
+  public void setPostNoiseFilterThreshold(double pPostNoiseFilterThreshold) {
+    postNoiseFilterThreshold = pPostNoiseFilterThreshold;
+  }
+
+  public double getForegroundOpacity() {
+    return foregroundOpacity;
+  }
+
+  public void setForegroundOpacity(double pForegroundOpacity) {
+    foregroundOpacity = pForegroundOpacity;
   }
 
 }

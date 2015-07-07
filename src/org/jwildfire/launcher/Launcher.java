@@ -30,8 +30,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -151,7 +149,6 @@ public class Launcher {
   private JPanel imgDisplayPanel;
   private JTabbedPane mainTabbedPane;
   private JCheckBox debugCmb;
-  private JCheckBox openCLCmb;
   private JButton btnAddJavaRuntime;
 
   private void loadImages() {
@@ -280,14 +277,6 @@ public class Launcher {
     debugCmb.setBackground(Color.BLACK);
     panel_2.add(debugCmb);
 
-    openCLCmb = new JCheckBox("OpenCL (experimental)");
-    openCLCmb.setVisible(false);
-    openCLCmb.setToolTipText("Enable experimental OpenCL code");
-    openCLCmb.setForeground(SystemColor.menu);
-    openCLCmb.setBackground(Color.BLACK);
-    openCLCmb.setBounds(369, 20, 170, 18);
-    panel_2.add(openCLCmb);
-
     mainPanel = new JPanel();
     mainPanel.setBackground(Color.BLACK);
     startPanel_1.add(mainPanel, BorderLayout.CENTER);
@@ -383,14 +372,6 @@ public class Launcher {
     scrollPane.setViewportView(logTextArea);
 
     imgDisplayPanel = new JPanel();
-    imgDisplayPanel.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2) {
-          openCLCmb.setVisible(true);
-        }
-      }
-    });
     imgDisplayPanel.setBackground(Color.BLACK);
     imgDisplayPanel.setBounds(20, 86, 500, 270);
     mainPanel.add(imgDisplayPanel);
@@ -505,7 +486,6 @@ public class Launcher {
   private void savePrefs() throws Exception {
     prefs.setJavaPath((String) getJdkCmb().getSelectedItem());
     prefs.setMaxMem(Integer.parseInt(getMaxMemField().getText()));
-    prefs.setWithOpenCL(openCLCmb.isSelected());
     prefs.saveToFile();
   }
 
@@ -529,7 +509,6 @@ public class Launcher {
     if (prefs.getMaxMem() > 0) {
       getMaxMemField().setText(String.valueOf(prefs.getMaxMem()));
     }
-    getOpenCLCmb().setSelected(prefs.isWithOpenCL());
   }
 
   public JComboBox getJdkCmb() {
@@ -627,10 +606,6 @@ public class Launcher {
 
   public JCheckBox getDebugCbx() {
     return debugCmb;
-  }
-
-  public JCheckBox getOpenCLCmb() {
-    return openCLCmb;
   }
 
   public JButton getBtnAddJavaRuntime() {

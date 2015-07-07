@@ -35,10 +35,10 @@ public class LauncherPrefsReader {
     return val.length() > 0 ? Tools.stringToInt(val) : pDefaultValue;
   }
 
-  private boolean getBooleanProperty(Properties pProperties, String pKey, boolean pDefaultValue) {
-    String val = pProperties.getProperty(pKey, "").trim();
-    return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
-  }
+  //  private boolean getBooleanProperty(Properties pProperties, String pKey, boolean pDefaultValue) {
+  //    String val = pProperties.getProperty(pKey, "").trim();
+  //    return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
+  //  }
 
   //  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
   //    String val = pProperties.getProperty(pKey, "").trim();
@@ -54,7 +54,6 @@ public class LauncherPrefsReader {
         props.load(inputStream);
         pPrefs.setJavaPath(getProperty(props, LauncherPrefs.KEY_JAVA_PATH, pPrefs.getJavaPath()));
         pPrefs.setMaxMem(getIntProperty(props, LauncherPrefs.KEY_MEMORY_MAX, pPrefs.getMaxMem()));
-        pPrefs.setWithOpenCL(getBooleanProperty(props, LauncherPrefs.KEY_WITH_OPENCL, pPrefs.isWithOpenCL()));
       }
       finally {
         inputStream.close();

@@ -67,7 +67,6 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
-import org.jwildfire.launcher.AppLauncher;
 
 public class Desktop extends JApplet {
   private static final long serialVersionUID = 1L;
@@ -1516,9 +1515,9 @@ public class Desktop extends JApplet {
               value = param.substring(p + 1, param.length()).trim();
               param = param.substring(0, p).trim();
             }
-            if (AppLauncher.PROPERTY_OPENCL.equals(param)) {
-              Prefs.getPrefs().setTinaUseExperimentalOpenClCode(Boolean.parseBoolean(value));
-            }
+            //            if (AppLauncher.PROPERTY_OPENCL.equals(param)) {
+            //              Prefs.getPrefs().setTinaUseExperimentalOpenClCode(Boolean.parseBoolean(value));
+            //            }
           }
         }
       }
@@ -1570,7 +1569,7 @@ public class Desktop extends JApplet {
       jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
       jFrame.setSize(wPrefs.getWidth(1240), wPrefs.getHeight(800));
       jFrame.setContentPane(getJContentPane());
-      jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION + (prefs.isTinaUseExperimentalOpenClCode() ? " (with OpenCL)" : ""));
+      jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
 
       jFrame.addWindowListener(new WindowAdapter() {
 
@@ -1692,7 +1691,7 @@ public class Desktop extends JApplet {
       systemInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           if (!systemInfoInternalFrame.isVisible()) {
-        	((SystemInfoInternalFrame)systemInfoInternalFrame).refresh();
+            ((SystemInfoInternalFrame) systemInfoInternalFrame).refresh();
             systemInfoInternalFrame.setVisible(true);
           }
           try {
