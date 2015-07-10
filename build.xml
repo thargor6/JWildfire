@@ -127,12 +127,5 @@
       <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
     </zip>
   </target>
-
-	 <taskdef name="izpack" classpathref="build.classpath" classname="com.izforge.izpack.ant.IzPackTask" />	
-	
-  <target name="izpack">
-	  <izpack input="jwildfire_izpack.xml"
-	    output="${installer.dir}/jwildfire-installer.jar" installerType="standard" inheritAll="true" basedir="${dist.dir}" izPackDir="${izpack.dir}/IzPack/" />
-  </target>
 	
 </project>
