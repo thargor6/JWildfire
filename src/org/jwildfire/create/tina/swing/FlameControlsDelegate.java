@@ -1511,29 +1511,35 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void sampleJitteringCbx_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      owner.saveUndoPoint();
-      flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
-      enableControls();
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
+        enableControls();
+      }
     }
   }
 
   public void flameTransparencyCbx_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      owner.saveUndoPoint();
-      flame.setBGTransparency(data.bgTransparencyCBx.isSelected());
-      enableControls();
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setBGTransparency(data.bgTransparencyCBx.isSelected());
+        enableControls();
+      }
     }
   }
 
   public void postNoiseFilterCheckBox_changed() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      owner.saveUndoPoint();
-      flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
-      enableControls();
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
+        enableControls();
+      }
     }
   }
 

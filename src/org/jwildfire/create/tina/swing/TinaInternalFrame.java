@@ -1936,7 +1936,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(backgroundRemoveImageBtn);
 
       foregroundOpacityField = new JWFNumberField();
-      foregroundOpacityField.setValueStep(0.1);
+      foregroundOpacityField.setValueStep(0.05);
       foregroundOpacityField.setText("");
       foregroundOpacityField.setSize(new Dimension(100, 24));
       foregroundOpacityField.setPreferredSize(new Dimension(100, 24));

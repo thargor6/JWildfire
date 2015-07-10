@@ -37,6 +37,7 @@ public class GammaCorrectionFilter {
   private boolean withAlpha;
   private double modSaturation;
   private final int rasterWidth, rasterHeight;
+  private final double alphaScale;
 
   public static class ColorF {
     public double r, g, b;
@@ -51,6 +52,8 @@ public class GammaCorrectionFilter {
     withAlpha = pWithAlpha;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
+    alphaScale = MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1)) / 1.25 + 1;
+    System.out.println(alphaScale);
     initFilter();
   }
 
@@ -108,7 +111,7 @@ public class GammaCorrectionFilter {
         alpha = pow(logDensityPnt.intensity, gamma);
       }
       logScl = vibInt * alpha / logDensityPnt.intensity;
-      int alphaInt = (int) (alpha * 255 + 0.5);
+      int alphaInt = (int) (alpha * 255 * alphaScale + 0.5);
       if (alphaInt < 0)
         alphaInt = 0;
       else if (alphaInt > 255)
