@@ -65,6 +65,7 @@ src/demos/*
 
 JWildfire.sh
 build_new.xml
+localsrc
 
 
 /bin/

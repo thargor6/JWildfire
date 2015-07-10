@@ -35,7 +35,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.FilterHolder;
 import org.jwildfire.image.SimpleImage;
 import org.sunflow.SunflowAPI;
-import org.sunflow.system.ImagePanel;
 
 public class FilterKernelVisualisation3dRenderer extends FilterHolder implements FilterKernelVisualisationRenderer {
   private static final Map<String, SimpleImage> cache = new HashMap<String, SimpleImage>();
@@ -88,12 +87,11 @@ public class FilterKernelVisualisation3dRenderer extends FilterHolder implements
 
         try {
           SunflowAPI api = createSunflowRenderer(scene);
-          ImagePanel imagePanel = new ImagePanel();
+          SunFlowImagePanel imagePanel = new SunFlowImagePanel();
           imagePanel.setBounds(0, 0, pWidth, pHeight);
           api.render(SunflowAPI.DEFAULT_OPTIONS, imagePanel);
           img.setBufferedImage(imagePanel.getImage(), imagePanel.getWidth(), imagePanel.getHeight());
           imagePanel.getImage();
-
         }
         catch (Exception e) {
           e.printStackTrace();
