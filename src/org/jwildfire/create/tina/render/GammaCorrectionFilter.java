@@ -53,7 +53,6 @@ public class GammaCorrectionFilter {
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
     alphaScale = MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1)) / 1.25 + 1;
-    System.out.println(alphaScale);
     initFilter();
   }
 
