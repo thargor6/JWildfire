@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.Graphics;
+import javax.swing.RepaintManager;
 
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
@@ -35,10 +35,10 @@ public class RenderProgressUpdater implements ProgressUpdater {
       parent.getRenderProgressBar().setMaximum(pMaxSteps);
       parent.getRenderProgressBar().invalidate();
       parent.getRenderProgressBar().validate();
-      Graphics g = parent.getRenderProgressBar().getGraphics();
-      if (g != null) {
-        parent.getRenderProgressBar().paint(g);
-      }
+      parent.getRenderProgressBar().invalidate();
+      RepaintManager manager = RepaintManager.currentManager(parent.getRenderProgressBar());
+      manager.markCompletelyDirty(parent.getRenderProgressBar());
+      manager.paintDirtyRegions();
     }
     catch (Throwable ex) {
       // ex.printStackTrace();
@@ -50,15 +50,12 @@ public class RenderProgressUpdater implements ProgressUpdater {
     try {
       parent.getRenderProgressBar().setValue(pStep);
       parent.getRenderProgressBar().invalidate();
-      parent.getRenderProgressBar().validate();
-      Graphics g = parent.getRenderProgressBar().getGraphics();
-      if (g != null) {
-        parent.getRenderProgressBar().paint(g);
-      }
+      RepaintManager manager = RepaintManager.currentManager(parent.getRenderProgressBar());
+      manager.markCompletelyDirty(parent.getRenderProgressBar());
+      manager.paintDirtyRegions();
     }
     catch (Throwable ex) {
       // ex.printStackTrace();
     }
   }
-
 }
