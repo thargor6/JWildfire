@@ -426,8 +426,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   private final static int STATS_UPDATE_INTERVAL = 1000;
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 50;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
-  private final static int MAX_IMAGE_UPDATE_INC_INTERVAL = 5000;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 25;
+  private final static int MAX_IMAGE_UPDATE_INC_INTERVAL = 15000;
   private final static int SLEEP_INTERVAL = 25;
 
   private class UpdateDisplayThread implements Runnable {

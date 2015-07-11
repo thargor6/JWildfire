@@ -120,7 +120,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
-  static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.3";
+  static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.4";
 
   static final String KEY_TINA_DISABLE_WIKIMEDIA_COMMONS_WARNING = "tina.random_batch.disable_wikimedia_commons_warning";
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
@@ -279,7 +279,7 @@ public class Prefs extends ManagedObject {
   private int tinaDefaultFPS = 30;
 
   @Property(description = "Optimize display-refresh in the interactive renderer, but may be slower at some really old computers", category = PropertyCategory.TINA)
-  private boolean tinaOptimizedRenderingIR = true;
+  private boolean tinaOptimizedRenderingIR = false;
 
   @Property(description = "User-defined mutation-sub-types for mutation-type USER1 in the MutaGen", category = PropertyCategory.TINA)
   private String tinaMutaGenMutationTypesUser1 = "ADD_TRANSFORM, CHANGE_WEIGHT, AFFINE, RANDOM_PARAMETER";
