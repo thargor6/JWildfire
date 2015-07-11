@@ -72,6 +72,7 @@ public class FlameRenderer {
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
   private AbstractRasterPoint[][] raster;
+  private int oversample;
   // init in initView
   private int renderScale = 1;
   protected AbstractRandomGenerator randGen;
@@ -131,7 +132,7 @@ public class FlameRenderer {
 
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
-    int oversample = flame.getSpatialOversampling();
+    oversample = flame.getSpatialOversampling();
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
     maxBorderWidth = (MAX_FILTER_WIDTH - oversample) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - oversample) / 2;
@@ -673,8 +674,8 @@ public class FlameRenderer {
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     int SliceThicknessMultiplier = pSliceThicknessMod > MathLib.EPSILON && pSliceThicknessSamples > 0 ? pSliceThicknessSamples : 1;
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier + 0.5));
-    int PROGRESS_STEPS = 75;
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier / (double) (oversample) + 0.5));
+    int PROGRESS_STEPS = 25;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
       progressUpdater.initProgress(progressChangePerPhase * progressDisplayPhaseCount);

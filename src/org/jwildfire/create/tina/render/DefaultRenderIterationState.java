@@ -424,9 +424,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
     plotBufferIdx = 0;
     long t1 = System.currentTimeMillis();
-    if (t1 - t0 > 100) {
+    if (t1 - t0 > 50) {
       try {
-        Thread.sleep(2);
+        Thread.sleep(1);
       }
       catch (InterruptedException e) {
         e.printStackTrace();
