@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.awt.Graphics;
+import javax.swing.RepaintManager;
 
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
@@ -47,10 +47,9 @@ public class SWFAnimatorProgressUpdater implements ProgressUpdater {
       parent.getSwfAnimatorProgressBar().setValue(pStep);
       parent.getSwfAnimatorProgressBar().invalidate();
       parent.getSwfAnimatorProgressBar().validate();
-      Graphics g = parent.getSwfAnimatorProgressBar().getGraphics();
-      if (g != null) {
-        parent.getSwfAnimatorProgressBar().paint(g);
-      }
+      RepaintManager manager = RepaintManager.currentManager(parent.getSwfAnimatorProgressBar());
+      manager.markCompletelyDirty(parent.getSwfAnimatorProgressBar());
+      manager.paintDirtyRegions();
     }
     catch (Throwable ex) {
       ex.printStackTrace();

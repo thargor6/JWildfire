@@ -21,7 +21,6 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -104,8 +103,6 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
 
   @Override
   protected void plotPoint(int xIdx, int yIdx, double intensity) {
-    AbstractRasterPoint rp = raster[yIdx][xIdx];
-
     double cx, cy, cz;
     switch (style) {
       case 0:
@@ -179,7 +176,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
       applySamplesToRaster();
     }
 
-    rp.incCount();
+    raster.incCount(xIdx, yIdx);
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, xIdx, yIdx);

@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.jwildfire.base.mathlib.BaseMathLibType;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.raster.RasterPointPrecision;
+import org.jwildfire.create.tina.base.raster.RasterCreator;
 import org.jwildfire.create.tina.random.RandomGeneratorType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.EditorDoubleClickActionType;
@@ -86,7 +86,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2 = "tina.random_batch.duality.prefered_variation_probability2";
   static final String KEY_TINA_RANDOMMOVIEBATCH_SIZE = "tina.random_movie_batch.size";
-  static final String KEY_TINA_RASTERPOINT_PRECISION = "tina.rasterpoint.precision";
+  static final String KEY_TINA_RASTER_TYPE = "tina.raster_type";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_RED = "tina.random_batch.bg_color.red";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_GREEN = "tina.random_batch.bg_color.green";
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
@@ -386,10 +386,10 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  public static class RasterPointPrecisionEditor extends ComboBoxPropertyEditor {
-    public RasterPointPrecisionEditor() {
+  public static class RasterCreatorEditor extends ComboBoxPropertyEditor {
+    public RasterCreatorEditor() {
       super();
-      setAvailableValues(new RasterPointPrecision[] { RasterPointPrecision.DOUBLE_PRECISION, RasterPointPrecision.SINGLE_PRECISION });
+      setAvailableValues(new RasterCreator[] { RasterCreator.FLOAT_INT_RASTER });
     }
   }
 
@@ -415,8 +415,8 @@ public class Prefs extends ManagedObject {
 
   private static int tinaRenderThreads;
 
-  @Property(description = "Precision of the raster (less precision needs less memory)", category = PropertyCategory.TINA, editorClass = RasterPointPrecisionEditor.class)
-  private RasterPointPrecision tinaRasterPointPrecision = RasterPointPrecision.getDefaultValue();
+  @Property(description = "Type of the iteration-raster (less precision needs less memory)", category = PropertyCategory.TINA, editorClass = RasterCreatorEditor.class)
+  private RasterCreator tinaRasterType = RasterCreator.getDefaultValue();
 
   @Property(description = "Random number generator to use", category = PropertyCategory.TINA, editorClass = RandomGeneratorTypeEditor.class)
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
@@ -696,7 +696,7 @@ public class Prefs extends ManagedObject {
     tinaSaveFlamesWhenImageIsSaved = pSrc.tinaSaveFlamesWhenImageIsSaved;
     tinaSaveHDRInIR = pSrc.tinaSaveHDRInIR;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
-    tinaRasterPointPrecision = pSrc.tinaRasterPointPrecision;
+    tinaRasterType = pSrc.tinaRasterType;
     tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
     tinaGradientPath = pSrc.tinaGradientPath;
     tinaSVGPath = pSrc.tinaSVGPath;
@@ -922,14 +922,6 @@ public class Prefs extends ManagedObject {
   public void setBaseMathLibType(BaseMathLibType baseMathLibType) {
     MathLib.setBaseMathLibType(baseMathLibType);
     this.baseMathLibType = baseMathLibType;
-  }
-
-  public RasterPointPrecision getTinaRasterPointPrecision() {
-    return tinaRasterPointPrecision;
-  }
-
-  public void setTinaRasterPointPrecision(RasterPointPrecision tinaRasterPointPrecision) {
-    this.tinaRasterPointPrecision = tinaRasterPointPrecision;
   }
 
   public RandomBatchRefreshType getTinaRandomBatchRefreshType() {
@@ -1457,6 +1449,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultForegroundOpacity(double pTinaDefaultForegroundOpacity) {
     tinaDefaultForegroundOpacity = pTinaDefaultForegroundOpacity;
+  }
+
+  public RasterCreator getTinaRasterType() {
+    return tinaRasterType;
+  }
+
+  public void setTinaRasterType(RasterCreator pTinaRasterType) {
+    tinaRasterType = pTinaRasterType;
   }
 
 }

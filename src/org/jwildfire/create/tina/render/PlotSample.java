@@ -17,8 +17,8 @@
 package org.jwildfire.create.tina.render;
 
 public class PlotSample {
-  int x, y;
-  double r, g, b;
+  public int x, y;
+  public double r, g, b;
 
   public void set(int x, int y, double r, double g, double b) {
     this.x = x;

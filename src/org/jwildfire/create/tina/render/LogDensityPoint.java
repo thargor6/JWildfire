@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,11 +16,19 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.create.tina.base.raster.RasterPoint;
+
 public class LogDensityPoint {
   public double red;
   public double green;
   public double blue;
   public double intensity;
+
+  public RasterPoint rp = new RasterPoint();
+  public RasterPoint lu = new RasterPoint();
+  public RasterPoint ru = new RasterPoint();
+  public RasterPoint lb = new RasterPoint();
+  public RasterPoint rb = new RasterPoint();
 
   public void clear() {
     red = green = blue = intensity = 0.0;

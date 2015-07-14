@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,24 +16,19 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
-public enum RasterPointPrecision {
-  SINGLE_PRECISION {
+public enum RasterCreator {
+  FLOAT_INT_RASTER
+  {
     @Override
-    public Class<? extends AbstractRasterPoint> getRasterPointClass() {
-      return RasterPointFloat.class;
-    }
-  },
-  DOUBLE_PRECISION {
-    @Override
-    public Class<? extends AbstractRasterPoint> getRasterPointClass() {
-      return RasterPoint.class;
+    public Class<? extends AbstractRaster> getRasterClass() {
+      return RasterFloatInt.class;
     }
   };
 
-  public abstract Class<? extends AbstractRasterPoint> getRasterPointClass();
+  public abstract Class<? extends AbstractRaster> getRasterClass();
 
-  public static RasterPointPrecision getDefaultValue() {
-    return SINGLE_PRECISION;
+  public static RasterCreator getDefaultValue() {
+    return FLOAT_INT_RASTER;
   }
 
 }

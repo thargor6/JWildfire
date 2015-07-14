@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
@@ -71,7 +71,7 @@ public class FlameRenderer {
   private boolean withAlpha;
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
-  private AbstractRasterPoint[][] raster;
+  private AbstractRaster raster;
   private int oversample;
   // init in initView
   private int renderScale = 1;
@@ -147,11 +147,11 @@ public class FlameRenderer {
     raster = allocRaster();
   }
 
-  private AbstractRasterPoint[][] allocRaster() {
-    Class<? extends AbstractRasterPoint> rpClass = prefs.getTinaRasterPointPrecision().getRasterPointClass();
-    AbstractRasterPoint rp;
+  private AbstractRaster allocRaster() {
+    Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass();
+    AbstractRaster raster;
     try {
-      rp = rpClass.newInstance();
+      raster = rasterClass.newInstance();
     }
     catch (InstantiationException e) {
       throw new RuntimeException(e);
@@ -159,7 +159,8 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    return rp.allocRaster(rasterWidth, rasterHeight);
+    raster.allocRaster(rasterWidth, rasterHeight);
+    return raster;
   }
 
   public RenderedFlame finishRenderFlame(long pSampleCount) {
@@ -468,7 +469,6 @@ public class FlameRenderer {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
-    LogDensityPoint logDensityPnt = new LogDensityPoint();
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }
@@ -482,15 +482,15 @@ public class FlameRenderer {
       throw new IllegalStateException();
     }
 
-    renderImage(pImage, logDensityPnt);
+    renderImage(pImage);
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
       postFilterImage(pImage);
     }
-    renderHDRImage(pHDRImage, logDensityPnt);
-    renderHDRIntensityMap(pHDRIntensityMap, logDensityPnt);
+    renderHDRImage(pHDRImage);
+    renderHDRIntensityMap(pHDRIntensityMap);
   }
 
-  private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap, LogDensityPoint logDensityPnt) {
+  private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap) {
     if (pHDRIntensityMap != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pHDRIntensityMap.getImageHeight() < 8 * threadCount) {
@@ -538,7 +538,7 @@ public class FlameRenderer {
     }
   }
 
-  private void renderHDRImage(SimpleHDRImage pHDRImage, LogDensityPoint logDensityPnt) {
+  private void renderHDRImage(SimpleHDRImage pHDRImage) {
     if (pHDRImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pHDRImage.getImageHeight() < 8 * threadCount) {
@@ -562,7 +562,7 @@ public class FlameRenderer {
     }
   }
 
-  private void renderImage(SimpleImage pImage, LogDensityPoint logDensityPnt) {
+  private void renderImage(SimpleImage pImage) {
     if (pImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
@@ -909,7 +909,7 @@ public class FlameRenderer {
         }
         raster = null;
         // read raster
-        raster = (AbstractRasterPoint[][]) in.readObject();
+        raster = (AbstractRaster) in.readObject();
         // create threads
         RenderThreads threads = startIterate(renderFlames, state, false);
         return new ResumedFlameRender(header, threads.getRenderThreads());
@@ -929,15 +929,7 @@ public class FlameRenderer {
   }
 
   public long calcSampleCount() {
-    long res = 0;
-    if (raster != null) {
-      for (int i = 0; i < rasterHeight; i++) {
-        for (int j = 0; j < rasterWidth; j++) {
-          res += raster[i][j].getCount();
-        }
-      }
-    }
-    return res;
+    return raster != null ? raster.calcSampleCount() : 0;
   }
 
   public RenderInfo getRenderInfo() {
@@ -1064,7 +1056,7 @@ public class FlameRenderer {
     pFlame.setCamPerspective(0.0);
   }
 
-  protected AbstractRasterPoint[][] getRaster() {
+  protected AbstractRaster getRaster() {
     return raster;
   }
 

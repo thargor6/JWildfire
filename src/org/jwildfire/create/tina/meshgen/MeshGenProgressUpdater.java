@@ -16,9 +16,8 @@
 */
 package org.jwildfire.create.tina.meshgen;
 
-import java.awt.Graphics;
-
 import javax.swing.JProgressBar;
+import javax.swing.RepaintManager;
 
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
@@ -49,10 +48,9 @@ public class MeshGenProgressUpdater implements ProgressUpdater {
       progressBar.setValue(pStep);
       progressBar.invalidate();
       progressBar.validate();
-      Graphics g = progressBar.getGraphics();
-      if (g != null) {
-        progressBar.paint(g);
-      }
+      RepaintManager manager = RepaintManager.currentManager(progressBar);
+      manager.markCompletelyDirty(progressBar);
+      manager.paintDirtyRegions();
     }
     catch (Throwable ex) {
       // empty

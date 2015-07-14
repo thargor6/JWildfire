@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,28 +16,21 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
-public interface AbstractRasterPoint {
+import org.jwildfire.create.tina.render.PlotSample;
 
-  public double getRed();
+public interface AbstractRaster {
 
-  public void setRed(double red);
+  public void incCount(int pX, int pY);
 
-  public double getGreen();
+  public void allocRaster(int pWidth, int pHeight);
 
-  public void setGreen(double green);
+  public long calcSampleCount();
 
-  public double getBlue();
+  public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint);
 
-  public void setBlue(double blue);
+  public void readRasterPointSafe(int pX, int pY, RasterPoint pDestRasterPoint);
 
-  public long getCount();
+  public void addSample(int pX, int pY, double pRed, double pGreen, double pBlue);
 
-  public void setCount(long count);
-
-  public void incCount();
-
-  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight);
-
-  public void addSample(double red, double green, double blue);
-
+  public void addSamples(PlotSample[] pPlotBuffer, int pCount);
 }

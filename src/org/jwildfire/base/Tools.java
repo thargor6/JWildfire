@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,13 +17,20 @@
 package org.jwildfire.base;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
@@ -45,7 +52,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "2.56 BETA 2 (12.07.2015)";
+  public static final String APP_VERSION = "2.56 BETA 3 (14.07.2015)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -541,4 +548,28 @@ public class Tools {
     return lerp(lerp(c00, c10, tx), lerp(c01, c11, tx), ty);
   }
 
+  public static void writeObjectToFile(Object pObject, String pFilename) {
+    try (
+        OutputStream file = new FileOutputStream(pFilename);
+        OutputStream buffer = new BufferedOutputStream(file);
+        ObjectOutput output = new ObjectOutputStream(buffer);) {
+      output.writeObject(pObject);
+    }
+    catch (IOException ex) {
+      Unchecker.rethrow(ex);
+    }
+  }
+
+  public static Object readObjectFromFile(String pFilename) {
+    try (
+        InputStream file = new FileInputStream(pFilename);
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput input = new ObjectInputStream(buffer);) {
+      return input.readObject();
+    }
+    catch (Exception ex) {
+      Unchecker.rethrow(ex);
+      return null;
+    }
+  }
 }

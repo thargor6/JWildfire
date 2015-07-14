@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,21 +18,21 @@ package org.jwildfire.create.tina.render;
 
 import java.io.Serializable;
 
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 
 public class RenderSlice implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private final AbstractRasterPoint[][] raster;
+  private final AbstractRaster raster;
   private final double zmin, zmax;
 
-  public RenderSlice(AbstractRasterPoint[][] pRaster, double pZMin, double pZMax) {
+  public RenderSlice(AbstractRaster pRaster, double pZMin, double pZMax) {
     raster = pRaster;
     zmin = pZMin;
     zmax = pZMax;
   }
 
-  public AbstractRasterPoint[][] getRaster() {
+  public AbstractRaster getRaster() {
     return raster;
   }
 

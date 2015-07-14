@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -35,7 +35,7 @@ public class RenderIterationState implements Serializable {
   protected final RenderPacket packet;
   protected final Flame flame;
   protected final Layer layer;
-  protected AbstractRasterPoint[][] raster;
+  protected AbstractRaster raster;
   protected final FlameTransformationContext ctx;
   protected final AbstractRandomGenerator randGen;
   protected final List<IterationObserver> observers;

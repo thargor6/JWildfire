@@ -18,75 +18,10 @@ package org.jwildfire.create.tina.base.raster;
 
 import java.io.Serializable;
 
-public class RasterPoint implements AbstractRasterPoint, Serializable {
+public class RasterPoint implements Serializable {
   private static final long serialVersionUID = 1L;
-  private double red;
-  private double green;
-  private double blue;
-  private long count;
-
-  @Override
-  public double getRed() {
-    return red;
-  }
-
-  @Override
-  public void setRed(double pRed) {
-    red = pRed;
-  }
-
-  @Override
-  public double getGreen() {
-    return green;
-  }
-
-  @Override
-  public void setGreen(double pGreen) {
-    green = pGreen;
-  }
-
-  @Override
-  public double getBlue() {
-    return blue;
-  }
-
-  @Override
-  public void setBlue(double pBlue) {
-    blue = pBlue;
-  }
-
-  @Override
-  public long getCount() {
-    return count;
-  }
-
-  @Override
-  public void setCount(long pCount) {
-    count = pCount;
-  }
-
-  @Override
-  public AbstractRasterPoint[][] allocRaster(int pWidth, int pHeight) {
-    RasterPoint[][] raster = new RasterPoint[pHeight][pWidth];
-    for (int i = 0; i < pHeight; i++) {
-      for (int j = 0; j < pWidth; j++) {
-        raster[i][j] = new RasterPoint();
-      }
-    }
-    return raster;
-  }
-
-  @Override
-  public void incCount() {
-    count++;
-  }
-
-  @Override
-  public void addSample(double pRed, double pGreen, double pBlue) {
-    red += pRed;
-    green += pGreen;
-    blue += pBlue;
-    count++;
-  }
-
+  public double red;
+  public double green;
+  public double blue;
+  public long count;
 }
