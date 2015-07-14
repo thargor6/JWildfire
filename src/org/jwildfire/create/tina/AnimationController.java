@@ -140,7 +140,9 @@ public class AnimationController {
       try {
         tinaController.setNoRefresh(true);
         int frame = keyframesFrameSlider.getValue();
-        adjustFrameControls(frame);
+        if (playPreviewThread == null) {
+          adjustFrameControls(frame);
+        }
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
@@ -149,7 +151,7 @@ public class AnimationController {
           boolean oldNoControls = cfg.isNoControls();
           try {
             cfg.setNoControls(true);
-            tinaController.refreshFlameImage(true, false, 2);
+            tinaController.refreshFlameImage(true, true, 1);
           }
           finally {
             cfg.setNoControls(oldNoControls);

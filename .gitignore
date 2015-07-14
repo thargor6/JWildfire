@@ -49,6 +49,7 @@ plugins32/*
 plugins64/*
 jres/*
 
+SizeofUtil.java
 
 lib/colt*
 lib/jcodec*
