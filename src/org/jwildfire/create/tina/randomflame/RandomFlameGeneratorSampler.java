@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -131,16 +131,15 @@ public class RandomFlameGeneratorSampler {
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
-      // TODO XXX
-      // flame.setAntialiasAmount(0.0);
-
+      flame.setAntialiasAmount(0.0);
+      flame.setSpatialOversampling(1);
       try {
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
         renderedFlame = renderer.renderFlame(info);
       }
       finally {
-        // TODO XXX
-        // flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+        flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
+        flame.setSpatialOversampling(prefs.getTinaDefaultSpatialOversampling());
       }
       if (j == quality.getMaxSamples() - 1) {
         renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);

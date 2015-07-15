@@ -78,6 +78,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.5";
+  static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.5";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
@@ -105,9 +107,9 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling";
-  static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling";
-  static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering";
-  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter";
+  static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling.2";
+  static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering.2";
+  static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel";
@@ -243,10 +245,10 @@ public class Prefs extends ManagedObject {
   private int tinaDefaultColorOversampling = 3;
 
   @Property(description = "Default jitter setting for reducing aliasing artifacts, used when creating a new flame", category = PropertyCategory.TINA)
-  private boolean tinaDefaultSampleJittering = true;
+  private boolean tinaDefaultSampleJittering = false;
 
   @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
-  private boolean tinaDefaultPostNoiseFilter = true;
+  private boolean tinaDefaultPostNoiseFilter = false;
 
   @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
   private double tinaDefaultPostNoiseFilterThreshold = 0.5;
@@ -439,6 +441,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default background transparency", category = PropertyCategory.TINA)
   private boolean tinaDefaultBGTransparency = false;
+
+  @Property(description = "Default antialiasing amount (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
+  private double tinaDefaultAntialiasingAmount = 0.42;
+
+  @Property(description = "Default antialiasing radius (set to zero to turn antialiasing off by default)", category = PropertyCategory.TINA)
+  private double tinaDefaultAntialiasingRadius = 0.36;
 
   @Property(description = "Quality for preview rendering", category = PropertyCategory.TINA)
   private int tinaRenderPreviewQuality = 100;
@@ -682,7 +690,8 @@ public class Prefs extends ManagedObject {
     tinaEditorControlsWithNumbers = pSrc.tinaEditorControlsWithNumbers;
     tinaEditorGridSize = pSrc.tinaEditorGridSize;
     tinaRandGenColorMapImagePath = pSrc.tinaRandGenColorMapImagePath;
-
+    tinaDefaultAntialiasingAmount = pSrc.tinaDefaultAntialiasingAmount;
+    tinaDefaultAntialiasingRadius = pSrc.tinaDefaultAntialiasingRadius;
     tinaRenderMovieFrames = pSrc.tinaRenderMovieFrames;
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
@@ -1457,6 +1466,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRasterType(RasterCreator pTinaRasterType) {
     tinaRasterType = pTinaRasterType;
+  }
+
+  public double getTinaDefaultAntialiasingAmount() {
+    return tinaDefaultAntialiasingAmount;
+  }
+
+  public void setTinaDefaultAntialiasingAmount(double pTinaDefaultAntialiasingAmount) {
+    tinaDefaultAntialiasingAmount = pTinaDefaultAntialiasingAmount;
+  }
+
+  public double getTinaDefaultAntialiasingRadius() {
+    return tinaDefaultAntialiasingRadius;
+  }
+
+  public void setTinaDefaultAntialiasingRadius(double pTinaDefaultAntialiasingRadius) {
+    tinaDefaultAntialiasingRadius = pTinaDefaultAntialiasingRadius;
   }
 
 }

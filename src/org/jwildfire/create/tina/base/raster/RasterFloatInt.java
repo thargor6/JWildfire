@@ -88,10 +88,11 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   public void addSamples(PlotSample[] pPlotBuffer, int pCount) {
     for (int i = 0; i < pCount; i++) {
       PlotSample sample = pPlotBuffer[i];
-      red[sample.x][sample.y] += (float) sample.r;
-      green[sample.x][sample.y] += (float) sample.g;
-      blue[sample.x][sample.y] += (float) sample.b;
-      count[sample.x][sample.y]++;
+      int x = sample.x, y = sample.y;
+      red[x][y] += (float) sample.r;
+      green[x][y] += (float) sample.g;
+      blue[x][y] += (float) sample.b;
+      count[x][y]++;
     }
   }
 }

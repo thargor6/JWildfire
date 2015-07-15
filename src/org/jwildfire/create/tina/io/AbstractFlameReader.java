@@ -442,6 +442,13 @@ public class AbstractFlameReader {
       pFlame.setPreserveZ(hs.length() > 0 && Integer.parseInt(hs) == 1);
     }
 
+    if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
+      pFlame.setAntialiasAmount(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
+      pFlame.setAntialiasRadius(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_MOTIONBLUR_LENGTH)) != null) {
       int blurLen = Integer.parseInt(hs);
       pFlame.setMotionBlurLength(blurLen);
@@ -618,6 +625,8 @@ public class AbstractFlameReader {
   public static final String ATTR_MOD_CONTRAST_SPEED = "mod_contrast_speed";
   public static final String ATTR_MOD_SATURATION = "mod_saturation";
   public static final String ATTR_MOD_SATURATION_SPEED = "mod_saturation_speed";
+  public static final String ATTR_ANTIALIAS_AMOUNT = "antialias_amount";
+  public static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
   public static final String ATTR_VISIBLE = "visible";
   public static final String ATTR_CHANNEL_MIXER_MODE = "mixer_mode";
   public static final String ATTR_CHANNEL_MIXER_RR_CURVE = "mixer_rr_curve";
@@ -660,6 +669,19 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_MOD_SATURATION_SPEED)) != null) {
       pXForm.setModSaturationSpeed(Double.parseDouble(hs));
     }
+    // legacy
+    if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
+      double value = Double.parseDouble(hs);
+      if (value > 0)
+        pFlame.setAntialiasAmount(value);
+    }
+    // legacy
+    if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
+      double value = Double.parseDouble(hs);
+      if (value > 0)
+        pFlame.setAntialiasRadius(value);
+    }
+
     if ((hs = atts.get(ATTR_OPACITY)) != null) {
       double opacity = Double.parseDouble(hs);
       pXForm.setOpacity(opacity);

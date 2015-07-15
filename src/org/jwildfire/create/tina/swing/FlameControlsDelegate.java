@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -261,6 +261,22 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void cameraPitchSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
+  }
+
+  public void xFormAntialiasAmountSlider_changed() {
+    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormAntialiasRadiusSlider_changed() {
+    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormAntialiasAmountREd_changed() {
+    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormAntialiasRadiusREd_changed() {
+    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
   }
 
   public void focusZSlider_stateChanged(ChangeEvent e) {
@@ -663,6 +679,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
 
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
+
+      data.xFormAntialiasAmountREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasAmount()));
+      data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasAmount() * TinaController.SLIDER_SCALE_COLOR));
+      data.xFormAntialiasRadiusREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasRadius()));
+      data.xFormAntialiasRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasRadius() * TinaController.SLIDER_SCALE_COLOR));
 
       data.motionBlurLengthField.setText(String.valueOf(getCurrFlame().getMotionBlurLength()));
       data.motionBlurLengthSlider.setValue(getCurrFlame().getMotionBlurLength());

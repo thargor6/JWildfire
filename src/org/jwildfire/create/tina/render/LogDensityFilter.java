@@ -43,7 +43,7 @@ public class LogDensityFilter extends FilterHolder {
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
     motionBlurScl = flame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (flame.getMotionBlurLength() + 1.0);
     jitter = pFlame.isSampleJittering();
-    colorOversampling = pFlame.getColorOversampling();
+    colorOversampling = jitter ? pFlame.getColorOversampling() : 1;
     if (jitter) {
       randGen = new MarsagliaRandomGenerator();
       randGen.randomize(pFlame.hashCode());

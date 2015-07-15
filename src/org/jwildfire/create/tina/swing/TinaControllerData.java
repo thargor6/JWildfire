@@ -248,6 +248,10 @@ public class TinaControllerData {
   public JWFNumberField xFormOpacityREd;
   public JSlider xFormOpacitySlider;
   public JComboBox xFormDrawModeCmb;
+  public JWFNumberField xFormAntialiasAmountREd;
+  public JSlider xFormAntialiasAmountSlider;
+  public JWFNumberField xFormAntialiasRadiusREd;
+  public JSlider xFormAntialiasRadiusSlider;
   public JTable relWeightsTable;
   public JButton relWeightsZeroButton;
   public JButton relWeightsOneButton;

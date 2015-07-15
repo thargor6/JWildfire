@@ -53,7 +53,6 @@ public class Layer implements Assignable<Layer>, Serializable {
   private double gradientMapVertScale = 1.0;
   private double gradientMapLocalColorAdd = 0.8;
   private double gradientMapLocalColorScale = 0.2;
-
   private boolean smoothGradient = false;
 
   public List<XForm> getXForms() {

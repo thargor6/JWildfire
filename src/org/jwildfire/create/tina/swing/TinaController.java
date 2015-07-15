@@ -500,6 +500,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
 
+    data.xFormAntialiasAmountREd = parameterObject.pXFormAntialiasAmountREd;
+    data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
+    data.xFormAntialiasRadiusREd = parameterObject.pXFormAntialiasRadiusREd;
+    data.xFormAntialiasRadiusSlider = parameterObject.pXFormAntialiasRadiusSlider;
+
     data.relWeightsTable = parameterObject.pRelWeightsTable;
     data.relWeightsZeroButton = parameterObject.pRelWeightsZeroButton;
     data.relWeightsOneButton = parameterObject.pRelWeightsOneButton;
