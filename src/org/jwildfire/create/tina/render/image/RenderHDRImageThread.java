@@ -48,7 +48,7 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint);
+          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint, j, i);
           img.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }

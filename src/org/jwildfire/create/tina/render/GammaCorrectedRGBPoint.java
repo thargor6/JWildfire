@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,9 +16,13 @@
 */
 package org.jwildfire.create.tina.render;
 
-public class GammaCorrectedRGBPoint {
+import org.jwildfire.create.tina.render.GammaCorrectionFilter.HSLRGBConverter;
+
+public class GammaCorrectedRGBPoint extends PointWithBackgroundColor {
   public int red;
   public int green;
   public int blue;
   public int alpha;
+
+  public final HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
 }

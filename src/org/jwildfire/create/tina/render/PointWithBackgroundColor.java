@@ -16,8 +16,12 @@
 */
 package org.jwildfire.create.tina.render;
 
-public class GammaCorrectedHDRPoint extends PointWithBackgroundColor {
-  public float red;
-  public float green;
-  public float blue;
+import org.jwildfire.image.Pixel;
+
+public class PointWithBackgroundColor {
+  public int bgRed;
+  public int bgGreen;
+  public int bgBlue;
+
+  public final Pixel toolPixel = new Pixel();
 }

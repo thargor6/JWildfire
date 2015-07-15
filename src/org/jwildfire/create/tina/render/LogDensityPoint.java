@@ -24,11 +24,11 @@ public class LogDensityPoint {
   public double blue;
   public double intensity;
 
-  public RasterPoint rp = new RasterPoint();
-  public RasterPoint lu = new RasterPoint();
-  public RasterPoint ru = new RasterPoint();
-  public RasterPoint lb = new RasterPoint();
-  public RasterPoint rb = new RasterPoint();
+  public final RasterPoint rp = new RasterPoint();
+  public final RasterPoint lu = new RasterPoint();
+  public final RasterPoint ru = new RasterPoint();
+  public final RasterPoint lb = new RasterPoint();
+  public final RasterPoint rb = new RasterPoint();
 
   public void clear() {
     red = green = blue = intensity = 0.0;
