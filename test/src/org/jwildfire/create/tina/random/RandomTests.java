@@ -66,7 +66,6 @@ public class RandomTests
 	public void testAbstractRandomGenerator() throws Exception
 	{
 		Prefs p = Prefs.newInstance();
-		p.setTinaUseExperimentalOpenClCode(true);
 		for(RandomGeneratorType grt:RandomGeneratorType.values())
 		{
 			AbstractRandomGenerator gr = RandomGeneratorFactory.getInstance(p, grt);
@@ -77,18 +76,6 @@ public class RandomTests
 			gr.randomize(16L);
 			if(!(gr instanceof MarsagliaOpenCLRandomGenerator))
 				gr.cleanup();
-		}
-		p.setTinaUseExperimentalOpenClCode(false);
-		for(RandomGeneratorType grt:RandomGeneratorType.values())
-		{
-			AbstractRandomGenerator gr = RandomGeneratorFactory.getInstance(p, grt);
-			for (int i=0;i<20;i++)
-				Assert.assertTrue(gr.getClass().getSimpleName(),gr.random()<1);
-			for (int i=0;i<20;i++)
-				Assert.assertTrue(gr.getClass().getSimpleName(),gr.random(100)<100);
-			gr.randomize(16L);
-			if(!(gr instanceof MarsagliaOpenCLRandomGenerator))
-				RandomGeneratorFactory.cleanup();
 		}
 	}
 	@Test

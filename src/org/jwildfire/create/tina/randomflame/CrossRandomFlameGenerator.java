@@ -225,10 +225,14 @@ public class CrossRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.rotate(xForm, Math.random() * 360.0, true);
       XFormTransformService.localTranslate(xForm, 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), true);
 
-      String variations[] = { "cross", "boarders2", "boarders", "butterfly", "cos", "cosh", "cosine", "csc", "cylinder", "cylinder_apo", "dc_ztransl", "elliptic", "eyefish", "fibonacci2", "heart_wf", "hypertile1", "loonie", "mobius", "perspective", "popcorn", "popcorn2_3D", "ripple", "roundspher3D", "scry_3D", "sec", "secant2", "separation", "shredlin", "sin", "spherical", "spiral", "stripes", "unpolar", "waves2", "waves4_wf", "whorl", "xtrb", "rays1", "rays2", "rays3" };
-      String varName = Math.random() < 0.33 ? "cross" : Math.random() < 0.33 ? "rays2" : variations[(int) (Math.random() * variations.length)];
-
-      xForm.addVariation(1.57, VariationFuncList.getVariationFuncInstance(varName, true));
+      if (Math.random() > 0.75) {
+        String variations[] = { "cross", "boarders2", "boarders", "butterfly", "cos", "cosh", "cosine", "csc", "cylinder", "cylinder_apo", "dc_ztransl", "elliptic", "eyefish", "fibonacci2", "heart_wf", "hypertile1", "loonie", "mobius", "perspective", "popcorn", "popcorn2_3D", "ripple", "roundspher3D", "scry_3D", "sec", "secant2", "separation", "shredlin", "sin", "spherical", "spiral", "stripes", "unpolar", "waves2", "waves4_wf", "whorl", "xtrb", "rays1", "rays2", "rays3" };
+        String varName = Math.random() < 0.25 ? "cross" : Math.random() < 0.25 ? "rays2" : variations[(int) (Math.random() * variations.length)];
+        xForm.addVariation(1.57, VariationFuncList.getVariationFuncInstance(varName, true));
+      }
+      else {
+        xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+      }
 
     }
     layer.randomizeColors();

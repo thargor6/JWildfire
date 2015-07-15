@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PreBlurFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private final double gauss_rnd[] = new double[4];
+  private final double gauss_rnd[] = new double[6];
   private int gauss_N;
 
   @Override
@@ -35,9 +35,9 @@ public class PreBlurFunc extends SimpleVariationFunc {
     double r = pContext.random() * 2 * M_PI;
     double sina = sin(r);
     double cosa = cos(r);
-    r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
+    r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] + gauss_rnd[4] + gauss_rnd[5] - 3);
     gauss_rnd[gauss_N] = pContext.random();
-    gauss_N = (gauss_N + 1) & 3;
+    gauss_N = (gauss_N + 1) & 5;
     pAffineTP.x += r * cosa;
     pAffineTP.y += r * sina;
   }
@@ -53,6 +53,8 @@ public class PreBlurFunc extends SimpleVariationFunc {
     gauss_rnd[1] = pContext.random();
     gauss_rnd[2] = pContext.random();
     gauss_rnd[3] = pContext.random();
+    gauss_rnd[4] = pContext.random();
+    gauss_rnd[5] = pContext.random();
     gauss_N = 0;
   }
 
