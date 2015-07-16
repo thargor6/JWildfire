@@ -245,7 +245,7 @@ public class BaseFlameListCreator {
           List<String> paramNames = new ArrayList<String>();
           List<Double> paramValues = new ArrayList<Double>();
           if (param1 != null) {
-            SimpleImage paramMap1 = paramMaps1 != null ? paramMaps1.get(shapeIndex) : null;
+            SimpleImage paramMap1 = paramMaps1.get(shapeIndex);
             double value;
             if (paramMap1 != null) {
               toolPixel.setARGBValue(paramMap1.getARGBValueIgnoreBounds(j, i));
@@ -259,7 +259,7 @@ public class BaseFlameListCreator {
             paramValues.add(value);
           }
           if (param2 != null) {
-            SimpleImage paramMap2 = params != null ? paramMaps2.get(shapeIndex) : null;
+            SimpleImage paramMap2 = paramMaps2.get(shapeIndex);
             double value;
             if (paramMap2 != null) {
               toolPixel.setARGBValue(paramMap2.getARGBValueIgnoreBounds(j, i));
@@ -273,7 +273,7 @@ public class BaseFlameListCreator {
             paramValues.add(value);
           }
           if (param3 != null) {
-            SimpleImage paramMap3 = params != null ? paramMaps3.get(shapeIndex) : null;
+            SimpleImage paramMap3 = paramMaps3.get(shapeIndex);
             double value;
             if (paramMap3 != null) {
               toolPixel.setARGBValue(paramMap3.getARGBValueIgnoreBounds(j, i));
@@ -289,7 +289,7 @@ public class BaseFlameListCreator {
           iterator = new IFlamesIterator(pContext, params, paramNames, paramValues);
           iteratorCount++;
         }
-        else if (params != null) {
+        else{
           iterator = new IFlamesIterator(pContext, params, null, null);
           iteratorCount++;
         }
