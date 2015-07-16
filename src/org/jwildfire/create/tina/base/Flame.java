@@ -805,7 +805,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (frame != pFlame.frame) || (frameCount != pFlame.frameCount) ||
         (postSymmetryType != pFlame.postSymmetryType) || (postSymmetryOrder != pFlame.postSymmetryOrder) ||
         (fabs(postSymmetryCentreX - pFlame.postSymmetryCentreX) > EPSILON) || (fabs(postSymmetryCentreY - pFlame.postSymmetryCentreY) > EPSILON) ||
-        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) || (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
+        (fabs(postSymmetryDistance - pFlame.postSymmetryDistance) > EPSILON) ||
         (stereo3dMode != pFlame.stereo3dMode) || (fabs(stereo3dAngle - pFlame.stereo3dAngle) > EPSILON) ||
         (fabs(stereo3dEyeDist - pFlame.stereo3dEyeDist) > EPSILON) || (stereo3dLeftEyeColor != pFlame.stereo3dLeftEyeColor) ||
         (stereo3dRightEyeColor != pFlame.stereo3dRightEyeColor) || (stereo3dInterpolatedImageCount != pFlame.stereo3dInterpolatedImageCount) ||
