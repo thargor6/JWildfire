@@ -21,36 +21,30 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.envelope.Envelope;
 
 public class BrightnessColorFunc implements ColorFunc {
-  private AbstractRandomGenerator randGen;
   private Envelope envelope;
 
   @Override
   public double mapRGBToR(double pR, double pG, double pB) {
     double brightness = 0.2990 * pR + 0.5880 * pG + 0.1130 * pB;
-    return envelope.evaluate(brightness) / brightness * pR + noise();
+    return envelope.evaluate(brightness) / brightness * pR;
   }
 
   @Override
   public double mapRGBToG(double pR, double pG, double pB) {
     double brightness = 0.2990 * pR + 0.5880 * pG + 0.1130 * pB;
-    return envelope.evaluate(brightness) / brightness * pG + noise();
+    return envelope.evaluate(brightness) / brightness * pG;
   }
 
   @Override
   public double mapRGBToB(double pR, double pG, double pB) {
     double brightness = 0.2990 * pR + 0.5880 * pG + 0.1130 * pB;
-    return envelope.evaluate(brightness) / brightness * pB + noise();
+    return envelope.evaluate(brightness) / brightness * pB;
   }
 
   @Override
   public void prepare(Flame pFlame, AbstractRandomGenerator pRandGen) {
-    randGen = pRandGen;
     envelope = pFlame.getMixerRRCurve().toEnvelope();
     envelope.setUseBisection(true);
-  }
-
-  private double noise() {
-    return 0.5 - randGen.random();
   }
 
 }

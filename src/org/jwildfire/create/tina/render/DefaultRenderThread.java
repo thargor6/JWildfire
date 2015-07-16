@@ -91,10 +91,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
     try {
       for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
-        if (iter % 100000 == 0) {
-          preFuseIter();
-        }
-        else if (iter % 10000 == 0) {
+        if (iter % 1000 == 0) {
           currSample = iter;
           for (DefaultRenderIterationState state : iterationState) {
             state.validateState();
