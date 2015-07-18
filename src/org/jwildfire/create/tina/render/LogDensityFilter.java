@@ -108,14 +108,15 @@ public class LogDensityFilter extends FilterHolder {
 
   private void getSample(LogDensityPoint pFilteredPnt, int pX, int pY) {
     if (jitter) {
-      final double epsilon = 0.01;
-      double x = epsilon + randGen.random() * (0.5 - 2 * epsilon);
-      double y = epsilon + randGen.random() * (0.5 - 2 * epsilon);
+      final double epsilon = 0.001;
+      double x = epsilon + randGen.random() * (0.125 - 2 * epsilon);
+      double y = epsilon + randGen.random() * (0.125 - 2 * epsilon);
       raster.readRasterPointSafe(pX, pY, pFilteredPnt.lu);
       raster.readRasterPointSafe(pX + 1, pY, pFilteredPnt.ru);
       raster.readRasterPointSafe(pX, pY + 1, pFilteredPnt.lb);
       raster.readRasterPointSafe(pX + 1, pY + 1, pFilteredPnt.rb);
       pFilteredPnt.rp.red = Tools.blerp(pFilteredPnt.lu.red, pFilteredPnt.ru.red, pFilteredPnt.lb.red, pFilteredPnt.rb.red, x, y);
+      //      System.out.println(pFilteredPnt.rp.red + " (" + pFilteredPnt.lu.red + " " + pFilteredPnt.ru.red + " " + pFilteredPnt.lb.red + "," + pFilteredPnt.rb.red + ")");
       pFilteredPnt.rp.green = Tools.blerp(pFilteredPnt.lu.green, pFilteredPnt.ru.green, pFilteredPnt.lb.green, pFilteredPnt.rb.green, x, y);
       pFilteredPnt.rp.blue = Tools.blerp(pFilteredPnt.lu.blue, pFilteredPnt.ru.blue, pFilteredPnt.lb.blue, pFilteredPnt.rb.blue, x, y);
       pFilteredPnt.rp.count = Math.round(Tools.blerp(pFilteredPnt.lu.count, pFilteredPnt.ru.count, pFilteredPnt.lb.count, pFilteredPnt.rb.count, x, y));
