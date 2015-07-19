@@ -315,6 +315,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       lastQuality = 0.0;
+      lastQualitySpeed = 0.0;
       lastQualityTime = 0;
       threads = renderer.startRenderFlame(info);
       for (Thread t : threads.getExecutingThreads()) {
@@ -504,6 +505,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private long pausedRenderTime = 0;
   private int advanceQuality = 500;
   private double lastQuality;
+  private double lastQualitySpeed;
   private long lastQualityTime;
   private boolean showStats = true;
   private final DateFormat timeFormat = createTimeFormat();
@@ -523,6 +525,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
       long renderTime = currTime - renderStartTime + pausedRenderTime;
       if (lastQuality > 0) {
         double qualitySpeed = (pQuality - lastQuality) / (currTime - lastQualityTime);
+        if (lastQualitySpeed > 0.0) {
+          qualitySpeed = (qualitySpeed + lastQualitySpeed) / 2.0;
+        }
         if (qualitySpeed > 0.0) {
           int nextQuality = (Tools.FTOI(pQuality) / advanceQuality) * advanceQuality;
           if (nextQuality <= pQuality) {
@@ -530,13 +535,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
           }
           long qualityReach1 = (long) ((nextQuality - pQuality) / qualitySpeed + 0.5);
           long qualityReach2 = (long) ((nextQuality + advanceQuality - pQuality) / qualitySpeed + 0.5);
-          System.out.println(qualitySpeed + " " + nextQuality + " " + qualityReach1);
+          sb.append("Render speed: " + Tools.FTOI(qualitySpeed * 1000.0 * 3600.0) + "\n");
           sb.append("Reach quality " + nextQuality + " in: " + timeFormat.format(new Date(qualityReach1)) + "\n");
           sb.append("Reach quality " + (nextQuality + advanceQuality) + " in: " + timeFormat.format(new Date(qualityReach2)) + "\n\n");
         }
+        lastQualitySpeed = qualitySpeed;
       }
       sb.append("Elapsed time: " + timeFormat.format(new Date(renderTime)));
-
       lastQuality = pQuality;
       lastQualityTime = currTime;
       statsTextArea.setText(sb.toString());
@@ -733,6 +738,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         lastQuality = 0.0;
+        lastQualitySpeed = 0.0;
         lastQualityTime = 0;
         for (AbstractRenderThread thread : threads.getRenderThreads()) {
           startRenderThread(thread);
