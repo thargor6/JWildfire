@@ -35,11 +35,12 @@ public class Pixel implements Serializable {
     a = 255;
   }
 
-  public void setARGBValue(int pValue) {
+  public Pixel setARGBValue(int pValue) {
     a = (pValue >>> 24) & 0xff;
     r = (pValue >>> 16) & 0xff;
     g = (pValue >>> 8) & 0xff;
     b = pValue & 0xff;
+    return this;
   }
 
   public int getARGBValue() {
@@ -53,17 +54,36 @@ public class Pixel implements Serializable {
     a = pSrcP.a;
   }
 
-  public void setRGB(int pR, int pG, int pB) {
+  public Pixel setRGB(int pR, int pG, int pB) {
     a = 255;
     r = pR;
     g = pG;
     b = pB;
+    return this;
   }
 
-  public void setARGB(int pA, int pR, int pG, int pB) {
+  public Pixel setARGB(int pA, int pR, int pG, int pB) {
     a = pA;
     r = pR;
     g = pG;
     b = pB;
+    return this;
   }
+
+  public int getA() {
+    return a;
+  }
+
+  public int getR() {
+    return r;
+  }
+
+  public int getG() {
+    return g;
+  }
+
+  public int getB() {
+    return b;
+  }
+
 }

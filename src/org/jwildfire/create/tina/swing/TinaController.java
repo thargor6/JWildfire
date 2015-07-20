@@ -167,7 +167,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   static final double SLIDER_SCALE_GAMMA = 100.0;
   static final double SLIDER_SCALE_FILTER_RADIUS = 100.0;
   static final double SLIDER_SCALE_GAMMA_THRESHOLD = 5000.0;
-  static final double SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD = 1000.0;
+  static final double SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD = 100.0;
   static final double SLIDER_SCALE_COLOR = 100.0;
   static final double SLIDER_SCALE_ZPOS = 50.0;
   static final double SLIDER_SCALE_DOF = 100.0;

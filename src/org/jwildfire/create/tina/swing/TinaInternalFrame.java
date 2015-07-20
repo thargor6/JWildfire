@@ -80,6 +80,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
@@ -13430,7 +13431,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorOversamplingREd.setPreferredSize(new Dimension(100, 24));
       tinaColorOversamplingREd.setOnlyIntegers(true);
       tinaColorOversamplingREd.setMinValue(1.0);
-      tinaColorOversamplingREd.setMaxValue(10.0);
+      tinaColorOversamplingREd.setMaxValue(Tools.MAX_COLOR_OVERSAMPLING);
       tinaColorOversamplingREd.setLocation(new Point(584, 2));
       tinaColorOversamplingREd.setHasMinValue(true);
       tinaColorOversamplingREd.setHasMaxValue(true);
@@ -13457,7 +13458,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorOversamplingSlider.setPreferredSize(new Dimension(220, 19));
       tinaColorOversamplingSlider.setName("tinaColorOversamplingSlider");
       tinaColorOversamplingSlider.setMinimum(1);
-      tinaColorOversamplingSlider.setMaximum(10);
+      tinaColorOversamplingSlider.setMaximum(Tools.MAX_COLOR_OVERSAMPLING);
       tinaColorOversamplingSlider.setLocation(new Point(686, 2));
       tinaColorOversamplingSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       tinaColorOversamplingSlider.setBounds(217, 111, 220, 24);
@@ -13520,6 +13521,7 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(tinaPostNoiseFilterCheckBox);
 
       tinaPostNoiseThresholdField = new JWFNumberField();
+      tinaPostNoiseThresholdField.setMouseSpeed(0.1);
       tinaPostNoiseThresholdField.setValueStep(0.1);
       tinaPostNoiseThresholdField.setText("");
       tinaPostNoiseThresholdField.setSize(new Dimension(100, 24));
@@ -13558,7 +13560,6 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(lblNoiseThreshold);
 
       tinaPostNoiseThresholdSlider = new JSlider();
-      tinaPostNoiseThresholdSlider.setMaximum(1000);
       tinaPostNoiseThresholdSlider.setValue(0);
       tinaPostNoiseThresholdSlider.setSize(new Dimension(220, 19));
       tinaPostNoiseThresholdSlider.setPreferredSize(new Dimension(220, 19));
@@ -23924,6 +23925,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormAntialiasAmountREd() {
     if (xFormAntialiasAmountREd == null) {
       xFormAntialiasAmountREd = new JWFNumberField();
+      xFormAntialiasAmountREd.setMouseSpeed(0.1);
       xFormAntialiasAmountREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -23994,6 +23996,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField getXFormAntialiasRadiusREd() {
     if (xFormAntialiasRadiusREd == null) {
       xFormAntialiasRadiusREd = new JWFNumberField();
+      xFormAntialiasRadiusREd.setMouseSpeed(0.1);
       xFormAntialiasRadiusREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {

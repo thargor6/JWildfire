@@ -16,9 +16,14 @@
 */
 package org.jwildfire.create.tina.render;
 
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.log10;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
@@ -108,18 +113,32 @@ public class LogDensityFilter extends FilterHolder {
 
   private void getSample(LogDensityPoint pFilteredPnt, int pX, int pY) {
     if (jitter) {
-      final double epsilon = 0.001;
-      double x = epsilon + randGen.random() * (0.125 - 2 * epsilon);
-      double y = epsilon + randGen.random() * (0.125 - 2 * epsilon);
+      final double epsilon = 0.0001;
+      final double radius = 0.25;
+      double dr = log(randGen.random() + 0.1) + 1;
+      if (dr < epsilon) {
+        dr = epsilon;
+      }
+      else if (dr > 1.0 - epsilon) {
+        dr = 1.0 - epsilon;
+      }
+      double da = epsilon + (randGen.random() - 2 * epsilon) * M_PI * 2.0;
+      double x = dr * cos(da) * radius;
+      int xi = x < 0 ? -1 : 1;
+      x = MathLib.fabs(x);
+      double y = dr * sin(da) * radius;
+      int yi = y < 0 ? -1 : 1;
+      y = MathLib.fabs(y);
+
       raster.readRasterPointSafe(pX, pY, pFilteredPnt.lu);
-      raster.readRasterPointSafe(pX + 1, pY, pFilteredPnt.ru);
-      raster.readRasterPointSafe(pX, pY + 1, pFilteredPnt.lb);
-      raster.readRasterPointSafe(pX + 1, pY + 1, pFilteredPnt.rb);
+      raster.readRasterPointSafe(pX + xi, pY, pFilteredPnt.ru);
+      raster.readRasterPointSafe(pX, pY + yi, pFilteredPnt.lb);
+      raster.readRasterPointSafe(pX + xi, pY + yi, pFilteredPnt.rb);
       pFilteredPnt.rp.red = Tools.blerp(pFilteredPnt.lu.red, pFilteredPnt.ru.red, pFilteredPnt.lb.red, pFilteredPnt.rb.red, x, y);
-      //      System.out.println(pFilteredPnt.rp.red + " (" + pFilteredPnt.lu.red + " " + pFilteredPnt.ru.red + " " + pFilteredPnt.lb.red + "," + pFilteredPnt.rb.red + ")");
       pFilteredPnt.rp.green = Tools.blerp(pFilteredPnt.lu.green, pFilteredPnt.ru.green, pFilteredPnt.lb.green, pFilteredPnt.rb.green, x, y);
       pFilteredPnt.rp.blue = Tools.blerp(pFilteredPnt.lu.blue, pFilteredPnt.ru.blue, pFilteredPnt.lb.blue, pFilteredPnt.rb.blue, x, y);
       pFilteredPnt.rp.count = Math.round(Tools.blerp(pFilteredPnt.lu.count, pFilteredPnt.ru.count, pFilteredPnt.lb.count, pFilteredPnt.rb.count, x, y));
+      //      System.out.println(pFilteredPnt.rp.red + " (" + pFilteredPnt.lu.red + " " + pFilteredPnt.ru.red + " " + pFilteredPnt.lb.red + "," + pFilteredPnt.rb.red + ") at (" + x + " " + y + ")");
     }
     else {
       raster.readRasterPointSafe(pX, pY, pFilteredPnt.rp);
@@ -203,13 +222,13 @@ public class LogDensityFilter extends FilterHolder {
             getSample(pFilteredPnt, pX * oversample + px, pY * oversample + py);
             double logScale;
             long pCount = pFilteredPnt.rp.count;
-            if (pCount < precalcLogArray.length) {
-              logScale = precalcLogArray[(int) pCount];
-            }
-            else {
-              logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
-            }
             if (pCount > 0) {
+              if (pCount < precalcLogArray.length) {
+                logScale = precalcLogArray[(int) pCount];
+              }
+              else {
+                logScale = (k1 * log10(1.0 + pCount * motionBlurScl * k2)) / (flame.getWhiteLevel() * pCount * motionBlurScl);
+              }
               if (colorFunc == ColorFunc.NULL) {
                 pFilteredPnt.red += logScale * pFilteredPnt.rp.red / (double) colorOversampling;
                 pFilteredPnt.green += logScale * pFilteredPnt.rp.green / (double) colorOversampling;
