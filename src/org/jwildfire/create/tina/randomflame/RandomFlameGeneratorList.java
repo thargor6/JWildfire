@@ -46,6 +46,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(FilledFlowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
+    registerRandomFlameGenerator(Pseudo3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
     registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
@@ -64,7 +65,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
     registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
     //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
-    
+
     nameList = new ArrayList<>();
     for (Class<? extends RandomFlameGenerator> funcCls : items) {
       try {
