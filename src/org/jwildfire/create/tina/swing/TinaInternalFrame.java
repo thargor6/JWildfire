@@ -17901,7 +17901,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryOrderREd.setText("");
       postSymmetryOrderREd.setSize(new Dimension(100, 24));
       postSymmetryOrderREd.setPreferredSize(new Dimension(100, 24));
-      postSymmetryOrderREd.setMaxValue(18.0);
+      postSymmetryOrderREd.setMaxValue(36.0);
       postSymmetryOrderREd.setLocation(new Point(584, 2));
       postSymmetryOrderREd.setLinkedMotionControlName("postSymmetryOrderSlider");
       postSymmetryOrderREd.setHasMinValue(true);
@@ -17974,7 +17974,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryOrderSlider.setPreferredSize(new Dimension(220, 19));
       postSymmetryOrderSlider.setName("postSymmetryOrderSlider");
       postSymmetryOrderSlider.setMinimum(2);
-      postSymmetryOrderSlider.setMaximum(18);
+      postSymmetryOrderSlider.setMaximum(36);
       postSymmetryOrderSlider.setLocation(new Point(686, 2));
       postSymmetryOrderSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       postSymmetryOrderSlider.setBounds(634, 6, 220, 24);
