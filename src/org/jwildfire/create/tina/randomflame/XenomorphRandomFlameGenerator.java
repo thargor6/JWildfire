@@ -62,10 +62,13 @@ public class XenomorphRandomFlameGenerator extends RandomFlameGenerator {
       // variation 2
       xForm.addVariation(0.012, VariationFuncList.getVariationFuncInstance("linear", true));
       // variation 3
-      {
+      if (Math.random() > 0.6) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("radial_blur", true);
         varFunc.setParameter("angle", 0.609835);
         xForm.addVariation(-0.249, varFunc);
+      }
+      else {
+        xForm.addVariation(Math.random() < 0.5 ? -0.249 : 0.5 - Math.random(), VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       }
       // variation 4
       xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("power", true));
