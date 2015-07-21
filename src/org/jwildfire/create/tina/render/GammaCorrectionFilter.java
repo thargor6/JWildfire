@@ -51,7 +51,7 @@ public class GammaCorrectionFilter {
     withAlpha = pWithAlpha;
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
-    alphaScale = MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1)) / 1.25 + 1;
+    alphaScale = 1.0 - MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1.0)) / 1.25;
     oversample = pFlame.getSpatialOversampling();
     initFilter();
   }

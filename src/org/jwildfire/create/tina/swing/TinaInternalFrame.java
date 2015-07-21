@@ -13522,7 +13522,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaPostNoiseThresholdField = new JWFNumberField();
       tinaPostNoiseThresholdField.setMouseSpeed(0.1);
-      tinaPostNoiseThresholdField.setValueStep(0.1);
+      tinaPostNoiseThresholdField.setValueStep(0.05);
       tinaPostNoiseThresholdField.setText("");
       tinaPostNoiseThresholdField.setSize(new Dimension(100, 24));
       tinaPostNoiseThresholdField.setPreferredSize(new Dimension(100, 24));
@@ -13560,6 +13560,7 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(lblNoiseThreshold);
 
       tinaPostNoiseThresholdSlider = new JSlider();
+      tinaPostNoiseThresholdSlider.setMaximum(1000);
       tinaPostNoiseThresholdSlider.setValue(0);
       tinaPostNoiseThresholdSlider.setSize(new Dimension(220, 19));
       tinaPostNoiseThresholdSlider.setPreferredSize(new Dimension(220, 19));

@@ -84,7 +84,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     RandomFlameGenerator generator = createRandGen(pState);
     RandomFlameGeneratorState subState = generator.initState(pState.getPrefs(), pState.getGradientGenerator());
     Flame flame = generator.prepareFlame(subState);
-    flame.setName(generator.getName() + " - " + flame.hashCode());
+    flame.setName(getName() + " - " + flame.hashCode());
     return flame;
   }
 

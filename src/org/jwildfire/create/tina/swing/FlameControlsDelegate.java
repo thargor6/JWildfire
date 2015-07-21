@@ -157,7 +157,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.camPosZREd, false);
 
     enableControl(data.bgTransparencyCBx, false);
-    enableControl(data.foregroundOpacityField, !data.bgTransparencyCBx.isSelected());
+    enableControl(data.foregroundOpacityField, false);
 
     enableControl(data.motionBlurLengthField, false);
     enableControl(data.motionBlurTimeStepField, false);

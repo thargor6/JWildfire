@@ -251,7 +251,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDefaultPostNoiseFilter = false;
 
   @Property(description = "Default threshold-setting for the post-noise-filter", category = PropertyCategory.TINA)
-  private double tinaDefaultPostNoiseFilterThreshold = 0.5;
+  private double tinaDefaultPostNoiseFilterThreshold = 0.35;
 
   @Property(description = "Default foreground-opacity when rendering images with transparent background", category = PropertyCategory.TINA)
   private double tinaDefaultForegroundOpacity = 1.0;

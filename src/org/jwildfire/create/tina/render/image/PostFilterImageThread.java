@@ -16,11 +16,6 @@
 */
 package org.jwildfire.create.tina.render.image;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
@@ -31,7 +26,8 @@ public class PostFilterImageThread extends AbstractImageRenderThread {
   private final int startRow, endRow;
   private final SimpleImage input, output;
   private final boolean showHits;
-  private final Pixel toolPixel = new Pixel();
+  private final Pixel toolPixel1 = new Pixel();
+  private final Pixel toolPixel2 = new Pixel();
   private final double threshold;
   int hits = 0;
 
@@ -69,15 +65,15 @@ public class PostFilterImageThread extends AbstractImageRenderThread {
     hits = 0;
     for (int y = startRow; y < endRow; y++) {
       for (int x = 0; x < input.getImageWidth(); x++) {
-        PixelValue pCenter = getPixel(input, toolPixel, x, y);
-        PixelValue pLeft = getPixel(input, toolPixel, x - 1, y);
-        PixelValue pRight = getPixel(input, toolPixel, x + 1, y);
-        PixelValue pUp = getPixel(input, toolPixel, x, y - 1);
-        PixelValue pDown = getPixel(input, toolPixel, x, y + 1);
-        boolean left = MathLib.fabs(pCenter.luminosity - pLeft.luminosity) > threshold;
-        boolean right = MathLib.fabs(pCenter.luminosity - pRight.luminosity) > threshold;
-        boolean up = MathLib.fabs(pCenter.luminosity - pUp.luminosity) > threshold;
-        boolean down = MathLib.fabs(pCenter.luminosity - pDown.luminosity) > threshold;
+        PixelValue pCenter = getPixel(input, toolPixel1, x, y);
+        PixelValue pLeft = getPixel(input, toolPixel1, x - 1, y);
+        PixelValue pRight = getPixel(input, toolPixel1, x + 1, y);
+        PixelValue pUp = getPixel(input, toolPixel1, x, y - 1);
+        PixelValue pDown = getPixel(input, toolPixel1, x, y + 1);
+        boolean left = hasHighContrast(pCenter, pLeft);
+        boolean right = hasHighContrast(pCenter, pRight);
+        boolean up = hasHighContrast(pCenter, pUp);
+        boolean down = hasHighContrast(pCenter, pDown);
         if ((left && right && (up || down)) || (up && down || (left || right))) {
           hits++;
           if (showHits) {
@@ -99,140 +95,105 @@ public class PostFilterImageThread extends AbstractImageRenderThread {
     }
   }
 
-  public void doFilter4() {
-    hits = 0;
-    for (int y = startRow; y < endRow; y++) {
-      for (int x = 0; x < input.getImageWidth(); x++) {
-        PixelValue pCenter = getPixel(input, toolPixel, x, y);
-        PixelValue pLeft = getPixel(input, toolPixel, x - 1, y);
-        if (MathLib.fabs(pCenter.luminosity - pLeft.luminosity) > threshold) {
-          PixelValue pRight = getPixel(input, toolPixel, x + 1, y);
-          if (MathLib.fabs(pCenter.luminosity - pRight.luminosity) > threshold) {
-            PixelValue pUp = getPixel(input, toolPixel, x, y - 1);
-            if (MathLib.fabs(pCenter.luminosity - pUp.luminosity) > threshold) {
-              PixelValue pDown = getPixel(input, toolPixel, x, y + 1);
-              if (MathLib.fabs(pCenter.luminosity - pDown.luminosity) > threshold) {
-                hits++;
-                if (showHits) {
-                  output.setARGB(x, y, 255, 0, 255, 0);
-                  if (x < input.getImageWidth() - 1)
-                    output.setARGB(x + 1, y, 255, 0, 255, 0);
-                  if (x > 0)
-                    output.setARGB(x - 1, y, 255, 0, 255, 0);
-                  if (y < input.getImageHeight() - 1)
-                    output.setARGB(x, y + 1, 255, 0, 255, 0);
-                  if (y > 0)
-                    output.setARGB(x, y - 1, 255, 0, 255, 0);
-                }
-                else {
-                  doMedian4(y, x, pCenter, pLeft, pRight, pUp, pDown);
-                }
-              }
-            }
-          }
-        }
-
-      }
-    }
+  private boolean hasHighContrast(PixelValue pA, PixelValue pB) {
+    toolPixel1.setARGBValue(pA.argb);
+    toolPixel2.setARGBValue(pB.argb);
+    double dist = MathLib.sqrt(MathLib.sqr(toolPixel1.r - toolPixel2.r) + MathLib.sqr(toolPixel1.g - toolPixel2.g) + MathLib.sqr(toolPixel1.b - toolPixel2.b)) / 255.0;
+    return dist > threshold;
+    //    return MathLib.fabs(pA.luminosity - pB.luminosity) > threshold;
   }
 
-  private void doMedian8(int y, int x, PixelValue pCenter, PixelValue pLeft, PixelValue pRight, PixelValue pUp, PixelValue pDown) {
-    List<PixelValue> pixels = new ArrayList<PixelValue>();
-    pixels.add(pCenter);
-    pixels.add(pLeft);
-    pixels.add(pRight);
-    pixels.add(pUp);
-    pixels.add(pDown);
-    pixels.add(getPixel(input, toolPixel, x + 1, y + 1));
-    pixels.add(getPixel(input, toolPixel, x + 1, y - 1));
-    pixels.add(getPixel(input, toolPixel, x - 1, y + 1));
-    pixels.add(getPixel(input, toolPixel, x - 1, y - 1));
-    Collections.sort(pixels, new Comparator<PixelValue>() {
+  //  public void doFilter4() {
+  //    hits = 0;
+  //    for (int y = startRow; y < endRow; y++) {
+  //      for (int x = 0; x < input.getImageWidth(); x++) {
+  //        PixelValue pCenter = getPixel(input, toolPixel1, x, y);
+  //        PixelValue pLeft = getPixel(input, toolPixel1, x - 1, y);
+  //        if (hasHighContrast(pCenter, pLeft)) {
+  //          PixelValue pRight = getPixel(input, toolPixel1, x + 1, y);
+  //          if (hasHighContrast(pCenter, pRight)) {
+  //            PixelValue pUp = getPixel(input, toolPixel1, x, y - 1);
+  //            if (hasHighContrast(pCenter, pUp)) {
+  //              PixelValue pDown = getPixel(input, toolPixel1, x, y + 1);
+  //              if (hasHighContrast(pCenter, pDown)) {
+  //                hits++;
+  //                if (showHits) {
+  //                  output.setARGB(x, y, 255, 0, 255, 0);
+  //                  if (x < input.getImageWidth() - 1)
+  //                    output.setARGB(x + 1, y, 255, 0, 255, 0);
+  //                  if (x > 0)
+  //                    output.setARGB(x - 1, y, 255, 0, 255, 0);
+  //                  if (y < input.getImageHeight() - 1)
+  //                    output.setARGB(x, y + 1, 255, 0, 255, 0);
+  //                  if (y > 0)
+  //                    output.setARGB(x, y - 1, 255, 0, 255, 0);
+  //                }
+  //                else {
+  //                  doMedian4(y, x, pCenter, pLeft, pRight, pUp, pDown);
+  //                }
+  //              }
+  //            }
+  //          }
+  //        }
+  //
+  //      }
+  //    }
+  //  }
 
-      @Override
-      public int compare(PixelValue o1, PixelValue o2) {
-        if (o1.luminosity > o2.luminosity) {
-          return 1;
-        }
-        else if (o1.luminosity < o2.luminosity) {
-          return -1;
-        }
-        else {
-          return 0;
-        }
-      }
-    });
-    PixelValue newCentre = pixels.get(pixels.size() / 2);
-    output.setARGB(x, y, newCentre.argb);
-  }
+  //  private void doMedian8(int y, int x, PixelValue pCenter, PixelValue pLeft, PixelValue pRight, PixelValue pUp, PixelValue pDown) {
+  //    List<PixelValue> pixels = new ArrayList<PixelValue>();
+  //    pixels.add(pCenter);
+  //    pixels.add(pLeft);
+  //    pixels.add(pRight);
+  //    pixels.add(pUp);
+  //    pixels.add(pDown);
+  //    pixels.add(getPixel(input, toolPixel1, x + 1, y + 1));
+  //    pixels.add(getPixel(input, toolPixel1, x + 1, y - 1));
+  //    pixels.add(getPixel(input, toolPixel1, x - 1, y + 1));
+  //    pixels.add(getPixel(input, toolPixel1, x - 1, y - 1));
+  //    Collections.sort(pixels, new Comparator<PixelValue>() {
+  //
+  //      @Override
+  //      public int compare(PixelValue o1, PixelValue o2) {
+  //        if (o1.luminosity > o2.luminosity) {
+  //          return 1;
+  //        }
+  //        else if (o1.luminosity < o2.luminosity) {
+  //          return -1;
+  //        }
+  //        else {
+  //          return 0;
+  //        }
+  //      }
+  //    });
+  //    PixelValue newCentre = pixels.get(pixels.size() / 2);
+  //    output.setARGB(x, y, newCentre.argb);
+  //  }
 
   private void doGaussian8(int y, int x, PixelValue pCenter, PixelValue pLeft, PixelValue pRight, PixelValue pUp, PixelValue pDown) {
     double w0 = 0.32;
     double w1 = 0.11;
     double w2 = 0.06;
 
-    PixelValue p1 = getPixel(input, toolPixel, x + 1, y + 1);
-    PixelValue p2 = getPixel(input, toolPixel, x + 1, y - 1);
-    PixelValue p3 = getPixel(input, toolPixel, x - 1, y + 1);
-    PixelValue p4 = getPixel(input, toolPixel, x - 1, y - 1);
+    PixelValue p1 = getPixel(input, toolPixel1, x + 1, y + 1);
+    PixelValue p2 = getPixel(input, toolPixel1, x + 1, y - 1);
+    PixelValue p3 = getPixel(input, toolPixel1, x - 1, y + 1);
+    PixelValue p4 = getPixel(input, toolPixel1, x - 1, y - 1);
 
-    double r = toolPixel.setARGBValue(pCenter.argb).getR() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getR() + toolPixel.setARGBValue(pRight.argb).getR() + toolPixel.setARGBValue(pUp.argb).getR() + toolPixel.setARGBValue(pDown.argb).getR()) * w1 +
-        (toolPixel.setARGBValue(p1.argb).getR() + toolPixel.setARGBValue(p2.argb).getR() + toolPixel.setARGBValue(p3.argb).getR() + toolPixel.setARGBValue(p4.argb).getR()) * w2;
+    double r = toolPixel1.setARGBValue(pCenter.argb).getR() * w0 +
+        (toolPixel1.setARGBValue(pLeft.argb).getR() + toolPixel1.setARGBValue(pRight.argb).getR() + toolPixel1.setARGBValue(pUp.argb).getR() + toolPixel1.setARGBValue(pDown.argb).getR()) * w1 +
+        (toolPixel1.setARGBValue(p1.argb).getR() + toolPixel1.setARGBValue(p2.argb).getR() + toolPixel1.setARGBValue(p3.argb).getR() + toolPixel1.setARGBValue(p4.argb).getR()) * w2;
 
-    double g = toolPixel.setARGBValue(pCenter.argb).getG() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getG() + toolPixel.setARGBValue(pRight.argb).getG() + toolPixel.setARGBValue(pUp.argb).getG() + toolPixel.setARGBValue(pDown.argb).getG()) * w1 +
-        (toolPixel.setARGBValue(p1.argb).getG() + toolPixel.setARGBValue(p2.argb).getG() + toolPixel.setARGBValue(p3.argb).getG() + toolPixel.setARGBValue(p4.argb).getG()) * w2;
-    double b = toolPixel.setARGBValue(pCenter.argb).getR() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getB() + toolPixel.setARGBValue(pRight.argb).getB() + toolPixel.setARGBValue(pUp.argb).getB() + toolPixel.setARGBValue(pDown.argb).getB()) * w1 +
-        (toolPixel.setARGBValue(p1.argb).getB() + toolPixel.setARGBValue(p2.argb).getB() + toolPixel.setARGBValue(p3.argb).getB() + toolPixel.setARGBValue(p4.argb).getB()) * w2;
+    double g = toolPixel1.setARGBValue(pCenter.argb).getG() * w0 +
+        (toolPixel1.setARGBValue(pLeft.argb).getG() + toolPixel1.setARGBValue(pRight.argb).getG() + toolPixel1.setARGBValue(pUp.argb).getG() + toolPixel1.setARGBValue(pDown.argb).getG()) * w1 +
+        (toolPixel1.setARGBValue(p1.argb).getG() + toolPixel1.setARGBValue(p2.argb).getG() + toolPixel1.setARGBValue(p3.argb).getG() + toolPixel1.setARGBValue(p4.argb).getG()) * w2;
+    double b = toolPixel1.setARGBValue(pCenter.argb).getR() * w0 +
+        (toolPixel1.setARGBValue(pLeft.argb).getB() + toolPixel1.setARGBValue(pRight.argb).getB() + toolPixel1.setARGBValue(pUp.argb).getB() + toolPixel1.setARGBValue(pDown.argb).getB()) * w1 +
+        (toolPixel1.setARGBValue(p1.argb).getB() + toolPixel1.setARGBValue(p2.argb).getB() + toolPixel1.setARGBValue(p3.argb).getB() + toolPixel1.setARGBValue(p4.argb).getB()) * w2;
 
-    toolPixel.setARGB(255, Tools.roundColor(r), Tools.roundColor(g), Tools.roundColor(b));
+    toolPixel1.setARGB(255, Tools.roundColor(r), Tools.roundColor(g), Tools.roundColor(b));
 
-    output.setARGB(x, y, toolPixel.getARGBValue());
-  }
-
-  private void doGaussian4(int y, int x, PixelValue pCenter, PixelValue pLeft, PixelValue pRight, PixelValue pUp, PixelValue pDown) {
-    double w0 = 0.36;
-    double w1 = 0.16;
-
-    double r = toolPixel.setARGBValue(pCenter.argb).getR() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getR() + toolPixel.setARGBValue(pRight.argb).getR() + toolPixel.setARGBValue(pUp.argb).getR() + toolPixel.setARGBValue(pDown.argb).getR()) * w1;
-
-    double g = toolPixel.setARGBValue(pCenter.argb).getG() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getG() + toolPixel.setARGBValue(pRight.argb).getG() + toolPixel.setARGBValue(pUp.argb).getG() + toolPixel.setARGBValue(pDown.argb).getG()) * w1;
-    double b = toolPixel.setARGBValue(pCenter.argb).getR() * w0 +
-        (toolPixel.setARGBValue(pLeft.argb).getB() + toolPixel.setARGBValue(pRight.argb).getB() + toolPixel.setARGBValue(pUp.argb).getB() + toolPixel.setARGBValue(pDown.argb).getB()) * w1;
-
-    toolPixel.setARGB(255, Tools.roundColor(r), Tools.roundColor(g), Tools.roundColor(b));
-
-    output.setARGB(x, y, toolPixel.getARGBValue());
-  }
-
-  private void doMedian4(int y, int x, PixelValue pCenter, PixelValue pLeft, PixelValue pRight, PixelValue pUp, PixelValue pDown) {
-    List<PixelValue> pixels = new ArrayList<PixelValue>();
-    pixels.add(pCenter);
-    pixels.add(pLeft);
-    pixels.add(pRight);
-    pixels.add(pUp);
-    pixels.add(pDown);
-    Collections.sort(pixels, new Comparator<PixelValue>() {
-
-      @Override
-      public int compare(PixelValue o1, PixelValue o2) {
-        if (o1.luminosity > o2.luminosity) {
-          return 1;
-        }
-        else if (o1.luminosity < o2.luminosity) {
-          return -1;
-        }
-        else {
-          return 0;
-        }
-      }
-    });
-    PixelValue newCentre = pixels.get(pixels.size() / 2);
-    output.setARGB(x, y, newCentre.argb);
+    output.setARGB(x, y, toolPixel1.getARGBValue());
   }
 
   private PixelValue getPixel(SimpleImage img, Pixel rgbPixel, int x, int y) {

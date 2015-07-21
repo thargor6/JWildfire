@@ -1,3 +1,40 @@
+V2.56 (21.07.2015):
+- new spatial-oversampling-option for improved render-quality. The default value is 2, this may be set in the Preferences
+- visualisation of filter-kernels for better understanding/easier customizing of the spatial filtering process, both a nice-looking 3d-mode and a fast 2d-mode are available  
+- new sample-jittering- and color-oversampling-option for improved render-quality. The default value is off, this may be set in the Preferences.
+- new post-noise-filtering-option for redusing noise of the final noise by using an adaptive gaussian filter. The default value is off, this may be set in the Preferences.
+- added a brief description of all of this options in the official Wiki: http://wiki.jwildfire.org/index.php?title=Manual_RenderQualityFlameFractals
+
+- changed the memory management/layout of the iteration buffer (rendering should now take significantly less memory, and initialisation of rendering runs substantly faster, comes to a cost of only slightly degraded render time)
+
+- the final image-generating-process now works fully multi-threaded and should be faster
+- added a new experimental option "Opacity" to control the opacity of the foreground when rendering an image with background (often those renders caused the loss of too many details)
+
+- new "Pseudo3D"-random-flame-generator
+- improved the "Xenomorph"-random-flame-generator
+- improved the "Cross"-random-flame-generator
+
+- some more useful statistics in the interactive renderer, e.g. absolute render-speed-indicator to make it easier to compare different settings (render speed means the quality level the renderer can reach in one hour)
+
+- the windows-launcher (JWildfire.exe) should now be much smarter to find a valid Java-install
+- completely removed the izpack-installer (until now there were always two files: a *.zip for users who just wanted to unzip, or an izpack-based installer which caused too many problems)
+- there are now two packages available: platform-independant without jdk and any dll's, and windows64 with jdk and certain dll's   
+- removed the applet from the distribution
+
+- the Chaotica-integration is now disabled by default (in order to hide the export-button which may occupy important space for some users)
+- changed the animation-playback in the main-editor to full-window-size
+
+- made the detached renderer and the interactive renderer to behave more smooth
+- progressbar-update should be much smoother now, i.e. use less ressources
+- negative "perspective"-values are allowed now (again)
+- when using post-symmetry, the maximum of symmetry-order of point-symmetry was increased from 18 to 36
+- new ouputchannel to change param-values of plugins via the Leap Motion controller
+- added a new option tinaIntegrationChaoticaAnimationExport to the preferences. This option controls if the flames which are exchanged over the Chaotica-bridge are animated flames or static flames. In case you export them as static flames and have not a Studio licence for Chaotica you may render in higher resolutions.
+- fixed a bug in the crop-like variations
+- fixed a bug regarding autoimatically saving the current flame in the iteractive renderer
+- some refactoring of the structure synthesizer
+- completely removed all experimental opencl-code
+
 V2.50 R2 (27.05.2015):
  - Added a new option tinaIntegrationChaoticaAnimationExport to the preferences. This option controls if the 
    flames which are exchanged over the Chaotica-bridge are animated flames or static flames.

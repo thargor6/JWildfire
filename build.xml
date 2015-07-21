@@ -1,27 +1,24 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-
+  <property name="release" value="2.56" />
   <property name="dist.dir" location="build/dist" />
-  <property name="izpack.dir" location="F:/DEV" />
+  <property name="dist.win64.dir" location="build/dist-win64" />
+  <property name="dist.win64.name" value="build/j-wildfire-win64-${release}.zip" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
 	<property name="lib.dir" location="lib" />
 	<property name="src.dir" location="src/" />
 	<property name="jwildfire.jar.name" value="build/j-wildfire.jar" />
   <property name="launcher.jar.name" value="build/j-wildfire-launcher.jar" />
-  <property name="dist.name" value="build/j-wildfire.zip" />
+  <property name="dist.name" value="build/j-wildfire-${release}.zip" />
 	
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
-    <fileset dir="${izpack.dir}/IzPack">
-      <include name="lib/*.jar" />
-    </fileset>		
 		<pathelement path="${build.dir}" />
 	</path>
-
 
 	<target name="init">
       <delete dir="${build.dir}" />
@@ -129,5 +126,34 @@
       <zipfileset filemode="755" dir="${dist.dir}/" includes="start_*" />
     </zip>
   </target>
+  
+  <target name="packageDistWin64" depends="packageJWildfireJar, packageLauncherJar" description="Package the distributable zip file for Win64">
+     <copy todir="${dist.win64.dir}/">
+      <fileset dir="${src.dir}/../jres/win64" />
+     </copy>    
+    <copy todir="${dist.win64.dir}/lib">
+       <fileset file="${jwildfire.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="${launcher.jar.name}"/>
+     </copy>    
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="${applet.jar.name}"/>
+     </copy>
+    <copy todir="${dist.win64.dir}/">
+       <fileset file="CHANGES.txt" />
+       <fileset file="README_SUPPORT.txt" />
+       <fileset file="README_CHAOTICA_SUPPORT.txt" />
+       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
+       <fileset file="Delphi/JWildfire.exe" />
+    </copy>      
+    <copy todir="${dist.win64.dir}/lib/x64">
+       <fileset file="${src.dir}/../lib/x64/*.dll" />
+    </copy>    
+    <zip destfile="${dist.win64.name}">
+      <zipfileset dir="${dist.win64.dir}/" excludes="start_*" />
+    </zip>
+  </target>
+  
 	
 </project>

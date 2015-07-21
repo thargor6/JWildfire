@@ -82,7 +82,7 @@ public class Pseudo3DRandomFlameGenerator extends RandomFlameGenerator {
     RandomFlameGenerator generator = createRandGen(pState);
     RandomFlameGeneratorState subState = generator.initState(pState.getPrefs(), pState.getGradientGenerator());
     Flame flame = generator.prepareFlame(subState);
-    flame.setName(generator.getName() + " - " + flame.hashCode());
+    flame.setName(getName() + " - " + flame.hashCode());
     return flame;
   }
 
@@ -129,6 +129,6 @@ public class Pseudo3DRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private int rndColor() {
-    return Math.random() > 0.5 ? (int) (Math.random() * 255) : (int) (Math.random() * 128) + (int) (Math.random() * 127);
+    return Math.random() > 0.5 ? 0 : (int) (Math.random() * 128) + (int) (Math.random() * 127);
   }
 }
