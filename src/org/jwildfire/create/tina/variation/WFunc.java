@@ -155,8 +155,8 @@ public class WFunc extends VariationFunc {
       pVarTP.y += pAmount * pAffineTP.y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -176,13 +176,13 @@ public class WFunc extends VariationFunc {
     else if (PARAM_HYPERGON.equalsIgnoreCase(pName))
       hypergon = pValue;
     else if (PARAM_HYPERGON_N.equalsIgnoreCase(pName))
-      hypergon_n = limitIntVal(3, Integer.MAX_VALUE, Tools.FTOI(pValue));
+      hypergon_n = limitIntVal(Tools.FTOI(pValue), 3, Integer.MAX_VALUE);
     else if (PARAM_HYPERGON_R.equalsIgnoreCase(pName))
       hypergon_r = pValue;
     else if (PARAM_STAR.equalsIgnoreCase(pName))
       star = pValue;
     else if (PARAM_STAR_N.equalsIgnoreCase(pName))
-      star_n = limitIntVal(3, Integer.MAX_VALUE, Tools.FTOI(pValue));
+      star_n = limitIntVal(Tools.FTOI(pValue), 3, Integer.MAX_VALUE);
     else if (PARAM_STAR_SLOPE.equalsIgnoreCase(pName))
       star_slope = pValue;
     else if (PARAM_LITUUS.equalsIgnoreCase(pName))
