@@ -76,8 +76,8 @@ public class TradeFunc extends VariationFunc {
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -93,11 +93,11 @@ public class TradeFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_R1.equalsIgnoreCase(pName))
-      r1 = limitVal(EPSILON, Double.MAX_VALUE, pValue);
+      r1 = limitVal(pValue, EPSILON, Double.MAX_VALUE);
     else if (PARAM_D1.equalsIgnoreCase(pName))
-      d1 = limitVal(0.0, Double.MAX_VALUE, pValue);
+      d1 = limitVal(pValue, 0.0, Double.MAX_VALUE);
     else if (PARAM_R2.equalsIgnoreCase(pName))
-      r2 = limitVal(EPSILON, Double.MAX_VALUE, pValue);
+      r2 = limitVal(pValue, EPSILON, Double.MAX_VALUE);
     else if (PARAM_D2.equalsIgnoreCase(pName))
       d2 = limitVal(0.0, Double.MAX_VALUE, pValue);
     else
