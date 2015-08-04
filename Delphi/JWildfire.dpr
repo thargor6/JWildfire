@@ -133,6 +133,9 @@ begin
   else
     Cmd := GetJavaCmd( WorkingDir ) +' -jar '+JarPath;
 
+  if Pos(' ', Cmd) > 1 then
+    Cmd := '"'+Cmd+'"';
+
   if(DebugMode) then
     ShowMessage(Cmd);
 
