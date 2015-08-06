@@ -63,7 +63,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
 
               if (observers != null && observers.size() > 0) {
                 for (IterationObserver observer : observers) {
-                  observer.notifyIterationFinished(renderThread, l, k);
+                  observer.notifyIterationFinished(renderThread, iteration, l, k);
                 }
               }
             }
@@ -78,7 +78,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
       }
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+          observer.notifyIterationFinished(renderThread, iteration, xIdx, yIdx);
         }
       }
     }

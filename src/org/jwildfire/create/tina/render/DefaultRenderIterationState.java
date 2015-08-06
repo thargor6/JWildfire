@@ -61,6 +61,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected final XYZProjectedPoint prj = new XYZProjectedPoint();
   protected PointProjector projector;
   protected final ColorProvider colorProvider;
+  protected long iteration;
 
   public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
@@ -128,7 +129,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  public void iterateNext() {
+  public void iterateNext(long pIteration) {
+    iteration = pIteration;
     xf = selectNextXForm(xf);
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
@@ -413,7 +415,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+        observer.notifyIterationFinished(renderThread, iteration, xIdx, yIdx);
       }
     }
   }

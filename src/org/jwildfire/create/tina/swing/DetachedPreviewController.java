@@ -233,7 +233,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
     while (paused) {
       try {
         Thread.sleep(1);
@@ -242,7 +242,7 @@ public class DetachedPreviewController implements IterationObserver {
         e.printStackTrace();
       }
     }
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+    displayUpdater.iterationFinished(pEventSource, pIteration, pX, pY);
   }
 
   private void updateStats() {

@@ -170,6 +170,8 @@ public class FlameRenderer {
     double oldDensity = flame.getSampleDensity();
     try {
       double quality = logDensityFilter.calcDensity(pSampleCount, rasterSize);
+      System.out.println("FINALIZE: " + pSampleCount + " " + quality);
+
       flame.setSampleDensity(quality);
       RenderedFlame res = new RenderedFlame();
       res.init(renderInfo);
@@ -657,16 +659,16 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
     switch (flame.getShadingInfo().getShading()) {
       case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+        return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+        return new BlurRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+        return new DistanceColorRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+        return new Pseudo3DRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       default:
         throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
     }
@@ -685,7 +687,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -720,7 +722,7 @@ public class FlameRenderer {
     List<Thread> executingThreads = new ArrayList<Thread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, pFlames.get(i), -1, null, 0.0, 0);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pFlames.get(i), -1, null, 0.0, 0);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }

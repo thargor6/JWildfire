@@ -34,6 +34,8 @@ public abstract class AbstractRenderThread implements Runnable {
   protected final int sliceThicknessSamples;
   protected final long samples;
   protected final int oversample;
+  protected final int threadId;
+  protected final int threadGroupSize;
   protected volatile long currSample;
   protected SampleTonemapper tonemapper;
   protected boolean forceAbort;
@@ -45,7 +47,9 @@ public abstract class AbstractRenderThread implements Runnable {
   protected final int bgRed, bgGreen, bgBlue;
   protected final String bgImagefile;
 
-  public AbstractRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
+  public AbstractRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
+    threadId = pThreadId;
+    threadGroupSize = pThreadGroupSize;
     renderer = pRenderer;
     renderPackets = pRenderPackets;
     samples = pSamples;

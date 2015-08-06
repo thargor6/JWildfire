@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -39,10 +39,10 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
   }
 
   @Override
-  public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+  public void iterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
     int x = pX / pEventSource.getOversample();
     int y = pY / pEventSource.getOversample();
-    sampleCount++;
+    sampleCount = pIteration;
     if (showPreview && x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {
       image.setARGB(x, y, pEventSource.getTonemapper().tonemapSample(x, y));
     }

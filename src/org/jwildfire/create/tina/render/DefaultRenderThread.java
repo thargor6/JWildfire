@@ -12,8 +12,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    super(pPrefs, pThreadId, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
+    super(pPrefs, pThreadId, pThreadGroupSize, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
 
@@ -98,7 +98,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
           }
         }
         for (DefaultRenderIterationState state : iterationState) {
-          state.iterateNext();
+          state.iterateNext(getIter());
         }
       }
     }
@@ -142,7 +142,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
   @Override
   protected long getIter() {
-    return iter;
+    return iter * (long) threadGroupSize + (long) threadId;
   }
 
 }

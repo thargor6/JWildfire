@@ -803,8 +803,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
+    displayUpdater.iterationFinished(pEventSource, pIteration, pX, pY);
   }
 
 }

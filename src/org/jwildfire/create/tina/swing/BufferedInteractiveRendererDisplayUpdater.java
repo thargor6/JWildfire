@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -46,14 +46,16 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   }
 
   @Override
-  public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    sampleCount++;
-    int x = pX / pEventSource.getOversample();
-    int y = pY / pEventSource.getOversample();
-    if (showPreview && x >= 0 && x < imageWidth && y >= 0 && y < imageHeight) {
-      int argb = pEventSource.getTonemapper().tonemapSample(x, y);
-      int offset = imageWidth * y + x;
-      buffer[offset] = argb;
+  public void iterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
+    sampleCount = pIteration;
+    if (sampleCount % 3 == 0) {
+      int x = pX / pEventSource.getOversample();
+      int y = pY / pEventSource.getOversample();
+      if (showPreview && x >= 0 && x < imageWidth && y >= 0 && y < imageHeight) {
+        int argb = pEventSource.getTonemapper().tonemapSample(x, y);
+        int offset = imageWidth * y + x;
+        buffer[offset] = argb;
+      }
     }
   }
 

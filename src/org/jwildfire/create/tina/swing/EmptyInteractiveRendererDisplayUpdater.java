@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.render.AbstractRenderThread;
 public class EmptyInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
 
   @Override
-  public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+  public void iterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
   }
 
   @Override

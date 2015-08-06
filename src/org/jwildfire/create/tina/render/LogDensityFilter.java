@@ -146,14 +146,14 @@ public class LogDensityFilter extends FilterHolder {
   }
 
   public double calcDensity(long pSampleCount, long pRasterSize) {
-    return (double) pSampleCount / (double) pRasterSize;
+    return (double) pSampleCount / (double) pRasterSize * oversample;
   }
 
   public double calcDensity(long pSampleCount) {
     if (rasterSize == 0) {
       throw new IllegalStateException();
     }
-    return (double) pSampleCount / (double) rasterSize;
+    return (double) pSampleCount / (double) rasterSize * oversample;
   }
 
   public void transformPoint(LogDensityPoint pFilteredPnt, int pX, int pY) {
