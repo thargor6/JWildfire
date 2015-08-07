@@ -92,10 +92,10 @@ public class ImageParams implements Params, Serializable {
   // derived params
   private WFImage colorMap;
   private String cachedPreprocessedImageKey;
-  private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
+  private transient Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
   private int imgWidth, imgHeight;
   private double scaleColorMap;
-  private AbstractRandomGenerator randGen;
+  private transient AbstractRandomGenerator randGen;
 
   @Override
   public String[] appendParamNames(String[] pParamNames) {

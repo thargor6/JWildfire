@@ -24,7 +24,7 @@ public class RenderPacket implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final Flame flame;
-  private final FlameRendererView view;
+  private final transient FlameRendererView view;
 
   public RenderPacket(Flame pFlame, FlameRendererView pView) {
     flame = pFlame;

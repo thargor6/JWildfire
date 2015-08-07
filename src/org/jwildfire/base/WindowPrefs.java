@@ -110,9 +110,13 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   @Override
   public boolean isEqual(WindowPrefs pSrc) {
     if (width != pSrc.width || height != pSrc.height ||
-        left != pSrc.left || top != pSrc.top ||
-        maximized != pSrc.maximized || (name == null || pSrc.name != null) ||
-        (name != null && pSrc.name == null) || !name.equals(pSrc.name)) {
+        left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized)
+    	return false;
+    if (name==null){
+    	if(pSrc.name!=null)
+    		return false;
+    }
+    else if(pSrc.name==null||!name.equals(pSrc.name)){
       return false;
     }
     return true;
