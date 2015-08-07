@@ -50,6 +50,8 @@ public class RenderProgressUpdater implements ProgressUpdater {
     try {
       parent.getRenderProgressBar().setValue(pStep);
       parent.getRenderProgressBar().invalidate();
+      parent.getRenderProgressBar().validate();
+      parent.getRenderProgressBar().invalidate();
       RepaintManager manager = RepaintManager.currentManager(parent.getRenderProgressBar());
       manager.markCompletelyDirty(parent.getRenderProgressBar());
       manager.paintDirtyRegions();
