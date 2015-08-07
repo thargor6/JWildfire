@@ -147,8 +147,6 @@ public abstract class AbstractRenderThread implements Runnable {
     this.resumeState = resumeState;
   }
 
-  protected abstract long getIter();
-
   public int getBgRed() {
     return bgRed;
   }
@@ -167,5 +165,9 @@ public abstract class AbstractRenderThread implements Runnable {
 
   public int getOversample() {
     return oversample;
+  }
+
+  public int getThreadId() {
+    return threadId;
   }
 }

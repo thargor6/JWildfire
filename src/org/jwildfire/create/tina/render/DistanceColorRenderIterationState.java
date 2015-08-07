@@ -179,7 +179,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     raster.incCount(xIdx, yIdx);
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, iteration, xIdx, yIdx);
+        observer.notifyIterationFinished(renderThread, xIdx, yIdx);
       }
     }
   }

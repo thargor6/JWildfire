@@ -98,7 +98,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
           }
         }
         for (DefaultRenderIterationState state : iterationState) {
-          state.iterateNext(getIter());
+          state.iterateNext();
         }
       }
     }
@@ -138,11 +138,6 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
         state.iterateNext(pSlices, pThicknessMod, pThicknessSamples);
       }
     }
-  }
-
-  @Override
-  protected long getIter() {
-    return iter * (long) threadGroupSize + (long) threadId;
   }
 
 }

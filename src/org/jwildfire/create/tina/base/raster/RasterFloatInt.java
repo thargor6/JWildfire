@@ -52,6 +52,8 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
+  // TODO
+  @Deprecated
   public long calcSampleCount() {
     long res = 0;
     for (int i = 0; i < rasterWidth; i++) {

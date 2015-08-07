@@ -66,9 +66,6 @@ public class DetachedPreviewController implements IterationObserver {
   private RenderThreads threads;
   private Thread updateDisplayExecuteThread;
   private FlameRenderer renderer;
-  private long sampleCount = 0;
-  private long renderStartTime = 0;
-  private long pausedRenderTime = 0;
   private ImagePanel imagePanel;
   private final JToggleButton toggleDetachedPreviewButton;
   private SimpleImage image;
@@ -116,13 +113,10 @@ public class DetachedPreviewController implements IterationObserver {
     }
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);
-    sampleCount = 0;
-    renderStartTime = System.currentTimeMillis();
-    pausedRenderTime = 0;
 
     displayUpdater = createDisplayUpdater();
     displayUpdater.setSampleCount(0);
-
+    displayUpdater.initRender(prefs.getTinaRenderThreads());
     threads = renderer.startRenderFlame(info);
     for (Thread thread : threads.getExecutingThreads()) {
       thread.setPriority(Thread.MIN_PRIORITY);
@@ -233,7 +227,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     while (paused) {
       try {
         Thread.sleep(1);
@@ -242,7 +236,7 @@ public class DetachedPreviewController implements IterationObserver {
         e.printStackTrace();
       }
     }
-    displayUpdater.iterationFinished(pEventSource, pIteration, pX, pY);
+    displayUpdater.iterationFinished(pEventSource, pX, pY);
   }
 
   private void updateStats() {

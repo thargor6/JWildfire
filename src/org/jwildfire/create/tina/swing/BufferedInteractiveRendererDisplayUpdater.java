@@ -29,6 +29,7 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   private final int imageWidth;
   private final int imageHeight;
   private int[] buffer;
+  private long[] iterationCount;
 
   private boolean showPreview;
 
@@ -46,8 +47,9 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   }
 
   @Override
-  public void iterationFinished(AbstractRenderThread pEventSource, long pIteration, int pX, int pY) {
-    sampleCount = pIteration;
+  public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+    iterationCount[pEventSource.getThreadId()] = pEventSource.getCurrSample();
+    sampleCount = calculateSampleCount();
     if (sampleCount % 3 == 0) {
       int x = pX / pEventSource.getOversample();
       int y = pY / pEventSource.getOversample();
@@ -104,5 +106,18 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
     if (repaint) {
       buffer = getBufferFromImage();
     }
+  }
+
+  private long calculateSampleCount() {
+    long res = 0;
+    for (int i = 0; i < iterationCount.length; i++) {
+      res += iterationCount[i];
+    }
+    return res;
+  }
+
+  @Override
+  public void initRender(int pThreadGroupSize) {
+    iterationCount = new long[pThreadGroupSize];
   }
 }
