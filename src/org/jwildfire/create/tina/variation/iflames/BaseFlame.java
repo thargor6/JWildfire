@@ -27,7 +27,7 @@ public class BaseFlame implements Serializable {
   private final double r, g, b;
   private final double brightness;
   private final double size;
-  private final IFlamesIterator iterator;
+  private final transient IFlamesIterator iterator;
   private final int previewColorR, previewColorG, previewColorB;
   private final DynamicProperties motionProperties;
 

@@ -17591,9 +17591,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
-            if (tinaController != null && tinaController.getAnimationController() != null) {
-              tinaController.getAnimationController().keyFrameFieldChanged();
-            }
+            tinaController.getAnimationController().keyFrameFieldChanged();
           }
         }
       });

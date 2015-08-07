@@ -1487,12 +1487,6 @@ public class Desktop extends JApplet {
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        try {
-          parseStartParams(args);
-        }
-        catch (Throwable ex) {
-          ex.printStackTrace();
-        }
         setUserLookAndFeel();
         Desktop application = new Desktop();
         application.getJFrame().setVisible(true);
@@ -1502,23 +1496,6 @@ public class Desktop extends JApplet {
         }
         catch (Exception ex) {
           ex.printStackTrace();
-        }
-      }
-
-      private void parseStartParams(String[] args) {
-        for (String arg : args) {
-          if (arg.indexOf("-D") == 0) {
-            String param = arg.substring(2, arg.length());
-            String value = "";
-            int p = param.indexOf("=");
-            if (p > 0) {
-              value = param.substring(p + 1, param.length()).trim();
-              param = param.substring(0, p).trim();
-            }
-            //            if (AppLauncher.PROPERTY_OPENCL.equals(param)) {
-            //              Prefs.getPrefs().setTinaUseExperimentalOpenClCode(Boolean.parseBoolean(value));
-            //            }
-          }
         }
       }
 

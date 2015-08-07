@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
@@ -13,8 +12,6 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.raster.AbstractRasterPoint;
-import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.batch.HeadlessBatchRendererController;
 import org.jwildfire.create.tina.batch.Job;
 import org.jwildfire.create.tina.batch.JobRenderThread;

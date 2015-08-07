@@ -30,7 +30,7 @@ public class IFlamesAnimator implements Serializable {
   private final MotionParams motionParams;
   private final Map<String, MotionCurve> motionCurves;
   private boolean useMotionStore = true;
-  private IFlamesAnimatorMotionStore motionStore;
+  private transient IFlamesAnimatorMotionStore motionStore;
 
   private final float DT = 0.0025f;
 

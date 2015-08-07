@@ -199,11 +199,8 @@ public class SimpleHDRImage implements WFImage {
     }
     imageWidth = newWidth;
     imageHeight = newHeight;
-    rBuffer = null;
     rBuffer = rNew;
-    gBuffer = null;
     gBuffer = gNew;
-    bBuffer = null;
     bBuffer = bNew;
   }
 

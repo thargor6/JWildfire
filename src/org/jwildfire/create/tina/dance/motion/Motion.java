@@ -48,7 +48,7 @@ public abstract class Motion extends ManagedObject implements Serializable {
 
   public MotionLink getLink(FlamePropertyPath pSelPath) {
     for (MotionLink link : motionLinks) {
-      if (pSelPath.getFlame().isEqual(link.getProperyPath().getFlame()) && pSelPath.getPath().equals(link.getProperyPath())) {
+      if (pSelPath.getFlame().isEqual(link.getProperyPath().getFlame()) && pSelPath.getPath().equals(link.getProperyPath().getPath())) {
         return link;
       }
     }
