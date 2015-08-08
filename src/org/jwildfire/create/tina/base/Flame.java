@@ -1447,6 +1447,15 @@ public class Flame implements Assignable<Flame>, Serializable {
     setPostNoiseFilter(false);
   }
 
+  public void applyDefaultOversamplingSettings() {
+    Prefs prefs = Prefs.getPrefs();
+    setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
+    setSpatialOversampling(prefs.getTinaDefaultSpatialOversampling());
+    setColorOversampling(prefs.getTinaDefaultColorOversampling());
+    setSampleJittering(prefs.isTinaDefaultSampleJittering());
+    setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
+  }
+
   public boolean isPostNoiseFilter() {
     return postNoiseFilter;
   }

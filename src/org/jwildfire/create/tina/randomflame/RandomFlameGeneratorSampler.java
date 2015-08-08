@@ -131,31 +131,30 @@ public class RandomFlameGeneratorSampler {
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
-      flame.setAntialiasAmount(0.0);
-      flame.setSpatialOversampling(1);
+
+      flame.applyFastOversamplingSettings();
       try {
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
         renderedFlame = renderer.renderFlame(info);
-      }
-      finally {
-        flame.setAntialiasAmount(prefs.getTinaDefaultAntialiasingAmount());
-        flame.setSpatialOversampling(prefs.getTinaDefaultSpatialOversampling());
-      }
-      if (j == quality.getMaxSamples() - 1) {
-        renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
-        return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
-      }
-      else {
-        double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, randGen.isUseFilter(randGenState));
-        if (fCoverage >= quality.getCoverage()) {
-          return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
+        if (j == quality.getMaxSamples() - 1) {
+          renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
+          return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());
         }
         else {
-          if (bestFlame == null || fCoverage > bestCoverage) {
-            bestFlame = flame;
-            bestCoverage = fCoverage;
+          double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, randGen.isUseFilter(randGenState));
+          if (fCoverage >= quality.getCoverage()) {
+            return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
+          }
+          else {
+            if (bestFlame == null || fCoverage > bestCoverage) {
+              bestFlame = flame;
+              bestCoverage = fCoverage;
+            }
           }
         }
+      }
+      finally {
+        flame.applyDefaultOversamplingSettings();
       }
     }
     throw new IllegalStateException();
