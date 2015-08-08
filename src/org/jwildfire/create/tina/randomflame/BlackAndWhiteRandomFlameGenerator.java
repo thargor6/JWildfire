@@ -100,7 +100,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return false;
+    return true;
   }
 
   @Override
