@@ -311,7 +311,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
       displayUpdater = createDisplayUpdater();
-      displayUpdater.setSampleCount(0);
       renderStartTime = System.currentTimeMillis();
       pausedRenderTime = 0;
       lastQuality = 0.0;
@@ -709,7 +708,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
         ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
         threads = new RenderThreads(resumedRender.getThreads(), null);
-        displayUpdater.initRender(threads.getRenderThreads().size());
         Flame flame = currFlame = newRenderer.getFlame();
         // setup size profile
         {
@@ -758,7 +756,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
         renderer.registerIterationObserver(this);
         displayUpdater = createDisplayUpdater();
-        displayUpdater.setSampleCount(renderer.calcSampleCount());
+        displayUpdater.initRender(threads.getRenderThreads().size());
+
         pausedRenderTime = resumedRender.getHeader().getElapsedMilliseconds();
         renderStartTime = System.currentTimeMillis();
         lastQuality = 0.0;
@@ -791,16 +790,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
             ex.printStackTrace();
           }
         }
-        pauseRenderThreads();
-        try {
-          if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            prefs.setLastOutputFlameFile(file);
-            renderer.saveState(file.getAbsolutePath(), threads.getRenderThreads(), displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
-          }
-        }
-        finally {
-          resumeRenderThreads();
+        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          prefs.setLastOutputFlameFile(file);
+          renderer.saveState(file.getAbsolutePath(), threads.getRenderThreads(), displayUpdater.getSampleCount(), System.currentTimeMillis() - renderStartTime + pausedRenderTime, null);
         }
       }
       catch (Throwable ex) {

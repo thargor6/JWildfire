@@ -24,10 +24,6 @@ public interface AbstractRaster {
 
   public void allocRaster(int pWidth, int pHeight);
 
-  // TODO
-  @Deprecated
-  public long calcSampleCount();
-
   public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint);
 
   public void readRasterPointSafe(int pX, int pY, RasterPoint pDestRasterPoint);

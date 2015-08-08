@@ -34,10 +34,6 @@ public class EmptyInteractiveRendererDisplayUpdater implements InteractiveRender
   }
 
   @Override
-  public void setSampleCount(long pSampleCount) {
-  }
-
-  @Override
   public void setShowPreview(boolean pShowPreview) {
   }
 

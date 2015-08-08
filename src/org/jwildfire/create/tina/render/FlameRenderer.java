@@ -930,10 +930,6 @@ public class FlameRenderer {
     return flame;
   }
 
-  public long calcSampleCount() {
-    return raster != null ? raster.calcSampleCount() : 0;
-  }
-
   public RenderInfo getRenderInfo() {
     return renderInfo;
   }

@@ -27,8 +27,6 @@ public interface InteractiveRendererDisplayUpdater {
 
   long getSampleCount();
 
-  void setSampleCount(long pSampleCount);
-
   void setShowPreview(boolean pShowPreview);
 
   void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile);

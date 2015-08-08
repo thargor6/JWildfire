@@ -52,19 +52,6 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  // TODO
-  @Deprecated
-  public long calcSampleCount() {
-    long res = 0;
-    for (int i = 0; i < rasterWidth; i++) {
-      for (int j = 0; j < rasterHeight; j++) {
-        res += count[i][j];
-      }
-    }
-    return res;
-  }
-
-  @Override
   public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint) {
     pDestRasterPoint.red = red[pX][pY];
     pDestRasterPoint.green = green[pX][pY];

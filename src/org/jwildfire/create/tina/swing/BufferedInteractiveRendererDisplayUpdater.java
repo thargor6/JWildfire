@@ -75,11 +75,6 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   }
 
   @Override
-  public void setSampleCount(long pSampleCount) {
-    sampleCount = pSampleCount;
-  }
-
-  @Override
   public void setShowPreview(boolean pShowPreview) {
     showPreview = pShowPreview;
   }
