@@ -1,3 +1,14 @@
+V2.57 (09.08.2015):
+ - Major speedup in the interactive renderer
+ - Tonemapping in the interactive renderer should now be exactly the same as in the fixed renderer (i.e., the final images should be the same when the quality is the same) 
+ - while saving an image the rendering is paused in order to avoid to too heavy load or even freezes of the java-process
+ - fixed the behaviour of the main progress-bar (was sometimes not updated)
+ - Windows-Launcher:  fixed the problem with paths which contain spaces (i.e. you can now have the JWildfire-folder at any local folder, e.g. at "C:\Program Files" etc.)
+ - added some Author-informations to the JWildfire.exe-file, otherwise some virus-scanner seems to be too nervous about the file ;-)
+ - slightly increased the default image-quality
+ - improved the "Black&White"-random-flame-generator
+ - Problem fixed regarding parameter handling in the variations "trade", "w", "x", "y" and "z"
+
 V2.56 (21.07.2015):
 - new spatial-oversampling-option for improved render-quality. The default value is 2, this may be set in the Preferences
 - visualisation of filter-kernels for better understanding/easier customizing of the spatial filtering process, both a nice-looking 3d-mode and a fast 2d-mode are available  
