@@ -99,7 +99,7 @@ public class TradeFunc extends VariationFunc {
     else if (PARAM_R2.equalsIgnoreCase(pName))
       r2 = limitVal(pValue, EPSILON, Double.MAX_VALUE);
     else if (PARAM_D2.equalsIgnoreCase(pName))
-      d2 = limitVal(0.0, Double.MAX_VALUE, pValue);
+      d2 = limitVal(pValue, 0.0, Double.MAX_VALUE);
     else
       throw new IllegalArgumentException(pName);
   }
