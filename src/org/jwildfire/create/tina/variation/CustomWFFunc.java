@@ -142,6 +142,16 @@ public class CustomWFFunc extends VariationFunc {
   }
 
   @Override
+  public RessourceType getRessourceType(String pName) {
+    if (pName.equals(RESSOURCE_CODE)) {
+      return RessourceType.JAVA_CODE;
+    }
+    else {
+      return super.getRessourceType(pName);
+    }
+  }
+
+  @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
       code = pValue != null ? new String(pValue) : "";

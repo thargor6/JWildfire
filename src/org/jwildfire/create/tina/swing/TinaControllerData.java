@@ -294,9 +294,6 @@ public class TinaControllerData {
   public JTree scriptTree;
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
-  public JButton compileScriptButton;
-  public JButton saveScriptBtn;
-  public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
   public JButton newScriptFromFlameBtn;
@@ -304,6 +301,7 @@ public class TinaControllerData {
   public JButton scriptRenameBtn;
   public JButton scriptDuplicateBtn;
   public JButton scriptRunBtn;
+  public JButton scriptEditBtn;
   public JTree gradientLibTree;
   public JButton backgroundColorIndicatorBtn;
   public JWFNumberField layerWeightEd;

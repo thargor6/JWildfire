@@ -75,7 +75,6 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.iflames.swing.JInternalFrameFlameMessageHelper;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
-import org.jwildfire.create.tina.JWFScriptController;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
@@ -127,6 +126,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
+import org.jwildfire.create.tina.script.swing.JWFScriptController;
 import org.jwildfire.create.tina.script.ui.FormBuilder;
 import org.jwildfire.create.tina.script.ui.ScriptParamsForm;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
@@ -311,9 +311,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.macroButtonMoveDownBtn = parameterObject.macroButtonMoveDownBtn;
     data.macroButtonDeleteBtn = parameterObject.macroButtonDeleteBtn;
     jwfScriptController = new JWFScriptController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, data, parameterObject.scriptTree,
-        parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea, parameterObject.compileScriptButton,
-        parameterObject.saveScriptBtn, parameterObject.revertScriptBtn, parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
-        parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn, parameterObject.scriptAddButtonBtn);
+        parameterObject.scriptDescriptionTextArea, parameterObject.scriptTextArea,
+        parameterObject.rescanScriptsBtn, parameterObject.newScriptBtn, parameterObject.newScriptFromFlameBtn, parameterObject.deleteScriptBtn,
+        parameterObject.scriptRenameBtn, parameterObject.scriptDuplicateBtn, parameterObject.scriptRunBtn, parameterObject.scriptAddButtonBtn,
+        parameterObject.scriptEditBtn);
 
     flameBrowserController = new FlameBrowserController(this, parameterObject.pErrorHandler, prefs, parameterObject.pCenterPanel, parameterObject.flameBrowserTree, parameterObject.flameBrowersImagesPnl,
         parameterObject.flameBrowserRefreshBtn, parameterObject.flameBrowserChangeFolderBtn, parameterObject.flameBrowserToEditorBtn, parameterObject.flameBrowserToBatchEditorBtn, parameterObject.flameBrowserDeleteBtn,
@@ -678,9 +679,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.scriptTree = parameterObject.scriptTree;
     data.scriptDescriptionTextArea = parameterObject.scriptDescriptionTextArea;
     data.scriptTextArea = parameterObject.scriptTextArea;
-    data.compileScriptButton = parameterObject.compileScriptButton;
-    data.saveScriptBtn = parameterObject.saveScriptBtn;
-    data.revertScriptBtn = parameterObject.revertScriptBtn;
     data.rescanScriptsBtn = parameterObject.rescanScriptsBtn;
     data.newScriptBtn = parameterObject.newScriptBtn;
     data.newScriptFromFlameBtn = parameterObject.newScriptFromFlameBtn;
@@ -688,6 +686,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.scriptRenameBtn = parameterObject.scriptRenameBtn;
     data.scriptDuplicateBtn = parameterObject.scriptDuplicateBtn;
     data.scriptRunBtn = parameterObject.scriptRunBtn;
+    data.scriptEditBtn = parameterObject.scriptEditBtn;
     data.gradientLibTree = parameterObject.gradientLibTree;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
@@ -3075,8 +3074,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 final RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
                 dlg.setRessourceName(rName);
                 byte val[] = var.getFunc().getRessourceValues()[idx];
+                RessourceType type = var.getFunc().getRessourceType(rName);
+                RessourceDialog.ContentType ct = type == RessourceType.JAVA_CODE ? RessourceDialog.ContentType.JAVA : RessourceDialog.ContentType.TEXT;
                 if (val != null) {
-                  dlg.setRessourceValue(new String(val));
+                  dlg.setRessourceValue(ct, new String(val));
                 }
                 dlg.addValidation(new RessourceValidation() {
                   @Override
@@ -3781,7 +3782,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public ScriptRunner compileScript() throws Exception {
-    return ScriptRunner.compile(data.scriptTextArea.getText());
+    return compileScript(data.scriptTextArea.getText());
+  }
+
+  public ScriptRunner compileScript(String pScript) throws Exception {
+    return ScriptRunner.compile(pScript);
   }
 
   @Override

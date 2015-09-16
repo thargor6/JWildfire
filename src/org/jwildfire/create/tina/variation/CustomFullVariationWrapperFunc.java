@@ -155,7 +155,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   @Override
   public RessourceType getRessourceType(String pName) {
     if (pName.equals(RESSOURCE_CODE)) {
-      return RessourceType.BYTEARRAY;
+      return RessourceType.JAVA_CODE;
     }
     else {
       return full_variation.getRessourceType(pName);

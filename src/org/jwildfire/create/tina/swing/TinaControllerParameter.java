@@ -361,9 +361,6 @@ public class TinaControllerParameter {
   public JTree scriptTree;
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
-  public JButton compileScriptButton;
-  public JButton saveScriptBtn;
-  public JButton revertScriptBtn;
   public JButton rescanScriptsBtn;
   public JButton newScriptBtn;
   public JButton newScriptFromFlameBtn;
@@ -566,6 +563,7 @@ public class TinaControllerParameter {
   public JPanel macroButtonVertPanel;
   public JPanel macroButtonHorizPanel;
   public JButton scriptAddButtonBtn;
+  public JButton scriptEditBtn;
   public JTable macroButtonsTable;
   public JButton macroButtonMoveUpBtn;
   public JButton macroButtonMoveDownBtn;
@@ -871,7 +869,7 @@ public class TinaControllerParameter {
       JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn,
       JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
       JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
-      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pCompileScriptButton, JButton pSaveScriptBtn, JButton pRevertScriptBtn, JButton pRescanScriptsBtn,
+      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
@@ -968,9 +966,6 @@ public class TinaControllerParameter {
     this.scriptTree = pScriptTree;
     this.scriptDescriptionTextArea = pScriptDescriptionTextArea;
     this.scriptTextArea = pScriptTextArea;
-    this.compileScriptButton = pCompileScriptButton;
-    this.saveScriptBtn = pSaveScriptBtn;
-    this.revertScriptBtn = pRevertScriptBtn;
     this.rescanScriptsBtn = pRescanScriptsBtn;
     this.newScriptBtn = pNewScriptBtn;
     this.newScriptFromFlameBtn = pNewScriptFromFlameBtn;
@@ -1130,7 +1125,8 @@ public class TinaControllerParameter {
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
       JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
-      JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider) {
+      JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
+      JButton pScriptEditBtn) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1299,5 +1295,6 @@ public class TinaControllerParameter {
     tinaPostNoiseThresholdSlider = pTinaPostNoiseThresholdSlider;
     foregroundOpacityField = pForegroundOpacityField;
     foregroundOpacitySlider = pForegroundOpacitySlider;
+    scriptEditBtn = pScriptEditBtn;
   }
 }
