@@ -2,6 +2,7 @@ package org.jwildfire.create.tina.script.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,9 +20,11 @@ public class ScriptParamsDialog extends JDialog {
   private JTabbedPane rootTabbedPane;
   private JButton runScriptButton;
 
-  public ScriptParamsDialog() {
+  public ScriptParamsDialog(Window owner) {
+    super(owner);
     setTitle(Tools.APP_TITLE);
-    setBounds(100, 100, 539, 339);
+    setSize(539, 339);
+
     getContentPane().setLayout(new BorderLayout());
     contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
     getContentPane().add(contentPanel, BorderLayout.CENTER);

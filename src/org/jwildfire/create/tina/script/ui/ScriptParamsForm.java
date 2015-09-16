@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.script.ui;
 
 import java.awt.Dialog.ModalityType;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -50,15 +52,13 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
 
   public ScriptParamsForm(JInternalFrame pParent, ErrorHandler pErrorHandler) {
     errorHandler = pErrorHandler;
-    dialog = new ScriptParamsDialog();
-    Rectangle parentBounds = pParent.getBounds();
+    Window owner = SwingUtilities.getWindowAncestor(pParent);
+    dialog = new ScriptParamsDialog(owner);
 
     int dialogWidth = 500;
     int dialogHeight = 400;
-    int x = parentBounds.x + (parentBounds.width - dialogWidth) / 2;
-    int y = parentBounds.y + (parentBounds.height - dialogHeight) / 2;
-
-    dialog.setBounds(x, y, dialogWidth, dialogHeight);
+    dialog.setSize(dialogWidth, dialogHeight);
+    dialog.setLocationRelativeTo(owner);
 
     dialog.getRunScriptButton().addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
