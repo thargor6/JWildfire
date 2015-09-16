@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="2.57" />
+  <property name="release" value="2.58" />
   <property name="dist.dir" location="build/dist" />
   <property name="dist.win64.dir" location="build/dist-win64" />
   <property name="dist.win64.name" value="build/j-wildfire-win64-${release}.zip" />
@@ -77,6 +77,7 @@
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
+      <zipfileset src="lib/jsyntaxpane-0.9.5-b29.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>

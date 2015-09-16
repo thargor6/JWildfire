@@ -98,7 +98,12 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
           }
         }
         for (DefaultRenderIterationState state : iterationState) {
-          state.iterateNext();
+          try {
+            state.iterateNext();
+          }
+          catch (Exception ex) {
+            state.validateState();
+          }
         }
       }
     }

@@ -431,8 +431,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-	for (TransformationStep transformation:t) {
-    	transformation.transform(pContext, pAffineT, pVarT, pSrcPoint, pDstPoint);
+    for (TransformationStep transformation : t) {
+      transformation.transform(pContext, pAffineT, pVarT, pSrcPoint, pDstPoint);
     }
   }
 
