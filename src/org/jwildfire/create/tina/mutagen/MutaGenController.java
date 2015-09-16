@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -282,8 +282,11 @@ public class MutaGenController {
   }
 
   private SimpleImage executeRenderThread(Flame pFlame, int pImageWidth, int pImageHeight, boolean pWithTimeout) {
-    RenderThread thread = new RenderThread(pFlame, pImageWidth, pImageHeight);
-    long tMax = 1000;
+    Flame flame = pFlame.makeCopy();
+    flame.applyFastOversamplingSettings();
+
+    RenderThread thread = new RenderThread(flame, pImageWidth, pImageHeight);
+    long tMax = 600;
     long t0 = System.currentTimeMillis();
     new Thread(thread).start();
     while (!thread.isDone()) {
@@ -488,7 +491,7 @@ public class MutaGenController {
 
       if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size()) {
         Dimension renderSize = calcImageSize();
-        Dimension probeSize = new Dimension(80, 60);
+        Dimension probeSize = new Dimension(60, 40);
 
         MutationSet selectedSet = mutationList.get(selectedGenerationIdx);
         final int rows = MUTA_ROWS;
@@ -515,8 +518,8 @@ public class MutaGenController {
               int x = (i - centreX);
               int y = (j - centreY);
               final int MAX_ITER = 10;
-              final double MIN_RENDER_COVERAGE = 0.42;
-              final double MIN_DIFF_COVERAGE = 0.28;
+              final double MIN_RENDER_COVERAGE = 0.36;
+              final double MIN_DIFF_COVERAGE = 0.22;
               final double INVALID_COVERAGE = -1.0;
               int iter = 0;
               double bestCoverage = INVALID_COVERAGE;
