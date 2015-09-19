@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
 
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
@@ -15,14 +16,20 @@ public class TinaNonlinearControlsRow {
   private final JWFNumberField nonlinearVarREd;
   private final JWFNumberField nonlinearParamsREd;
   private final JButton nonlinearParamsLeftButton;
+  private final JToggleButton nonlinearParamsPreButton;
+  private final JToggleButton nonlinearParamsPostButton;
+  private final JButton nonlinearParamsUpButton;
 
   public TinaNonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
-      JButton pNonlinearParamsLeftButton) {
+      JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton) {
     nonlinearVarCmb = pNonlinearVarCmb;
     nonlinearParamsCmb = pNonlinearParamsCmb;
     nonlinearVarREd = pNonlinearVarREd;
     nonlinearParamsREd = pNonlinearParamsREd;
     nonlinearParamsLeftButton = pNonlinearParamsLeftButton;
+    nonlinearParamsPreButton = pNonlinearParamsPreButton;
+    nonlinearParamsPostButton = pNonlinearParamsPostButton;
+    nonlinearParamsUpButton = pNonlinearParamsUpButton;
   }
 
   public void initControls() {
@@ -38,6 +45,9 @@ public class TinaNonlinearControlsRow {
 
     nonlinearParamsCmb.removeAllItems();
     nonlinearParamsCmb.setSelectedIndex(-1);
+
+    nonlinearParamsPreButton.setSelected(false);
+    nonlinearParamsPostButton.setSelected(false);
   }
 
   public JComboBox getNonlinearVarCmb() {
@@ -58,6 +68,18 @@ public class TinaNonlinearControlsRow {
 
   public JButton getNonlinearParamsLeftButton() {
     return nonlinearParamsLeftButton;
+  }
+
+  public JToggleButton getNonlinearParamsPreButton() {
+    return nonlinearParamsPreButton;
+  }
+
+  public JToggleButton getNonlinearParamsPostButton() {
+    return nonlinearParamsPostButton;
+  }
+
+  public JButton getNonlinearParamsUpButton() {
+    return nonlinearParamsUpButton;
   }
 
 }

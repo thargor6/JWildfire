@@ -34,9 +34,12 @@ public class Variation implements Assignable<Variation>, Serializable {
   private static final long serialVersionUID = 1L;
   @AnimAware
   private double amount;
+
   private final MotionCurve amountCurve = new MotionCurve();
   @AnimAware
   private VariationFunc func;
+
+  private int priority;
 
   private final Map<String, MotionCurve> motionCurves = new HashMap<String, MotionCurve>();
 
@@ -47,6 +50,7 @@ public class Variation implements Assignable<Variation>, Serializable {
   public Variation(double pAmount, VariationFunc pFunc) {
     amount = pAmount;
     func = pFunc;
+    priority = pFunc.getPriority();
   }
 
   public double getAmount() {
@@ -54,15 +58,15 @@ public class Variation implements Assignable<Variation>, Serializable {
   }
 
   public void setAmount(double pAmount) {
-    this.amount = pAmount;
+    amount = pAmount;
   }
 
   public VariationFunc getFunc() {
     return func;
   }
 
-  public void setFunc(VariationFunc func) {
-    this.func = func;
+  public void setFunc(VariationFunc pFunc) {
+    func = pFunc;
   }
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
@@ -86,9 +90,10 @@ public class Variation implements Assignable<Variation>, Serializable {
       copy.assign(var.motionCurves.get(name));
       motionCurves.put(name, copy);
     }
-    
+
     // variation function
     func = var.func.makeCopy();
+    priority = var.priority;
   }
 
   @Override
@@ -100,7 +105,8 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   @Override
   public boolean isEqual(Variation pSrc) {
-    if (fabs(amount - pSrc.amount) > EPSILON || !amountCurve.isEqual(pSrc.amountCurve) ||
+    if (fabs(amount - pSrc.amount) > EPSILON || (priority != pSrc.priority) ||
+        !amountCurve.isEqual(pSrc.amountCurve) ||
         ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
         (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
       return false;
@@ -127,7 +133,9 @@ public class Variation implements Assignable<Variation>, Serializable {
       Object vals[] = func.getParameterValues();
       if (vals != null) {
         Object srcVals[] = pSrc.func.getParameterValues();
-        if (vals.length != srcVals.length) { return false; }
+        if (vals.length != srcVals.length) {
+          return false;
+        }
         for (int i = 0; i < vals.length; i++) {
           Object o = vals[i];
           Object s = srcVals[i];
@@ -136,13 +144,17 @@ public class Variation implements Assignable<Variation>, Serializable {
           }
           else if (o != null && s != null) {
             if (o instanceof Integer) {
-              if (! (s instanceof Integer)) { return false; }
+              if (!(s instanceof Integer)) {
+                return false;
+              }
               if (((Integer) o).intValue() != ((Integer) s).intValue()) {
                 return false;
               }
             }
             else if (o instanceof Double) {
-              if (! (s instanceof Double)) { return false; }
+              if (!(s instanceof Double)) {
+                return false;
+              }
               if (fabs(((Double) o).doubleValue() - ((Double) s).doubleValue()) > EPSILON) {
                 return false;
               }
@@ -203,6 +215,14 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   public MotionCurve getAmountCurve() {
     return amountCurve;
+  }
+
+  public int getPriority() {
+    return priority;
+  }
+
+  public void setPriority(int pPriority) {
+    priority = pPriority;
   }
 
 }

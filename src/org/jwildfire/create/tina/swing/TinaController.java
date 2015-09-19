@@ -2424,7 +2424,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
             refreshParamCmb(row, null, null);
-            row.getNonlinearParamsLeftButton().setEnabled(false);
           }
           else {
             Variation var = pXForm.getVariation(idx);
@@ -2450,9 +2449,28 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       pRow.getNonlinearVarREd().setText(null);
       pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
       pRow.getNonlinearParamsREd().setText(null);
+
+      pRow.getNonlinearParamsLeftButton().setEnabled(false);
+      pRow.getNonlinearParamsPreButton().setSelected(false);
+      pRow.getNonlinearParamsPreButton().setEnabled(false);
+      pRow.getNonlinearParamsPostButton().setSelected(false);
+      pRow.getNonlinearParamsPostButton().setEnabled(false);
+      if (pRow.getNonlinearParamsUpButton() != null) {
+        pRow.getNonlinearParamsUpButton().setEnabled(false);
+      }
+
     }
     else {
       VariationFunc varFunc = pVar.getFunc();
+
+      pRow.getNonlinearParamsPreButton().setEnabled(true);
+      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0);
+      pRow.getNonlinearParamsPostButton().setEnabled(true);
+      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0);
+      if (pRow.getNonlinearParamsUpButton() != null) {
+        pRow.getNonlinearParamsUpButton().setEnabled(true);
+      }
+
       pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
       pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
       pRow.getNonlinearParamsCmb().removeAllItems();
@@ -5765,5 +5783,63 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void filterKernelFlatPreviewBtn_clicked() {
     refreshFilterKernelPreviewImg();
+  }
+
+  public void nonlinearParamsPreButtonClicked(int pIdx) {
+    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+  }
+
+  public void nonlinearParamsPostButtonClicked(int pIdx) {
+    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+  }
+
+  public void nonlinearParamsUpButtonClicked(int pIdx) {
+    if (cmbRefreshing) {
+      return;
+    }
+    boolean oldCmbRefreshing = cmbRefreshing;
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null && pIdx > 0 && pIdx < xForm.getVariationCount()) {
+        saveUndoPoint();
+        xForm.getVariations().add(pIdx - 1, xForm.getVariations().get(pIdx));
+        xForm.getVariations().remove(pIdx + 1);
+        refreshXFormUI(xForm);
+        refreshFlameImage(false);
+        data.transformationsTable.invalidate();
+        data.transformationsTable.repaint();
+      }
+    }
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
+  }
+
+  public void nonlinearParamsPriorityChanged(int pIdx, int pPriority) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null) {
+        saveUndoPoint();
+        if (pIdx < xForm.getVariationCount()) {
+          final Variation var = xForm.getVariation(pIdx);
+          var.setPriority(pPriority);
+          if (pPriority >= 0) {
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().setSelected(false);
+          }
+          if (pPriority <= 0) {
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().setSelected(false);
+          }
+          refreshFlameImage(false);
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
   }
 }

@@ -20,6 +20,8 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
 public class PreVariationTransformationStep extends AbstractTransformationStep {
+  private static final long serialVersionUID = 1L;
+
   private final Variation variation;
 
   public PreVariationTransformationStep(XForm pXForm, Variation pVariation) {
@@ -29,7 +31,7 @@ public class PreVariationTransformationStep extends AbstractTransformationStep {
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    variation.transform(pContext, xform, pAffineT, pVarT);
+    variation.transform(pContext, xform, pAffineT, pAffineT);
     pAffineT.invalidate();
   }
 

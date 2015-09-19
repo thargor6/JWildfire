@@ -399,7 +399,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     t.add(new TransformationPreparePreVariationsStep(this));
 
     for (Variation variation : variations) {
-      if (variation.getFunc().getPriority() < 0) {
+      if (variation.getPriority() < 0) {
         t.add(new PreVariationTransformationStep(this, variation));
       }
     }
@@ -407,7 +407,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     t.add(new TransformationPrepareVariationsStep(this));
 
     for (Variation variation : variations) {
-      if (variation.getFunc().getPriority() == 0) {
+      if (variation.getPriority() == 0) {
         t.add(new VariationTransformationStep(this, variation));
       }
     }
