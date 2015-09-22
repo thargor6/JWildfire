@@ -262,6 +262,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     Variation variation = new Variation();
     variation.setAmount(pAmount);
     variation.setFunc(pVariationFunc);
+    variation.setPriority(pVariationFunc.getPriority());
     variations.add(variation);
     return variation;
   }
@@ -400,7 +401,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
     for (Variation variation : variations) {
       if (variation.getPriority() < 0) {
-        t.add(new PreVariationTransformationStep(this, variation));
+        if (variation.getFunc().getPriority() < 0) {
+          t.add(new PreVariationTransformationStep(this, variation));
+        }
+        else {
+          t.add(new EnforcedPreVariationTransformationStep(this, variation));
+        }
       }
     }
 
@@ -408,13 +414,23 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
     for (Variation variation : variations) {
       if (variation.getPriority() == 0) {
-        t.add(new VariationTransformationStep(this, variation));
+        if (variation.getFunc().getPriority() == 0) {
+          t.add(new VariationTransformationStep(this, variation));
+        }
+        else {
+          t.add(new EnforcedVariationTransformationStep(this, variation));
+        }
       }
     }
 
     for (Variation variation : variations) {
       if (variation.getFunc().getPriority() > 0) {
-        t.add(new VariationTransformationStep(this, variation));
+        if (variation.getFunc().getPriority() > 0) {
+          t.add(new PostVariationTransformationStep(this, variation));
+        }
+        else {
+          t.add(new EnforcedPostVariationTransformationStep(this, variation));
+        }
       }
     }
 

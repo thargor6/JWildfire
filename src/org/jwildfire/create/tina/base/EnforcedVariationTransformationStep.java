@@ -19,19 +19,19 @@ package org.jwildfire.create.tina.base;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
-public final class VariationTransformationStep extends AbstractTransformationStep {
+public final class EnforcedVariationTransformationStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
 
   private final Variation variation;
 
-  public VariationTransformationStep(XForm pXForm, Variation pVariation) {
+  public EnforcedVariationTransformationStep(XForm pXForm, Variation pVariation) {
     super(pXForm);
     variation = pVariation;
   }
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    variation.transform(pContext, xform, pAffineT, pVarT);
+    variation.transform(pContext, xform, pVarT, pVarT);
   }
 
 }

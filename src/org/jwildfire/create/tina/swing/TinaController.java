@@ -2887,7 +2887,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
           else {
             if (var.getFunc() == null || !var.getFunc().getName().equals(fName)) {
-              var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+              VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fName);
+              var.setFunc(varFunc);
+              var.setPriority(varFunc.getPriority());
             }
           }
         }
@@ -2897,16 +2899,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           if (varStr == null || varStr.length() == 0) {
             varStr = "0";
           }
-          var.setFunc(VariationFuncList.getVariationFuncInstance(fName));
+          VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fName);
+          var.setFunc(varFunc);
+          var.setPriority(varFunc.getPriority());
           var.setAmount(Tools.stringToDouble(varStr));
           xForm.addVariation(var);
         }
         refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
         refreshXFormUI(xForm);
-        //        String selected = (String) TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().getSelectedItem();
-        //        boolean enabled = selected != null && selected.length() > 0;
-        //        TinaNonlinearControlsRows[pIdx].getNonlinearParamsLeftButton().setEnabled(enabled);
-        //        TinaNonlinearControlsRows[pIdx].getNonlinearParamsRightButton().setEnabled(enabled);
         refreshFlameImage(false);
         data.transformationsTable.invalidate();
         data.transformationsTable.repaint();

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,7 +31,7 @@ public class PreVariationTransformationStep extends AbstractTransformationStep {
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    variation.transform(pContext, xform, pAffineT, pAffineT);
+    variation.transform(pContext, xform, pAffineT, pVarT);
     pAffineT.invalidate();
   }
 

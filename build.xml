@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="2.58" />
+  <property name="release" value="2.60" />
   <property name="dist.dir" location="build/dist" />
   <property name="dist.win64.dir" location="build/dist-win64" />
   <property name="dist.win64.name" value="build/j-wildfire-win64-${release}.zip" />

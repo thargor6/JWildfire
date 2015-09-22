@@ -93,6 +93,7 @@ public class AbstractFlameWriter {
       String fName = namesMaker.makeUnique(func.getName());
 
       attrList.add(pXB.createAttr(fName, v.getAmount()));
+      attrList.add(pXB.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
       // params
       {
         String params[] = func.getParameterNames();

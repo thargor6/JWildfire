@@ -49,6 +49,7 @@ import org.jwildfire.create.tina.randomflame.SimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SimpleTilingRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.Spherical3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SphericalRandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.GhostsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SplitsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SynthRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.TentacleRandomFlameGenerator;
@@ -90,6 +91,7 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new DualityRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
+    generators.add(new GhostsRandomFlameGenerator());
     generators.add(new SplitsRandomFlameGenerator());
     generators.add(new SynthRandomFlameGenerator());
     generators.add(new TentacleRandomFlameGenerator());

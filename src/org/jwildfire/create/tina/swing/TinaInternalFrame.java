@@ -5900,7 +5900,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1PreButton.setLocation(new Point(269, 26));
       nonlinearParams1PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams1PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams1PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams1PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams1PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(0);
@@ -5916,7 +5916,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1PostButton.setLocation(new Point(168, 2));
       nonlinearParams1PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams1PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams1PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams1PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams1PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(0);
@@ -5989,7 +5989,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2PreButton.setLocation(new Point(269, 26));
       nonlinearParams2PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams2PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams2PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams2PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(1);
@@ -6005,7 +6005,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2PostButton.setLocation(new Point(168, 2));
       nonlinearParams2PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams2PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams2PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams2PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(1);
@@ -6021,7 +6021,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2UpButton.setLocation(new Point(269, 26));
       nonlinearParams2UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams2UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams2UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams2UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams2UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(1);
@@ -6205,7 +6205,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3PreButton.setLocation(new Point(269, 26));
       nonlinearParams3PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams3PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams3PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams3PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(2);
@@ -6221,7 +6221,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3PostButton.setLocation(new Point(168, 2));
       nonlinearParams3PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams3PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams3PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams3PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(2);
@@ -6237,7 +6237,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3UpButton.setLocation(new Point(269, 26));
       nonlinearParams3UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams3UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams3UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams3UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams3UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(2);
@@ -7977,7 +7977,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4PreButton.setLocation(new Point(269, 26));
       nonlinearParams4PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams4PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams4PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams4PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(3);
@@ -7993,7 +7993,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4PostButton.setLocation(new Point(168, 2));
       nonlinearParams4PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams4PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams4PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams4PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(3);
@@ -8009,7 +8009,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4UpButton.setLocation(new Point(269, 26));
       nonlinearParams4UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams4UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams4UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams4UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams4UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(3);
@@ -8268,7 +8268,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5PreButton.setLocation(new Point(269, 26));
       nonlinearParams5PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams5PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams5PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams5PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(4);
@@ -8284,7 +8284,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5PostButton.setLocation(new Point(168, 2));
       nonlinearParams5PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams5PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams5PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams5PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(4);
@@ -8300,7 +8300,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5UpButton.setLocation(new Point(269, 26));
       nonlinearParams5UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams5UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams5UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams5UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams5UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(4);
@@ -8483,7 +8483,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6PreButton.setLocation(new Point(269, 26));
       nonlinearParams6PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams6PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams6PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams6PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(5);
@@ -8499,7 +8499,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6PostButton.setLocation(new Point(168, 2));
       nonlinearParams6PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams6PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams6PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams6PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(5);
@@ -8515,7 +8515,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6UpButton.setLocation(new Point(269, 26));
       nonlinearParams6UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams6UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams6UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams6UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams6UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(5);
@@ -8698,7 +8698,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7PreButton.setLocation(new Point(269, 26));
       nonlinearParams7PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams7PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams7PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams7PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(6);
@@ -8714,7 +8714,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7PostButton.setLocation(new Point(168, 2));
       nonlinearParams7PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams7PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams7PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams7PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(6);
@@ -8730,7 +8730,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7UpButton.setLocation(new Point(269, 26));
       nonlinearParams7UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams7UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams7UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams7UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams7UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(6);
@@ -8913,7 +8913,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8PreButton.setLocation(new Point(269, 26));
       nonlinearParams8PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams8PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams8PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams8PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(7);
@@ -8929,7 +8929,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8PostButton.setLocation(new Point(168, 2));
       nonlinearParams8PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams8PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams8PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams8PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(7);
@@ -8945,7 +8945,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8UpButton.setLocation(new Point(269, 26));
       nonlinearParams8UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams8UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams8UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams8UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams8UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(7);
@@ -9128,7 +9128,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9PreButton.setLocation(new Point(269, 26));
       nonlinearParams9PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams9PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams9PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams9PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(8);
@@ -9144,7 +9144,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9PostButton.setLocation(new Point(168, 2));
       nonlinearParams9PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams9PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams9PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams9PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(9);
@@ -9160,7 +9160,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9UpButton.setLocation(new Point(269, 26));
       nonlinearParams9UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams9UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams9UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams9UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams9UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(8);
@@ -9343,7 +9343,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10PreButton.setLocation(new Point(269, 26));
       nonlinearParams10PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams10PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams10PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams10PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(9);
@@ -9359,7 +9359,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10PostButton.setLocation(new Point(168, 2));
       nonlinearParams10PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams10PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams10PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams10PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(9);
@@ -9375,7 +9375,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10UpButton.setLocation(new Point(269, 26));
       nonlinearParams10UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams10UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams10UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams10UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams10UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(9);
@@ -9558,7 +9558,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PreButton.setLocation(new Point(269, 26));
       nonlinearParams11PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams11PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams11PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(11);
@@ -9574,7 +9574,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PostButton.setLocation(new Point(168, 2));
       nonlinearParams11PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams11PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams11PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams11PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(10);
@@ -9590,7 +9590,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11UpButton.setLocation(new Point(269, 26));
       nonlinearParams11UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams11UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams11UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams11UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams11UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(10);
@@ -9773,7 +9773,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12PreButton.setLocation(new Point(269, 26));
       nonlinearParams12PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12PreButton.setBounds(42, 2, 22, 24);
-      nonlinearParams12PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-left-2.png")));
+      nonlinearParams12PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams12PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPreButtonClicked(11);
@@ -9789,7 +9789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12PostButton.setLocation(new Point(168, 2));
       nonlinearParams12PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12PostButton.setBounds(168, 2, 22, 24);
-      nonlinearParams12PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-right-2.png")));
+      nonlinearParams12PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams12PostButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsPostButtonClicked(11);
@@ -9805,7 +9805,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12UpButton.setLocation(new Point(269, 26));
       nonlinearParams12UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
       nonlinearParams12UpButton.setBounds(269, 2, 22, 24);
-      nonlinearParams12UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-up-3.png")));
+      nonlinearParams12UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams12UpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsUpButtonClicked(11);

@@ -638,6 +638,7 @@ public class AbstractFlameReader {
   public static final String ATTR_CHANNEL_MIXER_BR_CURVE = "mixer_br_curve";
   public static final String ATTR_CHANNEL_MIXER_BG_CURVE = "mixer_bg_curve";
   public static final String ATTR_CHANNEL_MIXER_BB_CURVE = "mixer_bb_curve";
+  public static final String ATTR_FX_PRIORITY = "fx_priority";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
@@ -779,6 +780,10 @@ public class AbstractFlameReader {
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
+          String priority = atts.get(varName + "_" + ATTR_FX_PRIORITY);
+          if (priority != null && priority.length() > 0) {
+            variation.setPriority(Integer.parseInt(priority));
+          }
           // ressources 
           {
             String ressNames[] = variation.getFunc().getRessourceNames();
