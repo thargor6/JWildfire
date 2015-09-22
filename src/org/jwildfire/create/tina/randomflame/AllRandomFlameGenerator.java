@@ -46,6 +46,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new ExperimentalSimpleRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
     allGenerators.add(new Flowers3DRandomFlameGenerator());
+    allGenerators.add(new GhostsRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
     allGenerators.add(new Gnarl3DRandomFlameGenerator());
     allGenerators.add(new JulianDiscRandomFlameGenerator());

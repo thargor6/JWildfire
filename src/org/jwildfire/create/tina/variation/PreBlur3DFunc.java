@@ -27,7 +27,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class PreBlur3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private double gauss_rnd[] = new double[4];
+  private double gauss_rnd[] = new double[6];
   private int gauss_N;
 
   private DoubleWrapper sina = new DoubleWrapper();
@@ -39,9 +39,9 @@ public class PreBlur3DFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double angle = pContext.random() * 2 * M_PI;
     sinAndCos(angle, sina, cosa);
-    double r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] - 2);
+    double r = pAmount * (gauss_rnd[0] + gauss_rnd[1] + gauss_rnd[2] + gauss_rnd[3] + gauss_rnd[4] + gauss_rnd[5] - 3);
     gauss_rnd[gauss_N] = pContext.random();
-    gauss_N = (gauss_N + 1) & 3;
+    gauss_N = (gauss_N + 1) & 5;
     angle = pContext.random() * M_PI;
     sinAndCos(angle, sinb, cosb);
     pAffineTP.x += r * sinb.value * cosa.value;
@@ -60,7 +60,13 @@ public class PreBlur3DFunc extends SimpleVariationFunc {
     gauss_rnd[1] = pContext.random();
     gauss_rnd[2] = pContext.random();
     gauss_rnd[3] = pContext.random();
+    gauss_rnd[4] = pContext.random();
+    gauss_rnd[5] = pContext.random();
     gauss_N = 0;
   }
 
+  @Override
+  public int getPriority() {
+    return -1;
+  }
 }

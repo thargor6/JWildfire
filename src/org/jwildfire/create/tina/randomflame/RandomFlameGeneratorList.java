@@ -17,8 +17,11 @@
 package org.jwildfire.create.tina.randomflame;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.jwildfire.base.Unchecker;
 import org.jwildfire.create.tina.integration.chaotica.ChaoticaBridgeRandomFlameGenerator;
 
 public class RandomFlameGeneratorList {
@@ -44,11 +47,12 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Flowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(FilledFlowers3DRandomFlameGenerator.class);
+    registerRandomFlameGenerator(GhostsRandomFlameGenerator.class);
+    registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
+    registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
     registerRandomFlameGenerator(Pseudo3DRandomFlameGenerator.class);
-    registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
-    registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
@@ -65,6 +69,20 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
     registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
     //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
+    Collections.sort(items, new Comparator<Class<? extends RandomFlameGenerator>>() {
+
+      @Override
+      public int compare(Class<? extends RandomFlameGenerator> o1, Class<? extends RandomFlameGenerator> o2) {
+        try {
+          return o1.newInstance().getName().compareTo(o2.newInstance().getName());
+        }
+        catch (Exception ex) {
+          Unchecker.rethrow(ex);
+          return 0;
+        }
+      }
+
+    });
 
     nameList = new ArrayList<>();
     for (Class<? extends RandomFlameGenerator> funcCls : items) {

@@ -60,6 +60,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new DualityRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
+    generators.add(new GhostsRandomFlameGenerator());
     generators.add(new SplitsRandomFlameGenerator());
     generators.add(new SubFlameRandomFlameGenerator());
     generators.add(new SynthRandomFlameGenerator());
