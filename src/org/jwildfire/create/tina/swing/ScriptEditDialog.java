@@ -35,6 +35,7 @@ import javax.swing.JTabbedPane;
 
 import jsyntaxpane.DefaultSyntaxKit;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.script.swing.JWFScriptUserNode;
 import org.jwildfire.swing.ErrorHandler;
 
@@ -61,13 +62,20 @@ public class ScriptEditDialog extends JDialog {
    */
   public ScriptEditDialog(TinaController pTinaController, Window pOwner, ErrorHandler pErrorHandler) {
     super(pOwner);
-    DefaultSyntaxKit.initKit();
     errorHandler = pErrorHandler;
     tinaController = pTinaController;
     initialize();
     Rectangle rootBounds = pOwner.getBounds();
     Dimension size = getSize();
     setLocation(rootBounds.x + (rootBounds.width - size.width) / 2, rootBounds.y + (rootBounds.height - size.height) / 2);
+    if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
+      try {
+        DefaultSyntaxKit.initKit();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   /**
@@ -277,14 +285,16 @@ public class ScriptEditDialog extends JDialog {
     setTitle("Editing " + (scriptname != null ? scriptname : "script"));
 
     String script = pScriptNode.getScript();
+    scriptEditor.setText("");
     scriptEditor.setContentType("text/java");
     scriptEditor.setText(script != null ? script : "");
     scriptEditor.setCaretPosition(0);
 
     String description = pScriptNode.getDescription();
+    descriptionEditor.setText("");
     descriptionEditor.setContentType("text/plain");
     descriptionEditor.setText(description != null ? description : "");
-    scriptEditor.setCaretPosition(0);
+    descriptionEditor.setCaretPosition(0);
 
     scriptNode = pScriptNode;
   }

@@ -280,8 +280,16 @@ public class RessourceDialog extends JDialog {
    */
   private JEditorPane getEditorTextArea() {
     if (editorTextArea == null) {
-      DefaultSyntaxKit.initKit();
+      if (Prefs.getPrefs().isTinaAdvancedCodeEditor()) {
+        try {
+          DefaultSyntaxKit.initKit();
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
       editorTextArea = new JEditorPane();
+      editorTextArea.setText("");
     }
     return editorTextArea;
   }
@@ -298,6 +306,7 @@ public class RessourceDialog extends JDialog {
       ex.printStackTrace();
     }
     editorTextArea.setText(pRessourceValue);
+    editorTextArea.setCaretPosition(0);
   }
 
   public void setRessourceName(String pRessourceName) {

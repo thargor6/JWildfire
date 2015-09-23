@@ -101,6 +101,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor";
+
   static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
@@ -193,6 +195,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Automatically load the flame- and image-library when opening the IFlames-window", category = PropertyCategory.IFLAMES)
   private boolean iflamesLoadLibraryAtStartup = false;
+
+  @Property(description = "Use an advanced editor with syntax-highlighting for editing scripts and custom variations. May not work on all systems and may not look good with all themes, so you can turn it off. A change of this property requires a program-restart", category = PropertyCategory.TINA)
+  private boolean tinaAdvancedCodeEditor = true;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -752,6 +757,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultForegroundOpacity = pSrc.tinaDefaultForegroundOpacity;
     tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
     tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
+    tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1482,6 +1488,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDefaultAntialiasingRadius(double pTinaDefaultAntialiasingRadius) {
     tinaDefaultAntialiasingRadius = pTinaDefaultAntialiasingRadius;
+  }
+
+  public boolean isTinaAdvancedCodeEditor() {
+    return tinaAdvancedCodeEditor;
+  }
+
+  public void setTinaAdvancedCodeEditor(boolean pTinaAdvancedCodeEditor) {
+    tinaAdvancedCodeEditor = pTinaAdvancedCodeEditor;
   }
 
 }
