@@ -48,6 +48,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(Flowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(FilledFlowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(GhostsRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SpiralsRandomFlameGenerator.class);
     registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
     registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
