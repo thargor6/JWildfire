@@ -955,7 +955,7 @@ public class FlamePanel extends ImagePanel {
         return true;
       }
       else if (config.getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE && selectedXForm != null) {
-        double dx = -pRotateAmount * 0.1;
+        double dx = MathLib.fabs(pRotateAmount * 0.1);
         double dy = dx;
         if (fineMovement) {
           dx *= 0.1;
@@ -968,7 +968,7 @@ public class FlamePanel extends ImagePanel {
         double v2y = v1y + dy;
         double dr1 = Math.sqrt(v1x * v1x + v1y * v1y);
         double dr2 = Math.sqrt(v2x * v2x + v2y * v2y);
-        double scale = dr2 / dr1;
+        double scale = pRotateAmount < 0 ? dr2 / dr1 : dr1 / dr2;
         if (config.isEditPostTransform()) {
           if (allowScaleX) {
             selectedXForm.setPostCoeff00(selectedXForm.getPostCoeff00() * scale);
