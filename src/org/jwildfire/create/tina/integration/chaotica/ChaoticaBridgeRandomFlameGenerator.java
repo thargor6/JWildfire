@@ -35,7 +35,6 @@ import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenera
 import org.jwildfire.create.tina.randomflame.FilledFlowers3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.Flowers3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.GhostsRandomFlameGenerator;
-import org.jwildfire.create.tina.randomflame.Gnarl3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.GnarlRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.JulianDiscRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.JuliansRandomFlameGenerator;
@@ -50,7 +49,6 @@ import org.jwildfire.create.tina.randomflame.SimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SimpleTilingRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.Spherical3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SphericalRandomFlameGenerator;
-import org.jwildfire.create.tina.randomflame.SpiralsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SplitsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.SynthRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.TentacleRandomFlameGenerator;
@@ -80,7 +78,6 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new GnarlRandomFlameGenerator());
     generators.add(new JuliansRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
-    generators.add(new Gnarl3DRandomFlameGenerator());
     generators.add(new MandelbrotRandomFlameGenerator());
     generators.add(new JulianDiscRandomFlameGenerator());
     generators.add(new LayerzRandomFlameGenerator());
@@ -93,7 +90,6 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
     generators.add(new GhostsRandomFlameGenerator());
-    generators.add(new SpiralsRandomFlameGenerator());
     generators.add(new SplitsRandomFlameGenerator());
     generators.add(new SynthRandomFlameGenerator());
     generators.add(new TentacleRandomFlameGenerator());

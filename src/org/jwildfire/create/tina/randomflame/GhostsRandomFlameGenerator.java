@@ -75,7 +75,6 @@ public class GhostsRandomFlameGenerator extends RandomFlameGenerator {
       }
       else {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
-        varFunc.setParameter("angle", Math.random() * MathLib.M_PI);
         xForm.addVariation(0.05 + Math.random() * 0.5, varFunc);
       }
 

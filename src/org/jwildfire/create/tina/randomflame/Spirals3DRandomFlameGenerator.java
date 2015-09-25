@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,16 +19,16 @@ package org.jwildfire.create.tina.randomflame;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
-public class Gnarl3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGenerator {
+public class Spirals3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGenerator {
 
   @Override
   public String getName() {
-    return "Gnarl3D";
+    return "Spirals3D";
   }
 
   @Override
   protected RandomFlameGenerator selectRandGen() {
-    return Math.random() > 0.33 ? new GnarlRandomFlameGenerator() : new ExperimentalGnarlRandomFlameGenerator();
+    return new SpiralsRandomFlameGenerator();
   }
 
   @Override
@@ -42,8 +42,14 @@ public class Gnarl3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGene
 
   @Override
   protected Flame postProcessFlame(Flame pFlame) {
-    rotateXForm(pFlame, 0, 3.0);
-    scaleXForm(pFlame, 0, 0.95, 0.01);
+    pFlame.setCamYaw((0.5 - Math.random()) * 75.0 + pFlame.getCamYaw());
+    pFlame.setCamPitch((0.5 - Math.random()) * 135.0 + pFlame.getCamPitch());
+    pFlame.setCamPerspective(0.1 + Math.random() * 0.4);
+    pFlame.setCamZoom(2.0);
+    rotateXForm(pFlame, 0, 30.0);
+    scaleXForm(pFlame, 0, 0.97, 0.01);
+    rotateXForm(pFlame, 1, 10.0);
+    scaleXForm(pFlame, 1, 0.97, 0.01);
     return pFlame;
   }
 
