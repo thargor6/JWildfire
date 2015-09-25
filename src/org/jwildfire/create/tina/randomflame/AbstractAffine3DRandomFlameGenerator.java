@@ -17,15 +17,15 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
-import org.jwildfire.create.tina.variation.PostDCZTranslFunc;
-import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameGenerator {
+public abstract class AbstractAffine3DRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {
@@ -43,21 +43,7 @@ public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameG
       flame.setCamDOF(0.1 + Math.random() * 0.2);
     }
 
-    Layer layer = flame.getFirstLayer();
-
-    XForm xForm = new XForm();
-    layer.getFinalXForms().add(xForm);
-    xForm.addVariation(0.25 + Math.random() * 0.25, VariationFuncList.getVariationFuncInstance("linear3D", true));
-    VariationFunc post_dcztransl = VariationFuncList.getVariationFuncInstance(PostDCZTranslFunc.VAR_NAME, true);
-    xForm.addVariation(0.75 + Math.random() * 0.25, post_dcztransl);
-    double factor = 0.5 + Math.random() * 2.0;
-    if (Math.random() < 0.42) {
-      factor = 0.0 - factor;
-    }
-    post_dcztransl.setParameter("factor", factor);
-
     flame = postProcessFlame(flame);
-
     return flame;
   }
 
@@ -86,4 +72,25 @@ public abstract class AbstractExtrude3DRandomFlameGenerator extends RandomFlameG
   protected abstract Flame preProcessFlame(Flame pFlame);
 
   protected abstract Flame postProcessFlame(Flame pFlame);
+
+  protected void rotateXForm(Flame pFlame, int idx, double amp0) {
+    Layer layer = pFlame.getFirstLayer();
+    if (layer.getXForms().size() > idx) {
+      pFlame.setEditPlane(EditPlane.ZX);
+      XForm xform = layer.getXForms().get(idx);
+      XFormTransformService.rotate(xform, (0.5 - Math.random()) * amp0);
+      pFlame.setEditPlane(EditPlane.XY);
+    }
+  }
+
+  protected void addFlatten(Flame pFlame, int idx) {
+    Layer layer = pFlame.getFirstLayer();
+    if (layer.getXForms().size() > idx) {
+      XForm xform = layer.getXForms().get(idx);
+      if (!xform.hasVariation("flatten")) {
+        xform.addVariation(1.0, VariationFuncList.getVariationFuncInstance("flatten", true));
+      }
+    }
+  }
+
 }

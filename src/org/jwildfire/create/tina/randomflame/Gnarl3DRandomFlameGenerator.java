@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.variation.PostDCZTranslFunc;
 import org.jwildfire.create.tina.variation.Variation;
 
-public class Gnarl3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGenerator {
+public class Gnarl3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGenerator {
 
   @Override
   public String getName() {

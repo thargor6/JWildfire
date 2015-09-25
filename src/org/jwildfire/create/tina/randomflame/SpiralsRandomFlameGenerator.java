@@ -45,7 +45,7 @@ public class SpiralsRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
 
-      xForm.setWeight(40.33797283);
+      xForm.setWeight(25.0 + Math.random() * 55.0);
       xForm.setColor(0.9);
       xForm.setColorSymmetry(0.93185856);
 
@@ -117,9 +117,15 @@ public class SpiralsRandomFlameGenerator extends RandomFlameGenerator {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.2 + Math.random() * 0.2, varFunc);
       }
+      // variation 2
       if (Math.random() > 0.42) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.1 + Math.random() * 0.1, varFunc).setPriority(-1);
+      }
+      // variation 3
+      if (Math.random() > 0.42) {
+        VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
+        xForm.addVariation(0.0001 + Math.random() * 0.0001, varFunc).setPriority(+1);
       }
 
       xForm.setColor(Math.random());

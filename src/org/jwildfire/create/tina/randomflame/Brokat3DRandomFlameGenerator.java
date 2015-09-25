@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,11 +17,8 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public class Brokat3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGenerator {
+public class Brokat3DRandomFlameGenerator extends AbstractAffine3DRandomFlameGenerator {
 
   @Override
   public String getName() {
@@ -35,20 +32,26 @@ public class Brokat3DRandomFlameGenerator extends AbstractExtrude3DRandomFlameGe
 
   @Override
   protected Flame preProcessFlame(Flame pFlame) {
-    Layer layer = pFlame.getFirstLayer();
-    for (XForm xForm : layer.getXForms()) {
-      if (Math.random() > 0.33 && !xForm.hasVariation("flatten")) {
-        xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("flatten", true));
-      }
-    }
     return pFlame;
   }
 
   @Override
   protected Flame postProcessFlame(Flame pFlame) {
     pFlame.setCamZoom(2.0 * pFlame.getCamZoom());
-    pFlame.setCamYaw(Math.random() * 30.0 + pFlame.getCamYaw());
-    pFlame.setCamPitch(Math.random() * 30.0 + pFlame.getCamPitch());
+    pFlame.setCamYaw((0.5 - Math.random()) * 75.0 + pFlame.getCamYaw());
+    pFlame.setCamPitch((0.5 - Math.random()) * 135.0 + pFlame.getCamPitch());
+    pFlame.setCamPerspective(0.1 + Math.random() * 0.4);
+    final double amp0 = 33.0;
+    final double amp1 = 15.0;
+    rotateXForm(pFlame, 0, amp0);
+    for (int i = 1; i <= 3; i++) {
+      if (Math.random() > 0.5) {
+        rotateXForm(pFlame, 1, amp1);
+        if (Math.random() > 0.67) {
+          addFlatten(pFlame, 1);
+        }
+      }
+    }
     return pFlame;
   }
 
