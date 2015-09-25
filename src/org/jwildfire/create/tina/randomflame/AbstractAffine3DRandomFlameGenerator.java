@@ -83,6 +83,16 @@ public abstract class AbstractAffine3DRandomFlameGenerator extends RandomFlameGe
     }
   }
 
+  protected void scaleXForm(Flame pFlame, int idx, double offset, double amp0) {
+    Layer layer = pFlame.getFirstLayer();
+    if (layer.getXForms().size() > idx) {
+      pFlame.setEditPlane(EditPlane.ZX);
+      XForm xform = layer.getXForms().get(idx);
+      XFormTransformService.scale(xform, offset + (0.5 - Math.random()) * amp0, true, true);
+      pFlame.setEditPlane(EditPlane.XY);
+    }
+  }
+
   protected void addFlatten(Flame pFlame, int idx) {
     Layer layer = pFlame.getFirstLayer();
     if (layer.getXForms().size() > idx) {
