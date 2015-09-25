@@ -103,6 +103,10 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.4 + Math.random() * 0.2);
       String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
       xForm.addVariation(0.01 + Math.random() * 0.04, VariationFuncList.getVariationFuncInstance(fncName, true));
+      if (Math.random() > 0.5) {
+        xForm.addVariation((0.01 + Math.random() * 0.04) * 0.5, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true)).setPriority(-1);
+      }
+
       xForm.setColor(0.1 + Math.random() * 0.3);
       xForm.setColorSymmetry(0);
       XFormTransformService.rotate(xForm, Math.random() * 360.0, true);
