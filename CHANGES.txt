@@ -1,3 +1,26 @@
+V2.60 (XX.XX.XXXX):
+ - new "Spirals"-random-flame-generator which can generate awesome results, thanks Tate27kh from dA for the inspiration!
+ - new "Ghosts"-random-flame-generator
+ - new "Spirals3D"-random-flame-generator (which utilizes the "Spirals"-generator)
+ - improved the "Brokat"-random-flame-generator (uses the ability to switch variation-types, see below)
+ - reimplemented the "Brokat3D"-random-flame-generator to generate more visually appealing results
+ - reimplemented the "Gnarl3D"-random-flame-generator to generate more visually appealing results
+
+ - any variation may be now be easily toggled to be pre_/normal/post_ - variation. This feature uses minimal changes in the user-interface
+   and it will not break anything, e. g. all scripts should be remain intact without any further change
+ - added the possiblity to change the position of variations inside a transform
+
+ - providing a more advanced editor with basic syntax-highlighting for editing scripts and custom variations (thanks CozyG for the java8-related fix)
+ - separate (and resizable) window for editing scripts
+ - new Option "tinaAdvancedCodeEditor" in the Prefs to turn off the advanced code-editor. May not work on all systems/may not look good on all themes, especially the true dark ones.
+
+ - performance-improvement of the MutaGen
+ - the Script-From-Flame-Generator also supports flames with 3D-affine transforms
+ - Modifications to ScriptParamsDialog and ScriptParamsForm to keep script params modal dialog centered on JWildfire main frame. 
+ 
+ - fixed some zoom-calculation-bug when zooming with the mouse-wheel
+ - fixed some problem with parameter-handling in the "trade"-variation
+
 V2.57 (09.08.2015):
  - Major speedup in the interactive renderer
  - Tonemapping in the interactive renderer should now be exactly the same as in the fixed renderer (i.e., the final images should be the same when the quality is the same) 

@@ -650,23 +650,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.setPreferredSize(new Dimension(0, 66));
       tinaNorthPanel.setLayout(new BoxLayout(tinaNorthPanel, BoxLayout.X_AXIS));
       tinaNorthPanel.add(getRandomBatchButton());
-
-      JButton randomBatchHighQualityButton = new JButton();
-      randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
-      randomBatchHighQualityButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), (String) randomGradientCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
-            tinaController.importFromRandomBatch(0);
-          }
-        }
-      });
-      randomBatchHighQualityButton.setText("H");
-      randomBatchHighQualityButton.setPreferredSize(new Dimension(22, 46));
-      randomBatchHighQualityButton.setMnemonic(KeyEvent.VK_D);
-      randomBatchHighQualityButton.setMinimumSize(new Dimension(22, 46));
-      randomBatchHighQualityButton.setMaximumSize(new Dimension(32000, 46));
-      randomBatchHighQualityButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaNorthPanel.add(randomBatchHighQualityButton);
       tinaNorthPanel.add(getPanel_7());
       tinaNorthPanel.add(getNewFlameButton());
       tinaNorthPanel.add(getPanel_6());
@@ -2345,7 +2328,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderMainButton.setMinimumSize(new Dimension(125, 52));
       renderMainButton.setMaximumSize(new Dimension(32000, 52));
       renderMainButton.setText("Render image");
-      renderMainButton.setPreferredSize(new Dimension(125, 24));
+      renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -5727,7 +5710,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setMinimumSize(new Dimension(100, 46));
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setText("Random batch");
-      randomBatchButton.setPreferredSize(new Dimension(105, 46));
+      randomBatchButton.setPreferredSize(new Dimension(115, 46));
       randomBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -6754,7 +6737,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newFlameButton = new JButton();
       newFlameButton.setMinimumSize(new Dimension(100, 52));
       newFlameButton.setMaximumSize(new Dimension(32000, 52));
-      newFlameButton.setPreferredSize(new Dimension(125, 52));
+      newFlameButton.setPreferredSize(new Dimension(115, 52));
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
@@ -13197,7 +13180,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       qualityProfileBtn.setToolTipText("Edit quality profiles");
       qualityProfileBtn.setText("...");
-      qualityProfileBtn.setPreferredSize(new Dimension(52, 24));
+      qualityProfileBtn.setPreferredSize(new Dimension(32, 24));
       qualityProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return qualityProfileBtn;
@@ -13215,7 +13198,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       resolutionProfileBtn.setToolTipText("Edit resolution profiles");
       resolutionProfileBtn.setText("...");
-      resolutionProfileBtn.setPreferredSize(new Dimension(52, 24));
+      resolutionProfileBtn.setPreferredSize(new Dimension(32, 24));
       resolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return resolutionProfileBtn;
