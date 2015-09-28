@@ -102,6 +102,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GRID_SIZE = "tina.editor.grid_size";
 
   static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor";
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX = "tina.advanced_code_editor_color_fix";
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size";
 
   static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
@@ -182,7 +184,7 @@ public class Prefs extends ManagedObject {
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
-
+  
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
@@ -198,6 +200,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Use an advanced editor with syntax-highlighting for editing scripts and custom variations. May not work on all systems and may not look good with all themes, so you can turn it off. A change of this property requires a program-restart", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditor = true;
+  
+  @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)  
+  private boolean tinaAdvancedCodeEditorColorFix = true;
+  
+  @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)  
+  private int tinaAdvancedCodeEditorFontSize = 10;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -758,6 +766,8 @@ public class Prefs extends ManagedObject {
     tinaDefaultPostNoiseFilter = pSrc.tinaDefaultPostNoiseFilter;
     tinaDefaultPostNoiseFilterThreshold = pSrc.tinaDefaultPostNoiseFilterThreshold;
     tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
+    tinaAdvancedCodeEditorColorFix = pSrc.tinaAdvancedCodeEditorColorFix;
+    tinaAdvancedCodeEditorFontSize = pSrc.tinaAdvancedCodeEditorFontSize;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1496,6 +1506,25 @@ public class Prefs extends ManagedObject {
 
   public void setTinaAdvancedCodeEditor(boolean pTinaAdvancedCodeEditor) {
     tinaAdvancedCodeEditor = pTinaAdvancedCodeEditor;
+  }
+
+  public boolean isTinaAdvancedCodeEditorColorFix() {
+    return tinaAdvancedCodeEditorColorFix;
+  }
+
+  public void setTinaAdvancedCodeEditorColorFix(boolean pTinaAdvancedCodeEditorColorFix) {
+    tinaAdvancedCodeEditorColorFix = pTinaAdvancedCodeEditorColorFix;
+  }
+  
+  public int getTinaAdvancedCodeEditorFontSize() {
+    return  tinaAdvancedCodeEditorFontSize;
+  }
+  
+  public void setTinaAdvancedCodeEditorFontSize(int font_size) {
+    if (font_size <= 0) {
+      font_size = 10;
+    }
+    tinaAdvancedCodeEditorFontSize = font_size;
   }
 
 }
