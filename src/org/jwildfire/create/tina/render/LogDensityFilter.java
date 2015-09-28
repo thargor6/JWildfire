@@ -64,6 +64,14 @@ public class LogDensityFilter extends FilterHolder {
     rasterHeight = pRasterHeight;
     rasterSize = rasterWidth * rasterHeight;
     k1 = flame.getContrast() * 2.0 * flame.getBrightness() / (double) (oversample);
+    switch (flame.getPostSymmetryType()) {
+      case POINT:
+        k1 /= (double) flame.getPostSymmetryOrder();
+        break;
+      case X_AXIS:
+      case Y_AXIS:
+        k1 /= 2.0;
+    }
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
     k2 = 1.0 / (flame.getContrast() * area * flame.getSampleDensity());
