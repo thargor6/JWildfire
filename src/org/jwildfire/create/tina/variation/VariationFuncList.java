@@ -458,7 +458,10 @@ public class VariationFuncList {
     registerVariationFunc(YFunc.class);
     registerVariationFunc(ZFunc.class);
     registerVariationFunc(CustomFullVariationWrapperFunc.class);
-    
+
+    registerVariationFunc(PostPointSymmetryWFFunc.class);
+    registerVariationFunc(PostAxisSymmetryWFFunc.class);
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
