@@ -458,6 +458,7 @@ public class VariationFuncList {
     registerVariationFunc(YFunc.class);
     registerVariationFunc(ZFunc.class);
     registerVariationFunc(CustomFullVariationWrapperFunc.class);
+    registerVariationFunc(MobiusStripFunc.class);
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
