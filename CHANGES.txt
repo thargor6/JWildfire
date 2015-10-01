@@ -1,4 +1,11 @@
 V2.60 (XX.XX.XXXX):
+ - new "Batch Renderer"-button which quicksaves the current flame and sends it together with size/quality information to the batch-renderer 
+ - new "post_axis_symmetry_wf"-variation
+ - new "post_point_symmetry_wf"-variation
+ - removed the confusing "H"-Button from the main-editor in order to free space, cleaned up the main toolbar
+ - adjustment to brightness-calculation when using post-symmetry
+
+
  - new "Spirals"-random-flame-generator which can generate awesome results, thanks Tate27kh from dA for the inspiration!
  - new "Ghosts"-random-flame-generator
  - new "Spirals3D"-random-flame-generator (which utilizes the "Spirals"-generator)

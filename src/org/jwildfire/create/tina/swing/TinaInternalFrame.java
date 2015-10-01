@@ -656,6 +656,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.add(getPanel_13());
       tinaNorthPanel.add(getRenderMainButton());
       tinaNorthPanel.add(getPanel_15());
+      tinaNorthPanel.add(getFlameToBatchButton());
 
     }
     return tinaNorthPanel;
@@ -2325,11 +2326,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRenderMainButton() {
     if (renderMainButton == null) {
       renderMainButton = new JButton();
+      renderMainButton.setToolTipText("Render the fractal at the size chosen to the right and save the result");
       renderMainButton.setMinimumSize(new Dimension(125, 52));
       renderMainButton.setMaximumSize(new Dimension(32000, 52));
-      renderMainButton.setText("Render image");
+      renderMainButton.setText("Render Fractal");
       renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderImageButton_actionPerformed();
@@ -11651,6 +11654,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton nonlinearParams11PostButton;
   private JToggleButton nonlinearParams7PostButton;
   private JToggleButton nonlinearParams3PostButton;
+  private JButton flameToBatchButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -14208,7 +14212,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      resolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
+      resolutionProfileCmb.setPreferredSize(new Dimension(85, 24));
       resolutionProfileCmb.setMaximumRowCount(32);
       resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_1.add(getResolutionProfileBtn());
@@ -14229,7 +14233,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      qualityProfileCmb.setPreferredSize(new Dimension(125, 24));
+      qualityProfileCmb.setPreferredSize(new Dimension(85, 24));
       qualityProfileCmb.setMaximumRowCount(32);
       qualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_2.add(getQualityProfileBtn());
@@ -24754,6 +24758,25 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getNonlinearParams3PostButton() {
     return nonlinearParams3PostButton;
+  }
+
+  private JButton getFlameToBatchButton() {
+    if (flameToBatchButton == null) {
+      flameToBatchButton = new JButton();
+      flameToBatchButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.sendCurrentFlameToBatchRenderer();
+        }
+      });
+      flameToBatchButton.setToolTipText("Send the current flame to the Batch Renderer (you must start the Batch Renderer later to actually render the fractal)");
+      flameToBatchButton.setText("Batch Renderer");
+      flameToBatchButton.setPreferredSize(new Dimension(115, 24));
+      flameToBatchButton.setMinimumSize(new Dimension(125, 52));
+      flameToBatchButton.setMaximumSize(new Dimension(32000, 52));
+      flameToBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameToBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")));
+    }
+    return flameToBatchButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

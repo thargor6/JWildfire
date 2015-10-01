@@ -5842,4 +5842,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       cmbRefreshing = false;
     }
   }
+
+  public void sendCurrentFlameToBatchRenderer() {
+    try {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        String filename = qsaveFilenameGen.generateNextFilename();
+        new FlameWriter().writeFlame(generateExportFlame(flame), filename);
+        batchRendererController.importFlame(filename, getResolutionProfile(), getQualityProfile());
+        messageHelper.showStatusMessage(getCurrFlame(), "sent as file <" + new File(filename).getName() + "> to batch-renderer");
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
 }
