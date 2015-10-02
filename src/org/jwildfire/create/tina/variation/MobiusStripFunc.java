@@ -230,7 +230,7 @@ public class MobiusStripFunc extends VariationFunc {
   
   @Override
   public String getName() {
-    return "mobius_strip_v2";
+    return "mobius_strip";
   }
   
   @Override
