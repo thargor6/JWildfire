@@ -398,6 +398,7 @@ public class JWFScriptController {
     sb.append("import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\n");
     sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
     sb.append("import org.jwildfire.create.tina.base.Layer;\n");
+    sb.append("import org.jwildfire.create.tina.variation.Variation;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFunc;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFuncList;\n");
     sb.append("import org.jwildfire.create.tina.mutagen.RandomGradientMutation;\n");
@@ -596,7 +597,13 @@ public class JWFScriptController {
   private void addVariation(StringBuilder pSB, Variation pVariation, int pIndex) {
     pSB.append("      // variation " + (pIndex + 1) + "\n");
     if (pVariation.getFunc().getParameterNames().length == 0 && (pVariation.getFunc().getRessourceNames() == null || pVariation.getFunc().getRessourceNames().length == 0)) {
-      pSB.append("      xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
+      if (pVariation.getPriority() != pVariation.getFunc().getPriority()) {
+        pSB.append("      Variation variation = xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
+        pSB.append("      variation.setPriority(" + pVariation.getPriority() + ");\n");
+      }
+      else {
+        pSB.append("      xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
+      }
     }
     else {
       pSB.append("      {\n");
@@ -611,7 +618,13 @@ public class JWFScriptController {
           pSB.append("        varFunc.setParameter(\"" + pName + "\", " + pValue + ");\n");
         }
       }
-      pSB.append("        xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
+      if (pVariation.getPriority() != pVariation.getFunc().getPriority()) {
+        pSB.append("        Variation variation = xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
+        pSB.append("        variation.setPriority(" + pVariation.getPriority() + ");\n");
+      }
+      else {
+        pSB.append("        xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
+      }
       pSB.append("      }\n");
     }
   }
