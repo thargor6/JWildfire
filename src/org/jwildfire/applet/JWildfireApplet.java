@@ -186,7 +186,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10);
-    info.setRenderHDR(prefs.isTinaSaveHDRInIR());
+    info.setRenderHDR(false);
     info.setRenderHDRIntensityMap(false);
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());

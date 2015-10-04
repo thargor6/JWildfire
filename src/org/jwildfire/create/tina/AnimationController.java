@@ -151,14 +151,14 @@ public class AnimationController {
           boolean oldNoControls = cfg.isNoControls();
           try {
             cfg.setNoControls(true);
-            tinaController.refreshFlameImage(true, true, 1);
+            tinaController.refreshFlameImage(true, true, 1, false);
           }
           finally {
             cfg.setNoControls(oldNoControls);
           }
         }
         else {
-          tinaController.refreshFlameImage(true, false, 1);
+          tinaController.refreshFlameImage(true, false, 1, false);
         }
 
       }

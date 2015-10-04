@@ -1132,7 +1132,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshFlameImage(boolean pMouseDown) {
-    refreshFlameImage(true, pMouseDown, 1);
+    refreshFlameImage(true, pMouseDown, 1, false);
   }
 
   @Override
@@ -1220,8 +1220,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return getFlamePanel().getConfig();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
-    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pForceBackgroundRender) {
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, pForceBackgroundRender);
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -3400,7 +3400,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flamePanel != null) {
       if (flamePanel.mouseWheelMoved(e.getWheelRotation())) {
         refreshXFormUI(getCurrXForm());
-        refreshFlameImage(true);
+        refreshFlameImage(true, true, 1, true);
         flameControls.refreshVisualCamValues();
       }
     }
@@ -5629,7 +5629,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1);
+    refreshFlameImage(false, false, 1, false);
   }
 
   private void runJWFScript(ScriptRunner pScript) {
@@ -5856,5 +5856,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     catch (Exception ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  private void stopPreviewRendering() {
+    flamePreviewHelper.stopPreviewRendering();
   }
 }

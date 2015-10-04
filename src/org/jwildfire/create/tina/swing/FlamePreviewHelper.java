@@ -11,14 +11,18 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderThreads;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelConfig;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -30,7 +34,7 @@ import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
 
-public class FlamePreviewHelper {
+public class FlamePreviewHelper implements IterationObserver {
   private final Prefs prefs;
   private final JPanel centerPanel;
   private final JToggleButton toggleTransparencyButton;
@@ -44,6 +48,8 @@ public class FlamePreviewHelper {
   private final FlamePanelProvider flamePanelProvider;
   private final FlameMessageHelper messageHelper;
   private final RandomBatchHolder randomBatchHolder;
+  private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
+  private FlameRenderer renderer;
 
   public FlamePreviewHelper(ErrorHandler pErrorHandler, JPanel pCenterPanel, JToggleButton pToggleTransparencyButton, JToggleButton pLayerAppendBtn, JToggleButton pLayerPreviewBtn,
       ProgressUpdater pMainProgressUpdater, FlameHolder pFlameHolder, LayerHolder pLayerHolder,
@@ -73,14 +79,14 @@ public class FlamePreviewHelper {
     imgPanel.repaint();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pForceBackgroundRender) {
+    cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
     }
 
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
-
     SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
     if (img != null) {
       imgPanel.setImage(img);
@@ -105,6 +111,9 @@ public class FlamePreviewHelper {
     if (!cfg.isNoControls()) {
       centerPanel.getParent().validate();
       centerPanel.repaint();
+      if ((pQuickRender && !pMouseDown) || pForceBackgroundRender) {
+        startBackgroundRender(imgPanel);
+      }
     }
     else {
       imgPanel.repaint();
@@ -125,8 +134,10 @@ public class FlamePreviewHelper {
     }
 
     int renderScale = pQuickRender && pMouseDown ? 2 : 1;
+
     int width = bounds.width / renderScale;
     int height = bounds.height / renderScale;
+
     if (width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame flame = flameHolder.getFlame();
@@ -167,12 +178,12 @@ public class FlamePreviewHelper {
               renderer.setProgressUpdater(mainProgressUpdater);
             }
 
-            renderer.setRenderScale(renderScale);
             long t0 = System.currentTimeMillis();
+            renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
-            long t1 = System.currentTimeMillis();
             SimpleImage img = res.getImage();
-            img.getBufferedImg().setAccelerationPriority(1.0f);
+            long t1 = System.currentTimeMillis();
+            // img.getBufferedImg().setAccelerationPriority(1.0f);
 
             if (layerAppendBtn != null && layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
@@ -348,7 +359,7 @@ public class FlamePreviewHelper {
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
-            img.getBufferedImg().setAccelerationPriority(1.0f);
+            //            img.getBufferedImg().setAccelerationPriority(1.0f);
             return img;
           }
           catch (Throwable ex) {
@@ -384,5 +395,224 @@ public class FlamePreviewHelper {
 
   public Rectangle getPanelBounds() {
     return flamePanelProvider.getFlamePanel().getBounds();
+  }
+
+  private UpdateDisplayThread updateDisplayThread;
+  private Thread updateDisplayExecuteThread;
+  private RenderThreads threads;
+
+  public void cancelBackgroundRender() {
+    if (threads == null)
+      return;
+
+    if (updateDisplayThread != null) {
+      updateDisplayThread.cancel();
+    }
+
+    try {
+      for (Thread thread : threads.getExecutingThreads()) {
+        try {
+          thread.setPriority(Thread.NORM_PRIORITY);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+
+      if (updateDisplayExecuteThread != null) {
+        updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
+      }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    while (true) {
+      boolean done = true;
+      for (AbstractRenderThread thread : threads.getRenderThreads()) {
+        if (!thread.isFinished()) {
+          done = false;
+          thread.cancel();
+          try {
+            Thread.sleep(1);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      if (done) {
+        break;
+      }
+    }
+    threads = null;
+
+    if (updateDisplayThread != null) {
+      updateDisplayThread.cancel();
+      while (!updateDisplayThread.isFinished()) {
+        try {
+          updateDisplayThread.cancel();
+          Thread.sleep(1);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      updateDisplayThread = null;
+    }
+  }
+
+  private void startBackgroundRender(FlamePanel pImgPanel) {
+    Flame flame = flameHolder.getFlame().makeCopy();
+    if (flame == null || !Tools.NEW_PREVIEW) {
+      return;
+    }
+    flame.applyFastOversamplingSettings();
+
+    RenderInfo info = new RenderInfo(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight(), RenderMode.PREVIEW);
+    double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
+    double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
+    flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
+    flame.setWidth(info.getImageWidth());
+    flame.setHeight(info.getImageHeight());
+    flame.setSampleDensity(MAX_QUALITY);
+    info.setRenderHDR(false);
+    info.setRenderHDRIntensityMap(false);
+    renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
+    renderer.registerIterationObserver(this);
+
+    SimpleImage image = new SimpleImage(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
+    initImage(image, flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue(), flame.getBGImageFilename());
+
+    displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
+    displayUpdater.initRender(prefs.getTinaRenderThreads());
+    threads = renderer.startRenderFlame(info);
+    for (Thread thread : threads.getExecutingThreads()) {
+      thread.setPriority(Thread.MIN_PRIORITY);
+    }
+
+    updateDisplayThread = new UpdateDisplayThread(image);
+    updateDisplayExecuteThread = new Thread(updateDisplayThread);
+    updateDisplayExecuteThread.setPriority(Thread.MIN_PRIORITY);
+    updateDisplayExecuteThread.start();
+  }
+
+  private void initImage(SimpleImage pImage, int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
+    if (pBGRed > 0 || pBGGreen > 0 || pBGBlue > 0) {
+      pImage.fillBackground(pBGRed, pBGGreen, pBGBlue);
+    }
+    else {
+      pImage.fillBackground(0, 0, 0);
+    }
+    if (pBGImagefile != null && pBGImagefile.length() > 0) {
+      try {
+        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
+        pImage.fillBackground(bgImg);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 1;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
+  private final static int MAX_UPDATE_INC_INTERVAL = 200;
+  private final static int MAX_PREVIEW_TIME = 12000;
+  private final static double MIN_QUALITY = Prefs.getPrefs().getTinaRenderRealtimeQuality() / 2.0;
+  private final static double MAX_QUALITY = 100.0;
+
+  private class UpdateDisplayThread implements Runnable {
+    private int nextImageUpdate;
+    private int lastImageUpdateInterval;
+    private boolean cancelSignalled;
+    private boolean replaceImageFlag;
+    private boolean finished;
+    private SimpleImage image;
+
+    public UpdateDisplayThread(SimpleImage pImage) {
+      nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+      lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
+      image = pImage;
+    }
+
+    private double getCurrQuality() {
+      try {
+        if (threads != null) {
+          List<AbstractRenderThread> renderThreads = threads.getRenderThreads();
+          if (renderThreads != null && renderThreads.size() > 0) {
+            return renderThreads.get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+          }
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      return 0.0;
+    }
+
+    @Override
+    public void run() {
+      long t0 = System.currentTimeMillis();
+      finished = cancelSignalled = false;
+      try {
+        replaceImageFlag = false;
+        while (!cancelSignalled) {
+          double currQuality = getCurrQuality();
+          if (currQuality > MAX_QUALITY || System.currentTimeMillis() - t0 > MAX_PREVIEW_TIME) {
+            cancelSignalled = true;
+            for (AbstractRenderThread thread : threads.getRenderThreads()) {
+              if (!thread.isFinished()) {
+                thread.cancel();
+              }
+            }
+            break;
+          }
+
+          try {
+            if (--nextImageUpdate <= 0) {
+              lastImageUpdateInterval += IMAGE_UPDATE_INC_INTERVAL;
+              if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
+                lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
+              }
+              if (currQuality > MIN_QUALITY) {
+                if (!replaceImageFlag) {
+                  FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+                  imgPanel.replaceImage(image);
+                  replaceImageFlag = true;
+                }
+                displayUpdater.updateImage();
+              }
+              nextImageUpdate = lastImageUpdateInterval;
+            }
+            else
+              Thread.sleep(1);
+          }
+          catch (Throwable e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      finally {
+        finished = true;
+      }
+    }
+
+    public void cancel() {
+      cancelSignalled = true;
+    }
+
+    public boolean isFinished() {
+      return finished;
+    }
+
+  }
+
+  @Override
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+    displayUpdater.iterationFinished(pEventSource, pX, pY);
+  }
+
+  public void stopPreviewRendering() {
+    cancelBackgroundRender();
   }
 }
