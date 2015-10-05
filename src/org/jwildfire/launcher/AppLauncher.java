@@ -23,6 +23,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
+
 public class AppLauncher {
   private final LauncherPrefs prefs;
   private final String JWFILDFIRE_JAR = "j-wildfire.jar";
@@ -71,6 +73,7 @@ public class AppLauncher {
       cmd.add("/C");
       cmd.add("start");
       cmd.add("/low");
+      cmd.add("\"" + Tools.APP_TITLE + "\"");
     }
 
     cmd.add(javaCmd);
