@@ -917,11 +917,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   @Override
   public FlamePanel getFlamePanel() {
     if (flamePanel == null) {
-      int width = centerPanel.getWidth();
-      int height = centerPanel.getHeight();
+      int width = centerPanel.getParent().getWidth();
+      int height = centerPanel.getParent().getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getParent().getWidth(), this, this);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.importOptions(prevFlamePanel);
@@ -1086,7 +1086,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       flamePanel.setSelectedXForm(getCurrXForm());
       if (firstFlamePanel) {
-        centerPanel.remove(0);
+        try {
+          centerPanel.getParent().remove(0);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
         firstFlamePanel = false;
       }
       centerPanel.add(flamePanel, BorderLayout.CENTER);
@@ -2772,6 +2777,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, String pGradientGeneratorname, RandomBatchQuality pQuality) {
+    stopPreviewRendering();
     if (!confirmNewRandomBatch(pGeneratorname))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {

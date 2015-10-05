@@ -9,6 +9,7 @@ import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
@@ -87,27 +88,30 @@ public class FlamePreviewHelper implements IterationObserver {
 
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
-    SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
-    if (img != null) {
-      imgPanel.setImage(img);
-      if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
-        Flame flame = flameHolder.getFlame();
-        List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
-        for (int i = 0; i < randomBatch.size(); i++) {
-          Flame bFlame = randomBatch.get(i).getFlame();
-          if (bFlame == flame) {
-            randomBatch.get(i).setPreview(null);
-            ImagePanel pnl = randomBatch.get(i).getImgPanel();
-            if (pnl != null) {
-              pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
-              pnl.repaint();
+    if (!(pQuickRender && !pMouseDown)) {
+      SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
+      if (img != null) {
+        imgPanel.setImage(img);
+        if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
+          Flame flame = flameHolder.getFlame();
+          List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
+          for (int i = 0; i < randomBatch.size(); i++) {
+            Flame bFlame = randomBatch.get(i).getFlame();
+            if (bFlame == flame) {
+              randomBatch.get(i).setPreview(null);
+              ImagePanel pnl = randomBatch.get(i).getImgPanel();
+              if (pnl != null) {
+                pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
+                pnl.repaint();
+              }
+              break;
             }
-            break;
           }
         }
       }
     }
 
+    imgPanel.setBounds(imgPanel.getImageBounds());
     if (!cfg.isNoControls()) {
       centerPanel.getParent().validate();
       centerPanel.repaint();
@@ -467,8 +471,9 @@ public class FlamePreviewHelper implements IterationObserver {
       return;
     }
     flame.applyFastOversamplingSettings();
+    Rectangle panelBounds = pImgPanel.getImageBounds();
 
-    RenderInfo info = new RenderInfo(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight(), RenderMode.PREVIEW);
+    RenderInfo info = new RenderInfo(panelBounds.width, panelBounds.height, RenderMode.PREVIEW);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
     double hScl = (double) info.getImageHeight() / (double) flame.getHeight();
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
@@ -514,12 +519,12 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 1;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 10;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
   private final static int MAX_UPDATE_INC_INTERVAL = 200;
-  private final static int MAX_PREVIEW_TIME = 12000;
-  private final static double MIN_QUALITY = Prefs.getPrefs().getTinaRenderRealtimeQuality() / 2.0;
-  private final static double MAX_QUALITY = 100.0;
+  private final static int MAX_PREVIEW_TIME = 15000;
+  private final static double MIN_QUALITY = MathLib.M_PI;
+  private final static double MAX_QUALITY = 200.0;
 
   private class UpdateDisplayThread implements Runnable {
     private int nextImageUpdate;

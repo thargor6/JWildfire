@@ -404,7 +404,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel centerNorthPanel = null;
   private JPanel centerWestPanel = null;
   private JPanel centerCenterPanel = null;
-  private JLabel centerDescLabel = null;
+  private JTextArea centerDescLabel = null;
   private JComboBox randomStyleCmb = null;
   private JLabel randomStyleLbl = null;
   private JToggleButton affineEditPostTransformButton = null;
@@ -4741,7 +4741,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
     TinaControllerParameter params = new TinaControllerParameter();
 
-    params.setParams1(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    params.setParams1(this, pErrorHandler, pPrefs,/* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
@@ -7812,14 +7812,14 @@ public class TinaInternalFrame extends JInternalFrame {
     if (centerCenterPanel == null) {
       centerCenterPanel = new JPanel();
       centerCenterPanel.setLayout(new BorderLayout());
-      centerCenterPanel.setBackground(Color.gray);
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-      centerDescLabel = new JLabel();
+      centerDescLabel = new JTextArea();
+      centerDescLabel.setEditable(false);
       centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
-      centerDescLabel.setText("  (just double-click or right-click on thumbnail to load it into main area)");
-      centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left are to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
       centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
+      centerCenterPanel.add(getMainPrevievPnl(), BorderLayout.CENTER);
     }
     return centerCenterPanel;
   }
@@ -11655,6 +11655,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton nonlinearParams7PostButton;
   private JToggleButton nonlinearParams3PostButton;
   private JButton flameToBatchButton;
+  private JPanel mainPrevievPnl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -24777,6 +24778,14 @@ public class TinaInternalFrame extends JInternalFrame {
       flameToBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")));
     }
     return flameToBatchButton;
+  }
+
+  private JPanel getMainPrevievPnl() {
+    if (mainPrevievPnl == null) {
+      mainPrevievPnl = new JPanel();
+      mainPrevievPnl.setLayout(null);
+    }
+    return mainPrevievPnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
