@@ -170,7 +170,6 @@ public class FlameRenderer {
     double oldDensity = flame.getSampleDensity();
     try {
       double quality = logDensityFilter.calcDensity(pSampleCount, rasterSize);
-      System.out.println("FINALIZE: " + pSampleCount + " " + quality);
 
       flame.setSampleDensity(quality);
       RenderedFlame res = new RenderedFlame();

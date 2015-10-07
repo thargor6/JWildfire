@@ -50,14 +50,12 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   public void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
     iterationCount[pEventSource.getThreadId()] = pEventSource.getCurrSample();
     sampleCount = calculateSampleCount();
-    if (sampleCount % 3 == 0) {
-      int x = pX / pEventSource.getOversample();
-      int y = pY / pEventSource.getOversample();
-      if (showPreview && x >= 0 && x < imageWidth && y >= 0 && y < imageHeight) {
-        int argb = pEventSource.getTonemapper().tonemapSample(x, y);
-        int offset = imageWidth * y + x;
-        buffer[offset] = argb;
-      }
+    int x = pX / pEventSource.getOversample();
+    int y = pY / pEventSource.getOversample();
+    if (showPreview && x >= 0 && x < imageWidth && y >= 0 && y < imageHeight) {
+      int argb = pEventSource.getTonemapper().tonemapSample(x, y);
+      int offset = imageWidth * y + x;
+      buffer[offset] = argb;
     }
   }
 

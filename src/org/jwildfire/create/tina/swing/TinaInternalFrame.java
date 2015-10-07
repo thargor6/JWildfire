@@ -404,7 +404,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel centerNorthPanel = null;
   private JPanel centerWestPanel = null;
   private JPanel centerCenterPanel = null;
-  private JLabel centerDescLabel = null;
+  private JTextArea centerDescLabel = null;
   private JComboBox randomStyleCmb = null;
   private JLabel randomStyleLbl = null;
   private JToggleButton affineEditPostTransformButton = null;
@@ -650,29 +650,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaNorthPanel.setPreferredSize(new Dimension(0, 66));
       tinaNorthPanel.setLayout(new BoxLayout(tinaNorthPanel, BoxLayout.X_AXIS));
       tinaNorthPanel.add(getRandomBatchButton());
-
-      JButton randomBatchHighQualityButton = new JButton();
-      randomBatchHighQualityButton.setToolTipText("Create a random batch in higher quality (may be much slower)");
-      randomBatchHighQualityButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController.createRandomBatch(-1, (String) randomStyleCmb.getSelectedItem(), (String) randomSymmetryCmb.getSelectedItem(), (String) randomGradientCmb.getSelectedItem(), RandomBatchQuality.HIGH)) {
-            tinaController.importFromRandomBatch(0);
-          }
-        }
-      });
-      randomBatchHighQualityButton.setText("H");
-      randomBatchHighQualityButton.setPreferredSize(new Dimension(22, 46));
-      randomBatchHighQualityButton.setMnemonic(KeyEvent.VK_D);
-      randomBatchHighQualityButton.setMinimumSize(new Dimension(22, 46));
-      randomBatchHighQualityButton.setMaximumSize(new Dimension(32000, 46));
-      randomBatchHighQualityButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      tinaNorthPanel.add(randomBatchHighQualityButton);
       tinaNorthPanel.add(getPanel_7());
       tinaNorthPanel.add(getNewFlameButton());
       tinaNorthPanel.add(getPanel_6());
       tinaNorthPanel.add(getPanel_13());
       tinaNorthPanel.add(getRenderMainButton());
       tinaNorthPanel.add(getPanel_15());
+      tinaNorthPanel.add(getFlameToBatchButton());
 
     }
     return tinaNorthPanel;
@@ -2342,11 +2326,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getRenderMainButton() {
     if (renderMainButton == null) {
       renderMainButton = new JButton();
+      renderMainButton.setToolTipText("Render the fractal at the size chosen to the right and save the result");
       renderMainButton.setMinimumSize(new Dimension(125, 52));
       renderMainButton.setMaximumSize(new Dimension(32000, 52));
-      renderMainButton.setText("Render image");
-      renderMainButton.setPreferredSize(new Dimension(125, 24));
+      renderMainButton.setText("Render Fractal");
+      renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderImageButton_actionPerformed();
@@ -4755,7 +4741,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
     TinaControllerParameter params = new TinaControllerParameter();
 
-    params.setParams1(this, pErrorHandler, pPrefs, getCenterCenterPanel(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    params.setParams1(this, pErrorHandler, pPrefs,/* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
@@ -5727,7 +5713,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setMinimumSize(new Dimension(100, 46));
       randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
       randomBatchButton.setText("Random batch");
-      randomBatchButton.setPreferredSize(new Dimension(105, 46));
+      randomBatchButton.setPreferredSize(new Dimension(115, 46));
       randomBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomBatchButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -6754,7 +6740,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newFlameButton = new JButton();
       newFlameButton.setMinimumSize(new Dimension(100, 52));
       newFlameButton.setMaximumSize(new Dimension(32000, 52));
-      newFlameButton.setPreferredSize(new Dimension(125, 52));
+      newFlameButton.setPreferredSize(new Dimension(115, 52));
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
@@ -7826,14 +7812,14 @@ public class TinaInternalFrame extends JInternalFrame {
     if (centerCenterPanel == null) {
       centerCenterPanel = new JPanel();
       centerCenterPanel.setLayout(new BorderLayout());
-      centerCenterPanel.setBackground(Color.gray);
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-      centerDescLabel = new JLabel();
+      centerDescLabel = new JTextArea();
+      centerDescLabel.setEditable(false);
       centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
-      centerDescLabel.setText("  (just double-click or right-click on thumbnail to load it into main area)");
-      centerDescLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left are to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
       centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
+      centerCenterPanel.add(getMainPrevievPnl(), BorderLayout.CENTER);
     }
     return centerCenterPanel;
   }
@@ -11668,6 +11654,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton nonlinearParams11PostButton;
   private JToggleButton nonlinearParams7PostButton;
   private JToggleButton nonlinearParams3PostButton;
+  private JButton flameToBatchButton;
+  private JPanel mainPrevievPnl;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -13197,7 +13185,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       qualityProfileBtn.setToolTipText("Edit quality profiles");
       qualityProfileBtn.setText("...");
-      qualityProfileBtn.setPreferredSize(new Dimension(52, 24));
+      qualityProfileBtn.setPreferredSize(new Dimension(32, 24));
       qualityProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return qualityProfileBtn;
@@ -13215,7 +13203,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       resolutionProfileBtn.setToolTipText("Edit resolution profiles");
       resolutionProfileBtn.setText("...");
-      resolutionProfileBtn.setPreferredSize(new Dimension(52, 24));
+      resolutionProfileBtn.setPreferredSize(new Dimension(32, 24));
       resolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return resolutionProfileBtn;
@@ -14225,7 +14213,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      resolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
+      resolutionProfileCmb.setPreferredSize(new Dimension(85, 24));
       resolutionProfileCmb.setMaximumRowCount(32);
       resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_1.add(getResolutionProfileBtn());
@@ -14246,7 +14234,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      qualityProfileCmb.setPreferredSize(new Dimension(125, 24));
+      qualityProfileCmb.setPreferredSize(new Dimension(85, 24));
       qualityProfileCmb.setMaximumRowCount(32);
       qualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       panel_2.add(getQualityProfileBtn());
@@ -24771,6 +24759,33 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getNonlinearParams3PostButton() {
     return nonlinearParams3PostButton;
+  }
+
+  private JButton getFlameToBatchButton() {
+    if (flameToBatchButton == null) {
+      flameToBatchButton = new JButton();
+      flameToBatchButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.sendCurrentFlameToBatchRenderer();
+        }
+      });
+      flameToBatchButton.setToolTipText("Send the current flame to the Batch Renderer (you must start the Batch Renderer later to actually render the fractal)");
+      flameToBatchButton.setText("Batch Renderer");
+      flameToBatchButton.setPreferredSize(new Dimension(115, 24));
+      flameToBatchButton.setMinimumSize(new Dimension(125, 52));
+      flameToBatchButton.setMaximumSize(new Dimension(32000, 52));
+      flameToBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameToBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")));
+    }
+    return flameToBatchButton;
+  }
+
+  private JPanel getMainPrevievPnl() {
+    if (mainPrevievPnl == null) {
+      mainPrevievPnl = new JPanel();
+      mainPrevievPnl.setLayout(null);
+    }
+    return mainPrevievPnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

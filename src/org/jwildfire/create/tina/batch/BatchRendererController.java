@@ -489,4 +489,18 @@ public class BatchRendererController implements JobRenderThreadController {
       errorHandler.handleError(ex);
     }
   }
+
+  public void importFlame(String pFilename, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile) {
+    Job job = new Job();
+    job.setFlameFilename(pFilename);
+    if (pResolutionProfile != null) {
+      job.setCustomWidth(pResolutionProfile.getWidth());
+      job.setCustomHeight(pResolutionProfile.getHeight());
+    }
+    if (pQualityProfile != null) {
+      job.setCustomQuality(pQualityProfile.getQuality());
+    }
+    batchRenderList.add(job);
+    refreshRenderBatchJobsTable();
+  }
 }

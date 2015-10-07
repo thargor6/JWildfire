@@ -458,6 +458,9 @@ public class VariationFuncList {
     registerVariationFunc(YFunc.class);
     registerVariationFunc(ZFunc.class);
     registerVariationFunc(CustomFullVariationWrapperFunc.class);
+
+    registerVariationFunc(PostPointSymmetryWFFunc.class);
+    registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
     
     resolvedAliasMap = new HashMap<>();

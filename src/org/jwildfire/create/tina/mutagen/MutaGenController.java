@@ -276,7 +276,9 @@ public class MutaGenController {
     }
 
     public void forceAbort() {
-      renderer.signalCancel();
+      if (renderer != null) {
+        renderer.signalCancel();
+      }
     }
 
   }

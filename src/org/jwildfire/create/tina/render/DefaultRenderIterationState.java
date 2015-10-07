@@ -424,7 +424,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     raster.addSamples(plotBuffer, plotBufferIdx);
     plotBufferIdx = 0;
     long t1 = System.currentTimeMillis();
-    if (t1 - t0 > 125) {
+    if (t1 - t0 > 100) {
       try {
         Thread.sleep(1);
       }

@@ -130,12 +130,12 @@ public class FlamePanel extends ImagePanel {
       }
       return;
     }
+    super.paintComponent(g);
     Graphics2D g2d = (Graphics2D) g;
     if (prefs.isTinaEditorControlsWithAntialiasing()) {
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     }
-    super.paintComponent(g);
     fillBackground(g);
     initTriangleView(g2d);
     if (withImage) {

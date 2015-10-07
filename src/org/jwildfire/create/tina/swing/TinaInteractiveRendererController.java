@@ -26,6 +26,7 @@ import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -154,7 +155,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       height /= 2;
     }
     image = new SimpleImage(width, height);
-    image.getBufferedImg().setAccelerationPriority(1.0f);
+    //    image.getBufferedImg().setAccelerationPriority(1.0f);
     image.fillBackground(prefs.getTinaRandomBatchBGColorRed(), prefs.getTinaRandomBatchBGColorGreen(), prefs.getTinaRandomBatchBGColorBlue());
     ImagePanel imagePanel = new ImagePanel(image, 0, 0, image.getImageWidth());
     imagePanel.setSize(image.getImageWidth(), image.getImageHeight());
@@ -707,7 +708,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
         FlameRenderer newRenderer = new FlameRenderer(newFlame, prefs, newFlame.isBGTransparency(), false);
 
         ResumedFlameRender resumedRender = newRenderer.resumeRenderFlame(file.getAbsolutePath());
-        threads = new RenderThreads(resumedRender.getThreads(), null);
+        threads = new RenderThreads(resumedRender.getThreads(), new ArrayList<Thread>());
         Flame flame = currFlame = newRenderer.getFlame();
         // setup size profile
         {
@@ -763,8 +764,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
         lastQuality = 0.0;
         lastQualitySpeed = 0.0;
         lastQualityTime = 0;
-        for (AbstractRenderThread thread : threads.getRenderThreads()) {
-          startRenderThread(thread);
+        for (int i = 0; i < threads.getRenderThreads().size(); i++) {
+          AbstractRenderThread rThread = threads.getRenderThreads().get(i);
+          Thread eThread = startRenderThread(rThread);
+          threads.getExecutingThreads().add(eThread);
         }
         updateDisplayThread = new UpdateDisplayThread();
         startDisplayThread(updateDisplayThread);

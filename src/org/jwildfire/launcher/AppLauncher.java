@@ -23,6 +23,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
+
 public class AppLauncher {
   private final LauncherPrefs prefs;
   private final String JWFILDFIRE_JAR = "j-wildfire.jar";
@@ -32,6 +34,7 @@ public class AppLauncher {
     prefs = pPrefs;
   }
 
+  // TODO priority
   public String[] getLaunchCmd() throws Exception {
     String jdkPath = prefs.getJavaPath();
     if (jdkPath == null || jdkPath.length() == 0)
@@ -65,11 +68,18 @@ public class AppLauncher {
 
     //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
     List<String> cmd = new ArrayList<String>();
+    if (isWindows()) {
+      cmd.add("cmd");
+      cmd.add("/C");
+      cmd.add("start");
+      cmd.add("/low");
+      cmd.add("\"" + Tools.APP_TITLE + "\"");
+    }
+
     cmd.add(javaCmd);
     cmd.add(minMemOption);
     cmd.add(maxMemOption);
-    String os = System.getProperty("os.name").toLowerCase();
-    if (os.startsWith("win")) {
+    if (isWindows()) {
       boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
       String libPath = new File(new File(currentDir.getParentFile().getAbsolutePath(), "lib"), (is64bit ? "x64" : "x86")).getAbsolutePath();
       String libraryPathOption;
@@ -86,6 +96,11 @@ public class AppLauncher {
     cmd.add(cp);
     cmd.add(JWILDFIRE_MAIN_CLASS);
     return cmd.toArray(new String[cmd.size()]);
+  }
+
+  public boolean isWindows() {
+    String os = System.getProperty("os.name").toLowerCase();
+    return os.startsWith("win");
   }
 
   public void launchSync(String[] pCmd) throws Exception {

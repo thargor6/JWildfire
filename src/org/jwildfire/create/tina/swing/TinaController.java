@@ -917,11 +917,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   @Override
   public FlamePanel getFlamePanel() {
     if (flamePanel == null) {
-      int width = centerPanel.getWidth();
-      int height = centerPanel.getHeight();
+      int width = centerPanel.getParent().getWidth();
+      int height = centerPanel.getParent().getHeight();
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
-      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getWidth(), this, this);
+      flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getParent().getWidth(), this, this);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.importOptions(prevFlamePanel);
@@ -1086,7 +1086,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       flamePanel.setSelectedXForm(getCurrXForm());
       if (firstFlamePanel) {
-        centerPanel.remove(0);
+        try {
+          centerPanel.getParent().remove(0);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
         firstFlamePanel = false;
       }
       centerPanel.add(flamePanel, BorderLayout.CENTER);
@@ -1132,7 +1137,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void refreshFlameImage(boolean pMouseDown) {
-    refreshFlameImage(true, pMouseDown, 1);
+    refreshFlameImage(true, pMouseDown, 1, false);
   }
 
   @Override
@@ -1220,8 +1225,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return getFlamePanel().getConfig();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
-    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale);
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pForceBackgroundRender) {
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, pForceBackgroundRender);
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -2772,6 +2777,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, String pGradientGeneratorname, RandomBatchQuality pQuality) {
+    stopPreviewRendering();
     if (!confirmNewRandomBatch(pGeneratorname))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
@@ -3400,7 +3406,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flamePanel != null) {
       if (flamePanel.mouseWheelMoved(e.getWheelRotation())) {
         refreshXFormUI(getCurrXForm());
-        refreshFlameImage(true);
+        refreshFlameImage(true, true, 1, true);
         flameControls.refreshVisualCamValues();
       }
     }
@@ -5629,7 +5635,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1);
+    refreshFlameImage(false, false, 1, false);
   }
 
   private void runJWFScript(ScriptRunner pScript) {
@@ -5841,5 +5847,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       cmbRefreshing = false;
     }
+  }
+
+  public void sendCurrentFlameToBatchRenderer() {
+    try {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        String filename = qsaveFilenameGen.generateNextFilename();
+        new FlameWriter().writeFlame(generateExportFlame(flame), filename);
+        batchRendererController.importFlame(filename, getResolutionProfile(), getQualityProfile());
+        messageHelper.showStatusMessage(getCurrFlame(), "sent as file <" + new File(filename).getName() + "> to batch-renderer");
+      }
+    }
+    catch (Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private void stopPreviewRendering() {
+    flamePreviewHelper.stopPreviewRendering();
   }
 }
