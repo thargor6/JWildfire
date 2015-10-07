@@ -461,7 +461,8 @@ public class VariationFuncList {
 
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
-
+    registerVariationFunc(MobiusStripFunc.class);
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
