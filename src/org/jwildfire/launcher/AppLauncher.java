@@ -73,6 +73,7 @@ public class AppLauncher {
       cmd.add("/C");
       cmd.add("start");
       cmd.add("/low");
+      cmd.add("/b");
       cmd.add("\"" + Tools.APP_TITLE + "\"");
     }
 
