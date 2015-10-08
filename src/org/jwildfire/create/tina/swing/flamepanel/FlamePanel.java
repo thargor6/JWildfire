@@ -210,6 +210,22 @@ public class FlamePanel extends ImagePanel {
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
+  public Rectangle getParentImageBounds() {
+    Rectangle bounds = this.getParent().getBounds();
+    double aspect = (double) bounds.width / (double) bounds.height;
+    int imageWidth, imageHeight;
+    if (aspect <= renderAspect) {
+      imageWidth = bounds.width;
+      imageHeight = Tools.FTOI((double) imageWidth / renderAspect);
+    }
+    else {
+      imageHeight = bounds.height;
+      imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
+    }
+    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
+    return new Rectangle(0, 0, imageWidth, imageHeight);
+  }
+
   private int viewAreaLeft, viewAreaRight, viewAreaTop, viewAreaBottom;
 
   private void initTriangleView(Graphics2D g) {

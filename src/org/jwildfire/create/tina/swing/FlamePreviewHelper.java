@@ -88,7 +88,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
-    if (!(pQuickRender && !pMouseDown)) {
+    if (!pQuickRender || pMouseDown) {
       SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
       if (img != null) {
         imgPanel.setImage(img);
@@ -111,7 +111,7 @@ public class FlamePreviewHelper implements IterationObserver {
       }
     }
 
-    imgPanel.setBounds(imgPanel.getImageBounds());
+    imgPanel.setBounds(imgPanel.getParentImageBounds());
     if (!cfg.isNoControls()) {
       centerPanel.getParent().validate();
       centerPanel.repaint();
@@ -128,7 +128,7 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
-    Rectangle panelBounds = imgPanel.getImageBounds();
+    Rectangle panelBounds = imgPanel.getParentImageBounds();
     Rectangle bounds;
     if (pDownScale != 1) {
       bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
@@ -187,7 +187,7 @@ public class FlamePreviewHelper implements IterationObserver {
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
             long t1 = System.currentTimeMillis();
-            // img.getBufferedImg().setAccelerationPriority(1.0f);
+            img.getBufferedImg().setAccelerationPriority(1.0f);
 
             if (layerAppendBtn != null && layerAppendBtn.isSelected() && !pMouseDown) {
               TextTransformer txt = new TextTransformer();
@@ -321,7 +321,7 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
-    Rectangle panelBounds = imgPanel.getImageBounds();
+    Rectangle panelBounds = imgPanel.getParentImageBounds();
     Rectangle bounds;
     if (pDownScale != 1) {
       bounds = new Rectangle(panelBounds.width / pDownScale, panelBounds.height / pDownScale);
@@ -363,7 +363,7 @@ public class FlamePreviewHelper implements IterationObserver {
             renderer.setRenderScale(renderScale);
             RenderedFlame res = renderer.renderFlame(info);
             SimpleImage img = res.getImage();
-            //            img.getBufferedImg().setAccelerationPriority(1.0f);
+            img.getBufferedImg().setAccelerationPriority(1.0f);
             return img;
           }
           catch (Throwable ex) {
@@ -471,7 +471,7 @@ public class FlamePreviewHelper implements IterationObserver {
       return;
     }
     flame.applyFastOversamplingSettings();
-    Rectangle panelBounds = pImgPanel.getImageBounds();
+    Rectangle panelBounds = pImgPanel.getParentImageBounds();
 
     RenderInfo info = new RenderInfo(panelBounds.width, panelBounds.height, RenderMode.PREVIEW);
     double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -525,9 +525,11 @@ public class FlamePreviewHelper implements IterationObserver {
   private final static int MAX_PREVIEW_TIME = 15000;
   private final static double MIN_QUALITY = MathLib.M_PI;
   private final static double MAX_QUALITY = 200.0;
+  private final static int STATS_UPDATE_INTERVAL = 250;
 
   private class UpdateDisplayThread implements Runnable {
     private int nextImageUpdate;
+    private long nextStatsUpdate;
     private int lastImageUpdateInterval;
     private boolean cancelSignalled;
     private boolean replaceImageFlag;
@@ -536,6 +538,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
     public UpdateDisplayThread(SimpleImage pImage) {
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
+      nextStatsUpdate = STATS_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
       image = pImage;
     }
@@ -588,6 +591,13 @@ public class FlamePreviewHelper implements IterationObserver {
                 displayUpdater.updateImage();
               }
               nextImageUpdate = lastImageUpdateInterval;
+            }
+            else if (--nextStatsUpdate <= 0) {
+              currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+              for (AbstractRenderThread thread : threads.getRenderThreads()) {
+                thread.getTonemapper().setDensity(currQuality);
+              }
+              nextStatsUpdate = STATS_UPDATE_INTERVAL;
             }
             else
               Thread.sleep(1);
