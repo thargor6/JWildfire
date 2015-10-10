@@ -29,6 +29,7 @@ public class FlamePanelConfig {
   private MouseDragOperation mouseDragOperation = MouseDragOperation.MOVE_TRIANGLE;
   private int selectedPoint = 1;
   private boolean noControls;
+  private boolean progressivePreview = true;
 
   // Apophysis-compatible colors
   public static final Color[] XFORM_COLORS = new Color[] {
@@ -119,6 +120,14 @@ public class FlamePanelConfig {
 
   public void setNoControls(boolean pNoControls) {
     noControls = pNoControls;
+  }
+
+  public boolean isProgressivePreview() {
+    return progressivePreview;
+  }
+
+  public void setProgressivePreview(boolean pProgressivePreview) {
+    progressivePreview = pProgressivePreview;
   }
 
 }

@@ -448,6 +448,7 @@ public class TinaControllerParameter {
   public JToggleButton toggleDrawGuidesButton;
   public JSlider editorFractalBrightnessSlider;
   public JToggleButton toggleTriangleWithColorsButton;
+  public JToggleButton realtimePreviewToggleButton;
   public JComboBox triangleStyleCmb;
 
   public JButton meshGenFromEditorBtn;
@@ -1126,7 +1127,7 @@ public class TinaControllerParameter {
       JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
-      JButton pScriptEditBtn) {
+      JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1296,5 +1297,6 @@ public class TinaControllerParameter {
     foregroundOpacityField = pForegroundOpacityField;
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
+    realtimePreviewToggleButton = pRealtimePreviewToggleButton;
   }
 }

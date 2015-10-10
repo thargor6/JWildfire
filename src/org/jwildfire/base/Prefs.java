@@ -95,6 +95,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS = "tina.editor.controls.with_numbers";
@@ -184,7 +185,7 @@ public class Prefs extends ManagedObject {
   private String tinaFlamePath = null;
   private String lastInputFlamePath = null;
   private String lastOutputFlamePath = null;
-  
+
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
@@ -200,11 +201,11 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Use an advanced editor with syntax-highlighting for editing scripts and custom variations. May not work on all systems and may not look good with all themes, so you can turn it off. A change of this property requires a program-restart", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditor = true;
-  
-  @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)  
+
+  @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditorColorFix = true;
-  
-  @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)  
+
+  @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private int tinaAdvancedCodeEditorFontSize = 10;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
@@ -241,6 +242,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithColor = true;
+
+  @Property(description = "Turn on progressive preview-display in the main-editor by default ", category = PropertyCategory.TINA)
+  private boolean tinaEditorProgressivePreview = true;
 
   @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithAntialiasing = true;
@@ -768,6 +772,7 @@ public class Prefs extends ManagedObject {
     tinaAdvancedCodeEditor = pSrc.tinaAdvancedCodeEditor;
     tinaAdvancedCodeEditorColorFix = pSrc.tinaAdvancedCodeEditorColorFix;
     tinaAdvancedCodeEditorFontSize = pSrc.tinaAdvancedCodeEditorFontSize;
+    tinaEditorProgressivePreview = pSrc.tinaEditorProgressivePreview;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1515,16 +1520,24 @@ public class Prefs extends ManagedObject {
   public void setTinaAdvancedCodeEditorColorFix(boolean pTinaAdvancedCodeEditorColorFix) {
     tinaAdvancedCodeEditorColorFix = pTinaAdvancedCodeEditorColorFix;
   }
-  
+
   public int getTinaAdvancedCodeEditorFontSize() {
-    return  tinaAdvancedCodeEditorFontSize;
+    return tinaAdvancedCodeEditorFontSize;
   }
-  
+
   public void setTinaAdvancedCodeEditorFontSize(int font_size) {
     if (font_size <= 0) {
       font_size = 10;
     }
     tinaAdvancedCodeEditorFontSize = font_size;
+  }
+
+  public boolean isTinaEditorProgressivePreview() {
+    return tinaEditorProgressivePreview;
+  }
+
+  public void setTinaEditorProgressivePreview(boolean pTinaEditorProgressivePreview) {
+    tinaEditorProgressivePreview = pTinaEditorProgressivePreview;
   }
 
 }

@@ -649,6 +649,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
+    data.realtimePreviewToggleButton = parameterObject.realtimePreviewToggleButton;
 
     data.renderBatchJobsTable = parameterObject.pRenderBatchJobsTable;
     data.batchPreviewRootPanel = parameterObject.pBatchPreviewRootPanel;
@@ -923,6 +924,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       img.fillBackground(0, 0, 0);
       flamePanel = new FlamePanel(prefs, img, 0, 0, centerPanel.getParent().getWidth(), this, this);
       flamePanel.getConfig().setWithColoredTransforms(prefs.isTinaEditorControlsWithColor());
+      flamePanel.getConfig().setProgressivePreview(prefs.isTinaEditorProgressivePreview());
       flamePanel.setFlamePanelTriangleMode(prefs.getTinaEditorControlsStyle());
       flamePanel.importOptions(prevFlamePanel);
       prevFlamePanel = null;
@@ -5866,5 +5868,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void stopPreviewRendering() {
     flamePreviewHelper.stopPreviewRendering();
+  }
+
+  public void realtimePreviewToggleButton_clicked() {
+    if (!refreshing) {
+      refreshing = true;
+      try {
+        data.mouseTransformRotateTrianglesButton.setSelected(false);
+        if (flamePanel != null) {
+          flamePanel.getConfig().setProgressivePreview(data.realtimePreviewToggleButton.isSelected());
+          refreshFlameImage(false);
+        }
+      }
+      finally {
+        refreshing = false;
+      }
+    }
   }
 }

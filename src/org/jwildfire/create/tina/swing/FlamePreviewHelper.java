@@ -9,7 +9,6 @@ import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
@@ -88,26 +87,11 @@ public class FlamePreviewHelper implements IterationObserver {
 
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
-    if (!pQuickRender || pMouseDown) {
+
+    if (!pQuickRender || !cfg.isProgressivePreview()) {
       SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
       if (img != null) {
         imgPanel.setImage(img);
-        if (!pMouseDown && !cfg.isNoControls() && randomBatchHolder != null) {
-          Flame flame = flameHolder.getFlame();
-          List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
-          for (int i = 0; i < randomBatch.size(); i++) {
-            Flame bFlame = randomBatch.get(i).getFlame();
-            if (bFlame == flame) {
-              randomBatch.get(i).setPreview(null);
-              ImagePanel pnl = randomBatch.get(i).getImgPanel();
-              if (pnl != null) {
-                pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
-                pnl.repaint();
-              }
-              break;
-            }
-          }
-        }
       }
     }
 
@@ -115,12 +99,35 @@ public class FlamePreviewHelper implements IterationObserver {
     if (!cfg.isNoControls()) {
       centerPanel.getParent().validate();
       centerPanel.repaint();
-      if ((pQuickRender && !pMouseDown) || pForceBackgroundRender) {
-        startBackgroundRender(imgPanel);
-      }
     }
     else {
       imgPanel.repaint();
+    }
+
+    if (cfg.isProgressivePreview() && pQuickRender) {
+      startBackgroundRender(imgPanel);
+    }
+
+    if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null) {
+      refreshThumbnail();
+    }
+
+  }
+
+  private void refreshThumbnail() {
+    Flame flame = flameHolder.getFlame();
+    List<FlameThumbnail> randomBatch = randomBatchHolder.getRandomBatch();
+    for (int i = 0; i < randomBatch.size(); i++) {
+      Flame bFlame = randomBatch.get(i).getFlame();
+      if (bFlame == flame) {
+        randomBatch.get(i).setPreview(null);
+        ImagePanel pnl = randomBatch.get(i).getImgPanel();
+        if (pnl != null) {
+          pnl.replaceImage(randomBatch.get(i).getPreview(prefs.getTinaRenderPreviewQuality() / 2));
+          pnl.repaint();
+        }
+        break;
+      }
     }
   }
 
@@ -467,7 +474,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
   private void startBackgroundRender(FlamePanel pImgPanel) {
     Flame flame = flameHolder.getFlame().makeCopy();
-    if (flame == null || !Tools.NEW_PREVIEW) {
+    if (flame == null) {
       return;
     }
     flame.applyFastOversamplingSettings();
@@ -519,17 +526,14 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 10;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
-  private final static int MAX_UPDATE_INC_INTERVAL = 200;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 10;
+  private final static int MAX_UPDATE_INC_INTERVAL = 100;
   private final static int MAX_PREVIEW_TIME = 15000;
-  private final static double MIN_QUALITY = MathLib.M_PI;
   private final static double MAX_QUALITY = 200.0;
-  private final static int STATS_UPDATE_INTERVAL = 250;
 
   private class UpdateDisplayThread implements Runnable {
     private int nextImageUpdate;
-    private long nextStatsUpdate;
     private int lastImageUpdateInterval;
     private boolean cancelSignalled;
     private boolean replaceImageFlag;
@@ -538,7 +542,6 @@ public class FlamePreviewHelper implements IterationObserver {
 
     public UpdateDisplayThread(SimpleImage pImage) {
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
-      nextStatsUpdate = STATS_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
       image = pImage;
     }
@@ -582,25 +585,25 @@ public class FlamePreviewHelper implements IterationObserver {
               if (lastImageUpdateInterval > MAX_UPDATE_INC_INTERVAL) {
                 lastImageUpdateInterval = MAX_UPDATE_INC_INTERVAL;
               }
-              if (currQuality > MIN_QUALITY) {
-                if (!replaceImageFlag) {
-                  FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
-                  imgPanel.replaceImage(image);
-                  replaceImageFlag = true;
-                }
-                displayUpdater.updateImage();
+              if (!replaceImageFlag) {
+                FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
+                imgPanel.replaceImage(image);
+                replaceImageFlag = true;
               }
-              nextImageUpdate = lastImageUpdateInterval;
-            }
-            else if (--nextStatsUpdate <= 0) {
               currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
+              if (currQuality < 0.5)
+                currQuality *= 10;
+              else if (currQuality < 1.0)
+                currQuality *= 5;
               for (AbstractRenderThread thread : threads.getRenderThreads()) {
                 thread.getTonemapper().setDensity(currQuality);
               }
-              nextStatsUpdate = STATS_UPDATE_INTERVAL;
+              displayUpdater.updateImage();
+              nextImageUpdate = lastImageUpdateInterval;
             }
-            else
+            else {
               Thread.sleep(1);
+            }
           }
           catch (Throwable e) {
             e.printStackTrace();

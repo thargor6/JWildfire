@@ -1044,6 +1044,7 @@ public class FlamePanel extends ImagePanel {
       fineMovement = pFlamePanel.fineMovement;
       allowScaleX = pFlamePanel.allowScaleX;
       allowScaleY = pFlamePanel.allowScaleY;
+
       withShowTransparency = pFlamePanel.withShowTransparency;
       config.setWithColoredTransforms(pFlamePanel.config.isWithColoredTransforms());
       config.setMouseDragOperation(pFlamePanel.config.getMouseDragOperation());
