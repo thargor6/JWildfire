@@ -67,6 +67,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PATH_FLAMES = "tina.path.flames";
   static final String KEY_TINA_PATH_JWFMOVIES = "tina.path.jwfmovies";
   static final String KEY_TINA_PATH_JWFSCRIPTS = "tina.path.jwfscripts";
+  static final String KEY_TINA_PATH_CUSTOM_VARIATIONS = "tina.path.custom_variations";
   static final String KEY_TINA_PATH_GRADIENTS = "tina.path.gradients";
   static final String KEY_TINA_RENDER_MOVIE_FRAMES = "tina.render.movie.frames";
   static final String KEY_TINA_PATH_MOVIEFLAMES = "tina.path.movie.flames";
@@ -159,7 +160,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
 
-  @Property(description = "Script drawer for the animation editor", category = PropertyCategory.MISC)
+  @Property(description = "Script drawer for the animation editor (please note that this NOT for scripts of the flame-editor)", category = PropertyCategory.MISC)
   private String scriptPath = null;
   private String lastInputScriptPath = null;
   private String lastOutputScriptPath = null;
@@ -215,8 +216,11 @@ public class Prefs extends ManagedObject {
   private String lastInputJWFMoviePath = null;
   private String lastOutputJWFMoviePath = null;
 
-  @Property(description = "JWFScript file drawer", category = PropertyCategory.TINA)
+  @Property(description = "Folder for user-scripts for the flame-editor", category = PropertyCategory.TINA)
   private String tinaJWFScriptPath = null;
+
+  @Property(description = "Folder for custom-variations (currently only used by the custom-variation-loader-script by CozyG)", category = PropertyCategory.TINA)
+  private String tinaCustomVariationsPath = null;
 
   @Property(description = "Drawer for raw motion data", category = PropertyCategory.TINA)
   private String tinaRawMotionDataPath = null;
@@ -732,6 +736,7 @@ public class Prefs extends ManagedObject {
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaRasterType = pSrc.tinaRasterType;
     tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
+    tinaCustomVariationsPath = pSrc.tinaCustomVariationsPath;
     tinaGradientPath = pSrc.tinaGradientPath;
     tinaSVGPath = pSrc.tinaSVGPath;
     baseMathLibType = pSrc.baseMathLibType;
@@ -1564,6 +1569,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaEditorProgressivePreviewMaxRenderQuality(double pTinaEditorProgressivePreviewMaxRenderQuality) {
     tinaEditorProgressivePreviewMaxRenderQuality = pTinaEditorProgressivePreviewMaxRenderQuality;
+  }
+
+  public String getTinaCustomVariationsPath() {
+    return tinaCustomVariationsPath;
+  }
+
+  public void setTinaCustomVariationsPath(String pTinaCustomVariationsPath) {
+    tinaCustomVariationsPath = pTinaCustomVariationsPath;
   }
 
 }

@@ -176,6 +176,7 @@ public class JWFScriptController {
     // Internal flames
     {
       String[] ressources = {
+          "Custom_Variation_Loader_GH",
           "LoonieSplits DT",
           "Buckballs by DT",
           "M&M Flower DT",
