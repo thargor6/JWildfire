@@ -589,7 +589,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           return;
         }
       }
-      flamePreviewHelper.refreshFlameImage(true, false, 1, false);
+      flamePreviewHelper.refreshFlameImage(true, false, 1);
     }
     finally {
       unprepareIFlame(renderId);
@@ -823,7 +823,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   public void renderFlameButton_clicked() {
-    flamePreviewHelper.refreshFlameImage(false, false, 1, false);
+    flamePreviewHelper.refreshFlameImage(false, false, 1);
   }
 
   public void loadImagesButton_clicked() {

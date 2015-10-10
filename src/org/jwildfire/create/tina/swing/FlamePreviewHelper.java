@@ -79,7 +79,7 @@ public class FlamePreviewHelper implements IterationObserver {
     imgPanel.repaint();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pForceBackgroundRender) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
@@ -431,7 +431,7 @@ public class FlamePreviewHelper implements IterationObserver {
       }
 
       if (updateDisplayExecuteThread != null) {
-        updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
+        updateDisplayExecuteThread.setPriority(Thread.MAX_PRIORITY);
       }
     }
     catch (Exception ex) {
@@ -486,7 +486,7 @@ public class FlamePreviewHelper implements IterationObserver {
     flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
     flame.setWidth(info.getImageWidth());
     flame.setHeight(info.getImageHeight());
-    flame.setSampleDensity(MAX_QUALITY);
+    flame.setSampleDensity(10.0);
     info.setRenderHDR(false);
     info.setRenderHDRIntensityMap(false);
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
@@ -529,8 +529,6 @@ public class FlamePreviewHelper implements IterationObserver {
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
   private final static int IMAGE_UPDATE_INC_INTERVAL = 10;
   private final static int MAX_UPDATE_INC_INTERVAL = 100;
-  private final static int MAX_PREVIEW_TIME = 15000;
-  private final static double MAX_QUALITY = 200.0;
 
   private class UpdateDisplayThread implements Runnable {
     private int nextImageUpdate;
@@ -539,8 +537,13 @@ public class FlamePreviewHelper implements IterationObserver {
     private boolean replaceImageFlag;
     private boolean finished;
     private SimpleImage image;
+    private int maxPreviewTimeInMilliseconds;
+    private double maxPreviewQuality;
 
     public UpdateDisplayThread(SimpleImage pImage) {
+      Prefs prefs = Prefs.getPrefs();
+      maxPreviewTimeInMilliseconds = Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderTime() * 1000.0);
+      maxPreviewQuality = prefs.getTinaEditorProgressivePreviewMaxRenderQuality();
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
       image = pImage;
@@ -569,7 +572,7 @@ public class FlamePreviewHelper implements IterationObserver {
         replaceImageFlag = false;
         while (!cancelSignalled) {
           double currQuality = getCurrQuality();
-          if (currQuality > MAX_QUALITY || System.currentTimeMillis() - t0 > MAX_PREVIEW_TIME) {
+          if (currQuality > maxPreviewQuality || System.currentTimeMillis() - t0 > maxPreviewTimeInMilliseconds) {
             cancelSignalled = true;
             for (AbstractRenderThread thread : threads.getRenderThreads()) {
               if (!thread.isFinished()) {

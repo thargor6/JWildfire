@@ -96,6 +96,8 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS = "tina.editor.controls.with_numbers";
@@ -243,8 +245,14 @@ public class Prefs extends ManagedObject {
   @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithColor = true;
 
-  @Property(description = "Turn on progressive preview-display in the main-editor by default ", category = PropertyCategory.TINA)
+  @Property(description = "Turn on progressive preview-display in the main-editor by default", category = PropertyCategory.TINA)
   private boolean tinaEditorProgressivePreview = true;
+
+  @Property(description = "Maximum render-time for the progressive preview-display", category = PropertyCategory.TINA)
+  private double tinaEditorProgressivePreviewMaxRenderTime = 15.0;
+
+  @Property(description = "Maximum render-quality for the progressive preview-display", category = PropertyCategory.TINA)
+  private double tinaEditorProgressivePreviewMaxRenderQuality = 200.0;
 
   @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithAntialiasing = true;
@@ -773,6 +781,8 @@ public class Prefs extends ManagedObject {
     tinaAdvancedCodeEditorColorFix = pSrc.tinaAdvancedCodeEditorColorFix;
     tinaAdvancedCodeEditorFontSize = pSrc.tinaAdvancedCodeEditorFontSize;
     tinaEditorProgressivePreview = pSrc.tinaEditorProgressivePreview;
+    tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
+    tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1538,6 +1548,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaEditorProgressivePreview(boolean pTinaEditorProgressivePreview) {
     tinaEditorProgressivePreview = pTinaEditorProgressivePreview;
+  }
+
+  public double getTinaEditorProgressivePreviewMaxRenderTime() {
+    return tinaEditorProgressivePreviewMaxRenderTime;
+  }
+
+  public void setTinaEditorProgressivePreviewMaxRenderTime(double pTinaEditorProgressivePreviewMaxRenderTime) {
+    tinaEditorProgressivePreviewMaxRenderTime = pTinaEditorProgressivePreviewMaxRenderTime;
+  }
+
+  public double getTinaEditorProgressivePreviewMaxRenderQuality() {
+    return tinaEditorProgressivePreviewMaxRenderQuality;
+  }
+
+  public void setTinaEditorProgressivePreviewMaxRenderQuality(double pTinaEditorProgressivePreviewMaxRenderQuality) {
+    tinaEditorProgressivePreviewMaxRenderQuality = pTinaEditorProgressivePreviewMaxRenderQuality;
   }
 
 }
