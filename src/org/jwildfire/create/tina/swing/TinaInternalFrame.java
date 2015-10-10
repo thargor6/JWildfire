@@ -2304,7 +2304,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaRenderFlameButton == null) {
       tinaRenderFlameButton = new JButton();
       tinaRenderFlameButton.setIconTextGap(0);
-      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
       tinaRenderFlameButton.setToolTipText("Render image");
@@ -2332,7 +2332,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderMainButton.setText("Render Fractal");
       renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
-      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive2.png")));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderImageButton_actionPerformed();
@@ -7680,23 +7680,6 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(toggleDrawGridButton);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton());
 
-      mouseTransformEditGradientButton = new JToggleButton();
-      mouseTransformEditGradientButton.setIconTextGap(0);
-      mouseTransformEditGradientButton.setFont(new Font("Dialog", Font.BOLD, 9));
-      mouseTransformEditGradientButton.setText("Grdnt");
-      mouseTransformEditGradientButton.setBounds(160, 4, 72, 24);
-      centerNorthPanel.add(mouseTransformEditGradientButton);
-      mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")));
-
-      mouseTransformEditGradientButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          expandGradientEditorFncPnl(mouseTransformEditGradientButton.isSelected());
-          tinaController.mouseTransformEditGradientButton_clicked();
-        }
-      });
-      mouseTransformEditGradientButton.setToolTipText("Edit gradient (use cursor-left and -right to control marker 1 and cursor-up and -down to control marker 2, press the 1 or 2 key for color choosers)");
-      mouseTransformEditGradientButton.setPreferredSize(new Dimension(72, 24));
-
       toggleTriangleWithColorsButton = new JToggleButton();
       toggleTriangleWithColorsButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7742,6 +7725,24 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDrawGuidesButton.setBounds(514, 4, 42, 24);
       toggleDrawGuidesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/guides.png")));
       centerNorthPanel.add(toggleDrawGuidesButton);
+
+      realtimePreviewToggleButton = new JToggleButton();
+      realtimePreviewToggleButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.realtimePreviewToggleButton_clicked();
+        }
+      });
+      realtimePreviewToggleButton.setToolTipText("Turn realtime (progressive) preview on/off");
+      realtimePreviewToggleButton.setText("Realtime");
+      realtimePreviewToggleButton.setSize(new Dimension(68, 24));
+      realtimePreviewToggleButton.setSelected(false);
+      realtimePreviewToggleButton.setPreferredSize(new Dimension(42, 24));
+      realtimePreviewToggleButton.setLocation(new Point(402, 4));
+      realtimePreviewToggleButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      realtimePreviewToggleButton.setBounds(379, 4, 90, 24);
+      realtimePreviewToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
+
+      centerNorthPanel.add(realtimePreviewToggleButton);
     }
     return centerNorthPanel;
   }
@@ -7816,7 +7817,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerDescLabel = new JTextArea();
       centerDescLabel.setEditable(false);
       centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
-      centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left are to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
+      centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
       centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
       centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
       centerCenterPanel.add(getMainPrevievPnl(), BorderLayout.CENTER);
@@ -7892,8 +7893,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(169, 14));
-      renderProgressBar.setLocation(new Point(232, 9));
+      renderProgressBar.setSize(new Dimension(126, 14));
+      renderProgressBar.setLocation(new Point(253, 9));
       renderProgressBar.setPreferredSize(new Dimension(169, 14));
       renderProgressBar.setStringPainted(true);
     }
@@ -10748,9 +10749,9 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformSlowButton.setFont(new Font("Dialog", Font.BOLD, 9));
       mouseTransformSlowButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/click.png")));
       mouseTransformSlowButton.setSelected(false);
-      mouseTransformSlowButton.setText("Fine");
-      mouseTransformSlowButton.setSize(new Dimension(68, 24));
-      mouseTransformSlowButton.setLocation(new Point(402, 4));
+      mouseTransformSlowButton.setText("Fine Edit");
+      mouseTransformSlowButton.setSize(new Dimension(92, 24));
+      mouseTransformSlowButton.setLocation(new Point(160, 4));
       mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
       mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
@@ -11656,6 +11657,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton nonlinearParams3PostButton;
   private JButton flameToBatchButton;
   private JPanel mainPrevievPnl;
+  private JToggleButton realtimePreviewToggleButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -17574,8 +17576,26 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getPanel_73() {
     if (panel_73 == null) {
       panel_73 = new JPanel();
-      panel_73.setPreferredSize(new Dimension(10, 20));
-      panel_73.setMinimumSize(new Dimension(10, 20));
+      panel_73.setPreferredSize(new Dimension(10, 24));
+      panel_73.setMinimumSize(new Dimension(10, 24));
+      panel_73.setLayout(null);
+
+      mouseTransformEditGradientButton = new JToggleButton();
+      mouseTransformEditGradientButton.setBounds(101, 0, 112, 24);
+      panel_73.add(mouseTransformEditGradientButton);
+      mouseTransformEditGradientButton.setIconTextGap(0);
+      mouseTransformEditGradientButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      mouseTransformEditGradientButton.setText("Edit gradient");
+      mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")));
+
+      mouseTransformEditGradientButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          expandGradientEditorFncPnl(mouseTransformEditGradientButton.isSelected());
+          tinaController.mouseTransformEditGradientButton_clicked();
+        }
+      });
+      mouseTransformEditGradientButton.setToolTipText("Edit gradient (use cursor-left and -right to control marker 1 and cursor-up and -down to control marker 2, press the 1 or 2 key for color choosers)");
+      mouseTransformEditGradientButton.setPreferredSize(new Dimension(72, 24));
     }
     return panel_73;
   }
@@ -24786,6 +24806,10 @@ public class TinaInternalFrame extends JInternalFrame {
       mainPrevievPnl.setLayout(null);
     }
     return mainPrevievPnl;
+  }
+
+  public JToggleButton getRealtimePreviewToggleButton() {
+    return realtimePreviewToggleButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
