@@ -7777,9 +7777,9 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel = new JPanel();
       centerWestPanel.setPreferredSize(new Dimension(74, 0));
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 3));
-      centerWestPanel.add(getTinaAppendToMovieButton());
-      centerWestPanel.add(getTinaAppendToDancingFlamesButton());
       centerWestPanel.add(getQuickMutationButton());
+      centerWestPanel.add(getTinaAppendToDancingFlamesButton());
+      centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
@@ -13771,7 +13771,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_5 == null) {
       label_5 = new JLabel();
       label_5.setText("");
-      label_5.setPreferredSize(new Dimension(42, 4));
+      label_5.setPreferredSize(new Dimension(42, 12));
       label_5.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_5;
@@ -14559,7 +14559,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (label_6 == null) {
       label_6 = new JLabel();
       label_6.setText("");
-      label_6.setPreferredSize(new Dimension(42, 4));
+      label_6.setPreferredSize(new Dimension(42, 12));
       label_6.setFont(new Font("Dialog", Font.BOLD, 10));
     }
     return label_6;
