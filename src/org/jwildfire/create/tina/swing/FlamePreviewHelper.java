@@ -608,14 +608,16 @@ public class FlamePreviewHelper implements IterationObserver {
                 replaceImageFlag = true;
               }
               currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
-              if (currQuality < 0.5)
-                currQuality *= 10;
-              else if (currQuality < 1.0)
-                currQuality *= 5;
-              for (AbstractRenderThread thread : threads.getRenderThreads()) {
-                thread.getTonemapper().setDensity(currQuality);
+              if (currQuality > 0.25) {
+                if (currQuality < 0.5)
+                  currQuality *= 10;
+                else if (currQuality < 1.0)
+                  currQuality *= 5;
+                for (AbstractRenderThread thread : threads.getRenderThreads()) {
+                  thread.getTonemapper().setDensity(currQuality);
+                }
+                displayUpdater.updateImage();
               }
-              displayUpdater.updateImage();
               nextImageUpdate = lastImageUpdateInterval;
             }
             else {

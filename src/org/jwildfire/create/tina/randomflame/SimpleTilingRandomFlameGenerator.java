@@ -40,18 +40,17 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 50.0);
 
-      String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
-      xForm.addVariation(0.01 + 0.4 * Math.random(), VariationFuncList.getVariationFuncInstance(fName, true));
-      xForm.addVariation(0.12 + 0.3 * Math.random(), VariationFuncList.getVariationFuncInstance("linear3D", true));
+      xForm.addVariation(0.01 + 0.4 * Math.random(), VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
+      xForm.addVariation(0.02 + 0.2 * Math.random(), VariationFuncList.getVariationFuncInstance("linear3D", true));
       xForm.setColor(0.87 + Math.random() * 0.1);
     }
     // 2nd XForm
     boolean twoPrimaryXForms = Math.random() > 0.33;
-    boolean linkedXForms = Math.random() < 0.25;
+    boolean linkedXForms = Math.random() < 0.4;
     if (twoPrimaryXForms) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
-      xForm.setWeight(0.4 + Math.random() * 150.0);
+      xForm.setWeight(0.4 + Math.random() * 72.0);
 
       xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true));
       xForm.setColorSymmetry(-1);
@@ -65,15 +64,15 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.25 + Math.random() * 0.5);
-      xForm.addVariation(1.0, VariationFuncList.getVariationFuncInstance("linear3D", true));
+      xForm.addVariation(0.5 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("linear3D", true));
       if (Math.random() > 0.75) {
-        XFormTransformService.scale(xForm, 0.25 + Math.random() * 0.75, Math.random() > 0.25, Math.random() < 0.75);
+        XFormTransformService.scale(xForm, 0.125 + Math.random() * 0.5, Math.random() > 0.5, Math.random() < 0.5);
       }
       else {
-        XFormTransformService.scale(xForm, 0.75 + Math.random() * 0.25, Math.random() > 0.25, Math.random() < 0.25);
+        XFormTransformService.scale(xForm, 0.75 + Math.random() * 0.25, Math.random() > 0.5, Math.random() < 0.5);
       }
-      XFormTransformService.rotate(xForm, Math.random() * 360.0);
-      XFormTransformService.localTranslate(xForm, -2.0 + Math.random() * 4.0, -2.0 + Math.random() * 4.0);
+      XFormTransformService.rotate(xForm, -45.0 + Math.random() * 90.0);
+      XFormTransformService.localTranslate(xForm, -2.0 + i * 0.5 + Math.random() * 4.0, -2.0 + i * 0.5 + Math.random() * 4.0);
       xForm.setColor(Math.random());
     }
     if (linkedXForms) {
