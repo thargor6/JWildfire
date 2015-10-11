@@ -79,6 +79,10 @@ public class FlamePreviewHelper implements IterationObserver {
     imgPanel.repaint();
   }
 
+  private boolean isProgressivePreviewEnabled(FlamePanelConfig cfg) {
+    return !isTransparencyEnabled() && !isDrawFocusPointEnabled(cfg) && cfg.isProgressivePreview();
+  }
+
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender) {
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
@@ -89,7 +93,7 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
     if (pReRender) {
-      if (!pQuickRender || !cfg.isProgressivePreview()) {
+      if (!pQuickRender || !isProgressivePreviewEnabled(cfg)) {
         SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
         if (img != null) {
           imgPanel.setImage(img);
@@ -106,7 +110,7 @@ public class FlamePreviewHelper implements IterationObserver {
       imgPanel.repaint();
     }
 
-    if (pReRender && cfg.isProgressivePreview() && pQuickRender) {
+    if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
       startBackgroundRender(imgPanel);
     }
 
@@ -177,11 +181,11 @@ public class FlamePreviewHelper implements IterationObserver {
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
             }
 
-            if (!cfg.isNoControls() && imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
-              renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected());
+            if (isDrawFocusPointEnabled(cfg)) {
+              renderer = new DrawFocusPointFlameRenderer(flame, prefs, isTransparencyEnabled());
             }
             else {
-              renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected(), false);
+              renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
             }
 
             if (pQuickRender) {
@@ -326,6 +330,14 @@ public class FlamePreviewHelper implements IterationObserver {
     return null;
   }
 
+  private boolean isDrawFocusPointEnabled(FlamePanelConfig cfg) {
+    return !cfg.isNoControls() && cfg.getMouseDragOperation() == MouseDragOperation.FOCUS;
+  }
+
+  private boolean isTransparencyEnabled() {
+    return toggleTransparencyButton != null && toggleTransparencyButton.isSelected();
+  }
+
   public SimpleImage fastRenderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
@@ -360,11 +372,11 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setHeight(info.getImageHeight());
           try {
             FlameRenderer renderer;
-            if (!cfg.isNoControls() && imgPanel.getConfig().getMouseDragOperation() == MouseDragOperation.FOCUS) {
-              renderer = new DrawFocusPointFlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected());
+            if (isDrawFocusPointEnabled(cfg)) {
+              renderer = new DrawFocusPointFlameRenderer(flame, prefs, isTransparencyEnabled());
             }
             else {
-              renderer = new FlameRenderer(flame, prefs, toggleTransparencyButton != null && toggleTransparencyButton.isSelected(), false);
+              renderer = new FlameRenderer(flame, prefs, isTransparencyEnabled(), false);
             }
             renderer.setProgressUpdater(null);
             flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
