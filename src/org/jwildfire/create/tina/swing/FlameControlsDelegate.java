@@ -244,7 +244,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(false);
+      owner.refreshFlameImage(true, false, 1, true);
     }
     finally {
       setNoRefresh(false);
@@ -391,7 +391,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(false);
+      owner.refreshFlameImage(true, false, 1, true);
     }
     finally {
       setNoRefresh(false);
@@ -985,7 +985,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(false);
+      owner.refreshFlameImage(true, false, 1, true);
     }
     finally {
       setNoRefresh(false);
@@ -1080,7 +1080,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(false);
+      owner.refreshFlameImage(true, false, 1, true);
     }
     finally {
       setNoRefresh(false);
@@ -1267,7 +1267,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setPostSymmetryType((PostSymmetryType) data.postSymmetryTypeCmb.getSelectedItem());
         enablePostSymmetryUI();
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1319,7 +1319,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setStereo3dMode((Stereo3dMode) data.stereo3dModeCmb.getSelectedItem());
         enableStereo3dUI();
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1330,7 +1330,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (flame != null) {
         owner.saveUndoPoint();
         flame.setStereo3dLeftEyeColor((Stereo3dColor) data.stereo3dLeftEyeColorCmb.getSelectedItem());
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1341,7 +1341,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (flame != null) {
         owner.saveUndoPoint();
         flame.setStereo3dRightEyeColor((Stereo3dColor) data.stereo3dRightEyeColorCmb.getSelectedItem());
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1385,7 +1385,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setStereo3dPreview((Stereo3dPreview) data.stereo3dPreviewCmb.getSelectedItem());
         enableStereo3dUI();
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1397,7 +1397,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (swap != flame.isStereo3dSwapSides()) {
         owner.saveUndoPoint();
         flame.setStereo3dSwapSides(swap);
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }
@@ -1436,7 +1436,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         shape.getDOFBlurShape().setDefaultParams(getCurrFlame());
         setupDOFParamsControls(getCurrFlame().getCamDOFShape());
         refreshBokehParams();
-        owner.refreshFlameImage(false);
+        owner.refreshFlameImage(true, false, 1, true);
       }
     }
   }

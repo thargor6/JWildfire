@@ -93,7 +93,7 @@ public abstract class AbstractControlsDelegate {
         pCurve.assignFromEnvelope(envelope);
         pCurve.setEnabled(true);
       }
-      owner.refreshFlameImage(false);
+      owner.refreshFlameImage(true, false, 1, true);
     }
   }
 

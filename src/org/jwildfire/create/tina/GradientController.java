@@ -361,7 +361,7 @@ public class GradientController {
         tinaController.setLastGradient(palette);
         tinaController.registerToEditor(tinaController.getCurrFlame(), tinaController.getCurrLayer());
         tinaController.refreshPaletteUI(palette);
-        tinaController.refreshFlameImage(false);
+        tinaController.refreshFlameImage(true, false, 1, true);
       }
     }
   }

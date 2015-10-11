@@ -127,7 +127,7 @@ public abstract class ChannelMixerPanelDelegate {
         owner.getOwner().undoManager.saveUndoPoint(flame);
       }
       curve.assignFromEnvelope(envelope);
-      owner.getOwner().refreshFlameImage(false);
+      owner.getOwner().refreshFlameImage(true, false, 1, true);
       refreshCurve(flame);
     }
   }
@@ -151,7 +151,7 @@ public abstract class ChannelMixerPanelDelegate {
     MotionCurve curve = getCurve(flame);
     curve.assignFromEnvelope(ctrl.getCurrEnvelope());
 
-    owner.getOwner().refreshFlameImage(false);
+    owner.getOwner().refreshFlameImage(true, false, 1, true);
   }
 
   public void setVisible(boolean pVisible) {

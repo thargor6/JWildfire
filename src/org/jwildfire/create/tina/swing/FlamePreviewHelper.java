@@ -79,7 +79,7 @@ public class FlamePreviewHelper implements IterationObserver {
     imgPanel.repaint();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender) {
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
@@ -88,10 +88,12 @@ public class FlamePreviewHelper implements IterationObserver {
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
-    if (!pQuickRender || !cfg.isProgressivePreview()) {
-      SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
-      if (img != null) {
-        imgPanel.setImage(img);
+    if (pReRender) {
+      if (!pQuickRender || !cfg.isProgressivePreview()) {
+        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
+        if (img != null) {
+          imgPanel.setImage(img);
+        }
       }
     }
 
@@ -104,7 +106,7 @@ public class FlamePreviewHelper implements IterationObserver {
       imgPanel.repaint();
     }
 
-    if (cfg.isProgressivePreview() && pQuickRender) {
+    if (pReRender && cfg.isProgressivePreview() && pQuickRender) {
       startBackgroundRender(imgPanel);
     }
 

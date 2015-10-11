@@ -126,7 +126,7 @@ public class AnimationController {
         if (tinaController.getCurrFlame() != null) {
           tinaController.getCurrFlame().setFrame(frame);
         }
-        tinaController.refreshFlameImage(false);
+        tinaController.refreshFlameImage(true, false, 1, true);
       }
       finally {
         tinaController.setNoRefresh(oldNoRefresh);
@@ -151,14 +151,14 @@ public class AnimationController {
           boolean oldNoControls = cfg.isNoControls();
           try {
             cfg.setNoControls(true);
-            tinaController.refreshFlameImage(true, true, 1);
+            tinaController.refreshFlameImage(true, true, 1, true);
           }
           finally {
             cfg.setNoControls(oldNoControls);
           }
         }
         else {
-          tinaController.refreshFlameImage(true, false, 1);
+          tinaController.refreshFlameImage(true, false, 1, true);
         }
 
       }
@@ -282,7 +282,7 @@ public class AnimationController {
           playPreviewThread = null;
           enablePlayPreviewControls();
           keyframesFrameField.setValue(oldFrame);
-          tinaController.refreshFlameImage(false);
+          tinaController.refreshFlameImage(true, false, 1, true);
         }
 
         @Override
@@ -291,7 +291,7 @@ public class AnimationController {
           playPreviewThread = null;
           enablePlayPreviewControls();
           keyframesFrameField.setValue(oldFrame);
-          tinaController.refreshFlameImage(false);
+          tinaController.refreshFlameImage(true, false, 1, true);
         }
       };
 
