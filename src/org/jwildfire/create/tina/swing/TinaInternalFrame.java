@@ -6638,8 +6638,36 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightREd.setLocation(new Point(238, 6));
       relWeightREd.setHasMinValue(true);
       relWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      relWeightREd.setBounds(6, 58, 81, 24);
+      relWeightREd.setBounds(6, 6, 81, 24);
       relWeightsEastPanel.add(relWeightREd);
+
+      relWeightsResetButton = new JButton();
+      relWeightsResetButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.saveUndoPoint();
+          tinaController.relWeightsResetButton_clicked();
+        }
+      });
+      relWeightsResetButton.setToolTipText("Reset all Xaos-values of the current transform to 1");
+      relWeightsResetButton.setText("Reset");
+      relWeightsResetButton.setPreferredSize(new Dimension(90, 24));
+      relWeightsResetButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsResetButton.setBounds(6, 90, 79, 24);
+      relWeightsEastPanel.add(relWeightsResetButton);
+
+      relWeightsResetAllButton = new JButton();
+      relWeightsResetAllButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.saveUndoPoint();
+          tinaController.relWeightsResetAllButton_clicked();
+        }
+      });
+      relWeightsResetAllButton.setToolTipText("Reset all Xaos-values of all transforms to 1");
+      relWeightsResetAllButton.setText("Reset all");
+      relWeightsResetAllButton.setPreferredSize(new Dimension(90, 24));
+      relWeightsResetAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsResetAllButton.setBounds(6, 148, 79, 24);
+      relWeightsEastPanel.add(relWeightsResetAllButton);
     }
     return relWeightsEastPanel;
   }
@@ -6657,7 +6685,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsZeroButton.setIcon(null);
       relWeightsZeroButton.setText("0");
       relWeightsZeroButton.setSize(new Dimension(36, 22));
-      relWeightsZeroButton.setLocation(new Point(6, 89));
+      relWeightsZeroButton.setLocation(new Point(6, 37));
       relWeightsZeroButton.setFont(new Font("Dialog", Font.BOLD, 10));
       relWeightsZeroButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -6682,7 +6710,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsOneButton.setIcon(null);
       relWeightsOneButton.setText("1");
       relWeightsOneButton.setSize(new Dimension(36, 22));
-      relWeightsOneButton.setLocation(new Point(51, 89));
+      relWeightsOneButton.setLocation(new Point(51, 37));
       relWeightsOneButton.setFont(new Font("Dialog", Font.BOLD, 10));
       relWeightsOneButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -11659,6 +11687,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton flameToBatchButton;
   private JPanel mainPrevievPnl;
   private JToggleButton realtimePreviewToggleButton;
+  private JButton relWeightsResetButton;
+  private JButton relWeightsResetAllButton;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -24811,6 +24841,14 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JToggleButton getRealtimePreviewToggleButton() {
     return realtimePreviewToggleButton;
+  }
+
+  public JButton getRelWeightsResetButton() {
+    return relWeightsResetButton;
+  }
+
+  public JButton getRelWeightsResetAllButton() {
+    return relWeightsResetAllButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

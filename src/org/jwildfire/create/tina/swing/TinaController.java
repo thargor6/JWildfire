@@ -1276,7 +1276,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = false;
       }
-      transformationTableClicked();
+      transformationChanged(true);
 
       data.shadingLightCmb.setSelectedIndex(0);
 
@@ -2209,6 +2209,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void transformationTableClicked() {
+    transformationChanged(false);
+  }
+
+  public void transformationChanged(boolean pReRender) {
     if (!gridRefreshing) {
       boolean oldGridRefreshing = gridRefreshing;
       boolean oldCmbRefreshing = cmbRefreshing;
@@ -2220,7 +2224,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         refreshXFormUI(xForm);
         xFormControls.enableControls(xForm);
-        refreshFlameImage(true, false, 1, false);
+        refreshFlameImage(true, false, 1, pReRender);
       }
       finally {
         cmbRefreshing = oldCmbRefreshing;
@@ -2631,7 +2635,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), amount, 0, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2641,7 +2645,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.rotate(getCurrXForm(), -amount, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2651,7 +2655,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), -amount, 0, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2659,14 +2663,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     forceTriangleMode();
     saveUndoPoint();
     XFormTransformService.flipHorizontal(getCurrXForm(), data.affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
+    transformationChanged(true);
   }
 
   public void xForm_flipVertical() {
     forceTriangleMode();
     saveUndoPoint();
     XFormTransformService.flipVertical(getCurrXForm(), data.affineEditPostTransformButton.isSelected());
-    transformationTableClicked();
+    transformationChanged(true);
   }
 
   public void xForm_enlarge() {
@@ -2675,7 +2679,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.scale(getCurrXForm(), amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2685,7 +2689,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.scale(getCurrXForm(), amount, data.affineScaleXButton.isSelected(), data.affineScaleYButton.isSelected(), data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2695,7 +2699,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.rotate(getCurrXForm(), amount, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -2705,18 +2709,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), 0, -amount, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
   public void gradientMarker_move(int pIdx, int pDeltaPos) {
     getFlamePanel().gradientMarker_move(pIdx, pDeltaPos);
-    transformationTableClicked();
+    transformationChanged(true);
   }
 
   public void gradientMarker_selectColor(int pIdx) {
     if (getFlamePanel().gradientMarker_selectColor(pIdx)) {
-      transformationTableClicked();
+      transformationChanged(true);
       refreshPaletteImg();
     }
   }
@@ -2727,7 +2731,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (MathLib.fabs(amount) > MathLib.EPSILON) {
       saveUndoPoint();
       XFormTransformService.globalTranslate(getCurrXForm(), 0, amount, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3590,7 +3594,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff21(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3607,7 +3611,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff20(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3616,7 +3620,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (xForm != null) {
       saveUndoPoint();
       XFormTransformService.reset(xForm, data.affineEditPostTransformButton.isSelected());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3846,7 +3850,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       saveUndoPoint();
       getCurrLayer().distributeColors();
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3855,7 +3859,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       saveUndoPoint();
       getCurrLayer().randomizeColors();
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3864,7 +3868,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       saveUndoPoint();
       getCurrLayer().randomizeColorSpeed();
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3913,7 +3917,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff01(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3930,7 +3934,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff11(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3947,7 +3951,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff00(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -3964,7 +3968,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         xForm.setCoeff10(value);
       }
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -4327,7 +4331,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       layer.getPalette().negativeColors();
       refreshPaletteUI(layer.getPalette());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -4337,7 +4341,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       layer.getPalette().reverseColors();
       refreshPaletteUI(layer.getPalette());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -4496,7 +4500,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       layer.getPalette().sort();
       refreshPaletteUI(layer.getPalette());
-      transformationTableClicked();
+      transformationChanged(true);
     }
   }
 
@@ -5531,7 +5535,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       return;
     }
     getCurrFlame().setEditPlane((EditPlane) data.affineEditPlaneCmb.getSelectedItem());
-    transformationTableClicked();
+    transformationChanged(true);
   }
 
   public void selectImageForBackgroundButton_actionPerformed(ActionEvent e) {
@@ -5880,5 +5884,57 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         refreshing = false;
       }
     }
+  }
+
+  public void relWeightsResetButton_clicked() {
+    if (gridRefreshing)
+      return;
+    Layer layer = getCurrLayer();
+    int transformRow = data.transformationsTable.getSelectedRow();
+    int xaosRow = data.relWeightsTable.getSelectedRow();
+    if (layer != null && transformRow >= 0 && transformRow < layer.getXForms().size()) {
+      for (int xaosIdx = 0; xaosIdx < layer.getXForms().get(transformRow).getModifiedWeights().length; xaosIdx++) {
+        layer.getXForms().get(transformRow).getModifiedWeights()[xaosIdx] = 1.0;
+      }
+      gridRefreshing = true;
+      try {
+        refreshRelWeightsTable();
+        if (xaosRow >= 0) {
+          data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
+        }
+        refreshFlameImage(true, false, 1, true);
+      }
+      finally {
+        gridRefreshing = false;
+      }
+    }
+    relWeightsTableClicked();
+  }
+
+  public void relWeightsResetAllButton_clicked() {
+    if (gridRefreshing)
+      return;
+    Layer layer = getCurrLayer();
+    int xaosRow = data.relWeightsTable.getSelectedRow();
+    if (layer != null) {
+      for (int transform = 0; transform < layer.getXForms().size(); transform++) {
+        for (int xaosIdx = 0; xaosIdx < layer.getXForms().get(transform).getModifiedWeights().length; xaosIdx++) {
+          layer.getXForms().get(transform).getModifiedWeights()[xaosIdx] = 1.0;
+        }
+      }
+      gridRefreshing = true;
+      try {
+        refreshRelWeightsTable();
+        if (xaosRow >= 0) {
+          data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
+        }
+        refreshFlameImage(true, false, 1, true);
+      }
+      finally {
+        gridRefreshing = false;
+      }
+    }
+
+    relWeightsTableClicked();
   }
 }
