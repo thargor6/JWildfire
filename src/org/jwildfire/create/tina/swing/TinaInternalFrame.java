@@ -17612,9 +17612,8 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_73.setLayout(null);
 
       mouseTransformEditGradientButton = new JToggleButton();
-      mouseTransformEditGradientButton.setBounds(101, 0, 112, 24);
+      mouseTransformEditGradientButton.setBounds(72, 0, 163, 24);
       panel_73.add(mouseTransformEditGradientButton);
-      mouseTransformEditGradientButton.setIconTextGap(0);
       mouseTransformEditGradientButton.setFont(new Font("Dialog", Font.BOLD, 9));
       mouseTransformEditGradientButton.setText("Edit gradient");
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")));
