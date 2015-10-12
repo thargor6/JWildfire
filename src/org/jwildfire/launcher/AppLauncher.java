@@ -34,7 +34,6 @@ public class AppLauncher {
     prefs = pPrefs;
   }
 
-  // TODO priority
   public String[] getLaunchCmd() throws Exception {
     String jdkPath = prefs.getJavaPath();
     if (jdkPath == null || jdkPath.length() == 0)
@@ -68,7 +67,7 @@ public class AppLauncher {
 
     //String cmd = javaCmd + " " + options + " -cp " + cp + " " + JWILDFIRE_MAIN_CLASS;
     List<String> cmd = new ArrayList<String>();
-    if (isWindows()) {
+    if (isWindows() && prefs.isLowPriority()) {
       cmd.add("cmd");
       cmd.add("/C");
       cmd.add("start");
@@ -99,7 +98,7 @@ public class AppLauncher {
     return cmd.toArray(new String[cmd.size()]);
   }
 
-  public boolean isWindows() {
+  public static boolean isWindows() {
     String os = System.getProperty("os.name").toLowerCase();
     return os.startsWith("win");
   }

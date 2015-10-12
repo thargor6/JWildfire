@@ -35,6 +35,7 @@ public class LauncherPrefsWriter {
     StringBuilder sb = new StringBuilder();
     addValue(sb, LauncherPrefs.KEY_JAVA_PATH, pPrefs.getJavaPath());
     addValue(sb, LauncherPrefs.KEY_MEMORY_MAX, pPrefs.getMaxMem());
+    addValue(sb, LauncherPrefs.KEY_PRIORITY_LOW, pPrefs.isLowPriority());
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + LauncherPrefs.PREFS_FILE, sb.toString());
   }
 
@@ -46,9 +47,9 @@ public class LauncherPrefsWriter {
     pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
   }
 
-  //  private void addValue(StringBuilder pSB, String pKey, boolean pValue) {
-  //    pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
-  //  }
+  private void addValue(StringBuilder pSB, String pKey, boolean pValue) {
+    pSB.append(pKey + "=" + String.valueOf(pValue) + "\n");
+  }
 
   //  private void addValue(StringBuilder pSB, String pKey, double pValue) {
   //    pSB.append(pKey + "=" + Tools.doubleToString(pValue) + "\n");

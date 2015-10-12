@@ -44,6 +44,10 @@ import org.jwildfire.create.tina.script.ui.FormBuilder;
  *       "randomize params":
  *             randomizes all params for the variation,
  *             in the range -2 to +2
+ *
+ *
+ * You may download a collection of example variations in the official forum: http://jwildfire.org/forum/viewtopic.php?f=23&t=1957&p=4917#p4917
+ *
  */ 
 
 // directory for custom code file, relative to location of this script

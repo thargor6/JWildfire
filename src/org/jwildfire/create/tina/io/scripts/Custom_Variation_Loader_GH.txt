@@ -4,6 +4,8 @@ Custom_Variation_Loader JWildfire script, version 6
            by Brad Stefanov, devilant1, chronologicaldot, and CozyG
      support for user-defined script-folder by thargor6
 
+You may download a collection of example variations in the official forum: http://jwildfire.org/forum/viewtopic.php?f=23&t=1957&p=4917#p4917 
+
 creates a "custom_full_wf" variation
    and populates it with custom variation code 
    selected by user from a list of possible custom variations

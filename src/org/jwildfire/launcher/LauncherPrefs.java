@@ -20,9 +20,11 @@ public class LauncherPrefs {
   static final String PREFS_FILE = "j-wildfire-launcher.properties";
   static final String KEY_JAVA_PATH = "java.path";
   static final String KEY_MEMORY_MAX = "memory.max";
+  static final String KEY_PRIORITY_LOW = "priority.low";
 
   private String javaPath = null;
   private int maxMem = 1024;
+  private boolean lowPriority = true;
 
   public String getJavaPath() {
     return javaPath;
@@ -46,6 +48,14 @@ public class LauncherPrefs {
 
   public void saveToFile() throws Exception {
     new LauncherPrefsWriter().writePrefs(this);
+  }
+
+  public boolean isLowPriority() {
+    return lowPriority;
+  }
+
+  public void setLowPriority(boolean pLowPriority) {
+    lowPriority = pLowPriority;
   }
 
 }

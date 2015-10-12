@@ -150,6 +150,7 @@ public class Launcher {
   private JTabbedPane mainTabbedPane;
   private JCheckBox debugCmb;
   private JButton btnAddJavaRuntime;
+  private JCheckBox lowPriorityCBx;
 
   private void loadImages() {
     frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
@@ -259,7 +260,7 @@ public class Launcher {
 
     launchButton = new JButton("Start");
     panel_2.add(launchButton);
-    launchButton.setBounds(226, 5, 128, 48);
+    launchButton.setBounds(220, 5, 128, 48);
     launchButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         launchAction();
@@ -271,11 +272,18 @@ public class Launcher {
     launchButton.setBackground(Color.BLACK);
 
     debugCmb = new JCheckBox("Debug");
-    debugCmb.setBounds(16, 20, 187, 18);
+    debugCmb.setBounds(59, 20, 144, 18);
     debugCmb.setToolTipText("Trace the launching process and record messages");
     debugCmb.setForeground(SystemColor.menu);
     debugCmb.setBackground(Color.BLACK);
     panel_2.add(debugCmb);
+
+    lowPriorityCBx = new JCheckBox("Low priority");
+    lowPriorityCBx.setToolTipText("Launch the application with low process-priority (recommended, but currently only works with Windows)");
+    lowPriorityCBx.setForeground(SystemColor.menu);
+    lowPriorityCBx.setBackground(Color.BLACK);
+    lowPriorityCBx.setBounds(393, 20, 135, 18);
+    panel_2.add(lowPriorityCBx);
 
     mainPanel = new JPanel();
     mainPanel.setBackground(Color.BLACK);
@@ -486,6 +494,7 @@ public class Launcher {
   private void savePrefs() throws Exception {
     prefs.setJavaPath((String) getJdkCmb().getSelectedItem());
     prefs.setMaxMem(Integer.parseInt(getMaxMemField().getText()));
+    prefs.setLowPriority(getLowPriorityCBx().isSelected());
     prefs.saveToFile();
   }
 
@@ -508,6 +517,14 @@ public class Launcher {
     }
     if (prefs.getMaxMem() > 0) {
       getMaxMemField().setText(String.valueOf(prefs.getMaxMem()));
+    }
+    if (AppLauncher.isWindows()) {
+      getLowPriorityCBx().setEnabled(true);
+      getLowPriorityCBx().setSelected(prefs.isLowPriority());
+    }
+    else {
+      getLowPriorityCBx().setEnabled(false);
+      getLowPriorityCBx().setSelected(false);
     }
   }
 
@@ -610,5 +627,9 @@ public class Launcher {
 
   public JButton getBtnAddJavaRuntime() {
     return btnAddJavaRuntime;
+  }
+
+  public JCheckBox getLowPriorityCBx() {
+    return lowPriorityCBx;
   }
 }
