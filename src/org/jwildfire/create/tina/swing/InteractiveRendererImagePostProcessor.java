@@ -16,19 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.render.AbstractRenderThread;
+import org.jwildfire.image.SimpleImage;
 
-public interface InteractiveRendererDisplayUpdater {
-  void initRender(int pThreadGroupSize);
-
-  void iterationFinished(AbstractRenderThread pEventSource, int pX, int pY);
-
-  void updateImage(InteractiveRendererImagePostProcessor pProcessor);
-
-  long getSampleCount();
-
-  void setShowPreview(boolean pShowPreview);
-
-  void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile);
-
+public interface InteractiveRendererImagePostProcessor {
+  void postProcessImage(SimpleImage pImage);
 }

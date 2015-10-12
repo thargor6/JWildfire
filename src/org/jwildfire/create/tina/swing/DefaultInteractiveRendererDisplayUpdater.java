@@ -51,8 +51,11 @@ public class DefaultInteractiveRendererDisplayUpdater implements InteractiveRend
   }
 
   @Override
-  public void updateImage() {
+  public void updateImage(InteractiveRendererImagePostProcessor pProcessor) {
     if (showPreview) {
+      if (pProcessor != null) {
+        pProcessor.postProcessImage(image);
+      }
       imageRootPanel.repaint();
     }
   }

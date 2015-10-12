@@ -222,7 +222,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   private synchronized void updateImage() {
-    displayUpdater.updateImage();
+    displayUpdater.updateImage(null);
   }
 
   @Override

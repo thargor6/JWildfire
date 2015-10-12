@@ -60,9 +60,12 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
   }
 
   @Override
-  public void updateImage() {
+  public void updateImage(InteractiveRendererImagePostProcessor pProcessor) {
     if (showPreview) {
       image.getBufferedImg().setRGB(0, 0, imageWidth, imageHeight, buffer, 0, imageWidth);
+      if (pProcessor != null) {
+        pProcessor.postProcessImage(image);
+      }
       imageRootPanel.repaint();
     }
   }

@@ -25,7 +25,7 @@ public class EmptyInteractiveRendererDisplayUpdater implements InteractiveRender
   }
 
   @Override
-  public void updateImage() {
+  public void updateImage(InteractiveRendererImagePostProcessor pProcessor) {
   }
 
   @Override

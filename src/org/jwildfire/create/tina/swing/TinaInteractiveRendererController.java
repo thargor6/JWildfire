@@ -821,7 +821,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   private void updateImage() {
-    displayUpdater.updateImage();
+    displayUpdater.updateImage(null);
   }
 
   private void initImage(int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
