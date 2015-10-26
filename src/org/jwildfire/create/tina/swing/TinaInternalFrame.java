@@ -583,7 +583,7 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private void initialize() {
     this.setSize(1188, 740);
-    this.setFont(new Font("Dialog", Font.PLAIN, 10));
+    this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(0, 0));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -613,7 +613,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (jContentPane == null) {
       jContentPane = new JPanel();
       jContentPane.setLayout(new BorderLayout());
-      jContentPane.setFont(new Font("Dialog", Font.PLAIN, 10));
+      jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
       jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
     }
@@ -629,7 +629,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (rootPanel == null) {
       rootPanel = new JPanel();
       rootPanel.setLayout(new BorderLayout());
-      rootPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      rootPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       rootPanel.add(getTinaNorthPanel(), BorderLayout.NORTH);
       rootPanel.add(getRandomBatchPanel(), BorderLayout.WEST);
       rootPanel.add(getTinaEastPanel(), BorderLayout.EAST);
@@ -691,7 +691,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastPanel = new JPanel();
       tinaEastPanel.setLayout(new BorderLayout());
       tinaEastPanel.setPreferredSize(new Dimension(328, 0));
-      tinaEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaEastPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaEastPanel.add(getTinaEastTabbedPane(), BorderLayout.CENTER);
     }
     return tinaEastPanel;
@@ -741,7 +741,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaSouthTabbedPane() {
     if (tinaSouthTabbedPane == null) {
       tinaSouthTabbedPane = new JTabbedPane();
-      tinaSouthTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSouthTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSouthTabbedPane.addTab("Camera ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/modify_view.png")), getTinaCameraPanel(), null);
 
       tinaDOFPanel = new JPanel();
@@ -798,7 +798,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFREd.setPreferredSize(new Dimension(100, 24));
       dofDOFREd.setLocation(new Point(100, 98));
       dofDOFREd.setHasMinValue(true);
-      dofDOFREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFREd.setBounds(102, 28, 100, 24);
       tinaDOFPanel.add(dofDOFREd);
 
@@ -808,7 +808,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblDepthOfField.setSize(new Dimension(94, 22));
       lblDepthOfField.setPreferredSize(new Dimension(94, 22));
       lblDepthOfField.setLocation(new Point(4, 98));
-      lblDepthOfField.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDepthOfField.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblDepthOfField.setBounds(6, 28, 94, 22);
       tinaDOFPanel.add(lblDepthOfField);
 
@@ -829,7 +829,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblArea.setSize(new Dimension(94, 22));
       lblArea.setPreferredSize(new Dimension(94, 22));
       lblArea.setLocation(new Point(4, 98));
-      lblArea.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblArea.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblArea.setBounds(6, 52, 94, 22);
       tinaDOFPanel.add(lblArea);
 
@@ -884,7 +884,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAreaREd.setPreferredSize(new Dimension(100, 24));
       dofDOFAreaREd.setLocation(new Point(100, 98));
       dofDOFAreaREd.setHasMinValue(true);
-      dofDOFAreaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFAreaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFAreaREd.setBounds(102, 52, 100, 24);
       tinaDOFPanel.add(dofDOFAreaREd);
 
@@ -894,7 +894,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblExponent.setSize(new Dimension(94, 22));
       lblExponent.setPreferredSize(new Dimension(94, 22));
       lblExponent.setLocation(new Point(4, 98));
-      lblExponent.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExponent.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblExponent.setBounds(6, 76, 94, 22);
       tinaDOFPanel.add(lblExponent);
 
@@ -949,7 +949,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFExponentREd.setPreferredSize(new Dimension(100, 24));
       dofDOFExponentREd.setLocation(new Point(100, 98));
       dofDOFExponentREd.setHasMinValue(true);
-      dofDOFExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFExponentREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFExponentREd.setBounds(102, 76, 100, 24);
       tinaDOFPanel.add(dofDOFExponentREd);
 
@@ -959,7 +959,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblCameraDistance.setSize(new Dimension(94, 22));
       lblCameraDistance.setPreferredSize(new Dimension(94, 22));
       lblCameraDistance.setLocation(new Point(4, 98));
-      lblCameraDistance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCameraDistance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblCameraDistance.setBounds(447, 4, 94, 22);
       tinaDOFPanel.add(lblCameraDistance);
 
@@ -1014,7 +1014,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofCamZREd.setPreferredSize(new Dimension(100, 24));
       dofCamZREd.setLocation(new Point(100, 98));
       dofCamZREd.setHasMinValue(true);
-      dofCamZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofCamZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofCamZREd.setBounds(543, 4, 100, 24);
       tinaDOFPanel.add(dofCamZREd);
 
@@ -1024,7 +1024,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusx.setSize(new Dimension(94, 22));
       lblFocusx.setPreferredSize(new Dimension(94, 22));
       lblFocusx.setLocation(new Point(4, 98));
-      lblFocusx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusx.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFocusx.setBounds(447, 52, 94, 22);
       tinaDOFPanel.add(lblFocusx);
 
@@ -1054,7 +1054,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusXREd.setSize(new Dimension(100, 24));
       dofFocusXREd.setPreferredSize(new Dimension(100, 24));
       dofFocusXREd.setLocation(new Point(100, 98));
-      dofFocusXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofFocusXREd.setBounds(543, 52, 100, 24);
       tinaDOFPanel.add(dofFocusXREd);
 
@@ -1088,7 +1088,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusy.setSize(new Dimension(94, 22));
       lblFocusy.setPreferredSize(new Dimension(94, 22));
       lblFocusy.setLocation(new Point(4, 98));
-      lblFocusy.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusy.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFocusy.setBounds(447, 76, 94, 22);
       tinaDOFPanel.add(lblFocusy);
 
@@ -1118,7 +1118,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusYREd.setSize(new Dimension(100, 24));
       dofFocusYREd.setPreferredSize(new Dimension(100, 24));
       dofFocusYREd.setLocation(new Point(100, 98));
-      dofFocusYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofFocusYREd.setBounds(543, 76, 100, 24);
       tinaDOFPanel.add(dofFocusYREd);
 
@@ -1152,7 +1152,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocusz.setSize(new Dimension(94, 22));
       lblFocusz.setPreferredSize(new Dimension(94, 22));
       lblFocusz.setLocation(new Point(4, 98));
-      lblFocusz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocusz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFocusz.setBounds(447, 100, 94, 22);
       tinaDOFPanel.add(lblFocusz);
 
@@ -1206,7 +1206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofFocusZREd.setSize(new Dimension(100, 24));
       dofFocusZREd.setPreferredSize(new Dimension(100, 24));
       dofFocusZREd.setLocation(new Point(100, 98));
-      dofFocusZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofFocusZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofFocusZREd.setBounds(543, 100, 100, 24);
       tinaDOFPanel.add(dofFocusZREd);
 
@@ -1216,7 +1216,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblDimishz.setSize(new Dimension(94, 22));
       lblDimishz.setPreferredSize(new Dimension(94, 22));
       lblDimishz.setLocation(new Point(4, 98));
-      lblDimishz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDimishz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblDimishz.setBounds(447, 28, 94, 22);
       tinaDOFPanel.add(lblDimishz);
 
@@ -1248,7 +1248,7 @@ public class TinaInternalFrame extends JInternalFrame {
       camDimishZREd.setPreferredSize(new Dimension(100, 24));
       camDimishZREd.setLocation(new Point(100, 98));
       camDimishZREd.setHasMinValue(true);
-      camDimishZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      camDimishZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       camDimishZREd.setBounds(543, 28, 100, 24);
       tinaDOFPanel.add(camDimishZREd);
 
@@ -1311,7 +1311,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionResetConfigButton.setMinimumSize(new Dimension(100, 24));
       leapMotionResetConfigButton.setMaximumSize(new Dimension(32000, 24));
       leapMotionResetConfigButton.setIconTextGap(2);
-      leapMotionResetConfigButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionResetConfigButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionResetConfigButton.setBounds(6, 114, 100, 24);
       panel_2.add(leapMotionResetConfigButton);
       panel_2.add(getLeapMotionToggleButton());
@@ -1325,7 +1325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionAddButton.setToolTipText("Add new motion listener");
       leapMotionAddButton.setText("Add");
       leapMotionAddButton.setPreferredSize(new Dimension(56, 24));
-      leapMotionAddButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionAddButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionAddButton.setBounds(6, 6, 90, 24);
       leapMotionAddButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1338,7 +1338,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionDeleteButton.setToolTipText("Delete motion listener");
       leapMotionDeleteButton.setText("Delete");
       leapMotionDeleteButton.setPreferredSize(new Dimension(90, 24));
-      leapMotionDeleteButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionDeleteButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionDeleteButton.setBounds(6, 80, 90, 24);
       leapMotionDeleteButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1351,7 +1351,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionDuplicateButton.setToolTipText("Duplicate motion listener");
       leapMotionDuplicateButton.setText("Duplicate");
       leapMotionDuplicateButton.setPreferredSize(new Dimension(90, 24));
-      leapMotionDuplicateButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionDuplicateButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionDuplicateButton.setBounds(6, 32, 90, 24);
       leapMotionDuplicateButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1372,7 +1372,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionClearButton.setToolTipText("Clear all motion listeners");
       leapMotionClearButton.setText("Clear");
       leapMotionClearButton.setPreferredSize(new Dimension(90, 24));
-      leapMotionClearButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionClearButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionClearButton.setBounds(6, 106, 90, 24);
       leapMotionClearButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1409,7 +1409,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setName("tinaPixelsPerUnitLbl");
       tinaPixelsPerUnitLbl.setText("Pixs per unit");
-      tinaPixelsPerUnitLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPixelsPerUnitLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl.setLocation(new Point(390, 78));
       tinaPixelsPerUnitLbl.setSize(new Dimension(68, 22));
       tinaPixelsPerUnitLbl.setPreferredSize(new Dimension(94, 22));
@@ -1418,49 +1418,49 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZoomLbl.setText("Zoom");
       tinaCameraZoomLbl.setLocation(new Point(390, 52));
       tinaCameraZoomLbl.setSize(new Dimension(68, 22));
-      tinaCameraZoomLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraZoomLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraZoomLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreYLbl = new JLabel();
       tinaCameraCentreYLbl.setName("tinaCameraCentreYLbl");
       tinaCameraCentreYLbl.setText("CentreY");
       tinaCameraCentreYLbl.setLocation(new Point(390, 28));
       tinaCameraCentreYLbl.setSize(new Dimension(68, 22));
-      tinaCameraCentreYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCentreYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCentreYLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCentreXLbl = new JLabel();
       tinaCameraCentreXLbl.setName("tinaCameraCentreXLbl");
       tinaCameraCentreXLbl.setText("CentreX");
       tinaCameraCentreXLbl.setLocation(new Point(390, 6));
       tinaCameraCentreXLbl.setSize(new Dimension(68, 22));
-      tinaCameraCentreXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCentreXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCentreXLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPerspectiveLbl = new JLabel();
       tinaCameraPerspectiveLbl.setName("tinaCameraPerspectiveLbl");
       tinaCameraPerspectiveLbl.setText("Perspective");
       tinaCameraPerspectiveLbl.setLocation(new Point(4, 76));
       tinaCameraPerspectiveLbl.setSize(new Dimension(68, 22));
-      tinaCameraPerspectiveLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraPerspectiveLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraPerspectiveLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraYawLbl = new JLabel();
       tinaCameraYawLbl.setName("tinaCameraYawLbl");
       tinaCameraYawLbl.setText("Yaw");
       tinaCameraYawLbl.setLocation(new Point(4, 52));
       tinaCameraYawLbl.setSize(new Dimension(68, 22));
-      tinaCameraYawLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraYawLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraYawLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPitchLbl = new JLabel();
       tinaCameraPitchLbl.setName("tinaCameraPitchLbl");
       tinaCameraPitchLbl.setText("Pitch");
       tinaCameraPitchLbl.setLocation(new Point(4, 28));
       tinaCameraPitchLbl.setSize(new Dimension(68, 22));
-      tinaCameraPitchLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraPitchLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraPitchLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraRollLbl = new JLabel();
       tinaCameraRollLbl.setName("tinaCameraRollLbl");
       tinaCameraRollLbl.setText("Roll");
       tinaCameraRollLbl.setLocation(new Point(4, 4));
       tinaCameraRollLbl.setSize(new Dimension(68, 22));
-      tinaCameraRollLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraRollLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraRollLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraPanel = new JPanel();
       tinaCameraPanel.setLayout(null);
@@ -1498,7 +1498,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosXREd.setLocation(new Point(456, 4));
       tinaCameraCamPosXREd.setLinkedMotionControlName("tinaCameraCamPosXSlider");
       tinaCameraCamPosXREd.setLinkedLabelControlName("tinaCameraCamPosXLbl");
-      tinaCameraCamPosXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosXREd.setBounds(840, 4, 100, 24);
       tinaCameraCamPosXREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1524,7 +1524,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosXLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosXLbl.setName("tinaCameraCamPosXLbl");
       tinaCameraCamPosXLbl.setLocation(new Point(390, 6));
-      tinaCameraCamPosXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosXLbl.setBounds(774, 4, 68, 22);
       tinaCameraPanel.add(tinaCameraCamPosXLbl);
 
@@ -1557,7 +1557,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosYLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosYLbl.setName("tinaCameraCamPosYLbl");
       tinaCameraCamPosYLbl.setLocation(new Point(390, 6));
-      tinaCameraCamPosYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosYLbl.setBounds(774, 28, 68, 22);
       tinaCameraPanel.add(tinaCameraCamPosYLbl);
 
@@ -1570,7 +1570,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosYREd.setLocation(new Point(456, 4));
       tinaCameraCamPosYREd.setLinkedMotionControlName("tinaCameraCamPosYSlider");
       tinaCameraCamPosYREd.setLinkedLabelControlName("tinaCameraCamPosYLbl");
-      tinaCameraCamPosYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosYREd.setBounds(840, 28, 100, 24);
       tinaCameraCamPosYREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1617,7 +1617,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosZLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosZLbl.setName("tinaCameraCamPosZLbl");
       tinaCameraCamPosZLbl.setLocation(new Point(390, 6));
-      tinaCameraCamPosZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaCameraCamPosZLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaCameraCamPosZLbl.setBounds(775, 52, 68, 22);
       tinaCameraPanel.add(tinaCameraCamPosZLbl);
 
@@ -1630,7 +1630,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCamPosZREd.setLocation(new Point(456, 4));
       tinaCameraCamPosZREd.setLinkedMotionControlName("tinaCameraCamPosZSlider");
       tinaCameraCamPosZREd.setLinkedLabelControlName("tinaCameraCamPosZLbl");
-      tinaCameraCamPosZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCamPosZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaCameraCamPosZREd.setBounds(841, 52, 100, 24);
       tinaCameraCamPosZREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1687,35 +1687,35 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdLbl.setText("Gamma threshold");
       tinaGammaThresholdLbl.setLocation(new Point(4, 73));
       tinaGammaThresholdLbl.setSize(new Dimension(94, 22));
-      tinaGammaThresholdLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGammaThresholdLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaThresholdLbl.setPreferredSize(new Dimension(94, 22));
       tinaVibrancyLbl = new JLabel();
       tinaVibrancyLbl.setName("tinaVibrancyLbl");
       tinaVibrancyLbl.setText("Vibrancy");
       tinaVibrancyLbl.setLocation(new Point(4, 96));
       tinaVibrancyLbl.setSize(new Dimension(94, 22));
-      tinaVibrancyLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaVibrancyLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVibrancyLbl.setPreferredSize(new Dimension(94, 22));
       tinaGammaLbl = new JLabel();
       tinaGammaLbl.setName("tinaGammaLbl");
       tinaGammaLbl.setText("Gamma");
       tinaGammaLbl.setLocation(new Point(4, 50));
       tinaGammaLbl.setSize(new Dimension(94, 22));
-      tinaGammaLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGammaLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaLbl.setPreferredSize(new Dimension(94, 22));
       tinaContrastLbl = new JLabel();
       tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast");
       tinaContrastLbl.setLocation(new Point(4, 27));
       tinaContrastLbl.setSize(new Dimension(94, 22));
-      tinaContrastLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaContrastLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaContrastLbl.setPreferredSize(new Dimension(94, 22));
       tinaBrightnessLbl = new JLabel();
       tinaBrightnessLbl.setName("tinaBrightnessLbl");
       tinaBrightnessLbl.setText("Brightness");
       tinaBrightnessLbl.setLocation(new Point(4, 4));
       tinaBrightnessLbl.setSize(new Dimension(94, 22));
-      tinaBrightnessLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaBrightnessLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaBrightnessLbl.setPreferredSize(new Dimension(94, 22));
       tinaColoringPanel = new JPanel();
       tinaColoringPanel.setLayout(null);
@@ -1752,7 +1752,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBackgroundColor.setSize(new Dimension(94, 22));
       lblBackgroundColor.setPreferredSize(new Dimension(94, 22));
       lblBackgroundColor.setLocation(new Point(4, 4));
-      lblBackgroundColor.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBackgroundColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBackgroundColor.setBounds(451, 17, 94, 22);
       tinaColoringPanel.add(lblBackgroundColor);
 
@@ -1762,7 +1762,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationLbl.setPreferredSize(new Dimension(94, 22));
       tinaSaturationLbl.setName("tinaSaturationLbl");
       tinaSaturationLbl.setLocation(new Point(4, 100));
-      tinaSaturationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSaturationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaturationLbl.setBounds(451, 96, 94, 22);
       tinaColoringPanel.add(tinaSaturationLbl);
 
@@ -1778,7 +1778,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationREd.setLinkedMotionControlName("tinaSaturationSlider");
       tinaSaturationREd.setLinkedLabelControlName("tinaSaturationLbl");
       tinaSaturationREd.setHasMinValue(true);
-      tinaSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSaturationREd.setBounds(547, 96, 100, 24);
       tinaSaturationREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1807,7 +1807,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationSlider.setMinimum(0);
       tinaSaturationSlider.setMaximum(200);
       tinaSaturationSlider.setLocation(new Point(202, 100));
-      tinaSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaturationSlider.setBounds(649, 96, 220, 19);
       tinaSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -1831,7 +1831,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFadeToWhite.setPreferredSize(new Dimension(94, 22));
       lblFadeToWhite.setName("tinaWhiteLevelLbl");
       lblFadeToWhite.setLocation(new Point(4, 100));
-      lblFadeToWhite.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFadeToWhite.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFadeToWhite.setBounds(451, 71, 94, 22);
       tinaColoringPanel.add(lblFadeToWhite);
 
@@ -1848,7 +1848,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWhiteLevelREd.setLinkedLabelControlName("tinaWhiteLevelLbl");
       tinaWhiteLevelREd.setHasMinValue(true);
       tinaWhiteLevelREd.setHasMaxValue(true);
-      tinaWhiteLevelREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaWhiteLevelREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaWhiteLevelREd.setBounds(547, 71, 100, 24);
       tinaWhiteLevelREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1878,7 +1878,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWhiteLevelSlider.setMinimum(20);
       tinaWhiteLevelSlider.setMaximum(500);
       tinaWhiteLevelSlider.setLocation(new Point(202, 100));
-      tinaWhiteLevelSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaWhiteLevelSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaWhiteLevelSlider.setBounds(649, 71, 220, 19);
       tinaWhiteLevelSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -1902,7 +1902,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundSelectImageBtn.setToolTipText("Select an image to use as a background");
       backgroundSelectImageBtn.setText("Select image...");
       backgroundSelectImageBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundSelectImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundSelectImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundSelectImageBtn.setBounds(604, 3, 148, 24);
       tinaColoringPanel.add(backgroundSelectImageBtn);
 
@@ -1910,7 +1910,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundRemoveImageBtn.setToolTipText("Remove the currently used image");
       backgroundRemoveImageBtn.setText("Remove image");
       backgroundRemoveImageBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundRemoveImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundRemoveImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundRemoveImageBtn.setBounds(604, 26, 148, 24);
       backgroundRemoveImageBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1929,7 +1929,7 @@ public class TinaInternalFrame extends JInternalFrame {
       foregroundOpacityField.setLinkedMotionControlName("foregroundOpacitySlider");
       foregroundOpacityField.setHasMinValue(true);
       foregroundOpacityField.setHasMaxValue(true);
-      foregroundOpacityField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      foregroundOpacityField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       foregroundOpacityField.setEditable(true);
       foregroundOpacityField.setBounds(848, 25, 100, 24);
       foregroundOpacityField.addChangeListener(new ChangeListener() {
@@ -1953,7 +1953,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblOpacity.setSize(new Dimension(94, 22));
       lblOpacity.setPreferredSize(new Dimension(94, 22));
       lblOpacity.setLocation(new Point(488, 2));
-      lblOpacity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOpacity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOpacity.setBounds(790, 25, 56, 22);
       tinaColoringPanel.add(lblOpacity);
 
@@ -1964,7 +1964,7 @@ public class TinaInternalFrame extends JInternalFrame {
       foregroundOpacitySlider.setName("foregroundOpacitySlider");
       foregroundOpacitySlider.setMaximum(2000);
       foregroundOpacitySlider.setLocation(new Point(686, 2));
-      foregroundOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      foregroundOpacitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       foregroundOpacitySlider.setBounds(950, 25, 220, 24);
       foregroundOpacitySlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -2015,7 +2015,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraRollREd.setPreferredSize(new Dimension(100, 24));
       tinaCameraRollREd.setLocation(new Point(71, 4));
       tinaCameraRollREd.setSize(new Dimension(100, 24));
-      tinaCameraRollREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraRollREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraRollREd;
   }
@@ -2051,7 +2051,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPitchREd.setText("");
       tinaCameraPitchREd.setLocation(new Point(71, 28));
       tinaCameraPitchREd.setSize(new Dimension(100, 24));
-      tinaCameraPitchREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraPitchREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraPitchREd;
   }
@@ -2087,7 +2087,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraYawREd.setText("");
       tinaCameraYawREd.setLocation(new Point(71, 52));
       tinaCameraYawREd.setSize(new Dimension(100, 24));
-      tinaCameraYawREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraYawREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraYawREd;
   }
@@ -2125,7 +2125,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraPerspectiveREd.setText("");
       tinaCameraPerspectiveREd.setLocation(new Point(71, 76));
       tinaCameraPerspectiveREd.setSize(new Dimension(100, 24));
-      tinaCameraPerspectiveREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraPerspectiveREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraPerspectiveREd;
   }
@@ -2261,7 +2261,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaLoadFlameButton.setText("Load Flame...");
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaLoadFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaLoadFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.loadFlameButton_actionPerformed(e);
@@ -2285,7 +2285,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaSaveFlameButton.setText("Save...");
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
-      tinaSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSaveFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaveFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.saveFlameButton_actionPerformed(e);
@@ -2306,7 +2306,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRenderFlameButton.setIconTextGap(0);
       tinaRenderFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
-      tinaRenderFlameButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      tinaRenderFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       tinaRenderFlameButton.setToolTipText("Render image");
       tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2331,7 +2331,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderMainButton.setMaximumSize(new Dimension(32000, 52));
       renderMainButton.setText("Render Fractal");
       renderMainButton.setPreferredSize(new Dimension(115, 24));
-      renderMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      renderMainButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive2.png")));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2373,7 +2373,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreXREd.setText("");
       tinaCameraCentreXREd.setLocation(new Point(456, 4));
       tinaCameraCentreXREd.setSize(new Dimension(100, 24));
-      tinaCameraCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCentreXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraCentreXREd;
   }
@@ -2409,7 +2409,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraCentreYREd.setText("");
       tinaCameraCentreYREd.setLocation(new Point(456, 28));
       tinaCameraCentreYREd.setSize(new Dimension(100, 24));
-      tinaCameraCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraCentreYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraCentreYREd;
   }
@@ -2505,7 +2505,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaCameraZoomREd.setText("");
       tinaCameraZoomREd.setLocation(new Point(456, 52));
       tinaCameraZoomREd.setSize(new Dimension(100, 24));
-      tinaCameraZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaCameraZoomREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaCameraZoomREd;
   }
@@ -2573,7 +2573,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessREd.setText("");
       tinaBrightnessREd.setSize(new Dimension(100, 24));
       tinaBrightnessREd.setLocation(new Point(100, 4));
-      tinaBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaBrightnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaBrightnessREd;
   }
@@ -2598,7 +2598,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaBrightnessSlider.setSize(new Dimension(220, 19));
       tinaBrightnessSlider.setPreferredSize(new Dimension(220, 19));
       tinaBrightnessSlider.setValue(0);
-      tinaBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaBrightnessSlider.setMaximum(2500);
       tinaBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -2640,7 +2640,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPixelsPerUnitREd.setText("");
       tinaPixelsPerUnitREd.setLocation(new Point(456, 76));
       tinaPixelsPerUnitREd.setSize(new Dimension(100, 24));
-      tinaPixelsPerUnitREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPixelsPerUnitREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPixelsPerUnitREd;
   }
@@ -2710,7 +2710,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastREd.setText("");
       tinaContrastREd.setLocation(new Point(100, 27));
       tinaContrastREd.setSize(new Dimension(100, 24));
-      tinaContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaContrastREd;
   }
@@ -2750,7 +2750,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaREd.setText("");
       tinaGammaREd.setLocation(new Point(100, 50));
       tinaGammaREd.setSize(new Dimension(100, 24));
-      tinaGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaGammaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaGammaREd;
   }
@@ -2791,7 +2791,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaVibrancyREd.setText("");
       tinaVibrancyREd.setLocation(new Point(100, 96));
       tinaVibrancyREd.setSize(new Dimension(100, 24));
-      tinaVibrancyREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaVibrancyREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaVibrancyREd;
   }
@@ -2831,7 +2831,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdREd.setText("");
       tinaGammaThresholdREd.setLocation(new Point(100, 73));
       tinaGammaThresholdREd.setSize(new Dimension(100, 24));
-      tinaGammaThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaGammaThresholdREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaGammaThresholdREd;
   }
@@ -2854,7 +2854,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastSlider.setMaximum(500);
       tinaContrastSlider.setMinimum(0);
       tinaContrastSlider.setValue(0);
-      tinaContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaContrastSlider.setSize(new Dimension(220, 19));
       tinaContrastSlider.setLocation(new Point(202, 27));
       tinaContrastSlider.setPreferredSize(new Dimension(220, 19));
@@ -2885,7 +2885,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaSlider.setMaximum(1000);
       tinaGammaSlider.setMinimum(0);
       tinaGammaSlider.setValue(0);
-      tinaGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGammaSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaSlider.setSize(new Dimension(220, 19));
       tinaGammaSlider.setLocation(new Point(202, 50));
       tinaGammaSlider.setPreferredSize(new Dimension(220, 19));
@@ -2916,7 +2916,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaVibrancySlider.setMaximum(100);
       tinaVibrancySlider.setMinimum(0);
       tinaVibrancySlider.setValue(0);
-      tinaVibrancySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaVibrancySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVibrancySlider.setSize(new Dimension(220, 19));
       tinaVibrancySlider.setLocation(new Point(202, 96));
       tinaVibrancySlider.setPreferredSize(new Dimension(220, 19));
@@ -2948,7 +2948,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGammaThresholdSlider.setMinimum(1);
       tinaGammaThresholdSlider.setValue(0);
       tinaGammaThresholdSlider.setMajorTickSpacing(1);
-      tinaGammaThresholdSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGammaThresholdSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGammaThresholdSlider.setSize(new Dimension(220, 19));
       tinaGammaThresholdSlider.setLocation(new Point(202, 73));
       tinaGammaThresholdSlider.setPreferredSize(new Dimension(220, 19));
@@ -2972,7 +2972,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddTransformationButton.setText("Add");
       tinaAddTransformationButton.setPreferredSize(new Dimension(56, 24));
       tinaAddTransformationButton.setToolTipText("Add new transform");
-      tinaAddTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAddTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaAddTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.addXForm();
@@ -3003,7 +3003,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      tinaEastTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaEastTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
       tinaEastTabbedPane.addTab("Scripts", null, getScriptPanel(), null);
     }
@@ -3020,7 +3020,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaTransformationsPanel = new JPanel();
       tinaTransformationsPanel.setLayout(new BorderLayout());
       tinaTransformationsPanel.setToolTipText("");
-      tinaTransformationsPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaTransformationsPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaTransformationsPanel.add(getTransformationsSplitPane(), BorderLayout.CENTER);
     }
     return tinaTransformationsPanel;
@@ -3050,7 +3050,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaDeleteTransformationButton == null) {
       tinaDeleteTransformationButton = new JButton();
       tinaDeleteTransformationButton.setText("Delete");
-      tinaDeleteTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaDeleteTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaDeleteTransformationButton.setToolTipText("Delete triangle");
       tinaDeleteTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -3073,7 +3073,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDuplicateTransformationButton.setText("Dupl");
       tinaDuplicateTransformationButton.setPreferredSize(new Dimension(56, 24));
       tinaDuplicateTransformationButton.setToolTipText("Duplicate transform");
-      tinaDuplicateTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaDuplicateTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaDuplicateTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.duplicateXForm();
@@ -3091,7 +3091,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JScrollPane getTinaTransformationsScrollPane() {
     if (tinaTransformationsScrollPane == null) {
       tinaTransformationsScrollPane = new JScrollPane();
-      tinaTransformationsScrollPane.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaTransformationsScrollPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaTransformationsScrollPane.setViewportView(getTinaTransformationsTable());
     }
     return tinaTransformationsScrollPane;
@@ -3106,7 +3106,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaTransformationsTable == null) {
       tinaTransformationsTable = new JTable();
       tinaTransformationsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      tinaTransformationsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaTransformationsTable.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaTransformationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
         @Override
@@ -3130,7 +3130,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getTinaTransformationsTabbedPane() {
     if (tinaTransformationsTabbedPane == null) {
       tinaTransformationsTabbedPane = new JTabbedPane();
-      tinaTransformationsTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaTransformationsTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaTransformationsTabbedPane.addTab("Affine transf", null, getTinaAffineTransformationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Xaos", null, getTinaModifiedWeightsPanel(), null);
@@ -3147,7 +3147,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSlider.setMinimum(-100);
       xFormModGammaSlider.setMaximum(100);
       xFormModGammaSlider.setLocation(new Point(125, 21));
-      xFormModGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModGammaSlider.setBounds(125, 6, 195, 22);
       xFormModGammaSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3172,7 +3172,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaREd.setLocation(new Point(70, 21));
       xFormModGammaREd.setHasMinValue(true);
       xFormModGammaREd.setHasMaxValue(true);
-      xFormModGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModGammaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModGammaREd.setBounds(70, 6, 55, 22);
       xFormModGammaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3195,7 +3195,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setSize(new Dimension(64, 22));
       label.setPreferredSize(new Dimension(64, 22));
       label.setLocation(new Point(6, 21));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label.setBounds(6, 6, 64, 22);
       panel_1.add(label);
 
@@ -3205,7 +3205,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setSize(new Dimension(64, 22));
       label_2.setPreferredSize(new Dimension(64, 22));
       label_2.setLocation(new Point(6, 47));
-      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_2.setBounds(6, 32, 64, 22);
       panel_1.add(label_2);
 
@@ -3216,7 +3216,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSpeedSlider.setMinimum(-100);
       xFormModGammaSpeedSlider.setMaximum(100);
       xFormModGammaSpeedSlider.setLocation(new Point(125, 47));
-      xFormModGammaSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModGammaSpeedSlider.setBounds(125, 32, 195, 22);
       xFormModGammaSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3241,7 +3241,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSpeedREd.setLocation(new Point(70, 47));
       xFormModGammaSpeedREd.setHasMinValue(true);
       xFormModGammaSpeedREd.setHasMaxValue(true);
-      xFormModGammaSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModGammaSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModGammaSpeedREd.setBounds(70, 32, 55, 22);
       xFormModGammaSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3263,7 +3263,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblContrast.setSize(new Dimension(64, 22));
       lblContrast.setPreferredSize(new Dimension(64, 22));
       lblContrast.setLocation(new Point(6, 21));
-      lblContrast.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblContrast.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblContrast.setBounds(6, 61, 64, 22);
       panel_1.add(lblContrast);
 
@@ -3277,7 +3277,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastREd.setLocation(new Point(70, 21));
       xFormModContrastREd.setHasMinValue(true);
       xFormModContrastREd.setHasMaxValue(true);
-      xFormModContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModContrastREd.setBounds(70, 61, 55, 22);
       xFormModContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3301,7 +3301,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSlider.setMinimum(-100);
       xFormModContrastSlider.setMaximum(100);
       xFormModContrastSlider.setLocation(new Point(125, 21));
-      xFormModContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModContrastSlider.setBounds(125, 61, 195, 22);
       xFormModContrastSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3323,7 +3323,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblContrstSpd.setSize(new Dimension(64, 22));
       lblContrstSpd.setPreferredSize(new Dimension(64, 22));
       lblContrstSpd.setLocation(new Point(6, 47));
-      lblContrstSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblContrstSpd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblContrstSpd.setBounds(6, 87, 64, 22);
       panel_1.add(lblContrstSpd);
 
@@ -3337,7 +3337,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSpeedREd.setLocation(new Point(70, 47));
       xFormModContrastSpeedREd.setHasMinValue(true);
       xFormModContrastSpeedREd.setHasMaxValue(true);
-      xFormModContrastSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModContrastSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModContrastSpeedREd.setBounds(70, 87, 55, 22);
       xFormModContrastSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3360,7 +3360,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSpeedSlider.setMinimum(-100);
       xFormModContrastSpeedSlider.setMaximum(100);
       xFormModContrastSpeedSlider.setLocation(new Point(125, 47));
-      xFormModContrastSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModContrastSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModContrastSpeedSlider.setBounds(125, 87, 195, 22);
       xFormModContrastSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3382,7 +3382,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSaturation.setSize(new Dimension(64, 22));
       lblSaturation.setPreferredSize(new Dimension(64, 22));
       lblSaturation.setLocation(new Point(6, 21));
-      lblSaturation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSaturation.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSaturation.setBounds(6, 117, 64, 22);
       panel_1.add(lblSaturation);
 
@@ -3396,7 +3396,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationREd.setLocation(new Point(70, 21));
       xFormModSaturationREd.setHasMinValue(true);
       xFormModSaturationREd.setHasMaxValue(true);
-      xFormModSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModSaturationREd.setBounds(70, 117, 55, 22);
       xFormModSaturationREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3419,7 +3419,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSlider.setMinimum(-100);
       xFormModSaturationSlider.setMaximum(100);
       xFormModSaturationSlider.setLocation(new Point(125, 21));
-      xFormModSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModSaturationSlider.setBounds(125, 117, 195, 22);
       xFormModSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3441,7 +3441,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSaturatSpd.setSize(new Dimension(64, 22));
       lblSaturatSpd.setPreferredSize(new Dimension(64, 22));
       lblSaturatSpd.setLocation(new Point(6, 47));
-      lblSaturatSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSaturatSpd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSaturatSpd.setBounds(6, 143, 64, 22);
       panel_1.add(lblSaturatSpd);
 
@@ -3455,7 +3455,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSpeedREd.setLocation(new Point(70, 47));
       xFormModSaturationSpeedREd.setHasMinValue(true);
       xFormModSaturationSpeedREd.setHasMaxValue(true);
-      xFormModSaturationSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModSaturationSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModSaturationSpeedREd.setBounds(70, 143, 55, 22);
       xFormModSaturationSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3478,7 +3478,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSpeedSlider.setMinimum(-100);
       xFormModSaturationSpeedSlider.setMaximum(100);
       xFormModSaturationSpeedSlider.setLocation(new Point(125, 47));
-      xFormModSaturationSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModSaturationSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModSaturationSpeedSlider.setBounds(125, 143, 195, 22);
       xFormModSaturationSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3503,7 +3503,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaRandomizeBtn.setToolTipText("Randomize local color-changing effects, either of the whole fractal or the selected transform");
       xFormModGammaRandomizeBtn.setText("Randomize");
       xFormModGammaRandomizeBtn.setPreferredSize(new Dimension(104, 24));
-      xFormModGammaRandomizeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaRandomizeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModGammaRandomizeBtn.setBounds(4, 172, 104, 24);
       panel_1.add(xFormModGammaRandomizeBtn);
 
@@ -3516,7 +3516,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaResetBtn.setToolTipText("Reset local color-changing effects, either of the whole fractal or the selected transform");
       xFormModGammaResetBtn.setText("Reset");
       xFormModGammaResetBtn.setPreferredSize(new Dimension(190, 24));
-      xFormModGammaResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModGammaResetBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModGammaResetBtn.setBounds(111, 172, 104, 24);
       panel_1.add(xFormModGammaResetBtn);
 
@@ -3542,7 +3542,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21Lbl.setText("O2");
       affineC21Lbl.setLocation(new Point(216, 30));
       affineC21Lbl.setSize(new Dimension(20, 22));
-      affineC21Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC21Lbl.setPreferredSize(new Dimension(24, 22));
       affineC20Lbl = new JLabel();
       affineC20Lbl.setName("affineC20Lbl");
@@ -3550,7 +3550,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC20Lbl.setText("O1");
       affineC20Lbl.setLocation(new Point(216, 6));
       affineC20Lbl.setSize(new Dimension(20, 22));
-      affineC20Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC20Lbl.setPreferredSize(new Dimension(24, 22));
       affineC11Lbl = new JLabel();
       affineC11Lbl.setName("affineC11Lbl");
@@ -3558,7 +3558,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC11Lbl.setText("Y2");
       affineC11Lbl.setLocation(new Point(108, 30));
       affineC11Lbl.setSize(new Dimension(20, 22));
-      affineC11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC11Lbl.setPreferredSize(new Dimension(24, 22));
       affineC10Lbl = new JLabel();
       affineC10Lbl.setName("affineC10Lbl");
@@ -3566,13 +3566,13 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC10Lbl.setText("Y1");
       affineC10Lbl.setLocation(new Point(108, 6));
       affineC10Lbl.setSize(new Dimension(20, 22));
-      affineC10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC10Lbl.setPreferredSize(new Dimension(24, 22));
       affineC01Lbl = new JLabel();
       affineC01Lbl.setName("affineC01Lbl");
       affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
       affineC01Lbl.setText("X2");
-      affineC01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC01Lbl.setLocation(new Point(0, 30));
       affineC01Lbl.setSize(new Dimension(20, 22));
       affineC01Lbl.setPreferredSize(new Dimension(24, 22));
@@ -3582,11 +3582,11 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC00Lbl.setText("X1");
       affineC00Lbl.setLocation(new Point(0, 6));
       affineC00Lbl.setSize(new Dimension(20, 22));
-      affineC00Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineC00Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineC00Lbl.setPreferredSize(new Dimension(24, 22));
       tinaAffineTransformationPanel = new JPanel();
       tinaAffineTransformationPanel.setLayout(null);
-      tinaAffineTransformationPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaAffineTransformationPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaAffineTransformationPanel.add(affineC00Lbl, null);
       tinaAffineTransformationPanel.add(getAffineC00REd(), null);
       tinaAffineTransformationPanel.add(affineC01Lbl, null);
@@ -3628,7 +3628,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setSize(new Dimension(138, 24));
       affinePreserveZButton.setPreferredSize(new Dimension(136, 24));
       affinePreserveZButton.setLocation(new Point(4, 181));
-      affinePreserveZButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affinePreserveZButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affinePreserveZButton.setBounds(218, 155, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
 
@@ -3644,7 +3644,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateEditMotionCurveBtn.setSize(new Dimension(70, 24));
       affineRotateEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
       affineRotateEditMotionCurveBtn.setLocation(new Point(0, 57));
-      affineRotateEditMotionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineRotateEditMotionCurveBtn.setBounds(0, 57, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
       tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
@@ -3661,7 +3661,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPlaneCmb.setMinimumSize(new Dimension(100, 24));
       affineEditPlaneCmb.setMaximumSize(new Dimension(32767, 24));
       affineEditPlaneCmb.setMaximumRowCount(32);
-      affineEditPlaneCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPlaneCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineEditPlaneCmb.setBounds(0, 127, 70, 24);
       tinaAffineTransformationPanel.add(affineEditPlaneCmb);
     }
@@ -3680,13 +3680,13 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1Lbl.setText("Params");
       nonlinearParams1Lbl.setSize(new Dimension(50, 22));
       nonlinearParams1Lbl.setLocation(new Point(14, 26));
-      nonlinearParams1Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Lbl = new JLabel();
       nonlinearVar1Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar1Lbl.setText("Var 1");
       nonlinearVar1Lbl.setSize(new Dimension(38, 22));
       nonlinearVar1Lbl.setLocation(new Point(4, 2));
-      nonlinearVar1Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaVariationPanel = new JPanel();
       tinaVariationPanel.setLayout(new BorderLayout());
       tinaVariationPanel.add(getNonlinearScrollPane(), BorderLayout.CENTER);
@@ -3749,14 +3749,14 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeLbl.setText("Draw mode");
       xFormDrawModeLbl.setSize(new Dimension(119, 22));
       xFormDrawModeLbl.setLocation(new Point(6, 75));
-      xFormDrawModeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormDrawModeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
       xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
       xFormOpacityLbl.setSize(new Dimension(49, 22));
       xFormOpacityLbl.setLocation(new Point(6, 101));
-      xFormOpacityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormOpacityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setName("xFormSymmetryLbl");
       xFormSymmetryLbl.setToolTipText("Color speed");
@@ -3764,14 +3764,14 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryLbl.setText("Speed");
       xFormSymmetryLbl.setSize(new Dimension(49, 22));
       xFormSymmetryLbl.setLocation(new Point(6, 47));
-      xFormSymmetryLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormSymmetryLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
       xFormColorLbl.setName("xFormColorLbl");
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
       xFormColorLbl.setSize(new Dimension(49, 22));
       xFormColorLbl.setLocation(new Point(6, 21));
-      xFormColorLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormColorLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaTransformationColorPanel = new JPanel();
       tinaTransformationColorPanel.setLayout(null);
       tinaTransformationColorPanel.add(xFormColorLbl, null);
@@ -3805,7 +3805,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRandomPointsREd.setBounds(259, 29, 80, 22);
       tinaPaletteRandomPointsREd.setPreferredSize(new Dimension(55, 22));
       tinaPaletteRandomPointsREd.setText("11");
-      tinaPaletteRandomPointsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteRandomPointsREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteRandomPointsREd;
   }
@@ -3822,7 +3822,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaRandomPaletteButton.setText("Random Gradient");
       tinaRandomPaletteButton.setPreferredSize(new Dimension(190, 24));
       tinaRandomPaletteButton.setActionCommand("Random Gradient");
-      tinaRandomPaletteButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaRandomPaletteButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaRandomPaletteButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.randomPaletteButton_actionPerformed(e);
@@ -3843,7 +3843,7 @@ public class TinaInternalFrame extends JInternalFrame {
       distributeColorsButton.setToolTipText("Distribute colors");
       distributeColorsButton.setBounds(243, 58, 79, 24);
       distributeColorsButton.setText("Distrib clr");
-      distributeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      distributeColorsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       distributeColorsButton.setPreferredSize(new Dimension(190, 24));
       distributeColorsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3905,7 +3905,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftLbl.setBounds(116, 7, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
-      tinaPaletteShiftLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteShiftLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteShiftLbl.setPreferredSize(new Dimension(64, 22));
 
       randomizeColorSpeedButton = new JButton();
@@ -3917,7 +3917,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomizeColorSpeedButton.setToolTipText("Randomize color speed");
       randomizeColorSpeedButton.setText("Rnd spd");
       randomizeColorSpeedButton.setPreferredSize(new Dimension(190, 24));
-      randomizeColorSpeedButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeColorSpeedButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomizeColorSpeedButton.setBounds(111, 58, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeColorSpeedButton);
 
@@ -3930,7 +3930,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomizeColorShiftButton.setToolTipText("Randomize color shift");
       randomizeColorShiftButton.setText("Rnd shift");
       randomizeColorShiftButton.setPreferredSize(new Dimension(190, 24));
-      randomizeColorShiftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeColorShiftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomizeColorShiftButton.setBounds(243, 6, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeColorShiftButton);
 
@@ -3943,7 +3943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomizeGradientButton.setToolTipText("Randomly select a gradient from the currently selected folder");
       randomizeGradientButton.setText("Rnd grd");
       randomizeGradientButton.setPreferredSize(new Dimension(190, 24));
-      randomizeGradientButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeGradientButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomizeGradientButton.setBounds(6, 6, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeGradientButton);
     }
@@ -3975,7 +3975,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSubTabbedPane.setTabPlacement(JTabbedPane.LEFT);
       tinaPaletteSubTabbedPane.setAutoscrolls(true);
       tinaPaletteSubTabbedPane.setToolTipText("");
-      tinaPaletteSubTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSubTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSubTabbedPane.addTab("Gradient Library", null, getGradientLibraryPanel(), null);
       tinaPaletteSubTabbedPane.addTab("Create new", null, getTinaPaletteCreatePanel(), "Create or import a gradient");
       tinaPaletteSubTabbedPane.addTab("Modify gradient", null, getTinaPaletteTransformPanel(), "Apply general modifications to the gradient");
@@ -4007,13 +4007,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaGrabPaletteFromImageButton.setToolTipText("Create a gradient from an image by choosing the most important 256 colors");
       tinaGrabPaletteFromImageButton.setText("Create from image");
       tinaGrabPaletteFromImageButton.setPreferredSize(new Dimension(190, 24));
-      tinaGrabPaletteFromImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGrabPaletteFromImageButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteCreatePanel.add(tinaGrabPaletteFromImageButton);
       tinaPaletteRandomPointsLbl = new JLabel();
       tinaPaletteRandomPointsLbl.setBounds(163, 34, 100, 14);
       tinaPaletteCreatePanel.add(tinaPaletteRandomPointsLbl);
       tinaPaletteRandomPointsLbl.setText("Random points");
-      tinaPaletteRandomPointsLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteRandomPointsLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteRandomPointsLbl.setPreferredSize(new Dimension(100, 22));
       tinaPaletteCreatePanel.add(getTinaPaletteRandomPointsREd());
       tinaPaletteCreatePanel.add(getCreatePaletteScrollPane());
@@ -4027,7 +4027,7 @@ public class TinaInternalFrame extends JInternalFrame {
       JLabel lblGradientGenerator = new JLabel();
       lblGradientGenerator.setText("Gradient generator");
       lblGradientGenerator.setPreferredSize(new Dimension(100, 22));
-      lblGradientGenerator.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGradientGenerator.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGradientGenerator.setAlignmentX(1.0f);
       lblGradientGenerator.setBounds(163, 8, 100, 14);
       tinaPaletteCreatePanel.add(lblGradientGenerator);
@@ -4038,7 +4038,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRandomGeneratorCmb.setMinimumSize(new Dimension(100, 24));
       tinaPaletteRandomGeneratorCmb.setMaximumSize(new Dimension(32767, 24));
       tinaPaletteRandomGeneratorCmb.setMaximumRowCount(32);
-      tinaPaletteRandomGeneratorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteRandomGeneratorCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteRandomGeneratorCmb.setBounds(259, 3, 80, 24);
       tinaPaletteCreatePanel.add(tinaPaletteRandomGeneratorCmb);
     }
@@ -4056,49 +4056,49 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessLbl.setText("Brightness");
       tinaPaletteBrightnessLbl.setSize(new Dimension(56, 22));
       tinaPaletteBrightnessLbl.setLocation(new Point(334, 84));
-      tinaPaletteBrightnessLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBrightnessLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGammaLbl = new JLabel();
       tinaPaletteGammaLbl.setText("Gamma");
       tinaPaletteGammaLbl.setSize(new Dimension(56, 22));
       tinaPaletteGammaLbl.setLocation(new Point(334, 58));
-      tinaPaletteGammaLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteGammaLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGammaLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteContrastLbl = new JLabel();
       tinaPaletteContrastLbl.setText("Contrast");
       tinaPaletteContrastLbl.setSize(new Dimension(56, 22));
       tinaPaletteContrastLbl.setLocation(new Point(334, 32));
-      tinaPaletteContrastLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteContrastLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteContrastLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteSaturationLbl = new JLabel();
       tinaPaletteSaturationLbl.setText("Saturation");
       tinaPaletteSaturationLbl.setSize(new Dimension(56, 22));
       tinaPaletteSaturationLbl.setLocation(new Point(334, 6));
-      tinaPaletteSaturationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSaturationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSaturationLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteHueLbl = new JLabel();
       tinaPaletteHueLbl.setText("Hue");
       tinaPaletteHueLbl.setSize(new Dimension(56, 22));
       tinaPaletteHueLbl.setLocation(new Point(6, 84));
-      tinaPaletteHueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteHueLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteHueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBlueLbl = new JLabel();
       tinaPaletteBlueLbl.setText("Blue");
       tinaPaletteBlueLbl.setSize(new Dimension(56, 22));
       tinaPaletteBlueLbl.setLocation(new Point(6, 58));
-      tinaPaletteBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlueLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBlueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGreenLbl = new JLabel();
       tinaPaletteGreenLbl.setText("Green");
       tinaPaletteGreenLbl.setSize(new Dimension(56, 22));
       tinaPaletteGreenLbl.setLocation(new Point(6, 32));
-      tinaPaletteGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteGreenLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGreenLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteRedLbl = new JLabel();
       tinaPaletteRedLbl.setText("Red");
       tinaPaletteRedLbl.setSize(new Dimension(56, 22));
       tinaPaletteRedLbl.setLocation(new Point(6, 6));
-      tinaPaletteRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteRedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteRedLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBalancingPanel = new JPanel();
       tinaPaletteBalancingPanel.setLayout(null);
@@ -4166,7 +4166,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftREd.setBounds(145, 6, 71, 24);
       tinaPaletteShiftREd.setPreferredSize(new Dimension(56, 24));
       tinaPaletteShiftREd.setText("0");
-      tinaPaletteShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteShiftREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteShiftREd;
   }
@@ -4198,7 +4198,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedREd.setText("0");
       tinaPaletteRedREd.setSize(new Dimension(56, 24));
       tinaPaletteRedREd.setLocation(new Point(62, 6));
-      tinaPaletteRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteRedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteRedREd;
   }
@@ -4230,7 +4230,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGreenREd.setText("0");
       tinaPaletteGreenREd.setSize(new Dimension(56, 24));
       tinaPaletteGreenREd.setLocation(new Point(62, 32));
-      tinaPaletteGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteGreenREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteGreenREd;
   }
@@ -4262,7 +4262,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueREd.setText("0");
       tinaPaletteBlueREd.setSize(new Dimension(56, 24));
       tinaPaletteBlueREd.setLocation(new Point(62, 58));
-      tinaPaletteBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteBlueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteBlueREd;
   }
@@ -4294,7 +4294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteHueREd.setText("0");
       tinaPaletteHueREd.setSize(new Dimension(56, 24));
       tinaPaletteHueREd.setLocation(new Point(62, 84));
-      tinaPaletteHueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteHueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteHueREd;
   }
@@ -4326,7 +4326,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationREd.setText("0");
       tinaPaletteSaturationREd.setSize(new Dimension(56, 24));
       tinaPaletteSaturationREd.setLocation(new Point(390, 6));
-      tinaPaletteSaturationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteSaturationREd;
   }
@@ -4358,7 +4358,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteContrastREd.setText("0");
       tinaPaletteContrastREd.setSize(new Dimension(56, 24));
       tinaPaletteContrastREd.setLocation(new Point(390, 32));
-      tinaPaletteContrastREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteContrastREd;
   }
@@ -4390,7 +4390,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGammaREd.setText("0");
       tinaPaletteGammaREd.setSize(new Dimension(56, 24));
       tinaPaletteGammaREd.setLocation(new Point(390, 58));
-      tinaPaletteGammaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteGammaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteGammaREd;
   }
@@ -4422,7 +4422,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessREd.setText("0");
       tinaPaletteBrightnessREd.setSize(new Dimension(56, 24));
       tinaPaletteBrightnessREd.setLocation(new Point(390, 84));
-      tinaPaletteBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteBrightnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return tinaPaletteBrightnessREd;
   }
@@ -4446,7 +4446,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteShiftSlider.setMaximum(25500);
       tinaPaletteShiftSlider.setMinimum(-25500);
       tinaPaletteShiftSlider.setValue(0);
-      tinaPaletteShiftSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteShiftSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteShiftSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteShiftSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4476,7 +4476,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteRedSlider.setValue(0);
       tinaPaletteRedSlider.setSize(new Dimension(204, 22));
       tinaPaletteRedSlider.setLocation(new Point(118, 6));
-      tinaPaletteRedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteRedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteRedSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteRedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4506,7 +4506,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGreenSlider.setValue(0);
       tinaPaletteGreenSlider.setSize(new Dimension(204, 22));
       tinaPaletteGreenSlider.setLocation(new Point(118, 32));
-      tinaPaletteGreenSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteGreenSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGreenSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteGreenSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4536,7 +4536,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlueSlider.setValue(0);
       tinaPaletteBlueSlider.setSize(new Dimension(204, 22));
       tinaPaletteBlueSlider.setLocation(new Point(118, 58));
-      tinaPaletteBlueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBlueSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteBlueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4566,7 +4566,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteHueSlider.setValue(0);
       tinaPaletteHueSlider.setSize(new Dimension(204, 22));
       tinaPaletteHueSlider.setLocation(new Point(118, 84));
-      tinaPaletteHueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteHueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteHueSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteHueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4596,7 +4596,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSaturationSlider.setValue(0);
       tinaPaletteSaturationSlider.setSize(new Dimension(204, 22));
       tinaPaletteSaturationSlider.setLocation(new Point(446, 6));
-      tinaPaletteSaturationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSaturationSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteSaturationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4626,7 +4626,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteContrastSlider.setValue(0);
       tinaPaletteContrastSlider.setSize(new Dimension(204, 22));
       tinaPaletteContrastSlider.setLocation(new Point(446, 32));
-      tinaPaletteContrastSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteContrastSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4656,7 +4656,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteGammaSlider.setValue(0);
       tinaPaletteGammaSlider.setSize(new Dimension(204, 22));
       tinaPaletteGammaSlider.setLocation(new Point(446, 58));
-      tinaPaletteGammaSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteGammaSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGammaSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteGammaSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -4686,7 +4686,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBrightnessSlider.setValue(0);
       tinaPaletteBrightnessSlider.setSize(new Dimension(204, 22));
       tinaPaletteBrightnessSlider.setLocation(new Point(446, 84));
-      tinaPaletteBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -5190,7 +5190,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaAddFinalTransformationButton == null) {
       tinaAddFinalTransformationButton = new JButton();
       tinaAddFinalTransformationButton.setActionCommand("Add Final");
-      tinaAddFinalTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAddFinalTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaAddFinalTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaAddFinalTransformationButton.setToolTipText("Add final transformation");
       tinaAddFinalTransformationButton.setText("Add Final");
@@ -5227,7 +5227,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC00REd.setText("");
       affineC00REd.setLocation(new Point(24, 6));
       affineC00REd.setSize(new Dimension(84, 24));
-      affineC00REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC00REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC00REd;
   }
@@ -5256,7 +5256,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC01REd.setText("");
       affineC01REd.setLocation(new Point(24, 30));
       affineC01REd.setSize(new Dimension(84, 24));
-      affineC01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC01REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC01REd;
   }
@@ -5286,7 +5286,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC10REd.setText("");
       affineC10REd.setLocation(new Point(132, 6));
       affineC10REd.setSize(new Dimension(84, 24));
-      affineC10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC10REd;
   }
@@ -5315,7 +5315,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC11REd.setText("");
       affineC11REd.setLocation(new Point(132, 30));
       affineC11REd.setSize(new Dimension(84, 24));
-      affineC11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC11REd;
   }
@@ -5344,7 +5344,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC20REd.setText("");
       affineC20REd.setLocation(new Point(240, 6));
       affineC20REd.setSize(new Dimension(84, 24));
-      affineC20REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC20REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC20REd;
   }
@@ -5373,7 +5373,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineC21REd.setText("");
       affineC21REd.setLocation(new Point(240, 30));
       affineC21REd.setSize(new Dimension(84, 24));
-      affineC21REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineC21REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineC21REd;
   }
@@ -5386,7 +5386,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineRotateLeftButton() {
     if (affineRotateLeftButton == null) {
       affineRotateLeftButton = new JButton();
-      affineRotateLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateLeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineRotateLeftButton.setPreferredSize(new Dimension(55, 24));
       affineRotateLeftButton.setSize(new Dimension(70, 24));
       affineRotateLeftButton.setLocation(new Point(0, 57));
@@ -5410,7 +5410,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineRotateRightButton() {
     if (affineRotateRightButton == null) {
       affineRotateRightButton = new JButton();
-      affineRotateRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineRotateRightButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineRotateRightButton.setPreferredSize(new Dimension(55, 24));
       affineRotateRightButton.setLocation(new Point(0, 102));
       affineRotateRightButton.setSize(new Dimension(70, 24));
@@ -5435,7 +5435,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineEnlargeButton() {
     if (affineEnlargeButton == null) {
       affineEnlargeButton = new JButton();
-      affineEnlargeButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineEnlargeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineEnlargeButton.setPreferredSize(new Dimension(55, 24));
       affineEnlargeButton.setLocation(new Point(92, 57));
       affineEnlargeButton.setSize(new Dimension(70, 24));
@@ -5459,7 +5459,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineShrinkButton() {
     if (affineShrinkButton == null) {
       affineShrinkButton = new JButton();
-      affineShrinkButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineShrinkButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineShrinkButton.setPreferredSize(new Dimension(55, 24));
       affineShrinkButton.setLocation(new Point(92, 102));
       affineShrinkButton.setSize(new Dimension(70, 24));
@@ -5488,7 +5488,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateAmountREd.setText("90");
       affineRotateAmountREd.setSize(new Dimension(70, 24));
       affineRotateAmountREd.setLocation(new Point(0, 80));
-      affineRotateAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineRotateAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineRotateAmountREd;
   }
@@ -5502,7 +5502,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (transformationsNorthPanel == null) {
       transformationsNorthPanel = new JPanel();
       transformationsNorthPanel.setLayout(new BorderLayout());
-      transformationsNorthPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      transformationsNorthPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       transformationsNorthPanel.add(getTrnsformationsEastPanel(), BorderLayout.EAST);
       transformationsNorthPanel.add(getTinaTransformationsScrollPane(), BorderLayout.CENTER);
     }
@@ -5521,7 +5521,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flowLayout.setHgap(3);
       flowLayout.setAlignment(FlowLayout.LEFT);
       trnsformationsEastPanel = new JPanel();
-      trnsformationsEastPanel.setFont(new Font("Dialog", Font.PLAIN, 10));
+      trnsformationsEastPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       trnsformationsEastPanel.setLayout(flowLayout);
       trnsformationsEastPanel.setPreferredSize(new Dimension(100, 0));
 
@@ -5559,7 +5559,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (transformationsSplitPane == null) {
       transformationsSplitPane = new JSplitPane();
       transformationsSplitPane.setDividerLocation(142);
-      transformationsSplitPane.setFont(new Font("Dialog", Font.PLAIN, 10));
+      transformationsSplitPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       transformationsSplitPane.setTopComponent(getTransformationsNorthPanel());
       transformationsSplitPane.setBottomComponent(getTinaTransformationsTabbedPane());
       transformationsSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -5579,7 +5579,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleAmountREd.setText("105");
       affineScaleAmountREd.setSize(new Dimension(70, 24));
       affineScaleAmountREd.setLocation(new Point(92, 80));
-      affineScaleAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineScaleAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineScaleAmountREd;
   }
@@ -5592,7 +5592,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineMoveUpButton() {
     if (affineMoveUpButton == null) {
       affineMoveUpButton = new JButton();
-      affineMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveUpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveUpButton.setPreferredSize(new Dimension(55, 24));
       affineMoveUpButton.setLocation(new Point(215, 57));
       affineMoveUpButton.setSize(new Dimension(70, 24));
@@ -5617,7 +5617,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getAffineMoveDownButton() {
     if (affineMoveDownButton == null) {
       affineMoveDownButton = new JButton();
-      affineMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveDownButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveDownButton.setPreferredSize(new Dimension(55, 24));
       affineMoveDownButton.setLocation(new Point(215, 102));
       affineMoveDownButton.setSize(new Dimension(70, 24));
@@ -5649,7 +5649,7 @@ public class TinaInternalFrame extends JInternalFrame {
       //      affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveLeft.gif")));
       affineMoveLeftButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-left.png")));
       affineMoveLeftButton.setToolTipText("Move triangle left");
-      affineMoveLeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveLeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveLeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.xForm_moveLeft(1.0);
@@ -5674,7 +5674,7 @@ public class TinaInternalFrame extends JInternalFrame {
       //      affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/moveRight.gif")));
       affineMoveRightButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/arrow-right.png")));
       affineMoveRightButton.setToolTipText("Move triangle right");
-      affineMoveRightButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineMoveRightButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMoveRightButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.xForm_moveRight(1.0);
@@ -5696,7 +5696,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMoveVertAmountREd.setText("0.5");
       affineMoveVertAmountREd.setSize(new Dimension(70, 24));
       affineMoveVertAmountREd.setLocation(new Point(215, 80));
-      affineMoveVertAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      affineMoveVertAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return affineMoveVertAmountREd;
   }
@@ -5712,7 +5712,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomBatchButton.setToolTipText("Create a batch of random flames");
       randomBatchButton.setMaximumSize(new Dimension(32000, 46));
       randomBatchButton.setMinimumSize(new Dimension(100, 46));
-      randomBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomBatchButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomBatchButton.setText("Random batch");
       randomBatchButton.setPreferredSize(new Dimension(115, 46));
       randomBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
@@ -5739,7 +5739,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1Cmb.setSize(new Dimension(108, 24));
       nonlinearVar1Cmb.setLocation(new Point(62, 2));
       nonlinearVar1Cmb.setMaximumRowCount(22);
-      nonlinearVar1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearVarCmbChanged(0);
@@ -5777,7 +5777,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearVar1REd.setText("");
       nonlinearVar1REd.setSize(new Dimension(81, 24));
       nonlinearVar1REd.setLocation(new Point(188, 2));
-      nonlinearVar1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return nonlinearVar1REd;
   }
@@ -5793,7 +5793,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams1Cmb.setSize(new Dimension(128, 24));
       nonlinearParams1Cmb.setLocation(new Point(62, 26));
-      nonlinearParams1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.nonlinearParamsCmbChanged(0);
@@ -5831,7 +5831,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1REd.setText("");
       nonlinearParams1REd.setSize(new Dimension(81, 24));
       nonlinearParams1REd.setLocation(new Point(188, 26));
-      nonlinearParams1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return nonlinearParams1REd;
   }
@@ -5875,7 +5875,7 @@ public class TinaInternalFrame extends JInternalFrame {
       button.setLocation(new Point(269, 26));
       button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-4-modified.png")));
       button.setText("");
-      button.setFont(new Font("Dialog", Font.BOLD, 10));
+      button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       button.setBounds(269, 2, 22, 24);
       nonlinearVar1Panel.add(button);
 
@@ -5885,7 +5885,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1PreButton.setSize(new Dimension(22, 22));
       nonlinearParams1PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams1PreButton.setLocation(new Point(269, 26));
-      nonlinearParams1PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams1PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams1PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5901,7 +5901,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1PostButton.setSize(new Dimension(22, 22));
       nonlinearParams1PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams1PostButton.setLocation(new Point(168, 2));
-      nonlinearParams1PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams1PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams1PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5927,7 +5927,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1LeftButton.setText("");
       nonlinearParams1LeftButton.setSize(new Dimension(22, 24));
       nonlinearParams1LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams1LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1LeftButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.nonlinearParamsLeftButtonClicked(0);
@@ -5946,13 +5946,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar2Panel == null) {
       nonlinearParams2Lbl = new JLabel();
       nonlinearParams2Lbl.setLocation(new Point(14, 26));
-      nonlinearParams2Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams2Lbl.setText("Params");
       nonlinearParams2Lbl.setSize(new Dimension(50, 22));
       nonlinearVar2Lbl = new JLabel();
       nonlinearVar2Lbl.setLocation(new Point(4, 2));
-      nonlinearVar2Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar2Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar2Lbl.setText("Var 2");
       nonlinearVar2Lbl.setSize(new Dimension(38, 22));
@@ -5974,7 +5974,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2PreButton.setSize(new Dimension(22, 22));
       nonlinearParams2PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2PreButton.setLocation(new Point(269, 26));
-      nonlinearParams2PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams2PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams2PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -5990,7 +5990,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2PostButton.setSize(new Dimension(22, 22));
       nonlinearParams2PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2PostButton.setLocation(new Point(168, 2));
-      nonlinearParams2PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams2PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams2PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6006,7 +6006,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2UpButton.setSize(new Dimension(22, 22));
       nonlinearParams2UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2UpButton.setLocation(new Point(269, 26));
-      nonlinearParams2UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams2UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams2UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6029,7 +6029,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar2Cmb == null) {
       nonlinearVar2Cmb = new JComboBox();
       nonlinearVar2Cmb.setLocation(new Point(62, 2));
-      nonlinearVar2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar2Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar2Cmb.setMaximumRowCount(22);
       nonlinearVar2Cmb.setSize(new Dimension(108, 24));
@@ -6067,7 +6067,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar2REd.setValueStep(0.01);
       nonlinearVar2REd.setLocation(new Point(188, 2));
-      nonlinearVar2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar2REd.setText("");
       nonlinearVar2REd.setSize(new Dimension(81, 24));
@@ -6084,7 +6084,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams2Cmb == null) {
       nonlinearParams2Cmb = new JComboBox();
       nonlinearParams2Cmb.setLocation(new Point(62, 26));
-      nonlinearParams2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams2Cmb.setSize(new Dimension(128, 24));
       nonlinearParams2Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -6121,7 +6121,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearParams2REd.setValueStep(0.05);
       nonlinearParams2REd.setLocation(new Point(188, 26));
-      nonlinearParams2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams2REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams2REd.setText("");
       nonlinearParams2REd.setSize(new Dimension(81, 24));
@@ -6138,7 +6138,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams2LeftButton == null) {
       nonlinearParams2LeftButton = new JButton();
       nonlinearParams2LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams2LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams2LeftButton.setText("");
@@ -6161,13 +6161,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar3Panel == null) {
       nonlinearParams3Lbl = new JLabel();
       nonlinearParams3Lbl.setLocation(new Point(14, 26));
-      nonlinearParams3Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams3Lbl.setText("Params");
       nonlinearParams3Lbl.setSize(new Dimension(50, 22));
       nonlinearVar3Lbl = new JLabel();
       nonlinearVar3Lbl.setLocation(new Point(4, 2));
-      nonlinearVar3Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar3Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar3Lbl.setText("Var 3");
       nonlinearVar3Lbl.setSize(new Dimension(38, 22));
@@ -6190,7 +6190,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3PreButton.setSize(new Dimension(22, 22));
       nonlinearParams3PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3PreButton.setLocation(new Point(269, 26));
-      nonlinearParams3PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams3PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams3PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6206,7 +6206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3PostButton.setSize(new Dimension(22, 22));
       nonlinearParams3PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3PostButton.setLocation(new Point(168, 2));
-      nonlinearParams3PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams3PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams3PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6222,7 +6222,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3UpButton.setSize(new Dimension(22, 22));
       nonlinearParams3UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3UpButton.setLocation(new Point(269, 26));
-      nonlinearParams3UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams3UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams3UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6245,7 +6245,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar3Cmb == null) {
       nonlinearVar3Cmb = new JComboBox();
       nonlinearVar3Cmb.setLocation(new Point(62, 2));
-      nonlinearVar3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar3Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar3Cmb.setMaximumRowCount(22);
       nonlinearVar3Cmb.setSize(new Dimension(108, 24));
@@ -6283,7 +6283,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar3REd.setValueStep(0.01);
       nonlinearVar3REd.setLocation(new Point(188, 2));
-      nonlinearVar3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar3REd.setText("");
       nonlinearVar3REd.setSize(new Dimension(81, 24));
@@ -6300,7 +6300,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams3Cmb == null) {
       nonlinearParams3Cmb = new JComboBox();
       nonlinearParams3Cmb.setLocation(new Point(62, 26));
-      nonlinearParams3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams3Cmb.setSize(new Dimension(128, 24));
       nonlinearParams3Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -6337,7 +6337,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams3REd.setLocation(new Point(188, 26));
-      nonlinearParams3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams3REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams3REd.setText("");
       nonlinearParams3REd.setSize(new Dimension(81, 24));
@@ -6354,7 +6354,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams3LeftButton == null) {
       nonlinearParams3LeftButton = new JButton();
       nonlinearParams3LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams3LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams3LeftButton.setText("");
@@ -6404,7 +6404,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorREd.setText("");
       xFormColorREd.setSize(new Dimension(70, 24));
       xFormColorREd.setLocation(new Point(55, 21));
-      xFormColorREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormColorREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormColorREd;
   }
@@ -6424,7 +6424,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormColorSlider.setValue(0);
       xFormColorSlider.setSize(new Dimension(195, 22));
       xFormColorSlider.setLocation(new Point(125, 21));
-      xFormColorSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormColorSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -6477,7 +6477,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetryREd.setText("");
       xFormSymmetryREd.setSize(new Dimension(70, 24));
       xFormSymmetryREd.setLocation(new Point(55, 47));
-      xFormSymmetryREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormSymmetryREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormSymmetryREd;
   }
@@ -6497,7 +6497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormSymmetrySlider.setValue(0);
       xFormSymmetrySlider.setLocation(new Point(125, 47));
       xFormSymmetrySlider.setSize(new Dimension(195, 22));
-      xFormSymmetrySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormSymmetrySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetrySlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -6549,7 +6549,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacityREd.setText("");
       xFormOpacityREd.setSize(new Dimension(70, 24));
       xFormOpacityREd.setLocation(new Point(55, 101));
-      xFormOpacityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormOpacityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormOpacityREd;
   }
@@ -6575,7 +6575,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(195, 22));
       xFormOpacitySlider.setLocation(new Point(125, 101));
-      xFormOpacitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormOpacitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.xFormOpacitySlider_changed();
@@ -6596,7 +6596,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
       xFormDrawModeCmb.setLocation(new Point(122, 77));
-      xFormDrawModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormDrawModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.saveUndoPoint();
@@ -6637,7 +6637,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightREd.setPreferredSize(new Dimension(81, 24));
       relWeightREd.setLocation(new Point(238, 6));
       relWeightREd.setHasMinValue(true);
-      relWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      relWeightREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       relWeightREd.setBounds(6, 6, 81, 24);
       relWeightsEastPanel.add(relWeightREd);
 
@@ -6651,7 +6651,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsResetButton.setToolTipText("Reset all Xaos-values of the current transform to 1");
       relWeightsResetButton.setText("Reset");
       relWeightsResetButton.setPreferredSize(new Dimension(90, 24));
-      relWeightsResetButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsResetButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       relWeightsResetButton.setBounds(6, 90, 79, 24);
       relWeightsEastPanel.add(relWeightsResetButton);
 
@@ -6665,7 +6665,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsResetAllButton.setToolTipText("Reset all Xaos-values of all transforms to 1");
       relWeightsResetAllButton.setText("Reset all");
       relWeightsResetAllButton.setPreferredSize(new Dimension(90, 24));
-      relWeightsResetAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsResetAllButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       relWeightsResetAllButton.setBounds(6, 148, 79, 24);
       relWeightsEastPanel.add(relWeightsResetAllButton);
     }
@@ -6686,7 +6686,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsZeroButton.setText("0");
       relWeightsZeroButton.setSize(new Dimension(36, 22));
       relWeightsZeroButton.setLocation(new Point(6, 37));
-      relWeightsZeroButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsZeroButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       relWeightsZeroButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.saveUndoPoint();
@@ -6711,7 +6711,7 @@ public class TinaInternalFrame extends JInternalFrame {
       relWeightsOneButton.setText("1");
       relWeightsOneButton.setSize(new Dimension(36, 22));
       relWeightsOneButton.setLocation(new Point(51, 37));
-      relWeightsOneButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      relWeightsOneButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       relWeightsOneButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.saveUndoPoint();
@@ -6744,7 +6744,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (relWeightsTable == null) {
       relWeightsTable = new JTable();
       relWeightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      relWeightsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      relWeightsTable.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       relWeightsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
         @Override
@@ -6773,7 +6773,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newFlameButton.setMnemonic(KeyEvent.VK_N);
       newFlameButton.setText("New from scratch");
       newFlameButton.setActionCommand("New from scratch");
-      newFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      newFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       newFlameButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/document-new-7.png")));
       newFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -6889,7 +6889,7 @@ public class TinaInternalFrame extends JInternalFrame {
       animateGlobalScriptLbl.setName("animateGlobalScriptLbl");
       animateGlobalScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateGlobalScriptLbl.setText("01");
-      animateGlobalScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateGlobalScriptLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript1REd = new JWFNumberField();
       swfAnimatorGlobalScript1REd.setBounds(213, 0, 100, 24);
@@ -6900,7 +6900,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript1REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript1REd.setMotionPropertyName("globalScript1");
       swfAnimatorGlobalScript1REd.setLinkedLabelControlName("animateGlobalScriptLbl");
-      swfAnimatorGlobalScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblGlobalScript = new JLabel();
       lblGlobalScript.setBounds(0, 23, 21, 22);
@@ -6908,14 +6908,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript.setName("lblGlobalScript");
       lblGlobalScript.setText("02");
       lblGlobalScript.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript2Cmb = new JComboBox();
       swfAnimatorGlobalScript2Cmb.setBounds(22, 23, 186, 24);
       panel_85.add(swfAnimatorGlobalScript2Cmb);
       swfAnimatorGlobalScript2Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript2Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript2REd = new JWFNumberField();
       swfAnimatorGlobalScript2REd.setBounds(213, 23, 100, 24);
@@ -6926,7 +6926,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript2REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript2REd.setMotionPropertyName("globalScript2");
       swfAnimatorGlobalScript2REd.setLinkedLabelControlName("lblGlobalScript");
-      swfAnimatorGlobalScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblGlobalScript_1 = new JLabel();
       lblGlobalScript_1.setBounds(0, 46, 21, 22);
@@ -6934,14 +6934,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_1.setName("lblGlobalScript_1");
       lblGlobalScript_1.setText("03");
       lblGlobalScript_1.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript3Cmb = new JComboBox();
       swfAnimatorGlobalScript3Cmb.setBounds(22, 46, 186, 24);
       panel_85.add(swfAnimatorGlobalScript3Cmb);
       swfAnimatorGlobalScript3Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript3Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript3REd = new JWFNumberField();
       swfAnimatorGlobalScript3REd.setBounds(213, 46, 100, 24);
@@ -6952,7 +6952,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript3REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript3REd.setMotionPropertyName("globalScript3");
       swfAnimatorGlobalScript3REd.setLinkedLabelControlName("lblGlobalScript_1");
-      swfAnimatorGlobalScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblGlobalScript_2 = new JLabel();
       lblGlobalScript_2.setBounds(0, 69, 21, 22);
@@ -6960,14 +6960,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_2.setName("lblGlobalScript_2");
       lblGlobalScript_2.setText("04");
       lblGlobalScript_2.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript4Cmb = new JComboBox();
       swfAnimatorGlobalScript4Cmb.setBounds(22, 69, 186, 24);
       panel_85.add(swfAnimatorGlobalScript4Cmb);
       swfAnimatorGlobalScript4Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript4Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript4REd = new JWFNumberField();
       swfAnimatorGlobalScript4REd.setBounds(213, 69, 100, 24);
@@ -6978,7 +6978,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript4REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript4REd.setMotionPropertyName("globalScript4");
       swfAnimatorGlobalScript4REd.setLinkedLabelControlName("lblGlobalScript_2");
-      swfAnimatorGlobalScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblGlobalScript_3 = new JLabel();
       lblGlobalScript_3.setBounds(0, 92, 21, 22);
@@ -6986,14 +6986,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_3.setName("lblGlobalScript_3");
       lblGlobalScript_3.setText("05");
       lblGlobalScript_3.setPreferredSize(new Dimension(94, 22));
-      lblGlobalScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript5Cmb = new JComboBox();
       swfAnimatorGlobalScript5Cmb.setBounds(22, 92, 186, 24);
       panel_85.add(swfAnimatorGlobalScript5Cmb);
       swfAnimatorGlobalScript5Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript5Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorGlobalScript5REd = new JWFNumberField();
       swfAnimatorGlobalScript5REd.setBounds(213, 92, 100, 24);
@@ -7004,20 +7004,20 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript5REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript5REd.setMotionPropertyName("globalScript5");
       swfAnimatorGlobalScript5REd.setLinkedLabelControlName("lblGlobalScript_3");
-      swfAnimatorGlobalScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       lblGlobalScript_4 = new JLabel();
       lblGlobalScript_4.setText("06");
       lblGlobalScript_4.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_4.setName("lblGlobalScript_4");
-      lblGlobalScript_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_4.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_4.setBounds(0, 115, 21, 22);
       panel_85.add(lblGlobalScript_4);
 
       swfAnimatorGlobalScript6Cmb = new JComboBox();
       swfAnimatorGlobalScript6Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript6Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript6Cmb.setBounds(22, 115, 186, 24);
       swfAnimatorGlobalScript6Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7035,7 +7035,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript6REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript6REd.setMotionPropertyName("globalScript6");
       swfAnimatorGlobalScript6REd.setLinkedLabelControlName("lblGlobalScript_4");
-      swfAnimatorGlobalScript6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript6REd.setBounds(213, 115, 100, 24);
       swfAnimatorGlobalScript6REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7054,7 +7054,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript7Cmb = new JComboBox();
       swfAnimatorGlobalScript7Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript7Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript7Cmb.setBounds(22, 138, 186, 24);
       swfAnimatorGlobalScript7Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7069,7 +7069,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_5.setText("07");
       lblGlobalScript_5.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_5.setName("lblGlobalScript_5");
-      lblGlobalScript_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_5.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_5.setBounds(0, 138, 21, 22);
       panel_85.add(lblGlobalScript_5);
 
@@ -7080,7 +7080,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript7REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript7REd.setMotionPropertyName("globalScript7");
       swfAnimatorGlobalScript7REd.setLinkedLabelControlName("lblGlobalScript_5");
-      swfAnimatorGlobalScript7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript7REd.setBounds(213, 138, 100, 24);
       swfAnimatorGlobalScript7REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7100,14 +7100,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_6.setText("08");
       lblGlobalScript_6.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_6.setName("lblGlobalScript_6");
-      lblGlobalScript_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_6.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_6.setBounds(0, 161, 21, 22);
       panel_85.add(lblGlobalScript_6);
 
       swfAnimatorGlobalScript8Cmb = new JComboBox();
       swfAnimatorGlobalScript8Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript8Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript8Cmb.setBounds(22, 161, 186, 24);
       swfAnimatorGlobalScript8Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7125,7 +7125,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript8REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript8REd.setMotionPropertyName("globalScript8");
       swfAnimatorGlobalScript8REd.setLinkedLabelControlName("lblGlobalScript_6");
-      swfAnimatorGlobalScript8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript8REd.setBounds(213, 161, 100, 24);
       swfAnimatorGlobalScript8REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7145,14 +7145,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_7.setText("09");
       lblGlobalScript_7.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_7.setName("lblGlobalScript_7");
-      lblGlobalScript_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_7.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_7.setBounds(0, 184, 21, 22);
       panel_85.add(lblGlobalScript_7);
 
       swfAnimatorGlobalScript9Cmb = new JComboBox();
       swfAnimatorGlobalScript9Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript9Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript9Cmb.setBounds(22, 184, 186, 24);
       swfAnimatorGlobalScript9Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7170,7 +7170,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript9REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript9REd.setMotionPropertyName("globalScript9");
       swfAnimatorGlobalScript9REd.setLinkedLabelControlName("lblGlobalScript_7");
-      swfAnimatorGlobalScript9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript9REd.setBounds(213, 184, 100, 24);
       swfAnimatorGlobalScript9REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7190,14 +7190,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_8.setText("10");
       lblGlobalScript_8.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_8.setName("lblGlobalScript_8");
-      lblGlobalScript_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_8.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_8.setBounds(0, 207, 21, 22);
       panel_85.add(lblGlobalScript_8);
 
       swfAnimatorGlobalScript10Cmb = new JComboBox();
       swfAnimatorGlobalScript10Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript10Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript10Cmb.setBounds(22, 207, 186, 24);
       swfAnimatorGlobalScript10Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7215,7 +7215,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript10REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript10REd.setMotionPropertyName("globalScript10");
       swfAnimatorGlobalScript10REd.setLinkedLabelControlName("lblGlobalScript_8");
-      swfAnimatorGlobalScript10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript10REd.setBounds(213, 207, 100, 24);
       swfAnimatorGlobalScript10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7235,14 +7235,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_9.setText("11");
       lblGlobalScript_9.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_9.setName("lblGlobalScript_9");
-      lblGlobalScript_9.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_9.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_9.setBounds(0, 230, 21, 22);
       panel_85.add(lblGlobalScript_9);
 
       swfAnimatorGlobalScript11Cmb = new JComboBox();
       swfAnimatorGlobalScript11Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript11Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript11Cmb.setBounds(22, 230, 186, 24);
       swfAnimatorGlobalScript11Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7260,7 +7260,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript11REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript11REd.setMotionPropertyName("globalScript11");
       swfAnimatorGlobalScript11REd.setLinkedLabelControlName("lblGlobalScript_9");
-      swfAnimatorGlobalScript11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript11REd.setBounds(213, 230, 100, 24);
       swfAnimatorGlobalScript11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7280,14 +7280,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGlobalScript_10.setText("12");
       lblGlobalScript_10.setPreferredSize(new Dimension(94, 22));
       lblGlobalScript_10.setName("lblGlobalScript_10");
-      lblGlobalScript_10.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalScript_10.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalScript_10.setBounds(0, 253, 21, 22);
       panel_85.add(lblGlobalScript_10);
 
       swfAnimatorGlobalScript12Cmb = new JComboBox();
       swfAnimatorGlobalScript12Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorGlobalScript12Cmb.setMaximumRowCount(16);
-      swfAnimatorGlobalScript12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript12Cmb.setBounds(22, 253, 186, 24);
       swfAnimatorGlobalScript12Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7305,7 +7305,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript12REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorGlobalScript12REd.setMotionPropertyName("globalScript12");
       swfAnimatorGlobalScript12REd.setLinkedLabelControlName("lblGlobalScript_10");
-      swfAnimatorGlobalScript12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorGlobalScript12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorGlobalScript12REd.setBounds(213, 253, 100, 24);
       swfAnimatorGlobalScript12REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -7437,7 +7437,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorGenerateButton.setPreferredSize(new Dimension(125, 24));
       swfAnimatorGenerateButton.setText("Generate sequence");
-      swfAnimatorGenerateButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGenerateButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorGenerateButton;
   }
@@ -7454,7 +7454,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesREd.setEditable(false);
       swfAnimatorFramesREd.setPreferredSize(new Dimension(64, 24));
       swfAnimatorFramesREd.setText("60");
-      swfAnimatorFramesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorFramesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return swfAnimatorFramesREd;
   }
@@ -7470,7 +7470,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGlobalScript1Cmb.setBounds(22, 0, 186, 24);
       swfAnimatorGlobalScript1Cmb.setMaximumRowCount(16);
       swfAnimatorGlobalScript1Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorGlobalScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGlobalScript1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorGlobalScript1Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
@@ -7493,7 +7493,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript1Cmb.setBounds(22, 0, 186, 24);
       swfAnimatorXFormScript1Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript1Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript1Cmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getSwfAnimatorCtrl() != null) {
@@ -7719,7 +7719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTriangleWithColorsButton.setToolTipText("Toggle monochrome/colored controls");
       toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
       toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
-      toggleTriangleWithColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      toggleTriangleWithColorsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       toggleTriangleWithColorsButton.setBounds(625, 4, 42, 24);
       centerNorthPanel.add(toggleTriangleWithColorsButton);
 
@@ -7728,7 +7728,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleStyleCmb.setMinimumSize(new Dimension(100, 24));
       triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
       triangleStyleCmb.setMaximumRowCount(32);
-      triangleStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      triangleStyleCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       triangleStyleCmb.setBounds(557, 4, 68, 24);
       triangleStyleCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -7767,7 +7767,7 @@ public class TinaInternalFrame extends JInternalFrame {
       realtimePreviewToggleButton.setSelected(false);
       realtimePreviewToggleButton.setPreferredSize(new Dimension(42, 24));
       realtimePreviewToggleButton.setLocation(new Point(402, 4));
-      realtimePreviewToggleButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      realtimePreviewToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       realtimePreviewToggleButton.setBounds(379, 4, 90, 24);
       realtimePreviewToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
 
@@ -7827,7 +7827,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
-      motionCurveEditModeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
     }
     return centerWestPanel;
@@ -7847,7 +7847,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerDescLabel.setEditable(false);
       centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
       centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
-      centerDescLabel.setFont(new Font("Dialog", Font.BOLD, 10));
+      centerDescLabel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
       centerCenterPanel.add(getMainPrevievPnl(), BorderLayout.CENTER);
     }
@@ -7866,7 +7866,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleCmb.setMaximumSize(new Dimension(32767, 24));
       randomStyleCmb.setMinimumSize(new Dimension(110, 24));
       randomStyleCmb.setPreferredSize(new Dimension(110, 24));
-      randomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomStyleCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomStyleCmb.setMaximumRowCount(48);
     }
     return randomStyleCmb;
@@ -7883,7 +7883,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
       affineEditPostTransformButton.setSize(new Dimension(104, 24));
       affineEditPostTransformButton.setText("Post TF");
-      affineEditPostTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPostTransformButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineEditPostTransformButton.setLocation(new Point(0, 155));
       affineEditPostTransformButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformButton.addActionListener(new java.awt.event.ActionListener() {
@@ -7905,7 +7905,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineEditPostTransformSmallButton = new JToggleButton();
       affineEditPostTransformSmallButton.setBounds(667, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
-      affineEditPostTransformSmallButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineEditPostTransformSmallButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformSmallButton.setMnemonic(KeyEvent.VK_P);
       affineEditPostTransformSmallButton.setPreferredSize(new Dimension(42, 24));
@@ -7943,7 +7943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineResetTransformButton.setLocation(new Point(109, 155));
       affineResetTransformButton.setSize(new Dimension(104, 24));
       affineResetTransformButton.setToolTipText("Reset affine transform to defaults");
-      affineResetTransformButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineResetTransformButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineResetTransformButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       affineResetTransformButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -7963,13 +7963,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar4Panel == null) {
       nonlinearParams4Lbl = new JLabel();
       nonlinearParams4Lbl.setLocation(new Point(14, 26));
-      nonlinearParams4Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams4Lbl.setText("Params");
       nonlinearParams4Lbl.setSize(new Dimension(50, 22));
       nonlinearVar4Lbl = new JLabel();
       nonlinearVar4Lbl.setLocation(new Point(4, 2));
-      nonlinearVar4Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar4Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar4Lbl.setText("Var 4");
       nonlinearVar4Lbl.setSize(new Dimension(38, 22));
@@ -7991,7 +7991,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4PreButton.setSize(new Dimension(22, 22));
       nonlinearParams4PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4PreButton.setLocation(new Point(269, 26));
-      nonlinearParams4PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams4PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams4PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8007,7 +8007,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4PostButton.setSize(new Dimension(22, 22));
       nonlinearParams4PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4PostButton.setLocation(new Point(168, 2));
-      nonlinearParams4PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams4PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams4PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8023,7 +8023,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4UpButton.setSize(new Dimension(22, 22));
       nonlinearParams4UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4UpButton.setLocation(new Point(269, 26));
-      nonlinearParams4UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams4UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams4UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8046,7 +8046,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar4Cmb == null) {
       nonlinearVar4Cmb = new JComboBox();
       nonlinearVar4Cmb.setLocation(new Point(62, 2));
-      nonlinearVar4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar4Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar4Cmb.setMaximumRowCount(22);
       nonlinearVar4Cmb.setSize(new Dimension(108, 24));
@@ -8084,7 +8084,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar4REd.setValueStep(0.01);
       nonlinearVar4REd.setLocation(new Point(188, 2));
-      nonlinearVar4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar4REd.setText("");
       nonlinearVar4REd.setSize(new Dimension(81, 24));
@@ -8101,7 +8101,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams4Cmb == null) {
       nonlinearParams4Cmb = new JComboBox();
       nonlinearParams4Cmb.setLocation(new Point(62, 26));
-      nonlinearParams4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams4Cmb.setSize(new Dimension(128, 24));
       nonlinearParams4Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -8138,7 +8138,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams4REd.setLocation(new Point(188, 26));
-      nonlinearParams4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams4REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams4REd.setText("");
       nonlinearParams4REd.setSize(new Dimension(81, 24));
@@ -8155,7 +8155,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams4LeftButton == null) {
       nonlinearParams4LeftButton = new JButton();
       nonlinearParams4LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams4LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams4LeftButton.setText("");
@@ -8192,7 +8192,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTable getCreatePaletteColorsTable() {
     if (createPaletteColorsTable == null) {
       createPaletteColorsTable = new JTable();
-      createPaletteColorsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      createPaletteColorsTable.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       createPaletteColorsTable.setSize(new Dimension(177, 80));
     }
     return createPaletteColorsTable;
@@ -8254,13 +8254,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar5Panel == null) {
       nonlinearParams5Lbl = new JLabel();
       nonlinearParams5Lbl.setLocation(new Point(14, 26));
-      nonlinearParams5Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams5Lbl.setText("Params");
       nonlinearParams5Lbl.setSize(new Dimension(50, 22));
       nonlinearVar5Lbl = new JLabel();
       nonlinearVar5Lbl.setLocation(new Point(4, 2));
-      nonlinearVar5Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar5Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar5Lbl.setText("Var 5");
       nonlinearVar5Lbl.setSize(new Dimension(38, 22));
@@ -8282,7 +8282,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5PreButton.setSize(new Dimension(22, 22));
       nonlinearParams5PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5PreButton.setLocation(new Point(269, 26));
-      nonlinearParams5PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams5PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams5PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8298,7 +8298,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5PostButton.setSize(new Dimension(22, 22));
       nonlinearParams5PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5PostButton.setLocation(new Point(168, 2));
-      nonlinearParams5PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams5PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams5PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8314,7 +8314,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5UpButton.setSize(new Dimension(22, 22));
       nonlinearParams5UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5UpButton.setLocation(new Point(269, 26));
-      nonlinearParams5UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams5UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams5UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8337,7 +8337,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar5Cmb == null) {
       nonlinearVar5Cmb = new JComboBox();
       nonlinearVar5Cmb.setLocation(new Point(62, 2));
-      nonlinearVar5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar5Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar5Cmb.setMaximumRowCount(22);
       nonlinearVar5Cmb.setSize(new Dimension(108, 24));
@@ -8375,7 +8375,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar5REd.setValueStep(0.01);
       nonlinearVar5REd.setLocation(new Point(188, 2));
-      nonlinearVar5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar5REd.setText("");
       nonlinearVar5REd.setSize(new Dimension(81, 24));
@@ -8392,7 +8392,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams5Cmb == null) {
       nonlinearParams5Cmb = new JComboBox();
       nonlinearParams5Cmb.setLocation(new Point(62, 26));
-      nonlinearParams5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams5Cmb.setSize(new Dimension(128, 24));
       nonlinearParams5Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -8429,7 +8429,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams5REd.setLocation(new Point(188, 26));
-      nonlinearParams5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams5REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams5REd.setText("");
       nonlinearParams5REd.setSize(new Dimension(81, 24));
@@ -8446,7 +8446,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams5LeftButton == null) {
       nonlinearParams5LeftButton = new JButton();
       nonlinearParams5LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams5LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams5LeftButton.setText("");
@@ -8469,13 +8469,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar6Panel == null) {
       nonlinearParams6Lbl = new JLabel();
       nonlinearParams6Lbl.setLocation(new Point(14, 26));
-      nonlinearParams6Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams6Lbl.setText("Params");
       nonlinearParams6Lbl.setSize(new Dimension(50, 22));
       nonlinearVar6Lbl = new JLabel();
       nonlinearVar6Lbl.setLocation(new Point(4, 2));
-      nonlinearVar6Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar6Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar6Lbl.setText("Var 6");
       nonlinearVar6Lbl.setSize(new Dimension(38, 22));
@@ -8497,7 +8497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6PreButton.setSize(new Dimension(22, 22));
       nonlinearParams6PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6PreButton.setLocation(new Point(269, 26));
-      nonlinearParams6PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams6PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams6PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8513,7 +8513,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6PostButton.setSize(new Dimension(22, 22));
       nonlinearParams6PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6PostButton.setLocation(new Point(168, 2));
-      nonlinearParams6PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams6PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams6PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8529,7 +8529,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6UpButton.setSize(new Dimension(22, 22));
       nonlinearParams6UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6UpButton.setLocation(new Point(269, 26));
-      nonlinearParams6UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams6UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams6UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8552,7 +8552,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar6Cmb == null) {
       nonlinearVar6Cmb = new JComboBox();
       nonlinearVar6Cmb.setLocation(new Point(62, 2));
-      nonlinearVar6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar6Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar6Cmb.setMaximumRowCount(22);
       nonlinearVar6Cmb.setSize(new Dimension(108, 24));
@@ -8590,7 +8590,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar6REd.setValueStep(0.01);
       nonlinearVar6REd.setLocation(new Point(188, 2));
-      nonlinearVar6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar6REd.setText("");
       nonlinearVar6REd.setSize(new Dimension(81, 24));
@@ -8607,7 +8607,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams6Cmb == null) {
       nonlinearParams6Cmb = new JComboBox();
       nonlinearParams6Cmb.setLocation(new Point(62, 26));
-      nonlinearParams6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams6Cmb.setSize(new Dimension(128, 24));
       nonlinearParams6Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -8644,7 +8644,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams6REd.setLocation(new Point(188, 26));
-      nonlinearParams6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams6REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams6REd.setText("");
       nonlinearParams6REd.setSize(new Dimension(81, 24));
@@ -8661,7 +8661,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams6LeftButton == null) {
       nonlinearParams6LeftButton = new JButton();
       nonlinearParams6LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams6LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams6LeftButton.setText("");
@@ -8684,13 +8684,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar7Panel == null) {
       nonlinearParams7Lbl = new JLabel();
       nonlinearParams7Lbl.setLocation(new Point(14, 26));
-      nonlinearParams7Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams7Lbl.setText("Params");
       nonlinearParams7Lbl.setSize(new Dimension(50, 22));
       nonlinearVar7Lbl = new JLabel();
       nonlinearVar7Lbl.setLocation(new Point(4, 2));
-      nonlinearVar7Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar7Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar7Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar7Lbl.setText("Var 7");
       nonlinearVar7Lbl.setSize(new Dimension(38, 22));
@@ -8712,7 +8712,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7PreButton.setSize(new Dimension(22, 22));
       nonlinearParams7PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7PreButton.setLocation(new Point(269, 26));
-      nonlinearParams7PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams7PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams7PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8728,7 +8728,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7PostButton.setSize(new Dimension(22, 22));
       nonlinearParams7PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7PostButton.setLocation(new Point(168, 2));
-      nonlinearParams7PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams7PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams7PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8744,7 +8744,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7UpButton.setSize(new Dimension(22, 22));
       nonlinearParams7UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7UpButton.setLocation(new Point(269, 26));
-      nonlinearParams7UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams7UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams7UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8767,7 +8767,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar7Cmb == null) {
       nonlinearVar7Cmb = new JComboBox();
       nonlinearVar7Cmb.setLocation(new Point(62, 2));
-      nonlinearVar7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar7Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar7Cmb.setMaximumRowCount(22);
       nonlinearVar7Cmb.setSize(new Dimension(108, 24));
@@ -8805,7 +8805,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar7REd.setValueStep(0.01);
       nonlinearVar7REd.setLocation(new Point(188, 2));
-      nonlinearVar7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar7REd.setText("");
       nonlinearVar7REd.setSize(new Dimension(81, 24));
@@ -8822,7 +8822,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams7Cmb == null) {
       nonlinearParams7Cmb = new JComboBox();
       nonlinearParams7Cmb.setLocation(new Point(62, 26));
-      nonlinearParams7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams7Cmb.setSize(new Dimension(128, 24));
       nonlinearParams7Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -8859,7 +8859,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams7REd.setLocation(new Point(188, 26));
-      nonlinearParams7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams7REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams7REd.setText("");
       nonlinearParams7REd.setSize(new Dimension(81, 24));
@@ -8876,7 +8876,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams7LeftButton == null) {
       nonlinearParams7LeftButton = new JButton();
       nonlinearParams7LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams7LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams7LeftButton.setText("");
@@ -8899,13 +8899,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar8Panel == null) {
       nonlinearParams8Lbl = new JLabel();
       nonlinearParams8Lbl.setLocation(new Point(14, 26));
-      nonlinearParams8Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams8Lbl.setText("Params");
       nonlinearParams8Lbl.setSize(new Dimension(50, 22));
       nonlinearVar8Lbl = new JLabel();
       nonlinearVar8Lbl.setLocation(new Point(4, 2));
-      nonlinearVar8Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar8Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar8Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar8Lbl.setText("Var 8");
       nonlinearVar8Lbl.setSize(new Dimension(38, 22));
@@ -8927,7 +8927,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8PreButton.setSize(new Dimension(22, 22));
       nonlinearParams8PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8PreButton.setLocation(new Point(269, 26));
-      nonlinearParams8PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams8PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams8PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8943,7 +8943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8PostButton.setSize(new Dimension(22, 22));
       nonlinearParams8PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8PostButton.setLocation(new Point(168, 2));
-      nonlinearParams8PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams8PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams8PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8959,7 +8959,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8UpButton.setSize(new Dimension(22, 22));
       nonlinearParams8UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8UpButton.setLocation(new Point(269, 26));
-      nonlinearParams8UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams8UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams8UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8982,7 +8982,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar8Cmb == null) {
       nonlinearVar8Cmb = new JComboBox();
       nonlinearVar8Cmb.setLocation(new Point(62, 2));
-      nonlinearVar8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar8Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar8Cmb.setMaximumRowCount(22);
       nonlinearVar8Cmb.setSize(new Dimension(108, 24));
@@ -9020,7 +9020,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar8REd.setValueStep(0.01);
       nonlinearVar8REd.setLocation(new Point(188, 2));
-      nonlinearVar8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar8REd.setText("");
       nonlinearVar8REd.setSize(new Dimension(81, 24));
@@ -9037,7 +9037,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams8Cmb == null) {
       nonlinearParams8Cmb = new JComboBox();
       nonlinearParams8Cmb.setLocation(new Point(62, 26));
-      nonlinearParams8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams8Cmb.setSize(new Dimension(128, 24));
       nonlinearParams8Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -9074,7 +9074,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams8REd.setLocation(new Point(188, 26));
-      nonlinearParams8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams8REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams8REd.setText("");
       nonlinearParams8REd.setSize(new Dimension(81, 24));
@@ -9091,7 +9091,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams8LeftButton == null) {
       nonlinearParams8LeftButton = new JButton();
       nonlinearParams8LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams8LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams8LeftButton.setText("");
@@ -9114,13 +9114,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar9Panel == null) {
       nonlinearParams9Lbl = new JLabel();
       nonlinearParams9Lbl.setLocation(new Point(14, 26));
-      nonlinearParams9Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams9Lbl.setText("Params");
       nonlinearParams9Lbl.setSize(new Dimension(50, 22));
       nonlinearVar9Lbl = new JLabel();
       nonlinearVar9Lbl.setLocation(new Point(4, 2));
-      nonlinearVar9Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar9Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar9Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar9Lbl.setText("Var 9");
       nonlinearVar9Lbl.setSize(new Dimension(38, 22));
@@ -9142,7 +9142,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9PreButton.setSize(new Dimension(22, 22));
       nonlinearParams9PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9PreButton.setLocation(new Point(269, 26));
-      nonlinearParams9PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams9PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams9PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9158,7 +9158,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9PostButton.setSize(new Dimension(22, 22));
       nonlinearParams9PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9PostButton.setLocation(new Point(168, 2));
-      nonlinearParams9PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams9PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams9PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9174,7 +9174,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9UpButton.setSize(new Dimension(22, 22));
       nonlinearParams9UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9UpButton.setLocation(new Point(269, 26));
-      nonlinearParams9UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams9UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams9UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9197,7 +9197,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar9Cmb == null) {
       nonlinearVar9Cmb = new JComboBox();
       nonlinearVar9Cmb.setLocation(new Point(62, 2));
-      nonlinearVar9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar9Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar9Cmb.setMaximumRowCount(22);
       nonlinearVar9Cmb.setSize(new Dimension(108, 24));
@@ -9235,7 +9235,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar9REd.setValueStep(0.01);
       nonlinearVar9REd.setLocation(new Point(188, 2));
-      nonlinearVar9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar9REd.setText("");
       nonlinearVar9REd.setSize(new Dimension(81, 24));
@@ -9252,7 +9252,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams9Cmb == null) {
       nonlinearParams9Cmb = new JComboBox();
       nonlinearParams9Cmb.setLocation(new Point(62, 26));
-      nonlinearParams9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams9Cmb.setSize(new Dimension(129, 24));
       nonlinearParams9Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -9289,7 +9289,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams9REd.setLocation(new Point(188, 26));
-      nonlinearParams9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams9REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams9REd.setText("");
       nonlinearParams9REd.setSize(new Dimension(81, 24));
@@ -9306,7 +9306,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams9LeftButton == null) {
       nonlinearParams9LeftButton = new JButton();
       nonlinearParams9LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams9LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams9LeftButton.setText("");
@@ -9329,13 +9329,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar10Panel == null) {
       nonlinearParams10Lbl = new JLabel();
       nonlinearParams10Lbl.setLocation(new Point(14, 26));
-      nonlinearParams10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams10Lbl.setText("Params");
       nonlinearParams10Lbl.setSize(new Dimension(50, 22));
       nonlinearVar10Lbl = new JLabel();
       nonlinearVar10Lbl.setLocation(new Point(4, 2));
-      nonlinearVar10Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar10Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar10Lbl.setText("Var 10");
       nonlinearVar10Lbl.setSize(new Dimension(38, 22));
@@ -9357,7 +9357,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10PreButton.setSize(new Dimension(22, 22));
       nonlinearParams10PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10PreButton.setLocation(new Point(269, 26));
-      nonlinearParams10PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams10PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams10PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9373,7 +9373,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10PostButton.setSize(new Dimension(22, 22));
       nonlinearParams10PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10PostButton.setLocation(new Point(168, 2));
-      nonlinearParams10PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams10PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams10PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9389,7 +9389,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10UpButton.setSize(new Dimension(22, 22));
       nonlinearParams10UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10UpButton.setLocation(new Point(269, 26));
-      nonlinearParams10UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams10UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams10UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9412,7 +9412,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar10Cmb == null) {
       nonlinearVar10Cmb = new JComboBox();
       nonlinearVar10Cmb.setLocation(new Point(62, 2));
-      nonlinearVar10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar10Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar10Cmb.setMaximumRowCount(22);
       nonlinearVar10Cmb.setSize(new Dimension(108, 24));
@@ -9450,7 +9450,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar10REd.setValueStep(0.01);
       nonlinearVar10REd.setLocation(new Point(188, 2));
-      nonlinearVar10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar10REd.setText("");
       nonlinearVar10REd.setSize(new Dimension(81, 24));
@@ -9467,7 +9467,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams10Cmb == null) {
       nonlinearParams10Cmb = new JComboBox();
       nonlinearParams10Cmb.setLocation(new Point(62, 26));
-      nonlinearParams10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams10Cmb.setSize(new Dimension(128, 24));
       nonlinearParams10Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -9504,7 +9504,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams10REd.setLocation(new Point(188, 26));
-      nonlinearParams10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams10REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams10REd.setText("");
       nonlinearParams10REd.setSize(new Dimension(81, 24));
@@ -9521,7 +9521,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams10LeftButton == null) {
       nonlinearParams10LeftButton = new JButton();
       nonlinearParams10LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams10LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams10LeftButton.setText("");
@@ -9544,13 +9544,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar11Panel == null) {
       nonlinearParams11Lbl = new JLabel();
       nonlinearParams11Lbl.setLocation(new Point(14, 26));
-      nonlinearParams11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams11Lbl.setText("Params");
       nonlinearParams11Lbl.setSize(new Dimension(50, 22));
       nonlinearVar11Lbl = new JLabel();
       nonlinearVar11Lbl.setLocation(new Point(4, 2));
-      nonlinearVar11Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar11Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar11Lbl.setText("Var 11");
       nonlinearVar11Lbl.setSize(new Dimension(38, 22));
@@ -9572,7 +9572,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PreButton.setSize(new Dimension(22, 22));
       nonlinearParams11PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11PreButton.setLocation(new Point(269, 26));
-      nonlinearParams11PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams11PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9588,7 +9588,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PostButton.setSize(new Dimension(22, 22));
       nonlinearParams11PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11PostButton.setLocation(new Point(168, 2));
-      nonlinearParams11PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams11PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams11PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9604,7 +9604,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11UpButton.setSize(new Dimension(22, 22));
       nonlinearParams11UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11UpButton.setLocation(new Point(269, 26));
-      nonlinearParams11UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams11UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams11UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9627,7 +9627,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar11Cmb == null) {
       nonlinearVar11Cmb = new JComboBox();
       nonlinearVar11Cmb.setLocation(new Point(62, 2));
-      nonlinearVar11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar11Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar11Cmb.setMaximumRowCount(22);
       nonlinearVar11Cmb.setSize(new Dimension(108, 24));
@@ -9665,7 +9665,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar11REd.setValueStep(0.01);
       nonlinearVar11REd.setLocation(new Point(188, 2));
-      nonlinearVar11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar11REd.setText("");
       nonlinearVar11REd.setSize(new Dimension(81, 24));
@@ -9682,7 +9682,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams11Cmb == null) {
       nonlinearParams11Cmb = new JComboBox();
       nonlinearParams11Cmb.setLocation(new Point(62, 26));
-      nonlinearParams11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams11Cmb.setSize(new Dimension(128, 24));
       nonlinearParams11Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -9719,7 +9719,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams11REd.setLocation(new Point(188, 26));
-      nonlinearParams11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams11REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams11REd.setText("");
       nonlinearParams11REd.setSize(new Dimension(81, 24));
@@ -9736,7 +9736,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams11LeftButton == null) {
       nonlinearParams11LeftButton = new JButton();
       nonlinearParams11LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams11LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams11LeftButton.setText("");
@@ -9759,13 +9759,13 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar12Panel == null) {
       nonlinearParams12Lbl = new JLabel();
       nonlinearParams12Lbl.setLocation(new Point(14, 26));
-      nonlinearParams12Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12Lbl.setPreferredSize(new Dimension(50, 22));
       nonlinearParams12Lbl.setText("Params");
       nonlinearParams12Lbl.setSize(new Dimension(50, 22));
       nonlinearVar12Lbl = new JLabel();
       nonlinearVar12Lbl.setLocation(new Point(4, 2));
-      nonlinearVar12Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar12Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar12Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar12Lbl.setText("Var 12");
       nonlinearVar12Lbl.setSize(new Dimension(38, 22));
@@ -9787,7 +9787,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12PreButton.setSize(new Dimension(22, 22));
       nonlinearParams12PreButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12PreButton.setLocation(new Point(269, 26));
-      nonlinearParams12PreButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12PreButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12PreButton.setBounds(42, 2, 22, 24);
       nonlinearParams12PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams12PreButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9803,7 +9803,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12PostButton.setSize(new Dimension(22, 22));
       nonlinearParams12PostButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12PostButton.setLocation(new Point(168, 2));
-      nonlinearParams12PostButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12PostButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12PostButton.setBounds(168, 2, 22, 24);
       nonlinearParams12PostButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-star-2.png")));
       nonlinearParams12PostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9819,7 +9819,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12UpButton.setSize(new Dimension(22, 22));
       nonlinearParams12UpButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12UpButton.setLocation(new Point(269, 26));
-      nonlinearParams12UpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12UpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12UpButton.setBounds(269, 2, 22, 24);
       nonlinearParams12UpButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/draw-arrow-up.png")));
       nonlinearParams12UpButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9841,7 +9841,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearVar12Cmb == null) {
       nonlinearVar12Cmb = new JComboBox();
       nonlinearVar12Cmb.setLocation(new Point(62, 2));
-      nonlinearVar12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearVar12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar12Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearVar12Cmb.setMaximumRowCount(22);
       nonlinearVar12Cmb.setSize(new Dimension(108, 24));
@@ -9879,7 +9879,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       nonlinearVar12REd.setValueStep(0.01);
       nonlinearVar12REd.setLocation(new Point(188, 2));
-      nonlinearVar12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearVar12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearVar12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearVar12REd.setText("");
       nonlinearVar12REd.setSize(new Dimension(81, 24));
@@ -9896,7 +9896,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams12Cmb == null) {
       nonlinearParams12Cmb = new JComboBox();
       nonlinearParams12Cmb.setLocation(new Point(62, 26));
-      nonlinearParams12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12Cmb.setPreferredSize(new Dimension(120, 22));
       nonlinearParams12Cmb.setSize(new Dimension(128, 24));
       nonlinearParams12Cmb.addItemListener(new java.awt.event.ItemListener() {
@@ -9933,7 +9933,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       nonlinearParams12REd.setLocation(new Point(188, 26));
-      nonlinearParams12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      nonlinearParams12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       nonlinearParams12REd.setPreferredSize(new Dimension(55, 22));
       nonlinearParams12REd.setText("");
       nonlinearParams12REd.setSize(new Dimension(81, 24));
@@ -9950,7 +9950,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearParams12LeftButton == null) {
       nonlinearParams12LeftButton = new JButton();
       nonlinearParams12LeftButton.setLocation(new Point(269, 26));
-      nonlinearParams12LeftButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12LeftButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12LeftButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12LeftButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-system.png")));
       nonlinearParams12LeftButton.setText("");
@@ -9973,7 +9973,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaGrabPaletteFromFlameButton == null) {
       tinaGrabPaletteFromFlameButton = new JButton();
       tinaGrabPaletteFromFlameButton.setBounds(5, 54, 148, 24);
-      tinaGrabPaletteFromFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaGrabPaletteFromFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGrabPaletteFromFlameButton.setText("Extract from flame");
       tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(190, 24));
       tinaGrabPaletteFromFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9997,67 +9997,67 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueLbl.setText("Blue");
       shadingLightBlueLbl.setSize(new Dimension(94, 22));
       shadingLightBlueLbl.setLocation(new Point(664, 74));
-      shadingLightBlueLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightBlueLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightGreenLbl = new JLabel();
       shadingLightGreenLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightGreenLbl.setText("Green");
       shadingLightGreenLbl.setSize(new Dimension(94, 22));
       shadingLightGreenLbl.setLocation(new Point(664, 50));
-      shadingLightGreenLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightGreenLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightRedLbl = new JLabel();
       shadingLightRedLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightRedLbl.setText("Red");
       shadingLightRedLbl.setSize(new Dimension(94, 22));
       shadingLightRedLbl.setLocation(new Point(664, 26));
-      shadingLightRedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightRedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightZLbl = new JLabel();
       shadingLightZLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightZLbl.setText("Z position");
       shadingLightZLbl.setSize(new Dimension(94, 22));
       shadingLightZLbl.setLocation(new Point(334, 74));
-      shadingLightZLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightZLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightYLbl = new JLabel();
       shadingLightYLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightYLbl.setText("Y position");
       shadingLightYLbl.setSize(new Dimension(94, 22));
       shadingLightYLbl.setLocation(new Point(334, 50));
-      shadingLightYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightXLbl = new JLabel();
       shadingLightXLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightXLbl.setText("X position");
       shadingLightXLbl.setSize(new Dimension(94, 22));
       shadingLightXLbl.setLocation(new Point(334, 26));
-      shadingLightXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightLbl = new JLabel();
       shadingLightLbl.setPreferredSize(new Dimension(94, 22));
       shadingLightLbl.setText("Light source");
       shadingLightLbl.setSize(new Dimension(94, 22));
       shadingLightLbl.setLocation(new Point(334, 2));
-      shadingLightLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingPhongSizeLbl = new JLabel();
       shadingPhongSizeLbl.setPreferredSize(new Dimension(94, 22));
       shadingPhongSizeLbl.setText("Phong size");
       shadingPhongSizeLbl.setSize(new Dimension(94, 22));
       shadingPhongSizeLbl.setLocation(new Point(4, 76));
-      shadingPhongSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingPhongSizeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingPhongLbl = new JLabel();
       shadingPhongLbl.setPreferredSize(new Dimension(94, 22));
       shadingPhongLbl.setText("Phong");
       shadingPhongLbl.setSize(new Dimension(94, 22));
       shadingPhongLbl.setLocation(new Point(4, 52));
-      shadingPhongLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingPhongLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingAmbientLbl = new JLabel();
       shadingAmbientLbl.setPreferredSize(new Dimension(94, 22));
       shadingAmbientLbl.setText("Ambient");
       shadingAmbientLbl.setSize(new Dimension(94, 22));
       shadingAmbientLbl.setLocation(new Point(4, 4));
-      shadingAmbientLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingAmbientLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingDiffuseLbl = new JLabel();
       shadingDiffuseLbl.setPreferredSize(new Dimension(94, 22));
       shadingDiffuseLbl.setText("Diffuse");
       shadingDiffuseLbl.setSize(new Dimension(94, 22));
       shadingDiffuseLbl.setLocation(new Point(4, 28));
-      shadingDiffuseLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingDiffuseLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       pseudo3DShadingPanel = new JPanel();
       pseudo3DShadingPanel.setLayout(null);
       pseudo3DShadingPanel.add(shadingDiffuseLbl, null);
@@ -10122,7 +10122,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingAmbientREd.setText("");
       shadingAmbientREd.setSize(new Dimension(100, 24));
       shadingAmbientREd.setLocation(new Point(100, 4));
-      shadingAmbientREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingAmbientREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingAmbientREd;
   }
@@ -10153,7 +10153,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDiffuseREd.setText("");
       shadingDiffuseREd.setSize(new Dimension(100, 24));
       shadingDiffuseREd.setLocation(new Point(100, 28));
-      shadingDiffuseREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDiffuseREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingDiffuseREd;
   }
@@ -10242,7 +10242,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingPhongREd.setText("");
       shadingPhongREd.setSize(new Dimension(100, 24));
       shadingPhongREd.setLocation(new Point(100, 52));
-      shadingPhongREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingPhongREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingPhongREd;
   }
@@ -10299,7 +10299,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingPhongSizeREd.setText("");
       shadingPhongSizeREd.setSize(new Dimension(100, 24));
       shadingPhongSizeREd.setLocation(new Point(100, 76));
-      shadingPhongSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingPhongSizeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingPhongSizeREd;
   }
@@ -10345,7 +10345,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightCmb.setSelectedItem("1");
       shadingLightCmb.setSize(new Dimension(125, 22));
       shadingLightCmb.setLocation(new Point(430, 2));
-      shadingLightCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLightCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingLightCmb.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getFlameControls().shadingLightCmb_changed();
@@ -10377,7 +10377,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightXREd.setText("");
       shadingLightXREd.setSize(new Dimension(100, 24));
       shadingLightXREd.setLocation(new Point(430, 26));
-      shadingLightXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightXREd;
   }
@@ -10433,7 +10433,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightYREd.setText("");
       shadingLightYREd.setSize(new Dimension(100, 24));
       shadingLightYREd.setLocation(new Point(430, 50));
-      shadingLightYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightYREd;
   }
@@ -10489,7 +10489,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightZREd.setText("");
       shadingLightZREd.setSize(new Dimension(100, 24));
       shadingLightZREd.setLocation(new Point(430, 74));
-      shadingLightZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightZREd;
   }
@@ -10550,7 +10550,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightRedREd.setText("");
       shadingLightRedREd.setSize(new Dimension(100, 24));
       shadingLightRedREd.setLocation(new Point(760, 26));
-      shadingLightRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightRedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightRedREd;
   }
@@ -10611,7 +10611,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightGreenREd.setText("");
       shadingLightGreenREd.setSize(new Dimension(100, 24));
       shadingLightGreenREd.setLocation(new Point(760, 50));
-      shadingLightGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightGreenREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightGreenREd;
   }
@@ -10671,7 +10671,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingLightBlueREd.setText("");
       shadingLightBlueREd.setSize(new Dimension(100, 24));
       shadingLightBlueREd.setLocation(new Point(760, 74));
-      shadingLightBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingLightBlueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingLightBlueREd;
   }
@@ -10734,7 +10734,7 @@ public class TinaInternalFrame extends JInternalFrame {
       loadFromClipboardFlameButton.setMinimumSize(new Dimension(100, 24));
       loadFromClipboardFlameButton.setPreferredSize(new Dimension(125, 24));
       loadFromClipboardFlameButton.setText("From Clipboard");
-      loadFromClipboardFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      loadFromClipboardFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       loadFromClipboardFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.loadFlameFromClipboard();
@@ -10757,7 +10757,7 @@ public class TinaInternalFrame extends JInternalFrame {
       saveFlameToClipboardButton.setMaximumSize(new Dimension(32000, 24));
       saveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       saveFlameToClipboardButton.setText("To Clipboard");
-      saveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      saveFlameToClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       saveFlameToClipboardButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.saveFlameToClipboard();
@@ -10775,7 +10775,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getMouseTransformSlowButton() {
     if (mouseTransformSlowButton == null) {
       mouseTransformSlowButton = new JToggleButton();
-      mouseTransformSlowButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      mouseTransformSlowButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       mouseTransformSlowButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/click.png")));
       mouseTransformSlowButton.setSelected(false);
       mouseTransformSlowButton.setText("Fine Edit");
@@ -10834,7 +10834,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(batchResolutionProfileCmb);
       batchResolutionProfileCmb.setPreferredSize(new Dimension(159, 24));
       batchResolutionProfileCmb.setMaximumRowCount(32);
-      batchResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchResolutionProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       batchQualityProfileCmb = new JComboBox();
       panel_2.add(batchQualityProfileCmb);
@@ -10842,7 +10842,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchQualityProfileCmb.setMaximumSize(new Dimension(159, 24));
       batchQualityProfileCmb.setPreferredSize(new Dimension(159, 24));
       batchQualityProfileCmb.setMaximumRowCount(32);
-      batchQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchQualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JPanel panel_8 = new JPanel();
       panel_8.setMaximumSize(new Dimension(159, 28));
@@ -10869,7 +10869,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderShowImageBtn.setPreferredSize(new Dimension(159, 24));
       batchRenderShowImageBtn.setMinimumSize(new Dimension(159, 12));
       batchRenderShowImageBtn.setMaximumSize(new Dimension(159, 24));
-      batchRenderShowImageBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderShowImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderShowImageBtn.setAlignmentX(0.5f);
       panel_2.add(batchRenderShowImageBtn);
 
@@ -10893,7 +10893,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTabbedPane getRootTabbedPane() {
     if (rootTabbedPane == null) {
       rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(new Font("Dialog", Font.BOLD, 10));
+      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")), getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")), getInteractiveRenderPanel(), null);
@@ -11739,7 +11739,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderAddFilesButton.setMaximumSize(new Dimension(159, 24));
       batchRenderAddFilesButton.setPreferredSize(new Dimension(125, 24));
       batchRenderAddFilesButton.setText("Add files");
-      batchRenderAddFilesButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderAddFilesButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderAddFilesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderAddFilesButton_clicked();
@@ -11762,7 +11762,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesMoveUpButton.setMaximumSize(new Dimension(159, 24));
       batchRenderFilesMoveUpButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesMoveUpButton.setText("Move up");
-      batchRenderFilesMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesMoveUpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveUpButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderFilesMoveUpButton_clicked();
@@ -11786,7 +11786,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesMoveDownButton.setMaximumSize(new Dimension(159, 24));
       batchRenderFilesMoveDownButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesMoveDownButton.setText("Move down");
-      batchRenderFilesMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesMoveDownButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderFilesMoveDownButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderFilesMoveDownButton_clicked();
@@ -11839,7 +11839,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesRemoveButton.setMaximumSize(new Dimension(159, 24));
       batchRenderFilesRemoveButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesRemoveButton.setText("Remove");
-      batchRenderFilesRemoveButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesRemoveButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderFilesRemoveButton_clicked();
@@ -11862,7 +11862,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderFilesRemoveAllButton.setMaximumSize(new Dimension(159, 24));
       batchRenderFilesRemoveAllButton.setPreferredSize(new Dimension(159, 24));
       batchRenderFilesRemoveAllButton.setText("Remove All");
-      batchRenderFilesRemoveAllButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderFilesRemoveAllButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderFilesRemoveAllButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderFilesRemoveAllButton_clicked();
@@ -11884,7 +11884,7 @@ public class TinaInternalFrame extends JInternalFrame {
       batchRenderStartButton.setMaximumSize(new Dimension(159, 59));
       batchRenderStartButton.setPreferredSize(new Dimension(159, 52));
       batchRenderStartButton.setText("Render");
-      batchRenderStartButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderStartButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       batchRenderStartButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.getBatchRendererController().batchRenderStartButton_clicked();
@@ -11909,7 +11909,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipHorizontalButton.setToolTipText("Horizontal flip");
       affineFlipHorizontalButton.setSize(new Dimension(70, 24));
       affineFlipHorizontalButton.setLocation(new Point(176, 127));
-      affineFlipHorizontalButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineFlipHorizontalButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineFlipHorizontalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.xForm_flipHorizontal();
@@ -11934,7 +11934,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineFlipVerticalButton.setText("");
       affineFlipVerticalButton.setSize(new Dimension(70, 24));
       affineFlipVerticalButton.setLocation(new Point(254, 127));
-      affineFlipVerticalButton.setFont(new Font("Dialog", Font.BOLD, 8));
+      affineFlipVerticalButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 8));
       affineFlipVerticalButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.xForm_flipVertical();
@@ -11965,7 +11965,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_2.add(shadingLbl);
       shadingLbl.setPreferredSize(new Dimension(94, 22));
       shadingLbl.setText("Shading");
-      shadingLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_2.add(getShadingCmb());
       panel_2.add(getResetShadingSettingsBtn());
       tabbedPane_1.addTab("Pseudo3D-Shading", null, getPseudo3DShadingPanel(), null);
@@ -12017,7 +12017,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorRadiusREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorRadiusREd.setMaxValue(1.0);
       shadingDistanceColorRadiusREd.setLocation(new Point(100, 4));
-      shadingDistanceColorRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorRadiusREd.setBounds(102, 6, 100, 24);
       panel_1.add(shadingDistanceColorRadiusREd);
 
@@ -12026,7 +12026,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRadius.setSize(new Dimension(94, 22));
       lblRadius.setPreferredSize(new Dimension(94, 22));
       lblRadius.setLocation(new Point(4, 4));
-      lblRadius.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRadius.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRadius.setBounds(6, 6, 94, 24);
       panel_1.add(lblRadius);
 
@@ -12050,7 +12050,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorScaleREd.setMaxValue(1.0);
       shadingDistanceColorScaleREd.setLocation(new Point(100, 4));
       shadingDistanceColorScaleREd.setHasMinValue(true);
-      shadingDistanceColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorScaleREd.setBounds(102, 29, 100, 24);
       panel_1.add(shadingDistanceColorScaleREd);
 
@@ -12059,7 +12059,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblScale.setSize(new Dimension(94, 22));
       lblScale.setPreferredSize(new Dimension(94, 22));
       lblScale.setLocation(new Point(4, 4));
-      lblScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScale.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblScale.setBounds(6, 29, 94, 24);
       panel_1.add(lblScale);
 
@@ -12105,7 +12105,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorExponentREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorExponentREd.setMaxValue(1.0);
       shadingDistanceColorExponentREd.setLocation(new Point(100, 4));
-      shadingDistanceColorExponentREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorExponentREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorExponentREd.setBounds(102, 52, 100, 24);
       panel_1.add(shadingDistanceColorExponentREd);
 
@@ -12114,7 +12114,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblExponent_1.setSize(new Dimension(94, 22));
       lblExponent_1.setPreferredSize(new Dimension(94, 22));
       lblExponent_1.setLocation(new Point(4, 4));
-      lblExponent_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblExponent_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblExponent_1.setBounds(6, 52, 94, 24);
       panel_1.add(lblExponent_1);
 
@@ -12160,7 +12160,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorOffsetXREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorOffsetXREd.setMaxValue(1.0);
       shadingDistanceColorOffsetXREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorOffsetXREd.setBounds(432, 6, 100, 24);
       panel_1.add(shadingDistanceColorOffsetXREd);
 
@@ -12169,7 +12169,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblOffsetx.setSize(new Dimension(94, 22));
       lblOffsetx.setPreferredSize(new Dimension(94, 22));
       lblOffsetx.setLocation(new Point(4, 4));
-      lblOffsetx.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetx.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOffsetx.setBounds(336, 6, 94, 24);
       panel_1.add(lblOffsetx);
 
@@ -12215,7 +12215,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorOffsetYREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorOffsetYREd.setMaxValue(1.0);
       shadingDistanceColorOffsetYREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorOffsetYREd.setBounds(432, 29, 100, 24);
       panel_1.add(shadingDistanceColorOffsetYREd);
 
@@ -12224,7 +12224,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblOffsety.setSize(new Dimension(94, 22));
       lblOffsety.setPreferredSize(new Dimension(94, 22));
       lblOffsety.setLocation(new Point(4, 4));
-      lblOffsety.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsety.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOffsety.setBounds(336, 29, 94, 24);
       panel_1.add(lblOffsety);
 
@@ -12270,7 +12270,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorOffsetZREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorOffsetZREd.setMaxValue(1.0);
       shadingDistanceColorOffsetZREd.setLocation(new Point(100, 4));
-      shadingDistanceColorOffsetZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorOffsetZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorOffsetZREd.setBounds(432, 52, 100, 24);
       panel_1.add(shadingDistanceColorOffsetZREd);
 
@@ -12279,7 +12279,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblOffsetz.setSize(new Dimension(94, 22));
       lblOffsetz.setPreferredSize(new Dimension(94, 22));
       lblOffsetz.setLocation(new Point(4, 4));
-      lblOffsetz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOffsetz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOffsetz.setBounds(336, 52, 94, 24);
       panel_1.add(lblOffsetz);
 
@@ -12328,7 +12328,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorStyleREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorStyleREd.setMaxValue(2.0);
       shadingDistanceColorStyleREd.setLocation(new Point(100, 4));
-      shadingDistanceColorStyleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorStyleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorStyleREd.setBounds(759, 6, 100, 24);
       panel_1.add(shadingDistanceColorStyleREd);
 
@@ -12376,7 +12376,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorCoordinateREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorCoordinateREd.setMaxValue(5.0);
       shadingDistanceColorCoordinateREd.setLocation(new Point(100, 4));
-      shadingDistanceColorCoordinateREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorCoordinateREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorCoordinateREd.setBounds(759, 29, 100, 24);
       panel_1.add(shadingDistanceColorCoordinateREd);
 
@@ -12421,7 +12421,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingDistanceColorShiftREd.setPreferredSize(new Dimension(100, 24));
       shadingDistanceColorShiftREd.setMaxValue(1.0);
       shadingDistanceColorShiftREd.setLocation(new Point(100, 4));
-      shadingDistanceColorShiftREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingDistanceColorShiftREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       shadingDistanceColorShiftREd.setBounds(759, 52, 100, 24);
       panel_1.add(shadingDistanceColorShiftREd);
 
@@ -12453,7 +12453,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblStyle.setSize(new Dimension(94, 22));
       lblStyle.setPreferredSize(new Dimension(94, 22));
       lblStyle.setLocation(new Point(4, 4));
-      lblStyle.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStyle.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblStyle.setBounds(663, 6, 94, 24);
       panel_1.add(lblStyle);
 
@@ -12462,7 +12462,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblCoordinate.setSize(new Dimension(94, 22));
       lblCoordinate.setPreferredSize(new Dimension(94, 22));
       lblCoordinate.setLocation(new Point(4, 4));
-      lblCoordinate.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCoordinate.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblCoordinate.setBounds(663, 29, 94, 24);
       panel_1.add(lblCoordinate);
 
@@ -12471,7 +12471,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblShift.setSize(new Dimension(94, 22));
       lblShift.setPreferredSize(new Dimension(94, 22));
       lblShift.setLocation(new Point(4, 4));
-      lblShift.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblShift.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblShift.setBounds(663, 52, 94, 24);
       panel_1.add(lblShift);
     }
@@ -12489,7 +12489,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingCmb.setBounds(102, 6, 220, 22);
       shadingCmb.setPreferredSize(new Dimension(125, 22));
       shadingCmb.setSelectedItem(Shading.FLAT);
-      shadingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
           tinaController.saveUndoPoint();
@@ -12512,19 +12512,19 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurFallOffLbl.setText("Blur falloff");
       shadingBlurFallOffLbl.setSize(new Dimension(94, 22));
       shadingBlurFallOffLbl.setLocation(new Point(4, 52));
-      shadingBlurFallOffLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingBlurFallOffLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingBlurFadeLbl = new JLabel();
       shadingBlurFadeLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurFadeLbl.setText("Blur fade");
       shadingBlurFadeLbl.setSize(new Dimension(94, 22));
       shadingBlurFadeLbl.setLocation(new Point(4, 28));
-      shadingBlurFadeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingBlurFadeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       shadingBlurRadiusLbl = new JLabel();
       shadingBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setText("Blur radius");
       shadingBlurRadiusLbl.setSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setLocation(new Point(4, 4));
-      shadingBlurRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      shadingBlurRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       blurShadingPanel = new JPanel();
       blurShadingPanel.setLayout(null);
       blurShadingPanel.add(shadingBlurRadiusLbl, null);
@@ -12567,7 +12567,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurRadiusREd.setText("");
       shadingBlurRadiusREd.setSize(new Dimension(100, 24));
       shadingBlurRadiusREd.setLocation(new Point(100, 4));
-      shadingBlurRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingBlurRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingBlurRadiusREd;
   }
@@ -12627,7 +12627,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurFadeREd.setText("");
       shadingBlurFadeREd.setSize(new Dimension(100, 24));
       shadingBlurFadeREd.setLocation(new Point(100, 28));
-      shadingBlurFadeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingBlurFadeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingBlurFadeREd;
   }
@@ -12687,7 +12687,7 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurFallOffREd.setText("");
       shadingBlurFallOffREd.setSize(new Dimension(100, 24));
       shadingBlurFallOffREd.setLocation(new Point(100, 52));
-      shadingBlurFallOffREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      shadingBlurFallOffREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return shadingBlurFallOffREd;
   }
@@ -12754,7 +12754,7 @@ public class TinaInternalFrame extends JInternalFrame {
       rescanScriptsBtn.setToolTipText("Rescan script-folder");
       rescanScriptsBtn.setText("Rescan");
       rescanScriptsBtn.setPreferredSize(new Dimension(116, 24));
-      rescanScriptsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      rescanScriptsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
 
       JPanel panel_8 = new JPanel();
@@ -12777,7 +12777,7 @@ public class TinaInternalFrame extends JInternalFrame {
       deleteScriptBtn.setToolTipText("Delete script");
       deleteScriptBtn.setText("Del");
       deleteScriptBtn.setPreferredSize(new Dimension(58, 24));
-      deleteScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      deleteScriptBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       deleteScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(deleteScriptBtn);
 
@@ -12792,7 +12792,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptRenameBtn.setToolTipText("Rename script");
       scriptRenameBtn.setText("Ren");
       scriptRenameBtn.setPreferredSize(new Dimension(58, 24));
-      scriptRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptRenameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       scriptRenameBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRenameBtn);
 
@@ -12814,7 +12814,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptRunBtn.setToolTipText("Run script");
       scriptRunBtn.setText("Run");
       scriptRunBtn.setPreferredSize(new Dimension(116, 24));
-      scriptRunBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptRunBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       scriptRunBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_2.add(scriptRunBtn);
       panel_2.add(getPanel_113());
@@ -12824,7 +12824,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(scrollPane_2, BorderLayout.CENTER);
 
       scriptTree = new JTree();
-      scriptTree.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptTree.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 10));
       scriptTree.addTreeSelectionListener(new TreeSelectionListener() {
         public void valueChanged(TreeSelectionEvent e) {
           if (tinaController != null) {
@@ -12859,7 +12859,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JTextArea getScriptTextArea() {
     if (scriptTextArea == null) {
       scriptTextArea = new JTextArea();
-      scriptTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptTextArea.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 10));
       scriptTextArea.setText("");
     }
     return scriptTextArea;
@@ -12882,7 +12882,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleXButton.setSelected(true);
       //      affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleX.gif")));
       affineScaleXButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-flip-horizontal.png")));
-      affineScaleXButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleXButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineScaleXButton.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.affineScaleXButton_stateChanged();
@@ -12909,7 +12909,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleYButton.setLocation(new Point(130, 127));
       //      affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/allowScaleY.gif")));
       affineScaleYButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/object-flip-vertical.png")));
-      affineScaleYButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleYButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineScaleYButton.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
           tinaController.affineScaleYButton_stateChanged();
@@ -12929,7 +12929,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomizeColorsButton = new JButton();
       randomizeColorsButton.setToolTipText("Randomize colors");
       randomizeColorsButton.setBounds(6, 58, 79, 24);
-      randomizeColorsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomizeColorsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       randomizeColorsButton.setText("Rnd clr");
       randomizeColorsButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -13032,7 +13032,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveNextButton.setText("Next");
       interactiveNextButton.setPreferredSize(new Dimension(125, 48));
       interactiveNextButton.setMnemonic(KeyEvent.VK_D);
-      interactiveNextButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveNextButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveNextButton;
   }
@@ -13050,7 +13050,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       interactiveLoadFlameFromClipboardButton.setText("From Clipboard");
       interactiveLoadFlameFromClipboardButton.setPreferredSize(new Dimension(125, 24));
-      interactiveLoadFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveLoadFlameFromClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveLoadFlameFromClipboardButton;
   }
@@ -13068,7 +13068,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       interactiveLoadFlameButton.setText("Load Flame");
       interactiveLoadFlameButton.setPreferredSize(new Dimension(125, 24));
-      interactiveLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveLoadFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveLoadFlameButton;
   }
@@ -13087,7 +13087,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToClipboardButton.setText("To Clipboard");
       interactiveFlameToClipboardButton.setPreferredSize(new Dimension(125, 24));
       interactiveFlameToClipboardButton.setMnemonic(KeyEvent.VK_D);
-      interactiveFlameToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveFlameToClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveFlameToClipboardButton;
   }
@@ -13106,7 +13106,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveStopButton.setText("Stop");
       interactiveStopButton.setPreferredSize(new Dimension(125, 24));
       interactiveStopButton.setMnemonic(KeyEvent.VK_D);
-      interactiveStopButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveStopButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveStopButton;
   }
@@ -13125,7 +13125,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveFlameButton.setText("Save Flame");
       interactiveSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveFlameButton.setMnemonic(KeyEvent.VK_D);
-      interactiveSaveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveSaveFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveSaveFlameButton;
   }
@@ -13143,7 +13143,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveSaveImageButton.setText("Save image");
       interactiveSaveImageButton.setPreferredSize(new Dimension(125, 24));
       interactiveSaveImageButton.setMnemonic(KeyEvent.VK_I);
-      interactiveSaveImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveSaveImageButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveSaveImageButton;
   }
@@ -13219,7 +13219,7 @@ public class TinaInternalFrame extends JInternalFrame {
       qualityProfileBtn.setToolTipText("Edit quality profiles");
       qualityProfileBtn.setText("...");
       qualityProfileBtn.setPreferredSize(new Dimension(32, 24));
-      qualityProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      qualityProfileBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return qualityProfileBtn;
   }
@@ -13237,7 +13237,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resolutionProfileBtn.setToolTipText("Edit resolution profiles");
       resolutionProfileBtn.setText("...");
       resolutionProfileBtn.setPreferredSize(new Dimension(32, 24));
-      resolutionProfileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resolutionProfileBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return resolutionProfileBtn;
   }
@@ -13256,7 +13256,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       interactiveResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
       interactiveResolutionProfileCmb.setMaximumRowCount(32);
-      interactiveResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveResolutionProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return interactiveResolutionProfileCmb;
   }
@@ -13321,7 +13321,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorCancelButton.setText("Cancel");
       swfAnimatorCancelButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorCancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorCancelButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_5.add(getLabel_3());
       panel_5.add(getSwfAnimatorResolutionProfileCmb());
       panel_5.add(getSwfAnimatorMovieFromClipboardButton());
@@ -13345,14 +13345,14 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorGenRandomBatchBtn.setPreferredSize(new Dimension(105, 46));
       swfAnimatorGenRandomBatchBtn.setMinimumSize(new Dimension(100, 46));
       swfAnimatorGenRandomBatchBtn.setMaximumSize(new Dimension(32000, 46));
-      swfAnimatorGenRandomBatchBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorGenRandomBatchBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JLabel label = new JLabel();
       label.setBounds(132, 13, 80, 14);
       panel_5.add(label);
       label.setText("  Rnd Generator");
       label.setPreferredSize(new Dimension(80, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label.setAlignmentX(1.0f);
 
       swfAnimatorRandGenCmb = new JComboBox();
@@ -13363,7 +13363,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorRandGenCmb.setMinimumSize(new Dimension(100, 24));
       swfAnimatorRandGenCmb.setMaximumSize(new Dimension(32767, 24));
       swfAnimatorRandGenCmb.setMaximumRowCount(32);
-      swfAnimatorRandGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorRandGenCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorOutputTypeCmb = new JComboBox();
       swfAnimatorOutputTypeCmb.addItemListener(new ItemListener() {
@@ -13376,14 +13376,14 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorOutputTypeCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorOutputTypeCmb.setMinimumSize(new Dimension(33, 24));
       swfAnimatorOutputTypeCmb.setMaximumRowCount(32);
-      swfAnimatorOutputTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorOutputTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorOutputTypeCmb.setBounds(1045, 5, 125, 24);
       panel_5.add(swfAnimatorOutputTypeCmb);
 
       JLabel lblOutput = new JLabel();
       lblOutput.setText("Output");
       lblOutput.setPreferredSize(new Dimension(94, 22));
-      lblOutput.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOutput.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOutput.setBounds(994, 6, 52, 22);
       panel_5.add(lblOutput);
 
@@ -13398,7 +13398,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorQualityProfileCmb.setMinimumSize(new Dimension(33, 24));
       swfAnimatorQualityProfileCmb.setMaximumRowCount(32);
-      swfAnimatorQualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorQualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorQualityProfileCmb.setBounds(822, 6, 125, 24);
 
       panel_5.add(swfAnimatorQualityProfileCmb);
@@ -13406,7 +13406,7 @@ public class TinaInternalFrame extends JInternalFrame {
       JLabel lblQuality = new JLabel();
       lblQuality.setText("Quality");
       lblQuality.setPreferredSize(new Dimension(94, 22));
-      lblQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblQuality.setBounds(772, 6, 45, 22);
       panel_5.add(lblQuality);
     }
@@ -13424,7 +13424,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorLoadFlameFromMainButton.setToolTipText("Load flame from Editor and add it to the movie");
       swfAnimatorLoadFlameFromMainButton.setText("Add from Editor");
       swfAnimatorLoadFlameFromMainButton.setPreferredSize(new Dimension(135, 24));
-      swfAnimatorLoadFlameFromMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameFromMainButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorLoadFlameFromMainButton;
   }
@@ -13440,7 +13440,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorLoadFlameFromClipboardButton.setToolTipText("Load flame from clipboard and add it to the movie");
       swfAnimatorLoadFlameFromClipboardButton.setText("Add from Clipboard");
       swfAnimatorLoadFlameFromClipboardButton.setPreferredSize(new Dimension(135, 24));
-      swfAnimatorLoadFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameFromClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorLoadFlameFromClipboardButton;
   }
@@ -13456,7 +13456,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorLoadFlameButton.setToolTipText("Load flame from file and add it to the movie");
       swfAnimatorLoadFlameButton.setText("Add flame from disc");
       swfAnimatorLoadFlameButton.setPreferredSize(new Dimension(135, 24));
-      swfAnimatorLoadFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorLoadFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorLoadFlameButton;
   }
@@ -13467,7 +13467,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_1.setMinimumSize(new Dimension(80, 22));
       label_1.setText("Resolution");
       label_1.setPreferredSize(new Dimension(80, 22));
-      label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_1;
   }
@@ -13486,7 +13486,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorResolutionProfileCmb.setBounds(644, 6, 125, 24);
       swfAnimatorResolutionProfileCmb.setPreferredSize(new Dimension(125, 24));
       swfAnimatorResolutionProfileCmb.setMaximumRowCount(32);
-      swfAnimatorResolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorResolutionProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorResolutionProfileCmb;
   }
@@ -13497,7 +13497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_3.setBounds(578, 6, 65, 22);
       label_3.setText("Resolution");
       label_3.setPreferredSize(new Dimension(94, 22));
-      label_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_3;
   }
@@ -13560,7 +13560,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorRemoveFlameButton.setToolTipText("Remove the currently selected flame from the movie");
       swfAnimatorRemoveFlameButton.setText("Remove flame");
       swfAnimatorRemoveFlameButton.setPreferredSize(new Dimension(135, 24));
-      swfAnimatorRemoveFlameButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorRemoveFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorRemoveFlameButton;
   }
@@ -13576,7 +13576,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorRemoveAllFlamesButton.setToolTipText("Remove all flames from the movie");
       swfAnimatorRemoveAllFlamesButton.setText("Remove all");
       swfAnimatorRemoveAllFlamesButton.setPreferredSize(new Dimension(135, 24));
-      swfAnimatorRemoveAllFlamesButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorRemoveAllFlamesButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorRemoveAllFlamesButton;
   }
@@ -13592,7 +13592,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMoveUpButton.setToolTipText("Move the currently selected flame up in the movie");
       swfAnimatorMoveUpButton.setText("Up");
       swfAnimatorMoveUpButton.setPreferredSize(new Dimension(65, 24));
-      swfAnimatorMoveUpButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMoveUpButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorMoveUpButton;
   }
@@ -13608,7 +13608,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMoveDownButton.setToolTipText("Move the currently selected flame down in the movie");
       swfAnimatorMoveDownButton.setText("Down");
       swfAnimatorMoveDownButton.setPreferredSize(new Dimension(65, 24));
-      swfAnimatorMoveDownButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMoveDownButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return swfAnimatorMoveDownButton;
   }
@@ -13623,7 +13623,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorMovieFromClipboardButton.setText("From Clipboard");
       swfAnimatorMovieFromClipboardButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieFromClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieFromClipboardButton.setBounds(new Rectangle(504, 7, 125, 24));
       swfAnimatorMovieFromClipboardButton.setBounds(304, 6, 125, 24);
     }
@@ -13640,7 +13640,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorMovieFromDiscButton.setText("Load Movie");
       swfAnimatorMovieFromDiscButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieFromDiscButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieFromDiscButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieFromDiscButton.setBounds(new Rectangle(504, 35, 125, 24));
       swfAnimatorMovieFromDiscButton.setBounds(304, 31, 125, 24);
     }
@@ -13657,7 +13657,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorMovieToClipboardButton.setText("To Clipboard");
       swfAnimatorMovieToClipboardButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieToClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieToClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToClipboardButton.setBounds(new Rectangle(643, 7, 125, 24));
       swfAnimatorMovieToClipboardButton.setBounds(441, 6, 125, 24);
     }
@@ -13674,7 +13674,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorMovieToDiscButton.setText("Save Movie");
       swfAnimatorMovieToDiscButton.setPreferredSize(new Dimension(125, 24));
-      swfAnimatorMovieToDiscButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorMovieToDiscButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorMovieToDiscButton.setBounds(new Rectangle(643, 35, 125, 24));
       swfAnimatorMovieToDiscButton.setBounds(441, 31, 125, 24);
     }
@@ -13694,7 +13694,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAppendToMovieButton.setText("Movie");
       tinaAppendToMovieButton.setPreferredSize(new Dimension(72, 24));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
-      tinaAppendToMovieButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      tinaAppendToMovieButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       tinaAppendToMovieButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
     }
     return tinaAppendToMovieButton;
@@ -13734,7 +13734,7 @@ public class TinaInternalFrame extends JInternalFrame {
       transformationWeightREd.setSize(new Dimension(81, 24));
       transformationWeightREd.setPreferredSize(new Dimension(90, 24));
       transformationWeightREd.setLocation(new Point(238, 6));
-      transformationWeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      transformationWeightREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return transformationWeightREd;
   }
@@ -13756,7 +13756,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (helpPane == null) {
       helpPane = new JTextPane();
       helpPane.setBackground(SystemColor.menu);
-      helpPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      helpPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       helpPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
           if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
@@ -13791,7 +13791,7 @@ public class TinaInternalFrame extends JInternalFrame {
       undoButton.setText("Undo");
       undoButton.setPreferredSize(new Dimension(72, 24));
       undoButton.setMnemonic(KeyEvent.VK_Z);
-      undoButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      undoButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       undoButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return undoButton;
@@ -13802,7 +13802,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_5 = new JLabel();
       label_5.setText("");
       label_5.setPreferredSize(new Dimension(42, 12));
-      label_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_5.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_5;
   }
@@ -13820,7 +13820,7 @@ public class TinaInternalFrame extends JInternalFrame {
       redoButton.setText("Redo");
       redoButton.setPreferredSize(new Dimension(72, 24));
       redoButton.setMnemonic(KeyEvent.VK_Y);
-      redoButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      redoButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       redoButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-redo-6.png")));
     }
     return redoButton;
@@ -13851,7 +13851,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSpatialFilterRadius.setSize(new Dimension(94, 22));
       lblSpatialFilterRadius.setPreferredSize(new Dimension(94, 22));
       lblSpatialFilterRadius.setLocation(new Point(488, 2));
-      lblSpatialFilterRadius.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpatialFilterRadius.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSpatialFilterRadius.setBounds(6, 58, 107, 22);
       antialiasPanel.add(lblSpatialFilterRadius);
 
@@ -13877,7 +13877,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusREd.setLocation(new Point(584, 2));
       tinaFilterRadiusREd.setHasMinValue(true);
       tinaFilterRadiusREd.setHasMaxValue(true);
-      tinaFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaFilterRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaFilterRadiusREd.setEditable(true);
       tinaFilterRadiusREd.setBounds(115, 58, 100, 24);
       antialiasPanel.add(tinaFilterRadiusREd);
@@ -13903,7 +13903,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusSlider.setMinimum(0);
       tinaFilterRadiusSlider.setMaximum(200);
       tinaFilterRadiusSlider.setLocation(new Point(686, 2));
-      tinaFilterRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterRadiusSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaFilterRadiusSlider.setBounds(217, 58, 220, 24);
       antialiasPanel.add(tinaFilterRadiusSlider);
 
@@ -13918,7 +13918,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterKernelCmb.setSize(new Dimension(125, 22));
       tinaFilterKernelCmb.setPreferredSize(new Dimension(125, 22));
       tinaFilterKernelCmb.setLocation(new Point(100, 4));
-      tinaFilterKernelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterKernelCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaFilterKernelCmb.setBounds(115, 34, 322, 24);
       antialiasPanel.add(tinaFilterKernelCmb);
 
@@ -13927,7 +13927,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSpatialFilterKernel.setSize(new Dimension(94, 22));
       lblSpatialFilterKernel.setPreferredSize(new Dimension(94, 22));
       lblSpatialFilterKernel.setLocation(new Point(488, 2));
-      lblSpatialFilterKernel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpatialFilterKernel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSpatialFilterKernel.setBounds(6, 34, 107, 22);
       antialiasPanel.add(lblSpatialFilterKernel);
 
@@ -13943,7 +13943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetAntialiasOptionsButton.setMinimumSize(new Dimension(100, 24));
       resetAntialiasOptionsButton.setMaximumSize(new Dimension(32000, 24));
       resetAntialiasOptionsButton.setIconTextGap(2);
-      resetAntialiasOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetAntialiasOptionsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetAntialiasOptionsButton.setBounds(1018, 6, 100, 24);
       resetAntialiasOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       antialiasPanel.add(resetAntialiasOptionsButton);
@@ -13954,7 +13954,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSpatialOversampling.setSize(new Dimension(94, 22));
       lblSpatialOversampling.setPreferredSize(new Dimension(94, 22));
       lblSpatialOversampling.setLocation(new Point(488, 2));
-      lblSpatialOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpatialOversampling.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSpatialOversampling.setBounds(6, 6, 107, 22);
       antialiasPanel.add(lblSpatialOversampling);
 
@@ -13970,7 +13970,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSpatialOversamplingREd.setLocation(new Point(584, 2));
       tinaSpatialOversamplingREd.setHasMinValue(true);
       tinaSpatialOversamplingREd.setHasMaxValue(true);
-      tinaSpatialOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSpatialOversamplingREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSpatialOversamplingREd.setEditable(true);
       tinaSpatialOversamplingREd.setBounds(115, 6, 100, 24);
       tinaSpatialOversamplingREd.addChangeListener(new ChangeListener() {
@@ -13995,7 +13995,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSpatialOversamplingSlider.setMinimum(1);
       tinaSpatialOversamplingSlider.setMaximum(6);
       tinaSpatialOversamplingSlider.setLocation(new Point(686, 2));
-      tinaSpatialOversamplingSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSpatialOversamplingSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSpatialOversamplingSlider.setBounds(217, 6, 220, 24);
       tinaSpatialOversamplingSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -14023,7 +14023,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblColorOversampling.setSize(new Dimension(94, 22));
       lblColorOversampling.setPreferredSize(new Dimension(94, 22));
       lblColorOversampling.setLocation(new Point(488, 2));
-      lblColorOversampling.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblColorOversampling.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblColorOversampling.setBounds(6, 111, 107, 22);
       antialiasPanel.add(lblColorOversampling);
 
@@ -14039,7 +14039,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorOversamplingREd.setLocation(new Point(584, 2));
       tinaColorOversamplingREd.setHasMinValue(true);
       tinaColorOversamplingREd.setHasMaxValue(true);
-      tinaColorOversamplingREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaColorOversamplingREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaColorOversamplingREd.setEditable(true);
       tinaColorOversamplingREd.setBounds(115, 111, 100, 24);
       tinaColorOversamplingREd.addChangeListener(new ChangeListener() {
@@ -14064,7 +14064,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorOversamplingSlider.setMinimum(1);
       tinaColorOversamplingSlider.setMaximum(Tools.MAX_COLOR_OVERSAMPLING);
       tinaColorOversamplingSlider.setLocation(new Point(686, 2));
-      tinaColorOversamplingSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaColorOversamplingSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaColorOversamplingSlider.setBounds(217, 111, 220, 24);
       tinaColorOversamplingSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -14108,7 +14108,7 @@ public class TinaInternalFrame extends JInternalFrame {
       filterKernelFlatPreviewBtn.setPreferredSize(new Dimension(26, 24));
       filterKernelFlatPreviewBtn.setMnemonic(KeyEvent.VK_P);
       filterKernelFlatPreviewBtn.setLocation(new Point(92, 127));
-      filterKernelFlatPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      filterKernelFlatPreviewBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       filterKernelFlatPreviewBtn.setBounds(449, 114, 107, 24);
       antialiasPanel.add(filterKernelFlatPreviewBtn);
 
@@ -14135,7 +14135,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPostNoiseThresholdField.setLinkedMotionControlName("tinaPostNoiseThresholdSlider");
       tinaPostNoiseThresholdField.setHasMinValue(true);
       tinaPostNoiseThresholdField.setHasMaxValue(true);
-      tinaPostNoiseThresholdField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPostNoiseThresholdField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaPostNoiseThresholdField.setEditable(true);
       tinaPostNoiseThresholdField.setBounds(674, 90, 100, 24);
       tinaPostNoiseThresholdField.addChangeListener(new ChangeListener() {
@@ -14159,7 +14159,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblNoiseThreshold.setSize(new Dimension(94, 22));
       lblNoiseThreshold.setPreferredSize(new Dimension(94, 22));
       lblNoiseThreshold.setLocation(new Point(488, 2));
-      lblNoiseThreshold.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblNoiseThreshold.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblNoiseThreshold.setBounds(565, 90, 107, 22);
       antialiasPanel.add(lblNoiseThreshold);
 
@@ -14170,7 +14170,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPostNoiseThresholdSlider.setPreferredSize(new Dimension(220, 19));
       tinaPostNoiseThresholdSlider.setName("tinaPostNoiseThresholdSlider");
       tinaPostNoiseThresholdSlider.setLocation(new Point(686, 2));
-      tinaPostNoiseThresholdSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPostNoiseThresholdSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPostNoiseThresholdSlider.setBounds(776, 90, 220, 24);
       tinaPostNoiseThresholdSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -14248,7 +14248,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       resolutionProfileCmb.setPreferredSize(new Dimension(85, 24));
       resolutionProfileCmb.setMaximumRowCount(32);
-      resolutionProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      resolutionProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_1.add(getResolutionProfileBtn());
 
       JPanel panel_2 = new JPanel();
@@ -14269,7 +14269,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       qualityProfileCmb.setPreferredSize(new Dimension(85, 24));
       qualityProfileCmb.setMaximumRowCount(32);
-      qualityProfileCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      qualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_2.add(getQualityProfileBtn());
     }
     return panel_15;
@@ -14285,7 +14285,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSwapRGBLbl_1.setSize(new Dimension(56, 22));
       tinaPaletteSwapRGBLbl_1.setPreferredSize(new Dimension(64, 22));
       tinaPaletteSwapRGBLbl_1.setLocation(new Point(6, 214));
-      tinaPaletteSwapRGBLbl_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSwapRGBLbl_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSwapRGBLbl_1.setBounds(6, 6, 56, 22);
       tinaPaletteTransformPanel.add(tinaPaletteSwapRGBLbl_1);
 
@@ -14311,7 +14311,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSwapRGBREd.setLocation(new Point(62, 214));
       tinaPaletteSwapRGBREd.setHasMinValue(true);
       tinaPaletteSwapRGBREd.setHasMaxValue(true);
-      tinaPaletteSwapRGBREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteSwapRGBREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaPaletteSwapRGBREd.setBounds(62, 6, 56, 24);
       tinaPaletteTransformPanel.add(tinaPaletteSwapRGBREd);
 
@@ -14335,7 +14335,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSwapRGBSlider.setMinimum(-255);
       tinaPaletteSwapRGBSlider.setMaximum(255);
       tinaPaletteSwapRGBSlider.setLocation(new Point(118, 214));
-      tinaPaletteSwapRGBSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSwapRGBSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSwapRGBSlider.setBounds(118, 6, 204, 22);
       tinaPaletteTransformPanel.add(tinaPaletteSwapRGBSlider);
 
@@ -14344,7 +14344,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteFrequencyLbl.setSize(new Dimension(56, 22));
       tinaPaletteFrequencyLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteFrequencyLbl.setLocation(new Point(6, 214));
-      tinaPaletteFrequencyLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteFrequencyLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteFrequencyLbl.setBounds(6, 31, 56, 22);
       tinaPaletteTransformPanel.add(tinaPaletteFrequencyLbl);
 
@@ -14371,7 +14371,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteFrequencyREd.setLocation(new Point(62, 214));
       tinaPaletteFrequencyREd.setHasMinValue(true);
       tinaPaletteFrequencyREd.setHasMaxValue(true);
-      tinaPaletteFrequencyREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteFrequencyREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaPaletteFrequencyREd.setBounds(62, 31, 56, 24);
       tinaPaletteTransformPanel.add(tinaPaletteFrequencyREd);
 
@@ -14395,7 +14395,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteFrequencySlider.setMinimum(1);
       tinaPaletteFrequencySlider.setMaximum(16);
       tinaPaletteFrequencySlider.setLocation(new Point(118, 214));
-      tinaPaletteFrequencySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteFrequencySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteFrequencySlider.setBounds(118, 31, 204, 22);
       tinaPaletteTransformPanel.add(tinaPaletteFrequencySlider);
 
@@ -14404,7 +14404,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlurLbl.setSize(new Dimension(56, 22));
       tinaPaletteBlurLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBlurLbl.setLocation(new Point(6, 214));
-      tinaPaletteBlurLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlurLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBlurLbl.setBounds(6, 55, 56, 22);
       tinaPaletteTransformPanel.add(tinaPaletteBlurLbl);
 
@@ -14429,7 +14429,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlurREd.setLocation(new Point(62, 214));
       tinaPaletteBlurREd.setHasMinValue(true);
       tinaPaletteBlurREd.setHasMaxValue(true);
-      tinaPaletteBlurREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaPaletteBlurREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaPaletteBlurREd.setBounds(62, 55, 56, 24);
       tinaPaletteTransformPanel.add(tinaPaletteBlurREd);
 
@@ -14452,7 +14452,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteBlurSlider.setPreferredSize(new Dimension(86, 22));
       tinaPaletteBlurSlider.setMaximum(127);
       tinaPaletteBlurSlider.setLocation(new Point(118, 214));
-      tinaPaletteBlurSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteBlurSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBlurSlider.setBounds(118, 55, 204, 22);
       tinaPaletteTransformPanel.add(tinaPaletteBlurSlider);
 
@@ -14467,7 +14467,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteInvertBtn.setSize(new Dimension(138, 24));
       tinaPaletteInvertBtn.setPreferredSize(new Dimension(136, 24));
       tinaPaletteInvertBtn.setLocation(new Point(4, 181));
-      tinaPaletteInvertBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteInvertBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteInvertBtn.setBounds(341, 5, 88, 24);
       tinaPaletteTransformPanel.add(tinaPaletteInvertBtn);
 
@@ -14482,7 +14482,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteReverseBtn.setSize(new Dimension(138, 24));
       tinaPaletteReverseBtn.setPreferredSize(new Dimension(136, 24));
       tinaPaletteReverseBtn.setLocation(new Point(4, 181));
-      tinaPaletteReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteReverseBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteReverseBtn.setBounds(341, 30, 88, 24);
       tinaPaletteTransformPanel.add(tinaPaletteReverseBtn);
 
@@ -14497,7 +14497,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteSortBtn.setSize(new Dimension(138, 24));
       tinaPaletteSortBtn.setPreferredSize(new Dimension(136, 24));
       tinaPaletteSortBtn.setLocation(new Point(4, 181));
-      tinaPaletteSortBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaPaletteSortBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSortBtn.setBounds(341, 54, 88, 24);
       tinaPaletteTransformPanel.add(tinaPaletteSortBtn);
 
@@ -14512,7 +14512,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientApplyTXBtn.setSize(new Dimension(190, 24));
       gradientApplyTXBtn.setPreferredSize(new Dimension(190, 24));
       gradientApplyTXBtn.setLocation(new Point(6, 230));
-      gradientApplyTXBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientApplyTXBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientApplyTXBtn.setBounds(6, 83, 316, 24);
       tinaPaletteTransformPanel.add(gradientApplyTXBtn);
     }
@@ -14563,7 +14563,7 @@ public class TinaInternalFrame extends JInternalFrame {
       snapShotButton.setText("SShot");
       snapShotButton.setPreferredSize(new Dimension(72, 24));
       snapShotButton.setMnemonic(KeyEvent.VK_H);
-      snapShotButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      snapShotButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return snapShotButton;
   }
@@ -14580,7 +14580,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnQsave.setText("Q");
       btnQsave.setPreferredSize(new Dimension(60, 24));
       btnQsave.setMnemonic(KeyEvent.VK_Q);
-      btnQsave.setFont(new Font("Dialog", Font.BOLD, 10));
+      btnQsave.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return btnQsave;
   }
@@ -14590,7 +14590,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_6 = new JLabel();
       label_6.setText("");
       label_6.setPreferredSize(new Dimension(42, 12));
-      label_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_6.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_6;
   }
@@ -14620,7 +14620,7 @@ public class TinaInternalFrame extends JInternalFrame {
       JLabel lblGlobalSettings = new JLabel();
       lblGlobalSettings.setText("Global settings:");
       lblGlobalSettings.setPreferredSize(new Dimension(100, 22));
-      lblGlobalSettings.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGlobalSettings.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalSettings.setAlignmentX(1.0f);
       lblGlobalSettings.setBounds(6, 20, 100, 14);
       panel_22.add(lblGlobalSettings);
@@ -14640,7 +14640,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_23.add(batchRenderJobProgressLbl);
       batchRenderJobProgressLbl.setPreferredSize(new Dimension(100, 22));
       batchRenderJobProgressLbl.setText("Job progress");
-      batchRenderJobProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderJobProgressLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_23.add(getBatchRenderJobProgressBar());
     }
     return panel_23;
@@ -14658,7 +14658,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_24.add(batchRenderTotalProgressLbl);
       batchRenderTotalProgressLbl.setPreferredSize(new Dimension(100, 22));
       batchRenderTotalProgressLbl.setText("Total progress");
-      batchRenderTotalProgressLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      batchRenderTotalProgressLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_24.add(getBatchRenderTotalProgressBar());
     }
     return panel_24;
@@ -14704,7 +14704,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveLoadFlameFromMainButton.setToolTipText("Load flame from Editor and render");
       interactiveLoadFlameFromMainButton.setText("From Editor");
       interactiveLoadFlameFromMainButton.setPreferredSize(new Dimension(125, 24));
-      interactiveLoadFlameFromMainButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveLoadFlameFromMainButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_27.add(getInteractiveLoadFlameFromClipboardButton());
       panel_27.add(getInteractiveLoadFlameButton());
     }
@@ -14732,7 +14732,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveHalfSizeButton.setText("Half size");
       interactiveHalfSizeButton.setPreferredSize(new Dimension(100, 24));
       interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
-      interactiveHalfSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveHalfSizeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_28.add(getPanel_29());
       panel_28.add(getPanel_30());
     }
@@ -14766,7 +14766,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_31.add(label);
       label.setText("Random generator");
       label.setPreferredSize(new Dimension(94, 22));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       interactiveRandomStyleCmb = new JComboBox();
       panel_31.add(interactiveRandomStyleCmb);
@@ -14774,7 +14774,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveRandomStyleCmb.setMaximumSize(new Dimension(32767, 24));
       interactiveRandomStyleCmb.setPreferredSize(new Dimension(125, 24));
       interactiveRandomStyleCmb.setMaximumRowCount(32);
-      interactiveRandomStyleCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveRandomStyleCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       interactiveRandomStyleCmb.setMaximumRowCount(32);
       interactiveRandomStyleCmb.removeAllItems();
       interactiveRandomStyleCmb.setSelectedItem(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME);
@@ -14815,7 +14815,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactivePauseButton.setText("Save render state");
       interactivePauseButton.setPreferredSize(new Dimension(125, 24));
       interactivePauseButton.setMnemonic(KeyEvent.VK_T);
-      interactivePauseButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactivePauseButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_33.add(getInteractiveSaveImageButton());
     }
     return panel_33;
@@ -14841,7 +14841,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveFlameToEditorButton.setText("To Editor");
       interactiveFlameToEditorButton.setPreferredSize(new Dimension(125, 24));
       interactiveFlameToEditorButton.setMnemonic(KeyEvent.VK_D);
-      interactiveFlameToEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveFlameToEditorButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_35.add(getInteractiveFlameToClipboardButton());
       panel_35.add(getInteractiveSaveFlameButton());
     }
@@ -14894,7 +14894,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesStopShowBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesStopShowBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesStopShowBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesStopShowBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesStopShowBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesStopShowBtn;
   }
@@ -14923,7 +14923,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAppendToDancingFlamesButton.setText("Dance");
       tinaAppendToDancingFlamesButton.setPreferredSize(new Dimension(72, 24));
       tinaAppendToDancingFlamesButton.setMnemonic(KeyEvent.VK_D);
-      tinaAppendToDancingFlamesButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      tinaAppendToDancingFlamesButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       tinaAppendToDancingFlamesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kipina.png")));
     }
     return tinaAppendToDancingFlamesButton;
@@ -14943,7 +14943,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesAddFromEditorBtn.setToolTipText("Load flame from Editor and add it to the movie");
       dancingFlamesAddFromEditorBtn.setText("Add from Editor");
       dancingFlamesAddFromEditorBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesAddFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesAddFromEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesAddFromEditorBtn;
   }
@@ -14962,7 +14962,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesAddFromClipboardBtn.setToolTipText("Load flame from clipboard and add it to the movie");
       dancingFlamesAddFromClipboardBtn.setText("Add from Clipboard");
       dancingFlamesAddFromClipboardBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesAddFromClipboardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesAddFromClipboardBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesAddFromClipboardBtn;
   }
@@ -14981,7 +14981,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesAddFromDiscBtn.setToolTipText("Load flames from file and add it to the movie");
       dancingFlamesAddFromDiscBtn.setText("Add flames from disc");
       dancingFlamesAddFromDiscBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesAddFromDiscBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesAddFromDiscBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesAddFromDiscBtn;
   }
@@ -15007,7 +15007,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRandomGenerator.setMinimumSize(new Dimension(100, 24));
       lblRandomGenerator.setText("Random generator");
       lblRandomGenerator.setPreferredSize(new Dimension(100, 24));
-      lblRandomGenerator.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRandomGenerator.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblRandomGenerator;
   }
@@ -15084,7 +15084,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBorderSize.setText("Border size");
       lblBorderSize.setPreferredSize(new Dimension(60, 24));
       lblBorderSize.setMinimumSize(new Dimension(100, 24));
-      lblBorderSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBorderSize.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblBorderSize;
   }
@@ -15102,7 +15102,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesFramesPerSecondIEd = new JTextField();
       dancingFlamesFramesPerSecondIEd.setText("12");
       dancingFlamesFramesPerSecondIEd.setPreferredSize(new Dimension(56, 22));
-      dancingFlamesFramesPerSecondIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesFramesPerSecondIEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return dancingFlamesFramesPerSecondIEd;
   }
@@ -15113,7 +15113,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_7.setText("Frames per second");
       label_7.setPreferredSize(new Dimension(110, 22));
       label_7.setHorizontalAlignment(SwingConstants.RIGHT);
-      label_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_7.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_7;
   }
@@ -15128,7 +15128,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesMorphFrameCountIEd.setBounds(482, 57, 56, 22);
       dancingFlamesMorphFrameCountIEd.setText("0");
       dancingFlamesMorphFrameCountIEd.setPreferredSize(new Dimension(56, 22));
-      dancingFlamesMorphFrameCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesMorphFrameCountIEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return dancingFlamesMorphFrameCountIEd;
   }
@@ -15140,7 +15140,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblMorphFrames.setText("Morph frames");
       lblMorphFrames.setPreferredSize(new Dimension(120, 22));
       lblMorphFrames.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblMorphFrames.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMorphFrames.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblMorphFrames;
   }
@@ -15163,7 +15163,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDoRecordCBx = new JCheckBox("Record show");
       dancingFlamesDoRecordCBx.setBounds(226, 93, 125, 18);
       dancingFlamesDoRecordCBx.setActionCommand("Record show");
-      dancingFlamesDoRecordCBx.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesDoRecordCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dancingFlamesDoRecordCBx.setPreferredSize(new Dimension(125, 18));
     }
     return dancingFlamesDoRecordCBx;
@@ -15199,7 +15199,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesBorderSizeSlider.setValue(200);
       dancingFlamesBorderSizeSlider.setPreferredSize(new Dimension(100, 22));
       dancingFlamesBorderSizeSlider.setMaximum(640);
-      dancingFlamesBorderSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesBorderSizeSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return panel_41;
   }
@@ -15230,7 +15230,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesFlameCmb.setMinimumSize(new Dimension(125, 24));
       dancingFlamesFlameCmb.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesFlameCmb.setMaximumRowCount(32);
-      dancingFlamesFlameCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesFlameCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesFlameCmb.setAlignmentX(1.0f);
 
       JLabel lblFlame = new JLabel();
@@ -15239,7 +15239,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFlame.setText("Flame");
       lblFlame.setPreferredSize(new Dimension(120, 22));
       lblFlame.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblFlame.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlame.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_49.add(getDancingFlamesMorphFrameCountIEd());
       panel_49.add(getLblMorphFrames());
 
@@ -15256,7 +15256,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesLoadSoundBtn.setToolTipText("Load a *.wav or *.mp3 file");
       dancingFlamesLoadSoundBtn.setText("Load sound");
       dancingFlamesLoadSoundBtn.setPreferredSize(new Dimension(125, 24));
-      dancingFlamesLoadSoundBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesLoadSoundBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       dancingFlamesStartShowBtn = new JButton();
       dancingFlamesStartShowBtn.setBounds(19, 90, 125, 24);
@@ -15270,7 +15270,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesStartShowBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesStartShowBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesStartShowBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesStartShowBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesStartShowBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_49.add(getDancingFlamesStopShowBtn());
       panel_49.add(getDancingFlamesDoRecordCBx());
 
@@ -15285,7 +15285,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesLoadProjectBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesLoadProjectBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesLoadProjectBtn.setMaximumSize(new Dimension(125, 24));
-      dancingFlamesLoadProjectBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesLoadProjectBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesLoadProjectBtn.setBounds(282, 20, 125, 24);
       panel_49.add(dancingFlamesLoadProjectBtn);
 
@@ -15300,7 +15300,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesSaveProjectBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesSaveProjectBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesSaveProjectBtn.setMaximumSize(new Dimension(125, 24));
-      dancingFlamesSaveProjectBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesSaveProjectBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesSaveProjectBtn.setBounds(413, 20, 125, 24);
       panel_49.add(dancingFlamesSaveProjectBtn);
     }
@@ -15405,7 +15405,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRandomGenCmb.setMinimumSize(new Dimension(125, 24));
       dancingFlamesRandomGenCmb.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesRandomGenCmb.setMaximumRowCount(32);
-      dancingFlamesRandomGenCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRandomGenCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesRandomGenCmb.removeAllItems();
       for (String name : RandomFlameGeneratorList.getNameList()) {
         dancingFlamesRandomGenCmb.addItem(name);
@@ -15419,7 +15419,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblCount.setMinimumSize(new Dimension(100, 24));
       lblCount.setText("Count");
       lblCount.setPreferredSize(new Dimension(100, 24));
-      lblCount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCount.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       dancingFlamesRandomCountIEd = new JWFNumberField();
       dancingFlamesRandomCountIEd.setBounds(100, 31, 62, 24);
@@ -15434,7 +15434,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRandomCountIEd.setMaxValue(255.0);
       dancingFlamesRandomCountIEd.setHasMinValue(true);
       dancingFlamesRandomCountIEd.setHasMaxValue(true);
-      dancingFlamesRandomCountIEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dancingFlamesRandomCountIEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dancingFlamesRandomCountIEd.setEditable(true);
 
       dancingFlamesGenRandFlamesBtn = new JButton();
@@ -15449,7 +15449,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesGenRandFlamesBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesGenRandFlamesBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesGenRandFlamesBtn.setMaximumSize(new Dimension(30000, 24));
-      dancingFlamesGenRandFlamesBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesGenRandFlamesBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_40.add(getDancingFlamesAddFromEditorBtn());
       panel_40.add(getDancingFlamesAddFromClipboardBtn());
       panel_40.add(getDancingFlamesAddFromDiscBtn());
@@ -15481,7 +15481,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDeleteFlameBtn.setText("Delete");
       dancingFlamesDeleteFlameBtn.setPreferredSize(new Dimension(115, 24));
       dancingFlamesDeleteFlameBtn.setMnemonic(KeyEvent.VK_D);
-      dancingFlamesDeleteFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesDeleteFlameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JPanel panel_2 = new JPanel();
       FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
@@ -15502,7 +15502,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesFlameToEditorBtn.setText("To Editor");
       dancingFlamesFlameToEditorBtn.setPreferredSize(new Dimension(115, 24));
       dancingFlamesFlameToEditorBtn.setMnemonic(KeyEvent.VK_E);
-      dancingFlamesFlameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesFlameToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_2.add(getDancingFlamesFlameToEditorBtn());
       panel_2.add(getDancingFlamesReplaceFlameFromEditorBtn());
       panel_2.add(getDancingFlamesRenameFlameBtn());
@@ -15652,7 +15652,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesAddMotionCmb.setMinimumSize(new Dimension(125, 24));
       dancingFlamesAddMotionCmb.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesAddMotionCmb.setMaximumRowCount(32);
-      dancingFlamesAddMotionCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesAddMotionCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesAddMotionCmb.setAlignmentX(1.0f);
       dancingFlamesAddMotionCmb.setBounds(132, 6, 180, 24);
       panel_38.add(dancingFlamesAddMotionCmb);
@@ -15667,7 +15667,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesAddMotionBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesAddMotionBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesAddMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesAddMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesAddMotionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesAddMotionBtn.setBounds(6, 6, 125, 24);
       panel_38.add(dancingFlamesAddMotionBtn);
 
@@ -15681,7 +15681,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesDeleteMotionBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesDeleteMotionBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesDeleteMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesDeleteMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesDeleteMotionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesDeleteMotionBtn.setBounds(461, 6, 125, 24);
       panel_38.add(dancingFlamesDeleteMotionBtn);
       panel_38.add(getDancingFlamesCreateMotionsBtn());
@@ -15700,7 +15700,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRenameMotionBtn.setMnemonic(KeyEvent.VK_M);
       dancingFlamesRenameMotionBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesRenameMotionBtn.setMaximumSize(new Dimension(160, 24));
-      dancingFlamesRenameMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRenameMotionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesRenameMotionBtn.setBounds(334, 6, 115, 24);
       panel_38.add(dancingFlamesRenameMotionBtn);
     }
@@ -15787,7 +15787,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesCreateMotionsBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesCreateMotionsBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesCreateMotionsBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesCreateMotionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesCreateMotionsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesCreateMotionsBtn.setBounds(5, 31, 125, 24);
     }
     return dancingFlamesCreateMotionsBtn;
@@ -15800,7 +15800,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesCreateMotionsCmb.setMinimumSize(new Dimension(125, 24));
       dancingFlamesCreateMotionsCmb.setMaximumSize(new Dimension(30000, 24));
       dancingFlamesCreateMotionsCmb.setMaximumRowCount(32);
-      dancingFlamesCreateMotionsCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesCreateMotionsCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesCreateMotionsCmb.setAlignmentX(1.0f);
       dancingFlamesCreateMotionsCmb.setBounds(131, 31, 180, 24);
     }
@@ -15819,7 +15819,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesClearMotionsBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesClearMotionsBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesClearMotionsBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesClearMotionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesClearMotionsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dancingFlamesClearMotionsBtn.setBounds(461, 31, 125, 24);
     }
     return dancingFlamesClearMotionsBtn;
@@ -15852,7 +15852,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesLinkMotionBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesLinkMotionBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesLinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesLinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesLinkMotionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       dancingFlamesUnlinkMotionBtn = new JButton();
       dancingFlamesUnlinkMotionBtn.setBounds(0, 23, 125, 24);
@@ -15867,7 +15867,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesUnlinkMotionBtn.setPreferredSize(new Dimension(125, 24));
       dancingFlamesUnlinkMotionBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesUnlinkMotionBtn.setMaximumSize(new Dimension(32000, 24));
-      dancingFlamesUnlinkMotionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesUnlinkMotionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return panel_50;
   }
@@ -15911,7 +15911,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddLinkedTransformationButton.setToolTipText("Add new linked transform");
       tinaAddLinkedTransformationButton.setText("L");
       tinaAddLinkedTransformationButton.setPreferredSize(new Dimension(34, 24));
-      tinaAddLinkedTransformationButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaAddLinkedTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return tinaAddLinkedTransformationButton;
   }
@@ -16000,7 +16000,7 @@ public class TinaInternalFrame extends JInternalFrame {
       quickMutationButton.setText("Muta");
       quickMutationButton.setPreferredSize(new Dimension(72, 24));
       quickMutationButton.setMnemonic(KeyEvent.VK_H);
-      quickMutationButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      quickMutationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       quickMutationButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kdissert.png")));
     }
     return quickMutationButton;
@@ -16046,7 +16046,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenLoadFlameFromEditorBtn.setPreferredSize(new Dimension(115, 24));
       mutaGenLoadFlameFromEditorBtn.setMinimumSize(new Dimension(115, 24));
       mutaGenLoadFlameFromEditorBtn.setMaximumSize(new Dimension(115, 24));
-      mutaGenLoadFlameFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenLoadFlameFromEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       mutaGenLoadFlameFromFileBtn = new JButton();
       mutaGenLoadFlameFromFileBtn.setMnemonic(KeyEvent.VK_L);
@@ -16062,7 +16062,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenLoadFlameFromFileBtn.setPreferredSize(new Dimension(125, 24));
       mutaGenLoadFlameFromFileBtn.setMinimumSize(new Dimension(125, 24));
       mutaGenLoadFlameFromFileBtn.setMaximumSize(new Dimension(30000, 24));
-      mutaGenLoadFlameFromFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenLoadFlameFromFileBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JPanel panel_2 = new JPanel();
       panel_2.setBorder(new TitledBorder(null, "Hints", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -16090,7 +16090,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenSaveFlameToEditorBtn.setMnemonic(KeyEvent.VK_E);
       mutaGenSaveFlameToEditorBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenSaveFlameToEditorBtn.setMaximumSize(new Dimension(32000, 24));
-      mutaGenSaveFlameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenSaveFlameToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenSaveFlameToEditorBtn.setBounds(16, 23, 115, 24);
       panel_10.add(mutaGenSaveFlameToEditorBtn);
 
@@ -16106,7 +16106,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenSaveFlameToFileBtn.setMnemonic(KeyEvent.VK_V);
       mutaGenSaveFlameToFileBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenSaveFlameToFileBtn.setMaximumSize(new Dimension(32000, 24));
-      mutaGenSaveFlameToFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenSaveFlameToFileBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenSaveFlameToFileBtn.setBounds(135, 23, 115, 24);
       panel_10.add(mutaGenSaveFlameToFileBtn);
 
@@ -16132,7 +16132,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenBackBtn.setMnemonic(KeyEvent.VK_B);
       mutaGenBackBtn.setMinimumSize(new Dimension(115, 24));
       mutaGenBackBtn.setMaximumSize(new Dimension(160, 24));
-      mutaGenBackBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenBackBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_3.add(getMutaGenForwardBtn());
 
       JPanel panel_8 = new JPanel();
@@ -16151,7 +16151,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblTrendVertical.setText("Horiz 1");
       lblTrendVertical.setPreferredSize(new Dimension(40, 22));
       lblTrendVertical.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblTrendVertical.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTrendVertical.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       mutaGenHorizontalTrend1Cmb = new JComboBox();
       panel_9.add(mutaGenHorizontalTrend1Cmb);
@@ -16159,7 +16159,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenHorizontalTrend1Cmb.setMinimumSize(new Dimension(125, 24));
       mutaGenHorizontalTrend1Cmb.setMaximumSize(new Dimension(30000, 24));
       mutaGenHorizontalTrend1Cmb.setMaximumRowCount(32);
-      mutaGenHorizontalTrend1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenHorizontalTrend1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenHorizontalTrend1Cmb.setAlignmentX(1.0f);
       panel_8.add(getPanel_55());
       panel_8.add(getPanel_56());
@@ -16487,7 +16487,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenHorizontalTrend2Cmb.setMinimumSize(new Dimension(125, 24));
       mutaGenHorizontalTrend2Cmb.setMaximumSize(new Dimension(30000, 24));
       mutaGenHorizontalTrend2Cmb.setMaximumRowCount(32);
-      mutaGenHorizontalTrend2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenHorizontalTrend2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenHorizontalTrend2Cmb.setAlignmentX(1.0f);
     }
     return panel_55;
@@ -16499,7 +16499,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblH.setText("Horiz 2");
       lblH.setPreferredSize(new Dimension(40, 22));
       lblH.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblH.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblH.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblH;
   }
@@ -16522,7 +16522,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenVerticalTrend1Cmb.setMinimumSize(new Dimension(125, 24));
       mutaGenVerticalTrend1Cmb.setMaximumSize(new Dimension(30000, 24));
       mutaGenVerticalTrend1Cmb.setMaximumRowCount(32);
-      mutaGenVerticalTrend1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenVerticalTrend1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenVerticalTrend1Cmb.setAlignmentX(1.0f);
     }
     return panel_56;
@@ -16534,7 +16534,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblV.setText("Vert 1");
       lblV.setPreferredSize(new Dimension(40, 22));
       lblV.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblV.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblV.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblV;
   }
@@ -16557,7 +16557,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblVertical.setText("Vert 2");
       lblVertical.setPreferredSize(new Dimension(40, 22));
       lblVertical.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblVertical.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVertical.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblVertical;
   }
@@ -16569,7 +16569,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenVerticalTrend2Cmb.setMinimumSize(new Dimension(125, 24));
       mutaGenVerticalTrend2Cmb.setMaximumSize(new Dimension(30000, 24));
       mutaGenVerticalTrend2Cmb.setMaximumRowCount(32);
-      mutaGenVerticalTrend2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenVerticalTrend2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       mutaGenVerticalTrend2Cmb.setAlignmentX(1.0f);
     }
     return mutaGenVerticalTrend2Cmb;
@@ -16586,7 +16586,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_58.add(lblAmount);
       lblAmount.setText("Strength");
       lblAmount.setPreferredSize(new Dimension(48, 22));
-      lblAmount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAmount.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_58.add(getMutaGenAmountREd());
       panel_58.add(getMutaGenRefreshBtn());
     }
@@ -16608,7 +16608,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenForwardBtn.setMnemonic(KeyEvent.VK_F);
       mutaGenForwardBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenForwardBtn.setMaximumSize(new Dimension(160, 24));
-      mutaGenForwardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenForwardBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return mutaGenForwardBtn;
   }
@@ -16617,7 +16617,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (mutaGenHintPane == null) {
       mutaGenHintPane = new JTextPane();
       mutaGenHintPane.setBackground(SystemColor.menu);
-      mutaGenHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      mutaGenHintPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       mutaGenHintPane.setEditable(false);
     }
     return mutaGenHintPane;
@@ -16642,7 +16642,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenAmountREd.setLocation(new Point(100, 100));
       mutaGenAmountREd.setHasMinValue(true);
       mutaGenAmountREd.setHasMaxValue(true);
-      mutaGenAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      mutaGenAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return mutaGenAmountREd;
   }
@@ -16661,7 +16661,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mutaGenRefreshBtn.setMnemonic(KeyEvent.VK_R);
       mutaGenRefreshBtn.setMinimumSize(new Dimension(100, 24));
       mutaGenRefreshBtn.setMaximumSize(new Dimension(160, 24));
-      mutaGenRefreshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      mutaGenRefreshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return mutaGenRefreshBtn;
   }
@@ -16686,7 +16686,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editFlameTitleBtn.setText("Title");
       editFlameTitleBtn.setPreferredSize(new Dimension(72, 24));
       editFlameTitleBtn.setMnemonic(KeyEvent.VK_T);
-      editFlameTitleBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      editFlameTitleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return editFlameTitleBtn;
   }
@@ -16696,7 +16696,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_8 = new JLabel();
       label_8.setText("");
       label_8.setPreferredSize(new Dimension(42, 4));
-      label_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_8.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_8;
   }
@@ -16730,7 +16730,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newScriptBtn.setToolTipText("Create a new script from scratch");
       newScriptBtn.setText("New");
       newScriptBtn.setPreferredSize(new Dimension(58, 24));
-      newScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      newScriptBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       newScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
     return newScriptBtn;
@@ -16758,7 +16758,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       macroButtonsTable = new JTable();
       macroButtonsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      macroButtonsTable.setFont(new Font("Dialog", Font.PLAIN, 10));
+      macroButtonsTable.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       macroButtonsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
         @Override
@@ -16796,7 +16796,7 @@ public class TinaInternalFrame extends JInternalFrame {
       macroButtonMoveUpBtn.setPreferredSize(new Dimension(58, 24));
       macroButtonMoveUpBtn.setMinimumSize(new Dimension(58, 12));
       macroButtonMoveUpBtn.setMaximumSize(new Dimension(58, 12));
-      macroButtonMoveUpBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonMoveUpBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       macroButtonMoveUpBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_3.add(macroButtonMoveUpBtn);
 
@@ -16811,7 +16811,7 @@ public class TinaInternalFrame extends JInternalFrame {
       macroButtonMoveDownBtn.setPreferredSize(new Dimension(58, 24));
       macroButtonMoveDownBtn.setMinimumSize(new Dimension(58, 12));
       macroButtonMoveDownBtn.setMaximumSize(new Dimension(58, 12));
-      macroButtonMoveDownBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonMoveDownBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       macroButtonMoveDownBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_3.add(macroButtonMoveDownBtn);
 
@@ -16830,7 +16830,7 @@ public class TinaInternalFrame extends JInternalFrame {
       macroButtonDeleteBtn.setToolTipText("Delete the button");
       macroButtonDeleteBtn.setText("Delete");
       macroButtonDeleteBtn.setPreferredSize(new Dimension(116, 24));
-      macroButtonDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      macroButtonDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       macroButtonDeleteBtn.setBounds(new Rectangle(9, 280, 125, 24));
       panel_3.add(macroButtonDeleteBtn);
     }
@@ -16868,7 +16868,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptDescriptionTextArea = new JTextArea();
       scriptDescriptionTextArea.setLineWrap(true);
       scriptDescriptionTextArea.setWrapStyleWord(true);
-      scriptDescriptionTextArea.setFont(new Font("SansSerif", Font.PLAIN, 10));
+      scriptDescriptionTextArea.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 10));
       scriptDescriptionTextArea.setText("");
     }
     return scriptDescriptionTextArea;
@@ -16903,7 +16903,7 @@ public class TinaInternalFrame extends JInternalFrame {
       duplicateScriptBtn.setToolTipText("Create a copy of the currently selected script");
       duplicateScriptBtn.setText("Dupl");
       duplicateScriptBtn.setPreferredSize(new Dimension(58, 24));
-      duplicateScriptBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      duplicateScriptBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       duplicateScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
     return duplicateScriptBtn;
@@ -16920,7 +16920,7 @@ public class TinaInternalFrame extends JInternalFrame {
       newScriptFromFlameBtn.setToolTipText("Create a new script by convderting the currently selected flame");
       newScriptFromFlameBtn.setText("From flame");
       newScriptFromFlameBtn.setPreferredSize(new Dimension(116, 24));
-      newScriptFromFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      newScriptFromFlameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       newScriptFromFlameBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
     return newScriptFromFlameBtn;
@@ -16961,7 +16961,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientInvertBtn.setSize(new Dimension(138, 24));
       gradientInvertBtn.setPreferredSize(new Dimension(70, 24));
       gradientInvertBtn.setLocation(new Point(4, 181));
-      gradientInvertBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientInvertBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientInvertBtn;
   }
@@ -16979,7 +16979,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientReverseBtn.setSize(new Dimension(60, 24));
       gradientReverseBtn.setPreferredSize(new Dimension(70, 24));
       gradientReverseBtn.setLocation(new Point(4, 181));
-      gradientReverseBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientReverseBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientReverseBtn;
   }
@@ -16997,7 +16997,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientSortBtn.setSize(new Dimension(138, 24));
       gradientSortBtn.setPreferredSize(new Dimension(70, 24));
       gradientSortBtn.setLocation(new Point(4, 181));
-      gradientSortBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientSortBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientSortBtn;
   }
@@ -17015,7 +17015,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientFadeBtn.setSize(new Dimension(138, 24));
       gradientFadeBtn.setPreferredSize(new Dimension(70, 24));
       gradientFadeBtn.setLocation(new Point(4, 181));
-      gradientFadeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientFadeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientFadeBtn;
   }
@@ -17033,7 +17033,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientSelectAllBtn.setSize(new Dimension(138, 24));
       gradientSelectAllBtn.setPreferredSize(new Dimension(70, 24));
       gradientSelectAllBtn.setLocation(new Point(4, 181));
-      gradientSelectAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientSelectAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientSelectAllBtn;
   }
@@ -17051,7 +17051,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientApplyBalancingBtn.setSize(new Dimension(316, 24));
       gradientApplyBalancingBtn.setPreferredSize(new Dimension(190, 24));
       gradientApplyBalancingBtn.setLocation(new Point(6, 112));
-      gradientApplyBalancingBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientApplyBalancingBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientApplyBalancingBtn;
   }
@@ -17112,7 +17112,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientCopyRangeBtn.setSize(new Dimension(138, 24));
       gradientCopyRangeBtn.setPreferredSize(new Dimension(70, 24));
       gradientCopyRangeBtn.setLocation(new Point(4, 181));
-      gradientCopyRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientCopyRangeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientCopyRangeBtn;
   }
@@ -17130,7 +17130,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientPasteRangeBtn.setSize(new Dimension(138, 24));
       gradientPasteRangeBtn.setPreferredSize(new Dimension(70, 24));
       gradientPasteRangeBtn.setLocation(new Point(4, 181));
-      gradientPasteRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientPasteRangeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientPasteRangeBtn;
   }
@@ -17148,7 +17148,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientEraseRangeBtn.setSize(new Dimension(138, 24));
       gradientEraseRangeBtn.setPreferredSize(new Dimension(70, 24));
       gradientEraseRangeBtn.setLocation(new Point(4, 181));
-      gradientEraseRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientEraseRangeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientEraseRangeBtn;
   }
@@ -17207,7 +17207,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientMonochromeRangeBtn.setSize(new Dimension(138, 24));
       gradientMonochromeRangeBtn.setPreferredSize(new Dimension(70, 24));
       gradientMonochromeRangeBtn.setLocation(new Point(4, 181));
-      gradientMonochromeRangeBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientMonochromeRangeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientMonochromeRangeBtn;
   }
@@ -17238,7 +17238,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientFadeAllBtn.setSize(new Dimension(138, 24));
       gradientFadeAllBtn.setPreferredSize(new Dimension(70, 24));
       gradientFadeAllBtn.setLocation(new Point(4, 181));
-      gradientFadeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientFadeAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientFadeAllBtn;
   }
@@ -17305,7 +17305,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryRescanBtn.setToolTipText("Rescan gradient-folder");
       gradientLibraryRescanBtn.setText("Rescan");
       gradientLibraryRescanBtn.setPreferredSize(new Dimension(96, 24));
-      gradientLibraryRescanBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientLibraryRescanBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientLibraryRescanBtn.setBounds(new Rectangle(4, 4, 96, 24));
       panel_1.add(gradientLibraryRescanBtn);
 
@@ -17318,7 +17318,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryNewFolderBtn.setToolTipText("Create a new gradient folder");
       gradientLibraryNewFolderBtn.setText("New Folder");
       gradientLibraryNewFolderBtn.setPreferredSize(new Dimension(96, 24));
-      gradientLibraryNewFolderBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientLibraryNewFolderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientLibraryNewFolderBtn.setBounds(new Rectangle(4, 30, 96, 24));
       panel_1.add(gradientLibraryNewFolderBtn);
       panel_1.add(getGradientLibraryRenameFolderBtn());
@@ -17345,7 +17345,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientLibraryRenameFolderBtn.setToolTipText("Rename the selected folder");
       gradientLibraryRenameFolderBtn.setText("Rename Fld");
       gradientLibraryRenameFolderBtn.setPreferredSize(new Dimension(96, 24));
-      gradientLibraryRenameFolderBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientLibraryRenameFolderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientLibraryRenameFolderBtn.setBounds(new Rectangle(4, 30, 96, 24));
       gradientLibraryRenameFolderBtn.setBounds(4, 56, 96, 24);
     }
@@ -17398,7 +17398,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientSaveBtn.setSize(new Dimension(128, 50));
       gradientSaveBtn.setPreferredSize(new Dimension(60, 48));
       gradientSaveBtn.setLocation(new Point(4, 181));
-      gradientSaveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientSaveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientSaveBtn;
   }
@@ -17414,7 +17414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       backgroundColorIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorIndicatorBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundColorIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorIndicatorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorIndicatorBtn.setBounds(547, 4, 56, 46);
     }
     return backgroundColorIndicatorBtn;
@@ -17527,7 +17527,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserRefreshBtn.setMnemonic(KeyEvent.VK_R);
       flameBrowserRefreshBtn.setMinimumSize(new Dimension(100, 46));
       flameBrowserRefreshBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserRefreshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserRefreshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserRefreshBtn;
   }
@@ -17545,7 +17545,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserToEditorBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserToEditorBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserToEditorBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserToEditorBtn;
   }
@@ -17563,7 +17563,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserDeleteBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserDeleteBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserDeleteBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserDeleteBtn;
   }
@@ -17581,7 +17581,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserRenameBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserRenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserRenameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserRenameBtn;
   }
@@ -17599,7 +17599,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserChangeFolderBtn.setMnemonic(KeyEvent.VK_F);
       flameBrowserChangeFolderBtn.setMinimumSize(new Dimension(100, 46));
       flameBrowserChangeFolderBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserChangeFolderBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserChangeFolderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserChangeFolderBtn;
   }
@@ -17614,7 +17614,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditGradientButton = new JToggleButton();
       mouseTransformEditGradientButton.setBounds(72, 0, 163, 24);
       panel_73.add(mouseTransformEditGradientButton);
-      mouseTransformEditGradientButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      mouseTransformEditGradientButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       mouseTransformEditGradientButton.setText("Edit gradient");
       mouseTransformEditGradientButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")));
 
@@ -17648,7 +17648,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesReplaceFlameFromEditorBtn.setMnemonic(KeyEvent.VK_F);
       dancingFlamesReplaceFlameFromEditorBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesReplaceFlameFromEditorBtn.setMaximumSize(new Dimension(160, 24));
-      dancingFlamesReplaceFlameFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesReplaceFlameFromEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesReplaceFlameFromEditorBtn;
   }
@@ -17667,7 +17667,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dancingFlamesRenameFlameBtn.setMnemonic(KeyEvent.VK_R);
       dancingFlamesRenameFlameBtn.setMinimumSize(new Dimension(100, 24));
       dancingFlamesRenameFlameBtn.setMaximumSize(new Dimension(160, 24));
-      dancingFlamesRenameFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      dancingFlamesRenameFlameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return dancingFlamesRenameFlameBtn;
   }
@@ -17706,7 +17706,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerAddBtn.setToolTipText("Add new layer");
       layerAddBtn.setText("Add");
       layerAddBtn.setPreferredSize(new Dimension(56, 24));
-      layerAddBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerAddBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerAddBtn.setBounds(6, 81, 90, 24);
       panel_75.add(layerAddBtn);
 
@@ -17717,7 +17717,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerWeightEd.setPreferredSize(new Dimension(56, 24));
       layerWeightEd.setLocation(new Point(238, 6));
       layerWeightEd.setHasMinValue(true);
-      layerWeightEd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      layerWeightEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       layerWeightEd.setBounds(172, 6, 90, 24);
       layerWeightEd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -17741,7 +17741,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerDuplicateBtn.setToolTipText("Duplicate layer");
       layerDuplicateBtn.setText("Duplicate");
       layerDuplicateBtn.setPreferredSize(new Dimension(90, 24));
-      layerDuplicateBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerDuplicateBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerDuplicateBtn.setBounds(6, 107, 90, 24);
       panel_75.add(layerDuplicateBtn);
 
@@ -17754,7 +17754,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerDeleteBtn.setToolTipText("Delete layer");
       layerDeleteBtn.setText("Delete");
       layerDeleteBtn.setPreferredSize(new Dimension(90, 24));
-      layerDeleteBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerDeleteBtn.setBounds(112, 81, 90, 24);
       panel_75.add(layerDeleteBtn);
 
@@ -17770,7 +17770,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerVisibleBtn.setSize(new Dimension(138, 24));
       layerVisibleBtn.setPreferredSize(new Dimension(136, 24));
       layerVisibleBtn.setLocation(new Point(4, 181));
-      layerVisibleBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerVisibleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerVisibleBtn.setBounds(6, 7, 86, 24);
       panel_75.add(layerVisibleBtn);
 
@@ -17780,7 +17780,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblWeight.setPreferredSize(new Dimension(24, 22));
       lblWeight.setLocation(new Point(212, 6));
       lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblWeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblWeight.setBounds(107, 10, 58, 22);
       panel_75.add(lblWeight);
 
@@ -17793,7 +17793,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerHideOthersBtn.setToolTipText("Hide all layers except the currently selected one");
       layerHideOthersBtn.setText("Hide all others");
       layerHideOthersBtn.setPreferredSize(new Dimension(56, 24));
-      layerHideOthersBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerHideOthersBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerHideOthersBtn.setBounds(6, 34, 159, 24);
       panel_75.add(layerHideOthersBtn);
 
@@ -17806,7 +17806,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerShowAllBtn.setToolTipText("Show all layers");
       layerShowAllBtn.setText("Show all");
       layerShowAllBtn.setPreferredSize(new Dimension(56, 24));
-      layerShowAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerShowAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerShowAllBtn.setBounds(172, 34, 159, 24);
       panel_75.add(layerShowAllBtn);
     }
@@ -17830,7 +17830,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerAppendBtn.setToolTipText("Append new flames as new layers");
       layerAppendBtn.setText("Layer append mode");
       layerAppendBtn.setPreferredSize(new Dimension(136, 42));
-      layerAppendBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerAppendBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_76.add(getLayerPreviewBtn());
     }
     return panel_76;
@@ -17915,7 +17915,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserToBatchRendererBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserToBatchRendererBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserToBatchRendererBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToBatchRendererBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserToBatchRendererBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserToBatchRendererBtn;
   }
@@ -17934,7 +17934,7 @@ public class TinaInternalFrame extends JInternalFrame {
       layerPreviewBtn.setSize(new Dimension(138, 24));
       layerPreviewBtn.setPreferredSize(new Dimension(136, 24));
       layerPreviewBtn.setLocation(new Point(4, 181));
-      layerPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      layerPreviewBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return layerPreviewBtn;
   }
@@ -17950,7 +17950,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBlurLength.setPreferredSize(new Dimension(94, 22));
       lblBlurLength.setName("");
       lblBlurLength.setLocation(new Point(4, 4));
-      lblBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBlurLength.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBlurLength.setBounds(6, 6, 94, 22);
       motionBlurPanel.add(lblBlurLength);
 
@@ -17974,7 +17974,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurLengthField.setSize(new Dimension(100, 24));
       motionBlurLengthField.setPreferredSize(new Dimension(100, 24));
       motionBlurLengthField.setLocation(new Point(100, 4));
-      motionBlurLengthField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionBlurLengthField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       motionBlurLengthField.setBounds(102, 6, 100, 24);
       motionBlurPanel.add(motionBlurLengthField);
 
@@ -18042,7 +18042,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurTimeStepField.setSize(new Dimension(100, 24));
       motionBlurTimeStepField.setPreferredSize(new Dimension(100, 24));
       motionBlurTimeStepField.setLocation(new Point(100, 28));
-      motionBlurTimeStepField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionBlurTimeStepField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       motionBlurTimeStepField.setBounds(102, 30, 100, 24);
       motionBlurPanel.add(motionBlurTimeStepField);
 
@@ -18052,7 +18052,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblTimeStep.setPreferredSize(new Dimension(94, 22));
       lblTimeStep.setName("");
       lblTimeStep.setLocation(new Point(4, 28));
-      lblTimeStep.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblTimeStep.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblTimeStep.setBounds(6, 30, 94, 22);
       motionBlurPanel.add(lblTimeStep);
 
@@ -18062,7 +18062,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblDecay.setPreferredSize(new Dimension(94, 22));
       lblDecay.setName("");
       lblDecay.setLocation(new Point(4, 52));
-      lblDecay.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblDecay.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblDecay.setBounds(6, 54, 94, 22);
       motionBlurPanel.add(lblDecay);
 
@@ -18085,7 +18085,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionBlurDecayField.setSize(new Dimension(100, 24));
       motionBlurDecayField.setPreferredSize(new Dimension(100, 24));
       motionBlurDecayField.setLocation(new Point(100, 52));
-      motionBlurDecayField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      motionBlurDecayField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       motionBlurDecayField.setBounds(102, 54, 100, 24);
       motionBlurPanel.add(motionBlurDecayField);
 
@@ -18125,7 +18125,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameFPSField.setPreferredSize(new Dimension(100, 24));
       flameFPSField.setLocation(new Point(100, 52));
       flameFPSField.setLinkedMotionControlName("motionBlurDecaySlider");
-      flameFPSField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      flameFPSField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       flameFPSField.setBounds(625, 6, 100, 24);
       flameFPSField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -18145,7 +18145,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFps.setPreferredSize(new Dimension(94, 22));
       lblFps.setName("");
       lblFps.setLocation(new Point(4, 52));
-      lblFps.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFps.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFps.setBounds(529, 6, 94, 22);
       motionBlurPanel.add(lblFps);
     }
@@ -18164,7 +18164,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameLbl.setText("Frame");
       keyframesFrameLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      keyframesFrameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      keyframesFrameLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       keyframesFrameField = new JWFNumberField();
       keyframesFrameField.setText("1");
@@ -18184,7 +18184,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameField.setMaxValue(30000.0);
       keyframesFrameField.setHasMinValue(true);
       keyframesFrameField.setHasMaxValue(true);
-      keyframesFrameField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      keyframesFrameField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return panel_79;
   }
@@ -18221,7 +18221,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountField.setMaxValue(30000.0);
       keyframesFrameCountField.setHasMinValue(true);
       keyframesFrameCountField.setHasMaxValue(true);
-      keyframesFrameCountField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      keyframesFrameCountField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       keyframesFrameCountField.setBounds(144, 0, 70, 24);
       panel_80.add(keyframesFrameCountField);
 
@@ -18229,7 +18229,7 @@ public class TinaInternalFrame extends JInternalFrame {
       keyframesFrameCountLbl.setText("Frame count");
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      keyframesFrameCountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       keyframesFrameCountLbl.setBounds(70, 0, 70, 22);
       panel_80.add(keyframesFrameCountLbl);
 
@@ -18251,7 +18251,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurvePlayPreviewButton.setSize(new Dimension(70, 24));
       motionCurvePlayPreviewButton.setPreferredSize(new Dimension(55, 24));
       motionCurvePlayPreviewButton.setLocation(new Point(0, 57));
-      motionCurvePlayPreviewButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      motionCurvePlayPreviewButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurvePlayPreviewButton.setBounds(0, 0, 70, 24);
       panel_80.add(motionCurvePlayPreviewButton);
     }
@@ -18332,7 +18332,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryTypeCmb.setSize(new Dimension(125, 22));
       postSymmetryTypeCmb.setPreferredSize(new Dimension(125, 22));
       postSymmetryTypeCmb.setLocation(new Point(100, 4));
-      postSymmetryTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryTypeCmb.setBounds(102, 6, 100, 24);
       postSymmetryTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -18348,7 +18348,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryTypeLbl.setSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setLocation(new Point(488, 2));
-      postSymmetryTypeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryTypeLbl.setBounds(6, 6, 94, 22);
       panel_34.add(postSymmetryTypeLbl);
 
@@ -18360,7 +18360,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryDistanceREd.setPreferredSize(new Dimension(100, 24));
       postSymmetryDistanceREd.setLocation(new Point(584, 2));
       postSymmetryDistanceREd.setLinkedMotionControlName("postSymmetryDistanceSlider");
-      postSymmetryDistanceREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryDistanceREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryDistanceREd.setEditable(true);
       postSymmetryDistanceREd.setBounds(102, 31, 100, 24);
       postSymmetryDistanceREd.addChangeListener(new ChangeListener() {
@@ -18383,7 +18383,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryDistanceLbl.setSize(new Dimension(94, 22));
       postSymmetryDistanceLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryDistanceLbl.setLocation(new Point(488, 2));
-      postSymmetryDistanceLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryDistanceLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryDistanceLbl.setBounds(6, 31, 94, 22);
       panel_34.add(postSymmetryDistanceLbl);
 
@@ -18393,7 +18393,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryRotationLbl.setSize(new Dimension(94, 22));
       postSymmetryRotationLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryRotationLbl.setLocation(new Point(488, 2));
-      postSymmetryRotationLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryRotationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryRotationLbl.setBounds(6, 56, 94, 22);
       panel_34.add(postSymmetryRotationLbl);
 
@@ -18405,7 +18405,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryRotationREd.setPreferredSize(new Dimension(100, 24));
       postSymmetryRotationREd.setLocation(new Point(584, 2));
       postSymmetryRotationREd.setLinkedMotionControlName("postSymmetryRotationSlider");
-      postSymmetryRotationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryRotationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryRotationREd.setEditable(true);
       postSymmetryRotationREd.setBounds(102, 56, 100, 24);
       postSymmetryRotationREd.addChangeListener(new ChangeListener() {
@@ -18430,7 +18430,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryDistanceSlider.setMinimum(-25000);
       postSymmetryDistanceSlider.setMaximum(25000);
       postSymmetryDistanceSlider.setLocation(new Point(686, 2));
-      postSymmetryDistanceSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryDistanceSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryDistanceSlider.setBounds(204, 31, 220, 24);
       postSymmetryDistanceSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18455,7 +18455,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryRotationSlider.setName("postSymmetryRotationSlider");
       postSymmetryRotationSlider.setMinimum(-180);
       postSymmetryRotationSlider.setLocation(new Point(686, 2));
-      postSymmetryRotationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryRotationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryRotationSlider.setBounds(204, 56, 220, 24);
       postSymmetryRotationSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18485,7 +18485,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryOrderREd.setLinkedMotionControlName("postSymmetryOrderSlider");
       postSymmetryOrderREd.setHasMinValue(true);
       postSymmetryOrderREd.setHasMaxValue(true);
-      postSymmetryOrderREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryOrderREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryOrderREd.setEditable(true);
       postSymmetryOrderREd.setBounds(532, 6, 100, 24);
       postSymmetryOrderREd.addChangeListener(new ChangeListener() {
@@ -18508,7 +18508,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryOrderLbl.setSize(new Dimension(94, 22));
       postSymmetryOrderLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryOrderLbl.setLocation(new Point(488, 2));
-      postSymmetryOrderLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryOrderLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryOrderLbl.setBounds(436, 6, 94, 22);
       panel_34.add(postSymmetryOrderLbl);
 
@@ -18518,7 +18518,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreXLbl.setSize(new Dimension(94, 22));
       postSymmetryCentreXLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryCentreXLbl.setLocation(new Point(488, 2));
-      postSymmetryCentreXLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryCentreXLbl.setBounds(436, 31, 94, 22);
       panel_34.add(postSymmetryCentreXLbl);
 
@@ -18530,7 +18530,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreXREd.setPreferredSize(new Dimension(100, 24));
       postSymmetryCentreXREd.setLocation(new Point(584, 2));
       postSymmetryCentreXREd.setLinkedMotionControlName("postSymmetryCentreXSlider");
-      postSymmetryCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryCentreXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryCentreXREd.setEditable(true);
       postSymmetryCentreXREd.setBounds(532, 31, 100, 24);
       postSymmetryCentreXREd.addChangeListener(new ChangeListener() {
@@ -18555,7 +18555,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryOrderSlider.setMinimum(2);
       postSymmetryOrderSlider.setMaximum(36);
       postSymmetryOrderSlider.setLocation(new Point(686, 2));
-      postSymmetryOrderSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryOrderSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryOrderSlider.setBounds(634, 6, 220, 24);
       postSymmetryOrderSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18580,7 +18580,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreXSlider.setName("postSymmetryCentreXSlider");
       postSymmetryCentreXSlider.setMinimum(-25000);
       postSymmetryCentreXSlider.setLocation(new Point(686, 2));
-      postSymmetryCentreXSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreXSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryCentreXSlider.setBounds(634, 31, 220, 24);
       postSymmetryCentreXSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18603,7 +18603,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreYLbl.setSize(new Dimension(94, 22));
       postSymmetryCentreYLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryCentreYLbl.setLocation(new Point(488, 2));
-      postSymmetryCentreYLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryCentreYLbl.setBounds(436, 56, 94, 22);
       panel_34.add(postSymmetryCentreYLbl);
 
@@ -18615,7 +18615,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreYREd.setPreferredSize(new Dimension(100, 24));
       postSymmetryCentreYREd.setLocation(new Point(584, 2));
       postSymmetryCentreYREd.setLinkedMotionControlName("postSymmetryCentreYSlider");
-      postSymmetryCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postSymmetryCentreYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postSymmetryCentreYREd.setEditable(true);
       postSymmetryCentreYREd.setBounds(532, 56, 100, 24);
       postSymmetryCentreYREd.addChangeListener(new ChangeListener() {
@@ -18640,7 +18640,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postSymmetryCentreYSlider.setMinimum(-25000);
       postSymmetryCentreYSlider.setMaximum(25000);
       postSymmetryCentreYSlider.setLocation(new Point(686, 2));
-      postSymmetryCentreYSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postSymmetryCentreYSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postSymmetryCentreYSlider.setBounds(634, 56, 220, 24);
       postSymmetryCentreYSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18716,7 +18716,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomStyleLbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
       randomStyleLbl.setPreferredSize(new Dimension(100, 22));
       randomStyleLbl.setText("  Random Generator");
-      randomStyleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomStyleLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_78.add(getRandomStyleCmb());
     }
     return panel_78;
@@ -18736,7 +18736,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomGradientCmb.setMinimumSize(new Dimension(100, 24));
       randomGradientCmb.setMaximumSize(new Dimension(32767, 24));
       randomGradientCmb.setMaximumRowCount(32);
-      randomGradientCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomGradientCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_81.add(randomGradientCmb);
     }
     return panel_81;
@@ -18747,7 +18747,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSymmetry = new JLabel();
       lblSymmetry.setText("  Symmetry/Gradient");
       lblSymmetry.setPreferredSize(new Dimension(100, 22));
-      lblSymmetry.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSymmetry.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSymmetry.setAlignmentX(1.0f);
     }
     return lblSymmetry;
@@ -18761,7 +18761,7 @@ public class TinaInternalFrame extends JInternalFrame {
       randomSymmetryCmb.setMinimumSize(new Dimension(100, 24));
       randomSymmetryCmb.setMaximumSize(new Dimension(32767, 24));
       randomSymmetryCmb.setMaximumRowCount(32);
-      randomSymmetryCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      randomSymmetryCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return randomSymmetryCmb;
   }
@@ -18775,7 +18775,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dModeCmb.setSize(new Dimension(125, 22));
       stereo3dModeCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dModeCmb.setLocation(new Point(100, 4));
-      stereo3dModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dModeCmb.setBounds(102, 6, 322, 24);
       stereo3dModeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -18791,7 +18791,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblStereodMode.setSize(new Dimension(94, 22));
       lblStereodMode.setPreferredSize(new Dimension(94, 22));
       lblStereodMode.setLocation(new Point(488, 2));
-      lblStereodMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStereodMode.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblStereodMode.setBounds(6, 6, 94, 22);
       panel_82.add(lblStereodMode);
 
@@ -18801,7 +18801,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblAngle.setPreferredSize(new Dimension(94, 22));
       lblAngle.setName("lblAngle");
       lblAngle.setLocation(new Point(488, 2));
-      lblAngle.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAngle.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblAngle.setBounds(6, 31, 94, 22);
       panel_82.add(lblAngle);
 
@@ -18817,7 +18817,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dAngleREd.setLocation(new Point(584, 2));
       stereo3dAngleREd.setLinkedMotionControlName("stereo3dAngleSlider");
       stereo3dAngleREd.setLinkedLabelControlName("lblAngle");
-      stereo3dAngleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dAngleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       stereo3dAngleREd.setEditable(true);
       stereo3dAngleREd.setBounds(102, 31, 100, 24);
       stereo3dAngleREd.addChangeListener(new ChangeListener() {
@@ -18843,7 +18843,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dAngleSlider.setName("stereo3dAngleSlider");
       stereo3dAngleSlider.setMaximum(30000);
       stereo3dAngleSlider.setLocation(new Point(686, 2));
-      stereo3dAngleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dAngleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dAngleSlider.setBounds(204, 31, 220, 24);
       stereo3dAngleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18868,7 +18868,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblImageCount.setPreferredSize(new Dimension(94, 22));
       lblImageCount.setName("lblImageCount");
       lblImageCount.setLocation(new Point(488, 2));
-      lblImageCount.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageCount.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblImageCount.setBounds(437, 81, 94, 22);
       panel_82.add(lblImageCount);
 
@@ -18885,7 +18885,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountREd.setLocation(new Point(584, 2));
       stereo3dInterpolatedImageCountREd.setLinkedMotionControlName("stereo3dInterpolatedImageCountSlider");
       stereo3dInterpolatedImageCountREd.setLinkedLabelControlName("lblImageCount");
-      stereo3dInterpolatedImageCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dInterpolatedImageCountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       stereo3dInterpolatedImageCountREd.setEditable(true);
       stereo3dInterpolatedImageCountREd.setBounds(533, 81, 100, 24);
       stereo3dInterpolatedImageCountREd.addChangeListener(new ChangeListener() {
@@ -18910,7 +18910,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dInterpolatedImageCountSlider.setMinimum(2);
       stereo3dInterpolatedImageCountSlider.setMaximum(24);
       stereo3dInterpolatedImageCountSlider.setLocation(new Point(686, 2));
-      stereo3dInterpolatedImageCountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dInterpolatedImageCountSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dInterpolatedImageCountSlider.setBounds(635, 81, 220, 24);
       stereo3dInterpolatedImageCountSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18933,7 +18933,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblEyeDistance.setPreferredSize(new Dimension(94, 22));
       lblEyeDistance.setName("lblEyeDistance");
       lblEyeDistance.setLocation(new Point(488, 2));
-      lblEyeDistance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblEyeDistance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblEyeDistance.setBounds(6, 56, 94, 22);
       panel_82.add(lblEyeDistance);
 
@@ -18947,7 +18947,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dEyeDistREd.setLocation(new Point(584, 2));
       stereo3dEyeDistREd.setLinkedMotionControlName("stereo3dEyeDistSlider");
       stereo3dEyeDistREd.setLinkedLabelControlName("lblEyeDistance");
-      stereo3dEyeDistREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dEyeDistREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       stereo3dEyeDistREd.setEditable(true);
       stereo3dEyeDistREd.setBounds(102, 56, 100, 24);
       stereo3dEyeDistREd.addChangeListener(new ChangeListener() {
@@ -18971,7 +18971,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dEyeDistSlider.setName("stereo3dEyeDistSlider");
       stereo3dEyeDistSlider.setMaximum(1000);
       stereo3dEyeDistSlider.setLocation(new Point(686, 2));
-      stereo3dEyeDistSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dEyeDistSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dEyeDistSlider.setBounds(204, 56, 220, 24);
       stereo3dEyeDistSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -18992,7 +18992,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dLeftEyeColorCmb.setSize(new Dimension(125, 22));
       stereo3dLeftEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dLeftEyeColorCmb.setLocation(new Point(100, 4));
-      stereo3dLeftEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dLeftEyeColorCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dLeftEyeColorCmb.setBounds(533, 31, 322, 24);
       stereo3dLeftEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -19009,7 +19009,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblLeftEyeColor.setSize(new Dimension(94, 22));
       lblLeftEyeColor.setPreferredSize(new Dimension(94, 22));
       lblLeftEyeColor.setLocation(new Point(488, 2));
-      lblLeftEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLeftEyeColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblLeftEyeColor.setBounds(437, 31, 94, 22);
       panel_82.add(lblLeftEyeColor);
 
@@ -19017,7 +19017,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dRightEyeColorCmb.setSize(new Dimension(125, 22));
       stereo3dRightEyeColorCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dRightEyeColorCmb.setLocation(new Point(100, 4));
-      stereo3dRightEyeColorCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dRightEyeColorCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dRightEyeColorCmb.setBounds(532, 56, 323, 24);
       stereo3dRightEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -19034,7 +19034,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRightEyeColor.setSize(new Dimension(94, 22));
       lblRightEyeColor.setPreferredSize(new Dimension(94, 22));
       lblRightEyeColor.setLocation(new Point(488, 2));
-      lblRightEyeColor.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRightEyeColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRightEyeColor.setBounds(436, 56, 94, 22);
       panel_82.add(lblRightEyeColor);
       panel_82.add(getStereo3dPreviewCmb());
@@ -19052,7 +19052,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dFocalOffsetREd.setLinkedLabelControlName("lblFocalOffset");
       stereo3dFocalOffsetREd.setHasMinValue(true);
       stereo3dFocalOffsetREd.setHasMaxValue(true);
-      stereo3dFocalOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      stereo3dFocalOffsetREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       stereo3dFocalOffsetREd.setEditable(true);
       stereo3dFocalOffsetREd.setBounds(102, 81, 100, 24);
       stereo3dFocalOffsetREd.addChangeListener(new ChangeListener() {
@@ -19075,7 +19075,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFocalOffset.setPreferredSize(new Dimension(94, 22));
       lblFocalOffset.setName("lblFocalOffset");
       lblFocalOffset.setLocation(new Point(488, 2));
-      lblFocalOffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFocalOffset.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFocalOffset.setBounds(6, 81, 94, 22);
       panel_82.add(lblFocalOffset);
 
@@ -19087,7 +19087,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dFocalOffsetSlider.setMinimum(-30000);
       stereo3dFocalOffsetSlider.setMaximum(30000);
       stereo3dFocalOffsetSlider.setLocation(new Point(686, 2));
-      stereo3dFocalOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dFocalOffsetSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dFocalOffsetSlider.setBounds(204, 81, 220, 24);
       stereo3dFocalOffsetSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -19195,7 +19195,7 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dPreviewCmb.setSize(new Dimension(125, 22));
       stereo3dPreviewCmb.setPreferredSize(new Dimension(125, 22));
       stereo3dPreviewCmb.setLocation(new Point(100, 4));
-      stereo3dPreviewCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      stereo3dPreviewCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       stereo3dPreviewCmb.setBounds(533, 6, 322, 24);
       stereo3dPreviewCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -19215,7 +19215,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPreviewMode.setSize(new Dimension(94, 22));
       lblPreviewMode.setPreferredSize(new Dimension(94, 22));
       lblPreviewMode.setLocation(new Point(488, 2));
-      lblPreviewMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPreviewMode.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPreviewMode.setBounds(437, 6, 94, 22);
     }
     return lblPreviewMode;
@@ -19311,7 +19311,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorPlayButton.setText("Play");
       swfAnimatorPlayButton.setPreferredSize(new Dimension(82, 28));
-      swfAnimatorPlayButton.setFont(new Font("Dialog", Font.BOLD, 9));
+      swfAnimatorPlayButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       swfAnimatorPlayButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
 
       swfAnimatorFrameToEditorBtn = new JButton();
@@ -19325,7 +19325,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameToEditorBtn.setText("E");
       swfAnimatorFrameToEditorBtn.setPreferredSize(new Dimension(42, 28));
       swfAnimatorFrameToEditorBtn.setMnemonic(KeyEvent.VK_E);
-      swfAnimatorFrameToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorFrameToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_84.add(getBtnRender());
     }
     return panel_84;
@@ -19351,7 +19351,7 @@ public class TinaInternalFrame extends JInternalFrame {
       animateXFormScriptLbl.setName("animateXFormScriptLbl");
       animateXFormScriptLbl.setPreferredSize(new Dimension(94, 22));
       animateXFormScriptLbl.setText("01");
-      animateXFormScriptLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateXFormScriptLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_86.add(getSwfAnimatorXFormScript1Cmb());
 
       swfAnimatorXFormScript1REd = new JWFNumberField();
@@ -19363,7 +19363,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript1REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript1REd.setMotionPropertyName("xFormScript1");
       swfAnimatorXFormScript1REd.setLinkedLabelControlName("animateXFormScriptLbl");
-      swfAnimatorXFormScript1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblXformScript = new JLabel();
       lblXformScript.setBounds(0, 23, 21, 22);
@@ -19371,14 +19371,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript.setName("lblXformScript");
       lblXformScript.setText("02");
       lblXformScript.setPreferredSize(new Dimension(94, 22));
-      lblXformScript.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript2Cmb = new JComboBox();
       swfAnimatorXFormScript2Cmb.setBounds(22, 23, 186, 24);
       panel_86.add(swfAnimatorXFormScript2Cmb);
       swfAnimatorXFormScript2Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript2Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript2REd = new JWFNumberField();
       swfAnimatorXFormScript2REd.setBounds(213, 23, 100, 24);
@@ -19389,7 +19389,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript2REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript2REd.setMotionPropertyName("xFormScript2");
       swfAnimatorXFormScript2REd.setLinkedLabelControlName("lblXformScript");
-      swfAnimatorXFormScript2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblXformScript_1 = new JLabel();
       lblXformScript_1.setBounds(0, 46, 21, 22);
@@ -19397,14 +19397,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_1.setName("lblXformScript_1");
       lblXformScript_1.setText("03");
       lblXformScript_1.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript3Cmb = new JComboBox();
       swfAnimatorXFormScript3Cmb.setBounds(22, 46, 186, 24);
       panel_86.add(swfAnimatorXFormScript3Cmb);
       swfAnimatorXFormScript3Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript3Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript3Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript3Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript3REd = new JWFNumberField();
       swfAnimatorXFormScript3REd.setBounds(213, 46, 100, 24);
@@ -19415,14 +19415,14 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript3REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript3REd.setMotionPropertyName("xFormScript3");
       swfAnimatorXFormScript3REd.setLinkedLabelControlName("lblXformScript_1");
-      swfAnimatorXFormScript3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       swfAnimatorXFormScript4Cmb = new JComboBox();
       swfAnimatorXFormScript4Cmb.setBounds(22, 69, 186, 24);
       panel_86.add(swfAnimatorXFormScript4Cmb);
       swfAnimatorXFormScript4Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript4Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript4Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript4Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JLabel lblXformScript_2 = new JLabel();
       lblXformScript_2.setBounds(0, 69, 21, 22);
@@ -19430,7 +19430,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_2.setName("lblXformScript_2");
       lblXformScript_2.setText("04");
       lblXformScript_2.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JLabel lblXformScript_3 = new JLabel();
       lblXformScript_3.setBounds(0, 92, 21, 22);
@@ -19438,14 +19438,14 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_3.setName("lblXformScript_3");
       lblXformScript_3.setText("05");
       lblXformScript_3.setPreferredSize(new Dimension(94, 22));
-      lblXformScript_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript5Cmb = new JComboBox();
       swfAnimatorXFormScript5Cmb.setBounds(22, 92, 186, 24);
       panel_86.add(swfAnimatorXFormScript5Cmb);
       swfAnimatorXFormScript5Cmb.setMaximumRowCount(16);
       swfAnimatorXFormScript5Cmb.setPreferredSize(new Dimension(275, 22));
-      swfAnimatorXFormScript5Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript5Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorXFormScript5REd = new JWFNumberField();
       swfAnimatorXFormScript5REd.setBounds(213, 92, 100, 24);
@@ -19456,7 +19456,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript5REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript5REd.setMotionPropertyName("xFormScript5");
       swfAnimatorXFormScript5REd.setLinkedLabelControlName("lblXformScript_3");
-      swfAnimatorXFormScript5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       swfAnimatorXFormScript4REd = new JWFNumberField();
       swfAnimatorXFormScript4REd.setBounds(213, 69, 100, 24);
@@ -19467,13 +19467,13 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript4REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript4REd.setMotionPropertyName("xFormScript4");
       swfAnimatorXFormScript4REd.setLinkedLabelControlName("lblXformScript_2");
-      swfAnimatorXFormScript4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblXformScript_4 = new JLabel();
       lblXformScript_4.setText("06");
       lblXformScript_4.setPreferredSize(new Dimension(94, 22));
       lblXformScript_4.setName("lblXformScript_4");
-      lblXformScript_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_4.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_4.setBounds(0, 115, 21, 22);
       panel_86.add(lblXformScript_4);
 
@@ -19487,7 +19487,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript6Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript6Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript6Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript6Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript6Cmb.setBounds(22, 115, 186, 24);
       panel_86.add(swfAnimatorXFormScript6Cmb);
 
@@ -19498,7 +19498,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript6REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript6REd.setMotionPropertyName("xFormScript6");
       swfAnimatorXFormScript6REd.setLinkedLabelControlName("lblXformScript_4");
-      swfAnimatorXFormScript6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript6REd.setBounds(213, 115, 100, 24);
       swfAnimatorXFormScript6REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19519,7 +19519,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_5.setText("07");
       lblXformScript_5.setPreferredSize(new Dimension(94, 22));
       lblXformScript_5.setName("lblXformScript_5");
-      lblXformScript_5.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_5.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_5.setBounds(0, 138, 21, 22);
       panel_86.add(lblXformScript_5);
 
@@ -19533,7 +19533,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript7Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript7Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript7Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript7Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript7Cmb.setBounds(22, 138, 186, 24);
       panel_86.add(swfAnimatorXFormScript7Cmb);
 
@@ -19544,7 +19544,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript7REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript7REd.setMotionPropertyName("xFormScript7");
       swfAnimatorXFormScript7REd.setLinkedLabelControlName("lblXformScript_5");
-      swfAnimatorXFormScript7REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript7REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript7REd.setBounds(213, 138, 100, 24);
       swfAnimatorXFormScript7REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19565,7 +19565,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_6.setText("08");
       lblXformScript_6.setPreferredSize(new Dimension(94, 22));
       lblXformScript_6.setName("lblXformScript_6");
-      lblXformScript_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_6.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_6.setBounds(0, 161, 21, 22);
       panel_86.add(lblXformScript_6);
 
@@ -19579,7 +19579,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript8Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript8Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript8Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript8Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript8Cmb.setBounds(22, 161, 186, 24);
       panel_86.add(swfAnimatorXFormScript8Cmb);
 
@@ -19590,7 +19590,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript8REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript8REd.setMotionPropertyName("xFormScript8");
       swfAnimatorXFormScript8REd.setLinkedLabelControlName("lblXformScript_6");
-      swfAnimatorXFormScript8REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript8REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript8REd.setBounds(213, 161, 100, 24);
       swfAnimatorXFormScript8REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19610,7 +19610,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_7.setText("09");
       lblXformScript_7.setPreferredSize(new Dimension(94, 22));
       lblXformScript_7.setName("lblXformScript_7");
-      lblXformScript_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_7.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_7.setBounds(0, 184, 21, 22);
       panel_86.add(lblXformScript_7);
 
@@ -19624,7 +19624,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript9Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript9Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript9Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript9Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript9Cmb.setBounds(22, 184, 186, 24);
       panel_86.add(swfAnimatorXFormScript9Cmb);
 
@@ -19635,7 +19635,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript9REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript9REd.setMotionPropertyName("xFormScript9");
       swfAnimatorXFormScript9REd.setLinkedLabelControlName("lblXformScript_7");
-      swfAnimatorXFormScript9REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript9REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript9REd.setBounds(213, 184, 100, 24);
       swfAnimatorXFormScript9REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19655,7 +19655,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_8.setText("10");
       lblXformScript_8.setPreferredSize(new Dimension(94, 22));
       lblXformScript_8.setName("lblXformScript_8");
-      lblXformScript_8.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_8.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_8.setBounds(0, 207, 21, 22);
       panel_86.add(lblXformScript_8);
 
@@ -19669,7 +19669,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript10Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript10Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript10Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript10Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript10Cmb.setBounds(22, 207, 186, 24);
       panel_86.add(swfAnimatorXFormScript10Cmb);
 
@@ -19680,7 +19680,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript10REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript10REd.setMotionPropertyName("xFormScript10");
       swfAnimatorXFormScript10REd.setLinkedLabelControlName("lblXformScript_8");
-      swfAnimatorXFormScript10REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript10REd.setBounds(213, 207, 100, 24);
       swfAnimatorXFormScript10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19700,7 +19700,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_9.setText("11");
       lblXformScript_9.setPreferredSize(new Dimension(94, 22));
       lblXformScript_9.setName("lblXformScript_9");
-      lblXformScript_9.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_9.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_9.setBounds(0, 230, 21, 22);
       panel_86.add(lblXformScript_9);
 
@@ -19714,7 +19714,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript11Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript11Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript11Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript11Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript11Cmb.setBounds(22, 230, 186, 24);
       panel_86.add(swfAnimatorXFormScript11Cmb);
 
@@ -19725,7 +19725,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript11REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript11REd.setMotionPropertyName("xFormScript11");
       swfAnimatorXFormScript11REd.setLinkedLabelControlName("lblXformScript_9");
-      swfAnimatorXFormScript11REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript11REd.setBounds(213, 230, 100, 24);
       swfAnimatorXFormScript11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19745,7 +19745,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblXformScript_10.setText("12");
       lblXformScript_10.setPreferredSize(new Dimension(94, 22));
       lblXformScript_10.setName("lblXformScript_10");
-      lblXformScript_10.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblXformScript_10.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblXformScript_10.setBounds(0, 253, 21, 22);
       panel_86.add(lblXformScript_10);
 
@@ -19759,7 +19759,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       swfAnimatorXFormScript12Cmb.setPreferredSize(new Dimension(275, 22));
       swfAnimatorXFormScript12Cmb.setMaximumRowCount(16);
-      swfAnimatorXFormScript12Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      swfAnimatorXFormScript12Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       swfAnimatorXFormScript12Cmb.setBounds(22, 253, 186, 24);
       panel_86.add(swfAnimatorXFormScript12Cmb);
 
@@ -19770,7 +19770,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorXFormScript12REd.setPreferredSize(new Dimension(100, 24));
       swfAnimatorXFormScript12REd.setMotionPropertyName("xFormScript12");
       swfAnimatorXFormScript12REd.setLinkedLabelControlName("lblXformScript_10");
-      swfAnimatorXFormScript12REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorXFormScript12REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorXFormScript12REd.setBounds(213, 253, 100, 24);
       swfAnimatorXFormScript12REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -19898,7 +19898,7 @@ public class TinaInternalFrame extends JInternalFrame {
       animateFramesLbl.setHorizontalAlignment(SwingConstants.LEFT);
       animateFramesLbl.setPreferredSize(new Dimension(94, 22));
       animateFramesLbl.setText("Total frame count");
-      animateFramesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      animateFramesLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       GridBagConstraints gbc_swfAnimatorFramesREd = new GridBagConstraints();
       gbc_swfAnimatorFramesREd.insets = new Insets(0, 0, 5, 5);
       gbc_swfAnimatorFramesREd.gridx = 1;
@@ -19915,7 +19915,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFramesPerSecond.setHorizontalAlignment(SwingConstants.LEFT);
       lblFramesPerSecond.setText("Frames per second");
       lblFramesPerSecond.setPreferredSize(new Dimension(110, 22));
-      lblFramesPerSecond.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFramesPerSecond.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorFramesPerSecondREd = new JWFNumberField();
       GridBagConstraints gbc_swfAnimatorFramesPerSecondREd = new GridBagConstraints();
@@ -19930,7 +19930,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFramesPerSecondREd.setEditable(true);
       swfAnimatorFramesPerSecondREd.setText("12");
       swfAnimatorFramesPerSecondREd.setPreferredSize(new Dimension(64, 24));
-      swfAnimatorFramesPerSecondREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorFramesPerSecondREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       JLabel lblMotionBlurLength = new JLabel();
       GridBagConstraints gbc_lblMotionBlurLength = new GridBagConstraints();
@@ -19942,7 +19942,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblMotionBlurLength.setText("Motion blur length");
       lblMotionBlurLength.setPreferredSize(new Dimension(94, 22));
       lblMotionBlurLength.setHorizontalAlignment(SwingConstants.LEFT);
-      lblMotionBlurLength.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMotionBlurLength.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorMotionBlurLengthREd = new JWFNumberField();
       swfAnimatorMotionBlurLengthREd.setMinimumSize(new Dimension(40, 28));
@@ -19958,7 +19958,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMotionBlurLengthREd.setMaxValue(120.0);
       swfAnimatorMotionBlurLengthREd.setHasMinValue(true);
       swfAnimatorMotionBlurLengthREd.setHasMaxValue(true);
-      swfAnimatorMotionBlurLengthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurLengthREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorMotionBlurLengthREd.setEditable(true);
 
       JLabel lblMotionBlurTimestep = new JLabel();
@@ -19971,7 +19971,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblMotionBlurTimestep.setText("Motion blur timestep");
       lblMotionBlurTimestep.setPreferredSize(new Dimension(110, 22));
       lblMotionBlurTimestep.setHorizontalAlignment(SwingConstants.LEFT);
-      lblMotionBlurTimestep.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMotionBlurTimestep.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorMotionBlurTimeStepREd = new JWFNumberField();
       GridBagConstraints gbc_swfAnimatorMotionBlurTimeStepREd = new GridBagConstraints();
@@ -19984,7 +19984,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorMotionBlurTimeStepREd.setMaxValue(1.0);
       swfAnimatorMotionBlurTimeStepREd.setHasMinValue(true);
       swfAnimatorMotionBlurTimeStepREd.setHasMaxValue(true);
-      swfAnimatorMotionBlurTimeStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorMotionBlurTimeStepREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       swfAnimatorMotionBlurTimeStepREd.setEditable(true);
       swfAnimatorMotionBlurTimeStepREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -20149,7 +20149,7 @@ public class TinaInternalFrame extends JInternalFrame {
       btnRender.setText("Render");
       btnRender.setPreferredSize(new Dimension(82, 28));
       btnRender.setMnemonic(KeyEvent.VK_R);
-      btnRender.setFont(new Font("Dialog", Font.BOLD, 9));
+      btnRender.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
     }
     return btnRender;
@@ -20167,7 +20167,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFrame.setHorizontalAlignment(SwingConstants.RIGHT);
       lblFrame.setText("Frame");
       lblFrame.setPreferredSize(new Dimension(38, 22));
-      lblFrame.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFrame.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       swfAnimatorFrameREd = new JWFNumberField();
       panel_12.add(swfAnimatorFrameREd);
@@ -20190,7 +20190,7 @@ public class TinaInternalFrame extends JInternalFrame {
       swfAnimatorFrameREd.setOnlyIntegers(true);
       swfAnimatorFrameREd.setText("60");
       swfAnimatorFrameREd.setPreferredSize(new Dimension(56, 22));
-      swfAnimatorFrameREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      swfAnimatorFrameREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return panel_12;
   }
@@ -20264,7 +20264,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserCopyToBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserCopyToBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserCopyToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserCopyToBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserCopyToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserCopyToBtn;
   }
@@ -20282,7 +20282,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserMoveToBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserMoveToBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserMoveToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserMoveToBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserMoveToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserMoveToBtn;
   }
@@ -20301,7 +20301,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineScaleEditMotionCurveBtn.setSize(new Dimension(70, 24));
       affineScaleEditMotionCurveBtn.setPreferredSize(new Dimension(55, 24));
       affineScaleEditMotionCurveBtn.setLocation(new Point(0, 57));
-      affineScaleEditMotionCurveBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      affineScaleEditMotionCurveBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineScaleEditMotionCurveBtn.setBounds(92, 57, 22, 24);
     }
     return affineScaleEditMotionCurveBtn;
@@ -20335,7 +20335,7 @@ public class TinaInternalFrame extends JInternalFrame {
       interactiveResumeButton.setText("Resume render");
       interactiveResumeButton.setPreferredSize(new Dimension(125, 24));
       interactiveResumeButton.setMnemonic(KeyEvent.VK_T);
-      interactiveResumeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveResumeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_17.add(getPanel_18());
       panel_17.add(getInteractiveStopButton());
     }
@@ -20371,7 +20371,7 @@ public class TinaInternalFrame extends JInternalFrame {
       editTransformCaptionBtn.setToolTipText("Edit the name of the current transform");
       editTransformCaptionBtn.setText("T");
       editTransformCaptionBtn.setPreferredSize(new Dimension(34, 24));
-      editTransformCaptionBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      editTransformCaptionBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return panel_19;
   }
@@ -20421,7 +20421,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenFrontViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenFrontViewRenderBtn.setIconTextGap(0);
       meshGenFrontViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
-      meshGenFrontViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenFrontViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenFrontViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_10.add(meshGenFrontViewRenderBtn);
 
@@ -20447,7 +20447,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPerspectiveViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenPerspectiveViewRenderBtn.setIconTextGap(0);
       meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
-      meshGenPerspectiveViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenPerspectiveViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenPerspectiveViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_11.add(meshGenPerspectiveViewRenderBtn);
     }
@@ -20548,7 +20548,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderWidth.setPreferredSize(new Dimension(94, 22));
       lblRenderWidth.setName("");
       lblRenderWidth.setLocation(new Point(4, 76));
-      lblRenderWidth.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderWidth.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRenderWidth.setBounds(254, 2, 79, 22);
       panel_3.add(lblRenderWidth);
 
@@ -20570,7 +20570,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRenderWidthREd.setLocation(new Point(71, 76));
       meshGenRenderWidthREd.setHasMinValue(true);
       meshGenRenderWidthREd.setHasMaxValue(true);
-      meshGenRenderWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderWidthREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenRenderWidthREd.setBounds(330, 0, 100, 24);
       panel_3.add(meshGenRenderWidthREd);
 
@@ -20580,7 +20580,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderHeight.setPreferredSize(new Dimension(94, 22));
       lblRenderHeight.setName("");
       lblRenderHeight.setLocation(new Point(4, 76));
-      lblRenderHeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderHeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRenderHeight.setBounds(254, 26, 79, 22);
       panel_3.add(lblRenderHeight);
 
@@ -20602,7 +20602,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRenderHeightREd.setLocation(new Point(71, 76));
       meshGenRenderHeightREd.setHasMinValue(true);
       meshGenRenderHeightREd.setHasMaxValue(true);
-      meshGenRenderHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderHeightREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenRenderHeightREd.setBounds(330, 24, 100, 24);
       panel_3.add(meshGenRenderHeightREd);
 
@@ -20624,7 +20624,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSliceCountREd.setMaxValue(4096.0);
       meshGenSliceCountREd.setLocation(new Point(71, 76));
       meshGenSliceCountREd.setHasMinValue(true);
-      meshGenSliceCountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSliceCountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSliceCountREd.setBounds(150, 0, 100, 24);
       panel_3.add(meshGenSliceCountREd);
 
@@ -20634,7 +20634,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblNumberOfSlices.setPreferredSize(new Dimension(94, 22));
       lblNumberOfSlices.setName("");
       lblNumberOfSlices.setLocation(new Point(6, 76));
-      lblNumberOfSlices.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblNumberOfSlices.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblNumberOfSlices.setBounds(2, 2, 151, 22);
       panel_3.add(lblNumberOfSlices);
 
@@ -20644,7 +20644,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSlicesPerPass.setPreferredSize(new Dimension(94, 22));
       lblSlicesPerPass.setName("");
       lblSlicesPerPass.setLocation(new Point(4, 76));
-      lblSlicesPerPass.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSlicesPerPass.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSlicesPerPass.setBounds(2, 26, 151, 22);
       panel_3.add(lblSlicesPerPass);
 
@@ -20658,7 +20658,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSlicesPerRenderREd.setMaxValue(1.0);
       meshGenSlicesPerRenderREd.setLocation(new Point(71, 76));
       meshGenSlicesPerRenderREd.setHasMinValue(true);
-      meshGenSlicesPerRenderREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSlicesPerRenderREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSlicesPerRenderREd.setBounds(150, 24, 100, 24);
       panel_3.add(meshGenSlicesPerRenderREd);
 
@@ -20672,7 +20672,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRenderQualityREd.setLocation(new Point(71, 76));
       meshGenRenderQualityREd.setHasMinValue(true);
       meshGenRenderQualityREd.setHasMaxValue(false);
-      meshGenRenderQualityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenRenderQualityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenRenderQualityREd.setBounds(510, 2, 100, 24);
       panel_3.add(meshGenRenderQualityREd);
 
@@ -20682,7 +20682,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRenderQuality.setPreferredSize(new Dimension(94, 22));
       lblRenderQuality.setName("");
       lblRenderQuality.setLocation(new Point(4, 76));
-      lblRenderQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRenderQuality.setBounds(434, 4, 79, 22);
       panel_3.add(lblRenderQuality);
 
@@ -20695,7 +20695,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSliceThicknessModREd.setLocation(new Point(71, 76));
       meshGenSliceThicknessModREd.setHasMinValue(true);
       meshGenSliceThicknessModREd.setHasMaxValue(true);
-      meshGenSliceThicknessModREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSliceThicknessModREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSliceThicknessModREd.setBounds(710, 2, 100, 24);
       panel_3.add(meshGenSliceThicknessModREd);
 
@@ -20706,7 +20706,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSliceThickness.setPreferredSize(new Dimension(94, 22));
       lblSliceThickness.setName("");
       lblSliceThickness.setLocation(new Point(4, 76));
-      lblSliceThickness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSliceThickness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSliceThickness.setBounds(613, 4, 100, 22);
       panel_3.add(lblSliceThickness);
 
@@ -20719,7 +20719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSliceThicknessSamplesREd.setMaxValue(200.0);
       meshGenSliceThicknessSamplesREd.setLocation(new Point(71, 76));
       meshGenSliceThicknessSamplesREd.setHasMinValue(true);
-      meshGenSliceThicknessSamplesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSliceThicknessSamplesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSliceThicknessSamplesREd.setBounds(710, 24, 100, 24);
       panel_3.add(meshGenSliceThicknessSamplesREd);
 
@@ -20730,7 +20730,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblThicknessSamples.setPreferredSize(new Dimension(94, 22));
       lblThicknessSamples.setName("");
       lblThicknessSamples.setLocation(new Point(4, 76));
-      lblThicknessSamples.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblThicknessSamples.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblThicknessSamples.setBounds(613, 26, 100, 22);
       panel_3.add(lblThicknessSamples);
 
@@ -20748,7 +20748,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenGenerateBtn.setText("Render slices");
       meshGenGenerateBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
       meshGenGenerateBtn.setPreferredSize(new Dimension(132, 46));
-      meshGenGenerateBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenGenerateBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_8.add(meshGenGenerateBtn);
     }
     return panel_89;
@@ -20774,7 +20774,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenFromEditorBtn.setPreferredSize(new Dimension(125, 24));
       meshGenFromEditorBtn.setMinimumSize(new Dimension(100, 24));
       meshGenFromEditorBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenFromEditorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenFromEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenFromClipboardBtn = new JButton();
       meshGenFromClipboardBtn.addActionListener(new ActionListener() {
@@ -20789,7 +20789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenFromClipboardBtn.setPreferredSize(new Dimension(125, 24));
       meshGenFromClipboardBtn.setMinimumSize(new Dimension(100, 24));
       meshGenFromClipboardBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenFromClipboardBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenFromClipboardBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenLoadFlameBtn = new JButton();
       meshGenLoadFlameBtn.addActionListener(new ActionListener() {
@@ -20804,7 +20804,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenLoadFlameBtn.setPreferredSize(new Dimension(125, 24));
       meshGenLoadFlameBtn.setMinimumSize(new Dimension(100, 24));
       meshGenLoadFlameBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenLoadFlameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenLoadFlameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return panel_90;
   }
@@ -20826,7 +20826,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setSize(new Dimension(68, 22));
       label_2.setPreferredSize(new Dimension(94, 22));
       label_2.setLocation(new Point(390, 28));
-      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_2.setBounds(16, 46, 68, 22);
       panel_1.add(label_2);
 
@@ -20836,7 +20836,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenCentreYREd.setSize(new Dimension(100, 24));
       meshGenCentreYREd.setPreferredSize(new Dimension(100, 24));
       meshGenCentreYREd.setLocation(new Point(456, 28));
-      meshGenCentreYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenCentreYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenCentreYREd.setBounds(82, 46, 100, 24);
       meshGenCentreYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -20869,7 +20869,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_4.setSize(new Dimension(68, 22));
       label_4.setPreferredSize(new Dimension(94, 22));
       label_4.setLocation(new Point(390, 52));
-      label_4.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_4.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_4.setBounds(16, 70, 68, 22);
       panel_1.add(label_4);
 
@@ -20879,7 +20879,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZoomREd.setSize(new Dimension(100, 24));
       meshGenZoomREd.setPreferredSize(new Dimension(100, 24));
       meshGenZoomREd.setLocation(new Point(456, 52));
-      meshGenZoomREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZoomREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenZoomREd.setBounds(82, 70, 100, 24);
       meshGenZoomREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -20912,7 +20912,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(lblSlice);
       lblSlice.setText("CentreX");
       lblSlice.setPreferredSize(new Dimension(94, 22));
-      lblSlice.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSlice.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenCentreXREd = new JWFNumberField();
       meshGenCentreXREd.setBounds(82, 20, 100, 24);
@@ -20927,7 +20927,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenCentreXREd.setValueStep(0.05);
       meshGenCentreXREd.setText("");
       meshGenCentreXREd.setPreferredSize(new Dimension(100, 24));
-      meshGenCentreXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenCentreXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       meshGenCentreXSlider = new JSlider();
       meshGenCentreXSlider.setBounds(184, 22, 308, 19);
@@ -20954,7 +20954,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblStartz.setSize(new Dimension(68, 22));
       lblStartz.setPreferredSize(new Dimension(94, 22));
       lblStartz.setLocation(new Point(390, 6));
-      lblStartz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblStartz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblStartz.setBounds(16, 32, 68, 22);
       panel_2.add(lblStartz);
 
@@ -20965,7 +20965,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZMinREd.setSize(new Dimension(100, 24));
       meshGenZMinREd.setPreferredSize(new Dimension(100, 24));
       meshGenZMinREd.setLocation(new Point(456, 4));
-      meshGenZMinREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZMinREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenZMinREd.setBounds(82, 30, 100, 24);
       meshGenZMinREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -20998,7 +20998,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblEndz.setSize(new Dimension(68, 22));
       lblEndz.setPreferredSize(new Dimension(94, 22));
       lblEndz.setLocation(new Point(390, 28));
-      lblEndz.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblEndz.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblEndz.setBounds(16, 54, 68, 22);
       panel_2.add(lblEndz);
 
@@ -21009,7 +21009,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenZMaxREd.setSize(new Dimension(100, 24));
       meshGenZMaxREd.setPreferredSize(new Dimension(100, 24));
       meshGenZMaxREd.setLocation(new Point(456, 28));
-      meshGenZMaxREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenZMaxREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenZMaxREd.setBounds(82, 54, 100, 24);
       meshGenZMaxREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21116,7 +21116,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (meshGenHintPane == null) {
       meshGenHintPane = new JTextPane();
       meshGenHintPane.setBackground(SystemColor.menu);
-      meshGenHintPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      meshGenHintPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       meshGenHintPane.setEditable(false);
     }
     return meshGenHintPane;
@@ -21179,7 +21179,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenTopViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenTopViewRenderBtn.setIconTextGap(0);
       meshGenTopViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
-      meshGenTopViewRenderBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenTopViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenTopViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_96.add(meshGenTopViewRenderBtn);
 
@@ -21194,7 +21194,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenTopViewToEditorBtn.setMnemonic(KeyEvent.VK_R);
       meshGenTopViewToEditorBtn.setIconTextGap(0);
       meshGenTopViewToEditorBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")));
-      meshGenTopViewToEditorBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      meshGenTopViewToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenTopViewToEditorBtn.setBounds(6, 6, 42, 24);
       panel_96.add(meshGenTopViewToEditorBtn);
     }
@@ -21230,7 +21230,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameBrowserToMeshGenBtn.setPreferredSize(new Dimension(112, 24));
       flameBrowserToMeshGenBtn.setMinimumSize(new Dimension(100, 24));
       flameBrowserToMeshGenBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToMeshGenBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameBrowserToMeshGenBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return flameBrowserToMeshGenBtn;
   }
@@ -21299,7 +21299,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblImageDownsample.setPreferredSize(new Dimension(94, 22));
       lblImageDownsample.setName("");
       lblImageDownsample.setLocation(new Point(6, 76));
-      lblImageDownsample.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageDownsample.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblImageDownsample.setBounds(6, 8, 108, 22);
       panel_3.add(lblImageDownsample);
 
@@ -21314,7 +21314,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceDownSampleREd.setLocation(new Point(71, 76));
       meshGenSequenceDownSampleREd.setHasMinValue(true);
       meshGenSequenceDownSampleREd.setHasMaxValue(true);
-      meshGenSequenceDownSampleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceDownSampleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceDownSampleREd.setBounds(113, 6, 100, 24);
       panel_3.add(meshGenSequenceDownSampleREd);
 
@@ -21324,7 +21324,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSpatialFilterRadius_1.setPreferredSize(new Dimension(94, 22));
       lblSpatialFilterRadius_1.setName("");
       lblSpatialFilterRadius_1.setLocation(new Point(4, 76));
-      lblSpatialFilterRadius_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSpatialFilterRadius_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSpatialFilterRadius_1.setBounds(6, 32, 108, 22);
       panel_3.add(lblSpatialFilterRadius_1);
 
@@ -21337,7 +21337,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceFilterRadiusREd.setMaxValue(2.0);
       meshGenSequenceFilterRadiusREd.setLocation(new Point(71, 76));
       meshGenSequenceFilterRadiusREd.setHasMinValue(true);
-      meshGenSequenceFilterRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceFilterRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceFilterRadiusREd.setBounds(113, 30, 100, 24);
       panel_3.add(meshGenSequenceFilterRadiusREd);
 
@@ -21351,7 +21351,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceThresholdREd.setLocation(new Point(71, 76));
       meshGenSequenceThresholdREd.setHasMinValue(true);
       meshGenSequenceThresholdREd.setHasMaxValue(true);
-      meshGenSequenceThresholdREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceThresholdREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceThresholdREd.setBounds(325, 6, 100, 24);
       panel_3.add(meshGenSequenceThresholdREd);
 
@@ -21361,7 +21361,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBrightnessThreshold.setPreferredSize(new Dimension(94, 22));
       lblBrightnessThreshold.setName("");
       lblBrightnessThreshold.setLocation(new Point(6, 76));
-      lblBrightnessThreshold.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBrightnessThreshold.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBrightnessThreshold.setBounds(218, 8, 108, 22);
       panel_3.add(lblBrightnessThreshold);
 
@@ -21371,7 +21371,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPrefilter.setPreferredSize(new Dimension(94, 22));
       lblPrefilter.setName("");
       lblPrefilter.setLocation(new Point(6, 76));
-      lblPrefilter.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPrefilter.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPrefilter.setBounds(428, 8, 59, 22);
       panel_3.add(lblPrefilter);
 
@@ -21381,7 +21381,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreFilter1Cmb.setMinimumSize(new Dimension(100, 24));
       meshGenPreFilter1Cmb.setMaximumSize(new Dimension(32767, 24));
       meshGenPreFilter1Cmb.setMaximumRowCount(32);
-      meshGenPreFilter1Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreFilter1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenPreFilter1Cmb.setBounds(487, 6, 117, 24);
       panel_3.add(meshGenPreFilter1Cmb);
 
@@ -21391,7 +21391,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreFilter2Cmb.setMinimumSize(new Dimension(100, 24));
       meshGenPreFilter2Cmb.setMaximumSize(new Dimension(32767, 24));
       meshGenPreFilter2Cmb.setMaximumRowCount(32);
-      meshGenPreFilter2Cmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreFilter2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenPreFilter2Cmb.setBounds(487, 30, 117, 24);
       panel_3.add(meshGenPreFilter2Cmb);
 
@@ -21401,7 +21401,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPrefilter_1.setPreferredSize(new Dimension(94, 22));
       lblPrefilter_1.setName("");
       lblPrefilter_1.setLocation(new Point(6, 76));
-      lblPrefilter_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPrefilter_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPrefilter_1.setBounds(428, 32, 59, 22);
       panel_3.add(lblPrefilter_1);
 
@@ -21414,7 +21414,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenImageStepREd.setMinValue(1.0);
       meshGenImageStepREd.setLocation(new Point(71, 76));
       meshGenImageStepREd.setHasMinValue(true);
-      meshGenImageStepREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenImageStepREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenImageStepREd.setBounds(325, 30, 100, 24);
       panel_3.add(meshGenImageStepREd);
 
@@ -21424,7 +21424,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblImageStep.setPreferredSize(new Dimension(94, 22));
       lblImageStep.setName("");
       lblImageStep.setLocation(new Point(6, 76));
-      lblImageStep.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblImageStep.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblImageStep.setBounds(218, 32, 108, 22);
       panel_3.add(lblImageStep);
 
@@ -21442,7 +21442,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenGenerateMeshBtn.setText("Create Mesh");
       meshGenGenerateMeshBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
       meshGenGenerateMeshBtn.setPreferredSize(new Dimension(132, 48));
-      meshGenGenerateMeshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenGenerateMeshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_8.add(meshGenGenerateMeshBtn);
 
       meshGenGenerateMeshProgressbar = new JProgressBar();
@@ -21472,7 +21472,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenLoadSequenceBtn.setPreferredSize(new Dimension(125, 24));
       meshGenLoadSequenceBtn.setMinimumSize(new Dimension(100, 24));
       meshGenLoadSequenceBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenLoadSequenceBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenLoadSequenceBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenLoadSequenceBtn.setBounds(18, 47, 176, 24);
       panel_99.add(meshGenLoadSequenceBtn);
 
@@ -21485,7 +21485,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceWidthREd.setMinValue(16.0);
       meshGenSequenceWidthREd.setMaxValue(4096.0);
       meshGenSequenceWidthREd.setLocation(new Point(71, 76));
-      meshGenSequenceWidthREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceWidthREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceWidthREd.setBounds(282, 23, 100, 24);
       panel_99.add(meshGenSequenceWidthREd);
 
@@ -21495,7 +21495,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblWidth.setPreferredSize(new Dimension(94, 22));
       lblWidth.setName("");
       lblWidth.setLocation(new Point(4, 76));
-      lblWidth.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblWidth.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblWidth.setBounds(206, 25, 79, 22);
       panel_99.add(lblWidth);
 
@@ -21505,7 +21505,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHeight.setPreferredSize(new Dimension(94, 22));
       lblHeight.setName("");
       lblHeight.setLocation(new Point(4, 76));
-      lblHeight.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHeight.setBounds(206, 49, 79, 22);
       panel_99.add(lblHeight);
 
@@ -21518,7 +21518,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceHeightREd.setMinValue(16.0);
       meshGenSequenceHeightREd.setMaxValue(4096.0);
       meshGenSequenceHeightREd.setLocation(new Point(71, 76));
-      meshGenSequenceHeightREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceHeightREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceHeightREd.setBounds(282, 47, 100, 24);
       panel_99.add(meshGenSequenceHeightREd);
 
@@ -21528,7 +21528,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSlices.setPreferredSize(new Dimension(94, 22));
       lblSlices.setName("");
       lblSlices.setLocation(new Point(4, 76));
-      lblSlices.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSlices.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSlices.setBounds(206, 74, 79, 22);
       panel_99.add(lblSlices);
 
@@ -21541,7 +21541,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceSlicesREd.setMinValue(16.0);
       meshGenSequenceSlicesREd.setMaxValue(4096.0);
       meshGenSequenceSlicesREd.setLocation(new Point(71, 76));
-      meshGenSequenceSlicesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSequenceSlicesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenSequenceSlicesREd.setBounds(282, 72, 100, 24);
       panel_99.add(meshGenSequenceSlicesREd);
 
@@ -21556,7 +21556,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceFromRendererBtn.setPreferredSize(new Dimension(125, 24));
       meshGenSequenceFromRendererBtn.setMinimumSize(new Dimension(100, 24));
       meshGenSequenceFromRendererBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenSequenceFromRendererBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenSequenceFromRendererBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenSequenceFromRendererBtn.setBounds(18, 23, 176, 24);
       panel_99.add(meshGenSequenceFromRendererBtn);
 
@@ -21567,7 +21567,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenSequenceLbl.setPreferredSize(new Dimension(94, 22));
       meshGenSequenceLbl.setName("");
       meshGenSequenceLbl.setLocation(new Point(4, 76));
-      meshGenSequenceLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenSequenceLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenSequenceLbl.setBounds(18, 75, 176, 22);
       panel_99.add(meshGenSequenceLbl);
     }
@@ -21642,7 +21642,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPositionY.setPreferredSize(new Dimension(94, 22));
       lblPositionY.setName("");
       lblPositionY.setLocation(new Point(6, 76));
-      lblPositionY.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPositionY.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPositionY.setBounds(6, 30, 78, 22);
       panel_101.add(lblPositionY);
 
@@ -21653,7 +21653,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewPositionYREd.setSize(new Dimension(100, 24));
       meshGenPreviewPositionYREd.setPreferredSize(new Dimension(100, 24));
       meshGenPreviewPositionYREd.setLocation(new Point(71, 76));
-      meshGenPreviewPositionYREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPositionYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewPositionYREd.setBounds(84, 30, 100, 24);
       meshGenPreviewPositionYREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21671,7 +21671,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewPositionXREd.setSize(new Dimension(100, 24));
       meshGenPreviewPositionXREd.setPreferredSize(new Dimension(100, 24));
       meshGenPreviewPositionXREd.setLocation(new Point(71, 76));
-      meshGenPreviewPositionXREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPositionXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewPositionXREd.setBounds(84, 6, 100, 24);
       meshGenPreviewPositionXREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21688,7 +21688,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setPreferredSize(new Dimension(94, 22));
       label_2.setName("");
       label_2.setLocation(new Point(6, 76));
-      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_2.setBounds(6, 6, 78, 22);
       panel_101.add(label_2);
 
@@ -21701,7 +21701,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewSizeREd.setMinValue(0.01);
       meshGenPreviewSizeREd.setLocation(new Point(71, 76));
       meshGenPreviewSizeREd.setHasMinValue(true);
-      meshGenPreviewSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewSizeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewSizeREd.setBounds(84, 75, 100, 24);
       meshGenPreviewSizeREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21718,7 +21718,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSize.setPreferredSize(new Dimension(94, 22));
       lblSize.setName("");
       lblSize.setLocation(new Point(6, 76));
-      lblSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSize.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSize.setBounds(6, 75, 78, 22);
       panel_101.add(lblSize);
 
@@ -21728,7 +21728,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblScaleZ.setPreferredSize(new Dimension(94, 22));
       lblScaleZ.setName("");
       lblScaleZ.setLocation(new Point(6, 76));
-      lblScaleZ.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblScaleZ.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblScaleZ.setBounds(6, 99, 78, 22);
       panel_101.add(lblScaleZ);
 
@@ -21741,7 +21741,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewScaleZREd.setMinValue(0.01);
       meshGenPreviewScaleZREd.setLocation(new Point(71, 76));
       meshGenPreviewScaleZREd.setHasMinValue(true);
-      meshGenPreviewScaleZREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewScaleZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewScaleZREd.setBounds(84, 99, 100, 24);
       meshGenPreviewScaleZREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21758,7 +21758,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewRotateAlphaREd.setSize(new Dimension(100, 24));
       meshGenPreviewRotateAlphaREd.setPreferredSize(new Dimension(100, 24));
       meshGenPreviewRotateAlphaREd.setLocation(new Point(71, 76));
-      meshGenPreviewRotateAlphaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewRotateAlphaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewRotateAlphaREd.setBounds(84, 146, 100, 24);
       meshGenPreviewRotateAlphaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21775,7 +21775,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRotateAlpha.setPreferredSize(new Dimension(94, 22));
       lblRotateAlpha.setName("");
       lblRotateAlpha.setLocation(new Point(6, 76));
-      lblRotateAlpha.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateAlpha.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRotateAlpha.setBounds(6, 146, 78, 22);
       panel_101.add(lblRotateAlpha);
 
@@ -21785,7 +21785,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRotateBeta.setPreferredSize(new Dimension(94, 22));
       lblRotateBeta.setName("");
       lblRotateBeta.setLocation(new Point(6, 76));
-      lblRotateBeta.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRotateBeta.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRotateBeta.setBounds(6, 170, 78, 22);
       panel_101.add(lblRotateBeta);
 
@@ -21795,7 +21795,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewRotateBetaREd.setSize(new Dimension(100, 24));
       meshGenPreviewRotateBetaREd.setPreferredSize(new Dimension(100, 24));
       meshGenPreviewRotateBetaREd.setLocation(new Point(71, 76));
-      meshGenPreviewRotateBetaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewRotateBetaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewRotateBetaREd.setBounds(84, 170, 100, 24);
       meshGenPreviewRotateBetaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -21817,7 +21817,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenRefreshPreviewBtn.setPreferredSize(new Dimension(125, 24));
       meshGenRefreshPreviewBtn.setMinimumSize(new Dimension(100, 24));
       meshGenRefreshPreviewBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenRefreshPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenRefreshPreviewBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenRefreshPreviewBtn.setBounds(6, 220, 176, 24);
       panel_101.add(meshGenRefreshPreviewBtn);
 
@@ -21832,7 +21832,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewSunflowExportBtn.setPreferredSize(new Dimension(125, 24));
       meshGenPreviewSunflowExportBtn.setMinimumSize(new Dimension(100, 24));
       meshGenPreviewSunflowExportBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenPreviewSunflowExportBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreviewSunflowExportBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       meshGenPreviewSunflowExportBtn.setBounds(6, 276, 176, 24);
       panel_101.add(meshGenPreviewSunflowExportBtn);
     }
@@ -21916,7 +21916,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewImportLastGeneratedMeshBtn.setPreferredSize(new Dimension(125, 24));
       meshGenPreviewImportLastGeneratedMeshBtn.setMinimumSize(new Dimension(100, 24));
       meshGenPreviewImportLastGeneratedMeshBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenPreviewImportLastGeneratedMeshBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreviewImportLastGeneratedMeshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenPreviewImportFromFileBtn = new JButton();
       meshGenPreviewImportFromFileBtn.addActionListener(new ActionListener() {
@@ -21931,7 +21931,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewImportFromFileBtn.setPreferredSize(new Dimension(125, 24));
       meshGenPreviewImportFromFileBtn.setMinimumSize(new Dimension(100, 24));
       meshGenPreviewImportFromFileBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenPreviewImportFromFileBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenPreviewImportFromFileBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenClearPreviewBtn = new JButton();
       meshGenClearPreviewBtn.addActionListener(new ActionListener() {
@@ -21946,7 +21946,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenClearPreviewBtn.setPreferredSize(new Dimension(125, 24));
       meshGenClearPreviewBtn.setMinimumSize(new Dimension(100, 24));
       meshGenClearPreviewBtn.setMaximumSize(new Dimension(32000, 24));
-      meshGenClearPreviewBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      meshGenClearPreviewBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JLabel lblModelReduction = new JLabel();
       lblModelReduction.setBounds(4, 194, 78, 22);
@@ -21955,7 +21955,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblModelReduction.setText("Points");
       lblModelReduction.setPreferredSize(new Dimension(94, 22));
       lblModelReduction.setName("");
-      lblModelReduction.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblModelReduction.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       meshGenPreviewPointsREd = new JWFNumberField();
       meshGenPreviewPointsREd.setBounds(82, 194, 100, 24);
@@ -21968,7 +21968,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewPointsREd.setMaxValue(12.0);
       meshGenPreviewPointsREd.setHasMinValue(true);
       meshGenPreviewPointsREd.setHasMaxValue(true);
-      meshGenPreviewPointsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPointsREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       meshGenPreviewPolygonsREd = new JWFNumberField();
       meshGenPreviewPolygonsREd.setValueStep(1.0);
@@ -21979,7 +21979,7 @@ public class TinaInternalFrame extends JInternalFrame {
       meshGenPreviewPolygonsREd.setMaxValue(12.0);
       meshGenPreviewPolygonsREd.setHasMinValue(true);
       meshGenPreviewPolygonsREd.setHasMaxValue(true);
-      meshGenPreviewPolygonsREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenPreviewPolygonsREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       meshGenPreviewPolygonsREd.setBounds(82, 216, 100, 24);
       panel_102.add(meshGenPreviewPolygonsREd);
 
@@ -21988,7 +21988,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblPolygons.setText("Polygons");
       lblPolygons.setPreferredSize(new Dimension(94, 22));
       lblPolygons.setName("");
-      lblPolygons.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPolygons.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblPolygons.setBounds(4, 216, 78, 22);
       panel_102.add(lblPolygons);
     }
@@ -22037,7 +22037,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (apophysisHintsPane == null) {
       apophysisHintsPane = new JTextPane();
       apophysisHintsPane.setBackground(SystemColor.menu);
-      apophysisHintsPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
+      apophysisHintsPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 14));
       apophysisHintsPane.setEditable(false);
     }
     return apophysisHintsPane;
@@ -22059,7 +22059,7 @@ public class TinaInternalFrame extends JInternalFrame {
       channelMixerModeCmb.setMinimumSize(new Dimension(100, 24));
       channelMixerModeCmb.setMaximumSize(new Dimension(32767, 24));
       channelMixerModeCmb.setMaximumRowCount(32);
-      channelMixerModeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      channelMixerModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       channelMixerModeCmb.setBounds(6, 39, 100, 24);
       channelMixerModeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -22084,7 +22084,7 @@ public class TinaInternalFrame extends JInternalFrame {
       channelMixerResetBtn.setMinimumSize(new Dimension(100, 24));
       channelMixerResetBtn.setMaximumSize(new Dimension(32000, 24));
       channelMixerResetBtn.setIconTextGap(2);
-      channelMixerResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      channelMixerResetBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       channelMixerResetBtn.setBounds(6, 75, 100, 24);
       channelMixerResetBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       panel_1.add(channelMixerResetBtn);
@@ -22096,7 +22096,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblMode.setName("affineC00Lbl");
       lblMode.setLocation(new Point(0, 6));
       lblMode.setHorizontalAlignment(SwingConstants.LEFT);
-      lblMode.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMode.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblMode.setBounds(8, 16, 87, 22);
       panel_1.add(lblMode);
 
@@ -22250,7 +22250,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRed.setName("affineC00Lbl");
       lblRed.setLocation(new Point(0, 6));
       lblRed.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblRed.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRed.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblRed;
   }
@@ -22264,7 +22264,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGreen.setName("affineC00Lbl");
       lblGreen.setLocation(new Point(0, 6));
       lblGreen.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblGreen.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGreen.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblGreen;
   }
@@ -22278,7 +22278,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBlue.setName("affineC00Lbl");
       lblBlue.setLocation(new Point(0, 6));
       lblBlue.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblBlue.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBlue.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return lblBlue;
   }
@@ -22339,7 +22339,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblShape.setSize(new Dimension(94, 22));
       lblShape.setPreferredSize(new Dimension(94, 22));
       lblShape.setLocation(new Point(488, 2));
-      lblShape.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblShape.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblShape.setBounds(6, 6, 94, 22);
       panel_118.add(lblShape);
 
@@ -22349,7 +22349,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFScaleLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFScaleLbl.setName("dofDOFScaleLbl");
       dofDOFScaleLbl.setLocation(new Point(488, 2));
-      dofDOFScaleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFScaleLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFScaleLbl.setBounds(6, 29, 94, 22);
       panel_118.add(dofDOFScaleLbl);
 
@@ -22365,7 +22365,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFScaleREd.setLocation(new Point(584, 2));
       dofDOFScaleREd.setLinkedMotionControlName("dofDOFScaleSlider");
       dofDOFScaleREd.setLinkedLabelControlName("dofDOFScaleLbl");
-      dofDOFScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFScaleREd.setEditable(true);
       dofDOFScaleREd.setBounds(102, 29, 100, 24);
       dofDOFScaleREd.addActionListener(new ActionListener() {
@@ -22399,7 +22399,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFShapeCmb.setSize(new Dimension(125, 22));
       dofDOFShapeCmb.setPreferredSize(new Dimension(125, 22));
       dofDOFShapeCmb.setLocation(new Point(100, 4));
-      dofDOFShapeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFShapeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFShapeCmb.setBounds(102, 6, 322, 24);
       panel_118.add(dofDOFShapeCmb);
 
@@ -22411,7 +22411,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFScaleSlider.setMinimum(-30000);
       dofDOFScaleSlider.setMaximum(30000);
       dofDOFScaleSlider.setLocation(new Point(686, 2));
-      dofDOFScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFScaleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFScaleSlider.setBounds(204, 29, 220, 24);
       dofDOFScaleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22441,7 +22441,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAngleREd.setLocation(new Point(584, 2));
       dofDOFAngleREd.setLinkedMotionControlName("dofDOFAngleSlider");
       dofDOFAngleREd.setLinkedLabelControlName("dofDOFAngleLbl");
-      dofDOFAngleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFAngleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFAngleREd.setEditable(true);
       dofDOFAngleREd.setBounds(102, 52, 100, 24);
       dofDOFAngleREd.addActionListener(new ActionListener() {
@@ -22470,7 +22470,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAngleLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFAngleLbl.setName("dofDOFAngleLbl");
       dofDOFAngleLbl.setLocation(new Point(488, 2));
-      dofDOFAngleLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFAngleLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFAngleLbl.setBounds(6, 52, 94, 22);
       panel_118.add(dofDOFAngleLbl);
 
@@ -22482,7 +22482,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAngleSlider.setMinimum(-30000);
       dofDOFAngleSlider.setMaximum(30000);
       dofDOFAngleSlider.setLocation(new Point(686, 2));
-      dofDOFAngleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFAngleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFAngleSlider.setBounds(204, 52, 220, 24);
       dofDOFAngleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22505,7 +22505,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFFadeLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFFadeLbl.setName("dofDOFFadeLbl");
       dofDOFFadeLbl.setLocation(new Point(488, 2));
-      dofDOFFadeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFFadeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFFadeLbl.setBounds(6, 75, 94, 22);
       panel_118.add(dofDOFFadeLbl);
 
@@ -22523,7 +22523,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFFadeREd.setLinkedLabelControlName("dofDOFFadeLbl");
       dofDOFFadeREd.setHasMinValue(true);
       dofDOFFadeREd.setHasMaxValue(true);
-      dofDOFFadeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFFadeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFFadeREd.setEditable(true);
       dofDOFFadeREd.setBounds(102, 75, 100, 24);
       dofDOFFadeREd.addActionListener(new ActionListener() {
@@ -22553,7 +22553,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFFadeSlider.setMinimum(-30000);
       dofDOFFadeSlider.setMaximum(30000);
       dofDOFFadeSlider.setLocation(new Point(686, 2));
-      dofDOFFadeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFFadeSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFFadeSlider.setBounds(204, 75, 220, 24);
       dofDOFFadeSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22582,7 +22582,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam1REd.setLocation(new Point(584, 2));
       dofDOFParam1REd.setLinkedMotionControlName("dofDOFParam1Slider");
       dofDOFParam1REd.setLinkedLabelControlName("dofDOFParam1Lbl");
-      dofDOFParam1REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam1REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam1REd.setEditable(true);
       dofDOFParam1REd.setBounds(102, 98, 100, 24);
       dofDOFParam1REd.addActionListener(new ActionListener() {
@@ -22610,7 +22610,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam1Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam1Lbl.setName("dofDOFParam1Lbl");
       dofDOFParam1Lbl.setLocation(new Point(488, 2));
-      dofDOFParam1Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam1Lbl.setBounds(6, 98, 94, 22);
       panel_118.add(dofDOFParam1Lbl);
 
@@ -22622,7 +22622,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam1Slider.setMinimum(-30000);
       dofDOFParam1Slider.setMaximum(30000);
       dofDOFParam1Slider.setLocation(new Point(686, 2));
-      dofDOFParam1Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam1Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam1Slider.setBounds(204, 98, 220, 24);
       dofDOFParam1Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22651,7 +22651,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam3REd.setLocation(new Point(584, 2));
       dofDOFParam3REd.setLinkedMotionControlName("dofDOFParam3Slider");
       dofDOFParam3REd.setLinkedLabelControlName("dofDOFParam3Lbl");
-      dofDOFParam3REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam3REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam3REd.setEditable(true);
       dofDOFParam3REd.setBounds(562, 29, 100, 24);
       dofDOFParam3REd.addActionListener(new ActionListener() {
@@ -22679,7 +22679,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam3Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam3Lbl.setName("dofDOFParam3Lbl");
       dofDOFParam3Lbl.setLocation(new Point(488, 2));
-      dofDOFParam3Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam3Lbl.setBounds(466, 29, 94, 22);
       panel_118.add(dofDOFParam3Lbl);
 
@@ -22689,7 +22689,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam4Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam4Lbl.setName("dofDOFParam4Lbl");
       dofDOFParam4Lbl.setLocation(new Point(488, 2));
-      dofDOFParam4Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam4Lbl.setBounds(466, 52, 94, 22);
       panel_118.add(dofDOFParam4Lbl);
 
@@ -22705,7 +22705,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam4REd.setLocation(new Point(584, 2));
       dofDOFParam4REd.setLinkedMotionControlName("dofDOFParam4Slider");
       dofDOFParam4REd.setLinkedLabelControlName("dofDOFParam4Lbl");
-      dofDOFParam4REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam4REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam4REd.setEditable(true);
       dofDOFParam4REd.setBounds(562, 52, 100, 24);
       dofDOFParam4REd.addActionListener(new ActionListener() {
@@ -22735,7 +22735,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam3Slider.setMinimum(-30000);
       dofDOFParam3Slider.setMaximum(30000);
       dofDOFParam3Slider.setLocation(new Point(686, 2));
-      dofDOFParam3Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam3Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam3Slider.setBounds(664, 29, 220, 24);
       dofDOFParam3Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22760,7 +22760,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam4Slider.setMinimum(-30000);
       dofDOFParam4Slider.setMaximum(30000);
       dofDOFParam4Slider.setLocation(new Point(686, 2));
-      dofDOFParam4Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam4Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam4Slider.setBounds(664, 52, 220, 24);
       dofDOFParam4Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22789,7 +22789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam5REd.setLocation(new Point(584, 2));
       dofDOFParam5REd.setLinkedMotionControlName("dofDOFParam5CurveSlider");
       dofDOFParam5REd.setLinkedLabelControlName("dofDOFParam5CurveLbl");
-      dofDOFParam5REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam5REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam5REd.setEditable(true);
       dofDOFParam5REd.setBounds(562, 75, 100, 24);
       dofDOFParam5REd.addActionListener(new ActionListener() {
@@ -22817,7 +22817,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam5Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam5Lbl.setName("dofDOFParam5Lbl");
       dofDOFParam5Lbl.setLocation(new Point(488, 2));
-      dofDOFParam5Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam5Lbl.setBounds(466, 75, 94, 22);
       panel_118.add(dofDOFParam5Lbl);
 
@@ -22829,7 +22829,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam5Slider.setMinimum(-30000);
       dofDOFParam5Slider.setMaximum(30000);
       dofDOFParam5Slider.setLocation(new Point(686, 2));
-      dofDOFParam5Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam5Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam5Slider.setBounds(664, 75, 220, 24);
       dofDOFParam5Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22852,7 +22852,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam6Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam6Lbl.setName("dofDOFParam6Lbl");
       dofDOFParam6Lbl.setLocation(new Point(488, 2));
-      dofDOFParam6Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam6Lbl.setBounds(466, 100, 98, 22);
       panel_118.add(dofDOFParam6Lbl);
 
@@ -22868,7 +22868,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam6REd.setLocation(new Point(584, 2));
       dofDOFParam6REd.setLinkedMotionControlName("dofDOFParam6Slider");
       dofDOFParam6REd.setLinkedLabelControlName("dofDOFParam6Lbl");
-      dofDOFParam6REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam6REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam6REd.setEditable(true);
       dofDOFParam6REd.setBounds(562, 100, 98, 24);
       dofDOFParam6REd.addActionListener(new ActionListener() {
@@ -22898,7 +22898,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam6Slider.setMinimum(-30000);
       dofDOFParam6Slider.setMaximum(30000);
       dofDOFParam6Slider.setLocation(new Point(686, 2));
-      dofDOFParam6Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam6Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam6Slider.setBounds(664, 98, 220, 24);
       dofDOFParam6Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -22921,7 +22921,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam2Lbl.setPreferredSize(new Dimension(94, 22));
       dofDOFParam2Lbl.setName("dofDOFParam2Lbl");
       dofDOFParam2Lbl.setLocation(new Point(488, 2));
-      dofDOFParam2Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam2Lbl.setBounds(466, 6, 94, 22);
       panel_118.add(dofDOFParam2Lbl);
 
@@ -22937,7 +22937,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam2REd.setLocation(new Point(584, 2));
       dofDOFParam2REd.setLinkedMotionControlName("dofDOFParam2Slider");
       dofDOFParam2REd.setLinkedLabelControlName("dofDOFParam2Lbl");
-      dofDOFParam2REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      dofDOFParam2REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofDOFParam2REd.setEditable(true);
       dofDOFParam2REd.setBounds(562, 6, 100, 24);
       dofDOFParam2REd.addActionListener(new ActionListener() {
@@ -22967,7 +22967,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam2Slider.setMinimum(-30000);
       dofDOFParam2Slider.setMaximum(30000);
       dofDOFParam2Slider.setLocation(new Point(686, 2));
-      dofDOFParam2Slider.setFont(new Font("Dialog", Font.BOLD, 10));
+      dofDOFParam2Slider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam2Slider.setBounds(664, 6, 220, 24);
       dofDOFParam2Slider.addMouseListener(new MouseAdapter() {
         @Override
@@ -23120,7 +23120,7 @@ public class TinaInternalFrame extends JInternalFrame {
       bokehBtn.setText("DOF");
       bokehBtn.setPreferredSize(new Dimension(72, 24));
       bokehBtn.setMnemonic(KeyEvent.VK_K);
-      bokehBtn.setFont(new Font("Dialog", Font.BOLD, 9));
+      bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
     }
     return bokehBtn;
@@ -23140,7 +23140,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetCameraSettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetCameraSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetCameraSettingsBtn.setIconTextGap(2);
-      resetCameraSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetCameraSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetCameraSettingsBtn.setBounds(71, 100, 100, 24);
       resetCameraSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23161,7 +23161,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetDOFSettingsButton.setMinimumSize(new Dimension(100, 24));
       resetDOFSettingsButton.setMaximumSize(new Dimension(32000, 24));
       resetDOFSettingsButton.setIconTextGap(2);
-      resetDOFSettingsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetDOFSettingsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetDOFSettingsButton.setBounds(102, 99, 100, 24);
       resetDOFSettingsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23182,7 +23182,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetBokehOptionsButton.setMinimumSize(new Dimension(100, 24));
       resetBokehOptionsButton.setMaximumSize(new Dimension(32000, 24));
       resetBokehOptionsButton.setIconTextGap(2);
-      resetBokehOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetBokehOptionsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetBokehOptionsButton.setBounds(102, 120, 100, 24);
       resetBokehOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23203,7 +23203,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetColoringOptionsButton.setMinimumSize(new Dimension(100, 24));
       resetColoringOptionsButton.setMaximumSize(new Dimension(32000, 24));
       resetColoringOptionsButton.setIconTextGap(2);
-      resetColoringOptionsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetColoringOptionsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetColoringOptionsButton.setBounds(100, 119, 100, 24);
       resetColoringOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23228,7 +23228,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetShadingSettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetShadingSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetShadingSettingsBtn.setIconTextGap(2);
-      resetShadingSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetShadingSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetShadingSettingsBtn.setBounds(102, 28, 100, 24);
       resetShadingSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23249,7 +23249,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetStereo3DSettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetStereo3DSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetStereo3DSettingsBtn.setIconTextGap(2);
-      resetStereo3DSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetStereo3DSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetStereo3DSettingsBtn.setBounds(102, 104, 100, 24);
       resetStereo3DSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23270,7 +23270,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetPostSymmetrySettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetPostSymmetrySettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetPostSymmetrySettingsBtn.setIconTextGap(2);
-      resetPostSymmetrySettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetPostSymmetrySettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetPostSymmetrySettingsBtn.setBounds(102, 80, 100, 24);
       resetPostSymmetrySettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23291,7 +23291,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetMotionBlurSettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetMotionBlurSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetMotionBlurSettingsBtn.setIconTextGap(2);
-      resetMotionBlurSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetMotionBlurSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetMotionBlurSettingsBtn.setBounds(102, 99, 100, 24);
       resetMotionBlurSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
@@ -23344,7 +23344,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptAddButtonBtn.setToolTipText("Add this script to the macro-toolbar");
       scriptAddButtonBtn.setText("Add macro button");
       scriptAddButtonBtn.setPreferredSize(new Dimension(116, 24));
-      scriptAddButtonBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptAddButtonBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       scriptAddButtonBtn.setBounds(new Rectangle(9, 280, 125, 24));
     }
     return scriptAddButtonBtn;
@@ -23416,7 +23416,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientResetBtn.setSize(new Dimension(128, 50));
       gradientResetBtn.setPreferredSize(new Dimension(60, 48));
       gradientResetBtn.setLocation(new Point(4, 181));
-      gradientResetBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientResetBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return gradientResetBtn;
   }
@@ -23526,7 +23526,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaClearGradientImageButton.setToolTipText("Remove the currently used image");
       tinaClearGradientImageButton.setText("Remove image");
       tinaClearGradientImageButton.setPreferredSize(new Dimension(190, 24));
-      tinaClearGradientImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaClearGradientImageButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return tinaClearGradientImageButton;
   }
@@ -23579,7 +23579,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSelectGradientImageButton.setToolTipText("Select an image to use as a 2D-gradient");
       tinaSelectGradientImageButton.setText("Select image...");
       tinaSelectGradientImageButton.setPreferredSize(new Dimension(190, 24));
-      tinaSelectGradientImageButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSelectGradientImageButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapPnl.add(getTinaClearGradientImageButton());
     }
     return gradientColorMapPnl;
@@ -23593,7 +23593,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHoffset.setSize(new Dimension(56, 22));
       lblHoffset.setPreferredSize(new Dimension(64, 22));
       lblHoffset.setLocation(new Point(6, 6));
-      lblHoffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHoffset.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHoffset.setBounds(6, 36, 56, 22);
     }
     return lblHoffset;
@@ -23607,7 +23607,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHscale.setSize(new Dimension(56, 22));
       lblHscale.setPreferredSize(new Dimension(64, 22));
       lblHscale.setLocation(new Point(6, 32));
-      lblHscale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHscale.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHscale.setBounds(6, 62, 56, 22);
     }
     return lblHscale;
@@ -23621,7 +23621,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblLocalCAdd.setSize(new Dimension(56, 22));
       lblLocalCAdd.setPreferredSize(new Dimension(64, 22));
       lblLocalCAdd.setLocation(new Point(6, 58));
-      lblLocalCAdd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLocalCAdd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblLocalCAdd.setBounds(6, 88, 56, 22);
     }
     return lblLocalCAdd;
@@ -23635,7 +23635,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblLocalScl.setSize(new Dimension(56, 22));
       lblLocalScl.setPreferredSize(new Dimension(64, 22));
       lblLocalScl.setLocation(new Point(6, 84));
-      lblLocalScl.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLocalScl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblLocalScl.setBounds(6, 114, 56, 22);
     }
     return lblLocalScl;
@@ -23649,7 +23649,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblVoffset.setSize(new Dimension(56, 22));
       lblVoffset.setPreferredSize(new Dimension(64, 22));
       lblVoffset.setLocation(new Point(334, 6));
-      lblVoffset.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVoffset.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVoffset.setBounds(334, 36, 56, 22);
     }
     return lblVoffset;
@@ -23662,7 +23662,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblVScale.setSize(new Dimension(56, 22));
       lblVScale.setPreferredSize(new Dimension(64, 22));
       lblVScale.setLocation(new Point(334, 32));
-      lblVScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVScale.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblVScale.setBounds(334, 62, 56, 22);
     }
     return lblVScale;
@@ -23675,7 +23675,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_15.setSize(new Dimension(56, 22));
       label_15.setPreferredSize(new Dimension(64, 22));
       label_15.setLocation(new Point(334, 58));
-      label_15.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_15.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_15.setBounds(334, 88, 56, 22);
     }
     return label_15;
@@ -23688,7 +23688,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_16.setSize(new Dimension(56, 22));
       label_16.setPreferredSize(new Dimension(64, 22));
       label_16.setLocation(new Point(334, 84));
-      label_16.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_16.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_16.setBounds(334, 114, 56, 22);
     }
     return label_16;
@@ -23706,7 +23706,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapHorizOffsetREd.setLocation(new Point(62, 6));
       gradientColorMapHorizOffsetREd.setHasMinValue(true);
       gradientColorMapHorizOffsetREd.setHasMaxValue(true);
-      gradientColorMapHorizOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapHorizOffsetREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapHorizOffsetREd.setBounds(62, 36, 56, 24);
       gradientColorMapHorizOffsetREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23734,7 +23734,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapHorizScaleREd.setLocation(new Point(62, 32));
       gradientColorMapHorizScaleREd.setHasMinValue(true);
       gradientColorMapHorizScaleREd.setHasMaxValue(true);
-      gradientColorMapHorizScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapHorizScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapHorizScaleREd.setBounds(62, 62, 56, 24);
       gradientColorMapHorizScaleREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23762,7 +23762,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapLocalColorAddREd.setLocation(new Point(62, 58));
       gradientColorMapLocalColorAddREd.setHasMinValue(true);
       gradientColorMapLocalColorAddREd.setHasMaxValue(true);
-      gradientColorMapLocalColorAddREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapLocalColorAddREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapLocalColorAddREd.setBounds(62, 88, 56, 24);
       gradientColorMapLocalColorAddREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23790,7 +23790,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapLocalColorScaleREd.setLocation(new Point(62, 84));
       gradientColorMapLocalColorScaleREd.setHasMinValue(true);
       gradientColorMapLocalColorScaleREd.setHasMaxValue(true);
-      gradientColorMapLocalColorScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapLocalColorScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapLocalColorScaleREd.setBounds(62, 114, 56, 24);
       gradientColorMapLocalColorScaleREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23818,7 +23818,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapVertOffsetREd.setLocation(new Point(390, 6));
       gradientColorMapVertOffsetREd.setHasMinValue(true);
       gradientColorMapVertOffsetREd.setHasMaxValue(true);
-      gradientColorMapVertOffsetREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapVertOffsetREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapVertOffsetREd.setBounds(390, 36, 56, 24);
       gradientColorMapVertOffsetREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23846,7 +23846,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapVertScaleREd.setLocation(new Point(390, 32));
       gradientColorMapVertScaleREd.setHasMinValue(true);
       gradientColorMapVertScaleREd.setHasMaxValue(true);
-      gradientColorMapVertScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      gradientColorMapVertScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       gradientColorMapVertScaleREd.setBounds(390, 62, 56, 24);
       gradientColorMapVertScaleREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -23874,7 +23874,7 @@ public class TinaInternalFrame extends JInternalFrame {
       numberField_6.setLocation(new Point(390, 58));
       numberField_6.setHasMinValue(true);
       numberField_6.setHasMaxValue(true);
-      numberField_6.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_6.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       numberField_6.setBounds(390, 88, 56, 24);
     }
     return numberField_6;
@@ -23892,7 +23892,7 @@ public class TinaInternalFrame extends JInternalFrame {
       numberField_7.setLocation(new Point(390, 84));
       numberField_7.setHasMinValue(true);
       numberField_7.setHasMaxValue(true);
-      numberField_7.setFont(new Font("Dialog", Font.PLAIN, 10));
+      numberField_7.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       numberField_7.setBounds(390, 114, 56, 24);
     }
     return numberField_7;
@@ -23907,7 +23907,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapHorizOffsetSlider.setMinimum(-25000);
       gradientColorMapHorizOffsetSlider.setMaximum(25000);
       gradientColorMapHorizOffsetSlider.setLocation(new Point(118, 6));
-      gradientColorMapHorizOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapHorizOffsetSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapHorizOffsetSlider.setBounds(118, 36, 204, 22);
       gradientColorMapHorizOffsetSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -23932,7 +23932,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapHorizScaleSlider.setPreferredSize(new Dimension(86, 22));
       gradientColorMapHorizScaleSlider.setMaximum(25000);
       gradientColorMapHorizScaleSlider.setLocation(new Point(118, 32));
-      gradientColorMapHorizScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapHorizScaleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapHorizScaleSlider.setBounds(118, 62, 204, 22);
       gradientColorMapHorizScaleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -23958,7 +23958,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapLocalColorAddSlider.setMinimum(-25000);
       gradientColorMapLocalColorAddSlider.setMaximum(25000);
       gradientColorMapLocalColorAddSlider.setLocation(new Point(118, 58));
-      gradientColorMapLocalColorAddSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapLocalColorAddSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapLocalColorAddSlider.setBounds(118, 88, 204, 22);
       gradientColorMapLocalColorAddSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -23984,7 +23984,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapLocalColorScaleSlider.setMinimum(-25000);
       gradientColorMapLocalColorScaleSlider.setMaximum(25000);
       gradientColorMapLocalColorScaleSlider.setLocation(new Point(118, 84));
-      gradientColorMapLocalColorScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapLocalColorScaleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapLocalColorScaleSlider.setBounds(118, 114, 204, 22);
       gradientColorMapLocalColorScaleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -24010,7 +24010,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapVertOffsetSlider.setMinimum(-25000);
       gradientColorMapVertOffsetSlider.setMaximum(25000);
       gradientColorMapVertOffsetSlider.setLocation(new Point(446, 6));
-      gradientColorMapVertOffsetSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapVertOffsetSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapVertOffsetSlider.setBounds(446, 36, 204, 22);
       gradientColorMapVertOffsetSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -24035,7 +24035,7 @@ public class TinaInternalFrame extends JInternalFrame {
       gradientColorMapVertScaleSlider.setPreferredSize(new Dimension(86, 22));
       gradientColorMapVertScaleSlider.setMaximum(25000);
       gradientColorMapVertScaleSlider.setLocation(new Point(446, 32));
-      gradientColorMapVertScaleSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      gradientColorMapVertScaleSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       gradientColorMapVertScaleSlider.setBounds(446, 62, 204, 22);
       gradientColorMapVertScaleSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -24062,7 +24062,7 @@ public class TinaInternalFrame extends JInternalFrame {
       slider_6.setMinimum(-255);
       slider_6.setMaximum(255);
       slider_6.setLocation(new Point(446, 58));
-      slider_6.setFont(new Font("Dialog", Font.BOLD, 10));
+      slider_6.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       slider_6.setBounds(446, 88, 204, 22);
     }
     return slider_6;
@@ -24078,7 +24078,7 @@ public class TinaInternalFrame extends JInternalFrame {
       slider_7.setMinimum(-255);
       slider_7.setMaximum(255);
       slider_7.setLocation(new Point(446, 84));
-      slider_7.setFont(new Font("Dialog", Font.BOLD, 10));
+      slider_7.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       slider_7.setBounds(446, 114, 204, 22);
     }
     return slider_7;
@@ -24103,7 +24103,7 @@ public class TinaInternalFrame extends JInternalFrame {
       exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and launch Chaotica to render it");
       exportToChaosBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/chaotica_jw.png")));
       exportToChaosBtn.setPreferredSize(new Dimension(42, 24));
-      exportToChaosBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      exportToChaosBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return exportToChaosBtn;
   }
@@ -24133,7 +24133,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionToggleButton.setToolTipText("Control the current fractal by using the Leap Motion controller");
       leapMotionToggleButton.setPreferredSize(new Dimension(72, 42));
       leapMotionToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
-      leapMotionToggleButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return leapMotionToggleButton;
   }
@@ -24182,7 +24182,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex1Field.setSize(new Dimension(100, 24));
       leapMotionIndex1Field.setPreferredSize(new Dimension(100, 24));
       leapMotionIndex1Field.setLocation(new Point(584, 2));
-      leapMotionIndex1Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex1Field.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       leapMotionIndex1Field.setEditable(true);
       leapMotionIndex1Field.setBounds(357, 34, 60, 24);
       leapMotionIndex1Field.addChangeListener(new ChangeListener() {
@@ -24206,7 +24206,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionHandCmb.setSize(new Dimension(125, 22));
       leapMotionHandCmb.setPreferredSize(new Dimension(125, 22));
       leapMotionHandCmb.setLocation(new Point(100, 4));
-      leapMotionHandCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionHandCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionHandCmb.setBounds(96, 7, 135, 24);
       panel_112.add(leapMotionHandCmb);
       panel_112.add(getLeapMotionInputChannelCmb());
@@ -24222,7 +24222,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionInvScaleField.setSize(new Dimension(100, 24));
       leapMotionInvScaleField.setPreferredSize(new Dimension(100, 24));
       leapMotionInvScaleField.setLocation(new Point(584, 2));
-      leapMotionInvScaleField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionInvScaleField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       leapMotionInvScaleField.setEditable(true);
       leapMotionInvScaleField.setBounds(616, 7, 100, 24);
       leapMotionInvScaleField.addChangeListener(new ChangeListener() {
@@ -24239,7 +24239,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblAmplitude.setSize(new Dimension(94, 22));
       lblAmplitude.setPreferredSize(new Dimension(94, 22));
       lblAmplitude.setLocation(new Point(488, 2));
-      lblAmplitude.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAmplitude.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblAmplitude.setBounds(555, 9, 60, 22);
       panel_112.add(lblAmplitude);
 
@@ -24249,7 +24249,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBias.setSize(new Dimension(94, 22));
       lblBias.setPreferredSize(new Dimension(94, 22));
       lblBias.setLocation(new Point(488, 2));
-      lblBias.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBias.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBias.setBounds(555, 36, 60, 22);
       panel_112.add(lblBias);
 
@@ -24260,7 +24260,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionOffsetField.setSize(new Dimension(100, 24));
       leapMotionOffsetField.setPreferredSize(new Dimension(100, 24));
       leapMotionOffsetField.setLocation(new Point(584, 2));
-      leapMotionOffsetField.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionOffsetField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       leapMotionOffsetField.setEditable(true);
       leapMotionOffsetField.setBounds(616, 34, 100, 24);
       leapMotionOffsetField.addChangeListener(new ChangeListener() {
@@ -24280,7 +24280,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex2Field.setOnlyIntegers(true);
       leapMotionIndex2Field.setLocation(new Point(584, 2));
       leapMotionIndex2Field.setHasMinValue(true);
-      leapMotionIndex2Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex2Field.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       leapMotionIndex2Field.setEditable(true);
       leapMotionIndex2Field.setBounds(417, 34, 60, 24);
       leapMotionIndex2Field.addChangeListener(new ChangeListener() {
@@ -24300,7 +24300,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionIndex3Field.setOnlyIntegers(true);
       leapMotionIndex3Field.setLocation(new Point(584, 2));
       leapMotionIndex3Field.setHasMinValue(true);
-      leapMotionIndex3Field.setFont(new Font("Dialog", Font.PLAIN, 10));
+      leapMotionIndex3Field.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       leapMotionIndex3Field.setEditable(true);
       leapMotionIndex3Field.setBounds(477, 34, 60, 24);
       leapMotionIndex3Field.addChangeListener(new ChangeListener() {
@@ -24329,7 +24329,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionInputChannelCmb.setSize(new Dimension(125, 22));
       leapMotionInputChannelCmb.setPreferredSize(new Dimension(125, 22));
       leapMotionInputChannelCmb.setLocation(new Point(100, 4));
-      leapMotionInputChannelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionInputChannelCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionInputChannelCmb.setBounds(96, 34, 135, 24);
       leapMotionInputChannelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -24349,7 +24349,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblInputChannel.setSize(new Dimension(94, 22));
       lblInputChannel.setPreferredSize(new Dimension(94, 22));
       lblInputChannel.setLocation(new Point(488, 2));
-      lblInputChannel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblInputChannel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblInputChannel.setBounds(4, 36, 86, 22);
     }
     return lblInputChannel;
@@ -24362,7 +24362,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFlameproperty.setSize(new Dimension(94, 22));
       lblFlameproperty.setPreferredSize(new Dimension(94, 22));
       lblFlameproperty.setLocation(new Point(488, 2));
-      lblFlameproperty.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlameproperty.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFlameproperty.setBounds(242, 9, 114, 22);
     }
     return lblFlameproperty;
@@ -24374,7 +24374,7 @@ public class TinaInternalFrame extends JInternalFrame {
       leapMotionOutputChannelCmb.setSize(new Dimension(125, 22));
       leapMotionOutputChannelCmb.setPreferredSize(new Dimension(125, 22));
       leapMotionOutputChannelCmb.setLocation(new Point(100, 4));
-      leapMotionOutputChannelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      leapMotionOutputChannelCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       leapMotionOutputChannelCmb.setBounds(357, 7, 180, 24);
       leapMotionOutputChannelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -24394,7 +24394,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFlamepropertyindex.setSize(new Dimension(94, 22));
       lblFlamepropertyindex.setPreferredSize(new Dimension(94, 22));
       lblFlamepropertyindex.setLocation(new Point(488, 2));
-      lblFlamepropertyindex.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFlamepropertyindex.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFlamepropertyindex.setBounds(242, 36, 114, 22);
     }
     return lblFlamepropertyindex;
@@ -24407,7 +24407,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHand.setSize(new Dimension(94, 22));
       lblHand.setPreferredSize(new Dimension(94, 22));
       lblHand.setLocation(new Point(488, 2));
-      lblHand.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHand.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHand.setBounds(4, 8, 86, 22);
     }
     return lblHand;
@@ -24525,7 +24525,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountREd.setLocation(new Point(68, 4));
       xFormAntialiasAmountREd.setHasMinValue(true);
       xFormAntialiasAmountREd.setHasMaxValue(true);
-      xFormAntialiasAmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormAntialiasAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormAntialiasAmountREd.setBounds(675, 6, 100, 22);
     }
     return xFormAntialiasAmountREd;
@@ -24538,7 +24538,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountLbl.setSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setLocation(new Point(4, 4));
-      xFormAntialiasAmountLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormAntialiasAmountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormAntialiasAmountLbl.setBounds(565, 6, 113, 22);
     }
     return xFormAntialiasAmountLbl;
@@ -24566,7 +24566,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasAmountSlider.setMinimum(0);
       xFormAntialiasAmountSlider.setMaximum(100);
       xFormAntialiasAmountSlider.setLocation(new Point(123, 4));
-      xFormAntialiasAmountSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormAntialiasAmountSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormAntialiasAmountSlider.setBounds(777, 6, 220, 22);
     }
     return xFormAntialiasAmountSlider;
@@ -24596,7 +24596,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusREd.setLocation(new Point(68, 4));
       xFormAntialiasRadiusREd.setHasMinValue(true);
       xFormAntialiasRadiusREd.setHasMaxValue(true);
-      xFormAntialiasRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormAntialiasRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormAntialiasRadiusREd.setBounds(675, 28, 100, 22);
     }
     return xFormAntialiasRadiusREd;
@@ -24609,7 +24609,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusLbl.setSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setLocation(new Point(4, 4));
-      xFormAntialiasRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormAntialiasRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormAntialiasRadiusLbl.setBounds(565, 28, 113, 22);
     }
     return xFormAntialiasRadiusLbl;
@@ -24637,7 +24637,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormAntialiasRadiusSlider.setMinimum(0);
       xFormAntialiasRadiusSlider.setMaximum(200);
       xFormAntialiasRadiusSlider.setLocation(new Point(123, 4));
-      xFormAntialiasRadiusSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormAntialiasRadiusSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormAntialiasRadiusSlider.setBounds(777, 28, 220, 22);
     }
     return xFormAntialiasRadiusSlider;
@@ -24650,7 +24650,7 @@ public class TinaInternalFrame extends JInternalFrame {
       scriptEditBtn.setText("Edit...");
       scriptEditBtn.setPreferredSize(new Dimension(116, 24));
       scriptEditBtn.setMnemonic('u');
-      scriptEditBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      scriptEditBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       scriptEditBtn.setBounds(new Rectangle(9, 280, 125, 24));
       scriptEditBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -24824,7 +24824,7 @@ public class TinaInternalFrame extends JInternalFrame {
       flameToBatchButton.setPreferredSize(new Dimension(115, 24));
       flameToBatchButton.setMinimumSize(new Dimension(125, 52));
       flameToBatchButton.setMaximumSize(new Dimension(32000, 52));
-      flameToBatchButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      flameToBatchButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       flameToBatchButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")));
     }
     return flameToBatchButton;

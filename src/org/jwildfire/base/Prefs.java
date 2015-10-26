@@ -17,6 +17,7 @@
 package org.jwildfire.base;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
 
   static final String KEY_SUNFLOW_PATH_SCENES = "sunflow.path.scenes";
+
+  static final String KEY_TINA_FONTSCALE = "tina.general.font_scale";
 
   static final String KEY_TINA_PRESERVE_FREE_CPUS = "tina.render.preserve_free_cpus";
   static final String KEY_TINA_PROFILE_RESOLUTION_COUNT = "tina.profile.resolution.count";
@@ -254,6 +257,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Maximum render-time for the progressive preview-display", category = PropertyCategory.TINA)
   private double tinaEditorProgressivePreviewMaxRenderTime = 15.0;
+
+  @Property(description = "Font-scale for the flame-fractal-editor (experimental, to apply changes a restart of the program is required)", category = PropertyCategory.TINA)
+  private double tinaFontScale = 1.0;
 
   @Property(description = "Maximum render-quality for the progressive preview-display", category = PropertyCategory.TINA)
   private double tinaEditorProgressivePreviewMaxRenderQuality = 200.0;
@@ -788,6 +794,7 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreview = pSrc.tinaEditorProgressivePreview;
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
+    tinaFontScale = pSrc.tinaFontScale;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1577,6 +1584,25 @@ public class Prefs extends ManagedObject {
 
   public void setTinaCustomVariationsPath(String pTinaCustomVariationsPath) {
     tinaCustomVariationsPath = pTinaCustomVariationsPath;
+  }
+
+  public Font getFont(String pName, int pStyle, int pSize) {
+    int scaledSize = (int) (pSize * tinaFontScale);
+    if (scaledSize < 8) {
+      scaledSize = 8;
+    }
+    else if (scaledSize > 64) {
+      scaledSize = 64;
+    }
+    return new Font(pName, pStyle, scaledSize);
+  }
+
+  public double getTinaFontScale() {
+    return tinaFontScale;
+  }
+
+  public void setTinaFontScale(double pTinaFontScale) {
+    tinaFontScale = pTinaFontScale;
   }
 
 }

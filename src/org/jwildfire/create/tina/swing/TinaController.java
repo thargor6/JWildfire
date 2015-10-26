@@ -5374,7 +5374,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.previewEastMainPanel.setPreferredSize(new Dimension(DFLT_VERT_TOOLBAR_SIZE + toolbarWidth, 0));
       for (final MacroButton macroButton : prefs.getTinaMacroButtons()) {
         JButton button = new JButton();
-        button.setFont(new Font("Dialog", Font.BOLD, 9));
+        button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
         button.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
         button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
         button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
@@ -5422,7 +5422,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.macroButtonHorizRootPanel.setPreferredSize(new Dimension(0, toolbarHeight + 2));
       for (final MacroButton macroButton : prefs.getTinaMacroButtons()) {
         JButton button = new JButton();
-        button.setFont(new Font("Dialog", Font.BOLD, 9));
+        button.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
         button.setMinimumSize(new Dimension(buttonWidth, buttonHeight));
         button.setMaximumSize(new Dimension(buttonWidth, buttonHeight));
         button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));

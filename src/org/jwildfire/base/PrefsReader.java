@@ -133,7 +133,7 @@ public class PrefsReader {
         pPrefs.setTinaEditorProgressivePreview(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW, pPrefs.isTinaEditorProgressivePreview()));
         pPrefs.setTinaEditorProgressivePreviewMaxRenderTime(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME, pPrefs.getTinaEditorProgressivePreviewMaxRenderTime()));
         pPrefs.setTinaEditorProgressivePreviewMaxRenderQuality(getDoubleProperty(props, Prefs.KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY, pPrefs.getTinaEditorProgressivePreviewMaxRenderQuality()));
-
+        pPrefs.setTinaFontScale(getDoubleProperty(props, Prefs.KEY_TINA_FONTSCALE, pPrefs.getTinaFontScale()));
         pPrefs.setTinaEditorControlsWithAntialiasing(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING, pPrefs.isTinaEditorControlsWithAntialiasing()));
         pPrefs.setTinaEditorControlsWithShadows(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS, pPrefs.isTinaEditorControlsWithShadows()));
         pPrefs.setTinaEditorControlsWithNumbers(getBooleanProperty(props, Prefs.KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS, pPrefs.isTinaEditorControlsWithNumbers()));
