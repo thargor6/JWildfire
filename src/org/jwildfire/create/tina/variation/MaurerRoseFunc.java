@@ -88,6 +88,7 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_RENDER_MODE = "render_mode";
+  private static final String PARAM_CURVE_MODE = "curve_mode";
   
   private static final int CONNECTING_LINES = 0;
   private static final int RIGHT_LINES_CURRENT = 1;  
@@ -95,7 +96,14 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final int RIGHT_LINES_CENTERED = 3;
   private static final int CIRCLES = 4;
   
-  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_RENDER_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_DIFF_MODE };
+  private static final int CIRCLE = 0;
+  private static final int RECTANGLE = 1;
+  private static final int ELLIPSE = 2;
+  private static final int RHODONEA = 3;
+  private static final int EPITROCHOID = 4;
+  private static final int HYPOTROCHOID = 5;
+  
+  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, PARAM_RENDER_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_DIFF_MODE };
 
   private double knumer = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double kdenom = 1; // denominator of k in rose curve equations, k = kn/kd
@@ -115,6 +123,7 @@ public class MaurerRoseFunc extends VariationFunc {
   private double show_points = 0.5;
   private boolean diff_mode = false;
   private int render_mode = CONNECTING_LINES;
+  private int curve_mode = RHODONEA;
 
   // want to figure out (when possible):
   //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
@@ -197,6 +206,37 @@ public class MaurerRoseFunc extends VariationFunc {
     // System.out.println("cycles to close: " + cycles_to_close);
     // System.out.println("total cycles: " + cycles);
   }
+  
+  public double getCurveRadius(double theta) {
+    double r = kn;
+    if (curve_mode == CIRCLE) {
+      r = kn;
+    }
+    else if (curve_mode == RECTANGLE) {
+      
+    }
+    else if (curve_mode == ELLIPSE) {
+      
+    }
+    else if (curve_mode == RHODONEA) {
+      r = cos(k * theta) + radial_offset;
+    }
+    else if (curve_mode == EPITROCHOID) {
+//  double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
+//  double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
+  //  double r = sqrt(x*x + y*y);
+      double x = ((kn + kd) * cos(theta)) - (radial_offset * cos(((kn + kd)/kd) * theta));
+      double y = ((kn + kd) * sin(theta)) - (radial_offset * sin(((kn + kd)/kd) * theta));
+      r = sqrt(x*x + y*y);
+    }
+    else if (curve_mode == HYPOTROCHOID) {
+      
+    }
+    else {  // default to just returning first param;
+      r = kn;
+    }
+    return r;
+  }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -215,7 +255,8 @@ public class MaurerRoseFunc extends VariationFunc {
     double tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point
     double t = cycles * (tin + (cycle_offset * 2 * M_PI)); // angle of rose curve
     
-    double r = cos(k * t) + radial_offset;  
+    // double r = cos(k * t) + radial_offset;  
+    double r = getCurveRadius(t);
 
     double x = r * cos(t);
     double y = r * sin(t);
@@ -242,8 +283,10 @@ public class MaurerRoseFunc extends VariationFunc {
       // find polar and cartesian coordinates for endpoints of Maure Rose line
       double theta1 = step_number * step_size_radians;
       double theta2 = theta1 + step_size_radians;
-      double radius1 = cos(k * theta1) + radial_offset;
-      double radius2 = cos(k * theta2) + radial_offset;
+      // double radius1 = cos(k * theta1) + radial_offset;
+      // double radius2 = cos(k * theta2) + radial_offset;
+      double radius1 = getCurveRadius(theta1);
+      double radius2 = getCurveRadius(theta2);
       
       double x1 = radius1 * cos(theta1);
       double y1 = radius1 * sin(theta1);
@@ -343,7 +386,7 @@ public class MaurerRoseFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { knumer, kdenom, line_offset_degrees, line_count, render_mode, show_curve, show_points, 
+    return new Object[] { knumer, kdenom, line_offset_degrees, line_count, curve_mode, render_mode, show_curve, show_points, 
                           thickness, radial_offset,
                           cycles_param, cycle_offset, (diff_mode ? 1 : 0)  };
   }
@@ -358,6 +401,8 @@ public class MaurerRoseFunc extends VariationFunc {
       line_offset_degrees = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
       line_count = pValue;
+    else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
+      curve_mode = (int)pValue;
     else if (PARAM_RENDER_MODE.equalsIgnoreCase(pName))
       render_mode = (int)pValue;
     else if (PARAM_SHOW_CURVE.equalsIgnoreCase(pName))
