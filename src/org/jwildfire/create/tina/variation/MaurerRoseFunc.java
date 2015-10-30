@@ -87,8 +87,15 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final String PARAM_RADIAL_OFFSET = "radial_offset";
   private static final String PARAM_CYCLES = "cycles";
   private static final String PARAM_DIFF_MODE = "diff_mode";
+  private static final String PARAM_RENDER_MODE = "render_mode";
   
-  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_DIFF_MODE };
+  private static final int CONNECTING_LINES = 0;
+  private static final int RIGHT_LINES_CURRENT = 1;  
+  private static final int RIGHT_LINES_NEXT = 2;  
+  private static final int RIGHT_LINES_CENTERED = 3;
+  private static final int CIRCLES = 4;
+  
+  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_RENDER_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_DIFF_MODE };
 
   private double knumer = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double kdenom = 1; // denominator of k in rose curve equations, k = kn/kd
@@ -107,6 +114,7 @@ public class MaurerRoseFunc extends VariationFunc {
   private double show_curve = 0.01;
   private double show_points = 0.5;
   private boolean diff_mode = false;
+  private int render_mode = CONNECTING_LINES;
 
   // want to figure out (when possible):
   //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
@@ -229,7 +237,7 @@ public class MaurerRoseFunc extends VariationFunc {
     else {
       // map to a Maurer Rose line
       // find nearest step
-      double step_number = floor (t/step_size_radians);
+      double step_number = floor(t/step_size_radians);
       
       // find polar and cartesian coordinates for endpoints of Maure Rose line
       double theta1 = step_number * step_size_radians;
@@ -241,26 +249,52 @@ public class MaurerRoseFunc extends VariationFunc {
       double y1 = radius1 * sin(theta1);
       double x2 = radius2 * cos(theta2);
       double y2 = radius2 * sin(theta2);
-
       
       // find the slope and length of the line
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
       double m = ydiff / xdiff;  // slope
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
-      
-      // distance along the line from p1
-      // double d = ((t - theta1) / step_size_radians) * line_length;
-      double d = Math.random() * line_length;
-      // xoffset = [+-] d / (sqrt(1 + m^2)) 
+
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
-      
-      // x = x1 [+-] (d / (sqrt(1 + m^2))) 
-      // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
-      double xoffset = d / Math.sqrt(1 + m*m);
-      if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-      double yoffset = Math.abs(m * xoffset);
-      if (y2 < y1) { yoffset = -1 * yoffset; }
+      double xoffset=0, yoffset=0;
+      if (render_mode == CONNECTING_LINES) {
+        // xoffset = [+-] d / (sqrt(1 + m^2)) 
+        // yoffset = [+-] m * d / (sqrt(1 + m^2))
+        // distance along the line from p1
+        // double d = ((t - theta1) / step_size_radians) * line_length;
+        double d = Math.random() * line_length;
+        // x = x1 [+-] (d / (sqrt(1 + m^2))) 
+        // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
+        xoffset = d / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+        yoffset = Math.abs(m * xoffset);
+        if (y2 < y1) { yoffset = -1 * yoffset; }
+      }
+      else if (render_mode == RIGHT_LINES_CENTERED) {
+        double midlength = line_length/2;  // use midlength as midpoint of right line
+        double xmid = midlength / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xmid = -1 * xmid; }  // determine sign based on p2
+        double ymid = Math.abs(m * xmid);
+        if (y2 < y1) { ymid = -1 * ymid; }
+        // double pslope = -1 / m;
+        m = -1/m;
+        double d = Math.random() * line_length;
+        xoffset = d / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+        yoffset = Math.abs(m * xoffset);
+        if (y2 < y1) { yoffset = -1 * yoffset; }
+      }
+      else if (render_mode == CIRCLES) {
+        double midlength = line_length/2;  // use midlength of Maurer line as radius
+        double xmid = midlength / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xmid = -1 * xmid; }  
+        double ymid = Math.abs(m * xmid);
+        if (y2 < y1) { ymid = -1 * ymid; }
+        double ang = Math.random() * M_2PI;
+        xoffset = xmid + (midlength * sin(ang));
+        yoffset = ymid + (midlength * cos(ang));
+      }
 
       double rnd1 = pContext.random();
       if (show_points > 0 && rnd1 < show_points) {
@@ -309,7 +343,7 @@ public class MaurerRoseFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { knumer, kdenom, line_offset_degrees, line_count, show_curve, show_points, 
+    return new Object[] { knumer, kdenom, line_offset_degrees, line_count, render_mode, show_curve, show_points, 
                           thickness, radial_offset,
                           cycles_param, cycle_offset, (diff_mode ? 1 : 0)  };
   }
@@ -324,6 +358,8 @@ public class MaurerRoseFunc extends VariationFunc {
       line_offset_degrees = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
       line_count = pValue;
+    else if (PARAM_RENDER_MODE.equalsIgnoreCase(pName))
+      render_mode = (int)pValue;
     else if (PARAM_SHOW_CURVE.equalsIgnoreCase(pName))
       show_curve = pValue;
     else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
