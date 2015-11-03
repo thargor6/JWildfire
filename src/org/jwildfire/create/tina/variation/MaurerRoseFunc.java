@@ -297,9 +297,8 @@ public class MaurerRoseFunc extends VariationFunc {
     
     if (pContext.random() < show_curve) {
       if (thickness != 0) {
-        rout = r + (thickness * (pContext.random() - 0.5));
-        xout = rout * cos(t);
-        yout = rout * sin(t);
+        xout = x + ((pContext.random() - 0.5) * thickness);
+        yout = y + ((pContext.random() - 0.5) * thickness);
       }
       else {
         xout = x;
