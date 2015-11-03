@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import java.awt.geom.Point2D;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
@@ -96,12 +97,14 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final int RIGHT_LINES_CENTERED = 3;
   private static final int CIRCLES = 4;
   
+  
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
   private static final int ELLIPSE = 2;
   private static final int RHODONEA = 3;
   private static final int EPITROCHOID = 4;
   private static final int HYPOTROCHOID = 5;
+  private static final int LISSAJOUS = 6;
   
   private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, PARAM_RENDER_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_DIFF_MODE };
 
@@ -124,6 +127,12 @@ public class MaurerRoseFunc extends VariationFunc {
   private boolean diff_mode = false;
   private int render_mode = CONNECTING_LINES;
   private int curve_mode = RHODONEA;
+  
+  class DoublePoint2D {
+    public double x;
+    public double y;
+  }
+  private DoublePoint2D curve_point = new DoublePoint2D(); 
 
   // want to figure out (when possible):
   //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
@@ -207,35 +216,57 @@ public class MaurerRoseFunc extends VariationFunc {
     // System.out.println("total cycles: " + cycles);
   }
   
-  public double getCurveRadius(double theta) {
-    double r = kn;
+  /* 
+  *  reuses object variable curve_point
+  */
+  public DoublePoint2D getCurveCoords(double theta) {
     if (curve_mode == CIRCLE) {
-      r = kn;
+      double r = kn;
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
     }
     else if (curve_mode == RECTANGLE) {
-      
     }
     else if (curve_mode == ELLIPSE) {
-      
     }
     else if (curve_mode == RHODONEA) {
-      r = cos(k * theta) + radial_offset;
-    }
-    else if (curve_mode == EPITROCHOID) {
-//  double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
-//  double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
-  //  double r = sqrt(x*x + y*y);
-      double x = ((kn + kd) * cos(theta)) - (radial_offset * cos(((kn + kd)/kd) * theta));
-      double y = ((kn + kd) * sin(theta)) - (radial_offset * sin(((kn + kd)/kd) * theta));
-      r = sqrt(x*x + y*y);
-    }
-    else if (curve_mode == HYPOTROCHOID) {
+      double r = cos(k * theta) + radial_offset;
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
       
     }
-    else {  // default to just returning first param;
-      r = kn;
+    else if (curve_mode == EPITROCHOID) {
+      //  double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
+      //  double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
+      //  double r = sqrt(x*x + y*y);
+      double x = ((kn + kd) * cos(theta)) - (radial_offset * cos(((kn + kd)/kd) * theta));
+      double y = ((kn + kd) * sin(theta)) - (radial_offset * sin(((kn + kd)/kd) * theta));
+      curve_point.x = x;
+      curve_point.y = y;
     }
-    return r;
+    else if (curve_mode == HYPOTROCHOID) {
+      // double x = ((a_radius - b_radius) * cos(theta)) + (c_radius * cos(((a_radius - b_radius)/b_radius) * theta));
+      // double y = ((a_radius - b_radius) * sin(theta)) - (c_radius * sin(((a_radius - b_radius)/b_radius) * theta));
+      double x = ((kn - kd) * cos(theta)) + (radial_offset * cos(((kn - kd)/kd) * theta));
+      double y = ((kn - kd) * sin(theta)) - (radial_offset * sin(((kn - kd)/kd) * theta));
+      curve_point.x = x;
+      curve_point.y = y;
+    }
+    else if (curve_mode == LISSAJOUS) {
+      // x = A * sin(a*t + d)
+      // y = B * sin(b*t);
+      // for now keep A = B = 1
+      double x = sin(kn*theta + radial_offset);
+      double y = sin(kd*theta);
+      curve_point.x = x;
+      curve_point.y = y;
+    }
+    else {  // default to circle
+      double r = kn;
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
+    }
+    return curve_point;
   }
 
   @Override
@@ -256,10 +287,11 @@ public class MaurerRoseFunc extends VariationFunc {
     double t = cycles * (tin + (cycle_offset * 2 * M_PI)); // angle of rose curve
     
     // double r = cos(k * t) + radial_offset;  
-    double r = getCurveRadius(t);
+    DoublePoint2D p = getCurveCoords(t);
 
-    double x = r * cos(t);
-    double y = r * sin(t);
+    double x = p.x;
+    double y = p.y;
+    double r = sqrt(x*x + y*y);
     double rinx, riny;
     double xout, yout, rout;
     
@@ -285,13 +317,12 @@ public class MaurerRoseFunc extends VariationFunc {
       double theta2 = theta1 + step_size_radians;
       // double radius1 = cos(k * theta1) + radial_offset;
       // double radius2 = cos(k * theta2) + radial_offset;
-      double radius1 = getCurveRadius(theta1);
-      double radius2 = getCurveRadius(theta2);
-      
-      double x1 = radius1 * cos(theta1);
-      double y1 = radius1 * sin(theta1);
-      double x2 = radius2 * cos(theta2);
-      double y2 = radius2 * sin(theta2);
+      DoublePoint2D p1 = getCurveCoords(theta1);
+      double x1 = p1.x;
+      double y1 = p1.y;
+      DoublePoint2D p2 = getCurveCoords(theta2);
+      double x2 = p2.x;     
+      double y2 = p2.y;
       
       // find the slope and length of the line
       double ydiff = y2 - y1;
