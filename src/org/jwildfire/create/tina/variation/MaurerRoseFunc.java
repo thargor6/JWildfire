@@ -40,14 +40,18 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class MaurerRoseFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_KNUMER = "knumer";
-  private static final String PARAM_KDENOM = "kdenom";
+  // PARAM_KNUMER ==> PARAM_A
+  // PARAM_KDENOM ==> PARAM_B
+  // PARAM_RADIAL_OFFSET ==> PARAM_C
+  private static final String PARAM_A = "a";
+  private static final String PARAM_B = "b";
+  private static final String PARAM_C = "c";
   private static final String PARAM_LINE_OFFSET_DEGREES = "line_offset_degrees";
   private static final String PARAM_LINE_COUNT = "line_count";
   private static final String PARAM_SHOW_CURVE = "show_curve";
   private static final String PARAM_SHOW_POINTS = "show_points";
   private static final String PARAM_THICKNESS = "thickness";
-  private static final String PARAM_RADIAL_OFFSET = "radial_offset";
+
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
   
@@ -60,18 +64,20 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final int LISSAJOUS = 6;
   
   private static final String[] paramNames = { 
-    PARAM_KNUMER, PARAM_KDENOM, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, 
+    PARAM_A, PARAM_B, PARAM_C, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, 
     PARAM_CURVE_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, 
-    PARAM_THICKNESS, PARAM_RADIAL_OFFSET, PARAM_DIFF_MODE };
+    PARAM_THICKNESS, PARAM_DIFF_MODE };
 
-  private double knumer = 2; // numerator of k in rose curve equations,   k = kn/kd
-  private double kdenom = 1; // denominator of k in rose curve equations, k = kn/kd
-  private double radial_offset = 0; // often called "c" in rose curve modifier equations
-  private double cycle_offset = 0; // radians to offset cycle for incoming points
+  private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
+  private double b = 1; // denominator of k in rose curve equations, k = kn/kd
+  private double c = 0; // often called "c" in rose curve modifier equations
   private double thickness = 0; // amount to thicken curve by randomizing input
 
-  private double kn, kd;
-  private double k; // k = kn/kd
+  // rhodonea vars
+  private double kn, kd, k, radial_offset; // k = kn/kd
+  // epitrochoid / hypotrochoid vars
+  private double a_radius, b_radius, c_radius;
+  
   private double cycles; // 1 cycle = 2*PI
   private double line_count = 360;
   private double line_offset_degrees = 71;
@@ -86,17 +92,49 @@ public class MaurerRoseFunc extends VariationFunc {
     public double y;
   }
   private DoublePoint2D curve_point = new DoublePoint2D(); 
-
-  // want to figure out (when possible):
-  //     number of cycles(radians) to close the curve (radians = 2*PI*cycles)
-  //     number of petals in the curve
-  //     given those, can also calculate: for a given input x and y, which petal(s) the point will map to.
-  //         
+  
+  // for rhodonea:
+  //     a = knumer
+  //     b = kdenom
+  //     c = radial_offset
+  // for epitrochoid / hypotrochoid
+  //     option 1: 
+  //       a = radius
+  //       b = cusps
+  //       c = cusp_size
+  //       cusp_divisor = 1
+  //     option 2: 
+  //       a = a_radius
+  //       b = b_radius
+  //       c = c_radius        
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    kn = knumer;
-    kd = kdenom;
+    
+    // rhodonea init
+    kn = a;
+    kd = b;
     k = kn / kd;
+    radial_offset = c;
+    
+    // epitrochoid/hypotrochoid init
+    double radius = a;
+    double cusps = b;
+    double cusp_size = c;
+    double cusp_divisor = 1;
+    double cusps_ratio = cusps/cusp_divisor;
+    double c_scale = cusp_size + 1;
+    
+    if (curve_mode == EPITROCHOID) {
+      b_radius = -1 * radius / (1 - cusps_ratio - c_scale);
+      a_radius = b_radius * cusps_ratio;
+      c_radius = b_radius * c_scale;
+    }
+    else if (curve_mode == HYPOTROCHOID) {
+      b_radius = radius/(cusps_ratio + c_scale + 1)  ;
+      a_radius = b_radius * cusps_ratio;
+      c_radius = b_radius * c_scale;
+    }
+    
     step_size_radians = M_2PI * (line_offset_degrees / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
   }
@@ -106,7 +144,7 @@ public class MaurerRoseFunc extends VariationFunc {
   */
   public DoublePoint2D getCurveCoords(double theta) {
     if (curve_mode == CIRCLE) {
-      double r = kn;
+      double r = a;
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
@@ -115,25 +153,27 @@ public class MaurerRoseFunc extends VariationFunc {
     else if (curve_mode == ELLIPSE) {
     }
     else if (curve_mode == RHODONEA) {
-      double r = cos(k * theta) + radial_offset;
+      double r = cos(k * theta) + c;
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
-      
     }
     else if (curve_mode == EPITROCHOID) {
-      //  double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
-      //  double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
-      //  double r = sqrt(x*x + y*y);
-      double x = ((kn + kd) * cos(theta)) - (radial_offset * cos(((kn + kd)/kd) * theta));
-      double y = ((kn + kd) * sin(theta)) - (radial_offset * sin(((kn + kd)/kd) * theta));
+      // option 1:
+      // double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
+      // double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
+      // option 2:
+      double x = ((a + b) * cos(theta)) - (c * cos(((a + b)/b) * theta));
+      double y = ((a + b) * sin(theta)) - (c * sin(((a + b)/b) * theta));
       curve_point.x = x;
       curve_point.y = y;
     }
     else if (curve_mode == HYPOTROCHOID) {
+      // option 1:
       // double x = ((a_radius - b_radius) * cos(theta)) + (c_radius * cos(((a_radius - b_radius)/b_radius) * theta));
       // double y = ((a_radius - b_radius) * sin(theta)) - (c_radius * sin(((a_radius - b_radius)/b_radius) * theta));
-      double x = ((kn - kd) * cos(theta)) + (radial_offset * cos(((kn - kd)/kd) * theta));
-      double y = ((kn - kd) * sin(theta)) - (radial_offset * sin(((kn - kd)/kd) * theta));
+      // option 2: 
+      double x = ((a - b) * cos(theta)) + (c * cos(((a - b)/b) * theta));
+      double y = ((a - b) * sin(theta)) - (c * sin(((a - b)/b) * theta));
       curve_point.x = x;
       curve_point.y = y;
     }
@@ -141,13 +181,13 @@ public class MaurerRoseFunc extends VariationFunc {
       // x = A * sin(a*t + d)
       // y = B * sin(b*t);
       // for now keep A = B = 1
-      double x = sin(kn*theta + radial_offset);
-      double y = sin(kd*theta);
+      double x = sin((a*theta) + c);
+      double y = sin(b*theta);
       curve_point.x = x;
       curve_point.y = y;
     }
     else {  // default to circle
-      double r = kn;
+      double r = a;
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
@@ -169,7 +209,7 @@ public class MaurerRoseFunc extends VariationFunc {
     
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
     double tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point
-    double t = cycles * (tin + (cycle_offset * 2 * M_PI)); // angle of rose curve
+    double t = cycles * tin; // angle of rose curve
     
     // double r = cos(k * t) + radial_offset;  
     DoublePoint2D p = getCurveCoords(t);
@@ -276,17 +316,19 @@ public class MaurerRoseFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { knumer, kdenom, line_offset_degrees, line_count, curve_mode, show_curve, show_points, 
-                          thickness, radial_offset, (diff_mode ? 1 : 0)  };
+    return new Object[] { a, b, c, line_offset_degrees, line_count, curve_mode, show_curve, show_points, 
+                          thickness, (diff_mode ? 1 : 0)  };
 
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_KNUMER.equalsIgnoreCase(pName))
-      knumer = pValue;
-    else if (PARAM_KDENOM.equalsIgnoreCase(pName))
-      kdenom = pValue;
+    if (PARAM_A.equalsIgnoreCase(pName))
+      a = pValue;
+    else if (PARAM_B.equalsIgnoreCase(pName))
+      b = pValue;
+    else if (PARAM_C.equalsIgnoreCase(pName))
+      c = pValue;
     else if (PARAM_LINE_OFFSET_DEGREES.equalsIgnoreCase(pName))
       line_offset_degrees = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
@@ -297,8 +339,6 @@ public class MaurerRoseFunc extends VariationFunc {
       show_curve = pValue;
     else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
       show_points = pValue;    
-    else if (PARAM_RADIAL_OFFSET.equalsIgnoreCase(pName))
-      radial_offset = pValue;
     else if (PARAM_THICKNESS.equalsIgnoreCase(pName) || pName.equalsIgnoreCase("fill"))
       thickness = pValue;
     else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName) || pName.equalsIgnoreCase("diff mode")) {
