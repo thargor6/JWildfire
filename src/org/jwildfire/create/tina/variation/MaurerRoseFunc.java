@@ -43,15 +43,20 @@ public class MaurerRoseFunc extends VariationFunc {
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
   // PARAM_RADIAL_OFFSET ==> PARAM_C
+  // PARAM_THICKNESS ==> split into PARAM_CURVE_THICKNESS, PARAM_LINE_THICKNESS, PARAM_POINT_THICKNESS
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_LINE_OFFSET_DEGREES = "line_offset_degrees";
   private static final String PARAM_LINE_COUNT = "line_count";
-  private static final String PARAM_SHOW_CURVE = "show_curve";
+  private static final String PARAM_SHOW_LINES = "show_lines";
   private static final String PARAM_SHOW_POINTS = "show_points";
-  private static final String PARAM_THICKNESS = "thickness";
+  private static final String PARAM_SHOW_CURVE = "show_curve";
+  private static final String PARAM_LINE_THICKNESS = "line_thickness";
+  private static final String PARAM_POINT_THICKNESS = "point_thickness";
+  private static final String PARAM_CURVE_THICKNESS = "curve_thickness";
 
+  
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
   
@@ -65,13 +70,12 @@ public class MaurerRoseFunc extends VariationFunc {
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, 
-    PARAM_CURVE_MODE, PARAM_SHOW_CURVE, PARAM_SHOW_POINTS, 
-    PARAM_THICKNESS, PARAM_DIFF_MODE };
+    PARAM_CURVE_MODE, PARAM_SHOW_LINES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
+    PARAM_LINE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, PARAM_DIFF_MODE };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double b = 1; // denominator of k in rose curve equations, k = kn/kd
   private double c = 0; // often called "c" in rose curve modifier equations
-  private double thickness = 0; // amount to thicken curve by randomizing input
 
   // rhodonea vars
   private double kn, kd, k, radial_offset; // k = kn/kd
@@ -82,8 +86,20 @@ public class MaurerRoseFunc extends VariationFunc {
   private double line_count = 360;
   private double line_offset_degrees = 71;
   private double step_size_radians;
-  private double show_curve = 0.01;
-  private double show_points = 0.5;
+
+  private double show_lines_param = 1;
+  private double show_points_param = 0.3;
+  private double show_curve_param = 0.1;
+  private double line_fraction, point_fraction, curve_fraction;
+  private double line_threshold, point_threshold, point_half_threshold;
+  
+  private double line_thickness_param = 1;
+  private double point_thickness_param = 2;
+  private double curve_thickness_param = 0.5;
+  private double line_thickness, point_thickness, curve_thickness;
+  
+  // private double show_curve = 0.01;
+  // private double show_points = 0.5;
   private boolean diff_mode = false;
   private int curve_mode = RHODONEA;
   
@@ -135,8 +151,21 @@ public class MaurerRoseFunc extends VariationFunc {
       c_radius = b_radius * c_scale;
     }
     
+    double show_sum = show_lines_param + show_points_param + show_curve_param;
+    line_fraction = show_lines_param / show_sum;
+    point_fraction = show_points_param / show_sum;
+    curve_fraction = show_curve_param / show_sum;
+    line_threshold = line_fraction;
+    point_threshold = line_fraction + point_fraction;
+    point_half_threshold = line_fraction + (point_fraction/2);
+    
+    line_thickness = line_thickness_param / 100;
+    point_thickness = point_thickness_param / 100;
+    curve_thickness = curve_thickness_param / 100;
+    
     step_size_radians = M_2PI * (line_offset_degrees / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
+
   }
   
   /* 
@@ -220,18 +249,6 @@ public class MaurerRoseFunc extends VariationFunc {
     double rinx, riny;
     double xout, yout, rout;
     
-    if (pContext.random() < show_curve) {
-      if (thickness != 0) {
-        xout = x + ((pContext.random() - 0.5) * thickness);
-        yout = y + ((pContext.random() - 0.5) * thickness);
-      }
-      else {
-        xout = x;
-        yout = y;
-      }
-    }
-    
-    else {
       // map to a Maurer Rose line
       // find nearest step
       double step_number = floor(t/step_size_radians);
@@ -256,44 +273,63 @@ public class MaurerRoseFunc extends VariationFunc {
 
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
       double xoffset=0, yoffset=0;
-      // CONNECTING_LINES
-      // xoffset = [+-] d / (sqrt(1 + m^2))
-      // yoffset = [+-] m * d / (sqrt(1 + m^2))
-      // distance along the line from p1
-      // double d = ((t - theta1) / step_size_radians) * line_length;
-      double d = Math.random() * line_length;
-      // x = x1 [+-] (d / (sqrt(1 + m^2)))
-      // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
-      xoffset = d / Math.sqrt(1 + m*m);
-      if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-      yoffset = Math.abs(m * xoffset);
-      if (y2 < y1) { yoffset = -1 * yoffset; }
 
-      double rnd1 = pContext.random();
-      if (show_points > 0 && rnd1 < show_points) {
-        double roffset = pContext.random() * thickness * 2;
-        double rangle = (pContext.random() * M_2PI);
-        xoffset = roffset * cos(rangle);
-        yoffset = roffset * sin(rangle);
-        if (rnd1 < (show_points/2)) {
+
+      double rnd = pContext.random();
+      if (rnd < line_threshold) {
+        // draw line
+        // CONNECTING_LINES
+        // xoffset = [+-] d / (sqrt(1 + m^2))
+        // yoffset = [+-] m * d / (sqrt(1 + m^2))
+        // distance along the line from p1
+        // double d = ((t - theta1) / step_size_radians) * line_length;
+        double d = Math.random() * line_length;
+        // x = x1 [+-] (d / (sqrt(1 + m^2)))
+        // y = y1 [+-] (m * d / (sqrt(1 + m^2)))
+        xoffset = d / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+        yoffset = Math.abs(m * xoffset);
+        if (y2 < y1) { yoffset = -1 * yoffset; }
+        if (line_thickness != 0) {
+          xoffset += ((pContext.random() - 0.5) * line_thickness);
+          yoffset += ((pContext.random() - 0.5) * line_thickness);
+        }
+        xout = x1 + xoffset;
+        yout = y1 + yoffset;
+      }
+      else if (rnd <= point_threshold) {
+        // draw point
+        if (point_thickness != 0) {
+          double roffset = pContext.random() * point_thickness;
+          double rangle = (pContext.random() * M_2PI);
+          xoffset = roffset * cos(rangle);
+          yoffset = roffset * sin(rangle);
+        }
+        else {
+          xoffset = 0;
+          yoffset = 0;
+        }
+        if (rnd <= point_half_threshold) {
           xout = x1 + xoffset;
           yout = y1 + yoffset;
         }
-        else { // if (rnd1 < show_points) {
+        else {
           xout = x2 + xoffset;
           yout = y2 + yoffset;
         }
       }
       else {
-        if (thickness > 0) {
-          xoffset += ((pContext.random() - 0.5) * thickness);
-          yoffset += ((pContext.random() - 0.5) * thickness);
+        // draw curve
+        if (curve_thickness != 0) {
+          xout = x + ((pContext.random() - 0.5) * curve_thickness);
+          yout = y + ((pContext.random() - 0.5) * curve_thickness);
         }
-        xout = x1 + xoffset;
-        yout = y1 + yoffset;
+        else {
+          xout = x;
+          yout = y;
+        }
       }
 
-    }
 
     // Add final values in to variations totals
     if (diff_mode) {
@@ -316,9 +352,8 @@ public class MaurerRoseFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, line_offset_degrees, line_count, curve_mode, show_curve, show_points, 
-                          thickness, (diff_mode ? 1 : 0)  };
-
+    return new Object[] { a, b, c, line_offset_degrees, line_count, curve_mode, show_lines_param, show_points_param, show_curve_param, 
+                          line_thickness_param, point_thickness_param, curve_thickness_param, (diff_mode ? 1 : 0)  };
   }
 
   @Override
@@ -335,13 +370,19 @@ public class MaurerRoseFunc extends VariationFunc {
       line_count = pValue;
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
       curve_mode = (int)pValue;
-    else if (PARAM_SHOW_CURVE.equalsIgnoreCase(pName))
-      show_curve = pValue;
+    else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
+      show_lines_param = pValue;
     else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
-      show_points = pValue;    
-    else if (PARAM_THICKNESS.equalsIgnoreCase(pName) || pName.equalsIgnoreCase("fill"))
-      thickness = pValue;
-    else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName) || pName.equalsIgnoreCase("diff mode")) {
+      show_points_param = pValue;    
+    else if (PARAM_SHOW_CURVE.equalsIgnoreCase(pName))
+      show_curve_param = pValue;
+    else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
+      line_thickness_param = pValue;
+    else if (PARAM_POINT_THICKNESS.equalsIgnoreCase(pName))
+      point_thickness_param = pValue;
+    else if (PARAM_CURVE_THICKNESS.equalsIgnoreCase(pName))
+      curve_thickness_param = pValue;
+    else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName)) {
       diff_mode = (pValue >= 1);
     }
     else
