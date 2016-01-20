@@ -284,15 +284,13 @@ public class MaurerCirclesFunc extends VariationFunc {
 
       double rnd = pContext.random();
       if (rnd < line_threshold) {
-        // draw circles
-        
         // draw lines
         double d = Math.random() * line_length;
         xoffset = d / Math.sqrt(1 + m*m);
         if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
         yoffset = Math.abs(m * xoffset);
         if (y2 < y1) { yoffset = -1 * yoffset; }
-        if (line_thickness != 0) {
+                if (line_thickness != 0) {
           xoffset += ((pContext.random() - 0.5) * line_thickness);
           yoffset += ((pContext.random() - 0.5) * line_thickness);
         }
@@ -300,14 +298,35 @@ public class MaurerCirclesFunc extends VariationFunc {
         yout = y1 + yoffset;
       }
       else if (rnd <= circle_threshold) {
+        // draw circles
         double midlength = line_length/2;  // use midlength of Maurer line as radius
+        double ang = Math.random() * M_2PI;
+        
+        // original version -- 
+        //   circles centered on midpoint of "Maurer line"
+        //   and use midlength of Maurer line as radius
+        /* 
         double xmid = midlength / Math.sqrt(1 + m*m);
         if (x2 < x1) { xmid = -1 * xmid; }  
         double ymid = Math.abs(m * xmid);
         if (y2 < y1) { ymid = -1 * ymid; }
-        double ang = Math.random() * M_2PI;
         xoffset = xmid + (midlength * sin(ang));
         yoffset = ymid + (midlength * cos(ang));
+        */
+        
+        // circles centered on points
+        // and use midlenth of Maurer line as radius
+        /*
+        xoffset = (midlength * sin(ang));
+        yoffset = (midlength * cos(ang));
+        */
+        
+        // circles centered on points
+        // and use length of Maurer line as radius
+        xoffset = (line_length * sin(ang));
+        yoffset = (line_length * cos(ang));
+
+        // add thickness
         if (circle_thickness != 0) {
           xoffset += ((pContext.random() - 0.5) * circle_thickness);
           yoffset += ((pContext.random() - 0.5) * circle_thickness);
