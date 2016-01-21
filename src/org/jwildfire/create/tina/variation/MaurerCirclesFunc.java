@@ -77,6 +77,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int SUPERSHAPE = 8;
   private static final int STARR_CURVE = 9;
   private static final int FARRIS_MYSTERY_CURVE = 10;
+  private static final int WAGON_FANCIFUL_CURVE = 11;
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
@@ -284,6 +285,11 @@ public class MaurerCirclesFunc extends VariationFunc {
       curve_point.y = sin(t)/a + sin(6*t)/b + cos(14*t)/c;
       // can also be represented more concisely with complex numbers: 
       //   c(t) = (e^(i*t))/a + (e^(6*i*t))/b + (e^(-14*i*t))/c
+      //   should break out into a fully parameterized version with exponent parameters as well 
+    }
+    else if (curve_mode == WAGON_FANCIFUL_CURVE) {
+      curve_point.x = sin(a * theta) * cos(c * theta);
+      curve_point.y = sin(b * theta) * sin(c * theta);
     }
     else {  // default to circle
       double r = a;
