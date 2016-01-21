@@ -16,9 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.awt.geom.Point2D;
-import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -26,8 +23,9 @@ import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-import java.math.BigInteger;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -47,6 +45,7 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
+  private static final String PARAM_D = "d";
   private static final String PARAM_LINE_OFFSET_DEGREES = "line_offset_degrees";
   private static final String PARAM_LINE_COUNT = "line_count";
   private static final String PARAM_SHOW_LINES = "show_lines";
@@ -64,19 +63,22 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final int RECTANGLE = 1;
   private static final int ELLIPSE = 2;
   private static final int RHODONEA = 3;
-  private static final int SECODONEA = 7;  // like rhodonea, but substituting secant (1/cos) for cos
   private static final int EPITROCHOID = 4;
   private static final int HYPOTROCHOID = 5;
   private static final int LISSAJOUS = 6;
+  private static final int SECODONEA = 7;  // like rhodonea, but substituting secant (1/cos) for cos
+  private static final int SUPERSHAPE = 8; 
   
+
   private static final String[] paramNames = { 
-    PARAM_A, PARAM_B, PARAM_C, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, 
+    PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, 
     PARAM_CURVE_MODE, PARAM_SHOW_LINES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, PARAM_DIFF_MODE };
-
+  
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double b = 1; // denominator of k in rose curve equations, k = kn/kd
   private double c = 0; // often called "c" in rose curve modifier equations
+  private double d = 0; // used for n3 in supershape equation
 
   // rhodonea vars
   private double kn, kd, k, radial_offset; // k = kn/kd
@@ -221,6 +223,26 @@ public class MaurerRoseFunc extends VariationFunc {
       curve_point.x = x;
       curve_point.y = y;
     }
+    else if (curve_mode == SUPERSHAPE) {
+      // original supershape variables: a, b, m, n1, n2, n3
+      // a = m
+      // b = n1
+      // c = n2
+      // d = n3
+      double a1 = 1;
+      double b1 = 1;
+      double m = a;
+      double n1 = b;
+      double n2 = c;
+      double n3 = d;
+
+      double r = pow( 
+                    (pow( fabs( (cos(m * theta / 4))/a1), n2) + 
+                     pow( fabs( (sin(m * theta / 4))/b1), n3)), 
+                    (-1/n1));
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
+    }
     else {  // default to circle
       double r = a;
       curve_point.x = r * cos(theta);
@@ -353,12 +375,12 @@ public class MaurerRoseFunc extends VariationFunc {
 
   @Override
   public String[] getParameterNames() {
-    return paramNames;
+      return paramNames;
   }
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, line_offset_degrees, line_count, curve_mode, show_lines_param, show_points_param, show_curve_param, 
+    return new Object[] { a, b, c, d, line_offset_degrees, line_count, curve_mode, show_lines_param, show_points_param, show_curve_param, 
                           line_thickness_param, point_thickness_param, curve_thickness_param, (diff_mode ? 1 : 0)  };
   }
 
@@ -370,6 +392,8 @@ public class MaurerRoseFunc extends VariationFunc {
       b = pValue;
     else if (PARAM_C.equalsIgnoreCase(pName))
       c = pValue;
+    else if (PARAM_D.equalsIgnoreCase(pName))
+      d = pValue;
     else if (PARAM_LINE_OFFSET_DEGREES.equalsIgnoreCase(pName))
       line_offset_degrees = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
