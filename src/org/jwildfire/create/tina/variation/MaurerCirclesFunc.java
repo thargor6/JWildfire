@@ -75,6 +75,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int HYPOTROCHOID = 5;
   private static final int LISSAJOUS = 6;
   private static final int SUPERSHAPE = 8;
+  private static final int STARR_CURVE = 9;
   //private static final int 
   
   private static final String[] paramNames = { 
@@ -251,7 +252,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       curve_point.x = x;
       curve_point.y = y;
     }
-        else if (curve_mode == SUPERSHAPE) {
+    else if (curve_mode == SUPERSHAPE) {
       // original supershape variables: a, b, m, n1, n2, n3
       // a = m
       // b = n1
@@ -268,6 +269,12 @@ public class MaurerCirclesFunc extends VariationFunc {
                     (pow( fabs( (cos(m * theta / 4))/a1), n2) + 
                      pow( fabs( (sin(m * theta / 4))/b1), n3)), 
                     (-1/n1));
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
+    }
+    else if (curve_mode == STARR_CURVE) {
+      double r = 2 + (sin(a * theta)/2);
+      theta = theta + (sin(b * theta)/c); 
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
