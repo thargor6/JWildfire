@@ -29,6 +29,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import java.math.BigInteger;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
@@ -78,6 +79,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int STARR_CURVE = 9;
   private static final int FARRIS_MYSTERY_CURVE = 10;
   private static final int WAGON_FANCIFUL_CURVE = 11;
+  private static final int FAY_BUTTERFLY = 12;
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
@@ -290,6 +292,16 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (curve_mode == WAGON_FANCIFUL_CURVE) {
       curve_point.x = sin(a * theta) * cos(c * theta);
       curve_point.y = sin(b * theta) * sin(c * theta);
+    }
+    else if (curve_mode == FAY_BUTTERFLY) {
+      // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
+      // y = sin(t)*r
+      // x = cos(t)*r
+      double t = theta;
+      // double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5) + offset);
+      double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
+      curve_point.x = r * sin(t);
+      curve_point.y = r * cos(t);
     }
     else {  // default to circle
       double r = a;
