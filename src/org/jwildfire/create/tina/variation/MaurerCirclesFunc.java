@@ -194,7 +194,26 @@ public class MaurerCirclesFunc extends VariationFunc {
       curve_point.y = r * sin(theta);
     }
     else if (curve_mode == RECTANGLE) {
+      double t = theta % M_2PI;
+      if (t < 0) { t = (0.5 - t); }
 
+      if (t <= 0.25) {
+        curve_point.x = a/2;
+        // curve_point.y = (s * 4 * b) - b/2;  
+        curve_point.y = (t * 4 * b) - b/2;  
+      }
+      else if (t <= 0.5) {
+        curve_point.x = ((t-0.25) * 4 * a) - a/2;
+        curve_point.y = b/2;
+      }
+      else if (t <= 0.75) {
+        curve_point.x = -a/2;
+        curve_point.y = ((t-0.5) * 4 * b) - b/2;
+      }
+      else {
+        curve_point.x = ((t-0.75) * 4 * a) -a/2;
+        curve_point.y = -b/2;
+      }
     }
     else if (curve_mode == ELLIPSE) {
     }
