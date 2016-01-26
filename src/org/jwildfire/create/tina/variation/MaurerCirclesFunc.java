@@ -79,6 +79,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int EPITROCHOID = 4;
   private static final int HYPOTROCHOID = 5;
   private static final int LISSAJOUS = 6;
+  private static final int EPISPIRAL = 7;
   private static final int SUPERSHAPE = 8;
   private static final int STARR_CURVE = 9;
   private static final int FARRIS_MYSTERY_CURVE = 10;
@@ -239,6 +240,11 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (curve_mode == RHODONEA) {
       double r = cos(k * theta) + c;
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
+    }
+    else if (curve_mode == EPISPIRAL) {
+      double r = (1/cos(k * theta)) + c;
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
