@@ -85,6 +85,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int FARRIS_MYSTERY_CURVE = 10;
   private static final int WAGON_FANCIFUL_CURVE = 11;
   private static final int FAY_BUTTERFLY = 12;
+  private static final int RIGGE1 = 13;
+  private static final int RIGGE2 = 14;
   
   private static final int NORMAL = 0;
   private static final int RED = 1;
@@ -324,6 +326,16 @@ public class MaurerCirclesFunc extends VariationFunc {
       double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
       curve_point.x = r * sin(t);
       curve_point.y = r * cos(t);
+    }
+    else if (curve_mode == RIGGE1) {
+      double r = (1 - cos(a * theta)) + (1 - cos(a * b * theta));
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
+    }
+    else if (curve_mode == RIGGE2) {
+      double r = (1 - cos(a * theta)) - (1 - cos(a * b * theta));
+      curve_point.x = r * cos(theta);
+      curve_point.y = r * sin(theta);
     }
     else {  // default to circle
       double r = a;
