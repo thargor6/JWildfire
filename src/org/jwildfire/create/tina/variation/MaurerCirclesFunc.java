@@ -67,6 +67,10 @@ public class MaurerCirclesFunc extends VariationFunc {
   
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
+  private static final String PARAM_COLOR_MODE = "color_mode";
+//  private static final String PARAM_COLOR_SCALING = "color_scaling";
+  private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
+  private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
@@ -81,11 +85,18 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int WAGON_FANCIFUL_CURVE = 11;
   private static final int FAY_BUTTERFLY = 12;
   
+  private static final int NORMAL = 0;
+  private static final int RED = 1;
+  private static final int GREEN = 2;
+  private static final int BLUE = 3;
+  private static final int LINE_LENGTH_RG = 4;
+  private static final int LINE_LENGTH_RB = 5;
+  
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
-    PARAM_DIFF_MODE };
+    PARAM_DIFF_MODE, PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double b = 1; // denominator of k in rose curve equations, k = kn/kd
@@ -119,6 +130,11 @@ public class MaurerCirclesFunc extends VariationFunc {
   // private double show_points = 0.5;
   private boolean diff_mode = false;
   private int curve_mode = RHODONEA;
+  // private boolean direct_color = true;
+  private int color_mode = NORMAL;
+//  private double color_scaling = 100;
+  private double color_low_thresh = 0.3;
+  private double color_high_thresh = 2.0;
   
   class DoublePoint2D {
     public double x;
@@ -460,6 +476,37 @@ public class MaurerCirclesFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
+
+    if (color_mode != NORMAL) {
+      pVarTP.rgbColor = true;
+      if (color_mode == RED) {
+        pVarTP.redColor = 255;
+        pVarTP.greenColor = 0;
+        pVarTP.blueColor = 0;
+      }
+      else if (color_mode == GREEN) {
+        pVarTP.redColor = 0;
+        pVarTP.greenColor = 255;
+        pVarTP.blueColor = 0;
+      }
+      else if (color_mode == BLUE) {
+        pVarTP.redColor = 0;
+        pVarTP.greenColor = 0;
+        pVarTP.blueColor = 255;
+      }
+      else if (color_mode == LINE_LENGTH_RG) {
+        double baseColor = 0;
+        if (line_length < color_low_thresh) { baseColor = 0; }
+        else if (line_length > color_high_thresh) { baseColor = 255; }
+        else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
+        
+        pVarTP.redColor = baseColor;
+        pVarTP.greenColor = 255 - pVarTP.redColor;
+        pVarTP.blueColor = 0;
+//        pVarTP.redColor = (int) (line_length * color_scaling);
+//        if (pVarTP.redColor > 255) { pVarTP.redColor = 255; }
+      }
+    }
   }
 
   @Override
@@ -473,7 +520,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       a, b, c, d, line_offset_degrees, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      (diff_mode ? 1 : 0)  };
+      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh };
   }
 
   @Override
@@ -510,6 +557,15 @@ public class MaurerCirclesFunc extends VariationFunc {
       curve_thickness_param = pValue;
     else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName)) {
       diff_mode = (pValue >= 1);
+    }
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+      color_mode = (int)pValue;
+    }
+    else if (PARAM_COLOR_LOW_THRESH.equalsIgnoreCase(pName)) {
+      color_low_thresh = pValue;
+    }
+    else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      color_high_thresh = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
