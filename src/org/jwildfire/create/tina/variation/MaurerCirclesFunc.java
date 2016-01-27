@@ -71,6 +71,8 @@ public class MaurerCirclesFunc extends VariationFunc {
 //  private static final String PARAM_COLOR_SCALING = "color_scaling";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
+  private static final String PARAM_LINE_LOW_THRESH = "line_low_threshold";
+  private static final String PARAM_LINE_HIGH_THRESH = "line_high_threshold";
   
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
@@ -99,7 +101,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
-    PARAM_DIFF_MODE, PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH };
+    PARAM_DIFF_MODE, PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double b = 1; // denominator of k in rose curve equations, k = kn/kd
@@ -138,6 +140,8 @@ public class MaurerCirclesFunc extends VariationFunc {
 //  private double color_scaling = 100;
   private double color_low_thresh = 0.3;
   private double color_high_thresh = 2.0;
+  private double line_low_thresh = 0;   // if != 0, hide lines with lengh < line_low_thresh
+  private double line_high_thresh = 0;  // if != 0, hide lines with lenght > line_high_thresh
   
   class DoublePoint2D {
     public double x;
@@ -392,6 +396,12 @@ public class MaurerCirclesFunc extends VariationFunc {
       double xdiff = x2 - x1;
       double m = ydiff / xdiff;  // slope
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
+      if (line_low_thresh != 0 && line_length < line_low_thresh) {
+        pVarTP.doHide = true;
+      }
+      if (line_high_thresh != 0 && line_length > line_high_thresh) {
+        pVarTP.doHide = true;
+      }
 
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
       double xoffset=0, yoffset=0;
@@ -547,7 +557,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       a, b, c, d, line_offset_degrees, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh };
+      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, line_low_thresh, line_high_thresh };
   }
 
   @Override
@@ -593,6 +603,12 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
+    }
+    else if (PARAM_LINE_LOW_THRESH.equalsIgnoreCase(pName)) {
+      line_low_thresh = pValue;
+    }
+    else if (PARAM_LINE_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      line_high_thresh = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
