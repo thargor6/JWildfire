@@ -73,6 +73,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   private static final String PARAM_LINE_LOW_THRESH = "line_low_threshold";
   private static final String PARAM_LINE_HIGH_THRESH = "line_high_threshold";
+  private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
+  private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
   
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
@@ -101,7 +103,10 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
-    PARAM_DIFF_MODE, PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH };
+    PARAM_DIFF_MODE, 
+    PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
+    PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
+  };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
   private double b = 1; // denominator of k in rose curve equations, k = kn/kd
@@ -142,6 +147,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double color_high_thresh = 2.0;
   private double line_low_thresh = 0;   // if != 0, hide lines with lengh < line_low_thresh
   private double line_high_thresh = 0;  // if != 0, hide lines with lenght > line_high_thresh
+  private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
+  private double line_variation_amp = 0;
   
   class DoublePoint2D {
     public double x;
@@ -381,7 +388,16 @@ public class MaurerCirclesFunc extends VariationFunc {
       
       // find polar and cartesian coordinates for endpoints of Maure Rose line
       double theta1 = step_number * step_size_radians;
-      double theta2 = theta1 + step_size_radians;
+      double theta2;
+      if (line_variation_freq == 0 || line_variation_amp == 0) {
+        theta2 = theta1 + step_size_radians;
+      }
+      else {
+        // theta2 = theta1 + step_size_radians + (line_variation_amp * (sin(M_2PI/line_variation_freq)));
+        double varangle = line_variation_amp * sin((theta1 % M_2PI)/line_variation_freq);
+        theta2 = theta1 + step_size_radians + varangle;
+      }
+
       // double radius1 = cos(k * theta1) + radial_offset;
       // double radius2 = cos(k * theta2) + radial_offset;
       DoublePoint2D p1 = getCurveCoords(theta1);
@@ -557,7 +573,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       a, b, c, d, line_offset_degrees, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, line_low_thresh, line_high_thresh };
+      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
+      line_low_thresh, line_high_thresh, line_variation_freq, line_variation_amp };
   }
 
   @Override
@@ -609,6 +626,12 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_LINE_HIGH_THRESH.equalsIgnoreCase(pName)) {
       line_high_thresh = pValue;
+    }
+    else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
+      line_variation_freq = pValue;
+    }
+    else if (PARAM_LINE_VARIATION_AMP.equalsIgnoreCase(pName)) {
+      line_variation_amp = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
