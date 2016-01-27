@@ -66,7 +66,7 @@ public class MaurerRoseFunc extends VariationFunc {
   private static final int EPITROCHOID = 4;
   private static final int HYPOTROCHOID = 5;
   private static final int LISSAJOUS = 6;
-  private static final int SECODONEA = 7;  // like rhodonea, but substituting secant (1/cos) for cos
+  private static final int EPISPIRAL = 7;  // like rhodonea, but substituting secant (1/cos) for cos
   private static final int SUPERSHAPE = 8; 
   
 
@@ -189,7 +189,7 @@ public class MaurerRoseFunc extends VariationFunc {
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
-    else if (curve_mode == SECODONEA) {
+    else if (curve_mode == EPISPIRAL) {
       double r = (1/cos(k * theta)) + c;
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
