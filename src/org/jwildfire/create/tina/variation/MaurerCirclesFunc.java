@@ -524,6 +524,15 @@ public class MaurerCirclesFunc extends VariationFunc {
 //        pVarTP.redColor = (int) (line_length * color_scaling);
 //        if (pVarTP.redColor > 255) { pVarTP.redColor = 255; }
       }
+      else if (color_mode == LINE_LENGTH_RB) {
+        double baseColor = 0;
+        if (line_length < color_low_thresh) { baseColor = 0; }
+        else if (line_length > color_high_thresh) { baseColor = 255; }
+        else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
+        pVarTP.redColor = baseColor;
+        pVarTP.blueColor = 255 - pVarTP.redColor;
+        pVarTP.greenColor = 0;
+      }
     }
   }
 
