@@ -98,6 +98,9 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int BLUE = 3;
   private static final int LINE_LENGTH_RG = 4;
   private static final int LINE_LENGTH_RB = 5;
+
+  private static final int LINE_ANGLE_RG = 7;
+  private static final int LINE_ANGLE_RB = 8;
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
@@ -410,7 +413,9 @@ public class MaurerCirclesFunc extends VariationFunc {
       // find the slope and length of the line
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
-      double m = ydiff / xdiff;  // slope
+      double m = ydiff / xdiff;  // slope 
+      double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
+      // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
       if (line_low_thresh != 0 && line_length < line_low_thresh) {
         pVarTP.doHide = true;
@@ -555,6 +560,46 @@ public class MaurerCirclesFunc extends VariationFunc {
         if (line_length < color_low_thresh) { baseColor = 0; }
         else if (line_length > color_high_thresh) { baseColor = 255; }
         else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
+        pVarTP.redColor = baseColor;
+        pVarTP.blueColor = 255 - pVarTP.redColor;
+        pVarTP.greenColor = 0;
+      }
+      else if (color_mode == LINE_ANGLE_RG) {
+        double baseColor = 0;
+        // delta_from_yaxis should be 0 if perpendicular to y-axis, and M_PI/2 if perpendicular to x-axis
+        double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+        // scale to range [0..1];
+        delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+        // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
+        if (color_low_thresh == color_high_thresh) {
+          baseColor = delta_from_yaxis * 255;
+        }
+        else if (delta_from_yaxis < color_low_thresh) { baseColor = 0; }
+        else if (delta_from_yaxis > color_high_thresh) { baseColor = 255; }
+        else {
+          baseColor = ((delta_from_yaxis - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; 
+        }
+
+        pVarTP.redColor = baseColor;
+        pVarTP.greenColor = 255 - pVarTP.redColor;
+        pVarTP.blueColor = 0;
+      }
+      else if (color_mode == LINE_ANGLE_RB) {
+        double baseColor = 0;
+        // delta_from_yaxis should be 0 if perpendicular to y-axis, and M_PI/2 if perpendicular to x-axis
+        double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+        // scale to range [0..1];
+        delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+        // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
+        if (color_low_thresh == color_high_thresh) {
+          baseColor = delta_from_yaxis * 255;
+        }
+        else if (delta_from_yaxis < color_low_thresh) { baseColor = 0; }
+        else if (delta_from_yaxis > color_high_thresh) { baseColor = 255; }
+        else {
+          baseColor = ((delta_from_yaxis - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; 
+        }
+
         pVarTP.redColor = baseColor;
         pVarTP.blueColor = 255 - pVarTP.redColor;
         pVarTP.greenColor = 0;
