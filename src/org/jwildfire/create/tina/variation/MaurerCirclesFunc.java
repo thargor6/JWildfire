@@ -73,6 +73,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   private static final String PARAM_LINE_LOW_THRESH = "line_low_threshold";
   private static final String PARAM_LINE_HIGH_THRESH = "line_high_threshold";
+  private static final String PARAM_ANGLE_LOW_THRESH = "angle_low_threshold";
+  private static final String PARAM_ANGLE_HIGH_THRESH = "angel_high_threshold";
   private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
   private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
   
@@ -109,7 +111,8 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
     PARAM_DIFF_MODE, 
     PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
-    PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
+    PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
+    PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
@@ -151,6 +154,9 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double color_high_thresh = 2.0;
   private double line_low_thresh = 0;   // if != 0, hide lines with lengh < line_low_thresh
   private double line_high_thresh = 0;  // if != 0, hide lines with lenght > line_high_thresh
+  private double angle_low_thresh = 0; // if != 0, hide lines with angle < angle_low_thresh
+  private double angle_high_thresh = 0; // if != 0, hide lines with angle > angle_high_thresh
+  
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
   
@@ -417,11 +423,23 @@ public class MaurerCirclesFunc extends VariationFunc {
       double m = ydiff / xdiff;  // slope 
       double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
       // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
+      // delta_from_yaxis should be 0 if parallel to y-axis, and M_PI/2 if parallel to x-axis
+      double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+      // scale to range [0..1]; (0 parallel to y-axis, 1 parallel to x-axis)
+      delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
+      
       if (line_low_thresh != 0 && line_length < line_low_thresh) {
         pVarTP.doHide = true;
       }
       if (line_high_thresh != 0 && line_length > line_high_thresh) {
+        pVarTP.doHide = true;
+      }
+      
+      if (angle_low_thresh != 0 && delta_from_yaxis < angle_low_thresh) {
+        pVarTP.doHide = true;
+      }
+      if (angle_high_thresh != 0 && delta_from_yaxis > angle_high_thresh) {
         pVarTP.doHide = true;
       }
 
@@ -568,10 +586,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       }
       else if (color_mode == LINE_ANGLE_RG || color_mode == LINE_ANGLE_RB || color_mode == LINE_ANGLE_BG) {
         double baseColor = 0;
-        // delta_from_yaxis should be 0 if perpendicular to y-axis, and M_PI/2 if perpendicular to x-axis
-        double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
-        // scale to range [0..1];
-        delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+
         // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
         if (color_low_thresh == color_high_thresh) {
           baseColor = delta_from_yaxis * 255;
@@ -612,7 +627,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
       (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
-      line_low_thresh, line_high_thresh, line_variation_freq, line_variation_amp };
+      line_low_thresh, line_high_thresh, angle_low_thresh, angle_high_thresh, 
+      line_variation_freq, line_variation_amp };
   }
 
   @Override
@@ -664,6 +680,12 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_LINE_HIGH_THRESH.equalsIgnoreCase(pName)) {
       line_high_thresh = pValue;
+    }
+    else if (PARAM_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
+      angle_low_thresh = pValue;
+    }
+    else if (PARAM_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      angle_high_thresh = pValue;
     }
     else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
       line_variation_freq = pValue;
