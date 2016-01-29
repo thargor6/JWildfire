@@ -75,10 +75,14 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_LINE_LOW_THRESH = "line_low_threshold";
   private static final String PARAM_LINE_HIGH_THRESH = "line_high_threshold";
   private static final String PARAM_ANGLE_LOW_THRESH = "angle_low_threshold";
+  /* need to fix "angel" mis-spelling in previously generated flames */
   private static final String PARAM_ANGLE_HIGH_THRESH = "angel_high_threshold";
+  private static final String PARAM_RELATIVE_ANGLE_LOW_THRESH = "relative_angle_low_threshold";
+  private static final String PARAM_RELATIVE_ANGLE_HIGH_THRESH = "relative_angle_high_threshold";
+  
   private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
   private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
-  
+
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
   private static final int ELLIPSE = 2;
@@ -116,6 +120,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_DIFF_MODE, 
     PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
     PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
+    PARAM_RELATIVE_ANGLE_LOW_THRESH, PARAM_RELATIVE_ANGLE_HIGH_THRESH, 
     PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
 
@@ -156,10 +161,12 @@ public class MaurerCirclesFunc extends VariationFunc {
 //  private double color_scaling = 100;
   private double color_low_thresh = 0.3;
   private double color_high_thresh = 2.0;
-  private double line_low_thresh = 0;   // if != 0, hide lines with lengh < line_low_thresh
-  private double line_high_thresh = 0;  // if != 0, hide lines with lenght > line_high_thresh
-  private double angle_low_thresh = 0; // if != 0, hide lines with angle < angle_low_thresh
-  private double angle_high_thresh = 0; // if != 0, hide lines with angle > angle_high_thresh
+  private double line_low_thresh = 0;    // if != 0, hide lines with lengh < line_low_thresh
+  private double line_high_thresh = 0;   // if != 0, hide lines with lenght > line_high_thresh
+  private double angle_low_thresh = 0;   // if != 0, hide lines with angle < angle_low_thresh
+  private double angle_high_thresh = 0;  // if != 0, hide lines with angle > angle_high_thresh
+  private double rangle_low_thresh = 0;  // if != 0, hide lines with relative angle < rangle_low_thresh
+  private double rangle_high_thresh = 0; // if != 0, hide lines with relative angle > rangle_high_thresh
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
@@ -457,6 +464,13 @@ public class MaurerCirclesFunc extends VariationFunc {
       if (angle_high_thresh != 0 && delta_from_yaxis > angle_high_thresh) {
         pVarTP.doHide = true;
       }
+      
+      if (rangle_low_thresh != 0 && adiff < rangle_low_thresh) {
+        pVarTP.doHide = true;
+      }
+      if (rangle_high_thresh != 0 && adiff > rangle_high_thresh) {
+        pVarTP.doHide = true;
+      }
 
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
       double xoffset=0, yoffset=0;
@@ -672,6 +686,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
       (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
       line_low_thresh, line_high_thresh, angle_low_thresh, angle_high_thresh, 
+      rangle_low_thresh, rangle_high_thresh, 
       line_variation_freq, line_variation_amp };
   }
 
@@ -730,6 +745,12 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
       angle_high_thresh = pValue;
+    }
+    else if (PARAM_RELATIVE_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
+      rangle_low_thresh = pValue;
+    }
+    else if (PARAM_RELATIVE_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      rangle_high_thresh = pValue;
     }
     else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
       line_variation_freq = pValue;
