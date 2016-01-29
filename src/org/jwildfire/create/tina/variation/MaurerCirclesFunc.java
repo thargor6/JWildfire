@@ -44,6 +44,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 */
 public class MaurerCirclesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
+  private boolean DEBUG = false;
 
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
@@ -104,6 +105,9 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int LINE_ANGLE_RG = 7;
   private static final int LINE_ANGLE_RB = 8;
   private static final int LINE_ANGLE_BG = 9;
+  private static final int LINE_ANGLE_RELATIVE_RG = 10;
+  private static final int LINE_ANGLE_RELATIVE_RB = 11;
+  private static final int LINE_ANGLE_RELATIVE_BG = 12;
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
@@ -159,6 +163,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
+  
+  private long count = 0;
   
   class DoublePoint2D {
     public double x;
@@ -263,6 +269,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (curve_mode == RHODONEA) {
       double r = cos(k * theta) + c;
+      if (DEBUG && count % 100000 == 0) { System.out.println("radius = " + r); }
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
@@ -376,11 +383,12 @@ public class MaurerCirclesFunc extends VariationFunc {
         x = cos(kt)cos(t)
         y = cos(kt)sin(t)
     */
+    count++;
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
-    
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
     double tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point
+    // double tin = (Math.random() * M_2PI) - M_PI;
     double t = cycles * tin; // angle of rose curve
     
     // double r = cos(k * t) + radial_offset;  
@@ -421,6 +429,13 @@ public class MaurerCirclesFunc extends VariationFunc {
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
       double m = ydiff / xdiff;  // slope 
+      double a1 = atan2(y1, x1); 
+      double a2 = atan2(y2, x2);
+      if (a1 < 0) { a1 += M_2PI; }  // map to [0..2Pi]
+      if (a2 < 0) { a2 += M_2PI; }  // map to [0..2Pi]
+      // double adiff = abs(a2-a1);
+      double adiff = abs(a2 - a1);
+      if (adiff > M_PI) { adiff = M_2PI - adiff; }
       double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
       // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
       // delta_from_yaxis should be 0 if parallel to y-axis, and M_PI/2 if parallel to x-axis
@@ -607,6 +622,35 @@ public class MaurerCirclesFunc extends VariationFunc {
           pVarTP.blueColor = 255 - baseColor;
         }
         else if (color_mode == LINE_ANGLE_BG) {
+          pVarTP.redColor = 0;
+          pVarTP.greenColor = 255 - baseColor;
+          pVarTP.blueColor = baseColor;
+        }
+      }
+      else if (color_mode == LINE_ANGLE_RELATIVE_RG || color_mode == LINE_ANGLE_RELATIVE_RB || color_mode == LINE_ANGLE_RELATIVE_BG) {
+        double baseColor = 0;
+        if (DEBUG && count % 100000 == 0) { System.out.println(adiff/M_PI + ", radians: " + adiff + ", step_size: " + step_size_radians); }
+
+        // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
+        if (color_low_thresh == color_high_thresh) {
+          baseColor = (adiff/M_PI) * 255;
+        }
+        else if (adiff < color_low_thresh) { baseColor = 0; }
+        else if (adiff > color_high_thresh) { baseColor = 255; }
+        else {
+          baseColor = ((adiff - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; 
+        }
+        if (color_mode == LINE_ANGLE_RELATIVE_RG) {
+          pVarTP.redColor = baseColor;
+          pVarTP.greenColor = 255 - baseColor;
+          pVarTP.blueColor = 0;
+        }
+        else if (color_mode == LINE_ANGLE_RELATIVE_RB) {
+          pVarTP.redColor = baseColor;
+          pVarTP.greenColor = 0;
+          pVarTP.blueColor = 255 - baseColor;
+        }
+        else if (color_mode == LINE_ANGLE_RELATIVE_BG) {
           pVarTP.redColor = 0;
           pVarTP.greenColor = 255 - baseColor;
           pVarTP.blueColor = baseColor;
