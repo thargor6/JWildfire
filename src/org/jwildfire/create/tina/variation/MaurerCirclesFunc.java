@@ -44,7 +44,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 */
 public class MaurerCirclesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  private boolean DEBUG = false;
+  private boolean DEBUG_RELATIVE_ANGLE = false;
+  private boolean DEBUG_META_MODE = false;
 
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
@@ -80,6 +81,11 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_RELATIVE_ANGLE_LOW_THRESH = "relative_angle_low_threshold";
   private static final String PARAM_RELATIVE_ANGLE_HIGH_THRESH = "relative_angle_high_threshold";
   
+  private static final String PARAM_META_MODE = "meta_mode";
+  private static final String PARAM_META_MIN_STEP = "meta_min_step";
+  private static final String PARAM_META_MAX_STEP = "meta_max_step";
+  private static final String PARAM_META_STEP_DIFF = "meta_step_diff";
+  
   private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
   private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
 
@@ -106,6 +112,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int LINE_LENGTH_RG = 4;
   private static final int LINE_LENGTH_RB = 5;
   private static final int LINE_LENGTH_BG = 6;
+  private static final int LINE_LENGTH_COLORMAP = 13;
   private static final int LINE_ANGLE_RG = 7;
   private static final int LINE_ANGLE_RB = 8;
   private static final int LINE_ANGLE_BG = 9;
@@ -121,6 +128,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
     PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
     PARAM_RELATIVE_ANGLE_LOW_THRESH, PARAM_RELATIVE_ANGLE_HIGH_THRESH, 
+    PARAM_META_MODE, PARAM_META_MIN_STEP, PARAM_META_MAX_STEP, PARAM_META_STEP_DIFF, 
     PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
 
@@ -167,6 +175,16 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double angle_high_thresh = 0;  // if != 0, hide lines with angle > angle_high_thresh
   private double rangle_low_thresh = 0;  // if != 0, hide lines with relative angle < rangle_low_thresh
   private double rangle_high_thresh = 0; // if != 0, hide lines with relative angle > rangle_high_thresh
+  
+  private boolean meta_mode = false;
+  private double meta_min_step_degrees = 30; 
+  private double meta_max_step_degrees = 45; 
+  private double meta_step_diff_degrees = 1;
+
+  private double meta_min_step_radians;
+  private double meta_max_step_radians;
+  private double meta_step_diff_radians;
+  private double meta_steps;
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
@@ -238,7 +256,19 @@ public class MaurerCirclesFunc extends VariationFunc {
     
     step_size_radians = M_2PI * (line_offset_degrees / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
-
+    
+    meta_min_step_radians = M_2PI * (meta_min_step_degrees/360);
+    meta_max_step_radians = M_2PI * (meta_max_step_degrees/360);
+    meta_step_diff_radians = M_2PI * (meta_step_diff_degrees/360);
+    meta_steps = (meta_max_step_radians - meta_min_step_radians)/meta_step_diff_radians;
+    meta_steps = (int)meta_steps;
+    if (DEBUG_META_MODE) {
+      System.out.println("min: " + meta_min_step_radians );
+      System.out.println("max: " + meta_max_step_radians );
+      System.out.println("diff: " + meta_step_diff_radians);
+      System.out.println("meta steps raw: " + meta_steps);
+      System.out.println("meta steps: " + meta_steps);
+    }
   }
   
   /* 
@@ -276,7 +306,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (curve_mode == RHODONEA) {
       double r = cos(k * theta) + c;
-      if (DEBUG && count % 100000 == 0) { System.out.println("radius = " + r); }
+      if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
       curve_point.x = r * cos(theta);
       curve_point.y = r * sin(theta);
     }
@@ -391,6 +421,20 @@ public class MaurerCirclesFunc extends VariationFunc {
         y = cos(kt)sin(t)
     */
     count++;
+    double actual_step_size;
+    if (meta_mode) {
+      // which meta-step
+      // int meta_step = (int)(Math.random()* (meta_max_step_radians - meta_min_step_radians));
+      //  = (int)(meta_step + meta_min_step_radians);
+//      actual_step_size = meta_step;
+      // x1 = x2 = y1 = y2 = 0;
+      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * (int)(Math.random()*meta_steps));
+//      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
+      cycles = (line_count * actual_step_size) / M_2PI;
+    }
+    else {
+      actual_step_size = step_size_radians;
+    }
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
@@ -406,31 +450,32 @@ public class MaurerCirclesFunc extends VariationFunc {
     double r = sqrt(x*x + y*y);
     double rinx, riny;
     double xout, yout, rout;
-    
+
+    double step_number, theta1, theta2;
+    double x1, y1, x2, y2;
+
       // map to a Maurer Rose line
       // find nearest step
-      double step_number = floor(t/step_size_radians);
+      step_number = floor(t/actual_step_size);
       
       // find polar and cartesian coordinates for endpoints of Maure Rose line
-      double theta1 = step_number * step_size_radians;
-      double theta2;
+      theta1 = step_number * actual_step_size;
       if (line_variation_freq == 0 || line_variation_amp == 0) {
-        theta2 = theta1 + step_size_radians;
+        theta2 = theta1 + actual_step_size;
       }
       else {
+        // angle variation NOT WORKING YET
         // theta2 = theta1 + step_size_radians + (line_variation_amp * (sin(M_2PI/line_variation_freq)));
         double varangle = line_variation_amp * sin((theta1 % M_2PI)/line_variation_freq);
-        theta2 = theta1 + step_size_radians + varangle;
+        theta2 = theta1 + actual_step_size + varangle;
       }
 
-      // double radius1 = cos(k * theta1) + radial_offset;
-      // double radius2 = cos(k * theta2) + radial_offset;
       DoublePoint2D p1 = getCurveCoords(theta1);
-      double x1 = p1.x;
-      double y1 = p1.y;
+      x1 = p1.x;
+      y1 = p1.y;
       DoublePoint2D p2 = getCurveCoords(theta2);
-      double x2 = p2.x;     
-      double y2 = p2.y;
+      x2 = p2.x;     
+      y2 = p2.y;
       
       // find the slope and length of the line
       double ydiff = y2 - y1;
@@ -450,6 +495,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       // scale to range [0..1]; (0 parallel to y-axis, 1 parallel to x-axis)
       delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
+      pVarTP.doHide = false;
       
       if (line_low_thresh != 0 && line_length < line_low_thresh) {
         pVarTP.doHide = true;
@@ -575,45 +621,59 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
 
     if (color_mode != NORMAL) {
-      pVarTP.rgbColor = true;
+
       if (color_mode == RED) {
+        pVarTP.rgbColor = true;
         pVarTP.redColor = 255;
         pVarTP.greenColor = 0;
         pVarTP.blueColor = 0;
       }
       else if (color_mode == GREEN) {
+        pVarTP.rgbColor = true;
         pVarTP.redColor = 0;
         pVarTP.greenColor = 255;
         pVarTP.blueColor = 0;
       }
       else if (color_mode == BLUE) {
+        pVarTP.rgbColor = true;
         pVarTP.redColor = 0;
         pVarTP.greenColor = 0;
         pVarTP.blueColor = 255;
       }
       else if (color_mode == LINE_LENGTH_RG || color_mode == LINE_LENGTH_RB || color_mode == LINE_LENGTH_BG) {
+
         double baseColor = 0;
         if (line_length < color_low_thresh) { baseColor = 0; }
         else if (line_length > color_high_thresh) { baseColor = 255; }
         else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
         
         if (color_mode == LINE_LENGTH_RG) {
+          pVarTP.rgbColor = true;
           pVarTP.redColor = baseColor;
           pVarTP.greenColor = 255 - baseColor;
           pVarTP.blueColor = 0;
         }
         else if (color_mode == LINE_LENGTH_RB) {
+          pVarTP.rgbColor = true;
           pVarTP.redColor = baseColor;
           pVarTP.greenColor = 0;
           pVarTP.blueColor = 255 - baseColor;
         }
         else if (color_mode == LINE_LENGTH_BG) {
+          pVarTP.rgbColor = true;
           pVarTP.redColor = 0;
           pVarTP.greenColor = 255 - baseColor;
           pVarTP.blueColor = baseColor;
         }
+        else if (color_mode == LINE_LENGTH_COLORMAP) {
+          pVarTP.rgbColor = false;
+          pVarTP.color = baseColor / 255.0;
+          if (pVarTP.color < 0) { pVarTP.color = 0; }
+          if (pVarTP.color > 0) { pVarTP.color = 1.0; }
+        }
       }
       else if (color_mode == LINE_ANGLE_RG || color_mode == LINE_ANGLE_RB || color_mode == LINE_ANGLE_BG) {
+        pVarTP.rgbColor = true;
         double baseColor = 0;
 
         // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
@@ -642,8 +702,9 @@ public class MaurerCirclesFunc extends VariationFunc {
         }
       }
       else if (color_mode == LINE_ANGLE_RELATIVE_RG || color_mode == LINE_ANGLE_RELATIVE_RB || color_mode == LINE_ANGLE_RELATIVE_BG) {
+        pVarTP.rgbColor = true;
         double baseColor = 0;
-        if (DEBUG && count % 100000 == 0) { System.out.println(adiff/M_PI + ", radians: " + adiff + ", step_size: " + step_size_radians); }
+        if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println(adiff/M_PI + ", radians: " + adiff + ", step_size: " + step_size_radians); }
 
         // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
         if (color_low_thresh == color_high_thresh) {
@@ -686,7 +747,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
       (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
       line_low_thresh, line_high_thresh, angle_low_thresh, angle_high_thresh, 
-      rangle_low_thresh, rangle_high_thresh, 
+      rangle_low_thresh, rangle_high_thresh,  
+      (meta_mode ? 1 : 0), this.meta_min_step_degrees, this.meta_max_step_degrees, this.meta_step_diff_degrees, 
       line_variation_freq, line_variation_amp };
   }
 
@@ -757,6 +819,18 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_LINE_VARIATION_AMP.equalsIgnoreCase(pName)) {
       line_variation_amp = pValue;
+    }
+    else if (PARAM_META_MODE.equalsIgnoreCase(pName)) {
+      meta_mode = (pValue >= 1);
+    }
+    else if (PARAM_META_MIN_STEP.equalsIgnoreCase(pName)) { 
+      meta_min_step_degrees = pValue;
+    }
+    else if (PARAM_META_MAX_STEP.equalsIgnoreCase(pName)) { 
+      meta_max_step_degrees = pValue;
+    }
+    else if (PARAM_META_STEP_DIFF.equalsIgnoreCase(pName)) { 
+      this.meta_step_diff_degrees = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
