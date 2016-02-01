@@ -134,9 +134,9 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
 
-  private double a = 2; // numerator of k in rose curve equations,   k = kn/kd
-  private double b = 1; // denominator of k in rose curve equations, k = kn/kd
-  private double c = 0; // often called "c" in rose curve modifier equations
+  private double a = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
+  private double b = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
+  private double c = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
   private double d = 0; // used for n3 in supershape equation
 
   // rhodonea vars
@@ -188,7 +188,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double meta_step_diff_radians;
   private double meta_steps;
   
-  private boolean randomize = true;
+  private boolean randomize = false;
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
