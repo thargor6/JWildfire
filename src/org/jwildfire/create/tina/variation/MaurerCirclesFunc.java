@@ -86,6 +86,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_META_MAX_STEP = "meta_max_step";
   private static final String PARAM_META_STEP_DIFF = "meta_step_diff";
   
+  private static final String PARAM_RANDOMIZE = "randomize";
   private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
   private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
 
@@ -128,6 +129,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
     PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
     PARAM_RELATIVE_ANGLE_LOW_THRESH, PARAM_RELATIVE_ANGLE_HIGH_THRESH, 
+    PARAM_RANDOMIZE, 
     PARAM_META_MODE, PARAM_META_MIN_STEP, PARAM_META_MAX_STEP, PARAM_META_STEP_DIFF, 
     PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
@@ -185,6 +187,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double meta_max_step_radians;
   private double meta_step_diff_radians;
   private double meta_steps;
+  
+  private boolean randomize = true;
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
@@ -438,8 +442,13 @@ public class MaurerCirclesFunc extends VariationFunc {
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
-    double tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point
-    // double tin = (Math.random() * M_2PI) - M_PI;
+    double tin;
+    if (randomize) { 
+      tin = (Math.random() * M_2PI) - M_PI; // random angle, range [-Pi .. +Pi]
+    }
+    else {
+      tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point [-Pi .. +Pi]
+    }
     double t = cycles * tin; // angle of rose curve
     
     // double r = cos(k * t) + radial_offset;  
@@ -748,6 +757,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
       line_low_thresh, line_high_thresh, angle_low_thresh, angle_high_thresh, 
       rangle_low_thresh, rangle_high_thresh,  
+      (randomize ? 1 : 0), 
       (meta_mode ? 1 : 0), this.meta_min_step_degrees, this.meta_max_step_degrees, this.meta_step_diff_degrees, 
       line_variation_freq, line_variation_amp };
   }
@@ -814,11 +824,8 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (PARAM_RELATIVE_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
       rangle_high_thresh = pValue;
     }
-    else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
-      line_variation_freq = pValue;
-    }
-    else if (PARAM_LINE_VARIATION_AMP.equalsIgnoreCase(pName)) {
-      line_variation_amp = pValue;
+    else if (PARAM_RANDOMIZE.equalsIgnoreCase(pName)) {
+      randomize = (pValue >= 1);
     }
     else if (PARAM_META_MODE.equalsIgnoreCase(pName)) {
       meta_mode = (pValue >= 1);
@@ -831,6 +838,12 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     else if (PARAM_META_STEP_DIFF.equalsIgnoreCase(pName)) { 
       this.meta_step_diff_degrees = pValue;
+    }
+    else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
+      line_variation_freq = pValue;
+    }
+    else if (PARAM_LINE_VARIATION_AMP.equalsIgnoreCase(pName)) {
+      line_variation_amp = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
