@@ -113,14 +113,16 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int LINE_LENGTH_RG = 4;
   private static final int LINE_LENGTH_RB = 5;
   private static final int LINE_LENGTH_BG = 6;
-  private static final int LINE_LENGTH_COLORMAP = 13;
   private static final int LINE_ANGLE_RG = 7;
   private static final int LINE_ANGLE_RB = 8;
   private static final int LINE_ANGLE_BG = 9;
   private static final int LINE_ANGLE_RELATIVE_RG = 10;
   private static final int LINE_ANGLE_RELATIVE_RB = 11;
   private static final int LINE_ANGLE_RELATIVE_BG = 12;
-  
+  private static final int LINE_LENGTH_COLORMAP = 13;
+  private static final int LINE_ANGLE_COLORMAP = 14;
+  private static final int LINE_ANGLE_RELATIVE_COLORMAP = 15;
+
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
@@ -649,12 +651,14 @@ public class MaurerCirclesFunc extends VariationFunc {
         pVarTP.greenColor = 0;
         pVarTP.blueColor = 255;
       }
-      else if (color_mode == LINE_LENGTH_RG || color_mode == LINE_LENGTH_RB || color_mode == LINE_LENGTH_BG) {
+      else if (color_mode == LINE_LENGTH_RG || color_mode == LINE_LENGTH_RB || color_mode == LINE_LENGTH_BG || 
+              color_mode == LINE_LENGTH_COLORMAP) {
 
         double baseColor = 0;
         if (line_length < color_low_thresh) { baseColor = 0; }
         else if (line_length > color_high_thresh) { baseColor = 255; }
         else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
+        
         
         if (color_mode == LINE_LENGTH_RG) {
           pVarTP.rgbColor = true;
@@ -678,10 +682,11 @@ public class MaurerCirclesFunc extends VariationFunc {
           pVarTP.rgbColor = false;
           pVarTP.color = baseColor / 255.0;
           if (pVarTP.color < 0) { pVarTP.color = 0; }
-          if (pVarTP.color > 0) { pVarTP.color = 1.0; }
+          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
         }
       }
-      else if (color_mode == LINE_ANGLE_RG || color_mode == LINE_ANGLE_RB || color_mode == LINE_ANGLE_BG) {
+      else if (color_mode == LINE_ANGLE_RG || color_mode == LINE_ANGLE_RB || color_mode == LINE_ANGLE_BG || 
+              color_mode == LINE_ANGLE_COLORMAP) {
         pVarTP.rgbColor = true;
         double baseColor = 0;
 
@@ -709,8 +714,15 @@ public class MaurerCirclesFunc extends VariationFunc {
           pVarTP.greenColor = 255 - baseColor;
           pVarTP.blueColor = baseColor;
         }
+        else if (color_mode == LINE_ANGLE_COLORMAP) {
+          pVarTP.rgbColor = false;
+          pVarTP.color = baseColor / 255.0;
+          if (pVarTP.color < 0) { pVarTP.color = 0; }
+          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
+        }
       }
-      else if (color_mode == LINE_ANGLE_RELATIVE_RG || color_mode == LINE_ANGLE_RELATIVE_RB || color_mode == LINE_ANGLE_RELATIVE_BG) {
+      else if (color_mode == LINE_ANGLE_RELATIVE_RG || color_mode == LINE_ANGLE_RELATIVE_RB || color_mode == LINE_ANGLE_RELATIVE_BG || 
+              color_mode == LINE_ANGLE_RELATIVE_COLORMAP) {
         pVarTP.rgbColor = true;
         double baseColor = 0;
         if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println(adiff/M_PI + ", radians: " + adiff + ", step_size: " + step_size_radians); }
@@ -738,6 +750,12 @@ public class MaurerCirclesFunc extends VariationFunc {
           pVarTP.redColor = 0;
           pVarTP.greenColor = 255 - baseColor;
           pVarTP.blueColor = baseColor;
+        }
+        else if (color_mode == LINE_ANGLE_RELATIVE_COLORMAP) {
+          pVarTP.rgbColor = false;
+          pVarTP.color = baseColor / 255.0;
+          if (pVarTP.color < 0) { pVarTP.color = 0; }
+          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
         }
       }
     }
