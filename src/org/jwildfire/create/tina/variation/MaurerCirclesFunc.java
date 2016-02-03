@@ -65,7 +65,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
-  private static final String PARAM_COLOR_MODE = "color_mode";
+  private static final String PARAM_DIRECT_COLOR_MODE = "direct_color_mode";
+  private static final String PARAM_DIRECT_COLOR_GRADIENT = "direct_color_gradient";
 //  private static final String PARAM_COLOR_SCALING = "color_scaling";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
@@ -102,6 +103,34 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
   
+  // color mode
+  // 0 NORMAL --> normal (no direct coloring)
+  // 1 LINE_LENGTH --> color by line length
+  // 2 LINE_ANGLE --> color by absolute angle
+  // 3 LINE_RELATIVE_ANGLE --> color by relative angle
+  
+  // where does percentage vs absolute numbers come in?
+  
+  // color gradient
+  // 0 NORMAL --> normal (uses flame/layer colormap, but in standard way)
+  // 1 COLORMAP --> flame/layer colormap used for direct coloring
+  // 2 ALTERNATIVE_COLORMAP --> reserved for specifying colormap for direct coloring that is different from flame
+  // 3 --> RED_GREEN
+  // 4 --> RED_BLUE
+  // 5 --> BLUE_GREEN
+  
+  // so for flames using earlier versions, need to split 
+  // PARAM_COLOR_MODE into PARAM_DIRECT_COLOR_GRADIENT and PARAM_DIRECT_COLOR_MODE
+  // NORMAL ==> NORMAL, NORMAL
+  // RED ==> no equivalent (other than normal red coloring based on colormap)
+  // GREEN ==> no equivalent
+  // BLUE ==> no equivalent
+  // LINE_LENGTH_RG ==> LINE_LENGTH, RED_GREEN
+  // LINE_LENGTH_RB ==> LINE_LENGTH, RED_BLUE
+  // LINE_LENGTH_BG ==> LINE_LENGTH, BLUE_GREEN
+  // LINE_LENGTH_COLORMAP => LINE_LENGTH, STANDARD_COLORMAP
+  // and etc for LINE_ANGLE_* and LINE_ANGLE_RELATIVE_*
+  
   private static final int NORMAL = 0;
   private static final int RED = 1;
   private static final int GREEN = 2;
@@ -118,13 +147,26 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int LINE_LENGTH_COLORMAP = 13;
   private static final int LINE_ANGLE_COLORMAP = 14;
   private static final int LINE_ANGLE_RELATIVE_COLORMAP = 15;
+  
+  // direct color gradient -- should be near bottom of parameter list, 
+  //   since (now that colormap options is working) will be almost always COLORMAP
+  private static final int COLORMAP = 1;
+  private static final int ALTERNATIVE_COLORMAP = 2;
+  private static final int RED_GREEN = 3;
+  private static final int RED_BLUE = 4;
+  private static final int BLUE_GREEN = 5; 
+  
+  // direct color mode
+  private static final int LINE_LENGTH = 1;
+  private static final int LINE_ANGLE = 2;
+  private static final int LINE_ANGLE_RELATIVE = 3;
 
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
     PARAM_DIFF_MODE, 
-    PARAM_COLOR_MODE, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
+    PARAM_DIRECT_COLOR_MODE, PARAM_DIRECT_COLOR_GRADIENT, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
     PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
     PARAM_RELATIVE_ANGLE_LOW_THRESH, PARAM_RELATIVE_ANGLE_HIGH_THRESH, 
     PARAM_RANDOMIZE, 
@@ -166,6 +208,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private int curve_mode = RHODONEA;
   // private boolean direct_color = true;
   private int color_mode = NORMAL;
+  private int color_gradient = NORMAL;
 //  private double color_scaling = 100;
   private double color_low_thresh = 0.3;
   private double color_high_thresh = 2.0;
@@ -669,7 +712,6 @@ public class MaurerCirclesFunc extends VariationFunc {
         }
       }
 
-
     // Add final values in to variations totals
     if (diff_mode) {
       pVarTP.x = pAffineTP.x + (pAmount * (xout - pAffineTP.x));
@@ -685,142 +727,67 @@ public class MaurerCirclesFunc extends VariationFunc {
 
     if (color_mode != NORMAL) {
 
-      if (color_mode == RED) {
+      double colvar;
+      double[] sample_array;
+      if (color_mode == LINE_LENGTH) {
+        colvar = line_length;
+        sample_array = sampled_line_lengths;
+      }
+      else if (color_mode == LINE_ANGLE) {
+        colvar = delta_from_yaxis;
+        sample_array = sampled_line_angles;
+      }
+      else if (color_mode == LINE_ANGLE_RELATIVE) {
+        colvar = adiff;
+        sample_array = sampled_relative_angles;
+      }
+      else {
+        colvar = 255;
+        sample_array = null;
+      }
+      double baseColor = 0;      
+
+      double actual_low_thresh, actual_high_thresh;
+      if (color_low_thresh < 0 && color_high_thresh < 0) {
+        int low_index = (int)(abs(color_low_thresh) * sample_size);
+        int high_index = (int)(abs(color_high_thresh) * (sample_size-1));
+        actual_low_thresh = sampled_line_lengths[low_index];
+        actual_high_thresh = sampled_line_lengths[high_index];
+      }
+      else {
+        actual_low_thresh = color_low_thresh;
+        actual_high_thresh = color_high_thresh;
+      }
+      if (colvar < actual_low_thresh) { baseColor = 0; }
+      else if (colvar > actual_high_thresh) { baseColor = 255; }
+      else { baseColor = ((colvar - actual_low_thresh)/(actual_high_thresh - actual_low_thresh)) * 255; }
+      if (color_gradient == COLORMAP) {
+        pVarTP.rgbColor = false;
+        pVarTP.color = baseColor / 255.0;
+        if (pVarTP.color < 0) { pVarTP.color = 0; }
+        if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
+      }
+      else if (color_gradient == RED_GREEN) {  // 
         pVarTP.rgbColor = true;
-        pVarTP.redColor = 255;
-        pVarTP.greenColor = 0;
+        pVarTP.redColor = baseColor;
+        pVarTP.greenColor = 255 - baseColor;
         pVarTP.blueColor = 0;
       }
-      else if (color_mode == GREEN) {
+      else if (color_gradient == RED_BLUE) {
         pVarTP.rgbColor = true;
-        pVarTP.redColor = 0;
-        pVarTP.greenColor = 255;
-        pVarTP.blueColor = 0;
-      }
-      else if (color_mode == BLUE) {
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = 0;
+        pVarTP.redColor = baseColor;
         pVarTP.greenColor = 0;
-        pVarTP.blueColor = 255;
+        pVarTP.blueColor = 255 - baseColor;
       }
-      else if (color_mode == LINE_LENGTH_RG || color_mode == LINE_LENGTH_RB || color_mode == LINE_LENGTH_BG || 
-              color_mode == LINE_LENGTH_COLORMAP) {
-
-        double baseColor = 0;
-        double actual_low_thresh, actual_high_thresh;
-        if (color_low_thresh < 0 && color_high_thresh < 0) {
-          int low_index = (int)(abs(color_low_thresh) * sample_size);
-          int high_index = (int)(abs(color_high_thresh) * (sample_size-1));
-          actual_low_thresh = sampled_line_lengths[low_index];
-          actual_high_thresh = sampled_line_lengths[high_index];
-        }
-        else {
-          actual_low_thresh = color_low_thresh;
-          actual_high_thresh = color_high_thresh;
-        }
-        if (line_length < actual_low_thresh) { baseColor = 0; }
-        else if (line_length > actual_high_thresh) { baseColor = 255; }
-        else { baseColor = ((line_length - actual_low_thresh)/(actual_high_thresh - actual_low_thresh)) * 255; }
-        
-        if (color_mode == LINE_LENGTH_RG) {
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = 0;
-        }
-        else if (color_mode == LINE_LENGTH_RB) {
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 0;
-          pVarTP.blueColor = 255 - baseColor;
-        }
-        else if (color_mode == LINE_LENGTH_BG) {
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = 0;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = baseColor;
-        }
-        else if (color_mode == LINE_LENGTH_COLORMAP) {
-          pVarTP.rgbColor = false;
-          pVarTP.color = baseColor / 255.0;
-          if (pVarTP.color < 0) { pVarTP.color = 0; }
-          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
-        }
-      }
-      else if (color_mode == LINE_ANGLE_RG || color_mode == LINE_ANGLE_RB || color_mode == LINE_ANGLE_BG || 
-              color_mode == LINE_ANGLE_COLORMAP) {
+      else if (color_gradient == BLUE_GREEN) {
         pVarTP.rgbColor = true;
-        double baseColor = 0;
-
-        // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
-        if (color_low_thresh == color_high_thresh) {
-          baseColor = delta_from_yaxis * 255;
-        }
-        else if (delta_from_yaxis < color_low_thresh) { baseColor = 0; }
-        else if (delta_from_yaxis > color_high_thresh) { baseColor = 255; }
-        else {
-          baseColor = ((delta_from_yaxis - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; 
-        }
-        if (color_mode == LINE_ANGLE_RG) {
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = 0;
-        }
-        else if (color_mode == LINE_ANGLE_RB) {
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 0;
-          pVarTP.blueColor = 255 - baseColor;
-        }
-        else if (color_mode == LINE_ANGLE_BG) {
-          pVarTP.redColor = 0;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = baseColor;
-        }
-        else if (color_mode == LINE_ANGLE_COLORMAP) {
-          pVarTP.rgbColor = false;
-          pVarTP.color = baseColor / 255.0;
-          if (pVarTP.color < 0) { pVarTP.color = 0; }
-          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
-        }
+        pVarTP.redColor = 0;
+        pVarTP.greenColor = 255 - baseColor;
+        pVarTP.blueColor = baseColor;
       }
-      else if (color_mode == LINE_ANGLE_RELATIVE_RG || color_mode == LINE_ANGLE_RELATIVE_RB || color_mode == LINE_ANGLE_RELATIVE_BG || 
-              color_mode == LINE_ANGLE_RELATIVE_COLORMAP) {
-        pVarTP.rgbColor = true;
-        double baseColor = 0;
-        if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println(adiff/M_PI + ", radians: " + adiff + ", step_size: " + step_size_radians); }
 
-        // if color_low_thresh and color_high_thresh are same, then ignore thresholds and do linear gradient across entire range
-        if (color_low_thresh == color_high_thresh) {
-          baseColor = (adiff/M_PI) * 255;
-        }
-        else if (adiff < color_low_thresh) { baseColor = 0; }
-        else if (adiff > color_high_thresh) { baseColor = 255; }
-        else {
-          baseColor = ((adiff - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; 
-        }
-        if (color_mode == LINE_ANGLE_RELATIVE_RG) {
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = 0;
-        }
-        else if (color_mode == LINE_ANGLE_RELATIVE_RB) {
-          pVarTP.redColor = baseColor;
-          pVarTP.greenColor = 0;
-          pVarTP.blueColor = 255 - baseColor;
-        }
-        else if (color_mode == LINE_ANGLE_RELATIVE_BG) {
-          pVarTP.redColor = 0;
-          pVarTP.greenColor = 255 - baseColor;
-          pVarTP.blueColor = baseColor;
-        }
-        else if (color_mode == LINE_ANGLE_RELATIVE_COLORMAP) {
-          pVarTP.rgbColor = false;
-          pVarTP.color = baseColor / 255.0;
-          if (pVarTP.color < 0) { pVarTP.color = 0; }
-          if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
-        }
-      }
-    }
+    } // END coor_mode != normal
+
   }
 
   @Override
@@ -834,8 +801,11 @@ public class MaurerCirclesFunc extends VariationFunc {
       a, b, c, d, line_offset_degrees, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      (diff_mode ? 1 : 0), color_mode, color_low_thresh, color_high_thresh, 
-      line_low_thresh, line_high_thresh, angle_low_thresh, angle_high_thresh, 
+      (diff_mode ? 1 : 0), 
+      color_mode, color_gradient, color_low_thresh, color_high_thresh, 
+
+      line_low_thresh, line_high_thresh, 
+      angle_low_thresh, angle_high_thresh, 
       rangle_low_thresh, rangle_high_thresh,  
       (randomize ? 1 : 0), 
       (meta_mode ? 1 : 0), this.meta_min_step_degrees, this.meta_max_step_degrees, this.meta_step_diff_degrees, 
@@ -877,8 +847,11 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName)) {
       diff_mode = (pValue >= 1);
     }
-    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+    else if (PARAM_DIRECT_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = (int)pValue;
+    }
+    else if (PARAM_DIRECT_COLOR_GRADIENT.equalsIgnoreCase(pName)) {
+      color_gradient = (int)pValue;
     }
     else if (PARAM_COLOR_LOW_THRESH.equalsIgnoreCase(pName)) {
       color_low_thresh = pValue;
