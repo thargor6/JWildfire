@@ -16,23 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.awt.geom.Point2D;
 import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
+import java.util.Arrays;
 
-import java.math.BigInteger;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.exp;
+import static org.jwildfire.base.mathlib.MathLib.pow;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -191,6 +187,10 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double meta_steps;
   
   private boolean randomize = false;
+  private int sample_size = 1000;
+  private double[] sampled_line_lengths = new double[sample_size];
+  private double[] sampled_line_angles = new double[sample_size];
+  private double[] sampled_relative_angles = new double[sample_size];
   
   private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
   private double line_variation_amp = 0;
@@ -275,6 +275,52 @@ public class MaurerCirclesFunc extends VariationFunc {
       System.out.println("meta steps raw: " + meta_steps);
       System.out.println("meta steps: " + meta_steps);
     }
+    
+    // sampling across theta range to get approximate distribution of: 
+    //    line lengths, angles, relative angles
+    //    (possibly other measures used for color selection, etc.)
+
+    System.out.println("sampling");
+    for (int i=0; i<sample_size; i++) {
+      double theta1, theta2, x1, y1, x2, y2;
+      theta1 = Math.random() * cycles * M_2PI;
+      DoublePoint2D p1 = getCurveCoords(theta1);
+      x1 = p1.x;
+      y1 = p1.y;
+      double sampled_step_size = getStepSize();
+      theta2 = theta1 + sampled_step_size;
+      DoublePoint2D p2 = getCurveCoords(theta2);
+      x2 = p2.x;
+      y2 = p2.y;
+      
+      // find the slope and length of the line
+      double ydiff = y2 - y1;
+      double xdiff = x2 - x1;
+      double m = ydiff / xdiff;  // slope 
+      double a1 = atan2(y1, x1); 
+      double a2 = atan2(y2, x2);
+      if (a1 < 0) { a1 += M_2PI; }  // map to [0..2Pi]
+      if (a2 < 0) { a2 += M_2PI; }  // map to [0..2Pi]
+      // double adiff = abs(a2-a1);
+      double adiff = abs(a2 - a1);
+      if (adiff > M_PI) { adiff = M_2PI - adiff; }
+      double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
+      // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
+      // delta_from_yaxis should be 0 if parallel to y-axis, and M_PI/2 if parallel to x-axis
+      double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+      // scale to range [0..1]; (0 parallel to y-axis, 1 parallel to x-axis)
+      delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+      double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
+      sampled_line_lengths[i] = line_length;
+      sampled_line_angles[i] = delta_from_yaxis;
+      sampled_relative_angles[i] = adiff;
+    }
+    System.out.println("sorting");
+    Arrays.sort(sampled_line_lengths);
+    Arrays.sort(sampled_line_angles);
+    Arrays.sort(sampled_relative_angles);
+    System.out.println("shortest line: " + sampled_line_lengths[0]);
+    System.out.println("longest line: " + sampled_line_lengths[sample_size-1]);
   }
   
   /* 
@@ -415,6 +461,24 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     return curve_point;
   }
+  
+  public double getStepSize() {
+    double actual_step_size;
+    if (meta_mode) {
+      // which meta-step
+      // int meta_step = (int)(Math.random()* (meta_max_step_radians - meta_min_step_radians));
+      //  = (int)(meta_step + meta_min_step_radians);
+      //      actual_step_size = meta_step;
+      // x1 = x2 = y1 = y2 = 0;
+      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * (int)(Math.random()*meta_steps));
+      //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
+      cycles = (line_count * actual_step_size) / M_2PI;
+    }
+    else {
+      actual_step_size = step_size_radians;
+    }
+    return actual_step_size;
+  }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -427,20 +491,8 @@ public class MaurerCirclesFunc extends VariationFunc {
         y = cos(kt)sin(t)
     */
     count++;
-    double actual_step_size;
-    if (meta_mode) {
-      // which meta-step
-      // int meta_step = (int)(Math.random()* (meta_max_step_radians - meta_min_step_radians));
-      //  = (int)(meta_step + meta_min_step_radians);
-//      actual_step_size = meta_step;
-      // x1 = x2 = y1 = y2 = 0;
-      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * (int)(Math.random()*meta_steps));
-//      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
-      cycles = (line_count * actual_step_size) / M_2PI;
-    }
-    else {
-      actual_step_size = step_size_radians;
-    }
+    double actual_step_size = getStepSize();
+
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
@@ -655,10 +707,20 @@ public class MaurerCirclesFunc extends VariationFunc {
               color_mode == LINE_LENGTH_COLORMAP) {
 
         double baseColor = 0;
-        if (line_length < color_low_thresh) { baseColor = 0; }
-        else if (line_length > color_high_thresh) { baseColor = 255; }
-        else { baseColor = ((line_length - color_low_thresh)/(color_high_thresh - color_low_thresh)) * 255; }
-        
+        double actual_low_thresh, actual_high_thresh;
+        if (color_low_thresh < 0 && color_high_thresh < 0) {
+          int low_index = (int)(abs(color_low_thresh) * sample_size);
+          int high_index = (int)(abs(color_high_thresh) * (sample_size-1));
+          actual_low_thresh = sampled_line_lengths[low_index];
+          actual_high_thresh = sampled_line_lengths[high_index];
+        }
+        else {
+          actual_low_thresh = color_low_thresh;
+          actual_high_thresh = color_high_thresh;
+        }
+        if (line_length < actual_low_thresh) { baseColor = 0; }
+        else if (line_length > actual_high_thresh) { baseColor = 255; }
+        else { baseColor = ((line_length - actual_low_thresh)/(actual_high_thresh - actual_low_thresh)) * 255; }
         
         if (color_mode == LINE_LENGTH_RG) {
           pVarTP.rgbColor = true;
