@@ -42,6 +42,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private boolean DEBUG_RELATIVE_ANGLE = false;
   private boolean DEBUG_META_MODE = false;
+  private boolean DEBUG_SAMPLING = false;
 
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
@@ -65,19 +66,25 @@ public class MaurerCirclesFunc extends VariationFunc {
   
   private static final String PARAM_DIFF_MODE = "diff_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
+  
   private static final String PARAM_DIRECT_COLOR_MEASURE = "direct_color_measure";
   private static final String PARAM_DIRECT_COLOR_GRADIENT = "direct_color_gradient";
 //  private static final String PARAM_COLOR_SCALING = "color_scaling";
   private static final String PARAM_DIRECT_COLOR_THRESHOLDING = "direct_color_thresholding";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
-  private static final String PARAM_LINE_LOW_THRESH = "line_low_threshold";
-  private static final String PARAM_LINE_HIGH_THRESH = "line_high_threshold";
-  private static final String PARAM_ANGLE_LOW_THRESH = "angle_low_threshold";
-  /* need to fix "angel" mis-spelling in previously generated flames */
-  private static final String PARAM_ANGLE_HIGH_THRESH = "angel_high_threshold";
-  private static final String PARAM_RELATIVE_ANGLE_LOW_THRESH = "relative_angle_low_threshold";
-  private static final String PARAM_RELATIVE_ANGLE_HIGH_THRESH = "relative_angle_high_threshold";
+  
+  private static final String PARAM_LINE_LENGTH_FILTER = "line_length_filter_mode";
+  private static final String PARAM_LINE_LENTH_LOW_THRESH = "line_length_low_threshold";
+  private static final String PARAM_LINE_LENGTH_HIGH_THRESH = "line_length_high_threshold";
+  
+  private static final String PARAM_LINE_ANGLE_FILTER = "line_angle_filter_mode";
+  private static final String PARAM_LINE_ANGLE_LOW_THRESH = "line_angle_low_threshold";
+  private static final String PARAM_LINE_ANGLE_HIGH_THRESH = "line_angle_high_threshold";
+  
+  private static final String PARAM_POINT_ANGLE_FILTER = "point_angle_filter_mode";
+  private static final String PARAM_POINT_ANGLE_LOW_THRESH = "point_angle_low_threshold";
+  private static final String PARAM_POINT_ANGLE_HIGH_THRESH = "point_angle_high_threshold";
   
   private static final String PARAM_META_MODE = "meta_mode";
   private static final String PARAM_META_MIN_STEP = "meta_min_step";
@@ -154,8 +161,6 @@ public class MaurerCirclesFunc extends VariationFunc {
   //   since (now that colormap options is working) will be almost always COLORMAP
   private static final int COLORMAP_CLAMP = 1;
   private static final int COLORMAP_CYCLE = 2;
-  private static final int ALTERNATIVE_COLORMAP_CLAMP = 3;
-  private static final int ALTERNATIVE_COLORMAP_CYCLE = 3;
   private static final int RED_GREEN = 3;
   private static final int RED_BLUE = 4;
   private static final int BLUE_GREEN = 5; 
@@ -170,18 +175,25 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int VALUE = 1;
   // other possibilties -- distance or deviation from mean?
   
+  // measure filtering
+  private static final int OFF = 0;
+  private static final int BAND_PASS_PERCENT = 1;
+  private static final int BAND_STOP_PERCENT = 2;
+  private static final int BAND_PASS_VALUE = 3;
+  private static final int BAND_STOP_VALUE = 4;
+
+  
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
     PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
     PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
-    PARAM_DIFF_MODE, 
     PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, PARAM_DIRECT_COLOR_THRESHOLDING, 
     PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
-    PARAM_LINE_LOW_THRESH, PARAM_LINE_HIGH_THRESH, PARAM_ANGLE_LOW_THRESH, PARAM_ANGLE_HIGH_THRESH, 
-    PARAM_RELATIVE_ANGLE_LOW_THRESH, PARAM_RELATIVE_ANGLE_HIGH_THRESH, 
-    PARAM_RANDOMIZE, 
+    PARAM_LINE_LENGTH_FILTER, PARAM_LINE_LENTH_LOW_THRESH, PARAM_LINE_LENGTH_HIGH_THRESH, 
+    PARAM_LINE_ANGLE_FILTER, PARAM_LINE_ANGLE_LOW_THRESH, PARAM_LINE_ANGLE_HIGH_THRESH, 
+    PARAM_POINT_ANGLE_FILTER, PARAM_POINT_ANGLE_LOW_THRESH, PARAM_POINT_ANGLE_HIGH_THRESH, 
+    PARAM_RANDOMIZE, PARAM_DIFF_MODE, 
     PARAM_META_MODE, PARAM_META_MIN_STEP, PARAM_META_MAX_STEP, PARAM_META_STEP_DIFF
-    // PARAM_LINE_VARIATION_FREQ, PARAM_LINE_VARIATION_AMP
   };
 
   private double a = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
@@ -224,12 +236,16 @@ public class MaurerCirclesFunc extends VariationFunc {
 //  private double color_scaling = 100;
   private double color_low_thresh = 0.3;
   private double color_high_thresh = 2.0;
-  private double line_low_thresh = 0;    // if != 0, hide lines with lengh < line_low_thresh
-  private double line_high_thresh = 0;   // if != 0, hide lines with lenght > line_high_thresh
-  private double angle_low_thresh = 0;   // if != 0, hide lines with angle < angle_low_thresh
-  private double angle_high_thresh = 0;  // if != 0, hide lines with angle > angle_high_thresh
-  private double rangle_low_thresh = 0;  // if != 0, hide lines with relative angle < rangle_low_thresh
-  private double rangle_high_thresh = 0; // if != 0, hide lines with relative angle > rangle_high_thresh
+
+  private int line_length_filter = OFF;
+  private double line_length_low_thresh = 0;    
+  private double line_length_high_thresh = 1;  
+  private int line_angle_filter = OFF;
+  private double line_angle_low_thresh = 0;   
+  private double line_angle_high_thresh = 1; 
+  private int point_angle_filter = OFF;
+  private double point_angle_low_thresh = 0;  
+  private double point_angle_high_thresh = 1; 
   
   private boolean meta_mode = false;
   private double meta_min_step_degrees = 30; 
@@ -245,10 +261,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private int sample_size = 1000;
   private double[] sampled_line_lengths = new double[sample_size];
   private double[] sampled_line_angles = new double[sample_size];
-  private double[] sampled_relative_angles = new double[sample_size];
-  
-  private double line_variation_freq = 0; // if != 0, determines frequency of variation sine wave (as 
-  private double line_variation_amp = 0;
+  private double[] sampled_point_angles = new double[sample_size];
   
   private long count = 0;
   
@@ -256,7 +269,9 @@ public class MaurerCirclesFunc extends VariationFunc {
     public double x;
     public double y;
   }
-  private DoublePoint2D curve_point = new DoublePoint2D(); 
+  private DoublePoint2D end_point1 = new DoublePoint2D(); 
+  private DoublePoint2D end_point2 = new DoublePoint2D(); 
+  private DoublePoint2D curve_point = new DoublePoint2D();
   
   // for rhodonea:
   //     a = knumer
@@ -335,78 +350,91 @@ public class MaurerCirclesFunc extends VariationFunc {
     //    line lengths, angles, relative angles
     //    (possibly other measures used for color selection, etc.)
 
-    System.out.println("sampling");
+    if (DEBUG_SAMPLING) { System.out.println("sampling"); }
     for (int i=0; i<sample_size; i++) {
       double theta1, theta2, x1, y1, x2, y2;
       theta1 = Math.random() * cycles * M_2PI;
-      DoublePoint2D p1 = getCurveCoords(theta1);
-      x1 = p1.x;
-      y1 = p1.y;
+      // reusing end_point1
+      end_point1 = getCurveCoords(theta1, end_point1);
+      x1 = end_point1.x;
+      y1 = end_point1.y;
       double sampled_step_size = getStepSize();
       theta2 = theta1 + sampled_step_size;
-      DoublePoint2D p2 = getCurveCoords(theta2);
-      x2 = p2.x;
-      y2 = p2.y;
+      // reusing end_point2
+      end_point2 = getCurveCoords(theta2, end_point2);
+      x2 = end_point2.x;
+      y2 = end_point2.y;
       
       // find the slope and length of the line
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
       double m = ydiff / xdiff;  // slope 
-      double a1 = atan2(y1, x1); 
-      double a2 = atan2(y2, x2);
-      if (a1 < 0) { a1 += M_2PI; }  // map to [0..2Pi]
-      if (a2 < 0) { a2 += M_2PI; }  // map to [0..2Pi]
-      // double adiff = abs(a2-a1);
-      double adiff = abs(a2 - a1);
-      if (adiff > M_PI) { adiff = M_2PI - adiff; }
-      double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
-      // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
+
+      double point_angle = getPointAngle(end_point1, end_point2);
+
+      double raw_line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
+      // if (raw_line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
       // delta_from_yaxis should be 0 if parallel to y-axis, and M_PI/2 if parallel to x-axis
-      double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+      double unscaled_line_angle = abs(abs(raw_line_angle) - (M_PI/2.0));
       // scale to range [0..1]; (0 parallel to y-axis, 1 parallel to x-axis)
-      delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+      double line_angle = unscaled_line_angle / (M_PI/2.0);
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
       sampled_line_lengths[i] = line_length;
-      sampled_line_angles[i] = delta_from_yaxis;
-      sampled_relative_angles[i] = adiff;
+      sampled_line_angles[i] = line_angle;
+      sampled_point_angles[i] = point_angle;
     }
-    System.out.println("sorting");
+    if (DEBUG_SAMPLING) { System.out.println("sorting"); }
     Arrays.sort(sampled_line_lengths);
     Arrays.sort(sampled_line_angles);
-    Arrays.sort(sampled_relative_angles);
-    System.out.println("shortest line: " + sampled_line_lengths[0]);
-    System.out.println("longest line: " + sampled_line_lengths[sample_size-1]);
+    Arrays.sort(sampled_point_angles);
+    if (DEBUG_SAMPLING) { 
+      System.out.println("low line length: " + sampled_line_lengths[0]);
+      System.out.println("high line length: " + sampled_line_lengths[sample_size-1]);
+      System.out.println("low line angle: " + sampled_line_angles[0]);
+      System.out.println("high line angle: " + sampled_line_angles[sample_size-1]);
+      System.out.println("low point angle: " + sampled_point_angles[0]);
+      System.out.println("high point angle: " + sampled_point_angles[sample_size-1]);
+    }
+
+  }
+  /* get the angle between two points (angle between two lines L1 and L2 to origin, one to P1 and one to P2); */
+  public double getPointAngle(DoublePoint2D point1, DoublePoint2D point2) {
+     double a1 = atan2(point1.y, point1.x); 
+     double a2 = atan2(point2.y, point2.x);
+
+     if (a1 < 0) { a1 += M_2PI; }  // map to [0..2Pi]
+     if (a2 < 0) { a2 += M_2PI; }  // map to [0..2Pi]
+     double point_angle = abs(a2 - a1);
+     if (point_angle > M_PI) { point_angle = M_2PI - point_angle; }
+     return point_angle;
   }
   
-  /* 
-  *  reuses object variable curve_point
-  */
-  public DoublePoint2D getCurveCoords(double theta) {
+  public DoublePoint2D getCurveCoords(double theta, DoublePoint2D point) {
     if (curve_mode == CIRCLE) {
       double r = a;
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == RECTANGLE) {
       double t = theta % M_2PI;
       if (t < 0) { t = (0.5 - t); }
 
       if (t <= 0.25) {
-        curve_point.x = a/2;
+        point.x = a/2;
         // curve_point.y = (s * 4 * b) - b/2;  
-        curve_point.y = (t * 4 * b) - b/2;  
+        point.y = (t * 4 * b) - b/2;  
       }
       else if (t <= 0.5) {
-        curve_point.x = ((t-0.25) * 4 * a) - a/2;
-        curve_point.y = b/2;
+        point.x = ((t-0.25) * 4 * a) - a/2;
+        point.y = b/2;
       }
       else if (t <= 0.75) {
-        curve_point.x = -a/2;
-        curve_point.y = ((t-0.5) * 4 * b) - b/2;
+        point.x = -a/2;
+        point.y = ((t-0.5) * 4 * b) - b/2;
       }
       else {
-        curve_point.x = ((t-0.75) * 4 * a) -a/2;
-        curve_point.y = -b/2;
+        point.x = ((t-0.75) * 4 * a) -a/2;
+        point.y = -b/2;
       }
     }
     else if (curve_mode == ELLIPSE) {
@@ -414,13 +442,13 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (curve_mode == RHODONEA) {
       double r = cos(k * theta) + c;
       if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == EPISPIRAL) {
       double r = (1/cos(k * theta)) + c;
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == EPITROCHOID) {
       // option 1:
@@ -429,8 +457,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       // option 2:
       double x = ((a + b) * cos(theta)) - (c * cos(((a + b)/b) * theta));
       double y = ((a + b) * sin(theta)) - (c * sin(((a + b)/b) * theta));
-      curve_point.x = x;
-      curve_point.y = y;
+      point.x = x;
+      point.y = y;
     }
     else if (curve_mode == HYPOTROCHOID) {
       // option 1:
@@ -439,8 +467,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       // option 2: 
       double x = ((a - b) * cos(theta)) + (c * cos(((a - b)/b) * theta));
       double y = ((a - b) * sin(theta)) - (c * sin(((a - b)/b) * theta));
-      curve_point.x = x;
-      curve_point.y = y;
+      point.x = x;
+      point.y = y;
     }
     else if (curve_mode == LISSAJOUS) {
       // x = A * sin(a*t + d)
@@ -448,8 +476,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       // for now keep A = B = 1
       double x = sin((a*theta) + c);
       double y = sin(b*theta);
-      curve_point.x = x;
-      curve_point.y = y;
+      point.x = x;
+      point.y = y;
     }
     else if (curve_mode == SUPERSHAPE) {
       // original supershape variables: a, b, m, n1, n2, n3
@@ -468,26 +496,26 @@ public class MaurerCirclesFunc extends VariationFunc {
                     (pow( fabs( (cos(m * theta / 4))/a1), n2) + 
                      pow( fabs( (sin(m * theta / 4))/b1), n3)), 
                     (-1/n1));
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == STARR_CURVE) {
       double r = 2 + (sin(a * theta)/2);
       theta = theta + (sin(b * theta)/c); 
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == FARRIS_MYSTERY_CURVE) {
       double t = theta;
-      curve_point.x = cos(t)/a + cos(6*t)/b + sin(14*t)/c;
-      curve_point.y = sin(t)/a + sin(6*t)/b + cos(14*t)/c;
+      point.x = cos(t)/a + cos(6*t)/b + sin(14*t)/c;
+      point.y = sin(t)/a + sin(6*t)/b + cos(14*t)/c;
       // can also be represented more concisely with complex numbers: 
       //   c(t) = (e^(i*t))/a + (e^(6*i*t))/b + (e^(-14*i*t))/c
       //   should break out into a fully parameterized version with exponent parameters as well 
     }
     else if (curve_mode == WAGON_FANCIFUL_CURVE) {
-      curve_point.x = sin(a * theta) * cos(c * theta);
-      curve_point.y = sin(b * theta) * sin(c * theta);
+      point.x = sin(a * theta) * cos(c * theta);
+      point.y = sin(b * theta) * sin(c * theta);
     }
     else if (curve_mode == FAY_BUTTERFLY) {
       // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
@@ -496,25 +524,25 @@ public class MaurerCirclesFunc extends VariationFunc {
       double t = theta;
       // double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5) + offset);
       double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
-      curve_point.x = r * sin(t);
-      curve_point.y = r * cos(t);
+      point.x = r * sin(t);
+      point.y = r * cos(t);
     }
     else if (curve_mode == RIGGE1) {
       double r = (1 - cos(a * theta)) + (1 - cos(a * b * theta));
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else if (curve_mode == RIGGE2) {
       double r = (1 - cos(a * theta)) - (1 - cos(a * b * theta));
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
     else {  // default to circle
       double r = a;
-      curve_point.x = r * cos(theta);
-      curve_point.y = r * sin(theta);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
-    return curve_point;
+    return point;
   }
   
   public double getStepSize() {
@@ -558,13 +586,13 @@ public class MaurerCirclesFunc extends VariationFunc {
     else {
       tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point [-Pi .. +Pi]
     }
-    double t = cycles * tin; // angle of rose curve
-    
-    // double r = cos(k * t) + radial_offset;  
-    DoublePoint2D p = getCurveCoords(t);
+    double t = cycles * tin; // theta parameter for curve calculation
 
-    double x = p.x;
-    double y = p.y;
+    // reusing curve_point
+    curve_point = getCurveCoords(t, curve_point);
+
+    double x = curve_point.x;
+    double y = curve_point.y;
     double r = sqrt(x*x + y*y);
     double rinx, riny;
     double xout, yout, rout;
@@ -578,62 +606,148 @@ public class MaurerCirclesFunc extends VariationFunc {
       
       // find polar and cartesian coordinates for endpoints of Maure Rose line
       theta1 = step_number * actual_step_size;
-      if (line_variation_freq == 0 || line_variation_amp == 0) {
-        theta2 = theta1 + actual_step_size;
-      }
-      else {
-        // angle variation NOT WORKING YET
-        // theta2 = theta1 + step_size_radians + (line_variation_amp * (sin(M_2PI/line_variation_freq)));
-        double varangle = line_variation_amp * sin((theta1 % M_2PI)/line_variation_freq);
-        theta2 = theta1 + actual_step_size + varangle;
-      }
+      theta2 = theta1 + actual_step_size;
 
-      DoublePoint2D p1 = getCurveCoords(theta1);
-      x1 = p1.x;
-      y1 = p1.y;
-      DoublePoint2D p2 = getCurveCoords(theta2);
-      x2 = p2.x;     
-      y2 = p2.y;
+      // reusing end_point1
+      end_point1 = getCurveCoords(theta1, end_point1);
+      x1 = end_point1.x;
+      y1 = end_point1.y;
+      // reusing end_point2
+      end_point2 = getCurveCoords(theta2, end_point2);
+      x2 = end_point2.x;     
+      y2 = end_point2.y;
       
       // find the slope and length of the line
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
       double m = ydiff / xdiff;  // slope 
-      double a1 = atan2(y1, x1); 
-      double a2 = atan2(y2, x2);
-      if (a1 < 0) { a1 += M_2PI; }  // map to [0..2Pi]
-      if (a2 < 0) { a2 += M_2PI; }  // map to [0..2Pi]
-      // double adiff = abs(a2-a1);
-      double adiff = abs(a2 - a1);
-      if (adiff > M_PI) { adiff = M_2PI - adiff; }
-      double line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
-      // if (line_angle < 0) { line_angle += M_2PI; }   // map to range [0..+2Pi]
+
+      double point_angle = getPointAngle(end_point1, end_point2);
+      
+      double raw_line_angle = atan2(ydiff, xdiff);  // atan2 range is [-Pi..+Pi]
+      // if (raw_line_angle < 0) { raw_line_angle += M_2PI; }   // map to range [0..+2Pi]
       // delta_from_yaxis should be 0 if parallel to y-axis, and M_PI/2 if parallel to x-axis
-      double delta_from_yaxis = abs(abs(line_angle) - (M_PI/2.0));
+      double unscaled_line_angle = abs(abs(raw_line_angle) - (M_PI/2.0));
       // scale to range [0..1]; (0 parallel to y-axis, 1 parallel to x-axis)
-      delta_from_yaxis = delta_from_yaxis / (M_PI/2.0);
+      double line_angle = unscaled_line_angle / (M_PI/2.0);
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
+
+      // 
+      // FILTERING
+      // 
       pVarTP.doHide = false;
-      
-      if (line_low_thresh != 0 && line_length < line_low_thresh) {
-        pVarTP.doHide = true;
+      if (line_length_filter != OFF) {
+        boolean inband = true; // default is to include all values in band
+        double low_value, high_value;
+        if (line_length_filter == BAND_PASS_VALUE || line_length_filter == BAND_STOP_VALUE) {
+          low_value = line_length_low_thresh;
+          high_value = line_length_high_thresh;
+        }
+        else if (line_length_filter == BAND_PASS_PERCENT || line_length_filter == BAND_STOP_PERCENT) {
+          int high_index, low_index;
+          if (line_length_high_thresh >= 1.0) { high_index = sample_size-1; }
+          else if (line_length_high_thresh < 0) { high_index = 0; }
+          else { high_index = (int)(line_length_high_thresh * sample_size); }
+          high_value = sampled_line_lengths[high_index];
+
+          if (line_length_low_thresh >= 1.0) { low_index = sample_size-1; }
+          else if (line_length_low_thresh < 0) { low_index = 0; }
+          else { low_index = (int)(line_length_low_thresh * sample_size); }
+          low_value = sampled_line_lengths[low_index];
+        }
+        else { // default to  values;
+          low_value = line_length_low_thresh;
+          high_value = line_length_high_thresh;
+        }
+        // to avoid everything disappearing, if low_val > high_val then flip
+        if (low_value > high_value) {
+          double temp = low_value;
+          low_value = high_value;
+          high_value = temp;
+        }
+        inband = (line_length >= low_value && line_length <= high_value);
+        if (line_length_filter == BAND_PASS_PERCENT || line_length_filter == BAND_PASS_VALUE) {
+          pVarTP.doHide = !inband;
+        }
+        else if (line_length_filter == BAND_STOP_PERCENT || line_length_filter == BAND_STOP_VALUE) {
+          pVarTP.doHide = inband;
+        }
       }
-      if (line_high_thresh != 0 && line_length > line_high_thresh) {
-        pVarTP.doHide = true;
+
+      if (this.line_angle_filter != OFF) {
+        boolean inband = true; // default is to include all values in band
+        double low_value, high_value;
+        if (line_angle_filter == BAND_PASS_VALUE || line_angle_filter == BAND_STOP_VALUE) {
+          low_value = line_angle_low_thresh;
+          high_value = line_angle_high_thresh;
+        }
+        else if (line_angle_filter == BAND_PASS_PERCENT || line_angle_filter == BAND_STOP_PERCENT) {
+          int high_index, low_index;
+          if (line_angle_high_thresh >= 1.0) { high_index = sample_size-1; }
+          else if (line_angle_high_thresh < 0) { high_index = 0; }
+          else { high_index = (int)(line_angle_high_thresh * sample_size); }
+          high_value = sampled_line_angles[high_index];
+
+          if (line_angle_low_thresh >= 1.0) { low_index = sample_size-1; }
+          else if (line_angle_low_thresh < 0) { low_index = 0; }
+          else { low_index = (int)(line_angle_low_thresh * sample_size); }
+          low_value = sampled_line_angles[low_index];
+        }
+        else { // default to  values;
+          low_value = line_angle_low_thresh;
+          high_value = line_angle_high_thresh;
+        }
+        // to avoid everything disappearing, if low_val > high_val then flip
+        if (low_value > high_value) {
+          double temp = low_value;
+          low_value = high_value;
+          high_value = temp;
+        }
+        inband = (line_angle >= low_value && line_angle <= high_value);
+        if (line_angle_filter == BAND_PASS_PERCENT || line_angle_filter == BAND_PASS_VALUE) {
+          pVarTP.doHide = !inband;
+        }
+        else if (line_angle_filter == BAND_STOP_PERCENT || line_angle_filter == BAND_STOP_VALUE) {
+          pVarTP.doHide = inband;
+        }
       }
-      
-      if (angle_low_thresh != 0 && delta_from_yaxis < angle_low_thresh) {
-        pVarTP.doHide = true;
-      }
-      if (angle_high_thresh != 0 && delta_from_yaxis > angle_high_thresh) {
-        pVarTP.doHide = true;
-      }
-      
-      if (rangle_low_thresh != 0 && adiff < rangle_low_thresh) {
-        pVarTP.doHide = true;
-      }
-      if (rangle_high_thresh != 0 && adiff > rangle_high_thresh) {
-        pVarTP.doHide = true;
+
+      if (this.point_angle_filter != OFF) {
+        boolean inband = true; // default is to include all values in band
+        double low_value, high_value;
+        if (point_angle_filter == BAND_PASS_VALUE || point_angle_filter == BAND_STOP_VALUE) {
+          low_value = point_angle_low_thresh;
+          high_value = point_angle_high_thresh;
+        }
+        else if (point_angle_filter == BAND_PASS_PERCENT || point_angle_filter == BAND_STOP_PERCENT) {
+          int high_index, low_index;
+          if (point_angle_high_thresh >= 1.0) { high_index = sample_size-1; }
+          else if (point_angle_high_thresh < 0) { high_index = 0; }
+          else { high_index = (int)(point_angle_high_thresh * sample_size); }
+          high_value = sampled_point_angles[high_index];
+
+          if (point_angle_low_thresh >= 1.0) { low_index = sample_size-1; }
+          else if (point_angle_low_thresh < 0) { low_index = 0; }
+          else { low_index = (int)(point_angle_low_thresh * sample_size); }
+          low_value = sampled_point_angles[low_index];
+        }
+        else { // default to  values;
+          low_value = point_angle_low_thresh;
+          high_value = point_angle_high_thresh;
+        }
+        // to avoid everything disappearing, if low_val > high_val then flip
+        if (low_value > high_value) {
+          double temp = low_value;
+          low_value = high_value;
+          high_value = temp;
+        }
+        inband = (point_angle >= low_value && point_angle <= high_value);
+        if (point_angle_filter == BAND_PASS_PERCENT || point_angle_filter == BAND_PASS_VALUE) {
+          pVarTP.doHide = !inband;
+        }
+        else if (point_angle_filter == BAND_STOP_PERCENT || point_angle_filter == BAND_STOP_VALUE) {
+          pVarTP.doHide = inband;
+        }
       }
 
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
@@ -737,6 +851,9 @@ public class MaurerCirclesFunc extends VariationFunc {
       pVarTP.z += pAmount * pAffineTP.z;
     }
 
+    //
+    //  COLORING
+    // 
     if (color_measure != NORMAL) {
 
       double colvar;
@@ -746,35 +863,43 @@ public class MaurerCirclesFunc extends VariationFunc {
         sample_array = sampled_line_lengths;
       }
       else if (color_measure == LINE_ANGLE) {
-        colvar = delta_from_yaxis;
+        colvar = line_angle;
         sample_array = sampled_line_angles;
       }
       else if (color_measure == LINE_ANGLE_RELATIVE) {
-        colvar = adiff;
-        sample_array = sampled_relative_angles;
+        colvar = point_angle;
+        sample_array = sampled_point_angles;
       }
-      else {
-        colvar = 255;
-        sample_array = null;
+      else { // default to LINE_LENGTH
+        colvar = line_length;
+        sample_array = sampled_line_lengths;
       }
       
       double baseColor = 0;      
 
-      double actual_low_thresh, actual_high_thresh;
+      double low_value, high_value;
       if (color_thresholding == PERCENT) {
-        int low_index = (int)(abs(color_low_thresh) * sample_size);
-        int high_index = (int)(abs(color_high_thresh) * (sample_size-1));
-        actual_low_thresh = sample_array[low_index];
-        actual_high_thresh = sample_array[high_index];
+        int low_index, high_index;
+        if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
+        else { low_index = (int)(color_low_thresh * sample_size); }
+        if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
+        else { high_index = (int)(color_high_thresh * (sample_size-1)); }
+        low_value = sample_array[low_index];
+        high_value = sample_array[high_index];
       }
       else {  // default is by value
-        actual_low_thresh = color_low_thresh;
-        actual_high_thresh = color_high_thresh;
+        low_value = color_low_thresh;
+        high_value = color_high_thresh;
       }
-      
-      if (colvar < actual_low_thresh) { baseColor = 0; }
-      else if (colvar > actual_high_thresh) { baseColor = 255; }
-      else { baseColor = ((colvar - actual_low_thresh)/(actual_high_thresh - actual_low_thresh)) * 255; }
+      if (low_value > high_value) {
+        double temp = low_value;
+        low_value = high_value;
+        high_value = temp;
+      }
+
+      if (colvar < low_value) { baseColor = 0; }
+      else if (colvar >= high_value) { baseColor = 255; }
+      else { baseColor = ((colvar - low_value)/(high_value - low_value)) * 255; }
       if (color_gradient == COLORMAP_CLAMP) {
         pVarTP.rgbColor = false;
         pVarTP.color = baseColor / 255.0;
@@ -800,7 +925,7 @@ public class MaurerCirclesFunc extends VariationFunc {
         pVarTP.blueColor = baseColor;
       }
 
-    } // END coor_mode != normal
+    } // END color_mode != normal
 
   }
 
@@ -815,15 +940,12 @@ public class MaurerCirclesFunc extends VariationFunc {
       a, b, c, d, line_offset_degrees, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      (diff_mode ? 1 : 0), 
       color_measure, color_gradient, color_thresholding, color_low_thresh, color_high_thresh, 
-
-      line_low_thresh, line_high_thresh, 
-      angle_low_thresh, angle_high_thresh, 
-      rangle_low_thresh, rangle_high_thresh,  
-      (randomize ? 1 : 0), 
+      line_length_filter, line_length_low_thresh, line_length_high_thresh, 
+      line_angle_filter, line_angle_low_thresh, line_angle_high_thresh, 
+      point_angle_filter, point_angle_low_thresh, point_angle_high_thresh,  
+      (randomize ? 1 : 0), (diff_mode ? 1 : 0), 
       (meta_mode ? 1 : 0), this.meta_min_step_degrees, this.meta_max_step_degrees, this.meta_step_diff_degrees };
-      // line_variation_freq, line_variation_amp };
   }
 
   @Override
@@ -876,23 +998,32 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
     }
-    else if (PARAM_LINE_LOW_THRESH.equalsIgnoreCase(pName)) {
-      line_low_thresh = pValue;
+    else if (PARAM_LINE_LENGTH_FILTER.equalsIgnoreCase(pName)) {
+      line_length_filter = (int)pValue;
     }
-    else if (PARAM_LINE_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      line_high_thresh = pValue;
+    else if (PARAM_LINE_LENTH_LOW_THRESH.equalsIgnoreCase(pName)) {
+      line_length_low_thresh = pValue;
     }
-    else if (PARAM_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
-      angle_low_thresh = pValue;
+    else if (PARAM_LINE_LENGTH_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      line_length_high_thresh = pValue;
     }
-    else if (PARAM_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      angle_high_thresh = pValue;
+    else if (PARAM_LINE_ANGLE_FILTER.equalsIgnoreCase(pName)) {
+      line_angle_filter = (int)pValue;
     }
-    else if (PARAM_RELATIVE_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
-      rangle_low_thresh = pValue;
+    else if (PARAM_LINE_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
+      line_angle_low_thresh = pValue;
     }
-    else if (PARAM_RELATIVE_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      rangle_high_thresh = pValue;
+    else if (PARAM_LINE_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      line_angle_high_thresh = pValue;
+    }
+    else if (PARAM_POINT_ANGLE_FILTER.equalsIgnoreCase(pName)) {
+      point_angle_filter = (int)pValue;
+    }
+    else if (PARAM_POINT_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
+      point_angle_low_thresh = pValue;
+    }
+    else if (PARAM_POINT_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      point_angle_high_thresh = pValue;
     }
     else if (PARAM_RANDOMIZE.equalsIgnoreCase(pName)) {
       randomize = (pValue >= 1);
@@ -909,14 +1040,6 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (PARAM_META_STEP_DIFF.equalsIgnoreCase(pName)) { 
       this.meta_step_diff_degrees = pValue;
     }
-    /*
-    else if (PARAM_LINE_VARIATION_FREQ.equalsIgnoreCase(pName)) {
-      line_variation_freq = pValue;
-    }
-    else if (PARAM_LINE_VARIATION_AMP.equalsIgnoreCase(pName)) {
-      line_variation_amp = pValue;
-    }
-    */
     else
       throw new IllegalArgumentException(pName);
   }
