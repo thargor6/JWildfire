@@ -92,8 +92,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final String PARAM_META_STEP_DIFF = "meta_step_diff";
   
   private static final String PARAM_RANDOMIZE = "randomize";
-  // private static final String PARAM_LINE_VARIATION_FREQ = "line_variation_freq";
-  // private static final String PARAM_LINE_VARIATION_AMP = "line_variation_amp";
+
 
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
@@ -168,7 +167,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   // direct color measures
   private static final int LINE_LENGTH = 1;
   private static final int LINE_ANGLE = 2;
-  private static final int LINE_ANGLE_RELATIVE = 3;
+  private static final int POINT_ANGLE = 3;
+  private static final int META_INDEX = 4;
 
   // measure thresholding
   private static final int PERCENT = 0;
@@ -255,6 +255,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double meta_min_step_radians;
   private double meta_max_step_radians;
   private double meta_step_diff_radians;
+  private double current_meta_step;
   private double meta_steps;
   
   private boolean randomize = false;
@@ -553,7 +554,8 @@ public class MaurerCirclesFunc extends VariationFunc {
       //  = (int)(meta_step + meta_min_step_radians);
       //      actual_step_size = meta_step;
       // x1 = x2 = y1 = y2 = 0;
-      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * (int)(Math.random()*meta_steps));
+      current_meta_step = (int)(Math.random() * meta_steps);
+      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
       //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
       cycles = (line_count * actual_step_size) / M_2PI;
     }
@@ -866,9 +868,13 @@ public class MaurerCirclesFunc extends VariationFunc {
         colvar = line_angle;
         sample_array = sampled_line_angles;
       }
-      else if (color_measure == LINE_ANGLE_RELATIVE) {
+      else if (color_measure == POINT_ANGLE) {
         colvar = point_angle;
         sample_array = sampled_point_angles;
+      }
+      else if (color_measure == META_INDEX && meta_mode) {
+        colvar = current_meta_step;
+        sample_array = null;
       }
       else { // default to LINE_LENGTH
         colvar = line_length;
@@ -878,23 +884,30 @@ public class MaurerCirclesFunc extends VariationFunc {
       double baseColor = 0;      
 
       double low_value, high_value;
-      if (color_thresholding == PERCENT) {
-        int low_index, high_index;
-        if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
-        else { low_index = (int)(color_low_thresh * sample_size); }
-        if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
-        else { high_index = (int)(color_high_thresh * (sample_size-1)); }
-        low_value = sample_array[low_index];
-        high_value = sample_array[high_index];
+      // ignore percentile option and color_thresholding if using META_INDEX mode??
+      if (color_measure == META_INDEX && meta_mode) {
+        low_value = 0;
+        high_value = meta_steps;
       }
-      else {  // default is by value
-        low_value = color_low_thresh;
-        high_value = color_high_thresh;
-      }
-      if (low_value > high_value) {
-        double temp = low_value;
-        low_value = high_value;
-        high_value = temp;
+      else {
+        if (color_thresholding == PERCENT) {
+          int low_index, high_index;
+          if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
+          else { low_index = (int)(color_low_thresh * sample_size); }
+          if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
+          else { high_index = (int)(color_high_thresh * (sample_size-1)); }
+          low_value = sample_array[low_index];
+          high_value = sample_array[high_index];
+        }
+        else {  // default is by value
+          low_value = color_low_thresh;
+          high_value = color_high_thresh;
+        }
+        if (low_value > high_value) {
+          double temp = low_value;
+          low_value = high_value;
+          high_value = temp;
+        }
       }
 
       if (colvar < low_value) { baseColor = 0; }
