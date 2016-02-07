@@ -169,6 +169,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int LINE_ANGLE = 2;
   private static final int POINT_ANGLE = 3;
   private static final int META_INDEX = 4;
+  // private static final int WEIGHTED_LINE_LENGTH = 5;
 
   // measure thresholding
   private static final int PERCENT = 0;
@@ -181,6 +182,16 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int BAND_STOP_PERCENT = 2;
   private static final int BAND_PASS_VALUE = 3;
   private static final int BAND_STOP_VALUE = 4;
+  
+  // meta modes
+  private static final int LINE_OFFSET_INCREMENT = 1;
+  private static final int A_LINEAR_INCREMENT = 2;
+  private static final int B_LINEAR_INCREMENT = 3;
+  private static final int C_LINEAR_INCREMENT = 4;
+  private static final int D_LINEAR_INCREMENT = 4;
+  private static final int E_LINEAR_INCREMENT = 5;
+  private static final int F_LINEAR_INCREMENT = 6;
+  private static final int A_B_LINEAR_INCREMENT = 5;
 
   
   private static final String[] paramNames = { 
@@ -196,19 +207,22 @@ public class MaurerCirclesFunc extends VariationFunc {
     PARAM_META_MODE, PARAM_META_MIN_STEP, PARAM_META_MAX_STEP, PARAM_META_STEP_DIFF
   };
 
-  private double a = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
-  private double b = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
-  private double c = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
-  private double d = 0; // used for n3 in supershape equation
+  private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
+  private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
+  private double c_param = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
+  private double d_param = 0; // used for n3 in supershape equation
+  
+  private double a, b, c, d;
+  private double line_offset;
 
   // rhodonea vars
-  private double kn, kd, k, radial_offset; // k = kn/kd
+  // private double kn, kd, k, radial_offset; // k = kn/kd
   // epitrochoid / hypotrochoid vars
   private double a_radius, b_radius, c_radius;
   
   private double cycles; // 1 cycle = 2*PI
   private double line_count = 360;
-  private double line_offset_degrees = 71;
+  private double line_offset_param = 71;  // specified in degrees
   private double step_size_radians;
 
   private double show_lines_param = 0;
@@ -247,14 +261,15 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double point_angle_low_thresh = 0;  
   private double point_angle_high_thresh = 1; 
   
-  private boolean meta_mode = false;
-  private double meta_min_step_degrees = 30; 
-  private double meta_max_step_degrees = 45; 
-  private double meta_step_diff_degrees = 1;
+  private  int meta_mode = OFF;
+  private double meta_min_value = 30; 
+  private double meta_max_value = 45; 
+  private double meta_step_value = 1;
 
-  private double meta_min_step_radians;
-  private double meta_max_step_radians;
-  private double meta_step_diff_radians;
+  // private double meta_min_step_radians;
+  // private double meta_max_step_radians;
+  // private double meta_step_diff_radians;
+  
   private double current_meta_step;
   private double meta_steps;
   
@@ -290,15 +305,17 @@ public class MaurerCirclesFunc extends VariationFunc {
   //       c = c_radius        
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    
+
     // rhodonea init
+ /*
     kn = a;
     kd = b;
     k = kn / kd;
     radial_offset = c;
+    */
     
     // epitrochoid/hypotrochoid init
-    double radius = a;
+  /*  double radius = a;
     double cusps = b;
     double cusp_size = c;
     double cusp_divisor = 1;
@@ -315,6 +332,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       a_radius = b_radius * cusps_ratio;
       c_radius = b_radius * c_scale;
     }
+    */
     
     double show_sum = show_lines_param + show_circles_param + show_points_param + show_curve_param;
     line_fraction = show_lines_param / show_sum;
@@ -331,19 +349,21 @@ public class MaurerCirclesFunc extends VariationFunc {
     point_thickness = point_thickness_param / 100;
     curve_thickness = curve_thickness_param / 100;
     
-    step_size_radians = M_2PI * (line_offset_degrees / 360);
+    step_size_radians = M_2PI * (line_offset_param / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
     
-    meta_min_step_radians = M_2PI * (meta_min_step_degrees/360);
-    meta_max_step_radians = M_2PI * (meta_max_step_degrees/360);
-    meta_step_diff_radians = M_2PI * (meta_step_diff_degrees/360);
-    meta_steps = (meta_max_step_radians - meta_min_step_radians)/meta_step_diff_radians;
-    meta_steps = (int)meta_steps;
+/*    meta_min_step_radians = M_2PI * (meta_min_value/360);
+    meta_max_step_radians = M_2PI * (meta_max_value/360);
+    meta_step_diff_radians = M_2PI * (meta_step_value/360);
+    */
+
+    double raw_meta_steps = (meta_max_value - meta_min_value)/meta_step_value;
+    meta_steps = (int)raw_meta_steps;
     if (DEBUG_META_MODE) {
-      System.out.println("min: " + meta_min_step_radians );
-      System.out.println("max: " + meta_max_step_radians );
-      System.out.println("diff: " + meta_step_diff_radians);
-      System.out.println("meta steps raw: " + meta_steps);
+      System.out.println("min: " + meta_min_value);
+      System.out.println("max: " + meta_max_value);
+      System.out.println("diff: " + meta_step_value);
+      System.out.println("meta steps raw: " + raw_meta_steps);
       System.out.println("meta steps: " + meta_steps);
     }
     
@@ -353,14 +373,20 @@ public class MaurerCirclesFunc extends VariationFunc {
 
     if (DEBUG_SAMPLING) { System.out.println("sampling"); }
     for (int i=0; i<sample_size; i++) {
+      count++;
+      setValues();
       double theta1, theta2, x1, y1, x2, y2;
+      
+      // should be able to improve this, only sample from possible theta
+      //    based on step size and lince count: 
+      // theta1 = step_size_radians * (int)(Math.random()*line_count);
       theta1 = Math.random() * cycles * M_2PI;
       // reusing end_point1
       end_point1 = getCurveCoords(theta1, end_point1);
       x1 = end_point1.x;
       y1 = end_point1.y;
-      double sampled_step_size = getStepSize();
-      theta2 = theta1 + sampled_step_size;
+      // double sampled_step_size = getStepSize();
+      theta2 = theta1 + step_size_radians;
       // reusing end_point2
       end_point2 = getCurveCoords(theta2, end_point2);
       x2 = end_point2.x;
@@ -398,6 +424,7 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
 
   }
+  
   /* get the angle between two points (angle between two lines L1 and L2 to origin, one to P1 and one to P2); */
   public double getPointAngle(DoublePoint2D point1, DoublePoint2D point2) {
      double a1 = atan2(point1.y, point1.x); 
@@ -441,12 +468,14 @@ public class MaurerCirclesFunc extends VariationFunc {
     else if (curve_mode == ELLIPSE) {
     }
     else if (curve_mode == RHODONEA) {
+      double k = a/b;
       double r = cos(k * theta) + c;
       if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
       point.x = r * cos(theta);
       point.y = r * sin(theta);
     }
     else if (curve_mode == EPISPIRAL) {
+      double k = a/b;
       double r = (1/cos(k * theta)) + c;
       point.x = r * cos(theta);
       point.y = r * sin(theta);
@@ -546,23 +575,54 @@ public class MaurerCirclesFunc extends VariationFunc {
     return point;
   }
   
-  public double getStepSize() {
-    double actual_step_size;
-    if (meta_mode) {
+  public void setValues() {
+    a = a_param;
+    b = b_param;
+    c = c_param;
+    d = d_param;
+    line_offset = line_offset_param;
+
+    
+    if (meta_mode != OFF) {
       // which meta-step
-      // int meta_step = (int)(Math.random()* (meta_max_step_radians - meta_min_step_radians));
-      //  = (int)(meta_step + meta_min_step_radians);
-      //      actual_step_size = meta_step;
-      // x1 = x2 = y1 = y2 = 0;
+      // should round instead?
+
       current_meta_step = (int)(Math.random() * meta_steps);
-      actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
-      //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
-      cycles = (line_count * actual_step_size) / M_2PI;
+      double meta_value = meta_min_value + (current_meta_step * meta_step_value);
+      if (meta_mode == LINE_OFFSET_INCREMENT) {
+        // line_offset = meta_min_value + (current_meta_step * meta_step_value);'
+        line_offset = meta_value;
+        step_size_radians = M_2PI * (line_offset / 360);
+        cycles = (line_count * step_size_radians) / M_2PI;
+        // actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
+        //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
+      }
+      else if (meta_mode == A_LINEAR_INCREMENT) {
+        a = meta_value;
+      }
+      else if (meta_mode == B_LINEAR_INCREMENT) {
+        b = meta_value;
+      }
+      else if (meta_mode == C_LINEAR_INCREMENT) {
+        c = meta_value;
+      }
+      else if (meta_mode == D_LINEAR_INCREMENT) {
+        d = meta_value;
+      }
+      else if (meta_mode == A_B_LINEAR_INCREMENT) {
+        // treat a param as meta param -- meta_min_value determines min
+        // treat b similar, but b_param determines min b
+        a = meta_value;
+        b = b_param + (current_meta_step * meta_step_value);
+      }
+      if (DEBUG_META_MODE && count % 50000 == 0) {
+        System.out.println("count: " + count + ", metacount = " + (int)(count / 50000));
+        System.out.println("meta_step: " + current_meta_step);
+        System.out.println("meta_value: " + meta_value);
+        System.out.println("a: " + a);
+        System.out.println("b: " + b);
+      }
     }
-    else {
-      actual_step_size = step_size_radians;
-    }
-    return actual_step_size;
   }
 
   @Override
@@ -576,7 +636,8 @@ public class MaurerCirclesFunc extends VariationFunc {
         y = cos(kt)sin(t)
     */
     count++;
-    double actual_step_size = getStepSize();
+    setValues();
+    // double actual_step_size = getStepSize();
 
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
@@ -604,11 +665,11 @@ public class MaurerCirclesFunc extends VariationFunc {
 
       // map to a Maurer Rose line
       // find nearest step
-      step_number = floor(t/actual_step_size);
+      step_number = floor(t/step_size_radians);
       
       // find polar and cartesian coordinates for endpoints of Maure Rose line
-      theta1 = step_number * actual_step_size;
-      theta2 = theta1 + actual_step_size;
+      theta1 = step_number * step_size_radians;
+      theta2 = theta1 + step_size_radians;
 
       // reusing end_point1
       end_point1 = getCurveCoords(theta1, end_point1);
@@ -872,7 +933,7 @@ public class MaurerCirclesFunc extends VariationFunc {
         colvar = point_angle;
         sample_array = sampled_point_angles;
       }
-      else if (color_measure == META_INDEX && meta_mode) {
+      else if (color_measure == META_INDEX && meta_mode != OFF) {
         colvar = current_meta_step;
         sample_array = null;
       }
@@ -885,7 +946,7 @@ public class MaurerCirclesFunc extends VariationFunc {
 
       double low_value, high_value;
       // ignore percentile option and color_thresholding if using META_INDEX mode??
-      if (color_measure == META_INDEX && meta_mode) {
+      if (color_measure == META_INDEX && meta_mode != OFF) {
         low_value = 0;
         high_value = meta_steps;
       }
@@ -950,7 +1011,7 @@ public class MaurerCirclesFunc extends VariationFunc {
   @Override
   public Object[] getParameterValues() {
     return new Object[] { 
-      a, b, c, d, line_offset_degrees, line_count, curve_mode, 
+      a_param, b_param, c_param, d_param, line_offset_param, line_count, curve_mode, 
       show_lines_param, show_circles_param, show_points_param, show_curve_param, 
       line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
       color_measure, color_gradient, color_thresholding, color_low_thresh, color_high_thresh, 
@@ -958,21 +1019,21 @@ public class MaurerCirclesFunc extends VariationFunc {
       line_angle_filter, line_angle_low_thresh, line_angle_high_thresh, 
       point_angle_filter, point_angle_low_thresh, point_angle_high_thresh,  
       (randomize ? 1 : 0), (diff_mode ? 1 : 0), 
-      (meta_mode ? 1 : 0), this.meta_min_step_degrees, this.meta_max_step_degrees, this.meta_step_diff_degrees };
+      meta_mode, meta_min_value, meta_max_value, meta_step_value };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A.equalsIgnoreCase(pName))
-      a = pValue;
+      a_param = pValue;
     else if (PARAM_B.equalsIgnoreCase(pName))
-      b = pValue;
+      b_param = pValue;
     else if (PARAM_C.equalsIgnoreCase(pName))
-      c = pValue;
+      c_param = pValue;
     else if (PARAM_D.equalsIgnoreCase(pName))
-      d = pValue;
+      d_param = pValue;
     else if (PARAM_LINE_OFFSET_DEGREES.equalsIgnoreCase(pName))
-      line_offset_degrees = pValue;
+      line_offset_param = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
       line_count = pValue;
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
@@ -1042,16 +1103,16 @@ public class MaurerCirclesFunc extends VariationFunc {
       randomize = (pValue >= 1);
     }
     else if (PARAM_META_MODE.equalsIgnoreCase(pName)) {
-      meta_mode = (pValue >= 1);
+      meta_mode = (int)pValue;
     }
     else if (PARAM_META_MIN_STEP.equalsIgnoreCase(pName)) { 
-      meta_min_step_degrees = pValue;
+      meta_min_value = pValue;
     }
     else if (PARAM_META_MAX_STEP.equalsIgnoreCase(pName)) { 
-      meta_max_step_degrees = pValue;
+      meta_max_value = pValue;
     }
     else if (PARAM_META_STEP_DIFF.equalsIgnoreCase(pName)) { 
-      this.meta_step_diff_degrees = pValue;
+      this.meta_step_value = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
