@@ -164,11 +164,13 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int RED_BLUE = 4;
   private static final int BLUE_GREEN = 5; 
   
-  // direct color measures
+  // direct color measures (and filters)
   private static final int LINE_LENGTH = 1;
   private static final int LINE_ANGLE = 2;
   private static final int POINT_ANGLE = 3;
   private static final int META_INDEX = 4;
+  private static final int Z_MINMAX = 5;
+  private static final int Z_ABSOLUTE_MINMAX = 6;
   // private static final int WEIGHTED_LINE_LENGTH = 5;
 
   // measure thresholding
@@ -345,11 +347,6 @@ public class MaurerCirclesFunc extends VariationFunc {
     step_size_radians = M_2PI * (line_offset_param / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
     
-/*    meta_min_step_radians = M_2PI * (meta_min_value/360);
-    meta_max_step_radians = M_2PI * (meta_max_value/360);
-    meta_step_diff_radians = M_2PI * (meta_step_value/360);
-    */
-
     double raw_meta_steps = (meta_max_value - meta_min_value)/meta_step_value;
     meta_steps = (int)raw_meta_steps;
     if (DEBUG_META_MODE) {
@@ -363,7 +360,6 @@ public class MaurerCirclesFunc extends VariationFunc {
     // sampling across theta range to get approximate distribution of: 
     //    line lengths, angles, relative angles
     //    (possibly other measures used for color selection, etc.)
-
     if (DEBUG_SAMPLING) { System.out.println("sampling"); }
     for (int i=0; i<sample_size; i++) {
       count++;
@@ -574,7 +570,6 @@ public class MaurerCirclesFunc extends VariationFunc {
     c = c_param;
     d = d_param;
     line_offset = line_offset_param;
-
     
     if (meta_mode != OFF) {
       // which meta-step
@@ -843,6 +838,7 @@ public class MaurerCirclesFunc extends VariationFunc {
         }
         // using negative show_circles_param to indicate circles should be 3D (perpendicular to xy plane)
         else {  // show_circles_param < 0) {
+          boolean semi_circle = false;
           double line_delta = Math.random() * line_length;
           xoffset = line_delta / Math.sqrt(1 + m*m);
           if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
@@ -851,6 +847,10 @@ public class MaurerCirclesFunc extends VariationFunc {
           double rad = midlength;
           double xx = (line_delta - rad);
           zout = Math.sqrt((rad * rad) - (xx * xx));
+          if (! semi_circle) {
+            if (Math.random() < 0.5) { zout = -zout; }
+          }
+
         }
 
         // circles centered on points
@@ -947,6 +947,17 @@ public class MaurerCirclesFunc extends VariationFunc {
       else if (color_measure == META_INDEX && meta_mode != OFF) {
         colvar = current_meta_step;
         sample_array = null;
+      }
+      else if (color_measure == Z_MINMAX) {
+        // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
+        // colvar = abs(zout*2); // min/max zout should be 
+        colvar = zout + (line_length/2); //  range of colvar should be 0 to line_length;
+        sample_array = sampled_line_lengths;
+      }
+      else if (color_measure == Z_ABSOLUTE_MINMAX) {
+        // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
+        colvar = abs(zout) * 2; // range of colvar should be 0 to line_length
+        sample_array = sampled_line_lengths;
       }
       else { // default to LINE_LENGTH
         colvar = line_length;
