@@ -192,7 +192,6 @@ public class MaurerCirclesFunc extends VariationFunc {
   private static final int E_LINEAR_INCREMENT = 5;
   private static final int F_LINEAR_INCREMENT = 6;
   private static final int A_B_LINEAR_INCREMENT = 5;
-
   
   private static final String[] paramNames = { 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
@@ -214,7 +213,6 @@ public class MaurerCirclesFunc extends VariationFunc {
   
   private double a, b, c, d;
   private double line_offset;
-
   // rhodonea vars
   // private double kn, kd, k, radial_offset; // k = kn/kd
   // epitrochoid / hypotrochoid vars
@@ -225,8 +223,8 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double line_offset_param = 71;  // specified in degrees
   private double step_size_radians;
 
-  private double show_lines_param = 0;
-  private double show_circles_param = 1;
+  private double show_lines_param = 1;
+  private double show_circles_param = 0;
   private double show_points_param = 0;
   private double show_curve_param = 0;
   private double line_fraction, circle_fraction, point_fraction, curve_fraction;
@@ -265,11 +263,6 @@ public class MaurerCirclesFunc extends VariationFunc {
   private double meta_min_value = 30; 
   private double meta_max_value = 45; 
   private double meta_step_value = 1;
-
-  // private double meta_min_step_radians;
-  // private double meta_max_step_radians;
-  // private double meta_step_diff_radians;
-  
   private double current_meta_step;
   private double meta_steps;
   
@@ -334,11 +327,11 @@ public class MaurerCirclesFunc extends VariationFunc {
     }
     */
     
-    double show_sum = show_lines_param + show_circles_param + show_points_param + show_curve_param;
-    line_fraction = show_lines_param / show_sum;
-    circle_fraction = show_circles_param / show_sum;
-    point_fraction = show_points_param / show_sum;
-    curve_fraction = show_curve_param / show_sum;
+    double show_sum = abs(show_lines_param) + abs(show_circles_param) + abs(show_points_param) + abs(show_curve_param);
+    line_fraction = abs(show_lines_param) / show_sum;
+    circle_fraction = abs(show_circles_param) / show_sum;
+    point_fraction = abs(show_points_param) / show_sum;
+    curve_fraction = abs(show_curve_param) / show_sum;
     line_threshold = line_fraction;
     circle_threshold = line_threshold + circle_fraction;
     point_threshold = circle_threshold + point_fraction;
@@ -658,8 +651,9 @@ public class MaurerCirclesFunc extends VariationFunc {
     double y = curve_point.y;
     double r = sqrt(x*x + y*y);
     double rinx, riny;
-    double xout, yout, rout;
-
+    double xout, yout, zout, rout;
+    zout = 0;
+    
     double step_number, theta1, theta2;
     double x1, y1, x2, y2;
 
@@ -814,13 +808,13 @@ public class MaurerCirclesFunc extends VariationFunc {
       }
 
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
-      double xoffset=0, yoffset=0;
+      double xoffset=0, yoffset=0, zoffset = 0;
 
       double rnd = pContext.random();
       if (rnd < line_threshold) {
         // draw lines
-        double d = Math.random() * line_length;
-        xoffset = d / Math.sqrt(1 + m*m);
+        double line_delta = Math.random() * line_length;
+        xoffset = line_delta / Math.sqrt(1 + m*m);
         if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
         yoffset = Math.abs(m * xoffset);
         if (y2 < y1) { yoffset = -1 * yoffset; }
@@ -843,9 +837,22 @@ public class MaurerCirclesFunc extends VariationFunc {
         if (x2 < x1) { xmid = -1 * xmid; }  
         double ymid = Math.abs(m * xmid);
         if (y2 < y1) { ymid = -1 * ymid; }
-        xoffset = xmid + (midlength * sin(ang));
-        yoffset = ymid + (midlength * cos(ang));
-        
+        if (show_circles_param >= 0) {
+          xoffset = xmid + (midlength * sin(ang));
+          yoffset = ymid + (midlength * cos(ang));
+        }
+        // using negative show_circles_param to indicate circles should be 3D (perpendicular to xy plane)
+        else {  // show_circles_param < 0) {
+          double line_delta = Math.random() * line_length;
+          xoffset = line_delta / Math.sqrt(1 + m*m);
+          if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+          yoffset = Math.abs(m * xoffset);
+          if (y2 < y1) { yoffset = -1 * yoffset; }
+          double rad = midlength;
+          double xx = (line_delta - rad);
+          zout = Math.sqrt((rad * rad) - (xx * xx));
+        }
+
         // circles centered on points
         // and use midlenth of Maurer line as radius
         /*
@@ -900,19 +907,23 @@ public class MaurerCirclesFunc extends VariationFunc {
           yout = y;
         }
       }
-
+      
     // Add final values in to variations totals
     if (diff_mode) {
       pVarTP.x = pAffineTP.x + (pAmount * (xout - pAffineTP.x));
       pVarTP.y = pAffineTP.y + (pAmount * (yout - pAffineTP.y));
+      pVarTP.z = pAffineTP.z + (pAmount * (zout - pAffineTP.z));
     }
     else {
       pVarTP.x += pAmount * xout;
       pVarTP.y += pAmount * yout;
+      pVarTP.z += pAmount * zout;
     }
-    if (pContext.isPreserveZCoordinate()) {
+    /*
+            if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
+    */
 
     //
     //  COLORING
@@ -947,7 +958,7 @@ public class MaurerCirclesFunc extends VariationFunc {
       double low_value, high_value;
       // ignore percentile option and color_thresholding if using META_INDEX mode??
       if (color_measure == META_INDEX && meta_mode != OFF) {
-        low_value = 0;
+        low_value = 0; 
         high_value = meta_steps;
       }
       else {
