@@ -164,18 +164,30 @@ public abstract class VariationFunc implements Serializable {
     }
     return varCopy;
   }
-
-  public boolean ressourceCanModifyParams()  { return false; }
+  
+  /** 
+   * if resourceCanModifyParams is true, it means that variation function
+   *   can dynamically add (or remove) parameters, depending on values of resource resourceName
+   *  in other words, calls to setRessource(resourceName, ...)) 
+   *       can change what is returned by getParameterNames() and getParameterValues()
+   */
+  public boolean ressourceCanModifyParams(String resourceName) { return false; }
+  
+  /** should return true if at least one resource can trigger parameter addition/removal */
+  public boolean ressourceCanModifyParams()  { return false; }  
   
   /**
    * if dynamicParameterExpansion is true, it means that variation function 
-   *   can dynamically add (or remove) parameters, depending on values of other parameters
-   *       in other words, calls to setParameter() 
+   *   can dynamically add (or remove) parameters, depending on values of parameter paramName
+   *       in other words, calls to setParameter(paramName, ...)) 
    *       can change what is returned by getParameterNames() and getParameterValues()
    * current implementation to handle this assumes only one level depth of parameter expansion 
-   *       that is, if changed to parameter A can cause a parameter B to be dynamically added/removed
+   *       that is, if change to parameter paramName can cause a parameter B to be dynamically added/removed
    *       then changes to parameter B cannot in turn cause additional parameters to be added/removed
    */
+  public boolean dynamicParameterExpansion(String paramName) { return false; }
+  
+  /** should return true if at least one parameter can trigger parameter addition/removal */
   public boolean dynamicParameterExpansion() { return false; }
-
+  
 }
