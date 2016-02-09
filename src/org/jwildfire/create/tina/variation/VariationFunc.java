@@ -166,5 +166,16 @@ public abstract class VariationFunc implements Serializable {
   }
 
   public boolean ressourceCanModifyParams()  { return false; }
+  
+  /**
+   * if dynamicParameterExpansion is true, it means that variation function 
+   *   can dynamically add (or remove) parameters, depending on values of other parameters
+   *       in other words, calls to setParameter() 
+   *       can change what is returned by getParameterNames() and getParameterValues()
+   * current implementation to handle this assumes only one level depth of parameter expansion 
+   *       that is, if changed to parameter A can cause a parameter B to be dynamically added/removed
+   *       then changes to parameter B cannot in turn cause additional parameters to be added/removed
+   */
+  public boolean dynamicParameterExpansion() { return false; }
 
 }
