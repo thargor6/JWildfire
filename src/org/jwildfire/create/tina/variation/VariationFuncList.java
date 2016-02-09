@@ -464,7 +464,7 @@ public class VariationFuncList {
     registerVariationFunc(MobiusStripFunc.class);
     
     registerVariationFunc(MaurerRoseFunc.class);
-    registerVariationFunc(MaurerCirclesFunc.class);
+    registerVariationFunc(MaurerLinesFunc.class);
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
