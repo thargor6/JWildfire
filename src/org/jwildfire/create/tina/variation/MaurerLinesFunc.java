@@ -112,8 +112,8 @@ public class MaurerLinesFunc extends VariationFunc {
   
   // color mode
   // 0 NORMAL --> normal (no direct coloring)
-  // 1 LINE_LENGTH --> color by line length
-  // 2 LINE_ANGLE --> color by absolute angle
+  // 1 LINE_LENGTH_LINES --> color by line length
+  // 2 LINE_ANGLE_LINES --> color by absolute angle
   // 3 LINE_RELATIVE_ANGLE --> color by relative angle
   
   // where does percentage vs absolute numbers come in?
@@ -132,10 +132,10 @@ public class MaurerLinesFunc extends VariationFunc {
   // RED ==> no equivalent (other than normal red coloring based on colormap)
   // GREEN ==> no equivalent
   // BLUE ==> no equivalent
-  // LINE_LENGTH_RG ==> LINE_LENGTH, RED_GREEN
-  // LINE_LENGTH_RB ==> LINE_LENGTH, RED_BLUE
-  // LINE_LENGTH_BG ==> LINE_LENGTH, BLUE_GREEN
-  // LINE_LENGTH_COLORMAP => LINE_LENGTH, STANDARD_COLORMAP
+  // LINE_LENGTH_RG ==> LINE_LENGTH_LINES, RED_GREEN
+  // LINE_LENGTH_RB ==> LINE_LENGTH_LINES, RED_BLUE
+  // LINE_LENGTH_BG ==> LINE_LENGTH_LINES, BLUE_GREEN
+  // LINE_LENGTH_COLORMAP => LINE_LENGTH_LINES, STANDARD_COLORMAP
   // and etc for LINE_ANGLE_* and LINE_ANGLE_RELATIVE_*
   
   private static final int NORMAL = 0;
@@ -151,12 +151,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int BLUE_GREEN = 5; 
   
   // direct color measures (and filters)
-  private static final int LINE_LENGTH = 1;
-  private static final int LINE_ANGLE = 2;
-  private static final int POINT_ANGLE = 3;
+  private static final int LINE_LENGTH_LINES = 1;
+  private static final int LINE_ANGLE_LINES = 2;
+  private static final int POINT_ANGLE_LINES = 3;
   private static final int META_INDEX = 4;
-  private static final int Z_MINMAX = 5;
-  private static final int Z_ABSOLUTE_MINMAX = 6;
+  private static final int Z_MINMAX_POINTS = 5;
+  private static final int Z_ABSOLUTE_MINMAX_POINTS = 6;
+  private static final int POINTS_DISTANCE_ALONG_LINE = 7;
+  private static final int POINTS_DISTANCE_FROM_MIDLINE = 8;
   // private static final int WEIGHTED_LINE_LENGTH = 5;
 
   // measure thresholding
@@ -267,7 +269,7 @@ public class MaurerLinesFunc extends VariationFunc {
   
   class MaurerFilter {
     public int mode = BAND_PASS_VALUE; // off, percentile/value/?, bandpass/bandstop
-    public int measure = LINE_LENGTH;// line length, angle, etc.
+    public int measure = LINE_LENGTH_LINES;// line length, angle, etc.
     public int operator = AND;  // AND, OR, XOR, ANOTB, BNOTA
     public double low_thresh = 0;
     public double high_thresh = 1;
@@ -673,10 +675,121 @@ public class MaurerLinesFunc extends VariationFunc {
       double line_angle = unscaled_line_angle / (M_PI/2.0);
       double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
 
-      // 
+      // yoffset = [+-] m * d / (sqrt(1 + m^2))
+      double xoffset=0, yoffset=0, zoffset = 0;
+
+      double line_delta = 0;
+      double midlength = line_length/2;  // use midlength of Maurer line as radius
+      double rnd = pContext.random();
+      if (rnd < line_threshold) {
+        // draw lines
+        line_delta = Math.random() * line_length;
+        xoffset = line_delta / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+        yoffset = Math.abs(m * xoffset);
+        if (y2 < y1) { yoffset = -1 * yoffset; }
+                if (line_thickness != 0) {
+          xoffset += ((pContext.random() - 0.5) * line_thickness);
+          yoffset += ((pContext.random() - 0.5) * line_thickness);
+        }
+        xout = x1 + xoffset;
+        yout = y1 + yoffset;
+      }
+      else if (rnd <= circle_threshold) {
+        // draw circles
+        double ang = Math.random() * M_2PI;
+        line_delta = ang;
+        
+        // original version -- 
+        //   circles centered on midpoint of "Maurer line"
+        //   and use midlength of Maurer line as radius
+        double xmid = midlength / Math.sqrt(1 + m*m);
+        if (x2 < x1) { xmid = -1 * xmid; }  
+        double ymid = Math.abs(m * xmid);
+        if (y2 < y1) { ymid = -1 * ymid; }
+        if (show_circles_param >= 0) {
+          xoffset = xmid + (midlength * sin(ang));
+          yoffset = ymid + (midlength * cos(ang));
+        }
+        // using negative show_circles_param to indicate circles should be 3D (perpendicular to xy plane)
+        else {  // show_circles_param < 0) {
+          boolean semi_circle = false;
+          // line_delta = (Math.random() * (line_length + 0.002)) - 0.001;
+          line_delta = Math.random() * line_length;
+           xoffset = line_delta / Math.sqrt(1 + m*m);
+           // xoffset = line_delta / Math.sqrt(1 + m*m);
+          if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+          yoffset = Math.abs(m * xoffset);
+          if (y2 < y1) { yoffset = -1 * yoffset; }
+          double rad = midlength;
+          double xx = (line_delta - rad);
+          zout = Math.sqrt((rad * rad) - (xx * xx));
+          if (! semi_circle) {
+            if (Math.random() < 0.5) { zout = -zout; }
+          }
+
+        }
+
+        // circles centered on points
+        // and use midlenth of Maurer line as radius
+        /*
+        xoffset = (midlength * sin(ang));
+        yoffset = (midlength * cos(ang));
+        */
+        
+        // circles centered on points
+        // and use length of Maurer line as radius
+        /*
+        xoffset = (line_length * sin(ang));
+        yoffset = (line_length * cos(ang));
+        */
+        
+        // add thickness
+        if (circle_thickness != 0) {
+          xoffset += ((pContext.random() - 0.5) * circle_thickness);
+          yoffset += ((pContext.random() - 0.5) * circle_thickness);
+        }
+        xout = x1 + xoffset;
+        yout = y1 + yoffset;
+      }
+      else if (rnd <= point_threshold) {
+        // draw point
+        if (point_thickness != 0) {
+          double roffset = pContext.random() * point_thickness;
+          double rangle = (pContext.random() * M_2PI);
+          xoffset = roffset * cos(rangle);
+          yoffset = roffset * sin(rangle);
+        }
+        else {
+          xoffset = 0;
+          yoffset = 0;
+        }
+        if (rnd <= point_half_threshold) {
+          xout = x1 + xoffset;
+          yout = y1 + yoffset;
+        }
+        else {
+          xout = x2 + xoffset;
+          yout = y2 + yoffset;
+        }
+      }
+      else {
+        // draw curve
+        if (curve_thickness != 0) {
+          xout = x + ((pContext.random() - 0.5) * curve_thickness);
+          yout = y + ((pContext.random() - 0.5) * curve_thickness);
+        }
+        else {
+          xout = x;
+          yout = y;
+        }
+      }
+      
+            // 
       // FILTERING
       // 
       
+ //     if (rnd < line_threshold) {
       pVarTP.doHide = false;
       boolean cumulative_pass = true;
       for (int findex=0; findex < filter_count; findex++)  {
@@ -689,17 +802,36 @@ public class MaurerLinesFunc extends VariationFunc {
           double low_thresh, high_thresh;
           double val;
           double[] sampled_vals;
-          if (measure == LINE_LENGTH) {
+          if (measure == LINE_LENGTH_LINES) {
             val = line_length;
             sampled_vals = sampled_line_lengths;
           }
-          else if (measure == LINE_ANGLE) {
+          else if (measure == LINE_ANGLE_LINES) {
             val = line_angle;
             sampled_vals = sampled_line_angles;
           }
-          else if (measure == POINT_ANGLE) {
+          else if (measure == POINT_ANGLE_LINES) {
             val = point_angle;
             sampled_vals = sampled_point_angles;
+          }
+          else if (measure == POINTS_DISTANCE_ALONG_LINE) {
+            val = line_delta;
+            sampled_vals = null;
+          }
+          else if (measure == POINTS_DISTANCE_FROM_MIDLINE) {
+            val = abs(line_delta - midlength);
+            sampled_vals = null;
+          }
+          else if (measure == Z_MINMAX_POINTS) {
+            // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
+            // val = abs(zout*2); // min/max zout should be 
+            val = zout + (line_length/2); //  range of val should be 0 to line_length;
+            sampled_vals = sampled_line_lengths;
+          }
+          else if (measure == Z_ABSOLUTE_MINMAX_POINTS) {
+            // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
+            val = abs(zout) * 2; // range of val should be 0 to line_length
+            sampled_vals = sampled_line_lengths;
           }
           else {
             // default to line length
@@ -768,112 +900,8 @@ public class MaurerLinesFunc extends VariationFunc {
       //
       // END FILTERING
       // 
+    //  }
       
-      // yoffset = [+-] m * d / (sqrt(1 + m^2))
-      double xoffset=0, yoffset=0, zoffset = 0;
-
-      double rnd = pContext.random();
-      if (rnd < line_threshold) {
-        // draw lines
-        double line_delta = Math.random() * line_length;
-        xoffset = line_delta / Math.sqrt(1 + m*m);
-        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-        yoffset = Math.abs(m * xoffset);
-        if (y2 < y1) { yoffset = -1 * yoffset; }
-                if (line_thickness != 0) {
-          xoffset += ((pContext.random() - 0.5) * line_thickness);
-          yoffset += ((pContext.random() - 0.5) * line_thickness);
-        }
-        xout = x1 + xoffset;
-        yout = y1 + yoffset;
-      }
-      else if (rnd <= circle_threshold) {
-        // draw circles
-        double midlength = line_length/2;  // use midlength of Maurer line as radius
-        double ang = Math.random() * M_2PI;
-        
-        // original version -- 
-        //   circles centered on midpoint of "Maurer line"
-        //   and use midlength of Maurer line as radius
-        double xmid = midlength / Math.sqrt(1 + m*m);
-        if (x2 < x1) { xmid = -1 * xmid; }  
-        double ymid = Math.abs(m * xmid);
-        if (y2 < y1) { ymid = -1 * ymid; }
-        if (show_circles_param >= 0) {
-          xoffset = xmid + (midlength * sin(ang));
-          yoffset = ymid + (midlength * cos(ang));
-        }
-        // using negative show_circles_param to indicate circles should be 3D (perpendicular to xy plane)
-        else {  // show_circles_param < 0) {
-          boolean semi_circle = false;
-          double line_delta = Math.random() * line_length;
-          xoffset = line_delta / Math.sqrt(1 + m*m);
-          if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-          yoffset = Math.abs(m * xoffset);
-          if (y2 < y1) { yoffset = -1 * yoffset; }
-          double rad = midlength;
-          double xx = (line_delta - rad);
-          zout = Math.sqrt((rad * rad) - (xx * xx));
-          if (! semi_circle) {
-            if (Math.random() < 0.5) { zout = -zout; }
-          }
-
-        }
-
-        // circles centered on points
-        // and use midlenth of Maurer line as radius
-        /*
-        xoffset = (midlength * sin(ang));
-        yoffset = (midlength * cos(ang));
-        */
-        
-        // circles centered on points
-        // and use length of Maurer line as radius
-        /*
-        xoffset = (line_length * sin(ang));
-        yoffset = (line_length * cos(ang));
-        */
-        
-        // add thickness
-        if (circle_thickness != 0) {
-          xoffset += ((pContext.random() - 0.5) * circle_thickness);
-          yoffset += ((pContext.random() - 0.5) * circle_thickness);
-        }
-        xout = x1 + xoffset;
-        yout = y1 + yoffset;
-      }
-      else if (rnd <= point_threshold) {
-        // draw point
-        if (point_thickness != 0) {
-          double roffset = pContext.random() * point_thickness;
-          double rangle = (pContext.random() * M_2PI);
-          xoffset = roffset * cos(rangle);
-          yoffset = roffset * sin(rangle);
-        }
-        else {
-          xoffset = 0;
-          yoffset = 0;
-        }
-        if (rnd <= point_half_threshold) {
-          xout = x1 + xoffset;
-          yout = y1 + yoffset;
-        }
-        else {
-          xout = x2 + xoffset;
-          yout = y2 + yoffset;
-        }
-      }
-      else {
-        // draw curve
-        if (curve_thickness != 0) {
-          xout = x + ((pContext.random() - 0.5) * curve_thickness);
-          yout = y + ((pContext.random() - 0.5) * curve_thickness);
-        }
-        else {
-          xout = x;
-          yout = y;
-        }
-      }
       
     // Add final values in to variations totals
     if (diff_mode) {
@@ -896,39 +924,46 @@ public class MaurerLinesFunc extends VariationFunc {
     //  COLORING
     // 
     if (color_measure != NORMAL) {
-
-      double colvar;
-      double[] sample_array;
-      if (color_measure == LINE_LENGTH) {
-        colvar = line_length;
-        sample_array = sampled_line_lengths;
+      double val;
+      double[] sampled_vals;
+      if (color_measure == LINE_LENGTH_LINES) {
+        val = line_length;
+        sampled_vals = sampled_line_lengths;
       }
-      else if (color_measure == LINE_ANGLE) {
-        colvar = line_angle;
-        sample_array = sampled_line_angles;
+      else if (color_measure == LINE_ANGLE_LINES) {
+        val = line_angle;
+        sampled_vals = sampled_line_angles;
       }
-      else if (color_measure == POINT_ANGLE) {
-        colvar = point_angle;
-        sample_array = sampled_point_angles;
+      else if (color_measure == POINT_ANGLE_LINES) {
+        val = point_angle;
+        sampled_vals = sampled_point_angles;
+      }
+      else if (color_measure == POINTS_DISTANCE_ALONG_LINE) {
+        val = line_delta;
+        sampled_vals = null;
+      }
+      else if (color_measure == POINTS_DISTANCE_FROM_MIDLINE) {
+        val = abs(line_delta - midlength);
+        sampled_vals = null;
       }
       else if (color_measure == META_INDEX && meta_mode != OFF) {
-        colvar = current_meta_step;
-        sample_array = null;
+        val = current_meta_step;
+        sampled_vals = null;
       }
-      else if (color_measure == Z_MINMAX) {
+      else if (color_measure == Z_MINMAX_POINTS) {
         // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
-        // colvar = abs(zout*2); // min/max zout should be 
-        colvar = zout + (line_length/2); //  range of colvar should be 0 to line_length;
-        sample_array = sampled_line_lengths;
+        // val = abs(zout*2); // min/max zout should be 
+        val = zout + (line_length/2); //  range of val should be 0 to line_length;
+        sampled_vals = sampled_line_lengths;
       }
-      else if (color_measure == Z_ABSOLUTE_MINMAX) {
+      else if (color_measure == Z_ABSOLUTE_MINMAX_POINTS) {
         // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
-        colvar = abs(zout) * 2; // range of colvar should be 0 to line_length
-        sample_array = sampled_line_lengths;
+        val = abs(zout) * 2; // range of val should be 0 to line_length
+        sampled_vals = sampled_line_lengths;
       }
-      else { // default to LINE_LENGTH
-        colvar = line_length;
-        sample_array = sampled_line_lengths;
+      else { // default to LINE_LENGTH_LINES
+        val = line_length;
+        sampled_vals = sampled_line_lengths;
       }
       
       double baseColor = 0;      
@@ -946,8 +981,8 @@ public class MaurerLinesFunc extends VariationFunc {
           else { low_index = (int)(color_low_thresh * sample_size); }
           if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
           else { high_index = (int)(color_high_thresh * (sample_size-1)); }
-          low_value = sample_array[low_index];
-          high_value = sample_array[high_index];
+          low_value = sampled_vals[low_index];
+          high_value = sampled_vals[high_index];
         }
         else {  // default is by value
           low_value = color_low_thresh;
@@ -960,9 +995,9 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
 
-      if (colvar < low_value) { baseColor = 0; }
-      else if (colvar >= high_value) { baseColor = 255; }
-      else { baseColor = ((colvar - low_value)/(high_value - low_value)) * 255; }
+      if (val < low_value) { baseColor = 0; }
+      else if (val >= high_value) { baseColor = 255; }
+      else { baseColor = ((val - low_value)/(high_value - low_value)) * 255; }
       if (color_gradient == COLORMAP_CLAMP) {
         pVarTP.rgbColor = false;
         pVarTP.color = baseColor / 255.0;
