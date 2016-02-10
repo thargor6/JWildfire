@@ -83,6 +83,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_FILTER_PREFIX = "filter";
   private static final String PARAM_FILTER_MODE_SUFFIX = "mode";
   private static final String PARAM_FILTER_MEASURE_SUFFIX = "measure";
+  private static final String PARAM_FILTER_OPERATOR_SUFFIX = "operator";
   private static final String PARAM_FILTER_LOW_SUFFIX = "low_threshold";
   private static final String PARAM_FILTER_HIGH_SUFFIX = "high_threshold";
   
@@ -139,7 +140,8 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
-  
+  private static final int RED = 1;
+
   // direct color gradient -- should be near bottom of parameter list, 
   //   since (now that colormap options is working) will be almost always COLORMAP
   private static final int COLORMAP_CLAMP = 1;
@@ -164,10 +166,21 @@ public class MaurerLinesFunc extends VariationFunc {
   
   // measure filtering
   private static final int OFF = 0;
-  private static final int BAND_PASS_PERCENT = 1;
-  private static final int BAND_STOP_PERCENT = 2;
-  private static final int BAND_PASS_VALUE = 3;
-  private static final int BAND_STOP_VALUE = 4;
+  private static final int BAND_PASS_VALUE = 1;
+  private static final int BAND_STOP_VALUE = 2;
+  private static final int BAND_PASS_PERCENT = 3;
+  private static final int BAND_STOP_PERCENT = 4;
+  
+  // boolean operations to combine filters
+  private static final int AND = 0;
+  private static final int OR = 1;
+  private static final int XOR = 2;
+  // not sure if should include ANOTB and BNOTA
+  // these can be done just as easily by using  BAND_PASS and BAND_STOP
+  // so to simplify may want to either eliminate ANOTB and BNOTA options for filter.operator, 
+  //    or eliminate BAND_STOP_VALUE and BAND_STOP_PERCENT options for filter.measure
+  private static final int ANOTB = 3;
+  private static final int BNOTA = 4;
   
   // meta modes
   private static final int LINE_OFFSET_INCREMENT = 1;
@@ -253,8 +266,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private DoublePoint3D curve_point = new DoublePoint3D();
   
   class MaurerFilter {
-    public int mode = 0; // off, percentile/value/?, bandpass/bandstop
-    public int measure = 1;// line length, angle, etc.
+    public int mode = BAND_PASS_VALUE; // off, percentile/value/?, bandpass/bandstop
+    public int measure = LINE_LENGTH;// line length, angle, etc.
+    public int operator = AND;  // AND, OR, XOR, ANOTB, BNOTA
     public double low_thresh = 0;
     public double high_thresh = 1;
   }
@@ -662,6 +676,7 @@ public class MaurerLinesFunc extends VariationFunc {
       // 
       // FILTERING
       // 
+      
       pVarTP.doHide = false;
       boolean cumulative_pass = true;
       for (int findex=0; findex < filter_count; findex++)  {
@@ -670,6 +685,7 @@ public class MaurerLinesFunc extends VariationFunc {
         // if filter mode is OFF, then skip this filter
         if (fmode != OFF) {
           int measure = mfilter.measure;
+          int op = mfilter.operator;
           double low_thresh, high_thresh;
           double val;
           double[] sampled_vals;
@@ -723,11 +739,28 @@ public class MaurerLinesFunc extends VariationFunc {
             // default to bandpass: passing values that are within filter band
             current_pass = inband;
           }
-          if (findex == 0) { // for first filter, no previous filter to combine with 
+          if (findex == 0) { // no combo operator for first filter
             cumulative_pass = current_pass;
           }
-          else { 
-            cumulative_pass = cumulative_pass && current_pass;
+          else {
+            if (op == AND) {
+              cumulative_pass = cumulative_pass && current_pass;
+            }
+            else if (op == OR) {
+              cumulative_pass = cumulative_pass || current_pass; 
+            }
+            else if (op == XOR) {
+              cumulative_pass = (cumulative_pass && !current_pass) || (!cumulative_pass && current_pass);
+            }
+            else if (op == ANOTB) {
+              cumulative_pass = cumulative_pass && !current_pass;
+            }
+            else if (op == BNOTA) {
+              cumulative_pass = !cumulative_pass && current_pass;
+            }
+            else { // default to AND
+              cumulative_pass = cumulative_pass && current_pass;
+            }
           }
         }
       }
@@ -1004,7 +1037,10 @@ public class MaurerLinesFunc extends VariationFunc {
     for (int i=0; i<filter_count; i++) {
       MaurerFilter mfil = (MaurerFilter)filters.get(i);
       String filter_base = PARAM_FILTER_PREFIX + (i+1) + "_";
-
+      // operator is about how to combine with previous filter, so first filter has no operator
+      if (i != 0) {   
+        plist.put(filter_base + PARAM_FILTER_OPERATOR_SUFFIX, mfil.operator); // AND, OR, XOR, ANOTB, BNOTA }
+      } 
       plist.put(filter_base + PARAM_FILTER_MODE_SUFFIX, mfil.mode); // off, percentile/value/?, bandpass/bandstop
       plist.put(filter_base + PARAM_FILTER_MEASURE_SUFFIX, mfil.measure); // line length, angle, etc.
       plist.put(filter_base + PARAM_FILTER_LOW_SUFFIX, mfil.low_thresh);
@@ -1089,8 +1125,10 @@ public class MaurerLinesFunc extends VariationFunc {
       String suffix = pName.substring(pName.indexOf('_') + 1);
       int findex = Integer.parseInt(fnum) - 1;
       MaurerFilter mfil = (MaurerFilter)filters.get(findex);
-
-      if (PARAM_FILTER_MODE_SUFFIX.equalsIgnoreCase(suffix)) {
+      if (PARAM_FILTER_OPERATOR_SUFFIX.equalsIgnoreCase(suffix)) {
+        mfil.operator = (int)pValue;
+      }
+      else if (PARAM_FILTER_MODE_SUFFIX.equalsIgnoreCase(suffix)) {
         mfil.mode = (int)pValue;
       }
       else if (PARAM_FILTER_MEASURE_SUFFIX.equalsIgnoreCase(suffix)) {
