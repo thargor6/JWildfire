@@ -17,7 +17,10 @@
 package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
@@ -43,12 +46,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private boolean DEBUG_RELATIVE_ANGLE = false;
   private boolean DEBUG_META_MODE = false;
   private boolean DEBUG_SAMPLING = false;
+  private boolean DEBUG_DYNAMIC_PARAMETERS = false;
 
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
   // PARAM_RADIAL_OFFSET ==> PARAM_C
   // PARAM_THICKNESS ==> split into PARAM_CURVE_THICKNESS, PARAM_LINE_THICKNESS, PARAM_POINT_THICKNESS
   private static final String PARAM_A = "a";
+  // addParam(
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
     private static final String PARAM_D = "d";
@@ -73,26 +78,20 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_DIRECT_COLOR_THRESHOLDING = "direct_color_thresholding";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
-  
-  private static final String PARAM_LINE_LENGTH_FILTER = "line_length_filter_mode";
-  private static final String PARAM_LINE_LENTH_LOW_THRESH = "line_length_low_threshold";
-  private static final String PARAM_LINE_LENGTH_HIGH_THRESH = "line_length_high_threshold";
-  
-  private static final String PARAM_LINE_ANGLE_FILTER = "line_angle_filter_mode";
-  private static final String PARAM_LINE_ANGLE_LOW_THRESH = "line_angle_low_threshold";
-  private static final String PARAM_LINE_ANGLE_HIGH_THRESH = "line_angle_high_threshold";
-  
-  private static final String PARAM_POINT_ANGLE_FILTER = "point_angle_filter_mode";
-  private static final String PARAM_POINT_ANGLE_LOW_THRESH = "point_angle_low_threshold";
-  private static final String PARAM_POINT_ANGLE_HIGH_THRESH = "point_angle_high_threshold";
+
+  private static final String PARAM_FILTER_COUNT = "number_of_filters";
+  private static final String PARAM_FILTER_PREFIX = "filter";
+  private static final String PARAM_FILTER_MODE_SUFFIX = "mode";
+  private static final String PARAM_FILTER_MEASURE_SUFFIX = "measure";
+  private static final String PARAM_FILTER_LOW_SUFFIX = "low_threshold";
+  private static final String PARAM_FILTER_HIGH_SUFFIX = "high_threshold";
   
   private static final String PARAM_META_MODE = "meta_mode";
-  private static final String PARAM_META_MIN_STEP = "meta_min_step";
-  private static final String PARAM_META_MAX_STEP = "meta_max_step";
-  private static final String PARAM_META_STEP_DIFF = "meta_step_diff";
+  private static final String PARAM_META_MIN_VALUE = "meta_min_step";
+  private static final String PARAM_META_MAX_VALUE = "meta_max_step";
+  private static final String PARAM_META_STEP_VALUE = "meta_step_diff";
   
   private static final String PARAM_RANDOMIZE = "randomize";
-
 
   private static final int CIRCLE = 0;
   private static final int RECTANGLE = 1;
@@ -140,21 +139,6 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
-  private static final int RED = 1;
-  private static final int GREEN = 2;
-  private static final int BLUE = 3;
-  private static final int LINE_LENGTH_RG = 4;
-  private static final int LINE_LENGTH_RB = 5;
-  private static final int LINE_LENGTH_BG = 6;
-  private static final int LINE_ANGLE_RG = 7;
-  private static final int LINE_ANGLE_RB = 8;
-  private static final int LINE_ANGLE_BG = 9;
-  private static final int LINE_ANGLE_RELATIVE_RG = 10;
-  private static final int LINE_ANGLE_RELATIVE_RB = 11;
-  private static final int LINE_ANGLE_RELATIVE_BG = 12;
-  private static final int LINE_LENGTH_COLORMAP = 13;
-  private static final int LINE_ANGLE_COLORMAP = 14;
-  private static final int LINE_ANGLE_RELATIVE_COLORMAP = 15;
   
   // direct color gradient -- should be near bottom of parameter list, 
   //   since (now that colormap options is working) will be almost always COLORMAP
@@ -194,19 +178,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int E_LINEAR_INCREMENT = 5;
   private static final int F_LINEAR_INCREMENT = 6;
   private static final int A_B_LINEAR_INCREMENT = 5;
-  
-  private static final String[] paramNames = { 
-    PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_LINE_OFFSET_DEGREES, PARAM_LINE_COUNT, PARAM_CURVE_MODE, 
-    PARAM_SHOW_LINES, PARAM_SHOW_CIRCLES, PARAM_SHOW_POINTS, PARAM_SHOW_CURVE, 
-    PARAM_LINE_THICKNESS, PARAM_CIRCLE_THICKNESS, PARAM_POINT_THICKNESS, PARAM_CURVE_THICKNESS, 
-    PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, PARAM_DIRECT_COLOR_THRESHOLDING, 
-    PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
-    PARAM_LINE_LENGTH_FILTER, PARAM_LINE_LENTH_LOW_THRESH, PARAM_LINE_LENGTH_HIGH_THRESH, 
-    PARAM_LINE_ANGLE_FILTER, PARAM_LINE_ANGLE_LOW_THRESH, PARAM_LINE_ANGLE_HIGH_THRESH, 
-    PARAM_POINT_ANGLE_FILTER, PARAM_POINT_ANGLE_LOW_THRESH, PARAM_POINT_ANGLE_HIGH_THRESH, 
-    PARAM_RANDOMIZE, PARAM_DIFF_MODE, 
-    PARAM_META_MODE, PARAM_META_MIN_STEP, PARAM_META_MAX_STEP, PARAM_META_STEP_DIFF
-  };
 
   private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
   private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
@@ -251,15 +222,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private double color_low_thresh = 0.3;
   private double color_high_thresh = 2.0;
 
-  private int line_length_filter = OFF;
-  private double line_length_low_thresh = 0;    
-  private double line_length_high_thresh = 1;  
-  private int line_angle_filter = OFF;
-  private double line_angle_low_thresh = 0;   
-  private double line_angle_high_thresh = 1; 
-  private int point_angle_filter = OFF;
-  private double point_angle_low_thresh = 0;  
-  private double point_angle_high_thresh = 1; 
+  private int filter_count = 0;
+  private List filters = new ArrayList();
   
   private  int meta_mode = OFF;
   private double meta_min_value = 30; 
@@ -276,13 +240,24 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private long count = 0;
   
-  class DoublePoint2D {
+  /**
+   *  only using z coordinate for specific modes
+   */
+  class DoublePoint3D {
     public double x;
     public double y;
+    public double z;
   }
-  private DoublePoint2D end_point1 = new DoublePoint2D(); 
-  private DoublePoint2D end_point2 = new DoublePoint2D(); 
-  private DoublePoint2D curve_point = new DoublePoint2D();
+  private DoublePoint3D end_point1 = new DoublePoint3D(); 
+  private DoublePoint3D end_point2 = new DoublePoint3D(); 
+  private DoublePoint3D curve_point = new DoublePoint3D();
+  
+  class MaurerFilter {
+    public int mode = 0; // off, percentile/value/?, bandpass/bandstop
+    public int measure = 1;// line length, angle, etc.
+    public double low_thresh = 0;
+    public double high_thresh = 1;
+  }
   
   // for rhodonea:
   //     a = knumer
@@ -415,7 +390,7 @@ public class MaurerLinesFunc extends VariationFunc {
   }
   
   /* get the angle between two points (angle between two lines L1 and L2 to origin, one to P1 and one to P2); */
-  public double getPointAngle(DoublePoint2D point1, DoublePoint2D point2) {
+  public double getPointAngle(DoublePoint3D point1, DoublePoint3D point2) {
      double a1 = atan2(point1.y, point1.x); 
      double a2 = atan2(point2.y, point2.x);
 
@@ -426,7 +401,7 @@ public class MaurerLinesFunc extends VariationFunc {
      return point_angle;
   }
   
-  public DoublePoint2D getCurveCoords(double theta, DoublePoint2D point) {
+  public DoublePoint3D getCurveCoords(double theta, DoublePoint3D point) {
     if (curve_mode == CIRCLE) {
       double r = a;
       point.x = r * cos(theta);
@@ -688,120 +663,79 @@ public class MaurerLinesFunc extends VariationFunc {
       // FILTERING
       // 
       pVarTP.doHide = false;
-      if (line_length_filter != OFF) {
-        boolean inband = true; // default is to include all values in band
-        double low_value, high_value;
-        if (line_length_filter == BAND_PASS_VALUE || line_length_filter == BAND_STOP_VALUE) {
-          low_value = line_length_low_thresh;
-          high_value = line_length_high_thresh;
-        }
-        else if (line_length_filter == BAND_PASS_PERCENT || line_length_filter == BAND_STOP_PERCENT) {
-          int high_index, low_index;
-          if (line_length_high_thresh >= 1.0) { high_index = sample_size-1; }
-          else if (line_length_high_thresh < 0) { high_index = 0; }
-          else { high_index = (int)(line_length_high_thresh * sample_size); }
-          high_value = sampled_line_lengths[high_index];
+      boolean cumulative_pass = true;
+      for (int findex=0; findex < filter_count; findex++)  {
+        MaurerFilter mfilter = (MaurerFilter)filters.get(findex);
+        int fmode = mfilter.mode;
+        // if filter mode is OFF, then skip this filter
+        if (fmode != OFF) {
+          int measure = mfilter.measure;
+          double low_thresh, high_thresh;
+          double val;
+          double[] sampled_vals;
+          if (measure == LINE_LENGTH) {
+            val = line_length;
+            sampled_vals = sampled_line_lengths;
+          }
+          else if (measure == LINE_ANGLE) {
+            val = line_angle;
+            sampled_vals = sampled_line_angles;
+          }
+          else if (measure == POINT_ANGLE) {
+            val = point_angle;
+            sampled_vals = sampled_point_angles;
+          }
+          else {
+            // default to line length
+            val = line_length;
+            sampled_vals = sampled_line_lengths;
+          }
+          if (fmode == BAND_PASS_VALUE|| fmode == BAND_STOP_VALUE) {
+            low_thresh = mfilter.low_thresh;
+            high_thresh = mfilter.high_thresh;
+          }
+          else if (fmode == BAND_PASS_PERCENT || fmode == BAND_STOP_PERCENT) {
+            int low_index, high_index;
+            // should probably round here instead of flooring with (int) cast?
+            if (mfilter.low_thresh <= 0 || mfilter.low_thresh >= 1) { low_index = 0; }
+            else { low_index = (int)(mfilter.low_thresh * sampled_vals.length); }
+            // if high_thresh not in (0 -> 1.0) exclusive range, clamp  at 100%
+            if (mfilter.high_thresh >= 1 || mfilter.high_thresh <= 0) { high_index = (sampled_vals.length - 1); }
+            else { high_index = (int)(mfilter.high_thresh * sampled_vals.length); }
+            low_thresh = sampled_vals[low_index];
+            high_thresh = sampled_vals[high_index];
+          }
+          else { // default to values
+            low_thresh = mfilter.low_thresh;
+            high_thresh = mfilter.high_thresh;  
+          }
 
-          if (line_length_low_thresh >= 1.0) { low_index = sample_size-1; }
-          else if (line_length_low_thresh < 0) { low_index = 0; }
-          else { low_index = (int)(line_length_low_thresh * sample_size); }
-          low_value = sampled_line_lengths[low_index];
-        }
-        else { // default to  values;
-          low_value = line_length_low_thresh;
-          high_value = line_length_high_thresh;
-        }
-        // to avoid everything disappearing, if low_val > high_val then flip
-        if (low_value > high_value) {
-          double temp = low_value;
-          low_value = high_value;
-          high_value = temp;
-        }
-        inband = (line_length >= low_value && line_length <= high_value);
-        if (line_length_filter == BAND_PASS_PERCENT || line_length_filter == BAND_PASS_VALUE) {
-          pVarTP.doHide = !inband;
-        }
-        else if (line_length_filter == BAND_STOP_PERCENT || line_length_filter == BAND_STOP_VALUE) {
-          pVarTP.doHide = inband;
+          boolean inband =  (val >= low_thresh && val <= high_thresh);
+          boolean current_pass;
+          if (fmode == BAND_PASS_VALUE || fmode == BAND_PASS_PERCENT) {
+            current_pass = inband;
+          }
+          else if (fmode == BAND_STOP_VALUE || fmode == BAND_STOP_PERCENT) {
+            // effectively the same as additional NOT operation on this filter
+            current_pass = !inband;
+          }
+          else {
+            // default to bandpass: passing values that are within filter band
+            current_pass = inband;
+          }
+          if (findex == 0) { // for first filter, no previous filter to combine with 
+            cumulative_pass = current_pass;
+          }
+          else { 
+            cumulative_pass = cumulative_pass && current_pass;
+          }
         }
       }
-
-      if (this.line_angle_filter != OFF) {
-        boolean inband = true; // default is to include all values in band
-        double low_value, high_value;
-        if (line_angle_filter == BAND_PASS_VALUE || line_angle_filter == BAND_STOP_VALUE) {
-          low_value = line_angle_low_thresh;
-          high_value = line_angle_high_thresh;
-        }
-        else if (line_angle_filter == BAND_PASS_PERCENT || line_angle_filter == BAND_STOP_PERCENT) {
-          int high_index, low_index;
-          if (line_angle_high_thresh >= 1.0) { high_index = sample_size-1; }
-          else if (line_angle_high_thresh < 0) { high_index = 0; }
-          else { high_index = (int)(line_angle_high_thresh * sample_size); }
-          high_value = sampled_line_angles[high_index];
-
-          if (line_angle_low_thresh >= 1.0) { low_index = sample_size-1; }
-          else if (line_angle_low_thresh < 0) { low_index = 0; }
-          else { low_index = (int)(line_angle_low_thresh * sample_size); }
-          low_value = sampled_line_angles[low_index];
-        }
-        else { // default to  values;
-          low_value = line_angle_low_thresh;
-          high_value = line_angle_high_thresh;
-        }
-        // to avoid everything disappearing, if low_val > high_val then flip
-        if (low_value > high_value) {
-          double temp = low_value;
-          low_value = high_value;
-          high_value = temp;
-        }
-        inband = (line_angle >= low_value && line_angle <= high_value);
-        if (line_angle_filter == BAND_PASS_PERCENT || line_angle_filter == BAND_PASS_VALUE) {
-          pVarTP.doHide = !inband;
-        }
-        else if (line_angle_filter == BAND_STOP_PERCENT || line_angle_filter == BAND_STOP_VALUE) {
-          pVarTP.doHide = inband;
-        }
-      }
-
-      if (this.point_angle_filter != OFF) {
-        boolean inband = true; // default is to include all values in band
-        double low_value, high_value;
-        if (point_angle_filter == BAND_PASS_VALUE || point_angle_filter == BAND_STOP_VALUE) {
-          low_value = point_angle_low_thresh;
-          high_value = point_angle_high_thresh;
-        }
-        else if (point_angle_filter == BAND_PASS_PERCENT || point_angle_filter == BAND_STOP_PERCENT) {
-          int high_index, low_index;
-          if (point_angle_high_thresh >= 1.0) { high_index = sample_size-1; }
-          else if (point_angle_high_thresh < 0) { high_index = 0; }
-          else { high_index = (int)(point_angle_high_thresh * sample_size); }
-          high_value = sampled_point_angles[high_index];
-
-          if (point_angle_low_thresh >= 1.0) { low_index = sample_size-1; }
-          else if (point_angle_low_thresh < 0) { low_index = 0; }
-          else { low_index = (int)(point_angle_low_thresh * sample_size); }
-          low_value = sampled_point_angles[low_index];
-        }
-        else { // default to  values;
-          low_value = point_angle_low_thresh;
-          high_value = point_angle_high_thresh;
-        }
-        // to avoid everything disappearing, if low_val > high_val then flip
-        if (low_value > high_value) {
-          double temp = low_value;
-          low_value = high_value;
-          high_value = temp;
-        }
-        inband = (point_angle >= low_value && point_angle <= high_value);
-        if (point_angle_filter == BAND_PASS_PERCENT || point_angle_filter == BAND_PASS_VALUE) {
-          pVarTP.doHide = !inband;
-        }
-        else if (point_angle_filter == BAND_STOP_PERCENT || point_angle_filter == BAND_STOP_VALUE) {
-          pVarTP.doHide = inband;
-        }
-      }
-
+      pVarTP.doHide = !cumulative_pass;
+      //
+      // END FILTERING
+      // 
+      
       // yoffset = [+-] m * d / (sqrt(1 + m^2))
       double xoffset=0, yoffset=0, zoffset = 0;
 
@@ -1027,25 +961,69 @@ public class MaurerLinesFunc extends VariationFunc {
 
   @Override
   public String[] getParameterNames() {
-    return paramNames;
+    LinkedHashMap plist = getParameters();
+    return (String[])plist.keySet().toArray(new String[0]);
+//    return paramNames;
   }
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { 
-      a_param, b_param, c_param, d_param, line_offset_param, line_count, curve_mode, 
-      show_lines_param, show_circles_param, show_points_param, show_curve_param, 
-      line_thickness_param, circle_thickness_param, point_thickness_param, curve_thickness_param, 
-      color_measure, color_gradient, color_thresholding, color_low_thresh, color_high_thresh, 
-      line_length_filter, line_length_low_thresh, line_length_high_thresh, 
-      line_angle_filter, line_angle_low_thresh, line_angle_high_thresh, 
-      point_angle_filter, point_angle_low_thresh, point_angle_high_thresh,  
-      (randomize ? 1 : 0), (diff_mode ? 1 : 0), 
-      meta_mode, meta_min_value, meta_max_value, meta_step_value };
+    LinkedHashMap plist = getParameters();
+    return plist.values().toArray();
   }
+   
+  public LinkedHashMap getParameters() {
+    LinkedHashMap plist = new LinkedHashMap(100);
 
+    plist.put(PARAM_A, a_param);
+    plist.put(PARAM_B, b_param);
+    plist.put(PARAM_C, c_param);
+    plist.put(PARAM_D, d_param);
+    plist.put(PARAM_LINE_OFFSET_DEGREES, line_offset_param);
+    plist.put(PARAM_LINE_COUNT, line_count);
+    plist.put(PARAM_CURVE_MODE, curve_mode);
+    plist.put(PARAM_SHOW_LINES, show_lines_param);
+    plist.put(PARAM_SHOW_CIRCLES, show_circles_param);
+    plist.put(PARAM_SHOW_POINTS, show_points_param);
+    plist.put(PARAM_SHOW_CURVE, show_curve_param);
+    plist.put(PARAM_LINE_THICKNESS, line_thickness_param);
+    plist.put(PARAM_CIRCLE_THICKNESS, circle_thickness_param);
+    plist.put(PARAM_POINT_THICKNESS, point_thickness_param);
+    plist.put(PARAM_CURVE_THICKNESS, curve_thickness_param);
+    plist.put(PARAM_DIRECT_COLOR_MEASURE, color_measure);
+    plist.put(PARAM_DIRECT_COLOR_GRADIENT, color_gradient);
+    plist.put(PARAM_DIRECT_COLOR_THRESHOLDING, color_thresholding);
+    plist.put(PARAM_COLOR_LOW_THRESH, color_low_thresh);
+    plist.put(PARAM_COLOR_HIGH_THRESH, color_high_thresh);
+    plist.put(PARAM_FILTER_COUNT, filter_count);
+    while (filter_count > filters.size()) {
+      MaurerFilter mfil = new MaurerFilter();
+      System.out.println("get, adding filter index: " + filters.size());
+      filters.add(mfil);
+    }
+    for (int i=0; i<filter_count; i++) {
+      MaurerFilter mfil = (MaurerFilter)filters.get(i);
+      String filter_base = PARAM_FILTER_PREFIX + (i+1) + "_";
+
+      plist.put(filter_base + PARAM_FILTER_MODE_SUFFIX, mfil.mode); // off, percentile/value/?, bandpass/bandstop
+      plist.put(filter_base + PARAM_FILTER_MEASURE_SUFFIX, mfil.measure); // line length, angle, etc.
+      plist.put(filter_base + PARAM_FILTER_LOW_SUFFIX, mfil.low_thresh);
+      plist.put(filter_base + PARAM_FILTER_HIGH_SUFFIX, mfil.high_thresh);
+      if (DEBUG_DYNAMIC_PARAMETERS) { 
+        System.out.println("get, adding param: " + filter_base + PARAM_FILTER_LOW_SUFFIX + ", " + mfil.low_thresh);
+      }
+    }
+    plist.put(PARAM_RANDOMIZE, (randomize ? 1 : 0));
+    plist.put(PARAM_DIFF_MODE, (diff_mode ? 1 : 0));
+    plist.put(PARAM_META_MODE, meta_mode);
+    plist.put(PARAM_META_MIN_VALUE, meta_min_value);
+    plist.put(PARAM_META_MAX_VALUE, meta_max_value);
+    return plist;
+  };
+  
   @Override
   public void setParameter(String pName, double pValue) {
+    if (DEBUG_DYNAMIC_PARAMETERS) { System.out.println("setParameter called: " + pName + ", " + pValue); }
     if (PARAM_A.equalsIgnoreCase(pName))
       a_param = pValue;
     else if (PARAM_B.equalsIgnoreCase(pName))
@@ -1094,32 +1072,43 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
     }
-    else if (PARAM_LINE_LENGTH_FILTER.equalsIgnoreCase(pName)) {
-      line_length_filter = (int)pValue;
+    else if (PARAM_FILTER_COUNT.equalsIgnoreCase(pName)) {
+      filter_count = (int)pValue;
+      if (filter_count > filters.size()) {
+        while (filter_count > filters.size()) {
+          MaurerFilter mfil = new MaurerFilter();
+          filters.add(mfil);
+          if (DEBUG_DYNAMIC_PARAMETERS) { System.out.println("set, count changed: " + filters.size() + ", low: " + mfil.low_thresh); }
+        }
+      }
     }
-    else if (PARAM_LINE_LENTH_LOW_THRESH.equalsIgnoreCase(pName)) {
-      line_length_low_thresh = pValue;
-    }
-    else if (PARAM_LINE_LENGTH_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      line_length_high_thresh = pValue;
-    }
-    else if (PARAM_LINE_ANGLE_FILTER.equalsIgnoreCase(pName)) {
-      line_angle_filter = (int)pValue;
-    }
-    else if (PARAM_LINE_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
-      line_angle_low_thresh = pValue;
-    }
-    else if (PARAM_LINE_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      line_angle_high_thresh = pValue;
-    }
-    else if (PARAM_POINT_ANGLE_FILTER.equalsIgnoreCase(pName)) {
-      point_angle_filter = (int)pValue;
-    }
-    else if (PARAM_POINT_ANGLE_LOW_THRESH.equalsIgnoreCase(pName)) {
-      point_angle_low_thresh = pValue;
-    }
-    else if (PARAM_POINT_ANGLE_HIGH_THRESH.equalsIgnoreCase(pName)) {
-      point_angle_high_thresh = pValue;
+    
+    else if (pName.startsWith(PARAM_FILTER_PREFIX)) {
+      String temp1 = pName.replaceFirst(PARAM_FILTER_PREFIX, "");
+      String fnum = temp1.substring(0, temp1.indexOf("_"));
+      String suffix = pName.substring(pName.indexOf('_') + 1);
+      int findex = Integer.parseInt(fnum) - 1;
+      MaurerFilter mfil = (MaurerFilter)filters.get(findex);
+
+      if (PARAM_FILTER_MODE_SUFFIX.equalsIgnoreCase(suffix)) {
+        mfil.mode = (int)pValue;
+      }
+      else if (PARAM_FILTER_MEASURE_SUFFIX.equalsIgnoreCase(suffix)) {
+        mfil.measure = (int)pValue;
+      }
+      else if (PARAM_FILTER_LOW_SUFFIX.equalsIgnoreCase(suffix)) {
+        mfil.low_thresh= pValue;
+        if (findex == 1) {
+          if (DEBUG_DYNAMIC_PARAMETERS) { System.out.println("set, low changed: " + mfil.low_thresh); }
+        }
+      }
+      else if (PARAM_FILTER_HIGH_SUFFIX.equalsIgnoreCase(suffix)) {
+        mfil.high_thresh = pValue;
+      }
+      else {
+        throw new IllegalArgumentException(pName);
+      }
+      
     }
     else if (PARAM_RANDOMIZE.equalsIgnoreCase(pName)) {
       randomize = (pValue >= 1);
@@ -1127,13 +1116,13 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (PARAM_META_MODE.equalsIgnoreCase(pName)) {
       meta_mode = (int)pValue;
     }
-    else if (PARAM_META_MIN_STEP.equalsIgnoreCase(pName)) { 
+    else if (PARAM_META_MIN_VALUE.equalsIgnoreCase(pName)) { 
       meta_min_value = pValue;
     }
-    else if (PARAM_META_MAX_STEP.equalsIgnoreCase(pName)) { 
+    else if (PARAM_META_MAX_VALUE.equalsIgnoreCase(pName)) { 
       meta_max_value = pValue;
     }
-    else if (PARAM_META_STEP_DIFF.equalsIgnoreCase(pName)) { 
+    else if (PARAM_META_STEP_VALUE.equalsIgnoreCase(pName)) { 
       this.meta_step_value = pValue;
     }
     else
@@ -1145,4 +1134,17 @@ public class MaurerLinesFunc extends VariationFunc {
     return "maurer_lines";
   }
 
+  @Override
+  public VariationFunc makeCopy() {
+    return super.makeCopy();
+  }
+  
+  @Override
+  public boolean dynamicParameterExpansion() { return true; }   
+    
+  @Override
+  public boolean dynamicParameterExpansion(String paramName) { 
+    if (paramName == PARAM_FILTER_COUNT) { return true; }
+    else { return false; }
+  }
 }
