@@ -17,6 +17,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -49,6 +50,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private boolean DEBUG_META_MODE = false;
   private boolean DEBUG_SAMPLING = false;
   private boolean DEBUG_DYNAMIC_PARAMETERS = false;
+  private boolean DEBUG_COSETS = false;
   
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
@@ -59,9 +61,11 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
   private static final String PARAM_LINE_OFFSET_DEGREES = "line_offset_degrees";
+  private static final String PARAM_INITIAL_OFFSET_DEGREES = "initial_offset_degrees";
   private static final String PARAM_LINE_COUNT = "line_count";
   private static final String PARAM_RENDER_MODE = "render_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
+  private static final String PARAM_USE_COSETS = "use_cosets";
   
   private static final String PARAM_DIRECT_COLOR_MEASURE = "direct_color_measure";
   private static final String PARAM_DIRECT_COLOR_GRADIENT = "direct_color_gradient";
@@ -107,6 +111,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int FAY_BUTTERFLY = 12;
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
+  private static final int HEARTS1 = 15;
+  private static final int HEARTS2 = 16;
   
   // color mode
   // 0 NORMAL --> normal (no direct coloring)
@@ -189,14 +195,19 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int BNOTA = 4;
   
   // meta modes
+
   private static final int LINE_OFFSET_INCREMENT = 1;
   private static final int A_LINEAR_INCREMENT = 2;
   private static final int B_LINEAR_INCREMENT = 3;
   private static final int C_LINEAR_INCREMENT = 4;
-  private static final int D_LINEAR_INCREMENT = 4;
-  private static final int E_LINEAR_INCREMENT = 5;
-  private static final int F_LINEAR_INCREMENT = 6;
-  private static final int A_B_LINEAR_INCREMENT = 5;
+  private static final int D_LINEAR_INCREMENT = 5;
+  private static final int E_LINEAR_INCREMENT = 6;
+  private static final int F_LINEAR_INCREMENT = 7;
+  private static final int INITIAL_OFFSET = 8;
+  private static final int INTEGER_COSETS = 9;
+  private static final int A_B_LINEAR_INCREMENT = 10;
+
+  
   
   private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
   private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
@@ -212,10 +223,12 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private double line_count = 360;
   private double line_offset_param = 71;  // specified in degrees
+  private double initial_offset_param = 0; // specified in degrees
   private double render_mode = STANDARD_LINES;
   
-  private double line_offset;
+  // private double line_offset;
   private double step_size_radians;
+  private double initial_offset_radians;
   private double cycles; // 1 cycle = 2*PI
   
   private double show_points_param = 0;
@@ -247,6 +260,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double current_meta_step;
   private double meta_steps;
   
+  private boolean use_cosets = false;
   private boolean randomize = false;
   private int sample_size = 1000;
   private double[] sampled_line_lengths = new double[sample_size];
@@ -334,7 +348,13 @@ public class MaurerLinesFunc extends VariationFunc {
     point_thickness = point_thickness_param / 100;
     curve_thickness = curve_thickness_param / 100;
     
-    step_size_radians = M_2PI * (line_offset_param / 360);
+  //  if (use_cosets) {
+    //  step_size_radians = M_2PI * (Math.floor(line_offset_param) / 360);
+   // }
+   // else {
+      step_size_radians = M_2PI * (line_offset_param / 360);
+//    }
+    initial_offset_radians = M_2PI * (initial_offset_param / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
     
     double raw_meta_steps = (meta_max_value - meta_min_value)/meta_step_value;
@@ -402,6 +422,25 @@ public class MaurerLinesFunc extends VariationFunc {
       System.out.println("high point angle: " + sampled_point_angles[sample_size-1]);
     }
     
+  }
+  
+  /*
+  *   get GCD (greatest common denominator) of two integers 
+  *   guaranteed to always return positive (or zero)
+  */
+  public int gcd(int a, int b) {
+    BigInteger aBig = BigInteger.valueOf(a);
+    BigInteger bBig = BigInteger.valueOf(b);
+    BigInteger result = aBig.gcd(bBig);  // BigInteger.gcd always returns postivie (or zero)
+    return result.intValue();
+  }
+  
+  /*
+   *   get LCM (least common multiple) of two integers
+   *   guaranteed to always return positive (or zero);
+   */
+  public int lcm(int a, int b) {
+    return abs(a) * (abs(b) / gcd(a, b));
   }
   
   /* get the angle between two points (angle between two lines L1 and L2 to origin, one to P1 and one to P2); */
@@ -546,6 +585,18 @@ public class MaurerLinesFunc extends VariationFunc {
       point.x = r * cos(theta);
       point.y = r * sin(theta);
     }
+    else if (curve_mode == HEARTS1) {
+      // r(theta)=2-2sintheta+sintheta(sqrt(|costheta|))/(sintheta+1.4);
+      double r = 2 - (2 * sin(theta)) + (sin(theta) * sqrt(abs(cos(theta))) / (sin(theta) + 1.4));
+      point.x = -1 * (r * cos(theta));
+      point.y = -1 * (r * sin(theta));
+    }
+    else if (curve_mode == HEARTS2) {
+      // x = 16sin^3(t)
+      // y = 13cost-5cos(2t)-2cos(3t)-cos(4t)
+      point.x = -1 * (16 * Math.pow(sin(theta), 3));
+      point.y = -1 * ((13 * cos(theta)) - (5 * cos(2*theta)) - (2 * cos(3*theta)) - cos(4*theta));
+    }
     else {  // default to circle
       double r = a;
       point.x = r * cos(theta);
@@ -559,21 +610,56 @@ public class MaurerLinesFunc extends VariationFunc {
     b = b_param;
     c = c_param;
     d = d_param;
-    line_offset = line_offset_param;
+    
+    if (use_cosets) {
+      // using cosets method from original Maurer Rose paper:
+      // line_count becomes the (integer) number of "degrees" circle is divided into 
+      // line_offset is rounded to nearest integer
+      // initial offset is ignored (considered 0)
+      // WARNING: certain meta_modes override use_cosets setting:
+      //     LINE_OFFSET_INCREMENT
+      //     INITIAL_OFFSET
+      int line_offset = (int)Math.floor(line_offset_param);
+      int cdiv = (int)Math.floor(line_count);
+      int gcd = gcd(line_offset, cdiv);
+      int lcm = lcm(line_offset, cdiv);
+      // relatively prime, then don't use cosets
+      if (gcd == 1) {  // relatively prime if don't share a common denominator other than 1
+        step_size_radians = M_2PI * ((double)line_offset / (double)cdiv);
+        initial_offset_radians = 0;
+        cycles =  (lcm/cdiv);
+        if (DEBUG_COSETS && count % 50000 == 0) {
+          System.out.println("gcd is 1, lcm: " + lcm + ", cycles: " + cycles + ", zero initial_offset");
+        }
+      }
+      else {
+        // pick one of the cosets [0, 1, ... gcd-1 ], use this to decide the initial_offset
+        double initial_offset = (int)(Math.round(Math.random() * (gcd-1)));
+        initial_offset_radians = M_2PI * (initial_offset / (double)cdiv);
+        step_size_radians = M_2PI * ((double)line_offset / (double)cdiv);
+        cycles =  (lcm/cdiv);
+        if (DEBUG_COSETS && count % 50000 == 0) {
+          System.out.println("gcd: " + gcd + ", lcm: " + lcm + ", cycles: " + cycles + ", initial_offset: " + initial_offset);
+        }
+      }
+    }
     
     if (meta_mode != OFF) {
       // which meta-step
       // should round instead?
-      
       current_meta_step = (int)(Math.random() * meta_steps);
       double meta_value = meta_min_value + (current_meta_step * meta_step_value);
       if (meta_mode == LINE_OFFSET_INCREMENT) {
         // line_offset = meta_min_value + (current_meta_step * meta_step_value);'
-        line_offset = meta_value;
+        double line_offset = meta_value;
         step_size_radians = M_2PI * (line_offset / 360);
         cycles = (line_count * step_size_radians) / M_2PI;
         // actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
         //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
+      }
+      else if (meta_mode == INITIAL_OFFSET) {
+        double initial_offset = meta_value;
+        initial_offset_radians = M_2PI * (initial_offset / 360);
       }
       else if (meta_mode == A_LINEAR_INCREMENT) {
         a = meta_value;
@@ -647,7 +733,7 @@ public class MaurerLinesFunc extends VariationFunc {
     step_number = floor(t/step_size_radians);
     
     // find polar and cartesian coordinates for endpoints of Maure Rose line
-    theta1 = step_number * step_size_radians;
+    theta1 = (step_number * step_size_radians) + initial_offset_radians;
     theta2 = theta1 + step_size_radians;
     
     // reusing end_point1
@@ -658,6 +744,11 @@ public class MaurerLinesFunc extends VariationFunc {
     end_point2 = getCurveCoords(theta2, end_point2);
     x2 = end_point2.x;
     y2 = end_point2.y;
+   /* if (DEBUG_COSETS && count % 50000 == 0) {
+      System.out.println("step_number: " + step_number + ", theta1: " + theta1 + ", theta2: " + theta2);
+      System.out.println("point1: " + x1 + ", " + y1 + "  point2: " + x2 + ", " + y2 );
+    }
+    */
     
     // find the slope and length of the line
     double ydiff = y2 - y1;
@@ -1062,8 +1153,10 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_D, d_param);
     plist.put(PARAM_RENDER_MODE, render_mode);
     plist.put(PARAM_LINE_OFFSET_DEGREES, line_offset_param);
+    plist.put(PARAM_INITIAL_OFFSET_DEGREES, initial_offset_param);
     plist.put(PARAM_LINE_COUNT, line_count);
     plist.put(PARAM_CURVE_MODE, curve_mode);
+    plist.put(PARAM_USE_COSETS, (use_cosets ? 1 : 0));
     
     plist.put(PARAM_DIRECT_COLOR_MEASURE, color_measure);
     plist.put(PARAM_DIRECT_COLOR_GRADIENT, color_gradient);
@@ -1120,10 +1213,15 @@ public class MaurerLinesFunc extends VariationFunc {
       render_mode = (int)pValue;
     else if (PARAM_LINE_OFFSET_DEGREES.equalsIgnoreCase(pName))
       line_offset_param = pValue;
+    else if (PARAM_INITIAL_OFFSET_DEGREES.equalsIgnoreCase(pName))
+      initial_offset_param = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
       line_count = pValue;
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
       curve_mode = (int)pValue;
+    else if (PARAM_USE_COSETS.equalsIgnoreCase(pName)) {
+      use_cosets = (pValue >= 1);
+    }
     
     else if (PARAM_DIRECT_COLOR_MEASURE.equalsIgnoreCase(pName)) {
       color_measure = (int)pValue;
