@@ -111,9 +111,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int FAY_BUTTERFLY = 12;
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
-  private static final int HEARTS1 = 15;
-  private static final int HEARTS2 = 16;
-  
+
   // color mode
   // 0 NORMAL --> normal (no direct coloring)
   // 1 LINE_LENGTH_LINES --> color by line length
@@ -148,9 +146,12 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int CIRCLES3 = 4;
   private static final int ZCIRCLES = 5;
   private static final int ZCIRCLES2 = 6;
+  private static final int QUADRATIC_BEZIER = 7;  // render a Bezier curve with origin as control point
+  private static final int QUADRATIC_BEZIER_REFLECTED = 8;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
+  private static final int OFF = 0;
   
   // direct color gradient -- should be near bottom of parameter list,
   //   since (now that colormap options is working) will be almost always COLORMAP
@@ -177,7 +178,6 @@ public class MaurerLinesFunc extends VariationFunc {
   // other possibilties -- distance or deviation from mean?
   
   // measure filtering
-  private static final int OFF = 0;
   private static final int BAND_PASS_VALUE = 1;
   private static final int BAND_STOP_VALUE = 2;
   private static final int BAND_PASS_PERCENT = 3;
@@ -195,7 +195,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int BNOTA = 4;
   
   // meta modes
-
   private static final int LINE_OFFSET_INCREMENT = 1;
   private static final int A_LINEAR_INCREMENT = 2;
   private static final int B_LINEAR_INCREMENT = 3;
@@ -204,10 +203,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int E_LINEAR_INCREMENT = 6;
   private static final int F_LINEAR_INCREMENT = 7;
   private static final int INITIAL_OFFSET = 8;
-  private static final int INTEGER_COSETS = 9;
-  private static final int A_B_LINEAR_INCREMENT = 10;
-
-  
+  private static final int A_B_LINEAR_INCREMENT = 9;
   
   private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
   private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
@@ -226,7 +222,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double initial_offset_param = 0; // specified in degrees
   private double render_mode = STANDARD_LINES;
   
-  // private double line_offset;
+  // private double coset_line_offset;
   private double step_size_radians;
   private double initial_offset_radians;
   private double cycles; // 1 cycle = 2*PI
@@ -241,10 +237,9 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private boolean diff_mode = false;
   private int curve_mode = RHODONEA;
-  // private boolean direct_color = true;
-  private int color_measure = NONE;
-  private int color_gradient = NORMAL;
-  private int color_thresholding = PERCENT;
+  private int direct_color_gradient = OFF;
+  private int direct_color_measure = LINE_LENGTH_LINES;
+  private int direct_color_thesholding = PERCENT;
   
 //  private double color_scaling = 100;
   private double color_low_thresh = 0.3;
@@ -259,8 +254,24 @@ public class MaurerLinesFunc extends VariationFunc {
   private double meta_step_value = 1;
   private double current_meta_step;
   private double meta_steps;
+
+  /* 
+  *  vars for using cosets method from original Maurer Rose paper:
+  *    line_count becomes the (integer) number of "degrees" circle is divided into 
+  *    coset_line_offset is rounded to nearest integer
+  *    initial offset is ignored (considered 0)
+  *    WARNING: certain meta_modes override use_cosets setting:
+  *        LINE_OFFSET_INCREMENT
+  *        INITIAL_OFFSET
+  */
+  private boolean use_cosets = false;  
+  int coset_line_offset;
+  int coset_circle_div;
+  int coset_gcd;
+  int coset_lcm;
+  double coset_cycles;
+  double coset_step_size;
   
-  private boolean use_cosets = false;
   private boolean randomize = false;
   private int sample_size = 1000;
   private double[] sampled_line_lengths = new double[sample_size];
@@ -334,28 +345,20 @@ public class MaurerLinesFunc extends VariationFunc {
     }
     */
     
-    // double show_sum = abs(show_lines_param) + abs(show_circles_param) + abs(show_points_param) + abs(show_curve_param);
-    // line_fraction = abs(show_lines_param) / show_sum;
-    // circle_fraction = abs(show_circles_param) / show_sum;
-    // point_fraction = abs(show_points_param) / show_sum;
-    // curve_fraction = abs(show_curve_param) / show_sum;
-    // line_threshold = line_fraction;
-    // circle_threshold = line_threshold + circle_fraction;
-    // point_threshold = circle_threshold + point_fraction;
-    // point_half_threshold = circle_threshold + (point_fraction/2);
-    
     line_thickness = line_thickness_param / 100;
     point_thickness = point_thickness_param / 100;
     curve_thickness = curve_thickness_param / 100;
-    
-  //  if (use_cosets) {
-    //  step_size_radians = M_2PI * (Math.floor(line_offset_param) / 360);
-   // }
-   // else {
-      step_size_radians = M_2PI * (line_offset_param / 360);
-//    }
+
+    step_size_radians = M_2PI * (line_offset_param / 360);
     initial_offset_radians = M_2PI * (initial_offset_param / 360);
     cycles = (line_count * step_size_radians) / M_2PI;
+
+    coset_line_offset = (int)Math.floor(line_offset_param);
+    coset_circle_div = (int)Math.floor(line_count);
+    coset_gcd = gcd(coset_line_offset, coset_circle_div);
+    coset_lcm = lcm(coset_line_offset, coset_circle_div);
+    coset_cycles = coset_lcm/coset_circle_div; 
+    coset_step_size = M_2PI * ((double)coset_line_offset / (double)coset_circle_div);
     
     double raw_meta_steps = (meta_max_value - meta_min_value)/meta_step_value;
     meta_steps = (int)raw_meta_steps;
@@ -431,7 +434,7 @@ public class MaurerLinesFunc extends VariationFunc {
   public int gcd(int a, int b) {
     BigInteger aBig = BigInteger.valueOf(a);
     BigInteger bBig = BigInteger.valueOf(b);
-    BigInteger result = aBig.gcd(bBig);  // BigInteger.gcd always returns postivie (or zero)
+    BigInteger result = aBig.gcd(bBig);  // BigInteger.coset_gcd always returns postivie (or zero)
     return result.intValue();
   }
   
@@ -585,18 +588,6 @@ public class MaurerLinesFunc extends VariationFunc {
       point.x = r * cos(theta);
       point.y = r * sin(theta);
     }
-    else if (curve_mode == HEARTS1) {
-      // r(theta)=2-2sintheta+sintheta(sqrt(|costheta|))/(sintheta+1.4);
-      double r = 2 - (2 * sin(theta)) + (sin(theta) * sqrt(abs(cos(theta))) / (sin(theta) + 1.4));
-      point.x = -1 * (r * cos(theta));
-      point.y = -1 * (r * sin(theta));
-    }
-    else if (curve_mode == HEARTS2) {
-      // x = 16sin^3(t)
-      // y = 13cost-5cos(2t)-2cos(3t)-cos(4t)
-      point.x = -1 * (16 * Math.pow(sin(theta), 3));
-      point.y = -1 * ((13 * cos(theta)) - (5 * cos(2*theta)) - (2 * cos(3*theta)) - cos(4*theta));
-    }
     else {  // default to circle
       double r = a;
       point.x = r * cos(theta);
@@ -612,45 +603,32 @@ public class MaurerLinesFunc extends VariationFunc {
     d = d_param;
     
     if (use_cosets) {
-      // using cosets method from original Maurer Rose paper:
-      // line_count becomes the (integer) number of "degrees" circle is divided into 
-      // line_offset is rounded to nearest integer
-      // initial offset is ignored (considered 0)
-      // WARNING: certain meta_modes override use_cosets setting:
-      //     LINE_OFFSET_INCREMENT
-      //     INITIAL_OFFSET
-      int line_offset = (int)Math.floor(line_offset_param);
-      int cdiv = (int)Math.floor(line_count);
-      int gcd = gcd(line_offset, cdiv);
-      int lcm = lcm(line_offset, cdiv);
-      // relatively prime, then don't use cosets
-      if (gcd == 1) {  // relatively prime if don't share a common denominator other than 1
-        step_size_radians = M_2PI * ((double)line_offset / (double)cdiv);
+      step_size_radians = coset_step_size;
+      cycles =  coset_cycles;
+      // if relatively prime, then don't use cosets
+      if (coset_gcd == 1) {  // relatively prime if don't share a common denominator other than 1
         initial_offset_radians = 0;
-        cycles =  (lcm/cdiv);
         if (DEBUG_COSETS && count % 50000 == 0) {
-          System.out.println("gcd is 1, lcm: " + lcm + ", cycles: " + cycles + ", zero initial_offset");
+          System.out.println("gcd is 1, lcm: " + coset_lcm + ", cycles: " + cycles + ", zero initial_offset");
         }
       }
       else {
-        // pick one of the cosets [0, 1, ... gcd-1 ], use this to decide the initial_offset
-        double initial_offset = (int)(Math.round(Math.random() * (gcd-1)));
-        initial_offset_radians = M_2PI * (initial_offset / (double)cdiv);
-        step_size_radians = M_2PI * ((double)line_offset / (double)cdiv);
-        cycles =  (lcm/cdiv);
+        // pick one of the cosets [0, 1, ... coset_gcd-1 ], use this to decide the initial_offset
+        double initial_offset = (int)(Math.round(Math.random() * (coset_gcd-1)));
+        initial_offset_radians = M_2PI * (initial_offset / (double)coset_circle_div);
         if (DEBUG_COSETS && count % 50000 == 0) {
-          System.out.println("gcd: " + gcd + ", lcm: " + lcm + ", cycles: " + cycles + ", initial_offset: " + initial_offset);
+          System.out.println("gcd: " + coset_gcd + ", lcm: " + coset_lcm + ", cycles: " + cycles + ", initial_offset: " + initial_offset);
         }
       }
     }
     
     if (meta_mode != OFF) {
-      // which meta-step
-      // should round instead?
+      // determine which meta-step to use
+      //    should round instead?
       current_meta_step = (int)(Math.random() * meta_steps);
       double meta_value = meta_min_value + (current_meta_step * meta_step_value);
       if (meta_mode == LINE_OFFSET_INCREMENT) {
-        // line_offset = meta_min_value + (current_meta_step * meta_step_value);'
+        // coset_line_offset = meta_min_value + (current_meta_step * meta_step_value);'
         double line_offset = meta_value;
         step_size_radians = M_2PI * (line_offset / 360);
         cycles = (line_count * step_size_radians) / M_2PI;
@@ -859,6 +837,22 @@ public class MaurerLinesFunc extends VariationFunc {
       
       }
       */
+      else if (render_mode == QUADRATIC_BEZIER) {
+        // use origin (0,0) as control point, and endpoints of Maurer line as Bezier curve endpoints
+        //    (since using origin as control point, can drop middle term of standard Bezier curve calc
+        double bt = Math.random();
+        xout = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
+        yout = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+      }
+      else if (render_mode == QUADRATIC_BEZIER_REFLECTED) {
+        double bt = Math.random();
+        double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
+        double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+        // now reflect point A across the Maurer line to get output point
+        double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+        xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
+        yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+      }
       else {
         xout = 0;
         yout = 0;
@@ -870,8 +864,6 @@ public class MaurerLinesFunc extends VariationFunc {
         yout += ((pContext.random() - 0.5) * line_thickness);
       }
     }
-    
-    
     
     // circles centered on points
     // and use midlenth of Maurer line as radius
@@ -887,14 +879,9 @@ public class MaurerLinesFunc extends VariationFunc {
     yoffset = (line_length * cos(ang));
     */
     
-    
-    
-    
     //
     // FILTERING
     //
-    
-    //     if (rnd < line_threshold) {
     pVarTP.doHide = false;
     boolean cumulative_pass = true;
     for (int findex=0; findex < filter_count; findex++)  {
@@ -1027,40 +1014,40 @@ public class MaurerLinesFunc extends VariationFunc {
     //
     //  COLORING
     //
-    if (color_measure != NORMAL) {
+    if (direct_color_measure != NORMAL) {
       double val;
       double[] sampled_vals;
-      if (color_measure == LINE_LENGTH_LINES) {
+      if (direct_color_measure == LINE_LENGTH_LINES) {
         val = line_length;
         sampled_vals = sampled_line_lengths;
       }
-      else if (color_measure == LINE_ANGLE_LINES) {
+      else if (direct_color_measure == LINE_ANGLE_LINES) {
         val = line_angle;
         sampled_vals = sampled_line_angles;
       }
-      else if (color_measure == POINT_ANGLE_LINES) {
+      else if (direct_color_measure == POINT_ANGLE_LINES) {
         val = point_angle;
         sampled_vals = sampled_point_angles;
       }
-      else if (color_measure == DISTANCE_ALONG_LINE_POINTS) {
+      else if (direct_color_measure == DISTANCE_ALONG_LINE_POINTS) {
         val = line_delta;
         sampled_vals = null;
       }
-      else if (color_measure == DISTANCE_FROM_MIDLINE_POINTS) {
+      else if (direct_color_measure == DISTANCE_FROM_MIDLINE_POINTS) {
         val = abs(line_delta - midlength);
         sampled_vals = null;
       }
-      else if (color_measure == META_INDEX && meta_mode != OFF) {
+      else if (direct_color_measure == META_INDEX && meta_mode != OFF) {
         val = current_meta_step;
         sampled_vals = null;
       }
-      else if (color_measure == Z_MINMAX_POINTS) {
+      else if (direct_color_measure == Z_MINMAX_POINTS) {
         // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
         // val = abs(zout*2); // min/max zout should be
         val = zout + (line_length/2); //  range of val should be 0 to line_length;
         sampled_vals = sampled_line_lengths;
       }
-      else if (color_measure == Z_ABSOLUTE_MINMAX_POINTS) {
+      else if (direct_color_measure == Z_ABSOLUTE_MINMAX_POINTS) {
         // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
         val = abs(zout) * 2; // range of val should be 0 to line_length
         sampled_vals = sampled_line_lengths;
@@ -1073,13 +1060,13 @@ public class MaurerLinesFunc extends VariationFunc {
       double baseColor = 0;
       
       double low_value, high_value;
-      // ignore percentile option and color_thresholding if using META_INDEX mode??
-      if (color_measure == META_INDEX && meta_mode != OFF) {
+      // ignore percentile option and direct_color_thesholding if using META_INDEX mode??
+      if (direct_color_measure == META_INDEX && meta_mode != OFF) {
         low_value = 0;
         high_value = meta_steps;
       }
       else {
-        if (color_thresholding == PERCENT) {
+        if (direct_color_thesholding == PERCENT) {
           int low_index, high_index;
           if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
           else { low_index = (int)(color_low_thresh * sample_size); }
@@ -1102,25 +1089,25 @@ public class MaurerLinesFunc extends VariationFunc {
       if (val < low_value) { baseColor = 0; }
       else if (val >= high_value) { baseColor = 255; }
       else { baseColor = ((val - low_value)/(high_value - low_value)) * 255; }
-      if (color_gradient == COLORMAP_CLAMP) {
+      if (direct_color_gradient == COLORMAP_CLAMP) {
         pVarTP.rgbColor = false;
         pVarTP.color = baseColor / 255.0;
         if (pVarTP.color < 0) { pVarTP.color = 0; }
         if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
       }
-      else if (color_gradient == RED_GREEN) {  //
+      else if (direct_color_gradient == RED_GREEN) {  //
         pVarTP.rgbColor = true;
         pVarTP.redColor = baseColor;
         pVarTP.greenColor = 255 - baseColor;
         pVarTP.blueColor = 0;
       }
-      else if (color_gradient == RED_BLUE) {
+      else if (direct_color_gradient == RED_BLUE) {
         pVarTP.rgbColor = true;
         pVarTP.redColor = baseColor;
         pVarTP.greenColor = 0;
         pVarTP.blueColor = 255 - baseColor;
       }
-      else if (color_gradient == BLUE_GREEN) {
+      else if (direct_color_gradient == BLUE_GREEN) {
         pVarTP.rgbColor = true;
         pVarTP.redColor = 0;
         pVarTP.greenColor = 255 - baseColor;
@@ -1158,9 +1145,9 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_CURVE_MODE, curve_mode);
     plist.put(PARAM_USE_COSETS, (use_cosets ? 1 : 0));
     
-    plist.put(PARAM_DIRECT_COLOR_MEASURE, color_measure);
-    plist.put(PARAM_DIRECT_COLOR_GRADIENT, color_gradient);
-    plist.put(PARAM_DIRECT_COLOR_THRESHOLDING, color_thresholding);
+    plist.put(PARAM_DIRECT_COLOR_MEASURE, direct_color_measure);
+    plist.put(PARAM_DIRECT_COLOR_GRADIENT, direct_color_gradient);
+    plist.put(PARAM_DIRECT_COLOR_THRESHOLDING, direct_color_thesholding);
     plist.put(PARAM_COLOR_LOW_THRESH, color_low_thresh);
     plist.put(PARAM_COLOR_HIGH_THRESH, color_high_thresh);
     plist.put(PARAM_FILTER_COUNT, filter_count);
@@ -1224,13 +1211,13 @@ public class MaurerLinesFunc extends VariationFunc {
     }
     
     else if (PARAM_DIRECT_COLOR_MEASURE.equalsIgnoreCase(pName)) {
-      color_measure = (int)pValue;
+      direct_color_measure = (int)pValue;
     }
     else if (PARAM_DIRECT_COLOR_GRADIENT.equalsIgnoreCase(pName)) {
-      color_gradient = (int)pValue;
+      direct_color_gradient = (int)pValue;
     }
     else if (PARAM_DIRECT_COLOR_THRESHOLDING.equalsIgnoreCase(pName)) {
-      color_thresholding = (int)pValue;
+      direct_color_thesholding = (int)pValue;
     }
     else if (PARAM_COLOR_LOW_THRESH.equalsIgnoreCase(pName)) {
       color_low_thresh = pValue;
