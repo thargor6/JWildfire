@@ -148,6 +148,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int ZCIRCLES2 = 6;
   private static final int QUADRATIC_BEZIER = 7;  // render a Bezier curve with origin as control point
   private static final int QUADRATIC_BEZIER_REFLECTED = 8;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
+  private static final int QUADRATIC_BEZIER_BOTH = 9;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
+  private static final int QUADRATIC_BEZIER_ALTERNATE = 10;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -156,7 +158,7 @@ public class MaurerLinesFunc extends VariationFunc {
   // direct color gradient -- should be near bottom of parameter list,
   //   since (now that colormap options is working) will be almost always COLORMAP
   private static final int COLORMAP_CLAMP = 1;
-  private static final int COLORMAP_CYCLE = 2;
+  private static final int COLORMAP_WRAP = 2;
   private static final int RED_GREEN = 3;
   private static final int RED_BLUE = 4;
   private static final int BLUE_GREEN = 5;
@@ -170,6 +172,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int Z_ABSOLUTE_MINMAX_POINTS = 6;
   private static final int DISTANCE_ALONG_LINE_POINTS = 7;
   private static final int DISTANCE_FROM_MIDLINE_POINTS = 8;
+  private static final int DISTANCE_FROM_NEAREST_END_POINTS = 9;
   // private static final int WEIGHTED_LINE_LENGTH = 5;
   
   // measure thresholding
@@ -837,21 +840,48 @@ public class MaurerLinesFunc extends VariationFunc {
       
       }
       */
-      else if (render_mode == QUADRATIC_BEZIER) {
+      else if (render_mode == QUADRATIC_BEZIER || render_mode == QUADRATIC_BEZIER_REFLECTED || 
+              render_mode == QUADRATIC_BEZIER_BOTH || render_mode == QUADRATIC_BEZIER_ALTERNATE) {
         // use origin (0,0) as control point, and endpoints of Maurer line as Bezier curve endpoints
         //    (since using origin as control point, can drop middle term of standard Bezier curve calc
         double bt = Math.random();
-        xout = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
-        yout = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
-      }
-      else if (render_mode == QUADRATIC_BEZIER_REFLECTED) {
-        double bt = Math.random();
         double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
         double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+        if (render_mode == QUADRATIC_BEZIER) {
+          xout = ax;
+          yout = ay;
+        }
+        else if (render_mode == QUADRATIC_BEZIER_REFLECTED) {
+        // double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
+        // double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
         // now reflect point A across the Maurer line to get output point
-        double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-        xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
-        yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+          double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+        }
+        else if (render_mode == QUADRATIC_BEZIER_BOTH) {
+          if (Math.random() < 0.5) {
+            xout = ax;
+            yout = ay;
+          }
+          else {
+            double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+            xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
+            yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+          }
+        }
+        else if (render_mode == QUADRATIC_BEZIER_ALTERNATE) {
+          // even steps use Bezier, odd steps use reflected Bezier
+          if (step_number % 2 == 0) {
+            xout = ax;
+            yout = ay;
+          }
+          else {
+            double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+            xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
+            yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+          }
+        }
       }
       else {
         xout = 0;
@@ -908,12 +938,16 @@ public class MaurerLinesFunc extends VariationFunc {
         }
         else if (measure == DISTANCE_ALONG_LINE_POINTS) {
           val = line_delta;
-          sampled_vals = null;
+          sampled_vals = null; // percentiles calculated directly for DISTANCE_ALONG_LINE_POINTS
         }
         else if (measure == DISTANCE_FROM_MIDLINE_POINTS) {
           val = abs(line_delta - midlength);
-          sampled_vals = null;
+          sampled_vals = null; // percentiles calculated directly for DISTANCE_FROM_MIDLINE_POINTS
         }
+        else if (measure == DISTANCE_FROM_NEAREST_END_POINTS) {
+          val = Math.min(line_delta, line_length - line_delta);
+          sampled_vals = null;  // percentiles calculated directly for DISTANCE_FROM_NEAREST_END_POINTS
+        } 
         else if (measure == Z_MINMAX_POINTS) {
           // min/max zout should be +/- radius of circle ==> +/-(line_length/2)
           // val = abs(zout*2); // min/max zout should be
@@ -935,15 +969,27 @@ public class MaurerLinesFunc extends VariationFunc {
           high_thresh = mfilter.high_thresh;
         }
         else if (fmode == BAND_PASS_PERCENT || fmode == BAND_STOP_PERCENT) {
-          int low_index, high_index;
-          // should probably round here instead of flooring with (int) cast?
-          if (mfilter.low_thresh <= 0 || mfilter.low_thresh >= 1) { low_index = 0; }
-          else { low_index = (int)(mfilter.low_thresh * sampled_vals.length); }
-          // if high_thresh not in (0 -> 1.0) exclusive range, clamp  at 100%
-          if (mfilter.high_thresh >= 1 || mfilter.high_thresh <= 0) { high_index = (sampled_vals.length - 1); }
-          else { high_index = (int)(mfilter.high_thresh * sampled_vals.length); }
-          low_thresh = sampled_vals[low_index];
-          high_thresh = sampled_vals[high_index];
+          if (measure == DISTANCE_ALONG_LINE_POINTS) {
+            low_thresh = mfilter.low_thresh * line_length;
+            high_thresh = mfilter.high_thresh * line_length;
+          }
+          else if (measure == DISTANCE_FROM_MIDLINE_POINTS || measure == DISTANCE_FROM_NEAREST_END_POINTS) {
+            // low_thresh and high_thresh for DISTANCE_FROM_MIDLINE_POINTS and DISTANCE_FROM_NEAREST_END_POINTS 
+            //      can behave differently when thresholding by value, but act the same when thresholding by percentile
+            low_thresh = mfilter.low_thresh * midlength;
+            high_thresh = mfilter.high_thresh * midlength;
+          }
+          else {
+            int low_index, high_index;
+            // should probably round here instead of flooring with (int) cast?
+            if (mfilter.low_thresh <= 0 || mfilter.low_thresh >= 1) { low_index = 0; }
+            else { low_index = (int)(mfilter.low_thresh * sampled_vals.length); }
+            // if high_thresh not in (0 -> 1.0) exclusive range, clamp  at 100%
+            if (mfilter.high_thresh >= 1 || mfilter.high_thresh <= 0) { high_index = (sampled_vals.length - 1); }
+            else { high_index = (int)(mfilter.high_thresh * sampled_vals.length); }
+            low_thresh = sampled_vals[low_index];
+            high_thresh = sampled_vals[high_index];
+          }
         }
         else { // default to values
           low_thresh = mfilter.low_thresh;
@@ -1014,7 +1060,7 @@ public class MaurerLinesFunc extends VariationFunc {
     //
     //  COLORING
     //
-    if (direct_color_measure != NORMAL) {
+    if (direct_color_measure != NONE && direct_color_gradient != OFF) {
       double val;
       double[] sampled_vals;
       if (direct_color_measure == LINE_LENGTH_LINES) {
@@ -1052,6 +1098,10 @@ public class MaurerLinesFunc extends VariationFunc {
         val = abs(zout) * 2; // range of val should be 0 to line_length
         sampled_vals = sampled_line_lengths;
       }
+      else if (direct_color_measure == DISTANCE_FROM_NEAREST_END_POINTS) {
+        val = Math.min(line_delta, line_length - line_delta);
+        sampled_vals = null;  // percentiles calculated directly for DISTANCE_FROM_NEAREST_END_POINTS
+      } 
       else { // default to LINE_LENGTH_LINES
         val = line_length;
         sampled_vals = sampled_line_lengths;
@@ -1067,13 +1117,29 @@ public class MaurerLinesFunc extends VariationFunc {
       }
       else {
         if (direct_color_thesholding == PERCENT) {
-          int low_index, high_index;
-          if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
-          else { low_index = (int)(color_low_thresh * sample_size); }
-          if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
-          else { high_index = (int)(color_high_thresh * (sample_size-1)); }
-          low_value = sampled_vals[low_index];
-          high_value = sampled_vals[high_index];
+          if (direct_color_measure == DISTANCE_ALONG_LINE_POINTS) {
+            low_value = color_low_thresh * line_length;
+            high_value = color_high_thresh * line_length;
+          }
+          else if (direct_color_measure == DISTANCE_FROM_MIDLINE_POINTS) {
+            low_value = color_low_thresh * midlength;
+            high_value = color_high_thresh * midlength;
+          }
+          else if (direct_color_measure == DISTANCE_FROM_MIDLINE_POINTS || direct_color_measure == DISTANCE_FROM_NEAREST_END_POINTS) {
+            // low_thresh and high_thresh for DISTANCE_FROM_MIDLINE_POINTS and DISTANCE_FROM_NEAREST_END_POINTS 
+            //      can behave differently when thresholding by value, but act the same when thresholding by percentile
+            low_value = color_low_thresh * midlength;
+            high_value = color_high_thresh * midlength;
+          }
+          else {
+            int low_index, high_index;
+            if (color_low_thresh < 0 || color_low_thresh >= 1) { low_index = 0; }
+            else { low_index = (int)(color_low_thresh * sample_size); }
+            if (color_high_thresh >= 1 || color_high_thresh < 0) { high_index = sample_size - 1; }
+            else { high_index = (int)(color_high_thresh * (sample_size-1)); }
+            low_value = sampled_vals[low_index];
+            high_value = sampled_vals[high_index];
+          }
         }
         else {  // default is by value
           low_value = color_low_thresh;
@@ -1091,6 +1157,19 @@ public class MaurerLinesFunc extends VariationFunc {
       else { baseColor = ((val - low_value)/(high_value - low_value)) * 255; }
       if (direct_color_gradient == COLORMAP_CLAMP) {
         pVarTP.rgbColor = false;
+        pVarTP.color = baseColor / 255.0;
+        if (pVarTP.color < 0) { pVarTP.color = 0; }
+        if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
+      }
+      else if (direct_color_gradient == COLORMAP_WRAP) {
+        // if val is outside range, wrap it around (cylce) to keep within range
+        if (val < low_value) {
+          val = high_value - ((low_value - val) % (high_value - low_value));
+        }
+        else if (val > high_value) {
+          val = low_value + ((val - low_value) % (high_value - low_value));
+        }
+        baseColor = ((val - low_value)/(high_value - low_value)) * 255; 
         pVarTP.color = baseColor / 255.0;
         if (pVarTP.color < 0) { pVarTP.color = 0; }
         if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
