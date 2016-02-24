@@ -60,8 +60,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
-  private static final String PARAM_LINE_OFFSET_DEGREES = "line_offset_degrees";
-  private static final String PARAM_INITIAL_OFFSET_DEGREES = "initial_offset_degrees";
+  private static final String PARAM_THETA_STEP_SIZE_DEGREES = "theta_step_size";
+  private static final String PARAM_INITIAL_THETA_DEGREES = "initial_theta";
   private static final String PARAM_LINE_COUNT = "line_count";
   private static final String PARAM_RENDER_MODE = "render_mode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
@@ -81,6 +81,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_FILTER_OPERATOR_SUFFIX = "operator";
   private static final String PARAM_FILTER_LOW_SUFFIX = "low_threshold";
   private static final String PARAM_FILTER_HIGH_SUFFIX = "high_threshold";
+  
+  private static final String PARAM_RENDER_MODIFIER1 = "render_modifier1";
+  private static final String PARAM_RENDER_MODIFIER2 = "render_modifier2";
   
   private static final String PARAM_META_MODE = "meta_mode";
   private static final String PARAM_META_MIN_VALUE = "meta_min_step";
@@ -150,6 +153,18 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int QUADRATIC_BEZIER_REFLECTED = 8;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
   private static final int QUADRATIC_BEZIER_BOTH = 9;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
   private static final int QUADRATIC_BEZIER_ALTERNATE = 10;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
+  private static final int ZBEZIER = 11;
+  private static final int SINE_WAVE = 12; 
+  private static final int SINE_WAVE_REFLECTED = 13;
+  private static final int SINE_WAVE_BOTH = 14;
+  private static final int SINE_WAVE_ALTERNATE = 15;
+  private static final int ZSINE = 16;
+  private static final int ZSINE2 = 17;
+  private static final int ZSINE3 = 18;
+  private static final int ZSINE4 = 19;
+  private static final int ZBEZIER2 = 21;
+  private static final int ELLIPSE1 = 22;
+  private static final int ELLIPSE2 = 23;
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -221,13 +236,15 @@ public class MaurerLinesFunc extends VariationFunc {
   private double a_radius, b_radius, c_radius;
   
   private double line_count = 360;
-  private double line_offset_param = 71;  // specified in degrees
-  private double initial_offset_param = 0; // specified in degrees
+  private double theta_step_size_param = 71;  // specified in degrees
+  private double initial_theta_param = 0; // specified in degrees
   private double render_mode = STANDARD_LINES;
+  private double render_modifier1 = 1.0;
+  private double render_modifier2 = 0.5;
   
   // private double coset_line_offset;
-  private double step_size_radians;
-  private double initial_offset_radians;
+  private double theta_step_radians;
+  private double initial_theta_radians;
   private double cycles; // 1 cycle = 2*PI
   
   private double show_points_param = 0;
@@ -352,11 +369,11 @@ public class MaurerLinesFunc extends VariationFunc {
     point_thickness = point_thickness_param / 100;
     curve_thickness = curve_thickness_param / 100;
 
-    step_size_radians = M_2PI * (line_offset_param / 360);
-    initial_offset_radians = M_2PI * (initial_offset_param / 360);
-    cycles = (line_count * step_size_radians) / M_2PI;
+    theta_step_radians = M_2PI * (theta_step_size_param / 360);
+    initial_theta_radians = M_2PI * (initial_theta_param / 360);
+    cycles = (line_count * theta_step_radians) / M_2PI;
 
-    coset_line_offset = (int)Math.floor(line_offset_param);
+    coset_line_offset = (int)Math.floor(theta_step_size_param);
     coset_circle_div = (int)Math.floor(line_count);
     coset_gcd = gcd(coset_line_offset, coset_circle_div);
     coset_lcm = lcm(coset_line_offset, coset_circle_div);
@@ -384,14 +401,14 @@ public class MaurerLinesFunc extends VariationFunc {
       
       // should be able to improve this, only sample from possible theta
       //    based on step size and lince count:
-      // theta1 = step_size_radians * (int)(Math.random()*line_count);
+      // theta1 = theta_step_radians * (int)(Math.random()*line_count);
       theta1 = Math.random() * cycles * M_2PI;
       // reusing end_point1
       end_point1 = getCurveCoords(theta1, end_point1);
       x1 = end_point1.x;
       y1 = end_point1.y;
       // double sampled_step_size = getStepSize();
-      theta2 = theta1 + step_size_radians;
+      theta2 = theta1 + theta_step_radians;
       // reusing end_point2
       end_point2 = getCurveCoords(theta2, end_point2);
       x2 = end_point2.x;
@@ -490,6 +507,14 @@ public class MaurerLinesFunc extends VariationFunc {
       }
     }
     else if (curve_mode == ELLIPSE) {
+      point.x = a * cos(theta);
+      point.y = b * sin(theta);
+      // x = a cos(t) ==> let a param actually be +/- of ellipse bound from point1 and point2
+      // y = b cos(t) ==> let b param actaull be specified in terms of scaling relative to a
+      //                  or scaling relative to line length
+      //                  or scaling relative to ellipse length
+      //             
+      
     }
     else if (curve_mode == RHODONEA) {
       double k = a/b;
@@ -534,8 +559,8 @@ public class MaurerLinesFunc extends VariationFunc {
       point.y = y;
     }
     else if (curve_mode == SUPERSHAPE) {
-      // original supershape variables: a, b, m, n1, n2, n3
-      // a = m
+      // original supershape variables: a, b, line_slope, n1, n2, n3
+      // a = line_slope
       // b = n1
       // c = n2
       // d = n3
@@ -606,11 +631,11 @@ public class MaurerLinesFunc extends VariationFunc {
     d = d_param;
     
     if (use_cosets) {
-      step_size_radians = coset_step_size;
+      theta_step_radians = coset_step_size;
       cycles =  coset_cycles;
       // if relatively prime, then don't use cosets
       if (coset_gcd == 1) {  // relatively prime if don't share a common denominator other than 1
-        initial_offset_radians = 0;
+        initial_theta_radians = 0;
         if (DEBUG_COSETS && count % 50000 == 0) {
           System.out.println("gcd is 1, lcm: " + coset_lcm + ", cycles: " + cycles + ", zero initial_offset");
         }
@@ -618,7 +643,7 @@ public class MaurerLinesFunc extends VariationFunc {
       else {
         // pick one of the cosets [0, 1, ... coset_gcd-1 ], use this to decide the initial_offset
         double initial_offset = (int)(Math.round(Math.random() * (coset_gcd-1)));
-        initial_offset_radians = M_2PI * (initial_offset / (double)coset_circle_div);
+        initial_theta_radians = M_2PI * (initial_offset / (double)coset_circle_div);
         if (DEBUG_COSETS && count % 50000 == 0) {
           System.out.println("gcd: " + coset_gcd + ", lcm: " + coset_lcm + ", cycles: " + cycles + ", initial_offset: " + initial_offset);
         }
@@ -633,14 +658,14 @@ public class MaurerLinesFunc extends VariationFunc {
       if (meta_mode == LINE_OFFSET_INCREMENT) {
         // coset_line_offset = meta_min_value + (current_meta_step * meta_step_value);'
         double line_offset = meta_value;
-        step_size_radians = M_2PI * (line_offset / 360);
-        cycles = (line_count * step_size_radians) / M_2PI;
+        theta_step_radians = M_2PI * (line_offset / 360);
+        cycles = (line_count * theta_step_radians) / M_2PI;
         // actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
         //      actual_step_size = M_2PI * (((int)(Math.random()* 60)+10)/360.0);
       }
       else if (meta_mode == INITIAL_OFFSET) {
         double initial_offset = meta_value;
-        initial_offset_radians = M_2PI * (initial_offset / 360);
+        initial_theta_radians = M_2PI * (initial_offset / 360);
       }
       else if (meta_mode == A_LINEAR_INCREMENT) {
         a = meta_value;
@@ -711,11 +736,11 @@ public class MaurerLinesFunc extends VariationFunc {
     
     // map to a Maurer Rose line
     // find nearest step
-    step_number = floor(t/step_size_radians);
+    step_number = floor(t/theta_step_radians);
     
     // find polar and cartesian coordinates for endpoints of Maure Rose line
-    theta1 = (step_number * step_size_radians) + initial_offset_radians;
-    theta2 = theta1 + step_size_radians;
+    theta1 = (step_number * theta_step_radians) + initial_theta_radians;
+    theta2 = theta1 + theta_step_radians;
     
     // reusing end_point1
     end_point1 = getCurveCoords(theta1, end_point1);
@@ -734,7 +759,20 @@ public class MaurerLinesFunc extends VariationFunc {
     // find the slope and length of the line
     double ydiff = y2 - y1;
     double xdiff = x2 - x1;
-    double m = ydiff / xdiff;  // slope
+   /* if (xdiff == 0) {
+      xdiff =
+    }
+    */
+
+    // slope of line (m in y=mx+b line equation)
+    double line_slope = ydiff / xdiff;  
+    // y-intercept of line (b in y=mx+b line equation)
+    double line_intercept; 
+    // special-casing for slope being NaN (xdiff = 0) ==> line_intercept set to NaN as well 
+    if (Double.isNaN(line_slope)) {
+      line_intercept = Double.NaN;
+    }     
+    else { line_intercept = y1 - (line_slope * x1); }
     
     double point_angle = getPointAngle(end_point1, end_point2);
     
@@ -746,11 +784,11 @@ public class MaurerLinesFunc extends VariationFunc {
     double line_angle = unscaled_line_angle / (M_PI/2.0);
     double line_length = Math.sqrt( (xdiff * xdiff) + (ydiff * ydiff));
     
-    // yoffset = [+-] m * d / (sqrt(1 + m^2))
-    double xoffset=0, yoffset=0, zoffset = 0;
+    // yoffset = [+-] line_slope * d / (sqrt(1 + line_slope^2))
+    // double xoffset=0, yoffset=0, zoffset = 0;
     
     double line_delta = 0;
-    double midlength = line_length/2;  // use midlength of Maurer line as radius
+    double midlength = line_length/2.0;  // use midlength of Maurer line as radius
     double rnd = pContext.random();
     double xmid = (x1 + x2)/2.0;
     double ymid = (y1 + y2)/2.0;
@@ -760,6 +798,7 @@ public class MaurerLinesFunc extends VariationFunc {
       /**
        *  overrides of rendering mode
        */
+      double xoffset=0, yoffset=0, zoffset = 0;
       double rand2 = Math.random();
       if (rand2 <= show_points_param) {
         // drawing Maurer anchor points instead of specified render_mode
@@ -803,19 +842,21 @@ public class MaurerLinesFunc extends VariationFunc {
       }
     }
     if (use_render_mode) {
+      double xoffset=0, yoffset=0, zoffset = 0;
       /**
        *   RENDER MODES
        */
       if (render_mode == STANDARD_LINES) {
         // draw lines
         line_delta = Math.random() * line_length;
-        xoffset = line_delta / Math.sqrt(1 + m*m);
+        xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
         if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-        yoffset = Math.abs(m * xoffset);
+        yoffset = Math.abs(line_slope * xoffset);
         if (y2 < y1) { yoffset = -1 * yoffset; }
         xout = x1 + xoffset;
         yout = y1 + yoffset;
       }
+  
       else if (render_mode == CIRCLES1) {
         // draw circles
         //   circles centered on midpoint of "Maurer line"
@@ -824,16 +865,18 @@ public class MaurerLinesFunc extends VariationFunc {
         double rad = midlength;
         xout = xmid + (rad * sin(ang));
         yout = ymid + (rad * cos(ang));
-        line_delta = ang;
+        // line_delta = ang;
+        line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
       }
       else if (render_mode == ZCIRCLES) {
         double ang = Math.random() * M_2PI;
         double rad = midlength;
-        line_delta = rad * cos(ang);
+        double mid_delta = rad * cos(ang);
         zout = rad * sin(ang);
-        // move along line, out from midpoint by line_delta
-        xout = xmid + (line_delta * cos(raw_line_angle));
-        yout = ymid + (line_delta * sin(raw_line_angle));
+        // move along line, out from midpoint by mid_delta
+        xout = xmid + (mid_delta * cos(raw_line_angle));
+        yout = ymid + (mid_delta * sin(raw_line_angle));
+        line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
       }
       
       /*      else if (render_mode == CIRCLES2) {
@@ -841,12 +884,14 @@ public class MaurerLinesFunc extends VariationFunc {
       }
       */
       else if (render_mode == QUADRATIC_BEZIER || render_mode == QUADRATIC_BEZIER_REFLECTED || 
-              render_mode == QUADRATIC_BEZIER_BOTH || render_mode == QUADRATIC_BEZIER_ALTERNATE) {
+              render_mode == QUADRATIC_BEZIER_BOTH || render_mode == QUADRATIC_BEZIER_ALTERNATE || 
+              render_mode == ZBEZIER || render_mode == ZBEZIER2) {
         // use origin (0,0) as control point, and endpoints of Maurer line as Bezier curve endpoints
         //    (since using origin as control point, can drop middle term of standard Bezier curve calc
-        double bt = Math.random();
+        double bt = Math.random();  // want bt => [0:1]
         double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
         double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+        line_delta = bt * line_length;
         if (render_mode == QUADRATIC_BEZIER) {
           xout = ax;
           yout = ay;
@@ -880,6 +925,182 @@ public class MaurerLinesFunc extends VariationFunc {
             double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
             xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
             yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
+          }
+        }
+        else if (render_mode == ZBEZIER) {
+          zout = ay;
+          xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
+          if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+          yoffset = Math.abs(line_slope * xoffset);
+          if (y2 < y1) { yoffset = -1 * yoffset; }
+          xout = x1 + xoffset;
+          yout = y1 + yoffset;
+        }
+        else if (render_mode == ZBEZIER2) {
+          // xout = x1 + (line_delta * cos(raw_line_angle));
+          // yout = y1 + (line_delta * sin(raw_line_angle));
+          // unrotate: 
+          // oR.x = oP.x + (o.x - oP.x) * cos(theta) - (o.y - oP.y) * sin(theta)
+        // oR.y = oP.y + (o.x - oP.x) * sin(theta) + (o.y - oP.y) * cos(theta)
+          /* double newx = x1 + ((ax - x1) * cos(-raw_line_angle)) - ((ay - y1) * sin(-raw_line_angle));
+          double newy = y1 + ((ax - x1) * sin(-raw_line_angle)) + ((ay - y1) * cos(-raw_line_angle));
+          xout = ax;
+          yout = (line_slope * xout) + line_intercept;
+          zout = newy - y1;
+          */
+          //xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
+          //if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
+          //yoffset = Math.abs(line_slope * xoffset);
+          //if (y2 < y1) { yoffset = -1 * yoffset; }
+          xout = ax;
+          // yout = (line_slope * xout) + y1;
+          yout = (line_slope * xout) + line_intercept;
+         //  yout = y1 + ()
+          zout = ((ax - x1) * sin(-raw_line_angle)) + ((ay - y1) * cos(-raw_line_angle));
+        }
+      }
+      else if (render_mode == ELLIPSE1) {
+        double ang = Math.random() * M_2PI;
+        // double ang = (Math.random() * M_2PI) - M_PI;
+        // offset along line (relative to start of line)
+        double relative_line_offset = (midlength * render_modifier1) * cos(ang);
+        line_delta = midlength * cos(ang);
+        
+        // offset perpendicular to line:
+        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
+        //   then adding 1 to gets range=>[0:2], 
+        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
+        double relative_perp_offset = (midlength * render_modifier2) * sin(ang);
+        // double relative_perp_offset = midlength * sin(ang);
+                
+        // shift to make offsets relative to start point (x1, y1)
+        double line_offset = relative_line_offset + x1 - midlength;
+        double perp_offset = relative_perp_offset + y1;
+        // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
+        // should already have angle (raw_line_angle)
+        // 2D rotation transformation of point B about a given fixed point A to give point C
+        // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+        // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+
+        // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
+        // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
+        double newx = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI)) - ((perp_offset - y1) * sin(raw_line_angle + M_PI));
+        double newy = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI)) + ((perp_offset - y1) * cos(raw_line_angle + M_PI));
+        xout = newx;
+        yout = newy;
+        // xout = line_offset;
+        // yout = perp_offset;
+      }
+      else if (render_mode == ELLIPSE2) {
+        // ang ==> [-Pi : +Pi]  or [ 0 : 2Pi ] ?
+        // double  ang = (Math.random() * M_2PI) - M_PI;  // ==> [ -Pi : +Pi ]
+        double ang = (Math.random() * M_2PI);   // ==> [ 0 : 2Pi ]
+
+        // offset along line (relative to start of line)
+        // if render_modifier1 == 1, then ranges are
+        //    delta_from_midlength ==> [-midlength : +midlength]
+        //    delta_from_start ==> [0 : line_length]
+        double delta_from_midlength = (midlength * render_modifier1) * cos(ang);
+        double delta_from_start = midlength - delta_from_midlength;
+        line_delta = delta_from_start;
+        
+        // offset perpendicular to line:
+        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
+        //   then adding 1 to gets range=>[0:2], 
+        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
+        double relative_perp_offset = (midlength * render_modifier2) * sin(ang);
+                
+        // shift to make offsets relative to start point (x1, y1)
+        double line_offset = delta_from_midlength + x1 - midlength;
+        double perp_offset = relative_perp_offset + y1;
+        // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
+        // should already have angle (raw_line_angle)
+        // 2D rotation transformation of point B about a given fixed point A to give point C
+        // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+        // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+
+        // drop last term for xout and yout since y offset (perp_offset) = y1  [[ or B.y = A.y in above equation ]
+        // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
+        // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
+        xout = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI));  
+        yout = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI));  // drop last term since y offset (perp_offset) = 0
+        zout = relative_perp_offset;
+
+      }
+      else if (render_mode == SINE_WAVE || render_mode == SINE_WAVE_REFLECTED || 
+               render_mode == SINE_WAVE_BOTH || render_mode == SINE_WAVE_ALTERNATE ||
+               render_mode == ZSINE || render_mode == ZSINE2 || render_mode == ZSINE3 || render_mode == ZSINE4) {
+        double sine_scale = d_param;
+        // range of [0 -> 2Pi ]
+        double ang = Math.random() * M_2PI;
+        
+        // offset along line (relative to start of line)
+        double relative_line_offset = ang * (line_length/M_2PI);
+        line_delta = relative_line_offset;
+        // offset perpendicular to line:
+        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
+        //   then adding 1 to gets range=>[0:2], 
+        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
+        double relative_perp_offset = ((line_length/2) * sine_scale) * ((sin(ang - (M_PI/2))) + 1);
+        // shift to make offsets relative to start point (x1, y1)
+        double line_offset = relative_line_offset + x1;
+        double perp_offset = relative_perp_offset + y1;
+        // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
+        // should already have angle (raw_line_angle)
+        // 2D rotation about a given point  
+        // oR.x = oP.x + (o.x - oP.x) * cos(theta) - (o.y - oP.y) * sin(theta)
+        // oR.y = oP.y + (o.x - oP.x) * sin(theta) + (o.y - oP.y) * cos(theta)
+
+        double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
+        double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
+        
+        if (render_mode == SINE_WAVE) {
+          xout = newx;
+          yout = newy;
+        }
+        else if (render_mode == SINE_WAVE_REFLECTED) {
+          double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
+        }
+        else if (render_mode == SINE_WAVE_BOTH) {
+          if (Math.random() < 0.5) {
+            xout = newx;
+            yout = newy;
+          }
+          else {
+            double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+            xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
+            yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
+          }
+        }
+        else if (render_mode == SINE_WAVE_ALTERNATE) {
+          if (step_number % 2 == 0) {
+            xout = newx;
+            yout = newy;
+          }
+          else {
+            double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+            xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
+            yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
+          }
+        }
+        else if (render_mode == ZSINE) {
+          xout = x1 + (relative_line_offset * cos(raw_line_angle));
+          // can save a sin() call by using slope-intercept once have xout
+          // yout = y1 + (relative_line_offset * sin(raw_line_angle));
+          yout = (line_slope * xout) + line_intercept;
+          zout = relative_perp_offset; // plus z1?
+        }
+        else if (render_mode == ZSINE2) {
+          xout = x1 + (relative_line_offset * cos(raw_line_angle));
+          // yout = y1 + (relative_line_offset * sin(raw_line_angle));
+          yout = (line_slope * xout) + line_intercept;
+          if (Math.random() < 0.5) {
+            zout = relative_perp_offset; // plus z1?
+          }
+          else {
+            zout = -relative_perp_offset;
           }
         }
       }
@@ -1212,16 +1433,17 @@ public class MaurerLinesFunc extends VariationFunc {
   
   public LinkedHashMap getParameters() {
     LinkedHashMap plist = new LinkedHashMap(100);
-    
+    plist.put(PARAM_CURVE_MODE, curve_mode);    
     plist.put(PARAM_A, a_param);
     plist.put(PARAM_B, b_param);
     plist.put(PARAM_C, c_param);
     plist.put(PARAM_D, d_param);
-    plist.put(PARAM_RENDER_MODE, render_mode);
-    plist.put(PARAM_LINE_OFFSET_DEGREES, line_offset_param);
-    plist.put(PARAM_INITIAL_OFFSET_DEGREES, initial_offset_param);
+    plist.put(PARAM_THETA_STEP_SIZE_DEGREES, theta_step_size_param);
+    plist.put(PARAM_INITIAL_THETA_DEGREES, initial_theta_param);
     plist.put(PARAM_LINE_COUNT, line_count);
-    plist.put(PARAM_CURVE_MODE, curve_mode);
+    plist.put(PARAM_RENDER_MODE, render_mode);
+    plist.put(PARAM_RENDER_MODIFIER1, render_modifier1);
+    plist.put(PARAM_RENDER_MODIFIER2, render_modifier2);
     plist.put(PARAM_USE_COSETS, (use_cosets ? 1 : 0));
     
     plist.put(PARAM_DIRECT_COLOR_MEASURE, direct_color_measure);
@@ -1277,10 +1499,14 @@ public class MaurerLinesFunc extends VariationFunc {
       d_param = pValue;
     else if (PARAM_RENDER_MODE.equalsIgnoreCase(pName))
       render_mode = (int)pValue;
-    else if (PARAM_LINE_OFFSET_DEGREES.equalsIgnoreCase(pName))
-      line_offset_param = pValue;
-    else if (PARAM_INITIAL_OFFSET_DEGREES.equalsIgnoreCase(pName))
-      initial_offset_param = pValue;
+    else if (PARAM_RENDER_MODIFIER1.equalsIgnoreCase(pName))
+      render_modifier1 = pValue;
+    else if (PARAM_RENDER_MODIFIER2.equalsIgnoreCase(pName))
+      render_modifier2 = pValue;
+    else if (PARAM_THETA_STEP_SIZE_DEGREES.equalsIgnoreCase(pName))
+      theta_step_size_param = pValue;
+    else if (PARAM_INITIAL_THETA_DEGREES.equalsIgnoreCase(pName))
+      initial_theta_param = pValue;
     else if (PARAM_LINE_COUNT.equalsIgnoreCase(pName))
       line_count = pValue;
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
