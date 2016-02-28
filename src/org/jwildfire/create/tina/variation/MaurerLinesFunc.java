@@ -33,6 +33,7 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -100,7 +101,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_RANDOMIZE = "randomize";
   
   private static final int CIRCLE = 0;
-  private static final int RECTANGLE = 1;
+  private static final int POLYGON = 1;
   private static final int ELLIPSE = 2;
   private static final int RHODONEA = 3;
   private static final int EPITROCHOID = 4;
@@ -114,6 +115,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int FAY_BUTTERFLY = 12;
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
+
 
   // color mode
   // 0 NORMAL --> normal (no direct coloring)
@@ -159,12 +161,12 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int SINE_WAVE_BOTH = 14;
   private static final int SINE_WAVE_ALTERNATE = 15;
   private static final int ZSINE = 16;
-  private static final int ZSINE2 = 17;
-  private static final int ZSINE3 = 18;
-  private static final int ZSINE4 = 19;
+  private static final int ZSINE_BOTH = 17;
+  private static final int ZSINE_REFLECTED = 18;
+  private static final int ZSINE_ALTERNATE = 19;
   private static final int ZBEZIER2 = 21;
-  private static final int ELLIPSE1 = 22;
-  private static final int ELLIPSE2 = 23;
+  private static final int ELLIPSES = 22;
+  private static final int ZELLIPSES = 23;
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -240,7 +242,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double initial_theta_param = 0; // specified in degrees
   private double render_mode = STANDARD_LINES;
   private double render_modifier1 = 1.0;
-  private double render_modifier2 = 0.5;
+  private double render_modifier2 = 1.0;
   
   // private double coset_line_offset;
   private double theta_step_radians;
@@ -300,14 +302,201 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private long count = 0;
   
+  ParametricCurve curve;
+  
+  class ParametricCurve {
+    public void getCurvePoint(double t, DoublePoint2D point) { }
+
+    public DoublePoint2D getCurvePoint(double t) {
+      DoublePoint2D outpoint = new DoublePoint2D();
+      getCurvePoint(t, outpoint);
+      return outpoint;
+    }
+  }
+  
+  class RhodoneaCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double k = a/b;
+      double r = cos(k * t) + c;
+      // if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+            
+  }
+  
+  class CircleCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double r = a;
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
+  class PolygonCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+    }
+  }
+  
+  class EllipseCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      point.x = a * cos(t);
+      point.y = b * sin(t);
+    }
+  }
+  
+  class EpitrochoidCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      // option 1:
+      // double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
+      // double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
+      // option 2:
+      double x = ((a + b) * cos(t)) - (c * cos(((a + b)/b) * t));
+      double y = ((a + b) * sin(t)) - (c * sin(((a + b)/b) * t));
+      point.x = x;
+      point.y = y;
+    }
+  }
+  
+  class HypotrochoidCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      // option 1:
+      // double x = ((a_radius - b_radius) * cos(theta)) + (c_radius * cos(((a_radius - b_radius)/b_radius) * theta));
+      // double y = ((a_radius - b_radius) * sin(theta)) - (c_radius * sin(((a_radius - b_radius)/b_radius) * theta));
+      // option 2:
+      double x = ((a - b) * cos(t)) + (c * cos(((a - b)/b) * t));
+      double y = ((a - b) * sin(t)) - (c * sin(((a - b)/b) * t));
+      point.x = x;
+      point.y = y;
+    }
+  }
+  
+  class EpispiralCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double k = a/b;
+      double r = (1/cos(k * t)) + c;
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
+  class LissajousCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      // x = A * sin(a*t + d)
+      // y = B * sin(b*t);
+      // for now keep A = B = 1
+      double x = sin((a*t) + c);
+      double y = sin(b*t);
+      point.x = x;
+      point.y = y;
+    }
+  }
+  
+  class SupershapeCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      // original supershape variables: a, b, line_slope, n1, n2, n3
+      // a = line_slope
+      // b = n1
+      // c = n2
+      // d = n3
+      double a1 = 1;
+      double b1 = 1;
+      double m = a;
+      double n1 = b;
+      double n2 = c;
+      double n3 = d;
+      
+      double r = pow(
+              (pow( fabs( (cos(m * t / 4))/a1), n2) +
+                      pow( fabs( (sin(m * t / 4))/b1), n3)),
+              (-1/n1));
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
+  class StarrCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double r = 2 + (sin(a * t)/2);
+      double t2 = t + (sin(b * t)/c);
+      point.x = r * cos(t2);
+      point.y = r * sin(t2);
+    }
+  }
+  
+  class FarrisMysteryCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      point.x = cos(t)/a + cos(6*t)/b + sin(14*t)/c;
+      point.y = sin(t)/a + sin(6*t)/b + cos(14*t)/c;
+      // can also be represented more concisely with complex numbers:
+      //   c(t) = (e^(i*t))/a + (e^(6*i*t))/b + (e^(-14*i*t))/c
+      //   should break out into a fully parameterized version with exponent parameters as well
+    }
+  }
+  
+  class WagonFancifulCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      point.x = sin(a * t) * cos(c * t);
+      point.y = sin(b * t) * sin(c * t);
+    }
+  }
+  
+  class FayButterflyCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
+      // y = sin(t)*r
+      // x = cos(t)*r
+      double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
+      point.x = r * sin(t);
+      point.y = r * cos(t);
+    }
+  }
+  
+  class Rigge1Curve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double r = (1 - cos(a * t)) + (1 - cos(a * b * t));
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
+  class Rigge2Curve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double r = (1 - cos(a * t)) - (1 - cos(a * b * t));
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
+  
   /**
    *  only using z coordinate for specific modes
    */
-  class DoublePoint3D {
+  
+  class DoublePoint2D {
     public double x;
     public double y;
+  }
+
+  class DoublePoint3D extends DoublePoint2D {
     public double z;
   }
+  
   private DoublePoint3D end_point1 = new DoublePoint3D();
   private DoublePoint3D end_point2 = new DoublePoint3D();
   private DoublePoint3D curve_point = new DoublePoint3D();
@@ -318,6 +507,29 @@ public class MaurerLinesFunc extends VariationFunc {
     public int operator = AND;  // AND, OR, XOR, ANOTB, BNOTA
     public double low_thresh = 0;
     public double high_thresh = 1;
+  }
+  
+  // need this method since can't do a class.newInstance() call on inner classes
+  ///    otherwise would keep array of curve classes and instantiate via curve_classes[curve_mode].newInstance()
+  public ParametricCurve createCurve(int curve_index) {
+    ParametricCurve new_curve;
+    if (curve_index == CIRCLE) { new_curve = new CircleCurve(); }
+    else if (curve_index == POLYGON) { new_curve = new PolygonCurve(); }
+    else if (curve_index == ELLIPSE) { new_curve = new PolygonCurve(); }
+    else if (curve_index == RHODONEA) { new_curve = new RhodoneaCurve(); }
+    else if (curve_index == EPITROCHOID) { new_curve = new EpitrochoidCurve(); }
+    else if (curve_index == HYPOTROCHOID) { new_curve = new HypotrochoidCurve(); }
+    else if (curve_index == LISSAJOUS) { new_curve = new LissajousCurve(); }
+    else if (curve_index == EPISPIRAL) { new_curve = new EpispiralCurve(); }
+    else if (curve_index == SUPERSHAPE) { new_curve = new SupershapeCurve(); }
+    else if (curve_index == STARR_CURVE) { new_curve = new StarrCurve(); }
+    else if (curve_index == FARRIS_MYSTERY_CURVE) { new_curve = new FarrisMysteryCurve(); }
+    else if (curve_index == WAGON_FANCIFUL_CURVE) { new_curve = new WagonFancifulCurve(); }
+    else if (curve_index == FAY_BUTTERFLY) { new_curve = new FayButterflyCurve(); }
+    else if (curve_index == RIGGE1) { new_curve = new Rigge1Curve(); }
+    else if (curve_index == RIGGE2) { new_curve = new Rigge2Curve(); }
+    else { new_curve = new CircleCurve(); } // default to circle curve
+    return new_curve;
   }
   
   // for rhodonea:
@@ -336,6 +548,7 @@ public class MaurerLinesFunc extends VariationFunc {
   //       c = c_radius
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    curve = createCurve(curve_mode);
     
     // rhodonea init
     /*
@@ -404,13 +617,15 @@ public class MaurerLinesFunc extends VariationFunc {
       // theta1 = theta_step_radians * (int)(Math.random()*line_count);
       theta1 = Math.random() * cycles * M_2PI;
       // reusing end_point1
-      end_point1 = getCurveCoords(theta1, end_point1);
+//      end_point1 = getCurveCoords(theta1, end_point1);
+      curve.getCurvePoint(theta1, end_point1);
       x1 = end_point1.x;
       y1 = end_point1.y;
       // double sampled_step_size = getStepSize();
       theta2 = theta1 + theta_step_radians;
       // reusing end_point2
-      end_point2 = getCurveCoords(theta2, end_point2);
+      // end_point2 = getCurveCoords(theta2, end_point2);
+      curve.getCurvePoint(theta2, end_point2);
       x2 = end_point2.x;
       y2 = end_point2.y;
       
@@ -476,152 +691,6 @@ public class MaurerLinesFunc extends VariationFunc {
     double point_angle = abs(a2 - a1);
     if (point_angle > M_PI) { point_angle = M_2PI - point_angle; }
     return point_angle;
-  }
-  
-  public DoublePoint3D getCurveCoords(double theta, DoublePoint3D point) {
-    if (curve_mode == CIRCLE) {
-      double r = a;
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == RECTANGLE) {
-      double t = theta % M_2PI;
-      if (t < 0) { t = (0.5 - t); }
-      
-      if (t <= 0.25) {
-        point.x = a/2;
-        // curve_point.y = (s * 4 * b) - b/2;
-        point.y = (t * 4 * b) - b/2;
-      }
-      else if (t <= 0.5) {
-        point.x = ((t-0.25) * 4 * a) - a/2;
-        point.y = b/2;
-      }
-      else if (t <= 0.75) {
-        point.x = -a/2;
-        point.y = ((t-0.5) * 4 * b) - b/2;
-      }
-      else {
-        point.x = ((t-0.75) * 4 * a) -a/2;
-        point.y = -b/2;
-      }
-    }
-    else if (curve_mode == ELLIPSE) {
-      point.x = a * cos(theta);
-      point.y = b * sin(theta);
-      // x = a cos(t) ==> let a param actually be +/- of ellipse bound from point1 and point2
-      // y = b cos(t) ==> let b param actaull be specified in terms of scaling relative to a
-      //                  or scaling relative to line length
-      //                  or scaling relative to ellipse length
-      //             
-      
-    }
-    else if (curve_mode == RHODONEA) {
-      double k = a/b;
-      double r = cos(k * theta) + c;
-      if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == EPISPIRAL) {
-      double k = a/b;
-      double r = (1/cos(k * theta)) + c;
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == EPITROCHOID) {
-      // option 1:
-      // double x = ((a_radius + b_radius) * cos(theta)) - (c_radius * cos(((a_radius + b_radius)/b_radius) * theta));
-      // double y = ((a_radius + b_radius) * sin(theta)) - (c_radius * sin(((a_radius + b_radius)/b_radius) * theta));
-      // option 2:
-      double x = ((a + b) * cos(theta)) - (c * cos(((a + b)/b) * theta));
-      double y = ((a + b) * sin(theta)) - (c * sin(((a + b)/b) * theta));
-      point.x = x;
-      point.y = y;
-    }
-    else if (curve_mode == HYPOTROCHOID) {
-      // option 1:
-      // double x = ((a_radius - b_radius) * cos(theta)) + (c_radius * cos(((a_radius - b_radius)/b_radius) * theta));
-      // double y = ((a_radius - b_radius) * sin(theta)) - (c_radius * sin(((a_radius - b_radius)/b_radius) * theta));
-      // option 2:
-      double x = ((a - b) * cos(theta)) + (c * cos(((a - b)/b) * theta));
-      double y = ((a - b) * sin(theta)) - (c * sin(((a - b)/b) * theta));
-      point.x = x;
-      point.y = y;
-    }
-    else if (curve_mode == LISSAJOUS) {
-      // x = A * sin(a*t + d)
-      // y = B * sin(b*t);
-      // for now keep A = B = 1
-      double x = sin((a*theta) + c);
-      double y = sin(b*theta);
-      point.x = x;
-      point.y = y;
-    }
-    else if (curve_mode == SUPERSHAPE) {
-      // original supershape variables: a, b, line_slope, n1, n2, n3
-      // a = line_slope
-      // b = n1
-      // c = n2
-      // d = n3
-      double a1 = 1;
-      double b1 = 1;
-      double m = a;
-      double n1 = b;
-      double n2 = c;
-      double n3 = d;
-      
-      double r = pow(
-              (pow( fabs( (cos(m * theta / 4))/a1), n2) +
-                      pow( fabs( (sin(m * theta / 4))/b1), n3)),
-              (-1/n1));
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == STARR_CURVE) {
-      double r = 2 + (sin(a * theta)/2);
-      theta = theta + (sin(b * theta)/c);
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == FARRIS_MYSTERY_CURVE) {
-      double t = theta;
-      point.x = cos(t)/a + cos(6*t)/b + sin(14*t)/c;
-      point.y = sin(t)/a + sin(6*t)/b + cos(14*t)/c;
-      // can also be represented more concisely with complex numbers:
-      //   c(t) = (e^(i*t))/a + (e^(6*i*t))/b + (e^(-14*i*t))/c
-      //   should break out into a fully parameterized version with exponent parameters as well
-    }
-    else if (curve_mode == WAGON_FANCIFUL_CURVE) {
-      point.x = sin(a * theta) * cos(c * theta);
-      point.y = sin(b * theta) * sin(c * theta);
-    }
-    else if (curve_mode == FAY_BUTTERFLY) {
-      // r = e^cos(t) - 2cos(4t) - sin^5(t/12)
-      // y = sin(t)*r
-      // x = cos(t)*r
-      double t = theta;
-      // double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5) + offset);
-      double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
-      point.x = r * sin(t);
-      point.y = r * cos(t);
-    }
-    else if (curve_mode == RIGGE1) {
-      double r = (1 - cos(a * theta)) + (1 - cos(a * b * theta));
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else if (curve_mode == RIGGE2) {
-      double r = (1 - cos(a * theta)) - (1 - cos(a * b * theta));
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    else {  // default to circle
-      double r = a;
-      point.x = r * cos(theta);
-      point.y = r * sin(theta);
-    }
-    return point;
   }
   
   public void setValues() {
@@ -722,7 +791,8 @@ public class MaurerLinesFunc extends VariationFunc {
     double t = cycles * tin; // theta parameter for curve calculation
     
     // reusing curve_point
-    curve_point = getCurveCoords(t, curve_point);
+    // curve_point = getCurveCoords(t, curve_point);
+    curve.getCurvePoint(t, curve_point);
     
     double x = curve_point.x;
     double y = curve_point.y;
@@ -743,11 +813,13 @@ public class MaurerLinesFunc extends VariationFunc {
     theta2 = theta1 + theta_step_radians;
     
     // reusing end_point1
-    end_point1 = getCurveCoords(theta1, end_point1);
+    // end_point1 = getCurveCoords(theta1, end_point1);
+    curve.getCurvePoint(theta1, end_point1);
     x1 = end_point1.x;
     y1 = end_point1.y;
     // reusing end_point2
-    end_point2 = getCurveCoords(theta2, end_point2);
+    // end_point2 = getCurveCoords(theta2, end_point2);
+    curve.getCurvePoint(theta2, end_point2);
     x2 = end_point2.x;
     y2 = end_point2.y;
    /* if (DEBUG_COSETS && count % 50000 == 0) {
@@ -878,19 +950,39 @@ public class MaurerLinesFunc extends VariationFunc {
         yout = ymid + (mid_delta * sin(raw_line_angle));
         line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
       }
-      
-      /*      else if (render_mode == CIRCLES2) {
-      
-      }
-      */
+
       else if (render_mode == QUADRATIC_BEZIER || render_mode == QUADRATIC_BEZIER_REFLECTED || 
               render_mode == QUADRATIC_BEZIER_BOTH || render_mode == QUADRATIC_BEZIER_ALTERNATE || 
               render_mode == ZBEZIER || render_mode == ZBEZIER2) {
         // use origin (0,0) as control point, and endpoints of Maurer line as Bezier curve endpoints
         //    (since using origin as control point, can drop middle term of standard Bezier curve calc
         double bt = Math.random();  // want bt => [0:1]
-        double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
-        double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+        double ax, ay;
+        // use full formula with control point
+        if (render_modifier1 != 1 || render_modifier2 != 1) {
+          // render_modifier1 controls relative radius of control point
+          //   (fraction of distance from midpoint of line to origin,
+          //    so as render_modifier range: [0=>1] then control point radius range: [midpoint_radius=>0]
+          // render_modifier2 controls relative angle of control point
+          //    (angle from midpoint-origin line to control point)
+          //    so if render_modifier = 1 then control point angle delta = 0
+          double midpoint_radius = sqrt(xmid*xmid + ymid*ymid);
+          double midpoint_angle = atan2(ymid, xmid);
+          double cradius = (1 - render_modifier1) * midpoint_radius;
+          double cangle = midpoint_angle + (M_2PI - (render_modifier2*M_2PI));
+          // double cangle = midpoint_angle;
+          double cx = cradius * cos(cangle);
+          double cy = cradius * sin(cangle);
+          ax = ((1-bt) * (1-bt) * x1) + (2*(1-bt)*bt*cx) + (bt * bt * x2);
+          ay = ((1-bt) * (1-bt) * y1) + (2*(1-bt)*bt*cy) + (bt * bt * y2);
+        }
+        else {
+          // control point is origin (0,0), so can drop control point term of quadratic Bezier
+          //    and therefore skip midradius, midangle etc. control point calcs
+          ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
+          ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
+        }
+        
         line_delta = bt * line_length;
         if (render_mode == QUADRATIC_BEZIER) {
           xout = ax;
@@ -959,7 +1051,7 @@ public class MaurerLinesFunc extends VariationFunc {
           zout = ((ax - x1) * sin(-raw_line_angle)) + ((ay - y1) * cos(-raw_line_angle));
         }
       }
-      else if (render_mode == ELLIPSE1) {
+      else if (render_mode == ELLIPSES) {
         double ang = Math.random() * M_2PI;
         // double ang = (Math.random() * M_2PI) - M_PI;
         // offset along line (relative to start of line)
@@ -969,8 +1061,8 @@ public class MaurerLinesFunc extends VariationFunc {
         // offset perpendicular to line:
         // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
         //   then adding 1 to gets range=>[0:2], 
-        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
-        double relative_perp_offset = (midlength * render_modifier2) * sin(ang);
+        //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
+        double relative_perp_offset = (midlength * (render_modifier2/2)) * sin(ang);
         // double relative_perp_offset = midlength * sin(ang);
                 
         // shift to make offsets relative to start point (x1, y1)
@@ -991,7 +1083,7 @@ public class MaurerLinesFunc extends VariationFunc {
         // xout = line_offset;
         // yout = perp_offset;
       }
-      else if (render_mode == ELLIPSE2) {
+      else if (render_mode == ZELLIPSES) {
         // ang ==> [-Pi : +Pi]  or [ 0 : 2Pi ] ?
         // double  ang = (Math.random() * M_2PI) - M_PI;  // ==> [ -Pi : +Pi ]
         double ang = (Math.random() * M_2PI);   // ==> [ 0 : 2Pi ]
@@ -1007,8 +1099,8 @@ public class MaurerLinesFunc extends VariationFunc {
         // offset perpendicular to line:
         // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
         //   then adding 1 to gets range=>[0:2], 
-        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
-        double relative_perp_offset = (midlength * render_modifier2) * sin(ang);
+        //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
+        double relative_perp_offset = (midlength * (render_modifier2/2))* sin(ang);
                 
         // shift to make offsets relative to start point (x1, y1)
         double line_offset = delta_from_midlength + x1 - midlength;
@@ -1029,19 +1121,27 @@ public class MaurerLinesFunc extends VariationFunc {
       }
       else if (render_mode == SINE_WAVE || render_mode == SINE_WAVE_REFLECTED || 
                render_mode == SINE_WAVE_BOTH || render_mode == SINE_WAVE_ALTERNATE ||
-               render_mode == ZSINE || render_mode == ZSINE2 || render_mode == ZSINE3 || render_mode == ZSINE4) {
-        double sine_scale = d_param;
+               render_mode == ZSINE || render_mode == ZSINE_REFLECTED || render_mode == ZSINE_BOTH || render_mode == ZSINE_ALTERNATE) {
+        // amplitude calculated such that when render_modifier = 1, relative_perp_offset range: [0 ==> line_length/2]
+        double amplitude = (line_length/4) * render_modifier1; 
+        double frequency = render_modifier2;
         // range of [0 -> 2Pi ]
         double ang = Math.random() * M_2PI;
         
-        // offset along line (relative to start of line)
+        // offset along line (relative to start of line) ==> [0=>line_length]
         double relative_line_offset = ang * (line_length/M_2PI);
         line_delta = relative_line_offset;
         // offset perpendicular to line:
-        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
-        //   then adding 1 to gets range=>[0:2], 
-        //   then scaling by line_length/2 * sine_scale gets perp_offset: [0:(line_length*sine_scale)]
-        double relative_perp_offset = ((line_length/2) * sine_scale) * ((sin(ang - (M_PI/2))) + 1);
+        // shift angle by -pi to get cos range=>[-1:1] as ang => [0:2Pi], 
+        // find perp offset for endpoints:
+        //     since midpoint is always at middle of range (0), and using cos, 
+        //     endpoints should have same offset, so use either one
+        //     endpoints are at [+/-](Pi*frequency)
+        double endpoint_perp_offset = amplitude * cos(M_PI * frequency);  // so at amp=1, freq=1, ==> -1
+        double relative_perp_offset = amplitude * ( cos((ang - M_PI) * frequency) );
+        // adjust relative_per_offset so endpoints are at 0
+        relative_perp_offset = relative_perp_offset - endpoint_perp_offset;
+
         // shift to make offsets relative to start point (x1, y1)
         double line_offset = relative_line_offset + x1;
         double perp_offset = relative_perp_offset + y1;
@@ -1092,7 +1192,7 @@ public class MaurerLinesFunc extends VariationFunc {
           yout = (line_slope * xout) + line_intercept;
           zout = relative_perp_offset; // plus z1?
         }
-        else if (render_mode == ZSINE2) {
+        else if (render_mode == ZSINE_BOTH) {
           xout = x1 + (relative_line_offset * cos(raw_line_angle));
           // yout = y1 + (relative_line_offset * sin(raw_line_angle));
           yout = (line_slope * xout) + line_intercept;
@@ -1185,6 +1285,8 @@ public class MaurerLinesFunc extends VariationFunc {
           val = line_length;
           sampled_vals = sampled_line_lengths;
         }
+        
+        
         if (fmode == BAND_PASS_VALUE|| fmode == BAND_STOP_VALUE) {
           low_thresh = mfilter.low_thresh;
           high_thresh = mfilter.high_thresh;
