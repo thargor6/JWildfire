@@ -85,6 +85,7 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private static final String PARAM_RENDER_MODIFIER1 = "render_modifier1";
   private static final String PARAM_RENDER_MODIFIER2 = "render_modifier2";
+  private static final String PARAM_RENDER_MODIFIER3 = "render_modifier3";
   
   private static final String PARAM_META_MODE = "meta_mode";
   private static final String PARAM_META_MIN_VALUE = "meta_min_step";
@@ -167,6 +168,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int ZBEZIER2 = 21;
   private static final int ELLIPSES = 22;
   private static final int ZELLIPSES = 23;
+  private static final int KOCHANEK_BARTELS_SPLINE = 25;
+  private static final int CUBIC_HERMITE_SPLINE = 26;
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -243,6 +246,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double render_mode = STANDARD_LINES;
   private double render_modifier1 = 1.0;
   private double render_modifier2 = 1.0;
+  private double render_modifier3 = 1.0;
   
   // private double coset_line_offset;
   private double theta_step_radians;
@@ -496,10 +500,17 @@ public class MaurerLinesFunc extends VariationFunc {
   class DoublePoint3D extends DoublePoint2D {
     public double z;
   }
-  
+
+    private DoublePoint3D curve_point = new DoublePoint3D();
   private DoublePoint3D end_point1 = new DoublePoint3D();
   private DoublePoint3D end_point2 = new DoublePoint3D();
-  private DoublePoint3D curve_point = new DoublePoint3D();
+  // end_point0 (point on curve one step before current Maurer line endpoints)
+  //     used for Kochanek-Bartels spline interpolation, possibly other uses in the future
+  private DoublePoint3D end_point0 = new DoublePoint3D();
+  // end_point1 (point on curve one step after current Maurer line endpoints);
+  //     used for Kochanek-Bartels spline interpolation, possibly other uses in the future
+  private DoublePoint3D end_point3 = new DoublePoint3D();
+
   
   class MaurerFilter {
     public int mode = BAND_PASS_VALUE; // off, percentile/value/?, bandpass/bandstop
@@ -1204,6 +1215,141 @@ public class MaurerLinesFunc extends VariationFunc {
           }
         }
       }
+      else if (render_mode == KOCHANEK_BARTELS_SPLINE) {
+        // cobbled together from:
+        // Online:
+        //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
+        //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+        //    http://paulbourke.net/miscellaneous/interpolation/
+        //    http://cubic.org/docs/hermite.htm
+        // Original Paper: "Interpolating splines with local tension, continuity, and bias control", Kochanek & Bartels
+        // Reference Book: "Curves and Surfaces for Computer Graphics", David Saloman
+        // GDC2012 Presentation: "Interpolation and Splines", Squirrel Eiserloh
+        //  
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // have points p1 and p2, get p0 and p3 (previous point and next point)
+        double theta0 = theta1 - theta_step_radians;
+        double theta3 = theta2 + theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point0.x;
+        double y3 = end_point0.y;
+
+        // but want defaults for tension, bias, continuity to be 0?
+        double tension = render_modifier1;
+        double continuity = render_modifier2;
+        double bias = render_modifier3;
+
+        // m2 ==> KB-calculated tangent for end_point2
+        double c110 = (1-tension)*(1+bias)*(1+continuity)/2;
+        double c121 = (1-tension)*(1-bias)*(1-continuity)/2;
+        double c221 = (1-tension)*(1+bias)*(1-continuity)/2;
+        double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
+
+        // m1 ==> KB-calculated tangent for end_point1        
+        // m2 ==> KB-calculated tangent for end_point1        
+        double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
+        double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
+        
+        double m1y = (c110 * (y1-y0)) + (c121 * (y2-y1));
+        double m2y = (c221 * (y2-y1)) + (c232 * (y3-y2));
+        
+        double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
+        double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      
+      else if (render_mode == CUBIC_HERMITE_SPLINE) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // have points p1 and p2, get p0 and p3 (previous point and next point)
+        /*
+        double theta0 = theta1 - theta_step_radians;
+        double theta3 = theta2 + theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point0.x;
+        double y3 = end_point0.y;
+        */
+
+        /*
+        // but want defaults for tension, bias, continuity to be 0?
+        double tension = render_modifier1;
+        double continuity = render_modifier2;
+        double bias = render_modifier3;
+
+        // m2 ==> KB-calculated tangent for end_point2
+        double c110 = (1-tension)*(1+bias)*(1+continuity)/2;
+        double c121 = (1-tension)*(1-bias)*(1-continuity)/2;
+        double c221 = (1-tension)*(1+bias)*(1-continuity)/2;
+        double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
+
+        // m1 ==> KB-calculated tangent for end_point1        
+        // m2 ==> KB-calculated tangent for end_point1        
+
+        double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
+        double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
+        
+        double m1y = (c110 * (y1-y0)) + (c121 * (y2-y1));
+        double m2y = (c221 * (y2-y1)) + (c232 * (y3-y2));
+        */
+
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)
+        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
+        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
+        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
+        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
+        //m1x = -1 * m1x;
+        //m2x = -1 * m2x;
+        // or is it:
+        //                f'(t)
+        //    tangent  = ------- 
+        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
+        double speed1 = sqrt(m1x*m1x + m1y*m1y);
+        double speed2 = sqrt(m2x*m2x + m2y*m2y);
+        double tan1x = m1x/speed1;
+        double tan2x = m2x/speed2;
+        double tan1y = m1y/speed1;
+        double tan2y = m2y/speed2;
+        
+        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
+        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
+        // double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
+        // double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
+        // double xnew = (h00 * x1) + ((h10 * m1x)*(x2-x1)) + (h01 * x2) + ((h11 * m2x)*(x2-x1));
+        // double ynew = (h00 * y1) + ((h10 * m1y)*(y2-y1)) + (h01 * y2) + ((h11 * m2y)*(y2-y1));
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
       else {
         xout = 0;
         yout = 0;
@@ -1546,6 +1692,7 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_RENDER_MODE, render_mode);
     plist.put(PARAM_RENDER_MODIFIER1, render_modifier1);
     plist.put(PARAM_RENDER_MODIFIER2, render_modifier2);
+    plist.put(PARAM_RENDER_MODIFIER3, render_modifier3);
     plist.put(PARAM_USE_COSETS, (use_cosets ? 1 : 0));
     
     plist.put(PARAM_DIRECT_COLOR_MEASURE, direct_color_measure);
@@ -1605,6 +1752,8 @@ public class MaurerLinesFunc extends VariationFunc {
       render_modifier1 = pValue;
     else if (PARAM_RENDER_MODIFIER2.equalsIgnoreCase(pName))
       render_modifier2 = pValue;
+    else if (PARAM_RENDER_MODIFIER3.equalsIgnoreCase(pName))
+      render_modifier3 = pValue;
     else if (PARAM_THETA_STEP_SIZE_DEGREES.equalsIgnoreCase(pName))
       theta_step_size_param = pValue;
     else if (PARAM_INITIAL_THETA_DEGREES.equalsIgnoreCase(pName))
