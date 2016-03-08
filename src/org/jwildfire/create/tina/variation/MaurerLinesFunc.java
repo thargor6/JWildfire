@@ -52,6 +52,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private boolean DEBUG_SAMPLING = false;
   private boolean DEBUG_DYNAMIC_PARAMETERS = false;
   private boolean DEBUG_COSETS = false;
+  private boolean DEBUG_TANGENTS = false;
   
   // PARAM_KNUMER ==> PARAM_A
   // PARAM_KDENOM ==> PARAM_B
@@ -168,8 +169,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int ZBEZIER2 = 21;
   private static final int ELLIPSES = 22;
   private static final int ZELLIPSES = 23;
-  private static final int KOCHANEK_BARTELS_SPLINE = 25;
-  private static final int CUBIC_HERMITE_SPLINE = 26;
+  private static final int KOCHANEK_BARTELS_SPLINE_FIXED = 24;
+  private static final int KOCHANEK_BARTELS_SPLINE_BROKEN = 25;
+  private static final int CUBIC_HERMITE_SPLINE1 = 26;   
+  private static final int CUBIC_HERMITE_SPLINE2 = 27;
+  private static final int CUBIC_HERMITE_SPLINE3 = 28;
+  private static final int CUBIC_HERMITE_SPLINE4 = 29;
+  private static final int CUBIC_HERMITE_SPLINE5 = 30;
+  private static final int CUBIC_HERMITE_SPLINE_EXACT_TANGENTS = 31;
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -316,6 +323,11 @@ public class MaurerLinesFunc extends VariationFunc {
       getCurvePoint(t, outpoint);
       return outpoint;
     }
+    
+    public void getFirstDerivative(double t, DoublePoint2D result) {
+      result.x = Double.NaN;
+      result.y = Double.NaN;
+    }
   }
   
   class RhodoneaCurve extends ParametricCurve {
@@ -327,6 +339,37 @@ public class MaurerLinesFunc extends VariationFunc {
       point.x = r * cos(t);
       point.y = r * sin(t);
     }
+    
+    @Override
+    public void getFirstDerivative(double t, DoublePoint2D result) {
+      // trying different  way of getting derivatives
+      //      previous attempts only calculating dr/dt, but really want dy/dx
+      // see http://tutorial.math.lamar.edu/Classes/CalcII/PolarTangents.aspx
+        //
+        //    dy/dt = f'(t)sin(t) + f(t)cos(t) ==> (dr/dt)*sin(t) + r*cos(t)
+        //    dx/dt = f'(t)cos(t) - f(t)sin(t) ==> (dr/dt)*cos(t) - r*sin(t)
+        //    dy/dx = (dy/dt) / (dx/dt)
+        // 
+        //  for rhodonea (ignoring c param for now):
+        //     r = cos(k * t)
+      //           so using standard trig derivative for cosine, for dr/dt
+        //     dr/dt =  -k * sin(k * t)  
+        //         then pluging into above to get dy/dt and dx/dt:
+        //     dy/dt = (-k * sin(k*t) * sin(t)) + (cos(k*t) * cos(t))
+        //     dx/dt = (-k * sin(k*t) * cos(t)) - (cos(k*t) * sin(t))
+        // 
+        //  which agrees with symbolic first derivative result from Mathematica:
+        //      y[t_] = Cos[k * t] * Sin[t]
+        //      x[t_] = Cos[k * t] * Cos[t]
+        //      y'[t] = (-k * sin(k*t) * sin(t)) + (cos(k*t) * cos(t))
+        //      x'[t] = (-k * sin(k*t) * cos(t)) - (cos(k*t) * sin(t))
+      double k = a/b;
+      double f1x = (-k * sin(k*t) * cos(t)) - ((cos(k*t)+c) * sin(t));  // first x derivative at P0 (of rhodonea)
+      double f1y = (-k * sin(k*t) * sin(t)) + ((cos(k*t)+c) * cos(t));  // first y derivative at P0 (of rhodonea)
+      result.x = f1x;
+      result.y = f1y;
+    }
+
             
   }
   
@@ -501,7 +544,7 @@ public class MaurerLinesFunc extends VariationFunc {
     public double z;
   }
 
-    private DoublePoint3D curve_point = new DoublePoint3D();
+  private DoublePoint3D curve_point = new DoublePoint3D();
   private DoublePoint3D end_point1 = new DoublePoint3D();
   private DoublePoint3D end_point2 = new DoublePoint3D();
   // end_point0 (point on curve one step before current Maurer line endpoints)
@@ -510,6 +553,10 @@ public class MaurerLinesFunc extends VariationFunc {
   // end_point1 (point on curve one step after current Maurer line endpoints);
   //     used for Kochanek-Bartels spline interpolation, possibly other uses in the future
   private DoublePoint3D end_point3 = new DoublePoint3D();
+  
+  private DoublePoint2D first_derivative_point1 = new DoublePoint2D();
+  private DoublePoint2D first_derivative_point2 = new DoublePoint2D();
+  
 
   
   class MaurerFilter {
@@ -794,7 +841,8 @@ public class MaurerLinesFunc extends VariationFunc {
     // atan2 range is [-PI, PI], so tin covers 2PI, or 1 cycle (from -0.5 to 0.5 cycle)
     double tin;
     if (randomize) {
-      tin = (Math.random() * M_2PI) - M_PI; // random angle, range [-Pi .. +Pi]
+      // tin = (Math.random() * M_2PI) - M_PI; // random angle, range [-Pi .. +Pi]
+      tin = (Math.random() * M_2PI); // random angle, range [0.. +2Pi]
     }
     else {
       tin = atan2(yin, xin); // polar coordinate angle (theta in radians) of incoming point [-Pi .. +Pi]
@@ -1215,7 +1263,7 @@ public class MaurerLinesFunc extends VariationFunc {
           }
         }
       }
-      else if (render_mode == KOCHANEK_BARTELS_SPLINE) {
+      else if (render_mode == KOCHANEK_BARTELS_SPLINE_BROKEN) {
         // cobbled together from:
         // Online:
         //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
@@ -1273,7 +1321,65 @@ public class MaurerLinesFunc extends VariationFunc {
         
       }
       
-      else if (render_mode == CUBIC_HERMITE_SPLINE) {
+      else if (render_mode == KOCHANEK_BARTELS_SPLINE_FIXED) {
+        // cobbled together from:
+        // Online:
+        //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
+        //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+        //    http://paulbourke.net/miscellaneous/interpolation/
+        //    http://cubic.org/docs/hermite.htm
+        // Original Paper: "Interpolating splines with local tension, continuity, and bias control", Kochanek & Bartels
+        // Reference Book: "Curves and Surfaces for Computer Graphics", David Saloman
+        // GDC2012 Presentation: "Interpolation and Splines", Squirrel Eiserloh
+        //  
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // have points p1 and p2, get p0 and p3 (previous point and next point)
+        double theta0 = theta1 - theta_step_radians;
+        double theta3 = theta2 + theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point3.x;
+        double y3 = end_point3.y;
+
+        // but want defaults for tension, bias, continuity to be 0?
+        double tension = render_modifier1;
+        double continuity = render_modifier2;
+        double bias = render_modifier3;
+
+        // m2 ==> KB-calculated tangent for end_point2
+        double c110 = (1-tension)*(1+bias)*(1+continuity)/2;
+        double c121 = (1-tension)*(1-bias)*(1-continuity)/2;
+        double c221 = (1-tension)*(1+bias)*(1-continuity)/2;
+        double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
+
+        // m1 ==> KB-calculated tangent for end_point1        
+        // m2 ==> KB-calculated tangent for end_point1        
+        double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
+        double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
+        
+        double m1y = (c110 * (y1-y0)) + (c121 * (y2-y1));
+        double m2y = (c221 * (y2-y1)) + (c232 * (y3-y2));
+        
+        double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
+        double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      
+      else if (render_mode == CUBIC_HERMITE_SPLINE1) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
 
         // Hermite Basis Functions: 
@@ -1350,6 +1456,262 @@ public class MaurerLinesFunc extends VariationFunc {
         yout = ynew;
         
       }
+      else if (render_mode == CUBIC_HERMITE_SPLINE2) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)
+        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
+        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
+        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
+        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
+        //m1x = -1 * m1x;
+        m2x = -1 * m2x;
+        // or is it:
+        //                f'(t)
+        //    tangent  = ------- 
+        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
+        double speed1 = sqrt(m1x*m1x + m1y*m1y);
+        double speed2 = sqrt(m2x*m2x + m2y*m2y);
+        double tan1x = m1x/speed1;
+        double tan2x = m2x/speed2;
+        double tan1y = m1y/speed1;
+        double tan2y = m2y/speed2;
+        
+        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
+        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
+        
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      else if (render_mode == CUBIC_HERMITE_SPLINE3) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)
+        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
+        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
+        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
+        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
+        m1x = -1 * m1x;
+        // m2x = -1 * m2x;
+        // or is it:
+        //                f'(t)
+        //    tangent  = ------- 
+        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
+        double speed1 = sqrt(m1x*m1x + m1y*m1y);
+        double speed2 = sqrt(m2x*m2x + m2y*m2y);
+        double tan1x = m1x/speed1;
+        double tan2x = m2x/speed2;
+        double tan1y = m1y/speed1;
+        double tan2y = m2y/speed2;
+        
+        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
+        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
+        
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      
+      else if (render_mode == CUBIC_HERMITE_SPLINE4) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+        
+        // Hermite Basis Functions:
+        // range from [0:1] along [0..line_length]
+        double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)
+        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
+        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
+        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
+        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
+        m1x = -1 * m1x;
+        m2x = -1 * m2x;
+        // or is it:
+        //                f'(t)
+        //    tangent  = -------
+        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
+        double speed1 = sqrt(m1x*m1x + m1y*m1y);
+        double speed2 = sqrt(m2x*m2x + m2y*m2y);
+        double tan1x = m1x/speed1;
+        double tan2x = m2x/speed2;
+        double tan1y = m1y/speed1;
+        double tan2y = m2y/speed2;
+        
+        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
+        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
+        
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      else if (render_mode == CUBIC_HERMITE_SPLINE5) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+        // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf:
+        
+        // w (standing in for x from above hermite equation) ranges from [theta1:theta2]
+        double rand = Math.random();
+        double w = theta1 + (rand * (theta2 - theta1));
+        double w0 = theta1;
+        double w1 = theta2;
+        
+        double fw0 = x1;  
+        double fw1 = x2;
+        double ffw0 = -(cos((a/b)*w0) + c) * sin(w0);   // first x derivative at P0 (of rhodonea)
+        double ffw1 = -(cos((a/b)*w1) + c) * sin(w1);   // first x derivative at P1 (of rhodonea)
+        
+        double gw0 = y1;
+        double gw1 = y2;
+        double ggw0 = (cos((a/b)*w0) + c) * cos(w0);  // first y derivative at P0 (of rhodonea)
+        double ggw1 = (cos((a/b)*w1) + c) * cos(w1);  // first y derivative at P1 (of rhodonea)
+        
+        double tw =  (w-w0)/(w1-w0);
+        double tw1 = ((w1-w)/(w1-w0));
+        double tw0 = ((w0-w)/(w0-w1));
+        
+        double hf0 = (1 + (2*tw)) * tw1 * tw1 * fw0;
+        double hff0 = (w-w0) * tw1 * tw1 * ffw0;
+        double hf1 = (1 + (2*tw1)) * tw0 * tw0 * fw1;
+        double hff1 = (w-w1) * tw0 * tw0 * ffw1;
+        double fw = hf0 + hff0 + hf1 + hff1;
+        
+        double hg0 = (1 + (2*tw)) * tw1 * tw1 * gw0;
+        double hgg0 = (w-w0) * tw1 * tw1 * ggw0;
+        double hg1 = (1 + (2*tw1)) * tw0 * tw0 * gw1;
+        double hgg1 = (w-w1) * tw0 * tw0 * ggw1;
+        double gw = hg0 + hgg0 + hg1 + hgg1;
+        
+        xout = fw;
+        yout = gw;
+        line_delta = rand * line_length;
+        
+      }
+      
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXACT_TANGENTS) {
+        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+        // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf
+        // for SPLINE6, attempting to introduce render modifier parameters (somewhat analogous to KB tension, continuity, bias?) 
+        
+        double w0 = theta1;
+        curve.getFirstDerivative(w0, first_derivative_point1);
+        double ffw0 = first_derivative_point1.x;
+        double ggw0 = first_derivative_point1.y;
+        // double ffw0 = (-k * sin(k*w0) * cos(w0)) - ((cos(k*w0)+c) * sin(w0));  // first x derivative at P0 (of rhodonea)
+        // double ggw0 = (-k * sin(k*w0) * sin(w0)) + ((cos(k*w0)+c) * cos(w0));  // first y derivative at P0 (of rhodonea)
+
+        double w1 = theta2;
+        curve.getFirstDerivative(w1, first_derivative_point2);
+        double ffw1 = first_derivative_point2.x;
+        double ggw1 = first_derivative_point2.y;
+        // double ffw1 = (-k * sin(k*w1) * cos(w1)) - ((cos(k*w1)+c) * sin(w1));  // first x derivative at P1 (of rhodonea)       
+        // double ggw1 = (-k * sin(k*w1) * sin(w1)) + ((cos(k*w1)+c) * cos(w1));  // first y derivative at P1 (of rhodonea)
+        
+        double fw0 = x1;  
+        double gw0 = y1;
+        double fw1 = x2;
+        double gw1 = y2;    
+        
+        // random value ranging from [0:1]
+        double p = Math.random();
+        if (Double.isNaN(ffw0) || Double.isNaN(ggw0) || Double.isNaN(ffw1) || Double.isNaN(ggw1)) {
+          // if can't find first derivatives, just default to linear line interpolation
+          xout = (x1 * (1-p)) + x2*p;
+          // same as xout = x1 + (v * (x2-x1));
+          yout = (y1 * (1-p)) + y2*p;
+          // same as yout = y1 + (v * (y2-y1));
+        }
+        else {
+          // w (standing in for x from above hermite equation) ranges from [theta1:theta2]
+          double w = theta1 + (p * (theta2 - theta1));
+          
+          if (DEBUG_TANGENTS && Math.random() < 0.01) {
+            double point_threshold = Math.random();
+            if (point_threshold < 0.5) {
+              // linear interp between point and tangent(point)
+              double fraction_of_line = 2 * point_threshold;
+              xout = (fw0 * (1-fraction_of_line)) + (ffw0 * fraction_of_line);
+              yout = (gw0 * (1-fraction_of_line)) + (ggw0 * fraction_of_line);
+              // xout = ffw0;
+              // yout = ggw0;
+            }
+            else {
+              double fraction_of_line = 2 * (point_threshold - 0.5);
+              xout = (fw1 * (1-fraction_of_line)) + (ffw1 * fraction_of_line);
+              yout = (gw1 * (1-fraction_of_line)) + (ggw1 * fraction_of_line);
+              // xout = ffw1;
+              // yout = ggw1;
+            }
+          }
+          
+          else {
+            double tw =  (w-w0)/(w1-w0);
+            double tw1 = ((w1-w)/(w1-w0));
+            double tw0 = ((w0-w)/(w0-w1));
+            
+            // double tw1pow = pow(tw1, 2 * render_modifier1);
+            // double tw0pow = pow(tw0, 2 * render_modifier1);
+            
+            // double hf0 = (1 + (2*tw)) * tw1 * tw1 * fw0;
+            double hf0 = (1 + (2*tw)) * pow(tw1, 2 * render_modifier1) * fw0;
+            double hff0 = (w-w0) * tw1 * tw1 * ffw0;
+            // double hff0 = (w-w0) * pow(tw1, 2 * render_modifier2) * ffw0;
+            // double hf1 = (1 + (2*tw1)) * tw0 * tw0 * fw1;
+            double hf1 = (1 + (2*tw1)) * pow(tw0, 2 * render_modifier1) * fw1;
+            double hff1 = (w-w1) * tw0 * tw0 * ffw1;
+            // double hff1 = (w-w1) * pow(tw0, 2 * render_modifier2) * ffw1;
+            double fw = hf0 + (render_modifier2 * hff0) + hf1 + (render_modifier3 * hff1);
+            
+            // double hg0 = (1 + (2*tw)) * tw1 * tw1 * gw0;
+            double hg0 = (1 + (2*tw)) * pow(tw1, 2 * render_modifier1) * gw0;
+            double hgg0 = (w-w0) * tw1 * tw1 * ggw0;
+            // double hgg0 = (w-w0) * pow(tw1, 2 * render_modifier2) * ggw0;
+            // double hg1 = (1 + (2*tw1)) * tw0 * tw0 * gw1;
+            double hg1 = (1 + (2*tw1)) * pow(tw0, 2 * render_modifier1) * gw1;
+            double hgg1 = (w-w1) * tw0 * tw0 * ggw1;
+            // double hgg1 = (w-w1) * pow(tw0, 2 * render_modifier2) * ggw1;
+            double gw = hg0 + (render_modifier2 * hgg0) + hg1 + (render_modifier3 * hgg1);
+            
+            xout = fw;
+            yout = gw;
+          }
+        }
+        
+        line_delta = p * line_length;
+        
+      } // end CUBIC_HERMITE_SPLINE_EXACT_TANGENTS
+
       else {
         xout = 0;
         yout = 0;
