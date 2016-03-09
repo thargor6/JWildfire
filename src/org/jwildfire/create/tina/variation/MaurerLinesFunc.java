@@ -66,6 +66,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_INITIAL_THETA_DEGREES = "initial_theta";
   private static final String PARAM_LINE_COUNT = "line_count";
   private static final String PARAM_RENDER_MODE = "render_mode";
+  private static final String PARAM_RENDER_SUBMODE = "render_submode";
+  private static final String PARAM_TANGENT_SUBMODE = "tangent_submode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
   private static final String PARAM_USE_COSETS = "use_cosets";
   
@@ -120,7 +122,7 @@ public class MaurerLinesFunc extends VariationFunc {
 
 
   // color mode
-  // 0 NORMAL --> normal (no direct coloring)
+  // 0 NORMAL_VECTOR --> normal (no direct coloring)
   // 1 LINE_LENGTH_LINES --> color by line length
   // 2 LINE_ANGLE_LINES --> color by absolute angle
   // 3 LINE_RELATIVE_ANGLE --> color by relative angle
@@ -128,7 +130,7 @@ public class MaurerLinesFunc extends VariationFunc {
   // where does percentage vs absolute numbers come in?
   
   // color gradient
-  // 0 NORMAL --> normal (uses flame/layer colormap, but in standard way)
+  // 0 NORMAL_VECTOR --> normal (uses flame/layer colormap, but in standard way)
   // 1 COLORMAP --> flame/layer colormap used for direct coloring
   // 2 ALTERNATIVE_COLORMAP --> reserved for specifying colormap for direct coloring that is different from flame
   // 3 --> RED_GREEN
@@ -137,7 +139,7 @@ public class MaurerLinesFunc extends VariationFunc {
   
   // so for flames using earlier versions, need to split
   // PARAM_COLOR_MODE into PARAM_DIRECT_COLOR_GRADIENT and PARAM_DIRECT_COLOR_MODE
-  // NORMAL ==> NORMAL, NORMAL
+  // NORMAL_VECTOR ==> NORMAL_VECTOR, NORMAL_VECTOR
   // RED ==> no equivalent (other than normal red coloring based on colormap)
   // GREEN ==> no equivalent
   // BLUE ==> no equivalent
@@ -147,36 +149,56 @@ public class MaurerLinesFunc extends VariationFunc {
   // LINE_LENGTH_COLORMAP => LINE_LENGTH_LINES, STANDARD_COLORMAP
   // and etc for LINE_ANGLE_* and LINE_ANGLE_RELATIVE_*
   
-  private static final int STANDARD_LINES = 1;
-  private static final int CIRCLES1 = 2;
-  private static final int CIRCLES2 = 3;
-  private static final int CIRCLES3 = 4;
-  private static final int ZCIRCLES = 5;
-  private static final int ZCIRCLES2 = 6;
-  private static final int QUADRATIC_BEZIER = 7;  // render a Bezier curve with origin as control point
-  private static final int QUADRATIC_BEZIER_REFLECTED = 8;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
-  private static final int QUADRATIC_BEZIER_BOTH = 9;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
-  private static final int QUADRATIC_BEZIER_ALTERNATE = 10;  // render a Bezier curve with origin as control point, then reflect across the Maurer line
-  private static final int ZBEZIER = 11;
-  private static final int SINE_WAVE = 12; 
-  private static final int SINE_WAVE_REFLECTED = 13;
-  private static final int SINE_WAVE_BOTH = 14;
-  private static final int SINE_WAVE_ALTERNATE = 15;
-  private static final int ZSINE = 16;
-  private static final int ZSINE_BOTH = 17;
-  private static final int ZSINE_REFLECTED = 18;
-  private static final int ZSINE_ALTERNATE = 19;
-  private static final int ZBEZIER2 = 21;
-  private static final int ELLIPSES = 22;
-  private static final int ZELLIPSES = 23;
-  private static final int KOCHANEK_BARTELS_SPLINE_FIXED = 24;
-  private static final int KOCHANEK_BARTELS_SPLINE_BROKEN = 25;
-  private static final int CUBIC_HERMITE_SPLINE1 = 26;   
-  private static final int CUBIC_HERMITE_SPLINE2 = 27;
-  private static final int CUBIC_HERMITE_SPLINE3 = 28;
-  private static final int CUBIC_HERMITE_SPLINE4 = 29;
-  private static final int CUBIC_HERMITE_SPLINE5 = 30;
-  private static final int CUBIC_HERMITE_SPLINE_EXACT_TANGENTS = 31;
+ 
+
+  private static final int DEFAULT = 0;  // used for render_mode, render_submode, tangent_mode (for cubic interpolations)
+  
+  private static final int LINES = 1;
+  private static final int CIRCLES = 2;
+  private static final int ELLIPSES = 3;
+  private static final int SINE_WAVES = 4;
+  private static final int QUADRATIC_BEZIER = 5;
+  private static final int CUBIC_HERMITE_SPLINE = 10;
+  private static final int CARDINAL_SPLINE = 11;
+  private static final int FINITE_DIFFERENCE_SPLINE = 12;
+  private static final int CATMULL_ROM_SPLINE = 13;
+  private static final int CHORDAL_CATMULL_ROM_SPLINE = 14;
+  private static final int CENTRIPETAL_CATMULL_ROM_SPLINE = 15;
+  private static final int KOCHANEK_BARTELS_SPLINE = 16;
+
+  private static final int CUBIC_HERMITE_TANGENT_FORM2 = 20;
+  private static final int ORIGIN_TRIANGLE_FILL = 21;
+  
+  private static final int CUBIC_HERMITE_SPLINE_EXP1 = 31;
+  private static final int CUBIC_HERMITE_SPLINE_EXP2 = 32;
+  private static final int CUBIC_HERMITE_SPLINE_EXP3 = 33;
+  private static final int CUBIC_HERMITE_SPLINE_EXP4 = 34;
+  private static final int CUBIC_HERMITE_SPLINE_EXP5 = 35;  
+  
+  private static final int STROKE = 1;
+  private static final int REFLECTED_STROKE = 2;
+  private static final int BOTH_STROKE = 3;
+  private static final int ALTERNATING_STROKE = 4;
+  private static final int FILL = 5;
+  private static final int REFLECTED_FILL = 6;
+  private static final int BOTH_FILL = 7;
+  private static final int ALTERNATING_FILL = 8;
+  private static final int Z_STROKE = 9;
+  private static final int Z_REFLECTED_STROKE = 10;
+  private static final int Z_BOTH_STROKE = 11;
+  private static final int Z_ALTERNATING_STROKE = 12;
+  
+  private static final int TANGENT = 1;      // velocity ==> f'(t)
+  private static final int UNIT_TANGENT = 2; // normalized velocity ==> f'(t) / |f'(t)|   
+  private static final int UNSCALED_TANGENT = 3;
+  private static final int UNSCALED_UNIT_TANGENT = 4;
+  private static final int NORMAL_VECTOR = 5;  // tangent vector rotated -90% (also is acceleration ==> f''(t) ??)
+  private static final int UNIT_NORMAL = 6;  // normalized acceleration ?? ==> f''(t) / |f''(t)| ==> T'(t)/|T'(t)| where T -> unit tangent vector 
+  private static final int UNSCALED_NORMAL = 7;
+  private static final int UNSCALED_UNIT_NORMAL = 8;
+  private static final int ROTATION_TANGENT = 9;   // specify how much to rotate vector relative to tangent
+  private static final int THETA_TANGENT = 10;     // specify theta +/- offset from P1/P2 Maurer endpoints to use for determining tangent
+  private static final int INDEX_TANGENT = 11;     // specify endpoint index +/- offset from P1/P2 Maurer endpoint to use for determining tangent
   
   private static final int NORMAL = 0;
   private static final int NONE = 0;
@@ -250,7 +272,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private double line_count = 360;
   private double theta_step_size_param = 71;  // specified in degrees
   private double initial_theta_param = 0; // specified in degrees
-  private double render_mode = STANDARD_LINES;
+  private double render_mode = DEFAULT;
+  private double render_submode = DEFAULT;
+  private double tangent_submode = DEFAULT;
   private double render_modifier1 = 1.0;
   private double render_modifier2 = 1.0;
   private double render_modifier3 = 1.0;
@@ -369,7 +393,6 @@ public class MaurerLinesFunc extends VariationFunc {
       result.x = f1x;
       result.y = f1y;
     }
-
             
   }
   
@@ -547,6 +570,10 @@ public class MaurerLinesFunc extends VariationFunc {
   private DoublePoint3D curve_point = new DoublePoint3D();
   private DoublePoint3D end_point1 = new DoublePoint3D();
   private DoublePoint3D end_point2 = new DoublePoint3D();
+
+  
+  private DoublePoint3D mpoint = new DoublePoint3D();
+  
   // end_point0 (point on curve one step before current Maurer line endpoints)
   //     used for Kochanek-Bartels spline interpolation, possibly other uses in the future
   private DoublePoint3D end_point0 = new DoublePoint3D();
@@ -917,15 +944,14 @@ public class MaurerLinesFunc extends VariationFunc {
     
     // yoffset = [+-] line_slope * d / (sqrt(1 + line_slope^2))
     // double xoffset=0, yoffset=0, zoffset = 0;
-    
     double line_delta = 0;
     double midlength = line_length/2.0;  // use midlength of Maurer line as radius
-    double rnd = pContext.random();
     double xmid = (x1 + x2)/2.0;
     double ymid = (y1 + y2)/2.0;
 
     boolean use_render_mode = true;
     if (show_points_param > 0 || show_curve_param > 0) {
+      double rnd = pContext.random();
       /**
        *  overrides of rendering mode
        */
@@ -974,11 +1000,22 @@ public class MaurerLinesFunc extends VariationFunc {
     }
     if (use_render_mode) {
       double xoffset=0, yoffset=0, zoffset = 0;
+      // pick a random point along the Maurer line specified by P1 and P2 endpoints
+      // t1 ranges from [0..1] as line ranges from P1..P2
+      // calculate the corresponding point PML along the Maurer line
+      double t1 = Math.random();
+      mpoint.x = (x1 * (1-t1)) + (x2 * t1);      
+      // same as mpoint.x = x1 + (t1 * (x2-x1));
+      mpoint.y = (y1 * (1-t1)) + (y2 * t1);
+      // same as mpoint.y = y1 + (t1 * (y2-y1));
+      line_delta = t1 * line_length;
+      
       /**
        *   RENDER MODES
        */
-      if (render_mode == STANDARD_LINES) {
+      if (render_mode == LINES || render_mode == DEFAULT) {
         // draw lines
+        /*
         line_delta = Math.random() * line_length;
         xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
         if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
@@ -986,36 +1023,40 @@ public class MaurerLinesFunc extends VariationFunc {
         if (y2 < y1) { yoffset = -1 * yoffset; }
         xout = x1 + xoffset;
         yout = y1 + yoffset;
+        */
+        xout = mpoint.x;
+        yout = mpoint.y;
       }
   
-      else if (render_mode == CIRCLES1) {
+      else if (render_mode == CIRCLES) {
         // draw circles
         //   circles centered on midpoint of "Maurer line"
         //   and use midlength of Maurer line as radius
-        double ang = Math.random() * M_2PI;
-        double rad = midlength;
-        xout = xmid + (rad * sin(ang));
-        yout = ymid + (rad * cos(ang));
-        // line_delta = ang;
-        line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
+        if (render_submode == Z_STROKE) {
+          double ang = t1 * M_2PI;
+          double rad = midlength;
+          double mid_delta = rad * cos(ang);
+          zout = rad * sin(ang);
+          // move along line, out from midpoint by mid_delta
+          xout = xmid + (mid_delta * cos(raw_line_angle));
+          yout = ymid + (mid_delta * sin(raw_line_angle));
+          line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
+        }
+        else {
+          double ang = t1 * M_2PI;
+          double rad = midlength;
+          xout = xmid + (rad * sin(ang));
+          yout = ymid + (rad * cos(ang));
+          // line_delta = ang;
+          line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
+        }
       }
-      else if (render_mode == ZCIRCLES) {
-        double ang = Math.random() * M_2PI;
-        double rad = midlength;
-        double mid_delta = rad * cos(ang);
-        zout = rad * sin(ang);
-        // move along line, out from midpoint by mid_delta
-        xout = xmid + (mid_delta * cos(raw_line_angle));
-        yout = ymid + (mid_delta * sin(raw_line_angle));
-        line_delta = sqrt(((x1-xout) * (x1-xout)) + ((y1-yout) * (y1-yout)));
-      }
-
-      else if (render_mode == QUADRATIC_BEZIER || render_mode == QUADRATIC_BEZIER_REFLECTED || 
-              render_mode == QUADRATIC_BEZIER_BOTH || render_mode == QUADRATIC_BEZIER_ALTERNATE || 
-              render_mode == ZBEZIER || render_mode == ZBEZIER2) {
+      
+      else if (render_mode == QUADRATIC_BEZIER) {
         // use origin (0,0) as control point, and endpoints of Maurer line as Bezier curve endpoints
         //    (since using origin as control point, can drop middle term of standard Bezier curve calc
-        double bt = Math.random();  // want bt => [0:1]
+        // double bt = Math.random();  // want bt => [0:1]
+        double bt = t1;
         double ax, ay;
         // use full formula with control point
         if (render_modifier1 != 1 || render_modifier2 != 1) {
@@ -1043,42 +1084,8 @@ public class MaurerLinesFunc extends VariationFunc {
         }
         
         line_delta = bt * line_length;
-        if (render_mode == QUADRATIC_BEZIER) {
-          xout = ax;
-          yout = ay;
-        }
-        else if (render_mode == QUADRATIC_BEZIER_REFLECTED) {
-        // double ax = ((1-bt) * (1-bt) * x1) + (bt * bt * x2);
-        // double ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
-        // now reflect point A across the Maurer line to get output point
-          double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-          xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
-          yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
-        }
-        else if (render_mode == QUADRATIC_BEZIER_BOTH) {
-          if (Math.random() < 0.5) {
-            xout = ax;
-            yout = ay;
-          }
-          else {
-            double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-            xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
-            yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
-          }
-        }
-        else if (render_mode == QUADRATIC_BEZIER_ALTERNATE) {
-          // even steps use Bezier, odd steps use reflected Bezier
-          if (step_number % 2 == 0) {
-            xout = ax;
-            yout = ay;
-          }
-          else {
-            double bc = (((x2-x1)*(ax-x1)) + ((y2-y1)*(ay-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-            xout = (2 * (x1 + ((x2-x1)*bc))) - ax;
-            yout = (2 * (y1 + ((y2-y1)*bc))) - ay;
-          }
-        }
-        else if (render_mode == ZBEZIER) {
+        // for now working on Z submodes here, but handling most submodes at end of transform() method...
+        if (render_submode == Z_STROKE) {  // not really working
           zout = ay;
           xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
           if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
@@ -1087,7 +1094,8 @@ public class MaurerLinesFunc extends VariationFunc {
           xout = x1 + xoffset;
           yout = y1 + yoffset;
         }
-        else if (render_mode == ZBEZIER2) {
+        // hijacking Z_STROKE_BOTH while trying different approaches for Z-Beziers
+        else if (render_submode == Z_BOTH_STROKE) {  
           // xout = x1 + (line_delta * cos(raw_line_angle));
           // yout = y1 + (line_delta * sin(raw_line_angle));
           // unrotate: 
@@ -1109,39 +1117,83 @@ public class MaurerLinesFunc extends VariationFunc {
          //  yout = y1 + ()
           zout = ((ax - x1) * sin(-raw_line_angle)) + ((ay - y1) * cos(-raw_line_angle));
         }
+        else {
+          xout = ax;
+          yout = ay;
+        }
       }
       else if (render_mode == ELLIPSES) {
-        double ang = Math.random() * M_2PI;
-        // double ang = (Math.random() * M_2PI) - M_PI;
-        // offset along line (relative to start of line)
-        double relative_line_offset = (midlength * render_modifier1) * cos(ang);
-        line_delta = midlength * cos(ang);
-        
-        // offset perpendicular to line:
-        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
-        //   then adding 1 to gets range=>[0:2], 
-        //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
-        double relative_perp_offset = (midlength * (render_modifier2/2)) * sin(ang);
-        // double relative_perp_offset = midlength * sin(ang);
-                
-        // shift to make offsets relative to start point (x1, y1)
-        double line_offset = relative_line_offset + x1 - midlength;
-        double perp_offset = relative_perp_offset + y1;
-        // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
-        // should already have angle (raw_line_angle)
-        // 2D rotation transformation of point B about a given fixed point A to give point C
-        // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
-        // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
-
-        // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
-        // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
-        double newx = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI)) - ((perp_offset - y1) * sin(raw_line_angle + M_PI));
-        double newy = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI)) + ((perp_offset - y1) * cos(raw_line_angle + M_PI));
-        xout = newx;
-        yout = newy;
-        // xout = line_offset;
-        // yout = perp_offset;
+        if (render_submode == Z_STROKE) {
+          // ang ==> [-Pi : +Pi]  or [ 0 : 2Pi ] ?
+          // double  ang = (Math.random() * M_2PI) - M_PI;  // ==> [ -Pi : +Pi ]
+          // double ang = (Math.random() * M_2PI);   // ==> [ 0 : 2Pi ]
+          double ang = t1 * M_2PI;
+          
+          // offset along line (relative to start of line)
+          // if render_modifier1 == 1, then ranges are
+          //    delta_from_midlength ==> [-midlength : +midlength]
+          //    delta_from_start ==> [0 : line_length]
+          double delta_from_midlength = (midlength * render_modifier1) * cos(ang);
+          double delta_from_start = midlength - delta_from_midlength;
+          line_delta = delta_from_start;
+          
+          // offset perpendicular to line:
+          // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length],
+          //   then adding 1 to gets range=>[0:2],
+          //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
+          double relative_perp_offset = (midlength * (render_modifier2/2))* sin(ang);
+          
+          // shift to make offsets relative to start point (x1, y1)
+          double line_offset = delta_from_midlength + x1 - midlength;
+          double perp_offset = relative_perp_offset + y1;
+          // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
+          // should already have angle (raw_line_angle)
+          // 2D rotation transformation of point B about a given fixed point A to give point C
+          // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+          // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+          
+          // drop last term for xout and yout since y offset (perp_offset) = y1  [[ or B.y = A.y in above equation ]
+          // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
+          // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
+          xout = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI));
+          yout = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI));  // drop last term since y offset (perp_offset) = 0
+          zout = relative_perp_offset;
+        }
+        else {
+          // double ang = Math.random() * M_2PI;
+          double ang = t1 * M_2PI;
+          // double ang = (Math.random() * M_2PI) - M_PI;
+          // offset along line (relative to start of line)
+          double relative_line_offset = (midlength * render_modifier1) * cos(ang);
+          line_delta = midlength * cos(ang);
+          
+          // offset perpendicular to line:
+          // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length],
+          //   then adding 1 to gets range=>[0:2],
+          //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
+          double relative_perp_offset = (midlength * (render_modifier2/2)) * sin(ang);
+          // double relative_perp_offset = midlength * sin(ang);
+          
+          // shift to make offsets relative to start point (x1, y1)
+          double line_offset = relative_line_offset + x1 - midlength;
+          double perp_offset = relative_perp_offset + y1;
+          // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
+          // should already have angle (raw_line_angle)
+          // 2D rotation transformation of point B about a given fixed point A to give point C
+          // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+          // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+          
+          // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
+          // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
+          double newx = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI)) - ((perp_offset - y1) * sin(raw_line_angle + M_PI));
+          double newy = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI)) + ((perp_offset - y1) * cos(raw_line_angle + M_PI));
+          xout = newx;
+          yout = newy;
+          // xout = line_offset;
+          // yout = perp_offset;
+        }
       }
+/*
       else if (render_mode == ZELLIPSES) {
         // ang ==> [-Pi : +Pi]  or [ 0 : 2Pi ] ?
         // double  ang = (Math.random() * M_2PI) - M_PI;  // ==> [ -Pi : +Pi ]
@@ -1178,14 +1230,14 @@ public class MaurerLinesFunc extends VariationFunc {
         zout = relative_perp_offset;
 
       }
-      else if (render_mode == SINE_WAVE || render_mode == SINE_WAVE_REFLECTED || 
-               render_mode == SINE_WAVE_BOTH || render_mode == SINE_WAVE_ALTERNATE ||
-               render_mode == ZSINE || render_mode == ZSINE_REFLECTED || render_mode == ZSINE_BOTH || render_mode == ZSINE_ALTERNATE) {
+      */
+      else if (render_mode == SINE_WAVES) {
         // amplitude calculated such that when render_modifier = 1, relative_perp_offset range: [0 ==> line_length/2]
         double amplitude = (line_length/4) * render_modifier1; 
         double frequency = render_modifier2;
         // range of [0 -> 2Pi ]
-        double ang = Math.random() * M_2PI;
+        // double ang = Math.random() * M_2PI;
+        double ang = t1 * M_2PI;
         
         // offset along line (relative to start of line) ==> [0=>line_length]
         double relative_line_offset = ang * (line_length/M_2PI);
@@ -1212,46 +1264,16 @@ public class MaurerLinesFunc extends VariationFunc {
 
         double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
         double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
-        
-        if (render_mode == SINE_WAVE) {
-          xout = newx;
-          yout = newy;
-        }
-        else if (render_mode == SINE_WAVE_REFLECTED) {
-          double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-          xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
-          yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
-        }
-        else if (render_mode == SINE_WAVE_BOTH) {
-          if (Math.random() < 0.5) {
-            xout = newx;
-            yout = newy;
-          }
-          else {
-            double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-            xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
-            yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
-          }
-        }
-        else if (render_mode == SINE_WAVE_ALTERNATE) {
-          if (step_number % 2 == 0) {
-            xout = newx;
-            yout = newy;
-          }
-          else {
-            double bc = (((x2-x1)*(newx-x1)) + ((y2-y1)*(newy-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-            xout = (2 * (x1 + ((x2-x1)*bc))) - newx;
-            yout = (2 * (y1 + ((y2-y1)*bc))) - newy;
-          }
-        }
-        else if (render_mode == ZSINE) {
+
+        // for now working on Z submodes here, but handling most submodes at end of transform() method...
+        if (render_submode == Z_STROKE) {
           xout = x1 + (relative_line_offset * cos(raw_line_angle));
           // can save a sin() call by using slope-intercept once have xout
           // yout = y1 + (relative_line_offset * sin(raw_line_angle));
           yout = (line_slope * xout) + line_intercept;
           zout = relative_perp_offset; // plus z1?
         }
-        else if (render_mode == ZSINE_BOTH) {
+        else if (render_submode == Z_BOTH_STROKE) {
           xout = x1 + (relative_line_offset * cos(raw_line_angle));
           // yout = y1 + (relative_line_offset * sin(raw_line_angle));
           yout = (line_slope * xout) + line_intercept;
@@ -1262,8 +1284,13 @@ public class MaurerLinesFunc extends VariationFunc {
             zout = -relative_perp_offset;
           }
         }
+        else {
+          xout = newx;
+          yout = newy;
+        }
       }
-      else if (render_mode == KOCHANEK_BARTELS_SPLINE_BROKEN) {
+ 
+      else if (render_mode == KOCHANEK_BARTELS_SPLINE) {
         // cobbled together from:
         // Online:
         //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
@@ -1276,65 +1303,7 @@ public class MaurerLinesFunc extends VariationFunc {
         //  
         // Hermite Basis Functions: 
         // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-        
-        // have points p1 and p2, get p0 and p3 (previous point and next point)
-        double theta0 = theta1 - theta_step_radians;
-        double theta3 = theta2 + theta_step_radians;
-        curve.getCurvePoint(theta0, end_point0);
-        curve.getCurvePoint(theta3, end_point3);
-        double x0 = end_point0.x;
-        double y0 = end_point0.y;
-        double x3 = end_point0.x;
-        double y3 = end_point0.y;
-
-        // but want defaults for tension, bias, continuity to be 0?
-        double tension = render_modifier1;
-        double continuity = render_modifier2;
-        double bias = render_modifier3;
-
-        // m2 ==> KB-calculated tangent for end_point2
-        double c110 = (1-tension)*(1+bias)*(1+continuity)/2;
-        double c121 = (1-tension)*(1-bias)*(1-continuity)/2;
-        double c221 = (1-tension)*(1+bias)*(1-continuity)/2;
-        double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
-
-        // m1 ==> KB-calculated tangent for end_point1        
-        // m2 ==> KB-calculated tangent for end_point1        
-        double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
-        double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
-        
-        double m1y = (c110 * (y1-y0)) + (c121 * (y2-y1));
-        double m2y = (c221 * (y2-y1)) + (c232 * (y3-y2));
-        
-        double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
-        double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-        
-      }
-      
-      else if (render_mode == KOCHANEK_BARTELS_SPLINE_FIXED) {
-        // cobbled together from:
-        // Online:
-        //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
-        //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
-        //    http://paulbourke.net/miscellaneous/interpolation/
-        //    http://cubic.org/docs/hermite.htm
-        // Original Paper: "Interpolating splines with local tension, continuity, and bias control", Kochanek & Bartels
-        // Reference Book: "Curves and Surfaces for Computer Graphics", David Saloman
-        // GDC2012 Presentation: "Interpolation and Splines", Squirrel Eiserloh
-        //  
-        // Hermite Basis Functions: 
-        // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
+        // double t1 = Math.random();
         double t2 = t1*t1;
         double t3 = t1*t1*t1;
         double h00 = 2*t3 - 3*t2 + 1;
@@ -1379,12 +1348,12 @@ public class MaurerLinesFunc extends VariationFunc {
         
       }
       
-      else if (render_mode == CUBIC_HERMITE_SPLINE1) {
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP1) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
 
         // Hermite Basis Functions: 
         // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
+        //double t1 = Math.random();
         double t2 = t1*t1;
         double t3 = t1*t1*t1;
         double h00 = 2*t3 - 3*t2 + 1;
@@ -1392,40 +1361,6 @@ public class MaurerLinesFunc extends VariationFunc {
         double h01 = -2*t3 + 3*t2;
         double h11 = t3 - t2;
         
-        // have points p1 and p2, get p0 and p3 (previous point and next point)
-        /*
-        double theta0 = theta1 - theta_step_radians;
-        double theta3 = theta2 + theta_step_radians;
-        curve.getCurvePoint(theta0, end_point0);
-        curve.getCurvePoint(theta3, end_point3);
-        double x0 = end_point0.x;
-        double y0 = end_point0.y;
-        double x3 = end_point0.x;
-        double y3 = end_point0.y;
-        */
-
-        /*
-        // but want defaults for tension, bias, continuity to be 0?
-        double tension = render_modifier1;
-        double continuity = render_modifier2;
-        double bias = render_modifier3;
-
-        // m2 ==> KB-calculated tangent for end_point2
-        double c110 = (1-tension)*(1+bias)*(1+continuity)/2;
-        double c121 = (1-tension)*(1-bias)*(1-continuity)/2;
-        double c221 = (1-tension)*(1+bias)*(1-continuity)/2;
-        double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
-
-        // m1 ==> KB-calculated tangent for end_point1        
-        // m2 ==> KB-calculated tangent for end_point1        
-
-        double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
-        double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
-        
-        double m1y = (c110 * (y1-y0)) + (c121 * (y2-y1));
-        double m2y = (c221 * (y2-y1)) + (c232 * (y3-y2));
-        */
-
         // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
         //     tangent = f'(t)
         double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
@@ -1456,12 +1391,12 @@ public class MaurerLinesFunc extends VariationFunc {
         yout = ynew;
         
       }
-      else if (render_mode == CUBIC_HERMITE_SPLINE2) {
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP2) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
 
         // Hermite Basis Functions: 
         // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
+        //double t1 = Math.random();
         double t2 = t1*t1;
         double t3 = t1*t1*t1;
         double h00 = 2*t3 - 3*t2 + 1;
@@ -1496,12 +1431,12 @@ public class MaurerLinesFunc extends VariationFunc {
         yout = ynew;
         
       }
-      else if (render_mode == CUBIC_HERMITE_SPLINE3) {
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP3) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
 
         // Hermite Basis Functions: 
         // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
+        // double t1 = Math.random();
         double t2 = t1*t1;
         double t3 = t1*t1*t1;
         double h00 = 2*t3 - 3*t2 + 1;
@@ -1537,12 +1472,12 @@ public class MaurerLinesFunc extends VariationFunc {
         
       }
       
-      else if (render_mode == CUBIC_HERMITE_SPLINE4) {
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP4) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
         
         // Hermite Basis Functions:
         // range from [0:1] along [0..line_length]
-        double t1 = Math.random();
+        //double t1 = Math.random();
         double t2 = t1*t1;
         double t3 = t1*t1*t1;
         double h00 = 2*t3 - 3*t2 + 1;
@@ -1577,49 +1512,186 @@ public class MaurerLinesFunc extends VariationFunc {
         yout = ynew;
         
       }
-      else if (render_mode == CUBIC_HERMITE_SPLINE5) {
-        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-        // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf:
-        
-        // w (standing in for x from above hermite equation) ranges from [theta1:theta2]
-        double rand = Math.random();
-        double w = theta1 + (rand * (theta2 - theta1));
-        double w0 = theta1;
-        double w1 = theta2;
-        
-        double fw0 = x1;  
-        double fw1 = x2;
-        double ffw0 = -(cos((a/b)*w0) + c) * sin(w0);   // first x derivative at P0 (of rhodonea)
-        double ffw1 = -(cos((a/b)*w1) + c) * sin(w1);   // first x derivative at P1 (of rhodonea)
-        
-        double gw0 = y1;
-        double gw1 = y2;
-        double ggw0 = (cos((a/b)*w0) + c) * cos(w0);  // first y derivative at P0 (of rhodonea)
-        double ggw1 = (cos((a/b)*w1) + c) * cos(w1);  // first y derivative at P1 (of rhodonea)
-        
-        double tw =  (w-w0)/(w1-w0);
-        double tw1 = ((w1-w)/(w1-w0));
-        double tw0 = ((w0-w)/(w0-w1));
-        
-        double hf0 = (1 + (2*tw)) * tw1 * tw1 * fw0;
-        double hff0 = (w-w0) * tw1 * tw1 * ffw0;
-        double hf1 = (1 + (2*tw1)) * tw0 * tw0 * fw1;
-        double hff1 = (w-w1) * tw0 * tw0 * ffw1;
-        double fw = hf0 + hff0 + hf1 + hff1;
-        
-        double hg0 = (1 + (2*tw)) * tw1 * tw1 * gw0;
-        double hgg0 = (w-w0) * tw1 * tw1 * ggw0;
-        double hg1 = (1 + (2*tw1)) * tw0 * tw0 * gw1;
-        double hgg1 = (w-w1) * tw0 * tw0 * ggw1;
-        double gw = hg0 + hgg0 + hg1 + hgg1;
-        
-        xout = fw;
-        yout = gw;
-        line_delta = rand * line_length;
-        
-      }
       
-      else if (render_mode == CUBIC_HERMITE_SPLINE_EXACT_TANGENTS) {
+      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP5) {
+         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+        
+        // Hermite Basis Functions:
+        // range from [0:1] along [0..line_length]
+        //double t1 = Math.random();
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // calculating tangent vectors
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)
+        curve.getFirstDerivative(theta1, first_derivative_point1);
+        double m1x = first_derivative_point1.x;
+        double m1y = first_derivative_point1.y;
+        curve.getFirstDerivative(theta2, first_derivative_point2);
+        double m2x = first_derivative_point2.x;
+        double m2y = first_derivative_point2.y;
+        // m1x = -1 * m1x;
+        // m2x = -1 * m2x;
+        
+        double tan1x = m1x;
+        double tan1y = m1y;
+        double tan2x = m2x;
+        double tan2y = m2y;
+
+         // or is it:
+        //                f'(t)
+        //    tangent  = -------
+        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
+        //  calulating unit tangent vectors
+        // double speed1 = sqrt(m1x*m1x + m1y*m1y);
+        // double speed2 = sqrt(m2x*m2x + m2y*m2y);
+        // double tan1x = m1x/speed1;
+        // double tan2x = m2x/speed2;
+        // double tan1y = m1y/speed1;
+        // double tan2y = m2y/speed2;
+        
+        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
+        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
+        
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      } // end CUBIC_HERMITE_SPLINE_EXP5
+
+      else if (render_mode == CUBIC_HERMITE_SPLINE) {
+                
+         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
+         // using formulation for interpolation on an arbitrary interval: 
+         //     https://en.wikipedia.org/wiki/Cubic_Hermite_spline
+
+        // w is random theta between theta1 and theta2
+        // double w = theta1 + (Math.random() * (theta2 - theta1));
+        // double t1 = (w-theta1)/(theta2-theta1);
+        // but the above w & t1 calcs are equivalent to t1 randomly ranging from [0:1], so just use that instead...
+        
+        // t1 ranges from [0:1]
+        // double t1 = Math.random();
+        double t2 = t1*t1; 
+        double t3 = t1*t1*t1;
+        
+        // Hermite Basis Functions:
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        double dt1, dt2;
+        // use render_modifier2 as theta offset (- for dt1, + for dt2) to find points to determine tangent vectors
+        if (tangent_submode == THETA_TANGENT) {
+          dt1 = theta1 - ((render_modifier2/360) * M_2PI);
+          dt2 = theta2 + ((render_modifier2/360) * M_2PI);
+        }
+        // use render_modifier2 to determine Maurer anchor points to use for tangent vectors
+        //    (-rm2*theta_step_radians for dt1, +rm2*theta_line_offset for dt2) 
+        else if (tangent_submode == INDEX_TANGENT) {
+          dt1 = theta1 - (render_modifier2 * this.theta_step_radians);
+          dt2 = theta2 + (render_modifier2 * this.theta_step_radians);
+        }
+        else {
+          dt1 = theta1;
+          dt2 = theta2;
+        }
+                
+        // calculating tangent vectors
+        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
+        //     tangent = f'(t)    
+        curve.getFirstDerivative(dt1, first_derivative_point1);
+        double tan1x = first_derivative_point1.x;
+        double tan1y= first_derivative_point1.y;
+        curve.getFirstDerivative(dt2, first_derivative_point2);
+        double tan2x = first_derivative_point2.x;
+        double tan2y = first_derivative_point2.y;
+        double tanscale;
+        
+        // if *_UNSCALED_* then don't apply scaling adjustment to vectors
+        if (tangent_submode == UNSCALED_TANGENT ||
+                tangent_submode == UNSCALED_UNIT_TANGENT ||
+                tangent_submode == UNSCALED_NORMAL || 
+                tangent_submode == UNSCALED_UNIT_NORMAL) {
+          tanscale = 1;
+        }
+        else {  // apply standard Hermite non-unit-interval scaling to vectors
+          tanscale = theta2 - theta1;
+        }
+        
+        double dx1, dx2, dy1, dy2;
+        
+        // if *_NORMAL_* then set (dx1, dy1) and (dx2, dy2) to normal vectors instead of tangent vectors
+        if (tangent_submode == NORMAL_VECTOR || 
+                tangent_submode == UNIT_NORMAL || 
+                tangent_submode == UNSCALED_NORMAL || 
+                tangent_submode == UNSCALED_UNIT_NORMAL) {
+          // rotate tangent vector around point to get normal vector?
+          // 2D rotation transformation of point B about a given fixed point A to give point C
+          // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+          // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+          double rota = -M_PI / 2.0;
+          dx1 = x1 + ((tan1x - x1) * cos(rota)) - ((tan1y - y1) * sin(rota));
+          dy1 = y1 + ((tan1x - x1) * sin(rota)) + ((tan1y - y1) * cos(rota));
+          dx2 = x2 + ((tan2x - x2) * cos(rota)) - ((tan2y - y2) * sin(rota));
+          dy2 = y2 + ((tan2x - x2) * sin(rota)) + ((tan2y - y2) * cos(rota));
+        }
+        else if (tangent_submode == ROTATION_TANGENT) {
+          double rota1 = (render_modifier2 / 360) * M_2PI;
+          dx1 = x1 + ((tan1x - x1) * cos(rota1)) - ((tan1y - y1) * sin(rota1));
+          dy1 = y1 + ((tan1x - x1) * sin(rota1)) + ((tan1y - y1) * cos(rota1));
+          double rota2 = (render_modifier3 / 360) * M_2PI;
+          dx2 = x2 + ((tan2x - x2) * cos(rota2)) - ((tan2y - y2) * sin(rota2));
+          dy2 = y2 + ((tan2x - x2) * sin(rota2)) + ((tan2y - y2) * cos(rota2));
+        }
+        else { // otherwise set (dx1,dy1) and (dx2,dy2) to tangent vectors
+          dx1 = tan1x;
+          dy1 = tan1y;
+          dx2 = tan2x;
+          dy2 = tan2y;
+        }
+
+        // if *_UNIT_* then normalize to unit vectors
+        if (tangent_submode == UNIT_TANGENT || 
+                tangent_submode == UNIT_NORMAL || 
+                tangent_submode == UNSCALED_UNIT_TANGENT ||
+                tangent_submode == UNSCALED_UNIT_NORMAL) {
+          // normalizing the vectors
+          double sr1 = sqrt(dx1*dx1 + dy1*dy1);
+          double sr2 = sqrt(dx2*dx2 + dy2*dy2);
+          dx1 = dx1/sr1;
+          dy1 = dy1/sr1;
+          dx2 = dx2/sr2;
+          dy2 = dy2/sr2;
+        }
+        else {  
+          // otherwise leave unnormalized
+        }
+        
+        // apply tension -- use render_modifier1 as tension parameter for cubic Hermite interpolation
+        //    by applying a (1 - tension) scaling factor to the tangent vector Hermite terms
+        //    thus if tension = 1, tangent terms will drop out and cubic Hermite interpolation will 
+        //    reduce to linear interoplation ==> Maurer lines
+        tanscale = (1 - render_modifier1) * tanscale;
+        
+        double xnew = (h00 * x1) + (h10 * dx1 * tanscale ) + (h01 * x2) + (h11 * dx2 * tanscale);
+        double ynew = (h00 * y1) + (h10 * dy1 * tanscale ) + (h01 * y2) + (h11 * dy2 * tanscale);
+        
+        line_delta = t1 * line_length;
+        
+        xout = xnew;
+        yout = ynew;
+        
+      } // end CUBIC_HERMITE_TANGENTS
+
+          
+      else if (render_mode == CUBIC_HERMITE_TANGENT_FORM2) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
         // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf
         // for SPLINE6, attempting to introduce render modifier parameters (somewhat analogous to KB tension, continuity, bias?) 
@@ -1710,13 +1782,83 @@ public class MaurerLinesFunc extends VariationFunc {
         
         line_delta = p * line_length;
         
-      } // end CUBIC_HERMITE_SPLINE_EXACT_TANGENTS
+      } // end CUBIC_HERMITE_TANGENT_FORM2
 
-      else {
+      else if (render_mode == ORIGIN_TRIANGLE_FILL) {   
         xout = 0;
         yout = 0;
-        zout = 0;
+        // zout = 0;
       }
+      else {
+        // default to Maurer lines
+        xout = mpoint.x;
+        yout = mpoint.y;
+      }
+
+      // 
+      // RENDER_SUBMODES
+      //    most handled here, still have some Z-modes and others special-cased above
+      // 
+      if (render_submode == STROKE || render_submode == DEFAULT) { 
+        // do nothing
+      }
+      else if (render_submode == REFLECTED_STROKE) {
+        double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+        xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+        yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+      }
+      else if (render_submode == BOTH_STROKE) {
+        if (Math.random() < 0.5) {  // reflect half the points, leave other half unaltered
+          double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+        }
+      }
+      else if (render_submode == ALTERNATING_STROKE) {
+        if (step_number % 2 != 0) { // reflect odd steps, leave even  steps unaltered
+          double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+        }
+      }
+      else if (render_submode == FILL) {
+        // randomly place point on line from outpoint to mpoint
+        double rfill = Math.random();
+        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
+        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+      }
+      else if (render_submode == REFLECTED_FILL) {
+        double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+        xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+        yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+        double rfill = Math.random();
+        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
+        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+      }
+      else if (render_submode == BOTH_FILL) {
+        if (Math.random() < 0.5) {  // reflect half the points, leave other half unaltered
+          double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+        }
+        double rfill = Math.random();
+        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
+        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+      }
+      else if (render_submode == ALTERNATING_FILL) {
+        if (step_number % 2 != 0) { // reflect odd steps, leave even steps unaltered
+          double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+          xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
+          yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
+        }
+        double rfill = Math.random();
+        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
+        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+      }
+//      else if (render_submode == CIRCLE_EXTRUDE) {
+//        
+//      }
+      
       // handling thickness
       if (line_thickness != 0) {
         xout += ((pContext.random() - 0.5) * line_thickness);
@@ -2052,6 +2194,8 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_INITIAL_THETA_DEGREES, initial_theta_param);
     plist.put(PARAM_LINE_COUNT, line_count);
     plist.put(PARAM_RENDER_MODE, render_mode);
+    plist.put(PARAM_RENDER_SUBMODE, render_submode);
+    plist.put(PARAM_TANGENT_SUBMODE, tangent_submode);
     plist.put(PARAM_RENDER_MODIFIER1, render_modifier1);
     plist.put(PARAM_RENDER_MODIFIER2, render_modifier2);
     plist.put(PARAM_RENDER_MODIFIER3, render_modifier3);
@@ -2110,6 +2254,10 @@ public class MaurerLinesFunc extends VariationFunc {
       d_param = pValue;
     else if (PARAM_RENDER_MODE.equalsIgnoreCase(pName))
       render_mode = (int)pValue;
+    else if (PARAM_RENDER_SUBMODE.equalsIgnoreCase(pName))
+      render_submode = (int)pValue;
+    else if (PARAM_TANGENT_SUBMODE.equalsIgnoreCase(pName))
+      tangent_submode = (int)pValue;
     else if (PARAM_RENDER_MODIFIER1.equalsIgnoreCase(pName))
       render_modifier1 = pValue;
     else if (PARAM_RENDER_MODIFIER2.equalsIgnoreCase(pName))
