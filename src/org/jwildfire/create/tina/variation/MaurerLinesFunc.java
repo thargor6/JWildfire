@@ -120,7 +120,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
 
-
   // color mode
   // 0 NORMAL_VECTOR --> normal (no direct coloring)
   // 1 LINE_LENGTH_LINES --> color by line length
@@ -148,9 +147,7 @@ public class MaurerLinesFunc extends VariationFunc {
   // LINE_LENGTH_BG ==> LINE_LENGTH_LINES, BLUE_GREEN
   // LINE_LENGTH_COLORMAP => LINE_LENGTH_LINES, STANDARD_COLORMAP
   // and etc for LINE_ANGLE_* and LINE_ANGLE_RELATIVE_*
-  
  
-
   private static final int DEFAULT = 0;  // used for render_mode, render_submode, tangent_mode (for cubic interpolations)
   
   private static final int LINES = 1;
@@ -159,11 +156,24 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int SINE_WAVES = 4;
   private static final int QUADRATIC_BEZIER = 5;
   private static final int CUBIC_HERMITE_SPLINE = 10;
+
+  // CARDINAL_SPLINE also include uniform Catmull-Rom splines as a special case (when tightness param is set to 0)
   private static final int CARDINAL_SPLINE = 11;
-  private static final int FINITE_DIFFERENCE_SPLINE = 12;
-  private static final int CATMULL_ROM_SPLINE = 13;
-  private static final int CHORDAL_CATMULL_ROM_SPLINE = 14;
-  private static final int CENTRIPETAL_CATMULL_ROM_SPLINE = 15;
+
+  // finite difference spline in this context becomes equivalent to Catmull-Rom, so removing it
+        // m1 ==> finite difference calculated tangent for end_point1        
+        // m2 ==> finite difference calculated tangent for end_point2
+        // M1 = ((P2-P1)/(t2-t1) + (P1-P0)/(t1-t0))/2
+        // M2 = ((P3-P2)/(t3-t2) + (P2-P1)/(t2-t1))/2
+        // for now assuming t(i+1) = t(i) + 1, or in other words t(i+t)-t(i) = 1
+        // M1 = (P2 - P0)/2
+        // M2 = (P3 - P1)/2
+        // so is equivalent to Catmull-Rom
+  // private static final int FINITE_DIFFERENCE_SPLINE = 12;
+  
+  private static final int NONUNIFORM_CATMULL_ROM_SPLINE = 13;
+  private static final int CHORDAL_CATMULL_ROM_SPLINE = 14;  // special case of nonuniform Catmull-Rom spline
+  private static final int CENTRIPETAL_CATMULL_ROM_SPLINE = 15;  // special case of nonuniform Catmull-Rom spline
   private static final int KOCHANEK_BARTELS_SPLINE = 16;
   // HAPPY_ACCIDENTS: accidentally used incorrect tangent calculations, but ended up with interesting curves...
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT1 = 17;  // incorrect tangent calculations
@@ -173,14 +183,6 @@ public class MaurerLinesFunc extends VariationFunc {
 
   private static final int CUBIC_HERMITE_TANGENT_FORM2 = 25;
   private static final int ORIGIN_TRIANGLE_FILL = 30;
-  
-  /*
-  private static final int CUBIC_HERMITE_SPLINE_EXP1 = 31;
-  private static final int CUBIC_HERMITE_SPLINE_EXP2 = 32;
-  private static final int CUBIC_HERMITE_SPLINE_EXP3 = 33;
-  private static final int CUBIC_HERMITE_SPLINE_EXP4 = 34;
-  private static final int CUBIC_HERMITE_SPLINE_EXP5 = 35;  
-  */
   
   private static final int STROKE = 1;
   private static final int REFLECTED_STROKE = 2;
@@ -1295,7 +1297,150 @@ public class MaurerLinesFunc extends VariationFunc {
           yout = newy;
         }
       }
- 
+      
+      else if (render_mode == CARDINAL_SPLINE) {
+        // cobbled together from:
+        //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+        //    http://paulbourke.net/miscellaneous/interpolation/
+        //    http://cubic.org/docs/hermite.htm
+        //  
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        // already have t1, randome [0:1]
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // have points p1 and p2, get p0 and p3 (previous point and next point)
+        double theta0 = theta1 - theta_step_radians;
+        double theta3 = theta2 + theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point3.x;
+        double y3 = end_point3.y;
+
+        // m1 ==> cardinal spline calculated tangent for end_point1        
+        // m2 ==> cardinal spline calculated tangent for end_point1        
+        // M1 = (P2 - P0) / (t2 - t0)
+        // M2 = (P3 - P1) / (t3 - t1)
+        // for now assuming t(i+1) = t(i) + 1, or in other words (t2-t0) = 2 and (t3-t1) = 2
+        // (I think this is a standard assumption for baseline Catmull-Rom, see for example http://cubic.org/docs/hermite.htm)
+        // so 
+        // M1 = (P2 - PO)/2
+        // M2 = (P3 - P1)/2
+        double m1x = 0.5 * (x2-x0);
+        double m2x = 0.5 * (x3-x1);
+        double m1y = 0.5 * (y2-y0);
+        double m2y = 0.5 * (y3-y1);
+
+        // also trying addition of a tightness parameter
+        // for the case where render_modifier1 = 0, get the uniform Catmull-Rom spline as a special case of cardinal splines
+        // for the case where render_modifier1 = 1, tangents have no effect
+        double tanscale = (1-render_modifier1);
+
+        m1x = m1x * tanscale;
+        m1y = m1y * tanscale;
+        m2x = m2x * tanscale;
+        m2y = m2y * tanscale;
+        
+        double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
+        double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      
+      else if (render_mode == NONUNIFORM_CATMULL_ROM_SPLINE || 
+              render_mode == CENTRIPETAL_CATMULL_ROM_SPLINE || 
+              render_mode == CHORDAL_CATMULL_ROM_SPLINE) {
+        // cobbled together from:
+        //    https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
+        //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+        // most helpful for actual implementation: 
+        //      http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/19283471#19283471
+        // 
+        // Original Paper: "A Recursive Evaluation Algorithm for a Class of Catmull-Rom Splines", Barry and Goldman
+        
+        // Hermite Basis Functions: 
+        // range from [0:1] along [0..line_length]
+        // already have t1, random [0:1]
+        double t2 = t1*t1;
+        double t3 = t1*t1*t1;
+        double h00 = 2*t3 - 3*t2 + 1;
+        double h10 = t3 - 2*t2+ t1;
+        double h01 = -2*t3 + 3*t2;
+        double h11 = t3 - t2;
+        
+        // have points p1 and p2, get p0 and p3 (previous point and next point)
+        double theta0 = theta1 - theta_step_radians;
+        double theta3 = theta2 + theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point3.x;
+        double y3 = end_point3.y;
+        
+        double alpha = 0;
+        if (render_mode == CENTRIPETAL_CATMULL_ROM_SPLINE) {
+          alpha = 0.5;
+        }
+        else if (render_mode == CHORDAL_CATMULL_ROM_SPLINE) {
+          alpha = 1.0;
+        }
+        else {  // render_mode == NONUNIFORM_CATMULL_ROM_SPLINE
+          // nonuniform Catmull-Rom spline, with special cases:
+          // rm = 0 ==> uniform Catmull-Rom spline (essentially same as cardinal spline)
+          // rm = 0.5 ==> centripetal Catmull-Rom spline
+          // rm = 1.0 ==> chordal Catmull-Rom spline
+          alpha = render_modifier2; 
+        }
+
+        // centripetal/chordal Catmull-Rom tangent caclulations
+        // M1 = (P1 - P0) / (t1 - t0) - (P2 - P0) / (t2 - t0) + (P2 - P1) / (t2 - t1)
+        // M2 = (P2 - P1) / (t2 - t1) - (P3 - P1) / (t3 - t1) + (P3 - P2) / (t3 - t2)
+        // and t[i+1] = (((x[i+1]-x[i])^2 + (y[i+1]-y[i])^2)^0.5)^a + t[i]
+        //     t[i+1] = (((x[i+1]-x[i])^2 + (y[i+1]-y[i])^2))^(a/2) + t[i]
+        // rewrite in terms of deltas, then can drop the last term
+        // dt0 = t1-t0 = (((x1-x0)^2 + (y1-y0)^2)) ^(a/2)
+        // dt1 = t2-t1
+        // dt2 = t3-t2
+        // M1 = ((P1-P0)/dt0) - ((P2-P0)/(dt0+dt1)) + ((P2-P1)/dt1)
+        // M2 = ((P2-P1)/dt1) - ((P3-P1)/(dt1+dt2)) + ((P3-P2)/dt2)
+        // also need to rescale by dt1 (so can parameterize t from [0:1]) ??
+        // do scaling when combining terms?
+        double dt0 = Math.pow(((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)), (alpha/2));
+        double dt1 = Math.pow(((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), (alpha/2));
+        double dt2 = Math.pow(((x3-x2)*(x3-x2) + (y3-y2)*(y3-y2)), (alpha/2));
+
+        double m1x = ((x1-x0)/dt0) - ((x2-x0)/(dt0+dt1)) + ((x2-x1)/dt1);
+        double m1y = ((y1-y0)/dt0) - ((y2-y0)/(dt0+dt1)) + ((y2-y1)/dt1);
+        double m2x = ((x2-x1)/dt1) - ((x3-x1)/(dt1+dt2)) + ((x3-x2)/dt2);
+        double m2y = ((y2-y1)/dt1) - ((y3-y1)/(dt1+dt2)) + ((y3-y2)/dt2);
+        
+        // scaling tangents (analagous to normalizing to the unit tangent?)
+        // double tanscale = dt1;
+        // also trying addition of a tightness parameter
+        double tanscale = dt1 * (1-render_modifier1);
+        m1x = m1x * tanscale;
+        m1y = m1y * tanscale;
+        m2x = m2x * tanscale;
+        m2y = m2y * tanscale;
+        
+        double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
+        double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
+        line_delta = t1 * line_length;
+        xout = xnew;
+        yout = ynew;
+        
+      }
+      
       else if (render_mode == KOCHANEK_BARTELS_SPLINE) {
         // cobbled together from:
         // Online:
@@ -1339,7 +1484,14 @@ public class MaurerLinesFunc extends VariationFunc {
         double c232 = (1-tension)*(1-bias)*(1+continuity)/2;
 
         // m1 ==> KB-calculated tangent for end_point1        
-        // m2 ==> KB-calculated tangent for end_point1        
+        // m2 ==> KB-calculated tangent for end_point1    
+        // note that when tension = bias = continuity = 0, all coefficients become 0.5, 
+        // and thus this reduces to Catmull-Rom spline, for example:
+        //     m1x = (c110 * (x1-x0)) + (c121 * (x2-x1)) 
+        //         = (0.5 * (x1-x0)) + (0.5 *(x2-x1))
+        //         =  0.5 * (x1 - x0 + x2 - x1)
+        //         =  0.5 * (x2 - x1)
+        //      
         double m1x = (c110 * (x1-x0)) + (c121 * (x2-x1));
         double m2x = (c221 * (x2-x1)) + (c232 * (x3-x2));
         
@@ -1351,245 +1503,8 @@ public class MaurerLinesFunc extends VariationFunc {
         line_delta = t1 * line_length;
         xout = xnew;
         yout = ynew;
-        
       }
-      
-      // can eliminate CUBIC_HERMITE_SPLINE_EXP1, 
-      // replicated by CUBIC_HERMITE_SPLINE_HAPPY_ACCIDENT1 (with tangent_mode UNSCALED_UNIT_TANGENT)
-      /*
-      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP1) {
-        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-
-        // Hermite Basis Functions: 
-        // range from [0:1] along [0..line_length]
-        //double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-        
-        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
-        //     tangent = f'(t)
-        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
-        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
-        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
-        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
-        //m1x = -1 * m1x;
-        //m2x = -1 * m2x;
-        // or is it:
-        //                f'(t)
-        //    tangent  = ------- 
-        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
-        double speed1 = sqrt(m1x*m1x + m1y*m1y);
-        double speed2 = sqrt(m2x*m2x + m2y*m2y);
-        double tan1x = m1x/speed1;
-        double tan2x = m2x/speed2;
-        double tan1y = m1y/speed1;
-        double tan2y = m2y/speed2;
-        
-        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
-        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
-        // double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
-        // double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
-        // double xnew = (h00 * x1) + ((h10 * m1x)*(x2-x1)) + (h01 * x2) + ((h11 * m2x)*(x2-x1));
-        // double ynew = (h00 * y1) + ((h10 * m1y)*(y2-y1)) + (h01 * y2) + ((h11 * m2y)*(y2-y1));
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-        
-      }
-      */
-      
-      // can eliminate CUBIC_HERMITE_SPLINE_EXP2, 
-      //    can get similar effect (though probably not exactly) with CUBIC_HERMITE_SPLINE 
-      /*
-      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP2) {
-        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-
-        // Hermite Basis Functions: 
-        // range from [0:1] along [0..line_length]
-        //double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-
-        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
-        //     tangent = f'(t)
-        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
-        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
-        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
-        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
-        //m1x = -1 * m1x;
-        m2x = -1 * m2x;
-        // or is it:
-        //                f'(t)
-        //    tangent  = ------- 
-        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
-        double speed1 = sqrt(m1x*m1x + m1y*m1y);
-        double speed2 = sqrt(m2x*m2x + m2y*m2y);
-        double tan1x = m1x/speed1;
-        double tan2x = m2x/speed2;
-        double tan1y = m1y/speed1;
-        double tan2y = m2y/speed2;
-        
-        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
-        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
-        
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-      }
-      
-      */
-      // can eliminate CUBIC_HERMITE_SPLINE_EXP3, 
-      //    can get similar effect (though probably not exactly) with CUBIC_HERMITE_SPLINE 
-      /*
-      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP3) {
-        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-
-        // Hermite Basis Functions: 
-        // range from [0:1] along [0..line_length]
-        // double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-
-        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
-        //     tangent = f'(t)
-        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
-        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
-        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
-        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
-        m1x = -1 * m1x;
-        // m2x = -1 * m2x;
-        // or is it:
-        //                f'(t)
-        //    tangent  = ------- 
-        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
-        double speed1 = sqrt(m1x*m1x + m1y*m1y);
-        double speed2 = sqrt(m2x*m2x + m2y*m2y);
-        double tan1x = m1x/speed1;
-        double tan2x = m2x/speed2;
-        double tan1y = m1y/speed1;
-        double tan2y = m2y/speed2;
-        
-        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
-        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
-        
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-        
-      }
-      */
-      
-      // can eliminate CUBIC_HERMITE_SPLINE_EXP4, 
-      // replicated by CUBIC_HERMITE_SPLINE_HAPPY_ACCIDENT2 (with tangent_mode UNSCALED_UNIT_TANGENT)
-      /*
-      else if (render_mode == CUBIC_HERMITE_SPLINE_EXP4) {
-        // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-        
-        // Hermite Basis Functions:
-        // range from [0:1] along [0..line_length]
-        //double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-        
-        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
-        //     tangent = f'(t)
-        double m1x = -(cos((a/b)*theta1) + c) * sin(theta1);
-        double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
-        double m1y =  (cos((a/b)*theta1) + c) * cos(theta1);
-        double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
-        m1x = -1 * m1x;
-        m2x = -1 * m2x;
-        // or is it:
-        //                f'(t)
-        //    tangent  = -------
-        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
-        double speed1 = sqrt(m1x*m1x + m1y*m1y);
-        double speed2 = sqrt(m2x*m2x + m2y*m2y);
-        double tan1x = m1x/speed1;
-        double tan2x = m2x/speed2;
-        double tan1y = m1y/speed1;
-        double tan2y = m2y/speed2;
-        
-        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
-        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
-        
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-        
-      }
-      */
-      
-      // can eliminate CUBIC_HERMITE_SPLINE_EXP5, same as CUBIC_HERMITE_SPLINE with submode UNSCALED_TANGENT
-     /* else if (render_mode == CUBIC_HERMITE_SPLINE_EXP5) {
-         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
-        
-        // Hermite Basis Functions:
-        // range from [0:1] along [0..line_length]
-        //double t1 = Math.random();
-        double t2 = t1*t1;
-        double t3 = t1*t1*t1;
-        double h00 = 2*t3 - 3*t2 + 1;
-        double h10 = t3 - 2*t2+ t1;
-        double h01 = -2*t3 + 3*t2;
-        double h11 = t3 - t2;
-        
-        // calculating tangent vectors
-        // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
-        //     tangent = f'(t)
-        curve.getFirstDerivative(theta1, first_derivative_point1);
-        double m1x = first_derivative_point1.x;
-        double m1y = first_derivative_point1.y;
-        curve.getFirstDerivative(theta2, first_derivative_point2);
-        double m2x = first_derivative_point2.x;
-        double m2y = first_derivative_point2.y;
-        // m1x = -1 * m1x;
-        // m2x = -1 * m2x;
-        
-        double tan1x = m1x;
-        double tan1y = m1y;
-        double tan2x = m2x;
-        double tan2y = m2y;
-
-         // or is it:
-        //                f'(t)
-        //    tangent  = -------
-        //               |f'(t)|  ==> speed ==> sqrt(x'(t)^2 + y'(t)^2)
-        //  calulating unit tangent vectors
-        // double speed1 = sqrt(m1x*m1x + m1y*m1y);
-        // double speed2 = sqrt(m2x*m2x + m2y*m2y);
-        // double tan1x = m1x/speed1;
-        // double tan2x = m2x/speed2;
-        // double tan1y = m1y/speed1;
-        // double tan2y = m2y/speed2;
-        
-        double xnew = (h00 * x1) + (h10 * tan1x) + (h01 * x2) + (h11 * tan2x);
-        double ynew = (h00 * y1) + (h10 * tan1y) + (h01 * y2) + (h11 * tan2y);
-        
-        line_delta = t1 * line_length;
-        xout = xnew;
-        yout = ynew;
-        
-      } // end CUBIC_HERMITE_SPLINE_EXP5
-      */
-
-      
+           
       else if (render_mode == CUBIC_HERMITE_SPLINE || 
               render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT1 ||
               render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT2 || 
@@ -1639,8 +1554,6 @@ public class MaurerLinesFunc extends VariationFunc {
                 render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT4) {
           // using wrong (but interesting) calculations for first derivative
           double k = a/b;
-          // double m2x = -(cos((a/b)*theta2) + c) * sin(theta2);
-          // double m2y =  (cos((a/b)*theta2) + c) * cos(theta2);
           first_derivative_point1.x = -(cos(k*dt1) + c) * sin(dt1);
           first_derivative_point1.y =  (cos(k*dt1) + c) * cos(dt1);
           first_derivative_point2.x = -(cos(k*dt2) + c) * sin(dt2);
@@ -1797,17 +1710,17 @@ public class MaurerLinesFunc extends VariationFunc {
         double gw1 = y2;    
         
         // random value ranging from [0:1]
-        double p = Math.random();
+        // double p = Math.random();
         if (Double.isNaN(ffw0) || Double.isNaN(ggw0) || Double.isNaN(ffw1) || Double.isNaN(ggw1)) {
           // if can't find first derivatives, just default to linear line interpolation
-          xout = (x1 * (1-p)) + x2*p;
+          xout = (x1 * (1-t1)) + x2*t1;
           // same as xout = x1 + (v * (x2-x1));
-          yout = (y1 * (1-p)) + y2*p;
+          yout = (y1 * (1-t1)) + y2*t1;
           // same as yout = y1 + (v * (y2-y1));
         }
         else {
           // w (standing in for x from above hermite equation) ranges from [theta1:theta2]
-          double w = theta1 + (p * (theta2 - theta1));
+          double w = theta1 + (t1 * (theta2 - theta1));
           
           if (DEBUG_TANGENTS && Math.random() < 0.01) {
             double point_threshold = Math.random();
@@ -1833,35 +1746,24 @@ public class MaurerLinesFunc extends VariationFunc {
             double tw1 = ((w1-w)/(w1-w0));
             double tw0 = ((w0-w)/(w0-w1));
             
-            // double tw1pow = pow(tw1, 2 * render_modifier1);
-            // double tw0pow = pow(tw0, 2 * render_modifier1);
-            
-            // double hf0 = (1 + (2*tw)) * tw1 * tw1 * fw0;
-            double hf0 = (1 + (2*tw)) * pow(tw1, 2 * render_modifier1) * fw0;
+            double hf0 = (1 + (2*tw)) * tw1 * tw1 * fw0;
             double hff0 = (w-w0) * tw1 * tw1 * ffw0;
-            // double hff0 = (w-w0) * pow(tw1, 2 * render_modifier2) * ffw0;
-            // double hf1 = (1 + (2*tw1)) * tw0 * tw0 * fw1;
-            double hf1 = (1 + (2*tw1)) * pow(tw0, 2 * render_modifier1) * fw1;
+            double hf1 = (1 + (2*tw1)) * tw0 * tw0 * fw1;
             double hff1 = (w-w1) * tw0 * tw0 * ffw1;
-            // double hff1 = (w-w1) * pow(tw0, 2 * render_modifier2) * ffw1;
-            double fw = hf0 + (render_modifier2 * hff0) + hf1 + (render_modifier3 * hff1);
+            double fw = hf0 + hff0 + hf1 + hff1;
             
-            // double hg0 = (1 + (2*tw)) * tw1 * tw1 * gw0;
-            double hg0 = (1 + (2*tw)) * pow(tw1, 2 * render_modifier1) * gw0;
+            double hg0 = (1 + (2*tw)) * tw1 * tw1 * gw0;
             double hgg0 = (w-w0) * tw1 * tw1 * ggw0;
-            // double hgg0 = (w-w0) * pow(tw1, 2 * render_modifier2) * ggw0;
-            // double hg1 = (1 + (2*tw1)) * tw0 * tw0 * gw1;
-            double hg1 = (1 + (2*tw1)) * pow(tw0, 2 * render_modifier1) * gw1;
+            double hg1 = (1 + (2*tw1)) * tw0 * tw0 * gw1;
             double hgg1 = (w-w1) * tw0 * tw0 * ggw1;
-            // double hgg1 = (w-w1) * pow(tw0, 2 * render_modifier2) * ggw1;
-            double gw = hg0 + (render_modifier2 * hgg0) + hg1 + (render_modifier3 * hgg1);
+            double gw = hg0 + hgg0 + hg1 + hgg1;
             
             xout = fw;
             yout = gw;
           }
         }
         
-        line_delta = p * line_length;
+        line_delta = t1 * line_length;
         
       } // end CUBIC_HERMITE_TANGENT_FORM2
 
