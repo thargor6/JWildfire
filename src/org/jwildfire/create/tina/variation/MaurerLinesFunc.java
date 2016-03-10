@@ -119,6 +119,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int FAY_BUTTERFLY = 12;
   private static final int RIGGE1 = 13;
   private static final int RIGGE2 = 14;
+  private static final int RIGGED_RHODONEA_PLUS = 15;
+  private static final int RIGGED_RHODONEA_MINUS = 16;
+  
 
   // color mode
   // 0 NORMAL_VECTOR --> normal (no direct coloring)
@@ -155,6 +158,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int ELLIPSES = 3;
   private static final int SINE_WAVES = 4;
   private static final int QUADRATIC_BEZIER = 5;
+  
+  private static final int SEQUIN_CIRCLE_SPLINE = 9;
   private static final int CUBIC_HERMITE_SPLINE = 10;
 
   // CARDINAL_SPLINE also include uniform Catmull-Rom splines as a special case (when tightness param is set to 0)
@@ -188,14 +193,19 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int REFLECTED_STROKE = 2;
   private static final int BOTH_STROKE = 3;
   private static final int ALTERNATING_STROKE = 4;
-  private static final int FILL = 5;
-  private static final int REFLECTED_FILL = 6;
-  private static final int BOTH_FILL = 7;
-  private static final int ALTERNATING_FILL = 8;
-  private static final int Z_STROKE = 9;
-  private static final int Z_REFLECTED_STROKE = 10;
-  private static final int Z_BOTH_STROKE = 11;
-  private static final int Z_ALTERNATING_STROKE = 12;
+  private static final int FILL_TO_LINE = 5;   // fill from calculated point to Maurer line (reduces to Maurer line for line render mode)
+  private static final int REFLECTED_FILL_TO_LINE = 6;
+  private static final int BOTH_FILL_TO_LINE = 7;
+  private static final int ALTERNATING_FILL_TO_LINE = 8;
+  private static final int FILL_TO_CURVE = 9;
+  private static final int REFLECTED_FILL_TO_CURVE = 10;
+  private static final int BOTH_FILL_TO_CURVE = 11;
+  private static final int ALTERNATING_FILL_TO_CURVE = 12;
+  
+  private static final int Z_STROKE = 15;
+  private static final int Z_REFLECTED_STROKE = 16;
+  private static final int Z_BOTH_STROKE = 17;
+  private static final int Z_ALTERNATING_STROKE = 18;
   
   private static final int TANGENT = 1;      // velocity ==> f'(t)
   private static final int UNIT_TANGENT = 2; // normalized velocity ==> f'(t) / |f'(t)|   
@@ -364,12 +374,12 @@ public class MaurerLinesFunc extends VariationFunc {
     }
   }
   
+ 
   class RhodoneaCurve extends ParametricCurve {
     @Override
     public void getCurvePoint(double t, DoublePoint2D point) {
       double k = a/b;
       double r = cos(k * t) + c;
-      // if (DEBUG_RELATIVE_ANGLE && count % 100000 == 0) { System.out.println("radius = " + r); }
       point.x = r * cos(t);
       point.y = r * sin(t);
     }
@@ -417,7 +427,15 @@ public class MaurerLinesFunc extends VariationFunc {
   
   class PolygonCurve extends ParametricCurve {
     @Override
+    // parametric polygon equation derived from: 
+    //    http://math.stackexchange.com/questions/41940/is-there-an-equation-to-describe-regular-polygons
+    //    http://www.geogebra.org/m/157867
     public void getCurvePoint(double t, DoublePoint2D point) {
+      double n = Math.floor(a);
+      double theta = abs(t % M_2PI);
+      double r = cos(M_PI/n) / cos( theta%(M_2PI/n) - M_PI/n);
+      point.x = r * cos(theta);
+      point.y = r * sin(theta);
     }
   }
   
@@ -545,6 +563,31 @@ public class MaurerLinesFunc extends VariationFunc {
     }
   }
   
+   class RiggedRhodoneaPlusCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double k = a/b;
+      // double r = cos(k * t) + c;
+      double r = cos(k * t) + cos(c * k * t);
+      r = r/2;  // should get scale similar to base rhodonea?
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    } 
+  }
+   
+   class RiggedRhodoneaMinusCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      double k = a/b;
+      // double r = cos(k * t) + c;
+      double r = cos(k * t) - cos(c * k * t);
+      r = r/2; // should get scale similar to base rhodonea?
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    } 
+  }
+  
+  
   class Rigge1Curve extends ParametricCurve {
     @Override
     public void getCurvePoint(double t, DoublePoint2D point) {
@@ -591,8 +634,16 @@ public class MaurerLinesFunc extends VariationFunc {
   //     used for Kochanek-Bartels spline interpolation, possibly other uses in the future
   private DoublePoint3D end_point3 = new DoublePoint3D();
   
+  // extra points to hold derivative/tangent vectors for various cubic interpolations
   private DoublePoint2D first_derivative_point1 = new DoublePoint2D();
   private DoublePoint2D first_derivative_point2 = new DoublePoint2D();
+
+  // extra points to hold vectors for circle spline interpolation
+  private DoublePoint2D vecA = new DoublePoint2D();
+  private DoublePoint2D vecB = new DoublePoint2D();
+  private DoublePoint2D vecC = new DoublePoint2D();
+  private DoublePoint2D vecD = new DoublePoint2D();
+  private DoublePoint2D vecE = new DoublePoint2D();
   
   class MaurerFilter {
     public int mode = BAND_PASS_VALUE; // off, percentile/value/?, bandpass/bandstop
@@ -608,7 +659,7 @@ public class MaurerLinesFunc extends VariationFunc {
     ParametricCurve new_curve;
     if (curve_index == CIRCLE) { new_curve = new CircleCurve(); }
     else if (curve_index == POLYGON) { new_curve = new PolygonCurve(); }
-    else if (curve_index == ELLIPSE) { new_curve = new PolygonCurve(); }
+    else if (curve_index == ELLIPSE) { new_curve = new EllipseCurve(); }
     else if (curve_index == RHODONEA) { new_curve = new RhodoneaCurve(); }
     else if (curve_index == EPITROCHOID) { new_curve = new EpitrochoidCurve(); }
     else if (curve_index == HYPOTROCHOID) { new_curve = new HypotrochoidCurve(); }
@@ -621,6 +672,8 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (curve_index == FAY_BUTTERFLY) { new_curve = new FayButterflyCurve(); }
     else if (curve_index == RIGGE1) { new_curve = new Rigge1Curve(); }
     else if (curve_index == RIGGE2) { new_curve = new Rigge2Curve(); }
+    else if (curve_index == RIGGED_RHODONEA_PLUS) { new_curve = new RiggedRhodoneaPlusCurve(); }
+    else if (curve_index == RIGGED_RHODONEA_MINUS) { new_curve = new RiggedRhodoneaMinusCurve(); }
     else { new_curve = new CircleCurve(); } // default to circle curve
     return new_curve;
   }
@@ -1091,7 +1144,7 @@ public class MaurerLinesFunc extends VariationFunc {
           ay = ((1-bt) * (1-bt) * y1) + (bt * bt * y2);
         }
         
-        line_delta = bt * line_length;
+        // line_delta = bt * line_length;
         // for now working on Z submodes here, but handling most submodes at end of transform() method...
         if (render_submode == Z_STROKE) {  // not really working
           zout = ay;
@@ -1298,6 +1351,83 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
       
+      else if (render_mode == SEQUIN_CIRCLE_SPLINE) {
+        // Want to calculate interpolated point P(u) between P1 and P2, where u:[0=>1]
+        // Need P0, P1, P2, P3
+        // already have P1, P2, endpoints of current Maurer line
+        // calculate P0 and P3, from t=(theta1-theta_offset) and t=(theta2+that_offset) respectively
+        double theta0 = theta1 - this.theta_step_radians;
+        double theta3 = theta2 + this.theta_step_radians;
+        curve.getCurvePoint(theta0, end_point0);
+        curve.getCurvePoint(theta3, end_point3);
+        double x0 = end_point0.x;
+        double y0 = end_point0.y;
+        double x3 = end_point3.x;
+        double y3 = end_point3.y;
+
+        // then calculate unit direction vectors:
+        // A = (P1-P0)/|P1-P0|
+        // B = (P2-P1)/|P2-P1|
+        // C = (P2-P0)/|P2-P0|
+        // D = (P3-P2)/|P3-P2|
+        // E = (P3-P1)/|P3-P1|
+        // where |Pk - Pj| = norm(Pk-Pi) = sqrt((xk-xi)^2 + (yk-yi)^2)
+        double norm10 = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
+        double norm21 = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+        double norm20 = sqrt((x2-x0)*(x2-x0) + (y2-y0)*(y2-y0));
+        double norm32 = sqrt((x3-x2)*(x3-x2) + (y3-y2)*(y3-y2));
+        double norm31 = sqrt((x3-x1)*(x3-x1) + (y3-y1)*(y3-y1));
+        vecA.x = (x1-x0)/norm10;
+        vecA.y = (y1-y0)/norm10;
+        vecB.x = (x2-x1)/norm21;
+        vecB.y = (y2-y1)/norm21;
+        vecC.x = (x2-x0)/norm20;
+        vecC.y = (y2-y0)/norm20;
+        vecD.x = (x3-x2)/norm32;
+        vecD.y = (y3-y2)/norm32;
+        vecE.x = (x3-x1)/norm31;
+        vecE.y = (y3-y1)/norm31;
+        
+        // calculate tangent angles at P1 and P2:
+        //  (hmm, wonder if could substitute exact tangent calculation for base curve here?? not sure if it's the same angle though...)
+        // a1 = arccos(A @ C) ==>  @ is vector dot product
+        // a2 = arccos(E @ D)
+        double a1 = Math.acos( (vecA.x * vecC.x) + (vecA.y * vecC.y) );
+        double a2 = Math.acos( (vecE.x * vecD.x) + (vecE.y * vecD.y) );
+        
+        // trigonometric angle blending function between P0 and P1:
+        // a(u) = (a1 * cos^2(u*Pi/2)) + (a2 * sin^2(u*Pi/2))
+        double u = t1;  // already have t1:[0=>1]
+        double cu = cos(u*M_PI/2);
+        double su = sin(u*M_PI/2);
+        double au = (a1 * cu * cu) + (a2 * su * su);     
+        // now can calculate distance of P(u), d(P(u)) from P1:
+        //  b = |P2-P1|  ==> should already have this as line length for current Maurer line
+        //  d(P(u)) = b * sin(u * a(u)) / sin(a(u))
+        double bp = norm21;  // same as line_length?
+        double pd = bp * sin(u*au) / sin(au);
+        
+        // and deviation angle from Maurer line is 
+        //  dangle(u) = (1-u) * a(u)
+        double pa = (1-u)*au;
+        pa = -pa; // ???
+        
+        // then place point along Maurer line P1P2 at distance d(P(u)) from endpoint P1, 
+        // http://math.stackexchange.com/questions/409689/how-do-i-find-a-point-a-given-distance-from-another-point-along-a-line
+        double linex = x1 + ((x2-x1)*pd/norm21);
+        double liney = y1 + ((y2-y1)*pd/norm21);
+        
+        //    and rotate by deviation angle dangle(u) around P1
+        //    to get final position position of P(u)
+        // 2D rotation transformation of point B about a given fixed point A to give point C
+        // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+        // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+        xout = x1 + ((linex-x1) * cos(pa)) - ((liney-y1) * sin(pa));
+        yout = y1 + ((linex-x1) * sin(pa)) + ((liney-y1) * cos(pa));
+        
+        
+      }
+      
       else if (render_mode == CARDINAL_SPLINE) {
         // cobbled together from:
         //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
@@ -1350,7 +1480,7 @@ public class MaurerLinesFunc extends VariationFunc {
         
         double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
         double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
-        line_delta = t1 * line_length;
+        // line_delta = t1 * line_length;
         xout = xnew;
         yout = ynew;
         
@@ -1435,7 +1565,7 @@ public class MaurerLinesFunc extends VariationFunc {
         
         double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
         double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
-        line_delta = t1 * line_length;
+        // line_delta = t1 * line_length;
         xout = xnew;
         yout = ynew;
         
@@ -1500,7 +1630,7 @@ public class MaurerLinesFunc extends VariationFunc {
         
         double xnew = (h00 * x1) + (h10 * m1x) + (h01 * x2) + (h11 * m2x);
         double ynew = (h00 * y1) + (h10 * m1y) + (h01 * y2) + (h11 * m2y);
-        line_delta = t1 * line_length;
+        // line_delta = t1 * line_length;   // already calculated at start of use_render_mode loop
         xout = xnew;
         yout = ynew;
       }
@@ -1677,7 +1807,7 @@ public class MaurerLinesFunc extends VariationFunc {
         double xnew = (h00 * x1) + (h10 * dx1 * tanscale) + (h01 * x2) + (h11 * dx2 * tanscale);
         double ynew = (h00 * y1) + (h10 * dy1 * tanscale) + (h01 * y2) + (h11 * dy2 * tanscale);
         
-        line_delta = t1 * line_length;
+        // line_delta = t1 * line_length;
         
         xout = xnew;
         yout = ynew;
@@ -1763,7 +1893,7 @@ public class MaurerLinesFunc extends VariationFunc {
           }
         }
         
-        line_delta = t1 * line_length;
+        // line_delta = t1 * line_length;
         
       } // end CUBIC_HERMITE_TANGENT_FORM2
 
@@ -1804,39 +1934,51 @@ public class MaurerLinesFunc extends VariationFunc {
           yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
         }
       }
-      else if (render_submode == FILL) {
+      else if (render_submode == FILL_TO_LINE || render_submode == FILL_TO_CURVE) {
+        DoublePoint2D opoint;
+        if (render_submode == FILL_TO_CURVE) { opoint = curve_point; }
+        else { opoint = mpoint; }
         // randomly place point on line from outpoint to mpoint
         double rfill = Math.random();
-        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
-        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+        xout = (xout * (1-rfill)) + (opoint.x * rfill);
+        yout = (yout * (1-rfill)) + (opoint.y * rfill);
       }
-      else if (render_submode == REFLECTED_FILL) {
+      else if (render_submode == REFLECTED_FILL_TO_LINE || render_submode == REFLECTED_FILL_TO_CURVE) {
+        DoublePoint2D opoint;
+        if (render_submode == REFLECTED_FILL_TO_CURVE) { opoint = curve_point; }
+        else { opoint = mpoint; }
         double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
         xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
         yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
         double rfill = Math.random();
-        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
-        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+        xout = (xout * (1-rfill)) + (opoint.x * rfill);
+        yout = (yout * (1-rfill)) + (opoint.y * rfill);
       }
-      else if (render_submode == BOTH_FILL) {
+      else if (render_submode == BOTH_FILL_TO_LINE || render_submode == BOTH_FILL_TO_CURVE) {
+        DoublePoint2D opoint;
+        if (render_submode == BOTH_FILL_TO_CURVE) { opoint = curve_point; }
+        else { opoint = mpoint; }
         if (Math.random() < 0.5) {  // reflect half the points, leave other half unaltered
           double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
           xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
           yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
         }
         double rfill = Math.random();
-        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
-        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+        xout = (xout * (1-rfill)) + (opoint.x * rfill);
+        yout = (yout * (1-rfill)) + (opoint.y * rfill);
       }
-      else if (render_submode == ALTERNATING_FILL) {
+      else if (render_submode == ALTERNATING_FILL_TO_LINE || render_submode == ALTERNATING_FILL_TO_CURVE) {
+        DoublePoint2D opoint;
+        if (render_submode == ALTERNATING_FILL_TO_CURVE) { opoint = curve_point; }
+        else { opoint = mpoint; }
         if (step_number % 2 != 0) { // reflect odd steps, leave even steps unaltered
           double bc = (((x2-x1)*(xout-x1)) + ((y2-y1)*(yout-y1))) / (((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
           xout = (2 * (x1 + ((x2-x1)*bc))) - xout;
           yout = (2 * (y1 + ((y2-y1)*bc))) - yout;
         }
         double rfill = Math.random();
-        xout = (xout * (1-rfill)) + (mpoint.x * rfill);
-        yout = (yout * (1-rfill)) + (mpoint.y * rfill);
+        xout = (xout * (1-rfill)) + (opoint.x * rfill);
+        yout = (yout * (1-rfill)) + (opoint.y * rfill);
       }
 //      else if (render_submode == CIRCLE_EXTRUDE) {
 //        
