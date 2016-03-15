@@ -62,6 +62,11 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
+  private static final String PARAM_E = "e";
+  private static final String PARAM_F = "f";
+  private static final String PARAM_G = "g";
+  private static final String PARAM_H = "h";
+  
   private static final String PARAM_THETA_STEP_SIZE_DEGREES = "theta_step_size";
   private static final String PARAM_INITIAL_THETA_DEGREES = "initial_theta";
   private static final String PARAM_LINE_COUNT = "line_count";
@@ -121,6 +126,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RIGGE2 = 14;
   private static final int RIGGED_RHODONEA_PLUS = 15;
   private static final int RIGGED_RHODONEA_MINUS = 16;
+  private static final int SUPER_RHODONEA = 18;
   
 
   // color mode
@@ -280,9 +286,13 @@ public class MaurerLinesFunc extends VariationFunc {
   private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
   private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
   private double c_param = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
-  private double d_param = 0; // used for n3 in supershape equation
+  private double d_param = 1; // used for n3 in supershape equation
+  private double e_param = 1;
+  private double f_param = 1;
+  private double g_param = 1;
+  private double h_param = 1;
   
-  private double a, b, c, d;
+  private double a, b, c, d, e, f, g, h;
   
   // rhodonea vars
   // private double kn, kd, k, radial_offset; // k = kn/kd
@@ -498,20 +508,50 @@ public class MaurerLinesFunc extends VariationFunc {
     }
   }
   
+  class SuperRhodoneaCurve extends ParametricCurve {
+    public void getCurvePoint(double t, DoublePoint2D point) {
+    // a = kn
+    // b = kd
+    // c = m
+    // 1 = a1, b1, n2, n3
+    // 4 = m
+      double k = a/b;
+      double m = c;
+      double n1 = d;
+      double n2 = e;
+      double n3 = f;
+      double a1 = g;
+      double b1 = h;
+
+      double rose = cos(k * t);
+      double supershape =  pow(
+              (pow( fabs( (cos(m * t / 4))/a1), n2) +
+                      pow( fabs( (sin(m * t / 4))/b1), n3)),
+              (-1/n1));
+      double r = rose * supershape;
+      point.x = r * cos(t);
+      point.y = r * sin(t);
+    }
+  }
+  
   class SupershapeCurve extends ParametricCurve {
     @Override
     public void getCurvePoint(double t, DoublePoint2D point) {
       // original supershape variables: a, b, line_slope, n1, n2, n3
-      // a = line_slope
+      // a = m  (line_slope)
       // b = n1
       // c = n2
       // d = n3
-      double a1 = 1;
-      double b1 = 1;
+      // e = a1
+      // f = b1
+
+      // old supershape params
       double m = a;
       double n1 = b;
       double n2 = c;
       double n3 = d;
+      double a1 = 1;
+      double b1 = 1;
       
       double r = pow(
               (pow( fabs( (cos(m * t / 4))/a1), n2) +
@@ -666,6 +706,7 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (curve_index == LISSAJOUS) { new_curve = new LissajousCurve(); }
     else if (curve_index == EPISPIRAL) { new_curve = new EpispiralCurve(); }
     else if (curve_index == SUPERSHAPE) { new_curve = new SupershapeCurve(); }
+    else if (curve_index == SUPER_RHODONEA) { new_curve = new SuperRhodoneaCurve(); }
     else if (curve_index == STARR_CURVE) { new_curve = new StarrCurve(); }
     else if (curve_index == FARRIS_MYSTERY_CURVE) { new_curve = new FarrisMysteryCurve(); }
     else if (curve_index == WAGON_FANCIFUL_CURVE) { new_curve = new WagonFancifulCurve(); }
@@ -844,6 +885,10 @@ public class MaurerLinesFunc extends VariationFunc {
     b = b_param;
     c = c_param;
     d = d_param;
+    e = e_param;
+    f = f_param;
+    g = g_param;
+    h = h_param;
     
     if (use_cosets) {
       theta_step_radians = coset_step_size;
@@ -1352,6 +1397,10 @@ public class MaurerLinesFunc extends VariationFunc {
       }
       
       else if (render_mode == SEQUIN_CIRCLE_SPLINE) {
+        // Circle Splines with angle-based trionometric interpolation
+        // attempting to implement strategy described by Sequin, Lee, Yen in paper
+        // "Fair, G2- and C2-continuous circle splines for the interpolation of sparse data points", 2005
+        
         // Want to calculate interpolated point P(u) between P1 and P2, where u:[0=>1]
         // Need P0, P1, P2, P3
         // already have P1, P2, endpoints of current Maurer line
@@ -2363,12 +2412,19 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_LINE_THICKNESS, line_thickness_param);
     plist.put(PARAM_POINT_THICKNESS, point_thickness_param);
     plist.put(PARAM_CURVE_THICKNESS, curve_thickness_param);
+    
+    plist.put(PARAM_E, e_param);
+    plist.put(PARAM_F, f_param);
+    plist.put(PARAM_G, g_param);
+    plist.put(PARAM_H, h_param);
+
     return plist;
   };
   
   @Override
   public void setParameter(String pName, double pValue) {
     if (DEBUG_DYNAMIC_PARAMETERS) { System.out.println("setParameter called: " + pName + ", " + pValue); }
+    
     if (PARAM_A.equalsIgnoreCase(pName))
       a_param = pValue;
     else if (PARAM_B.equalsIgnoreCase(pName))
@@ -2377,6 +2433,14 @@ public class MaurerLinesFunc extends VariationFunc {
       c_param = pValue;
     else if (PARAM_D.equalsIgnoreCase(pName))
       d_param = pValue;
+    else if (PARAM_E.equalsIgnoreCase(pName))
+      e_param = pValue;
+    else if (PARAM_F.equalsIgnoreCase(pName))
+      f_param = pValue;
+    else if (PARAM_G.equalsIgnoreCase(pName))
+      g_param = pValue;
+    else if (PARAM_H.equalsIgnoreCase(pName))
+      h_param = pValue;
     else if (PARAM_RENDER_MODE.equalsIgnoreCase(pName))
       render_mode = (int)pValue;
     else if (PARAM_RENDER_SUBMODE.equalsIgnoreCase(pName))
@@ -2397,6 +2461,7 @@ public class MaurerLinesFunc extends VariationFunc {
       line_count = pValue;
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
       curve_mode = (int)pValue;
+    
     else if (PARAM_USE_COSETS.equalsIgnoreCase(pName)) {
       use_cosets = (pValue >= 1);
     }
@@ -2484,8 +2549,10 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (PARAM_DIFF_MODE.equalsIgnoreCase(pName)) {
       diff_mode = (pValue >= 1);
     }
-    else
+    else {
+      System.out.println("can't find param: name = " + pName + ", value = " + pValue);
       throw new IllegalArgumentException(pName);
+    }
   }
   
   @Override
