@@ -248,7 +248,9 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int DISTANCE_ALONG_LINE_POINTS = 7;
   private static final int DISTANCE_FROM_MIDLINE_POINTS = 8;
   private static final int DISTANCE_FROM_NEAREST_END_POINTS = 9;
+  private static final int SPEED_AT_ENDPOINT1 = 10;
   // private static final int WEIGHTED_LINE_LENGTH = 5;
+  private static final int CURRENT_THETA = 11;
   
   // measure thresholding
   private static final int PERCENT = 0;
@@ -364,7 +366,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private double[] sampled_line_lengths = new double[sample_size];
   private double[] sampled_line_angles = new double[sample_size];
   private double[] sampled_point_angles = new double[sample_size];
-  
+  private double[] sampled_speeds = new double[sample_size];
+  private double[] sampled_thetas = new double[sample_size];
   private long count = 0;
   
   ParametricCurve curve;
@@ -381,6 +384,15 @@ public class MaurerLinesFunc extends VariationFunc {
     public void getFirstDerivative(double t, DoublePoint2D result) {
       result.x = Double.NaN;
       result.y = Double.NaN;
+    }
+    
+    public double getSpeed(double t, DoublePoint2D result) {
+      this.getFirstDerivative(t, result);
+      if (Double.isNaN(result.x) || Double.isNaN(result.y)) {
+        return 0;
+      }
+      double speed = sqrt(result.x*result.x + result.y*result.y);
+      return speed;
     }
   }
   
@@ -816,6 +828,8 @@ public class MaurerLinesFunc extends VariationFunc {
       x2 = end_point2.x;
       y2 = end_point2.y;
       
+      double s1 = curve.getSpeed(theta1, end_point1);
+      
       // find the slope and length of the line
       double ydiff = y2 - y1;
       double xdiff = x2 - x1;
@@ -833,11 +847,15 @@ public class MaurerLinesFunc extends VariationFunc {
       sampled_line_lengths[i] = line_length;
       sampled_line_angles[i] = line_angle;
       sampled_point_angles[i] = point_angle;
+      sampled_speeds[i] = s1;
+      sampled_thetas[i] = theta1;
     }
     if (DEBUG_SAMPLING) { System.out.println("sorting"); }
     Arrays.sort(sampled_line_lengths);
     Arrays.sort(sampled_line_angles);
     Arrays.sort(sampled_point_angles);
+    Arrays.sort(sampled_speeds);
+    Arrays.sort(sampled_thetas);
     if (DEBUG_SAMPLING) {
       System.out.println("low line length: " + sampled_line_lengths[0]);
       System.out.println("high line length: " + sampled_line_lengths[sample_size-1]);
@@ -845,6 +863,8 @@ public class MaurerLinesFunc extends VariationFunc {
       System.out.println("high line angle: " + sampled_line_angles[sample_size-1]);
       System.out.println("low point angle: " + sampled_point_angles[0]);
       System.out.println("high point angle: " + sampled_point_angles[sample_size-1]);
+      System.out.println("low speed: " + sampled_speeds[0]);
+      System.out.println("high speed: " + sampled_speeds[sample_size-1]);
     }
     
   }
@@ -902,7 +922,9 @@ public class MaurerLinesFunc extends VariationFunc {
       }
       else {
         // pick one of the cosets [0, 1, ... coset_gcd-1 ], use this to decide the initial_offset
-        double initial_offset = (int)(Math.round(Math.random() * (coset_gcd-1)));
+        // double initial_offset = (int)(Math.round(Math.random() * (coset_gcd-1)));
+        // since random gives [0..1), and want [0..{coset_gcd-1}]:
+        double initial_offset = (int)(Math.floor(Math.random() * coset_gcd));
         initial_theta_radians = M_2PI * (initial_offset / (double)coset_circle_div);
         if (DEBUG_COSETS && count % 50000 == 0) {
           System.out.println("gcd: " + coset_gcd + ", lcm: " + coset_lcm + ", cycles: " + cycles + ", initial_offset: " + initial_offset);
@@ -1054,6 +1076,8 @@ public class MaurerLinesFunc extends VariationFunc {
     double midlength = line_length/2.0;  // use midlength of Maurer line as radius
     double xmid = (x1 + x2)/2.0;
     double ymid = (y1 + y2)/2.0;
+
+    double speed1 = curve.getSpeed(theta1, end_point1);
 
     boolean use_render_mode = true;
     if (show_points_param > 0 || show_curve_param > 0) {
@@ -2213,6 +2237,14 @@ public class MaurerLinesFunc extends VariationFunc {
       if (direct_color_measure == LINE_LENGTH_LINES) {
         val = line_length;
         sampled_vals = sampled_line_lengths;
+      }
+      else if (direct_color_measure == SPEED_AT_ENDPOINT1) {
+        val = speed1;
+        sampled_vals = sampled_speeds;
+      }
+      else if (direct_color_measure == CURRENT_THETA)  {
+        val = theta1/M_2PI;
+        sampled_vals = sampled_thetas;
       }
       else if (direct_color_measure == LINE_ANGLE_LINES) {
         val = line_angle;
