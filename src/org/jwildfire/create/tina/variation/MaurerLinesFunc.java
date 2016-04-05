@@ -43,7 +43,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
  * Maurer Lines variation by CozyG
  * Initially based on the "Maurer Rose", as described by Peter Maurer,
  *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
- *
+ *    for more information on Maurer Lines see http://genomancer.org
  */
 public class MaurerLinesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_RENDER_SUBMODE = "render_submode";
   private static final String PARAM_TANGENT_SUBMODE = "tangent_submode";
   private static final String PARAM_CURVE_MODE = "curve_mode";
-  private static final String PARAM_USE_COSETS = "use_cosets";
+  private static final String PARAM_COSETS_MODE = "cosets_mode";
   
   private static final String PARAM_DIRECT_COLOR_MEASURE = "direct_color_measure";
   private static final String PARAM_DIRECT_COLOR_GRADIENT = "direct_color_gradient";
@@ -252,6 +252,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RED_BLUE = 4;
   private static final int BLUE_GREEN = 5;
   
+  /**
+   *  COSET MODES
+   */
+  private static final int NO_COSETS = 0;
+  private static final int CLASSIC_COSETS = 1;  // cosets as implemented in original Maurer rose paper -- 
+  private static final int CLOSURE_COSETS = 2;  // improved cosets as implemented in Helt rose paper -- line_count is for full curve closure 
+  private static final int HYBRID_COSETS = 3;   // hybrid of CLASSIC and CLOSURE -- line_count is for full_curve_closure/2Pi 
+  
   // direct color measures (and filters)
   /**
    * DIRECT COLOR MEASURE
@@ -269,8 +277,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int SPEED_AT_ENDPOINT1 = 10;
   // private static final int WEIGHTED_LINE_LENGTH = 5;
   private static final int CURRENT_THETA = 11;
-  private static final int CURRENT_COSET = 12;  
-  private static final int CURRENT_POLYLINE_SEGMENT = 13;
+  // private static final int CURRENT_COSET = 12;  
+  // private static final int CURRENT_POLYLINE_SEGMENT = 13;
   
   // measure thresholding
   private static final int PERCENT = 0;
@@ -331,7 +339,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double render_modifier2 = 1.0;
   private double render_modifier3 = 1.0;
   
-  // private double coset_line_offset;
+  // private double coset_d;
   private double theta_step_radians;
   private double initial_theta_radians;
   private double cycles; // 1 cycle = 2*PI
@@ -367,23 +375,28 @@ public class MaurerLinesFunc extends VariationFunc {
   /* 
   *  vars for using cosets method from original Maurer Rose paper:
   *    line_count becomes the (integer) number of "degrees" circle is divided into 
-  *    coset_line_offset is rounded to nearest integer
+  *    theta_step_size is rounded to nearest integer
   *    initial offset is ignored (considered 0)
-  *    WARNING: certain meta_modes override use_cosets setting:
+  *    WARNING: certain meta_modes override cosets_mode setting:
   *        LINE_OFFSET_INCREMENT
   *        INITIAL_OFFSET
   */
-  private boolean use_cosets = false;  
-  int coset_line_offset;
-  int coset_circle_div;
+  private int cosets_mode = 0; 
+  int coset_d;
+  int coset_z;
   int coset_gcd;
   int coset_lcm;
-  double cycles_to_close_polyline;
-  double cycles_to_close_curve;
+
   double lines_per_coset;
   double coset_step_size;
+  double coset_count;
+
+  double cycles_to_close_curve;
+  double cycles_to_close_polyline;
+  double radians_to_close_curve;
+  double radians_to_close_polyline;
   
-  private boolean irrationalize = false;
+  private double irrationalize = 0;
   private boolean randomize = false;
   private int sample_size = 1000;
   private double[] sampled_line_lengths = new double[sample_size];
@@ -821,14 +834,7 @@ public class MaurerLinesFunc extends VariationFunc {
   //       c = c_radius
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    a = a_param;
-    b = b_param;
-    c = c_param;
-    d = d_param;
-    e = e_param;
-    f = f_param;
-    g = g_param;
-    h = h_param;
+    setCurveParams();
     
     curve = createCurve(curve_mode);
     
@@ -865,57 +871,46 @@ public class MaurerLinesFunc extends VariationFunc {
     curve_thickness = curve_thickness_param / 100;
 
     theta_step_radians = M_2PI * (theta_step_size_param / 360);
+    if (irrationalize != 0) {
+      theta_step_radians += (irrationalize * 0.01 * Math.E)/360;
+    }
     initial_theta_radians = M_2PI * (initial_theta_param / 360);
     cycles = (line_count * theta_step_radians) / M_2PI;
 
-    coset_line_offset = (int)Math.floor(theta_step_size_param);
-    coset_circle_div = (int)Math.floor(line_count);
-    coset_gcd = gcd(coset_line_offset, coset_circle_div);
-    coset_lcm = lcm(coset_line_offset, coset_circle_div);   
-    // wrong calculation for coset cycles?
-    // 1 cycle = 2PI
-    // what we really want is:
-    //    WRONG: in transform() a t that ranges from 0 to (number_of_cosets)*(radians_to_close) ??
-    // above is wrong because actually which cosets to use is randomly chosen _regardless_ of t
-    //    so really don't need a separate cycles_to_close_polyline, can just use cycles_to_close (same as radians_to_close/2PI)
-    //    which ALSO means (I think) should be able to refactor so that can combine meta-modes and coset usage
-    // number_of_cosets = coset_gcd ??
-    // radians_to_close = cycles_to_close * 2PI
-    
-    // _IF_ cosets were picked sequentially based on t, then might want to reintroduce a cycles_to_close_polyline 
-    //    calculation, but using coset_lcm is still wrong?
-    //    instead would want:
-    //  double cycles_including_cosets = (number_of_coset)*(cycles_to_close)
-
-    double old_cycles_to_close_polyline = coset_lcm/coset_circle_div; 
+    coset_d = (int)Math.floor(theta_step_size_param);
+    coset_z = (int)Math.floor(line_count);
+    // coset_gcd = gcd(coset_d, coset_z);
+    // coset_lcm = lcm(coset_d, coset_z);  
     cycles_to_close_curve = curve.getCyclesToClose();
-    // System.out.println("cycles to close curve: " + cycles_to_close_curve);
     if (Double.isNaN(cycles_to_close_curve)) {
       // if cycles to close is unknown, default to 1 cycle (M_2PI radians) 
       cycles_to_close_curve = 1;
     }
-    double old_lines_per_coset = coset_circle_div / coset_gcd;
-    // TEMPORARY, 
-    //    because cycles_to_close_polyline should be related to cycles_to_close_curve:
-    //    not sure what should happen if z is not integer?
-    //    probably should either default to no cosets, or round cycles_to_close_curve, coset_circle_div, z
-    // CURRENT BEST TRY:
-    cycles_to_close_polyline = cycles_to_close_curve * (coset_lcm/coset_circle_div);
-    double z = cycles_to_close_curve * coset_circle_div;  // or radians_to_close_curve * coset_circle_div / M_2PI
-    lines_per_coset = z / gcd(coset_line_offset, (int)z);
-    double coset_count = coset_gcd; // ???
+    
+    if (cosets_mode == HYBRID_COSETS) {
+      coset_z = (int)(coset_z * cycles_to_close_curve);   // WARNING: this may break for small line_count and cycles_to_close_curve non-integer!
+    }
+    coset_gcd = gcd(coset_d, coset_z);
+    coset_lcm = lcm(coset_d, coset_z);  
+    lines_per_coset = coset_z / coset_gcd;   // lines per polyline (one polyline per coset)
+    coset_count = coset_gcd;
     double total_line_segments = lines_per_coset * coset_count;
 
-    // SHOULD REVISE THIS WITH NEW CALC BASED ON CURVE CLOSURE
-    // coset_step_size = M_2PI * ((double)coset_line_offset / (double)coset_circle_div);
-    // double radians_to_close = M_2PI;
-    double radians_to_close = cycles_to_close_curve * M_2PI;
-    coset_step_size = radians_to_close * ((double)coset_line_offset / (double)coset_circle_div);
-    if (DEBUG_COSETS_INIT && use_cosets) {
+    if (cosets_mode == CLASSIC_COSETS) {
+      cycles_to_close_polyline = coset_lcm/coset_z;       
+      coset_step_size = M_2PI * ((double)coset_d / (double)coset_z);
+    }
+    else if (cosets_mode == CLOSURE_COSETS || cosets_mode == HYBRID_COSETS) {
+      cycles_to_close_polyline = cycles_to_close_curve * (coset_lcm/coset_z);
+      // double z = cycles_to_close_curve * coset_z;  // or radians_to_close_curve * coset_z / M_2PI
+      // lines_per_coset = z / gcd(coset_d, (int)z);
+      double radians_to_close = cycles_to_close_curve * M_2PI;
+      coset_step_size = radians_to_close * ((double)coset_d / (double)coset_z);
+    }
+    if (DEBUG_COSETS_INIT && (cosets_mode != 0)) {
       System.out.println("cosets: => count|gcd: " + coset_gcd + ", lcm: " + coset_lcm + 
-              ", curve close: " + cycles_to_close_curve + ", line close: " + cycles_to_close_polyline + ", z: " + z + 
-              ", lines_per_coset: " + lines_per_coset + ", total lines: " + total_line_segments + 
-              ", old line_close: " + old_cycles_to_close_polyline + ", old lines_per_coset: " + old_lines_per_coset);
+              ", curve close: " + cycles_to_close_curve + ", line close: " + cycles_to_close_polyline + ", coset_z: " + coset_z + 
+              ", lines_per_coset: " + lines_per_coset + ", total lines: " + total_line_segments);
     }
     
     double raw_meta_steps = (meta_max_value - meta_min_value)/meta_step_value;
@@ -940,7 +935,7 @@ public class MaurerLinesFunc extends VariationFunc {
       // should be able to improve this, only sample from possible theta
       //    based on step size and lince count:
       // theta1 = theta_step_radians * (int)(Math.random()*line_count);
-      theta1 = Math.random() * cycles * M_2PI;
+      theta1 = Math.random() * cycles * M_2PI;   // if using cosets, cycles gets reset based on coset calcs in setValues()
       // reusing end_point1
 //      end_point1 = getCurveCoords(theta1, end_point1);
       curve.getCurvePoint(theta1, end_point1);
@@ -974,7 +969,7 @@ public class MaurerLinesFunc extends VariationFunc {
       sampled_line_angles[i] = line_angle;
       sampled_point_angles[i] = point_angle;
       sampled_speeds[i] = s1;
-      sampled_thetas[i] = theta1;
+      sampled_thetas[i] = theta1/M_2PI;
     }
     if (DEBUG_SAMPLING) { System.out.println("sorting"); }
     Arrays.sort(sampled_line_lengths);
@@ -1026,7 +1021,7 @@ public class MaurerLinesFunc extends VariationFunc {
     return point_angle;
   }
   
-  public void setValues() {
+  public void setCurveParams() {
     a = a_param;
     b = b_param;
     c = c_param;
@@ -1035,8 +1030,13 @@ public class MaurerLinesFunc extends VariationFunc {
     f = f_param;
     g = g_param;
     h = h_param;
-    
-    if (use_cosets) {
+
+  }
+  
+  public void setValues() {
+    setCurveParams();
+
+    if (cosets_mode != NO_COSETS) {
       theta_step_radians = coset_step_size;
       cycles = cycles_to_close_polyline;
       // if relatively prime, then don't use cosets
@@ -1047,20 +1047,18 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
       else {
-        // pick one of the cosets [0, 1, ... coset_gcd-1 ], use this to decide the initial_offset
-        //    WRONG -- gives [0, ... coset_gcd-2] (since Math.random is is [0..1) (1 is open and thus never reached))
-        //      coset_gcd-1double initial_offset = (int)(Math.round(Math.random() * (coset_gcd-1)));
-        // since random gives [0..1), and want [0..{coset_gcd-1}]:
-        int coset_id = (int)(Math.floor(Math.random() * coset_gcd));
-        // double initial_offset = (double)coset_id;
-        
-        // need to revise initial_theta_radians to reflect change from 2PI to cycles_to_close
-        // initial_theta_radians = M_2PI * ((double)coset_id / (double)coset_circle_div);
-        // initial_theta_radians = cycles_to_close_curve * ((double)coset_id / (double)coset_circle_div);
-        double radians_to_close = cycles_to_close_curve * M_2PI;
-        initial_theta_radians = radians_to_close * ((double)coset_id / (double)coset_circle_div);
-        if (DEBUG_COSETS && count % 50000 == 0) {
-          System.out.println("gcd: " + coset_gcd + ", lcm: " + coset_lcm + ", cycles: " + cycles + ", coset: " + coset_id);
+        if (cosets_mode == CLASSIC_COSETS) {
+          int coset_id = (int)(Math.floor(Math.random() * coset_gcd));
+          initial_theta_radians = M_2PI * ((double)coset_id / (double)coset_z);
+        }
+        else if (cosets_mode == CLOSURE_COSETS || cosets_mode == HYBRID_COSETS) {
+          // since random gives [0..1), and want [0..{coset_gcd-1}]:
+          int coset_id = (int)(Math.floor(Math.random() * coset_gcd));
+          double radians_to_close = cycles_to_close_curve * M_2PI;
+          initial_theta_radians = radians_to_close * ((double)coset_id / (double)coset_z);
+          if (DEBUG_COSETS && count % 50000 == 0) {
+            System.out.println("gcd: " + coset_gcd + ", lcm: " + coset_lcm + ", cycles: " + cycles + ", coset: " + coset_id);
+          }
         }
       }
     }
@@ -1071,8 +1069,11 @@ public class MaurerLinesFunc extends VariationFunc {
       current_meta_step = (int)(Math.random() * meta_steps);
       double meta_value = meta_min_value + (current_meta_step * meta_step_value);
       if (meta_mode == LINE_OFFSET_INCREMENT) {
-        // coset_line_offset = meta_min_value + (current_meta_step * meta_step_value);'
+        // coset_d = meta_min_value + (current_meta_step * meta_step_value);'
         double line_offset = meta_value;
+        if (irrationalize != 0) {
+          line_offset += (irrationalize * 0.01 * Math.E);
+        }
         theta_step_radians = M_2PI * (line_offset / 360);
         cycles = (line_count * theta_step_radians) / M_2PI;
         // actual_step_size = meta_min_step_radians + (meta_step_diff_radians * current_meta_step);
@@ -1154,6 +1155,9 @@ public class MaurerLinesFunc extends VariationFunc {
     // map to a Maurer Rose line
     // find nearest step
     step_number = floor(t/theta_step_radians);
+    // find distance along line??
+    // find radians per full line
+    // double line_fraction = (t % theta_step_radians)/radians_per_full_line
     
     // find polar and cartesian coordinates for endpoints of Maure Rose line
     theta1 = (step_number * theta_step_radians) + initial_theta_radians;
@@ -2535,14 +2539,14 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_THETA_STEP_SIZE_DEGREES, theta_step_size_param);
     plist.put(PARAM_INITIAL_THETA_DEGREES, initial_theta_param);
     plist.put(PARAM_LINE_COUNT, line_count);
-    plist.put(PARAM_IRRATIONALIZE, (irrationalize ? 1 : 0));
+    plist.put(PARAM_IRRATIONALIZE, irrationalize);
     plist.put(PARAM_RENDER_MODE, render_mode);
     plist.put(PARAM_RENDER_SUBMODE, render_submode);
     plist.put(PARAM_TANGENT_SUBMODE, tangent_submode);
     plist.put(PARAM_RENDER_MODIFIER1, render_modifier1);
     plist.put(PARAM_RENDER_MODIFIER2, render_modifier2);
     plist.put(PARAM_RENDER_MODIFIER3, render_modifier3);
-    plist.put(PARAM_USE_COSETS, (use_cosets ? 1 : 0));
+    plist.put(PARAM_COSETS_MODE, cosets_mode);
     
     plist.put(PARAM_DIRECT_COLOR_MEASURE, direct_color_measure);
     plist.put(PARAM_DIRECT_COLOR_GRADIENT, direct_color_gradient);
@@ -2631,11 +2635,11 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (PARAM_CURVE_MODE.equalsIgnoreCase(pName))
       curve_mode = (int)pValue;
     
-    else if (PARAM_USE_COSETS.equalsIgnoreCase(pName)) {
-      use_cosets = (pValue >= 1);
+    else if (PARAM_COSETS_MODE.equalsIgnoreCase(pName)) {
+      cosets_mode = (int)pValue;
     }
     else if (PARAM_IRRATIONALIZE.equalsIgnoreCase(pName)) {
-      irrationalize = (pValue >= 1);
+      irrationalize = pValue;
     }
     
     else if (PARAM_DIRECT_COLOR_MEASURE.equalsIgnoreCase(pName)) {
