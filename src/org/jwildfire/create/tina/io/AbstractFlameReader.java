@@ -828,6 +828,43 @@ public class AbstractFlameReader {
               }
             }
           }
+          // if it's possible that populating of variation function parameters has expanded list of parameters, 
+          //    (in other words, that calls to setParameter() has changed what getParameterNames() returns)
+          //    then redo parameter population 
+          // assumes only one level deep of parameter expansion
+          //    that is, if changes to parameter A can cause a parameter B to be dynamically added/removed
+          //    then changes to parameter B cannot in turn cause additional parameters to be added/removed
+          if (variation.getFunc().dynamicParameterExpansion()) {
+            String paramNames[] = variation.getFunc().getParameterNames();
+            String paramAltNames[] = variation.getFunc().getParameterAlternativeNames();
+            if (paramNames != null) {
+              if (paramAltNames != null && paramAltNames.length != paramNames.length) {
+                paramAltNames = null;
+              }
+              for (int i = 0; i < paramNames.length; i++) {
+                String pName = paramNames[i];
+                String pHs;
+                if ((pHs = atts.get(rawName + "_" + pName)) != null) {
+                  variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
+                }
+                // altNames can only be come from flames which were not created by JWF, so no need to handle index here 
+                else if (paramAltNames != null && ((pHs = atts.get(paramAltNames[i])) != null)) {
+                  variation.getFunc().setParameter(pName, Double.parseDouble(pHs));
+                }
+                // curve
+                {
+                  String namePrefix = rawName + "_" + pName + "_";
+                  if (atts.get(namePrefix + AbstractFlameReader.CURVE_ATTR_POINT_COUNT) != null) {
+                    MotionCurve curve = variation.getMotionCurve(pName);
+                    if (curve == null) {
+                      curve = variation.createMotionCurve(pName);
+                    }
+                    readMotionCurveAttributes(atts, curve, namePrefix);
+                  }
+                }
+              }
+            }
+          }
           // curves
           readMotionCurves(variation, atts, rawName + "_");
           //

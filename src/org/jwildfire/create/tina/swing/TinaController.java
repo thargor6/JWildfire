@@ -2991,6 +2991,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
             double val = Tools.stringToDouble(valStr) + pDelta;
             var.getFunc().setParameter(selected, val);
+            if (var.getFunc().dynamicParameterExpansion(selected)) {
+              // if setting the parameter can change the total number of parameters, 
+              //    then refresh parameter UI (and reselect parameter that was changed)
+              this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
+            }
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
           }
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
@@ -3130,7 +3136,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     String valStr = dlg.getRessourceValue();
                     byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
                     var.getFunc().setRessource(rName, valByteArray);
-                    if (var.getFunc().ressourceCanModifyParams()) {
+                    if (var.getFunc().ressourceCanModifyParams(rName)) {
                       // forcing refresh of params UI in case setting resource changes available params or param values
                       this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
                     }
