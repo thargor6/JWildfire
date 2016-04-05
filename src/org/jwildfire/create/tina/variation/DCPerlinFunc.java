@@ -237,7 +237,7 @@ public class DCPerlinFunc extends VariationFunc {
     else if (PARAM_Z.equalsIgnoreCase(pName))
       z = pValue;
     else if (PARAM_SELECT_BAILOUT.equalsIgnoreCase(pName))
-      scale = limitIntVal(Tools.FTOI(pValue), 2, 1000);
+      select_bailout = limitIntVal(Tools.FTOI(pValue), 2, 1000);
     else
       throw new IllegalArgumentException(pName);
   }
