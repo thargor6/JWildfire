@@ -171,7 +171,11 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     }
     transformPlotColor(p);
 
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * prj.intensity, plotGreen * intensity, plotBlue * intensity);
+    double finalRed = plotRed * prj.intensity;
+    double finalGreen = plotGreen * intensity;
+    double finalBlue = plotBlue * intensity;
+
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
@@ -179,7 +183,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     raster.incCount(xIdx, yIdx);
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+        observer.notifyIterationFinished(renderThread, xIdx, yIdx, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
       }
     }
   }

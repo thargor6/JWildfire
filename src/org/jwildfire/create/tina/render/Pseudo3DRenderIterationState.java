@@ -144,14 +144,17 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
 
     RenderColor shadedColor = shader.calculateColor(qA, color);
 
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, shadedColor.red * prj.intensity, shadedColor.green * prj.intensity, shadedColor.blue * prj.intensity);
+    double finalRed = shadedColor.red * prj.intensity;
+    double finalGreen = shadedColor.green * prj.intensity;
+    double finalBlue = shadedColor.blue * prj.intensity;
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
 
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+        observer.notifyIterationFinished(renderThread, xIdx, yIdx, qA[0].x, qA[0].y, qA[0].z, finalRed, finalGreen, finalBlue);
       }
     }
   }

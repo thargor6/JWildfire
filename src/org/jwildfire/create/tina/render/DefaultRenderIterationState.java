@@ -407,13 +407,16 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
     transformPlotColor(p);
 
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * intensity, plotGreen * intensity, plotBlue * intensity);
+    double finalRed = plotRed * intensity;
+    double finalGreen = plotGreen * intensity;
+    double finalBlue = plotBlue * intensity;
+    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+        observer.notifyIterationFinished(renderThread, xIdx, yIdx, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
       }
     }
   }
