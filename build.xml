@@ -79,6 +79,7 @@
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
       <zipfileset src="lib/jsyntaxpane-0.9.5-b29.modified.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
+      <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
       </manifest>			
