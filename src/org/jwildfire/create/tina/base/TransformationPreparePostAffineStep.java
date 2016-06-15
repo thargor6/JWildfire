@@ -28,6 +28,7 @@ public final class TransformationPreparePostAffineStep extends AbstractTransform
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pDstPoint.color = pVarT.color;
+    pDstPoint.material = pVarT.material;
     pDstPoint.modGamma = pVarT.modGamma;
     pDstPoint.modContrast = pVarT.modContrast;
     pDstPoint.modSaturation = pVarT.modSaturation;

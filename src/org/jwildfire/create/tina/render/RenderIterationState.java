@@ -28,7 +28,6 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class RenderIterationState implements Serializable {
   private static final long serialVersionUID = 2L;
-
   protected final AbstractRenderThread renderThread;
   protected final FlameRenderer renderer;
   protected final FlameRendererView view;

@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -254,7 +255,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
     int x = pPlotX / pEventSource.getOversample();
     int y = pPlotY / pEventSource.getOversample();
     iterationCount[pEventSource.getThreadId()] = pEventSource.getCurrSample();

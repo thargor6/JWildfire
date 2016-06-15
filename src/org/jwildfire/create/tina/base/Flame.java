@@ -29,6 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
@@ -204,6 +205,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve mixerBGCurve = new MotionCurve();
   private final MotionCurve mixerBBCurve = new MotionCurve();
 
+  private SolidRenderSettings solidRenderSettings = new SolidRenderSettings();
+
   private EditPlane editPlane;
 
   public Flame() {
@@ -225,8 +228,13 @@ public class Flame implements Assignable<Flame>, Serializable {
     resetStereo3DSettings();
     resetPostSymmetrySettings();
     resetMotionBlurSettings();
+    resetSolidRenderSettings();
     channelMixerMode = ChannelMixerMode.OFF;
     resetMixerCurves();
+  }
+
+  private void resetSolidRenderSettings() {
+    solidRenderSettings.setupDefaults();
   }
 
   public void resetMotionBlurSettings() {
@@ -740,6 +748,7 @@ public class Flame implements Assignable<Flame>, Serializable {
       layers.add(layer.makeCopy());
     }
 
+    solidRenderSettings.assign(pFlame.solidRenderSettings);
   }
 
   public List<Layer> getLayers() {
@@ -814,7 +823,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (channelMixerMode != pFlame.channelMixerMode) || !mixerRRCurve.isEqual(pFlame.mixerRRCurve) || !mixerRGCurve.isEqual(pFlame.mixerRGCurve) ||
         !mixerRBCurve.isEqual(pFlame.mixerRBCurve) || !mixerGRCurve.isEqual(pFlame.mixerGRCurve) || !mixerGGCurve.isEqual(pFlame.mixerGGCurve) ||
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
-        !mixerBBCurve.isEqual(pFlame.mixerBBCurve)) {
+        !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1478,6 +1487,10 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setForegroundOpacity(double pForegroundOpacity) {
     foregroundOpacity = pForegroundOpacity;
+  }
+
+  public SolidRenderSettings getSolidRenderSettings() {
+    return solidRenderSettings;
   }
 
 }

@@ -383,7 +383,7 @@ public class FlameMorphService {
     }
   }
 
-  private static double morphValue(double pValue1, double pValue2, double pFScl) {
+  public static double morphValue(double pValue1, double pValue2, double pFScl) {
     if (pFScl < 0.0) {
       pFScl = 0.0;
     }

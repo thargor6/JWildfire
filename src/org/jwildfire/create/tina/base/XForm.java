@@ -61,6 +61,13 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double modSaturationSpeed;
 
   @AnimAware
+  private double material;
+  private final MotionCurve materialCurve = new MotionCurve();
+  @AnimAware
+  private double materialSpeed;
+  private final MotionCurve materialSpeedCurve = new MotionCurve();
+
+  @AnimAware
   double xyCoeff00;
   private final MotionCurve xyCoeff00Curve = new MotionCurve();
   @AnimAware
@@ -246,6 +253,16 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.color = color;
   }
 
+  public void setMaterial(double material) {
+    if (material < -1.0) {
+      material = -1.0;
+    }
+    else if (material > 1.0) {
+      material = 1.0;
+    }
+    this.material = material;
+  }
+
   public int getVariationCount() {
     return variations.size();
   }
@@ -293,8 +310,20 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.colorSymmetry = colorSymmetry;
   }
 
+  public void setMaterialSpeed(double materialSpeed) {
+    if (materialSpeed < -1.0) {
+      materialSpeed = -1.0;
+    }
+    else if (materialSpeed > 1.0) {
+      materialSpeed = 1.0;
+    }
+    this.materialSpeed = materialSpeed;
+  }
+
   double c1;
   double c2;
+  double material1;
+  double material2;
   double modGamma1;
   double modGamma2;
   double modContrast1;
@@ -309,6 +338,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+
+    material1 = (1 + materialSpeed) * 0.5;
+    material2 = material * (1 - materialSpeed) * 0.5;
 
     modGamma1 = (1 + modGammaSpeed) * 0.5;
     modGamma2 = modGamma * (1 - modGammaSpeed) * 0.5;
@@ -490,6 +522,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modContrastSpeed = pXForm.modContrastSpeed;
     modSaturation = pXForm.modSaturation;
     modSaturationSpeed = pXForm.modSaturationSpeed;
+    material = pXForm.material;
+    materialCurve.assign(pXForm.materialCurve);
+    materialSpeed = pXForm.materialSpeed;
+    materialSpeedCurve.assign(pXForm.materialSpeedCurve);
 
     xyCoeff00 = pXForm.xyCoeff00;
     xyCoeff00Curve.assign(pXForm.xyCoeff00Curve);
@@ -612,6 +648,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
         (fabs(color - pSrc.color) > EPSILON) || !colorCurve.isEqual(pSrc.colorCurve) ||
         (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
+        (fabs(material - pSrc.material) > EPSILON) || !materialCurve.isEqual(pSrc.materialCurve) ||
+        (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSpeedCurve.isEqual(pSrc.materialSpeedCurve) ||
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
@@ -1489,6 +1527,14 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public MotionCurve getColorCurve() {
     return colorCurve;
+  }
+
+  public double getMaterial() {
+    return material;
+  }
+
+  public double getMaterialSpeed() {
+    return materialSpeed;
   }
 
 }
