@@ -14,23 +14,8 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.render;
+package org.jwildfire.create.tina.base.solidrender;
 
-public class PlotSample {
-  public int screenX, screenY;
-  public double r, g, b;
-  public double x, y, z;
-  public double material;
-
-  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material) {
-    this.screenX = screenX;
-    this.screenY = screenY;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.material = material;
-  }
+public interface LightDiffFunc {
+  double evaluate(double pCosa);
 }

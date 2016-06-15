@@ -33,7 +33,7 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
   }
 
   @Override
-  protected void plotPoint(int xIdx, int yIdx, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
@@ -48,22 +48,25 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
     transformPlotColor(p);
 
     if (ctx.random() > blurFade) {
-      for (int k = yIdx - blurRadius, yk = 0; k <= yIdx + blurRadius; k++, yk++) {
+      for (int k = screenY - blurRadius, yk = 0; k <= screenY + blurRadius; k++, yk++) {
         if (k >= 0 && k < rasterHeight) {
-          for (int l = xIdx - blurRadius, xk = 0; l <= xIdx + blurRadius; l++, xk++) {
+          for (int l = screenX - blurRadius, xk = 0; l <= screenX + blurRadius; l++, xk++) {
             if (l >= 0 && l < rasterWidth) {
               // y, x
 
               double scl = blurKernel[yk][xk];
 
-              plotBuffer[plotBufferIdx++].set(l, k, plotRed * scl * prj.intensity, plotGreen * scl * prj.intensity, plotBlue * scl * prj.intensity);
+              double finalRed = plotRed * scl * prj.intensity;
+              double finalGreen = plotGreen * scl * prj.intensity;
+              double finalBlue = plotBlue * scl * prj.intensity;
+              plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
               if (plotBufferIdx >= plotBuffer.length) {
                 applySamplesToRaster();
               }
 
               if (observers != null && observers.size() > 0) {
                 for (IterationObserver observer : observers) {
-                  observer.notifyIterationFinished(renderThread, l, k);
+                  observer.notifyIterationFinished(renderThread, l, k, prj, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
                 }
               }
             }
@@ -72,13 +75,16 @@ public class BlurRenderIterationState extends DefaultRenderIterationState {
       }
     }
     else {
-      plotBuffer[plotBufferIdx++].set(xIdx, yIdx, plotRed * prj.intensity, plotGreen * prj.intensity, plotBlue * prj.intensity);
+      double finalRed = plotRed * prj.intensity;
+      double finalGreen = plotGreen * prj.intensity;
+      double finalBlue = plotBlue * prj.intensity;
+      plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
       if (plotBufferIdx >= plotBuffer.length) {
         applySamplesToRaster();
       }
       if (observers != null && observers.size() > 0) {
         for (IterationObserver observer : observers) {
-          observer.notifyIterationFinished(renderThread, xIdx, yIdx);
+          observer.notifyIterationFinished(renderThread, screenX, screenY, prj, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
         }
       }
     }

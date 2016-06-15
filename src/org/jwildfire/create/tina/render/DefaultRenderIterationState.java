@@ -102,6 +102,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     p.y = 2.0 * randGen.random() - 1.0;
     p.z = 0.0;
     p.color = randGen.random();
+    p.material = 0.0;
     p.modGamma = 0.0;
     p.modContrast = 0.0;
     p.modSaturation = 0.0;
@@ -388,7 +389,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  protected void plotPoint(int xIdx, int yIdx, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
@@ -406,17 +407,16 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotBlue = color.blue;
     }
     transformPlotColor(p);
-
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
+        observer.notifyIterationFinished(renderThread, screenX, screenY, prj, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
       }
     }
   }
@@ -619,27 +619,32 @@ public class DefaultRenderIterationState extends RenderIterationState {
     public void projectPoint(XYZPoint q) {
       if (q.doHide || !view.project(q, prj) || q.isNaN())
         return;
-      int xIdx, yIdx;
+      double rawX, rawY;
+      int screenX, screenY;
       if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
         double dr = exp(flame.getAntialiasRadius() * sqrt(-log(randGen.random()))) - 1.0;
         double da = randGen.random() * 2.0 * M_PI;
-        xIdx = (int) (view.bws * prj.x + dr * cos(da) + 0.5);
-        if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+        rawX = view.bws * prj.x + dr * cos(da);
+        screenX = (int) (rawX + 0.5);
+        if (screenX < 0 || screenX >= renderer.rasterWidth)
           return;
-        yIdx = (int) (view.bhs * prj.y + dr * sin(da) + 0.5);
-        if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+        rawY = view.bhs * prj.y + dr * sin(da);
+        screenY = (int) (rawY + 0.5);
+        if (screenY < 0 || screenY >= renderer.rasterHeight)
           return;
       }
       else {
-        xIdx = (int) (view.bws * prj.x + 0.5);
-        if (xIdx < 0 || xIdx >= renderer.rasterWidth)
+        rawX = view.bws * prj.x;
+        screenX = (int) (rawX + 0.5);
+        if (screenX < 0 || screenX >= renderer.rasterWidth)
           return;
-        yIdx = (int) (view.bhs * prj.y + 0.5);
-        if (yIdx < 0 || yIdx >= renderer.rasterHeight)
+        rawY = view.bhs * prj.y;
+        screenY = (int) (rawY + 0.5);
+        if (screenY < 0 || screenY >= renderer.rasterHeight)
           return;
       }
       double intensity = prj.intensity * layer.getWeight();
-      plotPoint(xIdx, yIdx, intensity);
+      plotPoint(screenX, screenY, rawX, rawY, intensity);
     }
 
   }

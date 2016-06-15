@@ -102,7 +102,7 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
   }
 
   @Override
-  protected void plotPoint(int xIdx, int yIdx, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
     double cx, cy, cz;
     switch (style) {
       case 0:
@@ -175,15 +175,15 @@ public class DistanceColorRenderIterationState extends DefaultRenderIterationSta
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
 
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
 
-    raster.incCount(xIdx, yIdx);
+    raster.incCount(screenX, screenY);
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
+        observer.notifyIterationFinished(renderThread, screenX, screenY, prj, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
       }
     }
   }

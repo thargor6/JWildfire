@@ -124,7 +124,7 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
   }
 
   @Override
-  protected void plotPoint(int xIdx, int yIdx, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
     if (pA[0].rgbColor) {
       plotRed = pA[0].redColor;
       plotGreen = pA[0].greenColor;
@@ -147,14 +147,14 @@ public class Pseudo3DRenderIterationState extends DefaultRenderIterationState {
     double finalRed = shadedColor.red * prj.intensity;
     double finalGreen = shadedColor.green * prj.intensity;
     double finalBlue = shadedColor.blue * prj.intensity;
-    plotBuffer[plotBufferIdx++].set(xIdx, yIdx, finalRed, finalGreen, finalBlue);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
 
     if (observers != null && observers.size() > 0) {
       for (IterationObserver observer : observers) {
-        observer.notifyIterationFinished(renderThread, xIdx, yIdx, qA[0].x, qA[0].y, qA[0].z, finalRed, finalGreen, finalBlue);
+        observer.notifyIterationFinished(renderThread, screenX, screenY, prj, qA[0].x, qA[0].y, qA[0].z, finalRed, finalGreen, finalBlue);
       }
     }
   }
