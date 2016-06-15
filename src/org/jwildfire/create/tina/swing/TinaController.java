@@ -304,7 +304,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
         parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
         parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenThicknessModREd, parameterObject.meshGenThicknessSamplesREd,
-        parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd);
+        parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd,
+        parameterObject.meshGenOutputTypeCmb);
 
     data.macroButtonsTable = parameterObject.macroButtonsTable;
     data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;
@@ -482,6 +483,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormColorSlider = parameterObject.pXFormColorSlider;
     data.xFormSymmetryREd = parameterObject.pXFormSymmetryREd;
     data.xFormSymmetrySlider = parameterObject.pXFormSymmetrySlider;
+
+    data.xFormMaterialREd = parameterObject.pXFormMaterialREd;
+    data.xFormMaterialSlider = parameterObject.pXFormMaterialSlider;
+    data.xFormMaterialSpeedREd = parameterObject.pXFormMaterialSpeedREd;
+    data.xFormMaterialSpeedSlider = parameterObject.pXFormMaterialSpeedSlider;
+
     data.xFormModGammaREd = parameterObject.pXFormModGammaREd;
     data.xFormModGammaSlider = parameterObject.pXFormModGammaSlider;
     data.xFormModGammaSpeedREd = parameterObject.pXFormModGammaSpeedREd;
@@ -646,6 +653,42 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaPostNoiseThresholdSlider = parameterObject.tinaPostNoiseThresholdSlider;
     data.foregroundOpacityField = parameterObject.foregroundOpacityField;
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
+
+    data.tinaSolidRenderingCBx = parameterObject.tinaSolidRenderingCBx;
+    data.tinaSolidRenderingEnableSSAOCBx = parameterObject.tinaSolidRenderingEnableSSAOCBx;
+    data.tinaSolidRenderingSSAOIntensityREd = parameterObject.tinaSolidRenderingSSAOIntensityREd;
+    data.tinaSolidRenderingSSAOIntensitySlider = parameterObject.tinaSolidRenderingSSAOIntensitySlider;
+    data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
+    data.tinaSolidRenderingEnableLightsCBx = parameterObject.tinaSolidRenderingEnableLightsCBx;
+    data.resetSolidRenderingGlobalSettingsBtn = parameterObject.resetSolidRenderingGlobalSettingsBtn;
+    data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
+    data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
+    data.tinaSolidRenderingSelectedLightCmb = parameterObject.tinaSolidRenderingSelectedLightCmb;
+    data.tinaSolidRenderingAddLightBtn = parameterObject.tinaSolidRenderingAddLightBtn;
+    data.tinaSolidRenderingDeleteLightBtn = parameterObject.tinaSolidRenderingDeleteLightBtn;
+    data.tinaSolidRenderingLightPosXREd = parameterObject.tinaSolidRenderingLightPosXREd;
+    data.tinaSolidRenderingLightPosYREd = parameterObject.tinaSolidRenderingLightPosYREd;
+    data.tinaSolidRenderingLightPosZREd = parameterObject.tinaSolidRenderingLightPosZREd;
+    data.tinaSolidRenderingLightPosXSlider = parameterObject.tinaSolidRenderingLightPosXSlider;
+    data.tinaSolidRenderingLightPosYSlider = parameterObject.tinaSolidRenderingLightPosYSlider;
+    data.tinaSolidRenderingLightPosZSlider = parameterObject.tinaSolidRenderingLightPosZSlider;
+    data.tinaSolidRenderingLightColorBtn = parameterObject.tinaSolidRenderingLightColorBtn;
+    data.tinaSolidRenderingLightCastShadowsCBx = parameterObject.tinaSolidRenderingLightCastShadowsCBx;
+    data.tinaSolidRenderingLightIntensityREd = parameterObject.tinaSolidRenderingLightIntensityREd;
+    data.tinaSolidRenderingLightIntensitySlider = parameterObject.tinaSolidRenderingLightIntensitySlider;
+    data.tinaSolidRenderingSelectedMaterialCmb = parameterObject.tinaSolidRenderingSelectedMaterialCmb;
+    data.tinaSolidRenderingAddMaterialBtn = parameterObject.tinaSolidRenderingAddMaterialBtn;
+    data.tinaSolidRenderingDeleteMaterialBtn = parameterObject.tinaSolidRenderingDeleteMaterialBtn;
+    data.tinaSolidRenderingMaterialDiffuseREd = parameterObject.tinaSolidRenderingMaterialDiffuseREd;
+    data.tinaSolidRenderingMaterialDiffuseSlider = parameterObject.tinaSolidRenderingMaterialDiffuseSlider;
+    data.tinaSolidRenderingMaterialAmbientREd = parameterObject.tinaSolidRenderingMaterialAmbientREd;
+    data.tinaSolidRenderingMaterialAmbientSlider = parameterObject.tinaSolidRenderingMaterialAmbientSlider;
+    data.tinaSolidRenderingMaterialSpecularREd = parameterObject.tinaSolidRenderingMaterialSpecularREd;
+    data.tinaSolidRenderingMaterialSpecularSlider = parameterObject.tinaSolidRenderingMaterialSpecularSlider;
+    data.tinaSolidRenderingMaterialSpecularSharpnessREd = parameterObject.tinaSolidRenderingMaterialSpecularSharpnessREd;
+    data.tinaSolidRenderingMaterialSpecularSharpnessSlider = parameterObject.tinaSolidRenderingMaterialSpecularSharpnessSlider;
+    data.tinaSolidRenderingMaterialSpecularColorBtn = parameterObject.tinaSolidRenderingMaterialSpecularColorBtn;
+    data.tinaSolidRenderingMaterialDiffuseResponseCmb = parameterObject.tinaSolidRenderingMaterialDiffuseResponseCmb;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
@@ -2376,6 +2419,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
         data.xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
 
+        data.xFormMaterialREd.setText(Tools.doubleToString(pXForm.getMaterial()));
+        data.xFormMaterialSlider.setValue(Tools.FTOI(pXForm.getMaterial() * SLIDER_SCALE_COLOR));
+        data.xFormMaterialSpeedREd.setText(Tools.doubleToString(pXForm.getMaterialSpeed()));
+        data.xFormMaterialSpeedSlider.setValue(Tools.FTOI(pXForm.getMaterialSpeed() * SLIDER_SCALE_COLOR));
+
         data.xFormModGammaREd.setText(Tools.doubleToString(pXForm.getModGamma()));
         data.xFormModGammaSlider.setValue(Tools.FTOI(pXForm.getModGamma() * SLIDER_SCALE_COLOR));
         data.xFormModGammaSpeedREd.setText(Tools.doubleToString(pXForm.getModGammaSpeed()));
@@ -2408,6 +2456,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormColorSlider.setValue(0);
         data.xFormSymmetryREd.setText(null);
         data.xFormSymmetrySlider.setValue(0);
+        data.xFormMaterialREd.setText(null);
+        data.xFormMaterialSlider.setValue(0);
+        data.xFormMaterialSpeedREd.setText(null);
+        data.xFormMaterialSpeedSlider.setValue(0);
         data.xFormModGammaREd.setText(null);
         data.xFormModGammaSlider.setValue(0);
         data.xFormModGammaSpeedREd.setText(null);
@@ -3102,6 +3154,27 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 }
               }
                 break;
+              case OBJ_MESH: {
+                JFileChooser chooser = new MeshFileChooser(prefs);
+                if (prefs.getTinaMeshPath() != null) {
+                  try {
+                    chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  try {
+                    File file = chooser.getSelectedFile();
+                    var.getFunc().setRessource(rName, file.getAbsolutePath().getBytes());
+                  }
+                  catch (Exception ex) {
+                    errorHandler.handleError(ex);
+                  }
+                }
+              }
+                break;
               default: {
                 final RessourceDialog dlg = new RessourceDialog(SwingUtilities.getWindowAncestor(centerPanel), prefs, errorHandler);
                 dlg.setRessourceName(rName);
@@ -3218,6 +3291,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormSliderChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
+  public void xFormMaterialSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
+  }
+
   public void xFormOpacityREd_changed() {
     xFormTextFieldChanged(data.xFormOpacitySlider, data.xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
   }
@@ -3241,12 +3318,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormSliderChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
   }
 
+  public void xFormMaterialSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+  }
+
   public void xFormSymmetryREd_changed() {
     xFormTextFieldChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
+  public void xFormMaterialSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
+  }
+
   public void xFormColorREd_changed() {
     xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModGammaREd_changed() {
@@ -5029,6 +5118,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.transformationWeightREd);
     animationController.registerMotionPropertyControls(data.xFormColorREd);
     animationController.registerMotionPropertyControls(data.xFormSymmetryREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialSpeedREd);
     animationController.registerMotionPropertyControls(data.xFormOpacityREd);
 
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {

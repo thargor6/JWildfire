@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -233,6 +233,10 @@ public class TinaControllerData {
   public JSlider xFormColorSlider;
   public JWFNumberField xFormSymmetryREd;
   public JSlider xFormSymmetrySlider;
+  public JWFNumberField xFormMaterialREd;
+  public JSlider xFormMaterialSlider;
+  public JWFNumberField xFormMaterialSpeedREd;
+  public JSlider xFormMaterialSpeedSlider;
   public JWFNumberField xFormModGammaREd;
   public JSlider xFormModGammaSlider;
   public JWFNumberField xFormModGammaSpeedREd;
@@ -432,4 +436,41 @@ public class TinaControllerData {
   public JSlider tinaPostNoiseThresholdSlider;
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
+
+  public JCheckBox tinaSolidRenderingCBx;
+  public JCheckBox tinaSolidRenderingEnableSSAOCBx;
+  public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
+  public JSlider tinaSolidRenderingSSAOIntensitySlider;
+  public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
+  public JCheckBox tinaSolidRenderingEnableLightsCBx;
+  public JButton resetSolidRenderingGlobalSettingsBtn;
+  public JButton resetSolidRenderingMaterialsBtn;
+  public JButton resetSolidRenderingLightsBtn;
+  public JComboBox tinaSolidRenderingSelectedLightCmb;
+  public JButton tinaSolidRenderingAddLightBtn;
+  public JButton tinaSolidRenderingDeleteLightBtn;
+  public JWFNumberField tinaSolidRenderingLightPosXREd;
+  public JWFNumberField tinaSolidRenderingLightPosYREd;
+  public JWFNumberField tinaSolidRenderingLightPosZREd;
+  public JSlider tinaSolidRenderingLightPosXSlider;
+  public JSlider tinaSolidRenderingLightPosYSlider;
+  public JSlider tinaSolidRenderingLightPosZSlider;
+  public JButton tinaSolidRenderingLightColorBtn;
+  public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
+  public JWFNumberField tinaSolidRenderingLightIntensityREd;
+  public JSlider tinaSolidRenderingLightIntensitySlider;
+  public JComboBox tinaSolidRenderingSelectedMaterialCmb;
+  public JButton tinaSolidRenderingAddMaterialBtn;
+  public JButton tinaSolidRenderingDeleteMaterialBtn;
+  public JWFNumberField tinaSolidRenderingMaterialDiffuseREd;
+  public JSlider tinaSolidRenderingMaterialDiffuseSlider;
+  public JWFNumberField tinaSolidRenderingMaterialAmbientREd;
+  public JSlider tinaSolidRenderingMaterialAmbientSlider;
+  public JWFNumberField tinaSolidRenderingMaterialSpecularREd;
+  public JSlider tinaSolidRenderingMaterialSpecularSlider;
+  public JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd;
+  public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
+  public JButton tinaSolidRenderingMaterialSpecularColorBtn;
+  public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
+
 }

@@ -156,6 +156,10 @@ public class TinaControllerParameter {
   public JSlider pXFormColorSlider;
   public JWFNumberField pXFormSymmetryREd;
   public JSlider pXFormSymmetrySlider;
+  public JWFNumberField pXFormMaterialREd;
+  public JSlider pXFormMaterialSlider;
+  public JWFNumberField pXFormMaterialSpeedREd;
+  public JSlider pXFormMaterialSpeedSlider;
   public JWFNumberField pXFormModGammaREd;
   public JSlider pXFormModGammaSlider;
   public JWFNumberField pXFormModGammaSpeedREd;
@@ -613,6 +617,42 @@ public class TinaControllerParameter {
   public JSlider tinaPostNoiseThresholdSlider;
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
+  public JComboBox meshGenOutputTypeCmb;
+  public JCheckBox tinaSolidRenderingCBx;
+  public JCheckBox tinaSolidRenderingEnableSSAOCBx;
+  public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
+  public JSlider tinaSolidRenderingSSAOIntensitySlider;
+  public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
+  public JCheckBox tinaSolidRenderingEnableLightsCBx;
+  public JButton resetSolidRenderingGlobalSettingsBtn;
+  public JButton resetSolidRenderingMaterialsBtn;
+  public JButton resetSolidRenderingLightsBtn;
+  public JComboBox tinaSolidRenderingSelectedLightCmb;
+  public JButton tinaSolidRenderingAddLightBtn;
+  public JButton tinaSolidRenderingDeleteLightBtn;
+  public JWFNumberField tinaSolidRenderingLightPosXREd;
+  public JWFNumberField tinaSolidRenderingLightPosYREd;
+  public JWFNumberField tinaSolidRenderingLightPosZREd;
+  public JSlider tinaSolidRenderingLightPosXSlider;
+  public JSlider tinaSolidRenderingLightPosYSlider;
+  public JSlider tinaSolidRenderingLightPosZSlider;
+  public JButton tinaSolidRenderingLightColorBtn;
+  public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
+  public JWFNumberField tinaSolidRenderingLightIntensityREd;
+  public JSlider tinaSolidRenderingLightIntensitySlider;
+  public JComboBox tinaSolidRenderingSelectedMaterialCmb;
+  public JButton tinaSolidRenderingAddMaterialBtn;
+  public JButton tinaSolidRenderingDeleteMaterialBtn;
+  public JWFNumberField tinaSolidRenderingMaterialDiffuseREd;
+  public JSlider tinaSolidRenderingMaterialDiffuseSlider;
+  public JWFNumberField tinaSolidRenderingMaterialAmbientREd;
+  public JSlider tinaSolidRenderingMaterialAmbientSlider;
+  public JWFNumberField tinaSolidRenderingMaterialSpecularREd;
+  public JSlider tinaSolidRenderingMaterialSpecularSlider;
+  public JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd;
+  public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
+  public JButton tinaSolidRenderingMaterialSpecularColorBtn;
+  public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
 
   public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1127,7 +1167,21 @@ public class TinaControllerParameter {
       JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
-      JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton) {
+      JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton, JComboBox pMeshGenOutputTypeCmb,
+      JWFNumberField pXFormMaterialREd, JSlider pXFormMaterialSlider, JWFNumberField pXFormMaterialSpeedREd, JSlider pXFormMaterialSpeedSlider,
+      JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
+      JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx, JCheckBox tinaSolidRenderingEnableLightsCBx,
+      JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
+      JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
+      JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
+      JSlider tinaSolidRenderingLightPosXSlider, JSlider tinaSolidRenderingLightPosYSlider, JSlider tinaSolidRenderingLightPosZSlider,
+      JButton tinaSolidRenderingLightColorBtn, JCheckBox tinaSolidRenderingLightCastShadowsCBx, JWFNumberField tinaSolidRenderingLightIntensityREd,
+      JSlider tinaSolidRenderingLightIntensitySlider, JComboBox tinaSolidRenderingSelectedMaterialCmb, JButton tinaSolidRenderingAddMaterialBtn,
+      JButton tinaSolidRenderingDeleteMaterialBtn, JWFNumberField tinaSolidRenderingMaterialDiffuseREd, JSlider tinaSolidRenderingMaterialDiffuseSlider,
+      JWFNumberField tinaSolidRenderingMaterialAmbientREd, JSlider tinaSolidRenderingMaterialAmbientSlider, JWFNumberField tinaSolidRenderingMaterialSpecularREd,
+      JSlider tinaSolidRenderingMaterialSpecularSlider, JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd, JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider,
+      JButton tinaSolidRenderingMaterialSpecularColorBtn, JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb
+      ) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1298,5 +1352,46 @@ public class TinaControllerParameter {
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
+    meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
+    this.pXFormMaterialREd = pXFormMaterialREd;
+    this.pXFormMaterialSlider = pXFormMaterialSlider;
+    this.pXFormMaterialSpeedREd = pXFormMaterialSpeedREd;
+    this.pXFormMaterialSpeedSlider = pXFormMaterialSpeedSlider;
+
+    this.tinaSolidRenderingCBx = tinaSolidRenderingCBx;
+    this.tinaSolidRenderingEnableSSAOCBx = tinaSolidRenderingEnableSSAOCBx;
+    this.tinaSolidRenderingSSAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
+    this.tinaSolidRenderingSSAOIntensitySlider = tinaSolidRenderingSSAOIntensitySlider;
+    this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
+    this.tinaSolidRenderingEnableLightsCBx = tinaSolidRenderingEnableLightsCBx;
+    this.resetSolidRenderingGlobalSettingsBtn = resetSolidRenderingGlobalSettingsBtn;
+    this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;
+    this.resetSolidRenderingLightsBtn = resetSolidRenderingLightsBtn;
+    this.tinaSolidRenderingSelectedLightCmb = tinaSolidRenderingSelectedLightCmb;
+    this.tinaSolidRenderingAddLightBtn = tinaSolidRenderingAddLightBtn;
+    this.tinaSolidRenderingDeleteLightBtn = tinaSolidRenderingDeleteLightBtn;
+    this.tinaSolidRenderingLightPosXREd = tinaSolidRenderingLightPosXREd;
+    this.tinaSolidRenderingLightPosYREd = tinaSolidRenderingLightPosYREd;
+    this.tinaSolidRenderingLightPosZREd = tinaSolidRenderingLightPosZREd;
+    this.tinaSolidRenderingLightPosXSlider = tinaSolidRenderingLightPosXSlider;
+    this.tinaSolidRenderingLightPosYSlider = tinaSolidRenderingLightPosYSlider;
+    this.tinaSolidRenderingLightPosZSlider = tinaSolidRenderingLightPosZSlider;
+    this.tinaSolidRenderingLightColorBtn = tinaSolidRenderingLightColorBtn;
+    this.tinaSolidRenderingLightCastShadowsCBx = tinaSolidRenderingLightCastShadowsCBx;
+    this.tinaSolidRenderingLightIntensityREd = tinaSolidRenderingLightIntensityREd;
+    this.tinaSolidRenderingLightIntensitySlider = tinaSolidRenderingLightIntensitySlider;
+    this.tinaSolidRenderingSelectedMaterialCmb = tinaSolidRenderingSelectedMaterialCmb;
+    this.tinaSolidRenderingAddMaterialBtn = tinaSolidRenderingAddMaterialBtn;
+    this.tinaSolidRenderingDeleteMaterialBtn = tinaSolidRenderingDeleteMaterialBtn;
+    this.tinaSolidRenderingMaterialDiffuseREd = tinaSolidRenderingMaterialDiffuseREd;
+    this.tinaSolidRenderingMaterialDiffuseSlider = tinaSolidRenderingMaterialDiffuseSlider;
+    this.tinaSolidRenderingMaterialAmbientREd = tinaSolidRenderingMaterialAmbientREd;
+    this.tinaSolidRenderingMaterialAmbientSlider = tinaSolidRenderingMaterialAmbientSlider;
+    this.tinaSolidRenderingMaterialSpecularREd = tinaSolidRenderingMaterialSpecularREd;
+    this.tinaSolidRenderingMaterialSpecularSlider = tinaSolidRenderingMaterialSpecularSlider;
+    this.tinaSolidRenderingMaterialSpecularSharpnessREd = tinaSolidRenderingMaterialSpecularSharpnessREd;
+    this.tinaSolidRenderingMaterialSpecularSharpnessSlider = tinaSolidRenderingMaterialSpecularSharpnessSlider;
+    this.tinaSolidRenderingMaterialSpecularColorBtn = tinaSolidRenderingMaterialSpecularColorBtn;
+    this.tinaSolidRenderingMaterialDiffuseResponseCmb = tinaSolidRenderingMaterialDiffuseResponseCmb;
   }
 }
