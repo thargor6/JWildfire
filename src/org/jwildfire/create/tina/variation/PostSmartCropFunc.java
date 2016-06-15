@@ -207,7 +207,7 @@ public class PostSmartCropFunc extends VariationFunc {
     else if (PARAM_OFFSET.equalsIgnoreCase(pName))
       offset = pValue;
     else if (PARAM_CROPMODE.equalsIgnoreCase(pName))
-      roundstr = limitIntVal(Tools.FTOI(pValue), 0, 2);
+      cropmode = limitIntVal(Tools.FTOI(pValue), 0, 2);
     else if (PARAM_STATIC.equalsIgnoreCase(pName))
       _static = limitIntVal(Tools.FTOI(pValue), -1, 2);
     else
