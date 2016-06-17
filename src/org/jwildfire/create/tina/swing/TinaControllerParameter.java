@@ -193,46 +193,6 @@ public class TinaControllerParameter {
   public JButton affineScaleEditMotionCurveBtn;
   public JButton pAffineResetTransformButton;
   public JTable pCreatePaletteColorsTable;
-  public JComboBox pShadingCmb;
-  public JWFNumberField pShadingAmbientREd;
-  public JSlider pShadingAmbientSlider;
-  public JWFNumberField pShadingDiffuseREd;
-  public JSlider pShadingDiffuseSlider;
-  public JWFNumberField pShadingPhongREd;
-  public JSlider pShadingPhongSlider;
-  public JWFNumberField pShadingPhongSizeREd;
-  public JSlider pShadingPhongSizeSlider;
-  public JComboBox pShadingLightCmb;
-  public JWFNumberField pShadingLightXREd;
-  public JSlider pShadingLightXSlider;
-  public JWFNumberField pShadingLightYREd;
-  public JSlider pShadingLightYSlider;
-  public JWFNumberField pShadingLightZREd;
-  public JSlider pShadingLightZSlider;
-  public JWFNumberField pShadingLightRedREd;
-  public JSlider pShadingLightRedSlider;
-  public JWFNumberField pShadingLightGreenREd;
-  public JSlider pShadingLightGreenSlider;
-  public JWFNumberField pShadingLightBlueREd;
-  public JSlider pShadingLightBlueSlider;
-  public JWFNumberField pShadingDistanceColorRadiusREd;
-  public JSlider pShadingDistanceColorRadiusSlider;
-  public JWFNumberField pShadingDistanceColorScaleREd;
-  public JSlider pShadingDistanceColorScaleSlider;
-  public JWFNumberField pShadingDistanceColorExponentREd;
-  public JSlider pShadingDistanceColorExponentSlider;
-  public JWFNumberField pShadingDistanceColorOffsetXREd;
-  public JSlider pShadingDistanceColorOffsetXSlider;
-  public JWFNumberField pShadingDistanceColorOffsetYREd;
-  public JSlider pShadingDistanceColorOffsetYSlider;
-  public JWFNumberField pShadingDistanceColorOffsetZREd;
-  public JSlider pShadingDistanceColorOffsetZSlider;
-  public JWFNumberField pShadingDistanceColorStyleREd;
-  public JSlider pShadingDistanceColorStyleSlider;
-  public JWFNumberField pShadingDistanceColorCoordinateREd;
-  public JSlider pShadingDistanceColorCoordinateSlider;
-  public JWFNumberField pShadingDistanceColorShiftREd;
-  public JSlider pShadingDistanceColorShiftSlider;
   public JToggleButton pMouseTransformSlowButton;
   public JTable pRenderBatchJobsTable;
   public JPanel pBatchPreviewRootPanel;
@@ -248,12 +208,10 @@ public class TinaControllerParameter {
   public JTabbedPane pRootTabbedPane;
   public JButton pAffineFlipHorizontalButton;
   public JButton pAffineFlipVerticalButton;
-  public JWFNumberField pShadingBlurRadiusREd;
-  public JSlider pShadingBlurRadiusSlider;
-  public JWFNumberField pShadingBlurFadeREd;
-  public JSlider pShadingBlurFadeSlider;
-  public JWFNumberField pShadingBlurFallOffREd;
-  public JSlider pShadingBlurFallOffSlider;
+  public JWFNumberField postBlurRadiusREd;
+  public JSlider postBlurRadiusSlider;
+  public JWFNumberField postBlurFadeREd;
+  public JSlider postBlurFadeSlider;
   public JToggleButton pAffineScaleXButton;
   public JToggleButton pAffineScaleYButton;
   public JPanel pGradientLibraryPanel;
@@ -660,10 +618,9 @@ public class TinaControllerParameter {
       JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider, JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd, JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JWFNumberField pPaletteFrequencyREd, JSlider pPaletteFrequencySlider, JWFNumberField pPaletteBlurREd, JSlider pPaletteBlurSlider, JButton pPaletteInvertBtn, JButton pPaletteReverseBtn, JTable pTransformationsTable, JWFNumberField pAffineC00REd, JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd, JWFNumberField pAffineRotateAmountREd,
       JWFNumberField pAffineScaleAmountREd, JWFNumberField pAffineMoveHorizAmountREd, JButton pAffineRotateLeftButton, JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton, JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pAddLinkedTransformationButton, JButton pDuplicateTransformationButton, JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, TinaNonlinearControlsRow[] pTinaNonlinearControlsRows, JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider,
-      JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable, JComboBox pShadingCmb, JWFNumberField pShadingAmbientREd, JSlider pShadingAmbientSlider, JWFNumberField pShadingDiffuseREd, JSlider pShadingDiffuseSlider, JWFNumberField pShadingPhongREd,
-      JSlider pShadingPhongSlider, JWFNumberField pShadingPhongSizeREd, JSlider pShadingPhongSizeSlider, JComboBox pShadingLightCmb, JWFNumberField pShadingLightXREd, JSlider pShadingLightXSlider, JWFNumberField pShadingLightYREd, JSlider pShadingLightYSlider, JWFNumberField pShadingLightZREd, JSlider pShadingLightZSlider, JWFNumberField pShadingLightRedREd, JSlider pShadingLightRedSlider, JWFNumberField pShadingLightGreenREd, JSlider pShadingLightGreenSlider, JWFNumberField pShadingLightBlueREd, JSlider pShadingLightBlueSlider, JWFNumberField pShadingDistanceColorRadiusREd, JSlider pShadingDistanceColorRadiusSlider, JWFNumberField pShadingDistanceColorScaleREd, JSlider pShadingDistanceColorScaleSlider, JWFNumberField pShadingDistanceColorExponentREd,
-      JSlider pShadingDistanceColorExponentSlider, JWFNumberField pShadingDistanceColorOffsetXREd, JSlider pShadingDistanceColorOffsetXSlider, JWFNumberField pShadingDistanceColorOffsetYREd, JSlider pShadingDistanceColorOffsetYSlider, JWFNumberField pShadingDistanceColorOffsetZREd, JSlider pShadingDistanceColorOffsetZSlider, JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar, JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton, JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton, JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton,
-      JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pShadingBlurRadiusREd, JSlider pShadingBlurRadiusSlider, JWFNumberField pShadingBlurFadeREd, JSlider pShadingBlurFadeSlider, JWFNumberField pShadingBlurFallOffREd, JSlider pShadingBlurFallOffSlider, JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JTextPane pHelpPane, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb,
+      JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
+      JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar, JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton, JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton, JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton,
+      JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JTextPane pHelpPane, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb,
       JComboBox pBatchResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn, JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn,
       JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn, JComboBox pDancingFlamesRandomGenCmb, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pDancingFlamesBorderSizeSlider, JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd, JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton, JCheckBox pDancingFlamesDoRecordCBx, JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx, JTree pDancingFlamesFlamePropertiesTree, JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb,
       JButton pDancingFlamesAddMotionBtn, JButton pDancingFlamesDeleteMotionBtn) {
@@ -791,40 +748,6 @@ public class TinaControllerParameter {
     this.pAffineEditPostTransformSmallButton = pAffineEditPostTransformSmallButton;
     this.pAffineResetTransformButton = pAffineResetTransformButton;
     this.pCreatePaletteColorsTable = pCreatePaletteColorsTable;
-    this.pShadingCmb = pShadingCmb;
-    this.pShadingAmbientREd = pShadingAmbientREd;
-    this.pShadingAmbientSlider = pShadingAmbientSlider;
-    this.pShadingDiffuseREd = pShadingDiffuseREd;
-    this.pShadingDiffuseSlider = pShadingDiffuseSlider;
-    this.pShadingPhongREd = pShadingPhongREd;
-    this.pShadingPhongSlider = pShadingPhongSlider;
-    this.pShadingPhongSizeREd = pShadingPhongSizeREd;
-    this.pShadingPhongSizeSlider = pShadingPhongSizeSlider;
-    this.pShadingLightCmb = pShadingLightCmb;
-    this.pShadingLightXREd = pShadingLightXREd;
-    this.pShadingLightXSlider = pShadingLightXSlider;
-    this.pShadingLightYREd = pShadingLightYREd;
-    this.pShadingLightYSlider = pShadingLightYSlider;
-    this.pShadingLightZREd = pShadingLightZREd;
-    this.pShadingLightZSlider = pShadingLightZSlider;
-    this.pShadingLightRedREd = pShadingLightRedREd;
-    this.pShadingLightRedSlider = pShadingLightRedSlider;
-    this.pShadingLightGreenREd = pShadingLightGreenREd;
-    this.pShadingLightGreenSlider = pShadingLightGreenSlider;
-    this.pShadingLightBlueREd = pShadingLightBlueREd;
-    this.pShadingLightBlueSlider = pShadingLightBlueSlider;
-    this.pShadingDistanceColorRadiusREd = pShadingDistanceColorRadiusREd;
-    this.pShadingDistanceColorRadiusSlider = pShadingDistanceColorRadiusSlider;
-    this.pShadingDistanceColorScaleREd = pShadingDistanceColorScaleREd;
-    this.pShadingDistanceColorScaleSlider = pShadingDistanceColorScaleSlider;
-    this.pShadingDistanceColorExponentREd = pShadingDistanceColorExponentREd;
-    this.pShadingDistanceColorExponentSlider = pShadingDistanceColorExponentSlider;
-    this.pShadingDistanceColorOffsetXREd = pShadingDistanceColorOffsetXREd;
-    this.pShadingDistanceColorOffsetXSlider = pShadingDistanceColorOffsetXSlider;
-    this.pShadingDistanceColorOffsetYREd = pShadingDistanceColorOffsetYREd;
-    this.pShadingDistanceColorOffsetYSlider = pShadingDistanceColorOffsetYSlider;
-    this.pShadingDistanceColorOffsetZREd = pShadingDistanceColorOffsetZREd;
-    this.pShadingDistanceColorOffsetZSlider = pShadingDistanceColorOffsetZSlider;
     this.pMouseTransformSlowButton = pMouseTransformSlowButton;
     this.pRenderBatchJobsTable = pRenderBatchJobsTable;
     this.pBatchPreviewRootPanel = pBatchPreviewRootPanel;
@@ -840,12 +763,10 @@ public class TinaControllerParameter {
     this.pRootTabbedPane = pRootTabbedPane;
     this.pAffineFlipHorizontalButton = pAffineFlipHorizontalButton;
     this.pAffineFlipVerticalButton = pAffineFlipVerticalButton;
-    this.pShadingBlurRadiusREd = pShadingBlurRadiusREd;
-    this.pShadingBlurRadiusSlider = pShadingBlurRadiusSlider;
-    this.pShadingBlurFadeREd = pShadingBlurFadeREd;
-    this.pShadingBlurFadeSlider = pShadingBlurFadeSlider;
-    this.pShadingBlurFallOffREd = pShadingBlurFallOffREd;
-    this.pShadingBlurFallOffSlider = pShadingBlurFallOffSlider;
+    this.postBlurRadiusREd = pPostBlurRadiusREd;
+    this.postBlurRadiusSlider = pPostBlurRadiusSlider;
+    this.postBlurFadeREd = pPostBlurFadeREd;
+    this.postBlurFadeSlider = pPostBlurFadeSlider;
     this.pAffineScaleXButton = pAffineScaleXButton;
     this.pAffineScaleYButton = pAffineScaleYButton;
     this.pGradientLibraryPanel = pGradientLibraryPanel;
@@ -900,8 +821,7 @@ public class TinaControllerParameter {
   }
 
   public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
-      JWFNumberField pShadingDistanceColorStyleREd, JSlider pShadingDistanceColorStyleSlider, JWFNumberField pShadingDistanceColorCoordinateREd, JSlider pShadingDistanceColorCoordinateSlider,
-      JWFNumberField pShadingDistanceColorShiftREd, JSlider pShadingDistanceColorShiftSlider, JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
+      JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
       JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
       JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
       JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn,
@@ -949,12 +869,6 @@ public class TinaControllerParameter {
     this.pDancingFlamesLoadProjectBtn = pDancingFlamesLoadProjectBtn;
     this.pDancingFlamesSaveProjectBtn = pDancingFlamesSaveProjectBtn;
     this.pDancingFlamesMotionLinksTable = pDancingFlamesMotionLinksTable;
-    this.pShadingDistanceColorStyleREd = pShadingDistanceColorStyleREd;
-    this.pShadingDistanceColorStyleSlider = pShadingDistanceColorStyleSlider;
-    this.pShadingDistanceColorCoordinateREd = pShadingDistanceColorCoordinateREd;
-    this.pShadingDistanceColorCoordinateSlider = pShadingDistanceColorCoordinateSlider;
-    this.pShadingDistanceColorShiftREd = pShadingDistanceColorShiftREd;
-    this.pShadingDistanceColorShiftSlider = pShadingDistanceColorShiftSlider;
     this.mutaGen01Pnl = pMutaGen01Pnl;
     this.mutaGen02Pnl = pMutaGen02Pnl;
     this.mutaGen03Pnl = pMutaGen03Pnl;

@@ -117,7 +117,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     }
   }
 
-  public MaterialSettings getMaterial(double materialIdx) {
+  public MaterialSettings getInterpolatedMaterial(double materialIdx) {
     //    System.out.println(materialIdx);
     if (materialIdx < 0)
       return null;

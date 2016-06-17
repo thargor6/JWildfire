@@ -55,8 +55,6 @@ import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Shading;
-import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -289,39 +287,6 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
     if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
       attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
-    ShadingInfo shadingInfo = pFlame.getShadingInfo();
-    attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
-    if (shadingInfo.getShading() == Shading.PSEUDO3D) {
-      attrList.add(xb.createAttr("shading_ambient", shadingInfo.getAmbient()));
-      attrList.add(xb.createAttr("shading_diffuse", shadingInfo.getDiffuse()));
-      attrList.add(xb.createAttr("shading_phong", shadingInfo.getPhong()));
-      attrList.add(xb.createAttr("shading_phongSize", shadingInfo.getPhongSize()));
-      attrList.add(xb.createAttr("shading_lightCount", shadingInfo.getLightCount()));
-      for (int i = 0; i < shadingInfo.getLightCount(); i++) {
-        attrList.add(xb.createAttr("shading_lightPosX_" + i, shadingInfo.getLightPosX()[i]));
-        attrList.add(xb.createAttr("shading_lightPosY_" + i, shadingInfo.getLightPosY()[i]));
-        attrList.add(xb.createAttr("shading_lightPosZ_" + i, shadingInfo.getLightPosZ()[i]));
-        attrList.add(xb.createAttr("shading_lightRed_" + i, shadingInfo.getLightRed()[i]));
-        attrList.add(xb.createAttr("shading_lightGreen_" + i, shadingInfo.getLightGreen()[i]));
-        attrList.add(xb.createAttr("shading_lightBlue_" + i, shadingInfo.getLightBlue()[i]));
-      }
-    }
-    else if (shadingInfo.getShading() == Shading.BLUR) {
-      attrList.add(xb.createAttr("shading_blurRadius", shadingInfo.getBlurRadius()));
-      attrList.add(xb.createAttr("shading_blurFade", shadingInfo.getBlurFade()));
-      attrList.add(xb.createAttr("shading_blurFallOff", shadingInfo.getBlurFallOff()));
-    }
-    else if (shadingInfo.getShading() == Shading.DISTANCE_COLOR) {
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_RADIUS, shadingInfo.getDistanceColorRadius()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SCALE, shadingInfo.getDistanceColorScale()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_EXPONENT, shadingInfo.getDistanceColorExponent()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETX, shadingInfo.getDistanceColorOffsetX()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETY, shadingInfo.getDistanceColorOffsetY()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETZ, shadingInfo.getDistanceColorOffsetZ()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_STYLE, shadingInfo.getDistanceColorStyle()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_COORDINATE, shadingInfo.getDistanceColorCoordinate()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SHIFT, shadingInfo.getDistanceColorShift()));
-    }
     if (pFlame.getAntialiasAmount() > EPSILON) {
       attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
       attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));

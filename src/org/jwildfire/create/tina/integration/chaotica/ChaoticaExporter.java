@@ -19,7 +19,7 @@ public class ChaoticaExporter {
     pFlame.resetDOFSettings();
     pFlame.resetMixerCurves();
     pFlame.resetPostSymmetrySettings();
-    pFlame.resetShadingSettings();
+    pFlame.resetPostBlurSettings();
     pFlame.resetStereo3DSettings();
     while (pFlame.getLayers().size() > 1) {
       pFlame.getLayers().remove(pFlame.getLayers().size() - 1);

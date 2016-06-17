@@ -25,7 +25,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -99,15 +98,6 @@ public class AnimationModelService {
             e.printStackTrace();
           }
         }
-        else if (fCls == ShadingInfo.class) {
-          try {
-            ShadingInfo shadingInfo = (ShadingInfo) field.get(pFlame);
-            addShadingInfoToModel(res, shadingInfo, pVisitor, state);
-          }
-          catch (Exception e) {
-            e.printStackTrace();
-          }
-        }
         else if (fCls == List.class) {
           ParameterizedType listType = (ParameterizedType) field.getGenericType();
           Class<?> listSubClass = (Class<?>) listType.getActualTypeArguments()[0];
@@ -126,29 +116,6 @@ public class AnimationModelService {
                 addLayerToModel(res, idx++, layer, pVisitor, state);
               }
             }
-          }
-        }
-      }
-    }
-  }
-
-  private static void addShadingInfoToModel(PropertyModel pNode, ShadingInfo pShadingInfo, PropertyVisitor pVisitor, VisitState pState) {
-    Class<?> cls = pShadingInfo.getClass();
-    String fieldname = PROPNAME_SHADING;
-    PropertyModel shadingNode = new PropertyModel(pNode, fieldname, cls);
-    pNode.getChields().add(shadingNode);
-    for (Field field : cls.getDeclaredFields()) {
-      if (pState.isCancelSignalled()) {
-        return;
-      }
-      field.setAccessible(true);
-      if (field.getAnnotation(AnimAware.class) != null) {
-        Class<?> fCls = field.getType();
-        if (isPrimitiveProperty(fCls)) {
-          PlainProperty property = new PlainProperty(shadingNode, field.getName(), cls);
-          shadingNode.getProperties().add(property);
-          if (pVisitor != null) {
-            pState.updateState(pVisitor.accept(pShadingInfo, field, property));
           }
         }
       }

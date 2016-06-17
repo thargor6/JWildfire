@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -164,7 +164,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<Layer> layers = new LayerList(this);
 
   @AnimAware
-  private ShadingInfo shadingInfo;
   private String lastFilename = null;
   private double antialiasAmount;
   private double antialiasRadius;
@@ -224,7 +223,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     resetCameraSettings();
     resetDOFSettings();
     resetBokehSettings();
-    resetShadingSettings();
+    resetPostBlurSettings();
     resetStereo3DSettings();
     resetPostSymmetrySettings();
     resetMotionBlurSettings();
@@ -265,9 +264,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dSwapSides = false;
   }
 
-  public void resetShadingSettings() {
-    shadingInfo = new ShadingInfo();
-    shadingInfo.init();
+  public void resetPostBlurSettings() {
+    // TODO
   }
 
   public void resetAntialiasingSettings() {
@@ -576,14 +574,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.camDOFExponent = camDOFExponent;
   }
 
-  public ShadingInfo getShadingInfo() {
-    return shadingInfo;
-  }
-
-  public void setShadingInfo(ShadingInfo shadingInfo) {
-    this.shadingInfo = shadingInfo;
-  }
-
   public String getResolutionProfile() {
     return resolutionProfile;
   }
@@ -694,7 +684,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
-    shadingInfo.assign(pFlame.shadingInfo);
     name = pFlame.name;
     bgImageFilename = pFlame.bgImageFilename;
     lastFilename = pFlame.lastFilename;
@@ -806,7 +795,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
-        !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
+        !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||

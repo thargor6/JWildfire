@@ -14,7 +14,6 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.PostSymmetryType;
-import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
@@ -94,21 +93,6 @@ public class AbstractFlameReader {
   public static final String ATTR_CAM_DOF_PARAM6 = "cam_dof_param6";
   public static final String ATTR_CAM_ZOOM = "cam_zoom";
   public static final String ATTR_NEW_LINEAR = "new_linear";
-  public static final String ATTR_SHADING_SHADING = "shading_shading";
-  public static final String ATTR_SHADING_AMBIENT = "shading_ambient";
-  public static final String ATTR_SHADING_DIFFUSE = "shading_diffuse";
-  public static final String ATTR_SHADING_PHONG = "shading_phong";
-  public static final String ATTR_SHADING_PHONGSIZE = "shading_phongSize";
-  public static final String ATTR_SHADING_LIGHTCOUNT = "shading_lightCount";
-  public static final String ATTR_SHADING_LIGHTPOSX_ = "shading_lightPosX_";
-  public static final String ATTR_SHADING_LIGHTPOSY_ = "shading_lightPosY_";
-  public static final String ATTR_SHADING_LIGHTPOSZ_ = "shading_lightPosZ_";
-  public static final String ATTR_SHADING_LIGHTRED_ = "shading_lightRed_";
-  public static final String ATTR_SHADING_LIGHTGREEN_ = "shading_lightGreen_";
-  public static final String ATTR_SHADING_LIGHTBLUE_ = "shading_lightBlue_";
-  public static final String ATTR_SHADING_BLUR_RADIUS = "shading_blurRadius";
-  public static final String ATTR_SHADING_BLUR_FADE = "shading_blurFade";
-  public static final String ATTR_SHADING_BLUR_FALLOFF = "shading_blurFallOff";
   public static final String ATTR_PRESERVE_Z = "preserve_z";
   public static final String ATTR_RESOLUTION_PROFILE = "resolution_profile";
   public static final String ATTR_QUALITY_PROFILE = "quality_profile";
@@ -380,64 +364,6 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_QUALITY_PROFILE)) != null) {
       pFlame.setQualityProfile(hs);
     }
-    // Shading    
-    if ((hs = atts.get(ATTR_SHADING_SHADING)) != null) {
-      try {
-        pFlame.getShadingInfo().setShading(Shading.valueOf(hs));
-      }
-      catch (Exception ex) {
-        pFlame.getShadingInfo().setShading(Shading.FLAT);
-        ex.printStackTrace();
-      }
-    }
-    if ((hs = atts.get(ATTR_SHADING_AMBIENT)) != null) {
-      pFlame.getShadingInfo().setAmbient(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DIFFUSE)) != null) {
-      pFlame.getShadingInfo().setDiffuse(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_PHONG)) != null) {
-      pFlame.getShadingInfo().setPhong(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_PHONGSIZE)) != null) {
-      pFlame.getShadingInfo().setPhongSize(Double.parseDouble(hs));
-    }
-    int lightCount;
-    if ((hs = atts.get(ATTR_SHADING_LIGHTCOUNT)) != null) {
-      lightCount = Integer.parseInt(hs);
-    }
-    else {
-      lightCount = 0;
-    }
-    for (int i = 0; i < lightCount; i++) {
-      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSX_ + i)) != null) {
-        pFlame.getShadingInfo().setLightPosX(i, Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSY_ + i)) != null) {
-        pFlame.getShadingInfo().setLightPosY(i, Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(ATTR_SHADING_LIGHTPOSZ_ + i)) != null) {
-        pFlame.getShadingInfo().setLightPosZ(i, Double.parseDouble(hs));
-      }
-      if ((hs = atts.get(ATTR_SHADING_LIGHTRED_ + i)) != null) {
-        pFlame.getShadingInfo().setLightRed(i, Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(ATTR_SHADING_LIGHTGREEN_ + i)) != null) {
-        pFlame.getShadingInfo().setLightGreen(i, Integer.parseInt(hs));
-      }
-      if ((hs = atts.get(ATTR_SHADING_LIGHTBLUE_ + i)) != null) {
-        pFlame.getShadingInfo().setLightBlue(i, Integer.parseInt(hs));
-      }
-    }
-    if ((hs = atts.get(ATTR_SHADING_BLUR_RADIUS)) != null) {
-      pFlame.getShadingInfo().setBlurRadius(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_BLUR_FADE)) != null) {
-      pFlame.getShadingInfo().setBlurFade(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_BLUR_FALLOFF)) != null) {
-      pFlame.getShadingInfo().setBlurFallOff(Double.parseDouble(hs));
-    }
     if ((hs = atts.get(ATTR_NEW_LINEAR)) != null) {
       pFlame.setPreserveZ(hs.length() > 0 && Integer.parseInt(hs) == 1);
     }
@@ -459,34 +385,6 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_MOTIONBLUR_DECAY)) != null) {
       pFlame.setMotionBlurDecay(Double.parseDouble(hs));
-    }
-
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_RADIUS)) != null) {
-      pFlame.getShadingInfo().setDistanceColorRadius(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_SCALE)) != null) {
-      pFlame.getShadingInfo().setDistanceColorScale(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_EXPONENT)) != null) {
-      pFlame.getShadingInfo().setDistanceColorExponent(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETX)) != null) {
-      pFlame.getShadingInfo().setDistanceColorOffsetX(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETY)) != null) {
-      pFlame.getShadingInfo().setDistanceColorOffsetY(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_OFFSETZ)) != null) {
-      pFlame.getShadingInfo().setDistanceColorOffsetZ(Double.parseDouble(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_STYLE)) != null) {
-      pFlame.getShadingInfo().setDistanceColorStyle(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_COORDINATE)) != null) {
-      pFlame.getShadingInfo().setDistanceColorCoordinate(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SHADING_DISTANCE_COLOR_SHIFT)) != null) {
-      pFlame.getShadingInfo().setDistanceColorShift(Double.parseDouble(hs));
     }
 
     if ((hs = atts.get(ATTR_POST_SYMMETRY_TYPE)) != null) {
@@ -572,6 +470,7 @@ public class AbstractFlameReader {
       if (fps >= 1)
         pFlame.setFps(fps);
     }
+
     readMotionCurves(pFlame, atts, null);
 
     if ((hs = atts.get(ATTR_CHANNEL_MIXER_MODE)) != null) {
@@ -639,6 +538,7 @@ public class AbstractFlameReader {
   public static final String ATTR_CHANNEL_MIXER_BG_CURVE = "mixer_bg_curve";
   public static final String ATTR_CHANNEL_MIXER_BB_CURVE = "mixer_bb_curve";
   public static final String ATTR_FX_PRIORITY = "fx_priority";
+  public static final String ATTR_SOLID_RENDERING = "solid_rendering";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
