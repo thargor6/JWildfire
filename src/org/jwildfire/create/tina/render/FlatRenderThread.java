@@ -29,7 +29,12 @@ public final class FlatRenderThread extends DefaultRenderThread {
 
   @Override
   protected DefaultRenderIterationState createState(RenderPacket pRenderPacket, Layer pLayer) {
-    return new DefaultRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
+    if (pRenderPacket.getFlame().getPostBlurRadius() > 0) {
+      return new PostBlurRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
+    }
+    else {
+      return new DefaultRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
+    }
   }
 
 }

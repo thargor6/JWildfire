@@ -471,6 +471,16 @@ public class AbstractFlameReader {
         pFlame.setFps(fps);
     }
 
+    if ((hs = atts.get(ATTR_POSTBLUR_RADIUS)) != null) {
+      pFlame.setPostBlurRadius(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_POSTBLUR_FADE)) != null) {
+      pFlame.setPostBlurFade(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_POSTBLUR_FALLOFF)) != null) {
+      pFlame.setPostBlurFallOff(Double.parseDouble(hs));
+    }
+
     readMotionCurves(pFlame, atts, null);
 
     if ((hs = atts.get(ATTR_CHANNEL_MIXER_MODE)) != null) {
@@ -539,6 +549,10 @@ public class AbstractFlameReader {
   public static final String ATTR_CHANNEL_MIXER_BB_CURVE = "mixer_bb_curve";
   public static final String ATTR_FX_PRIORITY = "fx_priority";
   public static final String ATTR_SOLID_RENDERING = "solid_rendering";
+
+  public static final String ATTR_POSTBLUR_RADIUS = "post_blur_radius";
+  public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
+  public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);

@@ -176,6 +176,10 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frameCount = 300;
   private int fps = 30;
 
+  private int postBlurRadius;
+  private double postBlurFade;
+  private double postBlurFallOff;
+
   private PostSymmetryType postSymmetryType;
   private int postSymmetryOrder;
   private double postSymmetryCentreX;
@@ -265,7 +269,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public void resetPostBlurSettings() {
-    // TODO
+    postBlurRadius = 0;
+    postBlurFade = 0.95;
+    postBlurFallOff = 2.0;
   }
 
   public void resetAntialiasingSettings() {
@@ -695,6 +701,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     postNoiseFilter = pFlame.postNoiseFilter;
     postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
     foregroundOpacity = pFlame.foregroundOpacity;
+    postBlurRadius = pFlame.postBlurRadius;
+    postBlurFade = pFlame.postBlurFade;
+    postBlurFallOff = pFlame.postBlurFallOff;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -812,7 +821,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         (channelMixerMode != pFlame.channelMixerMode) || !mixerRRCurve.isEqual(pFlame.mixerRRCurve) || !mixerRGCurve.isEqual(pFlame.mixerRGCurve) ||
         !mixerRBCurve.isEqual(pFlame.mixerRBCurve) || !mixerGRCurve.isEqual(pFlame.mixerGRCurve) || !mixerGGCurve.isEqual(pFlame.mixerGGCurve) ||
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
-        !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings)) {
+        !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
+        postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1480,6 +1491,30 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public SolidRenderSettings getSolidRenderSettings() {
     return solidRenderSettings;
+  }
+
+  public int getPostBlurRadius() {
+    return postBlurRadius;
+  }
+
+  public void setPostBlurRadius(int postBlurRadius) {
+    this.postBlurRadius = postBlurRadius;
+  }
+
+  public double getPostBlurFade() {
+    return postBlurFade;
+  }
+
+  public void setPostBlurFade(double postBlurFade) {
+    this.postBlurFade = postBlurFade;
+  }
+
+  public double getPostBlurFallOff() {
+    return postBlurFallOff;
+  }
+
+  public void setPostBlurFallOff(double postBlurFallOff) {
+    this.postBlurFallOff = postBlurFallOff;
   }
 
 }

@@ -323,6 +323,10 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FPS, pFlame.getFps()));
 
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_RADIUS, pFlame.getPostBlurRadius()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FADE, pFlame.getPostBlurFade()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FALLOFF, pFlame.getPostBlurFallOff()));
+
     writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
 
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_CHANNEL_MIXER_MODE, pFlame.getChannelMixerMode().toString()));
