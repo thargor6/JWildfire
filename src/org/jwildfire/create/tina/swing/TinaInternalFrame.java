@@ -527,6 +527,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel shadingBlurFadeLbl = null;
   private JWFNumberField postBlurFadeREd = null;
   private JSlider postBlurFadeSlider = null;
+  public JWFNumberField postBlurFallOffREd;
+  public JSlider postBlurFallOffSlider;
   private JLabel shadingBlurFallOffLbl = null;
   private JPanel scriptPanel = null;
   private JScrollPane scriptScrollPane = null;
@@ -4877,8 +4879,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getBatchRenderAddFilesButton(), getBatchRenderFilesMoveDownButton(), getBatchRenderFilesMoveUpButton(),
         getBatchRenderFilesRemoveButton(), getBatchRenderFilesRemoveAllButton(), getBatchRenderStartButton(),
         getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(),
-        getPostBlurRadiusREd(), getPostBlurRadiusSlider(), getPostBlurFadeREd(),
-        getPostBlurFadeSlider(),
+        getPostBlurRadiusREd(), getPostBlurRadiusSlider(), getPostBlurFadeREd(), getPostBlurFadeSlider(), getPostBlurFallOffREd(), getPostBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl, getHelpPane(),
         getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         getBatchQualityProfileCmb(), getBatchResolutionProfileCmb(), getInteractiveResolutionProfileCmb(),
@@ -11407,13 +11408,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getPostBlurRadiusSlider() {
     if (postBlurRadiusSlider == null) {
       postBlurRadiusSlider = new JSlider();
+      postBlurRadiusSlider.setToolTipText("A value of 2 gives the typcial effect");
       postBlurRadiusSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
           tinaController.saveUndoPoint();
         }
       });
-      postBlurRadiusSlider.setMaximum(10);
+      postBlurRadiusSlider.setMaximum(6);
       postBlurRadiusSlider.setMinimum(0);
       postBlurRadiusSlider.setValue(0);
       postBlurRadiusSlider.setSize(new Dimension(120, 19));
@@ -21063,6 +21065,12 @@ public class TinaInternalFrame extends JInternalFrame {
       shadingBlurRadiusLbl.setSize(new Dimension(94, 22));
       shadingBlurRadiusLbl.setLocation(new Point(6, 6));
       shadingBlurRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      shadingBlurFallOffLbl = new JLabel();
+      shadingBlurFallOffLbl.setPreferredSize(new Dimension(94, 22));
+      shadingBlurFallOffLbl.setText("Blur falloff");
+      shadingBlurFallOffLbl.setSize(new Dimension(94, 22));
+      shadingBlurFallOffLbl.setLocation(new Point(6, 54));
+      shadingBlurFallOffLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       panel_1.add(shadingBlurRadiusLbl, null);
       panel_1.add(getPostBlurRadiusREd(), null);
@@ -21070,6 +21078,9 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(shadingBlurFadeLbl, null);
       panel_1.add(getPostBlurFadeREd(), null);
       panel_1.add(getPostBlurFadeSlider(), null);
+      panel_1.add(shadingBlurFallOffLbl, null);
+      panel_1.add(getPostBlurFallOffREd(), null);
+      panel_1.add(getPostBlurFallOffSlider(), null);
       panel_1.add(getResetPostBlurSettingsBtn());
     }
     return tabbedPane_3;
@@ -24299,6 +24310,57 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getTinaSolidRenderingMaterialSpecularColorBtn() {
     return tinaSolidRenderingMaterialSpecularColorBtn;
+  }
+
+  private JWFNumberField getPostBlurFallOffREd() {
+    if (postBlurFallOffREd == null) {
+      postBlurFallOffREd = new JWFNumberField();
+      postBlurFallOffREd.setValueStep(0.1);
+      postBlurFallOffREd.setHasMinValue(true);
+      postBlurFallOffREd.setHasMaxValue(true);
+      postBlurFallOffREd.setMaxValue(10.0);
+      postBlurFallOffREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!postBlurFallOffREd.isMouseAdjusting() || postBlurFallOffREd.getMouseChangeCount() == 0) {
+            if (!postBlurFallOffSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().postBlurFallOffREd_changed();
+        }
+      });
+
+      postBlurFallOffREd.setPreferredSize(new Dimension(100, 24));
+      postBlurFallOffREd.setText("");
+      postBlurFallOffREd.setSize(new Dimension(100, 24));
+      postBlurFallOffREd.setLocation(new Point(102, 54));
+      postBlurFallOffREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+    }
+    return postBlurFallOffREd;
+  }
+
+  private JSlider getPostBlurFallOffSlider() {
+    if (postBlurFallOffSlider == null) {
+      postBlurFallOffSlider = new JSlider();
+      postBlurFallOffSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postBlurFallOffSlider.setMaximum(100);
+      postBlurFallOffSlider.setMinimum(0);
+      postBlurFallOffSlider.setValue(0);
+      postBlurFallOffSlider.setSize(new Dimension(120, 19));
+      postBlurFallOffSlider.setLocation(new Point(204, 54));
+      postBlurFallOffSlider.setPreferredSize(new Dimension(120, 19));
+      postBlurFallOffSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().postBlurFallOffSlider_changed();
+        }
+      });
+    }
+    return postBlurFallOffSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

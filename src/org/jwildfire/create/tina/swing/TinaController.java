@@ -79,7 +79,6 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -592,54 +591,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     mainProgressUpdater = new RenderProgressUpdater(this);
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
-    data.shadingCmb = parameterObject.pShadingCmb;
-    data.shadingAmbientREd = parameterObject.pShadingAmbientREd;
-    data.shadingAmbientSlider = parameterObject.pShadingAmbientSlider;
-    data.shadingDiffuseREd = parameterObject.pShadingDiffuseREd;
-    data.shadingDiffuseSlider = parameterObject.pShadingDiffuseSlider;
-    data.shadingPhongREd = parameterObject.pShadingPhongREd;
-    data.shadingPhongSlider = parameterObject.pShadingPhongSlider;
-    data.shadingPhongSizeREd = parameterObject.pShadingPhongSizeREd;
-    data.shadingPhongSizeSlider = parameterObject.pShadingPhongSizeSlider;
-    data.shadingLightCmb = parameterObject.pShadingLightCmb;
-    data.shadingLightXREd = parameterObject.pShadingLightXREd;
-    data.shadingLightXSlider = parameterObject.pShadingLightXSlider;
-    data.shadingLightYREd = parameterObject.pShadingLightYREd;
-    data.shadingLightYSlider = parameterObject.pShadingLightYSlider;
-    data.shadingLightZREd = parameterObject.pShadingLightZREd;
-    data.shadingLightZSlider = parameterObject.pShadingLightZSlider;
-    data.shadingLightRedREd = parameterObject.pShadingLightRedREd;
-    data.shadingLightRedSlider = parameterObject.pShadingLightRedSlider;
-    data.shadingLightGreenREd = parameterObject.pShadingLightGreenREd;
-    data.shadingLightGreenSlider = parameterObject.pShadingLightGreenSlider;
-    data.shadingLightBlueREd = parameterObject.pShadingLightBlueREd;
-    data.shadingLightBlueSlider = parameterObject.pShadingLightBlueSlider;
 
-    data.shadingBlurRadiusREd = parameterObject.pShadingBlurRadiusREd;
-    data.shadingBlurRadiusSlider = parameterObject.pShadingBlurRadiusSlider;
-    data.shadingBlurFadeREd = parameterObject.pShadingBlurFadeREd;
-    data.shadingBlurFadeSlider = parameterObject.pShadingBlurFadeSlider;
-    data.shadingBlurFallOffREd = parameterObject.pShadingBlurFallOffREd;
-    data.shadingBlurFallOffSlider = parameterObject.pShadingBlurFallOffSlider;
-
-    data.shadingDistanceColorRadiusREd = parameterObject.pShadingDistanceColorRadiusREd;
-    data.shadingDistanceColorRadiusSlider = parameterObject.pShadingDistanceColorRadiusSlider;
-    data.shadingDistanceColorScaleREd = parameterObject.pShadingDistanceColorScaleREd;
-    data.shadingDistanceColorScaleSlider = parameterObject.pShadingDistanceColorScaleSlider;
-    data.shadingDistanceColorExponentREd = parameterObject.pShadingDistanceColorExponentREd;
-    data.shadingDistanceColorExponentSlider = parameterObject.pShadingDistanceColorExponentSlider;
-    data.shadingDistanceColorOffsetXREd = parameterObject.pShadingDistanceColorOffsetXREd;
-    data.shadingDistanceColorOffsetXSlider = parameterObject.pShadingDistanceColorOffsetXSlider;
-    data.shadingDistanceColorOffsetYREd = parameterObject.pShadingDistanceColorOffsetYREd;
-    data.shadingDistanceColorOffsetYSlider = parameterObject.pShadingDistanceColorOffsetYSlider;
-    data.shadingDistanceColorOffsetZREd = parameterObject.pShadingDistanceColorOffsetZREd;
-    data.shadingDistanceColorOffsetZSlider = parameterObject.pShadingDistanceColorOffsetZSlider;
-    data.shadingDistanceColorStyleREd = parameterObject.pShadingDistanceColorStyleREd;
-    data.shadingDistanceColorStyleSlider = parameterObject.pShadingDistanceColorStyleSlider;
-    data.shadingDistanceColorCoordinateREd = parameterObject.pShadingDistanceColorCoordinateREd;
-    data.shadingDistanceColorCoordinateSlider = parameterObject.pShadingDistanceColorCoordinateSlider;
-    data.shadingDistanceColorShiftREd = parameterObject.pShadingDistanceColorShiftREd;
-    data.shadingDistanceColorShiftSlider = parameterObject.pShadingDistanceColorShiftSlider;
+    data.postBlurRadiusREd = parameterObject.postBlurRadiusREd;
+    data.postBlurRadiusSlider = parameterObject.postBlurRadiusSlider;
+    data.postBlurFadeREd = parameterObject.postBlurFadeREd;
+    data.postBlurFadeSlider = parameterObject.postBlurFadeSlider;
+    data.postBlurFallOffREd = parameterObject.postBlurFallOffREd;
+    data.postBlurFallOffSlider = parameterObject.postBlurFallOffSlider;
 
     data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
@@ -1321,10 +1279,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       transformationChanged(true);
 
-      data.shadingLightCmb.setSelectedIndex(0);
-
       enableControls();
-      flameControls.refreshShadingUI();
       enableLayerControls();
       channelMixerControls.refreshValues(true);
       refreshPaletteUI(getCurrLayer().getPalette());
@@ -3782,25 +3737,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void shadingCmb_changed() {
-    if (noRefresh) {
-      return;
-    }
-    if (getCurrFlame() == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      getCurrFlame().getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
-      flameControls.enableShadingUI();
-      flameControls.refreshShadingUI();
-      refreshFlameImage(true, false, 1, true);
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
   public void loadFlameFromClipboard() {
     try {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -5380,11 +5316,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void resetShadingSettings() {
+  public void resetPostBlurSettings() {
     Flame flame = getCurrFlame();
     if (flame != null) {
       saveUndoPoint();
-      flame.resetShadingSettings();
+      flame.resetPostBlurSettings();
       refreshUI();
     }
   }
@@ -6034,4 +5970,137 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     relWeightsTableClicked();
   }
+
+  private void textFieldChanged(String property, Object value, double propValue) {
+    Class<?> cls = value.getClass();
+    try {
+      Field field = cls.getDeclaredField(property);
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == double.class || fieldCls == Double.class) {
+        field.setDouble(value, propValue);
+      }
+      else if (fieldCls == int.class || fieldCls == Integer.class) {
+        field.setInt(value, Tools.FTOI(propValue));
+      }
+      else {
+        throw new IllegalStateException();
+      }
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
+    refreshFlameImage(true, false, 1, true);
+  }
+
+  private void solidRenderSettingsTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings();
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void solidRenderSettingsSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings();
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void solidRenderSettingsMaterialTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsMaterialIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getMaterials().size())
+      return;
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings().getMaterials().get(idx);
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void solidRenderSettingsMaterialSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsMaterialIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getMaterials().size())
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings().getMaterials().get(idx);
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private void solidRenderSettingsLightTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsLightIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getLights().size())
+      return;
+    noRefresh = true;
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings().getLights().get(idx);
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private int getRenderSettingsLightIdx() {
+    return data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex();
+  }
+
+  private void solidRenderSettingsLightSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+    if (noRefresh || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsLightIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getLights().size())
+      return;
+    noRefresh = true;
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings().getLights().get(idx);
+      textFieldChanged(pProperty, value, propValue);
+    }
+    finally {
+      noRefresh = false;
+    }
+  }
+
+  private int getRenderSettingsMaterialIdx() {
+    return data.tinaSolidRenderingSelectedMaterialCmb.getSelectedIndex();
+  }
+
 }
