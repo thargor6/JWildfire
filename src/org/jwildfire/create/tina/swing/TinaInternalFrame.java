@@ -90,6 +90,7 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
@@ -5019,6 +5020,12 @@ public class TinaInternalFrame extends JInternalFrame {
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
       getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
+
+      getTinaSolidRenderingMaterialDiffuseResponseCmb().removeAllItems();
+      getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA);
+      getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_SQUARE);
+      getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_HALVE);
+      getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_HALVE_SQUARE);
 
       getChannelMixerModeCmb().removeAllItems();
       getChannelMixerModeCmb().addItem(ChannelMixerMode.OFF);
@@ -11408,7 +11415,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider getPostBlurRadiusSlider() {
     if (postBlurRadiusSlider == null) {
       postBlurRadiusSlider = new JSlider();
-      postBlurRadiusSlider.setToolTipText("A value of 2 gives the typcial effect");
       postBlurRadiusSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -23640,31 +23646,65 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSolidRenderingPane == null) {
       tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.LEFT);
 
-      JPanel tinaSolidRenderingGlobalSettingsPnl = new JPanel();
-      tinaSolidRenderingPane.addTab("Rendering settings", null, tinaSolidRenderingGlobalSettingsPnl, null);
-      tinaSolidRenderingGlobalSettingsPnl.setLayout(null);
-
+      JPanel panel_1 = new JPanel();
+      tinaSolidRenderingPane.addTab("Rendering settings", null, panel_1, null);
+      panel_1.setLayout(null);
       tinaSolidRenderingCBx = new JCheckBox("Enable solid rendering");
+      tinaSolidRenderingCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingCBx_changed();
+          }
+        }
+      });
       tinaSolidRenderingCBx.setActionCommand("");
       tinaSolidRenderingCBx.setBounds(6, 6, 169, 18);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingCBx);
+      panel_1.add(tinaSolidRenderingCBx);
 
       tinaSolidRenderingEnableSSAOCBx = new JCheckBox("Enable ambient shadows");
+      tinaSolidRenderingEnableSSAOCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableSSAOCBx_changed();
+          }
+        }
+      });
       tinaSolidRenderingEnableSSAOCBx.setActionCommand("Enable solid rendering");
       tinaSolidRenderingEnableSSAOCBx.setBounds(195, 36, 169, 18);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingEnableSSAOCBx);
+      panel_1.add(tinaSolidRenderingEnableSSAOCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
+      tinaSolidRenderingEnableHardShadowsCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
+          }
+        }
+      });
       tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable solid rendering");
       tinaSolidRenderingEnableHardShadowsCBx.setBounds(30, 66, 169, 18);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingEnableHardShadowsCBx);
+      panel_1.add(tinaSolidRenderingEnableHardShadowsCBx);
 
       tinaSolidRenderingEnableLightsCBx = new JCheckBox("Enable lights");
+      tinaSolidRenderingEnableLightsCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableLightsCBx_changed();
+          }
+        }
+      });
       tinaSolidRenderingEnableLightsCBx.setActionCommand("Enable solid rendering");
       tinaSolidRenderingEnableLightsCBx.setBounds(30, 36, 169, 18);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingEnableLightsCBx);
+      panel_1.add(tinaSolidRenderingEnableLightsCBx);
 
       resetSolidRenderingGlobalSettingsBtn = new JButton();
+      resetSolidRenderingGlobalSettingsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingResetSettingsBtn_clicked();
+          }
+        }
+      });
       resetSolidRenderingGlobalSettingsBtn.setToolTipText("Reset the global solid rendering settings to the defaults");
       resetSolidRenderingGlobalSettingsBtn.setText("Reset");
       resetSolidRenderingGlobalSettingsBtn.setPreferredSize(new Dimension(125, 24));
@@ -23674,7 +23714,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetSolidRenderingGlobalSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetSolidRenderingGlobalSettingsBtn.setBounds(6, 114, 100, 24);
       resetSolidRenderingGlobalSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
-      tinaSolidRenderingGlobalSettingsPnl.add(resetSolidRenderingGlobalSettingsBtn);
+      panel_1.add(resetSolidRenderingGlobalSettingsBtn);
 
       tinaSolidRenderingSSAOIntensityREd = new JWFNumberField();
       tinaSolidRenderingSSAOIntensityREd.setValueStep(0.05);
@@ -23687,7 +23727,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSSAOIntensityREd.setLinkedLabelControlName("tinaSolidRenderingSSAOIntensityLbl");
       tinaSolidRenderingSSAOIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingSSAOIntensityREd.setBounds(327, 66, 100, 24);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingSSAOIntensityREd);
+      panel_1.add(tinaSolidRenderingSSAOIntensityREd);
 
       JLabel tinaSolidRenderingSSAOIntensityLbl = new JLabel();
       tinaSolidRenderingSSAOIntensityLbl.setText("Amb shadow intensity");
@@ -23697,7 +23737,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSSAOIntensityLbl.setLocation(new Point(390, 6));
       tinaSolidRenderingSSAOIntensityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingSSAOIntensityLbl.setBounds(205, 66, 124, 22);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingSSAOIntensityLbl);
+      panel_1.add(tinaSolidRenderingSSAOIntensityLbl);
 
       tinaSolidRenderingSSAOIntensitySlider = new JSlider();
       tinaSolidRenderingSSAOIntensitySlider.setValue(0);
@@ -23707,7 +23747,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSSAOIntensitySlider.setMaximum(25000);
       tinaSolidRenderingSSAOIntensitySlider.setLocation(new Point(558, 4));
       tinaSolidRenderingSSAOIntensitySlider.setBounds(429, 66, 205, 19);
-      tinaSolidRenderingGlobalSettingsPnl.add(tinaSolidRenderingSSAOIntensitySlider);
+      panel_1.add(tinaSolidRenderingSSAOIntensitySlider);
 
       JPanel tinaSolidRenderingMaterialPnl = new JPanel();
       tinaSolidRenderingPane.addTab("Material settings", null, tinaSolidRenderingMaterialPnl, null);
@@ -23721,11 +23761,18 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(getResetSolidRenderingMaterialsBtn());
 
       tinaSolidRenderingAddLightBtn = new JButton();
+      tinaSolidRenderingAddLightBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingAddLightBtn_clicked();
+          }
+        }
+      });
       tinaSolidRenderingAddLightBtn.setToolTipText("Add new light");
       tinaSolidRenderingAddLightBtn.setText("Add");
       tinaSolidRenderingAddLightBtn.setPreferredSize(new Dimension(56, 24));
       tinaSolidRenderingAddLightBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingAddLightBtn.setBounds(174, 6, 56, 24);
+      tinaSolidRenderingAddLightBtn.setBounds(265, 6, 56, 24);
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingAddLightBtn);
 
       JLabel lblSelectLight = new JLabel();
@@ -23743,7 +23790,14 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSelectedLightCmb.setMaximumSize(new Dimension(32767, 24));
       tinaSolidRenderingSelectedLightCmb.setMaximumRowCount(48);
       tinaSolidRenderingSelectedLightCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingSelectedLightCmb.setBounds(106, 6, 66, 24);
+      tinaSolidRenderingSelectedLightCmb.setBounds(106, 6, 156, 24);
+      tinaSolidRenderingSelectedLightCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingSelectedLightCmb_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingSelectedLightCmb);
 
       JLabel tinaSolidRenderingLightPosXLbl = new JLabel();
@@ -23852,6 +23906,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightColorBtn = new JButton();
       tinaSolidRenderingLightColorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingLightColorBtn_clicked();
+          }
         }
       });
       tinaSolidRenderingLightColorBtn.setToolTipText("Set the background color of your fractal");
@@ -23904,16 +23961,31 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightIntensitySlider);
 
       tinaSolidRenderingDeleteLightBtn = new JButton();
+      tinaSolidRenderingDeleteLightBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingDeleteLightBtn_clicked();
+          }
+        }
+      });
       tinaSolidRenderingDeleteLightBtn.setToolTipText("Delete light");
       tinaSolidRenderingDeleteLightBtn.setText("Del");
       tinaSolidRenderingDeleteLightBtn.setPreferredSize(new Dimension(56, 24));
       tinaSolidRenderingDeleteLightBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingDeleteLightBtn.setBounds(232, 6, 56, 24);
+      tinaSolidRenderingDeleteLightBtn.setBounds(323, 6, 56, 24);
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingDeleteLightBtn);
 
       tinaSolidRenderingLightCastShadowsCBx = new JCheckBox("Cast shadows");
+      tinaSolidRenderingLightCastShadowsCBx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingLightCastShadowsCBx_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightCastShadowsCBx.setActionCommand("");
       tinaSolidRenderingLightCastShadowsCBx.setBounds(598, 38, 169, 18);
+
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightCastShadowsCBx);
     }
     return tinaSolidRenderingPane;
@@ -23942,6 +24014,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getResetSolidRenderingMaterialsBtn() {
     if (resetSolidRenderingMaterialsBtn == null) {
       resetSolidRenderingMaterialsBtn = new JButton();
+      resetSolidRenderingMaterialsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingResetLightsBtn_clicked();
+          }
+        }
+      });
       resetSolidRenderingMaterialsBtn.setToolTipText("Reset the material settings to the defaults");
       resetSolidRenderingMaterialsBtn.setText("Reset");
       resetSolidRenderingMaterialsBtn.setPreferredSize(new Dimension(125, 24));
@@ -23966,6 +24045,9 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialSpecularColorBtn = new JButton();
       tinaSolidRenderingMaterialSpecularColorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingMaterialSpecularColorBtn_clicked();
+          }
         }
       });
       tinaSolidRenderingMaterialSpecularColorBtn.setToolTipText("");
@@ -24024,7 +24106,15 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSelectedMaterialCmb.setMaximumSize(new Dimension(32767, 24));
       tinaSolidRenderingSelectedMaterialCmb.setMaximumRowCount(48);
       tinaSolidRenderingSelectedMaterialCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingSelectedMaterialCmb.setBounds(106, 6, 66, 24);
+      tinaSolidRenderingSelectedMaterialCmb.setBounds(106, 6, 157, 24);
+      tinaSolidRenderingSelectedMaterialCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingSelectedMaterialCmb_changed();
+          }
+        }
+      });
+
       panel_114.add(tinaSolidRenderingSelectedMaterialCmb);
 
       JLabel lblSelectedMaterial = new JLabel();
@@ -24036,19 +24126,33 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(lblSelectedMaterial);
 
       tinaSolidRenderingAddMaterialBtn = new JButton();
+      tinaSolidRenderingAddMaterialBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingAddMaterialBtn_clicked();
+          }
+        }
+      });
       tinaSolidRenderingAddMaterialBtn.setToolTipText("Add new material");
       tinaSolidRenderingAddMaterialBtn.setText("Add");
       tinaSolidRenderingAddMaterialBtn.setPreferredSize(new Dimension(56, 24));
       tinaSolidRenderingAddMaterialBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingAddMaterialBtn.setBounds(174, 6, 56, 24);
+      tinaSolidRenderingAddMaterialBtn.setBounds(265, 6, 56, 24);
       panel_114.add(tinaSolidRenderingAddMaterialBtn);
 
       tinaSolidRenderingDeleteMaterialBtn = new JButton();
+      tinaSolidRenderingDeleteMaterialBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingDeleteMaterialBtn_clicked();
+          }
+        }
+      });
       tinaSolidRenderingDeleteMaterialBtn.setToolTipText("Delete material");
       tinaSolidRenderingDeleteMaterialBtn.setText("Del");
       tinaSolidRenderingDeleteMaterialBtn.setPreferredSize(new Dimension(56, 24));
       tinaSolidRenderingDeleteMaterialBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingDeleteMaterialBtn.setBounds(232, 6, 56, 24);
+      tinaSolidRenderingDeleteMaterialBtn.setBounds(323, 6, 56, 24);
       panel_114.add(tinaSolidRenderingDeleteMaterialBtn);
 
       tinaSolidRenderingMaterialDiffuseREd = new JWFNumberField();
@@ -24162,6 +24266,13 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialDiffuseResponseCmb.setMaximumRowCount(48);
       tinaSolidRenderingMaterialDiffuseResponseCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialDiffuseResponseCmb.setBounds(499, 34, 100, 24);
+      tinaSolidRenderingMaterialDiffuseResponseCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingMaterialDiffuseResponseCmb_changed();
+          }
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialDiffuseResponseCmb);
 
       JLabel lblDiffuseResponse = new JLabel();
@@ -24187,6 +24298,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getResetSolidRenderingLightsBtn() {
     if (resetSolidRenderingLightsBtn == null) {
       resetSolidRenderingLightsBtn = new JButton();
+      resetSolidRenderingLightsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingResetMaterialsBtn_clicked();
+          }
+        }
+      });
       resetSolidRenderingLightsBtn.setToolTipText("Reset the light settings to the defaults");
       resetSolidRenderingLightsBtn.setText("Reset");
       resetSolidRenderingLightsBtn.setPreferredSize(new Dimension(125, 24));

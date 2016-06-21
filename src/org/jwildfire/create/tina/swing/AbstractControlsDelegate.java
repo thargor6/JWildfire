@@ -204,4 +204,8 @@ public abstract class AbstractControlsDelegate {
     pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
   }
 
+  public void enableControl(JButton pSender, boolean pDisabled) {
+    pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
+  }
+
 }

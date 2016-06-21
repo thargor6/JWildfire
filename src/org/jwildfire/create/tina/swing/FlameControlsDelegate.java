@@ -16,10 +16,12 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -34,10 +36,15 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
+import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
+
+import com.l2fprod.common.beans.editor.FilePropertyEditor;
+import com.l2fprod.common.util.ResourceManager;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
   private final List<DOFParamControl> dofParamControls;
@@ -189,6 +196,39 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableDEFilterUI();
     enablePostSymmetryUI();
     enableDOFUI();
+
+    enableSolidRenderUI();
+  }
+
+  private void enableSolidRenderUI() {
+    boolean disabled = getCurrFlame() == null || !getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled();
+    boolean hasLights = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getLights().size() > 0;
+    boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
+    enableControl(data.tinaSolidRenderingSSAOIntensityREd, disabled);
+    enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
+    enableControl(data.tinaSolidRenderingEnableLightsCBx, disabled);
+    enableControl(data.tinaSolidRenderingEnableSSAOCBx, disabled);
+    enableControl(data.resetSolidRenderingGlobalSettingsBtn, disabled);
+    enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
+    enableControl(data.resetSolidRenderingLightsBtn, disabled);
+    enableControl(data.tinaSolidRenderingSelectedLightCmb, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingAddLightBtn, disabled);
+    enableControl(data.tinaSolidRenderingDeleteLightBtn, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosXREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosYREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosZREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightColorBtn, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightCastShadowsCBx, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightIntensityREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingSelectedMaterialCmb, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingAddMaterialBtn, disabled);
+    enableControl(data.tinaSolidRenderingDeleteMaterialBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialDiffuseREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialAmbientREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularSharpnessREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularColorBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialDiffuseResponseCmb, disabled || !hasMaterials);
   }
 
   private void enableStereo3dUI() {
@@ -678,19 +718,26 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   private void refreshSelectItemCmb(List<?> items, JComboBox cmb, String itemPrefix) {
-    if (items.size() != cmb.getItemCount()) {
-      int selected = cmb.getSelectedIndex();
-      cmb.removeAllItems();
-      for (int i = 0; i < items.size(); i++) {
-        cmb.addItem(itemPrefix + (i + 1));
+    boolean oldNoRefresh = isNoRefresh();
+    setNoRefresh(true);
+    try {
+      if (items.size() != cmb.getItemCount()) {
+        int selected = cmb.getSelectedIndex();
+        cmb.removeAllItems();
+        for (int i = 0; i < items.size(); i++) {
+          cmb.addItem(itemPrefix + (i + 1));
+        }
+        if (selected < 0 && items.size() > 0) {
+          selected = 0;
+        }
+        else if (selected >= items.size()) {
+          selected = items.size() - 1;
+        }
+        cmb.setSelectedIndex(selected);
       }
-      if (selected < 0 && items.size() > 0) {
-        selected = 0;
-      }
-      else if (selected >= items.size()) {
-        selected = items.size() - 1;
-      }
-      cmb.setSelectedIndex(selected);
+    }
+    finally {
+      setNoRefresh(oldNoRefresh);
     }
   }
 
@@ -703,14 +750,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   private PointLight getSolidRenderingSelectedLight() {
-    SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
-    int idx = getSolidRenderingSelectedLightIndex();
-    if (idx >= 0 && idx < settings.getLights().size()) {
-      return settings.getLights().get(idx);
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      SolidRenderSettings settings = flame.getSolidRenderSettings();
+      int idx = getSolidRenderingSelectedLightIndex();
+      if (idx >= 0 && idx < settings.getLights().size()) {
+        return settings.getLights().get(idx);
+      }
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
   private int getSolidRenderingSelectedMaterialIndex() {
@@ -718,66 +766,77 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   private MaterialSettings getSolidRenderingSelectedMaterial() {
-    SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
-    int idx = getSolidRenderingSelectedMaterialIndex();
-    if (idx >= 0 && idx < settings.getMaterials().size()) {
-      return settings.getMaterials().get(idx);
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      SolidRenderSettings settings = flame.getSolidRenderSettings();
+      int idx = getSolidRenderingSelectedMaterialIndex();
+      if (idx >= 0 && idx < settings.getMaterials().size()) {
+        return settings.getMaterials().get(idx);
+      }
     }
-    else {
-      return null;
-    }
+    return null;
+  }
+
+  private void refreshSolidRenderLightColorIndicator() {
+    PointLight light = getSolidRenderingSelectedLight();
+    Color color = (light != null) ? new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL),
+        Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)) : Color.BLACK;
+    data.tinaSolidRenderingLightColorBtn.setBackground(color);
+  }
+
+  private void refreshSolidRenderMaterialSpecularColorIndicator() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    Color color = (material != null) ? new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL),
+        Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)) : Color.BLACK;
+    data.tinaSolidRenderingMaterialSpecularColorBtn.setBackground(color);
   }
 
   private void refreshSolidRenderSettingsUI() {
+    refreshSolidRenderingGlobals();
+    refreshSolidRenderingLightControls();
+    refreshSolidRenderingMaterialControls();
+  }
+
+  private void refreshSolidRenderingGlobals() {
     SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
     data.tinaSolidRenderingCBx.setSelected(settings.isSolidRenderingEnabled());
     data.tinaSolidRenderingEnableSSAOCBx.setSelected(settings.isSsaoEnabled());
     data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
     data.tinaSolidRenderingEnableLightsCBx.setSelected(settings.isLightsEnabled());
-
     data.tinaSolidRenderingSSAOIntensityREd.setText(Tools.doubleToString(settings.getSsaoIntensity()));
     data.tinaSolidRenderingSSAOIntensitySlider.setValue(Tools.FTOI(settings.getSsaoIntensity() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
+  }
 
+  private void refreshSolidRenderingMaterialControls() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      data.tinaSolidRenderingMaterialDiffuseREd.setText(Tools.doubleToString(material.getDiffuse()));
+      data.tinaSolidRenderingMaterialDiffuseSlider.setValue(Tools.FTOI(material.getDiffuse() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialAmbientREd.setText(Tools.doubleToString(material.getAmbient()));
+      data.tinaSolidRenderingMaterialAmbientSlider.setValue(Tools.FTOI(material.getAmbient() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialSpecularREd.setText(Tools.doubleToString(material.getPhong()));
+      data.tinaSolidRenderingMaterialSpecularSlider.setValue(Tools.FTOI(material.getPhong() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialSpecularSharpnessREd.setText(Tools.doubleToString(material.getPhongSize()));
+      data.tinaSolidRenderingMaterialSpecularSharpnessSlider.setValue(Tools.FTOI(material.getPhongSize() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialDiffuseResponseCmb.setSelectedItem(material.getLightDiffFunc());
+    }
+    refreshSolidRenderMaterialSpecularColorIndicator();
+  }
+
+  private void refreshSolidRenderingLightControls() {
     PointLight light = getSolidRenderingSelectedLight();
     if (light != null) {
-
+      data.tinaSolidRenderingLightPosXREd.setText(Tools.doubleToString(light.getX()));
+      data.tinaSolidRenderingLightPosXSlider.setValue(Tools.FTOI(light.getX() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightPosYREd.setText(Tools.doubleToString(light.getY()));
+      data.tinaSolidRenderingLightPosYSlider.setValue(Tools.FTOI(light.getY() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightPosZREd.setText(Tools.doubleToString(light.getZ()));
+      data.tinaSolidRenderingLightPosZSlider.setValue(Tools.FTOI(light.getZ() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightCastShadowsCBx.setSelected(light.isCastShadows());
+      data.tinaSolidRenderingLightIntensityREd.setText(Tools.doubleToString(light.getIntensity()));
+      data.tinaSolidRenderingLightIntensitySlider.setValue(Tools.FTOI(light.getIntensity() * TinaController.SLIDER_SCALE_CENTRE));
     }
-
-    /*
-    
-    
-    public JWFNumberField tinaSolidRenderingLightPosXREd;
-    public JWFNumberField tinaSolidRenderingLightPosYREd;
-    public JWFNumberField tinaSolidRenderingLightPosZREd;
-    public JSlider tinaSolidRenderingLightPosXSlider;
-    public JSlider tinaSolidRenderingLightPosYSlider;
-    public JSlider tinaSolidRenderingLightPosZSlider;
-    public JButton tinaSolidRenderingLightColorBtn;
-    public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
-    public JWFNumberField tinaSolidRenderingLightIntensityREd;
-    public JSlider tinaSolidRenderingLightIntensitySlider;
-    public JComboBox tinaSolidRenderingSelectedMaterialCmb;
-    public JButton tinaSolidRenderingAddMaterialBtn;
-    public JButton tinaSolidRenderingDeleteMaterialBtn;
-    public JWFNumberField tinaSolidRenderingMaterialDiffuseREd;
-    public JSlider tinaSolidRenderingMaterialDiffuseSlider;
-    public JWFNumberField tinaSolidRenderingMaterialAmbientREd;
-    public JSlider tinaSolidRenderingMaterialAmbientSlider;
-    public JWFNumberField tinaSolidRenderingMaterialSpecularREd;
-    public JSlider tinaSolidRenderingMaterialSpecularSlider;
-    public JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd;
-    public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
-    public JButton tinaSolidRenderingMaterialSpecularColorBtn;
-    public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
-    MaterialSettings
-
-    public JButton resetSolidRenderingGlobalSettingsBtn;
-    public JButton resetSolidRenderingMaterialsBtn;
-    public JButton resetSolidRenderingLightsBtn;
-    public JButton tinaSolidRenderingAddLightBtn;
-    public JButton tinaSolidRenderingDeleteLightBtn;
-    
-    */
+    refreshSolidRenderLightColorIndicator();
   }
 
   private void refreshBokehParams() {
@@ -1231,4 +1290,227 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOffRadius", TinaController.SLIDER_SCALE_AMBIENT);
   }
 
+  public void solidRenderingCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setSolidRenderingEnabled(data.tinaSolidRenderingCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
+
+  public void solidRenderingEnableSSAOCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setSsaoEnabled(data.tinaSolidRenderingEnableSSAOCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
+
+  public void solidRenderingEnableHardShadowsCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setHardShadowsEnabled(data.tinaSolidRenderingEnableHardShadowsCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
+
+  public void solidRenderingEnableLightsCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setLightsEnabled(data.tinaSolidRenderingEnableLightsCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
+
+  public void solidRenderingLightCastShadowsCBx_changed() {
+    if (!isNoRefresh()) {
+      PointLight light = getSolidRenderingSelectedLight();
+      if (light != null) {
+        owner.saveUndoPoint();
+        light.setCastShadows(data.tinaSolidRenderingLightCastShadowsCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
+
+  public void solidRenderingMaterialSpecularColorBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      owner.undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)));
+      if (selectedColor != null) {
+        material.setPhongRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
+        material.setPhongGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
+        material.setPhongBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
+        owner.refreshFlameImage(true, false, 1, true);
+        refreshSolidRenderMaterialSpecularColorIndicator();
+      }
+    }
+  }
+
+  public void solidRenderingLightColorBtn_clicked() {
+    PointLight light = getSolidRenderingSelectedLight();
+    if (light != null) {
+      owner.undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)));
+      if (selectedColor != null) {
+        light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
+        light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
+        light.setBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
+        owner.refreshFlameImage(true, false, 1, true);
+        refreshSolidRenderLightColorIndicator();
+      }
+    }
+  }
+
+  public void solidRenderingSelectedMaterialCmb_changed() {
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+  }
+
+  public void solidRenderingSelectedLightCmb_changed() {
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+  }
+
+  public void solidRenderingAddLightBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().addLight();
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedLightCmb();
+      data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(getCurrFlame().getSolidRenderSettings().getLights().size() - 1);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingDeleteLightBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().getLights().remove(data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex());
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedLightCmb();
+      if (getCurrFlame().getSolidRenderSettings().getLights().size() > 0) {
+        data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingResetLightsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultLights();
+      refreshSolidRenderingSelectedLightCmb();
+      data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(0);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingAddMaterialBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().addMaterial();
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedMaterialCmb();
+      data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(getCurrFlame().getSolidRenderSettings().getMaterials().size() - 1);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingDeleteMaterialBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().getMaterials().remove(data.tinaSolidRenderingSelectedMaterialCmb.getSelectedIndex());
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedMaterialCmb();
+      if (getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0) {
+        data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingResetMaterialsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultMaterials();
+      refreshSolidRenderingSelectedMaterialCmb();
+      data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(0);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingResetSettingsBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().setupDefaultGlobals();
+    refreshSolidRenderingGlobals();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true);
+  }
+
+  public void solidRenderingMaterialDiffuseResponseCmb_changed() {
+    if (!isNoRefresh()) {
+      MaterialSettings material = getSolidRenderingSelectedMaterial();
+      if (material != null) {
+        owner.saveUndoPoint();
+        material.setLightDiffFunc((LightDiffFunc) data.tinaSolidRenderingMaterialDiffuseResponseCmb.getSelectedItem());
+        owner.refreshFlameImage(true, false, 1, true);
+      }
+    }
+  }
 }
+
+//refreshSolidRenderingLightControls
+//refreshSolidRenderingMaterialControls
+//refreshSolidRenderingGlobals 
