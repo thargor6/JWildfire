@@ -79,6 +79,7 @@ public class Layer implements Assignable<Layer>, Serializable {
       for (int i = 0; i < getXForms().size(); i++) {
         XForm xForm = getXForms().get(i);
         xForm.setColor((double) i / (double) (cnt - 1));
+        xForm.setMaterial((double) i / (double) (cnt - 1));
       }
     }
   }
@@ -87,6 +88,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     for (int i = 0; i < getXForms().size(); i++) {
       XForm xForm = getXForms().get(i);
       xForm.setColor(Math.random());
+      xForm.setMaterial(Math.random());
     }
   }
 
@@ -94,6 +96,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     for (int i = 0; i < getXForms().size(); i++) {
       XForm xForm = getXForms().get(i);
       xForm.setColorSymmetry(Math.random());
+      xForm.setMaterialSpeed(Math.random());
     }
   }
 
