@@ -165,7 +165,7 @@ public class ChannelMixerControlsDelegate {
       }
       flame.setChannelMixerMode((ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem());
       refreshValues(true);
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, true);
     }
   }
 
@@ -230,7 +230,7 @@ public class ChannelMixerControlsDelegate {
     }
     flame.resetMixerCurves();
     refreshValues(false);
-    owner.refreshFlameImage(true, false, 1, true);
+    owner.refreshFlameImage(true, false, 1, true, true);
   }
 
   protected TinaController getOwner() {

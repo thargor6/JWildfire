@@ -783,8 +783,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaDOFPanel.add(lblDepthOfField);
 
       dofNewDOFCBx = new JCheckBox("New DOF");
-      dofNewDOFCBx.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      dofNewDOFCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
             tinaController.newDOFCBx_changed();
           }
@@ -1356,7 +1356,7 @@ public class TinaInternalFrame extends JInternalFrame {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
             switch (tinaSouthTabbedPane.getSelectedIndex()) {
-              case 5:
+              case 4:
                 if (tinaController.getGradientController() != null) {
                   tinaController.getGradientController().onActivate();
                 }
@@ -1706,8 +1706,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(getTinaGammaThresholdSlider(), null);
 
       bgTransparencyCBx = new JCheckBox("Background transparency");
-      bgTransparencyCBx.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      bgTransparencyCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().flameTransparencyCbx_changed();
           }
@@ -13821,8 +13821,8 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_54.add(getDancingFlamesDrawFPSCBx());
 
       dancingFlamesMutedCBx = new JCheckBox("Muted");
-      dancingFlamesMutedCBx.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      dancingFlamesMutedCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
             tinaController.getDancingFractalsController().mutedCBx_changed();
           }
@@ -17810,8 +17810,8 @@ public class TinaInternalFrame extends JInternalFrame {
       stereo3dSwapSidesCBx = new JCheckBox("Swap sides");
       stereo3dSwapSidesCBx.setToolTipText("Swap left and right images");
       stereo3dSwapSidesCBx.setBounds(865, 8, 197, 18);
-      stereo3dSwapSidesCBx.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      stereo3dSwapSidesCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
             tinaController.getFlameControls().stereo3dSwapSidesCBx_changed();
           }
@@ -23650,8 +23650,8 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingPane.addTab("Rendering settings", null, panel_1, null);
       panel_1.setLayout(null);
       tinaSolidRenderingCBx = new JCheckBox("Enable solid rendering");
-      tinaSolidRenderingCBx.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      tinaSolidRenderingCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingCBx_changed();
           }
@@ -23662,32 +23662,34 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(tinaSolidRenderingCBx);
 
       tinaSolidRenderingEnableSSAOCBx = new JCheckBox("Enable ambient shadows");
-      tinaSolidRenderingEnableSSAOCBx.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      tinaSolidRenderingEnableSSAOCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingEnableSSAOCBx_changed();
           }
         }
       });
+
       tinaSolidRenderingEnableSSAOCBx.setActionCommand("Enable solid rendering");
       tinaSolidRenderingEnableSSAOCBx.setBounds(195, 36, 169, 18);
       panel_1.add(tinaSolidRenderingEnableSSAOCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
-      tinaSolidRenderingEnableHardShadowsCBx.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
           }
         }
       });
+
       tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable solid rendering");
       tinaSolidRenderingEnableHardShadowsCBx.setBounds(30, 66, 169, 18);
       panel_1.add(tinaSolidRenderingEnableHardShadowsCBx);
 
       tinaSolidRenderingEnableLightsCBx = new JCheckBox("Enable lights");
-      tinaSolidRenderingEnableLightsCBx.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      tinaSolidRenderingEnableLightsCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingEnableLightsCBx_changed();
           }
@@ -23717,6 +23719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(resetSolidRenderingGlobalSettingsBtn);
 
       tinaSolidRenderingSSAOIntensityREd = new JWFNumberField();
+      tinaSolidRenderingSSAOIntensityREd.setHasMinValue(true);
       tinaSolidRenderingSSAOIntensityREd.setValueStep(0.05);
       tinaSolidRenderingSSAOIntensityREd.setText("");
       tinaSolidRenderingSSAOIntensityREd.setSize(new Dimension(100, 24));
@@ -23727,6 +23730,24 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSSAOIntensityREd.setLinkedLabelControlName("tinaSolidRenderingSSAOIntensityLbl");
       tinaSolidRenderingSSAOIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingSSAOIntensityREd.setBounds(327, 66, 100, 24);
+      tinaSolidRenderingSSAOIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingSSAOIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingSSAOIntensityREd.isMouseAdjusting() || tinaSolidRenderingSSAOIntensityREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingSSAOIntensitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingSSAOIntensityREd_changed();
+          }
+        }
+      });
+
       panel_1.add(tinaSolidRenderingSSAOIntensityREd);
 
       JLabel tinaSolidRenderingSSAOIntensityLbl = new JLabel();
@@ -23743,10 +23764,21 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingSSAOIntensitySlider.setValue(0);
       tinaSolidRenderingSSAOIntensitySlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingSSAOIntensitySlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingSSAOIntensitySlider.setName("tinaSolidRenderingSSAOIntensityREdSlider");
+      tinaSolidRenderingSSAOIntensitySlider.setName("tinaSolidRenderingSSAOIntensitySlider");
       tinaSolidRenderingSSAOIntensitySlider.setMaximum(25000);
       tinaSolidRenderingSSAOIntensitySlider.setLocation(new Point(558, 4));
       tinaSolidRenderingSSAOIntensitySlider.setBounds(429, 66, 205, 19);
+      tinaSolidRenderingSSAOIntensitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingSSAOIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingSSAOIntensitySlider_stateChanged(e);
+        }
+      });
       panel_1.add(tinaSolidRenderingSSAOIntensitySlider);
 
       JPanel tinaSolidRenderingMaterialPnl = new JPanel();
@@ -23822,6 +23854,23 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosXREd.setLinkedLabelControlName("tinaSolidRenderingLightPosXLbl");
       tinaSolidRenderingLightPosXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingLightPosXREd.setBounds(72, 37, 100, 24);
+      tinaSolidRenderingLightPosXREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingLightPosXREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingLightPosXREd.isMouseAdjusting() || tinaSolidRenderingLightPosXREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightPosXSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingLightPosXREd_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXREd);
 
       tinaSolidRenderingLightPosXSlider = new JSlider();
@@ -23833,6 +23882,17 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosXSlider.setMaximum(25000);
       tinaSolidRenderingLightPosXSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingLightPosXSlider.setBounds(174, 37, 205, 19);
+      tinaSolidRenderingLightPosXSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingLightPosXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingLightPosXSlider_stateChanged(e);
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXSlider);
 
       JLabel tinaSolidRenderingLightPosYLbl = new JLabel();
@@ -23856,6 +23916,23 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosYREd.setLinkedLabelControlName("tinaSolidRenderingLightPosYLbl");
       tinaSolidRenderingLightPosYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingLightPosYREd.setBounds(72, 61, 100, 24);
+      tinaSolidRenderingLightPosYREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingLightPosYREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingLightPosYREd.isMouseAdjusting() || tinaSolidRenderingLightPosYREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightPosYSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingLightPosYREd_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYREd);
 
       tinaSolidRenderingLightPosYSlider = new JSlider();
@@ -23867,6 +23944,17 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosYSlider.setMaximum(25000);
       tinaSolidRenderingLightPosYSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingLightPosYSlider.setBounds(174, 61, 205, 19);
+      tinaSolidRenderingLightPosYSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingLightPosYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingLightPosYSlider_stateChanged(e);
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYSlider);
 
       JLabel tinaSolidRenderingLightPosZLbl = new JLabel();
@@ -23890,6 +23978,23 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosZREd.setLinkedLabelControlName("tinaSolidRenderingLightPosZLbl");
       tinaSolidRenderingLightPosZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingLightPosZREd.setBounds(73, 85, 100, 24);
+      tinaSolidRenderingLightPosZREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingLightPosZREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingLightPosZREd.isMouseAdjusting() || tinaSolidRenderingLightPosZREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightPosZSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingLightPosZREd_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosZREd);
 
       tinaSolidRenderingLightPosZSlider = new JSlider();
@@ -23901,6 +24006,17 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPosZSlider.setMaximum(25000);
       tinaSolidRenderingLightPosZSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingLightPosZSlider.setBounds(175, 85, 205, 19);
+      tinaSolidRenderingLightPosZSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingLightPosZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingLightPosZSlider_stateChanged(e);
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosZSlider);
 
       tinaSolidRenderingLightColorBtn = new JButton();
@@ -23948,6 +24064,23 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightIntensityREd.setLinkedLabelControlName("tinaSolidRenderingLightIntensityLbl");
       tinaSolidRenderingLightIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingLightIntensityREd.setBounds(500, 83, 100, 24);
+      tinaSolidRenderingLightIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingLightIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingLightIntensityREd.isMouseAdjusting() || tinaSolidRenderingLightIntensityREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightIntensitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingLightIntensityREd_changed();
+          }
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightIntensityREd);
 
       tinaSolidRenderingLightIntensitySlider = new JSlider();
@@ -23958,6 +24091,17 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightIntensitySlider.setMaximum(25000);
       tinaSolidRenderingLightIntensitySlider.setLocation(new Point(558, 4));
       tinaSolidRenderingLightIntensitySlider.setBounds(602, 83, 205, 19);
+      tinaSolidRenderingLightIntensitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingLightIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingLightIntensitySlider_stateChanged(e);
+        }
+      });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightIntensitySlider);
 
       tinaSolidRenderingDeleteLightBtn = new JButton();
@@ -23976,13 +24120,14 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingDeleteLightBtn);
 
       tinaSolidRenderingLightCastShadowsCBx = new JCheckBox("Cast shadows");
-      tinaSolidRenderingLightCastShadowsCBx.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+      tinaSolidRenderingLightCastShadowsCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingLightCastShadowsCBx_changed();
           }
         }
       });
+
       tinaSolidRenderingLightCastShadowsCBx.setActionCommand("");
       tinaSolidRenderingLightCastShadowsCBx.setBounds(598, 38, 169, 18);
 
@@ -24077,6 +24222,8 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularSharpnessLbl);
 
       tinaSolidRenderingMaterialSpecularSharpnessREd = new JWFNumberField();
+      tinaSolidRenderingMaterialSpecularSharpnessREd.setMinValue(1.0);
+      tinaSolidRenderingMaterialSpecularSharpnessREd.setHasMinValue(true);
       tinaSolidRenderingMaterialSpecularSharpnessREd.setValueStep(0.05);
       tinaSolidRenderingMaterialSpecularSharpnessREd.setText("");
       tinaSolidRenderingMaterialSpecularSharpnessREd.setSize(new Dimension(100, 24));
@@ -24087,15 +24234,45 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialSpecularSharpnessREd.setLinkedLabelControlName("tinaSolidRenderingMaterialSpecularSharpnessLbl");
       tinaSolidRenderingMaterialSpecularSharpnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingMaterialSpecularSharpnessREd.setBounds(499, 79, 100, 24);
+      tinaSolidRenderingMaterialSpecularSharpnessREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingMaterialSpecularSharpnessREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingMaterialSpecularSharpnessREd.isMouseAdjusting() || tinaSolidRenderingMaterialSpecularSharpnessREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingMaterialSpecularSharpnessSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingMaterialSpecularSharpnessREd_changed();
+          }
+        }
+      });
+
       panel_114.add(tinaSolidRenderingMaterialSpecularSharpnessREd);
 
       tinaSolidRenderingMaterialSpecularSharpnessSlider = new JSlider();
+      tinaSolidRenderingMaterialSpecularSharpnessSlider.setMinimum(5000);
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setValue(0);
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setPreferredSize(new Dimension(220, 19));
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setName("tinaSolidRenderingMaterialSpecularSharpnessSlider");
-      tinaSolidRenderingMaterialSpecularSharpnessSlider.setMaximum(25000);
+      tinaSolidRenderingMaterialSpecularSharpnessSlider.setMaximum(250000);
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingMaterialSpecularSharpnessSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingMaterialSpecularSharpnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingMaterialSpecularSharpnessSlider_stateChanged(e);
+        }
+      });
       tinaSolidRenderingMaterialSpecularSharpnessSlider.setBounds(601, 79, 205, 19);
       panel_114.add(tinaSolidRenderingMaterialSpecularSharpnessSlider);
 
@@ -24156,6 +24333,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingDeleteMaterialBtn);
 
       tinaSolidRenderingMaterialDiffuseREd = new JWFNumberField();
+      tinaSolidRenderingMaterialDiffuseREd.setHasMinValue(true);
       tinaSolidRenderingMaterialDiffuseREd.setValueStep(0.05);
       tinaSolidRenderingMaterialDiffuseREd.setText("");
       tinaSolidRenderingMaterialDiffuseREd.setSize(new Dimension(100, 24));
@@ -24166,6 +24344,24 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialDiffuseREd.setLinkedLabelControlName("tinaSolidRenderingMaterialDiffuseLbl");
       tinaSolidRenderingMaterialDiffuseREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingMaterialDiffuseREd.setBounds(72, 34, 100, 24);
+      tinaSolidRenderingMaterialDiffuseREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingMaterialDiffuseREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingMaterialDiffuseREd.isMouseAdjusting() || tinaSolidRenderingMaterialDiffuseREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingMaterialDiffuseSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingMaterialDiffuseREd_changed();
+          }
+        }
+      });
+
       panel_114.add(tinaSolidRenderingMaterialDiffuseREd);
 
       JLabel tinaSolidRenderingMaterialDiffuseLbl = new JLabel();
@@ -24184,10 +24380,20 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialDiffuseSlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingMaterialDiffuseSlider.setPreferredSize(new Dimension(220, 19));
       tinaSolidRenderingMaterialDiffuseSlider.setName("tinaSolidRenderingMaterialDiffuseSlider");
-      tinaSolidRenderingMaterialDiffuseSlider.setMinimum(-25000);
-      tinaSolidRenderingMaterialDiffuseSlider.setMaximum(25000);
+      tinaSolidRenderingMaterialDiffuseSlider.setMaximum(5000);
       tinaSolidRenderingMaterialDiffuseSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingMaterialDiffuseSlider.setBounds(174, 34, 205, 19);
+      tinaSolidRenderingMaterialDiffuseSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingMaterialDiffuseSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingMaterialDiffuseSlider_stateChanged(e);
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialDiffuseSlider);
 
       JLabel tinaSolidRenderingMaterialAmbientLbl = new JLabel();
@@ -24201,6 +24407,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialAmbientLbl);
 
       tinaSolidRenderingMaterialAmbientREd = new JWFNumberField();
+      tinaSolidRenderingMaterialAmbientREd.setHasMinValue(true);
       tinaSolidRenderingMaterialAmbientREd.setValueStep(0.05);
       tinaSolidRenderingMaterialAmbientREd.setText("");
       tinaSolidRenderingMaterialAmbientREd.setSize(new Dimension(100, 24));
@@ -24211,6 +24418,23 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialAmbientREd.setLinkedLabelControlName("tinaSolidRenderingMaterialAmbientLbl");
       tinaSolidRenderingMaterialAmbientREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingMaterialAmbientREd.setBounds(72, 58, 100, 24);
+      tinaSolidRenderingMaterialAmbientREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingMaterialAmbientREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingMaterialAmbientREd.isMouseAdjusting() || tinaSolidRenderingMaterialAmbientREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingMaterialAmbientSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingMaterialAmbientREd_changed();
+          }
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialAmbientREd);
 
       tinaSolidRenderingMaterialAmbientSlider = new JSlider();
@@ -24218,10 +24442,20 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialAmbientSlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingMaterialAmbientSlider.setPreferredSize(new Dimension(220, 19));
       tinaSolidRenderingMaterialAmbientSlider.setName("tinaSolidRenderingMaterialAmbientSlider");
-      tinaSolidRenderingMaterialAmbientSlider.setMinimum(-25000);
-      tinaSolidRenderingMaterialAmbientSlider.setMaximum(25000);
+      tinaSolidRenderingMaterialAmbientSlider.setMaximum(5000);
       tinaSolidRenderingMaterialAmbientSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingMaterialAmbientSlider.setBounds(174, 58, 205, 19);
+      tinaSolidRenderingMaterialAmbientSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingMaterialAmbientSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingMaterialAmbientSlider_stateChanged(e);
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialAmbientSlider);
 
       JLabel tinaSolidRenderingMaterialSpecularLbl = new JLabel();
@@ -24235,6 +24469,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularLbl);
 
       tinaSolidRenderingMaterialSpecularREd = new JWFNumberField();
+      tinaSolidRenderingMaterialSpecularREd.setHasMinValue(true);
       tinaSolidRenderingMaterialSpecularREd.setValueStep(0.05);
       tinaSolidRenderingMaterialSpecularREd.setText("");
       tinaSolidRenderingMaterialSpecularREd.setSize(new Dimension(100, 24));
@@ -24245,17 +24480,44 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialSpecularREd.setLinkedLabelControlName("tinaSolidRenderingMaterialSpecularLbl");
       tinaSolidRenderingMaterialSpecularREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingMaterialSpecularREd.setBounds(73, 82, 100, 24);
+      tinaSolidRenderingMaterialSpecularREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingMaterialSpecularREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingMaterialSpecularREd.isMouseAdjusting() || tinaSolidRenderingMaterialSpecularREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingMaterialSpecularSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingMaterialSpecularREd_changed();
+          }
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialSpecularREd);
 
       tinaSolidRenderingMaterialSpecularSlider = new JSlider();
       tinaSolidRenderingMaterialSpecularSlider.setValue(0);
       tinaSolidRenderingMaterialSpecularSlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingMaterialSpecularSlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingMaterialSpecularSlider.setName("tinaSolidRenderingLightPosZSlider");
-      tinaSolidRenderingMaterialSpecularSlider.setMinimum(-25000);
-      tinaSolidRenderingMaterialSpecularSlider.setMaximum(25000);
+      tinaSolidRenderingMaterialSpecularSlider.setName("tinaSolidRenderingMaterialSpecularSlider");
+      tinaSolidRenderingMaterialSpecularSlider.setMaximum(5000);
       tinaSolidRenderingMaterialSpecularSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingMaterialSpecularSlider.setBounds(175, 82, 205, 19);
+      tinaSolidRenderingMaterialSpecularSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingMaterialSpecularSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingMaterialSpecularSlider_stateChanged(e);
+        }
+      });
       panel_114.add(tinaSolidRenderingMaterialSpecularSlider);
 
       tinaSolidRenderingMaterialDiffuseResponseCmb = new JComboBox();

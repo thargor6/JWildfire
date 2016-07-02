@@ -1420,7 +1420,7 @@ public class Desktop extends JApplet {
           });
       tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
         public void componentResized(java.awt.event.ComponentEvent e) {
-          tinaController.refreshFlameImage(true, false, 1, true);
+          tinaController.refreshFlameImage(true, false, 1, true, false);
         }
       });
       try {
