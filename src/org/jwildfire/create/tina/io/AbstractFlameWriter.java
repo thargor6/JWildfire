@@ -58,6 +58,9 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.Variation;
@@ -326,6 +329,41 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_RADIUS, pFlame.getPostBlurRadius()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FADE, pFlame.getPostBlurFade()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FALLOFF, pFlame.getPostBlurFallOff()));
+
+    if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHTS_ENABLED, pFlame.getSolidRenderSettings().isLightsEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_ENABLED, pFlame.getSolidRenderSettings().isSsaoEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_INTENSITY, pFlame.getSolidRenderSettings().getSsaoIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));
+
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));
+      for (int i = 0; i < pFlame.getSolidRenderSettings().getMaterials().size(); i++) {
+        MaterialSettings material = pFlame.getSolidRenderSettings().getMaterials().get(i);
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_DIFFUSE + i, material.getDiffuse()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_AMBIENT + i, material.getAmbient()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG + i, material.getPhong()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_SIZE + i, material.getPhongSize()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_RED + i, material.getPhongRed()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_GREEN + i, material.getPhongGreen()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE + i, material.getPhongBlue()));
+        if (material.getLightDiffFunc() instanceof LightDiffFuncPreset)
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC + i, ((LightDiffFuncPreset) material.getLightDiffFunc()).toString()));
+      }
+
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_COUNT, pFlame.getSolidRenderSettings().getLights().size()));
+      for (int i = 0; i < pFlame.getSolidRenderSettings().getLights().size(); i++) {
+        PointLight light = pFlame.getSolidRenderSettings().getLights().get(i);
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_X + i, light.getX()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Y + i, light.getY()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Z + i, light.getZ()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_INTENSITY + i, light.getIntensity()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_RED + i, light.getRed()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_GREEN + i, light.getGreen()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_BLUE + i, light.getBlue()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_SHADOWS + i, light.isCastShadows()));
+      }
+    }
 
     writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
 

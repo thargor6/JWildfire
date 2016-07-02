@@ -19,6 +19,9 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -126,6 +129,32 @@ public class AbstractFlameReader {
   public static final String ATTR_FRAME_COUNT = "frame_count";
   public static final String ATTR_FRAME = "frame";
   public static final String ATTR_FPS = "fps";
+
+  public static final String ATTR_SLD_RENDER_ENABLED = "sld_render_enabled";
+  public static final String ATTR_SLD_RENDER_LIGHTS_ENABLED = "sld_render_lights_enabled";
+  public static final String ATTR_SLD_RENDER_SSAO_ENABLED = "sld_render_ssao_enabled";
+  public static final String ATTR_SLD_RENDER_SSAO_INTENSITY = "sld_render_ssao_intensity";
+  public static final String ATTR_SLD_RENDER_SHADOWS_ENABLED = "sld_render_shadows_enabled";
+  public static final String ATTR_SLD_RENDER_MATERIAL_COUNT = "sld_render_material_count";
+  public static final String ATTR_SLD_RENDER_LIGHT_COUNT = "sld_render_ligtht_count";
+
+  public static final String ATTR_SLD_RENDER_MATERIAL_DIFFUSE = "sld_render_material_diffuse";
+  public static final String ATTR_SLD_RENDER_MATERIAL_AMBIENT = "sld_render_material_ambient";
+  public static final String ATTR_SLD_RENDER_MATERIAL_PHONG = "sld_render_material_phong";
+  public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_SIZE = "sld_render_material_phong_size";
+  public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_RED = "sld_render_material_phong_red";
+  public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_GREEN = "sld_render_material_phong_green";
+  public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE = "sld_render_material_phong_blue";
+  public static final String ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC = "sld_render_material_light_diif_func";
+
+  public static final String ATTR_SLD_RENDER_LIGHT_X = "sld_render_light_x";
+  public static final String ATTR_SLD_RENDER_LIGHT_Y = "sld_render_light_y";
+  public static final String ATTR_SLD_RENDER_LIGHT_Z = "sld_render_light_z";
+  public static final String ATTR_SLD_RENDER_LIGHT_INTENSITY = "sld_render_light_intensity";
+  public static final String ATTR_SLD_RENDER_LIGHT_RED = "sld_render_light_red";
+  public static final String ATTR_SLD_RENDER_LIGHT_GREEN = "sld_render_light_green";
+  public static final String ATTR_SLD_RENDER_LIGHT_BLUE = "sld_render_light_blue";
+  public static final String ATTR_SLD_RENDER_LIGHT_SHADOWS = "sld_render_light_shadows";
 
   public static final String CURVE_ATTR_ENABLED = "enabled";
   public static final String CURVE_ATTR_VIEW_XMIN = "view_xmin";
@@ -479,6 +508,97 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_POSTBLUR_FALLOFF)) != null) {
       pFlame.setPostBlurFallOff(Double.parseDouble(hs));
+    }
+
+    if ((hs = atts.get(ATTR_SLD_RENDER_ENABLED)) != null) {
+      pFlame.getSolidRenderSettings().setSolidRenderingEnabled(Integer.parseInt(hs) == 1);
+    }
+    else {
+      pFlame.getSolidRenderSettings().setSolidRenderingEnabled(false);
+    }
+    if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      if ((hs = atts.get(ATTR_SLD_RENDER_LIGHTS_ENABLED)) != null) {
+        pFlame.getSolidRenderSettings().setLightsEnabled(Integer.parseInt(hs) == 1);
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SSAO_ENABLED)) != null) {
+        pFlame.getSolidRenderSettings().setSsaoEnabled(Integer.parseInt(hs) == 1);
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SSAO_INTENSITY)) != null) {
+        pFlame.getSolidRenderSettings().setSsaoIntensity(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWS_ENABLED)) != null) {
+        pFlame.getSolidRenderSettings().setHardShadowsEnabled(Integer.parseInt(hs) == 1);
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_COUNT)) != null) {
+        int materialCount = Integer.parseInt(hs);
+        pFlame.getSolidRenderSettings().getMaterials().clear();
+        for (int i = 0; i < materialCount; i++) {
+          MaterialSettings material = new MaterialSettings();
+          pFlame.getSolidRenderSettings().getMaterials().add(material);
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_DIFFUSE + i)) != null) {
+            material.setDiffuse(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_AMBIENT + i)) != null) {
+            material.setAmbient(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_PHONG + i)) != null) {
+            material.setPhong(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_PHONG_SIZE + i)) != null) {
+            material.setPhongSize(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_PHONG_RED + i)) != null) {
+            material.setPhongRed(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_PHONG_GREEN + i)) != null) {
+            material.setPhongGreen(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE + i)) != null) {
+            material.setPhongBlue(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC + i)) != null) {
+            try {
+              material.setLightDiffFunc(LightDiffFuncPreset.valueOf(hs));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      }
+
+      if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_COUNT)) != null) {
+        int lightCount = Integer.parseInt(hs);
+        pFlame.getSolidRenderSettings().getLights().clear();
+        for (int i = 0; i < lightCount; i++) {
+          PointLight light = new PointLight();
+          pFlame.getSolidRenderSettings().getLights().add(light);
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_X + i)) != null) {
+            light.setX(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_Y + i)) != null) {
+            light.setY(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_Z + i)) != null) {
+            light.setZ(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_INTENSITY + i)) != null) {
+            light.setIntensity(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_RED + i)) != null) {
+            light.setRed(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_GREEN + i)) != null) {
+            light.setGreen(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_BLUE + i)) != null) {
+            light.setBlue(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_SHADOWS + i)) != null) {
+            light.setCastShadows(Integer.parseInt(hs) == 1);
+          }
+        }
+      }
     }
 
     readMotionCurves(pFlame, atts, null);
