@@ -22,98 +22,72 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   private final List<PointLight> lights = new ArrayList<>();
 
   public void setupDefaults() {
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.6);
-      material.setDiffuse(0.5);
-      material.setPhong(0.7);
-      material.setPhongSize(36.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(0.9);
-      material.setPhongBlue(0.3);
-      materials.add(material);
-    }
+    setupDefaultGlobals();
+    setupDefaultMaterials();
+    setupDefaultLights();
+  }
 
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.9);
-      material.setDiffuse(0.3);
-      material.setPhong(0.7);
-      material.setPhongSize(36.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(0.9);
-      material.setPhongBlue(0.3);
-      materials.add(material);
-    }
-
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.9);
-      material.setDiffuse(0.3);
-      material.setPhong(1.0);
-      material.setPhongSize(24.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(1.0);
-      material.setPhongBlue(1.0);
-      materials.add(material);
-    }
-
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(1.0);
-      material.setDiffuse(0.0);
-      material.setPhong(0.0);
-      material.setPhongSize(24.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(1.0);
-      material.setPhongBlue(1.0);
-      materials.add(material);
-    }
-
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.7);
-      material.setDiffuse(0.3);
-      material.setPhong(0.4);
-      material.setPhongSize(24.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(1.0);
-      material.setPhongBlue(1.0);
-      materials.add(material);
-    }
-
-    {
-      MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.3);
-      material.setDiffuse(0.7);
-      material.setPhong(0.6);
-      material.setPhongSize(40.0);
-      material.setPhongRed(1.0);
-      material.setPhongGreen(1.0);
-      material.setPhongBlue(1.0);
-      materials.add(material);
-    }
-
+  public void setupDefaultLights() {
     lights.clear();
     {
       PointLight light = new PointLight();
       lights.add(light);
-      light.setPosition(-0.15, 0.12, 0.7);
+      light.setX(6.12);
+      light.setY(0.12);
+      light.setZ(0.7);
       light.setIntensity(1.0);
       light.setRed(1.0);
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(true);
     }
+
     {
       PointLight light = new PointLight();
       lights.add(light);
-      light.setPosition(0.25, -0.22, 0.8);
+      light.setX(-1.8);
+      light.setY(-0.22);
+      light.setZ(0.8);
       light.setIntensity(0.5);
       light.setRed(1.0);
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(false);
+    }
+
+  }
+
+  public void setupDefaultGlobals() {
+    lightsEnabled = true;
+    ssaoEnabled = true;
+    ssaoIntensity = 1.0;
+    hardShadowsEnabled = false;
+  }
+
+  public void setupDefaultMaterials() {
+    materials.clear();
+    {
+      MaterialSettings material = new MaterialSettings();
+      material.setAmbient(0.6);
+      material.setDiffuse(0.4);
+      material.setPhong(0.8);
+      material.setPhongSize(12.0);
+      material.setPhongRed(1.0);
+      material.setPhongGreen(1.0);
+      material.setPhongBlue(1.0);
+      materials.add(material);
+    }
+
+    {
+      MaterialSettings material = new MaterialSettings();
+      material.setAmbient(0.6);
+      material.setDiffuse(0.6);
+      material.setPhong(0.6);
+      material.setPhongSize(15.0);
+      material.setPhongRed(1.0);
+      material.setPhongGreen(1.0);
+      material.setPhongBlue(0.3);
+      materials.add(material);
     }
   }
 
@@ -224,6 +198,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       dst.assign(src);
       materials.add(dst);
     }
+    lights.clear();
     for (PointLight src : pSrc.getLights()) {
       PointLight dst = new PointLight();
       dst.assign(src);
@@ -271,6 +246,33 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public List<MaterialSettings> getMaterials() {
     return materials;
+  }
+
+  public PointLight addLight() {
+    PointLight light = new PointLight();
+    lights.add(light);
+    light.setX(-0.15);
+    light.setY(0.12);
+    light.setZ(0.7);
+    light.setIntensity(1.0);
+    light.setRed(1.0);
+    light.setGreen(1.0);
+    light.setBlue(1.0);
+    light.setCastShadows(false);
+    return light;
+  }
+
+  public MaterialSettings addMaterial() {
+    MaterialSettings material = new MaterialSettings();
+    material.setAmbient(0.6);
+    material.setDiffuse(0.5);
+    material.setPhong(0.7);
+    material.setPhongSize(36.0);
+    material.setPhongRed(1.0);
+    material.setPhongGreen(0.9);
+    material.setPhongBlue(0.3);
+    materials.add(material);
+    return material;
   }
 
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,11 +22,11 @@ import org.jwildfire.create.tina.render.PlotSample;
 
 public class RasterFloatInt implements AbstractRaster, Serializable {
   private static final long serialVersionUID = 1L;
-  private float red[][];
-  private float green[][];
-  private float blue[][];
-  private int count[][];
-  private int rasterWidth, rasterHeight;
+  protected float red[][];
+  protected float green[][];
+  protected float blue[][];
+  protected int count[][];
+  protected int rasterWidth, rasterHeight;
 
   @Override
   public void incCount(int pX, int pY) {
@@ -44,15 +44,8 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public void addSample(int pX, int pY, double pRed, double pGreen, double pBlue) {
-    red[pX][pY] += (float) pRed;
-    green[pX][pY] += (float) pGreen;
-    blue[pX][pY] += (float) pBlue;
-    count[pX][pY]++;
-  }
-
-  @Override
   public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint) {
+    pDestRasterPoint.clear();
     pDestRasterPoint.red = red[pX][pY];
     pDestRasterPoint.green = green[pX][pY];
     pDestRasterPoint.blue = blue[pX][pY];
@@ -61,27 +54,27 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
 
   @Override
   public void readRasterPointSafe(int pX, int pY, RasterPoint pDestRasterPoint) {
-    if (pX >= 0 && pX < rasterWidth && pY >= 0 && pY < rasterHeight) {
-      pDestRasterPoint.red = red[pX][pY];
-      pDestRasterPoint.green = green[pX][pY];
-      pDestRasterPoint.blue = blue[pX][pY];
-      pDestRasterPoint.count = count[pX][pY];
-    }
-    else {
-      pDestRasterPoint.red = pDestRasterPoint.green = pDestRasterPoint.blue = 0;
-      pDestRasterPoint.count = 0;
-    }
+    pDestRasterPoint.clear();
+    if (pX >= 0 && pX < rasterWidth && pY >= 0 && pY < rasterHeight)
+      readRasterPoint(pX, pY, pDestRasterPoint);
+    else
+      pDestRasterPoint.clear();
   }
 
   @Override
-  public void addSamples(PlotSample[] pPlotBuffer, int pCount) {
+  public synchronized void addSamples(PlotSample[] pPlotBuffer, int pCount) {
     for (int i = 0; i < pCount; i++) {
       PlotSample sample = pPlotBuffer[i];
-      int x = sample.x, y = sample.y;
+      int x = sample.screenX, y = sample.screenY;
       red[x][y] += (float) sample.r;
       green[x][y] += (float) sample.g;
       blue[x][y] += (float) sample.b;
       count[x][y]++;
     }
+  }
+
+  @Override
+  public void finalizeRaster() {
+    // EMPTY    
   }
 }

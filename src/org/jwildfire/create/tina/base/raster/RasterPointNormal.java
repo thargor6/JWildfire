@@ -18,28 +18,9 @@ package org.jwildfire.create.tina.base.raster;
 
 import java.io.Serializable;
 
-public class RasterPoint implements Serializable {
+public class RasterPointNormal implements Serializable {
   private static final long serialVersionUID = 1L;
-  public double red;
-  public double green;
-  public double blue;
-  public long count;
-  public boolean hasNormals;
-  public double nx, ny, nz;
-  public boolean hasSSAO;
-  public double ao;
-  public boolean hasMaterial;
-  public double material;
-  public boolean hasRawColors;
-  public double rawR, rawG, rawB;
-
-  public void clear() {
-    red = green = blue = 0.0;
-    count = 0;
-    nx = ny = nz = 0.0;
-    ao = 0.0;
-    material = 0.0;
-    rawR = rawG = rawB = 0.0;
-    hasNormals = hasSSAO = hasMaterial = hasRawColors = false;
-  }
+  public double x;
+  public double y;
+  public double z;
 }

@@ -5,7 +5,6 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
-import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.edit.Assignable;
 
 @SuppressWarnings("serial")
@@ -20,22 +19,8 @@ public class PointLight implements Assignable<PointLight>, Serializable {
     return x;
   }
 
-  public void setPosition(double x, double y, double z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    normalize();
-  }
-
   public double getY() {
     return y;
-  }
-
-  private void normalize() {
-    double r = MathLib.sqrt(x * x + y * y + z * z) + 1.0e-16;
-    x /= r;
-    y /= r;
-    z /= r;
   }
 
   public double getZ() {
@@ -110,5 +95,17 @@ public class PointLight implements Assignable<PointLight>, Serializable {
       return false;
     }
     return false;
+  }
+
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
+  }
+
+  public void setZ(double z) {
+    this.z = z;
   }
 }

@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class XYZProjectedPoint implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  public double x, y;
+  public double x, y, z;
   public double intensity;
 
 }
