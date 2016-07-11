@@ -456,7 +456,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
 
     for (Variation variation : variations) {
-      if (variation.getFunc().getPriority() > 0) {
+      if (variation.getPriority() > 0) {
         if (variation.getFunc().getPriority() > 0) {
           t.add(new PostVariationTransformationStep(this, variation));
         }
