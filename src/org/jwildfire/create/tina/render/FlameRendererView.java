@@ -91,7 +91,7 @@ public class FlameRendererView {
     cameraMatrix[0][2] = sin(yaw) * sin(pitch);
     cameraMatrix[1][2] = cos(yaw) * sin(pitch);
     cameraMatrix[2][2] = cos(pitch);
-    useDOF = flame.isDOFActive();
+    useDOF = flame.isDOFActive() && !flame.getSolidRenderSettings().isSolidRenderingEnabled();
     doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
@@ -219,6 +219,22 @@ public class FlameRendererView {
     camPoint.x = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y + cameraMatrix[2][0] * pPoint.z;
     camPoint.y = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * pPoint.z;
     camPoint.z = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * pPoint.z;
+  }
+
+  public double getRcX() {
+    return rcX;
+  }
+
+  public double getRcY() {
+    return rcY;
+  }
+
+  public double getBws() {
+    return bws;
+  }
+
+  public double getBhs() {
+    return bhs;
   }
 
 }

@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.edit.Assignable;
 
 @SuppressWarnings("serial")
@@ -30,6 +31,8 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
   private double phong = 1.0;
   private double phongSize = 24.0;
   private double phongRed, phongGreen, phongBlue;
+  private String reflMapFilename = null;
+  private double reflMapIntensity = 0.5;
   private LightDiffFunc lightDiffFunc = LightDiffFuncPreset.COSA;
 
   public double getDiffuse() {
@@ -106,6 +109,8 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
     phongGreen = pSrc.phongGreen;
     phongBlue = pSrc.phongBlue;
     lightDiffFunc = pSrc.lightDiffFunc;
+    reflMapIntensity = pSrc.reflMapIntensity;
+    reflMapFilename = pSrc.reflMapFilename;
   }
 
   @Override
@@ -120,10 +125,27 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
     if (fabs(diffuse - pSrc.diffuse) > EPSILON || fabs(ambient - pSrc.ambient) > EPSILON ||
         fabs(phong - pSrc.phong) > EPSILON || fabs(phongSize - pSrc.phongSize) > EPSILON ||
         fabs(phongRed - pSrc.phongRed) > EPSILON || fabs(phongGreen - pSrc.phongGreen) > EPSILON ||
-        fabs(phongBlue - pSrc.phongBlue) > EPSILON || !lightDiffFunc.equals(pSrc.lightDiffFunc)) {
+        fabs(phongBlue - pSrc.phongBlue) > EPSILON || !lightDiffFunc.equals(pSrc.lightDiffFunc) ||
+        fabs(reflMapIntensity - pSrc.reflMapIntensity) > EPSILON || !Tools.stringEquals(reflMapFilename, pSrc.reflMapFilename)) {
       return false;
     }
     return false;
+  }
+
+  public String getReflMapFilename() {
+    return reflMapFilename;
+  }
+
+  public void setReflMapFilename(String reflMapFilename) {
+    this.reflMapFilename = reflMapFilename;
+  }
+
+  public double getReflMapIntensity() {
+    return reflMapIntensity;
+  }
+
+  public void setReflMapIntensity(double reflMapIntensity) {
+    this.reflMapIntensity = reflMapIntensity;
   }
 
 }

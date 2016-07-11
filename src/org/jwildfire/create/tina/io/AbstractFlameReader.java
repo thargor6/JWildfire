@@ -146,6 +146,8 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_GREEN = "sld_render_material_phong_green";
   public static final String ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE = "sld_render_material_phong_blue";
   public static final String ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC = "sld_render_material_light_diif_func";
+  public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAP_INTENSITY = "sld_render_material_refl_map_intensity";
+  public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME = "sld_render_material_refl_map_filename";
 
   public static final String ATTR_SLD_RENDER_LIGHT_X = "sld_render_light_x";
   public static final String ATTR_SLD_RENDER_LIGHT_Y = "sld_render_light_y";
@@ -564,6 +566,13 @@ public class AbstractFlameReader {
               ex.printStackTrace();
             }
           }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_REFL_MAP_INTENSITY + i)) != null) {
+            material.setReflMapIntensity(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME + i)) != null) {
+            material.setReflMapFilename(hs);
+          }
+
         }
       }
 

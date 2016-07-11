@@ -30,8 +30,7 @@ public class RasterPoint implements Serializable {
   public double ao;
   public boolean hasMaterial;
   public double material;
-  public boolean hasRawColors;
-  public double rawR, rawG, rawB;
+  public double dofDist;
 
   public void clear() {
     red = green = blue = 0.0;
@@ -39,7 +38,7 @@ public class RasterPoint implements Serializable {
     nx = ny = nz = 0.0;
     ao = 0.0;
     material = 0.0;
-    rawR = rawG = rawB = 0.0;
-    hasNormals = hasSSAO = hasMaterial = hasRawColors = false;
+    dofDist = 0.0;
+    hasNormals = hasSSAO = hasMaterial = false;
   }
 }

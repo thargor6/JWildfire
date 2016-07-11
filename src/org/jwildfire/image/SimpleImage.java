@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 
 public class SimpleImage implements WFImage {
@@ -236,9 +237,9 @@ public class SimpleImage implements WFImage {
 
           double x = MathLib.frac(xCoord);
           double y = MathLib.frac(yCoord);
-          int r = Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y));
-          int g = Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y));
-          int b = Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y));
+          int r = Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y));
+          int g = Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y));
+          int b = Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y));
           setRGB(j, i, r, g, b);
         }
       }

@@ -204,7 +204,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private FlamePanel prevFlamePanel;
 
   private final Prefs prefs;
-  private final ErrorHandler errorHandler;
+  final ErrorHandler errorHandler;
   boolean gridRefreshing = false;
   boolean cmbRefreshing = false;
   boolean refreshing = false;
@@ -647,6 +647,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingMaterialSpecularSharpnessSlider = parameterObject.tinaSolidRenderingMaterialSpecularSharpnessSlider;
     data.tinaSolidRenderingMaterialSpecularColorBtn = parameterObject.tinaSolidRenderingMaterialSpecularColorBtn;
     data.tinaSolidRenderingMaterialDiffuseResponseCmb = parameterObject.tinaSolidRenderingMaterialDiffuseResponseCmb;
+    data.tinaSolidRenderingMaterialReflectionMapIntensityREd = parameterObject.tinaSolidRenderingMaterialReflectionMapIntensityREd;
+    data.tinaSolidRenderingMaterialReflectionMapIntensitySlider = parameterObject.tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+    data.tinaSolidRenderingMaterialReflMapBtn = parameterObject.tinaSolidRenderingMaterialReflMapBtn;
+    data.tinaSolidRenderingMaterialSelectReflMapBtn = parameterObject.tinaSolidRenderingMaterialSelectReflMapBtn;
+    data.tinaSolidRenderingMaterialRemoveReflMapBtn = parameterObject.tinaSolidRenderingMaterialRemoveReflMapBtn;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;

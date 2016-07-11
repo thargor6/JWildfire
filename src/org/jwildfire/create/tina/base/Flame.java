@@ -1176,7 +1176,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean is3dProjectionRequired() {
-    return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
+    return getSolidRenderSettings().isSolidRenderingEnabled() ||
+        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
         fabs(getDimishZ()) > EPSILON || fabs(getCamPosX()) > EPSILON || fabs(getCamPosY()) > EPSILON || fabs(getCamPosZ()) > EPSILON;
   }
 

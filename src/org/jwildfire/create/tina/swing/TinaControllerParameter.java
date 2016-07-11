@@ -613,6 +613,11 @@ public class TinaControllerParameter {
   public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
   public JButton tinaSolidRenderingMaterialSpecularColorBtn;
   public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
+  public JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd;
+  public JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+  public JButton tinaSolidRenderingMaterialReflMapBtn;
+  public JButton tinaSolidRenderingMaterialSelectReflMapBtn;
+  public JButton tinaSolidRenderingMaterialRemoveReflMapBtn;
 
   public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1099,7 +1104,9 @@ public class TinaControllerParameter {
       JButton tinaSolidRenderingDeleteMaterialBtn, JWFNumberField tinaSolidRenderingMaterialDiffuseREd, JSlider tinaSolidRenderingMaterialDiffuseSlider,
       JWFNumberField tinaSolidRenderingMaterialAmbientREd, JSlider tinaSolidRenderingMaterialAmbientSlider, JWFNumberField tinaSolidRenderingMaterialSpecularREd,
       JSlider tinaSolidRenderingMaterialSpecularSlider, JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd, JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider,
-      JButton tinaSolidRenderingMaterialSpecularColorBtn, JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb
+      JButton tinaSolidRenderingMaterialSpecularColorBtn, JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb, JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd,
+      JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider, JButton tinaSolidRenderingMaterialReflMapBtn, JButton tinaSolidRenderingMaterialSelectReflMapBtn,
+      JButton tinaSolidRenderingMaterialRemoveReflMapBtn
       ) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
@@ -1312,5 +1319,10 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingMaterialSpecularSharpnessSlider = tinaSolidRenderingMaterialSpecularSharpnessSlider;
     this.tinaSolidRenderingMaterialSpecularColorBtn = tinaSolidRenderingMaterialSpecularColorBtn;
     this.tinaSolidRenderingMaterialDiffuseResponseCmb = tinaSolidRenderingMaterialDiffuseResponseCmb;
+    this.tinaSolidRenderingMaterialReflectionMapIntensityREd = tinaSolidRenderingMaterialReflectionMapIntensityREd;
+    this.tinaSolidRenderingMaterialReflectionMapIntensitySlider = tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+    this.tinaSolidRenderingMaterialReflMapBtn = tinaSolidRenderingMaterialReflMapBtn;
+    this.tinaSolidRenderingMaterialSelectReflMapBtn = tinaSolidRenderingMaterialSelectReflMapBtn;
+    this.tinaSolidRenderingMaterialRemoveReflMapBtn = tinaSolidRenderingMaterialRemoveReflMapBtn;
   }
 }

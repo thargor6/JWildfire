@@ -432,5 +432,9 @@ public class TinaControllerData {
   public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
   public JButton tinaSolidRenderingMaterialSpecularColorBtn;
   public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
-
+  public JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd;
+  public JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+  public JButton tinaSolidRenderingMaterialReflMapBtn;
+  public JButton tinaSolidRenderingMaterialSelectReflMapBtn;
+  public JButton tinaSolidRenderingMaterialRemoveReflMapBtn;
 }

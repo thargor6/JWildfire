@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Constants;
@@ -91,6 +92,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void init() {
+    raster.notifyInit(view);
   }
 
   public void preFuseIter() {
@@ -310,9 +312,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
       }
 
       double t = MathLib.frac(colorIdx);
-      rc.red = Tools.lerp(lR, rR, t);
-      rc.green = Tools.lerp(lG, rG, t);
-      rc.blue = Tools.lerp(lB, rB, t);
+      rc.red = GfxMathLib.lerp(lR, rR, t);
+      rc.green = GfxMathLib.lerp(lG, rG, t);
+      rc.blue = GfxMathLib.lerp(lB, rB, t);
       return rc;
     }
   }
@@ -382,9 +384,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
       double localX = MathLib.frac(imageX);
       double localY = MathLib.frac(imageY);
-      rc.red = Tools.blerp(luR, ruR, lbR, rbR, localX, localY);
-      rc.green = Tools.blerp(luG, ruG, lbG, rbG, localX, localY);
-      rc.blue = Tools.blerp(luB, ruB, lbB, rbB, localX, localY);
+      rc.red = GfxMathLib.blerp(luR, ruR, lbR, rbR, localX, localY);
+      rc.green = GfxMathLib.blerp(luG, ruG, lbG, rbG, localX, localY);
+      rc.blue = GfxMathLib.blerp(luB, ruB, lbB, rbB, localX, localY);
       return rc;
     }
   }

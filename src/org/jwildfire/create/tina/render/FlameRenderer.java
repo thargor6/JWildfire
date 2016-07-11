@@ -163,7 +163,7 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    raster.allocRaster(rasterWidth, rasterHeight);
+    raster.allocRaster(flame, rasterWidth, rasterHeight);
     return raster;
   }
 

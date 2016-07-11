@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.base.raster;
 
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.PlotSample;
 
 public class RasterFloatIntWithAccumulatedZBuffer extends RasterFloatInt {
@@ -31,8 +32,8 @@ public class RasterFloatIntWithAccumulatedZBuffer extends RasterFloatInt {
   private final float ZBUF_ZMAX = -Float.MAX_VALUE;
 
   @Override
-  public void allocRaster(int pWidth, int pHeight) {
-    super.allocRaster(pWidth, pHeight);
+  public void allocRaster(Flame flame, int pWidth, int pHeight) {
+    super.allocRaster(flame, pWidth, pHeight);
 
     zBuf = new float[rasterWidth][rasterHeight];
     nzBuf = new float[rasterWidth][rasterHeight];

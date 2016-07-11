@@ -75,6 +75,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       material.setPhongRed(1.0);
       material.setPhongGreen(1.0);
       material.setPhongBlue(1.0);
+      material.setReflMapIntensity(0.5);
+      material.setReflMapFilename(null);
       materials.add(material);
     }
 
@@ -87,8 +89,14 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       material.setPhongRed(1.0);
       material.setPhongGreen(1.0);
       material.setPhongBlue(0.3);
+      material.setReflMapIntensity(0.5);
+      material.setReflMapFilename(null);
       materials.add(material);
     }
+  }
+
+  private boolean isValidMaterialIdx(int idx) {
+    return idx >= 0 && idx < materials.size();
   }
 
   public MaterialSettings getInterpolatedMaterial(double materialIdx) {
@@ -96,26 +104,21 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     if (materialIdx < 0)
       return null;
 
-    double idx = materialIdx * materials.size();
-    int fromIdx = (int) idx;
+    int fromIdx = (int) materialIdx;
     int toIdx = fromIdx + 1;
-    double scl = MathLib.frac(idx);
+    double scl = MathLib.frac(materialIdx);
     double EPS = 0.01;
 
-    //    System.out.println(fromIdx + " " + toIdx + " " + scl + " " + idx);
-    if (fromIdx >= 0 && toIdx < materials.size()) {
-      if (scl < EPS) {
-        return materials.get(fromIdx);
-      }
-      else if (scl > 1.0 - EPS) {
-        return materials.get(toIdx);
-      }
-      else {
-        return morphMaterial(materials.get(fromIdx), materials.get(toIdx), scl);
-      }
+    //System.out.println(fromIdx + " " + toIdx + " " + scl + " " + materialIdx);
+    if (scl < EPS) {
+      return isValidMaterialIdx(fromIdx) ? materials.get(fromIdx) : null;
+    }
+    else if (scl > 1.0 - EPS) {
+      return isValidMaterialIdx(toIdx) ? materials.get(toIdx) : null;
     }
     else {
-      return null;
+      //return isValidMaterialIdx(fromIdx) && isValidMaterialIdx(toIdx) ? morphMaterial(materials.get(fromIdx), materials.get(toIdx), scl) : null;
+      return scl <= 0.5 ? isValidMaterialIdx(fromIdx) ? materials.get(fromIdx) : null : isValidMaterialIdx(toIdx) ? materials.get(toIdx) : null;
     }
   }
 
@@ -128,6 +131,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     morph.setPhongRed(FlameMorphService.morphValue(from.getPhongRed(), to.getPhongRed(), scl));
     morph.setPhongGreen(FlameMorphService.morphValue(from.getPhongGreen(), to.getPhongGreen(), scl));
     morph.setPhongBlue(FlameMorphService.morphValue(from.getPhongBlue(), to.getPhongBlue(), scl));
+    morph.setDiffuse(FlameMorphService.morphValue(from.getReflMapIntensity(), to.getReflMapIntensity(), scl));
+    morph.setReflMapIntensity(FlameMorphService.morphValue(from.getReflMapIntensity(), to.getReflMapIntensity(), scl));
     morph.setLightDiffFunc(new LightDiffFunc() {
 
       @Override
@@ -271,6 +276,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     material.setPhongRed(1.0);
     material.setPhongGreen(0.9);
     material.setPhongBlue(0.3);
+    material.setReflMapIntensity(0.5);
     materials.add(material);
     return material;
   }

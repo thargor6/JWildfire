@@ -17,17 +17,20 @@
 package org.jwildfire.create.tina.swing;
 
 import java.awt.Color;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
@@ -43,6 +46,10 @@ import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
+import org.jwildfire.swing.ImageFileChooser;
 
 import com.l2fprod.common.beans.editor.FilePropertyEditor;
 import com.l2fprod.common.util.ResourceManager;
@@ -230,6 +237,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingMaterialSpecularSharpnessREd, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialSpecularColorBtn, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialDiffuseResponseCmb, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialReflectionMapIntensityREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialReflMapBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSelectReflMapBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialRemoveReflMapBtn, disabled || !hasMaterials);
   }
 
   private void enableStereo3dUI() {
@@ -820,6 +831,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.tinaSolidRenderingMaterialSpecularSharpnessREd.setText(Tools.doubleToString(material.getPhongSize()));
       data.tinaSolidRenderingMaterialSpecularSharpnessSlider.setValue(Tools.FTOI(material.getPhongSize() * TinaController.SLIDER_SCALE_CENTRE));
       data.tinaSolidRenderingMaterialDiffuseResponseCmb.setSelectedItem(material.getLightDiffFunc());
+      data.tinaSolidRenderingMaterialReflectionMapIntensityREd.setText(Tools.doubleToString(material.getReflMapIntensity()));
+      data.tinaSolidRenderingMaterialReflectionMapIntensitySlider.setValue(Tools.FTOI(material.getReflMapIntensity() * TinaController.SLIDER_SCALE_CENTRE));
     }
     refreshSolidRenderMaterialSpecularColorIndicator();
   }
@@ -1305,9 +1318,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
           flame.setAntialiasRadius(0.0);
           refreshFlameValues();
         }
-        else {
-          enableControls();
-        }
+        enableControls();
         owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
@@ -1725,4 +1736,58 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingLightSliderChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
+  public void solidRenderingMaterialRemoveReflMapBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      owner.saveUndoPoint();
+      material.setReflMapFilename(null);
+      owner.refreshFlameImage(true, false, 1, true, true);
+    }
+  }
+
+  public void solidRenderingMaterialSelectReflMapBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+      if (Prefs.getPrefs().getInputImagePath() != null) {
+        try {
+          if (getCurrFlame().getBGImageFilename().length() > 0) {
+            chooser.setSelectedFile(new File(getCurrFlame().getBGImageFilename()));
+          }
+          else {
+            chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
+          }
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(owner.getFlamePanel()) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        try {
+          String filename = file.getAbsolutePath();
+          WFImage img = RessourceManager.getImage(filename);
+          if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
+            throw new Exception("Invalid image");
+          }
+          Prefs.getPrefs().setLastInputImageFile(file);
+
+          owner.saveUndoPoint();
+          material.setReflMapFilename(filename);
+          owner.refreshFlameImage(true, false, 1, true, false);
+        }
+        catch (Throwable ex) {
+          owner.errorHandler.handleError(ex);
+        }
+      }
+    }
+  }
+
+  public void solidRenderingMaterialReflectionMapIntensityREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialReflectionMapIntensitySlider, data.tinaSolidRenderingMaterialReflectionMapIntensityREd, "reflMapIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialReflectionMapIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialReflectionMapIntensitySlider, data.tinaSolidRenderingMaterialReflectionMapIntensityREd, "reflMapIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
 }

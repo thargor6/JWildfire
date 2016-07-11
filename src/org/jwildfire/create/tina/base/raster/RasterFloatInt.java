@@ -18,6 +18,8 @@ package org.jwildfire.create.tina.base.raster;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.FlameRendererView;
 import org.jwildfire.create.tina.render.PlotSample;
 
 public class RasterFloatInt implements AbstractRaster, Serializable {
@@ -34,7 +36,7 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public void allocRaster(int pWidth, int pHeight) {
+  public void allocRaster(Flame flame, int pWidth, int pHeight) {
     rasterWidth = pWidth;
     rasterHeight = pHeight;
     red = new float[pWidth][pHeight];
@@ -76,5 +78,10 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   @Override
   public void finalizeRaster() {
     // EMPTY    
+  }
+
+  @Override
+  public void notifyInit(FlameRendererView view) {
+    // EMPTY
   }
 }

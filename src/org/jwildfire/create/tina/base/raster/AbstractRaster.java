@@ -16,13 +16,15 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.render.FlameRendererView;
 import org.jwildfire.create.tina.render.PlotSample;
 
 public interface AbstractRaster {
 
   void incCount(int pX, int pY);
 
-  void allocRaster(int pWidth, int pHeight);
+  void allocRaster(Flame flame, int pWidth, int pHeight);
 
   void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint);
 
@@ -31,5 +33,7 @@ public interface AbstractRaster {
   void addSamples(PlotSample[] pPlotBuffer, int pCount);
 
   void finalizeRaster();
+
+  void notifyInit(FlameRendererView view);
 
 }
