@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
@@ -464,6 +466,7 @@ public class VariationFuncList {
     registerVariationFunc(MobiusStripFunc.class);
 
     registerVariationFunc(OBJMeshWFFunc.class);
+    registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
     registerVariationFunc(DLA_3D_WFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
