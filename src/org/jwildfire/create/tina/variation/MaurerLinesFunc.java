@@ -2481,6 +2481,7 @@ public class MaurerLinesFunc extends VariationFunc {
         if (pVarTP.color > 1.0) { pVarTP.color = 1.0; }
       }
       else if (direct_color_gradient == COLORMAP_WRAP) {
+        pVarTP.rgbColor = false;
         // if val is outside range, wrap it around (cylce) to keep within range
         if (val < low_value) {
           val = high_value - ((low_value - val) % (high_value - low_value));
