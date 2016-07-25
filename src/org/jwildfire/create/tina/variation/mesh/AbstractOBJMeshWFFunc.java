@@ -192,10 +192,11 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
         }
       }
       if (MathLib.fabs(areaMin - areaMax) > MathLib.EPSILON) {
+        int maxFaces = faces.size() < 10000 ? 10000 : 1000;
         List<Face> newFaces = new ArrayList<>();
         for (int i = 0; i < faces.size(); i++) {
           Face face = faces.get(i);
-          int count = Math.min(Tools.FTOI(areaLst.get(i) / areaMin), faces.size() / 2);
+          int count = Math.min(Tools.FTOI(areaLst.get(i) / areaMin), maxFaces);
           for (int j = 0; j < count; j++) {
             newFaces.add(face);
             //newFaces.add(new Face(face.p1, face.p3, face.p2));

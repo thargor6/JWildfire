@@ -156,10 +156,6 @@ public class TinaControllerParameter {
   public JSlider pXFormColorSlider;
   public JWFNumberField pXFormSymmetryREd;
   public JSlider pXFormSymmetrySlider;
-  public JWFNumberField pXFormMaterialREd;
-  public JSlider pXFormMaterialSlider;
-  public JWFNumberField pXFormMaterialSpeedREd;
-  public JSlider pXFormMaterialSpeedSlider;
   public JWFNumberField pXFormModGammaREd;
   public JSlider pXFormModGammaSlider;
   public JWFNumberField pXFormModGammaSpeedREd;
@@ -1092,7 +1088,6 @@ public class TinaControllerParameter {
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton, JComboBox pMeshGenOutputTypeCmb,
-      JWFNumberField pXFormMaterialREd, JSlider pXFormMaterialSlider, JWFNumberField pXFormMaterialSpeedREd, JSlider pXFormMaterialSpeedSlider,
       JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
       JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx, JCheckBox tinaSolidRenderingEnableLightsCBx,
       JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
@@ -1279,11 +1274,6 @@ public class TinaControllerParameter {
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
     meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
-    this.pXFormMaterialREd = pXFormMaterialREd;
-    this.pXFormMaterialSlider = pXFormMaterialSlider;
-    this.pXFormMaterialSpeedREd = pXFormMaterialSpeedREd;
-    this.pXFormMaterialSpeedSlider = pXFormMaterialSpeedSlider;
-
     this.tinaSolidRenderingCBx = tinaSolidRenderingCBx;
     this.tinaSolidRenderingEnableSSAOCBx = tinaSolidRenderingEnableSSAOCBx;
     this.tinaSolidRenderingSSAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;

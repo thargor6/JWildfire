@@ -151,10 +151,6 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormColorSlider.setEnabled(enabled);
     data.xFormSymmetryREd.setEnabled(enabled);
     data.xFormSymmetrySlider.setEnabled(enabled);
-    data.xFormMaterialREd.setEnabled(enabled);
-    data.xFormMaterialSlider.setEnabled(enabled);
-    data.xFormMaterialSpeedREd.setEnabled(enabled);
-    data.xFormMaterialSpeedSlider.setEnabled(enabled);
     data.xFormModGammaREd.setEnabled(enabled);
     data.xFormModGammaSlider.setEnabled(enabled);
     data.xFormModGammaSpeedREd.setEnabled(enabled);
