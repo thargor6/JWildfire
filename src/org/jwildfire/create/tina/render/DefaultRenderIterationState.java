@@ -412,7 +412,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
-    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }

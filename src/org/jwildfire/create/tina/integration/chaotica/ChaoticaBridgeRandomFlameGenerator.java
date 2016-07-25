@@ -34,6 +34,7 @@ import org.jwildfire.create.tina.randomflame.ExperimentalGnarlRandomFlameGenerat
 import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.FilledFlowers3DRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.Flowers3DRandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.GalaxiesRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.GhostsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.GnarlRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.JulianDiscRandomFlameGenerator;
@@ -69,6 +70,7 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new Bubbles3DRandomFlameGenerator());
     generators.add(new CrossRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new DuckiesRandomFlameGenerator());
     generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
     generators.add(new ExperimentalGnarlRandomFlameGenerator());
@@ -78,6 +80,7 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new GnarlRandomFlameGenerator());
     generators.add(new JuliansRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new MandelbrotRandomFlameGenerator());
     generators.add(new JulianDiscRandomFlameGenerator());
     generators.add(new LayerzRandomFlameGenerator());
@@ -87,6 +90,7 @@ public class ChaoticaBridgeRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SimpleTilingRandomFlameGenerator());
     generators.add(new SierpinskyRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
     generators.add(new GhostsRandomFlameGenerator());

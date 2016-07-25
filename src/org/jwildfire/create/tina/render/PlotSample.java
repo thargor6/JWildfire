@@ -21,8 +21,9 @@ public class PlotSample {
   public double r, g, b;
   public double x, y, z;
   public double material;
+  public double dofDist;
 
-  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material) {
+  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist) {
     this.screenX = screenX;
     this.screenY = screenY;
     this.r = r;
@@ -32,5 +33,6 @@ public class PlotSample {
     this.y = y;
     this.z = z;
     this.material = material;
+    this.dofDist = dofDist;
   }
 }

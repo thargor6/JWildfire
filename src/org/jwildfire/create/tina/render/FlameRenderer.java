@@ -594,12 +594,13 @@ public class FlameRenderer {
       if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
       }
+      PostDOFCalculator dofCalculator = (flame.getCamDOF() > MathLib.EPSILON && flame.getSolidRenderSettings().isSolidRenderingEnabled()) ? dofCalculator = new PostDOFCalculator() : null;
       int rowsPerThread = pImage.getImageHeight() / threadCount;
       List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageThread thread = new RenderImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        RenderImageThread thread = new RenderImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofCalculator);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -609,6 +610,9 @@ public class FlameRenderer {
         }
       }
       waitForThreads(threadCount, threads);
+      if (dofCalculator != null) {
+        dofCalculator.applyDOF(pImage);
+      }
     }
   }
 

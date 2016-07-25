@@ -117,7 +117,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.2";
   static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling.2";
   static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
@@ -274,7 +274,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultSpatialOversampling = 2;
+  private int tinaDefaultSpatialOversampling = 1;
 
   @Property(description = "Default color oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
   private int tinaDefaultColorOversampling = 3;

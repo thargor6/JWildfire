@@ -3760,138 +3760,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorChooserPaletteImgPanel.setBounds(125, 10, 195, 10);
       tinaTransformationColorPanel.add(tinaColorChooserPaletteImgPanel);
       tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
-
-      xFormMaterialREd = new JWFNumberField();
-      xFormMaterialREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      xFormMaterialREd.setValueStep(0.01);
-      xFormMaterialREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!xFormMaterialREd.isMouseAdjusting() || xFormMaterialREd.getMouseChangeCount() == 0) {
-              if (!xFormMaterialSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.xFormMaterialREd_changed();
-          }
-        }
-      });
-      xFormMaterialREd.setText("");
-      xFormMaterialREd.setSize(new Dimension(70, 24));
-      xFormMaterialREd.setPreferredSize(new Dimension(70, 24));
-      xFormMaterialREd.setMotionPropertyName("material");
-      xFormMaterialREd.setMaxValue(1.0);
-      xFormMaterialREd.setLocation(new Point(55, 21));
-      xFormMaterialREd.setLinkedMotionControlName("xFormMaterialSlider");
-      xFormMaterialREd.setLinkedLabelControlName("xFormMaterialLbl");
-      xFormMaterialREd.setHasMinValue(true);
-      xFormMaterialREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialREd.setBounds(55, 135, 70, 24);
-      tinaTransformationColorPanel.add(xFormMaterialREd);
-
-      JLabel xFormMaterialLbl = new JLabel();
-      xFormMaterialLbl.setText("Material");
-      xFormMaterialLbl.setSize(new Dimension(49, 22));
-      xFormMaterialLbl.setPreferredSize(new Dimension(64, 22));
-      xFormMaterialLbl.setName("xFormColorLbl");
-      xFormMaterialLbl.setLocation(new Point(6, 21));
-      xFormMaterialLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialLbl.setBounds(6, 135, 49, 22);
-      tinaTransformationColorPanel.add(xFormMaterialLbl);
-
-      xFormMaterialSlider = new JSlider();
-      xFormMaterialSlider.setValue(0);
-      xFormMaterialSlider.setSize(new Dimension(195, 22));
-      xFormMaterialSlider.setPreferredSize(new Dimension(195, 22));
-      xFormMaterialSlider.setName("xFormMaterialSlider");
-      xFormMaterialSlider.setMaximum(2000);
-      xFormMaterialSlider.setLocation(new Point(125, 21));
-      xFormMaterialSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      xFormMaterialSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.xFormMaterialSlider_changed();
-        }
-      });
-      xFormMaterialSlider.setBounds(125, 135, 195, 22);
-      tinaTransformationColorPanel.add(xFormMaterialSlider);
-
-      JLabel xFormMaterialSpeedLbl = new JLabel();
-      xFormMaterialSpeedLbl.setToolTipText("Material change speed");
-      xFormMaterialSpeedLbl.setText("Mat Chg");
-      xFormMaterialSpeedLbl.setSize(new Dimension(49, 22));
-      xFormMaterialSpeedLbl.setPreferredSize(new Dimension(64, 22));
-      xFormMaterialSpeedLbl.setName("xFormMaterialSpeedLbl");
-      xFormMaterialSpeedLbl.setLocation(new Point(6, 47));
-      xFormMaterialSpeedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSpeedLbl.setBounds(6, 161, 49, 22);
-      tinaTransformationColorPanel.add(xFormMaterialSpeedLbl);
-
-      xFormMaterialSpeedREd = new JWFNumberField();
-      xFormMaterialSpeedREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getXFormControls().editMotionCurve(e);
-        }
-      });
-      xFormMaterialSpeedREd.setValueStep(0.01);
-      xFormMaterialSpeedREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            if (!xFormMaterialSpeedREd.isMouseAdjusting() || xFormMaterialSpeedREd.getMouseChangeCount() == 0) {
-              if (!xFormMaterialSpeedSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.xFormMaterialSpeedREd_changed();
-          }
-        }
-      });
-      xFormMaterialSpeedREd.setText("");
-      xFormMaterialSpeedREd.setSize(new Dimension(70, 24));
-      xFormMaterialSpeedREd.setPreferredSize(new Dimension(55, 24));
-      xFormMaterialSpeedREd.setMotionPropertyName("materialSpeed");
-      xFormMaterialSpeedREd.setMinValue(-1.0);
-      xFormMaterialSpeedREd.setMaxValue(1.0);
-      xFormMaterialSpeedREd.setLocation(new Point(55, 47));
-      xFormMaterialSpeedREd.setLinkedMotionControlName("xFormMaterialSpeedSlider");
-      xFormMaterialSpeedREd.setLinkedLabelControlName("xFormMaterialSpeedLbl");
-      xFormMaterialSpeedREd.setHasMinValue(true);
-      xFormMaterialSpeedREd.setHasMaxValue(true);
-      xFormMaterialSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSpeedREd.setBounds(55, 161, 70, 24);
-      tinaTransformationColorPanel.add(xFormMaterialSpeedREd);
-
-      xFormMaterialSpeedSlider = new JSlider();
-      xFormMaterialSpeedSlider.setValue(0);
-      xFormMaterialSpeedSlider.setSize(new Dimension(195, 22));
-      xFormMaterialSpeedSlider.setPreferredSize(new Dimension(195, 22));
-      xFormMaterialSpeedSlider.setName("xFormMaterialSpeedSlider");
-      xFormMaterialSpeedSlider.setMinimum(-100);
-      xFormMaterialSpeedSlider.setMaximum(100);
-      xFormMaterialSpeedSlider.setLocation(new Point(125, 47));
-      xFormMaterialSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSpeedSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      xFormMaterialSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.xFormMaterialSpeedSlider_changed();
-        }
-      });
-      xFormMaterialSpeedSlider.setBounds(125, 161, 195, 22);
-      tinaTransformationColorPanel.add(xFormMaterialSpeedSlider);
     }
     return tinaTransformationColorPanel;
   }
@@ -4973,8 +4841,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox(), getFilterKernelFlatPreviewBtn(),
         getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
-        getMeshGenOutputTypeCmb(), getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider(),
-        getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableSSAOCBx(), getTinaSolidRenderingSSAOIntensityREd(),
+        getMeshGenOutputTypeCmb(), getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableSSAOCBx(), getTinaSolidRenderingSSAOIntensityREd(),
         getTinaSolidRenderingSSAOIntensitySlider(), getTinaSolidRenderingEnableHardShadowsCBx(), getTinaSolidRenderingEnableLightsCBx(),
         getResetSolidRenderingGlobalSettingsBtn(), getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
@@ -11064,10 +10931,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton relWeightsResetButton;
   private JButton relWeightsResetAllButton;
   private JComboBox meshGenOutputTypeCmb;
-  private JWFNumberField xFormMaterialREd;
-  private JWFNumberField xFormMaterialSpeedREd;
-  private JSlider xFormMaterialSlider;
-  private JSlider xFormMaterialSpeedSlider;
   private JPanel panel_59;
   private JTabbedPane tinaSolidRenderingPane;
   private JCheckBox tinaSolidRenderingCBx;
@@ -23623,34 +23486,25 @@ public class TinaInternalFrame extends JInternalFrame {
     return meshGenOutputTypeCmb;
   }
 
-  public JWFNumberField getXFormMaterialREd() {
-    return xFormMaterialREd;
-  }
-
-  public JWFNumberField getXFormMaterialSpeedREd() {
-    return xFormMaterialSpeedREd;
-  }
-
-  public JSlider getXFormMaterialSlider() {
-    return xFormMaterialSlider;
-  }
-
-  public JSlider getXFormMaterialSpeedSlider() {
-    return xFormMaterialSpeedSlider;
-  }
-
   private JPanel getPanel_59() {
     if (panel_59 == null) {
       panel_59 = new JPanel();
       panel_59.setLayout(new BorderLayout(0, 0));
       panel_59.add(getTinaSolidRenderingPane(), BorderLayout.CENTER);
     }
+
     return panel_59;
   }
 
   private JTabbedPane getTinaSolidRenderingPane() {
     if (tinaSolidRenderingPane == null) {
       tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.LEFT);
+
+      if (!Tools.ENABLE_SOLID_RENDERING) {
+        tinaSolidRenderingPane.setVisible(false);
+        tinaSolidRenderingPane.setEnabled(false);
+
+      }
 
       JPanel panel_1 = new JPanel();
       tinaSolidRenderingPane.addTab("Rendering settings", null, panel_1, null);
@@ -23681,6 +23535,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(tinaSolidRenderingEnableSSAOCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
+      tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
       tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -24126,6 +23981,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingDeleteLightBtn);
 
       tinaSolidRenderingLightCastShadowsCBx = new JCheckBox("Cast shadows");
+      tinaSolidRenderingLightCastShadowsCBx.setVisible(false);
       tinaSolidRenderingLightCastShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -24820,6 +24676,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaSolidRenderingMaterialReflMapBtn() {
     if (tinaSolidRenderingMaterialReflMapBtn == null) {
       tinaSolidRenderingMaterialReflMapBtn = new JButton();
+      tinaSolidRenderingMaterialReflMapBtn.setVisible(false);
       tinaSolidRenderingMaterialReflMapBtn.setToolTipText("Set the background color of your fractal");
       tinaSolidRenderingMaterialReflMapBtn.setPreferredSize(new Dimension(190, 24));
       tinaSolidRenderingMaterialReflMapBtn.setFont(new Font("Dialog", Font.BOLD, 10));

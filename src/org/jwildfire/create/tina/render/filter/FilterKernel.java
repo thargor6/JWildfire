@@ -63,4 +63,12 @@ public abstract class FilterKernel {
     }
   }
 
+  public double getFilterRadius(int pFilterSize, int pOversample) {
+    if (pFilterSize <= 0) {
+      return 0;
+    }
+    else {
+      return (double) (pFilterSize - 1) / (2.0 * (double) pOversample * getSpatialSupport());
+    }
+  }
 }

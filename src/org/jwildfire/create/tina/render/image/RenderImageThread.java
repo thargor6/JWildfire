@@ -20,6 +20,7 @@ import org.jwildfire.create.tina.render.GammaCorrectedRGBPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
+import org.jwildfire.create.tina.render.PostDOFCalculator;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderImageThread extends AbstractImageRenderThread {
@@ -30,8 +31,9 @@ public class RenderImageThread extends AbstractImageRenderThread {
   private final LogDensityPoint logDensityPnt;
   private final GammaCorrectedRGBPoint rbgPoint;
   private final SimpleImage img;
+  private final PostDOFCalculator dofCalculator;
 
-  public RenderImageThread(LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg) {
+  public RenderImageThread(LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg, PostDOFCalculator pDofCalculator) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
@@ -39,6 +41,7 @@ public class RenderImageThread extends AbstractImageRenderThread {
     logDensityPnt = new LogDensityPoint();
     rbgPoint = new GammaCorrectedRGBPoint();
     img = pImg;
+    dofCalculator = pDofCalculator;
   }
 
   @Override
@@ -49,7 +52,11 @@ public class RenderImageThread extends AbstractImageRenderThread {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, j, i);
+          if (dofCalculator != null) {
+            dofCalculator.addSample(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue, logDensityPnt.dofDist, logDensityPnt.rp.zBuf);
+          }
           img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+
         }
       }
     }
@@ -57,5 +64,4 @@ public class RenderImageThread extends AbstractImageRenderThread {
       setDone(true);
     }
   }
-
 }

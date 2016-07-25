@@ -132,6 +132,10 @@ public final class VecMathLib {
       y += src.y * scale;
       z += src.z * scale;
     }
+
+    public static VectorD cross(VectorD a, VectorD b) {
+      return new VectorD(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+    }
   }
 
 }

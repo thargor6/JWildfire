@@ -1,3 +1,6 @@
+V2.60 REVISION 2 (26.10.2015):
+ - Experimental font-scale (for screens with much higher resolution)
+
 V2.60 (12.10.2015):
  - New progressive preview, which allows progressive rendering while editing. 
    While it needs much CPU-power it is a great new way to explore interesting spots inside your fractals, it is especially of great use in combination 
