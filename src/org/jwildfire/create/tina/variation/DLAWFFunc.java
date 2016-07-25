@@ -16,12 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import odk.lang.DoubleWrapper;
+
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -35,12 +41,14 @@ public class DLAWFFunc extends VariationFunc {
   private static final String PARAM_MAX_ITER = "max_iter";
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_SCALE = "scale";
-  private static final String[] paramNames = { PARAM_BUFFER_SIZE, PARAM_MAX_ITER, PARAM_SEED, PARAM_SCALE };
+  private static final String PARAM_JITTER = "jitter";
+  private static final String[] paramNames = { PARAM_BUFFER_SIZE, PARAM_MAX_ITER, PARAM_SEED, PARAM_SCALE, PARAM_JITTER };
 
   private int buffer_size = 800;
   private int max_iter = 6000;
   private int seed = 666;
   private double scale = 10.0;
+  private double jitter = 0.01;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -48,8 +56,8 @@ public class DLAWFFunc extends VariationFunc {
     pVarTP.x += pAmount * point.x;
     pVarTP.y += pAmount * point.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -59,7 +67,7 @@ public class DLAWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { buffer_size, max_iter, seed, scale };
+    return new Object[] { buffer_size, max_iter, seed, scale, jitter };
   }
 
   @Override
@@ -72,6 +80,8 @@ public class DLAWFFunc extends VariationFunc {
       seed = Tools.FTOI(pValue);
     else if (PARAM_SCALE.equalsIgnoreCase(pName))
       scale = pValue;
+    else if (PARAM_JITTER.equalsIgnoreCase(pName))
+      jitter = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -82,7 +92,7 @@ public class DLAWFFunc extends VariationFunc {
   }
 
   private String makeKey() {
-    return String.valueOf(buffer_size) + "#" + String.valueOf(_max_iter) + "#" + String.valueOf(seed);
+    return String.valueOf(buffer_size) + "#" + String.valueOf(_max_iter) + "#" + String.valueOf(seed) + "#" + String.valueOf(scale) + "#" + String.valueOf(jitter);
   }
 
   private static class Point {
@@ -93,20 +103,43 @@ public class DLAWFFunc extends VariationFunc {
 
   private static Map<String, List<Point>> cache = new HashMap<String, List<Point>>();
 
+  private DoubleWrapper sina = new DoubleWrapper();
+  private DoubleWrapper cosa = new DoubleWrapper();
+
   private List<Point> getPoints() {
+    double jitterRadius = Math.max(Math.min(1.0, jitter), 0.0);
+
     String key = makeKey();
     List<Point> res = cache.get(key);
     if (res == null) {
+      AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
+      randGen.randomize(seed);
       short[][] points = calculate();
       res = new ArrayList<Point>();
       for (int i = 0; i < points.length; i++) {
         for (int j = 0; j < points[i].length; j++) {
+          double aRnd;
+          // Always calculate random jitter at each cell to ensure to have always the same result, even if more cells get populated.
+          // This way the growth may be animated by just increasig the max_iter param. 
+          if (jitterRadius > MathLib.EPSILON) {
+            aRnd = randGen.random();
+          }
+          else {
+            aRnd = 0.0;
+          }
           if (points[i][j] != 0) {
             Point point = new Point();
             point.x = (double) (i - buffer_size / 2) / (double) buffer_size * scale;
             point.y = (double) (j - buffer_size / 2) / (double) buffer_size * scale;
+            if (jitterRadius > MathLib.EPSILON) {
+              double alpha = aRnd * 2 * M_PI;
+              sinAndCos(alpha, sina, cosa);
+              point.x += jitterRadius * cosa.value;
+              point.y += jitterRadius * sina.value;
+            }
             res.add(point);
           }
+
         }
       }
       cache.put(key, res);
