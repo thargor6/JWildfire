@@ -42,7 +42,7 @@ public class RandomParamMutation implements Mutation {
     BLACKLIST.add("truchet");
   }
 
-  private void setRandomFlameProperty(Layer pLayer, double pAmount) {
+  public void setRandomFlameProperty(Layer pLayer, double pAmount) {
     List<VariationFunc> variations = new ArrayList<VariationFunc>();
 
     for (XForm xForm : pLayer.getXForms()) {

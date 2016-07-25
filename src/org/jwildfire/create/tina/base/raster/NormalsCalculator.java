@@ -27,7 +27,7 @@ public class NormalsCalculator {
   private final float nyBuf[][];
   private final float nzBuf[][];
 
-  public final static float ZBUF_ZMAX = -Float.MAX_VALUE;
+  public final static float ZBUF_ZMIN = -Float.MAX_VALUE;
 
   private class Corner {
     public final int dx, dy;
@@ -92,8 +92,8 @@ public class NormalsCalculator {
 
   public void refreshNormalsAtLocation(int x, int y) {
     double zb = zBuf[x][y];
-    nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMAX;
-    if (zb != ZBUF_ZMAX) {
+    nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
+    if (zb != ZBUF_ZMIN) {
       for (int pass = 0; pass < NNEIGHBOURS.length; pass++) {
         double nx = 0.0, ny = 0.0, nz = 0.0;
         int samples = 0;
@@ -108,7 +108,7 @@ public class NormalsCalculator {
             double by = NNEIGHBOURS[pass][k].b.dy;
             double bzb = zBuf[x + NNEIGHBOURS[pass][k].b.dx][y + NNEIGHBOURS[pass][k].b.dy];
             double bz = zb - bzb;
-            if (azb != ZBUF_ZMAX && bzb != ZBUF_ZMAX) {
+            if (azb != ZBUF_ZMIN && bzb != ZBUF_ZMIN) {
               samples++;
               nx += ay * bz - az * by;
               ny += az * bx - ax * bz;
@@ -118,7 +118,7 @@ public class NormalsCalculator {
         }
         if (samples >= 4) {
           double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
-          if (r > 0.000001) {
+          if (r > MathLib.EPSILON) {
             nx /= r;
             ny /= r;
             nz /= r;
@@ -137,8 +137,8 @@ public class NormalsCalculator {
       for (int j = 0; j < rasterHeight; j++) {
         double nx = 0.0, ny = 0.0, nz = 0.0;
         double zb = zBuf[i][j];
-        nxBuf[i][j] = nyBuf[i][j] = nzBuf[i][j] = ZBUF_ZMAX;
-        if (zb != ZBUF_ZMAX) {
+        nxBuf[i][j] = nyBuf[i][j] = nzBuf[i][j] = ZBUF_ZMIN;
+        if (zb != ZBUF_ZMIN) {
 
           for (int pass = 0; pass < NNEIGHBOURS.length; pass++) {
             nx = ny = nz = 0.0;
@@ -155,7 +155,7 @@ public class NormalsCalculator {
                 double by = NNEIGHBOURS[pass][k].b.dy;
                 double bzb = zBuf[i + NNEIGHBOURS[pass][k].b.dx][j + NNEIGHBOURS[pass][k].b.dy];
                 double bz = zb - bzb;
-                if (azb != ZBUF_ZMAX && bzb != ZBUF_ZMAX) {
+                if (azb != ZBUF_ZMIN && bzb != ZBUF_ZMIN) {
                   nx += ay * bz - az * by;
                   ny += az * bx - ax * bz;
                   nz += ax * by - ay * bx;
