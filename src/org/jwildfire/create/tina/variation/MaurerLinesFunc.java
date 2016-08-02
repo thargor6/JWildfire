@@ -313,6 +313,10 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int INITIAL_OFFSET = 8;
   private static final int A_B_LINEAR_INCREMENT = 9;
   
+  private static final int RANDOM = 0;
+  private static final int PERPENDICULAR = 1;
+  private static final int ROUNDED_CAPS = 2;
+  
   private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
   private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
   private double c_param = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
@@ -347,6 +351,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private double show_points_param = 0;
   private double show_curve_param = 0;
   
+  private double line_thickness_strategy = RANDOM;
   private double line_thickness_param = 0.1;
   private double point_thickness_param = 1;
   private double curve_thickness_param = 0.5;
@@ -1195,7 +1200,9 @@ public class MaurerLinesFunc extends VariationFunc {
     if (Double.isNaN(line_slope)) {
       line_intercept = Double.NaN;
     }     
-    else { line_intercept = y1 - (line_slope * x1); }
+    else { 
+      line_intercept = y1 - (line_slope * x1); 
+    }
     
     double point_angle = getPointAngle(end_point1, end_point2);
     
@@ -1214,7 +1221,7 @@ public class MaurerLinesFunc extends VariationFunc {
     double xmid = (x1 + x2)/2.0;
     double ymid = (y1 + y2)/2.0;
 
-    double speed1 = curve.getSpeed(theta1, end_point1);
+    // double speed1 = curve.getSpeed(theta1, end_point1);
 
     boolean use_render_mode = true;
     if (show_points_param > 0 || show_curve_param > 0) {
@@ -2199,8 +2206,38 @@ public class MaurerLinesFunc extends VariationFunc {
       
       // handling thickness
       if (line_thickness != 0) {
-        xout += ((pContext.random() - 0.5) * line_thickness);
-        yout += ((pContext.random() - 0.5) * line_thickness);
+        if (line_thickness_strategy == RANDOM) {  //  previous simple random offset from center of line 
+          xout += ((pContext.random() - 0.5) * line_thickness);
+          yout += ((pContext.random() - 0.5) * line_thickness);
+        }
+        else if (line_thickness_strategy == PERPENDICULAR) { // random distance _perpendicular_ to unmodified Maurer line;
+          double xnorm = xdiff / line_length;
+          double ynorm = ydiff / line_length;
+          double xperpnorm = -ynorm;
+          double yperpnorm = xnorm;
+          double perp_offset = (pContext.random() - 0.5) * line_thickness;
+          double xperp = perp_offset * xperpnorm;
+          double yperp = perp_offset * yperpnorm;
+          xout += xperp;
+          yout += yperp;
+        }
+        else if (line_thickness_strategy == ROUNDED_CAPS) { // random distance _perpendicular_ to unmodified Maurer line, but with rounded caps
+          if (line_delta < line_thickness || ((line_length - line_delta) < line_thickness)) {
+            xout += ((pContext.random() - 0.5) * line_thickness);
+            yout += ((pContext.random() - 0.5) * line_thickness);
+          }
+          else {
+            double xnorm = xdiff / line_length;
+            double ynorm = ydiff / line_length;
+            double xperpnorm = -ynorm;
+            double yperpnorm = xnorm;
+            double perp_offset = (pContext.random() - 0.5) * line_thickness;
+            double xperp = perp_offset * xperpnorm;
+            double yperp = perp_offset * yperpnorm;
+            xout += xperp;
+            yout += yperp;
+          }
+        }
       }
     }
     
@@ -2379,7 +2416,8 @@ public class MaurerLinesFunc extends VariationFunc {
         sampled_vals = sampled_line_lengths;
       }
       else if (direct_color_measure == SPEED_AT_ENDPOINT1) {
-        val = speed1;
+        // val = speed1;
+        val = curve.getSpeed(theta1, end_point1);
         sampled_vals = sampled_speeds;
       }
       else if (direct_color_measure == CURRENT_THETA)  {
