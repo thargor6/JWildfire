@@ -16,11 +16,12 @@
 */
 package org.jwildfire.create.tina.render.image;
 
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.GammaCorrectedRGBPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
-import org.jwildfire.create.tina.render.PostDOFCalculator;
+import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderImageThread extends AbstractImageRenderThread {
@@ -33,12 +34,12 @@ public class RenderImageThread extends AbstractImageRenderThread {
   private final SimpleImage img;
   private final PostDOFCalculator dofCalculator;
 
-  public RenderImageThread(LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg, PostDOFCalculator pDofCalculator) {
+  public RenderImageThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg, PostDOFCalculator pDofCalculator) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
     endRow = pEndRow;
-    logDensityPnt = new LogDensityPoint();
+    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     rbgPoint = new GammaCorrectedRGBPoint();
     img = pImg;
     dofCalculator = pDofCalculator;
@@ -56,7 +57,6 @@ public class RenderImageThread extends AbstractImageRenderThread {
             dofCalculator.addSample(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue, logDensityPnt.dofDist, logDensityPnt.rp.zBuf);
           }
           img.setARGB(j, i, rbgPoint.alpha, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
-
         }
       }
     }

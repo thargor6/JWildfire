@@ -36,7 +36,7 @@ public class SampleTonemapper {
   private int imageHeight;
 
   public SampleTonemapper(Flame pFlame, AbstractRaster pRaster, int pRasterWidth, int pRasterHeight, int pImageWidth, int pImageHeight, AbstractRandomGenerator pRandGen) {
-    logDensityPnt = new LogDensityPoint();
+    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     toolPixel = new Pixel();
     flame = pFlame.makeCopy();
     randGen = pRandGen;

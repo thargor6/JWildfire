@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -53,7 +54,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
   }
 
   @Override
-  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
@@ -79,7 +80,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
               double finalRed = plotRed * scl * prj.intensity;
               double finalGreen = plotGreen * scl * prj.intensity;
               double finalBlue = plotBlue * scl * prj.intensity;
-              plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist);
+              plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
               if (plotBufferIdx >= plotBuffer.length) {
                 applySamplesToRaster();
               }
@@ -98,7 +99,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
       double finalRed = plotRed * prj.intensity;
       double finalGreen = plotGreen * prj.intensity;
       double finalBlue = plotBlue * prj.intensity;
-      plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist);
+      plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
       if (plotBufferIdx >= plotBuffer.length) {
         applySamplesToRaster();
       }

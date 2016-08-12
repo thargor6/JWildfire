@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render.image;
 
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
 import org.jwildfire.image.SimpleHDRImage;
@@ -27,11 +28,11 @@ public class RenderHDRIntensityMapThread extends AbstractImageRenderThread {
   private final LogDensityPoint logDensityPnt;
   private final SimpleHDRImage img;
 
-  public RenderHDRIntensityMapThread(LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg) {
+  public RenderHDRIntensityMapThread(Flame pFlame, LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg) {
     logDensityFilter = pLogDensityFilter;
     startRow = pStartRow;
     endRow = pEndRow;
-    logDensityPnt = new LogDensityPoint();
+    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     img = pImg;
   }
 

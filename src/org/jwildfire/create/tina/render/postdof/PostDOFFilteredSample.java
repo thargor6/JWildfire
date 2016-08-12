@@ -14,35 +14,33 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.render;
+package org.jwildfire.create.tina.render.postdof;
 
-public class PlotSample {
-  public int screenX, screenY;
-  public double r, g, b;
-  public double x, y, z;
-  public double originalX, originalY, originalZ;
-  public double material;
-  public double dofDist;
+public class PostDOFFilteredSample {
+  private final int x, y;
+  private final PostDOFSample sample;
+  private final double intensity;
 
-  public void set(double x, double y, double z) {
+  public PostDOFFilteredSample(int x, int y, PostDOFSample sample, double intensity) {
     this.x = x;
     this.y = y;
-    this.z = z;
+    this.sample = sample;
+    this.intensity = intensity;
   }
 
-  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist, double originalX, double originalY, double originalZ) {
-    this.screenX = screenX;
-    this.screenY = screenY;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.originalX = originalX;
-    this.originalY = originalY;
-    this.originalZ = originalZ;
-    this.material = material;
-    this.dofDist = dofDist;
+  public int getX() {
+    return x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
+  public PostDOFSample getSample() {
+    return sample;
+  }
+
+  public double getIntensity() {
+    return intensity;
   }
 }

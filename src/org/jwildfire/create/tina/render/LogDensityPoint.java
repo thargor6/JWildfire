@@ -30,11 +30,19 @@ public class LogDensityPoint {
   public double material;
   public double dofDist;
 
-  public final RasterPoint rp = new RasterPoint();
-  public final RasterPoint lu = new RasterPoint();
-  public final RasterPoint ru = new RasterPoint();
-  public final RasterPoint lb = new RasterPoint();
-  public final RasterPoint rb = new RasterPoint();
+  public final RasterPoint rp;
+  public final RasterPoint lu;
+  public final RasterPoint ru;
+  public final RasterPoint lb;
+  public final RasterPoint rb;
+
+  public LogDensityPoint(int lightCount) {
+    rp = new RasterPoint(lightCount);
+    lu = new RasterPoint(lightCount);
+    ru = new RasterPoint(lightCount);
+    lb = new RasterPoint(lightCount);
+    rb = new RasterPoint(lightCount);
+  }
 
   public void clear() {
     red = green = blue = intensity = 0.0;

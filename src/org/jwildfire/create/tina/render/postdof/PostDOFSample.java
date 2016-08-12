@@ -14,35 +14,60 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.render;
+package org.jwildfire.create.tina.render.postdof;
 
-public class PlotSample {
-  public int screenX, screenY;
-  public double r, g, b;
-  public double x, y, z;
-  public double originalX, originalY, originalZ;
-  public double material;
-  public double dofDist;
+public class PostDOFSample {
+  private final int x, y;
+  private final float z, dofDist;
+  private int r, g, b;
 
-  public void set(double x, double y, double z) {
+  public PostDOFSample(int x, int y, float z, float dofDist, int r, int g, int b) {
     this.x = x;
     this.y = y;
     this.z = z;
-  }
-
-  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist, double originalX, double originalY, double originalZ) {
-    this.screenX = screenX;
-    this.screenY = screenY;
+    this.dofDist = dofDist;
     this.r = r;
     this.g = g;
     this.b = b;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.originalX = originalX;
-    this.originalY = originalY;
-    this.originalZ = originalZ;
-    this.material = material;
-    this.dofDist = dofDist;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
+  public float getZ() {
+    return z;
+  }
+
+  public float getDofDist() {
+    return dofDist;
+  }
+
+  public int getR() {
+    return r;
+  }
+
+  public int getG() {
+    return g;
+  }
+
+  public int getB() {
+    return b;
+  }
+
+  public void setR(int r) {
+    this.r = r;
+  }
+
+  public void setG(int g) {
+    this.g = g;
+  }
+
+  public void setB(int b) {
+    this.b = b;
   }
 }
