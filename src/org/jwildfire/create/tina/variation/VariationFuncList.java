@@ -471,7 +471,7 @@ public class VariationFuncList {
       registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
       //registerVariationFunc(DLA_3D_WFFunc.class);
       registerVariationFunc(MaterialConstWFFunc.class);
-      registerVariationFunc(MaterialIncWFFunc.class);
+      //registerVariationFunc(MaterialIncWFFunc.class);
     }
 
     resolvedAliasMap = new HashMap<>();

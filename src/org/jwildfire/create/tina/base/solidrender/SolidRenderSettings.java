@@ -117,8 +117,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       return isValidMaterialIdx(toIdx) ? materials.get(toIdx) : null;
     }
     else {
-      //return isValidMaterialIdx(fromIdx) && isValidMaterialIdx(toIdx) ? morphMaterial(materials.get(fromIdx), materials.get(toIdx), scl) : null;
-      return scl <= 0.5 ? isValidMaterialIdx(fromIdx) ? materials.get(fromIdx) : null : isValidMaterialIdx(toIdx) ? materials.get(toIdx) : null;
+      return isValidMaterialIdx(fromIdx) && isValidMaterialIdx(toIdx) ? morphMaterial(materials.get(fromIdx), materials.get(toIdx), scl) : null;
+      //return scl <= 0.5 ? isValidMaterialIdx(fromIdx) ? materials.get(fromIdx) : null : isValidMaterialIdx(toIdx) ? materials.get(toIdx) : null;
     }
   }
 
