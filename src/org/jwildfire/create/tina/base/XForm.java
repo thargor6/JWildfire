@@ -177,6 +177,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
   boolean hasZXPostCoeffs;
   boolean hasZXCoeffs;
 
+  private int index = -1;
+
   @AnimAware
   private final List<Variation> variations = new ArrayList<Variation>();
   private final double modifiedWeights[] = new double[Constants.MAX_MOD_WEIGHT_COUNT]; // the same like "xaos" in Apophysis
@@ -1489,6 +1491,14 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public MotionCurve getColorCurve() {
     return colorCurve;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
   }
 
 }

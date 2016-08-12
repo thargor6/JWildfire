@@ -59,7 +59,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected XYZPoint p;
   protected XYZPoint q;
   protected XForm xf;
-  protected final XYZProjectedPoint prj = new XYZProjectedPoint();
+  protected final XYZProjectedPoint prj;
   protected PointProjector projector;
   protected final ColorProvider colorProvider;
 
@@ -72,6 +72,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
     else {
       colorProvider = pLayer.isSmoothGradient() ? new SmoothColorProvider() : new DefaultColorProvider();
     }
+
+    boolean withLightmaps = flame.getSolidRenderSettings().isLightsEnabled() && flame.getSolidRenderSettings().isHardShadowsEnabled();
+    prj = new XYZProjectedPoint(withLightmaps ? flame.getSolidRenderSettings().getLights().size() : 0);
 
     Flame flame = pPacket.getFlame();
     switch (flame.getPostSymmetryType()) {
@@ -92,7 +95,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void init() {
-    raster.notifyInit(view);
+    if (raster != null)
+      raster.notifyInit(view);
   }
 
   public void preFuseIter() {
@@ -132,7 +136,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
+    // TODO remove ?
+    ctx.setFromXFormIdx(xf.getIndex());
     xf = selectNextXForm(xf);
+    // TODO remove ?
+    ctx.setToXFormIdx(xf.getIndex());
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
       return;
@@ -261,6 +269,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected int plotBufferIdx = 0;
 
   protected PlotSample[] plotBuffer = initPlotBuffer();
+
+  protected int shadowMapPlotBufferIdx[] = initShadowMapPlotBufferIdx();
+  protected PlotSample[][] shadowMapPlotBuffer = initShadowMapPlotBuffer();
 
   interface ColorProvider extends Serializable {
     RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint);
@@ -391,7 +402,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
     if (p.rgbColor) {
       plotRed = p.redColor;
       plotGreen = p.greenColor;
@@ -412,7 +423,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
-    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
@@ -420,6 +431,36 @@ public class DefaultRenderIterationState extends RenderIterationState {
       for (IterationObserver observer : observers) {
         observer.notifyIterationFinished(renderThread, screenX, screenY, prj, q.x, q.y, q.z, finalRed, finalGreen, finalBlue);
       }
+    }
+  }
+
+  private PlotSample[][] initShadowMapPlotBuffer() {
+    if (flame.isWithShadows()) {
+      PlotSample[][] res = new PlotSample[flame.getSolidRenderSettings().getLights().size()][];
+      for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
+        if (flame.getSolidRenderSettings().getLights().get(i).isCastShadows()) {
+          res[i] = new PlotSample[Tools.PLOT_BUFFER_SIZE];
+          for (int j = 0; j < res[i].length; j++) {
+            res[i][j] = new PlotSample();
+          }
+        }
+        else {
+          res[i] = null;
+        }
+      }
+      return res;
+    }
+    else {
+      return new PlotSample[0][];
+    }
+  }
+
+  private int[] initShadowMapPlotBufferIdx() {
+    if (flame.isWithShadows()) {
+      return new int[flame.getSolidRenderSettings().getLights().size()];
+    }
+    else {
+      return new int[0];
     }
   }
 
@@ -616,11 +657,24 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public class DefaultPointProjector implements PointProjector {
+    XYZPoint untransformed = new XYZPoint();
 
     @Override
     public void projectPoint(XYZPoint q) {
-      if (q.doHide || !view.project(q, prj) || q.isNaN())
+      if (q.doHide)
         return;
+      untransformed.assign(q);
+      boolean insideView = view.project(q, prj);
+      if (prj.hasLight != null) {
+        for (int i = 0; i < prj.hasLight.length; i++) {
+          if (prj.hasLight[i]) {
+            plotShadowMapPoint(i, prj.lightX[i], prj.lightY[i], prj.lightZ[i]);
+          }
+        }
+      }
+      if (!insideView || q.isNaN())
+        return;
+
       double rawX, rawY;
       int screenX, screenY;
       if ((flame.getAntialiasAmount() > EPSILON) && (flame.getAntialiasRadius() > EPSILON) && (randGen.random() > 1.0 - flame.getAntialiasAmount())) {
@@ -646,9 +700,20 @@ public class DefaultRenderIterationState extends RenderIterationState {
           return;
       }
       double intensity = prj.intensity * layer.getWeight();
-      plotPoint(screenX, screenY, rawX, rawY, intensity);
+      plotPoint(screenX, screenY, rawX, rawY, intensity, untransformed);
     }
 
+    private void plotShadowMapPoint(int i, double x, double y, double z) {
+      shadowMapPlotBuffer[i][shadowMapPlotBufferIdx[i]++].set(x, y, z);
+      if (shadowMapPlotBufferIdx[i] >= shadowMapPlotBuffer[i].length) {
+        applyShadowMapSamplesToRaster(i);
+      }
+    }
+
+    private void applyShadowMapSamplesToRaster(int idx) {
+      raster.addShadowMapSamples(idx, shadowMapPlotBuffer[idx], shadowMapPlotBufferIdx[idx]);
+      shadowMapPlotBufferIdx[idx] = 0;
+    }
   }
 
   public void cleanup() {

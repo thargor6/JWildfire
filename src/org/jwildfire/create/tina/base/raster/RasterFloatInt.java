@@ -81,7 +81,17 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public void notifyInit(FlameRendererView view) {
+  public void addShadowMapSamples(int pShadowMapIdx, PlotSample[] pPlotBuffer, int pCount) {
     // EMPTY
+  }
+
+  @Override
+  public void notifyInit(FlameRendererView view) {
+    // EMPTY    
+  }
+
+  @Override
+  public void cleanupRaster() {
+    // EMPTY       
   }
 }

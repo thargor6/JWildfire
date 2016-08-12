@@ -11,6 +11,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -83,7 +84,13 @@ public class FlamePreviewHelper implements IterationObserver {
     return !isTransparencyEnabled() && !isDrawFocusPointEnabled(cfg) && cfg.isProgressivePreview();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender) {
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
+    // TODO
+    //    pAllowUseCache = false;
+
+    if (!pAllowUseCache) {
+      prevRenderer = null;
+    }
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
@@ -94,7 +101,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
     if (pReRender) {
       if (!pQuickRender || !isProgressivePreviewEnabled(cfg)) {
-        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale);
+        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
         if (img != null) {
           imgPanel.setImage(img);
         }
@@ -111,7 +118,16 @@ public class FlamePreviewHelper implements IterationObserver {
     }
 
     if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
-      startBackgroundRender(imgPanel);
+      if (pAllowUseCache) {
+        System.out.println("ATTEMPT REUSE");
+        SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
+        if (img != null) {
+          imgPanel.setImage(img);
+        }
+      }
+      else {
+        startBackgroundRender(imgPanel);
+      }
     }
 
     if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null) {
@@ -137,7 +153,12 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
+  private FlameRenderer prevRenderer;
+
+  public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
+    if (!pAllowUseCache) {
+      prevRenderer = null;
+    }
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
 
@@ -197,7 +218,18 @@ public class FlamePreviewHelper implements IterationObserver {
 
             long t0 = System.currentTimeMillis();
             renderer.setRenderScale(renderScale);
-            RenderedFlame res = renderer.renderFlame(info);
+
+            RenderedFlame res;
+            if (prevRenderer != null && pAllowUseCache) {
+              System.out.println("!!!REUSE");
+              res = prevRenderer.rerenderFlame(info);
+            }
+            else {
+              res = renderer.renderFlame(info);
+              prevRenderer = renderer;
+              System.out.println("NO REUSE!!!");
+            }
+
             SimpleImage img = res.getImage();
             long t1 = System.currentTimeMillis();
             img.getBufferedImg().setAccelerationPriority(1.0f);
@@ -667,7 +699,7 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
     displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
   }
 

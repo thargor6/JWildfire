@@ -31,6 +31,17 @@ public class RasterPoint implements Serializable {
   public boolean hasMaterial;
   public double material;
   public double dofDist;
+  public boolean hasShadows;
+  public boolean insideShadow[];
+
+  public RasterPoint(int lightCount) {
+    if (lightCount > 0) {
+      insideShadow = new boolean[lightCount];
+    }
+    else {
+      insideShadow = null;
+    }
+  }
 
   public void clear() {
     red = green = blue = 0.0;
@@ -39,6 +50,6 @@ public class RasterPoint implements Serializable {
     ao = 0.0;
     material = 0.0;
     dofDist = 0.0;
-    hasNormals = hasSSAO = hasMaterial = false;
+    hasNormals = hasSSAO = hasMaterial = hasShadows = false;
   }
 }

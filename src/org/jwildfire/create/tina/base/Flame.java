@@ -29,6 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -1516,6 +1517,24 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setPostBlurFallOff(double postBlurFallOff) {
     this.postBlurFallOff = postBlurFallOff;
+  }
+
+  public boolean isWithShadows() {
+    boolean res = getSolidRenderSettings().isSolidRenderingEnabled() && getSolidRenderSettings().isHardShadowsEnabled();
+    if (res) {
+      res = false;
+      for (PointLight light : getSolidRenderSettings().getLights()) {
+        if (light.isCastShadows()) {
+          res = true;
+          break;
+        }
+      }
+    }
+    return res;
+  }
+
+  public int getActiveLightCount() {
+    return isWithShadows() ? getSolidRenderSettings().getLights().size() : 0;
   }
 
 }

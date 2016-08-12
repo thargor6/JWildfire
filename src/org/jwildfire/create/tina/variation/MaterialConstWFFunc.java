@@ -32,4 +32,9 @@ public class MaterialConstWFFunc extends SimpleVariationFunc {
     return "mat_const_wf";
   }
 
+  @Override
+  public int getPriority() {
+    return 1;
+  }
+
 }

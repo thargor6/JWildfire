@@ -100,17 +100,24 @@ public class Layer implements Assignable<Layer>, Serializable {
   public void refreshModWeightTables(FlameTransformationContext pFlameTransformationContext) {
     double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
     int n = getXForms().size();
-
-    for (XForm xForm : this.getXForms()) {
-      xForm.initTransform();
-      for (Variation var : xForm.getVariations()) {
-        var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
+    {
+      int idx = 0;
+      for (XForm xForm : this.getXForms()) {
+        xForm.initTransform();
+        xForm.setIndex(idx++);
+        for (Variation var : xForm.getVariations()) {
+          var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
+        }
       }
     }
-    for (XForm xForm : this.getFinalXForms()) {
-      xForm.initTransform();
-      for (Variation var : xForm.getVariations()) {
-        var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
+    {
+      int idx = 0;
+      for (XForm xForm : this.getFinalXForms()) {
+        xForm.initTransform();
+        xForm.setIndex(idx++);
+        for (Variation var : xForm.getVariations()) {
+          var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
+        }
       }
     }
     for (int k = 0; k < n; k++) {

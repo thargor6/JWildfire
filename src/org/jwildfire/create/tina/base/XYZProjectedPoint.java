@@ -24,5 +24,19 @@ public class XYZProjectedPoint implements Serializable {
   public double x, y, z;
   public double intensity;
   public double dofDist;
+  public double lightX[], lightY[], lightZ[];
+  public boolean hasLight[];
 
+  public XYZProjectedPoint(int lightCount) {
+    if (lightCount > 0) {
+      lightX = new double[lightCount];
+      lightY = new double[lightCount];
+      lightZ = new double[lightCount];
+      hasLight = new boolean[lightCount];
+    }
+    else {
+      lightX = lightY = lightZ = null;
+      hasLight = null;
+    }
+  }
 }

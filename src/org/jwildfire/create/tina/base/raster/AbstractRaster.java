@@ -34,6 +34,10 @@ public interface AbstractRaster {
 
   void finalizeRaster();
 
+  void cleanupRaster();
+
+  void addShadowMapSamples(int pShadowMapIdx, PlotSample[] pPlotBuffer, int pCount);
+
   void notifyInit(FlameRendererView view);
 
 }

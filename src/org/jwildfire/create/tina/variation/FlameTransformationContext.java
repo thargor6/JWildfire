@@ -25,6 +25,7 @@ public class FlameTransformationContext {
   private final int frame;
   private boolean preview;
   private boolean preserveZCoordinate;
+  private int fromXFormIdx, toXFormIdx;
 
   public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen, int pFrame) {
     randGen = pRandGen;
@@ -67,4 +68,21 @@ public class FlameTransformationContext {
   public void setPreserveZCoordinate(boolean pPreserveZCoordinate) {
     preserveZCoordinate = pPreserveZCoordinate;
   }
+
+  public void setFromXFormIdx(int idx) {
+    fromXFormIdx = idx;
+  }
+
+  public void setToXFormIdx(int idx) {
+    toXFormIdx = idx;
+  }
+
+  public int getFromXFormIdx() {
+    return fromXFormIdx;
+  }
+
+  public int getToXFormIdx() {
+    return toXFormIdx;
+  }
+
 }
