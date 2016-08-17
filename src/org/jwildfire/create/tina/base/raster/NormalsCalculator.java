@@ -88,7 +88,7 @@ public class NormalsCalculator {
       new CornerPair(new Corner(-1, 1), new Corner(-1, 0))
   };
 
-  private final CornerPair[][] NNEIGHBOURS = new CornerPair[][] { NNEIGHBOURS_NORMAL, NNEIGHBOURS_DIAG, NNEIGHBOURS_COARSE };
+  private final CornerPair[][] NNEIGHBOURS = new CornerPair[][] { NNEIGHBOURS_DIAG, NNEIGHBOURS_NORMAL, NNEIGHBOURS_COARSE };
 
   public void refreshNormalsAtLocation(int x, int y) {
     double zb = zBuf[x][y];
@@ -102,21 +102,23 @@ public class NormalsCalculator {
             double ax = NNEIGHBOURS[pass][k].a.dx;
             double ay = NNEIGHBOURS[pass][k].a.dy;
             double azb = zBuf[x + NNEIGHBOURS[pass][k].a.dx][y + NNEIGHBOURS[pass][k].a.dy];
-            double az = zb - azb;
+            if (azb != ZBUF_ZMIN) {
+              double az = zb - azb;
 
-            double bx = NNEIGHBOURS[pass][k].b.dx;
-            double by = NNEIGHBOURS[pass][k].b.dy;
-            double bzb = zBuf[x + NNEIGHBOURS[pass][k].b.dx][y + NNEIGHBOURS[pass][k].b.dy];
-            double bz = zb - bzb;
-            if (azb != ZBUF_ZMIN && bzb != ZBUF_ZMIN) {
-              samples++;
-              nx += ay * bz - az * by;
-              ny += az * bx - ax * bz;
-              nz += ax * by - ay * bx;
+              double bx = NNEIGHBOURS[pass][k].b.dx;
+              double by = NNEIGHBOURS[pass][k].b.dy;
+              double bzb = zBuf[x + NNEIGHBOURS[pass][k].b.dx][y + NNEIGHBOURS[pass][k].b.dy];
+              double bz = zb - bzb;
+              if (bzb != ZBUF_ZMIN) {
+                samples++;
+                nx += ay * bz - az * by;
+                ny += az * bx - ax * bz;
+                nz += ax * by - ay * bx;
+              }
             }
           }
         }
-        if (samples >= 4) {
+        if (samples >= 3) {
           double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
           if (r > MathLib.EPSILON) {
             nx /= r;

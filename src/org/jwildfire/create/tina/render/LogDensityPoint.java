@@ -24,6 +24,11 @@ public class LogDensityPoint {
   public double blue;
   public double intensity;
 
+  public boolean hasSolidColors;
+  public double solidRed;
+  public double solidGreen;
+  public double solidBlue;
+
   public boolean hasNormals;
   public double nx, ny, nz;
   public double ao;
@@ -46,7 +51,8 @@ public class LogDensityPoint {
 
   public void clear() {
     red = green = blue = intensity = 0.0;
-    hasNormals = false;
+    solidRed = solidGreen = solidBlue = 0.0;
+    hasNormals = hasSolidColors = false;
     nx = ny = nz = ao = material = dofDist = 0.0;
   }
 

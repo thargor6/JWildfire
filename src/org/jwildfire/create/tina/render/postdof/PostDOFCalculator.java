@@ -43,7 +43,7 @@ public class PostDOFCalculator {
     kernelScale = 1.0;
   }
 
-  public void addSample(int x, int y, int r, int g, int b, double dofDist, double z) {
+  public void addSample(int x, int y, float r, float g, float b, double dofDist, double z) {
     if (r > 0 || g > 0 || b > 0) {
       PostDOFSample sample = new PostDOFSample(x, y, (float) z, (float) dofDist, r, g, b);
       processSample(sample);

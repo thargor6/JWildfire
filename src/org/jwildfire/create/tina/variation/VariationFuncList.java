@@ -469,9 +469,6 @@ public class VariationFuncList {
     if (Tools.ENABLE_SOLID_RENDERING) {
       registerVariationFunc(OBJMeshWFFunc.class);
       registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
-      //registerVariationFunc(DLA_3D_WFFunc.class);
-      registerVariationFunc(MaterialConstWFFunc.class);
-      //registerVariationFunc(MaterialIncWFFunc.class);
     }
 
     resolvedAliasMap = new HashMap<>();

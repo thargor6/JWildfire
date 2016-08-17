@@ -45,6 +45,7 @@ import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.render.GammaCorrectionFilter.HSLRGBConverter;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
@@ -62,9 +63,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected final XYZProjectedPoint prj;
   protected PointProjector projector;
   protected final ColorProvider colorProvider;
+  protected final boolean solidRendering;
 
   public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
+    solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     projector = new DefaultPointProjector();
     if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
       colorProvider = new GradientMapColorProvider(pLayer.getGradientMapFilename());
@@ -73,7 +76,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       colorProvider = pLayer.isSmoothGradient() ? new SmoothColorProvider() : new DefaultColorProvider();
     }
 
-    boolean withLightmaps = flame.getSolidRenderSettings().isLightsEnabled() && flame.getSolidRenderSettings().isHardShadowsEnabled();
+    boolean withLightmaps = flame.getSolidRenderSettings().isHardShadowsEnabled();
     prj = new XYZProjectedPoint(withLightmaps ? flame.getSolidRenderSettings().getLights().size() : 0);
 
     Flame flame = pPacket.getFlame();
@@ -112,6 +115,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     p.modGamma = 0.0;
     p.modContrast = 0.0;
     p.modSaturation = 0.0;
+    p.modHue = 0.0;
 
     xf = layer.getXForms().get(0);
     transformPoint();
@@ -136,11 +140,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
-    // TODO remove ?
-    ctx.setFromXFormIdx(xf.getIndex());
     xf = selectNextXForm(xf);
-    // TODO remove ?
-    ctx.setToXFormIdx(xf.getIndex());
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
       return;
@@ -419,7 +419,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotGreen = color.green;
       plotBlue = color.blue;
     }
-    transformPlotColor(p);
+    if (!solidRendering)
+      transformPlotColor(p);
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
@@ -512,7 +513,16 @@ public class DefaultRenderIterationState extends RenderIterationState {
       plotGreen += (plotGreen - avg) * p.modSaturation;
       plotBlue += (plotBlue - avg) * p.modSaturation;
     }
+    if (fabs(p.modHue) > EPSILON) {
+      hslrgbConverter.fromRgb(plotRed / MathLib.C_255, plotGreen / MathLib.C_255, plotBlue / MathLib.C_255);
+      hslrgbConverter.fromHsl(hslrgbConverter.getHue() + p.modHue, hslrgbConverter.getSaturation(), hslrgbConverter.getLuminosity());
+      plotRed = Tools.roundColor(hslrgbConverter.getRed() * MathLib.C_255);
+      plotGreen = Tools.roundColor(hslrgbConverter.getGreen() * MathLib.C_255);
+      plotBlue = Tools.roundColor(hslrgbConverter.getBlue() * MathLib.C_255);
+    }
   }
+
+  HSLRGBConverter hslrgbConverter = new HSLRGBConverter();
 
   public interface PointProjector {
     void projectPoint(XYZPoint q);

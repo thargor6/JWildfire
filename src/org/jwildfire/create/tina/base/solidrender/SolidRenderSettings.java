@@ -14,7 +14,6 @@ import org.jwildfire.create.tina.edit.Assignable;
 @SuppressWarnings("serial")
 public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Serializable {
   private boolean solidRenderingEnabled = false;
-  private boolean lightsEnabled = true;
   private boolean ssaoEnabled = true;
   private double ssaoIntensity = 1.0;
   private boolean hardShadowsEnabled = false;
@@ -58,7 +57,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   }
 
   public void setupDefaultGlobals() {
-    lightsEnabled = true;
     ssaoEnabled = true;
     ssaoIntensity = 1.0;
     hardShadowsEnabled = false;
@@ -150,14 +148,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     return lights;
   }
 
-  public boolean isLightsEnabled() {
-    return lightsEnabled;
-  }
-
-  public void setLightsEnabled(boolean lightsEnabled) {
-    this.lightsEnabled = lightsEnabled;
-  }
-
   public boolean isSsaoEnabled() {
     return ssaoEnabled;
   }
@@ -193,7 +183,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   @Override
   public void assign(SolidRenderSettings pSrc) {
     solidRenderingEnabled = pSrc.solidRenderingEnabled;
-    lightsEnabled = pSrc.lightsEnabled;
     ssaoEnabled = pSrc.ssaoEnabled;
     ssaoIntensity = pSrc.ssaoIntensity;
     hardShadowsEnabled = pSrc.hardShadowsEnabled;
@@ -225,7 +214,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       return true;
     }
 
-    if (solidRenderingEnabled != pSrc.solidRenderingEnabled || lightsEnabled != pSrc.lightsEnabled ||
+    if (solidRenderingEnabled != pSrc.solidRenderingEnabled ||
         ssaoEnabled != pSrc.ssaoEnabled || hardShadowsEnabled != pSrc.hardShadowsEnabled ||
         fabs(ssaoIntensity - pSrc.ssaoIntensity) > EPSILON) {
       return false;

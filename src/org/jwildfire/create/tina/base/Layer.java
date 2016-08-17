@@ -101,20 +101,16 @@ public class Layer implements Assignable<Layer>, Serializable {
     double tp[] = new double[Constants.MAX_MOD_WEIGHT_COUNT];
     int n = getXForms().size();
     {
-      int idx = 0;
       for (XForm xForm : this.getXForms()) {
         xForm.initTransform();
-        xForm.setIndex(idx++);
         for (Variation var : xForm.getVariations()) {
           var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
         }
       }
     }
     {
-      int idx = 0;
       for (XForm xForm : this.getFinalXForms()) {
         xForm.initTransform();
-        xForm.setIndex(idx++);
         for (Variation var : xForm.getVariations()) {
           var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
         }

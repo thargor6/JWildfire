@@ -19,9 +19,9 @@ package org.jwildfire.create.tina.render.postdof;
 public class PostDOFSample {
   private final int x, y;
   private final float z, dofDist;
-  private int r, g, b;
+  private float r, g, b;
 
-  public PostDOFSample(int x, int y, float z, float dofDist, int r, int g, int b) {
+  public PostDOFSample(int x, int y, float z, float dofDist, float r, float g, float b) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -47,27 +47,27 @@ public class PostDOFSample {
     return dofDist;
   }
 
-  public int getR() {
+  public float getR() {
     return r;
   }
 
-  public int getG() {
+  public float getG() {
     return g;
   }
 
-  public int getB() {
+  public float getB() {
     return b;
   }
 
-  public void setR(int r) {
+  public void setR(float r) {
     this.r = r;
   }
 
-  public void setG(int g) {
+  public void setG(float g) {
     this.g = g;
   }
 
-  public void setB(int b) {
+  public void setB(float b) {
     this.b = b;
   }
 }

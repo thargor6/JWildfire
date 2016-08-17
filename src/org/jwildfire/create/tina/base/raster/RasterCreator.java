@@ -23,7 +23,7 @@ public enum RasterCreator {
   {
     @Override
     public Class<? extends AbstractRaster> getRasterClass(Flame pFlame) {
-      return pFlame.getSolidRenderSettings().isSolidRenderingEnabled() ? (pFlame.getSolidRenderSettings().isLightsEnabled() ? RasterFloatIntWithPreciseZBuffer.class : RasterFloatIntWithAccumulatedZBuffer.class) : RasterFloatInt.class;
+      return pFlame.getSolidRenderSettings().isSolidRenderingEnabled() ? RasterFloatIntWithPreciseZBuffer.class : RasterFloatInt.class;
     }
   };
 

@@ -24,6 +24,12 @@ public class RasterPoint implements Serializable {
   public double green;
   public double blue;
   public long count;
+
+  public double solidRed;
+  public double solidGreen;
+  public double solidBlue;
+  public boolean hasSolidColors;
+
   public boolean hasNormals;
   public double nx, ny, nz, zBuf;
   public boolean hasSSAO;
@@ -45,11 +51,12 @@ public class RasterPoint implements Serializable {
 
   public void clear() {
     red = green = blue = 0.0;
+    solidRed = solidGreen = solidBlue = 0.0;
     count = 0;
     nx = ny = nz = zBuf = 0.0;
     ao = 0.0;
     material = 0.0;
     dofDist = 0.0;
-    hasNormals = hasSSAO = hasMaterial = hasShadows = false;
+    hasNormals = hasSSAO = hasMaterial = hasShadows = hasSolidColors = false;
   }
 }

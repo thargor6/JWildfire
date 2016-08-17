@@ -32,6 +32,7 @@ public final class TransformationPreparePostAffineStep extends AbstractTransform
     pDstPoint.modGamma = pVarT.modGamma;
     pDstPoint.modContrast = pVarT.modContrast;
     pDstPoint.modSaturation = pVarT.modSaturation;
+    pDstPoint.modHue = pVarT.modHue;
     pDstPoint.rgbColor = pVarT.rgbColor;
     pDstPoint.redColor = pVarT.redColor;
     pDstPoint.greenColor = pVarT.greenColor;

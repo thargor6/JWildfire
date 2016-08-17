@@ -168,6 +168,10 @@ public class TinaControllerParameter {
   public JSlider pXFormModSaturationSlider;
   public JWFNumberField pXFormModSaturationSpeedREd;
   public JSlider pXFormModSaturationSpeedSlider;
+  public JWFNumberField pXFormModHueREd;
+  public JSlider pXFormModHueSlider;
+  public JWFNumberField pXFormModHueSpeedREd;
+  public JSlider pXFormModHueSpeedSlider;
   public JWFNumberField pXFormOpacityREd;
   public JSlider pXFormOpacitySlider;
   public JComboBox pXFormDrawModeCmb;
@@ -579,7 +583,6 @@ public class TinaControllerParameter {
   public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
   public JSlider tinaSolidRenderingSSAOIntensitySlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  public JCheckBox tinaSolidRenderingEnableLightsCBx;
   public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
@@ -1089,7 +1092,7 @@ public class TinaControllerParameter {
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton, JComboBox pMeshGenOutputTypeCmb,
       JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
-      JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx, JCheckBox tinaSolidRenderingEnableLightsCBx,
+      JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
       JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
@@ -1101,7 +1104,8 @@ public class TinaControllerParameter {
       JSlider tinaSolidRenderingMaterialSpecularSlider, JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd, JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider,
       JButton tinaSolidRenderingMaterialSpecularColorBtn, JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb, JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd,
       JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider, JButton tinaSolidRenderingMaterialReflMapBtn, JButton tinaSolidRenderingMaterialSelectReflMapBtn,
-      JButton tinaSolidRenderingMaterialRemoveReflMapBtn
+      JButton tinaSolidRenderingMaterialRemoveReflMapBtn,
+      JWFNumberField pXFormModHueREd, JSlider pXFormModHueSlider, JWFNumberField pXFormModHueSpeedREd, JSlider pXFormModHueSpeedSlider
       ) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
@@ -1279,7 +1283,6 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingSSAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
     this.tinaSolidRenderingSSAOIntensitySlider = tinaSolidRenderingSSAOIntensitySlider;
     this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
-    this.tinaSolidRenderingEnableLightsCBx = tinaSolidRenderingEnableLightsCBx;
     this.resetSolidRenderingGlobalSettingsBtn = resetSolidRenderingGlobalSettingsBtn;
     this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;
     this.resetSolidRenderingLightsBtn = resetSolidRenderingLightsBtn;
@@ -1314,5 +1317,9 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingMaterialReflMapBtn = tinaSolidRenderingMaterialReflMapBtn;
     this.tinaSolidRenderingMaterialSelectReflMapBtn = tinaSolidRenderingMaterialSelectReflMapBtn;
     this.tinaSolidRenderingMaterialRemoveReflMapBtn = tinaSolidRenderingMaterialRemoveReflMapBtn;
+    this.pXFormModHueREd = pXFormModHueREd;
+    this.pXFormModHueSlider = pXFormModHueSlider;
+    this.pXFormModHueSpeedREd = pXFormModHueSpeedREd;
+    this.pXFormModHueSpeedSlider = pXFormModHueSpeedSlider;
   }
 }

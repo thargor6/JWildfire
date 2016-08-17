@@ -78,6 +78,8 @@ public class AbstractFlameWriter {
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST_SPEED, pXForm.getModContrastSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION, pXForm.getModSaturation()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION_SPEED, pXForm.getModSaturationSpeed()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE, pXForm.getModHue()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE_SPEED, pXForm.getModHueSpeed()));
     if (pXForm.getDrawMode().equals(DrawMode.OPAQUE)) {
       attrList.add(pXB.createAttr("opacity", pXForm.getOpacity()));
     }
@@ -332,7 +334,6 @@ public class AbstractFlameWriter {
 
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHTS_ENABLED, pFlame.getSolidRenderSettings().isLightsEnabled()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_ENABLED, pFlame.getSolidRenderSettings().isSsaoEnabled()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_INTENSITY, pFlame.getSolidRenderSettings().getSsaoIntensity()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));

@@ -214,7 +214,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
     enableControl(data.tinaSolidRenderingSSAOIntensityREd, disabled);
     enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
-    enableControl(data.tinaSolidRenderingEnableLightsCBx, disabled);
     enableControl(data.tinaSolidRenderingEnableSSAOCBx, disabled);
     enableControl(data.resetSolidRenderingGlobalSettingsBtn, disabled);
     enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
@@ -814,7 +813,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.tinaSolidRenderingCBx.setSelected(settings.isSolidRenderingEnabled());
     data.tinaSolidRenderingEnableSSAOCBx.setSelected(settings.isSsaoEnabled());
     data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
-    data.tinaSolidRenderingEnableLightsCBx.setSelected(settings.isLightsEnabled());
     data.tinaSolidRenderingSSAOIntensityREd.setText(Tools.doubleToString(settings.getSsaoIntensity()));
     data.tinaSolidRenderingSSAOIntensitySlider.setValue(Tools.FTOI(settings.getSsaoIntensity() * TinaController.SLIDER_SCALE_CENTRE));
   }
@@ -1342,18 +1340,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (flame != null) {
         owner.saveUndoPoint();
         flame.getSolidRenderSettings().setHardShadowsEnabled(data.tinaSolidRenderingEnableHardShadowsCBx.isSelected());
-        enableControls();
-        owner.refreshFlameImage(true, false, 1, true, true);
-      }
-    }
-  }
-
-  public void solidRenderingEnableLightsCBx_changed() {
-    if (!isNoRefresh()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        owner.saveUndoPoint();
-        flame.getSolidRenderSettings().setLightsEnabled(data.tinaSolidRenderingEnableLightsCBx.isSelected());
         enableControls();
         owner.refreshFlameImage(true, false, 1, true, true);
       }

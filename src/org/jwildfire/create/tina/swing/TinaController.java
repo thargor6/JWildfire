@@ -498,6 +498,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormModSaturationSpeedREd = parameterObject.pXFormModSaturationSpeedREd;
     data.xFormModSaturationSpeedSlider = parameterObject.pXFormModSaturationSpeedSlider;
 
+    data.xFormModHueREd = parameterObject.pXFormModHueREd;
+    data.xFormModHueSlider = parameterObject.pXFormModHueSlider;
+    data.xFormModHueSpeedREd = parameterObject.pXFormModHueSpeedREd;
+    data.xFormModHueSpeedSlider = parameterObject.pXFormModHueSpeedSlider;
+
     data.xFormOpacityREd = parameterObject.pXFormOpacityREd;
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
@@ -612,7 +617,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingSSAOIntensityREd = parameterObject.tinaSolidRenderingSSAOIntensityREd;
     data.tinaSolidRenderingSSAOIntensitySlider = parameterObject.tinaSolidRenderingSSAOIntensitySlider;
     data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
-    data.tinaSolidRenderingEnableLightsCBx = parameterObject.tinaSolidRenderingEnableLightsCBx;
     data.resetSolidRenderingGlobalSettingsBtn = parameterObject.resetSolidRenderingGlobalSettingsBtn;
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
@@ -2389,6 +2393,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormModSaturationSpeedREd.setText(Tools.doubleToString(pXForm.getModSaturationSpeed()));
         data.xFormModSaturationSpeedSlider.setValue(Tools.FTOI(pXForm.getModSaturationSpeed() * SLIDER_SCALE_COLOR));
 
+        data.xFormModHueREd.setText(Tools.doubleToString(pXForm.getModHue()));
+        data.xFormModHueSlider.setValue(Tools.FTOI(pXForm.getModHue() * SLIDER_SCALE_COLOR));
+        data.xFormModHueSpeedREd.setText(Tools.doubleToString(pXForm.getModHueSpeed()));
+        data.xFormModHueSpeedSlider.setValue(Tools.FTOI(pXForm.getModHueSpeed() * SLIDER_SCALE_COLOR));
+
         data.xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
@@ -2418,6 +2427,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormModSaturationSlider.setValue(0);
         data.xFormModSaturationSpeedREd.setText(null);
         data.xFormModSaturationSpeedSlider.setValue(0);
+        data.xFormModHueREd.setText(null);
+        data.xFormModHueSlider.setValue(0);
+        data.xFormModHueSpeedREd.setText(null);
+        data.xFormModHueSpeedSlider.setValue(0);
         data.xFormOpacityREd.setText(null);
         data.xFormOpacitySlider.setValue(0);
         data.transformationWeightREd.setText(null);
@@ -3314,6 +3327,22 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void xFormModSaturationSpeedSlider_changed() {
     xFormSliderChanged(data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueREd_changed() {
+    xFormTextFieldChanged(data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSlider_changed() {
+    xFormSliderChanged(data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
   }
 
   private void setRelWeight(double pValue) {
@@ -5173,7 +5202,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     variationControlsDelegates = pVariationControlsDelegates;
   }
 
-  public void xFormModGammaRandomizeBtn_Clicked(boolean pWholeFractal) {
+  public void xFormModLocalGammaRandomizeAllBtn_Clicked(boolean pWholeFractal) {
     if (pWholeFractal) {
       Flame flame = getCurrFlame();
       if (flame != null) {
@@ -5198,7 +5227,107 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void xFormModGammaResetBtn_Clicked(boolean pWholeFractal) {
+  public void xFormModGammaRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModGamma();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModGamma();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModContrastRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModContrast();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModContrast();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModSaturationRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModSaturation();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModSaturation();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModHueRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModHue();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModHue();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModLocalGammaResetAllBtn_Clicked(boolean pWholeFractal) {
     if (pWholeFractal) {
       Flame flame = getCurrFlame();
       if (flame != null) {

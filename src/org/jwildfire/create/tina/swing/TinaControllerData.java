@@ -398,7 +398,6 @@ public class TinaControllerData {
   public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
   public JSlider tinaSolidRenderingSSAOIntensitySlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  public JCheckBox tinaSolidRenderingEnableLightsCBx;
   public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
@@ -433,4 +432,10 @@ public class TinaControllerData {
   public JButton tinaSolidRenderingMaterialReflMapBtn;
   public JButton tinaSolidRenderingMaterialSelectReflMapBtn;
   public JButton tinaSolidRenderingMaterialRemoveReflMapBtn;
+
+  public JWFNumberField xFormModHueREd;
+  public JSlider xFormModHueSlider;
+  public JWFNumberField xFormModHueSpeedREd;
+  public JSlider xFormModHueSpeedSlider;
+
 }

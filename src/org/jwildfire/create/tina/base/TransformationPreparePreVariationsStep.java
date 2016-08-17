@@ -36,6 +36,7 @@ public final class TransformationPreparePreVariationsStep extends AbstractTransf
     pVarT.modGamma = pAffineT.modGamma;
     pVarT.modContrast = pAffineT.modContrast;
     pVarT.modSaturation = pAffineT.modSaturation;
+    pVarT.modHue = pAffineT.modHue;
     pVarT.rgbColor = pAffineT.rgbColor;
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;

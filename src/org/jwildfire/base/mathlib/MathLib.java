@@ -32,6 +32,7 @@ public final class MathLib {
   public static final double M_SQRT2 = Math.sqrt(2.0);
   public final static double M_E = 2.7182818284590452354;
   public final static double M_LOG2E = 1.4426950408889634074;
+  public final static double C_255 = 255.0;
 
   private static BaseMathLib baseLib = BaseMathLibType.FAST_MATH.createInstance();
 

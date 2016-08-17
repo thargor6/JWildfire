@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.render.postdof;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class PostDOFBuffer {
@@ -26,6 +27,14 @@ public class PostDOFBuffer {
   private final float[][] rBuf, gBuf, bBuf;
 
   public PostDOFBuffer(SimpleImage pImage) {
+    width = pImage.getImageWidth();
+    height = pImage.getImageHeight();
+    rBuf = new float[getWidth()][getHeight()];
+    gBuf = new float[getWidth()][getHeight()];
+    bBuf = new float[getWidth()][getHeight()];
+  }
+
+  public PostDOFBuffer(SimpleHDRImage pImage) {
     width = pImage.getImageWidth();
     height = pImage.getImageHeight();
     rBuf = new float[getWidth()][getHeight()];
@@ -48,6 +57,14 @@ public class PostDOFBuffer {
         int g = Tools.roundColor(gBuf[i][j]);
         int b = Tools.roundColor(bBuf[i][j]);
         pImage.setARGB(i, j, pImage.getAValue(i, j), r, g, b);
+      }
+    }
+  }
+
+  public void renderToImage(SimpleHDRImage pHDRImage) {
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        pHDRImage.setRGB(i, j, rBuf[i][j], gBuf[i][j], bBuf[i][j]);
       }
     }
   }

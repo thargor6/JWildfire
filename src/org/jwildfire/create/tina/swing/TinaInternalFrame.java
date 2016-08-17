@@ -3118,7 +3118,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSlider.setMaximum(100);
       xFormModGammaSlider.setLocation(new Point(125, 21));
       xFormModGammaSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaSlider.setBounds(125, 6, 195, 22);
+      xFormModGammaSlider.setBounds(125, 2, 156, 22);
       xFormModGammaSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3143,7 +3143,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaREd.setHasMinValue(true);
       xFormModGammaREd.setHasMaxValue(true);
       xFormModGammaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModGammaREd.setBounds(70, 6, 55, 22);
+      xFormModGammaREd.setBounds(68, 2, 55, 22);
       xFormModGammaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3166,7 +3166,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setPreferredSize(new Dimension(64, 22));
       label.setLocation(new Point(6, 21));
       label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      label.setBounds(6, 6, 64, 22);
+      label.setBounds(4, 2, 64, 22);
       panel_1.add(label);
 
       JLabel label_2 = new JLabel();
@@ -3176,7 +3176,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setPreferredSize(new Dimension(64, 22));
       label_2.setLocation(new Point(6, 47));
       label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      label_2.setBounds(6, 32, 64, 22);
+      label_2.setBounds(4, 22, 64, 22);
       panel_1.add(label_2);
 
       xFormModGammaSpeedSlider = new JSlider();
@@ -3187,7 +3187,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSpeedSlider.setMaximum(100);
       xFormModGammaSpeedSlider.setLocation(new Point(125, 47));
       xFormModGammaSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaSpeedSlider.setBounds(125, 32, 195, 22);
+      xFormModGammaSpeedSlider.setBounds(125, 22, 156, 22);
       xFormModGammaSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3212,7 +3212,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaSpeedREd.setHasMinValue(true);
       xFormModGammaSpeedREd.setHasMaxValue(true);
       xFormModGammaSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModGammaSpeedREd.setBounds(70, 32, 55, 22);
+      xFormModGammaSpeedREd.setBounds(68, 22, 55, 22);
       xFormModGammaSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3234,7 +3234,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblContrast.setPreferredSize(new Dimension(64, 22));
       lblContrast.setLocation(new Point(6, 21));
       lblContrast.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblContrast.setBounds(6, 61, 64, 22);
+      lblContrast.setBounds(4, 46, 64, 22);
       panel_1.add(lblContrast);
 
       xFormModContrastREd = new JWFNumberField();
@@ -3248,7 +3248,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastREd.setHasMinValue(true);
       xFormModContrastREd.setHasMaxValue(true);
       xFormModContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModContrastREd.setBounds(70, 61, 55, 22);
+      xFormModContrastREd.setBounds(68, 46, 55, 22);
       xFormModContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3272,7 +3272,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSlider.setMaximum(100);
       xFormModContrastSlider.setLocation(new Point(125, 21));
       xFormModContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModContrastSlider.setBounds(125, 61, 195, 22);
+      xFormModContrastSlider.setBounds(125, 46, 156, 22);
       xFormModContrastSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3294,7 +3294,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblContrstSpd.setPreferredSize(new Dimension(64, 22));
       lblContrstSpd.setLocation(new Point(6, 47));
       lblContrstSpd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblContrstSpd.setBounds(6, 87, 64, 22);
+      lblContrstSpd.setBounds(4, 66, 64, 22);
       panel_1.add(lblContrstSpd);
 
       xFormModContrastSpeedREd = new JWFNumberField();
@@ -3308,7 +3308,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSpeedREd.setHasMinValue(true);
       xFormModContrastSpeedREd.setHasMaxValue(true);
       xFormModContrastSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModContrastSpeedREd.setBounds(70, 87, 55, 22);
+      xFormModContrastSpeedREd.setBounds(68, 66, 55, 22);
       xFormModContrastSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3331,7 +3331,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModContrastSpeedSlider.setMaximum(100);
       xFormModContrastSpeedSlider.setLocation(new Point(125, 47));
       xFormModContrastSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModContrastSpeedSlider.setBounds(125, 87, 195, 22);
+      xFormModContrastSpeedSlider.setBounds(125, 66, 156, 22);
       xFormModContrastSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3353,7 +3353,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSaturation.setPreferredSize(new Dimension(64, 22));
       lblSaturation.setLocation(new Point(6, 21));
       lblSaturation.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSaturation.setBounds(6, 117, 64, 22);
+      lblSaturation.setBounds(4, 90, 64, 22);
       panel_1.add(lblSaturation);
 
       xFormModSaturationREd = new JWFNumberField();
@@ -3367,7 +3367,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationREd.setHasMinValue(true);
       xFormModSaturationREd.setHasMaxValue(true);
       xFormModSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModSaturationREd.setBounds(70, 117, 55, 22);
+      xFormModSaturationREd.setBounds(68, 90, 55, 22);
       xFormModSaturationREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3390,7 +3390,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSlider.setMaximum(100);
       xFormModSaturationSlider.setLocation(new Point(125, 21));
       xFormModSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModSaturationSlider.setBounds(125, 117, 195, 22);
+      xFormModSaturationSlider.setBounds(125, 90, 156, 22);
       xFormModSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3412,7 +3412,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblSaturatSpd.setPreferredSize(new Dimension(64, 22));
       lblSaturatSpd.setLocation(new Point(6, 47));
       lblSaturatSpd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSaturatSpd.setBounds(6, 143, 64, 22);
+      lblSaturatSpd.setBounds(4, 110, 64, 22);
       panel_1.add(lblSaturatSpd);
 
       xFormModSaturationSpeedREd = new JWFNumberField();
@@ -3426,7 +3426,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSpeedREd.setHasMinValue(true);
       xFormModSaturationSpeedREd.setHasMaxValue(true);
       xFormModSaturationSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModSaturationSpeedREd.setBounds(70, 143, 55, 22);
+      xFormModSaturationSpeedREd.setBounds(68, 110, 55, 22);
       xFormModSaturationSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3449,7 +3449,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModSaturationSpeedSlider.setMaximum(100);
       xFormModSaturationSpeedSlider.setLocation(new Point(125, 47));
       xFormModSaturationSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModSaturationSpeedSlider.setBounds(125, 143, 195, 22);
+      xFormModSaturationSpeedSlider.setBounds(125, 110, 156, 22);
       xFormModSaturationSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3467,34 +3467,210 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModGammaRandomizeBtn = new JButton();
       xFormModGammaRandomizeBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.xFormModGammaRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+          tinaController.xFormModLocalGammaRandomizeAllBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
         }
       });
-      xFormModGammaRandomizeBtn.setToolTipText("Randomize local color-changing effects, either of the whole fractal or the selected transform");
-      xFormModGammaRandomizeBtn.setText("Randomize");
+      xFormModGammaRandomizeBtn.setToolTipText("Randomize all local color-changing effects, either of the whole fractal or the selected transform");
+      xFormModGammaRandomizeBtn.setText("Randomize all");
       xFormModGammaRandomizeBtn.setPreferredSize(new Dimension(104, 24));
       xFormModGammaRandomizeBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaRandomizeBtn.setBounds(4, 172, 104, 24);
+      xFormModGammaRandomizeBtn.setBounds(4, 176, 104, 24);
       panel_1.add(xFormModGammaRandomizeBtn);
 
       xFormModGammaResetBtn = new JButton();
       xFormModGammaResetBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.xFormModGammaResetBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+          tinaController.xFormModLocalGammaResetAllBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
         }
       });
       xFormModGammaResetBtn.setToolTipText("Reset local color-changing effects, either of the whole fractal or the selected transform");
-      xFormModGammaResetBtn.setText("Reset");
+      xFormModGammaResetBtn.setText("Reset all");
       xFormModGammaResetBtn.setPreferredSize(new Dimension(190, 24));
       xFormModGammaResetBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaResetBtn.setBounds(111, 172, 104, 24);
+      xFormModGammaResetBtn.setBounds(111, 176, 104, 24);
       panel_1.add(xFormModGammaResetBtn);
 
       xFormModGammaWholeFractalCBx = new JCheckBox("Whole fractal");
       xFormModGammaWholeFractalCBx.setSelected(true);
       xFormModGammaWholeFractalCBx.setToolTipText("Check if Randomize/Reset should apply to the whole fractal rather than only to the selected transform");
-      xFormModGammaWholeFractalCBx.setBounds(218, 175, 104, 18);
+      xFormModGammaWholeFractalCBx.setBounds(218, 178, 104, 18);
       panel_1.add(xFormModGammaWholeFractalCBx);
+
+      xFormModHueREd = new JWFNumberField();
+      xFormModHueREd.setValueStep(0.01);
+      xFormModHueREd.setText("");
+      xFormModHueREd.setSize(new Dimension(55, 22));
+      xFormModHueREd.setPreferredSize(new Dimension(55, 22));
+      xFormModHueREd.setMinValue(-2.0);
+      xFormModHueREd.setMaxValue(2.0);
+      xFormModHueREd.setLocation(new Point(70, 21));
+      xFormModHueREd.setHasMinValue(true);
+      xFormModHueREd.setHasMaxValue(true);
+      xFormModHueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModHueREd.setBounds(68, 134, 55, 22);
+      xFormModHueREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModHueREd.isMouseAdjusting() || xFormModHueREd.getMouseChangeCount() == 0) {
+              if (!xFormModHueSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModHueREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModHueREd);
+
+      JLabel lblHue = new JLabel();
+      lblHue.setToolTipText("Local modification of hue");
+      lblHue.setText("Hue");
+      lblHue.setSize(new Dimension(64, 22));
+      lblHue.setPreferredSize(new Dimension(64, 22));
+      lblHue.setLocation(new Point(6, 21));
+      lblHue.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHue.setBounds(4, 134, 64, 22);
+      panel_1.add(lblHue);
+
+      JLabel lblHueSpd = new JLabel();
+      lblHueSpd.setToolTipText("Blending of local hue change");
+      lblHueSpd.setText("Hue Spd");
+      lblHueSpd.setSize(new Dimension(64, 22));
+      lblHueSpd.setPreferredSize(new Dimension(64, 22));
+      lblHueSpd.setLocation(new Point(6, 47));
+      lblHueSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHueSpd.setBounds(4, 154, 64, 22);
+      panel_1.add(lblHueSpd);
+
+      xFormModHueSpeedREd = new JWFNumberField();
+      xFormModHueSpeedREd.setValueStep(0.01);
+      xFormModHueSpeedREd.setText("");
+      xFormModHueSpeedREd.setSize(new Dimension(55, 22));
+      xFormModHueSpeedREd.setPreferredSize(new Dimension(55, 22));
+      xFormModHueSpeedREd.setMinValue(-1.0);
+      xFormModHueSpeedREd.setMaxValue(1.0);
+      xFormModHueSpeedREd.setLocation(new Point(70, 47));
+      xFormModHueSpeedREd.setHasMinValue(true);
+      xFormModHueSpeedREd.setHasMaxValue(true);
+      xFormModHueSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModHueSpeedREd.setBounds(68, 154, 55, 22);
+      xFormModHueSpeedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormModHueSpeedREd.isMouseAdjusting() || xFormModHueSpeedREd.getMouseChangeCount() == 0) {
+              if (!xFormModHueSpeedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormModHueSpeedREd_changed();
+          }
+        }
+      });
+      panel_1.add(xFormModHueSpeedREd);
+
+      xFormModHueSlider = new JSlider();
+      xFormModHueSlider.setValue(0);
+      xFormModHueSlider.setSize(new Dimension(172, 22));
+      xFormModHueSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModHueSlider.setMinimum(-100);
+      xFormModHueSlider.setMaximum(100);
+      xFormModHueSlider.setLocation(new Point(125, 21));
+      xFormModHueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModHueSlider.setBounds(125, 134, 156, 22);
+      xFormModHueSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModHueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModHueSlider_changed();
+        }
+      });
+      panel_1.add(xFormModHueSlider);
+
+      xFormModHueSpeedSlider = new JSlider();
+      xFormModHueSpeedSlider.setValue(0);
+      xFormModHueSpeedSlider.setSize(new Dimension(172, 22));
+      xFormModHueSpeedSlider.setPreferredSize(new Dimension(172, 22));
+      xFormModHueSpeedSlider.setMinimum(-100);
+      xFormModHueSpeedSlider.setMaximum(100);
+      xFormModHueSpeedSlider.setLocation(new Point(125, 47));
+      xFormModHueSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModHueSpeedSlider.setBounds(125, 154, 156, 22);
+      xFormModHueSpeedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormModHueSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormModHueSpeedSlider_changed();
+        }
+      });
+      panel_1.add(xFormModHueSpeedSlider);
+
+      JButton toggleButton = new JButton();
+      toggleButton.setToolTipText("Randomize local gamma");
+      toggleButton.setSize(new Dimension(95, 24));
+      toggleButton.setSelected(false);
+      toggleButton.setPreferredSize(new Dimension(42, 24));
+      toggleButton.setLocation(new Point(4, 4));
+      toggleButton.setBounds(282, 10, 42, 24);
+      toggleButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      toggleButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModGammaRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      panel_1.add(toggleButton);
+
+      JButton toggleButton_1 = new JButton();
+      toggleButton_1.setToolTipText("Randomize local contrast");
+      toggleButton_1.setSize(new Dimension(95, 24));
+      toggleButton_1.setSelected(false);
+      toggleButton_1.setPreferredSize(new Dimension(42, 24));
+      toggleButton_1.setLocation(new Point(4, 4));
+      toggleButton_1.setBounds(282, 54, 42, 24);
+      toggleButton_1.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      toggleButton_1.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModContrastRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      panel_1.add(toggleButton_1);
+
+      JButton toggleButton_2 = new JButton();
+      toggleButton_2.setToolTipText("Randomize local saturation");
+      toggleButton_2.setSize(new Dimension(95, 24));
+      toggleButton_2.setSelected(false);
+      toggleButton_2.setPreferredSize(new Dimension(42, 24));
+      toggleButton_2.setLocation(new Point(4, 4));
+      toggleButton_2.setBounds(282, 98, 42, 24);
+      toggleButton_2.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      toggleButton_2.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModSaturationRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      panel_1.add(toggleButton_2);
+
+      JButton toggleButton_3 = new JButton();
+      toggleButton_3.setToolTipText("Randomize local hue");
+      toggleButton_3.setSize(new Dimension(95, 24));
+      toggleButton_3.setSelected(false);
+      toggleButton_3.setPreferredSize(new Dimension(42, 24));
+      toggleButton_3.setLocation(new Point(4, 4));
+      toggleButton_3.setBounds(282, 142, 42, 24);
+      toggleButton_3.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      toggleButton_3.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.xFormModHueRandomizeBtn_Clicked(getXFormModGammaWholeFractalCBx().isSelected());
+        }
+      });
+      panel_1.add(toggleButton_3);
     }
     return tinaTransformationsTabbedPane;
   }
@@ -4842,7 +5018,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
         getMeshGenOutputTypeCmb(), getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableSSAOCBx(), getTinaSolidRenderingSSAOIntensityREd(),
-        getTinaSolidRenderingSSAOIntensitySlider(), getTinaSolidRenderingEnableHardShadowsCBx(), getTinaSolidRenderingEnableLightsCBx(),
+        getTinaSolidRenderingSSAOIntensitySlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
         getResetSolidRenderingGlobalSettingsBtn(), getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
@@ -4855,7 +5031,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingMaterialSpecularSharpnessSlider(), getTinaSolidRenderingMaterialSpecularColorBtn(),
         getTinaSolidRenderingMaterialDiffuseResponseCmb(), getTinaSolidRenderingMaterialReflectionMapIntensityREd(),
         getTinaSolidRenderingMaterialReflectionMapIntensitySlider(), getTinaSolidRenderingMaterialReflMapBtn(),
-        getTinaSolidRenderingMaterialSelectReflMapBtn(), getTinaSolidRenderingMaterialRemoveReflMapBtn()
+        getTinaSolidRenderingMaterialSelectReflMapBtn(), getTinaSolidRenderingMaterialRemoveReflMapBtn(),
+        getXFormModHueREd(), getXFormModHueSlider(), getXFormModHueSpeedREd(), getXFormModHueSpeedSlider()
         );
 
     tinaController = new TinaController(params);
@@ -10935,7 +11112,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JCheckBox tinaSolidRenderingCBx;
   private JCheckBox tinaSolidRenderingEnableSSAOCBx;
   private JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  private JCheckBox tinaSolidRenderingEnableLightsCBx;
   private JButton resetSolidRenderingGlobalSettingsBtn;
   private JButton resetSolidRenderingMaterialsBtn;
   private JPanel panel_114;
@@ -10975,6 +11151,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel lblReflectionMap;
   private JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd;
   private JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+  private JWFNumberField xFormModHueREd;
+  private JWFNumberField xFormModHueSpeedREd;
+  private JSlider xFormModHueSlider;
+  private JSlider xFormModHueSpeedSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -23547,18 +23727,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingEnableHardShadowsCBx.setBounds(30, 66, 169, 18);
       panel_1.add(tinaSolidRenderingEnableHardShadowsCBx);
 
-      tinaSolidRenderingEnableLightsCBx = new JCheckBox("Enable lights");
-      tinaSolidRenderingEnableLightsCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingEnableLightsCBx_changed();
-          }
-        }
-      });
-      tinaSolidRenderingEnableLightsCBx.setActionCommand("Enable solid rendering");
-      tinaSolidRenderingEnableLightsCBx.setBounds(30, 36, 169, 18);
-      panel_1.add(tinaSolidRenderingEnableLightsCBx);
-
       resetSolidRenderingGlobalSettingsBtn = new JButton();
       resetSolidRenderingGlobalSettingsBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -24007,10 +24175,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getTinaSolidRenderingEnableHardShadowsCBx() {
     return tinaSolidRenderingEnableHardShadowsCBx;
-  }
-
-  public JCheckBox getTinaSolidRenderingEnableLightsCBx() {
-    return tinaSolidRenderingEnableLightsCBx;
   }
 
   public JButton getResetSolidRenderingGlobalSettingsBtn() {
@@ -24743,6 +24907,22 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaSolidRenderingMaterialReflectionMapIntensitySlider() {
     return tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+  }
+
+  public JWFNumberField getXFormModHueREd() {
+    return xFormModHueREd;
+  }
+
+  public JWFNumberField getXFormModHueSpeedREd() {
+    return xFormModHueSpeedREd;
+  }
+
+  public JSlider getXFormModHueSlider() {
+    return xFormModHueSlider;
+  }
+
+  public JSlider getXFormModHueSpeedSlider() {
+    return xFormModHueSpeedSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -163,6 +163,10 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormModSaturationSlider.setEnabled(enabled);
     data.xFormModSaturationSpeedREd.setEnabled(enabled);
     data.xFormModSaturationSpeedSlider.setEnabled(enabled);
+    data.xFormModHueREd.setEnabled(enabled);
+    data.xFormModHueSlider.setEnabled(enabled);
+    data.xFormModHueSpeedREd.setEnabled(enabled);
+    data.xFormModHueSpeedSlider.setEnabled(enabled);
     data.xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);

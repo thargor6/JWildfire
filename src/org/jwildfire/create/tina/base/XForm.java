@@ -59,6 +59,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double modSaturation;
   @AnimAware
   private double modSaturationSpeed;
+  @AnimAware
+  private double modHue;
+  @AnimAware
+  private double modHueSpeed;
 
   @AnimAware
   double xyCoeff00;
@@ -303,6 +307,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
   double modContrast2;
   double modSaturation1;
   double modSaturation2;
+  double modHue1;
+  double modHue2;
 
   public void initTransform() {
     // precalculate those variables to simplify the expression: 
@@ -320,6 +326,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
     modSaturation1 = (1 + modSaturationSpeed) * 0.5;
     modSaturation2 = modSaturation * (1 - modSaturationSpeed) * 0.5;
+
+    modHue1 = (1 + modHueSpeed) * 0.5;
+    modHue2 = modHue * (1 - modHueSpeed) * 0.5;
 
     updateHasXYCoeffs();
     updateHasXYPostCoeffs();
@@ -492,6 +501,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modContrastSpeed = pXForm.modContrastSpeed;
     modSaturation = pXForm.modSaturation;
     modSaturationSpeed = pXForm.modSaturationSpeed;
+    modHue = pXForm.modHue;
+    modHueSpeed = pXForm.modHueSpeed;
 
     xyCoeff00 = pXForm.xyCoeff00;
     xyCoeff00Curve.assign(pXForm.xyCoeff00Curve);
@@ -617,6 +628,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
+        (fabs(modHue - pSrc.modHue) > EPSILON) || (fabs(modHueSpeed - pSrc.modHueSpeed) > EPSILON) ||
 
         (fabs(xyCoeff00 - pSrc.xyCoeff00) > EPSILON) || !xyCoeff00Curve.isEqual(pSrc.xyCoeff00Curve) ||
         (fabs(xyCoeff01 - pSrc.xyCoeff01) > EPSILON) || !xyCoeff01Curve.isEqual(pSrc.xyCoeff01Curve) ||
@@ -778,12 +790,30 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void randomizeModColorEffects() {
+    randomizeModGamma();
+    randomizeModContrast();
+    randomizeModSaturation();
+    randomizeModHue();
+  }
+
+  public void randomizeModGamma() {
     modGamma = 1.0 - 2.0 * Math.random();
     modGammaSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+  }
+
+  public void randomizeModContrast() {
     modContrast = 1.0 - 2.0 * Math.random();
     modContrastSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+  }
+
+  public void randomizeModSaturation() {
     modSaturation = 1.0 - 2.0 * Math.random();
     modSaturationSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
+  }
+
+  public void randomizeModHue() {
+    modHue = 1.0 - 2.0 * Math.random();
+    modHueSpeed = Math.random() < 0.33 ? 1.0 - 2.0 * Math.random() : 0;
   }
 
   public void resetModColorEffects() {
@@ -793,6 +823,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     modContrastSpeed = 0.0;
     modSaturation = 0.0;
     modSaturationSpeed = 0.0;
+    modHue = 0.0;
+    modHueSpeed = 0.0;
   }
 
   public double getXYCoeff00() {
@@ -1493,12 +1525,20 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return colorCurve;
   }
 
-  public int getIndex() {
-    return index;
+  public double getModHue() {
+    return modHue;
   }
 
-  public void setIndex(int index) {
-    this.index = index;
+  public void setModHue(double modHue) {
+    this.modHue = modHue;
+  }
+
+  public double getModHueSpeed() {
+    return modHueSpeed;
+  }
+
+  public void setModHueSpeed(double modHueSpeed) {
+    this.modHueSpeed = modHueSpeed;
   }
 
 }

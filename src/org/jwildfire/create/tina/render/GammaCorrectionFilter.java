@@ -95,7 +95,7 @@ public class GammaCorrectionFilter {
     calculateBGColor(pRGBPoint, pX, pY);
     double logScl;
     int inverseAlphaInt;
-    if (logDensityPnt.intensity > 0.0) {
+    if (logDensityPnt.intensity > 0.0 || logDensityPnt.hasSolidColors) {
       double alpha;
       if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
         double frac = logDensityPnt.intensity / flame.getGammaThreshold();
@@ -114,6 +114,16 @@ public class GammaCorrectionFilter {
       pRGBPoint.alpha = withAlpha ? alphaInt : 255;
 
       ColorF transfColor = applyLogScale(logDensityPnt, logScl);
+
+      if (logDensityPnt.hasSolidColors) {
+        double fade = 0.95;
+        double rfade = 1.0 - fade;
+        transfColor.r = transfColor.r * rfade + logDensityPnt.solidRed * fade;
+        transfColor.g = transfColor.g * rfade + logDensityPnt.solidGreen * fade;
+        transfColor.b = transfColor.b * rfade + logDensityPnt.solidBlue * fade;
+        inverseAlphaInt *= rfade;
+      }
+
       ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
 
       pRGBPoint.red = finalColor.r;
@@ -253,7 +263,7 @@ public class GammaCorrectionFilter {
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint, int pX, int pY) {
     calculateBGColor(pHDRPoint, pX, pY);
-
+    // TODO solid
     double logScl;
     double inverseAlphaInt;
     if (logDensityPnt.intensity > 0.0) {

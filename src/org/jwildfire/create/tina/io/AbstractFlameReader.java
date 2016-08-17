@@ -131,7 +131,6 @@ public class AbstractFlameReader {
   public static final String ATTR_FPS = "fps";
 
   public static final String ATTR_SLD_RENDER_ENABLED = "sld_render_enabled";
-  public static final String ATTR_SLD_RENDER_LIGHTS_ENABLED = "sld_render_lights_enabled";
   public static final String ATTR_SLD_RENDER_SSAO_ENABLED = "sld_render_ssao_enabled";
   public static final String ATTR_SLD_RENDER_SSAO_INTENSITY = "sld_render_ssao_intensity";
   public static final String ATTR_SLD_RENDER_SHADOWS_ENABLED = "sld_render_shadows_enabled";
@@ -519,9 +518,6 @@ public class AbstractFlameReader {
       pFlame.getSolidRenderSettings().setSolidRenderingEnabled(false);
     }
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
-      if ((hs = atts.get(ATTR_SLD_RENDER_LIGHTS_ENABLED)) != null) {
-        pFlame.getSolidRenderSettings().setLightsEnabled(Integer.parseInt(hs) == 1);
-      }
       if ((hs = atts.get(ATTR_SLD_RENDER_SSAO_ENABLED)) != null) {
         pFlame.getSolidRenderSettings().setSsaoEnabled(Integer.parseInt(hs) == 1);
       }
@@ -663,6 +659,8 @@ public class AbstractFlameReader {
   public static final String ATTR_MOD_CONTRAST_SPEED = "mod_contrast_speed";
   public static final String ATTR_MOD_SATURATION = "mod_saturation";
   public static final String ATTR_MOD_SATURATION_SPEED = "mod_saturation_speed";
+  public static final String ATTR_MOD_HUE = "mod_hue";
+  public static final String ATTR_MOD_HUE_SPEED = "mod_hue_speed";
   public static final String ATTR_ANTIALIAS_AMOUNT = "antialias_amount";
   public static final String ATTR_ANTIALIAS_RADIUS = "antialias_radius";
   public static final String ATTR_VISIBLE = "visible";
@@ -712,6 +710,12 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_MOD_SATURATION_SPEED)) != null) {
       pXForm.setModSaturationSpeed(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_HUE)) != null) {
+      pXForm.setModHue(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MOD_HUE_SPEED)) != null) {
+      pXForm.setModHueSpeed(Double.parseDouble(hs));
     }
     // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
