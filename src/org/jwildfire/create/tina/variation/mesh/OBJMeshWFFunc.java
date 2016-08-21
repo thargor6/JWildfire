@@ -68,10 +68,11 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (objFilename != null && objFilename.length() > 0) {
       try {
-        mesh = (SimpleMesh) RessourceManager.getRessource(objFilename);
+        String meshKey = this.getClass().getName() + "_" + getMeshname(objFilename);
+        mesh = (SimpleMesh) RessourceManager.getRessource(meshKey);
         if (mesh == null) {
           mesh = loadMeshFromFile(objFilename);
-          RessourceManager.putRessource(objFilename, mesh);
+          RessourceManager.putRessource(meshKey, mesh);
         }
       }
       catch (Exception e) {

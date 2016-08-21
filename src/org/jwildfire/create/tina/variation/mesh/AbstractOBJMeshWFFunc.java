@@ -17,11 +17,9 @@
 package org.jwildfire.create.tina.variation.mesh;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -40,7 +38,12 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected static final String PARAM_OFFSETY = "offset_y";
   protected static final String PARAM_OFFSETZ = "offset_z";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ };
+  protected static final String PARAM_SUBDIV_LEVEL = "subdiv_level";
+  protected static final String PARAM_SUBDIV_SMOOTH_PASSES = "subdiv_smooth_passes";
+  protected static final String PARAM_SUBDIV_SMOOTH_LAMBDA = "subdiv_smooth_lambda";
+  protected static final String PARAM_SUBDIV_SMOOTH_MU = "subdiv_smooth_mu";
+
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU };
 
   protected double scaleX = 1.0;
   protected double scaleY = 1.0;
@@ -49,14 +52,19 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected double offsetY = 0.0;
   protected double offsetZ = 0.0;
 
+  protected int subdiv_level = 0;
+  protected int subdiv_smooth_passes = 12;
+  protected double subdiv_smooth_lambda = 0.42;
+  protected double subdiv_smooth_mu = -0.45;
+
   protected SimpleMesh mesh;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     Face f = mesh.getFace(pContext.random(mesh.getFaceCount()));
-    Point p1 = transform(mesh.getPoint(f.p1));
-    Point p2 = transform(mesh.getPoint(f.p2));
-    Point p3 = transform(mesh.getPoint(f.p3));
+    Vertex p1 = transform(mesh.getVertex(f.v1));
+    Vertex p2 = transform(mesh.getVertex(f.v2));
+    Vertex p3 = transform(mesh.getVertex(f.v3));
 
     // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
     double sqrt_r1 = MathLib.sqrt(pContext.random());
@@ -73,8 +81,8 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     pVarTP.z += pAmount * dz;
   }
 
-  private Point transform(Point p) {
-    Point res = new Point();
+  private Vertex transform(Vertex p) {
+    Vertex res = new Vertex();
     res.x = (float) (p.x * scaleX + offsetX);
     res.y = (float) (p.y * scaleY + offsetY);
     res.z = (float) (p.z * scaleZ + offsetZ);
@@ -88,7 +96,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu };
   }
 
   @Override
@@ -105,124 +113,34 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       offsetY = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offsetZ = pValue;
+    else if (PARAM_SUBDIV_LEVEL.equalsIgnoreCase(pName))
+      subdiv_level = limitIntVal(Tools.FTOI(pValue), 0, 6);
+    else if (PARAM_SUBDIV_SMOOTH_PASSES.equalsIgnoreCase(pName))
+      subdiv_smooth_passes = limitIntVal(Tools.FTOI(pValue), 0, 24);
+    else if (PARAM_SUBDIV_SMOOTH_LAMBDA.equalsIgnoreCase(pName))
+      subdiv_smooth_lambda = pValue;
+    else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
+      subdiv_smooth_mu = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
-  static class Point {
-    float x, y, z;
-  }
-
-  static class Face {
-    int p1, p2, p3;
-
-    public Face() {
-
-    }
-
-    public Face(int p1, int p2, int p3) {
-      this.p1 = p1;
-      this.p2 = p2;
-      this.p3 = p3;
-    }
-  }
-
-  static class SimpleMesh {
-    private List<Point> points = new ArrayList<>();
-    private List<Face> faces = new ArrayList<>();
-
-    public void addPoint(double x, double y, double z) {
-      Point p = new Point();
-      p.x = (float) x;
-      p.y = (float) y;
-      p.z = (float) z;
-      points.add(p);
-    }
-
-    public void addFace(int p1, int p2, int p3) {
-      Face f = new Face();
-      f.p1 = p1;
-      f.p2 = p2;
-      f.p3 = p3;
-      faces.add(f);
-    }
-
-    public void addFace(int p1, int p2, int p3, int p4) {
-      Face f1 = new Face();
-      f1.p1 = p1;
-      f1.p2 = p2;
-      f1.p3 = p3;
-      faces.add(f1);
-      Face f2 = new Face();
-      f2.p1 = p1;
-      f2.p2 = p3;
-      f2.p3 = p4;
-      faces.add(f2);
-    }
-
-    public int getFaceCount() {
-      return faces.size();
-    }
-
-    public Face getFace(int idx) {
-      return faces.get(idx);
-    }
-
-    public Point getPoint(int idx) {
-      return points.get(idx);
-    }
-
-    public void distributeFaces() {
-      List<Double> areaLst = new ArrayList<>();
-      double areaMin = Double.MAX_VALUE, areaMax = 0.0;
-      for (Face face : faces) {
-        Point p1 = getPoint(face.p1);
-        Point p2 = getPoint(face.p2);
-        Point p3 = getPoint(face.p3);
-        VectorD a = new VectorD(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
-        VectorD b = new VectorD(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
-        double area = VectorD.cross(a, b).length();
-
-        areaLst.add(area);
-        if (area < areaMin) {
-          areaMin = area;
-        }
-        if (area > areaMax) {
-          areaMax = area;
-        }
-      }
-      if (MathLib.fabs(areaMin - areaMax) > MathLib.EPSILON) {
-        int maxFaces = faces.size() < 10000 ? 10000 : 1000;
-        List<Face> newFaces = new ArrayList<>();
-        for (int i = 0; i < faces.size(); i++) {
-          Face face = faces.get(i);
-          int count = Math.min(Tools.FTOI(areaLst.get(i) / areaMin), maxFaces);
-          for (int j = 0; j < count; j++) {
-            newFaces.add(face);
-            //newFaces.add(new Face(face.p1, face.p3, face.p2));
-          }
-        }
-        faces = newFaces;
-      }
-    }
-  }
-
   protected SimpleMesh createDfltMesh() {
     SimpleMesh mesh = new SimpleMesh();
-    mesh.addPoint(-1.0, -1.0, 1.0);
-    mesh.addPoint(1.0, -1.0, 1.0);
-    mesh.addPoint(1.0, 1.0, 1.0);
-    mesh.addPoint(-1.0, 1.0, 1.0);
-    mesh.addPoint(-1.0, -1.0, -1.0);
-    mesh.addPoint(1.0, -1.0, -1.0);
-    mesh.addPoint(1.0, 1.0, -1.0);
-    mesh.addPoint(-1.0, 1.0, -1.0);
-    mesh.addFace(0, 1, 2, 3);
-    mesh.addFace(1, 5, 6, 2);
-    mesh.addFace(5, 6, 7, 4);
-    mesh.addFace(4, 7, 3, 0);
-    mesh.addFace(3, 2, 6, 7);
-    mesh.addFace(0, 1, 5, 4);
+    int v0 = mesh.addVertex(-1.0, -1.0, 1.0);
+    int v1 = mesh.addVertex(1.0, -1.0, 1.0);
+    int v2 = mesh.addVertex(1.0, 1.0, 1.0);
+    int v3 = mesh.addVertex(-1.0, 1.0, 1.0);
+    int v4 = mesh.addVertex(-1.0, -1.0, -1.0);
+    int v5 = mesh.addVertex(1.0, -1.0, -1.0);
+    int v6 = mesh.addVertex(1.0, 1.0, -1.0);
+    int v7 = mesh.addVertex(-1.0, 1.0, -1.0);
+    mesh.addFace(v0, v1, v2, v3);
+    mesh.addFace(v1, v5, v6, v2);
+    mesh.addFace(v5, v6, v7, v4);
+    mesh.addFace(v4, v7, v3, v0);
+    mesh.addFace(v3, v2, v6, v7);
+    mesh.addFace(v0, v1, v5, v4);
     return mesh;
   }
 
@@ -231,36 +149,50 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     /*Parse obj =*/new Parse(builder, pFilename);
 
     SimpleMesh mesh = new SimpleMesh();
-    int idx = 0;
-    // not optimized yet, creates vertices per face, but affects only memory-consumption, not speed 
     for (com.owens.oobjloader.builder.Face face : builder.faces) {
       ArrayList<com.owens.oobjloader.builder.FaceVertex> vertices = face.vertices;
       if (vertices.size() == 3) {
         com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
         com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
         com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
-        mesh.addPoint(f1.v.x, f1.v.y, f1.v.z);
-        mesh.addPoint(f2.v.x, f2.v.y, f2.v.z);
-        mesh.addPoint(f3.v.x, f3.v.y, f3.v.z);
-        mesh.addFace(idx, idx + 1, idx + 2);
-        idx += 3;
+        int v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
+        int v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
+        int v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
+        mesh.addFace(v0, v1, v2);
       }
       else if (vertices.size() == 4) {
         com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
         com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
         com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
         com.owens.oobjloader.builder.FaceVertex f4 = vertices.get(3);
-        mesh.addPoint(f1.v.x, f1.v.y, f1.v.z);
-        mesh.addPoint(f2.v.x, f2.v.y, f2.v.z);
-        mesh.addPoint(f3.v.x, f3.v.y, f3.v.z);
-        mesh.addPoint(f4.v.x, f4.v.y, f4.v.z);
-        mesh.addFace(idx, idx + 1, idx + 2);
-        mesh.addFace(idx, idx + 2, idx + 3);
-        idx += 4;
+        int v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
+        int v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
+        int v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
+        int v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z);
+        mesh.addFace(v0, v1, v2);
+        mesh.addFace(v0, v2, v3);
       }
     }
-    mesh.distributeFaces();
+    if (subdiv_level > 0) {
+      for (int i = 0; i < subdiv_level; i++) {
+        mesh = mesh.interpolate();
+        mesh.taubinSmooth(subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
+      }
+    }
+    else {
+      mesh.distributeFaces();
+    }
     return mesh;
   }
 
+  protected String getMeshname(String prefix) {
+    String res = prefix + "#" + subdiv_level;
+    if (subdiv_level > 0) {
+      res += "#" + subdiv_smooth_passes;
+      if (subdiv_smooth_passes > 0) {
+        res += "#" + subdiv_smooth_lambda + "#" + subdiv_smooth_mu;
+      }
+    }
+    return res;
+  }
 }
