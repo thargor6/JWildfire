@@ -33,7 +33,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   public static final String PARAM_PRIMITIVE = "primitive";
 
-  private static final String[] paramNames = { PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ };
+  private static final String[] paramNames = { PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU };
 
   private int primitive = 0;
 
@@ -48,7 +48,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ };
+    return new Object[] { primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu };
   }
 
   @Override
@@ -70,7 +70,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
     if (meshName != null && meshName.length() > 0) {
       try {
-        String meshKey = this.getClass().getName() + "_" + meshName;
+        String meshKey = this.getClass().getName() + "_" + getMeshname(meshName);
         mesh = (SimpleMesh) RessourceManager.getRessource(meshKey);
         if (mesh == null) {
           String resourceObj = meshName + ".obj";
