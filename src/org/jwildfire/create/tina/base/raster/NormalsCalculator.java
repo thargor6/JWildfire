@@ -63,20 +63,6 @@ public class NormalsCalculator {
     }
   }
 
-  private final CornerPair[] NNEIGHBOURS_NORMAL = new CornerPair[] {
-      new CornerPair(new Corner(-1, 0), new Corner(0, -1)),
-      new CornerPair(new Corner(0, -1), new Corner(1, 0)),
-      new CornerPair(new Corner(1, 0), new Corner(0, 1)),
-      new CornerPair(new Corner(0, 1), new Corner(-1, 0))
-  };
-
-  private final CornerPair[] NNEIGHBOURS_DIAG = new CornerPair[] {
-      new CornerPair(new Corner(-1, -1), new Corner(1, -1)),
-      new CornerPair(new Corner(1, -1), new Corner(1, 1)),
-      new CornerPair(new Corner(1, 1), new Corner(-1, 1)),
-      new CornerPair(new Corner(-1, 1), new Corner(-1, -1))
-  };
-
   private final CornerPair[] NNEIGHBOURS_COARSE = new CornerPair[] {
       new CornerPair(new Corner(-1, 0), new Corner(-1, -1)),
       new CornerPair(new Corner(-1, -1), new Corner(0, -1)),
@@ -88,48 +74,51 @@ public class NormalsCalculator {
       new CornerPair(new Corner(-1, 1), new Corner(-1, 0))
   };
 
-  private final CornerPair[][] NNEIGHBOURS = new CornerPair[][] { NNEIGHBOURS_DIAG, NNEIGHBOURS_NORMAL, NNEIGHBOURS_COARSE };
-
   public void refreshNormalsAtLocation(int x, int y) {
     double zb = zBuf[x][y];
     nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
     if (zb != ZBUF_ZMIN) {
-      for (int pass = 0; pass < NNEIGHBOURS.length; pass++) {
-        double nx = 0.0, ny = 0.0, nz = 0.0;
-        int samples = 0;
-        for (int k = 0; k < NNEIGHBOURS[pass].length; k++) {
-          if (NNEIGHBOURS[pass][k].isInside(x, y)) {
-            double ax = NNEIGHBOURS[pass][k].a.dx;
-            double ay = NNEIGHBOURS[pass][k].a.dy;
-            double azb = zBuf[x + NNEIGHBOURS[pass][k].a.dx][y + NNEIGHBOURS[pass][k].a.dy];
-            if (azb != ZBUF_ZMIN) {
-              double az = zb - azb;
+      double nx = 0.0, ny = 0.0, nz = 0.0;
+      double minzdist = MathLib.fabs(ZBUF_ZMIN * 10.0);
+      int samples = 0;
+      for (int k = 0; k < NNEIGHBOURS_COARSE.length; k++) {
+        if (NNEIGHBOURS_COARSE[k].isInside(x, y)) {
+          double ax = NNEIGHBOURS_COARSE[k].a.dx;
+          double ay = NNEIGHBOURS_COARSE[k].a.dy;
+          double azb = zBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
+          if (azb != ZBUF_ZMIN) {
+            double az = zb - azb;
 
-              double bx = NNEIGHBOURS[pass][k].b.dx;
-              double by = NNEIGHBOURS[pass][k].b.dy;
-              double bzb = zBuf[x + NNEIGHBOURS[pass][k].b.dx][y + NNEIGHBOURS[pass][k].b.dy];
+            double bx = NNEIGHBOURS_COARSE[k].b.dx;
+            double by = NNEIGHBOURS_COARSE[k].b.dy;
+            double bzb = zBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
+            if (bzb != ZBUF_ZMIN) {
+              samples++;
               double bz = zb - bzb;
-              if (bzb != ZBUF_ZMIN) {
-                samples++;
-                nx += ay * bz - az * by;
-                ny += az * bx - ax * bz;
-                nz += ax * by - ay * bx;
+              double zdist = MathLib.fabs(az) + MathLib.fabs(bz);
+              if (zdist < minzdist) {
+                minzdist = zdist;
+                nx = ay * bz - az * by;
+                ny = az * bx - ax * bz;
+                nz = ax * by - ay * bx;
               }
             }
           }
         }
-        if (samples >= 3) {
-          double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
-          if (r > MathLib.EPSILON) {
-            nx /= r;
-            ny /= r;
-            nz /= r;
-          }
-          nxBuf[x][y] = (float) nx;
-          nyBuf[x][y] = (float) ny;
-          nzBuf[x][y] = (float) nz;
+        if (samples > 0 && minzdist < 5.0) {
           break;
         }
+      }
+      if (samples > 0) {
+        double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
+        if (r > MathLib.EPSILON) {
+          nx /= r;
+          ny /= r;
+          nz /= r;
+        }
+        nxBuf[x][y] = (float) nx;
+        nyBuf[x][y] = (float) ny;
+        nzBuf[x][y] = (float) nz;
       }
     }
   }
@@ -137,49 +126,7 @@ public class NormalsCalculator {
   public void refreshAllNormals() {
     for (int i = 0; i < rasterWidth; i++) {
       for (int j = 0; j < rasterHeight; j++) {
-        double nx = 0.0, ny = 0.0, nz = 0.0;
-        double zb = zBuf[i][j];
-        nxBuf[i][j] = nyBuf[i][j] = nzBuf[i][j] = ZBUF_ZMIN;
-        if (zb != ZBUF_ZMIN) {
-
-          for (int pass = 0; pass < NNEIGHBOURS.length; pass++) {
-            nx = ny = nz = 0.0;
-            int samples = 0;
-
-            for (int k = 0; k < NNEIGHBOURS[pass].length; k++) {
-              if (NNEIGHBOURS[pass][k].isInside(i, j)) {
-                double ax = NNEIGHBOURS[pass][k].a.dx;
-                double ay = NNEIGHBOURS[pass][k].a.dy;
-                double azb = zBuf[i + NNEIGHBOURS[pass][k].a.dx][j + NNEIGHBOURS[pass][k].a.dy];
-                double az = zb - azb;
-
-                double bx = NNEIGHBOURS[pass][k].b.dx;
-                double by = NNEIGHBOURS[pass][k].b.dy;
-                double bzb = zBuf[i + NNEIGHBOURS[pass][k].b.dx][j + NNEIGHBOURS[pass][k].b.dy];
-                double bz = zb - bzb;
-                if (azb != ZBUF_ZMIN && bzb != ZBUF_ZMIN) {
-                  nx += ay * bz - az * by;
-                  ny += az * bx - ax * bz;
-                  nz += ax * by - ay * bx;
-                  samples++;
-                }
-              }
-            }
-            if (samples >= 3) {
-              double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
-              if (r > 0.000001) {
-                nx /= r;
-                ny /= r;
-                nz /= r;
-              }
-
-              nxBuf[i][j] = (float) nx;
-              nyBuf[i][j] = (float) ny;
-              nzBuf[i][j] = (float) nz;
-              break;
-            }
-          }
-        }
+        refreshNormalsAtLocation(i, j);
       }
     }
   }
