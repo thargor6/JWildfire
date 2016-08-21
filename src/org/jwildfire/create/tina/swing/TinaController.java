@@ -483,6 +483,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormSymmetryREd = parameterObject.pXFormSymmetryREd;
     data.xFormSymmetrySlider = parameterObject.pXFormSymmetrySlider;
 
+    data.xFormMaterialREd = parameterObject.xFormMaterialREd;
+    data.xFormMaterialSlider = parameterObject.xFormMaterialSlider;
+    data.xFormMaterialSpeedREd = parameterObject.xFormMaterialSpeedREd;
+    data.xFormMaterialSpeedSlider = parameterObject.xFormMaterialSpeedSlider;
+
     data.xFormModGammaREd = parameterObject.pXFormModGammaREd;
     data.xFormModGammaSlider = parameterObject.pXFormModGammaSlider;
     data.xFormModGammaSpeedREd = parameterObject.pXFormModGammaSpeedREd;
@@ -2378,6 +2383,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
         data.xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
 
+        data.xFormMaterialREd.setText(Tools.doubleToString(pXForm.getMaterial()));
+        data.xFormMaterialSlider.setValue(Tools.FTOI(pXForm.getMaterial() * SLIDER_SCALE_COLOR));
+        data.xFormMaterialSpeedREd.setText(Tools.doubleToString(pXForm.getMaterialSpeed()));
+        data.xFormMaterialSpeedSlider.setValue(Tools.FTOI(pXForm.getMaterialSpeed() * SLIDER_SCALE_COLOR));
+
         data.xFormModGammaREd.setText(Tools.doubleToString(pXForm.getModGamma()));
         data.xFormModGammaSlider.setValue(Tools.FTOI(pXForm.getModGamma() * SLIDER_SCALE_COLOR));
         data.xFormModGammaSpeedREd.setText(Tools.doubleToString(pXForm.getModGammaSpeed()));
@@ -2415,6 +2425,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormColorSlider.setValue(0);
         data.xFormSymmetryREd.setText(null);
         data.xFormSymmetrySlider.setValue(0);
+        data.xFormMaterialREd.setText(null);
+        data.xFormMaterialSlider.setValue(0);
+        data.xFormMaterialSpeedREd.setText(null);
+        data.xFormMaterialSpeedSlider.setValue(0);
         data.xFormModGammaREd.setText(null);
         data.xFormModGammaSlider.setValue(0);
         data.xFormModGammaSpeedREd.setText(null);
@@ -3246,10 +3260,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearParamsREdChanged(pIdx, DELTA_PARAM);
   }
 
-  public void xFormSymmetrySlider_changed() {
-    xFormSliderChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
-  }
-
   public void xFormOpacityREd_changed() {
     xFormTextFieldChanged(data.xFormOpacitySlider, data.xFormOpacityREd, "opacity", SLIDER_SCALE_COLOR);
   }
@@ -3269,6 +3279,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void xFormColorREd_changed() {
+    xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  }
+
   public void xFormColorSlider_changed() {
     xFormSliderChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
   }
@@ -3277,8 +3291,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormTextFieldChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
-  public void xFormColorREd_changed() {
-    xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  public void xFormSymmetrySlider_changed() {
+    xFormSliderChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModGammaREd_changed() {
@@ -5058,6 +5088,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.transformationWeightREd);
     animationController.registerMotionPropertyControls(data.xFormColorREd);
     animationController.registerMotionPropertyControls(data.xFormSymmetryREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialSpeedREd);
     animationController.registerMotionPropertyControls(data.xFormOpacityREd);
 
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {

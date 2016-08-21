@@ -72,6 +72,9 @@ public class AbstractFlameWriter {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL, pXForm.getMaterial()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, pXForm.getMaterialSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, pXForm.getModGamma()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA_SPEED, pXForm.getModGammaSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST, pXForm.getModContrast()));
@@ -86,7 +89,6 @@ public class AbstractFlameWriter {
     else if (pXForm.getDrawMode().equals(DrawMode.HIDDEN)) {
       attrList.add(pXB.createAttr("opacity", 0.0));
     }
-    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
 
     UniqueNamesMaker namesMaker = new UniqueNamesMaker();
     for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {

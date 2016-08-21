@@ -3936,6 +3936,145 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColorChooserPaletteImgPanel.setBounds(125, 10, 195, 10);
       tinaTransformationColorPanel.add(tinaColorChooserPaletteImgPanel);
       tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
+
+      JLabel xFormMaterialLbl = new JLabel();
+      xFormMaterialLbl.setText("Material");
+      xFormMaterialLbl.setSize(new Dimension(49, 22));
+      xFormMaterialLbl.setPreferredSize(new Dimension(64, 22));
+      xFormMaterialLbl.setName("xFormMaterialLbl");
+      xFormMaterialLbl.setLocation(new Point(6, 21));
+      xFormMaterialLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialLbl.setBounds(6, 146, 49, 22);
+      tinaTransformationColorPanel.add(xFormMaterialLbl);
+
+      xFormMaterialREd = new JWFNumberField();
+      xFormMaterialREd.setValueStep(0.01);
+      xFormMaterialREd.setText("");
+      xFormMaterialREd.setSize(new Dimension(70, 24));
+      xFormMaterialREd.setPreferredSize(new Dimension(70, 24));
+      xFormMaterialREd.setMotionPropertyName("material");
+      xFormMaterialREd.setLocation(new Point(55, 21));
+      xFormMaterialREd.setLinkedMotionControlName("xFormMaterialSlider");
+      xFormMaterialREd.setLinkedLabelControlName("xFormMaterialLbl");
+      xFormMaterialREd.setHasMinValue(true);
+      xFormMaterialREd.setHasMaxValue(false);
+      xFormMaterialREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormMaterialREd.setBounds(55, 146, 70, 24);
+      xFormMaterialREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
+      xFormMaterialREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormMaterialREd.isMouseAdjusting() || xFormMaterialREd.getMouseChangeCount() == 0) {
+              if (!xFormMaterialSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormMaterialREd_changed();
+          }
+        }
+      });
+      tinaTransformationColorPanel.add(xFormMaterialREd);
+
+      xFormMaterialSlider = new JSlider();
+      xFormMaterialSlider.setValue(0);
+      xFormMaterialSlider.setSize(new Dimension(195, 22));
+      xFormMaterialSlider.setPreferredSize(new Dimension(195, 22));
+      xFormMaterialSlider.setName("xFormMaterialSlider");
+      xFormMaterialSlider.setMinimum(0);
+      xFormMaterialSlider.setMaximum(300);
+      xFormMaterialSlider.setLocation(new Point(125, 21));
+      xFormMaterialSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSlider.setBounds(125, 146, 195, 22);
+      xFormMaterialSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormMaterialSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormMaterialSlider_changed();
+        }
+      });
+      tinaTransformationColorPanel.add(xFormMaterialSlider);
+
+      tinaMaterialChooserPaletteImgPanel = new JPanel();
+      tinaMaterialChooserPaletteImgPanel.setBounds(125, 135, 195, 10);
+      tinaTransformationColorPanel.add(tinaMaterialChooserPaletteImgPanel);
+      tinaMaterialChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
+
+      JLabel xFormMaterialSpeedLbl = new JLabel();
+      xFormMaterialSpeedLbl.setToolTipText("Material speed");
+      xFormMaterialSpeedLbl.setText("Mat Spd");
+      xFormMaterialSpeedLbl.setSize(new Dimension(49, 22));
+      xFormMaterialSpeedLbl.setPreferredSize(new Dimension(64, 22));
+      xFormMaterialSpeedLbl.setName("xFormMaterialSpeedLbl");
+      xFormMaterialSpeedLbl.setLocation(new Point(6, 47));
+      xFormMaterialSpeedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
+      tinaTransformationColorPanel.add(xFormMaterialSpeedLbl);
+
+      xFormMaterialSpeedREd = new JWFNumberField();
+      xFormMaterialSpeedREd.setValueStep(0.01);
+      xFormMaterialSpeedREd.setText("");
+      xFormMaterialSpeedREd.setSize(new Dimension(70, 24));
+      xFormMaterialSpeedREd.setPreferredSize(new Dimension(55, 24));
+      xFormMaterialSpeedREd.setMotionPropertyName("materialSpeed");
+      xFormMaterialSpeedREd.setMinValue(-1.0);
+      xFormMaterialSpeedREd.setMaxValue(1.0);
+      xFormMaterialSpeedREd.setLocation(new Point(55, 47));
+      xFormMaterialSpeedREd.setLinkedMotionControlName("xFormMaterialSpeedSlider");
+      xFormMaterialSpeedREd.setLinkedLabelControlName("xFormMaterialSpeedLbl");
+      xFormMaterialSpeedREd.setHasMinValue(true);
+      xFormMaterialSpeedREd.setHasMaxValue(true);
+      xFormMaterialSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
+      xFormMaterialSpeedREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
+      xFormMaterialSpeedREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!xFormMaterialSpeedREd.isMouseAdjusting() || xFormMaterialSpeedREd.getMouseChangeCount() == 0) {
+              if (!xFormMaterialSpeedSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.xFormMaterialSpeedREd_changed();
+          }
+        }
+      });
+
+      tinaTransformationColorPanel.add(xFormMaterialSpeedREd);
+
+      xFormMaterialSpeedSlider = new JSlider();
+      xFormMaterialSpeedSlider.setValue(0);
+      xFormMaterialSpeedSlider.setSize(new Dimension(195, 22));
+      xFormMaterialSpeedSlider.setPreferredSize(new Dimension(195, 22));
+      xFormMaterialSpeedSlider.setName("xFormMaterialSpeedSlider");
+      xFormMaterialSpeedSlider.setMinimum(-100);
+      xFormMaterialSpeedSlider.setMaximum(100);
+      xFormMaterialSpeedSlider.setLocation(new Point(125, 47));
+      xFormMaterialSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
+      xFormMaterialSpeedSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      xFormMaterialSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.xFormMaterialSpeedSlider_changed();
+        }
+      });
+      tinaTransformationColorPanel.add(xFormMaterialSpeedSlider);
     }
     return tinaTransformationColorPanel;
   }
@@ -5032,7 +5171,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingMaterialDiffuseResponseCmb(), getTinaSolidRenderingMaterialReflectionMapIntensityREd(),
         getTinaSolidRenderingMaterialReflectionMapIntensitySlider(), getTinaSolidRenderingMaterialReflMapBtn(),
         getTinaSolidRenderingMaterialSelectReflMapBtn(), getTinaSolidRenderingMaterialRemoveReflMapBtn(),
-        getXFormModHueREd(), getXFormModHueSlider(), getXFormModHueSpeedREd(), getXFormModHueSpeedSlider()
+        getXFormModHueREd(), getXFormModHueSlider(), getXFormModHueSpeedREd(), getXFormModHueSpeedSlider(),
+        getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider()
         );
 
     tinaController = new TinaController(params);
@@ -11155,6 +11295,11 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField xFormModHueSpeedREd;
   private JSlider xFormModHueSlider;
   private JSlider xFormModHueSpeedSlider;
+  private JWFNumberField xFormMaterialREd;
+  private JSlider xFormMaterialSlider;
+  private JPanel tinaMaterialChooserPaletteImgPanel;
+  private JWFNumberField xFormMaterialSpeedREd;
+  private JSlider xFormMaterialSpeedSlider;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -24923,6 +25068,26 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getXFormModHueSpeedSlider() {
     return xFormModHueSpeedSlider;
+  }
+
+  public JWFNumberField getXFormMaterialREd() {
+    return xFormMaterialREd;
+  }
+
+  public JSlider getXFormMaterialSlider() {
+    return xFormMaterialSlider;
+  }
+
+  public JPanel getTinaMaterialChooserPaletteImgPanel() {
+    return tinaMaterialChooserPaletteImgPanel;
+  }
+
+  public JWFNumberField getXFormMaterialSpeedREd() {
+    return xFormMaterialSpeedREd;
+  }
+
+  public JSlider getXFormMaterialSpeedSlider() {
+    return xFormMaterialSpeedSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

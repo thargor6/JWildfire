@@ -132,7 +132,7 @@ public class FlameRendererView {
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
     area = flame.getCamDOFArea();
-    fade = flame.getCamDOFArea() / 1.25;
+    fade = flame.getCamDOFArea() / 2.25;
     areaMinusFade = area - fade;
   }
 

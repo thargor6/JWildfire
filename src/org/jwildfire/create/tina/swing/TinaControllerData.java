@@ -193,6 +193,10 @@ public class TinaControllerData {
   public JSlider xFormColorSlider;
   public JWFNumberField xFormSymmetryREd;
   public JSlider xFormSymmetrySlider;
+  public JWFNumberField xFormMaterialREd;
+  public JSlider xFormMaterialSlider;
+  public JWFNumberField xFormMaterialSpeedREd;
+  public JSlider xFormMaterialSpeedSlider;
   public JWFNumberField xFormModGammaREd;
   public JSlider xFormModGammaSlider;
   public JWFNumberField xFormModGammaSpeedREd;

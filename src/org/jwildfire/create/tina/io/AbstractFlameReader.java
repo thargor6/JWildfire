@@ -653,6 +653,8 @@ public class AbstractFlameReader {
   public static final String ATTR_ZX_POST = "zxPost";
   public static final String ATTR_CHAOS = "chaos";
   public static final String ATTR_SYMMETRY = "symmetry";
+  public static final String ATTR_MATERIAL = "material";
+  public static final String ATTR_MATERIAL_SPEED = "material_speed";
   public static final String ATTR_MOD_GAMMA = "mod_gamma";
   public static final String ATTR_MOD_GAMMA_SPEED = "mod_gamma_speed";
   public static final String ATTR_MOD_CONTRAST = "mod_contrast";
@@ -692,6 +694,12 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MATERIAL)) != null) {
+      pXForm.setMaterial(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MATERIAL_SPEED)) != null) {
+      pXForm.setMaterialSpeed(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_GAMMA)) != null) {
       pXForm.setModGamma(Double.parseDouble(hs));

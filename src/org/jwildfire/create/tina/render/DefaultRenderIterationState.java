@@ -111,7 +111,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     p.y = 2.0 * randGen.random() - 1.0;
     p.z = 0.0;
     p.color = randGen.random();
-    p.material = 0.0;
+    p.material = randGen.random();
     p.modGamma = 0.0;
     p.modContrast = 0.0;
     p.modSaturation = 0.0;

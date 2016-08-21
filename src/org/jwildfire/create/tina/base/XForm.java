@@ -48,6 +48,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double colorSymmetry;
   private final MotionCurve colorSymmetryCurve = new MotionCurve();
   @AnimAware
+  private double material;
+  private final MotionCurve materialCurve = new MotionCurve();
+  @AnimAware
+  private double materialSpeed;
+  private final MotionCurve materialSymmetryCurve = new MotionCurve();
+  @AnimAware
   private double modGamma;
   @AnimAware
   private double modGammaSpeed;
@@ -301,6 +307,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   double c1;
   double c2;
+  double material1;
+  double material2;
   double modGamma1;
   double modGamma2;
   double modContrast1;
@@ -317,6 +325,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+
+    material1 = (1 + materialSpeed) * 0.5;
+    material2 = material * (1 - materialSpeed) * 0.5;
 
     modGamma1 = (1 + modGammaSpeed) * 0.5;
     modGamma2 = modGamma * (1 - modGammaSpeed) * 0.5;
@@ -495,6 +506,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     colorCurve.assign(pXForm.colorCurve);
     colorSymmetry = pXForm.colorSymmetry;
     colorSymmetryCurve.assign(pXForm.colorSymmetryCurve);
+    material = pXForm.material;
+    materialCurve.assign(pXForm.materialCurve);
+    materialSpeed = pXForm.materialSpeed;
+    materialSymmetryCurve.assign(pXForm.materialSymmetryCurve);
     modGamma = pXForm.modGamma;
     modGammaSpeed = pXForm.modGammaSpeed;
     modContrast = pXForm.modContrast;
@@ -625,6 +640,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
         (fabs(color - pSrc.color) > EPSILON) || !colorCurve.isEqual(pSrc.colorCurve) ||
         (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
+        (fabs(material - pSrc.material) > EPSILON) || !materialCurve.isEqual(pSrc.materialCurve) ||
+        (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSymmetryCurve.isEqual(pSrc.materialSymmetryCurve) ||
         (fabs(modGamma - pSrc.modGamma) > EPSILON) || (fabs(modGammaSpeed - pSrc.modGammaSpeed) > EPSILON) ||
         (fabs(modContrast - pSrc.modContrast) > EPSILON) || (fabs(modContrastSpeed - pSrc.modContrastSpeed) > EPSILON) ||
         (fabs(modSaturation - pSrc.modSaturation) > EPSILON) || (fabs(modSaturationSpeed - pSrc.modSaturationSpeed) > EPSILON) ||
@@ -1539,6 +1556,22 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public void setModHueSpeed(double modHueSpeed) {
     this.modHueSpeed = modHueSpeed;
+  }
+
+  public double getMaterial() {
+    return material;
+  }
+
+  public void setMaterial(double material) {
+    this.material = material;
+  }
+
+  public double getMaterialSpeed() {
+    return materialSpeed;
+  }
+
+  public void setMaterialSpeed(double materialSpeed) {
+    this.materialSpeed = materialSpeed;
   }
 
 }

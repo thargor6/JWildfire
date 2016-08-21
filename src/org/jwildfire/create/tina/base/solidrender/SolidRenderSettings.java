@@ -99,11 +99,20 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public MaterialSettings getInterpolatedMaterial(double materialIdx) {
     //    System.out.println(materialIdx);
-    if (materialIdx < 0)
+    if (materialIdx < 0 || materials.isEmpty()) {
       return null;
+    }
 
     int fromIdx = (int) materialIdx;
+    if (fromIdx >= materials.size()) {
+      return materials.get(materials.size() - 1);
+    }
+
     int toIdx = fromIdx + 1;
+    if (toIdx >= materials.size()) {
+      toIdx = 0;
+    }
+
     double scl = MathLib.frac(materialIdx);
     double EPS = 0.01;
 

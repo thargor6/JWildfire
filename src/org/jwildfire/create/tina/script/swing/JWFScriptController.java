@@ -497,6 +497,8 @@ public class JWFScriptController {
     pSB.append("      xForm.setWeight(" + Tools.doubleToString(pXForm.getWeight()) + ");\n");
     pSB.append("      xForm.setColor(" + Tools.doubleToString(pXForm.getColor()) + ");\n");
     pSB.append("      xForm.setColorSymmetry(" + Tools.doubleToString(pXForm.getColorSymmetry()) + ");\n");
+    pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
+    pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");
     pSB.append("\n");
 
     if (!pXForm.isHasYZCoeffs() && !pXForm.isHasYZPostCoeffs() && !pXForm.isHasZXCoeffs() && !pXForm.isHasZXPostCoeffs()) {
