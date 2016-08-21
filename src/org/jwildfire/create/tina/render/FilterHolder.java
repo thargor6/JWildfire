@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -51,7 +52,8 @@ public class FilterHolder {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
+        //  pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
+        pFilter[i][j] = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
       }
     }
     // normalize
