@@ -937,6 +937,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA_PREVIEW));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MUTAGEN));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {

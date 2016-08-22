@@ -833,14 +833,54 @@ public class TinaControllerParameter {
     this.pDancingFlamesDeleteMotionBtn = pDancingFlamesDeleteMotionBtn;
   }
 
-  public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
-      JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
+  public void setMutaGenParams(JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
       JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
       JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
       JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn,
       JButton pMutaGenLoadFlameFromFileBtn, JProgressBar pMutaGenProgressBar, JWFNumberField pMutaGenAmountREd, JComboBox pMutaGenHorizontalTrend1Cmb,
       JComboBox pMutaGenHorizontalTrend2Cmb, JComboBox pMutaGenVerticalTrend1Cmb, JComboBox pMutaGenVerticalTrend2Cmb, JButton pMutaGenBackButtonBtn, JButton pMutaGenForwardButtonBtn,
-      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn,
+      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn) {
+    this.mutaGen01Pnl = pMutaGen01Pnl;
+    this.mutaGen02Pnl = pMutaGen02Pnl;
+    this.mutaGen03Pnl = pMutaGen03Pnl;
+    this.mutaGen04Pnl = pMutaGen04Pnl;
+    this.mutaGen05Pnl = pMutaGen05Pnl;
+    this.mutaGen06Pnl = pMutaGen06Pnl;
+    this.mutaGen07Pnl = pMutaGen07Pnl;
+    this.mutaGen08Pnl = pMutaGen08Pnl;
+    this.mutaGen09Pnl = pMutaGen09Pnl;
+    this.mutaGen10Pnl = pMutaGen10Pnl;
+    this.mutaGen11Pnl = pMutaGen11Pnl;
+    this.mutaGen12Pnl = pMutaGen12Pnl;
+    this.mutaGen13Pnl = pMutaGen13Pnl;
+    this.mutaGen14Pnl = pMutaGen14Pnl;
+    this.mutaGen15Pnl = pMutaGen15Pnl;
+    this.mutaGen16Pnl = pMutaGen16Pnl;
+    this.mutaGen17Pnl = pMutaGen17Pnl;
+    this.mutaGen18Pnl = pMutaGen18Pnl;
+    this.mutaGen19Pnl = pMutaGen19Pnl;
+    this.mutaGen20Pnl = pMutaGen20Pnl;
+    this.mutaGen21Pnl = pMutaGen21Pnl;
+    this.mutaGen22Pnl = pMutaGen22Pnl;
+    this.mutaGen23Pnl = pMutaGen23Pnl;
+    this.mutaGen24Pnl = pMutaGen24Pnl;
+    this.mutaGen25Pnl = pMutaGen25Pnl;
+    this.mutaGenLoadFlameFromEditorBtn = pMutaGenLoadFlameFromEditorBtn;
+    this.mutaGenLoadFlameFromFileBtn = pMutaGenLoadFlameFromFileBtn;
+    this.mutaGenProgressBar = pMutaGenProgressBar;
+    this.mutaGenAmountREd = pMutaGenAmountREd;
+    this.mutaGenHorizontalTrend1Cmb = pMutaGenHorizontalTrend1Cmb;
+    this.mutaGenHorizontalTrend2Cmb = pMutaGenHorizontalTrend2Cmb;
+    this.mutaGenVerticalTrend1Cmb = pMutaGenVerticalTrend1Cmb;
+    this.mutaGenVerticalTrend2Cmb = pMutaGenVerticalTrend2Cmb;
+    this.mutaGenBackBtn = pMutaGenBackButtonBtn;
+    this.mutaGenForwardBtn = pMutaGenForwardButtonBtn;
+    this.mutaGenHintPane = pMutaGenHintPane;
+    this.mutaGenSaveFlameToEditorBtn = pMutaGenSaveFlameToEditorBtn;
+    this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
+  }
+
+  public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
       JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
       JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
       JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
@@ -882,44 +922,6 @@ public class TinaControllerParameter {
     this.pDancingFlamesLoadProjectBtn = pDancingFlamesLoadProjectBtn;
     this.pDancingFlamesSaveProjectBtn = pDancingFlamesSaveProjectBtn;
     this.pDancingFlamesMotionLinksTable = pDancingFlamesMotionLinksTable;
-    this.mutaGen01Pnl = pMutaGen01Pnl;
-    this.mutaGen02Pnl = pMutaGen02Pnl;
-    this.mutaGen03Pnl = pMutaGen03Pnl;
-    this.mutaGen04Pnl = pMutaGen04Pnl;
-    this.mutaGen05Pnl = pMutaGen05Pnl;
-    this.mutaGen06Pnl = pMutaGen06Pnl;
-    this.mutaGen07Pnl = pMutaGen07Pnl;
-    this.mutaGen08Pnl = pMutaGen08Pnl;
-    this.mutaGen09Pnl = pMutaGen09Pnl;
-    this.mutaGen10Pnl = pMutaGen10Pnl;
-    this.mutaGen11Pnl = pMutaGen11Pnl;
-    this.mutaGen12Pnl = pMutaGen12Pnl;
-    this.mutaGen13Pnl = pMutaGen13Pnl;
-    this.mutaGen14Pnl = pMutaGen14Pnl;
-    this.mutaGen15Pnl = pMutaGen15Pnl;
-    this.mutaGen16Pnl = pMutaGen16Pnl;
-    this.mutaGen17Pnl = pMutaGen17Pnl;
-    this.mutaGen18Pnl = pMutaGen18Pnl;
-    this.mutaGen19Pnl = pMutaGen19Pnl;
-    this.mutaGen20Pnl = pMutaGen20Pnl;
-    this.mutaGen21Pnl = pMutaGen21Pnl;
-    this.mutaGen22Pnl = pMutaGen22Pnl;
-    this.mutaGen23Pnl = pMutaGen23Pnl;
-    this.mutaGen24Pnl = pMutaGen24Pnl;
-    this.mutaGen25Pnl = pMutaGen25Pnl;
-    this.mutaGenLoadFlameFromEditorBtn = pMutaGenLoadFlameFromEditorBtn;
-    this.mutaGenLoadFlameFromFileBtn = pMutaGenLoadFlameFromFileBtn;
-    this.mutaGenProgressBar = pMutaGenProgressBar;
-    this.mutaGenAmountREd = pMutaGenAmountREd;
-    this.mutaGenHorizontalTrend1Cmb = pMutaGenHorizontalTrend1Cmb;
-    this.mutaGenHorizontalTrend2Cmb = pMutaGenHorizontalTrend2Cmb;
-    this.mutaGenVerticalTrend1Cmb = pMutaGenVerticalTrend1Cmb;
-    this.mutaGenVerticalTrend2Cmb = pMutaGenVerticalTrend2Cmb;
-    this.mutaGenBackBtn = pMutaGenBackButtonBtn;
-    this.mutaGenForwardBtn = pMutaGenForwardButtonBtn;
-    this.mutaGenHintPane = pMutaGenHintPane;
-    this.mutaGenSaveFlameToEditorBtn = pMutaGenSaveFlameToEditorBtn;
-    this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
     this.editTransformCaptionButton = pEditTransformCaptionButton;
     this.editFlameTileButton = pEditFlameTileButton;
     this.snapShotButton = pSnapShotButton;

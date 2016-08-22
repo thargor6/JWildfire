@@ -29,6 +29,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
 
   public static final String WINDOW_DESKTOP = "Desktop";
   public static final String WINDOW_TINA = "TINA";
+  public static final String WINDOW_MUTAGEN = "MUTAGEN";
   public static final String WINDOW_IFLAMES = "IFLAMES";
   public static final String WINDOW_TINA_PREVIEW = "TINA_PREVIEW";
 
@@ -111,12 +112,12 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public boolean isEqual(WindowPrefs pSrc) {
     if (width != pSrc.width || height != pSrc.height ||
         left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized)
-    	return false;
-    if (name==null){
-    	if(pSrc.name!=null)
-    		return false;
+      return false;
+    if (name == null) {
+      if (pSrc.name != null)
+        return false;
     }
-    else if(pSrc.name==null||!name.equals(pSrc.name)){
+    else if (pSrc.name == null || !name.equals(pSrc.name)) {
       return false;
     }
     return true;

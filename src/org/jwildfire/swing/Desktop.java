@@ -64,14 +64,18 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
 public class Desktop extends JApplet {
+  public Desktop() {
+  }
+
   private static final long serialVersionUID = 1L;
 
-  private JFrame jFrame = null; // @jve:decl-index=0:visual-constraint="10,10"
+  private JFrame jFrame = null;
   private JPanel jContentPane = null;
   private JMenuBar mainJMenuBar = null;
   private JMenu fileMenu = null;
@@ -85,6 +89,7 @@ public class Desktop extends JApplet {
   private JMenu windowMenu = null;
   private JCheckBoxMenuItem operatorsMenuItem = null;
   private JCheckBoxMenuItem tinaMenuItem = null;
+  private JCheckBoxMenuItem mutaGenMenuItem = null;
   private JCheckBoxMenuItem edenMenuItem = null;
   private JCheckBoxMenuItem iflamesMenuItem = null;
   private JMenuItem openMenuItem = null;
@@ -104,6 +109,7 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
+      mainDesktopPane.add(getMutaGenInternalFrame(), null);
       mainDesktopPane.add(getIFlamesInternalFrame(), null);
       mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
@@ -116,14 +122,18 @@ public class Desktop extends JApplet {
         welcomeInternalFrame.setVisible(true);
       }
 
+      MutaGenInternalFrame mutaGenFrame = (MutaGenInternalFrame) getMutaGenInternalFrame();
+
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
-      tinaController = tinaFrame.createController(errorHandler, prefs);
+      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+
+      mutaGenFrame.setTinaController(tinaController);
 
       renderController = new RenderController(errorHandler,
           mainDesktopPane, getRenderDialog(),
@@ -222,6 +232,7 @@ public class Desktop extends JApplet {
       windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
+      windowMenu.add(getMutaGenMenuItem());
       windowMenu.add(getIFlamesMenuItem());
       windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
@@ -267,6 +278,21 @@ public class Desktop extends JApplet {
           });
     }
     return tinaMenuItem;
+  }
+
+  private JCheckBoxMenuItem getMutaGenMenuItem() {
+    if (mutaGenMenuItem == null) {
+      mutaGenMenuItem = new JCheckBoxMenuItem();
+      mutaGenMenuItem.setText("Fractal flames: MutaGen");
+      mutaGenMenuItem.setEnabled(true);
+      mutaGenMenuItem
+          .addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              mutaGenMenuItem_actionPerformed(e);
+            }
+          });
+    }
+    return mutaGenMenuItem;
   }
 
   /**
@@ -760,12 +786,12 @@ public class Desktop extends JApplet {
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
                 javax.swing.event.InternalFrameEvent e) {
-              preferencesInternalFrame_internalFrameDeactivated(e);
+              enableControls();
             }
 
             public void internalFrameClosed(
                 javax.swing.event.InternalFrameEvent e) {
-              preferencesInternalFrame_internalFrameClosed(e);
+              enableControls();
             }
           });
     }
@@ -824,12 +850,12 @@ public class Desktop extends JApplet {
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
                 javax.swing.event.InternalFrameEvent e) {
-              operatorsInternalFrame_internalFrameDeactivated(e);
+              enableControls();
             }
 
             public void internalFrameClosed(
                 javax.swing.event.InternalFrameEvent e) {
-              operatorsInternalFrame_internalFrameClosed(e);
+              enableControls();
             }
           });
     }
@@ -1410,12 +1436,12 @@ public class Desktop extends JApplet {
           .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             public void internalFrameDeactivated(
                 javax.swing.event.InternalFrameEvent e) {
-              tinaInternalFrame_internalFrameDeactivated(e);
+              enableControls();
             }
 
             public void internalFrameClosed(
                 javax.swing.event.InternalFrameEvent e) {
-              tinaInternalFrame_internalFrameClosed(e);
+              enableControls();
             }
           });
       tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -1428,10 +1454,38 @@ public class Desktop extends JApplet {
         tinaInternalFrame.setMaximum(wPrefs.isMaximized());
       }
       catch (Exception e) {
-        // e.printStackTrace();
+        e.printStackTrace();
       }
     }
     return tinaInternalFrame;
+  }
+
+  private JInternalFrame getMutaGenInternalFrame() {
+    if (mutaGenInternalFrame == null) {
+      mutaGenInternalFrame = new MutaGenInternalFrame();
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_MUTAGEN);
+      mutaGenInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
+      mutaGenInternalFrame.setSize(wPrefs.getWidth(1188), wPrefs.getHeight(740));
+      mutaGenInternalFrame
+          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            public void internalFrameDeactivated(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+
+            public void internalFrameClosed(
+                javax.swing.event.InternalFrameEvent e) {
+              enableControls();
+            }
+          });
+      try {
+        mutaGenInternalFrame.setMaximum(wPrefs.isMaximized());
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return mutaGenInternalFrame;
   }
 
   /**
@@ -1758,10 +1812,10 @@ public class Desktop extends JApplet {
   /*-------------------------------------------------------------------------------*/
   /* custom code */
   /*-------------------------------------------------------------------------------*/
-  private MainController mainController = null; // @jve:decl-index=0:
-  private RenderController renderController = null; // @jve:decl-index=0:
-  private FormulaExplorerController formulaExplorerController = null; // @jve:decl-index=0:
-  private TinaController tinaController = null; // @jve:decl-index=0:
+  private MainController mainController = null;
+  private RenderController renderController = null;
+  private FormulaExplorerController formulaExplorerController = null;
+  private TinaController tinaController = null;
 
   private JPanel showMessageTopPnl = null;
 
@@ -1773,7 +1827,7 @@ public class Desktop extends JApplet {
 
   private JButton showMessageCloseButton = null;
 
-  private JDialog showMessageDlg = null; // @jve:decl-index=0:visual-constraint="1444,65"
+  private JDialog showMessageDlg = null;
 
   private JPanel showMessageDlgContentPanel = null;
 
@@ -1781,7 +1835,7 @@ public class Desktop extends JApplet {
 
   private JTextArea showMessageDlgTextArea = null;
 
-  private JDialog showErrorDlg = null; // @jve:decl-index=0:visual-constraint="1805,12"
+  private JDialog showErrorDlg = null;
 
   private JPanel showErrorDlgContentPane = null;
 
@@ -1836,6 +1890,22 @@ public class Desktop extends JApplet {
     }
     else {
       tinaInternalFrame.setVisible(false);
+    }
+  }
+
+  // TODO: abstrahieren
+  private void mutaGenMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
+    if (mutaGenMenuItem.isSelected()) {
+      mutaGenInternalFrame.setVisible(true);
+      try {
+        mutaGenInternalFrame.setSelected(true);
+      }
+      catch (PropertyVetoException ex) {
+        ex.printStackTrace();
+      }
+    }
+    else {
+      mutaGenInternalFrame.setVisible(false);
     }
   }
 
@@ -2020,6 +2090,7 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem formulaExplorerMenuItem = null;
 
   private JInternalFrame tinaInternalFrame = null;
+  private JInternalFrame mutaGenInternalFrame = null;
 
   private JInternalFrame edenInternalFrame = null;
   private JInternalFrame iflamesInternalFrame = null;
@@ -2027,10 +2098,12 @@ public class Desktop extends JApplet {
   private JInternalFrame systemInfoInternalFrame = null;
   private JInternalFrame lookAndFeelInternalFrame = null;
 
+  // TODO
   void enableControls() {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
     iflamesMenuItem.setSelected(iflamesInternalFrame.isVisible());
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
+    mutaGenMenuItem.setSelected(mutaGenInternalFrame.isVisible());
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
     preferencesMenuItem.setSelected(preferencesInternalFrame.isVisible());
@@ -2097,36 +2170,6 @@ public class Desktop extends JApplet {
     }
   }
 
-  private void preferencesInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void preferencesInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void operatorsInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void operatorsInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void tinaInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void tinaInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
   private JInternalFrame getWelcomeInternalFrame() {
     if (welcomeInternalFrame == null) {
       welcomeInternalFrame = new WelcomeInternalFrame();
@@ -2182,6 +2225,16 @@ public class Desktop extends JApplet {
       wPrefs.setWidth(size.width);
       wPrefs.setHeight(size.height);
       wPrefs.setMaximized(tinaInternalFrame.isMaximum());
+    }
+    if (mutaGenInternalFrame != null && mutaGenInternalFrame.isVisible()) {
+      Dimension size = mutaGenInternalFrame.getSize();
+      Point pos = mutaGenInternalFrame.getLocation();
+      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_MUTAGEN);
+      wPrefs.setLeft(pos.x);
+      wPrefs.setTop(pos.y);
+      wPrefs.setWidth(size.width);
+      wPrefs.setHeight(size.height);
+      wPrefs.setMaximized(mutaGenInternalFrame.isMaximum());
     }
     if (iflamesInternalFrame != null && iflamesInternalFrame.isVisible()) {
       Dimension size = iflamesInternalFrame.getSize();
