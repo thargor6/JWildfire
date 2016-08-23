@@ -31,6 +31,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_TINA = "TINA";
   public static final String WINDOW_MUTAGEN = "MUTAGEN";
   public static final String WINDOW_FLAMEBROWSER = "FLAMEBROWSER";
+  public static final String WINDOW_EASYMOVIEMAKER = "EASYMOVIEMAKER";
   public static final String WINDOW_IFLAMES = "IFLAMES";
   public static final String WINDOW_TINA_PREVIEW = "TINA_PREVIEW";
 

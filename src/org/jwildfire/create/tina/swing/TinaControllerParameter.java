@@ -632,7 +632,7 @@ public class TinaControllerParameter {
       JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar, JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton, JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton, JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton,
       JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
       JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JTextPane pHelpPane, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb,
-      JComboBox pBatchResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn, JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn,
+      JComboBox pBatchResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn, JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn,
       JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn, JComboBox pDancingFlamesRandomGenCmb, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pDancingFlamesBorderSizeSlider, JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd, JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton, JCheckBox pDancingFlamesDoRecordCBx, JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx, JTree pDancingFlamesFlamePropertiesTree, JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb,
       JButton pDancingFlamesAddMotionBtn, JButton pDancingFlamesDeleteMotionBtn) {
     this.pTinaFrame = pTinaFrame;
@@ -792,7 +792,6 @@ public class TinaControllerParameter {
     this.pBatchQualityProfileCmb = pBatchQualityProfileCmb;
     this.pBatchResolutionProfileCmb = pBatchResolutionProfileCmb;
     this.pInteractiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
-    this.pSWFAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
     this.pRenderFlameButton = pRenderFlameButton;
     this.pRenderMainButton = pRenderMainButton;
     this.pAppendToMovieButton = pAppendToMovieButton;
@@ -1090,7 +1089,7 @@ public class TinaControllerParameter {
       JSlider pGradientColorMapHorizScaleSlider, JWFNumberField pGradientColorMapVertOffsetREd, JSlider pGradientColorMapVertOffsetSlider,
       JWFNumberField pGradientColorMapVertScaleREd, JSlider pGradientColorMapVertScaleSlider, JWFNumberField pGradientColorMapLocalColorAddREd,
       JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider,
-      JComboBox pSWFAnimatorQualityProfileCmb, JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton,
+      JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton,
       JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb, JComboBox pLeapMotionInputChannelCmb,
       JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndex1Field, JWFNumberField pLeapMotionIndex2Field,
       JWFNumberField pLeapMotionIndex3Field, JWFNumberField pLeapMotionInvScaleField,
@@ -1257,7 +1256,6 @@ public class TinaControllerParameter {
     gradientColorMapLocalColorAddSlider = pGradientColorMapLocalColorAddSlider;
     gradientColorMapLocalColorScaleREd = pGradientColorMapLocalColorScaleREd;
     gradientColorMapLocalColorScaleSlider = pGradientColorMapLocalColorScaleSlider;
-    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
     flameFPSField = pFlameFPSField;
     leapMotionToggleButton = pLeapMotionToggleButton;
     leapMotionConfigTable = pLeapMotionConfigTable;
@@ -1336,5 +1334,10 @@ public class TinaControllerParameter {
     this.xFormMaterialSlider = xFormMaterialSlider;
     this.xFormMaterialSpeedREd = xFormMaterialSpeedREd;
     this.xFormMaterialSpeedSlider = xFormMaterialSpeedSlider;
+  }
+
+  public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {
+    this.pSWFAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
+    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
   }
 }

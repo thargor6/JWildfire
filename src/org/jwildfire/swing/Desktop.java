@@ -66,6 +66,7 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.swing.EasyMovieMakerInternalFrame;
 import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
 import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
@@ -79,6 +80,8 @@ public class Desktop extends JApplet {
     internalFrames = new ArrayList<>();
     internalFrames.add(new InternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
     internalFrames.add(new InternalFrameHolder<>(FlameBrowserInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
+    internalFrames.add(new InternalFrameHolder<>(EasyMovieMakerInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
+
   }
 
   private static final long serialVersionUID = 1L;
@@ -133,9 +136,10 @@ public class Desktop extends JApplet {
 
       MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
       FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
+      EasyMovieMakerInternalFrame easyMovieMakerFrame = getInternalFrame(EasyMovieMakerInternalFrame.class);
 
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
-      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame);
+      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
@@ -145,6 +149,7 @@ public class Desktop extends JApplet {
 
       flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
+      easyMovieMakerFrame.setTinaController(tinaController);
 
       renderController = new RenderController(errorHandler,
           mainDesktopPane, getRenderDialog(),
