@@ -964,7 +964,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
       rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kdissert.png")), getPanel_16(), null);
-      rootTabbedPane.addTab("Flame browser ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/application-view-tile.png")), getPanel_72(), null);
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
@@ -1120,24 +1119,10 @@ public class MutaGenInternalFrame extends JInternalFrame {
   private JButton mutaGenRefreshBtn;
   private JButton mutaGenSaveFlameToEditorBtn;
   private JButton mutaGenSaveFlameToFileBtn;
-  private JPanel panel_72;
-  private JPanel flameBrowserRootTopPanel;
-  private JPanel flameBrowserRootBottomPanel;
-  private JPanel flameBrowserTreePanel;
-  private JPanel flameBrowserDetailPanel;
-  private JPanel flameBrowserImagesPanel;
-  private JScrollPane flameBrowserTreeScrollPane;
-  private JTree flameBrowserTree;
-  private JButton flameBrowserRefreshBtn;
-  private JButton flameBrowserToEditorBtn;
-  private JButton flameBrowserDeleteBtn;
-  private JButton flameBrowserRenameBtn;
-  private JButton flameBrowserChangeFolderBtn;
   private JButton dancingFlamesReplaceFlameFromEditorBtn;
   private JButton dancingFlamesRenameFlameBtn;
   private JButton dancingFlamesRenameMotionBtn;
   private JCheckBox dancingFlamesMutedCBx;
-  private JButton flameBrowserToBatchRendererBtn;
   private JComboBox swfAnimatorGlobalScript2Cmb;
   private JComboBox swfAnimatorGlobalScript3Cmb;
   private JComboBox swfAnimatorGlobalScript4Cmb;
@@ -1200,8 +1185,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
   private JWFNumberField swfAnimatorGlobalScript12REd;
   private JButton btnRender;
   private JPanel panel_12;
-  private JButton flameBrowserCopyToBtn;
-  private JButton flameBrowserMoveToBtn;
   private JPanel panel_88;
   private JPanel panel_89;
   private JPanel panel_90;
@@ -1234,7 +1217,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
   private JButton meshGenFrontViewRenderBtn;
   private JButton meshGenPerspectiveViewRenderBtn;
   private JButton meshGenTopViewToEditorBtn;
-  private JButton flameBrowserToMeshGenBtn;
   private JPanel panel_93;
   private JPanel panel_94;
   private JTabbedPane tabbedPane_2;
@@ -3587,186 +3569,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
     return mutaGenSaveFlameToFileBtn;
   }
 
-  private JPanel getPanel_72() {
-    if (panel_72 == null) {
-      panel_72 = new JPanel();
-      panel_72.setVisible(false);
-      panel_72.setLayout(new BorderLayout(0, 0));
-      panel_72.add(getFlameBrowserRootTopPanel(), BorderLayout.NORTH);
-      panel_72.add(getFlameBrowserRootBottomPanel(), BorderLayout.CENTER);
-    }
-    return panel_72;
-  }
-
-  private JPanel getFlameBrowserRootTopPanel() {
-    if (flameBrowserRootTopPanel == null) {
-      flameBrowserRootTopPanel = new JPanel();
-      flameBrowserRootTopPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
-      flameBrowserRootTopPanel.setPreferredSize(new Dimension(10, 36));
-      flameBrowserRootTopPanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserRootTopPanel.add(getFlameBrowserRefreshBtn(), BorderLayout.WEST);
-      flameBrowserRootTopPanel.add(getFlameBrowserChangeFolderBtn());
-    }
-    return flameBrowserRootTopPanel;
-  }
-
-  private JPanel getFlameBrowserRootBottomPanel() {
-    if (flameBrowserRootBottomPanel == null) {
-      flameBrowserRootBottomPanel = new JPanel();
-      flameBrowserRootBottomPanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserRootBottomPanel.add(getFlameBrowserTreePanel(), BorderLayout.WEST);
-      flameBrowserRootBottomPanel.add(getFlameBrowserDetailPanel(), BorderLayout.EAST);
-      flameBrowserRootBottomPanel.add(getFlameBrowserImagesPanel(), BorderLayout.CENTER);
-    }
-    return flameBrowserRootBottomPanel;
-  }
-
-  private JPanel getFlameBrowserTreePanel() {
-    if (flameBrowserTreePanel == null) {
-      flameBrowserTreePanel = new JPanel();
-      flameBrowserTreePanel.setPreferredSize(new Dimension(200, 10));
-      flameBrowserTreePanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserTreePanel.add(getFlameBrowserTreeScrollPane(), BorderLayout.CENTER);
-    }
-    return flameBrowserTreePanel;
-  }
-
-  private JPanel getFlameBrowserDetailPanel() {
-    if (flameBrowserDetailPanel == null) {
-      flameBrowserDetailPanel = new JPanel();
-      flameBrowserDetailPanel.setPreferredSize(new Dimension(120, 10));
-      flameBrowserDetailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-      flameBrowserDetailPanel.add(getFlameBrowserToEditorBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserToBatchRendererBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserToMeshGenBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserCopyToBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserMoveToBtn());
-    }
-    return flameBrowserDetailPanel;
-  }
-
-  private JPanel getFlameBrowserImagesPanel() {
-    if (flameBrowserImagesPanel == null) {
-      flameBrowserImagesPanel = new JPanel();
-      flameBrowserImagesPanel.setLayout(new BorderLayout(0, 0));
-    }
-    return flameBrowserImagesPanel;
-  }
-
-  private JScrollPane getFlameBrowserTreeScrollPane() {
-    if (flameBrowserTreeScrollPane == null) {
-      flameBrowserTreeScrollPane = new JScrollPane();
-      flameBrowserTreeScrollPane.setViewportView(getFlameBrowserTree());
-    }
-    return flameBrowserTreeScrollPane;
-  }
-
-  private JTree getFlameBrowserTree() {
-    if (flameBrowserTree == null) {
-      flameBrowserTree = new JTree();
-      flameBrowserTree.addTreeSelectionListener(new TreeSelectionListener() {
-        public void valueChanged(TreeSelectionEvent e) {
-          if (tinaController != null) {
-            tinaController.getFlameBrowserController().flamesTree_changed();
-          }
-        }
-      });
-    }
-    return flameBrowserTree;
-  }
-
-  private JButton getFlameBrowserRefreshBtn() {
-    if (flameBrowserRefreshBtn == null) {
-      flameBrowserRefreshBtn = new JButton();
-      flameBrowserRefreshBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().refreshBtn_clicked();
-        }
-      });
-      flameBrowserRefreshBtn.setText("Refresh");
-      flameBrowserRefreshBtn.setPreferredSize(new Dimension(192, 24));
-      flameBrowserRefreshBtn.setMnemonic(KeyEvent.VK_R);
-      flameBrowserRefreshBtn.setMinimumSize(new Dimension(100, 46));
-      flameBrowserRefreshBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserRefreshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserRefreshBtn;
-  }
-
-  private JButton getFlameBrowserToEditorBtn() {
-    if (flameBrowserToEditorBtn == null) {
-      flameBrowserToEditorBtn = new JButton();
-      flameBrowserToEditorBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toEditorBtn_clicked();
-        }
-      });
-      flameBrowserToEditorBtn.setToolTipText("Copy the current fractal into the Editor");
-      flameBrowserToEditorBtn.setText("To Editor");
-      flameBrowserToEditorBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToEditorBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToEditorBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToEditorBtn;
-  }
-
-  private JButton getFlameBrowserDeleteBtn() {
-    if (flameBrowserDeleteBtn == null) {
-      flameBrowserDeleteBtn = new JButton();
-      flameBrowserDeleteBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().deleteBtn_clicked();
-        }
-      });
-      flameBrowserDeleteBtn.setToolTipText("Delete the currently selected flame");
-      flameBrowserDeleteBtn.setText("Delete");
-      flameBrowserDeleteBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserDeleteBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserDeleteBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserDeleteBtn;
-  }
-
-  private JButton getFlameBrowserRenameBtn() {
-    if (flameBrowserRenameBtn == null) {
-      flameBrowserRenameBtn = new JButton();
-      flameBrowserRenameBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().renameBtn_clicked();
-        }
-      });
-      flameBrowserRenameBtn.setToolTipText("Rename the currently selected flame");
-      flameBrowserRenameBtn.setText("Rename...");
-      flameBrowserRenameBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserRenameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserRenameBtn;
-  }
-
-  private JButton getFlameBrowserChangeFolderBtn() {
-    if (flameBrowserChangeFolderBtn == null) {
-      flameBrowserChangeFolderBtn = new JButton();
-      flameBrowserChangeFolderBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().changeFolderBtn_clicked();
-        }
-      });
-      flameBrowserChangeFolderBtn.setText("Change folder...");
-      flameBrowserChangeFolderBtn.setPreferredSize(new Dimension(125, 46));
-      flameBrowserChangeFolderBtn.setMnemonic(KeyEvent.VK_F);
-      flameBrowserChangeFolderBtn.setMinimumSize(new Dimension(100, 46));
-      flameBrowserChangeFolderBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserChangeFolderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserChangeFolderBtn;
-  }
-
   private JButton getDancingFlamesReplaceFlameFromEditorBtn() {
     if (dancingFlamesReplaceFlameFromEditorBtn == null) {
       dancingFlamesReplaceFlameFromEditorBtn = new JButton();
@@ -3811,24 +3613,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
 
   public JCheckBox getDancingFlamesMutedCBx() {
     return dancingFlamesMutedCBx;
-  }
-
-  private JButton getFlameBrowserToBatchRendererBtn() {
-    if (flameBrowserToBatchRendererBtn == null) {
-      flameBrowserToBatchRendererBtn = new JButton();
-      flameBrowserToBatchRendererBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toBatchRendererBtn_clicked();
-        }
-      });
-      flameBrowserToBatchRendererBtn.setToolTipText("Schedule the current fractal for rendering in the Batch Renderer");
-      flameBrowserToBatchRendererBtn.setText("To Batch Renderer");
-      flameBrowserToBatchRendererBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToBatchRendererBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToBatchRendererBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToBatchRendererBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToBatchRendererBtn;
   }
 
   public JComboBox getSwfAnimatorGlobalScript2Cmb() {
@@ -4825,42 +4609,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
     return panel_12;
   }
 
-  private JButton getFlameBrowserCopyToBtn() {
-    if (flameBrowserCopyToBtn == null) {
-      flameBrowserCopyToBtn = new JButton();
-      flameBrowserCopyToBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().copyToBtnClicked();
-        }
-      });
-      flameBrowserCopyToBtn.setToolTipText("Copy the currently selected flame into another directory");
-      flameBrowserCopyToBtn.setText("Copy to...");
-      flameBrowserCopyToBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserCopyToBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserCopyToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserCopyToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserCopyToBtn;
-  }
-
-  private JButton getFlameBrowserMoveToBtn() {
-    if (flameBrowserMoveToBtn == null) {
-      flameBrowserMoveToBtn = new JButton();
-      flameBrowserMoveToBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().moveToBtnClicked();
-        }
-      });
-      flameBrowserMoveToBtn.setToolTipText("Move the currently selected flame to another directory");
-      flameBrowserMoveToBtn.setText("Move to...");
-      flameBrowserMoveToBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserMoveToBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserMoveToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserMoveToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserMoveToBtn;
-  }
-
   private JPanel getPanel_88() {
     if (panel_88 == null) {
       panel_88 = new JPanel();
@@ -5649,24 +5397,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
 
   public JButton getMeshGenTopViewToEditorBtn() {
     return meshGenTopViewToEditorBtn;
-  }
-
-  private JButton getFlameBrowserToMeshGenBtn() {
-    if (flameBrowserToMeshGenBtn == null) {
-      flameBrowserToMeshGenBtn = new JButton();
-      flameBrowserToMeshGenBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toMeshGenBtn_clicked();
-        }
-      });
-      flameBrowserToMeshGenBtn.setToolTipText("Import this flame into the 3DMesh Generator module");
-      flameBrowserToMeshGenBtn.setText("To Mesh Gen");
-      flameBrowserToMeshGenBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToMeshGenBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToMeshGenBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToMeshGenBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToMeshGenBtn;
   }
 
   public JPanel getPanel_1() {

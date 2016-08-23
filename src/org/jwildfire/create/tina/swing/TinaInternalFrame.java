@@ -4973,7 +4973,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaPaletteBrightnessSlider;
   }
 
-  public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame) {
+  public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame, FlameBrowserInternalFrame flameBrowserFrame) {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null);
@@ -5028,6 +5028,12 @@ public class TinaInternalFrame extends JInternalFrame {
         mutaGenFrame.getMutaGenHorizontalTrend1Cmb(), mutaGenFrame.getMutaGenHorizontalTrend2Cmb(), mutaGenFrame.getMutaGenVerticalTrend1Cmb(), mutaGenFrame.getMutaGenVerticalTrend2Cmb(),
         mutaGenFrame.getMutaGenBackBtn(), mutaGenFrame.getMutaGenForwardBtn(), mutaGenFrame.getMutaGenHintPane(), mutaGenFrame.getMutaGenSaveFlameToEditorBtn(),
         mutaGenFrame.getMutaGenSaveFlameToFileBtn());
+
+    params.setFlameBrowserParams(flameBrowserFrame.getFlameBrowserTree(), flameBrowserFrame.getFlameBrowserImagesPanel(),
+        flameBrowserFrame.getFlameBrowserRefreshBtn(), flameBrowserFrame.getFlameBrowserChangeFolderBtn(), flameBrowserFrame.getFlameBrowserToEditorBtn(),
+        flameBrowserFrame.getFlameBrowserToBatchRendererBtn(), flameBrowserFrame.getFlameBrowserDeleteBtn(),
+        flameBrowserFrame.getFlameBrowserRenameBtn(), flameBrowserFrame.getFlameBrowserCopyToBtn(), flameBrowserFrame.getFlameBrowserMoveToBtn(),
+        flameBrowserFrame.getFlameBrowserToMeshGenBtn());
 
     params.setParams1(this, pErrorHandler, pPrefs,/* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
@@ -5087,9 +5093,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
-        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(), getFlameBrowserTree(), getFlameBrowserImagesPanel(),
-        getFlameBrowserRefreshBtn(), getFlameBrowserChangeFolderBtn(), getFlameBrowserToEditorBtn(), getFlameBrowserToBatchRendererBtn(), getFlameBrowserDeleteBtn(),
-        getFlameBrowserRenameBtn(), getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
+        getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
+        getTinaPaletteFadeColorsCBx(), getDancingFlamesReplaceFlameFromEditorBtn(), getDancingFlamesRenameFlameBtn(),
         getDancingFlamesRenameMotionBtn(), getDancingFlamesMutedCBx(),
         getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
@@ -5105,7 +5110,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
         getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
-        getFlameBrowserCopyToBtn(), getFlameBrowserMoveToBtn(), getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
+        getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
         getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
         getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
         getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider());
@@ -5116,7 +5121,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMeshGenHintPane(), getMeshGenCentreXREd(), getMeshGenCentreXSlider(), getMeshGenCentreYREd(), getMeshGenCentreYSlider(),
         getMeshGenZoomREd(), getMeshGenZoomSlider(), getMeshGenZMinREd(), getMeshGenZMinSlider(), getMeshGenZMaxREd(), getMeshGenZMaxSlider(),
         getMeshGenTopViewRenderBtn(), getMeshGenFrontViewRenderBtn(), getMeshGenPerspectiveViewRenderBtn(), getMeshGenTopViewToEditorBtn(),
-        getFlameBrowserToMeshGenBtn(), getMeshGenLoadSequenceBtn(), getMeshGenSequenceWidthREd(), getMeshGenSequenceHeightREd(),
+        getMeshGenLoadSequenceBtn(), getMeshGenSequenceWidthREd(), getMeshGenSequenceHeightREd(),
         getMeshGenSequenceSlicesREd(), getMeshGenSequenceDownSampleREd(), getMeshGenSequenceFilterRadiusREd(), getMeshGenGenerateMeshProgressbar(),
         getMeshGenGenerateMeshBtn(), getMeshGenSequenceFromRendererBtn(), getMeshGenSequenceThresholdREd(), getMeshGenSequenceLbl(),
         getMeshGenPreviewRootPanel(), getMeshGenAutoPreviewCBx(), getMeshGenPreviewImportLastGeneratedMeshBtn(), getMeshGenPreviewImportFromFileBtn(),
@@ -10467,7 +10472,6 @@ public class TinaInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")), getRootPanel(), null);
       rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")), getInteractiveRenderPanel(), null);
-      rootTabbedPane.addTab("Flame browser ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/application-view-tile.png")), getPanel_72(), null);
       rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
       rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
       rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
@@ -10739,19 +10743,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton gradientSaveBtn;
   private JButton backgroundColorIndicatorBtn;
   private JButton randomizeBtn;
-  private JPanel panel_72;
-  private JPanel flameBrowserRootTopPanel;
-  private JPanel flameBrowserRootBottomPanel;
-  private JPanel flameBrowserTreePanel;
-  private JPanel flameBrowserDetailPanel;
-  private JPanel flameBrowserImagesPanel;
-  private JScrollPane flameBrowserTreeScrollPane;
-  private JTree flameBrowserTree;
-  private JButton flameBrowserRefreshBtn;
-  private JButton flameBrowserToEditorBtn;
-  private JButton flameBrowserDeleteBtn;
-  private JButton flameBrowserRenameBtn;
-  private JButton flameBrowserChangeFolderBtn;
   private JPanel panel_73;
   private JCheckBox tinaPaletteFadeColorsCBx;
   private JButton dancingFlamesReplaceFlameFromEditorBtn;
@@ -10772,7 +10763,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton layerAppendBtn;
   private JButton layerShowAllBtn;
   private JButton layerHideOthersBtn;
-  private JButton flameBrowserToBatchRendererBtn;
   private JToggleButton layerPreviewBtn;
   private JPanel motionBlurPanel;
   private JPanel panel_79;
@@ -10897,8 +10887,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JComboBox randomGradientCmb;
   private JComboBox tinaPaletteRandomGeneratorCmb;
   private JToggleButton toggleTriangleWithColorsButton;
-  private JButton flameBrowserCopyToBtn;
-  private JButton flameBrowserMoveToBtn;
   private JButton affineScaleEditMotionCurveBtn;
   private JButton affineRotateEditMotionCurveBtn;
   private JComboBox triangleStyleCmb;
@@ -10954,7 +10942,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton meshGenFrontViewRenderBtn;
   private JButton meshGenPerspectiveViewRenderBtn;
   private JButton meshGenTopViewToEditorBtn;
-  private JButton flameBrowserToMeshGenBtn;
   private JPanel panel_93;
   private JPanel panel_94;
   private JTabbedPane tabbedPane_2;
@@ -15603,186 +15590,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return randomizeBtn;
   }
 
-  private JPanel getPanel_72() {
-    if (panel_72 == null) {
-      panel_72 = new JPanel();
-      panel_72.setVisible(false);
-      panel_72.setLayout(new BorderLayout(0, 0));
-      panel_72.add(getFlameBrowserRootTopPanel(), BorderLayout.NORTH);
-      panel_72.add(getFlameBrowserRootBottomPanel(), BorderLayout.CENTER);
-    }
-    return panel_72;
-  }
-
-  private JPanel getFlameBrowserRootTopPanel() {
-    if (flameBrowserRootTopPanel == null) {
-      flameBrowserRootTopPanel = new JPanel();
-      flameBrowserRootTopPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
-      flameBrowserRootTopPanel.setPreferredSize(new Dimension(10, 36));
-      flameBrowserRootTopPanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserRootTopPanel.add(getFlameBrowserRefreshBtn(), BorderLayout.WEST);
-      flameBrowserRootTopPanel.add(getFlameBrowserChangeFolderBtn());
-    }
-    return flameBrowserRootTopPanel;
-  }
-
-  private JPanel getFlameBrowserRootBottomPanel() {
-    if (flameBrowserRootBottomPanel == null) {
-      flameBrowserRootBottomPanel = new JPanel();
-      flameBrowserRootBottomPanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserRootBottomPanel.add(getFlameBrowserTreePanel(), BorderLayout.WEST);
-      flameBrowserRootBottomPanel.add(getFlameBrowserDetailPanel(), BorderLayout.EAST);
-      flameBrowserRootBottomPanel.add(getFlameBrowserImagesPanel(), BorderLayout.CENTER);
-    }
-    return flameBrowserRootBottomPanel;
-  }
-
-  private JPanel getFlameBrowserTreePanel() {
-    if (flameBrowserTreePanel == null) {
-      flameBrowserTreePanel = new JPanel();
-      flameBrowserTreePanel.setPreferredSize(new Dimension(200, 10));
-      flameBrowserTreePanel.setLayout(new BorderLayout(0, 0));
-      flameBrowserTreePanel.add(getFlameBrowserTreeScrollPane(), BorderLayout.CENTER);
-    }
-    return flameBrowserTreePanel;
-  }
-
-  private JPanel getFlameBrowserDetailPanel() {
-    if (flameBrowserDetailPanel == null) {
-      flameBrowserDetailPanel = new JPanel();
-      flameBrowserDetailPanel.setPreferredSize(new Dimension(120, 10));
-      flameBrowserDetailPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-      flameBrowserDetailPanel.add(getFlameBrowserToEditorBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserToBatchRendererBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserToMeshGenBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserDeleteBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserRenameBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserCopyToBtn());
-      flameBrowserDetailPanel.add(getFlameBrowserMoveToBtn());
-    }
-    return flameBrowserDetailPanel;
-  }
-
-  private JPanel getFlameBrowserImagesPanel() {
-    if (flameBrowserImagesPanel == null) {
-      flameBrowserImagesPanel = new JPanel();
-      flameBrowserImagesPanel.setLayout(new BorderLayout(0, 0));
-    }
-    return flameBrowserImagesPanel;
-  }
-
-  private JScrollPane getFlameBrowserTreeScrollPane() {
-    if (flameBrowserTreeScrollPane == null) {
-      flameBrowserTreeScrollPane = new JScrollPane();
-      flameBrowserTreeScrollPane.setViewportView(getFlameBrowserTree());
-    }
-    return flameBrowserTreeScrollPane;
-  }
-
-  private JTree getFlameBrowserTree() {
-    if (flameBrowserTree == null) {
-      flameBrowserTree = new JTree();
-      flameBrowserTree.addTreeSelectionListener(new TreeSelectionListener() {
-        public void valueChanged(TreeSelectionEvent e) {
-          if (tinaController != null) {
-            tinaController.getFlameBrowserController().flamesTree_changed();
-          }
-        }
-      });
-    }
-    return flameBrowserTree;
-  }
-
-  private JButton getFlameBrowserRefreshBtn() {
-    if (flameBrowserRefreshBtn == null) {
-      flameBrowserRefreshBtn = new JButton();
-      flameBrowserRefreshBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().refreshBtn_clicked();
-        }
-      });
-      flameBrowserRefreshBtn.setText("Refresh");
-      flameBrowserRefreshBtn.setPreferredSize(new Dimension(192, 24));
-      flameBrowserRefreshBtn.setMnemonic(KeyEvent.VK_R);
-      flameBrowserRefreshBtn.setMinimumSize(new Dimension(100, 46));
-      flameBrowserRefreshBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserRefreshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserRefreshBtn;
-  }
-
-  private JButton getFlameBrowserToEditorBtn() {
-    if (flameBrowserToEditorBtn == null) {
-      flameBrowserToEditorBtn = new JButton();
-      flameBrowserToEditorBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toEditorBtn_clicked();
-        }
-      });
-      flameBrowserToEditorBtn.setToolTipText("Copy the current fractal into the Editor");
-      flameBrowserToEditorBtn.setText("To Editor");
-      flameBrowserToEditorBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToEditorBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToEditorBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToEditorBtn;
-  }
-
-  private JButton getFlameBrowserDeleteBtn() {
-    if (flameBrowserDeleteBtn == null) {
-      flameBrowserDeleteBtn = new JButton();
-      flameBrowserDeleteBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().deleteBtn_clicked();
-        }
-      });
-      flameBrowserDeleteBtn.setToolTipText("Delete the currently selected flame");
-      flameBrowserDeleteBtn.setText("Delete");
-      flameBrowserDeleteBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserDeleteBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserDeleteBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserDeleteBtn;
-  }
-
-  private JButton getFlameBrowserRenameBtn() {
-    if (flameBrowserRenameBtn == null) {
-      flameBrowserRenameBtn = new JButton();
-      flameBrowserRenameBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().renameBtn_clicked();
-        }
-      });
-      flameBrowserRenameBtn.setToolTipText("Rename the currently selected flame");
-      flameBrowserRenameBtn.setText("Rename...");
-      flameBrowserRenameBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserRenameBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserRenameBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserRenameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserRenameBtn;
-  }
-
-  private JButton getFlameBrowserChangeFolderBtn() {
-    if (flameBrowserChangeFolderBtn == null) {
-      flameBrowserChangeFolderBtn = new JButton();
-      flameBrowserChangeFolderBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().changeFolderBtn_clicked();
-        }
-      });
-      flameBrowserChangeFolderBtn.setText("Change folder...");
-      flameBrowserChangeFolderBtn.setPreferredSize(new Dimension(125, 46));
-      flameBrowserChangeFolderBtn.setMnemonic(KeyEvent.VK_F);
-      flameBrowserChangeFolderBtn.setMinimumSize(new Dimension(100, 46));
-      flameBrowserChangeFolderBtn.setMaximumSize(new Dimension(32000, 46));
-      flameBrowserChangeFolderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserChangeFolderBtn;
-  }
-
   private JPanel getPanel_73() {
     if (panel_73 == null) {
       panel_73 = new JPanel();
@@ -16079,24 +15886,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getLayerHideOthersBtn() {
     return layerHideOthersBtn;
-  }
-
-  private JButton getFlameBrowserToBatchRendererBtn() {
-    if (flameBrowserToBatchRendererBtn == null) {
-      flameBrowserToBatchRendererBtn = new JButton();
-      flameBrowserToBatchRendererBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toBatchRendererBtn_clicked();
-        }
-      });
-      flameBrowserToBatchRendererBtn.setToolTipText("Schedule the current fractal for rendering in the Batch Renderer");
-      flameBrowserToBatchRendererBtn.setText("To Batch Renderer");
-      flameBrowserToBatchRendererBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToBatchRendererBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToBatchRendererBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToBatchRendererBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToBatchRendererBtn;
   }
 
   private JToggleButton getLayerPreviewBtn() {
@@ -18430,42 +18219,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return toggleTriangleWithColorsButton;
   }
 
-  private JButton getFlameBrowserCopyToBtn() {
-    if (flameBrowserCopyToBtn == null) {
-      flameBrowserCopyToBtn = new JButton();
-      flameBrowserCopyToBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().copyToBtnClicked();
-        }
-      });
-      flameBrowserCopyToBtn.setToolTipText("Copy the currently selected flame into another directory");
-      flameBrowserCopyToBtn.setText("Copy to...");
-      flameBrowserCopyToBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserCopyToBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserCopyToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserCopyToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserCopyToBtn;
-  }
-
-  private JButton getFlameBrowserMoveToBtn() {
-    if (flameBrowserMoveToBtn == null) {
-      flameBrowserMoveToBtn = new JButton();
-      flameBrowserMoveToBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().moveToBtnClicked();
-        }
-      });
-      flameBrowserMoveToBtn.setToolTipText("Move the currently selected flame to another directory");
-      flameBrowserMoveToBtn.setText("Move to...");
-      flameBrowserMoveToBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserMoveToBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserMoveToBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserMoveToBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserMoveToBtn;
-  }
-
   private JButton getAffineScaleEditMotionCurveBtn() {
     if (affineScaleEditMotionCurveBtn == null) {
       affineScaleEditMotionCurveBtn = new JButton();
@@ -19421,24 +19174,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getMeshGenTopViewToEditorBtn() {
     return meshGenTopViewToEditorBtn;
-  }
-
-  private JButton getFlameBrowserToMeshGenBtn() {
-    if (flameBrowserToMeshGenBtn == null) {
-      flameBrowserToMeshGenBtn = new JButton();
-      flameBrowserToMeshGenBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameBrowserController().toMeshGenBtn_clicked();
-        }
-      });
-      flameBrowserToMeshGenBtn.setToolTipText("Import this flame into the 3DMesh Generator module");
-      flameBrowserToMeshGenBtn.setText("To Mesh Gen");
-      flameBrowserToMeshGenBtn.setPreferredSize(new Dimension(112, 24));
-      flameBrowserToMeshGenBtn.setMinimumSize(new Dimension(100, 24));
-      flameBrowserToMeshGenBtn.setMaximumSize(new Dimension(32000, 24));
-      flameBrowserToMeshGenBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return flameBrowserToMeshGenBtn;
   }
 
   public JPanel getPanel_1() {

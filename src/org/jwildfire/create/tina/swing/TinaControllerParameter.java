@@ -833,6 +833,23 @@ public class TinaControllerParameter {
     this.pDancingFlamesDeleteMotionBtn = pDancingFlamesDeleteMotionBtn;
   }
 
+  public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
+      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn, JButton pFlameBrowserToBatchRendererBtn,
+      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JButton pFlameBrowserCopyToBtn, JButton pFlameBrowserMoveToBtn,
+      JButton pFlameBrowserToMeshGenBtn) {
+    this.flameBrowserTree = pFlameBrowserTree;
+    this.flameBrowersImagesPnl = pFlameBrowersImagesPnl;
+    this.flameBrowserRefreshBtn = pFlameBrowserRefreshBtn;
+    this.flameBrowserChangeFolderBtn = pFlameBrowserChangeFolderBtn;
+    this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
+    this.flameBrowserToBatchEditorBtn = pFlameBrowserToBatchRendererBtn;
+    this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
+    this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
+    this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
+    this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
+    this.flameBrowserToMeshGenBtn = pFlameBrowserToMeshGenBtn;
+  }
+
   public void setMutaGenParams(JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
       JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
       JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
@@ -887,9 +904,7 @@ public class TinaControllerParameter {
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
-      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
-      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn, JButton pFlameBrowserToBatchRendererBtn,
-      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JCheckBox pPaletteFadeColorsCBx, JButton pDancingFlamesReplaceFlameFromEditorBtn,
+      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx, JButton pDancingFlamesReplaceFlameFromEditorBtn,
       JButton pDancingFlamesRenameFlameBtn, JButton pDancingFlamesRenameMotionBtn, JCheckBox pDancingFlamesMutedCBx,
       JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
       JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
@@ -909,8 +924,7 @@ public class TinaControllerParameter {
       JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
       JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
       JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
-      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pFlameBrowserCopyToBtn,
-      JButton pFlameBrowserMoveToBtn, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
+      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
       JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
       JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
       JSlider pXFormModContrastSpeedSlider, JWFNumberField pXFormModSaturationREd, JSlider pXFormModSaturationSlider, JWFNumberField pXFormModSaturationSpeedREd,
@@ -951,14 +965,6 @@ public class TinaControllerParameter {
     this.gradientsList = pGradientsList;
     this.backgroundColorIndicatorBtn = pBackgroundColorIndicatorBtn;
     this.randomizeButton = pRandomizeButton;
-    this.flameBrowserTree = pFlameBrowserTree;
-    this.flameBrowersImagesPnl = pFlameBrowersImagesPnl;
-    this.flameBrowserRefreshBtn = pFlameBrowserRefreshBtn;
-    this.flameBrowserChangeFolderBtn = pFlameBrowserChangeFolderBtn;
-    this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
-    this.flameBrowserToBatchEditorBtn = pFlameBrowserToBatchRendererBtn;
-    this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
-    this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
     this.dancingFlamesReplaceFlameFromEditorBtn = pDancingFlamesReplaceFlameFromEditorBtn;
     this.dancingFlamesRenameFlameBtn = pDancingFlamesRenameFlameBtn;
@@ -1026,8 +1032,6 @@ public class TinaControllerParameter {
     this.mouseTransformEditTriangleViewButton = pMouseTransformEditTriangleViewButton;
     this.paletteRandomGeneratorCmb = pPaletteRandomGeneratorCmb;
     this.toggleTriangleWithColorsButton = pToggleTriangleWithColorsButton;
-    this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
-    this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
     this.affineRotateEditMotionCurveBtn = pAffineRotateEditMotionCurveBtn;
     this.affineScaleEditMotionCurveBtn = pAffineScaleEditMotionCurveBtn;
     this.triangleStyleCmb = pTriangleStyleCmb;
@@ -1053,7 +1057,7 @@ public class TinaControllerParameter {
       JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
       JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JButton pMeshGenTopViewRenderBtn,
       JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
-      JButton pFlameBrowserToMeshGenBtn, JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
+      JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
       JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
       JProgressBar pMeshGenGenerateMeshProgressbar, JButton pMeshGenGenerateMeshBtn, JButton pMeshGenSequenceFromRendererBtn,
       JWFNumberField pMeshGenSequenceThresholdREd, JLabel pMeshGenSequenceLbl, JPanel pMeshGenPreviewRootPanel, JCheckBox pMeshGenAutoPreviewCBx,
@@ -1143,7 +1147,6 @@ public class TinaControllerParameter {
     meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
     meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;
     meshGenTopViewToEditorBtn = pMeshGenTopViewToEditorBtn;
-    flameBrowserToMeshGenBtn = pFlameBrowserToMeshGenBtn;
     meshGenLoadSequenceBtn = pMeshGenLoadSequenceBtn;
     meshGenSequenceWidthREd = pMeshGenSequenceWidthREd;
     meshGenSequenceHeightREd = pMeshGenSequenceHeightREd;

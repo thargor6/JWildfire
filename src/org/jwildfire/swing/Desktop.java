@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,6 +29,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -64,13 +66,19 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
 import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
 public class Desktop extends JApplet {
+  private final List<InternalFrameHolder<?>> internalFrames;
+
   public Desktop() {
+    internalFrames = new ArrayList<>();
+    internalFrames.add(new InternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
+    internalFrames.add(new InternalFrameHolder<>(FlameBrowserInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
   }
 
   private static final long serialVersionUID = 1L;
@@ -89,7 +97,6 @@ public class Desktop extends JApplet {
   private JMenu windowMenu = null;
   private JCheckBoxMenuItem operatorsMenuItem = null;
   private JCheckBoxMenuItem tinaMenuItem = null;
-  private JCheckBoxMenuItem mutaGenMenuItem = null;
   private JCheckBoxMenuItem edenMenuItem = null;
   private JCheckBoxMenuItem iflamesMenuItem = null;
   private JMenuItem openMenuItem = null;
@@ -109,7 +116,9 @@ public class Desktop extends JApplet {
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
       mainDesktopPane.add(getTinaInternalFrame(), null);
-      mainDesktopPane.add(getMutaGenInternalFrame(), null);
+      for (InternalFrameHolder<?> internalFrame : internalFrames) {
+        mainDesktopPane.add(internalFrame.getInternalFrame());
+      }
       mainDesktopPane.add(getIFlamesInternalFrame(), null);
       mainDesktopPane.add(getEDENInternalFrame(), null);
       mainDesktopPane.add(getPreferencesInternalFrame(), null);
@@ -122,10 +131,11 @@ public class Desktop extends JApplet {
         welcomeInternalFrame.setVisible(true);
       }
 
-      MutaGenInternalFrame mutaGenFrame = (MutaGenInternalFrame) getMutaGenInternalFrame();
+      MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
+      FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
 
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
-      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame);
+      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
@@ -133,6 +143,7 @@ public class Desktop extends JApplet {
         ex.printStackTrace();
       }
 
+      flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
 
       renderController = new RenderController(errorHandler,
@@ -198,6 +209,16 @@ public class Desktop extends JApplet {
     return mainDesktopPane;
   }
 
+  @SuppressWarnings("unchecked")
+  private <T extends JInternalFrame> T getInternalFrame(Class<T> frameType) {
+    for (InternalFrameHolder<?> internalFrame : internalFrames) {
+      if (frameType.equals(internalFrame.getFrameType())) {
+        return (T) internalFrame.getInternalFrame();
+      }
+    }
+    return null;
+  }
+
   private void setupShowSysInfoThread() {
     final JInternalFrame tinaFrame = getTinaInternalFrame();
     final String title = tinaFrame.getTitle();
@@ -232,7 +253,9 @@ public class Desktop extends JApplet {
       windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
-      windowMenu.add(getMutaGenMenuItem());
+      for (InternalFrameHolder<?> internalFrame : internalFrames) {
+        windowMenu.add(internalFrame.getMenuItem());
+      }
       windowMenu.add(getIFlamesMenuItem());
       windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
@@ -280,26 +303,6 @@ public class Desktop extends JApplet {
     return tinaMenuItem;
   }
 
-  private JCheckBoxMenuItem getMutaGenMenuItem() {
-    if (mutaGenMenuItem == null) {
-      mutaGenMenuItem = new JCheckBoxMenuItem();
-      mutaGenMenuItem.setText("Fractal flames: MutaGen");
-      mutaGenMenuItem.setEnabled(true);
-      mutaGenMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              mutaGenMenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return mutaGenMenuItem;
-  }
-
-  /**
-   * This method initializes operatorsMenuItem
-   * 
-   * @return javax.swing.JCheckBoxMenuItem
-   */
   private JCheckBoxMenuItem getEDENMenuItem() {
     if (edenMenuItem == null) {
       edenMenuItem = new JCheckBoxMenuItem();
@@ -1460,39 +1463,6 @@ public class Desktop extends JApplet {
     return tinaInternalFrame;
   }
 
-  private JInternalFrame getMutaGenInternalFrame() {
-    if (mutaGenInternalFrame == null) {
-      mutaGenInternalFrame = new MutaGenInternalFrame();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_MUTAGEN);
-      mutaGenInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      mutaGenInternalFrame.setSize(wPrefs.getWidth(1188), wPrefs.getHeight(740));
-      mutaGenInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-          });
-      try {
-        mutaGenInternalFrame.setMaximum(wPrefs.isMaximized());
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    return mutaGenInternalFrame;
-  }
-
-  /**
-   * This method initializes edenInternalFrame	
-   * 	
-   * @return javax.swing.JInternalFrame	
-   */
   private JInternalFrame getEDENInternalFrame() {
     if (edenInternalFrame == null) {
       edenInternalFrame = new EDENInternalFrame();
@@ -1893,22 +1863,6 @@ public class Desktop extends JApplet {
     }
   }
 
-  // TODO: abstrahieren
-  private void mutaGenMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (mutaGenMenuItem.isSelected()) {
-      mutaGenInternalFrame.setVisible(true);
-      try {
-        mutaGenInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      mutaGenInternalFrame.setVisible(false);
-    }
-  }
-
   private void edenMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     if (edenMenuItem.isSelected()) {
       edenInternalFrame.setVisible(true);
@@ -2090,7 +2044,6 @@ public class Desktop extends JApplet {
   private JCheckBoxMenuItem formulaExplorerMenuItem = null;
 
   private JInternalFrame tinaInternalFrame = null;
-  private JInternalFrame mutaGenInternalFrame = null;
 
   private JInternalFrame edenInternalFrame = null;
   private JInternalFrame iflamesInternalFrame = null;
@@ -2103,7 +2056,9 @@ public class Desktop extends JApplet {
     edenMenuItem.setSelected(edenInternalFrame.isVisible());
     iflamesMenuItem.setSelected(iflamesInternalFrame.isVisible());
     tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
-    mutaGenMenuItem.setSelected(mutaGenInternalFrame.isVisible());
+    for (InternalFrameHolder<?> internalFrame : internalFrames) {
+      internalFrame.enableMenu();
+    }
     operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
     scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
     preferencesMenuItem.setSelected(preferencesInternalFrame.isVisible());
@@ -2226,15 +2181,8 @@ public class Desktop extends JApplet {
       wPrefs.setHeight(size.height);
       wPrefs.setMaximized(tinaInternalFrame.isMaximum());
     }
-    if (mutaGenInternalFrame != null && mutaGenInternalFrame.isVisible()) {
-      Dimension size = mutaGenInternalFrame.getSize();
-      Point pos = mutaGenInternalFrame.getLocation();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_MUTAGEN);
-      wPrefs.setLeft(pos.x);
-      wPrefs.setTop(pos.y);
-      wPrefs.setWidth(size.width);
-      wPrefs.setHeight(size.height);
-      wPrefs.setMaximized(mutaGenInternalFrame.isMaximum());
+    for (InternalFrameHolder<?> internalFrame : internalFrames) {
+      internalFrame.saveWindowPrefs();
     }
     if (iflamesInternalFrame != null && iflamesInternalFrame.isVisible()) {
       Dimension size = iflamesInternalFrame.getSize();
