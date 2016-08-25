@@ -19,6 +19,7 @@ package org.jwildfire.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Event;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -28,10 +29,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -66,8 +69,11 @@ import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.swing.BatchFlameRendererInternalFrame;
+import org.jwildfire.create.tina.swing.DancingFlamesInternalFrame;
 import org.jwildfire.create.tina.swing.EasyMovieMakerInternalFrame;
 import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
+import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
 import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -81,7 +87,9 @@ public class Desktop extends JApplet {
     internalFrames.add(new InternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
     internalFrames.add(new InternalFrameHolder<>(FlameBrowserInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
     internalFrames.add(new InternalFrameHolder<>(EasyMovieMakerInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
-
+    internalFrames.add(new InternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
+    internalFrames.add(new InternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
+    internalFrames.add(new InternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
   }
 
   private static final long serialVersionUID = 1L;
@@ -112,9 +120,10 @@ public class Desktop extends JApplet {
    * 
    * @return javax.swing.JDesktopPane
    */
+
   private JDesktopPane getMainDesktopPane() {
     if (mainDesktopPane == null) {
-      mainDesktopPane = new JDesktopPane();
+      mainDesktopPane = createMainDesktopPane();
       mainDesktopPane.add(getScriptInternalFrame(), null);
       mainDesktopPane.add(getOperatorsInternalFrame(), null);
       mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
@@ -137,9 +146,12 @@ public class Desktop extends JApplet {
       MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
       FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
       EasyMovieMakerInternalFrame easyMovieMakerFrame = getInternalFrame(EasyMovieMakerInternalFrame.class);
+      DancingFlamesInternalFrame dancingFlamesFrame = getInternalFrame(DancingFlamesInternalFrame.class);
+      BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
+      MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
 
       TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
-      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame);
+      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
@@ -150,6 +162,9 @@ public class Desktop extends JApplet {
       flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
       easyMovieMakerFrame.setTinaController(tinaController);
+      dancingFlamesFrame.setTinaController(tinaController);
+      batchFlameRendererFrame.setTinaController(tinaController);
+      meshGenFrame.setTinaController(tinaController);
 
       renderController = new RenderController(errorHandler,
           mainDesktopPane, getRenderDialog(),
@@ -191,7 +206,7 @@ public class Desktop extends JApplet {
           getShowMessageDlg(), getShowMessageDlgTextArea(), scriptFrame.getScriptTable(),
           scriptFrame.getScriptActionTextArea(), scriptFrame.getScriptFrameSlider(),
           scriptFrame.getScriptFramesREd(), scriptFrame.getScriptFrameREd(),
-          scriptFrame.getEnvelopeController(), renderController);
+          scriptFrame.getEnvelopeController(), renderController, internalFrames.size());
       renderController.setActionList(mainController.getActionList());
 
       EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
@@ -212,6 +227,35 @@ public class Desktop extends JApplet {
 
     }
     return mainDesktopPane;
+  }
+
+  private BufferedImage backgroundImage;
+
+  private JDesktopPane createMainDesktopPane() {
+    try {
+      backgroundImage = ImageIO.read(this.getClass().getResource("/org/jwildfire/swing/backgrounds/wallpaper_pearls2.jpg"));
+    }
+    catch (Exception ex) {
+      backgroundImage = null;
+      ex.printStackTrace();
+    }
+    if (backgroundImage != null) {
+      return new JDesktopPane() {
+        @Override
+        protected void paintComponent(Graphics grphcs) {
+          super.paintComponent(grphcs);
+          grphcs.drawImage(backgroundImage, 0, 0, null);
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+          return new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight());
+        }
+      };
+    }
+    else {
+      return new JDesktopPane();
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -255,14 +299,14 @@ public class Desktop extends JApplet {
       windowMenu = new JMenu();
       windowMenu.setText("Windows");
       windowMenu.add(getOperatorsMenuItem());
-      windowMenu.add(getScriptMenuItem());
+      //windowMenu.add(getScriptMenuItem());
       windowMenu.add(getFormulaExplorerMenuItem());
       windowMenu.add(getTinaMenuItem());
       for (InternalFrameHolder<?> internalFrame : internalFrames) {
         windowMenu.add(internalFrame.getMenuItem());
       }
       windowMenu.add(getIFlamesMenuItem());
-      windowMenu.add(getEDENMenuItem());
+      //windowMenu.add(getEDENMenuItem());
       windowMenu.add(getPreferencesMenuItem());
       windowMenu.add(getLookAndFeelMenuItem());
     }
@@ -2209,4 +2253,5 @@ public class Desktop extends JApplet {
     RandomGeneratorFactory.cleanup();
     System.exit(0);
   }
+
 }

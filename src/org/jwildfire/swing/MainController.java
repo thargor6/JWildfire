@@ -81,6 +81,8 @@ public class MainController {
 
   private final ScriptProcessor scriptProcessor;
 
+  private final int designedWindowCount;
+
   public BufferList getBufferList() {
     return scriptProcessor.getBufferList();
   }
@@ -117,7 +119,8 @@ public class MainController {
       JTextArea pScriptActionTextArea, JSlider pScriptFrameSlider,
       JTextField pScriptFramesREd, JTextField pScriptFrameREd,
       EnvelopeController pEnvelopeController,
-      RenderController pRenderController) {
+      RenderController pRenderController, int pDesignedWindowCount) {
+    designedWindowCount = pDesignedWindowCount;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
     desktop = pJDesktopPane;
@@ -331,10 +334,8 @@ public class MainController {
     errorHandler.handleError(pThrowable);
   }
 
-  private final static int DESIGNED_WINDOW_MENU_COUNT = 8;
-
   public void refreshWindowMenu() {
-    while (windowMenu.getItemCount() > DESIGNED_WINDOW_MENU_COUNT)
+    while (windowMenu.getItemCount() > designedWindowCount)
       windowMenu.remove(windowMenu.getItemCount() - 1);
     if (getBufferList().size() > 0) {
       windowMenu.addSeparator();
@@ -357,7 +358,7 @@ public class MainController {
   private void windowMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     try {
       JMenuItem menuItem = (JMenuItem) e.getSource();
-      int off = DESIGNED_WINDOW_MENU_COUNT + 1; // +1 because of the
+      int off = designedWindowCount + 1; // +1 because of the
       // separator
       for (int i = off; i < windowMenu.getItemCount(); i++) {
         if (windowMenu.getItem(i) == menuItem) {
