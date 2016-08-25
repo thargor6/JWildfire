@@ -939,7 +939,10 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMEBROWSER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_EASYMOVIEMAKER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DANCINGFLAMES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MUTAGEN));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESHGEN));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_BATCHFLAMERENDERER));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {
