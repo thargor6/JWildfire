@@ -62,7 +62,7 @@ public class FlameBrowserInternalFrame extends JInternalFrame {
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
-    this.setTitle("Fractal flames: Flame browser");
+    this.setTitle("Flame browser");
     this.setVisible(false);
     this.setResizable(true);
     this.setMaximizable(true);

@@ -39,14 +39,12 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Preset;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.ImageCreator;
-import org.jwildfire.envelope.Envelope;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 import org.jwildfire.io.SunFlowWriter;
 import org.jwildfire.loader.ImageLoader;
 import org.jwildfire.script.Action;
 import org.jwildfire.script.ActionList;
-import org.jwildfire.script.Parameter;
 import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Transformer;
 
@@ -686,69 +684,6 @@ public class MainController {
   public PropertyPanel createLoaderPropertyPanel() {
     currLoaderPropertyPanel = new PropertyPanel(getLoader());
     return currLoaderPropertyPanel;
-  }
-
-  private boolean scriptRefreshing = false;
-
-  public void scriptFrameChanged(int pSliderPos, String pFrameStr,
-      String pFramesStr) {
-    if (scriptRefreshing)
-      return;
-    scriptRefreshing = true;
-    try {
-      int frames;
-      try {
-        frames = Integer.parseInt(pFramesStr);
-      }
-      catch (Exception ex) {
-        frames = 60;
-      }
-      if (frames < 1)
-        frames = 1;
-
-      int frame = pSliderPos;
-      if (frame < 0) {
-        try {
-          frame = Integer.parseInt(pFrameStr);
-        }
-        catch (Exception ex) {
-          frames = 1;
-        }
-      }
-      if (frame > frames)
-        frame = frames;
-      else if (frame < 1)
-        frame = 1;
-
-      scriptFrameSlider.setMinimum(1);
-      scriptFrameSlider.setMaximum(frames);
-      scriptFrameSlider.setValue(frame);
-      scriptFrameREd.setText(String.valueOf(frame));
-      scriptFramesREd.setText(String.valueOf(frames));
-
-      int row = actionTable.getSelectedRow();
-      if ((row >= 0) && (row < actionList.size())) {
-        Action action = actionList.get(row);
-        if (action.hasEnvelopes()) {
-          for (Parameter parameter : action.getParameterList()) {
-            Envelope envelope = parameter.getEnvelope();
-            if (envelope != null) {
-              double val = envelope.evaluate(frame);
-              parameter.setValue(Tools.doubleToString(val));
-            }
-          }
-
-          StringBuffer b = new StringBuffer();
-          action.saveToBuffer(b, "\n");
-          String actionStr = b.toString();
-          scriptActionTextArea.setText(actionStr);
-          scriptActionTextArea.select(0, 0);
-        }
-      }
-    }
-    finally {
-      scriptRefreshing = false;
-    }
   }
 
   public void renderFrame() {

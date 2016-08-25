@@ -68,7 +68,7 @@ public class MutaGenInternalFrame extends JInternalFrame {
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
-    this.setTitle("Fractal flames: MutaGen");
+    this.setTitle("MutaGen");
     this.setVisible(false);
     this.setResizable(true);
     this.setMaximizable(true);

@@ -81,7 +81,7 @@ public class DancingFlamesInternalFrame extends JInternalFrame {
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
-    this.setTitle("Fractal flames: MutaGen");
+    this.setTitle("Dancing flames movies");
     this.setVisible(false);
     this.setResizable(true);
     this.setMaximizable(true);
