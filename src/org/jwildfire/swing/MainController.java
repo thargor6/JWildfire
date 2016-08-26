@@ -31,9 +31,6 @@ import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Preset;
@@ -56,14 +53,9 @@ public class MainController {
   private final JComboBox creatorsPresetCmb;
   private final JDialog showMessageDlg;
   private final JTextArea showMessageDlgTextArea;
-  private final JTable actionTable;
-  private final JTextArea scriptActionTextArea;
 
-  private final JSlider scriptFrameSlider;
-  private final JTextField scriptFramesREd;
   private final JTextField scriptFrameREd;
 
-  private final EnvelopeController envelopeController;
   private final RenderController renderController;
 
   private final ActionList actionList = new ActionList();
@@ -128,12 +120,7 @@ public class MainController {
     creatorsPresetCmb = pCreatorsPresetCmb;
     showMessageDlg = pShowMessageDlg;
     showMessageDlgTextArea = pShowMessageDlgTextArea;
-    actionTable = pActionTable;
-    scriptActionTextArea = pScriptActionTextArea;
-    scriptFrameSlider = pScriptFrameSlider;
-    scriptFramesREd = pScriptFramesREd;
     scriptFrameREd = pScriptFrameREd;
-    envelopeController = pEnvelopeController;
     renderController = pRenderController;
     scriptProcessor = new ScriptProcessor(pJDesktopPane);
     scriptProcessor.getBufferList().setSyncWithStaticBufferList(true);
@@ -145,7 +132,6 @@ public class MainController {
     Buffer buffer = scriptProcessor.loadImage(pFilename);
     if (pRecordAction)
       actionList.addLoadImageAction(pFilename);
-    refreshActionTable();
     addEvents(buffer);
     refreshWindowMenu();
     return buffer;
@@ -195,7 +181,6 @@ public class MainController {
             scriptProcessor.getTransformer(),
             buffers.getInBuffer(), buffers.getOutBuffer(), buffers.getOutHDRBuffer(),
             buffers.getOutBuffer3D());
-      refreshActionTable();
       refreshWindowMenu();
       desktop.repaint();
     }
@@ -228,7 +213,6 @@ public class MainController {
       if (pRecordAction)
         actionList.addExecuteImageCreatorAction(
             scriptProcessor.getCreator(), buffer, pWidth, pHeight);
-      refreshActionTable();
       return buffer;
     }
     finally {
@@ -255,7 +239,6 @@ public class MainController {
       if (pRecordAction)
         actionList.addExecuteImageLoaderAction(
             scriptProcessor.getLoader(), buffer);
-      refreshActionTable();
       return buffer;
     }
     finally {
@@ -276,7 +259,6 @@ public class MainController {
             actionList.removeBuffer(buffer, getBufferList());
             buffer.flush();
             refreshWindowMenu();
-            refreshActionTable();
             break;
           }
         }
@@ -450,7 +432,6 @@ public class MainController {
       clearAllBuffers();
       refreshWindowMenu();
       actionList.clear();
-      refreshActionTable();
       desktop.repaint();
       return true;
     }
@@ -465,72 +446,10 @@ public class MainController {
       if (JOptionPane.showConfirmDialog(desktop, msg, title,
           JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
         actionList.clear();
-        refreshActionTable();
         return true;
       }
     }
     return false;
-  }
-
-  private ListSelectionListener listener = null;
-
-  private void refreshActionTable() {
-    scriptActionTextArea.setText(null);
-    if (listener != null) {
-      actionTable.getSelectionModel().removeListSelectionListener(
-          listener);
-      listener = null;
-    }
-    actionTable.setModel(new ActionTableModel());
-    listener = new ListSelectionListener() {
-      @Override
-      public void valueChanged(ListSelectionEvent e) {
-        revertScriptAction();
-      }
-    };
-    actionTable.getSelectionModel().addListSelectionListener(listener);
-  }
-
-  private class ActionTableModel extends AbstractTableModel {
-    private static final long serialVersionUID = 1L;
-
-    private String[] columnNames = { "Action", "Parameter", "Input",
-        "Output", "Output3D" };
-
-    @Override
-    public int getColumnCount() {
-      return columnNames.length;
-    }
-
-    @Override
-    public int getRowCount() {
-      return actionList.size();
-    }
-
-    @Override
-    public String getColumnName(int col) {
-      return columnNames[col];
-    }
-
-    @Override
-    public Object getValueAt(int row, int col) {
-      if ((row >= 0) && (row < actionList.size())) {
-        Action a = actionList.get(row);
-        switch (col) {
-          case 0:
-            return a.getActionType().toString();
-          case 1:
-            return a.getParameter();
-          case 2:
-            return a.getInputBuffer();
-          case 3:
-            return a.getOutputBuffer();
-          case 4:
-            return a.getOutputBuffer3D();
-        }
-      }
-      return null;
-    }
   }
 
   public void saveScript() throws Exception {
@@ -629,45 +548,9 @@ public class MainController {
         }
         finally {
           refreshWindowMenu();
-          refreshActionTable();
           desktop.repaint();
         }
       }
-    }
-  }
-
-  public void revertScriptAction() {
-    String actionStr = null;
-    int row = actionTable.getSelectedRow();
-    if ((row >= 0) && (row < actionList.size())) {
-      Action action = actionList.get(row);
-      StringBuffer b = new StringBuffer();
-      action.saveToBuffer(b, "\n");
-      actionStr = b.toString();
-      envelopeController.setCurrAction(action);
-    }
-    else {
-      envelopeController.setCurrAction(null);
-    }
-    envelopeController.enableControls();
-    envelopeController.refreshEnvelope();
-    scriptActionTextArea.setText(actionStr);
-    scriptActionTextArea.select(0, 0);
-  }
-
-  public void saveScriptAction() throws Exception {
-    int row = actionTable.getSelectedRow();
-    if ((row >= 0) && (row < actionList.size())) {
-      ActionList lActionList = new ActionList();
-      lActionList.loadFromString(scriptActionTextArea.getText());
-      actionList.remove(row);
-      for (Action action : lActionList) {
-        if (row < actionList.size())
-          actionList.add(row, action);
-        else
-          actionList.add(action);
-      }
-      refreshActionTable();
     }
   }
 
@@ -696,31 +579,6 @@ public class MainController {
       handleError(ex);
     }
 
-  }
-
-  public void syncActionAction() throws Exception {
-    int row = actionTable.getSelectedRow();
-    if ((row >= 0) && (row < actionList.size())) {
-      Action action = actionList.get(row);
-      switch (action.getActionType()) {
-        case EXECUTE_CREATOR:
-          selectCreator(action.getParameter());
-
-          action.setProperties(scriptProcessor.getCreator(),
-              scriptProcessor.getBufferList());
-          break;
-        case EXECUTE_TRANSFORMER:
-          selectTransformer(action.getParameter());
-          action.setProperties(scriptProcessor.getTransformer(),
-              scriptProcessor.getBufferList());
-          break;
-        case EXECUTE_LOADER:
-          selectLoader(action.getParameter());
-          action.setProperties(scriptProcessor.getLoader(),
-              scriptProcessor.getBufferList());
-          break;
-      }
-    }
   }
 
   public void applyTransformerPreset(String presetName) {

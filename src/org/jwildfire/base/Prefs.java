@@ -935,6 +935,7 @@ public class Prefs extends ManagedObject {
   private Prefs() {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_NAVIGATOR));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA_PREVIEW));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FORMULAEXPLORER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
@@ -947,6 +948,10 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_INTERACTIVERENDERER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESHGEN));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_BATCHFLAMERENDERER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_PREFERENCES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_SYSTEMINFO));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_WELCOME));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LOOKANDFEEL));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {

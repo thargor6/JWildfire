@@ -153,6 +153,7 @@ public class PrefsWriter {
       addValue(sb, WindowPrefs.KEY_WIDTH + "." + i, prefs.getWidth());
       addValue(sb, WindowPrefs.KEY_HEIGHT + "." + i, prefs.getHeight());
       addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
+      addValue(sb, WindowPrefs.KEY_VISIBLE + "." + i, prefs.isVisible());
     }
     // macro buttons
     addValue(sb, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons());

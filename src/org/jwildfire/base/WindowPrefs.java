@@ -26,8 +26,10 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   static final String KEY_LEFT = "window.left";
   static final String KEY_TOP = "window.top";
   static final String KEY_MAXIMIZED = "window.maximized";
+  static final String KEY_VISIBLE = "window.visible";
 
   public static final String WINDOW_DESKTOP = "Desktop";
+  public static final String WINDOW_NAVIGATOR = "NAVIGATOR";
   public static final String WINDOW_TINA = "TINA";
   public static final String WINDOW_MESHGEN = "MESHGEN";
   public static final String WINDOW_MUTAGEN = "MUTAGEN";
@@ -41,6 +43,10 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_TINA_PREVIEW = "TINA_PREVIEW";
   public static final String WINDOW_IMAGEPROCESSING = "IMAGEPROCESSING";
   public static final String WINDOW_FORMULAEXPLORER = "FORMULAEXPLORER";
+  public static final String WINDOW_PREFERENCES = "PREFERENCES";
+  public static final String WINDOW_SYSTEMINFO = "SYSTEMINFO";
+  public static final String WINDOW_WELCOME = "WELCOME";
+  public static final String WINDOW_LOOKANDFEEL = "LOOKANDFEEL";
 
   private int width;
   private int height;
@@ -48,6 +54,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   private int top;
   private boolean maximized;
   private final String name;
+  private boolean visible;
 
   public WindowPrefs(String pName) {
     name = pName;
@@ -60,6 +67,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
     left = pSrc.left;
     top = pSrc.top;
     maximized = pSrc.maximized;
+    visible = pSrc.visible;
   }
 
   public int getWidth() {
@@ -120,7 +128,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   @Override
   public boolean isEqual(WindowPrefs pSrc) {
     if (width != pSrc.width || height != pSrc.height ||
-        left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized)
+        left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized || visible != pSrc.visible)
       return false;
     if (name == null) {
       if (pSrc.name != null)
@@ -134,6 +142,14 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
 
   public String getName() {
     return name;
+  }
+
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
   }
 
 }

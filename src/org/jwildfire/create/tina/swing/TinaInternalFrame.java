@@ -513,7 +513,7 @@ public class TinaInternalFrame extends JInternalFrame {
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
     this.setTitle("Fractal flames");
-    this.setVisible(true);
+    this.setVisible(false);
     this.setResizable(true);
     this.setMaximizable(true);
     this.setContentPane(getJContentPane());

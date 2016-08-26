@@ -36,8 +36,8 @@ import javax.swing.event.HyperlinkListener;
 import org.jwildfire.base.Prefs;
 
 public class HelpInternalFrame extends JInternalFrame {
-  private TinaController tinaController; //  @jve:decl-index=0:
-  private JPanel jContentPane = null; //  @jve:decl-index=0:visual-constraint="10,10"
+  private TinaController tinaController;
+  private JPanel jContentPane = null;
   private JTabbedPane rootTabbedPane = null;
   private JPanel blurShadingPanel = null;
 
