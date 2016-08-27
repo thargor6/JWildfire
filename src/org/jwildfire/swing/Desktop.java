@@ -124,6 +124,7 @@ public class Desktop extends JApplet {
     helpInternalFrames = new ArrayList<>();
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(SystemInfoInternalFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(WelcomeInternalFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(TipOfTheDayInternalFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
 
   private static final long serialVersionUID = 1L;
@@ -176,6 +177,10 @@ public class Desktop extends JApplet {
       if (!welcomeInternalFrame.isVisible()) {
         welcomeInternalFrame.setVisible(true);
       }
+      TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
+      if (!tipOfTheDayInternalFrame.isVisible()) {
+        tipOfTheDayInternalFrame.setVisible(true);
+      }
 
       MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
       FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
@@ -187,7 +192,7 @@ public class Desktop extends JApplet {
       HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
 
       TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);
-      tinaController = tinaFrame.createController(errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, helpFrame);
+      tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, helpFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }

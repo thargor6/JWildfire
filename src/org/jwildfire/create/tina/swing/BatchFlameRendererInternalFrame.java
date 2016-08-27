@@ -27,7 +27,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -36,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
@@ -52,7 +50,6 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
   private JPanel batchRenderPanel = null;
-  private JTabbedPane rootTabbedPane = null;
   private JScrollPane renderBatchJobsScrollPane = null;
   private JTable renderBatchJobsTable = null;
   private JButton batchRenderAddFilesButton = null;
@@ -101,7 +98,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getBatchRenderPanel(), BorderLayout.CENTER);
     }
     return jContentPane;
   }
@@ -197,21 +194,6 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       panel_1.add(getRenderBatchJobsScrollPane(), BorderLayout.CENTER);
     }
     return batchRenderPanel;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Batch Flame Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/images.png")), getBatchRenderPanel(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JComboBox batchQualityProfileCmb;

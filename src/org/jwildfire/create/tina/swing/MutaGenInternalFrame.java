@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
@@ -36,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -50,7 +48,6 @@ public class MutaGenInternalFrame extends JInternalFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
-  private JTabbedPane rootTabbedPane = null;
 
   public MutaGenInternalFrame() {
     super();
@@ -87,24 +84,9 @@ public class MutaGenInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getPanel_16(), BorderLayout.CENTER);
     }
     return jContentPane;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("MutaGen ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kdissert.png")), getPanel_16(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JWFNumberField swfAnimatorFramesPerSecondREd;

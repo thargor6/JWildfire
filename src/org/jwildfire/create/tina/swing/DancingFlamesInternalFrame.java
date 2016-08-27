@@ -29,7 +29,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -38,7 +37,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -63,7 +61,6 @@ public class DancingFlamesInternalFrame extends JInternalFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
-  private JTabbedPane rootTabbedPane = null;
 
   public DancingFlamesInternalFrame() {
     super();
@@ -100,24 +97,9 @@ public class DancingFlamesInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getPanel_36(), BorderLayout.CENTER);
     }
     return jContentPane;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Dancing Flames Movies ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kipina.png")), getPanel_36(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JWFNumberField swfAnimatorFramesPerSecondREd;

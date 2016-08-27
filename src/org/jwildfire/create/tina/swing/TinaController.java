@@ -57,7 +57,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -141,6 +140,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
+import org.jwildfire.swing.Desktop;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
@@ -157,7 +157,6 @@ import com.l2fprod.common.util.ResourceManager;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
     DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder {
-  public static final int PAGE_INDEX = 0;
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   static final double SLIDER_SCALE_CENTRE = 5000.0;
@@ -203,6 +202,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
 
+  private final Desktop desktop;
   private final Prefs prefs;
   final ErrorHandler errorHandler;
   boolean gridRefreshing = false;
@@ -213,7 +213,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final QuickSaveFilenameGen qsaveFilenameGen;
 
   private MainController mainController;
-  private final JTabbedPane rootTabbedPane;
+  private final JPanel rootPanel;
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
@@ -226,13 +226,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private File scriptPropFile = new File(System.getProperty("user.home"), SCRIPT_PROPS_FILE);
 
   public TinaController(TinaControllerParameter parameterObject) {
+    desktop = parameterObject.desktop;
     tinaFrame = parameterObject.pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = parameterObject.pErrorHandler;
     prefs = parameterObject.pPrefs;
     centerPanel = parameterObject.pCenterPanel;
 
-    dancingFractalsController = new DancingFractalsController(this, parameterObject.pErrorHandler, parameterObject.pRootTabbedPane, parameterObject.pDancingFlamesFlamePnl, parameterObject.pDancingFlamesGraph1Pnl,
+    dancingFractalsController = new DancingFractalsController(this, parameterObject.pErrorHandler, parameterObject.pRootPanel, parameterObject.pDancingFlamesFlamePnl, parameterObject.pDancingFlamesGraph1Pnl,
         parameterObject.pDancingFlamesLoadSoundBtn, parameterObject.pDancingFlamesAddFromClipboardBtn, parameterObject.pDancingFlamesAddFromEditorBtn,
         parameterObject.pDancingFlamesAddFromDiscBtn, parameterObject.pDancingFlamesRandomCountIEd, parameterObject.pDancingFlamesGenRandFlamesBtn,
         parameterObject.pDancingFlamesRandomGenCmb, parameterObject.pDancingFlamesPoolFlamePreviewPnl, parameterObject.pDancingFlamesBorderSizeSlider,
@@ -273,17 +274,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flamePanels[22] = parameterObject.mutaGen23Pnl;
       flamePanels[23] = parameterObject.mutaGen24Pnl;
       flamePanels[24] = parameterObject.mutaGen25Pnl;
-      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, flamePanels,
+      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, flamePanels,
           parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
           parameterObject.mutaGenAmountREd, parameterObject.mutaGenHorizontalTrend1Cmb, parameterObject.mutaGenHorizontalTrend2Cmb,
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
 
-    batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, data,
+    batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
         parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn);
 
-    meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane,
+    meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel,
         parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
         parameterObject.meshGenSliceCountREd, parameterObject.meshGenSlicesPerRenderREd, parameterObject.meshGenRenderWidthREd,
         parameterObject.meshGenRenderHeightREd, parameterObject.meshGenRenderQualityREd, parameterObject.meshGenProgressbar,
@@ -671,7 +672,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.batchRenderFilesRemoveButton = parameterObject.pBatchRenderFilesRemoveButton;
     data.batchRenderFilesRemoveAllButton = parameterObject.pBatchRenderFilesRemoveAllButton;
     data.batchRenderStartButton = parameterObject.pBatchRenderStartButton;
-    rootTabbedPane = parameterObject.pRootTabbedPane;
+    rootPanel = parameterObject.pRootPanel;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
 
@@ -759,10 +760,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineEditPlaneCmb = parameterObject.affineEditPlaneCmb;
 
     // end create
-    flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
-    xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
-    gradientControls = new GradientControlsDelegate(this, data, rootTabbedPane);
-    channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
+    flameControls = new FlameControlsDelegate(this, data, rootPanel);
+    xFormControls = new XFormControlsDelegate(this, data, rootPanel);
+    gradientControls = new GradientControlsDelegate(this, data, rootPanel);
+    channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
 
     messageHelper = new JInternalFrameFlameMessageHelper(tinaFrame);
 
@@ -4157,12 +4158,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
     if (getCurrFlame() != null) {
       getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
-      rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
+      desktop.showInternalFrame(EasyMovieMakerInternalFrame.class);
     }
   }
 
-  public JTabbedPane getRootTabbedPane() {
-    return rootTabbedPane;
+  public JPanel getRootPanel() {
+    return rootPanel;
   }
 
   public void mouseTransformEditPointsButton_clicked() {
@@ -4536,12 +4537,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      rootTabbedPane.setSelectedIndex(MutaGenController.PAGE_INDEX);
-      rootTabbedPane.getParent().invalidate();
+      desktop.showInternalFrame(MutaGenInternalFrame.class);
+      rootPanel.getParent().invalidate();
       try {
-        Graphics g = rootTabbedPane.getParent().getGraphics();
+        Graphics g = rootPanel.getParent().getGraphics();
         if (g != null) {
-          rootTabbedPane.getParent().paint(g);
+          rootPanel.getParent().paint(g);
         }
       }
       catch (Throwable ex) {
@@ -4572,7 +4573,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void editFlameTitleBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
+      String s = StandardDialogs.promptForText(rootPanel, "Please enter the new title:", flame.getName());
       if (s != null) {
         flame.setName(s);
         messageHelper.showStatusMessage(flame, "Title changed");
@@ -4583,7 +4584,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void editTransformCaptionBtn_clicked() {
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter a new name:", xForm.getName());
+      String s = StandardDialogs.promptForText(rootPanel, "Please enter a new name:", xForm.getName());
       if (s != null) {
         xForm.setName(s);
         int row = data.transformationsTable.getSelectedRow();
@@ -4799,7 +4800,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
 
-      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
       if (selectedColor != null) {
         getCurrFlame().setBGColorRed(selectedColor.getRed());
         getCurrFlame().setBGColorGreen(selectedColor.getGreen());
@@ -6103,6 +6104,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
 
     relWeightsTableClicked();
+  }
+
+  public Desktop getDesktop() {
+    return desktop;
   }
 
 }

@@ -29,7 +29,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
@@ -37,7 +36,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
@@ -53,7 +51,6 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private JPanel jContentPane = null; //  @jve:decl-index=0:visual-constraint="10,10"
 
   private JPanel interactiveRenderPanel = null;
-  private JTabbedPane rootTabbedPane = null;
 
   public InteractiveRendererInternalFrame() {
     super();
@@ -90,7 +87,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getInteractiveRenderPanel(), BorderLayout.CENTER);
     }
     return jContentPane;
   }
@@ -110,21 +107,6 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       interactiveRenderPanel.add(getInteractiveCenterPanel(), BorderLayout.CENTER);
     }
     return interactiveRenderPanel;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Interactive Renderer ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")), getInteractiveRenderPanel(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JPanel interactiveNorthPanel;

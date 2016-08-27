@@ -36,10 +36,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
@@ -53,18 +51,12 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
-  private JTabbedPane rootTabbedPane = null;
 
   public MeshGenInternalFrame() {
     super();
     initialize();
   }
 
-  /**
-   * This method initializes this
-   * 
-   * @return void
-   */
   private void initialize() {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -90,24 +82,9 @@ public class MeshGenInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getPanel_88(), BorderLayout.CENTER);
     }
     return jContentPane;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("3DMesh Generation ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_88(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JWFNumberField swfAnimatorFramesPerSecondREd;
@@ -155,8 +132,6 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenRenderQualityREd;
   private JProgressBar meshGenProgressbar;
   private JButton meshGenGenerateBtn;
-  private JScrollPane scrollPane_10;
-  private JTextPane meshGenHintPane;
   private JWFNumberField meshGenCentreXREd;
   private JWFNumberField meshGenCentreYREd;
   private JWFNumberField meshGenZoomREd;

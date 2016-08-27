@@ -83,7 +83,6 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
-import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -532,7 +531,7 @@ public class TinaInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getRootPanel(), BorderLayout.CENTER);
     }
     return jContentPane;
   }
@@ -4929,7 +4928,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaPaletteBrightnessSlider;
   }
 
-  public TinaController createController(StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame,
+  public TinaController createController(Desktop pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame,
       FlameBrowserInternalFrame flameBrowserFrame, EasyMovieMakerInternalFrame easyMovieMakerFrame,
       DancingFlamesInternalFrame dancingFlamesFrame, BatchFlameRendererInternalFrame batchFlameRendererFrame,
       MeshGenInternalFrame meshGenFrame, InteractiveRendererInternalFrame interactiveRendererFrame, HelpInternalFrame helpFrame) {
@@ -5041,7 +5040,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
     params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane());
 
-    params.setParams1(this, pErrorHandler, pPrefs,/* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
+    params.setParams1(pDesktop, this, pErrorHandler, pPrefs,/* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
         getTinaCameraCentreXREd(), getTinaCameraCentreXSlider(), getTinaCameraCentreYREd(),
         getTinaCameraCentreYSlider(), getTinaCameraZoomREd(), getTinaCameraZoomSlider(), getDofNewDOFCBx(),
@@ -5069,7 +5068,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformEditFocusPointButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
         getAffineResetTransformButton(), getCreatePaletteColorsTable(),
-        getMouseTransformSlowButton(), getRootTabbedPane(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(),
+        getMouseTransformSlowButton(), getRootPanel(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(),
         getPostBlurRadiusREd(), getPostBlurRadiusSlider(), getPostBlurFadeREd(), getPostBlurFadeSlider(), getPostBlurFallOffREd(), getPostBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl,
         getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
@@ -5157,7 +5156,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
     for (int i = 0; i < variationControlsDelegates.length; i++) {
-      variationControlsDelegates[i] = new VariationControlsDelegate(tinaController, tinaController.getData(), getRootTabbedPane(), i);
+      variationControlsDelegates[i] = new VariationControlsDelegate(tinaController, tinaController.getData(), getRootPanel(), i);
     }
     tinaController.setVariationControlsDelegates(variationControlsDelegates);
 
@@ -9610,21 +9609,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return mouseTransformSlowButton;
   }
 
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Flame Editor ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")), getRootPanel(), null);
-    }
-    return rootTabbedPane;
-  }
-
   private JToggleButton affinePreserveZButton;
   private JButton qualityProfileBtn;
   private JButton resolutionProfileBtn;
@@ -11462,7 +11446,7 @@ public class TinaInternalFrame extends JInternalFrame {
         public void actionPerformed(ActionEvent e) {
           if (tinaController.getCurrFlame() != null) {
             tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
-            rootTabbedPane.setSelectedIndex(DancingFractalsController.PAGE_INDEX);
+            tinaController.getDesktop().showInternalFrame(DancingFlamesInternalFrame.class);
           }
         }
       });

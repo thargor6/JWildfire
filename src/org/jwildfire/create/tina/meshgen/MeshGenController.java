@@ -41,7 +41,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 
 import org.jwildfire.base.Prefs;
@@ -73,6 +72,7 @@ import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.MeshFileChooser;
 import org.jwildfire.create.tina.swing.SunflowSceneFileChooser;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaInternalFrame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.InternalSliceRangeIndicatorWFFunc;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -89,7 +89,7 @@ public class MeshGenController {
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
-  private final JTabbedPane rootTabbedPane;
+  private final JPanel rootPanel;
   private Flame currStrippedOrigFlame;
   private Flame currBaseFlame;
   private boolean refreshing;
@@ -160,7 +160,7 @@ public class MeshGenController {
   private String currSequencePattern;
   private ImagePanel previewPanel;
 
-  public MeshGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane,
+  public MeshGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel,
       JButton pFromEditorBtn, JButton pFromClipboardBtn, JButton pLoadFlameBtn, JWFNumberField pSliceCountREd,
       JWFNumberField pSlicesPerRenderREd, JWFNumberField pRenderWidthREd, JWFNumberField pRenderHeightREd,
       JWFNumberField pRenderQualityREd, JProgressBar pRenderSequenceProgressbar, JButton pGenerateBtn, JPanel pTopViewRootPnl,
@@ -181,7 +181,7 @@ public class MeshGenController {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
-    rootTabbedPane = pRootTabbedPane;
+    rootPanel = pRootPanel;
 
     fromEditorBtn = pFromEditorBtn;
     fromClipboardBtn = pFromClipboardBtn;
@@ -532,7 +532,7 @@ public class MeshGenController {
           ex.printStackTrace();
         }
       }
-      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame newFlame = flames.get(0);
@@ -871,7 +871,7 @@ public class MeshGenController {
             ex.printStackTrace();
           }
         }
-        if (chooser.showSaveDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
           final File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
 
@@ -932,7 +932,7 @@ public class MeshGenController {
       currStrippedOrigFlame.setCentreY(centreYREd.getDoubleValue());
       currStrippedOrigFlame.setCamZoom(zoomREd.getDoubleValue());
       tinaController.importFlame(currStrippedOrigFlame, true);
-      tinaController.getRootTabbedPane().setSelectedIndex(0);
+      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
     }
   }
 
@@ -950,7 +950,7 @@ public class MeshGenController {
         ex.printStackTrace();
       }
     }
-    if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+    if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
       File file = chooser.getSelectedFile();
       prefs.setLastInputImageFile(file);
       importSequence(SequenceFilenameGen.guessFilenamePattern(file));
@@ -977,7 +977,7 @@ public class MeshGenController {
       }
       if (count > 0) {
         File first = new File(String.format(pFilenamePattern, firstIndex));
-        SimpleImage img = new ImageReader(rootTabbedPane).loadImage(first.getAbsolutePath());
+        SimpleImage img = new ImageReader(rootPanel).loadImage(first.getAbsolutePath());
         if (img != null) {
           sequenceWidthREd.setValue(img.getImageWidth());
           sequenceHeightREd.setValue(img.getImageHeight());
@@ -1019,7 +1019,7 @@ public class MeshGenController {
             ex.printStackTrace();
           }
         }
-        if (chooser.showSaveDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
           final File outFile = chooser.getSelectedFile();
           prefs.setLastMeshFile(outFile);
 
@@ -1163,7 +1163,7 @@ public class MeshGenController {
           ex.printStackTrace();
         }
       }
-      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         importPreviewMesh(file.getAbsolutePath());
       }
@@ -1224,7 +1224,7 @@ public class MeshGenController {
           ex.printStackTrace();
         }
       }
-      if (chooser.showSaveDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+      if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         exportMeshToSunflow(currPreviewMesh.getMesh(), file.getAbsolutePath());
       }

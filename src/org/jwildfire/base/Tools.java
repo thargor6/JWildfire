@@ -97,9 +97,6 @@ public class Tools {
 
   public static final String CURVE_POSTFIX = "Curve";
 
-  public static final int TINA_EDITOR_TAB_IDX = 0;
-  public static final int TINA_MESHGEN_TAB_IDX = 7;
-
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));
   }

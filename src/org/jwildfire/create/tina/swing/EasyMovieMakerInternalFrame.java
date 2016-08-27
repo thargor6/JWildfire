@@ -105,7 +105,7 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getRootTabbedPane(), BorderLayout.CENTER);
+      jContentPane.add(getTinaSWFAnimatorPanel(), BorderLayout.CENTER);
     }
     return jContentPane;
   }
@@ -829,21 +829,6 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
       });
     }
     return swfAnimatorXFormScript1Cmb;
-  }
-
-  /**
-   * This method initializes rootTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getRootTabbedPane() {
-    if (rootTabbedPane == null) {
-      rootTabbedPane = new JTabbedPane();
-      rootTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rootTabbedPane.setEnabled(true);
-      rootTabbedPane.addTab("Easy Movie Maker ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")), getTinaSWFAnimatorPanel(), null);
-    }
-    return rootTabbedPane;
   }
 
   private JWFNumberField swfAnimatorFramesPerSecondREd;

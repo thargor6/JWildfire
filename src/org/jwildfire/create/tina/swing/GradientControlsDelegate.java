@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -27,8 +27,8 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class GradientControlsDelegate extends AbstractControlsDelegate {
 
-  public GradientControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane, true);
+  public GradientControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+    super(pOwner, pData, pRootPanel, true);
   }
 
   @Override

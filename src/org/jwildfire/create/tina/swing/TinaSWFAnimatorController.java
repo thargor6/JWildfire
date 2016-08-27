@@ -49,7 +49,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -238,7 +237,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       swfAnimatorFrameREd.setValue(1);
       swfAnimatorMotionBlurLengthREd.setValue(32);
       swfAnimatorMotionBlurTimeStepREd.setValue(0.01);
-      motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane());
+      motionControlsDelegate = new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel());
 
       randomBatch.add(0, new MovieThumbnail(currMovie, null));
       updateThumbnails();
@@ -553,7 +552,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void editPartBtn_clicked(FlameMoviePart pPart) {
     parentCtrl.importFlame(pPart.getFlame(), true);
-    parentCtrl.getRootTabbedPane().setSelectedIndex(0);
+    parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
   }
 
   protected void replacePartBtn_clicked(FlameMoviePart pPart) {
@@ -1190,7 +1189,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       pCmb.setSelectedItem(XFormScriptType.NONE);
       pAmountField.setValue(1.0);
     }
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane()).enableControl(pAmountField, false);
+    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel()).enableControl(pAmountField, false);
   }
 
   private void setGlobalScriptToUI(GlobalScript pScript, JComboBox pCmb, JWFNumberField pAmountField) {
@@ -1203,7 +1202,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
       pCmb.setSelectedItem(GlobalScriptType.NONE);
       pAmountField.setValue(1.0);
     }
-    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootTabbedPane()).enableControl(pAmountField, false);
+    new MotionControlsDelegate(parentCtrl, null, parentCtrl.getRootPanel()).enableControl(pAmountField, false);
   }
 
   public void movieFromDiscButton_clicked() {
@@ -1280,7 +1279,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     Flame flame = getCurrFlame();
     if (flame != null) {
       parentCtrl.importFlame(flame, true);
-      parentCtrl.getRootTabbedPane().setSelectedIndex(0);
+      parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
     }
   }
 
@@ -1420,8 +1419,8 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private class MotionControlsDelegate extends AbstractControlsDelegate {
 
-    public MotionControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-      super(pOwner, pData, pRootTabbedPane, false);
+    public MotionControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+      super(pOwner, pData, pRootPanel, false);
     }
 
     @Override

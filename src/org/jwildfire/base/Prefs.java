@@ -951,6 +951,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_PREFERENCES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_SYSTEMINFO));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_WELCOME));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TIPOFTHEDAY));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LOOKANDFEEL));
   }
 

@@ -25,8 +25,8 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,7 +54,7 @@ public class BatchRendererController implements JobRenderThreadController {
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
-  private final JTabbedPane rootTabbedPane;
+  private final JPanel rootPanel;
   private final TinaControllerData data;
   private final List<Job> batchRenderList = new ArrayList<Job>();
   private final ProgressUpdater jobProgressUpdater;
@@ -62,12 +62,12 @@ public class BatchRendererController implements JobRenderThreadController {
   private final JCheckBox batchRenderOverrideCBx;
   private final JButton batchRenderShowImageBtn;
 
-  public BatchRendererController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane, TinaControllerData pData, ProgressUpdater pJobProgressUpdater,
+  public BatchRendererController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData, ProgressUpdater pJobProgressUpdater,
       JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
-    rootTabbedPane = pRootTabbedPane;
+    rootPanel = pRootPanel;
     data = pData;
     jobProgressUpdater = pJobProgressUpdater;
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
@@ -129,7 +129,7 @@ public class BatchRendererController implements JobRenderThreadController {
     data.batchRenderStartButton.setText(idle ? "Render" : "Stop");
     data.batchRenderStartButton.invalidate();
     data.batchRenderStartButton.validate();
-    rootTabbedPane.setEnabled(idle);
+    rootPanel.setEnabled(idle);
   }
 
   public void batchRenderAddFilesButton_clicked() {
@@ -148,7 +148,7 @@ public class BatchRendererController implements JobRenderThreadController {
       }
       int jobCount = batchRenderList.size();
       chooser.setMultiSelectionEnabled(true);
-      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
         for (File file : chooser.getSelectedFiles()) {
           addFlameToBatchRenderer(file.getPath(), false);
         }
@@ -481,7 +481,7 @@ public class BatchRendererController implements JobRenderThreadController {
           tinaController.getMainController().loadImage(imageFile.getAbsolutePath(), false);
         }
         else {
-          StandardDialogs.message(rootTabbedPane, "No rendered image found");
+          StandardDialogs.message(rootPanel, "No rendered image found");
         }
       }
     }
