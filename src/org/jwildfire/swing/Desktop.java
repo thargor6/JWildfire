@@ -241,6 +241,14 @@ public class Desktop extends JApplet {
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
     }
+
+    try {
+      getInternalFrame(WelcomeInternalFrame.class).setSelected(true);
+    }
+    catch (PropertyVetoException ex) {
+      ex.printStackTrace();
+    }
+
     return mainDesktopPane;
   }
 
@@ -1043,15 +1051,36 @@ public class Desktop extends JApplet {
     InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
     if (frameHolder != null) {
       T frame = frameHolder.getInternalFrame();
-      if (!frame.isVisible() || frame.isClosed()) {
-        frameHolder.getMenuItem().doClick();
+      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+        if (!frame.isVisible() || frame.isClosed()) {
+          frameHolder.getMenuItem().doClick();
+        }
+        try {
+          frame.setSelected(true);
+        }
+        catch (PropertyVetoException ex) {
+          ex.printStackTrace();
+        }
+        if (frame.isIcon()) {
+          try {
+            frame.setIcon(false);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
       }
-      try {
-        frame.setSelected(true);
+      else {
+        if (!frame.isIcon()) {
+          try {
+            frame.setIcon(true);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
       }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
+
     }
   }
 }

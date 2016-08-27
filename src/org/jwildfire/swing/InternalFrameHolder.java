@@ -53,7 +53,7 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
       Dimension size = internalFrame.getSize();
       Point pos = internalFrame.getLocation();
       WindowPrefs wPrefs = Prefs.getPrefs().getWindowPrefs(windowPrefsName);
-      boolean visible = internalFrame.isVisible() && !internalFrame.isClosed();
+      boolean visible = internalFrame.isVisible() && !internalFrame.isClosed() && !internalFrame.isIcon();
       if (visible) {
         wPrefs.setLeft(pos.x);
         wPrefs.setTop(pos.y);
