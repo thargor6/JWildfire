@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +81,8 @@ public class Desktop extends JApplet {
 
   public Desktop() {
     mainInternalFrames = new ArrayList<>();
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(NavigatorInternalFrame.class, this, WindowPrefs.WINDOW_NAVIGATOR, "Navigator"));
+
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(TinaInternalFrame.class, this, WindowPrefs.WINDOW_TINA, "Fractal flames: Editor"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(InteractiveRendererInternalFrame.class, this, WindowPrefs.WINDOW_INTERACTIVERENDERER, "Fractal flames: Interactive renderer"));
@@ -124,6 +127,8 @@ public class Desktop extends JApplet {
   }
 
   private static final long serialVersionUID = 1L;
+  public static final int DEFAULT_WINDOW_LEFT = 120;
+  public static final int DEFAULT_WINDOW_TOP = 0;
 
   private JFrame jFrame = null;
   private JPanel jContentPane = null;
@@ -143,10 +148,10 @@ public class Desktop extends JApplet {
   private JDesktopPane getMainDesktopPane() {
     if (mainDesktopPane == null) {
       mainDesktopPane = createMainDesktopPane();
-      mainDesktopPane.add(getNavigatorInternalFrame(), null);
       for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
         mainDesktopPane.add(internalFrame.getInternalFrame());
       }
+      getInternalFrame(NavigatorInternalFrame.class).setDesktop(this);
       getInternalFrame(TinaInternalFrame.class).addComponentListener(new java.awt.event.ComponentAdapter() {
         public void componentResized(java.awt.event.ComponentEvent e) {
           tinaController.refreshFlameImage(true, false, 1, true, false);
@@ -161,6 +166,11 @@ public class Desktop extends JApplet {
 
       errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
+
+      NavigatorInternalFrame navigatorInternalFrame = getInternalFrame(NavigatorInternalFrame.class);
+      if (!navigatorInternalFrame.isVisible()) {
+        navigatorInternalFrame.setVisible(true);
+      }
 
       WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
       if (!welcomeInternalFrame.isVisible()) {
@@ -265,23 +275,28 @@ public class Desktop extends JApplet {
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends JInternalFrame> T getInternalFrame(Class<T> frameType) {
+  public <T extends JInternalFrame> InternalFrameHolder<T> getInternalFrameHolder(Class<T> frameType) {
     for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
       if (frameType.equals(internalFrame.getFrameType())) {
-        return (T) internalFrame.getInternalFrame();
+        return (InternalFrameHolder<T>) internalFrame;
       }
     }
     for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
       if (frameType.equals(internalFrame.getFrameType())) {
-        return (T) internalFrame.getInternalFrame();
+        return (InternalFrameHolder<T>) internalFrame;
       }
     }
     for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
       if (frameType.equals(internalFrame.getFrameType())) {
-        return (T) internalFrame.getInternalFrame();
+        return (InternalFrameHolder<T>) internalFrame;
       }
     }
     return null;
+  }
+
+  public <T extends JInternalFrame> T getInternalFrame(Class<T> frameType) {
+    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+    return frameHolder != null ? frameHolder.getInternalFrame() : null;
   }
 
   private JMenu getWindowMenu() {
@@ -692,22 +707,6 @@ public class Desktop extends JApplet {
     return closeAllMenuItem;
   }
 
-  private JInternalFrame getNavigatorInternalFrame() {
-    if (navigatorInternalFrame == null) {
-      navigatorInternalFrame = new NavigatorInternalFrame();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_NAVIGATOR);
-      navigatorInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      //navigatorInternalFrame.setSize(wPrefs.getWidth(1188), wPrefs.getHeight(740));
-      try {
-        navigatorInternalFrame.setSelected(true);
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    return navigatorInternalFrame;
-  }
-
   public static void main(final String[] args) {
 
     SwingUtilities.invokeLater(new Runnable() {
@@ -983,8 +982,6 @@ public class Desktop extends JApplet {
 
   private JMenuItem closeAllMenuItem = null;
 
-  private JInternalFrame navigatorInternalFrame = null;
-
   void enableControls() {
     for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
       internalFrame.enableMenu();
@@ -1042,4 +1039,19 @@ public class Desktop extends JApplet {
     System.exit(0);
   }
 
+  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
+    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+    if (frameHolder != null) {
+      T frame = frameHolder.getInternalFrame();
+      if (!frame.isVisible() || frame.isClosed()) {
+        frameHolder.getMenuItem().doClick();
+      }
+      try {
+        frame.setSelected(true);
+      }
+      catch (PropertyVetoException ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
 }

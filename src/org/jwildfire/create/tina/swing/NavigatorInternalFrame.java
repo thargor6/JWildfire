@@ -31,14 +31,15 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.swing.Desktop;
 
 import com.l2fprod.common.demo.OutlookBarMain;
 import com.l2fprod.common.swing.JOutlookBar;
 import com.l2fprod.common.swing.PercentLayout;
 
 public class NavigatorInternalFrame extends JInternalFrame {
-  private TinaController tinaController;
   private JPanel jContentPane = null;
+  private Desktop desktop;
 
   public NavigatorInternalFrame() {
     super();
@@ -55,6 +56,7 @@ public class NavigatorInternalFrame extends JInternalFrame {
     this.setTitle("Navigator");
     this.setVisible(true);
     this.setResizable(true);
+    this.setIconifiable(false);
     this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
@@ -70,15 +72,10 @@ public class NavigatorInternalFrame extends JInternalFrame {
     return jContentPane;
   }
 
-  public void setTinaController(TinaController tinaController) {
-    this.tinaController = tinaController;
-  }
-
   JPanel makeOutlookPanel(int alignment) {
     JOutlookBar outlook = new JOutlookBar();
     outlook.setTabPlacement(JTabbedPane.LEFT);
-    addTab(outlook, "Flames");
-    addTab(outlook, "Misc");
+    addFlameWindowsTab(outlook, "Flames");
     /*
         // show it is possible to add any component to the bar
         JTree tree = new JTree();
@@ -93,33 +90,58 @@ public class NavigatorInternalFrame extends JInternalFrame {
     return panel;
   }
 
-  void addTab(JOutlookBar tabs, String title) {
+  private static class WindowEntry {
+    private final String caption;
+    private final String iconpath;
+    private final Class<? extends JInternalFrame> frameType;
+
+    public WindowEntry(String caption, String iconpath, Class<? extends JInternalFrame> frameType) {
+      super();
+      this.caption = caption;
+      this.iconpath = iconpath;
+      this.frameType = frameType;
+    }
+
+    public String getCaption() {
+      return caption;
+    }
+
+    public String getIconpath() {
+      return iconpath;
+    }
+
+    public Class<? extends JInternalFrame> getFrameType() {
+      return frameType;
+    }
+
+  }
+
+  void addFlameWindowsTab(JOutlookBar tabs, String title) {
     JPanel panel = new JPanel();
     panel.setLayout(new PercentLayout(PercentLayout.VERTICAL, 0));
     panel.setOpaque(false);
 
-    String[] buttons = new String[] {
-        "Flame editor", "/org/jwildfire/swing/icons/new/brick2.png",
-        "Interactive renderer", "/org/jwildfire/swing/icons/new/fraqtive.png",
-        "Flame browser", "/org/jwildfire/swing/icons/new/application-view-tile.png",
-        "Easy movie maker", "/org/jwildfire/swing/icons/new/applications-multimedia.png",
-        "Dancing flames movies", "/org/jwildfire/swing/icons/new/kipina.png",
-        "Dancing flames movies", "/org/jwildfire/swing/icons/new/kipina.png",
-        "Batch flame renderer", "/org/jwildfire/swing/icons/new/images.png",
-        "3DMesh generation", "/org/jwildfire/swing/icons/new/sports-soccer.png",
+    WindowEntry[] windows = new WindowEntry[] {
+        new WindowEntry("Editor", "/org/jwildfire/swing/icons/new/brick2.png", TinaInternalFrame.class),
+        new WindowEntry("IR", "/org/jwildfire/swing/icons/new/fraqtive.png", InteractiveRendererInternalFrame.class),
+        new WindowEntry("Browser", "/org/jwildfire/swing/icons/new/application-view-tile.png", FlameBrowserInternalFrame.class),
+        new WindowEntry("Movie maker", "/org/jwildfire/swing/icons/new/applications-multimedia.png", EasyMovieMakerInternalFrame.class),
+        new WindowEntry("Dancing flames", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class),
+        new WindowEntry("Batch renderer", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class),
+        new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class),
+        new WindowEntry("3DMeshGen", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class)
     };
 
-    for (int i = 0, c = buttons.length; i < c; i += 2) {
-      JButton button = new JButton(buttons[i]);
-      try {
-        //        button.setUI((ButtonUI) Class.forName(
-        //            (String) UIManager.get("OutlookButtonUI")).newInstance());
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-      }
-      button.setIcon(new ImageIcon(OutlookBarMain.class
-          .getResource(buttons[i + 1])));
+    for (final WindowEntry window : windows) {
+      JButton button = new JButton(window.getCaption());
+      button.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
+      button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          desktop.showInternalFrame(window.getFrameType());
+        }
+      });
+
       panel.add(button);
     }
 
@@ -130,6 +152,10 @@ public class NavigatorInternalFrame extends JInternalFrame {
     int index = tabs.indexOfComponent(scroll);
     tabs.setTitleAt(index, title);
     tabs.setToolTipTextAt(index, title + " Tooltip");
+  }
+
+  public void setDesktop(Desktop desktop) {
+    this.desktop = desktop;
   }
 
 }

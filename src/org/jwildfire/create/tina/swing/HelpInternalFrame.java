@@ -34,6 +34,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.swing.Desktop;
 
 public class HelpInternalFrame extends JInternalFrame {
   private TinaController tinaController;
@@ -54,7 +55,7 @@ public class HelpInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(0, 0));
+    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
