@@ -46,6 +46,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_PREFERENCES = "PREFERENCES";
   public static final String WINDOW_SYSTEMINFO = "SYSTEMINFO";
   public static final String WINDOW_WELCOME = "WELCOME";
+  public static final String WINDOW_TIPOFTHEDAY = "TIPOFTHEDAY";
   public static final String WINDOW_LOOKANDFEEL = "LOOKANDFEEL";
 
   private int width;

@@ -22,7 +22,6 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.SystemColor;
 
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -37,10 +36,8 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.Desktop;
 
 public class HelpInternalFrame extends JInternalFrame {
-  private TinaController tinaController;
   private JPanel jContentPane = null;
   private JTabbedPane rootTabbedPane = null;
-  private JPanel blurShadingPanel = null;
 
   public HelpInternalFrame() {
     super();
@@ -110,7 +107,6 @@ public class HelpInternalFrame extends JInternalFrame {
     return rootTabbedPane;
   }
 
-  private ButtonGroup swfAnimatorFlamesButtonGroup;
   private JScrollPane scrollPane;
   private JTextPane helpPane;
   private JScrollPane scrollPane_10;
@@ -119,26 +115,6 @@ public class HelpInternalFrame extends JInternalFrame {
   private JPanel panel_105;
   private JScrollPane scrollPane_11;
   private JTextPane apophysisHintsPane;
-
-  /**
-   * This method initializes blurShadingPanel	
-   * 	
-   * @return javax.swing.JPanel	
-   */
-  private JPanel getBlurShadingPanel() {
-    if (blurShadingPanel == null) {
-      blurShadingPanel = new JPanel();
-      blurShadingPanel.setLayout(null);
-    }
-    return blurShadingPanel;
-  }
-
-  private ButtonGroup getSwfAnimatorFlamesButtonGroup() {
-    if (swfAnimatorFlamesButtonGroup == null) {
-      swfAnimatorFlamesButtonGroup = new ButtonGroup();
-    }
-    return swfAnimatorFlamesButtonGroup;
-  }
 
   private JScrollPane getScrollPane() {
     if (scrollPane == null) {
@@ -226,7 +202,6 @@ public class HelpInternalFrame extends JInternalFrame {
   }
 
   public void setTinaController(TinaController tinaController) {
-    this.tinaController = tinaController;
   }
 
 }
