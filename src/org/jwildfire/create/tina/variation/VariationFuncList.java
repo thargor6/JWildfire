@@ -465,6 +465,8 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
+    registerVariationFunc(YPlot2DWFFunc.class);
+    registerVariationFunc(YPlot3DWFFunc.class);
 
     if (Tools.ENABLE_SOLID_RENDERING) {
       registerVariationFunc(OBJMeshWFFunc.class);
