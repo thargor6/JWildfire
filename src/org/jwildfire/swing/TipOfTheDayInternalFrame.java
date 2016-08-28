@@ -50,7 +50,8 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
   private int prevTipIndex = -1;
 
   public TipOfTheDayInternalFrame() {
-    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    setClosable(true);
+    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     setIconifiable(true);
     setResizable(true);
     getContentPane().setBackground(UIManager.getColor("Button.background"));
@@ -85,14 +86,16 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     getContentPane().add(panel_2, BorderLayout.CENTER);
     initializeTips();
     setTitle("Tip of the day (" + tips.size() + " tips available for now)");
-    setBounds(820, 540, 366, 295);
+    setBounds(1000, 400, 366, 295);
     showNextTip();
   }
 
   private void showNextTip() {
     String content = loadNextTip();
     helpPane.setContentType("text/html");
+
     helpPane.setText(content);
+
     helpPane.setSelectionStart(0);
     helpPane.setSelectionEnd(0);
   }
@@ -110,6 +113,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     if (helpPane == null) {
       helpPane = new JTextPane();
       helpPane.setBackground(SystemColor.menu);
+
       helpPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
       helpPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {

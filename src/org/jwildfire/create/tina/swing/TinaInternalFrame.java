@@ -515,7 +515,7 @@ public class TinaInternalFrame extends JInternalFrame {
     this.setTitle("Fractal flames");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
+    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
     getGradientEditorFncPnl().setVisible(false);
   }

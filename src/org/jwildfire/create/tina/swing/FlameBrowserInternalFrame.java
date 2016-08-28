@@ -54,16 +54,16 @@ public class FlameBrowserInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(1188, 740);
+    this.setSize(800, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 160, Desktop.DEFAULT_WINDOW_TOP + 80));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
     this.setTitle("Flame browser");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
+    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 
@@ -104,7 +104,6 @@ public class FlameBrowserInternalFrame extends JInternalFrame {
   private JPanel getPanel_72() {
     if (panel_72 == null) {
       panel_72 = new JPanel();
-      panel_72.setVisible(false);
       panel_72.setLayout(new BorderLayout(0, 0));
       panel_72.add(getFlameBrowserRootTopPanel(), BorderLayout.NORTH);
       panel_72.add(getFlameBrowserRootBottomPanel(), BorderLayout.CENTER);

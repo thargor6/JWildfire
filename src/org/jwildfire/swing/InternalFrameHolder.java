@@ -108,12 +108,15 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
     catch (Exception e) {
       e.printStackTrace();
     }
-    try {
-      frame.setVisible(wPrefs.isVisible());
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
+
+    /*    
+        try {
+          frame.setVisible(wPrefs.isVisible());
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+        }
+    */
   }
 
   protected abstract T createInternalFrame();

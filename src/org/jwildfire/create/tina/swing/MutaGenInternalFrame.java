@@ -60,16 +60,16 @@ public class MutaGenInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(1188, 740);
+    this.setSize(1000, 700);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 80, Desktop.DEFAULT_WINDOW_TOP + 20));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
     this.setTitle("MutaGen");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
+    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 

@@ -74,16 +74,16 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(1188, 740);
+    this.setSize(600, 620);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(200 + Desktop.DEFAULT_WINDOW_LEFT, 50 + Desktop.DEFAULT_WINDOW_TOP));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
     this.setTitle("Batch flame renderer");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
+    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 

@@ -153,11 +153,15 @@ public class Desktop extends JApplet {
         mainDesktopPane.add(internalFrame.getInternalFrame());
       }
       getInternalFrame(NavigatorInternalFrame.class).setDesktop(this);
-      getInternalFrame(TinaInternalFrame.class).addComponentListener(new java.awt.event.ComponentAdapter() {
+      TinaInternalFrame tinaInternalFrame = getInternalFrame(TinaInternalFrame.class);
+      tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
         public void componentResized(java.awt.event.ComponentEvent e) {
           tinaController.refreshFlameImage(true, false, 1, true, false);
         }
       });
+      if (!tinaInternalFrame.isVisible()) {
+        tinaInternalFrame.setVisible(true);
+      }
       for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
         mainDesktopPane.add(internalFrame.getInternalFrame());
       }
@@ -172,15 +176,19 @@ public class Desktop extends JApplet {
       if (!navigatorInternalFrame.isVisible()) {
         navigatorInternalFrame.setVisible(true);
       }
+      /*
+            WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
+            if (!welcomeInternalFrame.isVisible()) {
+              welcomeInternalFrame.setVisible(true);
+            }
+            welcomeInternalFrame.moveToFront();
+      */
 
-      WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
-      if (!welcomeInternalFrame.isVisible()) {
-        welcomeInternalFrame.setVisible(true);
-      }
       TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
       if (!tipOfTheDayInternalFrame.isVisible()) {
         tipOfTheDayInternalFrame.setVisible(true);
       }
+      tipOfTheDayInternalFrame.moveToFront();
 
       MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
       FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
@@ -781,7 +789,7 @@ public class Desktop extends JApplet {
       jFrame.setJMenuBar(getMainJMenuBar());
       WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_DESKTOP);
       jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      jFrame.setSize(wPrefs.getWidth(1240), wPrefs.getHeight(800));
+      jFrame.setSize(wPrefs.getWidth(1400), wPrefs.getHeight(800));
       jFrame.setContentPane(getJContentPane());
       jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
 

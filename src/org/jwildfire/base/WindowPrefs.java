@@ -19,14 +19,14 @@ package org.jwildfire.base;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class WindowPrefs implements Assignable<WindowPrefs> {
-  static final String KEY_WINDOW_COUNT = "window.count";
-  static final String KEY_NAME = "window.name";
-  static final String KEY_WIDTH = "window.width";
-  static final String KEY_HEIGHT = "window.height";
-  static final String KEY_LEFT = "window.left";
-  static final String KEY_TOP = "window.top";
-  static final String KEY_MAXIMIZED = "window.maximized";
-  static final String KEY_VISIBLE = "window.visible";
+  static final String KEY_WINDOW_COUNT = "windowPrefs.count";
+  static final String KEY_NAME = "windowPrefs.name";
+  static final String KEY_WIDTH = "windowPrefs.width";
+  static final String KEY_HEIGHT = "windowPrefs.height";
+  static final String KEY_LEFT = "windowPrefs.left";
+  static final String KEY_TOP = "windowPrefs.top";
+  static final String KEY_MAXIMIZED = "windowPrefs.maximized";
+  static final String KEY_VISIBLE = "windowPrefs.visible";
 
   public static final String WINDOW_DESKTOP = "Desktop";
   public static final String WINDOW_NAVIGATOR = "NAVIGATOR";
