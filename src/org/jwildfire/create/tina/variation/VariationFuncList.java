@@ -467,6 +467,7 @@ public class VariationFuncList {
     registerVariationFunc(MobiusStripFunc.class);
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
+    registerVariationFunc(ParPlot2DWFFunc.class);
 
     if (Tools.ENABLE_SOLID_RENDERING) {
       registerVariationFunc(OBJMeshWFFunc.class);

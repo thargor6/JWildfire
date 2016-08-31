@@ -66,9 +66,9 @@ public class YPlot2DWFFunc extends VariationFunc {
       else if (pVarTP.color > 1.0)
         pVarTP.color = 1.0;
     }
-    pVarTP.x += x;
-    pVarTP.y += y;
-    pVarTP.z += z;
+    pVarTP.x += pAmount * x;
+    pVarTP.y += pAmount * y;
+    pVarTP.z += pAmount * z;
   }
 
   @Override
@@ -172,6 +172,7 @@ public class YPlot2DWFFunc extends VariationFunc {
         return "(sin(x)+2*sin(2*x)+1*sin(4*x))";
       case 1:
         return "sin(x)*cos(x)";
+      case 2:
       default:
         return "sin(2*x*x)";
     }
