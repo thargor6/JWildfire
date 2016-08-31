@@ -45,6 +45,7 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -130,7 +131,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
     state = State.IDLE;
-    genRandomFlame();
+    //genRandomFlame();
     enableControls();
   }
 
@@ -829,8 +830,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
+    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
   }
 
 }

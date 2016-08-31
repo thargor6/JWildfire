@@ -67,4 +67,5 @@ public class FlameTransformationContext {
   public void setPreserveZCoordinate(boolean pPreserveZCoordinate) {
     preserveZCoordinate = pPreserveZCoordinate;
   }
+
 }

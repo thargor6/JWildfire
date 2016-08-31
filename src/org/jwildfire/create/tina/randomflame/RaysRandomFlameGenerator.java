@@ -157,7 +157,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff21(0);
 
       // variation 1
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 4
     {
@@ -180,7 +180,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff11(1);
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 5
     {
@@ -204,7 +204,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
 
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 6
     {
@@ -228,7 +228,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
 
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // final transform
     if (Math.random() > 0.33) {
@@ -252,6 +252,15 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(1, var);
     }
     return flame;
+  }
+
+  private String getRandomVariationName() {
+    while (true) {
+      String name = VariationFuncList.getRandomVariationname();
+      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_")) {
+        return name;
+      }
+    }
   }
 
   @Override

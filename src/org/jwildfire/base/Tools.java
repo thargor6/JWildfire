@@ -52,7 +52,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "2.60 REVISION 2 (26.10.2015)";
+  public static final String APP_VERSION = "3.00 ALPHA 2 (17.08.2016)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -62,6 +62,8 @@ public class Tools {
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
   public static final int PLOT_BUFFER_SIZE = 1024;
+
+  public static final boolean ENABLE_SOLID_RENDERING = true;
 
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
@@ -540,14 +542,6 @@ public class Tools {
       return a.equals(b);
   }
 
-  public static double lerp(double s, double e, double t) {
-    return s + (e - s) * t;
-  }
-
-  public static double blerp(double c00, double c10, double c01, double c11, double tx, double ty) {
-    return lerp(lerp(c00, c10, tx), lerp(c01, c11, tx), ty);
-  }
-
   public static void writeObjectToFile(Object pObject, String pFilename) {
     try (
         OutputStream file = new FileOutputStream(pFilename);
@@ -571,5 +565,9 @@ public class Tools {
       Unchecker.rethrow(ex);
       return null;
     }
+  }
+
+  public static double limitValue(double value, double min, double max) {
+    return value < min ? min : value > max ? max : value;
   }
 }

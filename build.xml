@@ -65,6 +65,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
@@ -79,6 +80,7 @@
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
       <zipfileset src="lib/jsyntaxpane-0.9.5-b29.modified.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
+      <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
       </manifest>			

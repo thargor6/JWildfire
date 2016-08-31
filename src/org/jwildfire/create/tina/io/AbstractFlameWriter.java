@@ -55,11 +55,12 @@ import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Shading;
-import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.Variation;
@@ -71,19 +72,23 @@ public class AbstractFlameWriter {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL, pXForm.getMaterial()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, pXForm.getMaterialSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, pXForm.getModGamma()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA_SPEED, pXForm.getModGammaSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST, pXForm.getModContrast()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST_SPEED, pXForm.getModContrastSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION, pXForm.getModSaturation()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION_SPEED, pXForm.getModSaturationSpeed()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE, pXForm.getModHue()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE_SPEED, pXForm.getModHueSpeed()));
     if (pXForm.getDrawMode().equals(DrawMode.OPAQUE)) {
       attrList.add(pXB.createAttr("opacity", pXForm.getOpacity()));
     }
     else if (pXForm.getDrawMode().equals(DrawMode.HIDDEN)) {
       attrList.add(pXB.createAttr("opacity", 0.0));
     }
-    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
 
     UniqueNamesMaker namesMaker = new UniqueNamesMaker();
     for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
@@ -289,39 +294,6 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
     if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
       attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
-    ShadingInfo shadingInfo = pFlame.getShadingInfo();
-    attrList.add(xb.createAttr("shading_shading", shadingInfo.getShading().toString()));
-    if (shadingInfo.getShading() == Shading.PSEUDO3D) {
-      attrList.add(xb.createAttr("shading_ambient", shadingInfo.getAmbient()));
-      attrList.add(xb.createAttr("shading_diffuse", shadingInfo.getDiffuse()));
-      attrList.add(xb.createAttr("shading_phong", shadingInfo.getPhong()));
-      attrList.add(xb.createAttr("shading_phongSize", shadingInfo.getPhongSize()));
-      attrList.add(xb.createAttr("shading_lightCount", shadingInfo.getLightCount()));
-      for (int i = 0; i < shadingInfo.getLightCount(); i++) {
-        attrList.add(xb.createAttr("shading_lightPosX_" + i, shadingInfo.getLightPosX()[i]));
-        attrList.add(xb.createAttr("shading_lightPosY_" + i, shadingInfo.getLightPosY()[i]));
-        attrList.add(xb.createAttr("shading_lightPosZ_" + i, shadingInfo.getLightPosZ()[i]));
-        attrList.add(xb.createAttr("shading_lightRed_" + i, shadingInfo.getLightRed()[i]));
-        attrList.add(xb.createAttr("shading_lightGreen_" + i, shadingInfo.getLightGreen()[i]));
-        attrList.add(xb.createAttr("shading_lightBlue_" + i, shadingInfo.getLightBlue()[i]));
-      }
-    }
-    else if (shadingInfo.getShading() == Shading.BLUR) {
-      attrList.add(xb.createAttr("shading_blurRadius", shadingInfo.getBlurRadius()));
-      attrList.add(xb.createAttr("shading_blurFade", shadingInfo.getBlurFade()));
-      attrList.add(xb.createAttr("shading_blurFallOff", shadingInfo.getBlurFallOff()));
-    }
-    else if (shadingInfo.getShading() == Shading.DISTANCE_COLOR) {
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_RADIUS, shadingInfo.getDistanceColorRadius()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SCALE, shadingInfo.getDistanceColorScale()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_EXPONENT, shadingInfo.getDistanceColorExponent()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETX, shadingInfo.getDistanceColorOffsetX()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETY, shadingInfo.getDistanceColorOffsetY()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_OFFSETZ, shadingInfo.getDistanceColorOffsetZ()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_STYLE, shadingInfo.getDistanceColorStyle()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_COORDINATE, shadingInfo.getDistanceColorCoordinate()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SHADING_DISTANCE_COLOR_SHIFT, shadingInfo.getDistanceColorShift()));
-    }
     if (pFlame.getAntialiasAmount() > EPSILON) {
       attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
       attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
@@ -357,6 +329,46 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME, pFlame.getFrame()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FRAME_COUNT, pFlame.getFrameCount()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FPS, pFlame.getFps()));
+
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_RADIUS, pFlame.getPostBlurRadius()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FADE, pFlame.getPostBlurFade()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FALLOFF, pFlame.getPostBlurFallOff()));
+
+    if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_ENABLED, pFlame.getSolidRenderSettings().isSsaoEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_INTENSITY, pFlame.getSolidRenderSettings().getSsaoIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));
+
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));
+      for (int i = 0; i < pFlame.getSolidRenderSettings().getMaterials().size(); i++) {
+        MaterialSettings material = pFlame.getSolidRenderSettings().getMaterials().get(i);
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_DIFFUSE + i, material.getDiffuse()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_AMBIENT + i, material.getAmbient()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG + i, material.getPhong()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_SIZE + i, material.getPhongSize()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_RED + i, material.getPhongRed()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_GREEN + i, material.getPhongGreen()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE + i, material.getPhongBlue()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_REFL_MAP_INTENSITY + i, material.getReflMapIntensity()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME + i, material.getReflMapFilename() != null ? material.getReflMapFilename() : ""));
+        if (material.getLightDiffFunc() instanceof LightDiffFuncPreset)
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC + i, ((LightDiffFuncPreset) material.getLightDiffFunc()).toString()));
+      }
+
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_COUNT, pFlame.getSolidRenderSettings().getLights().size()));
+      for (int i = 0; i < pFlame.getSolidRenderSettings().getLights().size(); i++) {
+        PointLight light = pFlame.getSolidRenderSettings().getLights().get(i);
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_X + i, light.getX()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Y + i, light.getY()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Z + i, light.getZ()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_INTENSITY + i, light.getIntensity()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_RED + i, light.getRed()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_GREEN + i, light.getGreen()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_BLUE + i, light.getBlue()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_SHADOWS + i, light.isCastShadows()));
+      }
+    }
 
     writeMotionCurves(pFlame, xb, attrList, null, flameAttrMotionCurveBlackList);
 

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,4 +24,39 @@ public class RasterPoint implements Serializable {
   public double green;
   public double blue;
   public long count;
+
+  public double solidRed;
+  public double solidGreen;
+  public double solidBlue;
+  public boolean hasSolidColors;
+
+  public boolean hasNormals;
+  public double nx, ny, nz, zBuf;
+  public boolean hasSSAO;
+  public double ao;
+  public boolean hasMaterial;
+  public double material;
+  public double dofDist;
+  public boolean hasShadows;
+  public boolean insideShadow[];
+
+  public RasterPoint(int lightCount) {
+    if (lightCount > 0) {
+      insideShadow = new boolean[lightCount];
+    }
+    else {
+      insideShadow = null;
+    }
+  }
+
+  public void clear() {
+    red = green = blue = 0.0;
+    solidRed = solidGreen = solidBlue = 0.0;
+    count = 0;
+    nx = ny = nz = zBuf = 0.0;
+    ao = 0.0;
+    material = 0.0;
+    dofDist = 0.0;
+    hasNormals = hasSSAO = hasMaterial = hasShadows = hasSolidColors = false;
+  }
 }

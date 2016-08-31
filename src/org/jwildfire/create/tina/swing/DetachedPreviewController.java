@@ -24,6 +24,7 @@ import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
@@ -226,7 +227,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
     while (paused) {
       try {
         Thread.sleep(1);
@@ -235,7 +236,7 @@ public class DetachedPreviewController implements IterationObserver {
         e.printStackTrace();
       }
     }
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
   }
 
   private void updateStats() {

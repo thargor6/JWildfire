@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,27 +16,43 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import java.lang.reflect.Array;
+import java.awt.Color;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.PostSymmetryType;
-import org.jwildfire.create.tina.base.Shading;
-import org.jwildfire.create.tina.base.ShadingInfo;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
+import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
+import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
+import org.jwildfire.swing.ImageFileChooser;
+
+import com.l2fprod.common.beans.editor.FilePropertyEditor;
+import com.l2fprod.common.util.ResourceManager;
 
 public class FlameControlsDelegate extends AbstractControlsDelegate {
   private final List<DOFParamControl> dofParamControls;
@@ -187,10 +203,43 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableStereo3dUI();
     enableDEFilterUI();
     enablePostSymmetryUI();
-
     enableDOFUI();
 
-    enableShadingUI();
+    enableSolidRenderUI();
+  }
+
+  private void enableSolidRenderUI() {
+    boolean disabled = getCurrFlame() == null || !getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled();
+    boolean hasLights = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getLights().size() > 0;
+    boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
+    enableControl(data.tinaSolidRenderingSSAOIntensityREd, disabled);
+    enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
+    enableControl(data.tinaSolidRenderingEnableSSAOCBx, disabled);
+    enableControl(data.resetSolidRenderingGlobalSettingsBtn, disabled);
+    enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
+    enableControl(data.resetSolidRenderingLightsBtn, disabled);
+    enableControl(data.tinaSolidRenderingSelectedLightCmb, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingAddLightBtn, disabled);
+    enableControl(data.tinaSolidRenderingDeleteLightBtn, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosXREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosYREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightPosZREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightColorBtn, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightCastShadowsCBx, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightIntensityREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingSelectedMaterialCmb, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingAddMaterialBtn, disabled);
+    enableControl(data.tinaSolidRenderingDeleteMaterialBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialDiffuseREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialAmbientREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularSharpnessREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSpecularColorBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialDiffuseResponseCmb, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialReflectionMapIntensityREd, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialReflMapBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialSelectReflMapBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialRemoveReflMapBtn, disabled || !hasMaterials);
   }
 
   private void enableStereo3dUI() {
@@ -218,7 +267,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     owner.setNoRefresh(pNoRefresh);
   }
 
-  private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  private void flameSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
     if (isNoRefresh() || getCurrFlame() == null)
       return;
     setNoRefresh(true);
@@ -244,7 +293,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
       setNoRefresh(false);
@@ -252,115 +301,115 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void cameraYawSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0);
+    flameSliderChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
   }
 
   public void cameraPerspectiveSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE);
+    flameSliderChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
   }
 
   public void cameraPitchSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
+    flameSliderChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false);
   }
 
   public void xFormAntialiasAmountSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
+    flameSliderChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void xFormAntialiasRadiusSlider_changed() {
-    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
+    flameSliderChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void xFormAntialiasAmountREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR);
+    flameTextFieldChanged(data.xFormAntialiasAmountSlider, data.xFormAntialiasAmountREd, "antialiasAmount", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void xFormAntialiasRadiusREd_changed() {
-    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR);
+    flameTextFieldChanged(data.xFormAntialiasRadiusSlider, data.xFormAntialiasRadiusREd, "antialiasRadius", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void focusZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameSliderChanged(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusXSlider, data.focusXREd, "focusX", TinaController.SLIDER_SCALE_ZPOS);
+    flameSliderChanged(data.focusXSlider, data.focusXREd, "focusX", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.focusYSlider, data.focusYREd, "focusY", TinaController.SLIDER_SCALE_ZPOS);
+    flameSliderChanged(data.focusYSlider, data.focusYREd, "focusY", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void diminishZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameSliderChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void camZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameSliderChanged(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void cameraDOFSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF);
+    flameSliderChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF, false);
   }
 
   public void cameraDOFAreaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA);
+    flameSliderChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA, false);
   }
 
   public void cameraDOFExponentSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT);
+    flameSliderChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT, false);
   }
 
   public void cameraRollSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0);
+    flameSliderChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
   }
 
   public void cameraCentreYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void cameraCentreXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void cameraZoomSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void brightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void vibrancySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void saturationSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+    flameSliderChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
     owner.refreshFilterKernelPreviewImg();
   }
 
   public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
   }
 
   public void vibrancyREd_changed() {
-    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void saturationREd_changed() {
-    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0);
+    flameSliderChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false);
   }
 
-  private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  private void flameTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
     if (isNoRefresh()) {
       return;
     }
@@ -391,7 +440,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
     }
     finally {
       setNoRefresh(false);
@@ -399,104 +448,104 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void cameraCentreYREd_changed() {
-    flameTextFieldChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.cameraCentreYSlider, data.cameraCentreYREd, "centreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void cameraCentreXREd_changed() {
-    flameTextFieldChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.cameraCentreXSlider, data.cameraCentreXREd, "centreX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void cameraZoomREd_changed() {
-    flameTextFieldChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.cameraZoomSlider, data.cameraZoomREd, "camZoom", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void filterRadiusREd_changed() {
-    flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS);
+    flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
     owner.refreshFilterKernelPreviewImg();
   }
 
   public void gammaREd_changed() {
-    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA);
+    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
   }
 
   public void gammaThresholdREd_changed() {
-    flameTextFieldChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameTextFieldChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
   }
 
   public void contrastREd_changed() {
-    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void whiteLevelREd_changed() {
-    flameTextFieldChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0);
+    flameTextFieldChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true);
   }
 
   public void gammaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA);
+    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
   }
 
   public void pixelsPerUnitREd_changed() {
-    flameTextFieldChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0);
+    flameTextFieldChanged(data.pixelsPerUnitSlider, data.pixelsPerUnitREd, "pixelsPerUnit", 1.0, false);
   }
 
   public void brightnessREd_changed() {
-    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void contrastSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY);
+    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void whiteLevelSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0);
+    flameSliderChanged(data.whiteLevelSlider, data.whiteLevelREd, "whiteLevel", 1.0, true);
   }
 
   public void cameraRollREd_changed() {
-    flameTextFieldChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0);
+    flameTextFieldChanged(data.cameraRollSlider, data.cameraRollREd, "camRoll", 1.0, false);
   }
 
   public void cameraPitchREd_changed() {
-    flameTextFieldChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0);
+    flameTextFieldChanged(data.cameraPitchSlider, data.cameraPitchREd, "camPitch", 1.0, false);
   }
 
   public void cameraYawREd_changed() {
-    flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0);
+    flameTextFieldChanged(data.cameraYawSlider, data.cameraYawREd, "camYaw", 1.0, false);
   }
 
   public void cameraPerspectiveREd_changed() {
-    flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE);
+    flameTextFieldChanged(data.cameraPerspectiveSlider, data.cameraPerspectiveREd, "camPerspective", TinaController.SLIDER_SCALE_PERSPECTIVE, false);
   }
 
   public void focusXREd_changed() {
-    flameTextFieldChanged(data.focusXSlider, data.focusXREd, "focusX", TinaController.SLIDER_SCALE_ZPOS);
+    flameTextFieldChanged(data.focusXSlider, data.focusXREd, "focusX", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusYREd_changed() {
-    flameTextFieldChanged(data.focusYSlider, data.focusYREd, "focusY", TinaController.SLIDER_SCALE_ZPOS);
+    flameTextFieldChanged(data.focusYSlider, data.focusYREd, "focusY", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void focusZREd_changed() {
-    flameTextFieldChanged(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameTextFieldChanged(data.focusZSlider, data.focusZREd, "focusZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void diminishZREd_changed() {
-    flameTextFieldChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameTextFieldChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void cameraDOFREd_changed() {
-    flameTextFieldChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF);
+    flameTextFieldChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF, false);
   }
 
   public void camZREd_changed() {
-    flameTextFieldChanged(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS);
+    flameTextFieldChanged(data.camZSlider, data.camZREd, "camZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void cameraDOFAreaREd_changed() {
-    flameTextFieldChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA);
+    flameTextFieldChanged(data.cameraDOFAreaSlider, data.cameraDOFAreaREd, "camDOFArea", TinaController.SLIDER_SCALE_DOF_AREA, false);
   }
 
   public void cameraDOFExponentREd_changed() {
-    flameTextFieldChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT);
+    flameTextFieldChanged(data.cameraDOFExponentSlider, data.cameraDOFExponentREd, "camDOFExponent", TinaController.SLIDER_SCALE_DOF_EXPONENT, false);
   }
 
   public void enableDOFUI() {
@@ -541,77 +590,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
   }
 
-  public void enableShadingUI() {
-    ShadingInfo shadingInfo = getCurrFlame() != null ? getCurrFlame().getShadingInfo() : null;
-    boolean pseudo3DEnabled;
-    boolean blurEnabled;
-    boolean distanceColorEnabled;
-    if (shadingInfo != null) {
-      data.shadingCmb.setEnabled(true);
-      pseudo3DEnabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
-      blurEnabled = shadingInfo.getShading().equals(Shading.BLUR);
-      distanceColorEnabled = shadingInfo.getShading().equals(Shading.DISTANCE_COLOR);
-    }
-    else {
-      data.shadingCmb.setEnabled(false);
-      pseudo3DEnabled = false;
-      blurEnabled = false;
-      distanceColorEnabled = false;
-    }
-    // pseudo3d
-    data.shadingAmbientREd.setEnabled(pseudo3DEnabled);
-    data.shadingAmbientSlider.setEnabled(pseudo3DEnabled);
-    data.shadingDiffuseREd.setEnabled(pseudo3DEnabled);
-    data.shadingDiffuseSlider.setEnabled(pseudo3DEnabled);
-    data.shadingPhongREd.setEnabled(pseudo3DEnabled);
-    data.shadingPhongSlider.setEnabled(pseudo3DEnabled);
-    data.shadingPhongSizeREd.setEnabled(pseudo3DEnabled);
-    data.shadingPhongSizeSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightCmb.setEnabled(pseudo3DEnabled);
-    data.shadingLightXREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightXSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightYREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightYSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightZREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightZSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightRedREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightRedSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightGreenREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightGreenSlider.setEnabled(pseudo3DEnabled);
-    data.shadingLightBlueREd.setEnabled(pseudo3DEnabled);
-    data.shadingLightBlueSlider.setEnabled(pseudo3DEnabled);
-    // blur
-    data.shadingBlurRadiusREd.setEnabled(blurEnabled);
-    data.shadingBlurRadiusSlider.setEnabled(blurEnabled);
-    data.shadingBlurFadeREd.setEnabled(blurEnabled);
-    data.shadingBlurFadeSlider.setEnabled(blurEnabled);
-    data.shadingBlurFallOffREd.setEnabled(blurEnabled);
-    data.shadingBlurFallOffSlider.setEnabled(blurEnabled);
-    // distanceColor
-    data.shadingDistanceColorRadiusREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorRadiusSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorScaleREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorScaleSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorExponentREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorExponentSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetXREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetXSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetYREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetYSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetZREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorOffsetZSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorStyleREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorStyleSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorCoordinateREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorCoordinateSlider.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorShiftREd.setEnabled(distanceColorEnabled);
-    data.shadingDistanceColorShiftSlider.setEnabled(distanceColorEnabled);
-  }
-
   public void refreshFlameValues() {
     boolean oldNoRefrsh = isNoRefresh();
     setNoRefresh(true);
     try {
+      refreshSolidRenderingSelectedLightCmb();
+      refreshSolidRenderingSelectedMaterialCmb();
 
       data.camPosXREd.setText(Tools.doubleToString(getCurrFlame().getCamPosX()));
       data.camPosXSlider.setValue(Tools.FTOI(getCurrFlame().getCamPosX() * TinaController.SLIDER_SCALE_CENTRE));
@@ -721,14 +705,150 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.stereo3dPreviewCmb.setSelectedItem(getCurrFlame().getStereo3dPreview());
       data.stereo3dSwapSidesCBx.setSelected(getCurrFlame().isStereo3dSwapSides());
 
+      data.postBlurRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurRadius()));
+      data.postBlurRadiusREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurRadius()));
+      data.postBlurFadeSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurFade() * TinaController.SLIDER_SCALE_AMBIENT));
+      data.postBlurFadeREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurFade()));
+      data.postBlurFallOffSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurFallOff() * TinaController.SLIDER_SCALE_AMBIENT));
+      data.postBlurFallOffREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurFallOff()));
+
       setupDOFParamsControls(getCurrFlame().getCamDOFShape());
       data.dofDOFShapeCmb.setSelectedItem(getCurrFlame().getCamDOFShape());
       refreshBokehParams();
+
+      refreshSolidRenderSettingsUI();
     }
     finally {
       setNoRefresh(oldNoRefrsh);
     }
     refreshVisualCamValues();
+  }
+
+  private void refreshSolidRenderingSelectedMaterialCmb() {
+    refreshSelectItemCmb(getCurrFlame().getSolidRenderSettings().getMaterials(), data.tinaSolidRenderingSelectedMaterialCmb, "Material ");
+  }
+
+  private void refreshSelectItemCmb(List<?> items, JComboBox cmb, String itemPrefix) {
+    boolean oldNoRefresh = isNoRefresh();
+    setNoRefresh(true);
+    try {
+      if (items.size() != cmb.getItemCount()) {
+        int selected = cmb.getSelectedIndex();
+        cmb.removeAllItems();
+        for (int i = 0; i < items.size(); i++) {
+          cmb.addItem(itemPrefix + (i + 1));
+        }
+        if (selected < 0 && items.size() > 0) {
+          selected = 0;
+        }
+        else if (selected >= items.size()) {
+          selected = items.size() - 1;
+        }
+        cmb.setSelectedIndex(selected);
+      }
+    }
+    finally {
+      setNoRefresh(oldNoRefresh);
+    }
+  }
+
+  private void refreshSolidRenderingSelectedLightCmb() {
+    refreshSelectItemCmb(getCurrFlame().getSolidRenderSettings().getLights(), data.tinaSolidRenderingSelectedLightCmb, "Light ");
+  }
+
+  private int getSolidRenderingSelectedLightIndex() {
+    return data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex();
+  }
+
+  private PointLight getSolidRenderingSelectedLight() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      SolidRenderSettings settings = flame.getSolidRenderSettings();
+      int idx = getSolidRenderingSelectedLightIndex();
+      if (idx >= 0 && idx < settings.getLights().size()) {
+        return settings.getLights().get(idx);
+      }
+    }
+    return null;
+  }
+
+  private int getSolidRenderingSelectedMaterialIndex() {
+    return data.tinaSolidRenderingSelectedMaterialCmb.getSelectedIndex();
+  }
+
+  private MaterialSettings getSolidRenderingSelectedMaterial() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      SolidRenderSettings settings = flame.getSolidRenderSettings();
+      int idx = getSolidRenderingSelectedMaterialIndex();
+      if (idx >= 0 && idx < settings.getMaterials().size()) {
+        return settings.getMaterials().get(idx);
+      }
+    }
+    return null;
+  }
+
+  private void refreshSolidRenderLightColorIndicator() {
+    PointLight light = getSolidRenderingSelectedLight();
+    Color color = (light != null) ? new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL),
+        Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)) : Color.BLACK;
+    data.tinaSolidRenderingLightColorBtn.setBackground(color);
+  }
+
+  private void refreshSolidRenderMaterialSpecularColorIndicator() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    Color color = (material != null) ? new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL),
+        Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)) : Color.BLACK;
+    data.tinaSolidRenderingMaterialSpecularColorBtn.setBackground(color);
+  }
+
+  private void refreshSolidRenderSettingsUI() {
+    refreshSolidRenderingGlobals();
+    refreshSolidRenderingLightControls();
+    refreshSolidRenderingMaterialControls();
+  }
+
+  private void refreshSolidRenderingGlobals() {
+    SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
+    data.tinaSolidRenderingCBx.setSelected(settings.isSolidRenderingEnabled());
+    data.tinaSolidRenderingEnableSSAOCBx.setSelected(settings.isSsaoEnabled());
+    data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
+    data.tinaSolidRenderingSSAOIntensityREd.setText(Tools.doubleToString(settings.getSsaoIntensity()));
+    data.tinaSolidRenderingSSAOIntensitySlider.setValue(Tools.FTOI(settings.getSsaoIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+  }
+
+  private void refreshSolidRenderingMaterialControls() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      data.tinaSolidRenderingMaterialDiffuseREd.setText(Tools.doubleToString(material.getDiffuse()));
+      data.tinaSolidRenderingMaterialDiffuseSlider.setValue(Tools.FTOI(material.getDiffuse() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialAmbientREd.setText(Tools.doubleToString(material.getAmbient()));
+      data.tinaSolidRenderingMaterialAmbientSlider.setValue(Tools.FTOI(material.getAmbient() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialSpecularREd.setText(Tools.doubleToString(material.getPhong()));
+      data.tinaSolidRenderingMaterialSpecularSlider.setValue(Tools.FTOI(material.getPhong() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialSpecularSharpnessREd.setText(Tools.doubleToString(material.getPhongSize()));
+      data.tinaSolidRenderingMaterialSpecularSharpnessSlider.setValue(Tools.FTOI(material.getPhongSize() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialDiffuseResponseCmb.setSelectedItem(material.getLightDiffFunc());
+      data.tinaSolidRenderingMaterialReflectionMapIntensityREd.setText(Tools.doubleToString(material.getReflMapIntensity()));
+      data.tinaSolidRenderingMaterialReflectionMapIntensitySlider.setValue(Tools.FTOI(material.getReflMapIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+    }
+    refreshSolidRenderMaterialSpecularColorIndicator();
+  }
+
+  private void refreshSolidRenderingLightControls() {
+    PointLight light = getSolidRenderingSelectedLight();
+    if (light != null) {
+      data.tinaSolidRenderingLightPosXREd.setText(Tools.doubleToString(light.getX()));
+      data.tinaSolidRenderingLightPosXSlider.setValue(Tools.FTOI(light.getX() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightPosYREd.setText(Tools.doubleToString(light.getY()));
+      data.tinaSolidRenderingLightPosYSlider.setValue(Tools.FTOI(light.getY() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightPosZREd.setText(Tools.doubleToString(light.getZ()));
+      data.tinaSolidRenderingLightPosZSlider.setValue(Tools.FTOI(light.getZ() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingLightCastShadowsCBx.setSelected(light.isCastShadows());
+      data.tinaSolidRenderingLightIntensityREd.setText(Tools.doubleToString(light.getIntensity()));
+      data.tinaSolidRenderingLightIntensitySlider.setValue(Tools.FTOI(light.getIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+    }
+    refreshSolidRenderLightColorIndicator();
   }
 
   private void refreshBokehParams() {
@@ -807,430 +927,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void refreshShadingUI() {
-    ShadingInfo shadingInfo = getCurrFlame() != null ? getCurrFlame().getShadingInfo() : null;
-    boolean pseudo3DEnabled;
-    boolean blurEnabled;
-    boolean distanceColorEnabled;
-    if (shadingInfo != null) {
-      data.shadingCmb.setSelectedItem(shadingInfo.getShading());
-      pseudo3DEnabled = shadingInfo.getShading().equals(Shading.PSEUDO3D);
-      blurEnabled = shadingInfo.getShading().equals(Shading.BLUR);
-      distanceColorEnabled = shadingInfo.getShading().equals(Shading.DISTANCE_COLOR);
-    }
-    else {
-      data.shadingCmb.setSelectedIndex(0);
-      pseudo3DEnabled = false;
-      blurEnabled = false;
-      distanceColorEnabled = false;
-    }
-    if (pseudo3DEnabled) {
-      data.shadingAmbientREd.setText(Tools.doubleToString(shadingInfo.getAmbient()));
-      data.shadingAmbientSlider.setValue(Tools.FTOI(shadingInfo.getAmbient() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDiffuseREd.setText(Tools.doubleToString(shadingInfo.getDiffuse()));
-      data.shadingDiffuseSlider.setValue(Tools.FTOI(shadingInfo.getDiffuse() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingPhongREd.setText(Tools.doubleToString(shadingInfo.getPhong()));
-      data.shadingPhongSlider.setValue(Tools.FTOI(shadingInfo.getPhong() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingPhongSizeREd.setText(Tools.doubleToString(shadingInfo.getPhongSize()));
-      data.shadingPhongSizeSlider.setValue(Tools.FTOI(shadingInfo.getPhongSize() * TinaController.SLIDER_SCALE_PHONGSIZE));
-      int cIdx = data.shadingLightCmb.getSelectedIndex();
-      data.shadingLightXREd.setText(Tools.doubleToString(shadingInfo.getLightPosX()[cIdx]));
-      data.shadingLightXSlider.setValue(Tools.FTOI(shadingInfo.getLightPosX()[cIdx] * TinaController.SLIDER_SCALE_LIGHTPOS));
-      data.shadingLightYREd.setText(Tools.doubleToString(shadingInfo.getLightPosY()[cIdx]));
-      data.shadingLightYSlider.setValue(Tools.FTOI(shadingInfo.getLightPosY()[cIdx] * TinaController.SLIDER_SCALE_LIGHTPOS));
-      data.shadingLightZREd.setText(Tools.doubleToString(shadingInfo.getLightPosZ()[cIdx]));
-      data.shadingLightZSlider.setValue(Tools.FTOI(shadingInfo.getLightPosZ()[cIdx] * TinaController.SLIDER_SCALE_LIGHTPOS));
-      data.shadingLightRedREd.setText(String.valueOf(shadingInfo.getLightRed()[cIdx]));
-      data.shadingLightRedSlider.setValue(shadingInfo.getLightRed()[cIdx]);
-      data.shadingLightGreenREd.setText(String.valueOf(shadingInfo.getLightGreen()[cIdx]));
-      data.shadingLightGreenSlider.setValue(shadingInfo.getLightGreen()[cIdx]);
-      data.shadingLightBlueREd.setText(String.valueOf(shadingInfo.getLightBlue()[cIdx]));
-      data.shadingLightBlueSlider.setValue(shadingInfo.getLightBlue()[cIdx]);
-    }
-    else {
-      data.shadingAmbientREd.setText("");
-      data.shadingAmbientSlider.setValue(0);
-      data.shadingDiffuseREd.setText("");
-      data.shadingDiffuseSlider.setValue(0);
-      data.shadingPhongREd.setText("");
-      data.shadingPhongSlider.setValue(0);
-      data.shadingPhongSizeREd.setText("");
-      data.shadingPhongSizeSlider.setValue(0);
-      data.shadingLightXREd.setText("");
-      data.shadingLightXSlider.setValue(0);
-      data.shadingLightYREd.setText("");
-      data.shadingLightYSlider.setValue(0);
-      data.shadingLightZREd.setText("");
-      data.shadingLightZSlider.setValue(0);
-      data.shadingLightRedREd.setText("");
-      data.shadingLightRedSlider.setValue(0);
-      data.shadingLightGreenREd.setText("");
-      data.shadingLightGreenSlider.setValue(0);
-      data.shadingLightBlueREd.setText("");
-      data.shadingLightBlueSlider.setValue(0);
-    }
-    if (blurEnabled) {
-      data.shadingBlurRadiusREd.setText(Tools.doubleToString(shadingInfo.getBlurRadius()));
-      data.shadingBlurRadiusSlider.setValue(shadingInfo.getBlurRadius());
-      data.shadingBlurFadeREd.setText(Tools.doubleToString(shadingInfo.getBlurFade()));
-      data.shadingBlurFadeSlider.setValue(Tools.FTOI(shadingInfo.getBlurFade() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingBlurFallOffREd.setText(Tools.doubleToString(shadingInfo.getBlurFallOff()));
-      data.shadingBlurFallOffSlider.setValue(Tools.FTOI(shadingInfo.getBlurFallOff() * TinaController.SLIDER_SCALE_BLUR_FALLOFF));
-    }
-    else {
-      data.shadingBlurRadiusREd.setText("");
-      data.shadingBlurRadiusSlider.setValue(0);
-      data.shadingBlurFadeREd.setText("");
-      data.shadingBlurFadeSlider.setValue(0);
-      data.shadingBlurFallOffREd.setText("");
-      data.shadingBlurFallOffSlider.setValue(0);
-    }
-    if (distanceColorEnabled) {
-      data.shadingDistanceColorRadiusREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorRadius()));
-      data.shadingDistanceColorRadiusSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorRadius() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorExponentREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorExponent()));
-      data.shadingDistanceColorExponentSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorExponent() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorScaleREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorScale()));
-      data.shadingDistanceColorScaleSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorScale() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorOffsetXREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorOffsetX()));
-      data.shadingDistanceColorOffsetXSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorOffsetX() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorOffsetYREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorOffsetY()));
-      data.shadingDistanceColorOffsetYSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorOffsetY() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorOffsetZREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorOffsetZ()));
-      data.shadingDistanceColorOffsetZSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorOffsetZ() * TinaController.SLIDER_SCALE_AMBIENT));
-      data.shadingDistanceColorStyleREd.setText(String.valueOf(shadingInfo.getDistanceColorStyle()));
-      data.shadingDistanceColorStyleSlider.setValue(shadingInfo.getDistanceColorStyle());
-      data.shadingDistanceColorCoordinateREd.setText(String.valueOf(shadingInfo.getDistanceColorCoordinate()));
-      data.shadingDistanceColorCoordinateSlider.setValue(shadingInfo.getDistanceColorCoordinate());
-      data.shadingDistanceColorShiftREd.setText(Tools.doubleToString(shadingInfo.getDistanceColorShift()));
-      data.shadingDistanceColorShiftSlider.setValue(Tools.FTOI(shadingInfo.getDistanceColorShift() * TinaController.SLIDER_SCALE_AMBIENT));
-    }
-    else {
-      data.shadingDistanceColorRadiusREd.setText("");
-      data.shadingDistanceColorRadiusSlider.setValue(0);
-      data.shadingDistanceColorExponentREd.setText("");
-      data.shadingDistanceColorExponentSlider.setValue(0);
-      data.shadingDistanceColorScaleREd.setText("");
-      data.shadingDistanceColorScaleSlider.setValue(0);
-      data.shadingDistanceColorOffsetXREd.setText("");
-      data.shadingDistanceColorOffsetXSlider.setValue(0);
-      data.shadingDistanceColorOffsetYREd.setText("");
-      data.shadingDistanceColorOffsetYSlider.setValue(0);
-      data.shadingDistanceColorOffsetZREd.setText("");
-      data.shadingDistanceColorOffsetZSlider.setValue(0);
-      data.shadingDistanceColorStyleREd.setText("");
-      data.shadingDistanceColorStyleSlider.setValue(0);
-      data.shadingDistanceColorCoordinateREd.setText("");
-      data.shadingDistanceColorCoordinateSlider.setValue(0);
-      data.shadingDistanceColorShiftREd.setText("");
-      data.shadingDistanceColorShiftSlider.setValue(0);
-    }
-  }
-
-  public void shadingLightXSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightXSlider, data.shadingLightXREd, "lightPosX", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  public void shadingLightYSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightYSlider, data.shadingLightYREd, "lightPosY", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  public void shadingLightZSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightZSlider, data.shadingLightZREd, "lightPosZ", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  private void shadingInfoSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    if (isNoRefresh() || getCurrFlame() == null)
-      return;
-    ShadingInfo shadingInfo = getCurrFlame().getShadingInfo();
-    setNoRefresh(true);
-    try {
-      double propValue = pSlider.getValue() / pSliderScale;
-      pTextField.setText(Tools.doubleToString(propValue));
-      Class<?> cls = shadingInfo.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(shadingInfo, propValue);
-        }
-        else if (fieldCls == double[].class) {
-          double[] arr = (double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == Double[].class) {
-          Double[] arr = (Double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(shadingInfo, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == int[].class) {
-          int[] arr = (int[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == Integer[].class) {
-          Integer[] arr = (Integer[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      owner.refreshFlameImage(true, false, 1, true);
-    }
-    finally {
-      setNoRefresh(false);
-    }
-  }
-
-  public void shadingLightRedSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightRedSlider, data.shadingLightRedREd, "lightRed", 1.0, cIdx);
-  }
-
-  public void shadingLightCmb_changed() {
-    if (isNoRefresh()) {
-      return;
-    }
-    setNoRefresh(true);
-    try {
-      refreshShadingUI();
-    }
-    finally {
-      setNoRefresh(false);
-    }
-  }
-
-  public void shadingPhongSizeSlider_changed() {
-    shadingInfoSliderChanged(data.shadingPhongSizeSlider, data.shadingPhongSizeREd, "phongSize", TinaController.SLIDER_SCALE_PHONGSIZE, 0);
-  }
-
-  public void shadingLightBlueSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightBlueSlider, data.shadingLightBlueREd, "lightBlue", 1.0, cIdx);
-  }
-
-  public void shadingLightGreenSlider_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoSliderChanged(data.shadingLightGreenSlider, data.shadingLightGreenREd, "lightGreen", 1.0, cIdx);
-  }
-
-  public void shadingAmbientSlider_changed() {
-    shadingInfoSliderChanged(data.shadingAmbientSlider, data.shadingAmbientREd, "ambient", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDiffuseSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDiffuseSlider, data.shadingDiffuseREd, "diffuse", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingPhongSlider_changed() {
-    shadingInfoSliderChanged(data.shadingPhongSlider, data.shadingPhongREd, "phong", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  private void shadingInfoTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, int pIdx) {
-    if (isNoRefresh() || getCurrFlame() == null)
-      return;
-    ShadingInfo shadingInfo = getCurrFlame().getShadingInfo();
-    setNoRefresh(true);
-    try {
-      double propValue = Tools.stringToDouble(pTextField.getText());
-      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
-
-      Class<?> cls = shadingInfo.getClass();
-      Field field;
-      try {
-        field = cls.getDeclaredField(pProperty);
-        field.setAccessible(true);
-        Class<?> fieldCls = field.getType();
-        if (fieldCls == double.class || fieldCls == Double.class) {
-          field.setDouble(shadingInfo, propValue);
-        }
-        else if (fieldCls == double[].class) {
-          double[] arr = (double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == Double[].class) {
-          Double[] arr = (Double[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, propValue);
-        }
-        else if (fieldCls == int.class || fieldCls == Integer.class) {
-          field.setInt(shadingInfo, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == int[].class) {
-          int[] arr = (int[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else if (fieldCls == Integer[].class) {
-          Integer[] arr = (Integer[]) field.get(shadingInfo);
-          Array.set(arr, pIdx, Tools.FTOI(propValue));
-        }
-        else {
-          throw new IllegalStateException();
-        }
-      }
-      catch (Throwable ex) {
-        ex.printStackTrace();
-      }
-      owner.refreshFlameImage(true, false, 1, true);
-    }
-    finally {
-      setNoRefresh(false);
-    }
-  }
-
-  public void shadingAmbientREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingAmbientSlider, data.shadingAmbientREd, "ambient", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDiffuseREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDiffuseSlider, data.shadingDiffuseREd, "diffuse", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingPhongREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingPhongSlider, data.shadingPhongREd, "phong", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingPhongSizeREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingPhongSizeSlider, data.shadingPhongSizeREd, "phongSize", TinaController.SLIDER_SCALE_PHONGSIZE, 0);
-  }
-
-  public void shadingLightXREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightXSlider, data.shadingLightXREd, "lightPosX", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  public void shadingLightYREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightYSlider, data.shadingLightYREd, "lightPosY", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  public void shadingLightZREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightZSlider, data.shadingLightZREd, "lightPosZ", TinaController.SLIDER_SCALE_LIGHTPOS, cIdx);
-  }
-
-  public void shadingLightRedREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightRedSlider, data.shadingLightRedREd, "lightRed", 1.0, cIdx);
-  }
-
-  public void shadingLightGreenREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightGreenSlider, data.shadingLightGreenREd, "lightGreen", 1.0, cIdx);
-  }
-
-  public void shadingLightBlueREd_changed() {
-    int cIdx = data.shadingLightCmb.getSelectedIndex();
-    shadingInfoTextFieldChanged(data.shadingLightBlueSlider, data.shadingLightBlueREd, "lightBlue", 1.0, cIdx);
-  }
-
-  public void shadingBlurFadeREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingBlurFadeSlider, data.shadingBlurFadeREd, "blurFade", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingBlurFallOffREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingBlurFallOffSlider, data.shadingBlurFallOffREd, "blurFallOff", TinaController.SLIDER_SCALE_BLUR_FALLOFF, 0);
-  }
-
-  public void shadingBlurRadiusREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingBlurRadiusSlider, data.shadingBlurRadiusREd, "blurRadius", 1.0, 0);
-  }
-
-  public void shadingBlurFallOffSlider_changed() {
-    shadingInfoSliderChanged(data.shadingBlurFallOffSlider, data.shadingBlurFallOffREd, "blurFallOff", TinaController.SLIDER_SCALE_BLUR_FALLOFF, 0);
-  }
-
-  public void shadingBlurFadeSlider_changed() {
-    shadingInfoSliderChanged(data.shadingBlurFadeSlider, data.shadingBlurFadeREd, "blurFade", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingBlurRadiusSlider_changed() {
-    shadingInfoSliderChanged(data.shadingBlurRadiusSlider, data.shadingBlurRadiusREd, "blurRadius", 1.0, 0);
-  }
-
-  public void shadingDistanceColorRadiusREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorRadiusSlider, data.shadingDistanceColorRadiusREd, "distanceColorRadius", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorRadiusSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorRadiusSlider, data.shadingDistanceColorRadiusREd, "distanceColorRadius", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorStyleREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorStyleSlider, data.shadingDistanceColorStyleREd, "distanceColorStyle", 1.0, 0);
-  }
-
-  public void shadingDistanceColorStyleSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorStyleSlider, data.shadingDistanceColorStyleREd, "distanceColorStyle", 1.0, 0);
-  }
-
-  public void shadingDistanceColorCoordinateREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorCoordinateSlider, data.shadingDistanceColorCoordinateREd, "distanceColorCoordinate", 1.0, 0);
-  }
-
-  public void shadingDistanceColorCoordinateSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorCoordinateSlider, data.shadingDistanceColorCoordinateREd, "distanceColorCoordinate", 1.0, 0);
-  }
-
-  public void shadingDistanceColorShiftREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorShiftSlider, data.shadingDistanceColorShiftREd, "distanceColorShift", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorShiftSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorShiftSlider, data.shadingDistanceColorShiftREd, "distanceColorShift", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorExponentREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorExponentSlider, data.shadingDistanceColorExponentREd, "distanceColorExponent", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorExponentSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorExponentSlider, data.shadingDistanceColorExponentREd, "distanceColorExponent", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorScaleREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorScaleSlider, data.shadingDistanceColorScaleREd, "distanceColorScale", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorScaleSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorScaleSlider, data.shadingDistanceColorScaleREd, "distanceColorScale", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetXREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorOffsetXSlider, data.shadingDistanceColorOffsetXREd, "distanceColorOffsetX", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetXSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorOffsetXSlider, data.shadingDistanceColorOffsetXREd, "distanceColorOffsetX", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetYREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorOffsetYSlider, data.shadingDistanceColorOffsetYREd, "distanceColorOffsetY", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetYSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorOffsetYSlider, data.shadingDistanceColorOffsetYREd, "distanceColorOffsetY", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetZREd_changed() {
-    shadingInfoTextFieldChanged(data.shadingDistanceColorOffsetZSlider, data.shadingDistanceColorOffsetZREd, "distanceColorOffsetZ", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
-  public void shadingDistanceColorOffsetZSlider_changed() {
-    shadingInfoSliderChanged(data.shadingDistanceColorOffsetZSlider, data.shadingDistanceColorOffsetZREd, "distanceColorOffsetZ", TinaController.SLIDER_SCALE_AMBIENT, 0);
-  }
-
   public void motionBlurLengthREd_changed() {
-    flameTextFieldChanged(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0);
+    flameTextFieldChanged(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0, false);
   }
 
   public void flameFPSField_changed() {
@@ -1241,23 +939,23 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void motionBlurLengthSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0);
+    flameSliderChanged(data.motionBlurLengthSlider, data.motionBlurLengthField, "motionBlurLength", 1.0, false);
   }
 
   public void motionBlurTimeStepREd_changed() {
-    flameTextFieldChanged(data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR);
+    flameTextFieldChanged(data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void motionBlurTimeStepSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR);
+    flameSliderChanged(data.motionBlurTimeStepSlider, data.motionBlurTimeStepField, "motionBlurTimeStep", TinaController.SLIDER_SCALE_COLOR, false);
   }
 
   public void motionBlurDecayREd_changed() {
-    flameTextFieldChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void motionBlurDecaySlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.motionBlurDecaySlider, data.motionBlurDecayField, "motionBlurDecay", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void postSymmetryCmb_changed() {
@@ -1267,49 +965,49 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setPostSymmetryType((PostSymmetryType) data.postSymmetryTypeCmb.getSelectedItem());
         enablePostSymmetryUI();
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
   public void postSymmetryDistanceREd_changed() {
-    flameTextFieldChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryDistanceSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.postSymmetryDistanceSlider, data.postSymmetryDistanceREd, "postSymmetryDistance", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryRotationREd_changed() {
-    flameTextFieldChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0);
+    flameTextFieldChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0, false);
   }
 
   public void postSymmetryRotationSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0);
+    flameSliderChanged(data.postSymmetryRotationSlider, data.postSymmetryRotationREd, "postSymmetryRotation", 1.0, false);
   }
 
   public void postSymmetryCentreXREd_changed() {
-    flameTextFieldChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryCentreXSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.postSymmetryCentreXSlider, data.postSymmetryCentreXREd, "postSymmetryCentreX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryCentreYREd_changed() {
-    flameTextFieldChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryCentreYSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.postSymmetryCentreYSlider, data.postSymmetryCentreYREd, "postSymmetryCentreY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postSymmetryOrderREd_changed() {
-    flameTextFieldChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
+    flameTextFieldChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0, false);
   }
 
   public void postSymmetryOrderSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0);
+    flameSliderChanged(data.postSymmetryOrderSlider, data.postSymmetryOrderREd, "postSymmetryOrder", 1.0, false);
   }
 
   public void stereo3dModeCmb_changed() {
@@ -1319,7 +1017,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setStereo3dMode((Stereo3dMode) data.stereo3dModeCmb.getSelectedItem());
         enableStereo3dUI();
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -1330,7 +1028,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (flame != null) {
         owner.saveUndoPoint();
         flame.setStereo3dLeftEyeColor((Stereo3dColor) data.stereo3dLeftEyeColorCmb.getSelectedItem());
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -1341,41 +1039,41 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (flame != null) {
         owner.saveUndoPoint();
         flame.setStereo3dRightEyeColor((Stereo3dColor) data.stereo3dRightEyeColorCmb.getSelectedItem());
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
   public void stereo3dAngleREd_changed() {
-    flameTextFieldChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameTextFieldChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dAngleSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameSliderChanged(data.stereo3dAngleSlider, data.stereo3dAngleREd, "stereo3dAngle", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dEyeDistREd_changed() {
-    flameTextFieldChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameTextFieldChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dEyeDistSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameSliderChanged(data.stereo3dEyeDistSlider, data.stereo3dEyeDistREd, "stereo3dEyeDist", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dFocalOffsetREd_changed() {
-    flameTextFieldChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameTextFieldChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dFocalOffsetSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD);
+    flameSliderChanged(data.stereo3dFocalOffsetSlider, data.stereo3dFocalOffsetREd, "stereo3dFocalOffset", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, false);
   }
 
   public void stereo3dInterpolatedImageCountREd_changed() {
-    flameTextFieldChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
+    flameTextFieldChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0, false);
   }
 
   public void stereo3dInterpolatedImageCountSlider_changed(ChangeEvent e) {
-    flameSliderChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0);
+    flameSliderChanged(data.stereo3dInterpolatedImageCountSlider, data.stereo3dInterpolatedImageCountREd, "stereo3dInterpolatedImageCount", 1.0, false);
   }
 
   public void stereo3dPreviewCmb_changed() {
@@ -1385,7 +1083,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.setStereo3dPreview((Stereo3dPreview) data.stereo3dPreviewCmb.getSelectedItem());
         enableStereo3dUI();
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -1397,33 +1095,33 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (swap != flame.isStereo3dSwapSides()) {
         owner.saveUndoPoint();
         flame.setStereo3dSwapSides(swap);
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
   public void camPosXSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void camPosYSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void camPosZSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
+    flameSliderChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void camPosXREd_changed() {
-    flameTextFieldChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.camPosXSlider, data.camPosXREd, "camPosX", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void camPosYREd_changed() {
-    flameTextFieldChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.camPosYSlider, data.camPosYREd, "camPosY", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void camPosZREd_changed() {
-    flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE);
+    flameTextFieldChanged(data.camPosZSlider, data.camPosZREd, "camPosZ", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void dofDOFShapeCmb_changed() {
@@ -1436,99 +1134,99 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         shape.getDOFBlurShape().setDefaultParams(getCurrFlame());
         setupDOFParamsControls(getCurrFlame().getCamDOFShape());
         refreshBokehParams();
-        owner.refreshFlameImage(true, false, 1, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
   public void dofDOFScaleSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFScaleREd_changed() {
-    flameTextFieldChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFScaleSlider, data.dofDOFScaleREd, "camDOFScale", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFAngleSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFAngleREd_changed() {
-    flameTextFieldChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFAngleSlider, data.dofDOFAngleREd, "camDOFAngle", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFFadeSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFFadeREd_changed() {
-    flameTextFieldChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFFadeSlider, data.dofDOFFadeREd, "camDOFFade", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam1Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam1REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam1Slider, data.dofDOFParam1REd, "camDOFParam1", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam2Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam2REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam2Slider, data.dofDOFParam2REd, "camDOFParam2", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam3Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam3REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam3Slider, data.dofDOFParam3REd, "camDOFParam3", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam4Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam4REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam4Slider, data.dofDOFParam4REd, "camDOFParam4", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam5Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam5REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam5Slider, data.dofDOFParam5REd, "camDOFParam5", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam6Slider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
+    flameSliderChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void dofDOFParam6REd_changed() {
-    flameTextFieldChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM);
+    flameTextFieldChanged(data.dofDOFParam6Slider, data.dofDOFParam6REd, "camDOFParam6", TinaController.SLIDER_SCALE_ZOOM, false);
   }
 
   public void spatialOversamplingSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
+    flameSliderChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0, false);
     owner.refreshFilterKernelPreviewImg();
   }
 
   public void spatialOversamplingREd_changed() {
-    flameTextFieldChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0);
+    flameTextFieldChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0, false);
     owner.refreshFilterKernelPreviewImg();
   }
 
   public void colorOversamplingSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0);
+    flameSliderChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0, false);
   }
 
   public void colorOversamplingREd_changed() {
-    flameTextFieldChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0);
+    flameTextFieldChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0, false);
   }
 
   public void sampleJitteringCbx_changed() {
@@ -1565,18 +1263,517 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void postNoiseFilterThresholdSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
+    flameSliderChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
   public void postNoiseFilterThresholdREd_changed() {
-    flameTextFieldChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
+    flameTextFieldChanged(data.tinaPostNoiseThresholdSlider, data.tinaPostNoiseThresholdField, "postNoiseFilterThreshold", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, false);
   }
 
   public void foregroundOpacitySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
+    flameSliderChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true);
   }
 
   public void foregroundOpacityREd_changed() {
-    flameTextFieldChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD);
+    flameTextFieldChanged(data.foregroundOpacitySlider, data.foregroundOpacityField, "foregroundOpacity", TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD, true);
+  }
+
+  public void postBlurRadiusREd_changed() {
+    flameTextFieldChanged(data.postBlurRadiusSlider, data.postBlurRadiusREd, "postBlurRadius", 1.0, false);
+  }
+
+  public void postBlurRadiusSlider_changed() {
+    flameSliderChanged(data.postBlurRadiusSlider, data.postBlurRadiusREd, "postBlurRadius", 1.0, false);
+  }
+
+  public void postBlurFadeREd_changed() {
+    flameTextFieldChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFadeRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+  }
+
+  public void postBlurFadeSlider_changed() {
+    flameSliderChanged(data.postBlurFadeSlider, data.postBlurFadeREd, "postBlurFadeRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+  }
+
+  public void postBlurFallOffSlider_changed() {
+    flameTextFieldChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOffRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+  }
+
+  public void postBlurFallOffREd_changed() {
+    flameSliderChanged(data.postBlurFallOffSlider, data.postBlurFallOffREd, "postBlurFallOffRadius", TinaController.SLIDER_SCALE_AMBIENT, false);
+  }
+
+  public void solidRenderingCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setSolidRenderingEnabled(data.tinaSolidRenderingCBx.isSelected());
+        if (data.tinaSolidRenderingCBx.isSelected()) {
+          flame.setSpatialOversampling(2);
+          flame.setSpatialFilterRadius(0.5);
+          flame.setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
+          flame.setAntialiasAmount(0.0);
+          flame.setAntialiasRadius(0.0);
+          refreshFlameValues();
+        }
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void solidRenderingEnableSSAOCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setSsaoEnabled(data.tinaSolidRenderingEnableSSAOCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true, true);
+      }
+    }
+  }
+
+  public void solidRenderingEnableHardShadowsCBx_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.getSolidRenderSettings().setHardShadowsEnabled(data.tinaSolidRenderingEnableHardShadowsCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true, true);
+      }
+    }
+  }
+
+  public void solidRenderingLightCastShadowsCBx_changed() {
+    if (!isNoRefresh()) {
+      PointLight light = getSolidRenderingSelectedLight();
+      if (light != null) {
+        owner.saveUndoPoint();
+        light.setCastShadows(data.tinaSolidRenderingLightCastShadowsCBx.isSelected());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true, true);
+      }
+    }
+  }
+
+  public void solidRenderingMaterialSpecularColorBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      owner.undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)));
+      if (selectedColor != null) {
+        material.setPhongRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
+        material.setPhongGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
+        material.setPhongBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
+        owner.refreshFlameImage(true, false, 1, true, true);
+        refreshSolidRenderMaterialSpecularColorIndicator();
+      }
+    }
+  }
+
+  public void solidRenderingLightColorBtn_clicked() {
+    PointLight light = getSolidRenderingSelectedLight();
+    if (light != null) {
+      owner.undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)));
+      if (selectedColor != null) {
+        light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
+        light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
+        light.setBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
+        owner.refreshFlameImage(true, false, 1, true, true);
+        refreshSolidRenderLightColorIndicator();
+      }
+    }
+  }
+
+  public void solidRenderingSelectedMaterialCmb_changed() {
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+  }
+
+  public void solidRenderingSelectedLightCmb_changed() {
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+  }
+
+  public void solidRenderingAddLightBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().addLight();
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedLightCmb();
+      data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(getCurrFlame().getSolidRenderSettings().getLights().size() - 1);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingDeleteLightBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().getLights().remove(data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex());
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedLightCmb();
+      if (getCurrFlame().getSolidRenderSettings().getLights().size() > 0) {
+        data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingResetLightsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultLights();
+      refreshSolidRenderingSelectedLightCmb();
+      data.tinaSolidRenderingSelectedLightCmb.setSelectedIndex(0);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingLightControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingAddMaterialBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().addMaterial();
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedMaterialCmb();
+      data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(getCurrFlame().getSolidRenderSettings().getMaterials().size() - 1);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingDeleteMaterialBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().getMaterials().remove(data.tinaSolidRenderingSelectedMaterialCmb.getSelectedIndex());
+    setNoRefresh(true);
+    try {
+      refreshSolidRenderingSelectedMaterialCmb();
+      if (getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0) {
+        data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(0);
+      }
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingResetMaterialsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultMaterials();
+      refreshSolidRenderingSelectedMaterialCmb();
+      data.tinaSolidRenderingSelectedMaterialCmb.setSelectedIndex(0);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingMaterialControls();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingResetSettingsBtn_clicked() {
+    getCurrFlame().getSolidRenderSettings().setupDefaultGlobals();
+    refreshSolidRenderingGlobals();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingMaterialDiffuseResponseCmb_changed() {
+    if (!isNoRefresh()) {
+      MaterialSettings material = getSolidRenderingSelectedMaterial();
+      if (material != null) {
+        owner.saveUndoPoint();
+        material.setLightDiffFunc((LightDiffFunc) data.tinaSolidRenderingMaterialDiffuseResponseCmb.getSelectedItem());
+        owner.refreshFlameImage(true, false, 1, true, true);
+      }
+    }
+  }
+
+  private void textFieldChanged(String property, Object value, double propValue, boolean pAllowUseCache) {
+    Class<?> cls = value.getClass();
+    try {
+      Field field = cls.getDeclaredField(property);
+      field.setAccessible(true);
+      Class<?> fieldCls = field.getType();
+      if (fieldCls == double.class || fieldCls == Double.class) {
+        field.setDouble(value, propValue);
+      }
+      else if (fieldCls == int.class || fieldCls == Integer.class) {
+        field.setInt(value, Tools.FTOI(propValue));
+      }
+      else {
+        throw new IllegalStateException();
+      }
+    }
+    catch (Throwable ex) {
+      ex.printStackTrace();
+    }
+    owner.refreshFlameImage(true, false, 1, true, pAllowUseCache);
+  }
+
+  private void solidRenderingTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings();
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private void solidRenderingSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings();
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private void solidRenderingMaterialTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsMaterialIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getMaterials().size())
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings().getMaterials().get(idx);
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private void solidRenderingMaterialSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsMaterialIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getMaterials().size())
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings().getMaterials().get(idx);
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private void solidRenderingLightTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsLightIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getLights().size())
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = Tools.stringToDouble(pTextField.getText());
+      pSlider.setValue(Tools.FTOI(propValue * pSliderScale));
+      Object value = getCurrFlame().getSolidRenderSettings().getLights().get(idx);
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private int getRenderSettingsLightIdx() {
+    return data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex();
+  }
+
+  private void solidRenderingLightSliderChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale, boolean pAllowUseCache) {
+    if (isNoRefresh() || getCurrFlame() == null)
+      return;
+    int idx = getRenderSettingsLightIdx();
+    if (idx < 0 || idx >= getCurrFlame().getSolidRenderSettings().getLights().size())
+      return;
+    setNoRefresh(true);
+    try {
+      double propValue = pSlider.getValue() / pSliderScale;
+      pTextField.setText(Tools.doubleToString(propValue));
+      Object value = getCurrFlame().getSolidRenderSettings().getLights().get(idx);
+      textFieldChanged(pProperty, value, propValue, pAllowUseCache);
+    }
+    finally {
+      setNoRefresh(false);
+    }
+  }
+
+  private int getRenderSettingsMaterialIdx() {
+    return data.tinaSolidRenderingSelectedMaterialCmb.getSelectedIndex();
+  }
+
+  public void solidRenderingMaterialDiffuseREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialDiffuseSlider, data.tinaSolidRenderingMaterialDiffuseREd, "diffuse", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingSSAOIntensityREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingSSAOIntensitySlider, data.tinaSolidRenderingSSAOIntensityREd, "ssaoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialAmbientREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialAmbientSlider, data.tinaSolidRenderingMaterialAmbientREd, "ambient", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialSpecularREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialSpecularSlider, data.tinaSolidRenderingMaterialSpecularREd, "phong", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialSpecularSharpnessREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialSpecularSharpnessSlider, data.tinaSolidRenderingMaterialSpecularSharpnessREd, "phongSize", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosXREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosYREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosZREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightIntensityREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingSSAOIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingSSAOIntensitySlider, data.tinaSolidRenderingSSAOIntensityREd, "ssaoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialDiffuseSlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialDiffuseSlider, data.tinaSolidRenderingMaterialDiffuseREd, "diffuse", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialAmbientSlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialAmbientSlider, data.tinaSolidRenderingMaterialAmbientREd, "ambient", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialSpecularSlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialSpecularSlider, data.tinaSolidRenderingMaterialSpecularREd, "phong", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialSpecularSharpnessSlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialSpecularSharpnessSlider, data.tinaSolidRenderingMaterialSpecularSharpnessREd, "phongSize", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosXSlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosYSlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightPosZSlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingLightIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialRemoveReflMapBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      owner.saveUndoPoint();
+      material.setReflMapFilename(null);
+      owner.refreshFlameImage(true, false, 1, true, true);
+    }
+  }
+
+  public void solidRenderingMaterialSelectReflMapBtn_clicked() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    if (material != null) {
+      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+      if (Prefs.getPrefs().getInputImagePath() != null) {
+        try {
+          if (getCurrFlame().getBGImageFilename().length() > 0) {
+            chooser.setSelectedFile(new File(getCurrFlame().getBGImageFilename()));
+          }
+          else {
+            chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
+          }
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if (chooser.showOpenDialog(owner.getFlamePanel()) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        try {
+          String filename = file.getAbsolutePath();
+          WFImage img = RessourceManager.getImage(filename);
+          if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
+            throw new Exception("Invalid image");
+          }
+          Prefs.getPrefs().setLastInputImageFile(file);
+
+          owner.saveUndoPoint();
+          material.setReflMapFilename(filename);
+          owner.refreshFlameImage(true, false, 1, true, false);
+        }
+        catch (Throwable ex) {
+          owner.errorHandler.handleError(ex);
+        }
+      }
+    }
+  }
+
+  public void solidRenderingMaterialReflectionMapIntensityREd_changed() {
+    solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialReflectionMapIntensitySlider, data.tinaSolidRenderingMaterialReflectionMapIntensityREd, "reflMapIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingMaterialReflectionMapIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialReflectionMapIntensitySlider, data.tinaSolidRenderingMaterialReflectionMapIntensityREd, "reflMapIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 }

@@ -42,6 +42,7 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(ExperimentalBubbles3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(DualityRandomFlameGenerator.class);
     registerRandomFlameGenerator(DuckiesRandomFlameGenerator.class);
+    registerRandomFlameGenerator(GalaxiesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Gnarl3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
@@ -54,7 +55,6 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
     registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
-    registerRandomFlameGenerator(Pseudo3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);

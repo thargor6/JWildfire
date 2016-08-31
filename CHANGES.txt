@@ -1,3 +1,28 @@
+V3.00 ALPHA 2 (17.08.2016)
+ - Completely new DOF for solid rendering with bokeh-effects. This DOF is a post-effect (and works totally different than the regular DOF) 
+   and is not visible in the fast-preview (!). But, it also gives better results. 
+   One way to adjust the DOF is to turn solid rendering of in order to show the regular DOF in fast-preview, adjust it (position and strength), 
+   and then turn solid rendering on again 
+ - "obj_mesh_primitive_wf" got a new shape (set the "primitive" parameter to 25 to try it out)
+ - Solid rendering supports also spatial oversampling (the default is 2)
+ - Lots of internal changes to the solid rendering
+ - New local hue parameter at the Local Gamma tab (called "Gamma"), allowing much more variations in color than using only the default coloring
+ - New randomizer-buttons at the Local Gamma tab, to randomize each parameter individually
+ 
+V3.00 ALPHA 1 (30.07.2016)
+ - Highly experimental solid renderer for flame-fractals
+     - ambient shadows
+     - point-light-sources, specular lighting, several diffuse-response functions
+     - reflection-mapping
+ - New "obj_mesh_wf" and "obj_mesh_primitive_wf" to integrate meshes as shapes into your fractals      
+ - Removed the Shading-tab and all the options for Blur-Shading, Distance-Color-Shading and Pseudo3D-Shading. 
+     - the popular blur-shading was re-introduced as new option under the "DOF / Bokeh" - tab as "Post blur"
+     - distance-color-shading was removed completely, if you liked it, please keed an old version
+     - Pseudo3D-shading will be obsolete when the solid-rendering will be finished  
+     
+V2.60 REVISION 2 (26.10.2015):
+ - Experimental font-scale (for screens with much higher resolution)
+
 V2.60 (12.10.2015):
  - New progressive preview, which allows progressive rendering while editing. 
    While it needs much CPU-power it is a great new way to explore interesting spots inside your fractals, it is especially of great use in combination 

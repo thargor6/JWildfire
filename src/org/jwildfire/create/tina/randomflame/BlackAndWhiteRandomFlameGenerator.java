@@ -39,6 +39,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new Bubbles3DRandomFlameGenerator());
     generators.add(new CrossRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new DuckiesRandomFlameGenerator());
     generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
     generators.add(new ExperimentalGnarlRandomFlameGenerator());
@@ -47,6 +48,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new Flowers3DRandomFlameGenerator());
     generators.add(new GnarlRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new Gnarl3DRandomFlameGenerator());
     generators.add(new JulianDiscRandomFlameGenerator());
     generators.add(new JuliansRandomFlameGenerator());
@@ -58,6 +60,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SimpleTilingRandomFlameGenerator());
     generators.add(new SierpinskyRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
     generators.add(new GhostsRandomFlameGenerator());

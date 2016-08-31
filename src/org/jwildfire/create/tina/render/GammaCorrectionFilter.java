@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.render;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -94,7 +95,7 @@ public class GammaCorrectionFilter {
     calculateBGColor(pRGBPoint, pX, pY);
     double logScl;
     int inverseAlphaInt;
-    if (logDensityPnt.intensity > 0.0) {
+    if (logDensityPnt.intensity > 0.0 || logDensityPnt.hasSolidColors) {
       double alpha;
       if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
         double frac = logDensityPnt.intensity / flame.getGammaThreshold();
@@ -113,6 +114,16 @@ public class GammaCorrectionFilter {
       pRGBPoint.alpha = withAlpha ? alphaInt : 255;
 
       ColorF transfColor = applyLogScale(logDensityPnt, logScl);
+
+      if (logDensityPnt.hasSolidColors) {
+        double fade = 0.95;
+        double rfade = 1.0 - fade;
+        transfColor.r = transfColor.r * rfade + logDensityPnt.solidRed * fade;
+        transfColor.g = transfColor.g * rfade + logDensityPnt.solidGreen * fade;
+        transfColor.b = transfColor.b * rfade + logDensityPnt.solidBlue * fade;
+        inverseAlphaInt *= rfade;
+      }
+
       ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
 
       pRGBPoint.red = finalColor.r;
@@ -164,9 +175,9 @@ public class GammaCorrectionFilter {
 
         double x = MathLib.frac(xCoord);
         double y = MathLib.frac(yCoord);
-        pBGColor.bgRed = Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y));
-        pBGColor.bgGreen = Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y));
-        pBGColor.bgBlue = Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y));
+        pBGColor.bgRed = Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y));
+        pBGColor.bgGreen = Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y));
+        pBGColor.bgBlue = Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y));
       }
     }
     else {
@@ -220,7 +231,8 @@ public class GammaCorrectionFilter {
 
   private ColorF applyLogScale(LogDensityPoint pLogDensityPnt, double pLogScl) {
     ColorF res = new ColorF();
-    double rawRed, rawGreen, rawBlue;
+    double rawRed = 0.0, rawGreen = 0.0, rawBlue = 0.0;
+
     if (inverseVibInt > 0) {
       rawRed = pLogScl * pLogDensityPnt.red + inverseVibInt * pow(pLogDensityPnt.red, gamma);
       rawGreen = pLogScl * pLogDensityPnt.green + inverseVibInt * pow(pLogDensityPnt.green, gamma);
@@ -234,6 +246,7 @@ public class GammaCorrectionFilter {
     res.r = rawRed;
     res.g = rawGreen;
     res.b = rawBlue;
+
     return res;
   }
 
@@ -246,11 +259,11 @@ public class GammaCorrectionFilter {
     pRGBPoint.blue = Tools.roundColor(hslrgbConverter.getBlue() * COLORSCL);
   }
 
-  private static final double COLORSCL = 255.0;
+  public static final double COLORSCL = 255.0;
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint, int pX, int pY) {
     calculateBGColor(pHDRPoint, pX, pY);
-
+    // TODO solid
     double logScl;
     double inverseAlphaInt;
     if (logDensityPnt.intensity > 0.0) {

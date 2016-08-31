@@ -93,7 +93,7 @@ public abstract class AbstractControlsDelegate {
         pCurve.assignFromEnvelope(envelope);
         pCurve.setEnabled(true);
       }
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -201,6 +201,10 @@ public abstract class AbstractControlsDelegate {
   }
 
   public void enableControl(JComboBox pSender, boolean pDisabled) {
+    pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
+  }
+
+  public void enableControl(JButton pSender, boolean pDisabled) {
     pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
   }
 

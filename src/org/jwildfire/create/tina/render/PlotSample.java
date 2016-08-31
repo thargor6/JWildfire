@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,14 +17,32 @@
 package org.jwildfire.create.tina.render;
 
 public class PlotSample {
-  public int x, y;
+  public int screenX, screenY;
   public double r, g, b;
+  public double x, y, z;
+  public double originalX, originalY, originalZ;
+  public double material;
+  public double dofDist;
 
-  public void set(int x, int y, double r, double g, double b) {
+  public void set(double x, double y, double z) {
     this.x = x;
     this.y = y;
+    this.z = z;
+  }
+
+  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist, double originalX, double originalY, double originalZ) {
+    this.screenX = screenX;
+    this.screenY = screenY;
     this.r = r;
     this.g = g;
     this.b = b;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.originalX = originalX;
+    this.originalY = originalY;
+    this.originalZ = originalZ;
+    this.material = material;
+    this.dofDist = dofDist;
   }
 }

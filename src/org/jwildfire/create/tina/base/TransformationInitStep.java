@@ -30,8 +30,10 @@ public final class TransformationInitStep extends AbstractTransformationStep {
     pAffineT.clear();
     pAffineT.doHide = pSrcPoint.doHide;
     pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
+    pAffineT.material = pSrcPoint.material * xform.material1 + xform.material2;
     pAffineT.modGamma = pSrcPoint.modGamma * xform.modGamma1 + xform.modGamma2;
     pAffineT.modContrast = pSrcPoint.modContrast * xform.modContrast1 + xform.modContrast2;
     pAffineT.modSaturation = pSrcPoint.modSaturation * xform.modSaturation1 + xform.modSaturation2;
+    pAffineT.modHue = pSrcPoint.modHue * xform.modHue1 + xform.modHue2;
   }
 }

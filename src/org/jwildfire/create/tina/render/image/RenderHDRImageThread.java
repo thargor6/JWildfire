@@ -16,10 +16,12 @@
 */
 package org.jwildfire.create.tina.render.image;
 
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.GammaCorrectedHDRPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.LogDensityPoint;
+import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.image.SimpleHDRImage;
 
 public class RenderHDRImageThread extends AbstractImageRenderThread {
@@ -30,15 +32,17 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
   private final LogDensityPoint logDensityPnt;
   private final GammaCorrectedHDRPoint rbgPoint;
   private final SimpleHDRImage img;
+  private final PostDOFCalculator dofCalculator;
 
-  public RenderHDRImageThread(LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg) {
+  public RenderHDRImageThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg, PostDOFCalculator pDofCalculator) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
     endRow = pEndRow;
-    logDensityPnt = new LogDensityPoint();
+    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     rbgPoint = new GammaCorrectedHDRPoint();
     img = pImg;
+    dofCalculator = pDofCalculator;
   }
 
   @Override
@@ -49,6 +53,9 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformPoint(logDensityPnt, j, i);
           gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint, j, i);
+          if (dofCalculator != null) {
+            dofCalculator.addSample(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue, logDensityPnt.dofDist, logDensityPnt.rp.zBuf);
+          }
           img.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
         }
       }

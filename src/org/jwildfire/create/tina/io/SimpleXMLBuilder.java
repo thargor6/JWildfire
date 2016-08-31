@@ -41,6 +41,10 @@ public class SimpleXMLBuilder {
     return new Attribute<Double>(pName, pValue);
   }
 
+  public Attribute<Integer> createAttr(String pName, Boolean pValue) {
+    return new Attribute<Integer>(pName, pValue ? 1 : 0);
+  }
+
   public void beginElement(String pElement, List<Attribute<?>> attrList) {
     Attribute<?>[] attrArray = new Attribute<?>[attrList.size()];
     int idx = 0;

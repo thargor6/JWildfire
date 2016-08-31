@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,14 +24,36 @@ public class LogDensityPoint {
   public double blue;
   public double intensity;
 
-  public final RasterPoint rp = new RasterPoint();
-  public final RasterPoint lu = new RasterPoint();
-  public final RasterPoint ru = new RasterPoint();
-  public final RasterPoint lb = new RasterPoint();
-  public final RasterPoint rb = new RasterPoint();
+  public boolean hasSolidColors;
+  public double solidRed;
+  public double solidGreen;
+  public double solidBlue;
+
+  public boolean hasNormals;
+  public double nx, ny, nz;
+  public double ao;
+  public double material;
+  public double dofDist;
+
+  public final RasterPoint rp;
+  public final RasterPoint lu;
+  public final RasterPoint ru;
+  public final RasterPoint lb;
+  public final RasterPoint rb;
+
+  public LogDensityPoint(int lightCount) {
+    rp = new RasterPoint(lightCount);
+    lu = new RasterPoint(lightCount);
+    ru = new RasterPoint(lightCount);
+    lb = new RasterPoint(lightCount);
+    rb = new RasterPoint(lightCount);
+  }
 
   public void clear() {
     red = green = blue = intensity = 0.0;
+    solidRed = solidGreen = solidBlue = 0.0;
+    hasNormals = hasSolidColors = false;
+    nx = ny = nz = ao = material = dofDist = 0.0;
   }
 
   public void clip() {

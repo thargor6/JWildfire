@@ -45,6 +45,8 @@ import org.jwildfire.create.tina.render.image.RenderHDRIntensityMapThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
+import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
+import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
@@ -111,6 +113,10 @@ public class FlameRenderer {
 
   public FlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha, boolean pPreview) {
     flame = pFlame;
+    if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      flame.setAntialiasAmount(0.0);
+      flame.setAntialiasRadius(0.0);
+    }
     prefs = pPrefs;
     withAlpha = pWithAlpha;
     preview = pPreview;
@@ -148,7 +154,7 @@ public class FlameRenderer {
   }
 
   private AbstractRaster allocRaster() {
-    Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass();
+    Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass(flame);
     AbstractRaster raster;
     try {
       raster = rasterClass.newInstance();
@@ -159,7 +165,7 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    raster.allocRaster(rasterWidth, rasterHeight);
+    raster.allocRaster(flame, rasterWidth, rasterHeight);
     return raster;
   }
 
@@ -182,7 +188,26 @@ public class FlameRenderer {
     }
   }
 
+  public RenderedFlame rerenderFlame(RenderInfo pRenderInfo) {
+    renderInfo = pRenderInfo;
+    if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
+      return renderImageStereo3d(pRenderInfo);
+    }
+    else {
+      RenderedFlame res = new RenderedFlame();
+      res.init(pRenderInfo);
+      if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
+        renderImageSimple(res.getImage());
+      }
+      else {
+        renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
+      }
+      return res;
+    }
+  }
+
   public RenderedFlame renderFlame(RenderInfo pRenderInfo) {
+    renderInfo = pRenderInfo;
     if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
       return renderImageStereo3d(pRenderInfo);
     }
@@ -483,12 +508,15 @@ public class FlameRenderer {
       throw new IllegalStateException();
     }
 
+    raster.finalizeRaster();
+
     renderImage(pImage);
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
       postFilterImage(pImage);
     }
     renderHDRImage(pHDRImage);
     renderHDRIntensityMap(pHDRIntensityMap);
+    raster.cleanupRaster();
   }
 
   private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap) {
@@ -502,7 +530,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRIntensityMap.getImageHeight();
-        RenderHDRIntensityMapThread thread = new RenderHDRIntensityMapThread(logDensityFilter, startRow, endRow, pHDRIntensityMap);
+        RenderHDRIntensityMapThread thread = new RenderHDRIntensityMapThread(flame, logDensityFilter, startRow, endRow, pHDRIntensityMap);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -546,11 +574,12 @@ public class FlameRenderer {
         threadCount = 1;
       }
       int rowsPerThread = pHDRImage.getImageHeight() / threadCount;
+      PostDOFBuffer dofBuffer = flame.getCamDOF() > MathLib.EPSILON && flame.getSolidRenderSettings().isSolidRenderingEnabled() ? new PostDOFBuffer(pHDRImage) : null;
       List<RenderHDRImageThread> threads = new ArrayList<>();
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRImage.getImageHeight();
-        RenderHDRImageThread thread = new RenderHDRImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage);
+        RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer) : null);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -560,6 +589,9 @@ public class FlameRenderer {
         }
       }
       waitForThreads(threadCount, threads);
+      if (dofBuffer != null) {
+        dofBuffer.renderToImage(pHDRImage);
+      }
     }
   }
 
@@ -569,12 +601,14 @@ public class FlameRenderer {
       if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
       }
+
+      PostDOFBuffer dofBuffer = flame.getCamDOF() > MathLib.EPSILON && flame.getSolidRenderSettings().isSolidRenderingEnabled() ? new PostDOFBuffer(pImage) : null;
       int rowsPerThread = pImage.getImageHeight() / threadCount;
       List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageThread thread = new RenderImageThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer) : null);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -584,6 +618,9 @@ public class FlameRenderer {
         }
       }
       waitForThreads(threadCount, threads);
+      if (dofBuffer != null) {
+        dofBuffer.renderToImage(pImage);
+      }
     }
   }
 
@@ -624,7 +661,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg);
+        RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(flame, logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -642,7 +679,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < rowsPerThread - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageSimpleThread thread = new RenderImageSimpleThread(logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
+        RenderImageSimpleThread thread = new RenderImageSimpleThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -659,18 +696,7 @@ public class FlameRenderer {
   }
 
   private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    switch (flame.getShadingInfo().getShading()) {
-      case FLAT:
-        return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-      case BLUR:
-        return new BlurRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-      case DISTANCE_COLOR:
-        return new DistanceColorRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-      case PSEUDO3D:
-        return new Pseudo3DRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
-      default:
-        throw new IllegalArgumentException(flame.getShadingInfo().getShading().toString());
-    }
+    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
   }
 
   private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
@@ -1013,7 +1039,7 @@ public class FlameRenderer {
       iterate(0, 1, renderFlames, slices, pSliceThicknessMod, pSliceThicknessSamples);
 
       if (!forceAbort) {
-        LogDensityPoint logDensityPnt = new LogDensityPoint();
+        LogDensityPoint logDensityPnt = new LogDensityPoint(flame.getActiveLightCount());
         while (slices.size() > 0) {
           if (forceAbort) {
             break;
@@ -1055,6 +1081,16 @@ public class FlameRenderer {
 
   protected AbstractRaster getRaster() {
     return raster;
+  }
+
+  public void renderPointCloud(String pFilename, double pZmin, double pZmax) {
+    initRaster(flame.getWidth(), flame.getHeight());
+
+    List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
+    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+    }
+    iterate(0, 1, renderFlames, null, 1.0, 1);
   }
 
 }

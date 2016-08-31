@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
@@ -462,10 +465,14 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
-    
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
-    
+
+    if (Tools.ENABLE_SOLID_RENDERING) {
+      registerVariationFunc(OBJMeshWFFunc.class);
+      registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
+    }
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);

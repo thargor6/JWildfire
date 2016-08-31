@@ -212,6 +212,8 @@ public class FlameMorphService {
     res.setWeight(morphValue(pXForm1.getWeight(), pXForm2.getWeight(), pFScl));
     res.setColor(morphValue(pXForm1.getColor(), pXForm2.getColor(), pFScl));
     res.setColorSymmetry(morphValue(pXForm1.getColorSymmetry(), pXForm2.getColorSymmetry(), pFScl));
+    res.setMaterial(morphValue(pXForm1.getMaterial(), pXForm2.getMaterial(), pFScl));
+    res.setMaterialSpeed(morphValue(pXForm1.getMaterialSpeed(), pXForm2.getMaterialSpeed(), pFScl));
 
     res.setXYCoeff00(morphValue(pXForm1.getXYCoeff00(), pXForm2.getXYCoeff00(), pFScl));
     res.setXYCoeff01(morphValue(pXForm1.getXYCoeff01(), pXForm2.getXYCoeff01(), pFScl));
@@ -383,7 +385,7 @@ public class FlameMorphService {
     }
   }
 
-  private static double morphValue(double pValue1, double pValue2, double pFScl) {
+  public static double morphValue(double pValue1, double pValue2, double pFScl) {
     if (pFScl < 0.0) {
       pFScl = 0.0;
     }

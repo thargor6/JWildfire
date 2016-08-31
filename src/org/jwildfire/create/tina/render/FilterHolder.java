@@ -16,10 +16,12 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
-public abstract class FilterHolder {
+public class FilterHolder {
   protected final Flame flame;
   protected double filter[][];
   protected int noiseFilterSize;
@@ -35,13 +37,23 @@ public abstract class FilterHolder {
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
   }
 
+  public FilterHolder(Flame pFlame, FilterKernelType pSpatialFilterKernel, int pSpatialOversampling, double pSpatialFilterRadius) {
+    flame = pFlame;
+    oversample = pSpatialOversampling;
+    filterKernel = pSpatialFilterKernel.createFilterInstance();
+    noiseFilterSize = filterKernel.getFilterSize(pSpatialFilterRadius, oversample);
+    filter = new double[noiseFilterSize][noiseFilterSize];
+    initFilter(pSpatialFilterRadius, noiseFilterSize, filter);
+  }
+
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
     double adjust = filterKernel.getFilterAdjust(pFilterRadius, oversample);
     for (int i = 0; i < pFilterSize; i++) {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
+        //  pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
+        pFilter[i][j] = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
       }
     }
     // normalize
@@ -62,6 +74,10 @@ public abstract class FilterHolder {
 
   public int getNoiseFilterSize() {
     return noiseFilterSize;
+  }
+
+  public double[][] getFilter() {
+    return filter;
   }
 
 }

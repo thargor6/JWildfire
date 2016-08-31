@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
+
 public interface IterationObserver {
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY);
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue);
 }
