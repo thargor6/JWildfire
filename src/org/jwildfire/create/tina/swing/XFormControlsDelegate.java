@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -29,8 +29,8 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class XFormControlsDelegate extends AbstractControlsDelegate {
 
-  public XFormControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane, true);
+  public XFormControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+    super(pOwner, pData, pRootPanel, true);
     setUpMotionControls();
   }
 

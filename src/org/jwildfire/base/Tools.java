@@ -52,7 +52,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 ALPHA 2 (17.08.2016)";
+  public static final String APP_VERSION = "3.00 ALPHA 4 (28.08.2016)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -96,9 +96,6 @@ public class Tools {
   public static final String FILEEXT_MAP = "map";
 
   public static final String CURVE_POSTFIX = "Curve";
-
-  public static final int TINA_EDITOR_TAB_IDX = 0;
-  public static final int TINA_MESHGEN_TAB_IDX = 7;
 
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));

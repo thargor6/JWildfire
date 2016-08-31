@@ -62,6 +62,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>

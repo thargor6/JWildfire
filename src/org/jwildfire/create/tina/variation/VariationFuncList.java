@@ -465,6 +465,10 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
+
+    registerVariationFunc(YPlot2DWFFunc.class);
+    registerVariationFunc(YPlot3DWFFunc.class);
+    
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
 

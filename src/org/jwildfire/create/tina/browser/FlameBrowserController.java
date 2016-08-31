@@ -31,8 +31,10 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -532,7 +534,7 @@ public class FlameBrowserController {
       for (Flame flame : flames) {
         tinaController.importFlame(flame, true);
       }
-      tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_EDITOR_TAB_IDX);
+      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
     }
   }
 
@@ -556,7 +558,7 @@ public class FlameBrowserController {
         List<Flame> flames = new FlameReader(prefs).readFlames(node.getFilename());
         if (flames.size() > 0) {
           tinaController.getMeshGenController().importFlame(flames.get(0));
-          tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_MESHGEN_TAB_IDX);
+          tinaController.getDesktop().showInternalFrame(MeshGenInternalFrame.class);
         }
       }
     }

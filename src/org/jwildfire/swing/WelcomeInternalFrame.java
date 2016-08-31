@@ -35,11 +35,10 @@ import java.io.InputStream;
 import java.net.URI;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
@@ -48,15 +47,8 @@ public class WelcomeInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
 
   private String[] imageFilenames = { "bronze_bubbles.jpg", "smoky_dreams.jpg", "watchers2.jpg", "woven.jpg" };
-  private JButton enterBtn;
 
   public WelcomeInternalFrame() {
-    addInternalFrameListener(new InternalFrameAdapter() {
-      @Override
-      public void internalFrameActivated(InternalFrameEvent e) {
-        enterBtn.requestFocus();
-      }
-    });
     getContentPane().setBackground(UIManager.getColor("Button.background"));
 
     JPanel northPanel = new JPanel();
@@ -64,7 +56,6 @@ public class WelcomeInternalFrame extends JInternalFrame {
     northPanel.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        //        setVisible(false);
         browse("http://jwildfire.org/");
       }
     });
@@ -74,12 +65,6 @@ public class WelcomeInternalFrame extends JInternalFrame {
 
     JPanel southPanel = new JPanel();
     southPanel.setBackground(Color.BLACK);
-    southPanel.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        setVisible(false);
-      }
-    });
     southPanel.setPreferredSize(new Dimension(10, 100));
     getContentPane().add(southPanel, BorderLayout.SOUTH);
     southPanel.setLayout(null);
@@ -171,19 +156,6 @@ public class WelcomeInternalFrame extends JInternalFrame {
     updatesBtn.setBounds(6, 34, 134, 28);
     southPanel.add(updatesBtn);
 
-    enterBtn = new JButton("Enter software");
-    enterBtn.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        setVisible(false);
-      }
-    });
-    enterBtn.setPreferredSize(new Dimension(128, 24));
-    enterBtn.setForeground(SystemColor.menu);
-    enterBtn.setBorderPainted(false);
-    enterBtn.setBackground(Color.BLACK);
-    enterBtn.setBounds(178, 0, 122, 62);
-    southPanel.add(enterBtn);
-
     JButton dravesBtn = new JButton("Forum");
     dravesBtn.setDefaultCapable(false);
     dravesBtn.addActionListener(new ActionListener() {
@@ -208,7 +180,11 @@ public class WelcomeInternalFrame extends JInternalFrame {
     });
     getContentPane().add(panel_2, BorderLayout.CENTER);
     setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
-    setBounds(320, 140, 490, 498);
+    setBounds(440, 140, 490, 498);
+    setClosable(true);
+    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    setIconifiable(true);
+    setResizable(true);
 
     // Load logo
     try {
@@ -298,7 +274,4 @@ public class WelcomeInternalFrame extends JInternalFrame {
     }
   }
 
-  public JButton getEnterBtn() {
-    return enterBtn;
-  }
 }

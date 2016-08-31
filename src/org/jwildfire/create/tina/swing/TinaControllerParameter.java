@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -36,9 +35,11 @@ import javax.swing.JTree;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.render.ProgressUpdater;
+import org.jwildfire.swing.Desktop;
 import org.jwildfire.swing.ErrorHandler;
 
 public class TinaControllerParameter {
+  public Desktop desktop;
   public TinaInternalFrame pTinaFrame;
   public ErrorHandler pErrorHandler;
   public Prefs pPrefs;
@@ -205,7 +206,7 @@ public class TinaControllerParameter {
   public JButton pBatchRenderFilesRemoveButton;
   public JButton pBatchRenderFilesRemoveAllButton;
   public JButton pBatchRenderStartButton;
-  public JTabbedPane pRootTabbedPane;
+  public JPanel pRootPanel;
   public JButton pAffineFlipHorizontalButton;
   public JButton pAffineFlipVerticalButton;
   public JWFNumberField postBlurRadiusREd;
@@ -622,19 +623,17 @@ public class TinaControllerParameter {
   public JWFNumberField xFormMaterialSpeedREd;
   public JSlider xFormMaterialSpeedSlider;
 
-  public void setParams1(TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
+  public void setParams1(Desktop pDesktop, TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
       JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
       JWFNumberField pPaletteSaturationREd, JSlider pPaletteSaturationSlider, JWFNumberField pPaletteContrastREd, JSlider pPaletteContrastSlider, JWFNumberField pPaletteGammaREd, JSlider pPaletteGammaSlider, JWFNumberField pPaletteBrightnessREd, JSlider pPaletteBrightnessSlider, JWFNumberField pPaletteSwapRGBREd, JSlider pPaletteSwapRGBSlider, JWFNumberField pPaletteFrequencyREd, JSlider pPaletteFrequencySlider, JWFNumberField pPaletteBlurREd, JSlider pPaletteBlurSlider, JButton pPaletteInvertBtn, JButton pPaletteReverseBtn, JTable pTransformationsTable, JWFNumberField pAffineC00REd, JWFNumberField pAffineC01REd, JWFNumberField pAffineC10REd, JWFNumberField pAffineC11REd, JWFNumberField pAffineC20REd, JWFNumberField pAffineC21REd, JWFNumberField pAffineRotateAmountREd,
       JWFNumberField pAffineScaleAmountREd, JWFNumberField pAffineMoveHorizAmountREd, JButton pAffineRotateLeftButton, JButton pAffineRotateRightButton, JButton pAffineEnlargeButton, JButton pAffineShrinkButton, JButton pAffineMoveUpButton, JButton pAffineMoveLeftButton, JButton pAffineMoveRightButton, JButton pAffineMoveDownButton, JButton pAddTransformationButton, JButton pAddLinkedTransformationButton, JButton pDuplicateTransformationButton, JButton pDeleteTransformationButton, JButton pAddFinalTransformationButton, JPanel pRandomBatchPanel, TinaNonlinearControlsRow[] pTinaNonlinearControlsRows, JWFNumberField pXFormColorREd, JSlider pXFormColorSlider, JWFNumberField pXFormSymmetryREd, JSlider pXFormSymmetrySlider, JWFNumberField pXFormOpacityREd,
       JSlider pXFormOpacitySlider,
       JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
-      JToggleButton pMouseTransformSlowButton, JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar, JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton, JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton, JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton,
-      JTabbedPane pRootTabbedPane, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
-      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JTextPane pHelpPane, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pBatchQualityProfileCmb,
-      JComboBox pBatchResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JComboBox pSWFAnimatorResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider, JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn, JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn,
-      JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn, JComboBox pDancingFlamesRandomGenCmb, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pDancingFlamesBorderSizeSlider, JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd, JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton, JCheckBox pDancingFlamesDoRecordCBx, JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx, JTree pDancingFlamesFlamePropertiesTree, JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb,
-      JButton pDancingFlamesAddMotionBtn, JButton pDancingFlamesDeleteMotionBtn) {
+      JToggleButton pMouseTransformSlowButton,
+      JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
+      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider) {
+    this.desktop = pDesktop;
     this.pTinaFrame = pTinaFrame;
     this.pErrorHandler = pErrorHandler;
     this.pPrefs = pPrefs;
@@ -760,18 +759,7 @@ public class TinaControllerParameter {
     this.pAffineResetTransformButton = pAffineResetTransformButton;
     this.pCreatePaletteColorsTable = pCreatePaletteColorsTable;
     this.pMouseTransformSlowButton = pMouseTransformSlowButton;
-    this.pRenderBatchJobsTable = pRenderBatchJobsTable;
-    this.pBatchPreviewRootPanel = pBatchPreviewRootPanel;
-    this.pBatchRenderJobProgressBar = pBatchRenderJobProgressBar;
-    this.pBatchRenderTotalProgressBar = pBatchRenderTotalProgressBar;
-    this.pJobProgressUpdater = pJobProgressUpdater;
-    this.pBatchRenderAddFilesButton = pBatchRenderAddFilesButton;
-    this.pBatchRenderFilesMoveDownButton = pBatchRenderFilesMoveDownButton;
-    this.pBatchRenderFilesMoveUpButton = pBatchRenderFilesMoveUpButton;
-    this.pBatchRenderFilesRemoveButton = pBatchRenderFilesRemoveButton;
-    this.pBatchRenderFilesRemoveAllButton = pBatchRenderFilesRemoveAllButton;
-    this.pBatchRenderStartButton = pBatchRenderStartButton;
-    this.pRootTabbedPane = pRootTabbedPane;
+    this.pRootPanel = pRootPanel;
     this.pAffineFlipHorizontalButton = pAffineFlipHorizontalButton;
     this.pAffineFlipVerticalButton = pAffineFlipVerticalButton;
     this.postBlurRadiusREd = pPostBlurRadiusREd;
@@ -783,16 +771,12 @@ public class TinaControllerParameter {
     this.pAffineScaleXButton = pAffineScaleXButton;
     this.pAffineScaleYButton = pAffineScaleYButton;
     this.pGradientLibraryPanel = pGradientLibraryPanel;
-    this.pHelpPane = pHelpPane;
     this.pToggleVariationsButton = pToggleVariationsButton;
     this.pToggleTransparencyButton = pToggleTransparencyButton;
     this.pAffinePreserveZButton = pAffinePreserveZButton;
     this.pQualityProfileCmb = pQualityProfileCmb;
     this.pResolutionProfileCmb = pResolutionProfileCmb;
-    this.pBatchQualityProfileCmb = pBatchQualityProfileCmb;
-    this.pBatchResolutionProfileCmb = pBatchResolutionProfileCmb;
     this.pInteractiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
-    this.pSWFAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
     this.pRenderFlameButton = pRenderFlameButton;
     this.pRenderMainButton = pRenderMainButton;
     this.pAppendToMovieButton = pAppendToMovieButton;
@@ -803,85 +787,32 @@ public class TinaControllerParameter {
     this.pXFormAntialiasAmountSlider = pXFormAntialiasAmountSlider;
     this.pXFormAntialiasRadiusREd = pXFormAntialiasRadiusREd;
     this.pXFormAntialiasRadiusSlider = pXFormAntialiasRadiusSlider;
-    this.pDancingFlamesFlamePnl = pDancingFlamesFlamePnl;
-    this.pDancingFlamesGraph1Pnl = pDancingFlamesGraph1Pnl;
-    this.pDancingFlamesLoadSoundBtn = pDancingFlamesLoadSoundBtn;
-    this.pDancingFlamesAddFromClipboardBtn = pDancingFlamesAddFromClipboardBtn;
-    this.pDancingFlamesAddFromEditorBtn = pDancingFlamesAddFromEditorBtn;
-    this.pDancingFlamesAddFromDiscBtn = pDancingFlamesAddFromDiscBtn;
-    this.pDancingFlamesRandomCountIEd = pDancingFlamesRandomCountIEd;
-    this.pDancingFlamesGenRandFlamesBtn = pDancingFlamesGenRandFlamesBtn;
-    this.pDancingFlamesRandomGenCmb = pDancingFlamesRandomGenCmb;
-    this.pDancingFlamesPoolFlamePreviewPnl = pDancingFlamesPoolFlamePreviewPnl;
-    this.pDancingFlamesBorderSizeSlider = pDancingFlamesBorderSizeSlider;
-    this.pDancingFlamesFlameToEditorBtn = pDancingFlamesFlameToEditorBtn;
-    this.pDancingFlamesDeleteFlameBtn = pDancingFlamesDeleteFlameBtn;
-    this.pDancingFlamesFramesPerSecondIEd = pDancingFlamesFramesPerSecondIEd;
-    this.pDancingFlamesMorphFrameCountIEd = pDancingFlamesMorphFrameCountIEd;
-    this.pDancingFlamesStartShowButton = pDancingFlamesStartShowButton;
-    this.pDancingFlamesStopShowButton = pDancingFlamesStopShowButton;
-    this.pDancingFlamesDoRecordCBx = pDancingFlamesDoRecordCBx;
-    this.pDancingFlamesFlamesCmb = pDancingFlamesFlamesCmb;
-    this.pDancingFlamesDrawTrianglesCBx = pDancingFlamesDrawTrianglesCBx;
-    this.pDancingFlamesDrawFFTCBx = pDancingFlamesDrawFFTCBx;
-    this.pDancingFlamesDrawFPSCBx = pDancingFlamesDrawFPSCBx;
-    this.pDancingFlamesFlamePropertiesTree = pDancingFlamesFlamePropertiesTree;
-    this.pDancingFlamesMotionPropertyPnl = pDancingFlamesMotionPropertyPnl;
-    this.pDancingFlamesMotionTable = pDancingFlamesMotionTable;
-    this.pDancingFlamesAddMotionCmb = pDancingFlamesAddMotionCmb;
-    this.pDancingFlamesAddMotionBtn = pDancingFlamesAddMotionBtn;
-    this.pDancingFlamesDeleteMotionBtn = pDancingFlamesDeleteMotionBtn;
   }
 
-  public void setParams2(JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
-      JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
+  public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
+      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn, JButton pFlameBrowserToBatchRendererBtn,
+      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JButton pFlameBrowserCopyToBtn, JButton pFlameBrowserMoveToBtn,
+      JButton pFlameBrowserToMeshGenBtn) {
+    this.flameBrowserTree = pFlameBrowserTree;
+    this.flameBrowersImagesPnl = pFlameBrowersImagesPnl;
+    this.flameBrowserRefreshBtn = pFlameBrowserRefreshBtn;
+    this.flameBrowserChangeFolderBtn = pFlameBrowserChangeFolderBtn;
+    this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
+    this.flameBrowserToBatchEditorBtn = pFlameBrowserToBatchRendererBtn;
+    this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
+    this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
+    this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
+    this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
+    this.flameBrowserToMeshGenBtn = pFlameBrowserToMeshGenBtn;
+  }
+
+  public void setMutaGenParams(JPanel pMutaGen01Pnl, JPanel pMutaGen02Pnl, JPanel pMutaGen03Pnl, JPanel pMutaGen04Pnl, JPanel pMutaGen05Pnl,
       JPanel pMutaGen06Pnl, JPanel pMutaGen07Pnl, JPanel pMutaGen08Pnl, JPanel pMutaGen09Pnl, JPanel pMutaGen10Pnl, JPanel pMutaGen11Pnl, JPanel pMutaGen12Pnl, JPanel pMutaGen13Pnl, JPanel pMutaGen14Pnl,
       JPanel pMutaGen15Pnl, JPanel pMutaGen16Pnl, JPanel pMutaGen17Pnl, JPanel pMutaGen18Pnl, JPanel pMutaGen19Pnl, JPanel pMutaGen20Pnl, JPanel pMutaGen21Pnl, JPanel pMutaGen22Pnl, JPanel pMutaGen23Pnl,
       JPanel pMutaGen24Pnl, JPanel pMutaGen25Pnl, JButton pMutaGenLoadFlameFromEditorBtn,
       JButton pMutaGenLoadFlameFromFileBtn, JProgressBar pMutaGenProgressBar, JWFNumberField pMutaGenAmountREd, JComboBox pMutaGenHorizontalTrend1Cmb,
       JComboBox pMutaGenHorizontalTrend2Cmb, JComboBox pMutaGenVerticalTrend1Cmb, JComboBox pMutaGenVerticalTrend2Cmb, JButton pMutaGenBackButtonBtn, JButton pMutaGenForwardButtonBtn,
-      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn,
-      JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
-      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
-      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
-      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
-      JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
-      JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
-      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
-      JButton pFlameBrowserRefreshBtn, JButton pFlameBrowserChangeFolderBtn, JButton pFlameBrowserToEditorBtn, JButton pFlameBrowserToBatchRendererBtn,
-      JButton pFlameBrowserDeleteBtn, JButton pFlameBrowserRenameBtn, JCheckBox pPaletteFadeColorsCBx, JButton pDancingFlamesReplaceFlameFromEditorBtn,
-      JButton pDancingFlamesRenameFlameBtn, JButton pDancingFlamesRenameMotionBtn, JCheckBox pDancingFlamesMutedCBx,
-      JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
-      JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
-      JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn,
-      JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
-      JWFNumberField pMotionBlurLengthField, JSlider pMotionBlurLengthSlider, JWFNumberField pMotionBlurTimeStepField,
-      JSlider pMotionBlurTimeStepSlider, JWFNumberField pMotionBlurDecayField, JSlider pMotionBlurDecaySlider,
-      JToggleButton pMotionCurveEditModeButton, JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl,
-      JPanel pMotionBlurPanel, JWFNumberField pAffineMoveVertAmountREd, JComboBox pPostSymmetryTypeCmb, JWFNumberField pPostSymmetryDistanceREd,
-      JSlider pPostSymmetryDistanceSlider, JWFNumberField pPostSymmetryRotationREd, JSlider pPostSymmetryRotationSlider,
-      JWFNumberField pPostSymmetryOrderREd, JSlider pPostSymmetryOrderSlider, JWFNumberField pPostSymmetryCentreXREd,
-      JSlider pPostSymmetryCentreXSlider, JWFNumberField pPostSymmetryCentreYREd, JSlider pPostSymmetryCentreYSlider,
-      JComboBox pStereo3dModeCmb, JWFNumberField pStereo3dAngleREd, JSlider pStereo3dAngleSlider, JWFNumberField pStereo3dEyeDistREd,
-      JSlider pStereo3dEyeDistSlider, JComboBox pStereo3dLeftEyeColorCmb, JComboBox pStereo3dRightEyeColorCmb,
-      JWFNumberField pStereo3dInterpolatedImageCountREd, JSlider pStereo3dInterpolatedImageCountSlider, JComboBox pStereo3dPreviewCmb,
-      JWFNumberField pStereo3dFocalOffsetREd, JSlider pStereo3dFocalOffsetSlider, JCheckBox pStereo3dSwapSidesCBx,
-      JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
-      JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
-      JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
-      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pFlameBrowserCopyToBtn,
-      JButton pFlameBrowserMoveToBtn, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
-      JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
-      JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
-      JSlider pXFormModContrastSpeedSlider, JWFNumberField pXFormModSaturationREd, JSlider pXFormModSaturationSlider, JWFNumberField pXFormModSaturationSpeedREd,
-      JSlider pXFormModSaturationSpeedSlider) {
-    this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
-    this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
-    this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
-    this.pDancingFlamesClearMotionsBtn = pDancingFlamesClearMotionsBtn;
-    this.pDancingFlamesLoadProjectBtn = pDancingFlamesLoadProjectBtn;
-    this.pDancingFlamesSaveProjectBtn = pDancingFlamesSaveProjectBtn;
-    this.pDancingFlamesMotionLinksTable = pDancingFlamesMotionLinksTable;
+      JTextPane pMutaGenHintPane, JButton pMutaGenSaveFlameToEditorBtn, JButton pMutaGenSaveFlameToFileBtn) {
     this.mutaGen01Pnl = pMutaGen01Pnl;
     this.mutaGen02Pnl = pMutaGen02Pnl;
     this.mutaGen03Pnl = pMutaGen03Pnl;
@@ -920,6 +851,38 @@ public class TinaControllerParameter {
     this.mutaGenHintPane = pMutaGenHintPane;
     this.mutaGenSaveFlameToEditorBtn = pMutaGenSaveFlameToEditorBtn;
     this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
+  }
+
+  public void setParams2(JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
+      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
+      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
+      JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
+      JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
+      JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
+      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx,
+      JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
+      JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
+      JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn,
+      JWFNumberField pKeyframesFrameField, JSlider pKeyframesFrameSlider, JWFNumberField pKeyframesFrameCountField,
+      JWFNumberField pMotionBlurLengthField, JSlider pMotionBlurLengthSlider, JWFNumberField pMotionBlurTimeStepField,
+      JSlider pMotionBlurTimeStepSlider, JWFNumberField pMotionBlurDecayField, JSlider pMotionBlurDecaySlider,
+      JToggleButton pMotionCurveEditModeButton, JPanel pFrameSliderPanel, JLabel pKeyframesFrameLbl, JLabel pKeyframesFrameCountLbl,
+      JPanel pMotionBlurPanel, JWFNumberField pAffineMoveVertAmountREd, JComboBox pPostSymmetryTypeCmb, JWFNumberField pPostSymmetryDistanceREd,
+      JSlider pPostSymmetryDistanceSlider, JWFNumberField pPostSymmetryRotationREd, JSlider pPostSymmetryRotationSlider,
+      JWFNumberField pPostSymmetryOrderREd, JSlider pPostSymmetryOrderSlider, JWFNumberField pPostSymmetryCentreXREd,
+      JSlider pPostSymmetryCentreXSlider, JWFNumberField pPostSymmetryCentreYREd, JSlider pPostSymmetryCentreYSlider,
+      JComboBox pStereo3dModeCmb, JWFNumberField pStereo3dAngleREd, JSlider pStereo3dAngleSlider, JWFNumberField pStereo3dEyeDistREd,
+      JSlider pStereo3dEyeDistSlider, JComboBox pStereo3dLeftEyeColorCmb, JComboBox pStereo3dRightEyeColorCmb,
+      JWFNumberField pStereo3dInterpolatedImageCountREd, JSlider pStereo3dInterpolatedImageCountSlider, JComboBox pStereo3dPreviewCmb,
+      JWFNumberField pStereo3dFocalOffsetREd, JSlider pStereo3dFocalOffsetSlider, JCheckBox pStereo3dSwapSidesCBx,
+      JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
+      JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
+      JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
+      JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
+      JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
+      JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
+      JSlider pXFormModContrastSpeedSlider, JWFNumberField pXFormModSaturationREd, JSlider pXFormModSaturationSlider, JWFNumberField pXFormModSaturationSpeedREd,
+      JSlider pXFormModSaturationSpeedSlider) {
     this.editTransformCaptionButton = pEditTransformCaptionButton;
     this.editFlameTileButton = pEditFlameTileButton;
     this.snapShotButton = pSnapShotButton;
@@ -949,19 +912,7 @@ public class TinaControllerParameter {
     this.gradientsList = pGradientsList;
     this.backgroundColorIndicatorBtn = pBackgroundColorIndicatorBtn;
     this.randomizeButton = pRandomizeButton;
-    this.flameBrowserTree = pFlameBrowserTree;
-    this.flameBrowersImagesPnl = pFlameBrowersImagesPnl;
-    this.flameBrowserRefreshBtn = pFlameBrowserRefreshBtn;
-    this.flameBrowserChangeFolderBtn = pFlameBrowserChangeFolderBtn;
-    this.flameBrowserToEditorBtn = pFlameBrowserToEditorBtn;
-    this.flameBrowserToBatchEditorBtn = pFlameBrowserToBatchRendererBtn;
-    this.flameBrowserDeleteBtn = pFlameBrowserDeleteBtn;
-    this.flameBrowserRenameBtn = pFlameBrowserRenameBtn;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
-    this.dancingFlamesReplaceFlameFromEditorBtn = pDancingFlamesReplaceFlameFromEditorBtn;
-    this.dancingFlamesRenameFlameBtn = pDancingFlamesRenameFlameBtn;
-    this.dancingFlamesRenameMotionBtn = pDancingFlamesRenameMotionBtn;
-    this.dancingFlamesMutedCBx = pDancingFlamesMutedCBx;
     this.layerWeightEd = pLayerWeightEd;
     this.layerAddBtn = pLayerAddBtn;
     this.layerDuplicateBtn = pLayerDuplicateBtn;
@@ -1024,8 +975,6 @@ public class TinaControllerParameter {
     this.mouseTransformEditTriangleViewButton = pMouseTransformEditTriangleViewButton;
     this.paletteRandomGeneratorCmb = pPaletteRandomGeneratorCmb;
     this.toggleTriangleWithColorsButton = pToggleTriangleWithColorsButton;
-    this.flameBrowserCopyToBtn = pFlameBrowserCopyToBtn;
-    this.flameBrowserMoveToBtn = pFlameBrowserMoveToBtn;
     this.affineRotateEditMotionCurveBtn = pAffineRotateEditMotionCurveBtn;
     this.affineScaleEditMotionCurveBtn = pAffineScaleEditMotionCurveBtn;
     this.triangleStyleCmb = pTriangleStyleCmb;
@@ -1043,35 +992,17 @@ public class TinaControllerParameter {
     this.pXFormModSaturationSpeedSlider = pXFormModSaturationSpeedSlider;
   }
 
-  public void setParams3(JButton pMeshGenFromEditorBtn, JButton pMeshGenFromClipboardBtn, JButton pMeshGenLoadFlameBtn,
-      JWFNumberField pMeshGenSliceCountREd, JWFNumberField pMeshGenSlicesPerRenderREd, JWFNumberField pMeshGenRenderWidthREd,
-      JWFNumberField pMeshGenRenderHeightREd, JWFNumberField pMeshGenRenderQualityREd, JProgressBar pMeshGenProgressbar,
-      JButton pMeshGenGenerateBtn, JPanel pMeshGenTopViewRootPnl, JPanel pMeshGenFrontViewRootPnl, JPanel pMeshGenPerspectiveViewRootPnl,
-      JTextPane pMeshGenHintPane, JWFNumberField pMeshGenCentreXREd, JSlider pMeshGenCentreXSlider, JWFNumberField pMeshGenCentreYREd,
-      JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
-      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JButton pMeshGenTopViewRenderBtn,
-      JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
-      JButton pFlameBrowserToMeshGenBtn, JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
-      JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
-      JProgressBar pMeshGenGenerateMeshProgressbar, JButton pMeshGenGenerateMeshBtn, JButton pMeshGenSequenceFromRendererBtn,
-      JWFNumberField pMeshGenSequenceThresholdREd, JLabel pMeshGenSequenceLbl, JPanel pMeshGenPreviewRootPanel, JCheckBox pMeshGenAutoPreviewCBx,
-      JButton pMeshGenPreviewImportLastGeneratedMeshBtn, JButton pMeshGenPreviewImportFromFileBtn, JButton pMeshGenClearPreviewBtn,
-      JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
-      JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
-      JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
-      JButton pMeshGenRefreshPreviewBtn, JTextPane pApophysisHintsPane, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenThicknessModREd,
+  public void setParams3(
       JButton pChannelMixerResetBtn, JComboBox pChannelMixerModeCmb, JPanel pChannelMixerRRRootPanel, JPanel pChannelMixerRGRootPanel,
       JPanel pChannelMixerRBRootPanel, JPanel pChannelMixerGRRootPanel, JPanel pChannelMixerGGRootPanel, JPanel pChannelMixerGBRootPanel,
       JPanel pChannelMixerBRRootPanel, JPanel pChannelMixerBGRootPanel, JPanel pChannelMixerBBRootPanel,
-      JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
-      JWFNumberField pMeshGenImageStepREd, JButton pMotionCurvePlayPreviewButton,
-      JComboBox pDofDOFShapeCmb, JWFNumberField pDofDOFScaleREd, JSlider pDofDOFScaleSlider, JWFNumberField pDofDOFAngleREd,
+      JButton pMotionCurvePlayPreviewButton, JComboBox pDofDOFShapeCmb, JWFNumberField pDofDOFScaleREd, JSlider pDofDOFScaleSlider, JWFNumberField pDofDOFAngleREd,
       JSlider pDofDOFAngleSlider, JWFNumberField pDofDOFFadeREd, JSlider pDofDOFFadeSlider, JWFNumberField pDofDOFParam1REd,
       JSlider pDofDOFParam1Slider, JLabel pDofDOFParam1Lbl, JWFNumberField pDofDOFParam2REd, JSlider pDofDOFParam2Slider,
       JLabel pDofDOFParam2Lbl, JWFNumberField pDofDOFParam3REd, JSlider pDofDOFParam3Slider, JLabel pDofDOFParam3Lbl,
       JWFNumberField pDofDOFParam4REd, JSlider pDofDOFParam4Slider, JLabel pDofDOFParam4Lbl, JWFNumberField pDofDOFParam5REd,
       JSlider pDofDOFParam5Slider, JLabel pDofDOFParam5Lbl, JWFNumberField pDofDOFParam6REd, JSlider pDofDOFParam6Slider,
-      JLabel pDofDOFParam6Lbl, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn, JButton pBokehButton,
+      JLabel pDofDOFParam6Lbl, JButton pBokehButton,
       JButton pResetCameraSettingsBtn, JButton pResetDOFSettingsButton, JButton pResetBokehOptionsButton,
       JButton pResetColoringOptionsButton, JButton pResetAntialiasOptionsButton, JButton pResetShadingSettingsBtn,
       JButton pResetStereo3DSettingsBtn, JButton pResetPostSymmetrySettingsBtn, JButton pResetMotionBlurSettingsBtn,
@@ -1084,7 +1015,7 @@ public class TinaControllerParameter {
       JSlider pGradientColorMapHorizScaleSlider, JWFNumberField pGradientColorMapVertOffsetREd, JSlider pGradientColorMapVertOffsetSlider,
       JWFNumberField pGradientColorMapVertScaleREd, JSlider pGradientColorMapVertScaleSlider, JWFNumberField pGradientColorMapLocalColorAddREd,
       JSlider pGradientColorMapLocalColorAddSlider, JWFNumberField pGradientColorMapLocalColorScaleREd, JSlider pGradientColorMapLocalColorScaleSlider,
-      JComboBox pSWFAnimatorQualityProfileCmb, JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton,
+      JWFNumberField pFlameFPSField, JToggleButton pLeapMotionToggleButton,
       JTable pLeapMotionConfigTable, JComboBox pLeapMotionHandCmb, JComboBox pLeapMotionInputChannelCmb,
       JComboBox pLeapMotionOutputChannelCmb, JWFNumberField pLeapMotionIndex1Field, JWFNumberField pLeapMotionIndex2Field,
       JWFNumberField pLeapMotionIndex3Field, JWFNumberField pLeapMotionInvScaleField,
@@ -1094,7 +1025,7 @@ public class TinaControllerParameter {
       JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
-      JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton, JComboBox pMeshGenOutputTypeCmb,
+      JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
       JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
       JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
       JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
@@ -1113,63 +1044,6 @@ public class TinaControllerParameter {
       JWFNumberField xFormMaterialREd, JSlider xFormMaterialSlider, JWFNumberField xFormMaterialSpeedREd, JSlider xFormMaterialSpeedSlider
 
       ) {
-    meshGenFromEditorBtn = pMeshGenFromEditorBtn;
-    meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
-    meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
-    meshGenSliceCountREd = pMeshGenSliceCountREd;
-    meshGenSlicesPerRenderREd = pMeshGenSlicesPerRenderREd;
-    meshGenRenderWidthREd = pMeshGenRenderWidthREd;
-    meshGenRenderHeightREd = pMeshGenRenderHeightREd;
-    meshGenRenderQualityREd = pMeshGenRenderQualityREd;
-    meshGenProgressbar = pMeshGenProgressbar;
-    meshGenGenerateBtn = pMeshGenGenerateBtn;
-    meshGenTopViewRootPnl = pMeshGenTopViewRootPnl;
-    meshGenFrontViewRootPnl = pMeshGenFrontViewRootPnl;
-    meshGenPerspectiveViewRootPnl = pMeshGenPerspectiveViewRootPnl;
-    meshGenHintPane = pMeshGenHintPane;
-    meshGenCentreXREd = pMeshGenCentreXREd;
-    meshGenCentreXSlider = pMeshGenCentreXSlider;
-    meshGenCentreYREd = pMeshGenCentreYREd;
-    meshGenCentreYSlider = pMeshGenCentreYSlider;
-    meshGenZoomREd = pMeshGenZoomREd;
-    meshGenZoomSlider = pMeshGenZoomSlider;
-    meshGenZMinREd = pMeshGenZMinREd;
-    meshGenZMinSlider = pMeshGenZMinSlider;
-    meshGenZMaxREd = pMeshGenZMaxREd;
-    meshGenZMaxSlider = pMeshGenZMaxSlider;
-    meshGenTopViewRenderBtn = pMeshGenTopViewRenderBtn;
-    meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
-    meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;
-    meshGenTopViewToEditorBtn = pMeshGenTopViewToEditorBtn;
-    flameBrowserToMeshGenBtn = pFlameBrowserToMeshGenBtn;
-    meshGenLoadSequenceBtn = pMeshGenLoadSequenceBtn;
-    meshGenSequenceWidthREd = pMeshGenSequenceWidthREd;
-    meshGenSequenceHeightREd = pMeshGenSequenceHeightREd;
-    meshGenSequenceSlicesREd = pMeshGenSequenceSlicesREd;
-    meshGenSequenceDownSampleREd = pMeshGenSequenceDownSampleREd;
-    meshGenSequenceFilterRadiusREd = pMeshGenSequenceFilterRadiusREd;
-    meshGenGenerateMeshProgressbar = pMeshGenGenerateMeshProgressbar;
-    meshGenGenerateMeshBtn = pMeshGenGenerateMeshBtn;
-    meshGenSequenceFromRendererBtn = pMeshGenSequenceFromRendererBtn;
-    meshGenSequenceThresholdREd = pMeshGenSequenceThresholdREd;
-    meshGenSequenceLbl = pMeshGenSequenceLbl;
-    meshGenPreviewRootPanel = pMeshGenPreviewRootPanel;
-    meshGenAutoPreviewCBx = pMeshGenAutoPreviewCBx;
-    meshGenPreviewImportLastGeneratedMeshBtn = pMeshGenPreviewImportLastGeneratedMeshBtn;
-    meshGenPreviewImportFromFileBtn = pMeshGenPreviewImportFromFileBtn;
-    meshGenClearPreviewBtn = pMeshGenClearPreviewBtn;
-    meshGenPreviewPositionXREd = pMeshGenPreviewPositionXREd;
-    meshGenPreviewPositionYREd = pMeshGenPreviewPositionYREd;
-    meshGenPreviewSizeREd = pMeshGenPreviewSizeREd;
-    meshGenPreviewScaleZREd = pMeshGenPreviewScaleZREd;
-    meshGenPreviewRotateAlphaREd = pMeshGenPreviewRotateAlphaREd;
-    meshGenPreviewRotateBetaREd = pMeshGenPreviewRotateBetaREd;
-    meshGenPreviewPointsREd = pMeshGenPreviewPointsREd;
-    meshGenPreviewPolygonsREd = pMeshGenPreviewPolygonsREd;
-    meshGenRefreshPreviewBtn = pMeshGenRefreshPreviewBtn;
-    apophysisHintsPane = pApophysisHintsPane;
-    meshGenPreviewSunflowExportBtn = pMeshGenPreviewSunflowExportBtn;
-    meshGenThicknessModREd = pMeshGenThicknessModREd;
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1181,10 +1055,6 @@ public class TinaControllerParameter {
     channelMixerBRRootPanel = pChannelMixerBRRootPanel;
     channelMixerBGRootPanel = pChannelMixerBGRootPanel;
     channelMixerBBRootPanel = pChannelMixerBBRootPanel;
-    meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
-    meshGenPreFilter1Cmb = pMeshGenPreFilter1Cmb;
-    meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
-    meshGenImageStepREd = pMeshGenImageStepREd;
     motionCurvePlayPreviewButton = pMotionCurvePlayPreviewButton;
     dofDOFShapeCmb = pDofDOFShapeCmb;
     dofDOFScaleREd = pDofDOFScaleREd;
@@ -1211,8 +1081,6 @@ public class TinaControllerParameter {
     dofDOFParam6REd = pDofDOFParam6REd;
     dofDOFParam6Slider = pDofDOFParam6Slider;
     dofDOFParam6Lbl = pDofDOFParam6Lbl;
-    batchRenderOverrideCBx = pBatchRenderOverrideCBx;
-    batchRenderShowImageBtn = pBatchRenderShowImageBtn;
     bokehButton = pBokehButton;
     resetCameraSettingsBtn = pResetCameraSettingsBtn;
     resetDOFSettingsButton = pResetDOFSettingsButton;
@@ -1252,7 +1120,6 @@ public class TinaControllerParameter {
     gradientColorMapLocalColorAddSlider = pGradientColorMapLocalColorAddSlider;
     gradientColorMapLocalColorScaleREd = pGradientColorMapLocalColorScaleREd;
     gradientColorMapLocalColorScaleSlider = pGradientColorMapLocalColorScaleSlider;
-    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
     flameFPSField = pFlameFPSField;
     leapMotionToggleButton = pLeapMotionToggleButton;
     leapMotionConfigTable = pLeapMotionConfigTable;
@@ -1283,7 +1150,6 @@ public class TinaControllerParameter {
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
-    meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
     this.tinaSolidRenderingCBx = tinaSolidRenderingCBx;
     this.tinaSolidRenderingEnableSSAOCBx = tinaSolidRenderingEnableSSAOCBx;
     this.tinaSolidRenderingSSAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
@@ -1331,5 +1197,163 @@ public class TinaControllerParameter {
     this.xFormMaterialSlider = xFormMaterialSlider;
     this.xFormMaterialSpeedREd = xFormMaterialSpeedREd;
     this.xFormMaterialSpeedSlider = xFormMaterialSpeedSlider;
+  }
+
+  public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {
+    this.pSWFAnimatorResolutionProfileCmb = pSWFAnimatorResolutionProfileCmb;
+    swfAnimatorQualityProfileCmb = pSWFAnimatorQualityProfileCmb;
+  }
+
+  public void setDancingFlamesParams(JPanel pDancingFlamesFlamePnl, JPanel pDancingFlamesGraph1Pnl, JButton pDancingFlamesLoadSoundBtn, JButton pDancingFlamesAddFromClipboardBtn, JButton pDancingFlamesAddFromEditorBtn, JButton pDancingFlamesAddFromDiscBtn,
+      JWFNumberField pDancingFlamesRandomCountIEd, JButton pDancingFlamesGenRandFlamesBtn, JComboBox pDancingFlamesRandomGenCmb, JPanel pDancingFlamesPoolFlamePreviewPnl, JSlider pDancingFlamesBorderSizeSlider, JButton pDancingFlamesFlameToEditorBtn, JButton pDancingFlamesDeleteFlameBtn, JTextField pDancingFlamesFramesPerSecondIEd, JTextField pDancingFlamesMorphFrameCountIEd, JButton pDancingFlamesStartShowButton, JButton pDancingFlamesStopShowButton, JCheckBox pDancingFlamesDoRecordCBx, JComboBox pDancingFlamesFlamesCmb, JCheckBox pDancingFlamesDrawTrianglesCBx, JCheckBox pDancingFlamesDrawFFTCBx, JCheckBox pDancingFlamesDrawFPSCBx, JTree pDancingFlamesFlamePropertiesTree, JPanel pDancingFlamesMotionPropertyPnl, JTable pDancingFlamesMotionTable, JComboBox pDancingFlamesAddMotionCmb,
+      JButton pDancingFlamesAddMotionBtn, JButton pDancingFlamesDeleteMotionBtn, JButton pDancingFlamesLinkMotionBtn, JButton pDancingFlamesUnlinkMotionBtn, JComboBox pDancingFlamesCreateMotionsCmb, JButton pDancingFlamesClearMotionsBtn, JButton pDancingFlamesLoadProjectBtn, JButton pDancingFlamesSaveProjectBtn, JTable pDancingFlamesMotionLinksTable,
+      JButton pDancingFlamesReplaceFlameFromEditorBtn, JButton pDancingFlamesRenameFlameBtn, JButton pDancingFlamesRenameMotionBtn, JCheckBox pDancingFlamesMutedCBx) {
+    this.pDancingFlamesFlamePnl = pDancingFlamesFlamePnl;
+    this.pDancingFlamesGraph1Pnl = pDancingFlamesGraph1Pnl;
+    this.pDancingFlamesLoadSoundBtn = pDancingFlamesLoadSoundBtn;
+    this.pDancingFlamesAddFromClipboardBtn = pDancingFlamesAddFromClipboardBtn;
+    this.pDancingFlamesAddFromEditorBtn = pDancingFlamesAddFromEditorBtn;
+    this.pDancingFlamesAddFromDiscBtn = pDancingFlamesAddFromDiscBtn;
+    this.pDancingFlamesRandomCountIEd = pDancingFlamesRandomCountIEd;
+    this.pDancingFlamesGenRandFlamesBtn = pDancingFlamesGenRandFlamesBtn;
+    this.pDancingFlamesRandomGenCmb = pDancingFlamesRandomGenCmb;
+    this.pDancingFlamesPoolFlamePreviewPnl = pDancingFlamesPoolFlamePreviewPnl;
+    this.pDancingFlamesBorderSizeSlider = pDancingFlamesBorderSizeSlider;
+    this.pDancingFlamesFlameToEditorBtn = pDancingFlamesFlameToEditorBtn;
+    this.pDancingFlamesDeleteFlameBtn = pDancingFlamesDeleteFlameBtn;
+    this.pDancingFlamesFramesPerSecondIEd = pDancingFlamesFramesPerSecondIEd;
+    this.pDancingFlamesMorphFrameCountIEd = pDancingFlamesMorphFrameCountIEd;
+    this.pDancingFlamesStartShowButton = pDancingFlamesStartShowButton;
+    this.pDancingFlamesStopShowButton = pDancingFlamesStopShowButton;
+    this.pDancingFlamesDoRecordCBx = pDancingFlamesDoRecordCBx;
+    this.pDancingFlamesFlamesCmb = pDancingFlamesFlamesCmb;
+    this.pDancingFlamesDrawTrianglesCBx = pDancingFlamesDrawTrianglesCBx;
+    this.pDancingFlamesDrawFFTCBx = pDancingFlamesDrawFFTCBx;
+    this.pDancingFlamesDrawFPSCBx = pDancingFlamesDrawFPSCBx;
+    this.pDancingFlamesFlamePropertiesTree = pDancingFlamesFlamePropertiesTree;
+    this.pDancingFlamesMotionPropertyPnl = pDancingFlamesMotionPropertyPnl;
+    this.pDancingFlamesMotionTable = pDancingFlamesMotionTable;
+    this.pDancingFlamesAddMotionCmb = pDancingFlamesAddMotionCmb;
+    this.pDancingFlamesAddMotionBtn = pDancingFlamesAddMotionBtn;
+    this.pDancingFlamesDeleteMotionBtn = pDancingFlamesDeleteMotionBtn;
+    this.pDancingFlamesLinkMotionBtn = pDancingFlamesLinkMotionBtn;
+    this.pDancingFlamesUnlinkMotionBtn = pDancingFlamesUnlinkMotionBtn;
+    this.pDancingFlamesCreateMotionsCmb = pDancingFlamesCreateMotionsCmb;
+    this.pDancingFlamesClearMotionsBtn = pDancingFlamesClearMotionsBtn;
+    this.pDancingFlamesLoadProjectBtn = pDancingFlamesLoadProjectBtn;
+    this.pDancingFlamesSaveProjectBtn = pDancingFlamesSaveProjectBtn;
+    this.pDancingFlamesMotionLinksTable = pDancingFlamesMotionLinksTable;
+    this.dancingFlamesReplaceFlameFromEditorBtn = pDancingFlamesReplaceFlameFromEditorBtn;
+    this.dancingFlamesRenameFlameBtn = pDancingFlamesRenameFlameBtn;
+    this.dancingFlamesRenameMotionBtn = pDancingFlamesRenameMotionBtn;
+    this.dancingFlamesMutedCBx = pDancingFlamesMutedCBx;
+  }
+
+  public void setBatchFlameRendererParams(JTable pRenderBatchJobsTable, JPanel pBatchPreviewRootPanel, JProgressBar pBatchRenderJobProgressBar,
+      JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
+      JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
+      JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JComboBox pBatchQualityProfileCmb,
+      JComboBox pBatchResolutionProfileCmb, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn) {
+    this.pRenderBatchJobsTable = pRenderBatchJobsTable;
+    this.pBatchPreviewRootPanel = pBatchPreviewRootPanel;
+    this.pBatchRenderJobProgressBar = pBatchRenderJobProgressBar;
+    this.pBatchRenderTotalProgressBar = pBatchRenderTotalProgressBar;
+    this.pJobProgressUpdater = pJobProgressUpdater;
+    this.pBatchRenderAddFilesButton = pBatchRenderAddFilesButton;
+    this.pBatchRenderFilesMoveDownButton = pBatchRenderFilesMoveDownButton;
+    this.pBatchRenderFilesMoveUpButton = pBatchRenderFilesMoveUpButton;
+    this.pBatchRenderFilesRemoveButton = pBatchRenderFilesRemoveButton;
+    this.pBatchRenderFilesRemoveAllButton = pBatchRenderFilesRemoveAllButton;
+    this.pBatchRenderStartButton = pBatchRenderStartButton;
+    this.pBatchQualityProfileCmb = pBatchQualityProfileCmb;
+    this.pBatchResolutionProfileCmb = pBatchResolutionProfileCmb;
+    batchRenderOverrideCBx = pBatchRenderOverrideCBx;
+    batchRenderShowImageBtn = pBatchRenderShowImageBtn;
+  }
+
+  public void setMeshGenParams(JButton pMeshGenFromEditorBtn, JButton pMeshGenFromClipboardBtn, JButton pMeshGenLoadFlameBtn,
+      JWFNumberField pMeshGenSliceCountREd, JWFNumberField pMeshGenSlicesPerRenderREd, JWFNumberField pMeshGenRenderWidthREd,
+      JWFNumberField pMeshGenRenderHeightREd, JWFNumberField pMeshGenRenderQualityREd, JProgressBar pMeshGenProgressbar,
+      JButton pMeshGenGenerateBtn, JPanel pMeshGenTopViewRootPnl, JPanel pMeshGenFrontViewRootPnl, JPanel pMeshGenPerspectiveViewRootPnl,
+      JWFNumberField pMeshGenCentreXREd, JSlider pMeshGenCentreXSlider, JWFNumberField pMeshGenCentreYREd,
+      JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
+      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JButton pMeshGenTopViewRenderBtn,
+      JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
+      JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
+      JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
+      JProgressBar pMeshGenGenerateMeshProgressbar, JButton pMeshGenGenerateMeshBtn, JButton pMeshGenSequenceFromRendererBtn,
+      JWFNumberField pMeshGenSequenceThresholdREd, JLabel pMeshGenSequenceLbl, JPanel pMeshGenPreviewRootPanel, JCheckBox pMeshGenAutoPreviewCBx,
+      JButton pMeshGenPreviewImportLastGeneratedMeshBtn, JButton pMeshGenPreviewImportFromFileBtn, JButton pMeshGenClearPreviewBtn,
+      JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
+      JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
+      JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
+      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenThicknessModREd,
+      JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
+      JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb) {
+    meshGenFromEditorBtn = pMeshGenFromEditorBtn;
+    meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
+    meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
+    meshGenSliceCountREd = pMeshGenSliceCountREd;
+    meshGenSlicesPerRenderREd = pMeshGenSlicesPerRenderREd;
+    meshGenRenderWidthREd = pMeshGenRenderWidthREd;
+    meshGenRenderHeightREd = pMeshGenRenderHeightREd;
+    meshGenRenderQualityREd = pMeshGenRenderQualityREd;
+    meshGenProgressbar = pMeshGenProgressbar;
+    meshGenGenerateBtn = pMeshGenGenerateBtn;
+    meshGenTopViewRootPnl = pMeshGenTopViewRootPnl;
+    meshGenFrontViewRootPnl = pMeshGenFrontViewRootPnl;
+    meshGenPerspectiveViewRootPnl = pMeshGenPerspectiveViewRootPnl;
+    meshGenCentreXREd = pMeshGenCentreXREd;
+    meshGenCentreXSlider = pMeshGenCentreXSlider;
+    meshGenCentreYREd = pMeshGenCentreYREd;
+    meshGenCentreYSlider = pMeshGenCentreYSlider;
+    meshGenZoomREd = pMeshGenZoomREd;
+    meshGenZoomSlider = pMeshGenZoomSlider;
+    meshGenZMinREd = pMeshGenZMinREd;
+    meshGenZMinSlider = pMeshGenZMinSlider;
+    meshGenZMaxREd = pMeshGenZMaxREd;
+    meshGenZMaxSlider = pMeshGenZMaxSlider;
+    meshGenTopViewRenderBtn = pMeshGenTopViewRenderBtn;
+    meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
+    meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;
+    meshGenTopViewToEditorBtn = pMeshGenTopViewToEditorBtn;
+    meshGenLoadSequenceBtn = pMeshGenLoadSequenceBtn;
+    meshGenSequenceWidthREd = pMeshGenSequenceWidthREd;
+    meshGenSequenceHeightREd = pMeshGenSequenceHeightREd;
+    meshGenSequenceSlicesREd = pMeshGenSequenceSlicesREd;
+    meshGenSequenceDownSampleREd = pMeshGenSequenceDownSampleREd;
+    meshGenSequenceFilterRadiusREd = pMeshGenSequenceFilterRadiusREd;
+    meshGenGenerateMeshProgressbar = pMeshGenGenerateMeshProgressbar;
+    meshGenGenerateMeshBtn = pMeshGenGenerateMeshBtn;
+    meshGenSequenceFromRendererBtn = pMeshGenSequenceFromRendererBtn;
+    meshGenSequenceThresholdREd = pMeshGenSequenceThresholdREd;
+    meshGenSequenceLbl = pMeshGenSequenceLbl;
+    meshGenPreviewRootPanel = pMeshGenPreviewRootPanel;
+    meshGenAutoPreviewCBx = pMeshGenAutoPreviewCBx;
+    meshGenPreviewImportLastGeneratedMeshBtn = pMeshGenPreviewImportLastGeneratedMeshBtn;
+    meshGenPreviewImportFromFileBtn = pMeshGenPreviewImportFromFileBtn;
+    meshGenClearPreviewBtn = pMeshGenClearPreviewBtn;
+    meshGenPreviewPositionXREd = pMeshGenPreviewPositionXREd;
+    meshGenPreviewPositionYREd = pMeshGenPreviewPositionYREd;
+    meshGenPreviewSizeREd = pMeshGenPreviewSizeREd;
+    meshGenPreviewScaleZREd = pMeshGenPreviewScaleZREd;
+    meshGenPreviewRotateAlphaREd = pMeshGenPreviewRotateAlphaREd;
+    meshGenPreviewRotateBetaREd = pMeshGenPreviewRotateBetaREd;
+    meshGenPreviewPointsREd = pMeshGenPreviewPointsREd;
+    meshGenPreviewPolygonsREd = pMeshGenPreviewPolygonsREd;
+    meshGenRefreshPreviewBtn = pMeshGenRefreshPreviewBtn;
+    meshGenPreviewSunflowExportBtn = pMeshGenPreviewSunflowExportBtn;
+    meshGenThicknessModREd = pMeshGenThicknessModREd;
+    meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
+    meshGenPreFilter1Cmb = pMeshGenPreFilter1Cmb;
+    meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
+    meshGenImageStepREd = pMeshGenImageStepREd;
+    meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
+  }
+
+  public void setHelpParams(JTextPane pMeshGenHintPane, JTextPane pHelpPane, JTextPane pApophysisHintsPane) {
+    this.meshGenHintPane = pMeshGenHintPane;
+    this.pHelpPane = pHelpPane;
+    this.apophysisHintsPane = pApophysisHintsPane;
   }
 }

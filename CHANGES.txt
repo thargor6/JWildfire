@@ -1,3 +1,25 @@
+V3.00 ALPHA 4 (28.08.2016)
+ - redesigned the default window-positions and sizes (of inner windows)
+ - new "Tips of the day", only 2 tips currently available
+ - visibility of windows will not be restored at programm startup, instead the editor is always shown per default 
+ - because it seems to confuse some users and is not really necessary, inner windows can not be maximized anymore 
+ - removed the unnecessary tabs (which become unnecessary after splitting the main window) on several windows
+ - implemented transfer of flames between windows (instead of different tabs)
+ - the Welcome-window is not show pr default, but you can reach it in the menu
+ 
+V3.00 ALPHA 3 (27.08.2016)
+ - solid rendering: new implementation of ambient shadows, but not finished yet
+ - obj_mesh_wf and obj_primitive_wf have now options to smooth meshes:
+     - subdiv_level: number of smoothing passes, a value of 0..2 is recommended
+     - subdiv_...: all other params are related to the Taubin-smooth-algorithm, leave them unchangd unless you know what you are doing     
+ - solid rendering: improvement of calculation of normals
+ - huge UI change: the main flame-window was broken into multiple smaller windows, still work in progress!
+ - new Navigator-window to make it easier to navigate between windows
+ - changed the default background image
+ - new window-menues
+ - window-state for all windows inside the desktoip is now saved in the Preferences
+ - affine-controls in the editor are now monochrome per default, but you may change this bot in the editor and in the prefs
+
 V3.00 ALPHA 2 (17.08.2016)
  - Completely new DOF for solid rendering with bokeh-effects. This DOF is a post-effect (and works totally different than the regular DOF) 
    and is not visible in the fast-preview (!). But, it also gives better results. 

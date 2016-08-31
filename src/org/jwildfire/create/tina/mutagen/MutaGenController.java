@@ -40,7 +40,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
@@ -61,6 +60,7 @@ import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -70,7 +70,7 @@ public class MutaGenController {
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
-  private final JTabbedPane rootTabbedPane;
+  private final JPanel rootPanel;
   private final JPanel flamePanels[];
   private final JButton loadFlameFromEditorBtn;
   private final JButton loadFlameFromFileBtn;
@@ -138,7 +138,7 @@ public class MutaGenController {
 
   }
 
-  public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JTabbedPane pRootTabbedPane, JPanel pFlamePanels[],
+  public MutaGenController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, JPanel pFlamePanels[],
       JButton pLoadFlameFromEditorBtn, JButton pLoadFlameFromFileBtn,
       JProgressBar pProgressBar, JWFNumberField pAmountREd, JComboBox<MutationType> pHorizontalTrend1Cmb, JComboBox<MutationType> pHorizontalTrend2Cmb,
       JComboBox<MutationType> pVerticalTrend1Cmb, JComboBox<MutationType> pVerticalTrend2Cmb, JButton pBackButton, JButton pForwardButton, JTextPane pHintPane,
@@ -147,7 +147,7 @@ public class MutaGenController {
     errorHandler = pErrorHandler;
     flamePanels = pFlamePanels;
     prefs = pPrefs;
-    rootTabbedPane = pRootTabbedPane;
+    rootPanel = pRootPanel;
     loadFlameFromEditorBtn = pLoadFlameFromEditorBtn;
     loadFlameFromFileBtn = pLoadFlameFromFileBtn;
     progressBar = pProgressBar;
@@ -464,12 +464,12 @@ public class MutaGenController {
 
       tinaController.importFlame(morphedFlame, true);
 
-      rootTabbedPane.setSelectedIndex(TinaController.PAGE_INDEX);
-      rootTabbedPane.getParent().invalidate();
+      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      rootPanel.getParent().invalidate();
       try {
-        Graphics g = rootTabbedPane.getParent().getGraphics();
+        Graphics g = rootPanel.getParent().getGraphics();
         if (g != null) {
-          rootTabbedPane.getParent().paint(g);
+          rootPanel.getParent().paint(g);
         }
       }
       catch (Throwable ex) {
@@ -704,7 +704,7 @@ public class MutaGenController {
           ex.printStackTrace();
         }
       }
-      if (chooser.showOpenDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+      if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         List<Flame> flames = new FlameReader(prefs).readFlames(file.getAbsolutePath());
         Flame flame = flames.get(0);
@@ -817,7 +817,7 @@ public class MutaGenController {
               ex.printStackTrace();
             }
           }
-          if (chooser.showSaveDialog(rootTabbedPane) == JFileChooser.APPROVE_OPTION) {
+          if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             new FlameWriter().writeFlame(currFlame, file.getAbsolutePath());
             currFlame.setLastFilename(file.getName());

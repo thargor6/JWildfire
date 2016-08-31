@@ -530,6 +530,9 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private void startBackgroundRender(FlamePanel pImgPanel) {
+    if (flameHolder == null) {
+      return;
+    }
     Flame flame = flameHolder.getFlame().makeCopy();
     if (flame == null) {
       return;

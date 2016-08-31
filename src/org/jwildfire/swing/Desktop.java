@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,105 +19,188 @@ package org.jwildfire.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Event;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.border.SoftBevelBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
-import org.jwildfire.create.eden.swing.EDENInternalFrame;
 import org.jwildfire.create.iflames.swing.IFlamesInternalFrame;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.swing.BatchFlameRendererInternalFrame;
+import org.jwildfire.create.tina.swing.DancingFlamesInternalFrame;
+import org.jwildfire.create.tina.swing.EasyMovieMakerInternalFrame;
+import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
+import org.jwildfire.create.tina.swing.HelpInternalFrame;
+import org.jwildfire.create.tina.swing.InteractiveRendererInternalFrame;
+import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
+import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
+import org.jwildfire.create.tina.swing.NavigatorInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
 
 public class Desktop extends JApplet {
-  private static final long serialVersionUID = 1L;
+  private final List<InternalFrameHolder<?>> mainInternalFrames;
+  private final List<InternalFrameHolder<?>> settingsInternalFrames;
+  private final List<InternalFrameHolder<?>> helpInternalFrames;
 
-  private JFrame jFrame = null; // @jve:decl-index=0:visual-constraint="10,10"
+  public Desktop() {
+    mainInternalFrames = new ArrayList<>();
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(NavigatorInternalFrame.class, this, WindowPrefs.WINDOW_NAVIGATOR, "Navigator"));
+
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(TinaInternalFrame.class, this, WindowPrefs.WINDOW_TINA, "Fractal flames: Editor"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(InteractiveRendererInternalFrame.class, this, WindowPrefs.WINDOW_INTERACTIVERENDERER, "Fractal flames: Interactive renderer"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlameBrowserInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(EasyMovieMakerInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(HelpInternalFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(IFlamesInternalFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(OperatorsInternalFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FormulaExplorerInternalFrame.class, this, WindowPrefs.WINDOW_FORMULAEXPLORER, "Formula explorer"));
+
+    settingsInternalFrames = new ArrayList<>();
+    settingsInternalFrames.add(new InternalFrameHolder<LookAndFeelInternalFrame>(LookAndFeelInternalFrame.class, this, WindowPrefs.WINDOW_LOOKANDFEEL, "UI Theme (Look and Feel)") {
+
+      @Override
+      protected LookAndFeelInternalFrame createInternalFrame() {
+        LookAndFeelInternalFrame frame = new LookAndFeelInternalFrame(Desktop.this, mainDesktopPane, errorHandler, Prefs.getPrefs());
+
+        applyWindowPrefs(frame);
+
+        frame.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+          public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent e) {
+            enableControls();
+          }
+
+          public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+            enableControls();
+          }
+        });
+
+        return frame;
+      }
+
+    });
+    settingsInternalFrames.add(new DefaultInternalFrameHolder<>(PreferencesInternalFrame.class, this, WindowPrefs.WINDOW_PREFERENCES, "Preferences"));
+
+    helpInternalFrames = new ArrayList<>();
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(SystemInfoInternalFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(WelcomeInternalFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(TipOfTheDayInternalFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
+  }
+
+  private static final long serialVersionUID = 1L;
+  public static final int DEFAULT_WINDOW_LEFT = 120;
+  public static final int DEFAULT_WINDOW_TOP = 0;
+
+  private JFrame jFrame = null;
   private JPanel jContentPane = null;
   private JMenuBar mainJMenuBar = null;
   private JMenu fileMenu = null;
   private JMenu helpMenu = null;
+  private JMenu settingsMenu = null;
   private JMenuItem exitMenuItem = null;
-  private JMenuItem welcomeMenuItem = null;
-  private JMenuItem systemInfoMenuItem = null;
-  private JCheckBoxMenuItem lookAndFeelMenuItem = null;
   private JMenuItem saveMenuItem = null;
   private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
-  private JCheckBoxMenuItem operatorsMenuItem = null;
-  private JCheckBoxMenuItem tinaMenuItem = null;
-  private JCheckBoxMenuItem edenMenuItem = null;
-  private JCheckBoxMenuItem iflamesMenuItem = null;
   private JMenuItem openMenuItem = null;
   private Prefs prefs = null;
 
   private StandardErrorHandler errorHandler = null;
 
-  /**
-   * This method initializes mainDesktopPane
-   * 
-   * @return javax.swing.JDesktopPane
-   */
   private JDesktopPane getMainDesktopPane() {
     if (mainDesktopPane == null) {
-      mainDesktopPane = new JDesktopPane();
-      mainDesktopPane.add(getScriptInternalFrame(), null);
-      mainDesktopPane.add(getOperatorsInternalFrame(), null);
-      mainDesktopPane.add(getFormulaExplorerInternalFrame(), null);
-      mainDesktopPane.add(getTinaInternalFrame(), null);
-      mainDesktopPane.add(getIFlamesInternalFrame(), null);
-      mainDesktopPane.add(getEDENInternalFrame(), null);
-      mainDesktopPane.add(getPreferencesInternalFrame(), null);
-      mainDesktopPane.add(getWelcomeInternalFrame(), null);
-      mainDesktopPane.add(getSystemInfoInternalFrame(), null);
-      errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
-          getShowErrorDlgStacktraceTextArea());
-      mainDesktopPane.add(getLookAndFeelInternalFrame(mainDesktopPane, errorHandler, prefs), null);
-      if (!welcomeInternalFrame.isVisible()) {
-        welcomeInternalFrame.setVisible(true);
+      mainDesktopPane = createMainDesktopPane();
+      for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+        mainDesktopPane.add(internalFrame.getInternalFrame());
+      }
+      getInternalFrame(NavigatorInternalFrame.class).setDesktop(this);
+      TinaInternalFrame tinaInternalFrame = getInternalFrame(TinaInternalFrame.class);
+      tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
+        public void componentResized(java.awt.event.ComponentEvent e) {
+          tinaController.refreshFlameImage(true, false, 1, true, false);
+        }
+      });
+      if (!tinaInternalFrame.isVisible()) {
+        tinaInternalFrame.setVisible(true);
+      }
+      for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+        mainDesktopPane.add(internalFrame.getInternalFrame());
+      }
+      for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+        mainDesktopPane.add(internalFrame.getInternalFrame());
       }
 
-      TinaInternalFrame tinaFrame = (TinaInternalFrame) getTinaInternalFrame();
-      tinaController = tinaFrame.createController(errorHandler, prefs);
+      errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
+          getShowErrorDlgStacktraceTextArea());
+
+      NavigatorInternalFrame navigatorInternalFrame = getInternalFrame(NavigatorInternalFrame.class);
+      if (!navigatorInternalFrame.isVisible()) {
+        navigatorInternalFrame.setVisible(true);
+      }
+      /*
+            WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
+            if (!welcomeInternalFrame.isVisible()) {
+              welcomeInternalFrame.setVisible(true);
+            }
+            welcomeInternalFrame.moveToFront();
+      */
+
+      TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
+      if (!tipOfTheDayInternalFrame.isVisible()) {
+        tipOfTheDayInternalFrame.setVisible(true);
+      }
+      tipOfTheDayInternalFrame.moveToFront();
+
+      MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
+      FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
+      EasyMovieMakerInternalFrame easyMovieMakerFrame = getInternalFrame(EasyMovieMakerInternalFrame.class);
+      DancingFlamesInternalFrame dancingFlamesFrame = getInternalFrame(DancingFlamesInternalFrame.class);
+      BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
+      MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
+      InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
+      HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
+
+      TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);
+      tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, helpFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }
@@ -125,18 +208,16 @@ public class Desktop extends JApplet {
         ex.printStackTrace();
       }
 
-      renderController = new RenderController(errorHandler,
-          mainDesktopPane, getRenderDialog(),
-          getRenderCancelButton(), getRenderRenderButton(),
-          getRenderCloseButton(), getRenderPrefixREd(),
-          getRenderOutputREd(), renderFrameValueLabel,
-          renderSizeValueLabel, getRenderProgressBar(),
-          getRenderPreviewImg1Panel(), renderPreviewImg1Label,
-          getRenderPreviewImg2Panel(), renderPreviewImg2Label,
-          getRenderPreviewImg3Panel(), renderPreviewImg3Label,
-          getRenderFrameStartREd(), getRenderFrameEndREd());
+      flameBrowserFrame.setTinaController(tinaController);
+      mutaGenFrame.setTinaController(tinaController);
+      easyMovieMakerFrame.setTinaController(tinaController);
+      dancingFlamesFrame.setTinaController(tinaController);
+      batchFlameRendererFrame.setTinaController(tinaController);
+      meshGenFrame.setTinaController(tinaController);
+      interactiveRendererFrame.setTinaController(tinaController);
+      helpFrame.setTinaController(tinaController);
 
-      FormulaExplorerInternalFrame formulaExplorerFrame = (FormulaExplorerInternalFrame) getFormulaExplorerInternalFrame();
+      FormulaExplorerInternalFrame formulaExplorerFrame = getInternalFrame(FormulaExplorerInternalFrame.class);
 
       formulaExplorerController = new FormulaExplorerController(
           (FormulaPanel) formulaExplorerFrame.getFormulaPanel(),
@@ -148,165 +229,108 @@ public class Desktop extends JApplet {
           formulaExplorerFrame.getFormulaExplorerFormulaXCountREd(),
           formulaExplorerFrame.getFormulaExplorerValuesTextArea());
 
-      OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
+      OperatorsInternalFrame operatorsFrame = getInternalFrame(OperatorsInternalFrame.class);
       operatorsFrame.setDesktop(this);
 
-      ScriptInternalFrame scriptFrame = (ScriptInternalFrame) getScriptInternalFrame();
-      scriptFrame.setDesktop(this);
-      scriptFrame.setRenderController(renderController);
-
-      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
+      PreferencesInternalFrame preferencesFrame = getInternalFrame(PreferencesInternalFrame.class);
       preferencesFrame.setDesktop(this);
       preferencesFrame.setPrefs(prefs);
       preferencesFrame.setMainController(mainController);
 
       mainController = new MainController(prefs, errorHandler, mainDesktopPane,
           getWindowMenu(), operatorsFrame.getTransformerInputCmb(), operatorsFrame.getTransformerPresetCmb(), operatorsFrame.getCreatorPresetCmb(),
-          getShowMessageDlg(), getShowMessageDlgTextArea(), scriptFrame.getScriptTable(),
-          scriptFrame.getScriptActionTextArea(), scriptFrame.getScriptFrameSlider(),
-          scriptFrame.getScriptFramesREd(), scriptFrame.getScriptFrameREd(),
-          scriptFrame.getEnvelopeController(), renderController);
-      renderController.setActionList(mainController.getActionList());
+          getShowMessageDlg(), getShowMessageDlgTextArea(), null, null, null, null, null, null, null, mainInternalFrames.size());
 
+      /*
       EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
       edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
-
-      IFlamesInternalFrame iflamesInternalFrame = (IFlamesInternalFrame) getIFlamesInternalFrame();
+      */
+      IFlamesInternalFrame iflamesInternalFrame = getInternalFrame(IFlamesInternalFrame.class);
       iflamesInternalFrame.createController(mainController, tinaController, errorHandler);
 
       tinaController.setMainController(mainController);
 
-      scriptFrame.setMainController(mainController);
-      scriptFrame.setOperatorsFrame(operatorsFrame);
       operatorsFrame.setMainController(mainController);
       formulaExplorerFrame.setMainController(mainController);
       formulaExplorerFrame.setFormulaExplorerController(formulaExplorerController);
-
-      // setupShowSysInfoThread();
-
     }
+
+    try {
+      getInternalFrame(WelcomeInternalFrame.class).setSelected(true);
+    }
+    catch (PropertyVetoException ex) {
+      ex.printStackTrace();
+    }
+
     return mainDesktopPane;
   }
 
-  private void setupShowSysInfoThread() {
-    final JInternalFrame tinaFrame = getTinaInternalFrame();
-    final String title = tinaFrame.getTitle();
-    new Thread(new Runnable() {
+  private BufferedImage backgroundImage;
 
-      @Override
-      public void run() {
-        while (true) {
-          try {
-            SystemInfo sysInfo = new SystemInfo();
-            tinaFrame.setTitle(title + "(" + sysInfo.getUsedMemMB() + "MB / " + sysInfo.getMaxMemMB() + "MB)");
-            Thread.sleep(1000);
-          }
-          catch (InterruptedException e) {
-            e.printStackTrace();
-          }
+  @SuppressWarnings("serial")
+  private JDesktopPane createMainDesktopPane() {
+    try {
+      backgroundImage = ImageIO.read(this.getClass().getResource("/org/jwildfire/swing/backgrounds/wallpaper_pearls2.png"));
+    }
+    catch (Exception ex) {
+      backgroundImage = null;
+      ex.printStackTrace();
+    }
+    if (backgroundImage != null) {
+      return new JDesktopPane() {
+        @Override
+        protected void paintComponent(Graphics grphcs) {
+          super.paintComponent(grphcs);
+          grphcs.drawImage(backgroundImage, 0, 0, null);
         }
-      }
-    }).start();
+
+        @Override
+        public Dimension getPreferredSize() {
+          return new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight());
+        }
+      };
+    }
+    else {
+      return new JDesktopPane();
+    }
   }
 
-  /**
-   * This method initializes windowMenu
-   * 
-   * @return javax.swing.JMenu
-   */
+  @SuppressWarnings("unchecked")
+  public <T extends JInternalFrame> InternalFrameHolder<T> getInternalFrameHolder(Class<T> frameType) {
+    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+      if (frameType.equals(internalFrame.getFrameType())) {
+        return (InternalFrameHolder<T>) internalFrame;
+      }
+    }
+    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+      if (frameType.equals(internalFrame.getFrameType())) {
+        return (InternalFrameHolder<T>) internalFrame;
+      }
+    }
+    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+      if (frameType.equals(internalFrame.getFrameType())) {
+        return (InternalFrameHolder<T>) internalFrame;
+      }
+    }
+    return null;
+  }
+
+  public <T extends JInternalFrame> T getInternalFrame(Class<T> frameType) {
+    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+    return frameHolder != null ? frameHolder.getInternalFrame() : null;
+  }
+
   private JMenu getWindowMenu() {
     if (windowMenu == null) {
       windowMenu = new JMenu();
       windowMenu.setText("Windows");
-      windowMenu.add(getOperatorsMenuItem());
-      windowMenu.add(getScriptMenuItem());
-      windowMenu.add(getFormulaExplorerMenuItem());
-      windowMenu.add(getTinaMenuItem());
-      windowMenu.add(getIFlamesMenuItem());
-      windowMenu.add(getEDENMenuItem());
-      windowMenu.add(getPreferencesMenuItem());
-      windowMenu.add(getLookAndFeelMenuItem());
+      for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+        windowMenu.add(internalFrame.getMenuItem());
+      }
     }
     return windowMenu;
   }
 
-  /**
-   * This method initializes operatorsMenuItem
-   * 
-   * @return javax.swing.JCheckBoxMenuItem
-   */
-  private JCheckBoxMenuItem getOperatorsMenuItem() {
-    if (operatorsMenuItem == null) {
-      operatorsMenuItem = new JCheckBoxMenuItem();
-      operatorsMenuItem.setText("Operators");
-      operatorsMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              operatorsMenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return operatorsMenuItem;
-  }
-
-  /**
-   * This method initializes operatorsMenuItem
-   * 
-   * @return javax.swing.JCheckBoxMenuItem
-   */
-  private JCheckBoxMenuItem getTinaMenuItem() {
-    if (tinaMenuItem == null) {
-      tinaMenuItem = new JCheckBoxMenuItem();
-      tinaMenuItem.setText("Fractal flames");
-      tinaMenuItem.setEnabled(true);
-      tinaMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              tinaMenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return tinaMenuItem;
-  }
-
-  /**
-   * This method initializes operatorsMenuItem
-   * 
-   * @return javax.swing.JCheckBoxMenuItem
-   */
-  private JCheckBoxMenuItem getEDENMenuItem() {
-    if (edenMenuItem == null) {
-      edenMenuItem = new JCheckBoxMenuItem();
-      edenMenuItem.setText("Structure Synthesizer");
-      edenMenuItem.setEnabled(true);
-      edenMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          edenMenuItem_actionPerformed(e);
-        }
-      });
-    }
-    return edenMenuItem;
-  }
-
-  private JCheckBoxMenuItem getIFlamesMenuItem() {
-    if (iflamesMenuItem == null) {
-      iflamesMenuItem = new JCheckBoxMenuItem();
-      iflamesMenuItem.setText("IFlames");
-      iflamesMenuItem.setEnabled(true);
-      iflamesMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          iflamesMenuItem_actionPerformed(e);
-        }
-      });
-    }
-    return iflamesMenuItem;
-  }
-
-  /**
-   * This method initializes openMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
   private JMenuItem getOpenMenuItem() {
     if (openMenuItem == null) {
       openMenuItem = new JMenuItem();
@@ -322,11 +346,6 @@ public class Desktop extends JApplet {
     return openMenuItem;
   }
 
-  /**
-   * This method initializes showMessageTopPnl
-   * 
-   * @return javax.swing.JPanel
-   */
   private JPanel getShowMessageTopPnl() {
     if (showMessageTopPnl == null) {
       showMessageTopPnl = new JPanel();
@@ -336,11 +355,6 @@ public class Desktop extends JApplet {
     return showMessageTopPnl;
   }
 
-  /**
-   * This method initializes showMessageBottomPnl
-   * 
-   * @return javax.swing.JPanel
-   */
   private JPanel getShowMessageBottomPnl() {
     if (showMessageBottomPnl == null) {
       showMessageBottomPnl = new JPanel();
@@ -354,11 +368,6 @@ public class Desktop extends JApplet {
     return showMessageBottomPnl;
   }
 
-  /**
-   * This method initializes showMessageLeftPnl
-   * 
-   * @return javax.swing.JPanel
-   */
   private JPanel getShowMessageLeftPnl() {
     if (showMessageLeftPnl == null) {
       showMessageLeftPnl = new JPanel();
@@ -368,11 +377,6 @@ public class Desktop extends JApplet {
     return showMessageLeftPnl;
   }
 
-  /**
-   * This method initializes showMessageRightPnl
-   * 
-   * @return javax.swing.JPanel
-   */
   private JPanel getShowMessageRightPnl() {
     if (showMessageRightPnl == null) {
       showMessageRightPnl = new JPanel();
@@ -724,765 +728,6 @@ public class Desktop extends JApplet {
     return closeAllMenuItem;
   }
 
-  /**
-   * This method initializes scriptInternalFrame
-   * 
-   * @return javax.swing.JInternalFrame
-   */
-  private JInternalFrame getScriptInternalFrame() {
-    if (scriptInternalFrame == null) {
-      scriptInternalFrame = new ScriptInternalFrame();
-      scriptInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              scriptInternalFrame_internalFrameDeactivated(e);
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              scriptInternalFrame_internalFrameClosed(e);
-            }
-          });
-    }
-    return scriptInternalFrame;
-  }
-
-  /**
-   * This method initializes preferencesInternalFrame
-   * 
-   * @return javax.swing.JInternalFrame
-   */
-  private JInternalFrame getPreferencesInternalFrame() {
-    if (preferencesInternalFrame == null) {
-      preferencesInternalFrame = new PreferencesInternalFrame();
-      preferencesInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              preferencesInternalFrame_internalFrameDeactivated(e);
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              preferencesInternalFrame_internalFrameClosed(e);
-            }
-          });
-    }
-    return preferencesInternalFrame;
-  }
-
-  /**
-   * This method initializes scriptMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JCheckBoxMenuItem getScriptMenuItem() {
-    if (scriptMenuItem == null) {
-      scriptMenuItem = new JCheckBoxMenuItem();
-      scriptMenuItem.setText("Operators Script");
-      scriptMenuItem.setSelected(true);
-      scriptMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              scriptMenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return scriptMenuItem;
-  }
-
-  /**
-   * This method initializes scriptMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JCheckBoxMenuItem getPreferencesMenuItem() {
-    if (preferencesMenuItem == null) {
-      preferencesMenuItem = new JCheckBoxMenuItem();
-      preferencesMenuItem.setText("Preferences");
-      preferencesMenuItem.setSelected(true);
-      preferencesMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              preferencesMenuItem_actionPerformed(e);
-            }
-          });
-    }
-    return preferencesMenuItem;
-  }
-
-  /**
-  * This method initializes operatorsInternalFrame
-  * 
-  * @return javax.swing.JInternalFrame
-  */
-  private JInternalFrame getOperatorsInternalFrame() {
-    if (operatorsInternalFrame == null) {
-      operatorsInternalFrame = new OperatorsInternalFrame();
-      operatorsInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              operatorsInternalFrame_internalFrameDeactivated(e);
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              operatorsInternalFrame_internalFrameClosed(e);
-            }
-          });
-    }
-    return operatorsInternalFrame;
-  }
-
-  /**
-  * This method initializes renderDialog
-  * 
-  * @return javax.swing.JDialog
-  */
-  private JDialog getRenderDialog() {
-    if (renderDialog == null) {
-      renderDialog = new JDialog(getJFrame());
-      renderDialog.setSize(new Dimension(597, 359));
-      renderDialog.setTitle("Render Script");
-      renderDialog.setModal(true);
-      renderDialog.setContentPane(getRenderWindowContentPane());
-    }
-    return renderDialog;
-  }
-
-  /**
-   * This method initializes renderWindowContentPane
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderWindowContentPane() {
-    if (renderWindowContentPane == null) {
-      renderWindowContentPane = new JPanel();
-      renderWindowContentPane.setLayout(new BorderLayout());
-      renderWindowContentPane
-          .add(getRenderTopPanel(), BorderLayout.NORTH);
-      renderWindowContentPane.add(getRenderBottomPanel(),
-          BorderLayout.SOUTH);
-      renderWindowContentPane.add(getRenderCenterPanel(),
-          BorderLayout.CENTER);
-    }
-    return renderWindowContentPane;
-  }
-
-  /**
-   * This method initializes renderTopPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderTopPanel() {
-    if (renderTopPanel == null) {
-      renderFrameEndLabel = new JLabel();
-      renderFrameEndLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderFrameEndLabel.setText("End");
-      renderFrameEndLabel.setSize(new Dimension(50, 26));
-      renderFrameEndLabel.setLocation(new Point(226, 36));
-      renderFrameEndLabel.setPreferredSize(new Dimension(50, 26));
-      renderFrameStartLabel = new JLabel();
-      renderFrameStartLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderFrameStartLabel.setText("Start");
-      renderFrameStartLabel.setLocation(new Point(5, 36));
-      renderFrameStartLabel.setSize(new Dimension(50, 26));
-      renderFrameStartLabel.setPreferredSize(new Dimension(50, 26));
-      renderPrefixLabel = new JLabel();
-      renderPrefixLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderPrefixLabel.setText("Prefix");
-      renderPrefixLabel.setLocation(new Point(438, 5));
-      renderPrefixLabel.setSize(new Dimension(50, 26));
-      renderPrefixLabel.setPreferredSize(new Dimension(50, 26));
-      renderOutputLabel = new JLabel();
-      renderOutputLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderOutputLabel.setText("Output");
-      renderOutputLabel.setLocation(new Point(5, 5));
-      renderOutputLabel.setSize(new Dimension(50, 26));
-      renderOutputLabel.setPreferredSize(new Dimension(50, 26));
-      renderTopPanel = new JPanel();
-      renderTopPanel.setLayout(null);
-      renderTopPanel.setPreferredSize(new Dimension(0, 68));
-      renderTopPanel.add(renderOutputLabel, null);
-      renderTopPanel.add(getRenderOutputREd(), null);
-      renderTopPanel.add(renderPrefixLabel, null);
-      renderTopPanel.add(getRenderPrefixREd(), null);
-      renderTopPanel.add(renderFrameStartLabel, null);
-      renderTopPanel.add(getRenderFrameStartREd(), null);
-      renderTopPanel.add(renderFrameEndLabel, null);
-      renderTopPanel.add(getRenderFrameEndREd(), null);
-    }
-    return renderTopPanel;
-  }
-
-  /**
-   * This method initializes renderBottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderBottomPanel() {
-    if (renderBottomPanel == null) {
-      renderBottomPanel = new JPanel();
-      renderBottomPanel.setLayout(null);
-      renderBottomPanel.setPreferredSize(new Dimension(0, 36));
-      renderBottomPanel.add(getRenderRenderButton(), null);
-      renderBottomPanel.add(getRenderCancelButton(), null);
-      renderBottomPanel.add(getRenderCloseButton(), null);
-    }
-    return renderBottomPanel;
-  }
-
-  /**
-   * This method initializes renderCenterPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderCenterPanel() {
-    if (renderCenterPanel == null) {
-      renderCenterPanel = new JPanel();
-      renderCenterPanel.setLayout(new BorderLayout());
-      renderCenterPanel.add(getRenderPreviewBottomPanel(),
-          BorderLayout.SOUTH);
-      renderCenterPanel.add(getRenderPreviewMainPanel(),
-          BorderLayout.CENTER);
-    }
-    return renderCenterPanel;
-  }
-
-  /**
-   * This method initializes renderRenderButton
-   * 
-   * @return javax.swing.JButton
-   */
-  private JButton getRenderRenderButton() {
-    if (renderRenderButton == null) {
-      renderRenderButton = new JButton();
-      renderRenderButton.setText("Render");
-      renderRenderButton.setSize(new Dimension(120, 24));
-      renderRenderButton.setLocation(new Point(5, 5));
-      renderRenderButton.setPreferredSize(new Dimension(120, 26));
-      renderRenderButton
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              try {
-                renderController.render();
-              }
-              catch (Exception ex) {
-                mainController.handleError(ex);
-              }
-            }
-          });
-    }
-    return renderRenderButton;
-  }
-
-  /**
-   * This method initializes renderCancelButton
-   * 
-   * @return javax.swing.JButton
-   */
-  private JButton getRenderCancelButton() {
-    if (renderCancelButton == null) {
-      renderCancelButton = new JButton();
-      renderCancelButton.setText("Cancel");
-      renderCancelButton.setSize(new Dimension(120, 24));
-      renderCancelButton.setLocation(new Point(233, 5));
-      renderCancelButton.setPreferredSize(new Dimension(120, 26));
-      renderCancelButton
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              renderController.cancel();
-            }
-          });
-    }
-    return renderCancelButton;
-  }
-
-  /**
-   * This method initializes renderCloseButton
-   * 
-   * @return javax.swing.JButton
-   */
-  private JButton getRenderCloseButton() {
-    if (renderCloseButton == null) {
-      renderCloseButton = new JButton();
-      renderCloseButton.setText("Close");
-      renderCloseButton.setLocation(new Point(455, 5));
-      renderCloseButton.setSize(new Dimension(120, 24));
-      renderCloseButton.setPreferredSize(new Dimension(120, 26));
-      renderCloseButton
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              renderController.close();
-            }
-          });
-    }
-    return renderCloseButton;
-  }
-
-  /**
-   * This method initializes renderPreviewBottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewBottomPanel() {
-    if (renderPreviewBottomPanel == null) {
-      renderPreviewBottomPanel = new JPanel();
-      renderPreviewBottomPanel.setLayout(new BorderLayout());
-      renderPreviewBottomPanel.setPreferredSize(new Dimension(0, 64));
-      renderPreviewBottomPanel.add(getRenderPreviewProgressTopPanel(),
-          BorderLayout.NORTH);
-      renderPreviewBottomPanel.add(getRenderPreviewProgressMainPanel(),
-          BorderLayout.CENTER);
-    }
-    return renderPreviewBottomPanel;
-  }
-
-  /**
-   * This method initializes renderPreviewMainPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewMainPanel() {
-    if (renderPreviewMainPanel == null) {
-      GridLayout gridLayout = new GridLayout(0, 3);
-      gridLayout.setRows(0);
-      gridLayout.setHgap(5);
-      gridLayout.setVgap(0);
-      gridLayout.setColumns(3);
-      renderPreviewMainPanel = new JPanel();
-      renderPreviewMainPanel.setBorder(BorderFactory.createEmptyBorder(0,
-          5, 0, 5));
-      renderPreviewMainPanel.setLayout(gridLayout);
-      renderPreviewMainPanel.add(getRenderPreviewImg1Panel(), null);
-      renderPreviewMainPanel.add(getRenderPreviewImg2Panel(), null);
-      renderPreviewMainPanel.add(getRenderPreviewImg3Panel(), null);
-    }
-    return renderPreviewMainPanel;
-  }
-
-  /**
-   * This method initializes renderPreviewProgressTopPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewProgressTopPanel() {
-    if (renderPreviewProgressTopPanel == null) {
-      renderSizeValueLabel = new JLabel();
-      renderSizeValueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderSizeValueLabel.setText("320x256");
-      renderSizeValueLabel.setLocation(new Point(221, 5));
-      renderSizeValueLabel.setSize(new Dimension(80, 26));
-      renderSizeValueLabel.setPreferredSize(new Dimension(80, 26));
-      renderSizeLabel = new JLabel();
-      renderSizeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderSizeLabel.setText("Size");
-      renderSizeLabel.setLocation(new Point(167, 5));
-      renderSizeLabel.setSize(new Dimension(50, 26));
-      renderSizeLabel.setPreferredSize(new Dimension(50, 26));
-      renderFrameValueLabel = new JLabel();
-      renderFrameValueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderFrameValueLabel.setText("1/60");
-      renderFrameValueLabel.setLocation(new Point(58, 5));
-      renderFrameValueLabel.setSize(new Dimension(80, 26));
-      renderFrameValueLabel.setPreferredSize(new Dimension(80, 26));
-      renderFrameLabel = new JLabel();
-      renderFrameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-      renderFrameLabel.setText("Frame");
-      renderFrameLabel.setLocation(new Point(5, 5));
-      renderFrameLabel.setSize(new Dimension(50, 26));
-      renderFrameLabel.setPreferredSize(new Dimension(50, 26));
-      renderPreviewProgressTopPanel = new JPanel();
-      renderPreviewProgressTopPanel.setLayout(null);
-      renderPreviewProgressTopPanel
-          .setPreferredSize(new Dimension(0, 36));
-      renderPreviewProgressTopPanel.add(renderFrameLabel, null);
-      renderPreviewProgressTopPanel.add(renderFrameValueLabel, null);
-      renderPreviewProgressTopPanel.add(renderSizeLabel, null);
-      renderPreviewProgressTopPanel.add(renderSizeValueLabel, null);
-    }
-    return renderPreviewProgressTopPanel;
-  }
-
-  /**
-   * This method initializes renderPreviewProgressMainPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewProgressMainPanel() {
-    if (renderPreviewProgressMainPanel == null) {
-      renderPreviewProgressMainPanel = new JPanel();
-      renderPreviewProgressMainPanel.setLayout(new BorderLayout());
-      renderPreviewProgressMainPanel.setBorder(BorderFactory
-          .createEmptyBorder(5, 5, 5, 5));
-      renderPreviewProgressMainPanel.setPreferredSize(new Dimension(158,
-          34));
-      renderPreviewProgressMainPanel.add(getRenderProgressBar(),
-          BorderLayout.CENTER);
-    }
-    return renderPreviewProgressMainPanel;
-  }
-
-  /**
-   * This method initializes renderProgressBar
-   * 
-   * @return javax.swing.JProgressBar
-   */
-  private JProgressBar getRenderProgressBar() {
-    if (renderProgressBar == null) {
-      renderProgressBar = new JProgressBar();
-      renderProgressBar.setValue(33);
-      renderProgressBar.setStringPainted(true);
-    }
-    return renderProgressBar;
-  }
-
-  /**
-   * This method initializes renderOutputREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getRenderOutputREd() {
-    if (renderOutputREd == null) {
-      renderOutputREd = new JTextField();
-      renderOutputREd.setText("C:\\TMP\\wf\\render");
-      renderOutputREd.setLocation(new Point(58, 5));
-      renderOutputREd.setSize(new Dimension(294, 26));
-      renderOutputREd.setPreferredSize(new Dimension(294, 26));
-    }
-    return renderOutputREd;
-  }
-
-  /**
-   * This method initializes renderPrefixREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getRenderPrefixREd() {
-    if (renderPrefixREd == null) {
-      renderPrefixREd = new JTextField();
-      renderPrefixREd.setText("Img");
-      renderPrefixREd.setLocation(new Point(490, 5));
-      renderPrefixREd.setSize(new Dimension(86, 26));
-      renderPrefixREd.setPreferredSize(new Dimension(86, 26));
-    }
-    return renderPrefixREd;
-  }
-
-  /**
-   * This method initializes renderPreviewImg1Panel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg1Panel() {
-    if (renderPreviewImg1Panel == null) {
-      renderPreviewImg1Panel = new JPanel();
-      renderPreviewImg1Panel.setLayout(new BorderLayout());
-      renderPreviewImg1Panel.setBorder(new SoftBevelBorder(
-          SoftBevelBorder.RAISED));
-      renderPreviewImg1Panel.add(getRenderPreviewImg1BottomPanel(),
-          BorderLayout.SOUTH);
-    }
-    return renderPreviewImg1Panel;
-  }
-
-  /**
-   * This method initializes renderPreviewImg2Panel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg2Panel() {
-    if (renderPreviewImg2Panel == null) {
-      renderPreviewImg2Panel = new JPanel();
-      renderPreviewImg2Panel.setLayout(new BorderLayout());
-      renderPreviewImg2Panel.setBorder(new SoftBevelBorder(
-          SoftBevelBorder.RAISED));
-      renderPreviewImg2Panel.add(getRenderPreviewImg2BottomPanel(),
-          BorderLayout.SOUTH);
-    }
-    return renderPreviewImg2Panel;
-  }
-
-  /**
-   * This method initializes renderPreviewImg3Panel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg3Panel() {
-    if (renderPreviewImg3Panel == null) {
-      renderPreviewImg3Panel = new JPanel();
-      renderPreviewImg3Panel.setLayout(new BorderLayout());
-      renderPreviewImg3Panel.setBorder(new SoftBevelBorder(
-          SoftBevelBorder.RAISED));
-      renderPreviewImg3Panel.add(getRenderPreviewImg3BottomPanel(),
-          BorderLayout.SOUTH);
-    }
-    return renderPreviewImg3Panel;
-  }
-
-  /**
-   * This method initializes renderPreviewImg1BottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg1BottomPanel() {
-    if (renderPreviewImg1BottomPanel == null) {
-      renderPreviewImg1Label = new JLabel();
-      renderPreviewImg1Label.setText("Img0001");
-      renderPreviewImg1Label
-          .setHorizontalAlignment(SwingConstants.CENTER);
-      renderPreviewImg1BottomPanel = new JPanel();
-      renderPreviewImg1BottomPanel.setLayout(new BorderLayout());
-      renderPreviewImg1BottomPanel.setPreferredSize(new Dimension(0, 20));
-      renderPreviewImg1BottomPanel.add(renderPreviewImg1Label,
-          BorderLayout.CENTER);
-    }
-    return renderPreviewImg1BottomPanel;
-  }
-
-  /**
-   * This method initializes renderPreviewImg2BottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg2BottomPanel() {
-    if (renderPreviewImg2BottomPanel == null) {
-      renderPreviewImg2Label = new JLabel();
-      renderPreviewImg2Label
-          .setHorizontalAlignment(SwingConstants.CENTER);
-      renderPreviewImg2Label.setText("Img0002");
-      renderPreviewImg2BottomPanel = new JPanel();
-      renderPreviewImg2BottomPanel.setLayout(new BorderLayout());
-      renderPreviewImg2BottomPanel.setPreferredSize(new Dimension(0, 20));
-      renderPreviewImg2BottomPanel.add(renderPreviewImg2Label,
-          BorderLayout.CENTER);
-    }
-    return renderPreviewImg2BottomPanel;
-  }
-
-  /**
-   * This method initializes renderPreviewImg3BottomPanel
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getRenderPreviewImg3BottomPanel() {
-    if (renderPreviewImg3BottomPanel == null) {
-      renderPreviewImg3Label = new JLabel();
-      renderPreviewImg3Label
-          .setHorizontalAlignment(SwingConstants.CENTER);
-      renderPreviewImg3Label.setText("Img0003");
-      renderPreviewImg3BottomPanel = new JPanel();
-      renderPreviewImg3BottomPanel.setLayout(new BorderLayout());
-      renderPreviewImg3BottomPanel.setPreferredSize(new Dimension(0, 20));
-      renderPreviewImg3BottomPanel.add(renderPreviewImg3Label,
-          BorderLayout.CENTER);
-    }
-    return renderPreviewImg3BottomPanel;
-  }
-
-  /**
-   * This method initializes renderFrameStartREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getRenderFrameStartREd() {
-    if (renderFrameStartREd == null) {
-      renderFrameStartREd = new JTextField();
-      renderFrameStartREd.setText("1");
-      renderFrameStartREd.setSize(new Dimension(72, 26));
-      renderFrameStartREd.setLocation(new Point(58, 36));
-      renderFrameStartREd.setPreferredSize(new Dimension(72, 26));
-      renderFrameStartREd
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              renderController.frameStartChanged();
-            }
-          });
-      renderFrameStartREd
-          .addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent e) {
-              renderController.frameStartChanged();
-            }
-          });
-    }
-    return renderFrameStartREd;
-  }
-
-  /**
-   * This method initializes renderFrameEndREd
-   * 
-   * @return javax.swing.JTextField
-   */
-  private JTextField getRenderFrameEndREd() {
-    if (renderFrameEndREd == null) {
-      renderFrameEndREd = new JTextField();
-      renderFrameEndREd.setText("60");
-      renderFrameEndREd.setLocation(new Point(279, 36));
-      renderFrameEndREd.setSize(new Dimension(72, 26));
-      renderFrameEndREd.setPreferredSize(new Dimension(72, 26));
-      renderFrameEndREd
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              renderController.frameEndChanged();
-            }
-          });
-      renderFrameEndREd
-          .addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent e) {
-              renderController.frameEndChanged();
-            }
-          });
-    }
-    return renderFrameEndREd;
-  }
-
-  /**
-   * This method initializes formulaExplorerInternalFrame
-   * 
-   * @return javax.swing.JInternalFrame
-   */
-  private JInternalFrame getFormulaExplorerInternalFrame() {
-    if (formulaExplorerInternalFrame == null) {
-      formulaExplorerInternalFrame = new FormulaExplorerInternalFrame();
-      formulaExplorerInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-          });
-    }
-    return formulaExplorerInternalFrame;
-  }
-
-  /**
-   * This method initializes formulaExplorerMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
-  private JMenuItem getFormulaExplorerMenuItem() {
-    if (formulaExplorerMenuItem == null) {
-      formulaExplorerMenuItem = new JCheckBoxMenuItem();
-      formulaExplorerMenuItem.setActionCommand("Formula Explorer");
-      formulaExplorerMenuItem.setSelected(true);
-      formulaExplorerMenuItem.setText("Formula Explorer");
-      formulaExplorerMenuItem
-          .addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-              if (formulaExplorerMenuItem.isSelected()) {
-                formulaExplorerInternalFrame.setVisible(true);
-                try {
-                  formulaExplorerInternalFrame
-                      .setSelected(true);
-                }
-                catch (PropertyVetoException ex) {
-                  ex.printStackTrace();
-                }
-              }
-              else {
-                formulaExplorerInternalFrame.setVisible(false);
-              }
-            }
-          });
-    }
-    return formulaExplorerMenuItem;
-  }
-
-  /**
-   * This method initializes tinaInternalFrame	
-   * 	
-   * @return javax.swing.JInternalFrame	
-   */
-  private JInternalFrame getTinaInternalFrame() {
-    if (tinaInternalFrame == null) {
-      tinaInternalFrame = new TinaInternalFrame();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_TINA);
-      tinaInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      tinaInternalFrame.setSize(wPrefs.getWidth(1188), wPrefs.getHeight(740));
-      tinaInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              tinaInternalFrame_internalFrameDeactivated(e);
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              tinaInternalFrame_internalFrameClosed(e);
-            }
-          });
-      tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
-        public void componentResized(java.awt.event.ComponentEvent e) {
-          tinaController.refreshFlameImage(true, false, 1, true, false);
-        }
-      });
-      try {
-        tinaInternalFrame.setSelected(true);
-        tinaInternalFrame.setMaximum(wPrefs.isMaximized());
-      }
-      catch (Exception e) {
-        // e.printStackTrace();
-      }
-    }
-    return tinaInternalFrame;
-  }
-
-  /**
-   * This method initializes edenInternalFrame	
-   * 	
-   * @return javax.swing.JInternalFrame	
-   */
-  private JInternalFrame getEDENInternalFrame() {
-    if (edenInternalFrame == null) {
-      edenInternalFrame = new EDENInternalFrame();
-      edenInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-          });
-    }
-    return edenInternalFrame;
-  }
-
-  private JInternalFrame getIFlamesInternalFrame() {
-    if (iflamesInternalFrame == null) {
-      iflamesInternalFrame = new IFlamesInternalFrame();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_IFLAMES);
-      iflamesInternalFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      iflamesInternalFrame.setSize(wPrefs.getWidth(800), wPrefs.getHeight(600));
-      iflamesInternalFrame
-          .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-            public void internalFrameDeactivated(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-
-            public void internalFrameClosed(
-                javax.swing.event.InternalFrameEvent e) {
-              enableControls();
-            }
-          });
-    }
-    return iflamesInternalFrame;
-  }
-
-  /**
-   * @param args
-   */
   public static void main(final String[] args) {
 
     SwingUtilities.invokeLater(new Runnable() {
@@ -1492,7 +737,7 @@ public class Desktop extends JApplet {
         application.getJFrame().setVisible(true);
         application.initApp();
         try {
-          application.getWelcomeInternalFrame().setSelected(true);
+          application.getInternalFrame(WelcomeInternalFrame.class).setSelected(true);
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -1544,7 +789,7 @@ public class Desktop extends JApplet {
       jFrame.setJMenuBar(getMainJMenuBar());
       WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_DESKTOP);
       jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      jFrame.setSize(wPrefs.getWidth(1240), wPrefs.getHeight(800));
+      jFrame.setSize(wPrefs.getWidth(1400), wPrefs.getHeight(800));
       jFrame.setContentPane(getJContentPane());
       jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
 
@@ -1584,6 +829,7 @@ public class Desktop extends JApplet {
       mainJMenuBar = new JMenuBar();
       mainJMenuBar.add(getFileMenu());
       mainJMenuBar.add(getWindowMenu());
+      mainJMenuBar.add(getSettingsMenu());
       mainJMenuBar.add(getHelpMenu());
     }
     return mainJMenuBar;
@@ -1606,26 +852,28 @@ public class Desktop extends JApplet {
     return fileMenu;
   }
 
-  /**
-   * This method initializes jMenu
-   * 
-   * @return javax.swing.JMenu
-   */
   private JMenu getHelpMenu() {
     if (helpMenu == null) {
       helpMenu = new JMenu();
       helpMenu.setText("Help");
-      helpMenu.add(getWelcomeMenuItem());
-      helpMenu.add(getSystemInfoMenuItem());
+      for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+        helpMenu.add(internalFrame.getMenuItem());
+      }
     }
     return helpMenu;
   }
 
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
+  private JMenu getSettingsMenu() {
+    if (settingsMenu == null) {
+      settingsMenu = new JMenu();
+      settingsMenu.setText("Settings");
+      for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+        settingsMenu.add(internalFrame.getMenuItem());
+      }
+    }
+    return settingsMenu;
+  }
+
   private JMenuItem getExitMenuItem() {
     if (exitMenuItem == null) {
       exitMenuItem = new JMenuItem();
@@ -1639,80 +887,6 @@ public class Desktop extends JApplet {
     return exitMenuItem;
   }
 
-  private JMenuItem getWelcomeMenuItem() {
-    if (welcomeMenuItem == null) {
-      welcomeMenuItem = new JMenuItem();
-      welcomeMenuItem.setText("Welcome to " + Tools.APP_TITLE);
-      welcomeMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          if (!welcomeInternalFrame.isVisible()) {
-            welcomeInternalFrame.setVisible(true);
-          }
-          try {
-            welcomeInternalFrame.setSelected(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
-          }
-        }
-      });
-    }
-    return welcomeMenuItem;
-  }
-
-  private JMenuItem getSystemInfoMenuItem() {
-    if (systemInfoMenuItem == null) {
-      systemInfoMenuItem = new JMenuItem();
-      systemInfoMenuItem.setText("System Information");
-      systemInfoMenuItem.setVisible(true);
-      systemInfoMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          if (!systemInfoInternalFrame.isVisible()) {
-            ((SystemInfoInternalFrame) systemInfoInternalFrame).refresh();
-            systemInfoInternalFrame.setVisible(true);
-          }
-          try {
-            systemInfoInternalFrame.setSelected(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
-          }
-        }
-      });
-    }
-    return systemInfoMenuItem;
-  }
-
-  private JCheckBoxMenuItem getLookAndFeelMenuItem() {
-    if (lookAndFeelMenuItem == null) {
-      lookAndFeelMenuItem = new JCheckBoxMenuItem();
-      lookAndFeelMenuItem.setText("UI Theme (Look and Feel)");
-      lookAndFeelMenuItem.setVisible(true);
-      lookAndFeelMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          if (lookAndFeelMenuItem.isSelected()) {
-            lookAndFeelInternalFrame.setVisible(true);
-            try {
-              lookAndFeelInternalFrame.setSelected(true);
-            }
-            catch (PropertyVetoException ex) {
-              ex.printStackTrace();
-            }
-          }
-          else {
-            lookAndFeelInternalFrame.setVisible(false);
-          }
-        }
-      });
-    }
-    return lookAndFeelMenuItem;
-  }
-
-  /**
-   * This method initializes jMenuItem
-   * 
-   * @return javax.swing.JMenuItem
-   */
   private JMenuItem getSaveMenuItem() {
     if (saveMenuItem == null) {
       saveMenuItem = new JMenuItem();
@@ -1728,40 +902,9 @@ public class Desktop extends JApplet {
     return saveMenuItem;
   }
 
-  /*-------------------------------------------------------------------------------*/
-  /* applet code */
-  /*-------------------------------------------------------------------------------*/
-  Desktop appletApplication = null;
-
-  @Override
-  public void start() {
-    setUserLookAndFeel();
-    appletApplication = new Desktop();
-    appletApplication.getJFrame().setVisible(true);
-    appletApplication.initApp();
-    try {
-      appletApplication.getWelcomeInternalFrame().setSelected(true);
-    }
-    catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    super.start();
-  }
-
-  @Override
-  public void stop() {
-    appletApplication.getJFrame().setVisible(false);
-    appletApplication = null;
-    super.stop();
-  }
-
-  /*-------------------------------------------------------------------------------*/
-  /* custom code */
-  /*-------------------------------------------------------------------------------*/
-  private MainController mainController = null; // @jve:decl-index=0:
-  private RenderController renderController = null; // @jve:decl-index=0:
-  private FormulaExplorerController formulaExplorerController = null; // @jve:decl-index=0:
-  private TinaController tinaController = null; // @jve:decl-index=0:
+  private MainController mainController = null;
+  private FormulaExplorerController formulaExplorerController = null;
+  private TinaController tinaController = null;
 
   private JPanel showMessageTopPnl = null;
 
@@ -1773,7 +916,7 @@ public class Desktop extends JApplet {
 
   private JButton showMessageCloseButton = null;
 
-  private JDialog showMessageDlg = null; // @jve:decl-index=0:visual-constraint="1444,65"
+  private JDialog showMessageDlg = null;
 
   private JPanel showMessageDlgContentPanel = null;
 
@@ -1781,7 +924,7 @@ public class Desktop extends JApplet {
 
   private JTextArea showMessageDlgTextArea = null;
 
-  private JDialog showErrorDlg = null; // @jve:decl-index=0:visual-constraint="1805,12"
+  private JDialog showErrorDlg = null;
 
   private JPanel showErrorDlgContentPane = null;
 
@@ -1809,67 +952,6 @@ public class Desktop extends JApplet {
 
   private JButton showErrorCloseButton = null;
 
-  private void operatorsMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (operatorsMenuItem.isSelected()) {
-      operatorsInternalFrame.setVisible(true);
-      try {
-        operatorsInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      operatorsInternalFrame.setVisible(false);
-    }
-  }
-
-  private void tinaMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (tinaMenuItem.isSelected()) {
-      tinaInternalFrame.setVisible(true);
-      try {
-        tinaInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      tinaInternalFrame.setVisible(false);
-    }
-  }
-
-  private void edenMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (edenMenuItem.isSelected()) {
-      edenInternalFrame.setVisible(true);
-      try {
-        edenInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      edenInternalFrame.setVisible(false);
-    }
-  }
-
-  private void iflamesMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (iflamesMenuItem.isSelected()) {
-      iflamesInternalFrame.setVisible(true);
-      ((IFlamesInternalFrame) iflamesInternalFrame).getIflamesController().init();
-      try {
-        iflamesInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      iflamesInternalFrame.setVisible(false);
-    }
-  }
-
   private void openMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     try {
       mainController.loadImage(true);
@@ -1881,25 +963,11 @@ public class Desktop extends JApplet {
   }
 
   private void initApp() {
-    {
-      ScriptInternalFrame scriptFrame = (ScriptInternalFrame) getScriptInternalFrame();
-      scriptFrame.initApp();
-    }
-    {
-      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
-      preferencesFrame.initApp();
-    }
-    {
-      OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
-      operatorsFrame.initApp();
-    }
-    {
-      FormulaExplorerInternalFrame formulaExplorerFrame = (FormulaExplorerInternalFrame) getFormulaExplorerInternalFrame();
-      formulaExplorerFrame.initApp();
-    }
+    getInternalFrame(PreferencesInternalFrame.class).initApp();
+    getInternalFrame(OperatorsInternalFrame.class).initApp();
+    getInternalFrame(FormulaExplorerInternalFrame.class).initApp();
 
     mainController.refreshWindowMenu();
-    mainController.scriptFrameChanged(1, null, "60");
 
     try {
       formulaExplorerController.calculate();
@@ -1933,228 +1001,26 @@ public class Desktop extends JApplet {
     enableControls();
   }
 
-  // type=Object -> hide from Visual Editor
-
   private JMenuItem closeAllMenuItem = null;
 
-  private JInternalFrame scriptInternalFrame = null;
-
-  private JInternalFrame preferencesInternalFrame = null;
-
-  private JCheckBoxMenuItem scriptMenuItem = null;
-
-  private JCheckBoxMenuItem preferencesMenuItem = null;
-
-  private JInternalFrame operatorsInternalFrame = null;
-
-  private JDialog renderDialog = null; //  @jve:decl-index=0:visual-constraint="2243,6"
-
-  private JPanel renderWindowContentPane = null;
-
-  private JPanel renderTopPanel = null;
-
-  private JPanel renderBottomPanel = null;
-
-  private JPanel renderCenterPanel = null;
-
-  private JButton renderRenderButton = null;
-
-  private JButton renderCancelButton = null;
-
-  private JButton renderCloseButton = null;
-
-  private JPanel renderPreviewBottomPanel = null;
-
-  private JPanel renderPreviewMainPanel = null;
-
-  private JPanel renderPreviewProgressTopPanel = null;
-
-  private JPanel renderPreviewProgressMainPanel = null;
-
-  private JProgressBar renderProgressBar = null;
-
-  private JLabel renderOutputLabel = null;
-
-  private JTextField renderOutputREd = null;
-
-  private JLabel renderFrameLabel = null;
-
-  private JLabel renderFrameValueLabel = null;
-
-  private JLabel renderSizeLabel = null;
-
-  private JLabel renderSizeValueLabel = null;
-
-  private JLabel renderPrefixLabel = null;
-
-  private JTextField renderPrefixREd = null;
-
-  private JPanel renderPreviewImg1Panel = null;
-
-  private JPanel renderPreviewImg2Panel = null;
-
-  private JPanel renderPreviewImg3Panel = null;
-
-  private JPanel renderPreviewImg1BottomPanel = null;
-
-  private JPanel renderPreviewImg2BottomPanel = null;
-
-  private JPanel renderPreviewImg3BottomPanel = null;
-
-  private JLabel renderPreviewImg1Label = null;
-
-  private JLabel renderPreviewImg2Label = null;
-
-  private JLabel renderPreviewImg3Label = null;
-
-  private JLabel renderFrameStartLabel = null;
-
-  private JTextField renderFrameStartREd = null;
-
-  private JLabel renderFrameEndLabel = null;
-
-  private JTextField renderFrameEndREd = null;
-
-  private JInternalFrame formulaExplorerInternalFrame = null;
-
-  private JCheckBoxMenuItem formulaExplorerMenuItem = null;
-
-  private JInternalFrame tinaInternalFrame = null;
-
-  private JInternalFrame edenInternalFrame = null;
-  private JInternalFrame iflamesInternalFrame = null;
-  private JInternalFrame welcomeInternalFrame = null;
-  private JInternalFrame systemInfoInternalFrame = null;
-  private JInternalFrame lookAndFeelInternalFrame = null;
-
   void enableControls() {
-    edenMenuItem.setSelected(edenInternalFrame.isVisible());
-    iflamesMenuItem.setSelected(iflamesInternalFrame.isVisible());
-    tinaMenuItem.setSelected(tinaInternalFrame.isVisible());
-    operatorsMenuItem.setSelected(operatorsInternalFrame.isVisible());
-    scriptMenuItem.setSelected(scriptInternalFrame.isVisible());
-    preferencesMenuItem.setSelected(preferencesInternalFrame.isVisible());
-    lookAndFeelMenuItem.setSelected(lookAndFeelInternalFrame.isVisible());
-    formulaExplorerMenuItem.setSelected(formulaExplorerInternalFrame
-        .isVisible());
+    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+      internalFrame.enableMenu();
+    }
+    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+      internalFrame.enableMenu();
+    }
+    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+      internalFrame.enableMenu();
+    }
     closeAllMenuItem.setEnabled(mainController.getBufferList().size() > 0);
-    {
-      ScriptInternalFrame scriptFrame = (ScriptInternalFrame) getScriptInternalFrame();
-      scriptFrame.enableControls();
-    }
-    {
-      PreferencesInternalFrame preferencesFrame = (PreferencesInternalFrame) getPreferencesInternalFrame();
-      preferencesFrame.enableControls();
-    }
-    {
-      OperatorsInternalFrame operatorsFrame = (OperatorsInternalFrame) getOperatorsInternalFrame();
-      operatorsFrame.enableControls();
-    }
+    getInternalFrame(PreferencesInternalFrame.class).enableControls();
+    getInternalFrame(OperatorsInternalFrame.class).enableControls();
   }
 
   private void closeAllMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
     if (mainController.closeAll())
       enableControls();
-  }
-
-  private void scriptMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (scriptMenuItem.isSelected()) {
-      scriptInternalFrame.setVisible(true);
-      try {
-        scriptInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      scriptInternalFrame.setVisible(false);
-    }
-  }
-
-  private void scriptInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void scriptInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void preferencesMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (preferencesMenuItem.isSelected()) {
-      preferencesInternalFrame.setVisible(true);
-      try {
-        preferencesInternalFrame.setSelected(true);
-      }
-      catch (PropertyVetoException ex) {
-        ex.printStackTrace();
-      }
-    }
-    else {
-      preferencesInternalFrame.setVisible(false);
-    }
-  }
-
-  private void preferencesInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void preferencesInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void operatorsInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void operatorsInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void tinaInternalFrame_internalFrameClosed(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private void tinaInternalFrame_internalFrameDeactivated(
-      javax.swing.event.InternalFrameEvent e) {
-    enableControls();
-  }
-
-  private JInternalFrame getWelcomeInternalFrame() {
-    if (welcomeInternalFrame == null) {
-      welcomeInternalFrame = new WelcomeInternalFrame();
-    }
-    return welcomeInternalFrame;
-  }
-
-  private JInternalFrame getSystemInfoInternalFrame() {
-    if (systemInfoInternalFrame == null) {
-      systemInfoInternalFrame = new SystemInfoInternalFrame();
-    }
-    return systemInfoInternalFrame;
-  }
-
-  private JInternalFrame getLookAndFeelInternalFrame(JDesktopPane pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
-    if (lookAndFeelInternalFrame == null) {
-      lookAndFeelInternalFrame = new LookAndFeelInternalFrame(this, pRootPane, pErrorHandler, pPrefs);
-      lookAndFeelInternalFrame.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-        public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent e) {
-          enableControls();
-        }
-
-        public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
-          enableControls();
-        }
-      });
-    }
-    return lookAndFeelInternalFrame;
   }
 
   private void closeApp() {
@@ -2173,25 +1039,15 @@ public class Desktop extends JApplet {
       wPrefs.setWidth(size.width);
       wPrefs.setHeight(size.height);
     }
-    if (tinaInternalFrame != null && tinaInternalFrame.isVisible()) {
-      Dimension size = tinaInternalFrame.getSize();
-      Point pos = tinaInternalFrame.getLocation();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_TINA);
-      wPrefs.setLeft(pos.x);
-      wPrefs.setTop(pos.y);
-      wPrefs.setWidth(size.width);
-      wPrefs.setHeight(size.height);
-      wPrefs.setMaximized(tinaInternalFrame.isMaximum());
+
+    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+      internalFrame.saveWindowPrefs();
     }
-    if (iflamesInternalFrame != null && iflamesInternalFrame.isVisible()) {
-      Dimension size = iflamesInternalFrame.getSize();
-      Point pos = iflamesInternalFrame.getLocation();
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_IFLAMES);
-      wPrefs.setLeft(pos.x);
-      wPrefs.setTop(pos.y);
-      wPrefs.setWidth(size.width);
-      wPrefs.setHeight(size.height);
-      wPrefs.setMaximized(iflamesInternalFrame.isMaximum());
+    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+      internalFrame.saveWindowPrefs();
+    }
+    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+      internalFrame.saveWindowPrefs();
     }
     try {
       prefs.saveToFromFile();
@@ -2202,5 +1058,42 @@ public class Desktop extends JApplet {
     }
     RandomGeneratorFactory.cleanup();
     System.exit(0);
+  }
+
+  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
+    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+    if (frameHolder != null) {
+      T frame = frameHolder.getInternalFrame();
+      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+        if (!frame.isVisible() || frame.isClosed()) {
+          frameHolder.getMenuItem().doClick();
+        }
+        try {
+          frame.setSelected(true);
+        }
+        catch (PropertyVetoException ex) {
+          ex.printStackTrace();
+        }
+        if (frame.isIcon()) {
+          try {
+            frame.setIcon(false);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+      else {
+        if (!frame.isIcon()) {
+          try {
+            frame.setIcon(true);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+
+    }
   }
 }

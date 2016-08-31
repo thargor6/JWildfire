@@ -352,7 +352,7 @@ public class LogDensityFilter extends FilterHolder {
         boolean withSSAO = flame.getSolidRenderSettings().isSsaoEnabled();
         double ambientIntensity = Math.max(0.0, withSSAO ? (material.getAmbient() - rp.ao * aoInt) : material.getAmbient());
 
-        double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt / 3.0) : material.getDiffuse());
+        double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt / 6.0) : material.getDiffuse());
         double specularIntensity = material.getPhong();
 
         //double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 3.0) : material.getReflMapIntensity());

@@ -80,8 +80,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
     {
       MaterialSettings material = new MaterialSettings();
-      material.setAmbient(0.6);
-      material.setDiffuse(0.6);
+      material.setAmbient(0.8);
+      material.setDiffuse(0.1);
       material.setPhong(0.6);
       material.setPhongSize(15.0);
       material.setPhongRed(1.0);

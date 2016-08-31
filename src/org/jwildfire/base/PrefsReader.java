@@ -282,6 +282,7 @@ public class PrefsReader {
                 windowPrefs.setWidth(getIntProperty(props, WindowPrefs.KEY_WIDTH + "." + i, 0));
                 windowPrefs.setHeight(getIntProperty(props, WindowPrefs.KEY_HEIGHT + "." + i, 0));
                 windowPrefs.setMaximized(getBooleanProperty(props, WindowPrefs.KEY_MAXIMIZED + "." + i, false));
+                windowPrefs.setVisible(getBooleanProperty(props, WindowPrefs.KEY_VISIBLE + "." + i, false));
               }
             }
             catch (Throwable ex) {

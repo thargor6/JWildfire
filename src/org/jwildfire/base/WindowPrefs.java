@@ -19,18 +19,35 @@ package org.jwildfire.base;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class WindowPrefs implements Assignable<WindowPrefs> {
-  static final String KEY_WINDOW_COUNT = "window.count";
-  static final String KEY_NAME = "window.name";
-  static final String KEY_WIDTH = "window.width";
-  static final String KEY_HEIGHT = "window.height";
-  static final String KEY_LEFT = "window.left";
-  static final String KEY_TOP = "window.top";
-  static final String KEY_MAXIMIZED = "window.maximized";
+  static final String KEY_WINDOW_COUNT = "windowPrefs.count";
+  static final String KEY_NAME = "windowPrefs.name";
+  static final String KEY_WIDTH = "windowPrefs.width";
+  static final String KEY_HEIGHT = "windowPrefs.height";
+  static final String KEY_LEFT = "windowPrefs.left";
+  static final String KEY_TOP = "windowPrefs.top";
+  static final String KEY_MAXIMIZED = "windowPrefs.maximized";
+  static final String KEY_VISIBLE = "windowPrefs.visible";
 
   public static final String WINDOW_DESKTOP = "Desktop";
+  public static final String WINDOW_NAVIGATOR = "NAVIGATOR";
   public static final String WINDOW_TINA = "TINA";
+  public static final String WINDOW_MESHGEN = "MESHGEN";
+  public static final String WINDOW_MUTAGEN = "MUTAGEN";
+  public static final String WINDOW_INTERACTIVERENDERER = "INTERACTIVERENDERER";
+  public static final String WINDOW_HELP = "HELP";
+  public static final String WINDOW_FLAMEBROWSER = "FLAMEBROWSER";
+  public static final String WINDOW_DANCINGFLAMES = "DANCINGFLAMES";
+  public static final String WINDOW_EASYMOVIEMAKER = "EASYMOVIEMAKER";
+  public static final String WINDOW_BATCHFLAMERENDERER = "BATCHFLAMERENDERER";
   public static final String WINDOW_IFLAMES = "IFLAMES";
   public static final String WINDOW_TINA_PREVIEW = "TINA_PREVIEW";
+  public static final String WINDOW_IMAGEPROCESSING = "IMAGEPROCESSING";
+  public static final String WINDOW_FORMULAEXPLORER = "FORMULAEXPLORER";
+  public static final String WINDOW_PREFERENCES = "PREFERENCES";
+  public static final String WINDOW_SYSTEMINFO = "SYSTEMINFO";
+  public static final String WINDOW_WELCOME = "WELCOME";
+  public static final String WINDOW_TIPOFTHEDAY = "TIPOFTHEDAY";
+  public static final String WINDOW_LOOKANDFEEL = "LOOKANDFEEL";
 
   private int width;
   private int height;
@@ -38,6 +55,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   private int top;
   private boolean maximized;
   private final String name;
+  private boolean visible;
 
   public WindowPrefs(String pName) {
     name = pName;
@@ -50,6 +68,7 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
     left = pSrc.left;
     top = pSrc.top;
     maximized = pSrc.maximized;
+    visible = pSrc.visible;
   }
 
   public int getWidth() {
@@ -110,13 +129,13 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   @Override
   public boolean isEqual(WindowPrefs pSrc) {
     if (width != pSrc.width || height != pSrc.height ||
-        left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized)
-    	return false;
-    if (name==null){
-    	if(pSrc.name!=null)
-    		return false;
+        left != pSrc.left || top != pSrc.top || maximized != pSrc.maximized || visible != pSrc.visible)
+      return false;
+    if (name == null) {
+      if (pSrc.name != null)
+        return false;
     }
-    else if(pSrc.name==null||!name.equals(pSrc.name)){
+    else if (pSrc.name == null || !name.equals(pSrc.name)) {
       return false;
     }
     return true;
@@ -124,6 +143,14 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
 
   public String getName() {
     return name;
+  }
+
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
   }
 
 }

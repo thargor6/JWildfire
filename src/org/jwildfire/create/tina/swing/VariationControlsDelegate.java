@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.XForm;
@@ -26,8 +26,8 @@ import org.jwildfire.create.tina.variation.Variation;
 public class VariationControlsDelegate extends AbstractControlsDelegate {
   private final int variationIndex;
 
-  public VariationControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane, int pVariationIndex) {
-    super(pOwner, pData, pRootTabbedPane, true);
+  public VariationControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel, int pVariationIndex) {
+    super(pOwner, pData, pRootPanel, true);
     variationIndex = pVariationIndex;
   }
 

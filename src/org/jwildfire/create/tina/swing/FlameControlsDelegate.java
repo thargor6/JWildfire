@@ -26,8 +26,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
 import org.jwildfire.base.Prefs;
@@ -80,8 +80,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   }
 
-  public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane, true);
+  public FlameControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+    super(pOwner, pData, pRootPanel, true);
     dofParamControls = initDofParamControls(pData);
   }
 
@@ -1366,7 +1366,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
 
-      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)));
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(Tools.roundColor(material.getPhongRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(material.getPhongBlue() * GammaCorrectionFilter.COLORSCL)));
       if (selectedColor != null) {
         material.setPhongRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
         material.setPhongGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
@@ -1385,7 +1385,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
 
-      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)));
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)));
       if (selectedColor != null) {
         light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
         light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
