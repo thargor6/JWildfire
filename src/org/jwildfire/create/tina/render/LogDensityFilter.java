@@ -348,8 +348,8 @@ public class LogDensityFilter extends FilterHolder {
     if (solidRendering && rp.hasNormals) {
       MaterialSettings material = flame.getSolidRenderSettings().getInterpolatedMaterial(rp.material);
       if (material != null) {
-        double aoInt = Tools.limitValue(flame.getSolidRenderSettings().getSsaoIntensity(), 0.0, 2.0);
-        boolean withSSAO = flame.getSolidRenderSettings().isSsaoEnabled();
+        double aoInt = Tools.limitValue(flame.getSolidRenderSettings().getAoIntensity(), 0.0, 4.0);
+        boolean withSSAO = flame.getSolidRenderSettings().isAoEnabled();
         double ambientIntensity = Math.max(0.0, withSSAO ? (material.getAmbient() - rp.ao * aoInt) : material.getAmbient());
 
         double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt / 6.0) : material.getDiffuse());
@@ -363,6 +363,7 @@ public class LogDensityFilter extends FilterHolder {
             reflectionMap = (SimpleImage) RessourceManager.getImage(material.getReflMapFilename());
           }
           catch (Exception e) {
+            material.setReflMapFilename(null);
             e.printStackTrace();
           }
         }
