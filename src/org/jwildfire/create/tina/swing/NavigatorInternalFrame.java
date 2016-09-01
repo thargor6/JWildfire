@@ -138,7 +138,7 @@ public class NavigatorInternalFrame extends JInternalFrame {
       button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
       button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          desktop.showInternalFrame(window.getFrameType());
+          desktop.toggleInternalFrame(window.getFrameType());
         }
       });
 

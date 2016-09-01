@@ -580,9 +580,19 @@ public class TinaControllerParameter {
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
   public JCheckBox tinaSolidRenderingCBx;
-  public JCheckBox tinaSolidRenderingEnableSSAOCBx;
-  public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
-  public JSlider tinaSolidRenderingSSAOIntensitySlider;
+  public JCheckBox tinaSolidRenderingEnableAOCBx;
+  public JWFNumberField tinaSolidRenderingAOIntensityREd;
+  public JSlider tinaSolidRenderingAOIntensitySlider;
+  public JWFNumberField tinaSolidRenderingAOSearchRadiusREd;
+  public JSlider tinaSolidRenderingAOSearchRadiusSlider;
+  public JWFNumberField tinaSolidRenderingAOBlurRadiusREd;
+  public JSlider tinaSolidRenderingAOBlurRadiusSlider;
+  public JWFNumberField tinaSolidRenderingAOFalloffREd;
+  public JSlider tinaSolidRenderingAOFalloffSlider;
+  public JWFNumberField tinaSolidRenderingAORadiusSamplesREd;
+  public JSlider tinaSolidRenderingAORadiusSamplesSlider;
+  public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
+  public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;
@@ -1027,7 +1037,10 @@ public class TinaControllerParameter {
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
       JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
-      JSlider tinaSolidRenderingSSAOIntensitySlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
+      JSlider tinaSolidRenderingSSAOIntensitySlider, JWFNumberField tinaSolidRenderingAOSearchRadiusREd, JSlider tinaSolidRenderingAOSearchRadiusSlider,
+      JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
+      JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
+      JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd, JSlider tinaSolidRenderingAOAzimuthSamplesSlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
       JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
@@ -1151,9 +1164,19 @@ public class TinaControllerParameter {
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
     this.tinaSolidRenderingCBx = tinaSolidRenderingCBx;
-    this.tinaSolidRenderingEnableSSAOCBx = tinaSolidRenderingEnableSSAOCBx;
-    this.tinaSolidRenderingSSAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
-    this.tinaSolidRenderingSSAOIntensitySlider = tinaSolidRenderingSSAOIntensitySlider;
+    this.tinaSolidRenderingEnableAOCBx = tinaSolidRenderingEnableSSAOCBx;
+    this.tinaSolidRenderingAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
+    this.tinaSolidRenderingAOIntensitySlider = tinaSolidRenderingSSAOIntensitySlider;
+    this.tinaSolidRenderingAOSearchRadiusREd = tinaSolidRenderingAOSearchRadiusREd;
+    this.tinaSolidRenderingAOSearchRadiusSlider = tinaSolidRenderingAOSearchRadiusSlider;
+    this.tinaSolidRenderingAOBlurRadiusREd = tinaSolidRenderingAOBlurRadiusREd;
+    this.tinaSolidRenderingAOBlurRadiusSlider = tinaSolidRenderingAOBlurRadiusSlider;
+    this.tinaSolidRenderingAOFalloffREd = tinaSolidRenderingAOFalloffREd;
+    this.tinaSolidRenderingAOFalloffSlider = tinaSolidRenderingAOFalloffSlider;
+    this.tinaSolidRenderingAORadiusSamplesREd = tinaSolidRenderingAORadiusSamplesREd;
+    this.tinaSolidRenderingAORadiusSamplesSlider = tinaSolidRenderingAORadiusSamplesSlider;
+    this.tinaSolidRenderingAOAzimuthSamplesREd = tinaSolidRenderingAOAzimuthSamplesREd;
+    this.tinaSolidRenderingAOAzimuthSamplesSlider = tinaSolidRenderingAOAzimuthSamplesSlider;
     this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
     this.resetSolidRenderingGlobalSettingsBtn = resetSolidRenderingGlobalSettingsBtn;
     this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;

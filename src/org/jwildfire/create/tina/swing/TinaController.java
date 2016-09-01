@@ -619,9 +619,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
 
     data.tinaSolidRenderingCBx = parameterObject.tinaSolidRenderingCBx;
-    data.tinaSolidRenderingEnableSSAOCBx = parameterObject.tinaSolidRenderingEnableSSAOCBx;
-    data.tinaSolidRenderingSSAOIntensityREd = parameterObject.tinaSolidRenderingSSAOIntensityREd;
-    data.tinaSolidRenderingSSAOIntensitySlider = parameterObject.tinaSolidRenderingSSAOIntensitySlider;
+    data.tinaSolidRenderingEnableAOCBx = parameterObject.tinaSolidRenderingEnableAOCBx;
+    data.tinaSolidRenderingAOIntensityREd = parameterObject.tinaSolidRenderingAOIntensityREd;
+    data.tinaSolidRenderingAOIntensitySlider = parameterObject.tinaSolidRenderingAOIntensitySlider;
+    data.tinaSolidRenderingAOSearchRadiusREd = parameterObject.tinaSolidRenderingAOSearchRadiusREd;
+    data.tinaSolidRenderingAOSearchRadiusSlider = parameterObject.tinaSolidRenderingAOSearchRadiusSlider;
+    data.tinaSolidRenderingAOBlurRadiusREd = parameterObject.tinaSolidRenderingAOBlurRadiusREd;
+    data.tinaSolidRenderingAOBlurRadiusSlider = parameterObject.tinaSolidRenderingAOBlurRadiusSlider;
+    data.tinaSolidRenderingAOFalloffREd = parameterObject.tinaSolidRenderingAOFalloffREd;
+    data.tinaSolidRenderingAOFalloffSlider = parameterObject.tinaSolidRenderingAOFalloffSlider;
+    data.tinaSolidRenderingAORadiusSamplesREd = parameterObject.tinaSolidRenderingAORadiusSamplesREd;
+    data.tinaSolidRenderingAORadiusSamplesSlider = parameterObject.tinaSolidRenderingAORadiusSamplesSlider;
+    data.tinaSolidRenderingAOAzimuthSamplesREd = parameterObject.tinaSolidRenderingAOAzimuthSamplesREd;
+    data.tinaSolidRenderingAOAzimuthSamplesSlider = parameterObject.tinaSolidRenderingAOAzimuthSamplesSlider;
+
     data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
     data.resetSolidRenderingGlobalSettingsBtn = parameterObject.resetSolidRenderingGlobalSettingsBtn;
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;

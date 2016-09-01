@@ -1060,7 +1060,7 @@ public class Desktop extends JApplet {
     System.exit(0);
   }
 
-  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
+  public <T extends JInternalFrame> void toggleInternalFrame(Class<T> frameType) {
     InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
     if (frameHolder != null) {
       T frame = frameHolder.getInternalFrame();
@@ -1093,7 +1093,35 @@ public class Desktop extends JApplet {
           }
         }
       }
+    }
+  }
 
+  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
+    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+    if (frameHolder != null) {
+      T frame = frameHolder.getInternalFrame();
+      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+        if (!frame.isVisible() || frame.isClosed()) {
+          frameHolder.getMenuItem().doClick();
+        }
+        try {
+          frame.setSelected(true);
+        }
+        catch (PropertyVetoException ex) {
+          ex.printStackTrace();
+        }
+        if (frame.isIcon()) {
+          try {
+            frame.setIcon(false);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+      else {
+        frame.toFront();
+      }
     }
   }
 }

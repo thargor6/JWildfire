@@ -14,8 +14,14 @@ import org.jwildfire.create.tina.edit.Assignable;
 @SuppressWarnings("serial")
 public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Serializable {
   private boolean solidRenderingEnabled = false;
-  private boolean ssaoEnabled = true;
-  private double ssaoIntensity = 1.0;
+  private boolean aoEnabled = true;
+  private double aoIntensity = 0.75;
+  private double aoSearchRadius = 12.0;
+  private double aoBlurRadius = 2.5;
+  private int aoRadiusSamples = 8;
+  private int aoAzimuthSamples = 10;
+  private double aoFalloff = 0.5;
+
   private boolean hardShadowsEnabled = false;
   private final List<MaterialSettings> materials = new ArrayList<>();
   private final List<PointLight> lights = new ArrayList<>();
@@ -57,8 +63,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   }
 
   public void setupDefaultGlobals() {
-    ssaoEnabled = true;
-    ssaoIntensity = 1.0;
+    aoEnabled = true;
+    aoIntensity = 1.0;
     hardShadowsEnabled = false;
   }
 
@@ -86,7 +92,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       material.setPhongSize(15.0);
       material.setPhongRed(1.0);
       material.setPhongGreen(1.0);
-      material.setPhongBlue(0.3);
+      material.setPhongBlue(1.0);
       material.setReflMapIntensity(0.5);
       material.setReflMapFilename(null);
       materials.add(material);
@@ -157,12 +163,12 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     return lights;
   }
 
-  public boolean isSsaoEnabled() {
-    return ssaoEnabled;
+  public boolean isAoEnabled() {
+    return aoEnabled;
   }
 
-  public void setSsaoEnabled(boolean ssaoEnabled) {
-    this.ssaoEnabled = ssaoEnabled;
+  public void setAoEnabled(boolean aoEnabled) {
+    this.aoEnabled = aoEnabled;
   }
 
   public boolean isHardShadowsEnabled() {
@@ -173,12 +179,12 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     this.hardShadowsEnabled = hardShadowsEnabled;
   }
 
-  public double getSsaoIntensity() {
-    return ssaoIntensity;
+  public double getAoIntensity() {
+    return aoIntensity;
   }
 
-  public void setSsaoIntensity(double ssaoIntensity) {
-    this.ssaoIntensity = ssaoIntensity;
+  public void setAoIntensity(double aoIntensity) {
+    this.aoIntensity = aoIntensity;
   }
 
   public boolean isSolidRenderingEnabled() {
@@ -192,8 +198,14 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   @Override
   public void assign(SolidRenderSettings pSrc) {
     solidRenderingEnabled = pSrc.solidRenderingEnabled;
-    ssaoEnabled = pSrc.ssaoEnabled;
-    ssaoIntensity = pSrc.ssaoIntensity;
+    aoEnabled = pSrc.aoEnabled;
+    aoIntensity = pSrc.aoIntensity;
+    aoSearchRadius = pSrc.aoSearchRadius;
+    aoBlurRadius = pSrc.aoBlurRadius;
+    aoRadiusSamples = pSrc.aoRadiusSamples;
+    aoAzimuthSamples = pSrc.aoAzimuthSamples;
+    aoFalloff = pSrc.aoFalloff;
+
     hardShadowsEnabled = pSrc.hardShadowsEnabled;
     materials.clear();
     for (MaterialSettings src : pSrc.getMaterials()) {
@@ -224,8 +236,10 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     }
 
     if (solidRenderingEnabled != pSrc.solidRenderingEnabled ||
-        ssaoEnabled != pSrc.ssaoEnabled || hardShadowsEnabled != pSrc.hardShadowsEnabled ||
-        fabs(ssaoIntensity - pSrc.ssaoIntensity) > EPSILON) {
+        aoEnabled != pSrc.aoEnabled || hardShadowsEnabled != pSrc.hardShadowsEnabled ||
+        fabs(aoIntensity - pSrc.aoIntensity) > EPSILON || fabs(aoSearchRadius - pSrc.aoSearchRadius) > EPSILON ||
+        fabs(aoBlurRadius - pSrc.aoBlurRadius) > EPSILON || aoRadiusSamples != pSrc.aoRadiusSamples ||
+        aoAzimuthSamples != pSrc.aoAzimuthSamples || fabs(aoFalloff - pSrc.aoFalloff) > EPSILON) {
       return false;
     }
     if (materials.size() != pSrc.materials.size()) {
@@ -277,6 +291,46 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     material.setReflMapIntensity(0.5);
     materials.add(material);
     return material;
+  }
+
+  public double getAoSearchRadius() {
+    return aoSearchRadius;
+  }
+
+  public void setAoSearchRadius(double aoSearchRadius) {
+    this.aoSearchRadius = aoSearchRadius;
+  }
+
+  public double getAoBlurRadius() {
+    return aoBlurRadius;
+  }
+
+  public void setAoBlurRadius(double aoBlurRadius) {
+    this.aoBlurRadius = aoBlurRadius;
+  }
+
+  public int getAoRadiusSamples() {
+    return aoRadiusSamples;
+  }
+
+  public void setAoRadiusSamples(int aoRadiusSamples) {
+    this.aoRadiusSamples = aoRadiusSamples;
+  }
+
+  public int getAoAzimuthSamples() {
+    return aoAzimuthSamples;
+  }
+
+  public void setAoAzimuthSamples(int aoAzimuthSamples) {
+    this.aoAzimuthSamples = aoAzimuthSamples;
+  }
+
+  public double getAoFalloff() {
+    return aoFalloff;
+  }
+
+  public void setAoFalloff(double aoFalloff) {
+    this.aoFalloff = aoFalloff;
   }
 
 }

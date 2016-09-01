@@ -567,4 +567,8 @@ public class Tools {
   public static double limitValue(double value, double min, double max) {
     return value < min ? min : value > max ? max : value;
   }
+
+  public static int limitValue(int value, int min, int max) {
+    return value < min ? min : value > max ? max : value;
+  }
 }

@@ -131,8 +131,13 @@ public class AbstractFlameReader {
   public static final String ATTR_FPS = "fps";
 
   public static final String ATTR_SLD_RENDER_ENABLED = "sld_render_enabled";
-  public static final String ATTR_SLD_RENDER_SSAO_ENABLED = "sld_render_ssao_enabled";
-  public static final String ATTR_SLD_RENDER_SSAO_INTENSITY = "sld_render_ssao_intensity";
+  public static final String ATTR_SLD_RENDER_AO_ENABLED = "sld_render_ao_enabled";
+  public static final String ATTR_SLD_RENDER_AO_INTENSITY = "sld_render_ao_intensity";
+  public static final String ATTR_SLD_RENDER_AO_SEARCH_RADIUS = "sld_render_ao_search_radius";
+  public static final String ATTR_SLD_RENDER_AO_BLUR_RADIUS = "sld_render_ao_blur_radius";
+  public static final String ATTR_SLD_RENDER_AO_RADIUS_SAMPLES = "sld_render_ao_radius_samples";
+  public static final String ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES = "sld_render_ao_azimuth_samples";
+  public static final String ATTR_SLD_RENDER_AO_FALLOFF = "sld_render_ao_falloff";
   public static final String ATTR_SLD_RENDER_SHADOWS_ENABLED = "sld_render_shadows_enabled";
   public static final String ATTR_SLD_RENDER_MATERIAL_COUNT = "sld_render_material_count";
   public static final String ATTR_SLD_RENDER_LIGHT_COUNT = "sld_render_ligtht_count";
@@ -518,11 +523,26 @@ public class AbstractFlameReader {
       pFlame.getSolidRenderSettings().setSolidRenderingEnabled(false);
     }
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
-      if ((hs = atts.get(ATTR_SLD_RENDER_SSAO_ENABLED)) != null) {
-        pFlame.getSolidRenderSettings().setSsaoEnabled(Integer.parseInt(hs) == 1);
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_ENABLED)) != null) {
+        pFlame.getSolidRenderSettings().setAoEnabled(Integer.parseInt(hs) == 1);
       }
-      if ((hs = atts.get(ATTR_SLD_RENDER_SSAO_INTENSITY)) != null) {
-        pFlame.getSolidRenderSettings().setSsaoIntensity(Double.parseDouble(hs));
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_INTENSITY)) != null) {
+        pFlame.getSolidRenderSettings().setAoIntensity(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_SEARCH_RADIUS)) != null) {
+        pFlame.getSolidRenderSettings().setAoSearchRadius(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_BLUR_RADIUS)) != null) {
+        pFlame.getSolidRenderSettings().setAoBlurRadius(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_RADIUS_SAMPLES)) != null) {
+        pFlame.getSolidRenderSettings().setAoRadiusSamples(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES)) != null) {
+        pFlame.getSolidRenderSettings().setAoAzimuthSamples(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_FALLOFF)) != null) {
+        pFlame.getSolidRenderSettings().setAoFalloff(Double.parseDouble(hs));
       }
       if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWS_ENABLED)) != null) {
         pFlame.getSolidRenderSettings().setHardShadowsEnabled(Integer.parseInt(hs) == 1);
