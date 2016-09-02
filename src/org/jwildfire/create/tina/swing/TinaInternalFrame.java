@@ -16847,6 +16847,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(tinaSolidRenderingCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
+      tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
       tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {

@@ -31,6 +31,9 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL, pPrefs.getLookAndFeelType().toString());
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme());
     }
+    addValue(sb, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup());
+    addValue(sb, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH, pPrefs.getDesktopBackgroundImagePath());
+    addValue(sb, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT, pPrefs.getDesktopBackgroundDarkenAmount());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_THUMBNAILS, pPrefs.getThumbnailPath());

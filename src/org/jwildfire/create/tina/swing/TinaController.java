@@ -4121,7 +4121,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         QualityProfile profile = getQualityProfile();
         prefs.getQualityProfiles().clear();
         prefs.getQualityProfiles().addAll(dlg.getProfiles());
-        prefs.saveToFromFile();
+        prefs.saveToFile();
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
@@ -4153,7 +4153,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ResolutionProfile profile = getResolutionProfile();
         prefs.getResolutionProfiles().clear();
         prefs.getResolutionProfiles().addAll(dlg.getProfiles());
-        prefs.saveToFromFile();
+        prefs.saveToFile();
         refreshResolutionProfileCmb(data.resolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, profile);

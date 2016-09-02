@@ -351,7 +351,7 @@ public class LogDensityFilter extends FilterHolder {
         double aoInt = Tools.limitValue(flame.getSolidRenderSettings().getAoIntensity(), 0.0, 4.0);
         boolean withSSAO = flame.getSolidRenderSettings().isAoEnabled();
         double ambientIntensity = Math.max(0.0, withSSAO ? (material.getAmbient() - rp.ao * aoInt) : material.getAmbient());
-
+        // TODO ao param
         double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt / 6.0) : material.getDiffuse());
         double specularIntensity = material.getPhong();
 
@@ -422,7 +422,8 @@ public class LogDensityFilter extends FilterHolder {
           // http://www.reindelsoftware.com/Documents/Mapping/Mapping.html
           if (reflectionMap != null) {
             //double reflectionMapIntensity = Math.max(0.0, material.getReflMapIntensity() / 3.0);
-            double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 3.0) : material.getReflMapIntensity());
+            // TODO ao param
+            double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 6.0) : material.getReflMapIntensity());
 
             VectorD r = VectorD.reflect(viewDir, normal);
             UVPairD uv = UVPairD.sphericalBlinnNewellLatitudeMapping(r);

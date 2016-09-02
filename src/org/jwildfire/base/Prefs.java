@@ -45,6 +45,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
+  static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH = "general.desktop_background_imagepath";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT = "general.desktop_background_darken_amount";
+
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
   static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
@@ -195,6 +199,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
+
+  @Property(description = "Background image ", category = PropertyCategory.GENERAL)
+  private String desktopBackgroundImagePath = null;
+
+  @Property(description = "Background image darken amount", category = PropertyCategory.GENERAL)
+  private double desktopBackgroundDarkenAmount = 1.0;
+
+  @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
+  private boolean showTipsAtStartup = true;
 
   @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
   private String iflamesFlameLibraryPath = null;
@@ -649,7 +662,7 @@ public class Prefs extends ManagedObject {
     new PrefsReader().readPrefs(this);
   }
 
-  public void saveToFromFile() throws Exception {
+  public void saveToFile() throws Exception {
     new PrefsWriter().writePrefs(this);
   }
 
@@ -795,6 +808,9 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
+    desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
+    desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
+    showTipsAtStartup = pSrc.showTipsAtStartup;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1619,6 +1635,30 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFontScale(double pTinaFontScale) {
     tinaFontScale = pTinaFontScale;
+  }
+
+  public String getDesktopBackgroundImagePath() {
+    return desktopBackgroundImagePath;
+  }
+
+  public void setDesktopBackgroundImagePath(String desktopBackgroundImagePath) {
+    this.desktopBackgroundImagePath = desktopBackgroundImagePath;
+  }
+
+  public double getDesktopBackgroundDarkenAmount() {
+    return desktopBackgroundDarkenAmount;
+  }
+
+  public void setDesktopBackgroundDarkenAmount(double desktopBackgroundDarkenAmount) {
+    this.desktopBackgroundDarkenAmount = desktopBackgroundDarkenAmount;
+  }
+
+  public boolean isShowTipsAtStartup() {
+    return showTipsAtStartup;
+  }
+
+  public void setShowTipsAtStartup(boolean showTipsAtStartup) {
+    this.showTipsAtStartup = showTipsAtStartup;
   }
 
 }

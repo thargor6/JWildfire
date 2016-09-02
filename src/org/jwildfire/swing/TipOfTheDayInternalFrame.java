@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -78,6 +79,24 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     websiteButton.setBorderPainted(false);
     websiteButton.setBounds(6, 6, 134, 28);
     southPanel.add(websiteButton);
+
+    showTipsAtStartupCBx = new JCheckBox("Show tips at startup");
+    showTipsAtStartupCBx.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        Prefs.getPrefs().setShowTipsAtStartup(showTipsAtStartupCBx.isSelected());
+        try {
+          Prefs.getPrefs().saveToFile();
+        }
+        catch (Exception e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+      }
+    });
+    showTipsAtStartupCBx.setActionCommand("");
+    showTipsAtStartupCBx.setBounds(152, 11, 169, 18);
+    showTipsAtStartupCBx.setSelected(Prefs.getPrefs().isShowTipsAtStartup());
+    southPanel.add(showTipsAtStartupCBx);
 
     JPanel panel_2 = new JPanel();
     panel_2.setLayout(new BorderLayout(0, 0));
@@ -134,6 +153,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
 
   private List<String> tips = null;
   private AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
+  private JCheckBox showTipsAtStartupCBx;
 
   private void initializeTips() {
     if (tips == null) {
@@ -193,5 +213,9 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
       prevTipIndex = idx;
       return tips.get(idx);
     }
+  }
+
+  public JCheckBox getShowTipsAtStartupCBx() {
+    return showTipsAtStartupCBx;
   }
 }

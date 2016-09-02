@@ -185,7 +185,7 @@ public class Desktop extends JApplet {
       */
 
       TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
-      if (!tipOfTheDayInternalFrame.isVisible()) {
+      if (!tipOfTheDayInternalFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
         tipOfTheDayInternalFrame.setVisible(true);
       }
       tipOfTheDayInternalFrame.moveToFront();
@@ -1050,7 +1050,7 @@ public class Desktop extends JApplet {
       internalFrame.saveWindowPrefs();
     }
     try {
-      prefs.saveToFromFile();
+      prefs.saveToFile();
       tinaController.saveScriptProps();
     }
     catch (Exception ex) {
