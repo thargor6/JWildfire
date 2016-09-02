@@ -18,28 +18,27 @@ package org.jwildfire.create.tina.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.Desktop;
 
 import com.l2fprod.common.demo.OutlookBarMain;
-import com.l2fprod.common.swing.JOutlookBar;
-import com.l2fprod.common.swing.PercentLayout;
 
+@SuppressWarnings("serial")
 public class NavigatorInternalFrame extends JInternalFrame {
   private JPanel jContentPane = null;
   private Desktop desktop;
+  private JButton interactiveRendererButton;
 
   public NavigatorInternalFrame() {
     super();
@@ -67,27 +66,53 @@ public class NavigatorInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(makeOutlookPanel(SwingConstants.CENTER), BorderLayout.CENTER);
+      JPanel panel = new JPanel();
+      FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+      flowLayout.setVgap(2);
+      flowLayout.setHgap(2);
+      jContentPane.add(panel, BorderLayout.CENTER);
+      addButtons(panel);
     }
     return jContentPane;
   }
 
-  JPanel makeOutlookPanel(int alignment) {
-    JOutlookBar outlook = new JOutlookBar();
-    outlook.setTabPlacement(JTabbedPane.LEFT);
-    addFlameWindowsTab(outlook, "Flames");
-    /*
-        // show it is possible to add any component to the bar
-        JTree tree = new JTree();
-        outlook.addTab("A JTree", outlook.makeScrollPane(tree));
+  private void addButtons(JPanel panel) {
+    WindowEntry[] windows = new WindowEntry[] {
+        new WindowEntry("Editor", "/org/jwildfire/swing/icons/new/brick2.png", TinaInternalFrame.class),
+        new WindowEntry("IRender", "/org/jwildfire/swing/icons/new/fraqtive.png", InteractiveRendererInternalFrame.class),
+        new WindowEntry("Browser", "/org/jwildfire/swing/icons/new/application-view-tile.png", FlameBrowserInternalFrame.class),
+        new WindowEntry("Movies", "/org/jwildfire/swing/icons/new/applications-multimedia.png", EasyMovieMakerInternalFrame.class),
+        new WindowEntry("Dancing", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class),
+        new WindowEntry("Batch", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class),
+        new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class),
+        new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class)
+    };
 
-        outlook.addTab("Disabled", new JButton());
-        outlook.setEnabledAt(3, false);
-        outlook.setAllTabsAlignment(alignment);
-    */
-    JPanel panel = new JPanel(new PercentLayout(PercentLayout.HORIZONTAL, 3));
-    panel.add(outlook, "100");
-    return panel;
+    for (final WindowEntry window : windows) {
+      if (window.getFrameType() != null) {
+        JButton button = new JButton(window.getCaption());
+        button.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+        button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
+        button.setPreferredSize(new Dimension(100, 28));
+        //button.setIconTextGap(0);
+        button.setFont(new Font("Dialog", Font.BOLD, 9));
+
+        button.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent e) {
+            desktop.toggleInternalFrame(window.getFrameType());
+          }
+        });
+
+        panel.add(button);
+      }
+      else if (window.getCaption() != null && !window.getCaption().isEmpty()) {
+        JLabel label = new JLabel();
+        label.setPreferredSize(new Dimension(100, 28));
+        label.setText(window.getCaption());
+        label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+        panel.add(label);
+      }
+    }
   }
 
   private static class WindowEntry {
@@ -116,46 +141,11 @@ public class NavigatorInternalFrame extends JInternalFrame {
 
   }
 
-  void addFlameWindowsTab(JOutlookBar tabs, String title) {
-    JPanel panel = new JPanel();
-    panel.setLayout(new PercentLayout(PercentLayout.VERTICAL, 0));
-    panel.setOpaque(false);
-
-    WindowEntry[] windows = new WindowEntry[] {
-        new WindowEntry("Editor", "/org/jwildfire/swing/icons/new/brick2.png", TinaInternalFrame.class),
-        new WindowEntry("IR", "/org/jwildfire/swing/icons/new/fraqtive.png", InteractiveRendererInternalFrame.class),
-        new WindowEntry("Browser", "/org/jwildfire/swing/icons/new/application-view-tile.png", FlameBrowserInternalFrame.class),
-        new WindowEntry("Movie maker", "/org/jwildfire/swing/icons/new/applications-multimedia.png", EasyMovieMakerInternalFrame.class),
-        new WindowEntry("Dancing flames", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class),
-        new WindowEntry("Batch renderer", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class),
-        new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class),
-        new WindowEntry("3DMeshGen", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class)
-    };
-
-    for (final WindowEntry window : windows) {
-      JButton button = new JButton(window.getCaption());
-      button.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
-      button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          desktop.toggleInternalFrame(window.getFrameType());
-        }
-      });
-
-      panel.add(button);
-    }
-
-    JScrollPane scroll = tabs.makeScrollPane(panel);
-    tabs.addTab("", scroll);
-
-    // this to test the UI gets notified of changes
-    int index = tabs.indexOfComponent(scroll);
-    tabs.setTitleAt(index, title);
-    tabs.setToolTipTextAt(index, title + " Tooltip");
-  }
-
   public void setDesktop(Desktop desktop) {
     this.desktop = desktop;
   }
 
+  public JButton getInteractiveRendererButton() {
+    return interactiveRendererButton;
+  }
 }
