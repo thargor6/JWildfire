@@ -2172,7 +2172,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaLoadFlameButton() {
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
-      tinaLoadFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-open-5.png")));
+      //tinaLoadFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-open-5.png")));
       tinaLoadFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaLoadFlameButton.setText("Load Flame...");
@@ -2196,7 +2196,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setIconTextGap(2);
-      tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-export-3.png")));
+      // tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-export-3.png")));
       tinaSaveFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaSaveFlameButton.setText("Save...");
@@ -7234,7 +7234,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       randomizeBtn.setToolTipText("Randomize random parameters of the currently selected flame");
-      randomizeBtn.setText("Rnd");
+      randomizeBtn.setText("???");
       randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomizeBtn.setSelected(false);
       randomizeBtn.setPreferredSize(new Dimension(42, 24));
@@ -15136,7 +15136,8 @@ public class TinaInternalFrame extends JInternalFrame {
       bokehBtn.setPreferredSize(new Dimension(72, 24));
       bokehBtn.setMnemonic(KeyEvent.VK_K);
       bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
+      //bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
+      bokehBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
     }
     return bokehBtn;
   }
