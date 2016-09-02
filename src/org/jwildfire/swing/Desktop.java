@@ -1061,67 +1061,81 @@ public class Desktop extends JApplet {
   }
 
   public <T extends JInternalFrame> void toggleInternalFrame(Class<T> frameType) {
-    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
-    if (frameHolder != null) {
-      T frame = frameHolder.getInternalFrame();
-      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
-        if (!frame.isVisible() || frame.isClosed()) {
-          frameHolder.getMenuItem().doClick();
-        }
-        try {
-          frame.setSelected(true);
-        }
-        catch (PropertyVetoException ex) {
-          ex.printStackTrace();
-        }
-        if (frame.isIcon()) {
+    try {
+      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+      if (frameHolder != null) {
+        T frame = frameHolder.getInternalFrame();
+        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+          if (!frame.isVisible() || frame.isClosed()) {
+            frameHolder.getMenuItem().doClick();
+            frame.setVisible(true);
+          }
           try {
-            frame.setIcon(false);
+            frame.setSelected(true);
           }
           catch (PropertyVetoException ex) {
             ex.printStackTrace();
           }
-        }
-      }
-      else {
-        if (!frame.isIcon()) {
-          try {
-            frame.setIcon(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
+          if (frame.isIcon()) {
+            try {
+              frame.setIcon(false);
+            }
+            catch (PropertyVetoException ex) {
+              ex.printStackTrace();
+            }
           }
         }
+        else {
+          frame.setVisible(false);
+          /*
+                  if (!frame.isIcon()) {
+                    try {
+                      frame.setIcon(true);
+                    }
+                    catch (PropertyVetoException ex) {
+                      ex.printStackTrace();
+                    }
+                  }
+          */
+        }
       }
+    }
+    finally {
+      enableControls();
     }
   }
 
   public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
-    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
-    if (frameHolder != null) {
-      T frame = frameHolder.getInternalFrame();
-      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
-        if (!frame.isVisible() || frame.isClosed()) {
-          frameHolder.getMenuItem().doClick();
-        }
-        try {
-          frame.setSelected(true);
-        }
-        catch (PropertyVetoException ex) {
-          ex.printStackTrace();
-        }
-        if (frame.isIcon()) {
+    try {
+      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+      if (frameHolder != null) {
+        T frame = frameHolder.getInternalFrame();
+        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+          if (!frame.isVisible() || frame.isClosed()) {
+            frameHolder.getMenuItem().doClick();
+          }
           try {
-            frame.setIcon(false);
+            frame.setSelected(true);
           }
           catch (PropertyVetoException ex) {
             ex.printStackTrace();
           }
+          if (frame.isIcon()) {
+            try {
+              frame.setIcon(false);
+            }
+            catch (PropertyVetoException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        else {
+          frame.toFront();
         }
       }
-      else {
-        frame.toFront();
-      }
+    }
+    finally {
+      enableControls();
     }
   }
 }
