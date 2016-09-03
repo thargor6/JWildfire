@@ -105,7 +105,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   }
 
   private void setRandomParams() {
-    switch (11 /*(Tools.FTOI(Math.random() * 12))*/) {
+    switch ((Tools.FTOI(Math.random() * 12))) {
       case 0:
         umin = 0.0;
         umax = 2.0 * Math.PI;

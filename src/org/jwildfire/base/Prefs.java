@@ -200,10 +200,10 @@ public class Prefs extends ManagedObject {
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
 
-  @Property(description = "Background image ", category = PropertyCategory.GENERAL)
+  @Property(description = "Background-image for the desktop, a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
   private String desktopBackgroundImagePath = null;
 
-  @Property(description = "Background image darken amount", category = PropertyCategory.GENERAL)
+  @Property(description = "Convenience background-image darken-amount (because a regular usually is too bright), a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
   private double desktopBackgroundDarkenAmount = 1.0;
 
   @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)

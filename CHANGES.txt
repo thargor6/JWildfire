@@ -1,3 +1,14 @@
+V3.00 ALPHA 5 (03.09.2016)
+ - New "parplot2d_wf"-variation to generate geometry by plotting arbitrary parametric functions
+ - New visual controls for ambient shadows on a separate tab
+ - Customizable background and convenience-darkening effect (see desktopBackgroundImagePath and desktopBackgroundDarkenAmount in the Preferences)
+ - FIXED: when importing params with a missign reflection-map the programm should not slow down anymore
+ - Redesigned the Navigator-window to be fully resizable (may be resized to be horizontal for example)
+ - Navigator actually hides windows rather than iconifying them
+ - The "Tip of the day"-window may be now disabled/enabled at any time by using a new checkbox "Show Tips at startup"
+ - New experimental monochrome icon set
+ - Exchanged some icons in the main editor window
+
 V3.00 ALPHA 4 (28.08.2016)
  - redesigned the default window-positions and sizes (of inner windows)
  - new "Tips of the day", only 2 tips currently available
@@ -6,6 +17,8 @@ V3.00 ALPHA 4 (28.08.2016)
  - removed the unnecessary tabs (which become unnecessary after splitting the main window) on several windows
  - implemented transfer of flames between windows (instead of different tabs)
  - the Welcome-window is not show pr default, but you can reach it in the menu
+ - new "yplot2d_wf" and "yplot3d_wf"-variation to generate geometry by plotting arbitrary mathematical functions (e.g. "sin(x*x+z*z)")
+    
  
 V3.00 ALPHA 3 (27.08.2016)
  - solid rendering: new implementation of ambient shadows, but not finished yet
