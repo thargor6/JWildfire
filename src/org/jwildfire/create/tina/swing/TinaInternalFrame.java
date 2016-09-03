@@ -5151,10 +5151,6 @@ public class TinaInternalFrame extends JInternalFrame {
         );
 
     tinaController = new TinaController(params);
-    if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
-      getChaoticaButtonSeparator().setVisible(false);
-      getExportToChaoticaBtn().setVisible(false);
-    }
     getFilterKernelFlatPreviewBtn().setSelected(Prefs.getPrefs().isTinaDefaultFilterVisualisationFlat());
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
@@ -7133,8 +7129,6 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setValue(100);
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 42));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
-      previewEastDefaultPanel.add(getExportToChaoticaBtn());
-      previewEastDefaultPanel.add(getChaoticaButtonSeparator());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
@@ -9932,8 +9926,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider gradientColorMapVertScaleSlider;
   private JSlider slider_6;
   private JSlider slider_7;
-  private JButton exportToChaosBtn;
-  private JPanel panel_104;
   private JWFNumberField flameFPSField;
   private JToggleButton leapMotionToggleButton;
   private JPanel panel_111;
@@ -16051,30 +16043,6 @@ public class TinaInternalFrame extends JInternalFrame {
       slider_7.setBounds(446, 114, 204, 22);
     }
     return slider_7;
-  }
-
-  private JButton getExportToChaoticaBtn() {
-    if (exportToChaosBtn == null) {
-      exportToChaosBtn = new JButton();
-      exportToChaosBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.exportToChaotica();
-        }
-      });
-      exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and launch Chaotica to render it");
-      exportToChaosBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/chaotica_jw.png")));
-      exportToChaosBtn.setPreferredSize(new Dimension(42, 24));
-      exportToChaosBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return exportToChaosBtn;
-  }
-
-  private JPanel getChaoticaButtonSeparator() {
-    if (panel_104 == null) {
-      panel_104 = new JPanel();
-      panel_104.setPreferredSize(new Dimension(10, 16));
-    }
-    return panel_104;
   }
 
   public JWFNumberField getFlameFPSField() {

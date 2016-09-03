@@ -61,7 +61,6 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -85,8 +84,6 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.integration.chaotica.ChaosFlameWriter;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaLauncher;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -2170,7 +2167,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
       if (getCurrFlame() != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs, !prefs.isTinaIntegrationChaoticaDisabled());
+        JFileChooser chooser = new FlameFileChooser(prefs);
         if (prefs.getOutputFlamePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
@@ -2181,21 +2178,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          FileFilter filter = chooser.getFileFilter();
           String filename = file.getAbsolutePath();
-          if ((filter != null && filter instanceof ChaosFileFilter) || filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
-            if (!filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
-              filename += "." + Tools.FILEEXT_CHAOS;
-            }
-            new ChaosFlameWriter(generateExportFlame(getCurrFlame())).writeFlame(filename);
+          if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
+            filename += "." + Tools.FILEEXT_FLAME;
           }
-          else {
-            if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
-              filename += "." + Tools.FILEEXT_FLAME;
-            }
-            new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
-            getCurrFlame().setLastFilename(file.getName());
-          }
+          new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
+          getCurrFlame().setLastFilename(file.getName());
           messageHelper.showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
@@ -5884,20 +5872,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     else {
       return propVal;
-    }
-  }
-
-  public void exportToChaotica() {
-    try {
-      if (getCurrFlame() != null) {
-        closeDetachedPreview();
-        data.toggleDetachedPreviewButton.setSelected(false);
-        new ChaoticaLauncher().launchChaotica(generateExportFlame(getCurrFlame()));
-        messageHelper.showStatusMessage(getCurrFlame(), "flame sucessfully exported");
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
     }
   }
 

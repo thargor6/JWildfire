@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jwildfire.base.Unchecker;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaBridgeRandomFlameGenerator;
 
 public class RandomFlameGeneratorList {
   public static final String DEFAULT_GENERATOR_NAME = new AllRandomFlameGenerator().getName();
@@ -37,7 +36,6 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(Brokat3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
     registerRandomFlameGenerator(Bubbles3DRandomFlameGenerator.class);
-    registerRandomFlameGenerator(ChaoticaBridgeRandomFlameGenerator.class);
     registerRandomFlameGenerator(CrossRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalBubbles3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(DualityRandomFlameGenerator.class);
