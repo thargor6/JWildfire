@@ -2172,7 +2172,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton getTinaLoadFlameButton() {
     if (tinaLoadFlameButton == null) {
       tinaLoadFlameButton = new JButton();
-      tinaLoadFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-open-5.png")));
+      //tinaLoadFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-open-5.png")));
       tinaLoadFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaLoadFlameButton.setText("Load Flame...");
@@ -2196,7 +2196,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSaveFlameButton == null) {
       tinaSaveFlameButton = new JButton();
       tinaSaveFlameButton.setIconTextGap(2);
-      tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-export-3.png")));
+      // tinaSaveFlameButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/document-export-3.png")));
       tinaSaveFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaSaveFlameButton.setText("Save...");
@@ -5128,8 +5128,11 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox(), getFilterKernelFlatPreviewBtn(),
         getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
-        getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableSSAOCBx(), getTinaSolidRenderingSSAOIntensityREd(),
-        getTinaSolidRenderingSSAOIntensitySlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
+        getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
+        getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
+        getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
+        getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
+        getTinaSolidRenderingAOAzimuthSamplesREd(), getTinaSolidRenderingAOAzimuthSamplesSlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
         getResetSolidRenderingGlobalSettingsBtn(), getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
@@ -5148,10 +5151,6 @@ public class TinaInternalFrame extends JInternalFrame {
         );
 
     tinaController = new TinaController(params);
-    if (Prefs.getPrefs().isTinaIntegrationChaoticaDisabled()) {
-      getChaoticaButtonSeparator().setVisible(false);
-      getExportToChaoticaBtn().setVisible(false);
-    }
     getFilterKernelFlatPreviewBtn().setSelected(Prefs.getPrefs().isTinaDefaultFilterVisualisationFlat());
 
     VariationControlsDelegate[] variationControlsDelegates = new VariationControlsDelegate[12];
@@ -7130,8 +7129,6 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setValue(100);
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 42));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
-      previewEastDefaultPanel.add(getExportToChaoticaBtn());
-      previewEastDefaultPanel.add(getChaoticaButtonSeparator());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
@@ -7231,7 +7228,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       randomizeBtn.setToolTipText("Randomize random parameters of the currently selected flame");
-      randomizeBtn.setText("Rnd");
+      randomizeBtn.setText("???");
       randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomizeBtn.setSelected(false);
       randomizeBtn.setPreferredSize(new Dimension(42, 24));
@@ -9929,8 +9926,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider gradientColorMapVertScaleSlider;
   private JSlider slider_6;
   private JSlider slider_7;
-  private JButton exportToChaosBtn;
-  private JPanel panel_104;
   private JWFNumberField flameFPSField;
   private JToggleButton leapMotionToggleButton;
   private JPanel panel_111;
@@ -10010,16 +10005,13 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_59;
   private JTabbedPane tinaSolidRenderingPane;
   private JCheckBox tinaSolidRenderingCBx;
-  private JCheckBox tinaSolidRenderingEnableSSAOCBx;
   private JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   private JButton resetSolidRenderingGlobalSettingsBtn;
   private JButton resetSolidRenderingMaterialsBtn;
   private JPanel panel_114;
   private JPanel panel_115;
   private JButton resetSolidRenderingLightsBtn;
-  private JWFNumberField tinaSolidRenderingSSAOIntensityREd;
   private JComboBox tinaSolidRenderingSelectedLightCmb;
-  private JSlider tinaSolidRenderingSSAOIntensitySlider;
   private JButton tinaSolidRenderingAddLightBtn;
   private JWFNumberField tinaSolidRenderingLightPosXREd;
   private JWFNumberField tinaSolidRenderingLightPosYREd;
@@ -10060,6 +10052,20 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel tinaMaterialChooserPaletteImgPanel;
   private JWFNumberField xFormMaterialSpeedREd;
   private JSlider xFormMaterialSpeedSlider;
+  private JPanel panel;
+  private JCheckBox tinaSolidRenderingEnableAOCBx;
+  private JWFNumberField tinaSolidRenderingAOIntensityREd;
+  private JSlider tinaSolidRenderingAOIntensitySlider;
+  private JWFNumberField tinaSolidRenderingAOSearchRadiusREd;
+  private JWFNumberField tinaSolidRenderingAOBlurRadiusREd;
+  private JWFNumberField tinaSolidRenderingAOFalloffREd;
+  private JWFNumberField tinaSolidRenderingAORadiusSamplesREd;
+  private JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
+  private JSlider tinaSolidRenderingAOSearchRadiusSlider;
+  private JSlider tinaSolidRenderingAOBlurRadiusSlider;
+  private JSlider tinaSolidRenderingAOFalloffSlider;
+  private JSlider tinaSolidRenderingAORadiusSamplesSlider;
+  private JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -15122,7 +15128,8 @@ public class TinaInternalFrame extends JInternalFrame {
       bokehBtn.setPreferredSize(new Dimension(72, 24));
       bokehBtn.setMnemonic(KeyEvent.VK_K);
       bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
+      //bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
+      bokehBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
     }
     return bokehBtn;
   }
@@ -16038,30 +16045,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return slider_7;
   }
 
-  private JButton getExportToChaoticaBtn() {
-    if (exportToChaosBtn == null) {
-      exportToChaosBtn = new JButton();
-      exportToChaosBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.exportToChaotica();
-        }
-      });
-      exportToChaosBtn.setToolTipText("Convert the current parameters (including motion-curves) into the Chaotica-format and launch Chaotica to render it");
-      exportToChaosBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/chaotica_jw.png")));
-      exportToChaosBtn.setPreferredSize(new Dimension(42, 24));
-      exportToChaosBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return exportToChaosBtn;
-  }
-
-  private JPanel getChaoticaButtonSeparator() {
-    if (panel_104 == null) {
-      panel_104 = new JPanel();
-      panel_104.setPreferredSize(new Dimension(10, 16));
-    }
-    return panel_104;
-  }
-
   public JWFNumberField getFlameFPSField() {
     return flameFPSField;
   }
@@ -16831,19 +16814,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingCBx.setBounds(6, 6, 169, 18);
       panel_1.add(tinaSolidRenderingCBx);
 
-      tinaSolidRenderingEnableSSAOCBx = new JCheckBox("Enable ambient shadows");
-      tinaSolidRenderingEnableSSAOCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingEnableSSAOCBx_changed();
-          }
-        }
-      });
-
-      tinaSolidRenderingEnableSSAOCBx.setActionCommand("Enable solid rendering");
-      tinaSolidRenderingEnableSSAOCBx.setBounds(195, 36, 169, 18);
-      panel_1.add(tinaSolidRenderingEnableSSAOCBx);
-
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
       tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
       tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
@@ -16876,69 +16846,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetSolidRenderingGlobalSettingsBtn.setBounds(6, 114, 100, 24);
       resetSolidRenderingGlobalSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       panel_1.add(resetSolidRenderingGlobalSettingsBtn);
-
-      tinaSolidRenderingSSAOIntensityREd = new JWFNumberField();
-      tinaSolidRenderingSSAOIntensityREd.setHasMinValue(true);
-      tinaSolidRenderingSSAOIntensityREd.setValueStep(0.05);
-      tinaSolidRenderingSSAOIntensityREd.setText("");
-      tinaSolidRenderingSSAOIntensityREd.setSize(new Dimension(100, 24));
-      tinaSolidRenderingSSAOIntensityREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingSSAOIntensityREd.setMotionPropertyName("camPosZ");
-      tinaSolidRenderingSSAOIntensityREd.setLocation(new Point(456, 4));
-      tinaSolidRenderingSSAOIntensityREd.setLinkedMotionControlName("tinaSolidRenderingSSAOIntensitySlider");
-      tinaSolidRenderingSSAOIntensityREd.setLinkedLabelControlName("tinaSolidRenderingSSAOIntensityLbl");
-      tinaSolidRenderingSSAOIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSolidRenderingSSAOIntensityREd.setBounds(327, 66, 100, 24);
-      tinaSolidRenderingSSAOIntensityREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaSolidRenderingSSAOIntensityREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!tinaSolidRenderingSSAOIntensityREd.isMouseAdjusting() || tinaSolidRenderingSSAOIntensityREd.getMouseChangeCount() == 0) {
-              if (!tinaSolidRenderingSSAOIntensitySlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().solidRenderingSSAOIntensityREd_changed();
-          }
-        }
-      });
-
-      panel_1.add(tinaSolidRenderingSSAOIntensityREd);
-
-      JLabel tinaSolidRenderingSSAOIntensityLbl = new JLabel();
-      tinaSolidRenderingSSAOIntensityLbl.setText("Amb shadow intensity");
-      tinaSolidRenderingSSAOIntensityLbl.setSize(new Dimension(68, 22));
-      tinaSolidRenderingSSAOIntensityLbl.setPreferredSize(new Dimension(94, 22));
-      tinaSolidRenderingSSAOIntensityLbl.setName("tinaSolidRenderingSSAOIntensityLbl");
-      tinaSolidRenderingSSAOIntensityLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingSSAOIntensityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingSSAOIntensityLbl.setBounds(205, 66, 124, 22);
-      panel_1.add(tinaSolidRenderingSSAOIntensityLbl);
-
-      tinaSolidRenderingSSAOIntensitySlider = new JSlider();
-      tinaSolidRenderingSSAOIntensitySlider.setValue(0);
-      tinaSolidRenderingSSAOIntensitySlider.setSize(new Dimension(205, 19));
-      tinaSolidRenderingSSAOIntensitySlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingSSAOIntensitySlider.setName("tinaSolidRenderingSSAOIntensitySlider");
-      tinaSolidRenderingSSAOIntensitySlider.setMaximum(25000);
-      tinaSolidRenderingSSAOIntensitySlider.setLocation(new Point(558, 4));
-      tinaSolidRenderingSSAOIntensitySlider.setBounds(429, 66, 205, 19);
-      tinaSolidRenderingSSAOIntensitySlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaSolidRenderingSSAOIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().solidRenderingSSAOIntensitySlider_stateChanged(e);
-        }
-      });
-      panel_1.add(tinaSolidRenderingSSAOIntensitySlider);
+      tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
 
       JPanel tinaSolidRenderingMaterialPnl = new JPanel();
       tinaSolidRenderingPane.addTab("Material settings", null, tinaSolidRenderingMaterialPnl, null);
@@ -17298,10 +17206,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getTinaSolidRenderingCBx() {
     return tinaSolidRenderingCBx;
-  }
-
-  public JCheckBox getTinaSolidRenderingEnableSSAOCBx() {
-    return tinaSolidRenderingEnableSSAOCBx;
   }
 
   public JCheckBox getTinaSolidRenderingEnableHardShadowsCBx() {
@@ -17804,16 +17708,8 @@ public class TinaInternalFrame extends JInternalFrame {
     return resetSolidRenderingLightsBtn;
   }
 
-  public JWFNumberField getTinaSolidRenderingSSAOIntensityREd() {
-    return tinaSolidRenderingSSAOIntensityREd;
-  }
-
   public JComboBox getTinaSolidRenderingSelectedLightCmb() {
     return tinaSolidRenderingSelectedLightCmb;
-  }
-
-  public JSlider getTinaSolidRenderingSSAOIntensitySlider() {
-    return tinaSolidRenderingSSAOIntensitySlider;
   }
 
   public JButton getTinaSolidRenderingAddLightBtn() {
@@ -18074,6 +17970,464 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getXFormMaterialSpeedSlider() {
     return xFormMaterialSpeedSlider;
+  }
+
+  private JPanel getPanel() {
+    if (panel == null) {
+      panel = new JPanel();
+      panel.setLayout(null);
+
+      tinaSolidRenderingEnableAOCBx = new JCheckBox("Enable ambient shadows");
+      tinaSolidRenderingEnableAOCBx.setBounds(16, 6, 169, 18);
+      tinaSolidRenderingEnableAOCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableAOCBx_changed();
+          }
+        }
+      });
+      panel.add(tinaSolidRenderingEnableAOCBx);
+
+      JLabel tinaSolidRenderingAOIntensityLbl = new JLabel();
+      tinaSolidRenderingAOIntensityLbl.setText("Amb shadow intensity");
+      tinaSolidRenderingAOIntensityLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAOIntensityLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAOIntensityLbl.setName("tinaSolidRenderingAOIntensityLbl");
+      tinaSolidRenderingAOIntensityLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAOIntensityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOIntensityLbl.setBounds(26, 36, 124, 22);
+      panel.add(tinaSolidRenderingAOIntensityLbl);
+
+      tinaSolidRenderingAOIntensityREd = new JWFNumberField();
+      tinaSolidRenderingAOIntensityREd.setValueStep(0.05);
+      tinaSolidRenderingAOIntensityREd.setText("");
+      tinaSolidRenderingAOIntensityREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOIntensityREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOIntensityREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOIntensityREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOIntensityREd.setLinkedMotionControlName("tinaSolidRenderingAOIntensitySlider");
+      tinaSolidRenderingAOIntensityREd.setLinkedLabelControlName("tinaSolidRenderingAOIntensityLbl");
+      tinaSolidRenderingAOIntensityREd.setHasMinValue(true);
+      tinaSolidRenderingAOIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOIntensityREd.setBounds(148, 36, 100, 24);
+      tinaSolidRenderingAOIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAOIntensityREd.isMouseAdjusting() || tinaSolidRenderingAOIntensityREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOIntensitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOIntensityREd_changed();
+          }
+        }
+      });
+      panel.add(tinaSolidRenderingAOIntensityREd);
+
+      tinaSolidRenderingAOIntensitySlider = new JSlider();
+      tinaSolidRenderingAOIntensitySlider.setValue(0);
+      tinaSolidRenderingAOIntensitySlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOIntensitySlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOIntensitySlider.setName("tinaSolidRenderingAOIntensitySlider");
+      tinaSolidRenderingAOIntensitySlider.setMaximum(25000);
+      tinaSolidRenderingAOIntensitySlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOIntensitySlider.setBounds(250, 38, 205, 19);
+      tinaSolidRenderingAOIntensitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOIntensitySlider_stateChanged(e);
+        }
+      });
+
+      panel.add(tinaSolidRenderingAOIntensitySlider);
+
+      JLabel tinaSolidRenderingAOSearchRadiusLbl = new JLabel();
+      tinaSolidRenderingAOSearchRadiusLbl.setText("Search radius");
+      tinaSolidRenderingAOSearchRadiusLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAOSearchRadiusLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAOSearchRadiusLbl.setName("tinaSolidRenderingAOSearchRadiusLbl");
+      tinaSolidRenderingAOSearchRadiusLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAOSearchRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOSearchRadiusLbl.setBounds(26, 58, 124, 22);
+      panel.add(tinaSolidRenderingAOSearchRadiusLbl);
+
+      tinaSolidRenderingAOSearchRadiusREd = new JWFNumberField();
+      tinaSolidRenderingAOSearchRadiusREd.setMinValue(5.0);
+      tinaSolidRenderingAOSearchRadiusREd.setValueStep(0.05);
+      tinaSolidRenderingAOSearchRadiusREd.setText("");
+      tinaSolidRenderingAOSearchRadiusREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOSearchRadiusREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOSearchRadiusREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOSearchRadiusREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOSearchRadiusREd.setLinkedMotionControlName("tinaSolidRenderingAOSearchRadiusSlider");
+      tinaSolidRenderingAOSearchRadiusREd.setLinkedLabelControlName("tinaSolidRenderingAOSearchRadiusLbl");
+      tinaSolidRenderingAOSearchRadiusREd.setHasMinValue(true);
+      tinaSolidRenderingAOSearchRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOSearchRadiusREd.setBounds(148, 58, 100, 24);
+      tinaSolidRenderingAOSearchRadiusREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOSearchRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAOSearchRadiusREd.isMouseAdjusting() || tinaSolidRenderingAOSearchRadiusREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOSearchRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOSearchRadiusREd_changed();
+          }
+        }
+      });
+      panel.add(tinaSolidRenderingAOSearchRadiusREd);
+
+      tinaSolidRenderingAOSearchRadiusSlider = new JSlider();
+      tinaSolidRenderingAOSearchRadiusSlider.setMinimum(500);
+      tinaSolidRenderingAOSearchRadiusSlider.setValue(0);
+      tinaSolidRenderingAOSearchRadiusSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOSearchRadiusSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOSearchRadiusSlider.setName("tinaSolidRenderingAOSearchRadiusSlider");
+      tinaSolidRenderingAOSearchRadiusSlider.setMaximum(25000);
+      tinaSolidRenderingAOSearchRadiusSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOSearchRadiusSlider.setBounds(250, 60, 205, 19);
+      tinaSolidRenderingAOSearchRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOSearchRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOSearchRadiusSlider_stateChanged(e);
+        }
+      });
+      panel.add(tinaSolidRenderingAOSearchRadiusSlider);
+
+      JLabel tinaSolidRenderingAOBlurRadiusLbl = new JLabel();
+      tinaSolidRenderingAOBlurRadiusLbl.setText("Blur radius");
+      tinaSolidRenderingAOBlurRadiusLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAOBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAOBlurRadiusLbl.setName("tinaSolidRenderingAOBlurRadiusLbl");
+      tinaSolidRenderingAOBlurRadiusLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAOBlurRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOBlurRadiusLbl.setBounds(26, 80, 124, 22);
+      panel.add(tinaSolidRenderingAOBlurRadiusLbl);
+
+      tinaSolidRenderingAOBlurRadiusREd = new JWFNumberField();
+      tinaSolidRenderingAOBlurRadiusREd.setValueStep(0.05);
+      tinaSolidRenderingAOBlurRadiusREd.setText("");
+      tinaSolidRenderingAOBlurRadiusREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOBlurRadiusREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOBlurRadiusREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOBlurRadiusREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOBlurRadiusREd.setLinkedMotionControlName("tinaSolidRenderingAOBlurRadiusSlider");
+      tinaSolidRenderingAOBlurRadiusREd.setLinkedLabelControlName("tinaSolidRenderingAOBlurRadiusLbl");
+      tinaSolidRenderingAOBlurRadiusREd.setHasMinValue(true);
+      tinaSolidRenderingAOBlurRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOBlurRadiusREd.setBounds(148, 80, 100, 24);
+      tinaSolidRenderingAOBlurRadiusREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOBlurRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAOBlurRadiusREd.isMouseAdjusting() || tinaSolidRenderingAOBlurRadiusREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOBlurRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOBlurRadiusREd_changed();
+          }
+        }
+      });
+      panel.add(tinaSolidRenderingAOBlurRadiusREd);
+
+      tinaSolidRenderingAOBlurRadiusSlider = new JSlider();
+      tinaSolidRenderingAOBlurRadiusSlider.setValue(0);
+      tinaSolidRenderingAOBlurRadiusSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOBlurRadiusSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOBlurRadiusSlider.setName("tinaSolidRenderingAOBlurRadiusSlider");
+      tinaSolidRenderingAOBlurRadiusSlider.setMaximum(25000);
+      tinaSolidRenderingAOBlurRadiusSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOBlurRadiusSlider.setBounds(250, 82, 205, 19);
+      tinaSolidRenderingAOBlurRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOBlurRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOBlurRadiusSlider_stateChanged(e);
+        }
+      });
+      panel.add(tinaSolidRenderingAOBlurRadiusSlider);
+
+      JLabel tinaSolidRenderingAOFalloffLbl = new JLabel();
+      tinaSolidRenderingAOFalloffLbl.setText("Falloff");
+      tinaSolidRenderingAOFalloffLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAOFalloffLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAOFalloffLbl.setName("tinaSolidRenderingAOFalloffLbl");
+      tinaSolidRenderingAOFalloffLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAOFalloffLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOFalloffLbl.setBounds(26, 101, 124, 22);
+      panel.add(tinaSolidRenderingAOFalloffLbl);
+
+      tinaSolidRenderingAOFalloffREd = new JWFNumberField();
+      tinaSolidRenderingAOFalloffREd.setValueStep(0.05);
+      tinaSolidRenderingAOFalloffREd.setText("");
+      tinaSolidRenderingAOFalloffREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOFalloffREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOFalloffREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOFalloffREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOFalloffREd.setLinkedMotionControlName("tinaSolidRenderingAOFalloffSlider");
+      tinaSolidRenderingAOFalloffREd.setLinkedLabelControlName("tinaSolidRenderingAOFalloffLbl");
+      tinaSolidRenderingAOFalloffREd.setHasMinValue(true);
+      tinaSolidRenderingAOFalloffREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOFalloffREd.setBounds(148, 101, 100, 24);
+      tinaSolidRenderingAOFalloffREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOFalloffREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAOFalloffREd.isMouseAdjusting() || tinaSolidRenderingAOFalloffREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOFalloffSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOFalloffREd_changed();
+          }
+        }
+      });
+
+      panel.add(tinaSolidRenderingAOFalloffREd);
+
+      tinaSolidRenderingAOFalloffSlider = new JSlider();
+      tinaSolidRenderingAOFalloffSlider.setValue(0);
+      tinaSolidRenderingAOFalloffSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOFalloffSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOFalloffSlider.setName("tinaSolidRenderingAOFalloffSlider");
+      tinaSolidRenderingAOFalloffSlider.setMaximum(25000);
+      tinaSolidRenderingAOFalloffSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOFalloffSlider.setBounds(250, 103, 205, 19);
+      tinaSolidRenderingAOFalloffSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOFalloffSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOFalloffSlider_stateChanged(e);
+        }
+      });
+      panel.add(tinaSolidRenderingAOFalloffSlider);
+
+      JLabel tinaSolidRenderingAORadiusSamplesLbl = new JLabel();
+      tinaSolidRenderingAORadiusSamplesLbl.setText("Radius samples");
+      tinaSolidRenderingAORadiusSamplesLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAORadiusSamplesLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAORadiusSamplesLbl.setName("tinaSolidRenderingAORadiusSamplesLbl");
+      tinaSolidRenderingAORadiusSamplesLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAORadiusSamplesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAORadiusSamplesLbl.setBounds(485, 34, 124, 22);
+      panel.add(tinaSolidRenderingAORadiusSamplesLbl);
+
+      tinaSolidRenderingAORadiusSamplesREd = new JWFNumberField();
+      tinaSolidRenderingAORadiusSamplesREd.setMinValue(1.0);
+      tinaSolidRenderingAORadiusSamplesREd.setMaxValue(128.0);
+      tinaSolidRenderingAORadiusSamplesREd.setHasMaxValue(true);
+      tinaSolidRenderingAORadiusSamplesREd.setOnlyIntegers(true);
+      tinaSolidRenderingAORadiusSamplesREd.setValueStep(0.05);
+      tinaSolidRenderingAORadiusSamplesREd.setText("");
+      tinaSolidRenderingAORadiusSamplesREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAORadiusSamplesREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAORadiusSamplesREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAORadiusSamplesREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAORadiusSamplesREd.setLinkedMotionControlName("tinaSolidRenderingAORadiusSamplesSlider");
+      tinaSolidRenderingAORadiusSamplesREd.setLinkedLabelControlName("tinaSolidRenderingAORadiusSamplesLbl");
+      tinaSolidRenderingAORadiusSamplesREd.setHasMinValue(true);
+      tinaSolidRenderingAORadiusSamplesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAORadiusSamplesREd.setBounds(607, 34, 100, 24);
+      tinaSolidRenderingAORadiusSamplesREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAORadiusSamplesREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAORadiusSamplesREd.isMouseAdjusting() || tinaSolidRenderingAORadiusSamplesREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAORadiusSamplesSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAORadiusSamplesREd_changed();
+          }
+        }
+      });
+
+      panel.add(tinaSolidRenderingAORadiusSamplesREd);
+
+      tinaSolidRenderingAORadiusSamplesSlider = new JSlider();
+      tinaSolidRenderingAORadiusSamplesSlider.setMinimum(1);
+      tinaSolidRenderingAORadiusSamplesSlider.setValue(0);
+      tinaSolidRenderingAORadiusSamplesSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAORadiusSamplesSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAORadiusSamplesSlider.setName("tinaSolidRenderingAORadiusSamplesSlider");
+      tinaSolidRenderingAORadiusSamplesSlider.setMaximum(128);
+      tinaSolidRenderingAORadiusSamplesSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAORadiusSamplesSlider.setBounds(709, 36, 205, 19);
+      tinaSolidRenderingAORadiusSamplesSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAORadiusSamplesSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAORadiusSamplesSlider_stateChanged(e);
+        }
+      });
+      panel.add(tinaSolidRenderingAORadiusSamplesSlider);
+
+      JLabel tinaSolidRenderingAOAzimuthSamplesLbl = new JLabel();
+      tinaSolidRenderingAOAzimuthSamplesLbl.setText("Azimuth samples");
+      tinaSolidRenderingAOAzimuthSamplesLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingAOAzimuthSamplesLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingAOAzimuthSamplesLbl.setName("tinaSolidRenderingAOAzimuthSamplesLbl");
+      tinaSolidRenderingAOAzimuthSamplesLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingAOAzimuthSamplesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOAzimuthSamplesLbl.setBounds(485, 58, 124, 22);
+      panel.add(tinaSolidRenderingAOAzimuthSamplesLbl);
+
+      tinaSolidRenderingAOAzimuthSamplesREd = new JWFNumberField();
+      tinaSolidRenderingAOAzimuthSamplesREd.setHasMaxValue(true);
+      tinaSolidRenderingAOAzimuthSamplesREd.setMinValue(1.0);
+      tinaSolidRenderingAOAzimuthSamplesREd.setMaxValue(128.0);
+      tinaSolidRenderingAOAzimuthSamplesREd.setOnlyIntegers(true);
+      tinaSolidRenderingAOAzimuthSamplesREd.setValueStep(0.05);
+      tinaSolidRenderingAOAzimuthSamplesREd.setText("");
+      tinaSolidRenderingAOAzimuthSamplesREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOAzimuthSamplesREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOAzimuthSamplesREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOAzimuthSamplesREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOAzimuthSamplesREd.setLinkedMotionControlName("tinaSolidRenderingAOAzimuthSamplesSlider");
+      tinaSolidRenderingAOAzimuthSamplesREd.setLinkedLabelControlName("tinaSolidRenderingAOAzimuthSamplesLbl");
+      tinaSolidRenderingAOAzimuthSamplesREd.setHasMinValue(true);
+      tinaSolidRenderingAOAzimuthSamplesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOAzimuthSamplesREd.setBounds(607, 58, 100, 24);
+      tinaSolidRenderingAOAzimuthSamplesREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOAzimuthSamplesREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingAOAzimuthSamplesREd.isMouseAdjusting() || tinaSolidRenderingAOAzimuthSamplesREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOAzimuthSamplesSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOAzimuthSamplesREd_changed();
+          }
+        }
+      });
+      panel.add(tinaSolidRenderingAOAzimuthSamplesREd);
+
+      tinaSolidRenderingAOAzimuthSamplesSlider = new JSlider();
+      tinaSolidRenderingAOAzimuthSamplesSlider.setMinimum(1);
+      tinaSolidRenderingAOAzimuthSamplesSlider.setValue(0);
+      tinaSolidRenderingAOAzimuthSamplesSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOAzimuthSamplesSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOAzimuthSamplesSlider.setName("tinaSolidRenderingAOAzimuthSamplesSlider");
+      tinaSolidRenderingAOAzimuthSamplesSlider.setMaximum(128);
+      tinaSolidRenderingAOAzimuthSamplesSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOAzimuthSamplesSlider.setBounds(709, 60, 205, 19);
+      tinaSolidRenderingAOAzimuthSamplesSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOAzimuthSamplesSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOAzimuthSamplesSlider_stateChanged(e);
+        }
+      });
+      panel.add(tinaSolidRenderingAOAzimuthSamplesSlider);
+    }
+    return panel;
+  }
+
+  public JCheckBox getTinaSolidRenderingEnableAOCBx() {
+    return tinaSolidRenderingEnableAOCBx;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOIntensityREd() {
+    return tinaSolidRenderingAOIntensityREd;
+  }
+
+  public JSlider getTinaSolidRenderingAOIntensitySlider() {
+    return tinaSolidRenderingAOIntensitySlider;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOSearchRadiusREd() {
+    return tinaSolidRenderingAOSearchRadiusREd;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOBlurRadiusREd() {
+    return tinaSolidRenderingAOBlurRadiusREd;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOFalloffREd() {
+    return tinaSolidRenderingAOFalloffREd;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAORadiusSamplesREd() {
+    return tinaSolidRenderingAORadiusSamplesREd;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOAzimuthSamplesREd() {
+    return tinaSolidRenderingAOAzimuthSamplesREd;
+  }
+
+  public JSlider getTinaSolidRenderingAOSearchRadiusSlider() {
+    return tinaSolidRenderingAOSearchRadiusSlider;
+  }
+
+  public JSlider getTinaSolidRenderingAOBlurRadiusSlider() {
+    return tinaSolidRenderingAOBlurRadiusSlider;
+  }
+
+  public JSlider getTinaSolidRenderingAOFalloffSlider() {
+    return tinaSolidRenderingAOFalloffSlider;
+  }
+
+  public JSlider getTinaSolidRenderingAORadiusSamplesSlider() {
+    return tinaSolidRenderingAORadiusSamplesSlider;
+  }
+
+  public JSlider getTinaSolidRenderingAOAzimuthSamplesSlider() {
+    return tinaSolidRenderingAOAzimuthSamplesSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

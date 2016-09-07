@@ -468,10 +468,10 @@ public class VariationFuncList {
 
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
-    
+    registerVariationFunc(ParPlot2DWFFunc.class);
+
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
-
     if (Tools.ENABLE_SOLID_RENDERING) {
       registerVariationFunc(OBJMeshWFFunc.class);
       registerVariationFunc(OBJMeshPrimitiveWFFunc.class);

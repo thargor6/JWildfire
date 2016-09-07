@@ -67,9 +67,9 @@ public class YPlot3DWFFunc extends VariationFunc {
       else if (pVarTP.color > 1.0)
         pVarTP.color = 1.0;
     }
-    pVarTP.x += x;
-    pVarTP.y += y;
-    pVarTP.z += z;
+    pVarTP.x += pAmount * x;
+    pVarTP.y += pAmount * y;
+    pVarTP.z += pAmount * z;
   }
 
   private String getRandomFormula() {
@@ -86,6 +86,7 @@ public class YPlot3DWFFunc extends VariationFunc {
         return "(sin(x)*sin(x)+cos(z)*cos(z))/(5+x*x+z*z)";
       case 5:
         return "cos(2*pi*(x+z))*(1-sqrt(x*x+z*z))";
+      case 6:
       default:
         return "sin(x*x+z*z)";
     }

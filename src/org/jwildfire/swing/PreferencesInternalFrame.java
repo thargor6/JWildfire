@@ -107,7 +107,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           try {
             prefs.assign(editPrefs);
-            prefs.saveToFromFile();
+            prefs.saveToFile();
           }
           catch (Exception ex) {
             mainController.handleError(ex);

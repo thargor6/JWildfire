@@ -75,11 +75,33 @@ public class PostDOFCalculator {
 
         radius *= bokehSize * (1.0 + Math.random() * 2.0);
       }
+      else {
+        radius *= (1.0 + (0.5 - Math.random()) * 0.1);
+      }
 
       double scaledInvRadius = 1.0 / plainRadius * kernelScale * kernel.getSpatialSupport();
 
       double intensitySum = 0.0;
-      double stepSize = (radius < 5.0) ? 0.5 : 1.0;
+      //      double stepSize = (radius < 5.0) ? 0.5 : 1.0;
+      double stepSize;
+      if (radius < 2.0) {
+        stepSize = 0.0625;
+      }
+      else if (radius < 3.0) {
+        stepSize = 0.125;
+      }
+      else if (radius < 4.0) {
+        stepSize = 0.25;
+      }
+      else if (radius < 5.0) {
+        stepSize = 0.5;
+      }
+      else if (radius < 6.0) {
+        stepSize = 0.75;
+      }
+      else {
+        stepSize = 1.0;
+      }
 
       for (double i = -radius; i < radius + MathLib.EPSILON; i += stepSize) {
         double dstX = sample.getX() + i;

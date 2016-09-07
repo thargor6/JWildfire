@@ -398,9 +398,19 @@ public class TinaControllerData {
   public JSlider foregroundOpacitySlider;
 
   public JCheckBox tinaSolidRenderingCBx;
-  public JCheckBox tinaSolidRenderingEnableSSAOCBx;
-  public JWFNumberField tinaSolidRenderingSSAOIntensityREd;
-  public JSlider tinaSolidRenderingSSAOIntensitySlider;
+  public JCheckBox tinaSolidRenderingEnableAOCBx;
+  public JWFNumberField tinaSolidRenderingAOIntensityREd;
+  public JSlider tinaSolidRenderingAOIntensitySlider;
+  public JWFNumberField tinaSolidRenderingAOSearchRadiusREd;
+  public JSlider tinaSolidRenderingAOSearchRadiusSlider;
+  public JWFNumberField tinaSolidRenderingAOBlurRadiusREd;
+  public JSlider tinaSolidRenderingAOBlurRadiusSlider;
+  public JWFNumberField tinaSolidRenderingAOFalloffREd;
+  public JSlider tinaSolidRenderingAOFalloffSlider;
+  public JWFNumberField tinaSolidRenderingAORadiusSamplesREd;
+  public JSlider tinaSolidRenderingAORadiusSamplesSlider;
+  public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
+  public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;

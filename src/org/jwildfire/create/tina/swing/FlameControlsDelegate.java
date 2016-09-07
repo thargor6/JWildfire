@@ -212,9 +212,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean disabled = getCurrFlame() == null || !getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled();
     boolean hasLights = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getLights().size() > 0;
     boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
-    enableControl(data.tinaSolidRenderingSSAOIntensityREd, disabled);
     enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
-    enableControl(data.tinaSolidRenderingEnableSSAOCBx, disabled);
+    boolean aoEnabled = !disabled && getCurrFlame().getSolidRenderSettings().isAoEnabled();
+    enableControl(data.tinaSolidRenderingAOIntensityREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAOSearchRadiusREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAOBlurRadiusREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAOFalloffREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAORadiusSamplesREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAOAzimuthSamplesREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingEnableAOCBx, disabled);
     enableControl(data.resetSolidRenderingGlobalSettingsBtn, disabled);
     enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
     enableControl(data.resetSolidRenderingLightsBtn, disabled);
@@ -811,10 +817,20 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   private void refreshSolidRenderingGlobals() {
     SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
     data.tinaSolidRenderingCBx.setSelected(settings.isSolidRenderingEnabled());
-    data.tinaSolidRenderingEnableSSAOCBx.setSelected(settings.isSsaoEnabled());
+    data.tinaSolidRenderingEnableAOCBx.setSelected(settings.isAoEnabled());
     data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
-    data.tinaSolidRenderingSSAOIntensityREd.setText(Tools.doubleToString(settings.getSsaoIntensity()));
-    data.tinaSolidRenderingSSAOIntensitySlider.setValue(Tools.FTOI(settings.getSsaoIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingAOIntensityREd.setText(Tools.doubleToString(settings.getAoIntensity()));
+    data.tinaSolidRenderingAOIntensitySlider.setValue(Tools.FTOI(settings.getAoIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingAOSearchRadiusREd.setText(Tools.doubleToString(settings.getAoSearchRadius()));
+    data.tinaSolidRenderingAOSearchRadiusSlider.setValue(Tools.FTOI(settings.getAoSearchRadius() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingAOBlurRadiusREd.setText(Tools.doubleToString(settings.getAoBlurRadius()));
+    data.tinaSolidRenderingAOBlurRadiusSlider.setValue(Tools.FTOI(settings.getAoBlurRadius() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingAOFalloffREd.setText(Tools.doubleToString(settings.getAoFalloff()));
+    data.tinaSolidRenderingAOFalloffSlider.setValue(Tools.FTOI(settings.getAoFalloff() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingAORadiusSamplesREd.setText(Tools.doubleToString(settings.getAoRadiusSamples()));
+    data.tinaSolidRenderingAORadiusSamplesSlider.setValue(Tools.FTOI(settings.getAoRadiusSamples()));
+    data.tinaSolidRenderingAOAzimuthSamplesREd.setText(Tools.doubleToString(settings.getAoAzimuthSamples()));
+    data.tinaSolidRenderingAOAzimuthSamplesSlider.setValue(Tools.FTOI(settings.getAoAzimuthSamples()));
   }
 
   private void refreshSolidRenderingMaterialControls() {
@@ -1322,12 +1338,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void solidRenderingEnableSSAOCBx_changed() {
+  public void solidRenderingEnableAOCBx_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
       if (flame != null) {
         owner.saveUndoPoint();
-        flame.getSolidRenderSettings().setSsaoEnabled(data.tinaSolidRenderingEnableSSAOCBx.isSelected());
+        flame.getSolidRenderSettings().setAoEnabled(data.tinaSolidRenderingEnableAOCBx.isSelected());
         enableControls();
         owner.refreshFlameImage(true, false, 1, true, true);
       }
@@ -1654,8 +1670,28 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialDiffuseSlider, data.tinaSolidRenderingMaterialDiffuseREd, "diffuse", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
-  public void solidRenderingSSAOIntensityREd_changed() {
-    solidRenderingTextFieldChanged(data.tinaSolidRenderingSSAOIntensitySlider, data.tinaSolidRenderingSSAOIntensityREd, "ssaoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  public void solidRenderingAOIntensityREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOIntensitySlider, data.tinaSolidRenderingAOIntensityREd, "aoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingAOSearchRadiusREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOSearchRadiusSlider, data.tinaSolidRenderingAOSearchRadiusREd, "aoSearchRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAOBlurRadiusREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOBlurRadiusSlider, data.tinaSolidRenderingAOBlurRadiusREd, "aoBlurRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAOFalloffREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOFalloffSlider, data.tinaSolidRenderingAOFalloffREd, "aoFalloff", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAORadiusSamplesREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAORadiusSamplesSlider, data.tinaSolidRenderingAORadiusSamplesREd, "aoRadiusSamples", 1.0, false);
+  }
+
+  public void solidRenderingAOAzimuthSamplesREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOAzimuthSamplesSlider, data.tinaSolidRenderingAOAzimuthSamplesREd, "aoAzimuthSamples", 1.0, false);
   }
 
   public void solidRenderingMaterialAmbientREd_changed() {
@@ -1686,8 +1722,28 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
-  public void solidRenderingSSAOIntensitySlider_stateChanged(ChangeEvent e) {
-    solidRenderingSliderChanged(data.tinaSolidRenderingSSAOIntensitySlider, data.tinaSolidRenderingSSAOIntensityREd, "ssaoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  public void solidRenderingAOIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOIntensitySlider, data.tinaSolidRenderingAOIntensityREd, "aoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingAOSearchRadiusSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOSearchRadiusSlider, data.tinaSolidRenderingAOSearchRadiusREd, "aoSearchRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAOBlurRadiusSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOBlurRadiusSlider, data.tinaSolidRenderingAOBlurRadiusREd, "aoBlurRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAOFalloffSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOFalloffSlider, data.tinaSolidRenderingAOFalloffREd, "aoFalloff", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingAORadiusSamplesSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAORadiusSamplesSlider, data.tinaSolidRenderingAORadiusSamplesREd, "aoRadiusSamples", 1.0, false);
+  }
+
+  public void solidRenderingAOAzimuthSamplesSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOAzimuthSamplesSlider, data.tinaSolidRenderingAOAzimuthSamplesREd, "aoAzimuthSamples", 1.0, false);
   }
 
   public void solidRenderingMaterialDiffuseSlider_stateChanged(ChangeEvent e) {

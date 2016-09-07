@@ -73,6 +73,9 @@ import org.jwildfire.create.tina.swing.NavigatorInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+import org.jwildfire.transform.BalancingTransformer;
 
 public class Desktop extends JApplet {
   private final List<InternalFrameHolder<?>> mainInternalFrames;
@@ -185,7 +188,7 @@ public class Desktop extends JApplet {
       */
 
       TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
-      if (!tipOfTheDayInternalFrame.isVisible()) {
+      if (!tipOfTheDayInternalFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
         tipOfTheDayInternalFrame.setVisible(true);
       }
       tipOfTheDayInternalFrame.moveToFront();
@@ -269,12 +272,41 @@ public class Desktop extends JApplet {
 
   @SuppressWarnings("serial")
   private JDesktopPane createMainDesktopPane() {
-    try {
-      backgroundImage = ImageIO.read(this.getClass().getResource("/org/jwildfire/swing/backgrounds/wallpaper_pearls2.png"));
+    if (prefs.getDesktopBackgroundImagePath() != null && !prefs.getDesktopBackgroundImagePath().isEmpty()) {
+      try {
+        SimpleImage img = new ImageReader(this).loadImage(prefs.getDesktopBackgroundImagePath());
+        if (prefs.getDesktopBackgroundDarkenAmount() > 0.1) {
+          double scale = prefs.getDesktopBackgroundDarkenAmount();
+          {
+            BalancingTransformer bT = new BalancingTransformer();
+            bT.setContrast(Tools.limitValue(Tools.FTOI(-160.0 * scale), -200, 200));
+            bT.setGamma(Tools.limitValue(Tools.FTOI(-180.0 * scale), -200, 200));
+            bT.transformImage(img);
+          }
+          {
+            BalancingTransformer bT = new BalancingTransformer();
+            bT.setBrightness(Tools.limitValue(Tools.FTOI(-20.0 * scale), -200, 200));
+            bT.setContrast(Tools.limitValue(Tools.FTOI(-20.0 * scale), -200, 200));
+            bT.setGamma(Tools.limitValue(Tools.FTOI(-220.0 * scale), -200, 200));
+            bT.transformImage(img);
+          }
+          backgroundImage = img.getBufferedImg();
+        }
+      }
+      catch (Exception ex) {
+        backgroundImage = null;
+        ex.printStackTrace();
+      }
     }
-    catch (Exception ex) {
-      backgroundImage = null;
-      ex.printStackTrace();
+
+    if (backgroundImage == null) {
+      try {
+        backgroundImage = ImageIO.read(this.getClass().getResource("/org/jwildfire/swing/backgrounds/wallpaper_pearls2.png"));
+      }
+      catch (Exception ex) {
+        backgroundImage = null;
+        ex.printStackTrace();
+      }
     }
     if (backgroundImage != null) {
       return new JDesktopPane() {
@@ -1050,7 +1082,7 @@ public class Desktop extends JApplet {
       internalFrame.saveWindowPrefs();
     }
     try {
-      prefs.saveToFromFile();
+      prefs.saveToFile();
       tinaController.saveScriptProps();
     }
     catch (Exception ex) {
@@ -1060,40 +1092,82 @@ public class Desktop extends JApplet {
     System.exit(0);
   }
 
-  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
-    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
-    if (frameHolder != null) {
-      T frame = frameHolder.getInternalFrame();
-      if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
-        if (!frame.isVisible() || frame.isClosed()) {
-          frameHolder.getMenuItem().doClick();
-        }
-        try {
-          frame.setSelected(true);
-        }
-        catch (PropertyVetoException ex) {
-          ex.printStackTrace();
-        }
-        if (frame.isIcon()) {
+  public <T extends JInternalFrame> void toggleInternalFrame(Class<T> frameType) {
+    try {
+      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+      if (frameHolder != null) {
+        T frame = frameHolder.getInternalFrame();
+        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+          if (!frame.isVisible() || frame.isClosed()) {
+            frameHolder.getMenuItem().doClick();
+            frame.setVisible(true);
+          }
           try {
-            frame.setIcon(false);
+            frame.setSelected(true);
           }
           catch (PropertyVetoException ex) {
             ex.printStackTrace();
           }
-        }
-      }
-      else {
-        if (!frame.isIcon()) {
-          try {
-            frame.setIcon(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
+          if (frame.isIcon()) {
+            try {
+              frame.setIcon(false);
+            }
+            catch (PropertyVetoException ex) {
+              ex.printStackTrace();
+            }
           }
         }
+        else {
+          frame.setVisible(false);
+          /*
+                  if (!frame.isIcon()) {
+                    try {
+                      frame.setIcon(true);
+                    }
+                    catch (PropertyVetoException ex) {
+                      ex.printStackTrace();
+                    }
+                  }
+          */
+        }
       }
+    }
+    finally {
+      enableControls();
+    }
+  }
 
+  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
+    try {
+      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+      if (frameHolder != null) {
+        T frame = frameHolder.getInternalFrame();
+        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
+          if (!frame.isVisible() || frame.isClosed()) {
+            frameHolder.getMenuItem().doClick();
+          }
+          try {
+            frame.setSelected(true);
+          }
+          catch (PropertyVetoException ex) {
+            ex.printStackTrace();
+          }
+          if (frame.isIcon()) {
+            try {
+              frame.setIcon(false);
+            }
+            catch (PropertyVetoException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        else {
+          frame.toFront();
+        }
+      }
+    }
+    finally {
+      enableControls();
     }
   }
 }

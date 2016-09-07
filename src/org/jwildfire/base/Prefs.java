@@ -45,6 +45,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
+  static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH = "general.desktop_background_imagepath";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT = "general.desktop_background_darken_amount";
+
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
   static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
@@ -153,12 +157,6 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
 
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DISABLED = "tina.integration.chaotica.disabled.2";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DRAWER = "tina.integration.chaotica.drawer";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE = "tina.integration.chaotica.executable";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER = "tina.integration.chaotica.flame_drawer";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT = "tina.integration.chaotica.animation_export";
-
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
   static final String KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP = "iflames.load_library_at_startup";
@@ -195,6 +193,15 @@ public class Prefs extends ManagedObject {
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
+
+  @Property(description = "Background-image for the desktop, a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
+  private String desktopBackgroundImagePath = null;
+
+  @Property(description = "Convenience background-image darken-amount (because a regular usually is too bright), a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
+  private double desktopBackgroundDarkenAmount = 1.0;
+
+  @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
+  private boolean showTipsAtStartup = true;
 
   @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
   private String iflamesFlameLibraryPath = null;
@@ -372,21 +379,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Create a vertical toolbar to hold macro-buttons instead of the horizontal one (restart of program after change required)", category = PropertyCategory.TINA)
   private boolean tinaMacroButtonsVertical = false;
-
-  @Property(description = "Disable the Chaotica-support inside the flame-module", category = PropertyCategory.TINA)
-  private boolean tinaIntegrationChaoticaDisabled = true;
-
-  @Property(description = "Allow the animation-export from with the Chaotica-bridge. Please note that this reduces the maximum possible resolution in Chaotica when you do not have a Studio licence", category = PropertyCategory.TINA)
-  private boolean tinaIntegrationChaoticaAnimationExport = false;
-
-  @Property(description = "Installation drawer where the Chaotica-software resides", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaDrawer = "C:\\Program Files\\Chaotica";
-
-  @Property(description = "Executable which is invoked when launching Chaotica from with the flame-editor (typically chaotica.exe under Windows)", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaExecutable = "chaotica.exe";
-
-  @Property(description = "Drawer to store flames in the Chaotica-format", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaFlameDrawer = "";
 
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
@@ -649,7 +641,7 @@ public class Prefs extends ManagedObject {
     new PrefsReader().readPrefs(this);
   }
 
-  public void saveToFromFile() throws Exception {
+  public void saveToFile() throws Exception {
     new PrefsWriter().writePrefs(this);
   }
 
@@ -772,11 +764,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFadeToWhiteLevel = pSrc.tinaDefaultFadeToWhiteLevel;
     tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
 
-    tinaIntegrationChaoticaDisabled = pSrc.tinaIntegrationChaoticaDisabled;
-    tinaIntegrationChaoticaDrawer = pSrc.tinaIntegrationChaoticaDrawer;
-    tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
-    tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
-    tinaIntegrationChaoticaAnimationExport = pSrc.tinaIntegrationChaoticaAnimationExport;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
     tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
@@ -795,6 +782,9 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
+    desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
+    desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
+    showTipsAtStartup = pSrc.showTipsAtStartup;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1379,38 +1369,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFadeToWhiteLevel = pTinaDefaultFadeToWhiteLevel;
   }
 
-  public boolean isTinaIntegrationChaoticaDisabled() {
-    return tinaIntegrationChaoticaDisabled;
-  }
-
-  public void setTinaIntegrationChaoticaDisabled(boolean pTinaIntegrationChaoticaDisabled) {
-    tinaIntegrationChaoticaDisabled = pTinaIntegrationChaoticaDisabled;
-  }
-
-  public String getTinaIntegrationChaoticaDrawer() {
-    return tinaIntegrationChaoticaDrawer;
-  }
-
-  public void setTinaIntegrationChaoticaDrawer(String pTinaIntegrationChaoticaDrawer) {
-    tinaIntegrationChaoticaDrawer = pTinaIntegrationChaoticaDrawer;
-  }
-
-  public String getTinaIntegrationChaoticaExecutable() {
-    return tinaIntegrationChaoticaExecutable;
-  }
-
-  public void setTinaIntegrationChaoticaExecutable(String pTinaIntegrationChaoticaExecutable) {
-    tinaIntegrationChaoticaExecutable = pTinaIntegrationChaoticaExecutable;
-  }
-
-  public String getTinaIntegrationChaoticaFlameDrawer() {
-    return tinaIntegrationChaoticaFlameDrawer;
-  }
-
-  public void setTinaIntegrationChaoticaFlameDrawer(String pTinaIntegrationChaoticaFlameDrawer) {
-    tinaIntegrationChaoticaFlameDrawer = pTinaIntegrationChaoticaFlameDrawer;
-  }
-
   public int getTinaDefaultFPS() {
     return tinaDefaultFPS;
   }
@@ -1425,14 +1383,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRawMotionDataPath(String pTinaRawMotionDataPath) {
     tinaRawMotionDataPath = pTinaRawMotionDataPath;
-  }
-
-  public boolean isTinaIntegrationChaoticaAnimationExport() {
-    return tinaIntegrationChaoticaAnimationExport;
-  }
-
-  public void setTinaIntegrationChaoticaAnimationExport(boolean pTinaIntegrationChaoticaAnimationExport) {
-    tinaIntegrationChaoticaAnimationExport = pTinaIntegrationChaoticaAnimationExport;
   }
 
   public int getTinaDefaultSpatialOversampling() {
@@ -1619,6 +1569,30 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFontScale(double pTinaFontScale) {
     tinaFontScale = pTinaFontScale;
+  }
+
+  public String getDesktopBackgroundImagePath() {
+    return desktopBackgroundImagePath;
+  }
+
+  public void setDesktopBackgroundImagePath(String desktopBackgroundImagePath) {
+    this.desktopBackgroundImagePath = desktopBackgroundImagePath;
+  }
+
+  public double getDesktopBackgroundDarkenAmount() {
+    return desktopBackgroundDarkenAmount;
+  }
+
+  public void setDesktopBackgroundDarkenAmount(double desktopBackgroundDarkenAmount) {
+    this.desktopBackgroundDarkenAmount = desktopBackgroundDarkenAmount;
+  }
+
+  public boolean isShowTipsAtStartup() {
+    return showTipsAtStartup;
+  }
+
+  public void setShowTipsAtStartup(boolean showTipsAtStartup) {
+    this.showTipsAtStartup = showTipsAtStartup;
   }
 
 }

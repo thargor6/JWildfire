@@ -336,8 +336,13 @@ public class AbstractFlameWriter {
 
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_ENABLED, pFlame.getSolidRenderSettings().isSsaoEnabled()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SSAO_INTENSITY, pFlame.getSolidRenderSettings().getSsaoIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_ENABLED, pFlame.getSolidRenderSettings().isAoEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_INTENSITY, pFlame.getSolidRenderSettings().getAoIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_SEARCH_RADIUS, pFlame.getSolidRenderSettings().getAoSearchRadius()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_BLUR_RADIUS, pFlame.getSolidRenderSettings().getAoBlurRadius()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_RADIUS_SAMPLES, pFlame.getSolidRenderSettings().getAoRadiusSamples()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES, pFlame.getSolidRenderSettings().getAoAzimuthSamples()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_FALLOFF, pFlame.getSolidRenderSettings().getAoFalloff()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));
 
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));

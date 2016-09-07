@@ -52,7 +52,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 ALPHA 4 (28.08.2016)";
+  public static final String APP_VERSION = "3.00 ALPHA 5 (03.09.2016)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -68,7 +68,6 @@ public class Tools {
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_ANB = "anb";
-  public static final String FILEEXT_CHAOS = "chaos";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILEEXT_GRADIENT = "gradient";
   public static final String FILEEXT_GIF = "gif";
@@ -565,6 +564,10 @@ public class Tools {
   }
 
   public static double limitValue(double value, double min, double max) {
+    return value < min ? min : value > max ? max : value;
+  }
+
+  public static int limitValue(int value, int min, int max) {
     return value < min ? min : value > max ? max : value;
   }
 }

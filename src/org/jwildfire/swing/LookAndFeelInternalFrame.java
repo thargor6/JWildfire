@@ -79,7 +79,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
             prefs.setLookAndFeelTheme((String) getSubThemeCmb().getSelectedItem());
           }
 
-          prefs.saveToFromFile();
+          prefs.saveToFile();
         }
         catch (Exception ex) {
           errorHandler.handleError(ex);
