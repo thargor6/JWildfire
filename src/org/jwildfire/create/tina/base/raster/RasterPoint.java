@@ -38,14 +38,14 @@ public class RasterPoint implements Serializable {
   public double material;
   public double dofDist;
   public boolean hasShadows;
-  public boolean insideShadow[];
+  public double visibility[];
 
   public RasterPoint(int lightCount) {
     if (lightCount > 0) {
-      insideShadow = new boolean[lightCount];
+      visibility = new double[lightCount];
     }
     else {
-      insideShadow = null;
+      visibility = null;
     }
   }
 

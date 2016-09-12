@@ -133,8 +133,109 @@ public final class VecMathLib {
       z += src.z * scale;
     }
 
+    @Override
+    public VectorD clone() {
+      return new VectorD(x, y, z);
+    }
+
     public static VectorD cross(VectorD a, VectorD b) {
       return new VectorD(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+    }
+
+    public static VectorD a(VectorD a, VectorD b) {
+      return new VectorD(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public static VectorD substract(VectorD a, VectorD b) {
+      return new VectorD(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+  }
+
+  public static final class Matrix4D {
+    public final double m[][] = new double[4][4];
+
+    public static Matrix4D identity() {
+      Matrix4D res = new Matrix4D();
+      res.m[0][0] = 1.0;
+      res.m[1][1] = 1.0;
+      res.m[2][2] = 1.0;
+      res.m[3][3] = 1.0;
+      return res;
+    }
+
+    public static Matrix4D lookAt(VectorD eyePosition, VectorD lookAt, VectorD upVector) {
+      VectorD e = eyePosition.clone();
+      e.normalize();
+      VectorD l = lookAt.clone();
+      l.normalize();
+      VectorD up = upVector.clone();
+      up.normalize();
+      // forward vector
+      VectorD forward = VectorD.substract(l, e);
+      forward.normalize();
+      // side vector
+      VectorD side = VectorD.cross(forward, up);
+      side.normalize();
+
+      //    VectorD u = VectorD.cross(side, forward);
+      //  u.normalize();
+
+      Matrix4D rotmat = new Matrix4D();
+
+      rotmat.m[0][0] = side.x;
+      rotmat.m[1][0] = side.y;
+      rotmat.m[2][0] = side.z;
+      rotmat.m[3][0] = 0.0;
+
+      rotmat.m[0][1] = up.x;
+      rotmat.m[1][1] = up.y;
+      rotmat.m[2][1] = up.z;
+      rotmat.m[3][1] = 0.0;
+      /*
+      rotmat.m[0][1] = u.x;
+      rotmat.m[1][1] = u.y;
+      rotmat.m[2][1] = u.z;
+      rotmat.m[3][1] = 0.0;
+      */
+      rotmat.m[0][2] = -forward.x;
+      rotmat.m[1][2] = -forward.y;
+      rotmat.m[2][2] = -forward.z;
+      rotmat.m[3][2] = 0.0;
+
+      rotmat.m[3][3] = 1.0;
+
+      Matrix4D transmat = Matrix4D.translateMatrix(-e.x, -e.y, -e.z);
+
+      return Matrix4D.multiply(transmat, rotmat);
+    }
+
+    public static Matrix4D multiply(Matrix4D a, Matrix4D b) {
+      Matrix4D res = new Matrix4D();
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+          res.m[i][j] = 0.0;
+          for (int s = 0; s < 4; s++) {
+            res.m[i][j] += a.m[i][s] * b.m[s][j];
+          }
+        }
+      }
+      return res;
+    }
+
+    public static Matrix4D translateMatrix(double tx, double ty, double tz) {
+      Matrix4D res = Matrix4D.identity();
+      res.m[0][3] = tx;
+      res.m[1][3] = ty;
+      res.m[2][3] = tz;
+      return res;
+    }
+
+    public static VectorD multiply(Matrix4D a, VectorD v) {
+      VectorD res = new VectorD();
+      res.x = v.x * a.m[0][0] + v.y * a.m[0][1] + v.z * a.m[0][2] + a.m[0][3];
+      res.y = v.x * a.m[1][0] + v.y * a.m[1][1] + v.z * a.m[1][2] + a.m[1][3];
+      res.z = v.x * a.m[2][0] + v.y * a.m[2][1] + v.z * a.m[2][2] + a.m[2][3];
+      return res;
     }
   }
 

@@ -673,6 +673,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     public void projectPoint(XYZPoint q) {
       if (q.doHide)
         return;
+      // TODO overkill, need only xyz
       untransformed.assign(q);
       boolean insideView = view.project(q, prj);
       if (prj.hasLight != null) {

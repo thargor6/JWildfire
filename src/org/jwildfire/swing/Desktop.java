@@ -179,6 +179,8 @@ public class Desktop extends JApplet {
       if (!navigatorInternalFrame.isVisible()) {
         navigatorInternalFrame.setVisible(true);
       }
+      navigatorInternalFrame.moveToFront();
+
       /*
             WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
             if (!welcomeInternalFrame.isVisible()) {

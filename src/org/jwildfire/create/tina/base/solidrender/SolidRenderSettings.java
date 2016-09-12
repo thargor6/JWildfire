@@ -15,7 +15,7 @@ import org.jwildfire.create.tina.edit.Assignable;
 public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Serializable {
   private boolean solidRenderingEnabled = false;
   private boolean aoEnabled = true;
-  private double aoIntensity = 0.75;
+  private double aoIntensity = 0.5;
   private double aoSearchRadius = 12.0;
   private double aoBlurRadius = 1.25;
   private int aoRadiusSamples = 8;
@@ -64,7 +64,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public void setupDefaultGlobals() {
     aoEnabled = true;
-    aoIntensity = 1.0;
+    aoIntensity = 0.5;
     hardShadowsEnabled = false;
   }
 

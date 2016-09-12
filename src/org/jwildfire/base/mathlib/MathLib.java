@@ -131,6 +131,14 @@ public final class MathLib {
     return Math.min(a, b);
   }
 
+  public static final int iMin(int a, int b) {
+    return a < b ? a : b;
+  }
+
+  public static final int iMax(int a, int b) {
+    return a > b ? a : b;
+  }
+
   public static final double max(double a, double b) {
     return Math.max(a, b);
   }

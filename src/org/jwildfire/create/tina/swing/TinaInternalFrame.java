@@ -7121,6 +7121,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditTriangleViewButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformEditTriangleViewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_view.png")));
       previewEastDefaultPanel.add(getMouseTransformEditFocusPointButton());
+      previewEastDefaultPanel.add(getLabel_1());
 
       editorFractalBrightnessSlider = new JSlider();
       editorFractalBrightnessSlider.setToolTipText("Show/Hide the realtime preview (may make sense to hide it temporary completely to get better control over the triangles)");
@@ -7129,6 +7130,10 @@ public class TinaInternalFrame extends JInternalFrame {
       editorFractalBrightnessSlider.setValue(100);
       editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 42));
       editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
+      previewEastDefaultPanel.add(getTglbtnXy());
+      previewEastDefaultPanel.add(getTglbtnYz());
+      previewEastDefaultPanel.add(getTglbtnZx());
+      previewEastDefaultPanel.add(getLabel_3());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
@@ -7380,6 +7385,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
+      centerWestPanel.add(getToggleButton_4());
     }
     return centerWestPanel;
   }
@@ -10066,6 +10072,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaSolidRenderingAOFalloffSlider;
   private JSlider tinaSolidRenderingAORadiusSamplesSlider;
   private JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
+  private JToggleButton toggleButton_4;
+  private JLabel label_1;
+  private JLabel label_3;
+  private JToggleButton tglbtnXy;
+  private JToggleButton tglbtnYz;
+  private JToggleButton tglbtnZx;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -16815,7 +16827,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(tinaSolidRenderingCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
-      tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
       tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -17187,7 +17198,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingDeleteLightBtn);
 
       tinaSolidRenderingLightCastShadowsCBx = new JCheckBox("Cast shadows");
-      tinaSolidRenderingLightCastShadowsCBx.setVisible(false);
       tinaSolidRenderingLightCastShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -18062,7 +18072,6 @@ public class TinaInternalFrame extends JInternalFrame {
       panel.add(tinaSolidRenderingAOSearchRadiusLbl);
 
       tinaSolidRenderingAOSearchRadiusREd = new JWFNumberField();
-      tinaSolidRenderingAOSearchRadiusREd.setMinValue(5.0);
       tinaSolidRenderingAOSearchRadiusREd.setValueStep(0.05);
       tinaSolidRenderingAOSearchRadiusREd.setText("");
       tinaSolidRenderingAOSearchRadiusREd.setSize(new Dimension(100, 24));
@@ -18094,12 +18103,11 @@ public class TinaInternalFrame extends JInternalFrame {
       panel.add(tinaSolidRenderingAOSearchRadiusREd);
 
       tinaSolidRenderingAOSearchRadiusSlider = new JSlider();
-      tinaSolidRenderingAOSearchRadiusSlider.setMinimum(500);
       tinaSolidRenderingAOSearchRadiusSlider.setValue(0);
       tinaSolidRenderingAOSearchRadiusSlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingAOSearchRadiusSlider.setPreferredSize(new Dimension(220, 19));
       tinaSolidRenderingAOSearchRadiusSlider.setName("tinaSolidRenderingAOSearchRadiusSlider");
-      tinaSolidRenderingAOSearchRadiusSlider.setMaximum(25000);
+      tinaSolidRenderingAOSearchRadiusSlider.setMaximum(150000);
       tinaSolidRenderingAOSearchRadiusSlider.setLocation(new Point(558, 4));
       tinaSolidRenderingAOSearchRadiusSlider.setBounds(250, 60, 205, 19);
       tinaSolidRenderingAOSearchRadiusSlider.addMouseListener(new MouseAdapter() {
@@ -18428,6 +18436,68 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaSolidRenderingAOAzimuthSamplesSlider() {
     return tinaSolidRenderingAOAzimuthSamplesSlider;
+  }
+
+  private JToggleButton getToggleButton_4() {
+    if (toggleButton_4 == null) {
+      toggleButton_4 = new JToggleButton();
+      toggleButton_4.setToolTipText("Enable solid rendering");
+      toggleButton_4.setPreferredSize(new Dimension(72, 42));
+      toggleButton_4.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      toggleButton_4.setPreferredSize(new Dimension(72, 42));
+      toggleButton_4.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return toggleButton_4;
+  }
+
+  private JLabel getLabel_1() {
+    if (label_1 == null) {
+      label_1 = new JLabel();
+      label_1.setText("");
+      label_1.setPreferredSize(new Dimension(42, 12));
+      label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_1;
+  }
+
+  private JLabel getLabel_3() {
+    if (label_3 == null) {
+      label_3 = new JLabel();
+      label_3.setText("");
+      label_3.setPreferredSize(new Dimension(42, 12));
+      label_3.setFont(new Font("Dialog", Font.BOLD, 10));
+    }
+    return label_3;
+  }
+
+  private JToggleButton getTglbtnXy() {
+    if (tglbtnXy == null) {
+      tglbtnXy = new JToggleButton();
+      tglbtnXy.setText("XY");
+      tglbtnXy.setToolTipText("Rotate triangles using the left mouse button");
+      tglbtnXy.setPreferredSize(new Dimension(42, 24));
+    }
+    return tglbtnXy;
+  }
+
+  private JToggleButton getTglbtnYz() {
+    if (tglbtnYz == null) {
+      tglbtnYz = new JToggleButton();
+      tglbtnYz.setText("YZ");
+      tglbtnYz.setToolTipText("Rotate triangles using the left mouse button");
+      tglbtnYz.setPreferredSize(new Dimension(42, 24));
+    }
+    return tglbtnYz;
+  }
+
+  private JToggleButton getTglbtnZx() {
+    if (tglbtnZx == null) {
+      tglbtnZx = new JToggleButton();
+      tglbtnZx.setText("ZX");
+      tglbtnZx.setToolTipText("Rotate triangles using the left mouse button");
+      tglbtnZx.setPreferredSize(new Dimension(42, 24));
+    }
+    return tglbtnZx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

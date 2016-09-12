@@ -24,7 +24,8 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.mathlib.GfxMathLib;
-import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.base.mathlib.VecMathLib.Matrix4D;
+import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -64,7 +65,7 @@ public class FlameRendererView {
   protected final Stereo3dEye eye;
   private double area, fade, areaMinusFade;
   private boolean withShadows;
-  protected double lightProjectionMatrix[][][];
+  protected Matrix4D lightProjectionMatrix[];
 
   public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
     flame = pFlame;
@@ -95,31 +96,11 @@ public class FlameRendererView {
 
     withShadows = flame.isWithShadows();
     if (withShadows) {
-      lightProjectionMatrix = new double[flame.getSolidRenderSettings().getLights().size()][][];
+      lightProjectionMatrix = new Matrix4D[flame.getSolidRenderSettings().getLights().size()];
       for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
         PointLight light = flame.getSolidRenderSettings().getLights().get(i);
         if (light.isCastShadows()) {
-          light.setX(10.0);
-          light.setY(0.0);
-          light.setZ(0.0);
-
-          double dX = -light.getX();
-          double dY = -light.getY();
-          double dZ = -light.getZ();
-          double dN = MathLib.sqrt(dX * dX + dY * dY + dZ * dZ);
-          dX /= dN;
-          dY /= dN;
-          dZ /= dN;
-          double pitch = MathLib.asin(dY);
-          double yaw = MathLib.asin(dX / (cos(pitch))); //-MathLib.atan2(dX, dY) * MathLib.sign(dX);
-          double roll = 0.0;
-          /*
-                    pitch = -MathLib.M_PI_2;
-                    yaw = -MathLib.M_PI_2;
-                    roll = 0.0;
-          */
-          lightProjectionMatrix[i] = new double[3][3];
-          createProjectionMatrix(lightProjectionMatrix[i], yaw, pitch, roll);
+          lightProjectionMatrix[i] = Matrix4D.lookAt(new VectorD(-light.getX(), light.getY(), light.getZ()), new VectorD(), new VectorD(0.0, 1.0, 0.0));
         }
         else {
           lightProjectionMatrix[i] = null;
@@ -191,16 +172,20 @@ public class FlameRendererView {
     }
   }
 
+  //  public VectorD applyLightProjection(int idx, double x, double y, double z) {
+  //    return Matrix4D.multiply(lightProjectionMatrix[idx], new VectorD(x, y, z));
+  //  }
+
   public double applyLightProjectionX(int idx, double x, double y, double z) {
-    return lightProjectionMatrix[idx][0][0] * x + lightProjectionMatrix[idx][1][0] * y + lightProjectionMatrix[idx][2][0] * z;
+    return x * lightProjectionMatrix[idx].m[0][0] + y * lightProjectionMatrix[idx].m[0][1] + z * lightProjectionMatrix[idx].m[0][2] + lightProjectionMatrix[idx].m[0][3];
   }
 
   public double applyLightProjectionY(int idx, double x, double y, double z) {
-    return lightProjectionMatrix[idx][0][1] * x + lightProjectionMatrix[idx][1][1] * y + lightProjectionMatrix[idx][2][1] * z;
+    return x * lightProjectionMatrix[idx].m[1][0] + y * lightProjectionMatrix[idx].m[1][1] + z * lightProjectionMatrix[idx].m[1][2] + lightProjectionMatrix[idx].m[1][3];
   }
 
   public double applyLightProjectionZ(int idx, double x, double y, double z) {
-    return lightProjectionMatrix[idx][0][2] * x + lightProjectionMatrix[idx][1][2] * y + lightProjectionMatrix[idx][2][2] * z;
+    return x * lightProjectionMatrix[idx].m[2][0] + y * lightProjectionMatrix[idx].m[2][1] + z * lightProjectionMatrix[idx].m[2][2] + lightProjectionMatrix[idx].m[2][3];
   }
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
