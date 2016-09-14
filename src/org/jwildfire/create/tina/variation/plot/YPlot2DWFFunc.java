@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -15,20 +15,22 @@
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-// Variation Plugin DLL for Apophysis
-//  Jed Kelsey, 20 June 2007
-package org.jwildfire.create.tina.variation;
+package org.jwildfire.create.tina.variation.plot;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.VariationFunc;
 import org.nfunk.jep.Node;
 
 public class YPlot2DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
+  private static final String PARAM_USE_PRESET = "use_preset";
+  private static final String PARAM_PRESET_ID = "preset_id";
   private static final String PARAM_XMIN = "xmin";
   private static final String PARAM_XMAX = "xmax";
   private static final String PARAM_YMIN = "ymin";
@@ -39,9 +41,12 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   private static final String RESSOURCE_FORMULA = "formula";
 
-  private static final String[] paramNames = { PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = { PARAM_USE_PRESET, PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR };
 
   private static final String[] ressourceNames = { RESSOURCE_FORMULA };
+
+  private int use_preset = 1;
+  private int preset_id;
 
   private double xmin = -3.0;
   private double xmax = 2.0;
@@ -51,7 +56,7 @@ public class YPlot2DWFFunc extends VariationFunc {
   private double zmax = 2.0;
   private int direct_color = 1;
 
-  private String formula = getRandomFormula();
+  private String formula;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -78,12 +83,21 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xmin, xmax, ymin, ymax, zmin, zmax, direct_color };
+    return new Object[] { use_preset, preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_XMIN.equalsIgnoreCase(pName))
+    if (PARAM_USE_PRESET.equalsIgnoreCase(pName))
+      use_preset = limitIntVal(Tools.FTOI(pValue), 0, 1);
+    else if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) {
+      int new_preset_id = Tools.FTOI(pValue);
+      if (use_preset > 0 && new_preset_id != preset_id) {
+        refreshFormulaFromPreset(new_preset_id);
+      }
+      preset_id = new_preset_id;
+    }
+    else if (PARAM_XMIN.equalsIgnoreCase(pName))
       xmin = pValue;
     else if (PARAM_XMAX.equalsIgnoreCase(pName))
       xmax = pValue;
@@ -136,46 +150,45 @@ public class YPlot2DWFFunc extends VariationFunc {
     _parser = new JEPWrapper();
     _parser.addVariable("x", 0.0);
     _node = _parser.parse(formula);
-    if (xmin < xmax) {
-      _xmin = xmin;
-      _xmax = xmax;
-    }
-    else {
-      _xmin = xmax;
-      _xmax = xmin;
+
+    _xmin = xmin;
+    _xmax = xmax;
+    if (_xmin > _xmax) {
+      double t = _xmin;
+      _xmin = _xmax;
+      _xmax = t;
     }
     _dx = _xmax - _xmin;
-    if (ymin < ymax) {
-      _ymin = ymin;
-      _ymax = ymax;
-    }
-    else {
-      _ymin = ymax;
-      _ymax = ymin;
+
+    _ymin = ymin;
+    _ymax = ymax;
+    if (_ymin > _ymax) {
+      double t = _ymin;
+      _ymin = _ymax;
+      _ymax = t;
     }
     _dy = _ymax - _ymin;
-    _dz = _zmax - _zmin;
-    if (zmin < zmax) {
-      _zmin = zmin;
-      _zmax = zmax;
-    }
-    else {
-      _zmin = zmax;
-      _zmax = zmin;
+
+    _zmin = zmin;
+    _zmax = zmax;
+    if (_zmin > _zmax) {
+      double t = _zmin;
+      _zmin = _zmax;
+      _zmax = t;
     }
     _dz = _zmax - _zmin;
   }
 
-  private String getRandomFormula() {
-    switch (Tools.FTOI(Math.random() * 3)) {
-      case 0:
-        return "(sin(x)+2*sin(2*x)+1*sin(4*x))";
-      case 1:
-        return "sin(x)*cos(x)";
-      case 2:
-      default:
-        return "sin(2*x*x)";
-    }
+  public YPlot2DWFFunc() {
+    super();
+    preset_id = WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId();
+    refreshFormulaFromPreset(preset_id);
   }
 
+  private void refreshFormulaFromPreset(int presetId) {
+    YPlot2DWFFuncPreset preset = WFFuncPresetsStore.getYPlot2DWFFuncPresets().getPreset(presetId);
+    formula = preset.getFormula();
+    xmin = preset.getXmin();
+    xmax = preset.getXmax();
+  }
 }
