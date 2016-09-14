@@ -27,6 +27,9 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
+import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
