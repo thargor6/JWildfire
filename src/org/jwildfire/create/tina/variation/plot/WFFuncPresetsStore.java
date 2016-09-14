@@ -1,0 +1,49 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2016 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+package org.jwildfire.create.tina.variation.plot;
+
+public class WFFuncPresetsStore {
+  private WFFuncPresetsStore() {
+
+  }
+
+  private static ParPlot2DWFFuncPresets parPlot2DWFFuncPresets;
+  private static YPlot2DWFFuncPresets yPlot2DWFFuncPresets;
+  private static YPlot3DWFFuncPresets yPlot3DWFFuncPresets;
+
+  public static ParPlot2DWFFuncPresets getParPlot2DWFFuncPresets() {
+    if (parPlot2DWFFuncPresets == null) {
+      parPlot2DWFFuncPresets = new ParPlot2DWFFuncPresets();
+    }
+    return parPlot2DWFFuncPresets;
+  }
+
+  public static YPlot2DWFFuncPresets getYPlot2DWFFuncPresets() {
+    if (yPlot2DWFFuncPresets == null) {
+      yPlot2DWFFuncPresets = new YPlot2DWFFuncPresets();
+    }
+    return yPlot2DWFFuncPresets;
+  }
+
+  public static YPlot3DWFFuncPresets getYPlot3DWFFuncPresets() {
+    if (yPlot3DWFFuncPresets == null) {
+      yPlot3DWFFuncPresets = new YPlot3DWFFuncPresets();
+    }
+    return yPlot3DWFFuncPresets;
+  }
+
+}
