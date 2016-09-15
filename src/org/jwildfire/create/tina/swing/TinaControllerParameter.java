@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -536,7 +536,9 @@ public class TinaControllerParameter {
   public JToggleButton toggleDetachedPreviewButton;
   public JButton gradientResetBtn;
   public JPanel macroButtonHorizRootPanel;
-  public JComboBox affineEditPlaneCmb;
+  public JToggleButton affineXYEditPlaneToggleBtn;
+  public JToggleButton affineYZEditPlaneToggleBtn;
+  public JToggleButton affineZXEditPlaneToggleBtn;
   public JWFNumberField gradientColorMapHorizOffsetREd;
   public JSlider gradientColorMapHorizOffsetSlider;
   public JWFNumberField gradientColorMapHorizScaleREd;
@@ -593,7 +595,6 @@ public class TinaControllerParameter {
   public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
   public JComboBox tinaSolidRenderingSelectedLightCmb;
@@ -1018,7 +1019,8 @@ public class TinaControllerParameter {
       JPanel pPreviewEastMainPanel, JPanel pMacroButtonPanel, JButton pScriptAddButtonBtn, JTable pMacroButtonsTable,
       JButton pMacroButtonMoveUpBtn, JButton pMacroButtonMoveDownBtn, JButton pMacroButtonDeleteBtn,
       JToggleButton pToggleDetachedPreviewButton, JButton pGradientResetBtn, JWFNumberField pWhiteLevelREd,
-      JSlider pWhiteLevelSlider, JPanel pMacroButtonHorizPanel, JPanel pMacroButtonHorizRootPanel, JComboBox pAffineEditPlaneCmb,
+      JSlider pWhiteLevelSlider, JPanel pMacroButtonHorizPanel, JPanel pMacroButtonHorizRootPanel,
+      JToggleButton affineXYEditPlaneToggleBtn, JToggleButton affineYZEditPlaneToggleBtn, JToggleButton affineZXEditPlaneToggleBtn,
       JWFNumberField pGradientColorMapHorizOffsetREd, JSlider pGradientColorMapHorizOffsetSlider, JWFNumberField pGradientColorMapHorizScaleREd,
       JSlider pGradientColorMapHorizScaleSlider, JWFNumberField pGradientColorMapVertOffsetREd, JSlider pGradientColorMapVertOffsetSlider,
       JWFNumberField pGradientColorMapVertScaleREd, JSlider pGradientColorMapVertScaleSlider, JWFNumberField pGradientColorMapLocalColorAddREd,
@@ -1039,7 +1041,7 @@ public class TinaControllerParameter {
       JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
       JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
       JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd, JSlider tinaSolidRenderingAOAzimuthSamplesSlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
-      JButton resetSolidRenderingGlobalSettingsBtn, JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
+      JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
       JSlider tinaSolidRenderingLightPosXSlider, JSlider tinaSolidRenderingLightPosYSlider, JSlider tinaSolidRenderingLightPosZSlider,
@@ -1118,7 +1120,9 @@ public class TinaControllerParameter {
     whiteLevelSlider = pWhiteLevelSlider;
     macroButtonHorizPanel = pMacroButtonHorizPanel;
     macroButtonHorizRootPanel = pMacroButtonHorizRootPanel;
-    affineEditPlaneCmb = pAffineEditPlaneCmb;
+    this.affineXYEditPlaneToggleBtn = affineXYEditPlaneToggleBtn;
+    this.affineYZEditPlaneToggleBtn = affineYZEditPlaneToggleBtn;
+    this.affineZXEditPlaneToggleBtn = affineZXEditPlaneToggleBtn;
     gradientColorMapHorizOffsetREd = pGradientColorMapHorizOffsetREd;
     gradientColorMapHorizOffsetSlider = pGradientColorMapHorizOffsetSlider;
     gradientColorMapHorizScaleREd = pGradientColorMapHorizScaleREd;
@@ -1176,7 +1180,6 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingAOAzimuthSamplesREd = tinaSolidRenderingAOAzimuthSamplesREd;
     this.tinaSolidRenderingAOAzimuthSamplesSlider = tinaSolidRenderingAOAzimuthSamplesSlider;
     this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
-    this.resetSolidRenderingGlobalSettingsBtn = resetSolidRenderingGlobalSettingsBtn;
     this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;
     this.resetSolidRenderingLightsBtn = resetSolidRenderingLightsBtn;
     this.tinaSolidRenderingSelectedLightCmb = tinaSolidRenderingSelectedLightCmb;

@@ -369,7 +369,9 @@ public class TinaControllerData {
   public JToggleButton toggleDetachedPreviewButton;
   public JButton gradientResetBtn;
   public JPanel macroButtonHorizRootPanel;
-  public JComboBox affineEditPlaneCmb;
+  public JToggleButton affineXYEditPlaneToggleBtn;
+  public JToggleButton affineYZEditPlaneToggleBtn;
+  public JToggleButton affineZXEditPlaneToggleBtn;
   public JWFNumberField gradientColorMapHorizOffsetREd;
   public JSlider gradientColorMapHorizOffsetSlider;
   public JWFNumberField gradientColorMapHorizScaleREd;
@@ -411,7 +413,6 @@ public class TinaControllerData {
   public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  public JButton resetSolidRenderingGlobalSettingsBtn;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
   public JComboBox tinaSolidRenderingSelectedLightCmb;

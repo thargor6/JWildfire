@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -52,7 +52,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 ALPHA 5 (03.09.2016)";
+  public static final String APP_VERSION = "3.00 ALPHA 6 (16.09.2016)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -569,5 +569,20 @@ public class Tools {
 
   public static int limitValue(int value, int min, int max) {
     return value < min ? min : value > max ? max : value;
+  }
+
+  public static String getRessourceAsString(Class<?> parent, String ressource) throws Exception {
+    try (InputStream is = parent.getResourceAsStream(ressource)) {
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+      return content.toString();
+    }
   }
 }

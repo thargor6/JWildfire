@@ -221,7 +221,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingAORadiusSamplesREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOAzimuthSamplesREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingEnableAOCBx, disabled);
-    enableControl(data.resetSolidRenderingGlobalSettingsBtn, disabled);
     enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
     enableControl(data.resetSolidRenderingLightsBtn, disabled);
     enableControl(data.tinaSolidRenderingSelectedLightCmb, disabled || !hasLights);

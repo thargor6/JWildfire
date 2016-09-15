@@ -3740,22 +3740,6 @@ public class TinaInternalFrame extends JInternalFrame {
       affineRotateEditMotionCurveBtn.setBounds(0, 57, 22, 24);
       tinaAffineTransformationPanel.add(affineRotateEditMotionCurveBtn);
       tinaAffineTransformationPanel.add(getAffineScaleEditMotionCurveBtn());
-
-      affineEditPlaneCmb = new JComboBox();
-      affineEditPlaneCmb.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null) {
-            tinaController.affineEditPlaneCmb_changed();
-          }
-        }
-      });
-      affineEditPlaneCmb.setPreferredSize(new Dimension(125, 24));
-      affineEditPlaneCmb.setMinimumSize(new Dimension(100, 24));
-      affineEditPlaneCmb.setMaximumSize(new Dimension(32767, 24));
-      affineEditPlaneCmb.setMaximumRowCount(32);
-      affineEditPlaneCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineEditPlaneCmb.setBounds(0, 127, 70, 24);
-      tinaAffineTransformationPanel.add(affineEditPlaneCmb);
     }
     return tinaAffineTransformationPanel;
   }
@@ -5114,7 +5098,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetMotionBlurSettingsBtn(), getXaosViewAsToBtn(), getXaosViewAsFromBtn(), getToggleDrawGuidesButton(), getPreviewEastMainPanel(),
         getMacroButtonPanel(), getScriptAddButtonBtn(), getMacroButtonsTable(), getMacroButtonMoveUpBtn(), getMacroButtonMoveDownBtn(),
         getMacroButtonDeleteBtn(), getToggleDetachedPreviewButton(), getGradientResetBtn(), getTinaWhiteLevelREd(), getTinaWhiteLevelSlider(),
-        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineEditPlaneCmb(),
+        getMacroButtonHorizPanel(), getMacroButtonHorizRootPanel(), getAffineXYEditPlaneToggleBtn(), getAffineYZEditPlaneToggleBtn(), getAffineZXEditPlaneToggleBtn(),
         getGradientColorMapHorizOffsetREd(), getGradientColorMapHorizOffsetSlider(), getGradientColorMapHorizScaleREd(),
         getGradientColorMapHorizScaleSlider(), getGradientColorMapVertOffsetREd(), getGradientColorMapVertOffsetSlider(),
         getGradientColorMapVertScaleREd(), getGradientColorMapVertScaleSlider(), getGradientColorMapLocalColorAddREd(),
@@ -5133,7 +5117,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
         getTinaSolidRenderingAOAzimuthSamplesREd(), getTinaSolidRenderingAOAzimuthSamplesSlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
-        getResetSolidRenderingGlobalSettingsBtn(), getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
+        getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
         getTinaSolidRenderingLightPosXSlider(), getTinaSolidRenderingLightPosYSlider(), getTinaSolidRenderingLightPosZSlider(),
@@ -5168,8 +5152,6 @@ public class TinaInternalFrame extends JInternalFrame {
       for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
-
-      initEditPlaneCmb(getAffineEditPlaneCmb());
 
       getXFormDrawModeCmb().removeAllItems();
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
@@ -5339,14 +5321,6 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Y);
     pCmb.addItem(GlobalScriptType.MOVE_CAM_Z);
     pCmb.setSelectedItem(GlobalScriptType.NONE);
-  }
-
-  private void initEditPlaneCmb(JComboBox pCmb) {
-    pCmb.removeAllItems();
-    pCmb.addItem(EditPlane.XY);
-    pCmb.addItem(EditPlane.YZ);
-    pCmb.addItem(EditPlane.ZX);
-    pCmb.setSelectedItem(EditPlane.XY);
   }
 
   private void initSequenceOutputType(JComboBox pCmb) {
@@ -7122,9 +7096,9 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditTriangleViewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_view.png")));
       previewEastDefaultPanel.add(getMouseTransformEditFocusPointButton());
       previewEastDefaultPanel.add(getLabel_1());
-      previewEastDefaultPanel.add(getTglbtnXy());
-      previewEastDefaultPanel.add(getTglbtnYz());
-      previewEastDefaultPanel.add(getTglbtnZx());
+      previewEastDefaultPanel.add(getAffineXYEditPlaneToggleBtn());
+      previewEastDefaultPanel.add(getAffineYZEditPlaneToggleBtn());
+      previewEastDefaultPanel.add(getAffineZXEditPlaneToggleBtn());
       previewEastDefaultPanel.add(getLabel_3());
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
@@ -9886,7 +9860,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel macroButtonHorizRootPanel;
   private JScrollPane macroButtonsHorizScrollPane;
   private JPanel macroButtonHorizPanel;
-  private JComboBox affineEditPlaneCmb;
   private JButton randomizeColorSpeedButton;
   private JButton tinaClearGradientImageButton;
   private JButton backgroundSelectImageBtn;
@@ -9995,7 +9968,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_59;
   private JTabbedPane tinaSolidRenderingPane;
   private JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
-  private JButton resetSolidRenderingGlobalSettingsBtn;
   private JButton resetSolidRenderingMaterialsBtn;
   private JPanel panel_114;
   private JPanel panel_115;
@@ -10058,9 +10030,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton solidRenderingToggleBtn;
   private JLabel label_1;
   private JLabel label_3;
-  private JToggleButton tglbtnXy;
-  private JToggleButton tglbtnYz;
-  private JToggleButton tglbtnZx;
+  private JToggleButton affineXYEditPlaneToggleBtn;
+  private JToggleButton affineYZEditPlaneToggleBtn;
+  private JToggleButton affineZXEditPlaneToggleBtn;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -15458,10 +15430,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return macroButtonHorizPanel;
   }
 
-  public JComboBox getAffineEditPlaneCmb() {
-    return affineEditPlaneCmb;
-  }
-
   public JButton getRandomizeColorSpeedButton() {
     return randomizeColorSpeedButton;
   }
@@ -16789,42 +16757,6 @@ public class TinaInternalFrame extends JInternalFrame {
         tinaSolidRenderingPane.setEnabled(false);
 
       }
-
-      JPanel panel_1 = new JPanel();
-      tinaSolidRenderingPane.addTab("Rendering settings", null, panel_1, null);
-      panel_1.setLayout(null);
-
-      tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
-      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
-          }
-        }
-      });
-
-      tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable solid rendering");
-      tinaSolidRenderingEnableHardShadowsCBx.setBounds(30, 66, 169, 18);
-      panel_1.add(tinaSolidRenderingEnableHardShadowsCBx);
-
-      resetSolidRenderingGlobalSettingsBtn = new JButton();
-      resetSolidRenderingGlobalSettingsBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingResetSettingsBtn_clicked();
-          }
-        }
-      });
-      resetSolidRenderingGlobalSettingsBtn.setToolTipText("Reset the global solid rendering settings to the defaults");
-      resetSolidRenderingGlobalSettingsBtn.setText("Reset");
-      resetSolidRenderingGlobalSettingsBtn.setPreferredSize(new Dimension(125, 24));
-      resetSolidRenderingGlobalSettingsBtn.setMinimumSize(new Dimension(100, 24));
-      resetSolidRenderingGlobalSettingsBtn.setMaximumSize(new Dimension(32000, 24));
-      resetSolidRenderingGlobalSettingsBtn.setIconTextGap(2);
-      resetSolidRenderingGlobalSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetSolidRenderingGlobalSettingsBtn.setBounds(6, 114, 100, 24);
-      resetSolidRenderingGlobalSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
-      panel_1.add(resetSolidRenderingGlobalSettingsBtn);
       tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
 
       JPanel tinaSolidRenderingMaterialPnl = new JPanel();
@@ -17184,10 +17116,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getTinaSolidRenderingEnableHardShadowsCBx() {
     return tinaSolidRenderingEnableHardShadowsCBx;
-  }
-
-  public JButton getResetSolidRenderingGlobalSettingsBtn() {
-    return resetSolidRenderingGlobalSettingsBtn;
   }
 
   private JButton getResetSolidRenderingMaterialsBtn() {
@@ -18346,6 +18274,20 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel.add(tinaSolidRenderingAOAzimuthSamplesSlider);
+
+      tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
+      tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
+      tinaSolidRenderingEnableHardShadowsCBx.setBounds(607, 102, 169, 18);
+      panel.add(tinaSolidRenderingEnableHardShadowsCBx);
+      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
+          }
+        }
+      });
+
+      tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable solid rendering");
     }
     return panel;
   }
@@ -18441,34 +18383,55 @@ public class TinaInternalFrame extends JInternalFrame {
     return label_3;
   }
 
-  private JToggleButton getTglbtnXy() {
-    if (tglbtnXy == null) {
-      tglbtnXy = new JToggleButton();
-      tglbtnXy.setText("XY");
-      tglbtnXy.setToolTipText("Rotate triangles using the left mouse button");
-      tglbtnXy.setPreferredSize(new Dimension(42, 24));
+  private JToggleButton getAffineXYEditPlaneToggleBtn() {
+    if (affineXYEditPlaneToggleBtn == null) {
+      affineXYEditPlaneToggleBtn = new JToggleButton();
+      affineXYEditPlaneToggleBtn.setText("XY");
+      affineXYEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the XY-plane ");
+      affineXYEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
+      affineXYEditPlaneToggleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.changeAffineEditPlane(EditPlane.XY);
+          }
+        }
+      });
     }
-    return tglbtnXy;
+    return affineXYEditPlaneToggleBtn;
   }
 
-  private JToggleButton getTglbtnYz() {
-    if (tglbtnYz == null) {
-      tglbtnYz = new JToggleButton();
-      tglbtnYz.setText("YZ");
-      tglbtnYz.setToolTipText("Rotate triangles using the left mouse button");
-      tglbtnYz.setPreferredSize(new Dimension(42, 24));
+  private JToggleButton getAffineYZEditPlaneToggleBtn() {
+    if (affineYZEditPlaneToggleBtn == null) {
+      affineYZEditPlaneToggleBtn = new JToggleButton();
+      affineYZEditPlaneToggleBtn.setText("YZ");
+      affineYZEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the YZ-plane ");
+      affineYZEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
+      affineYZEditPlaneToggleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.changeAffineEditPlane(EditPlane.YZ);
+          }
+        }
+      });
     }
-    return tglbtnYz;
+    return affineYZEditPlaneToggleBtn;
   }
 
-  private JToggleButton getTglbtnZx() {
-    if (tglbtnZx == null) {
-      tglbtnZx = new JToggleButton();
-      tglbtnZx.setText("ZX");
-      tglbtnZx.setToolTipText("Rotate triangles using the left mouse button");
-      tglbtnZx.setPreferredSize(new Dimension(42, 24));
+  private JToggleButton getAffineZXEditPlaneToggleBtn() {
+    if (affineZXEditPlaneToggleBtn == null) {
+      affineZXEditPlaneToggleBtn = new JToggleButton();
+      affineZXEditPlaneToggleBtn.setText("ZX");
+      affineZXEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the ZX-plane ");
+      affineZXEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
+      affineZXEditPlaneToggleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.changeAffineEditPlane(EditPlane.ZX);
+          }
+        }
+      });
     }
-    return tglbtnZx;
+    return affineZXEditPlaneToggleBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

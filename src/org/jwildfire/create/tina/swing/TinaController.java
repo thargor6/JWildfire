@@ -631,7 +631,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingAOAzimuthSamplesSlider = parameterObject.tinaSolidRenderingAOAzimuthSamplesSlider;
 
     data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
-    data.resetSolidRenderingGlobalSettingsBtn = parameterObject.resetSolidRenderingGlobalSettingsBtn;
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
     data.tinaSolidRenderingSelectedLightCmb = parameterObject.tinaSolidRenderingSelectedLightCmb;
@@ -764,8 +763,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.macroButtonHorizPanel = parameterObject.macroButtonHorizPanel;
     data.gradientResetBtn = parameterObject.gradientResetBtn;
     data.macroButtonHorizRootPanel = parameterObject.macroButtonHorizRootPanel;
-    data.affineEditPlaneCmb = parameterObject.affineEditPlaneCmb;
-
+    data.affineXYEditPlaneToggleBtn = parameterObject.affineXYEditPlaneToggleBtn;
+    data.affineYZEditPlaneToggleBtn = parameterObject.affineYZEditPlaneToggleBtn;
+    data.affineZXEditPlaneToggleBtn = parameterObject.affineZXEditPlaneToggleBtn;
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootPanel);
     xFormControls = new XFormControlsDelegate(this, data, rootPanel);
@@ -2358,7 +2358,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     boolean oldNoRefresh = noRefresh;
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-      data.affineEditPlaneCmb.setSelectedItem(getCurrFlame().getEditPlane());
+      refreshEditPlaneToggleButtons(getCurrFlame().getEditPlane());
       if (pXForm != null) {
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
@@ -5685,12 +5685,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return _lastGradient;
   }
 
-  public void affineEditPlaneCmb_changed() {
+  public void changeAffineEditPlane(EditPlane editPlane) {
     if (gridRefreshing || cmbRefreshing || getCurrFlame() == null) {
       return;
     }
-    getCurrFlame().setEditPlane((EditPlane) data.affineEditPlaneCmb.getSelectedItem());
+    getCurrFlame().setEditPlane(editPlane);
+    refreshEditPlaneToggleButtons(editPlane);
     transformationChanged(true);
+  }
+
+  private void refreshEditPlaneToggleButtons(EditPlane editPlane) {
+    boolean oldCmbRefreshing = cmbRefreshing;
+    try {
+      cmbRefreshing = true;
+      data.affineXYEditPlaneToggleBtn.setSelected(EditPlane.XY.equals(editPlane));
+      data.affineYZEditPlaneToggleBtn.setSelected(EditPlane.YZ.equals(editPlane));
+      data.affineZXEditPlaneToggleBtn.setSelected(EditPlane.ZX.equals(editPlane));
+    }
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
   }
 
   public void selectImageForBackgroundButton_actionPerformed(ActionEvent e) {
