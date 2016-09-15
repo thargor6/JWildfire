@@ -5095,7 +5095,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getStereo3dInterpolatedImageCountSlider(), getStereo3dPreviewCmb(), getStereo3dFocalOffsetREd(), getStereo3dFocalOffsetSlider(),
         getStereo3dSwapSidesCBx(), getTinaCameraCamPosXREd(), getTinaCameraCamPosXSlider(), getTinaCameraCamPosYREd(), getTinaCameraCamPosYSlider(),
         getTinaCameraCamPosZREd(), getTinaCameraCamPosZSlider(), getTinaSaturationREd(), getTinaSaturationSlider(), getToggleDrawGridButton(),
-        getEditorFractalBrightnessSlider(), getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
+        getMouseTransformEditTriangleViewButton(), getTinaPaletteRandomGeneratorCmb(), getToggleTriangleWithColorsButton(),
         getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
         getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
         getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
@@ -7122,14 +7122,6 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformEditTriangleViewButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_view.png")));
       previewEastDefaultPanel.add(getMouseTransformEditFocusPointButton());
       previewEastDefaultPanel.add(getLabel_1());
-
-      editorFractalBrightnessSlider = new JSlider();
-      editorFractalBrightnessSlider.setToolTipText("Show/Hide the realtime preview (may make sense to hide it temporary completely to get better control over the triangles)");
-      previewEastDefaultPanel.add(editorFractalBrightnessSlider);
-      editorFractalBrightnessSlider.setOrientation(SwingConstants.VERTICAL);
-      editorFractalBrightnessSlider.setValue(100);
-      editorFractalBrightnessSlider.setPreferredSize(new Dimension(19, 42));
-      editorFractalBrightnessSlider.setName("tinaCameraCentreXSlider");
       previewEastDefaultPanel.add(getTglbtnXy());
       previewEastDefaultPanel.add(getTglbtnYz());
       previewEastDefaultPanel.add(getTglbtnZx());
@@ -7137,13 +7129,6 @@ public class TinaInternalFrame extends JInternalFrame {
       previewEastDefaultPanel.add(getToggleDetachedPreviewButton());
       previewEastDefaultPanel.add(getTinaRenderFlameButton());
       previewEastMainPanel.add(getMacroButtonRootPanel(), BorderLayout.CENTER);
-      editorFractalBrightnessSlider.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null) {
-            tinaController.editorFractalBrightnessSliderChanged();
-          }
-        }
-      });
       mouseTransformScaleTrianglesButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           expandGradientEditorFncPnl(false);
@@ -9800,7 +9785,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaCameraCamPosZSlider;
   private JSlider tinaSaturationSlider;
   private JWFNumberField tinaSaturationREd;
-  private JSlider editorFractalBrightnessSlider;
   private JToggleButton toggleDrawGridButton;
   private JToggleButton mouseTransformEditTriangleViewButton;
   private JComboBox randomGradientCmb;
@@ -13916,10 +13900,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JWFNumberField getTinaSaturationREd() {
     return tinaSaturationREd;
-  }
-
-  public JSlider getEditorFractalBrightnessSlider() {
-    return editorFractalBrightnessSlider;
   }
 
   public JToggleButton getToggleDrawGridButton() {

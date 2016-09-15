@@ -411,7 +411,6 @@ public class TinaControllerParameter {
   public JSlider camPosZSlider;
   public JToggleButton toggleDrawGridButton;
   public JToggleButton toggleDrawGuidesButton;
-  public JSlider editorFractalBrightnessSlider;
   public JToggleButton toggleTriangleWithColorsButton;
   public JToggleButton realtimePreviewToggleButton;
   public JComboBox triangleStyleCmb;
@@ -887,7 +886,7 @@ public class TinaControllerParameter {
       JWFNumberField pStereo3dFocalOffsetREd, JSlider pStereo3dFocalOffsetSlider, JCheckBox pStereo3dSwapSidesCBx,
       JWFNumberField pCamPosXREd, JSlider pCamPosXSlider, JWFNumberField pCamPosYREd, JSlider pCamPosYSlider,
       JWFNumberField pCamPosZREd, JSlider pCamPosZSlider, JWFNumberField pSaturationREd, JSlider pSaturationSlider,
-      JToggleButton pToggleDrawGridButton, JSlider pEditorFractalBrightnessSlider, JToggleButton pMouseTransformEditTriangleViewButton,
+      JToggleButton pToggleDrawGridButton, JToggleButton pMouseTransformEditTriangleViewButton,
       JComboBox pPaletteRandomGeneratorCmb, JToggleButton pToggleTriangleWithColorsButton, JButton pAffineRotateEditMotionCurveBtn, JButton pAffineScaleEditMotionCurveBtn,
       JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
       JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
@@ -981,7 +980,6 @@ public class TinaControllerParameter {
     this.saturationREd = pSaturationREd;
     this.saturationSlider = pSaturationSlider;
     this.toggleDrawGridButton = pToggleDrawGridButton;
-    this.editorFractalBrightnessSlider = pEditorFractalBrightnessSlider;
     this.mouseTransformEditTriangleViewButton = pMouseTransformEditTriangleViewButton;
     this.paletteRandomGeneratorCmb = pPaletteRandomGeneratorCmb;
     this.toggleTriangleWithColorsButton = pToggleTriangleWithColorsButton;
