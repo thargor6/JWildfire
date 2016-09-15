@@ -279,15 +279,14 @@ public class LogDensityFilter extends FilterHolder {
               getSample(pFilteredPnt, pX * oversample + j, pY * oversample + i);
               if (pFilteredPnt.rp.hasSolidColors) {
                 double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
-                addSolidColors(pFilteredPnt, pFilteredPnt.rp, f);
-                pFilteredPnt.dofDist += pFilteredPnt.rp.dofDist * f;
-                //pFilteredPnt.dofDist = pFilteredPnt.rp.dofDist;
+                if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
+                  pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
+                }
               }
             }
           }
         }
       }
-
     }
     else {
       int solidSampleCount = 0;
@@ -352,7 +351,8 @@ public class LogDensityFilter extends FilterHolder {
         boolean withSSAO = flame.getSolidRenderSettings().isAoEnabled();
         double ambientIntensity = Math.max(0.0, withSSAO ? (material.getAmbient() - rp.ao * aoInt) : material.getAmbient());
         // TODO ao param
-        double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt / 6.0) : material.getDiffuse());
+        double aoDiffuseInfluence = 0.5;
+        double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt * aoDiffuseInfluence) : material.getDiffuse());
         double specularIntensity = material.getPhong();
 
         //double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 3.0) : material.getReflMapIntensity());
@@ -420,7 +420,7 @@ public class LogDensityFilter extends FilterHolder {
           if (reflectionMap != null) {
             //double reflectionMapIntensity = Math.max(0.0, material.getReflMapIntensity() / 3.0);
             // TODO ao param
-            double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 6.0) : material.getReflMapIntensity());
+            double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt * aoDiffuseInfluence) : material.getReflMapIntensity());
 
             VectorD r = VectorD.reflect(viewDir, normal);
             UVPairD uv = UVPairD.sphericalBlinnNewellLatitudeMapping(r);

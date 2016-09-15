@@ -116,12 +116,15 @@ public class GammaCorrectionFilter {
       ColorF transfColor = applyLogScale(logDensityPnt, logScl);
 
       if (logDensityPnt.hasSolidColors) {
-        double fade = 0.95;
-        double rfade = 1.0 - fade;
-        transfColor.r = transfColor.r * rfade + logDensityPnt.solidRed * fade;
-        transfColor.g = transfColor.g * rfade + logDensityPnt.solidGreen * fade;
-        transfColor.b = transfColor.b * rfade + logDensityPnt.solidBlue * fade;
-        inverseAlphaInt *= rfade;
+        //        double fade = 0.95;
+        //        double rfade = 1.0 - fade;
+        //        transfColor.r = transfColor.r * rfade + logDensityPnt.solidRed * fade;
+        //        transfColor.g = transfColor.g * rfade + logDensityPnt.solidGreen * fade;
+        //        transfColor.b = transfColor.b * rfade + logDensityPnt.solidBlue * fade;
+        //        inverseAlphaInt *= rfade;
+        transfColor.r = logDensityPnt.solidRed;
+        transfColor.g = logDensityPnt.solidGreen;
+        transfColor.b = logDensityPnt.solidBlue;
       }
 
       ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);

@@ -129,7 +129,7 @@ public class BatchRendererController implements JobRenderThreadController {
     data.batchRenderStartButton.setText(idle ? "Render" : "Stop");
     data.batchRenderStartButton.invalidate();
     data.batchRenderStartButton.validate();
-    rootPanel.setEnabled(idle);
+    //    rootPanel.setEnabled(idle);
   }
 
   public void batchRenderAddFilesButton_clicked() {
