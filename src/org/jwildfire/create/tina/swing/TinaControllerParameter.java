@@ -579,7 +579,7 @@ public class TinaControllerParameter {
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
-  public JCheckBox tinaSolidRenderingCBx;
+  public JToggleButton solidRenderingToggleBtn;
   public JCheckBox tinaSolidRenderingEnableAOCBx;
   public JWFNumberField tinaSolidRenderingAOIntensityREd;
   public JSlider tinaSolidRenderingAOIntensitySlider;
@@ -1036,7 +1036,7 @@ public class TinaControllerParameter {
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
-      JCheckBox tinaSolidRenderingCBx, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
+      JToggleButton solidRenderingToggleBtn, JCheckBox tinaSolidRenderingEnableSSAOCBx, JWFNumberField tinaSolidRenderingSSAOIntensityREd,
       JSlider tinaSolidRenderingSSAOIntensitySlider, JWFNumberField tinaSolidRenderingAOSearchRadiusREd, JSlider tinaSolidRenderingAOSearchRadiusSlider,
       JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
       JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
@@ -1163,7 +1163,7 @@ public class TinaControllerParameter {
     foregroundOpacitySlider = pForegroundOpacitySlider;
     scriptEditBtn = pScriptEditBtn;
     realtimePreviewToggleButton = pRealtimePreviewToggleButton;
-    this.tinaSolidRenderingCBx = tinaSolidRenderingCBx;
+    this.solidRenderingToggleBtn = solidRenderingToggleBtn;
     this.tinaSolidRenderingEnableAOCBx = tinaSolidRenderingEnableSSAOCBx;
     this.tinaSolidRenderingAOIntensityREd = tinaSolidRenderingSSAOIntensityREd;
     this.tinaSolidRenderingAOIntensitySlider = tinaSolidRenderingSSAOIntensitySlider;

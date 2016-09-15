@@ -816,7 +816,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   private void refreshSolidRenderingGlobals() {
     SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
-    data.tinaSolidRenderingCBx.setSelected(settings.isSolidRenderingEnabled());
+    data.solidRenderingToggleBtn.setSelected(settings.isSolidRenderingEnabled());
     data.tinaSolidRenderingEnableAOCBx.setSelected(settings.isAoEnabled());
     data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
     data.tinaSolidRenderingAOIntensityREd.setText(Tools.doubleToString(settings.getAoIntensity()));
@@ -1323,8 +1323,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       Flame flame = getCurrFlame();
       if (flame != null) {
         owner.saveUndoPoint();
-        flame.getSolidRenderSettings().setSolidRenderingEnabled(data.tinaSolidRenderingCBx.isSelected());
-        if (data.tinaSolidRenderingCBx.isSelected()) {
+        flame.getSolidRenderSettings().setSolidRenderingEnabled(data.solidRenderingToggleBtn.isSelected());
+        if (data.solidRenderingToggleBtn.isSelected()) {
           flame.setSpatialOversampling(2);
           flame.setSpatialFilterRadius(0.5);
           flame.setSpatialFilterKernel(FilterKernelType.GAUSSIAN);

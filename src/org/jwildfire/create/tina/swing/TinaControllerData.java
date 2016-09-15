@@ -397,7 +397,7 @@ public class TinaControllerData {
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
 
-  public JCheckBox tinaSolidRenderingCBx;
+  public JToggleButton solidRenderingToggleBtn;
   public JCheckBox tinaSolidRenderingEnableAOCBx;
   public JWFNumberField tinaSolidRenderingAOIntensityREd;
   public JSlider tinaSolidRenderingAOIntensitySlider;

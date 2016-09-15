@@ -5128,7 +5128,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox(), getFilterKernelFlatPreviewBtn(),
         getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
-        getTinaSolidRenderingCBx(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
+        getSolidRenderingToggleBtn(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
@@ -7385,7 +7385,7 @@ public class TinaInternalFrame extends JInternalFrame {
       motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
-      centerWestPanel.add(getToggleButton_4());
+      centerWestPanel.add(getSolidRenderingToggleBtn());
     }
     return centerWestPanel;
   }
@@ -10010,7 +10010,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton relWeightsResetAllButton;
   private JPanel panel_59;
   private JTabbedPane tinaSolidRenderingPane;
-  private JCheckBox tinaSolidRenderingCBx;
   private JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   private JButton resetSolidRenderingGlobalSettingsBtn;
   private JButton resetSolidRenderingMaterialsBtn;
@@ -10072,7 +10071,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaSolidRenderingAOFalloffSlider;
   private JSlider tinaSolidRenderingAORadiusSamplesSlider;
   private JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
-  private JToggleButton toggleButton_4;
+  private JToggleButton solidRenderingToggleBtn;
   private JLabel label_1;
   private JLabel label_3;
   private JToggleButton tglbtnXy;
@@ -16814,17 +16813,6 @@ public class TinaInternalFrame extends JInternalFrame {
       JPanel panel_1 = new JPanel();
       tinaSolidRenderingPane.addTab("Rendering settings", null, panel_1, null);
       panel_1.setLayout(null);
-      tinaSolidRenderingCBx = new JCheckBox("Enable solid rendering");
-      tinaSolidRenderingCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingCBx_changed();
-          }
-        }
-      });
-      tinaSolidRenderingCBx.setActionCommand("");
-      tinaSolidRenderingCBx.setBounds(6, 6, 169, 18);
-      panel_1.add(tinaSolidRenderingCBx);
 
       tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
       tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
@@ -17212,10 +17200,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightCastShadowsCBx);
     }
     return tinaSolidRenderingPane;
-  }
-
-  public JCheckBox getTinaSolidRenderingCBx() {
-    return tinaSolidRenderingCBx;
   }
 
   public JCheckBox getTinaSolidRenderingEnableHardShadowsCBx() {
@@ -18438,16 +18422,23 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaSolidRenderingAOAzimuthSamplesSlider;
   }
 
-  private JToggleButton getToggleButton_4() {
-    if (toggleButton_4 == null) {
-      toggleButton_4 = new JToggleButton();
-      toggleButton_4.setToolTipText("Enable solid rendering");
-      toggleButton_4.setPreferredSize(new Dimension(72, 42));
-      toggleButton_4.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
-      toggleButton_4.setPreferredSize(new Dimension(72, 42));
-      toggleButton_4.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+  private JToggleButton getSolidRenderingToggleBtn() {
+    if (solidRenderingToggleBtn == null) {
+      solidRenderingToggleBtn = new JToggleButton();
+      solidRenderingToggleBtn.setToolTipText("Enable solid rendering");
+      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
+      solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/applications-toys.png")));
+      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
+      solidRenderingToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      solidRenderingToggleBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingCBx_changed();
+          }
+        }
+      });
     }
-    return toggleButton_4;
+    return solidRenderingToggleBtn;
   }
 
   private JLabel getLabel_1() {
