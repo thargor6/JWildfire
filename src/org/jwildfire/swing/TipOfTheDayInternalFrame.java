@@ -206,12 +206,17 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
       return tips.get(0);
     }
     else {
-      int idx = 0;
-      while (idx == prevTipIndex) {
-        idx = randGen.random(tips.size());
+      //      int idx = 0;
+      //      while (idx == prevTipIndex) {
+      //        idx = randGen.random(tips.size());
+      //      }
+      //      prevTipIndex = idx;
+      //      return tips.get(idx);
+      prevTipIndex++;
+      if (prevTipIndex >= tips.size()) {
+        prevTipIndex = 0;
       }
-      prevTipIndex = idx;
-      return tips.get(idx);
+      return tips.get(prevTipIndex);
     }
   }
 
