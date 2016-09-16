@@ -629,6 +629,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingAORadiusSamplesSlider = parameterObject.tinaSolidRenderingAORadiusSamplesSlider;
     data.tinaSolidRenderingAOAzimuthSamplesREd = parameterObject.tinaSolidRenderingAOAzimuthSamplesREd;
     data.tinaSolidRenderingAOAzimuthSamplesSlider = parameterObject.tinaSolidRenderingAOAzimuthSamplesSlider;
+    data.tinaSolidRenderingAOAffectDiffuseREd = parameterObject.tinaSolidRenderingAOAffectDiffuseREd;
+    data.tinaSolidRenderingAOAffectDiffuseSlider = parameterObject.tinaSolidRenderingAOAffectDiffuseSlider;
 
     data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;

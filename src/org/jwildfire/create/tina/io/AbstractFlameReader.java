@@ -138,6 +138,7 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_AO_RADIUS_SAMPLES = "sld_render_ao_radius_samples";
   public static final String ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES = "sld_render_ao_azimuth_samples";
   public static final String ATTR_SLD_RENDER_AO_FALLOFF = "sld_render_ao_falloff";
+  public static final String ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE = "sld_render_ao_affect_diffuse";
   public static final String ATTR_SLD_RENDER_SHADOWS_ENABLED = "sld_render_shadows_enabled";
   public static final String ATTR_SLD_RENDER_MATERIAL_COUNT = "sld_render_material_count";
   public static final String ATTR_SLD_RENDER_LIGHT_COUNT = "sld_render_ligtht_count";
@@ -543,6 +544,9 @@ public class AbstractFlameReader {
       }
       if ((hs = atts.get(ATTR_SLD_RENDER_AO_FALLOFF)) != null) {
         pFlame.getSolidRenderSettings().setAoFalloff(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE)) != null) {
+        pFlame.getSolidRenderSettings().setAoAffectDiffuse(Double.parseDouble(hs));
       }
       if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWS_ENABLED)) != null) {
         pFlame.getSolidRenderSettings().setHardShadowsEnabled(Integer.parseInt(hs) == 1);

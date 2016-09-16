@@ -220,6 +220,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingAOFalloffREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAORadiusSamplesREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOAzimuthSamplesREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingAOAffectDiffuseREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingEnableAOCBx, disabled);
     enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
     enableControl(data.resetSolidRenderingLightsBtn, disabled);
@@ -830,6 +831,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.tinaSolidRenderingAORadiusSamplesSlider.setValue(Tools.FTOI(settings.getAoRadiusSamples()));
     data.tinaSolidRenderingAOAzimuthSamplesREd.setText(Tools.doubleToString(settings.getAoAzimuthSamples()));
     data.tinaSolidRenderingAOAzimuthSamplesSlider.setValue(Tools.FTOI(settings.getAoAzimuthSamples()));
+    data.tinaSolidRenderingAOAffectDiffuseREd.setText(Tools.doubleToString(settings.getAoAffectDiffuse()));
+    data.tinaSolidRenderingAOAffectDiffuseSlider.setValue(Tools.FTOI(settings.getAoAffectDiffuse() * TinaController.SLIDER_SCALE_CENTRE));
   }
 
   private void refreshSolidRenderingMaterialControls() {
@@ -1693,6 +1696,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingTextFieldChanged(data.tinaSolidRenderingAOAzimuthSamplesSlider, data.tinaSolidRenderingAOAzimuthSamplesREd, "aoAzimuthSamples", 1.0, false);
   }
 
+  public void solidRenderingAOAffectDiffuseREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingAOAffectDiffuseSlider, data.tinaSolidRenderingAOAffectDiffuseREd, "aoAffectDiffuse", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
   public void solidRenderingMaterialAmbientREd_changed() {
     solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialAmbientSlider, data.tinaSolidRenderingMaterialAmbientREd, "ambient", TinaController.SLIDER_SCALE_CENTRE, true);
   }
@@ -1723,6 +1730,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingAOIntensitySlider_stateChanged(ChangeEvent e) {
     solidRenderingSliderChanged(data.tinaSolidRenderingAOIntensitySlider, data.tinaSolidRenderingAOIntensityREd, "aoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingAOAffectDiffuseSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingAOAffectDiffuseSlider, data.tinaSolidRenderingAOAffectDiffuseREd, "aoAffectDiffuse", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void solidRenderingAOSearchRadiusSlider_stateChanged(ChangeEvent e) {

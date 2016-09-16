@@ -594,6 +594,8 @@ public class TinaControllerParameter {
   public JSlider tinaSolidRenderingAORadiusSamplesSlider;
   public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
+  public JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
+  public JSlider tinaSolidRenderingAOAffectDiffuseSlider;
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
@@ -1040,7 +1042,8 @@ public class TinaControllerParameter {
       JSlider tinaSolidRenderingSSAOIntensitySlider, JWFNumberField tinaSolidRenderingAOSearchRadiusREd, JSlider tinaSolidRenderingAOSearchRadiusSlider,
       JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
       JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
-      JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd, JSlider tinaSolidRenderingAOAzimuthSamplesSlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
+      JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd, JSlider tinaSolidRenderingAOAzimuthSamplesSlider,
+      JWFNumberField tinaSolidRenderingAOAffectDiffuseREd, JSlider tinaSolidRenderingAOAffectDiffuseSlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
       JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
@@ -1179,6 +1182,9 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingAORadiusSamplesSlider = tinaSolidRenderingAORadiusSamplesSlider;
     this.tinaSolidRenderingAOAzimuthSamplesREd = tinaSolidRenderingAOAzimuthSamplesREd;
     this.tinaSolidRenderingAOAzimuthSamplesSlider = tinaSolidRenderingAOAzimuthSamplesSlider;
+    this.tinaSolidRenderingAOAffectDiffuseREd = tinaSolidRenderingAOAffectDiffuseREd;
+    this.tinaSolidRenderingAOAffectDiffuseSlider = tinaSolidRenderingAOAffectDiffuseSlider;
+
     this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
     this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;
     this.resetSolidRenderingLightsBtn = resetSolidRenderingLightsBtn;

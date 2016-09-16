@@ -21,6 +21,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   private int aoRadiusSamples = 8;
   private int aoAzimuthSamples = 10;
   private double aoFalloff = 0.5;
+  private double aoAffectDiffuse = 0.2;
 
   private boolean hardShadowsEnabled = false;
   private final List<MaterialSettings> materials = new ArrayList<>();
@@ -205,6 +206,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     aoRadiusSamples = pSrc.aoRadiusSamples;
     aoAzimuthSamples = pSrc.aoAzimuthSamples;
     aoFalloff = pSrc.aoFalloff;
+    aoAffectDiffuse = pSrc.aoAffectDiffuse;
 
     hardShadowsEnabled = pSrc.hardShadowsEnabled;
     materials.clear();
@@ -239,7 +241,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
         aoEnabled != pSrc.aoEnabled || hardShadowsEnabled != pSrc.hardShadowsEnabled ||
         fabs(aoIntensity - pSrc.aoIntensity) > EPSILON || fabs(aoSearchRadius - pSrc.aoSearchRadius) > EPSILON ||
         fabs(aoBlurRadius - pSrc.aoBlurRadius) > EPSILON || aoRadiusSamples != pSrc.aoRadiusSamples ||
-        aoAzimuthSamples != pSrc.aoAzimuthSamples || fabs(aoFalloff - pSrc.aoFalloff) > EPSILON) {
+        aoAzimuthSamples != pSrc.aoAzimuthSamples || fabs(aoFalloff - pSrc.aoFalloff) > EPSILON ||
+        fabs(aoAffectDiffuse - pSrc.aoAffectDiffuse) > EPSILON) {
       return false;
     }
     if (materials.size() != pSrc.materials.size()) {
@@ -331,6 +334,14 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public void setAoFalloff(double aoFalloff) {
     this.aoFalloff = aoFalloff;
+  }
+
+  public double getAoAffectDiffuse() {
+    return aoAffectDiffuse;
+  }
+
+  public void setAoAffectDiffuse(double aoAffectDiffuse) {
+    this.aoAffectDiffuse = aoAffectDiffuse;
   }
 
 }

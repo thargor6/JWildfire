@@ -412,6 +412,9 @@ public class TinaControllerData {
   public JSlider tinaSolidRenderingAORadiusSamplesSlider;
   public JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd;
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
+  public JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
+  public JSlider tinaSolidRenderingAOAffectDiffuseSlider;
+
   public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;

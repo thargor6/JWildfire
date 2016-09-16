@@ -343,6 +343,7 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_RADIUS_SAMPLES, pFlame.getSolidRenderSettings().getAoRadiusSamples()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES, pFlame.getSolidRenderSettings().getAoAzimuthSamples()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_FALLOFF, pFlame.getSolidRenderSettings().getAoFalloff()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE, pFlame.getSolidRenderSettings().getAoAffectDiffuse()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));
 
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));

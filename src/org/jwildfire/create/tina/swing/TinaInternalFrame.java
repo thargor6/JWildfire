@@ -5116,7 +5116,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingAOIntensitySlider(), getTinaSolidRenderingAOSearchRadiusREd(), getTinaSolidRenderingAOSearchRadiusSlider(),
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
-        getTinaSolidRenderingAOAzimuthSamplesREd(), getTinaSolidRenderingAOAzimuthSamplesSlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
+        getTinaSolidRenderingAOAzimuthSamplesREd(), getTinaSolidRenderingAOAzimuthSamplesSlider(),
+        getTinaSolidRenderingAOAffectDiffuseREd(), getTinaSolidRenderingAOAffectDiffuseSlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
         getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
@@ -10033,6 +10034,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton affineXYEditPlaneToggleBtn;
   private JToggleButton affineYZEditPlaneToggleBtn;
   private JToggleButton affineZXEditPlaneToggleBtn;
+  private JPanel panel_4;
+  private JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
+  private JSlider tinaSolidRenderingAOAffectDiffuseSlider;
+  private JLabel lblHintAmbientShadows;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -16758,6 +16763,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       }
       tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
+      tinaSolidRenderingPane.addTab("Hard shadows", null, getPanel_4(), null);
 
       JPanel tinaSolidRenderingMaterialPnl = new JPanel();
       tinaSolidRenderingPane.addTab("Material settings", null, tinaSolidRenderingMaterialPnl, null);
@@ -18275,19 +18281,73 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       panel.add(tinaSolidRenderingAOAzimuthSamplesSlider);
 
-      tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
-      tinaSolidRenderingEnableHardShadowsCBx.setVisible(false);
-      tinaSolidRenderingEnableHardShadowsCBx.setBounds(607, 102, 169, 18);
-      panel.add(tinaSolidRenderingEnableHardShadowsCBx);
-      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
+      JLabel lblAffectDiffuse = new JLabel();
+      lblAffectDiffuse.setToolTipText("Affect diffuse lighting component for more dramatic effects");
+      lblAffectDiffuse.setText("Affect diffuse");
+      lblAffectDiffuse.setSize(new Dimension(68, 22));
+      lblAffectDiffuse.setPreferredSize(new Dimension(94, 22));
+      lblAffectDiffuse.setName("tinaSolidRenderingAOBlurRadiusLbl");
+      lblAffectDiffuse.setLocation(new Point(390, 6));
+      lblAffectDiffuse.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAffectDiffuse.setBounds(485, 99, 124, 22);
+      panel.add(lblAffectDiffuse);
+
+      tinaSolidRenderingAOAffectDiffuseREd = new JWFNumberField();
+      tinaSolidRenderingAOAffectDiffuseREd.setMaxValue(1.0);
+      tinaSolidRenderingAOAffectDiffuseREd.setHasMaxValue(true);
+      tinaSolidRenderingAOAffectDiffuseREd.setValueStep(0.05);
+      tinaSolidRenderingAOAffectDiffuseREd.setText("");
+      tinaSolidRenderingAOAffectDiffuseREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingAOAffectDiffuseREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingAOAffectDiffuseREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingAOAffectDiffuseREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingAOAffectDiffuseREd.setLinkedMotionControlName("tinaSolidRenderingAOAffectDiffuseSlider");
+      tinaSolidRenderingAOAffectDiffuseREd.setLinkedLabelControlName("tinaSolidRenderingAOAffectDiffuseLbl");
+      tinaSolidRenderingAOAffectDiffuseREd.setHasMinValue(true);
+      tinaSolidRenderingAOAffectDiffuseREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOAffectDiffuseREd.setBounds(607, 99, 100, 24);
+      tinaSolidRenderingAOAffectDiffuseREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingAOAffectDiffuseREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
+            if (!tinaSolidRenderingAOAffectDiffuseREd.isMouseAdjusting() || tinaSolidRenderingAOAffectDiffuseREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingAOAffectDiffuseSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingAOAffectDiffuseREd_changed();
           }
         }
       });
 
-      tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable solid rendering");
+      panel.add(tinaSolidRenderingAOAffectDiffuseREd);
+
+      tinaSolidRenderingAOAffectDiffuseSlider = new JSlider();
+      tinaSolidRenderingAOAffectDiffuseSlider.setValue(0);
+      tinaSolidRenderingAOAffectDiffuseSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingAOAffectDiffuseSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingAOAffectDiffuseSlider.setName("tinaSolidRenderingAOAffectDiffuseSlider");
+      tinaSolidRenderingAOAffectDiffuseSlider.setMaximum(5000);
+      tinaSolidRenderingAOAffectDiffuseSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingAOAffectDiffuseSlider.setBounds(709, 101, 205, 19);
+      tinaSolidRenderingAOAffectDiffuseSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingAOAffectDiffuseSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingAOAffectDiffuseSlider_stateChanged(e);
+        }
+      });
+
+      panel.add(tinaSolidRenderingAOAffectDiffuseSlider);
+      panel.add(getLblHintAmbientShadows());
     }
     return panel;
   }
@@ -18432,6 +18492,49 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return affineZXEditPlaneToggleBtn;
+  }
+
+  private JPanel getPanel_4() {
+    if (panel_4 == null) {
+      panel_4 = new JPanel();
+      panel_4.setLayout(null);
+
+      tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
+      tinaSolidRenderingEnableHardShadowsCBx.setBounds(16, 6, 169, 18);
+      panel_4.add(tinaSolidRenderingEnableHardShadowsCBx);
+      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
+          }
+        }
+      });
+
+      tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable hard shadows");
+    }
+    return panel_4;
+  }
+
+  public JWFNumberField getTinaSolidRenderingAOAffectDiffuseREd() {
+    return tinaSolidRenderingAOAffectDiffuseREd;
+  }
+
+  public JSlider getTinaSolidRenderingAOAffectDiffuseSlider() {
+    return tinaSolidRenderingAOAffectDiffuseSlider;
+  }
+
+  private JLabel getLblHintAmbientShadows() {
+    if (lblHintAmbientShadows == null) {
+      lblHintAmbientShadows = new JLabel();
+      lblHintAmbientShadows.setText("Note: Ambient-shadow-calculation is a post-effect which is applied after rendering, so it can not be displayed during progressive rendering");
+      lblHintAmbientShadows.setSize(new Dimension(68, 22));
+      lblHintAmbientShadows.setPreferredSize(new Dimension(94, 22));
+      lblHintAmbientShadows.setName("tinaCameraRollLbl");
+      lblHintAmbientShadows.setLocation(new Point(4, 4));
+      lblHintAmbientShadows.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHintAmbientShadows.setBounds(250, 5, 718, 22);
+    }
+    return lblHintAmbientShadows;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
