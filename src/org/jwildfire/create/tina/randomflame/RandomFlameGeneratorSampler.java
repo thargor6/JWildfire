@@ -142,7 +142,7 @@ public class RandomFlameGeneratorSampler {
         }
         else {
           double fCoverage = calculateCoverage(renderedFlame.getImage(), bgRed, bgGreen, bgBlue, randGen.isUseFilter(randGenState));
-          if (fCoverage >= quality.getCoverage()) {
+          if (fCoverage >= quality.getCoverage() && fCoverage < randGen.getMaxCoverage()) {
             return new RandomFlameGeneratorSample(flame, renderedFlame.getImage());
           }
           else {

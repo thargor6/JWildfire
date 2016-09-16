@@ -37,6 +37,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   private int primitive = 0;
 
+  public static final int LOWPOLY_SHAPE_COUNT = 14;
+
   private String primitives[] = { "ball", "capsule", "cone", "diamond", "torus", "box", "gear15", "icosahedron", "tetrahedron",
       "octahedron", "dodecahedron", "wedge", "icosidodecahedron", "cubeoctahedron", "gears6a", "gears6s", "gears8a", "gears8s",
       "gears12a", "gears12s", "gears16a", "gears16s", "gears24a", "gears24s", "mandelbulb", "drop" };
