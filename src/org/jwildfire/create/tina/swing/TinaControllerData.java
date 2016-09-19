@@ -444,6 +444,7 @@ public class TinaControllerData {
   public JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider;
   public JButton tinaSolidRenderingMaterialSpecularColorBtn;
   public JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb;
+  public JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
   public JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd;
   public JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider;
   public JButton tinaSolidRenderingMaterialReflMapBtn;

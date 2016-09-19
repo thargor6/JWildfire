@@ -42,6 +42,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -244,6 +245,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingMaterialDiffuseResponseCmb, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialReflectionMapIntensityREd, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialReflMapBtn, disabled || !hasMaterials);
+    enableControl(data.tinaSolidRenderingMaterialReflectionMappingCmb, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialSelectReflMapBtn, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialRemoveReflMapBtn, disabled || !hasMaterials);
   }
@@ -849,6 +851,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.tinaSolidRenderingMaterialDiffuseResponseCmb.setSelectedItem(material.getLightDiffFunc());
       data.tinaSolidRenderingMaterialReflectionMapIntensityREd.setText(Tools.doubleToString(material.getReflMapIntensity()));
       data.tinaSolidRenderingMaterialReflectionMapIntensitySlider.setValue(Tools.FTOI(material.getReflMapIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingMaterialReflectionMappingCmb.setSelectedItem(material.getReflectionMapping());
     }
     refreshSolidRenderMaterialSpecularColorIndicator();
   }
@@ -1531,6 +1534,17 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       if (material != null) {
         owner.saveUndoPoint();
         material.setLightDiffFunc((LightDiffFunc) data.tinaSolidRenderingMaterialDiffuseResponseCmb.getSelectedItem());
+        owner.refreshFlameImage(true, false, 1, true, true);
+      }
+    }
+  }
+
+  public void solidRenderingMaterialReflectionMappingCmb_changed() {
+    if (!isNoRefresh()) {
+      MaterialSettings material = getSolidRenderingSelectedMaterial();
+      if (material != null) {
+        owner.saveUndoPoint();
+        material.setReflectionMapping((ReflectionMapping) data.tinaSolidRenderingMaterialReflectionMappingCmb.getSelectedItem());
         owner.refreshFlameImage(true, false, 1, true, true);
       }
     }

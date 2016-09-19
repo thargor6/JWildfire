@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -153,6 +154,7 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC = "sld_render_material_light_diif_func";
   public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAP_INTENSITY = "sld_render_material_refl_map_intensity";
   public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME = "sld_render_material_refl_map_filename";
+  public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAPPING = "sld_render_material_refl_mappping";
 
   public static final String ATTR_SLD_RENDER_LIGHT_X = "sld_render_light_x";
   public static final String ATTR_SLD_RENDER_LIGHT_Y = "sld_render_light_y";
@@ -591,6 +593,14 @@ public class AbstractFlameReader {
           }
           if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME + i)) != null) {
             material.setReflMapFilename(hs);
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_REFL_MAPPING + i)) != null) {
+            try {
+              material.setReflectionMapping(ReflectionMapping.valueOf(hs));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
           }
 
         }

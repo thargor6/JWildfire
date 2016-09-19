@@ -630,6 +630,7 @@ public class TinaControllerParameter {
   public JButton tinaSolidRenderingMaterialReflMapBtn;
   public JButton tinaSolidRenderingMaterialSelectReflMapBtn;
   public JButton tinaSolidRenderingMaterialRemoveReflMapBtn;
+  public JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
   public JWFNumberField xFormMaterialREd;
   public JSlider xFormMaterialSlider;
   public JWFNumberField xFormMaterialSpeedREd;
@@ -1055,7 +1056,7 @@ public class TinaControllerParameter {
       JSlider tinaSolidRenderingMaterialSpecularSlider, JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd, JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider,
       JButton tinaSolidRenderingMaterialSpecularColorBtn, JComboBox tinaSolidRenderingMaterialDiffuseResponseCmb, JWFNumberField tinaSolidRenderingMaterialReflectionMapIntensityREd,
       JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider, JButton tinaSolidRenderingMaterialReflMapBtn, JButton tinaSolidRenderingMaterialSelectReflMapBtn,
-      JButton tinaSolidRenderingMaterialRemoveReflMapBtn,
+      JButton tinaSolidRenderingMaterialRemoveReflMapBtn, JComboBox tinaSolidRenderingMaterialReflectionMappingCmb,
       JWFNumberField pXFormModHueREd, JSlider pXFormModHueSlider, JWFNumberField pXFormModHueSpeedREd, JSlider pXFormModHueSpeedSlider,
       JWFNumberField xFormMaterialREd, JSlider xFormMaterialSlider, JWFNumberField xFormMaterialSpeedREd, JSlider xFormMaterialSpeedSlider
 
@@ -1219,6 +1220,7 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingMaterialReflMapBtn = tinaSolidRenderingMaterialReflMapBtn;
     this.tinaSolidRenderingMaterialSelectReflMapBtn = tinaSolidRenderingMaterialSelectReflMapBtn;
     this.tinaSolidRenderingMaterialRemoveReflMapBtn = tinaSolidRenderingMaterialRemoveReflMapBtn;
+    this.tinaSolidRenderingMaterialReflectionMappingCmb = tinaSolidRenderingMaterialReflectionMappingCmb;
     this.pXFormModHueREd = pXFormModHueREd;
     this.pXFormModHueSlider = pXFormModHueSlider;
     this.pXFormModHueSpeedREd = pXFormModHueSpeedREd;

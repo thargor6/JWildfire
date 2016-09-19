@@ -83,6 +83,7 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -5131,6 +5132,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingMaterialDiffuseResponseCmb(), getTinaSolidRenderingMaterialReflectionMapIntensityREd(),
         getTinaSolidRenderingMaterialReflectionMapIntensitySlider(), getTinaSolidRenderingMaterialReflMapBtn(),
         getTinaSolidRenderingMaterialSelectReflMapBtn(), getTinaSolidRenderingMaterialRemoveReflMapBtn(),
+        getTinaSolidRenderingMaterialReflectionMappingCmb(),
         getXFormModHueREd(), getXFormModHueSlider(), getXFormModHueSpeedREd(), getXFormModHueSpeedSlider(),
         getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider()
         );
@@ -5164,6 +5166,10 @@ public class TinaInternalFrame extends JInternalFrame {
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_SQUARE);
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_HALVE);
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA_HALVE_SQUARE);
+
+      getTinaSolidRenderingMaterialReflectionMappingCmb().removeAllItems();
+      getTinaSolidRenderingMaterialReflectionMappingCmb().addItem(ReflectionMapping.BLINN_NEWELL);
+      getTinaSolidRenderingMaterialReflectionMappingCmb().addItem(ReflectionMapping.SPHERICAL);
 
       getChannelMixerModeCmb().removeAllItems();
       getChannelMixerModeCmb().addItem(ChannelMixerMode.OFF);
@@ -10038,6 +10044,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
   private JSlider tinaSolidRenderingAOAffectDiffuseSlider;
   private JLabel lblHintAmbientShadows;
+  private JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -17582,6 +17589,33 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       panel_114.add(tinaSolidRenderingMaterialReflectionMapIntensitySlider);
+
+      tinaSolidRenderingMaterialReflectionMappingCmb = new JComboBox();
+      tinaSolidRenderingMaterialReflectionMappingCmb.setToolTipText("");
+      tinaSolidRenderingMaterialReflectionMappingCmb.setPreferredSize(new Dimension(110, 24));
+      tinaSolidRenderingMaterialReflectionMappingCmb.setMinimumSize(new Dimension(110, 24));
+      tinaSolidRenderingMaterialReflectionMappingCmb.setMaximumSize(new Dimension(32767, 24));
+      tinaSolidRenderingMaterialReflectionMappingCmb.setMaximumRowCount(48);
+      tinaSolidRenderingMaterialReflectionMappingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialReflectionMappingCmb.setBounds(704, 113, 136, 24);
+      tinaSolidRenderingMaterialReflectionMappingCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingMaterialReflectionMappingCmb_changed();
+          }
+        }
+      });
+      panel_114.add(tinaSolidRenderingMaterialReflectionMappingCmb);
+
+      JLabel lblReflectionMapping = new JLabel();
+      lblReflectionMapping.setText("Reflection mapping");
+      lblReflectionMapping.setSize(new Dimension(68, 22));
+      lblReflectionMapping.setPreferredSize(new Dimension(94, 22));
+      lblReflectionMapping.setName("tinaSolidRenderingMaterialReflectionMappingLbl");
+      lblReflectionMapping.setLocation(new Point(390, 6));
+      lblReflectionMapping.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblReflectionMapping.setBounds(734, 90, 100, 22);
+      panel_114.add(lblReflectionMapping);
     }
     return panel_114;
   }
@@ -18535,6 +18569,10 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHintAmbientShadows.setBounds(250, 5, 718, 22);
     }
     return lblHintAmbientShadows;
+  }
+
+  public JComboBox getTinaSolidRenderingMaterialReflectionMappingCmb() {
+    return tinaSolidRenderingMaterialReflectionMappingCmb;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

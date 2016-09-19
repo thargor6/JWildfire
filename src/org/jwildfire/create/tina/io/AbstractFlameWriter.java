@@ -358,6 +358,7 @@ public class AbstractFlameWriter {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_PHONG_BLUE + i, material.getPhongBlue()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_REFL_MAP_INTENSITY + i, material.getReflMapIntensity()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME + i, material.getReflMapFilename() != null ? material.getReflMapFilename() : ""));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_REFL_MAPPING + i, material.getReflectionMapping().toString()));
         if (material.getLightDiffFunc() instanceof LightDiffFuncPreset)
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_LIGHT_DIFF_FUNC + i, ((LightDiffFuncPreset) material.getLightDiffFunc()).toString()));
       }

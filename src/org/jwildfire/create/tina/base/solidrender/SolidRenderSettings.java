@@ -232,7 +232,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   @Override
   public boolean isEqual(SolidRenderSettings pSrc) {
-    // do not care then solid rendering is disable 
+    // do not care then solid rendering is disabled
     if (!solidRenderingEnabled && !pSrc.solidRenderingEnabled) {
       return true;
     }

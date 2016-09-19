@@ -33,6 +33,7 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
   private double phongRed, phongGreen, phongBlue;
   private String reflMapFilename = null;
   private double reflMapIntensity = 0.5;
+  private ReflectionMapping reflectionMapping = ReflectionMapping.BLINN_NEWELL;
   private LightDiffFunc lightDiffFunc = LightDiffFuncPreset.COSA;
 
   public double getDiffuse() {
@@ -111,6 +112,7 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
     lightDiffFunc = pSrc.lightDiffFunc;
     reflMapIntensity = pSrc.reflMapIntensity;
     reflMapFilename = pSrc.reflMapFilename;
+    reflectionMapping = pSrc.reflectionMapping;
   }
 
   @Override
@@ -126,7 +128,8 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
         fabs(phong - pSrc.phong) > EPSILON || fabs(phongSize - pSrc.phongSize) > EPSILON ||
         fabs(phongRed - pSrc.phongRed) > EPSILON || fabs(phongGreen - pSrc.phongGreen) > EPSILON ||
         fabs(phongBlue - pSrc.phongBlue) > EPSILON || !lightDiffFunc.equals(pSrc.lightDiffFunc) ||
-        fabs(reflMapIntensity - pSrc.reflMapIntensity) > EPSILON || !Tools.stringEquals(reflMapFilename, pSrc.reflMapFilename)) {
+        fabs(reflMapIntensity - pSrc.reflMapIntensity) > EPSILON || reflectionMapping != pSrc.reflectionMapping ||
+        !Tools.stringEquals(reflMapFilename, pSrc.reflMapFilename)) {
       return false;
     }
     return false;
@@ -146,6 +149,14 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
 
   public void setReflMapIntensity(double reflMapIntensity) {
     this.reflMapIntensity = reflMapIntensity;
+  }
+
+  public ReflectionMapping getReflectionMapping() {
+    return reflectionMapping;
+  }
+
+  public void setReflectionMapping(ReflectionMapping reflectionMapping) {
+    this.reflectionMapping = reflectionMapping;
   }
 
 }

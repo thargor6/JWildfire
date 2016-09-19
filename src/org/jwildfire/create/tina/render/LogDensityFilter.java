@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -220,14 +220,24 @@ public class LogDensityFilter extends FilterHolder {
     if (noiseFilterSize > 1) {
 
       if (solidRendering) {
-        for (int c = 0; c < colorOversampling; c++) {
-          for (int i = 0; i < noiseFilterSize; i++) {
-            for (int j = 0; j < noiseFilterSize; j++) {
-              getSample(pFilteredPnt, pX * oversample + j, pY * oversample + i);
-              if (pFilteredPnt.rp.hasSolidColors) {
-                double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
-                if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
-                  pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
+        boolean centreIsSolid;
+        if (noiseFilterSize > 2) {
+          getSample(pFilteredPnt, pX * oversample + noiseFilterSize / 2, pY * oversample + noiseFilterSize / 2);
+          centreIsSolid = pFilteredPnt.rp.hasSolidColors;
+        }
+        else {
+          centreIsSolid = true;
+        }
+        if (centreIsSolid) {
+          for (int c = 0; c < colorOversampling; c++) {
+            for (int i = 0; i < noiseFilterSize; i++) {
+              for (int j = 0; j < noiseFilterSize; j++) {
+                getSample(pFilteredPnt, pX * oversample + j, pY * oversample + i);
+                if (pFilteredPnt.rp.hasSolidColors) {
+                  double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
+                  if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
+                    pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
+                  }
                 }
               }
             }
@@ -357,8 +367,6 @@ public class LogDensityFilter extends FilterHolder {
         double diffuseIntensity = Math.max(0.0, withSSAO ? (material.getDiffuse() - rp.ao * aoInt * aoDiffuseInfluence) : material.getDiffuse());
         double specularIntensity = material.getPhong();
 
-        //double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt / 3.0) : material.getReflMapIntensity());
-        //double reflectionMapIntensity = Math.max(0.0, material.getReflMapIntensity() * ambientIntensity);
         SimpleImage reflectionMap = null;
         if (material.getReflMapIntensity() > MathLib.EPSILON && material.getReflMapFilename() != null && material.getReflMapFilename().length() > 0) {
           try {
@@ -420,13 +428,19 @@ public class LogDensityFilter extends FilterHolder {
 
           // http://www.reindelsoftware.com/Documents/Mapping/Mapping.html
           if (reflectionMap != null) {
-            //double reflectionMapIntensity = Math.max(0.0, material.getReflMapIntensity() / 3.0);
-            // TODO ao param
             double reflectionMapIntensity = Math.max(0.0, withSSAO ? (material.getReflMapIntensity() - rp.ao * aoInt * aoDiffuseInfluence) : material.getReflMapIntensity());
 
             VectorD r = VectorD.reflect(viewDir, normal);
-            UVPairD uv = UVPairD.sphericalBlinnNewellLatitudeMapping(r);
-            //UVPairD uv = UVPairD.sphericalOpenGlMapping(r);
+            UVPairD uv;
+            switch (material.getReflectionMapping()) {
+              case SPHERICAL:
+                uv = UVPairD.sphericalOpenGlMapping(r);
+                break;
+              case BLINN_NEWELL:
+              default:
+                uv = UVPairD.sphericalBlinnNewellLatitudeMapping(r);
+                break;
+            }
             RGBColorD reflMapColor = uv.getColorFromMap(reflectionMap);
             rawColor.addFrom(reflMapColor.r, reflMapColor.g, reflMapColor.b, visibility * reflectionMapIntensity);
           }
