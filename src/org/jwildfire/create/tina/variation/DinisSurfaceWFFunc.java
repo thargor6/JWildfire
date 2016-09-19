@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.tan;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -41,7 +42,7 @@ public class DinisSurfaceWFFunc extends VariationFunc {
     double sinv = sin(v);
     pVarTP.x += pAmount * a * cos(u) * sinv;
     pVarTP.y += pAmount * a * sin(u) * sinv;
-    pVarTP.z -= pAmount * (a * (cos(v) + log(v / 2.0)) + b * u);
+    pVarTP.z -= pAmount * (a * (cos(v) + log(tan(v / 2.0))) + b * u);
   }
 
   @Override
