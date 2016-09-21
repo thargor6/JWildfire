@@ -271,16 +271,21 @@ public class TinaInteractiveRendererController implements IterationObserver {
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
-        storeCurrFlame();
-        cancelRender();
-        setupProfiles(currFlame);
-        renderButton_clicked();
-        enableControls();
+        importFlame(newFlame);
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void importFlame(Flame flame) {
+    currFlame = flame;
+    storeCurrFlame();
+    cancelRender();
+    setupProfiles(currFlame);
+    renderButton_clicked();
+    enableControls();
   }
 
   public void renderButton_clicked() {
@@ -355,6 +360,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void stopButton_clicked() {
     cancelRender();
     enableControls();
+  }
+
+  public boolean isRendering() {
+    return state == State.RENDER;
   }
 
   private void cancelRender() {

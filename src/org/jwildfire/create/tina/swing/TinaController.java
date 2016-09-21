@@ -692,7 +692,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton = parameterObject.editFlameTileButton;
     data.snapShotButton = parameterObject.snapShotButton;
     data.qSaveButton = parameterObject.qSaveButton;
-    data.quickMutationButton = parameterObject.quickMutationButton;
+    data.sendToIRButton = parameterObject.sendToIRButton;
     data.bokehButton = parameterObject.bokehButton;
     data.dancingFlamesButton = parameterObject.dancingFlamesButton;
     data.movieButton = parameterObject.movieButton;
@@ -2277,7 +2277,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton.setEnabled(enabled);
     data.snapShotButton.setEnabled(enabled);
     data.qSaveButton.setEnabled(enabled);
-    data.quickMutationButton.setEnabled(enabled);
+    data.sendToIRButton.setEnabled(enabled);
     data.bokehButton.setEnabled(enabled);
     data.dancingFlamesButton.setEnabled(enabled);
     data.movieButton.setEnabled(enabled);
@@ -4550,6 +4550,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       mutaGenController.importFlame(flame);
+    }
+  }
+
+  public void sendFlameToIRButton_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
+        desktop.showInternalFrame(InteractiveRendererInternalFrame.class);
+        interactiveRendererCtrl.importFlame(flame);
+      }
     }
   }
 

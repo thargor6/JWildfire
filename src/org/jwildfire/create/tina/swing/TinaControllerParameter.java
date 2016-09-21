@@ -317,7 +317,7 @@ public class TinaControllerParameter {
   public JButton editFlameTileButton;
   public JButton snapShotButton;
   public JButton qSaveButton;
-  public JButton quickMutationButton;
+  public JButton sendToIRButton;
   public JButton bokehButton;
   public JButton dancingFlamesButton;
   public JButton movieButton;
@@ -866,7 +866,7 @@ public class TinaControllerParameter {
     this.mutaGenSaveFlameToFileBtn = pMutaGenSaveFlameToFileBtn;
   }
 
-  public void setParams2(JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pQuickMutationButton,
+  public void setParams2(JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pSendToIRButton,
       JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
       JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
@@ -900,7 +900,7 @@ public class TinaControllerParameter {
     this.editFlameTileButton = pEditFlameTileButton;
     this.snapShotButton = pSnapShotButton;
     this.qSaveButton = pQSaveButton;
-    this.quickMutationButton = pQuickMutationButton;
+    this.sendToIRButton = pSendToIRButton;
     this.dancingFlamesButton = pDancingFlamesButton;
     this.movieButton = pMovieButton;
     this.transformSlowButton = pTransformSlowButton;

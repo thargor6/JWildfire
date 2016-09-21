@@ -5061,7 +5061,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider());
 
-    params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getQuickMutationButton(), getTinaAppendToDancingFlamesButton(),
+    params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(), getTinaAppendToDancingFlamesButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
@@ -7327,7 +7327,7 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel = new JPanel();
       centerWestPanel.setPreferredSize(new Dimension(74, 0));
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 3));
-      centerWestPanel.add(getQuickMutationButton());
+      centerWestPanel.add(getSendFlameToIRButton());
       centerWestPanel.add(getTinaAppendToDancingFlamesButton());
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getLabel_5());
@@ -9640,7 +9640,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField camDimishZREd;
   private JSlider camDimishZSlider;
   private JButton tinaAddLinkedTransformationButton;
-  private JButton quickMutationButton;
   private JProgressBar mutaGenProgressBar;
   private JButton editFlameTitleBtn;
   private JLabel label_8;
@@ -10045,6 +10044,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider tinaSolidRenderingAOAffectDiffuseSlider;
   private JLabel lblHintAmbientShadows;
   private JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
+  private JButton sendFlameToIRButton;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -11547,24 +11547,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaAddLinkedTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return tinaAddLinkedTransformationButton;
-  }
-
-  private JButton getQuickMutationButton() {
-    if (quickMutationButton == null) {
-      quickMutationButton = new JButton();
-      quickMutationButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.quickMutateButton_clicked();
-        }
-      });
-      quickMutationButton.setToolTipText("Create mutations of the current flame in the MutaGen");
-      quickMutationButton.setText("Muta");
-      quickMutationButton.setPreferredSize(new Dimension(72, 24));
-      quickMutationButton.setMnemonic(KeyEvent.VK_H);
-      quickMutationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      quickMutationButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kdissert.png")));
-    }
-    return quickMutationButton;
   }
 
   public JProgressBar getMutaGenProgressBar() {
@@ -18573,6 +18555,24 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JComboBox getTinaSolidRenderingMaterialReflectionMappingCmb() {
     return tinaSolidRenderingMaterialReflectionMappingCmb;
+  }
+
+  private JButton getSendFlameToIRButton() {
+    if (sendFlameToIRButton == null) {
+      sendFlameToIRButton = new JButton();
+      sendFlameToIRButton.setToolTipText("Send the current flame to the Interactive Renderer");
+      sendFlameToIRButton.setText("IR");
+      sendFlameToIRButton.setPreferredSize(new Dimension(72, 24));
+      sendFlameToIRButton.setMnemonic(KeyEvent.VK_I);
+      sendFlameToIRButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      sendFlameToIRButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      sendFlameToIRButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.sendFlameToIRButton_clicked();
+        }
+      });
+    }
+    return sendFlameToIRButton;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

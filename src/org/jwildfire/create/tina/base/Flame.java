@@ -40,6 +40,7 @@ import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
+  private static final int DFLT_SOLID_SPATIAL_OVERSAMPLING = 2;
   @AnimAware
   private double centreX;
   private final MotionCurve centreXCurve = new MotionCurve();
@@ -1461,7 +1462,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void applyDefaultOversamplingSettings() {
     Prefs prefs = Prefs.getPrefs();
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
-    setSpatialOversampling(prefs.getTinaDefaultSpatialOversampling());
+    setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
     setColorOversampling(prefs.getTinaDefaultColorOversampling());
     setSampleJittering(prefs.isTinaDefaultSampleJittering());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
@@ -1535,6 +1536,14 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public int getActiveLightCount() {
     return isWithShadows() ? getSolidRenderSettings().getLights().size() : 0;
+  }
+
+  public void setDefaultSolidRenderingSettings() {
+    setSpatialOversampling(DFLT_SOLID_SPATIAL_OVERSAMPLING);
+    setSpatialFilterRadius(0.5);
+    setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
+    setAntialiasAmount(0.0);
+    setAntialiasRadius(0.0);
   }
 
 }

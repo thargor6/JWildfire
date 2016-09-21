@@ -219,9 +219,4 @@ public class SolidJulia3DRandomFlameGenerator extends SolidRandomFlameGenerator 
     return false;
   }
 
-  @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
-    return pFlame;
-  }
-
 }

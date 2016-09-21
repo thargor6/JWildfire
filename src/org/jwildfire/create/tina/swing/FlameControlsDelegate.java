@@ -46,7 +46,6 @@ import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
-import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -1330,11 +1329,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.getSolidRenderSettings().setSolidRenderingEnabled(data.solidRenderingToggleBtn.isSelected());
         if (data.solidRenderingToggleBtn.isSelected()) {
-          flame.setSpatialOversampling(2);
-          flame.setSpatialFilterRadius(0.5);
-          flame.setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
-          flame.setAntialiasAmount(0.0);
-          flame.setAntialiasRadius(0.0);
+          flame.setDefaultSolidRenderingSettings();
           refreshFlameValues();
         }
         enableControls();

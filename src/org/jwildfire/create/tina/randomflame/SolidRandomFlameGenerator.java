@@ -109,4 +109,11 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
   public double getMaxCoverage() {
     return 0.85;
   }
+
+  @Override
+  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+    pFlame.setDefaultSolidRenderingSettings();
+    pFlame.setSpatialOversampling(1);
+    return pFlame;
+  }
 }

@@ -220,24 +220,14 @@ public class LogDensityFilter extends FilterHolder {
     if (noiseFilterSize > 1) {
 
       if (solidRendering) {
-        boolean centreIsSolid;
-        if (noiseFilterSize > 2) {
-          getSample(pFilteredPnt, pX * oversample + noiseFilterSize / 2, pY * oversample + noiseFilterSize / 2);
-          centreIsSolid = pFilteredPnt.rp.hasSolidColors;
-        }
-        else {
-          centreIsSolid = true;
-        }
-        if (centreIsSolid) {
-          for (int c = 0; c < colorOversampling; c++) {
-            for (int i = 0; i < noiseFilterSize; i++) {
-              for (int j = 0; j < noiseFilterSize; j++) {
-                getSample(pFilteredPnt, pX * oversample + j, pY * oversample + i);
-                if (pFilteredPnt.rp.hasSolidColors) {
-                  double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
-                  if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
-                    pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
-                  }
+        for (int c = 0; c < colorOversampling; c++) {
+          for (int i = 0; i < noiseFilterSize; i++) {
+            for (int j = 0; j < noiseFilterSize; j++) {
+              getSample(pFilteredPnt, pX * oversample + j, pY * oversample + i);
+              if (pFilteredPnt.rp.hasSolidColors) {
+                double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
+                if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
+                  pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
                 }
               }
             }
