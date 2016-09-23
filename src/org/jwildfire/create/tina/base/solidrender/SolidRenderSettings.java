@@ -18,8 +18,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   private double aoIntensity = 0.5;
   private double aoSearchRadius = 12.0;
   private double aoBlurRadius = 1.25;
-  private int aoRadiusSamples = 8;
-  private int aoAzimuthSamples = 10;
+  private int aoRadiusSamples = 6;
+  private int aoAzimuthSamples = 7;
   private double aoFalloff = 0.5;
   private double aoAffectDiffuse = 0.2;
 

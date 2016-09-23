@@ -4557,8 +4557,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Flame flame = getCurrFlame();
     if (flame != null) {
       if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
-        desktop.showInternalFrame(InteractiveRendererInternalFrame.class);
         interactiveRendererCtrl.importFlame(flame);
+        desktop.showInternalFrame(InteractiveRendererInternalFrame.class);
       }
     }
   }

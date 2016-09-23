@@ -408,17 +408,17 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void saveImageButton_clicked() {
     try {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (prefs.getOutputImagePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
       pauseRenderThreads();
       try {
+        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);

@@ -16,22 +16,28 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.base.ThreadTools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
 
 public class NormalsCalculator {
   private final int rasterWidth, rasterHeight;
-
-  private final float zBuf[][];
 
   private final float nxBuf[][];
   private final float nyBuf[][];
   private final float nzBuf[][];
 
+  private final float originXBuf[][];
+  private final float originYBuf[][];
+  private final float originZBuf[][];
+
   public final static float ZBUF_ZMIN = -Float.MAX_VALUE;
 
-  private class Corner implements Serializable {
+  private class Corner {
     public final int dx, dy;
 
     public Corner(int dx, int dy) {
@@ -51,7 +57,7 @@ public class NormalsCalculator {
     }
   }
 
-  public static class CornerPair implements Serializable {
+  public static class CornerPair {
     public final Corner a, b;
 
     public CornerPair(Corner a, Corner b) {
@@ -77,7 +83,9 @@ public class NormalsCalculator {
   };
 
   public void refreshNormalsAtLocation(int x, int y) {
-    double zb = zBuf[x][y];
+    double xb = originXBuf[x][y];
+    double yb = originYBuf[x][y];
+    double zb = originZBuf[x][y];
     nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
     if (zb != ZBUF_ZMIN) {
       double nx = 0.0, ny = 0.0, nz = 0.0;
@@ -85,17 +93,17 @@ public class NormalsCalculator {
       int samples = 0;
       for (int k = 0; k < NNEIGHBOURS_COARSE.length; k++) {
         if (NNEIGHBOURS_COARSE[k].isInside(x, y)) {
-          double ax = NNEIGHBOURS_COARSE[k].a.dx;
-          double ay = NNEIGHBOURS_COARSE[k].a.dy;
-          double azb = zBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
+          double azb = originZBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
           if (azb != ZBUF_ZMIN) {
+            double ax = xb - originXBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
+            double ay = yb - originYBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
             double az = zb - azb;
 
-            double bx = NNEIGHBOURS_COARSE[k].b.dx;
-            double by = NNEIGHBOURS_COARSE[k].b.dy;
-            double bzb = zBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
+            double bzb = originZBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
             if (bzb != ZBUF_ZMIN) {
               samples++;
+              double bx = xb - originXBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
+              double by = yb - originYBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
               double bz = zb - bzb;
               double zdist = MathLib.fabs(az) + MathLib.fabs(bz);
               if (zdist < minzdist) {
@@ -125,22 +133,69 @@ public class NormalsCalculator {
     }
   }
 
-  public void refreshAllNormals() {
-    for (int i = 0; i < rasterWidth; i++) {
-      for (int j = 0; j < rasterHeight; j++) {
-        refreshNormalsAtLocation(i, j);
+  private class RefreshNormalsThread extends AbstractImageRenderThread {
+    private final int startRow, endRow;
+
+    public RefreshNormalsThread(int pStartRow, int pEndRow) {
+      startRow = pStartRow;
+      endRow = pEndRow;
+    }
+
+    @Override
+    public void run() {
+      setDone(false);
+      try {
+        for (int i = startRow; i < endRow; i++) {
+          for (int j = 0; j < rasterWidth; j++) {
+            refreshNormalsAtLocation(j, i);
+          }
+        }
+      }
+      finally {
+        setDone(true);
       }
     }
   }
 
-  public NormalsCalculator(int rasterWidth, int rasterHeight, float[][] zBuf, float[][] nxBuf, float[][] nyBuf, float[][] nzBuf) {
+  public void refreshAllNormals() {
+    int threadCount = Prefs.getPrefs().getTinaRenderThreads();
+    if (threadCount < 1 || rasterHeight < 8 * threadCount) {
+      threadCount = 1;
+    }
+
+    int rowsPerThread = rasterHeight / threadCount;
+    List<RefreshNormalsThread> threads = new ArrayList<>();
+    for (int i = 0; i < threadCount; i++) {
+      int startRow = i * rowsPerThread;
+      int endRow = i < threadCount - 1 ? startRow + rowsPerThread : rasterHeight;
+      RefreshNormalsThread thread = new RefreshNormalsThread(startRow, endRow);
+      threads.add(thread);
+      if (threadCount > 1) {
+        new Thread(thread).start();
+      }
+      else {
+        thread.run();
+      }
+    }
+    ThreadTools.waitForThreads(threadCount, threads);
+    /*
+        for (int i = 0; i < rasterWidth; i++) {
+          for (int j = 0; j < rasterHeight; j++) {
+            refreshNormalsAtLocation(i, j);
+          }
+        }*/
+  }
+
+  public NormalsCalculator(int rasterWidth, int rasterHeight, float[][] nxBuf, float[][] nyBuf, float[][] nzBuf, float[][] originXBuf, float[][] originYBuf, float[][] originZBuf) {
     super();
     this.rasterWidth = rasterWidth;
     this.rasterHeight = rasterHeight;
-    this.zBuf = zBuf;
     this.nxBuf = nxBuf;
     this.nyBuf = nyBuf;
     this.nzBuf = nzBuf;
+    this.originXBuf = originXBuf;
+    this.originYBuf = originYBuf;
+    this.originZBuf = originZBuf;
   }
 
 }

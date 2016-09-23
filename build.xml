@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="2.60" />
+  <property name="release" value="3.00BETA" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -57,6 +57,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>

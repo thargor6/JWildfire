@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
+import org.jwildfire.base.ThreadTools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
@@ -38,7 +39,6 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
-import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
 import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRIntensityMapThread;
@@ -539,31 +539,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
-    }
-  }
-
-  private void waitForThreads(int threadCount, List<? extends AbstractImageRenderThread> threads) {
-    if (threadCount > 1) {
-      while (true) {
-        boolean ready = true;
-        for (AbstractImageRenderThread t : threads) {
-          if (!t.isDone()) {
-            ready = false;
-            break;
-          }
-        }
-        if (!ready) {
-          try {
-            Thread.sleep(1);
-          }
-          catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-        else
-          break;
-      }
+      ThreadTools.waitForThreads(threadCount, threads);
     }
   }
 
@@ -588,7 +564,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
+      ThreadTools.waitForThreads(threadCount, threads);
       if (dofBuffer != null) {
         dofBuffer.renderToImage(pHDRImage);
       }
@@ -617,7 +593,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
+      ThreadTools.waitForThreads(threadCount, threads);
       if (dofBuffer != null) {
         dofBuffer.renderToImage(pImage);
       }
@@ -645,7 +621,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
+      ThreadTools.waitForThreads(threadCount, threads);
     }
   }
 
@@ -670,7 +646,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
+      ThreadTools.waitForThreads(threadCount, threads);
       pImage.setBufferedImage(newImg.getBufferedImg(), newImg.getImageWidth(), newImg.getImageHeight());
     }
     else if (renderScale == 1) {
@@ -688,7 +664,7 @@ public class FlameRenderer {
           thread.run();
         }
       }
-      waitForThreads(threadCount, threads);
+      ThreadTools.waitForThreads(threadCount, threads);
     }
     else {
       throw new IllegalArgumentException("renderScale " + renderScale);
