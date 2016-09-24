@@ -22,7 +22,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 
-public class FloatBufferTools {
+public class RasterTools {
 
   public static void saveFloatBuffer(float buf[][], String filename) {
     double min, max;
