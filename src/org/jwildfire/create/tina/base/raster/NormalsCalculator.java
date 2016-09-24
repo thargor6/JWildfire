@@ -82,7 +82,11 @@ public class NormalsCalculator {
       new CornerPair(new Corner(-1, 1), new Corner(-1, 0))
   };
 
-  public void refreshNormalsAtLocation(int x, int y) {
+  public boolean hasNormalAtLocation(int x, int y) {
+    return nxBuf[x][y] != ZBUF_ZMIN;
+  }
+
+  public void refreshNormalAtLocation(int x, int y) {
     double xb = originXBuf[x][y];
     double yb = originYBuf[x][y];
     double zb = originZBuf[x][y];
@@ -147,7 +151,7 @@ public class NormalsCalculator {
       try {
         for (int i = startRow; i < endRow; i++) {
           for (int j = 0; j < rasterWidth; j++) {
-            refreshNormalsAtLocation(j, i);
+            refreshNormalAtLocation(j, i);
           }
         }
       }
