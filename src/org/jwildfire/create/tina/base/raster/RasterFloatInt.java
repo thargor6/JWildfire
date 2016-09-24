@@ -90,8 +90,4 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
     // EMPTY    
   }
 
-  @Override
-  public void cleanupRaster() {
-    // EMPTY       
-  }
 }

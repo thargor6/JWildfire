@@ -396,7 +396,7 @@ public class LogDensityFilter extends FilterHolder {
           PointLight light = flame.getSolidRenderSettings().getLights().get(i);
           VectorD lightDir = new VectorD(light.getX(), light.getY(), light.getZ());
           lightDir.normalize();
-          double visibility = light.isCastShadows() && rp.hasShadows ? (rp.visibility[i]) : avgVisibility;
+          double visibility = light.isCastShadows() && rp.hasShadows ? rp.visibility[i] : avgVisibility;
 
           double cosa = VectorD.dot(lightDir, normal);
           if (cosa > MathLib.EPSILON) {

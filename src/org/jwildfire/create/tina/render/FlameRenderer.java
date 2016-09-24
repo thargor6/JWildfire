@@ -516,7 +516,6 @@ public class FlameRenderer {
     }
     renderHDRImage(pHDRImage);
     renderHDRIntensityMap(pHDRIntensityMap);
-    raster.cleanupRaster();
   }
 
   private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap) {
@@ -577,6 +576,7 @@ public class FlameRenderer {
       if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
       }
+      long t0 = System.currentTimeMillis();
 
       PostDOFBuffer dofBuffer = flame.getCamDOF() > MathLib.EPSILON && flame.getSolidRenderSettings().isSolidRenderingEnabled() ? new PostDOFBuffer(pImage) : null;
       int rowsPerThread = pImage.getImageHeight() / threadCount;
@@ -594,6 +594,10 @@ public class FlameRenderer {
         }
       }
       ThreadTools.waitForThreads(threadCount, threads);
+
+      long t1 = System.currentTimeMillis();
+      System.out.println("IMAGE RENDER: " + (t1 - t0));
+
       if (dofBuffer != null) {
         dofBuffer.renderToImage(pImage);
       }
