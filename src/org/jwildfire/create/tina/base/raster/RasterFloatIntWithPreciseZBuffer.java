@@ -16,6 +16,208 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.solidrender.AOCalculator;
+import org.jwildfire.create.tina.base.solidrender.ShadowCalculator;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.render.FlameRendererView;
+import org.jwildfire.create.tina.render.PlotSample;
+
 public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
+  private static final long serialVersionUID = 1L;
+
+  private float zBuf[][];
+
+  private float nxBuf[][];
+  private float nyBuf[][];
+  private float nzBuf[][];
+
+  private float aoBuf[][];
+  private float dofBuf[][];
+
+  private float materialBuf[][];
+
+  private AbstractRandomGenerator randGen;
+
+  private NormalsCalculator normalsCalculator;
+  private AOCalculator aoCalculator;
+
+  private boolean withDOF;
+  private double dofAmount;
+
+  private float[][] originXBuf, originYBuf, originZBuf;
+
+  private double imgSize;
+
+  private ShadowCalculator shadowCalculator;
+
+  @Override
+  public void allocRaster(Flame flame, int pWidth, int pHeight) {
+    super.allocRaster(flame, pWidth, pHeight);
+
+    imgSize = MathLib.sqrt(MathLib.sqr(pWidth) + MathLib.sqr(pHeight));
+
+    zBuf = new float[rasterWidth][rasterHeight];
+
+    nxBuf = new float[rasterWidth][rasterHeight];
+    nyBuf = new float[rasterWidth][rasterHeight];
+    nzBuf = new float[rasterWidth][rasterHeight];
+
+    materialBuf = new float[rasterWidth][rasterHeight];
+
+    for (int i = 0; i < pWidth; i++) {
+      for (int j = 0; j < pHeight; j++) {
+        zBuf[i][j] = NormalsCalculator.ZBUF_ZMIN;
+      }
+    }
+
+    randGen = new MarsagliaRandomGenerator();
+    randGen.randomize(System.currentTimeMillis());
+
+    if (flame.getCamDOF() > MathLib.EPSILON) {
+      withDOF = true;
+      dofBuf = new float[rasterWidth][rasterHeight];
+      dofAmount = flame.getCamDOF() * imgSize / (1000.0 * (double) flame.getSpatialOversampling());
+    }
+    else {
+      withDOF = false;
+    }
+
+    originXBuf = new float[rasterWidth][rasterHeight];
+    originYBuf = new float[rasterWidth][rasterHeight];
+    originZBuf = new float[rasterWidth][rasterHeight];
+
+    for (int k = 0; k < originZBuf.length; k++) {
+      for (int l = 0; l < originZBuf[0].length; l++) {
+        originXBuf[k][l] = NormalsCalculator.ZBUF_ZMIN;
+        originYBuf[k][l] = NormalsCalculator.ZBUF_ZMIN;
+        originZBuf[k][l] = NormalsCalculator.ZBUF_ZMIN;
+      }
+    }
+
+    if (flame.getSolidRenderSettings().isAoEnabled()) {
+      aoCalculator = new AOCalculator(flame, rasterWidth, rasterHeight, zBuf, nxBuf, nyBuf, nzBuf);
+    }
+
+    normalsCalculator = new NormalsCalculator(rasterWidth, rasterHeight, nxBuf, nyBuf, nzBuf, originXBuf, originYBuf, originZBuf);
+
+    if (flame.isWithShadows()) {
+      shadowCalculator = new ShadowCalculator(rasterWidth, rasterHeight, originXBuf, originYBuf, originZBuf, imgSize, flame);
+    }
+    else {
+      shadowCalculator = null;
+    }
+  }
+
+  @Override
+  public void notifyInit(FlameRendererView view) {
+    if (shadowCalculator != null) {
+      shadowCalculator.setProjector(view);
+    }
+  }
+
+  @Override
+  public synchronized void addSamples(PlotSample[] pPlotBuffer, int pCount) {
+    for (int i = 0; i < pCount; i++) {
+      PlotSample sample = pPlotBuffer[i];
+      final int x = sample.screenX, y = sample.screenY;
+      final float material = (float) sample.material;
+      final float z = (float) sample.z;
+      if (z > zBuf[x][y]) {
+        count[x][y] = 1;
+        if (sample.r >= 0 && sample.g >= 0 && sample.b >= 0) {
+          red[x][y] = (float) sample.r;
+          green[x][y] = (float) sample.g;
+          blue[x][y] = (float) sample.b;
+        }
+        else {
+          red[x][y] = green[x][y] = blue[x][y] = 0;
+        }
+        zBuf[x][y] = z;
+        originXBuf[x][y] = (float) sample.originalX;
+        originYBuf[x][y] = (float) sample.originalY;
+        originZBuf[x][y] = (float) sample.originalZ;
+        materialBuf[x][y] = material;
+        if (withDOF) {
+          dofBuf[x][y] = (float) sample.dofDist;
+        }
+        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.6) || randGen.random() > 0.25) {
+          normalsCalculator.refreshNormalAtLocation(x, y);
+        }
+      }
+    }
+  }
+
+  @Override
+  public void finalizeRaster() {
+    normalsCalculator.refreshAllNormals();
+    aoBuf = new float[rasterWidth][rasterHeight];
+    if (aoCalculator != null) {
+      aoCalculator.refreshAO(aoBuf);
+    }
+    if (shadowCalculator != null) {
+      shadowCalculator.accelerateShadows();
+    }
+  }
+
+  private double calcDOF(double dofBufVal) {
+    return MathLib.fabs(dofBufVal * dofAmount);
+  }
+
+  @Override
+  public void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint) {
+    pDestRasterPoint.clear();
+    // flame density
+    pDestRasterPoint.red = 0.0;
+    pDestRasterPoint.green = 0.0;
+    pDestRasterPoint.blue = 0.0;
+    pDestRasterPoint.count = 0;
+
+    // normal
+    if (nxBuf[pX][pY] != NormalsCalculator.ZBUF_ZMIN) {
+      // solid colors
+      pDestRasterPoint.solidRed = red[pX][pY];
+      pDestRasterPoint.solidGreen = green[pX][pY];
+      pDestRasterPoint.solidBlue = blue[pX][pY];
+      pDestRasterPoint.hasSolidColors = true;
+
+      pDestRasterPoint.hasNormals = true;
+      pDestRasterPoint.nx = nxBuf[pX][pY];
+      pDestRasterPoint.ny = nyBuf[pX][pY];
+      pDestRasterPoint.nz = nzBuf[pX][pY];
+      pDestRasterPoint.zBuf = zBuf[pX][pY];
+    }
+    // ssao
+    if (aoBuf != null) {
+      pDestRasterPoint.hasSSAO = true;
+      pDestRasterPoint.ao = aoBuf[pX][pY];
+    }
+    // mat
+    if (materialBuf != null) {
+      pDestRasterPoint.hasMaterial = true;
+      pDestRasterPoint.material = materialBuf[pX][pY];
+    }
+
+    if (withDOF) {
+      pDestRasterPoint.dofDist = calcDOF(dofBuf[pX][pY]);
+    }
+    else {
+      pDestRasterPoint.dofDist = 0.0;
+    }
+
+    if (shadowCalculator != null) {
+      shadowCalculator.calcShadows(pX, pY, pDestRasterPoint);
+    }
+    else {
+      pDestRasterPoint.hasShadows = false;
+    }
+  }
+
+  @Override
+  public void addShadowMapSamples(int pShadowMapIdx, PlotSample[] pPlotBuffer, int pCount) {
+    shadowCalculator.addShadowMapSamples(pShadowMapIdx, pPlotBuffer, pCount);
+  }
 
 }
