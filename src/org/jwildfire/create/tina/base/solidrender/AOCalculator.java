@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.base.solidrender;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,8 @@ import org.jwildfire.create.tina.render.FilterHolder;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
 
-public class AOCalculator {
+@SuppressWarnings("serial")
+public class AOCalculator implements Serializable {
   private final float zBuf[][];
 
   private final float nxBuf[][];
@@ -134,6 +136,7 @@ public class AOCalculator {
     return yi;
   }
 
+  @SuppressWarnings("serial")
   private class SmoothAOBufferThread extends AbstractImageRenderThread {
     private final float[][] srcBuf, dstBuf;
     private final int startRow, endRow;
@@ -180,6 +183,7 @@ public class AOCalculator {
     }
   }
 
+  @SuppressWarnings("serial")
   private class RefreshAOThread extends AbstractImageRenderThread {
     private final float aoBuf[][];
     private final int startRow, endRow;

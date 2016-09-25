@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.render.image;
 
-public abstract class AbstractImageRenderThread implements Runnable {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class AbstractImageRenderThread implements Runnable, Serializable {
   private boolean done;
 
   public boolean isDone() {

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.base.raster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,8 @@ import org.jwildfire.base.ThreadTools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.render.image.AbstractImageRenderThread;
 
-public class NormalsCalculator {
+@SuppressWarnings("serial")
+public class NormalsCalculator implements Serializable {
   private final int rasterWidth, rasterHeight;
 
   private final float nxBuf[][];
@@ -37,7 +39,7 @@ public class NormalsCalculator {
 
   public final static float ZBUF_ZMIN = -Float.MAX_VALUE;
 
-  private class Corner {
+  private class Corner implements Serializable {
     public final int dx, dy;
 
     public Corner(int dx, int dy) {
@@ -57,7 +59,7 @@ public class NormalsCalculator {
     }
   }
 
-  public static class CornerPair {
+  public static class CornerPair implements Serializable {
     public final Corner a, b;
 
     public CornerPair(Corner a, Corner b) {

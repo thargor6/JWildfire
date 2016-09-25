@@ -40,6 +40,7 @@ import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 
+@SuppressWarnings("serial")
 public class LogDensityFilter extends FilterHolder {
   private final ColorFunc colorFunc;
 

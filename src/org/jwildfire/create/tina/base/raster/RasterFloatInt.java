@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.base.raster;
 import java.io.Serializable;
 
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.render.FlameRendererView;
+import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
 
 public class RasterFloatInt implements AbstractRaster, Serializable {
@@ -86,7 +86,7 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public void notifyInit(FlameRendererView view) {
+  public void notifyInit(LightViewCalculator lightViewCalculator) {
     // EMPTY    
   }
 

@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.solidrender.AOCalculator;
 import org.jwildfire.create.tina.base.solidrender.ShadowCalculator;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
-import org.jwildfire.create.tina.render.FlameRendererView;
+import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
 
 public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
@@ -112,9 +112,9 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   }
 
   @Override
-  public void notifyInit(FlameRendererView view) {
+  public void notifyInit(LightViewCalculator lightViewCalculator) {
     if (shadowCalculator != null) {
-      shadowCalculator.setProjector(view);
+      shadowCalculator.setLightViewCalculator(lightViewCalculator);
     }
   }
 

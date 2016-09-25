@@ -16,7 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
-public class PlotSample {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class PlotSample implements Serializable {
   public int screenX, screenY;
   public double r, g, b;
   public double x, y, z;

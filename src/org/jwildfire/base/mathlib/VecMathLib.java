@@ -1,11 +1,14 @@
 package org.jwildfire.base.mathlib;
 
+import java.io.Serializable;
+
 import org.jwildfire.image.SimpleImage;
 
 public final class VecMathLib {
   public static final double COLORSCL = 255.0;
 
-  public static final class RGBColorD {
+  @SuppressWarnings("serial")
+  public static final class RGBColorD implements Serializable {
     public double r, g, b;
 
     public RGBColorD() {
@@ -87,7 +90,8 @@ public final class VecMathLib {
     }
   }
 
-  public static final class VectorD {
+  @SuppressWarnings("serial")
+  public static final class VectorD implements Serializable {
     public double x, y, z;
 
     public VectorD() {
@@ -151,7 +155,8 @@ public final class VecMathLib {
     }
   }
 
-  public static final class Matrix4D {
+  @SuppressWarnings("serial")
+  public static final class Matrix4D implements Serializable {
     public final double m[][] = new double[4][4];
 
     public static Matrix4D identity() {

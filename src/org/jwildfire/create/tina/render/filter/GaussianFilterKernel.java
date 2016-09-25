@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 // Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
+@SuppressWarnings("serial")
 public class GaussianFilterKernel extends FilterKernel {
 
   @Override

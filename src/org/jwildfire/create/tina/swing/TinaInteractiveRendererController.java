@@ -280,7 +280,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   public void importFlame(Flame flame) {
-    currFlame = flame;
+    currFlame = flame.makeCopy();
     storeCurrFlame();
     cancelRender();
     setupProfiles(currFlame);

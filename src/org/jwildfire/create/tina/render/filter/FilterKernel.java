@@ -20,7 +20,10 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public abstract class FilterKernel {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class FilterKernel implements Serializable {
   public abstract double getSpatialSupport();
 
   public abstract double getFilterCoeff(double x);

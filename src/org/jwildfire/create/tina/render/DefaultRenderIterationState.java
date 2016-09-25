@@ -99,7 +99,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   public void init() {
     if (raster != null)
-      raster.notifyInit(view);
+      raster.notifyInit(view.getLightViewCalculator());
   }
 
   public void preFuseIter() {

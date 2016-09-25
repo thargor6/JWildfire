@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.base.solidrender;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,12 +26,13 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.NormalsCalculator;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
-import org.jwildfire.create.tina.render.FlameRendererView;
+import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.GaussianFilterKernel;
 
-public class ShadowCalculator {
+@SuppressWarnings("serial")
+public class ShadowCalculator implements Serializable {
   private final int rasterWidth, rasterHeight;
   private final float originXBuf[][];
   private final float originYBuf[][];
@@ -57,8 +59,7 @@ public class ShadowCalculator {
 
   private final float shadowZBuf[][][];
 
-  // TODO remove (not serializable)
-  private FlameRendererView projector;
+  private LightViewCalculator lightViewCalculator;
 
   public ShadowCalculator(int rasterWidth, int rasterHeight, float[][] originXBuf, float[][] originYBuf, float[][] originZBuf, double imgSize, Flame flame) {
     this.rasterWidth = rasterWidth;
@@ -100,7 +101,7 @@ public class ShadowCalculator {
         lightY[i] = light.getY();
         lightZ[i] = light.getZ();
         // TODO
-        shadowIntensity[i] = 1.0 - GfxMathLib.clamp(0.6, 0.0, 1.0);
+        shadowIntensity[i] = 1.0 - GfxMathLib.clamp(0.8, 0.0, 1.0);
       }
       else {
         shadowZBuf[i] = null;
@@ -139,10 +140,10 @@ public class ShadowCalculator {
                 if (originY != NormalsCalculator.ZBUF_ZMIN) {
                   float originZ = originZBuf[pX][pY];
                   if (originZ != NormalsCalculator.ZBUF_ZMIN) {
-                    int x = projectPointToLightMapX(i, projector.applyLightProjectionX(i, originX, originY, originZ));
-                    int y = projectPointToLightMapY(i, projector.applyLightProjectionY(i, originX, originY, originZ));
+                    int x = projectPointToLightMapX(i, lightViewCalculator.applyLightProjectionX(i, originX, originY, originZ));
+                    int y = projectPointToLightMapY(i, lightViewCalculator.applyLightProjectionY(i, originX, originY, originZ));
                     if (x >= 0 && x < shadowZBuf[i].length && y >= 0 && y < shadowZBuf[i][0].length) {
-                      double lightZ = projector.applyLightProjectionZ(i, originX, originY, originZ);
+                      double lightZ = lightViewCalculator.applyLightProjectionZ(i, originX, originY, originZ);
                       accLightProjectionZBuf[i][pX][pY] = (float) GfxMathLib.step(shadowZBuf[i][x][y] - shadowDistBias, lightZ);
                     }
                   }
@@ -214,10 +215,10 @@ public class ShadowCalculator {
         if (originY != NormalsCalculator.ZBUF_ZMIN) {
           float originZ = originZBuf[pX][pY];
           if (originZ != NormalsCalculator.ZBUF_ZMIN) {
-            int x = projectPointToLightMapX(i, projector.applyLightProjectionX(i, originX, originY, originZ));
-            int y = projectPointToLightMapY(i, projector.applyLightProjectionY(i, originX, originY, originZ));
+            int x = projectPointToLightMapX(i, lightViewCalculator.applyLightProjectionX(i, originX, originY, originZ));
+            int y = projectPointToLightMapY(i, lightViewCalculator.applyLightProjectionY(i, originX, originY, originZ));
             if (x >= 0 && x < shadowZBuf[i].length && y >= 0 && y < shadowZBuf[i][0].length) {
-              double lightZ = projector.applyLightProjectionZ(i, originX, originY, originZ);
+              double lightZ = lightViewCalculator.applyLightProjectionZ(i, originX, originY, originZ);
               if (lightZ < shadowZBuf[i][x][y] - shadowDistBias) {
                 pDestRasterPoint.visibility[i] = 0.0;
               }
@@ -265,12 +266,12 @@ public class ShadowCalculator {
                 if (originY != NormalsCalculator.ZBUF_ZMIN) {
                   float originZ = originZBuf[dstX][dstY];
                   if (originZ != NormalsCalculator.ZBUF_ZMIN) {
-                    int x = projectPointToLightMapX(i, projector.applyLightProjectionX(i, originX, originY, originZ));
-                    int y = projectPointToLightMapY(i, projector.applyLightProjectionY(i, originX, originY, originZ));
+                    int x = projectPointToLightMapX(i, lightViewCalculator.applyLightProjectionX(i, originX, originY, originZ));
+                    int y = projectPointToLightMapY(i, lightViewCalculator.applyLightProjectionY(i, originX, originY, originZ));
                     if (x >= 0 && x < shadowZBuf[i].length && y >= 0 && y < shadowZBuf[i][0].length) {
                       double intensity = shadowSmoothKernel[k + shadowSmoothRadius][l + shadowSmoothRadius];
                       totalIntensity += intensity;
-                      double lightZ = projector.applyLightProjectionZ(i, originX, originY, originZ);
+                      double lightZ = lightViewCalculator.applyLightProjectionZ(i, originX, originY, originZ);
                       pDestRasterPoint.visibility[i] += GfxMathLib.step(shadowZBuf[i][x][y] - shadowDistBias, lightZ) * intensity;
                     }
                   }
@@ -384,7 +385,8 @@ public class ShadowCalculator {
     }
   }
 
-  public void setProjector(FlameRendererView projector) {
-    this.projector = projector;
+  public void setLightViewCalculator(LightViewCalculator lightViewCalculator) {
+    this.lightViewCalculator = lightViewCalculator;
   }
+
 }

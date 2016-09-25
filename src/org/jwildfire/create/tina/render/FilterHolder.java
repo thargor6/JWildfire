@@ -16,12 +16,15 @@
 */
 package org.jwildfire.create.tina.render;
 
+import java.io.Serializable;
+
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
-public class FilterHolder {
+@SuppressWarnings("serial")
+public class FilterHolder implements Serializable {
   protected final Flame flame;
   protected double filter[][];
   protected int noiseFilterSize;

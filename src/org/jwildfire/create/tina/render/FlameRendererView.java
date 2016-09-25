@@ -24,13 +24,10 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import org.jwildfire.base.mathlib.GfxMathLib;
-import org.jwildfire.base.mathlib.VecMathLib.Matrix4D;
-import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -64,8 +61,7 @@ public class FlameRendererView {
   private final DOFBlurShape dofBlurShape;
   protected final Stereo3dEye eye;
   private double area, fade, areaMinusFade;
-  private boolean withShadows;
-  protected Matrix4D lightProjectionMatrix[];
+  private LightViewCalculator lightViewCalculator;
 
   public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
     flame = pFlame;
@@ -94,18 +90,11 @@ public class FlameRendererView {
     }
     useDOF = flame.isDOFActive();
 
-    withShadows = flame.isWithShadows();
-    if (withShadows) {
-      lightProjectionMatrix = new Matrix4D[flame.getSolidRenderSettings().getLights().size()];
-      for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
-        PointLight light = flame.getSolidRenderSettings().getLights().get(i);
-        if (light.isCastShadows()) {
-          lightProjectionMatrix[i] = Matrix4D.lookAt(new VectorD(-light.getX(), light.getY(), light.getZ()), new VectorD(), new VectorD(0.0, 1.0, 0.0));
-        }
-        else {
-          lightProjectionMatrix[i] = null;
-        }
-      }
+    if (flame.isWithShadows()) {
+      lightViewCalculator = new LightViewCalculator(flame);
+    }
+    else {
+      lightViewCalculator = null;
     }
 
     solidDOF = flame.getSolidRenderSettings().isSolidRenderingEnabled();
@@ -172,36 +161,10 @@ public class FlameRendererView {
     }
   }
 
-  //  public VectorD applyLightProjection(int idx, double x, double y, double z) {
-  //    return Matrix4D.multiply(lightProjectionMatrix[idx], new VectorD(x, y, z));
-  //  }
-
-  public double applyLightProjectionX(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[0][0] + y * lightProjectionMatrix[idx].m[0][1] + z * lightProjectionMatrix[idx].m[0][2] + lightProjectionMatrix[idx].m[0][3];
-  }
-
-  public double applyLightProjectionY(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[1][0] + y * lightProjectionMatrix[idx].m[1][1] + z * lightProjectionMatrix[idx].m[1][2] + lightProjectionMatrix[idx].m[1][3];
-  }
-
-  public double applyLightProjectionZ(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[2][0] + y * lightProjectionMatrix[idx].m[2][1] + z * lightProjectionMatrix[idx].m[2][2] + lightProjectionMatrix[idx].m[2][3];
-  }
-
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
-      if (withShadows) {
-        for (int i = 0; i < lightProjectionMatrix.length; i++) {
-          if (lightProjectionMatrix[i] != null) {
-            pProjectedPoint.lightX[i] = applyLightProjectionX(i, pPoint.x, pPoint.y, pPoint.z);
-            pProjectedPoint.lightY[i] = applyLightProjectionY(i, pPoint.x, pPoint.y, pPoint.z);
-            pProjectedPoint.lightZ[i] = applyLightProjectionZ(i, pPoint.x, pPoint.y, pPoint.z);
-            pProjectedPoint.hasLight[i] = true;
-          }
-          else {
-            pProjectedPoint.hasLight[i] = false;
-          }
-        }
+      if (lightViewCalculator != null) {
+        lightViewCalculator.project(pPoint, pProjectedPoint);
       }
 
       applyCameraMatrix(pPoint);
@@ -320,6 +283,10 @@ public class FlameRendererView {
 
   public double getBhs() {
     return bhs;
+  }
+
+  public LightViewCalculator getLightViewCalculator() {
+    return lightViewCalculator;
   }
 
 }
