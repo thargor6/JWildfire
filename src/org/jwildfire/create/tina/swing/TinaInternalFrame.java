@@ -2249,7 +2249,7 @@ public class TinaInternalFrame extends JInternalFrame {
       renderMainButton.setText("Render Fractal");
       renderMainButton.setPreferredSize(new Dimension(115, 24));
       renderMainButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive2.png")));
+      renderMainButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
       renderMainButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           tinaController.renderImageButton_actionPerformed();
@@ -18425,7 +18425,7 @@ public class TinaInternalFrame extends JInternalFrame {
       solidRenderingToggleBtn = new JToggleButton();
       solidRenderingToggleBtn.setToolTipText("Enable solid rendering");
       solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
-      solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/applications-toys.png")));
+      solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/bkchem.png")));
       solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
       solidRenderingToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       solidRenderingToggleBtn.addActionListener(new ActionListener() {

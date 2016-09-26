@@ -20,72 +20,108 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+
+import org.jwildfire.create.tina.variation.RessourceManager;
 
 public class SystemInfoInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
   private JTextPane textPane;
+  private JButton clearCacheButton;
+
   /**
    * give components names so we can test them
    * This frame displays system info from the help menu, and should disappear when ok is clicked
    */
   public SystemInfoInternalFrame() {
-	setName("siif");
+    addInternalFrameListener(new InternalFrameAdapter() {
+      @Override
+      public void internalFrameActivated(InternalFrameEvent e) {
+        refresh();
+      }
+    });
+    setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+    setClosable(true);
+    setResizable(true);
+    setName("siif");
+
+    JButton refreshButton = new JButton("Refresh");
+    refreshButton.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        refresh();
+      }
+    });
+    refreshButton.setPreferredSize(new Dimension(36, 36));
+    getContentPane().add(refreshButton, BorderLayout.NORTH);
     JPanel mainPane = new JPanel();
     mainPane.setName("siif.sysInfoPanel");
     getContentPane().add(mainPane, BorderLayout.CENTER);
     mainPane.setLayout(new BorderLayout(0, 0));
-    
+
     JScrollPane scrollPane = new JScrollPane();
     scrollPane.setName("siif.scrollPane");
     mainPane.add(scrollPane, BorderLayout.CENTER);
-    
+
     textPane = new JTextPane();
     textPane.setEditable(false);
     textPane.setName("siif.text");
     scrollPane.setViewportView(textPane);
     setTitle("System Information");
-    setBounds(320, 140, 641, 499);
+    setBounds(320, 140, 297, 208);
     textPane.setText(collectInfo());
-    
-    JButton button = new JButton("Ok");
-    button.setName("siif.okbutton");
-    button.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        setVisible(false);
-      }
-    });
-    button.setPreferredSize(new Dimension(36, 36));
-    getContentPane().add(button, BorderLayout.SOUTH);
-    //southPanel.setLayout(null);
 
-    button.addMouseListener(new MouseAdapter() {
-    	
+    clearCacheButton = new JButton("Clear cache");
+    clearCacheButton.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-    	  setVisible(false);
+        RessourceManager.clearAll();
+        System.gc();
+        refresh();
       }
     });
+    clearCacheButton.setPreferredSize(new Dimension(36, 36));
+    getContentPane().add(clearCacheButton, BorderLayout.SOUTH);
     pack();
   }
-  public void refresh() {
-	  textPane.setText(collectInfo());
-  }
-  private String collectInfo() {
-    SystemInfo sysInfo = new SystemInfo();
 
+  public void refresh() {
+    textPane.setText(collectInfo());
+  }
+
+  private String collectInfo() {
     StringBuffer sb = new StringBuffer();
-    sb.append("OS: "+sysInfo.getOsName()+" "+sysInfo.getOsVersion() +"["+sysInfo.getOsArch()+"]\n");
-    sb.append("Committed Memory: "+sysInfo.getTotalMemMB()+" MB\n");
-    sb.append("Max Memory: "+sysInfo.getMaxMemMB()+" MB\n");
-    sb.append("Used Memory: "+sysInfo.getUsedMemMB()+" MB\n");
-    sb.append("CPU count(incl hyperthread): "+sysInfo.getProcessors()+" core\n\n");
+    sb.append("Operating system: " + System.getProperty("os.name") + "\n");
+    sb.append("Available processors: " + Runtime.getRuntime().availableProcessors() + " cores\n\n");
+    long allocatedMemory =
+        (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+    long presumableFreeMemory = Runtime.getRuntime().maxMemory() - allocatedMemory;
+    sb.append("Maximum memory: " + (Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : formatMemoryInGB(Runtime.getRuntime().maxMemory()) + " GB") + "\n");
+    sb.append("Free memory (approximated): " + formatMemoryInGB(presumableFreeMemory) + " GB\n\n");
+    sb.append("Press the [Clear cache]-button to free any resources (images, meshes, fonts, ...) which are currently hold in memory in order to speed up future calculations.\n\n");
     return sb.toString();
+  }
+
+  private String formatMemoryInGB(long memory) {
+    NumberFormat fmt = DecimalFormat.getInstance(Locale.US);
+    fmt.setGroupingUsed(false);
+    fmt.setMaximumFractionDigits(1);
+    fmt.setMinimumIntegerDigits(1);
+    return fmt.format(memory / 1024.0 / 1024.0 / 1024.0);
+  }
+
+  public JButton getClearCacheButton() {
+    return clearCacheButton;
   }
 }
