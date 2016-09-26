@@ -5212,7 +5212,8 @@ public class TinaInternalFrame extends JInternalFrame {
           interactiveRendererFrame.getInteractiveFlameToClipboardButton(), interactiveRendererFrame.getInteractiveSaveImageButton(),
           interactiveRendererFrame.getInteractiveSaveFlameButton(), interactiveRendererFrame.getInteractiveRandomStyleCmb(),
           interactiveRendererFrame.getInteractiveCenterTopPanel(), interactiveRendererFrame.getInteractiveStatsTextArea(),
-          interactiveRendererFrame.getInteractiveHalveSizeButton(), interactiveRendererFrame.getInteractiveResolutionProfileCmb(),
+          interactiveRendererFrame.getInteractiveHalveSizeButton(), interactiveRendererFrame.getInteractiveQuarterSizeButton(),
+          interactiveRendererFrame.getInteractiveFullSizeButton(), interactiveRendererFrame.getInteractiveResolutionProfileCmb(),
           interactiveRendererFrame.getInteractivePauseButton(), interactiveRendererFrame.getInteractiveResumeButton(),
           interactiveRendererFrame.getInteractiveRendererShowStatsButton(), interactiveRendererFrame.getInteractiveRendererShowPreviewButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();

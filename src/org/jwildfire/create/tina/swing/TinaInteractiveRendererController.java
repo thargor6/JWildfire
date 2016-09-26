@@ -84,6 +84,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JButton saveFlameButton;
   private final JComboBox randomStyleCmb;
   private final JToggleButton halveSizeButton;
+  private final JToggleButton quarterSizeButton;
+  private final JToggleButton fullSizeButton;
   private final JComboBox interactiveResolutionProfileCmb;
   private final JButton pauseButton;
   private final JButton resumeButton;
@@ -100,12 +102,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private State state = State.IDLE;
   private final QuickSaveFilenameGen qsaveFilenameGen;
   private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
+  private boolean refreshing = false;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
       JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
+      JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton, JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
       JToggleButton pShowStatsButton, JToggleButton pShowPreviewButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -121,6 +124,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
     saveFlameButton = pSaveFlameButton;
     randomStyleCmb = pRandomStyleCmb;
     halveSizeButton = pHalveSizeButton;
+    quarterSizeButton = pQuarterSizeButton;
+    fullSizeButton = pFullSizeButton;
+
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     imageRootPanel = pImagePanel;
     pauseButton = pPauseButton;
@@ -151,7 +157,11 @@ public class TinaInteractiveRendererController implements IterationObserver {
     ResolutionProfile profile = getResolutionProfile();
     int width = profile.getWidth();
     int height = profile.getHeight();
-    if (halveSizeButton.isSelected()) {
+    if (quarterSizeButton.isSelected()) {
+      width /= 4;
+      height /= 4;
+    }
+    else if (halveSizeButton.isSelected()) {
       width /= 2;
       height /= 2;
     }
@@ -294,7 +304,11 @@ public class TinaInteractiveRendererController implements IterationObserver {
       ResolutionProfile resProfile = getResolutionProfile();
       int width = resProfile.getWidth();
       int height = resProfile.getHeight();
-      if (halveSizeButton.isSelected()) {
+      if (quarterSizeButton.isSelected()) {
+        width /= 4;
+        height /= 4;
+      }
+      else if (halveSizeButton.isSelected()) {
         width /= 2;
         height /= 2;
       }
@@ -645,22 +659,70 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
   }
 
-  public void halveSizeButton_clicked() {
-    boolean rendering = state == State.RENDER;
-    if (rendering) {
-      stopButton_clicked();
+  public void halveRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(true);
+      quarterSizeButton.setSelected(false);
+      fullSizeButton.setSelected(false);
     }
-    refreshImagePanel();
-    enableControls();
-    if (rendering) {
-      renderButton_clicked();
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void quarterRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(false);
+      quarterSizeButton.setSelected(true);
+      fullSizeButton.setSelected(false);
+    }
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void fullRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(false);
+      quarterSizeButton.setSelected(false);
+      fullSizeButton.setSelected(true);
+    }
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void changeRenderSizeButton_clicked() {
+    if (!refreshing) {
+      boolean oldRefreshing = refreshing;
+      refreshing = true;
+      try {
+        boolean rendering = state == State.RENDER;
+        if (rendering) {
+          stopButton_clicked();
+        }
+        refreshImagePanel();
+        enableControls();
+        if (rendering) {
+          renderButton_clicked();
+        }
+      }
+      finally {
+        refreshing = oldRefreshing;
+      }
     }
   }
 
   public void resolutionProfile_changed() {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
-      halveSizeButton_clicked();
+      changeRenderSizeButton_clicked();
     }
   }
 
@@ -696,7 +758,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void qualityProfile_changed() {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
-      halveSizeButton_clicked();
+      changeRenderSizeButton_clicked();
     }
   }
 
@@ -725,11 +787,15 @@ public class TinaInteractiveRendererController implements IterationObserver {
           int width = newRenderer.getRenderInfo().getImageWidth();
           int height = newRenderer.getRenderInfo().getImageHeight();
           ResolutionProfile selected = null;
+          boolean full = false;
           boolean halve = false;
+          boolean quarter = false;
+
           for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
             ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
             if (profile.getWidth() == width && profile.getHeight() == height) {
               selected = profile;
+              full = true;
               break;
             }
           }
@@ -744,14 +810,34 @@ public class TinaInteractiveRendererController implements IterationObserver {
             }
           }
           if (selected == null) {
+            for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
+              ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
+              if (profile.getWidth() / 4 == width && profile.getHeight() / 4 == height) {
+                selected = profile;
+                quarter = true;
+                break;
+              }
+            }
+          }
+          if (selected == null) {
             selected = new ResolutionProfile(false, width, height);
-            halve = false;
+            full = true;
             interactiveResolutionProfileCmb.addItem(selected);
           }
+          boolean wasQuarterSelected = quarterSizeButton.isSelected();
           boolean wasHalveSelected = halveSizeButton.isSelected();
-          halveSizeButton.setSelected(halve);
+          boolean wasFullSelected = fullSizeButton.isSelected();
+          refreshing = true;
+          try {
+            quarterSizeButton.setSelected(quarter);
+            halveSizeButton.setSelected(halve);
+            fullSizeButton.setSelected(full);
+          }
+          finally {
+            refreshing = false;
+          }
           ResolutionProfile currSel = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
-          if (currSel == null || !currSel.equals(selected) || wasHalveSelected != halve) {
+          if (currSel == null || !currSel.equals(selected) || wasQuarterSelected != quarter || wasHalveSelected != halve || wasFullSelected != full) {
             interactiveResolutionProfileCmb.setSelectedItem(selected);
             refreshImagePanel();
           }

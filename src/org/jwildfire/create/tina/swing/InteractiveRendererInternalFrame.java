@@ -136,6 +136,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private JPanel panel_27;
   private JPanel panel_28;
   private JPanel panel_29;
+  private JPanel panel_36;
   private JPanel panel_30;
   private JPanel panel_31;
   private JPanel panel_32;
@@ -146,6 +147,8 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private JPanel panel_110;
   private JToggleButton interactiveRendererShowStatsButton;
   private JToggleButton interactiveRendererShowPreviewButton;
+  private JToggleButton interactiveFullSizeButton;
+  private JToggleButton interactiveQuarterSizeButton;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -412,7 +415,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       label_1 = new JLabel();
       label_1.setMinimumSize(new Dimension(80, 22));
       label_1.setText("Resolution");
-      label_1.setPreferredSize(new Dimension(80, 22));
+      label_1.setPreferredSize(new Dimension(62, 22));
       label_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_1;
@@ -460,21 +463,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       panel_28.setMaximumSize(new Dimension(250, 32767));
       panel_28.setMinimumSize(new Dimension(200, 10));
       panel_28.setLayout(new BoxLayout(panel_28, BoxLayout.Y_AXIS));
-
-      interactiveHalfSizeButton = new JToggleButton();
-      panel_28.add(interactiveHalfSizeButton);
-      interactiveHalfSizeButton.setMinimumSize(new Dimension(125, 24));
-      interactiveHalfSizeButton.setMaximumSize(new Dimension(32000, 24));
-      interactiveHalfSizeButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getInteractiveRendererCtrl().halveSizeButton_clicked();
-        }
-      });
-      interactiveHalfSizeButton.setToolTipText("Switch to half render resolution (to get rid of scroll bars in exploration mode)");
-      interactiveHalfSizeButton.setText("Half size");
-      interactiveHalfSizeButton.setPreferredSize(new Dimension(100, 24));
-      interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
-      interactiveHalfSizeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      panel_28.add(getPanel_36());
       panel_28.add(getPanel_29());
       panel_28.add(getPanel_30());
     }
@@ -489,6 +478,31 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       panel_29.add(getInteractiveResolutionProfileCmb());
     }
     return panel_29;
+  }
+
+  private JPanel getPanel_36() {
+    if (panel_36 == null) {
+      panel_36 = new JPanel();
+      panel_36.setLayout(new BoxLayout(panel_36, BoxLayout.X_AXIS));
+
+      interactiveHalfSizeButton = new JToggleButton();
+      panel_36.add(interactiveHalfSizeButton);
+      interactiveHalfSizeButton.setMinimumSize(new Dimension(48, 24));
+      interactiveHalfSizeButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveHalfSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().halveRenderSizeButton_clicked();
+        }
+      });
+      interactiveHalfSizeButton.setToolTipText("Switch to half render resolution");
+      interactiveHalfSizeButton.setText("1:2");
+      interactiveHalfSizeButton.setPreferredSize(new Dimension(48, 24));
+      interactiveHalfSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveHalfSizeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      panel_36.add(getInteractiveQuarterSizeButton());
+      panel_36.add(getInteractiveFullSizeButton());
+    }
+    return panel_36;
   }
 
   private JPanel getPanel_30() {
@@ -676,4 +690,42 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
     this.tinaController = tinaController;
   }
 
+  public JToggleButton getInteractiveFullSizeButton() {
+    if (interactiveFullSizeButton == null) {
+      interactiveFullSizeButton = new JToggleButton();
+      interactiveFullSizeButton.setSelected(true);
+      interactiveFullSizeButton.setToolTipText("Switch to full render resolution");
+      interactiveFullSizeButton.setText("Full");
+      interactiveFullSizeButton.setPreferredSize(new Dimension(48, 24));
+      interactiveFullSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveFullSizeButton.setMinimumSize(new Dimension(48, 24));
+      interactiveFullSizeButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveFullSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveFullSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().fullRenderSizeButton_clicked();
+        }
+      });
+    }
+    return interactiveFullSizeButton;
+  }
+
+  public JToggleButton getInteractiveQuarterSizeButton() {
+    if (interactiveQuarterSizeButton == null) {
+      interactiveQuarterSizeButton = new JToggleButton();
+      interactiveQuarterSizeButton.setToolTipText("Switch to quarter render resolution");
+      interactiveQuarterSizeButton.setText("1:4");
+      interactiveQuarterSizeButton.setPreferredSize(new Dimension(48, 24));
+      interactiveQuarterSizeButton.setMnemonic(KeyEvent.VK_M);
+      interactiveQuarterSizeButton.setMinimumSize(new Dimension(48, 24));
+      interactiveQuarterSizeButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveQuarterSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveQuarterSizeButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().quarterRenderSizeButton_clicked();
+        }
+      });
+    }
+    return interactiveQuarterSizeButton;
+  }
 }
