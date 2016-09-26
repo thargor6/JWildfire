@@ -41,8 +41,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.random.AbstractRandomGenerator;
-import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 
 public class TipOfTheDayInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
@@ -67,18 +65,18 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     getContentPane().add(southPanel, BorderLayout.SOUTH);
     southPanel.setLayout(null);
 
-    JButton websiteButton = new JButton("Next tip");
-    websiteButton.setDefaultCapable(false);
-    websiteButton.addActionListener(new ActionListener() {
+    JButton nextTipButton = new JButton("Next tip");
+    nextTipButton.setDefaultCapable(false);
+    nextTipButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        showNextTip();
+        showTip(loadNextTip());
       }
     });
-    websiteButton.setPreferredSize(new Dimension(128, 24));
-    websiteButton.setBorder(null);
-    websiteButton.setBorderPainted(false);
-    websiteButton.setBounds(6, 6, 134, 28);
-    southPanel.add(websiteButton);
+    nextTipButton.setPreferredSize(new Dimension(128, 24));
+    nextTipButton.setBorder(null);
+    nextTipButton.setBorderPainted(false);
+    nextTipButton.setBounds(103, 6, 92, 28);
+    southPanel.add(nextTipButton);
 
     showTipsAtStartupCBx = new JCheckBox("Show tips at startup");
     showTipsAtStartupCBx.addActionListener(new ActionListener() {
@@ -88,15 +86,27 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
           Prefs.getPrefs().saveToFile();
         }
         catch (Exception e1) {
-          // TODO Auto-generated catch block
           e1.printStackTrace();
         }
       }
     });
     showTipsAtStartupCBx.setActionCommand("");
-    showTipsAtStartupCBx.setBounds(152, 11, 169, 18);
+    showTipsAtStartupCBx.setBounds(200, 11, 148, 18);
     showTipsAtStartupCBx.setSelected(Prefs.getPrefs().isShowTipsAtStartup());
     southPanel.add(showTipsAtStartupCBx);
+
+    JButton prevTipButton = new JButton("Prev tip");
+    prevTipButton.setPreferredSize(new Dimension(128, 24));
+    prevTipButton.setDefaultCapable(false);
+    prevTipButton.setBorderPainted(false);
+    prevTipButton.setBounds(6, 6, 92, 28);
+    prevTipButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        showTip(loadPrevTip());
+      }
+    });
+
+    southPanel.add(prevTipButton);
 
     JPanel panel_2 = new JPanel();
     panel_2.setLayout(new BorderLayout(0, 0));
@@ -106,11 +116,10 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     initializeTips();
     setTitle("Tip of the day (" + tips.size() + " tips available for now)");
     setBounds(1000, 400, 366, 295);
-    showNextTip();
+    showTip(loadNextTip());
   }
 
-  private void showNextTip() {
-    String content = loadNextTip();
+  private void showTip(String content) {
     helpPane.setContentType("text/html");
 
     helpPane.setText(content);
@@ -152,7 +161,6 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
   }
 
   private List<String> tips = null;
-  private AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
   private JCheckBox showTipsAtStartupCBx;
 
   private void initializeTips() {
@@ -206,14 +214,25 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
       return tips.get(0);
     }
     else {
-      //      int idx = 0;
-      //      while (idx == prevTipIndex) {
-      //        idx = randGen.random(tips.size());
-      //      }
-      //      prevTipIndex = idx;
-      //      return tips.get(idx);
       prevTipIndex++;
       if (prevTipIndex >= tips.size()) {
+        prevTipIndex = tips.size() - 1;
+      }
+      return tips.get(prevTipIndex);
+    }
+  }
+
+  private String loadPrevTip() {
+    initializeTips();
+    if (tips.size() == 0) {
+      return "";
+    }
+    else if (tips.size() == 1) {
+      return tips.get(0);
+    }
+    else {
+      prevTipIndex--;
+      if (prevTipIndex < 0) {
         prevTipIndex = 0;
       }
       return tips.get(prevTipIndex);
