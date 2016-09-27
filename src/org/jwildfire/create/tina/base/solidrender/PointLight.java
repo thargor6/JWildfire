@@ -11,9 +11,10 @@ import org.jwildfire.create.tina.edit.Assignable;
 public class PointLight implements Assignable<PointLight>, Serializable {
 
   private double x, y, z;
-  private double intensity;
+  private double intensity = 0.5;
   private double red, green, blue;
   private boolean castShadows = true;
+  private double shadowIntensity = 0.8;
 
   public double getX() {
     return x;
@@ -77,6 +78,7 @@ public class PointLight implements Assignable<PointLight>, Serializable {
     green = pSrc.green;
     blue = pSrc.blue;
     castShadows = pSrc.castShadows;
+    shadowIntensity = pSrc.shadowIntensity;
   }
 
   @Override
@@ -91,7 +93,8 @@ public class PointLight implements Assignable<PointLight>, Serializable {
     if (fabs(x - pSrc.x) > EPSILON || fabs(y - pSrc.y) > EPSILON ||
         fabs(z - pSrc.z) > EPSILON || fabs(intensity - pSrc.intensity) > EPSILON ||
         fabs(red - pSrc.red) > EPSILON || fabs(green - pSrc.green) > EPSILON ||
-        fabs(blue - pSrc.blue) > EPSILON || castShadows != pSrc.castShadows) {
+        fabs(blue - pSrc.blue) > EPSILON || castShadows != pSrc.castShadows ||
+        fabs(shadowIntensity - pSrc.shadowIntensity) > EPSILON) {
       return false;
     }
     return false;
@@ -107,5 +110,13 @@ public class PointLight implements Assignable<PointLight>, Serializable {
 
   public void setZ(double z) {
     this.z = z;
+  }
+
+  public double getShadowIntensity() {
+    return shadowIntensity;
+  }
+
+  public void setShadowIntensity(double shadowIntensity) {
+    this.shadowIntensity = shadowIntensity;
   }
 }

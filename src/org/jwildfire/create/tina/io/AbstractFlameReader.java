@@ -164,6 +164,7 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_LIGHT_GREEN = "sld_render_light_green";
   public static final String ATTR_SLD_RENDER_LIGHT_BLUE = "sld_render_light_blue";
   public static final String ATTR_SLD_RENDER_LIGHT_SHADOWS = "sld_render_light_shadows";
+  public static final String ATTR_SLD_RENDER_LIGHT_SHADOW_INTENSITY = "sld_render_light_shadow_intensity";
 
   public static final String CURVE_ATTR_ENABLED = "enabled";
   public static final String CURVE_ATTR_VIEW_XMIN = "view_xmin";
@@ -623,6 +624,9 @@ public class AbstractFlameReader {
           }
           if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_INTENSITY + i)) != null) {
             light.setIntensity(Double.parseDouble(hs));
+          }
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_SHADOW_INTENSITY + i)) != null) {
+            light.setShadowIntensity(Double.parseDouble(hs));
           }
           if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_RED + i)) != null) {
             light.setRed(Double.parseDouble(hs));

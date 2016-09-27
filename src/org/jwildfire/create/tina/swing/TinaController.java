@@ -648,6 +648,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingLightCastShadowsCBx = parameterObject.tinaSolidRenderingLightCastShadowsCBx;
     data.tinaSolidRenderingLightIntensityREd = parameterObject.tinaSolidRenderingLightIntensityREd;
     data.tinaSolidRenderingLightIntensitySlider = parameterObject.tinaSolidRenderingLightIntensitySlider;
+    data.tinaSolidRenderingShadowIntensityREd = parameterObject.tinaSolidRenderingShadowIntensityREd;
+    data.tinaSolidRenderingShadowIntensitySlider = parameterObject.tinaSolidRenderingShadowIntensitySlider;
     data.tinaSolidRenderingSelectedMaterialCmb = parameterObject.tinaSolidRenderingSelectedMaterialCmb;
     data.tinaSolidRenderingAddMaterialBtn = parameterObject.tinaSolidRenderingAddMaterialBtn;
     data.tinaSolidRenderingDeleteMaterialBtn = parameterObject.tinaSolidRenderingDeleteMaterialBtn;
@@ -2279,6 +2281,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.qSaveButton.setEnabled(enabled);
     data.sendToIRButton.setEnabled(enabled);
     data.bokehButton.setEnabled(enabled);
+    data.solidRenderingToggleBtn.setEnabled(enabled);
     data.dancingFlamesButton.setEnabled(enabled);
     data.movieButton.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);

@@ -46,6 +46,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(true);
+      light.setShadowIntensity(0.8);
     }
 
     {
@@ -59,6 +60,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(false);
+      light.setShadowIntensity(0.7);
     }
 
   }
@@ -275,6 +277,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     light.setY(0.12);
     light.setZ(0.7);
     light.setIntensity(1.0);
+    light.setShadowIntensity(0.8);
     light.setRed(1.0);
     light.setGreen(1.0);
     light.setBlue(1.0);

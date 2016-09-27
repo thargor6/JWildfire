@@ -374,6 +374,7 @@ public class AbstractFlameWriter {
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_GREEN + i, light.getGreen()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_BLUE + i, light.getBlue()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_SHADOWS + i, light.isCastShadows()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_SHADOW_INTENSITY + i, light.getShadowIntensity()));
       }
     }
 

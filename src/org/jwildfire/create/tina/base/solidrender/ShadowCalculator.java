@@ -40,7 +40,7 @@ public class ShadowCalculator implements Serializable {
 
   private double[] lightX, lightY, lightZ, shadowIntensity;
 
-  private double shadowDistBias = 0.05;
+  private double shadowDistBias = 0.005;
 
   private final int lightCount;
   private final boolean withAcceleration = true;
@@ -100,8 +100,7 @@ public class ShadowCalculator implements Serializable {
         lightX[i] = light.getX();
         lightY[i] = light.getY();
         lightZ[i] = light.getZ();
-        // TODO
-        shadowIntensity[i] = 1.0 - GfxMathLib.clamp(0.8, 0.0, 1.0);
+        shadowIntensity[i] = 1.0 - GfxMathLib.clamp(light.getShadowIntensity(), 0.0, 1.0);
       }
       else {
         shadowZBuf[i] = null;

@@ -319,6 +319,7 @@ public class TinaControllerParameter {
   public JButton qSaveButton;
   public JButton sendToIRButton;
   public JButton bokehButton;
+  public JToggleButton solidRenderingToggleBtn;
   public JButton dancingFlamesButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
@@ -580,7 +581,6 @@ public class TinaControllerParameter {
   public JWFNumberField foregroundOpacityField;
   public JSlider foregroundOpacitySlider;
   public JComboBox meshGenOutputTypeCmb;
-  public JToggleButton solidRenderingToggleBtn;
   public JCheckBox tinaSolidRenderingEnableAOCBx;
   public JWFNumberField tinaSolidRenderingAOIntensityREd;
   public JSlider tinaSolidRenderingAOIntensitySlider;
@@ -612,6 +612,8 @@ public class TinaControllerParameter {
   public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
   public JWFNumberField tinaSolidRenderingLightIntensityREd;
   public JSlider tinaSolidRenderingLightIntensitySlider;
+  public JWFNumberField tinaSolidRenderingShadowIntensityREd;
+  public JSlider tinaSolidRenderingShadowIntensitySlider;
   public JComboBox tinaSolidRenderingSelectedMaterialCmb;
   public JButton tinaSolidRenderingAddMaterialBtn;
   public JButton tinaSolidRenderingDeleteMaterialBtn;
@@ -1050,7 +1052,8 @@ public class TinaControllerParameter {
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
       JSlider tinaSolidRenderingLightPosXSlider, JSlider tinaSolidRenderingLightPosYSlider, JSlider tinaSolidRenderingLightPosZSlider,
       JButton tinaSolidRenderingLightColorBtn, JCheckBox tinaSolidRenderingLightCastShadowsCBx, JWFNumberField tinaSolidRenderingLightIntensityREd,
-      JSlider tinaSolidRenderingLightIntensitySlider, JComboBox tinaSolidRenderingSelectedMaterialCmb, JButton tinaSolidRenderingAddMaterialBtn,
+      JSlider tinaSolidRenderingLightIntensitySlider, JWFNumberField tinaSolidRenderingShadowIntensityREd, JSlider tinaSolidRenderingShadowIntensitySlider,
+      JComboBox tinaSolidRenderingSelectedMaterialCmb, JButton tinaSolidRenderingAddMaterialBtn,
       JButton tinaSolidRenderingDeleteMaterialBtn, JWFNumberField tinaSolidRenderingMaterialDiffuseREd, JSlider tinaSolidRenderingMaterialDiffuseSlider,
       JWFNumberField tinaSolidRenderingMaterialAmbientREd, JSlider tinaSolidRenderingMaterialAmbientSlider, JWFNumberField tinaSolidRenderingMaterialSpecularREd,
       JSlider tinaSolidRenderingMaterialSpecularSlider, JWFNumberField tinaSolidRenderingMaterialSpecularSharpnessREd, JSlider tinaSolidRenderingMaterialSpecularSharpnessSlider,
@@ -1202,6 +1205,8 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingLightCastShadowsCBx = tinaSolidRenderingLightCastShadowsCBx;
     this.tinaSolidRenderingLightIntensityREd = tinaSolidRenderingLightIntensityREd;
     this.tinaSolidRenderingLightIntensitySlider = tinaSolidRenderingLightIntensitySlider;
+    this.tinaSolidRenderingShadowIntensityREd = tinaSolidRenderingShadowIntensityREd;
+    this.tinaSolidRenderingShadowIntensitySlider = tinaSolidRenderingShadowIntensitySlider;
     this.tinaSolidRenderingSelectedMaterialCmb = tinaSolidRenderingSelectedMaterialCmb;
     this.tinaSolidRenderingAddMaterialBtn = tinaSolidRenderingAddMaterialBtn;
     this.tinaSolidRenderingDeleteMaterialBtn = tinaSolidRenderingDeleteMaterialBtn;

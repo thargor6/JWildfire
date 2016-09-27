@@ -212,6 +212,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean disabled = getCurrFlame() == null || !getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled();
     boolean hasLights = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getLights().size() > 0;
     boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
+    boolean hasHardShadows = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().isHardShadowsEnabled();
     enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
     boolean aoEnabled = !disabled && getCurrFlame().getSolidRenderSettings().isAoEnabled();
     enableControl(data.tinaSolidRenderingAOIntensityREd, disabled || !aoEnabled);
@@ -233,6 +234,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingLightColorBtn, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingLightCastShadowsCBx, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingLightIntensityREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingShadowIntensityREd, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingSelectedMaterialCmb, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingAddMaterialBtn, disabled);
     enableControl(data.tinaSolidRenderingDeleteMaterialBtn, disabled || !hasMaterials);
@@ -867,6 +869,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.tinaSolidRenderingLightCastShadowsCBx.setSelected(light.isCastShadows());
       data.tinaSolidRenderingLightIntensityREd.setText(Tools.doubleToString(light.getIntensity()));
       data.tinaSolidRenderingLightIntensitySlider.setValue(Tools.FTOI(light.getIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+      data.tinaSolidRenderingShadowIntensityREd.setText(Tools.doubleToString(light.getShadowIntensity()));
+      data.tinaSolidRenderingShadowIntensitySlider.setValue(Tools.FTOI(light.getShadowIntensity() * TinaController.SLIDER_SCALE_CENTRE));
     }
     refreshSolidRenderLightColorIndicator();
   }
@@ -1737,6 +1741,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
+  public void solidRenderingShadowIntensityREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingShadowIntensitySlider, data.tinaSolidRenderingShadowIntensityREd, "shadowIntensity", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
   public void solidRenderingAOIntensitySlider_stateChanged(ChangeEvent e) {
     solidRenderingSliderChanged(data.tinaSolidRenderingAOIntensitySlider, data.tinaSolidRenderingAOIntensityREd, "aoIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
   }
@@ -1795,6 +1803,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingLightIntensitySlider_stateChanged(ChangeEvent e) {
     solidRenderingLightSliderChanged(data.tinaSolidRenderingLightIntensitySlider, data.tinaSolidRenderingLightIntensityREd, "intensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingShadowIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingShadowIntensitySlider, data.tinaSolidRenderingShadowIntensityREd, "shadowIntensity", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void solidRenderingMaterialRemoveReflMapBtn_clicked() {

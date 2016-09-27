@@ -431,6 +431,8 @@ public class TinaControllerData {
   public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
   public JWFNumberField tinaSolidRenderingLightIntensityREd;
   public JSlider tinaSolidRenderingLightIntensitySlider;
+  public JWFNumberField tinaSolidRenderingShadowIntensityREd;
+  public JSlider tinaSolidRenderingShadowIntensitySlider;
   public JComboBox tinaSolidRenderingSelectedMaterialCmb;
   public JButton tinaSolidRenderingAddMaterialBtn;
   public JButton tinaSolidRenderingDeleteMaterialBtn;

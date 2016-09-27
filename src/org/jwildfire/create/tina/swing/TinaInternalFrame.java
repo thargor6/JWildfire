@@ -5124,7 +5124,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
         getTinaSolidRenderingLightPosXSlider(), getTinaSolidRenderingLightPosYSlider(), getTinaSolidRenderingLightPosZSlider(),
         getTinaSolidRenderingLightColorBtn(), getTinaSolidRenderingLightCastShadowsCBx(), getTinaSolidRenderingLightIntensityREd0(),
-        getTinaSolidRenderingLightIntensitySlider(), getTinaSolidRenderingSelectedMaterialCmb(), getTinaSolidRenderingAddMaterialBtn(),
+        getTinaSolidRenderingLightIntensitySlider(), getTinaSolidRenderingShadowIntensityREd(),
+        getTinaSolidRenderingShadowIntensitySlider(), getTinaSolidRenderingSelectedMaterialCmb(), getTinaSolidRenderingAddMaterialBtn(),
         getTinaSolidRenderingDeleteMaterialBtn(), getTinaSolidRenderingMaterialDiffuseREd(), getTinaSolidRenderingMaterialDiffuseSlider(),
         getTinaSolidRenderingMaterialAmbientREd(), getTinaSolidRenderingMaterialAmbientSlider(), getTinaSolidRenderingMaterialSpecularREd(),
         getTinaSolidRenderingMaterialSpecularSlider(), getTinaSolidRenderingMaterialSpecularSharpnessREd(),
@@ -10046,6 +10047,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel lblHintAmbientShadows;
   private JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
   private JButton sendFlameToIRButton;
+  private JWFNumberField tinaSolidRenderingShadowIntensityREd;
+  private JSlider tinaSolidRenderingShadowIntensitySlider;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -17005,7 +17008,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightColorBtn.setPreferredSize(new Dimension(190, 24));
       tinaSolidRenderingLightColorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingLightColorBtn.setBackground(Color.BLACK);
-      tinaSolidRenderingLightColorBtn.setBounds(500, 23, 56, 46);
+      tinaSolidRenderingLightColorBtn.setBounds(526, 6, 56, 46);
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightColorBtn);
 
       JLabel lblLightColor = new JLabel();
@@ -17014,20 +17017,21 @@ public class TinaInternalFrame extends JInternalFrame {
       lblLightColor.setPreferredSize(new Dimension(88, 22));
       lblLightColor.setLocation(new Point(4, 4));
       lblLightColor.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblLightColor.setBounds(434, 34, 62, 22);
+      lblLightColor.setBounds(434, 17, 90, 22);
       tinaSolidRenderingLightPnl.add(lblLightColor);
 
       JLabel tinaSolidRenderingLightIntensityLbl0 = new JLabel();
-      tinaSolidRenderingLightIntensityLbl0.setText("Intensity");
+      tinaSolidRenderingLightIntensityLbl0.setText("Light intensity");
       tinaSolidRenderingLightIntensityLbl0.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightIntensityLbl0.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightIntensityLbl0.setName("tinaSolidRenderingLightIntensityLbl0");
       tinaSolidRenderingLightIntensityLbl0.setLocation(new Point(390, 6));
       tinaSolidRenderingLightIntensityLbl0.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingLightIntensityLbl0.setBounds(434, 83, 68, 22);
+      tinaSolidRenderingLightIntensityLbl0.setBounds(434, 61, 90, 22);
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightIntensityLbl0);
 
       tinaSolidRenderingLightIntensityREd = new JWFNumberField();
+      tinaSolidRenderingLightIntensityREd.setHasMinValue(true);
       tinaSolidRenderingLightIntensityREd.setValueStep(0.05);
       tinaSolidRenderingLightIntensityREd.setText("");
       tinaSolidRenderingLightIntensityREd.setSize(new Dimension(100, 24));
@@ -17037,7 +17041,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightIntensityREd.setLinkedMotionControlName("tinaSolidRenderingLightIntensitySlider");
       tinaSolidRenderingLightIntensityREd.setLinkedLabelControlName("tinaSolidRenderingLightIntensityLbl");
       tinaSolidRenderingLightIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSolidRenderingLightIntensityREd.setBounds(500, 83, 100, 24);
+      tinaSolidRenderingLightIntensityREd.setBounds(526, 61, 100, 24);
       tinaSolidRenderingLightIntensityREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -17064,7 +17068,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightIntensitySlider.setName("tinaSolidRenderingLightIntensitySlider");
       tinaSolidRenderingLightIntensitySlider.setMaximum(25000);
       tinaSolidRenderingLightIntensitySlider.setLocation(new Point(558, 4));
-      tinaSolidRenderingLightIntensitySlider.setBounds(602, 83, 205, 19);
+      tinaSolidRenderingLightIntensitySlider.setBounds(628, 61, 205, 19);
       tinaSolidRenderingLightIntensitySlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -17103,9 +17107,73 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       tinaSolidRenderingLightCastShadowsCBx.setActionCommand("");
-      tinaSolidRenderingLightCastShadowsCBx.setBounds(598, 38, 169, 18);
+      tinaSolidRenderingLightCastShadowsCBx.setBounds(624, 21, 169, 18);
 
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightCastShadowsCBx);
+
+      JLabel tinaSolidRenderingShadowIntensityLbl0 = new JLabel();
+      tinaSolidRenderingShadowIntensityLbl0.setText("Shadow intensity");
+      tinaSolidRenderingShadowIntensityLbl0.setSize(new Dimension(68, 22));
+      tinaSolidRenderingShadowIntensityLbl0.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingShadowIntensityLbl0.setName("tinaSolidRenderingShadowIntensityLbl0");
+      tinaSolidRenderingShadowIntensityLbl0.setLocation(new Point(390, 6));
+      tinaSolidRenderingShadowIntensityLbl0.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowIntensityLbl0.setBounds(434, 85, 90, 22);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingShadowIntensityLbl0);
+
+      tinaSolidRenderingShadowIntensityREd = new JWFNumberField();
+      tinaSolidRenderingShadowIntensityREd.setMaxValue(1.0);
+      tinaSolidRenderingShadowIntensityREd.setHasMinValue(true);
+      tinaSolidRenderingShadowIntensityREd.setHasMaxValue(true);
+      tinaSolidRenderingShadowIntensityREd.setValueStep(0.05);
+      tinaSolidRenderingShadowIntensityREd.setText("");
+      tinaSolidRenderingShadowIntensityREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowIntensityREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowIntensityREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingShadowIntensityREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingShadowIntensityREd.setLinkedMotionControlName("tinaSolidRenderingShadowIntensitySlider");
+      tinaSolidRenderingShadowIntensityREd.setLinkedLabelControlName("tinaSolidRenderingShadowIntensityLbl");
+      tinaSolidRenderingShadowIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowIntensityREd.setBounds(526, 85, 100, 24);
+      tinaSolidRenderingShadowIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingShadowIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingShadowIntensityREd.isMouseAdjusting() || tinaSolidRenderingShadowIntensityREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingShadowIntensitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingShadowIntensityREd_changed();
+          }
+        }
+      });
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingShadowIntensityREd);
+
+      tinaSolidRenderingShadowIntensitySlider = new JSlider();
+      tinaSolidRenderingShadowIntensitySlider.setValue(0);
+      tinaSolidRenderingShadowIntensitySlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingShadowIntensitySlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingShadowIntensitySlider.setName("tinaSolidRenderingShadowIntensitySlider");
+      tinaSolidRenderingShadowIntensitySlider.setMaximum(5000);
+      tinaSolidRenderingShadowIntensitySlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingShadowIntensitySlider.setBounds(628, 85, 205, 19);
+      tinaSolidRenderingShadowIntensitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingShadowIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingShadowIntensitySlider_stateChanged(e);
+        }
+      });
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingShadowIntensitySlider);
     }
     return tinaSolidRenderingPane;
   }
@@ -18574,6 +18642,14 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return sendFlameToIRButton;
+  }
+
+  public JWFNumberField getTinaSolidRenderingShadowIntensityREd() {
+    return tinaSolidRenderingShadowIntensityREd;
+  }
+
+  public JSlider getTinaSolidRenderingShadowIntensitySlider() {
+    return tinaSolidRenderingShadowIntensitySlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
