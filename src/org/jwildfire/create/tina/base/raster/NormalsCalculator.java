@@ -121,7 +121,7 @@ public class NormalsCalculator implements Serializable {
             }
           }
         }
-        if (samples > 0 && minzdist < 5.0) {
+        if (samples > 5) {
           break;
         }
       }
