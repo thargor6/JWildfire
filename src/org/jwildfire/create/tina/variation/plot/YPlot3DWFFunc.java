@@ -98,20 +98,31 @@ public class YPlot3DWFFunc extends VariationFunc {
       }
       preset_id = new_preset_id;
     }
-    else if (PARAM_XMIN.equalsIgnoreCase(pName))
-      xmin = pValue;
-    else if (PARAM_XMAX.equalsIgnoreCase(pName))
-      xmax = pValue;
-    else if (PARAM_YMIN.equalsIgnoreCase(pName))
-      ymin = pValue;
-    else if (PARAM_YMAX.equalsIgnoreCase(pName))
-      ymax = pValue;
-    else if (PARAM_ZMIN.equalsIgnoreCase(pName))
+    else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        xmin = pValue;
+    }
+    else if (PARAM_XMAX.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        xmax = pValue;
+    }
+    else if (PARAM_YMIN.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        ymin = pValue;
+    }
+    else if (PARAM_YMAX.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        ymax = pValue;
+    }
+    else if (PARAM_ZMIN.equalsIgnoreCase(pName)) {
       zmin = pValue;
-    else if (PARAM_ZMAX.equalsIgnoreCase(pName))
+    }
+    else if (PARAM_ZMAX.equalsIgnoreCase(pName)) {
       zmax = pValue;
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName))
+    }
+    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -134,7 +145,8 @@ public class YPlot3DWFFunc extends VariationFunc {
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
-      formula = pValue != null ? new String(pValue) : "";
+      if (use_preset <= 0)
+        formula = pValue != null ? new String(pValue) : "";
     }
     else
       throw new IllegalArgumentException(pName);

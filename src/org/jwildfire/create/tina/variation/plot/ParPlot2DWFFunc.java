@@ -125,18 +125,28 @@ public class ParPlot2DWFFunc extends VariationFunc {
       }
       preset_id = new_preset_id;
     }
-    else if (PARAM_UMIN.equalsIgnoreCase(pName))
-      umin = pValue;
-    else if (PARAM_UMAX.equalsIgnoreCase(pName))
-      umax = pValue;
-    else if (PARAM_VMIN.equalsIgnoreCase(pName))
-      vmin = pValue;
-    else if (PARAM_VMAX.equalsIgnoreCase(pName))
-      vmax = pValue;
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName))
+    else if (PARAM_UMIN.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        umin = pValue;
+    }
+    else if (PARAM_UMAX.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        umax = pValue;
+    }
+    else if (PARAM_VMIN.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        vmin = pValue;
+    }
+    else if (PARAM_VMAX.equalsIgnoreCase(pName)) {
+      if (use_preset <= 0)
+        vmax = pValue;
+    }
+    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
-    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
+    }
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = Tools.FTOI(pValue);
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -159,13 +169,16 @@ public class ParPlot2DWFFunc extends VariationFunc {
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_XFORMULA.equalsIgnoreCase(pName)) {
-      xformula = pValue != null ? new String(pValue) : "";
+      if (use_preset <= 0)
+        xformula = pValue != null ? new String(pValue) : "";
     }
     else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
-      yformula = pValue != null ? new String(pValue) : "";
+      if (use_preset <= 0)
+        yformula = pValue != null ? new String(pValue) : "";
     }
     else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
-      zformula = pValue != null ? new String(pValue) : "";
+      if (use_preset <= 0)
+        zformula = pValue != null ? new String(pValue) : "";
     }
     else
       throw new IllegalArgumentException(pName);
