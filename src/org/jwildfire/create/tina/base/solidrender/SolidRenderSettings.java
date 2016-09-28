@@ -14,6 +14,7 @@ import org.jwildfire.create.tina.edit.Assignable;
 @SuppressWarnings("serial")
 public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Serializable {
   private boolean solidRenderingEnabled = false;
+
   private boolean aoEnabled = true;
   private double aoIntensity = 0.5;
   private double aoSearchRadius = 12.0;
@@ -23,12 +24,17 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   private double aoFalloff = 0.5;
   private double aoAffectDiffuse = 0.2;
 
-  private boolean hardShadowsEnabled = false;
+  private ShadowType shadowType = ShadowType.OFF;
+  private double shadowmapBias = 0.01;
+  private int shadowmapSize = 2048;
+  private double shadowSmoothRadius = 1.0;
+
   private final List<MaterialSettings> materials = new ArrayList<>();
   private final List<PointLight> lights = new ArrayList<>();
 
   public void setupDefaults() {
-    setupDefaultGlobals();
+    setupDefaultAmbientShadowOptions();
+    setupDefaultHardShadowOptions();
     setupDefaultMaterials();
     setupDefaultLights();
   }
@@ -63,12 +69,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       light.setShadowIntensity(0.7);
     }
 
-  }
-
-  public void setupDefaultGlobals() {
-    aoEnabled = true;
-    aoIntensity = 0.5;
-    hardShadowsEnabled = false;
   }
 
   public void setupDefaultMaterials() {
@@ -174,14 +174,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     this.aoEnabled = aoEnabled;
   }
 
-  public boolean isHardShadowsEnabled() {
-    return hardShadowsEnabled;
-  }
-
-  public void setHardShadowsEnabled(boolean hardShadowsEnabled) {
-    this.hardShadowsEnabled = hardShadowsEnabled;
-  }
-
   public double getAoIntensity() {
     return aoIntensity;
   }
@@ -210,7 +202,11 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     aoFalloff = pSrc.aoFalloff;
     aoAffectDiffuse = pSrc.aoAffectDiffuse;
 
-    hardShadowsEnabled = pSrc.hardShadowsEnabled;
+    shadowType = pSrc.shadowType;
+    shadowmapBias = pSrc.shadowmapBias;
+    shadowmapSize = pSrc.shadowmapSize;
+    shadowSmoothRadius = pSrc.shadowSmoothRadius;
+
     materials.clear();
     for (MaterialSettings src : pSrc.getMaterials()) {
       MaterialSettings dst = new MaterialSettings();
@@ -234,13 +230,15 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   @Override
   public boolean isEqual(SolidRenderSettings pSrc) {
-    // do not care then solid rendering is disabled
+    // do not care when solid rendering is disabled
     if (!solidRenderingEnabled && !pSrc.solidRenderingEnabled) {
       return true;
     }
 
     if (solidRenderingEnabled != pSrc.solidRenderingEnabled ||
-        aoEnabled != pSrc.aoEnabled || hardShadowsEnabled != pSrc.hardShadowsEnabled ||
+        aoEnabled != pSrc.aoEnabled || !shadowType.equals(pSrc.shadowType) ||
+        fabs(shadowSmoothRadius - pSrc.shadowSmoothRadius) > EPSILON || shadowmapSize != pSrc.shadowmapSize ||
+        fabs(shadowmapBias - pSrc.shadowmapBias) > EPSILON ||
         fabs(aoIntensity - pSrc.aoIntensity) > EPSILON || fabs(aoSearchRadius - pSrc.aoSearchRadius) > EPSILON ||
         fabs(aoBlurRadius - pSrc.aoBlurRadius) > EPSILON || aoRadiusSamples != pSrc.aoRadiusSamples ||
         aoAzimuthSamples != pSrc.aoAzimuthSamples || fabs(aoFalloff - pSrc.aoFalloff) > EPSILON ||
@@ -345,6 +343,56 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public void setAoAffectDiffuse(double aoAffectDiffuse) {
     this.aoAffectDiffuse = aoAffectDiffuse;
+  }
+
+  public void setupDefaultAmbientShadowOptions() {
+    aoEnabled = true;
+    aoIntensity = 0.5;
+    aoSearchRadius = 12.0;
+    aoBlurRadius = 1.25;
+    aoRadiusSamples = 6;
+    aoAzimuthSamples = 7;
+    aoFalloff = 0.5;
+    aoAffectDiffuse = 0.2;
+  }
+
+  public void setupDefaultHardShadowOptions() {
+    shadowType = ShadowType.OFF;
+    shadowmapBias = 0.01;
+    shadowmapSize = 2048;
+    shadowSmoothRadius = 1.0;
+  }
+
+  public ShadowType getShadowType() {
+    return shadowType;
+  }
+
+  public void setShadowType(ShadowType shadowType) {
+    this.shadowType = shadowType;
+  }
+
+  public double getShadowmapBias() {
+    return shadowmapBias;
+  }
+
+  public void setShadowmapBias(double shadowmapBias) {
+    this.shadowmapBias = shadowmapBias;
+  }
+
+  public int getShadowmapSize() {
+    return shadowmapSize;
+  }
+
+  public void setShadowmapSize(int shadowmapSize) {
+    this.shadowmapSize = shadowmapSize;
+  }
+
+  public double getShadowSmoothRadius() {
+    return shadowSmoothRadius;
+  }
+
+  public void setShadowSmoothRadius(double shadowSmoothRadius) {
+    this.shadowSmoothRadius = shadowSmoothRadius;
   }
 
 }

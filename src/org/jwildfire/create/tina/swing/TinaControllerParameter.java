@@ -596,9 +596,16 @@ public class TinaControllerParameter {
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
   public JSlider tinaSolidRenderingAOAffectDiffuseSlider;
-  public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
+  public JComboBox tinaSolidRenderingShadowTypeCmb;
+  public JComboBox tinaSolidRenderingShadowmapSizeCmb;
+  public JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd;
+  public JSlider tinaSolidRenderingShadowSmoothRadiusSlider;
+  public JWFNumberField tinaSolidRenderingShadowmapBiasREd;
+  public JSlider tinaSolidRenderingShadowmapBiasSlider;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
+  public JButton resetSolidRenderingHardShadowOptionsBtn;
+  public JButton resetSolidRenderingAmbientShadowOptionsBtn;
   public JComboBox tinaSolidRenderingSelectedLightCmb;
   public JButton tinaSolidRenderingAddLightBtn;
   public JButton tinaSolidRenderingDeleteLightBtn;
@@ -1046,7 +1053,7 @@ public class TinaControllerParameter {
       JWFNumberField tinaSolidRenderingAOBlurRadiusREd, JSlider tinaSolidRenderingAOBlurRadiusSlider, JWFNumberField tinaSolidRenderingAOFalloffREd,
       JSlider tinaSolidRenderingAOFalloffSlider, JWFNumberField tinaSolidRenderingAORadiusSamplesREd, JSlider tinaSolidRenderingAORadiusSamplesSlider,
       JWFNumberField tinaSolidRenderingAOAzimuthSamplesREd, JSlider tinaSolidRenderingAOAzimuthSamplesSlider,
-      JWFNumberField tinaSolidRenderingAOAffectDiffuseREd, JSlider tinaSolidRenderingAOAffectDiffuseSlider, JCheckBox tinaSolidRenderingEnableHardShadowsCBx,
+      JWFNumberField tinaSolidRenderingAOAffectDiffuseREd, JSlider tinaSolidRenderingAOAffectDiffuseSlider,
       JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
       JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
@@ -1061,8 +1068,10 @@ public class TinaControllerParameter {
       JSlider tinaSolidRenderingMaterialReflectionMapIntensitySlider, JButton tinaSolidRenderingMaterialReflMapBtn, JButton tinaSolidRenderingMaterialSelectReflMapBtn,
       JButton tinaSolidRenderingMaterialRemoveReflMapBtn, JComboBox tinaSolidRenderingMaterialReflectionMappingCmb,
       JWFNumberField pXFormModHueREd, JSlider pXFormModHueSlider, JWFNumberField pXFormModHueSpeedREd, JSlider pXFormModHueSpeedSlider,
-      JWFNumberField xFormMaterialREd, JSlider xFormMaterialSlider, JWFNumberField xFormMaterialSpeedREd, JSlider xFormMaterialSpeedSlider
-
+      JWFNumberField xFormMaterialREd, JSlider xFormMaterialSlider, JWFNumberField xFormMaterialSpeedREd, JSlider xFormMaterialSpeedSlider,
+      JButton resetSolidRenderingHardShadowOptionsBtn, JButton resetSolidRenderingAmbientShadowOptionsBtn,
+      JComboBox tinaSolidRenderingShadowTypeCmb, JComboBox tinaSolidRenderingShadowmapSizeCmb, JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd,
+      JSlider tinaSolidRenderingShadowSmoothRadiusSlider, JWFNumberField tinaSolidRenderingShadowmapBiasREd, JSlider tinaSolidRenderingShadowmapBiasSlider
       ) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
@@ -1189,7 +1198,6 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingAOAffectDiffuseREd = tinaSolidRenderingAOAffectDiffuseREd;
     this.tinaSolidRenderingAOAffectDiffuseSlider = tinaSolidRenderingAOAffectDiffuseSlider;
 
-    this.tinaSolidRenderingEnableHardShadowsCBx = tinaSolidRenderingEnableHardShadowsCBx;
     this.resetSolidRenderingMaterialsBtn = resetSolidRenderingMaterialsBtn;
     this.resetSolidRenderingLightsBtn = resetSolidRenderingLightsBtn;
     this.tinaSolidRenderingSelectedLightCmb = tinaSolidRenderingSelectedLightCmb;
@@ -1234,6 +1242,14 @@ public class TinaControllerParameter {
     this.xFormMaterialSlider = xFormMaterialSlider;
     this.xFormMaterialSpeedREd = xFormMaterialSpeedREd;
     this.xFormMaterialSpeedSlider = xFormMaterialSpeedSlider;
+    this.resetSolidRenderingHardShadowOptionsBtn = resetSolidRenderingHardShadowOptionsBtn;
+    this.resetSolidRenderingAmbientShadowOptionsBtn = resetSolidRenderingAmbientShadowOptionsBtn;
+    this.tinaSolidRenderingShadowTypeCmb = tinaSolidRenderingShadowTypeCmb;
+    this.tinaSolidRenderingShadowmapSizeCmb = tinaSolidRenderingShadowmapSizeCmb;
+    this.tinaSolidRenderingShadowSmoothRadiusREd = tinaSolidRenderingShadowSmoothRadiusREd;
+    this.tinaSolidRenderingShadowSmoothRadiusSlider = tinaSolidRenderingShadowSmoothRadiusSlider;
+    this.tinaSolidRenderingShadowmapBiasREd = tinaSolidRenderingShadowmapBiasREd;
+    this.tinaSolidRenderingShadowmapBiasSlider = tinaSolidRenderingShadowmapBiasSlider;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

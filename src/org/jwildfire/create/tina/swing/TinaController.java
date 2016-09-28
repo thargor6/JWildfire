@@ -631,10 +631,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingAOAzimuthSamplesSlider = parameterObject.tinaSolidRenderingAOAzimuthSamplesSlider;
     data.tinaSolidRenderingAOAffectDiffuseREd = parameterObject.tinaSolidRenderingAOAffectDiffuseREd;
     data.tinaSolidRenderingAOAffectDiffuseSlider = parameterObject.tinaSolidRenderingAOAffectDiffuseSlider;
+    data.tinaSolidRenderingShadowTypeCmb = parameterObject.tinaSolidRenderingShadowTypeCmb;
+    data.tinaSolidRenderingShadowmapSizeCmb = parameterObject.tinaSolidRenderingShadowmapSizeCmb;
+    data.tinaSolidRenderingShadowSmoothRadiusREd = parameterObject.tinaSolidRenderingShadowSmoothRadiusREd;
+    data.tinaSolidRenderingShadowSmoothRadiusSlider = parameterObject.tinaSolidRenderingShadowSmoothRadiusSlider;
+    data.tinaSolidRenderingShadowmapBiasREd = parameterObject.tinaSolidRenderingShadowmapBiasREd;
+    data.tinaSolidRenderingShadowmapBiasSlider = parameterObject.tinaSolidRenderingShadowmapBiasSlider;
 
-    data.tinaSolidRenderingEnableHardShadowsCBx = parameterObject.tinaSolidRenderingEnableHardShadowsCBx;
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
+    data.resetSolidRenderingHardShadowOptionsBtn = parameterObject.resetSolidRenderingHardShadowOptionsBtn;
+    data.resetSolidRenderingAmbientShadowOptionsBtn = parameterObject.resetSolidRenderingAmbientShadowOptionsBtn;
     data.tinaSolidRenderingSelectedLightCmb = parameterObject.tinaSolidRenderingSelectedLightCmb;
     data.tinaSolidRenderingAddLightBtn = parameterObject.tinaSolidRenderingAddLightBtn;
     data.tinaSolidRenderingDeleteLightBtn = parameterObject.tinaSolidRenderingDeleteLightBtn;

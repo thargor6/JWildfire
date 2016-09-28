@@ -40,13 +40,13 @@ public class ShadowCalculator implements Serializable {
 
   private double[] lightX, lightY, lightZ, shadowIntensity;
 
-  private double shadowDistBias = 0.005;
+  private double shadowDistBias;
 
   private final int lightCount;
   private final boolean withAcceleration = true;
   private float[][][] accLightProjectionZBuf;
 
-  private final int SHADOWMAP_SIZE = 2048;
+  private int shadowMapSize;
   private final double shadowMapXScale[], shadowMapYScale[], shadowMapXCentre[], shadowMapYCentre[];
 
   private final int PRE_SHADOWMAP_SIZE = 256;
@@ -85,10 +85,16 @@ public class ShadowCalculator implements Serializable {
     lightZ = new double[lightCount];
     shadowIntensity = new double[lightCount];
 
+    shadowMapSize = flame.getSolidRenderSettings().getShadowmapSize();
+    if (shadowMapSize < 64) {
+      shadowMapSize = 64;
+    }
+    shadowDistBias = flame.getSolidRenderSettings().getShadowmapBias();
+
     for (int i = 0; i < lightCount; i++) {
       PointLight light = flame.getSolidRenderSettings().getLights().get(i);
       if (light.isCastShadows()) {
-        shadowZBuf[i] = new float[SHADOWMAP_SIZE][SHADOWMAP_SIZE];
+        shadowZBuf[i] = new float[shadowMapSize][shadowMapSize];
         pre_shadowXBuf[i] = new float[PRE_SHADOWMAP_SIZE];
         pre_shadowYBuf[i] = new float[PRE_SHADOWMAP_SIZE];
         pre_shadowZBuf[i] = new float[PRE_SHADOWMAP_SIZE];
@@ -108,9 +114,14 @@ public class ShadowCalculator implements Serializable {
       }
     }
 
-    shadowSoften = true;
+    shadowSoften = ShadowType.SMOOTH.equals(flame.getSolidRenderSettings().getShadowType());
 
-    shadowSmoothRadius = clipSmoothRadius(Tools.FTOI(6.0 * imgSize / 1000.0));
+    double rawSmoothRadius = flame.getSolidRenderSettings().getShadowSmoothRadius();
+    if (rawSmoothRadius < MathLib.EPSILON) {
+      rawSmoothRadius = 0.0;
+    }
+
+    shadowSmoothRadius = clipSmoothRadius(Tools.FTOI(rawSmoothRadius * 6.0 * imgSize / 1000.0));
     if (shadowSmoothRadius < 1.0) {
       shadowSoften = false;
       shadowSmoothKernel = null;
@@ -359,8 +370,8 @@ public class ShadowCalculator implements Serializable {
             dy = eps;
           }
 
-          shadowMapXScale[pShadowMapIdx] = (double) SHADOWMAP_SIZE / dx;
-          shadowMapYScale[pShadowMapIdx] = (double) SHADOWMAP_SIZE / dy;
+          shadowMapXScale[pShadowMapIdx] = (double) shadowMapSize / dx;
+          shadowMapYScale[pShadowMapIdx] = (double) shadowMapSize / dy;
 
           shadowMapXCentre[pShadowMapIdx] = -xmin * shadowMapXScale[pShadowMapIdx];
           shadowMapYCentre[pShadowMapIdx] = -ymin * shadowMapYScale[pShadowMapIdx];

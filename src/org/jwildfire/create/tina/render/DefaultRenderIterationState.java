@@ -42,6 +42,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
@@ -76,7 +77,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       colorProvider = pLayer.isSmoothGradient() ? new SmoothColorProvider() : new DefaultColorProvider();
     }
 
-    boolean withLightmaps = flame.getSolidRenderSettings().isHardShadowsEnabled();
+    boolean withLightmaps = ShadowType.areShadowsEnabled(flame.getSolidRenderSettings().getShadowType());
     prj = new XYZProjectedPoint(withLightmaps ? flame.getSolidRenderSettings().getLights().size() : 0);
 
     Flame flame = pPacket.getFlame();

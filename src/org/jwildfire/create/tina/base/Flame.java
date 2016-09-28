@@ -30,6 +30,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -1521,7 +1522,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean isWithShadows() {
-    boolean res = getSolidRenderSettings().isSolidRenderingEnabled() && getSolidRenderSettings().isHardShadowsEnabled();
+    boolean res = getSolidRenderSettings().isSolidRenderingEnabled() && ShadowType.areShadowsEnabled(getSolidRenderSettings().getShadowType());
     if (res) {
       res = false;
       for (PointLight light : getSolidRenderSettings().getLights()) {

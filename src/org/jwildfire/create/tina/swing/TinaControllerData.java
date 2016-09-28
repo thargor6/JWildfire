@@ -414,10 +414,16 @@ public class TinaControllerData {
   public JSlider tinaSolidRenderingAOAzimuthSamplesSlider;
   public JWFNumberField tinaSolidRenderingAOAffectDiffuseREd;
   public JSlider tinaSolidRenderingAOAffectDiffuseSlider;
-
-  public JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
+  public JComboBox tinaSolidRenderingShadowTypeCmb;
+  public JComboBox tinaSolidRenderingShadowmapSizeCmb;
+  public JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd;
+  public JSlider tinaSolidRenderingShadowSmoothRadiusSlider;
+  public JWFNumberField tinaSolidRenderingShadowmapBiasREd;
+  public JSlider tinaSolidRenderingShadowmapBiasSlider;
   public JButton resetSolidRenderingMaterialsBtn;
   public JButton resetSolidRenderingLightsBtn;
+  public JButton resetSolidRenderingHardShadowOptionsBtn;
+  public JButton resetSolidRenderingAmbientShadowOptionsBtn;
   public JComboBox tinaSolidRenderingSelectedLightCmb;
   public JButton tinaSolidRenderingAddLightBtn;
   public JButton tinaSolidRenderingDeleteLightBtn;

@@ -84,6 +84,7 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -5118,7 +5119,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingAOBlurRadiusREd(), getTinaSolidRenderingAOBlurRadiusSlider(), getTinaSolidRenderingAOFalloffREd(),
         getTinaSolidRenderingAOFalloffSlider(), getTinaSolidRenderingAORadiusSamplesREd(), getTinaSolidRenderingAORadiusSamplesSlider(),
         getTinaSolidRenderingAOAzimuthSamplesREd(), getTinaSolidRenderingAOAzimuthSamplesSlider(),
-        getTinaSolidRenderingAOAffectDiffuseREd(), getTinaSolidRenderingAOAffectDiffuseSlider(), getTinaSolidRenderingEnableHardShadowsCBx(),
+        getTinaSolidRenderingAOAffectDiffuseREd(), getTinaSolidRenderingAOAffectDiffuseSlider(),
         getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
         getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
@@ -5135,7 +5136,10 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingMaterialSelectReflMapBtn(), getTinaSolidRenderingMaterialRemoveReflMapBtn(),
         getTinaSolidRenderingMaterialReflectionMappingCmb(),
         getXFormModHueREd(), getXFormModHueSlider(), getXFormModHueSpeedREd(), getXFormModHueSpeedSlider(),
-        getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider()
+        getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider(),
+        getResetSolidRenderingHardShadowOptionsBtn(), getResetSolidRenderingAmbientShadowOptionsBtn(),
+        getTinaSolidRenderingShadowTypeCmb(), getTinaSolidRenderingShadowmapSizeCmb(), getTinaSolidRenderingShadowSmoothRadiusREd(),
+        getTinaSolidRenderingShadowSmoothRadiusSlider(), getTinaSolidRenderingShadowmapBiasREd(), getTinaSolidRenderingShadowmapBiasSlider()
         );
 
     tinaController = new TinaController(params);
@@ -5156,6 +5160,23 @@ public class TinaInternalFrame extends JInternalFrame {
       for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
         row.initControls();
       }
+
+      getTinaSolidRenderingShadowTypeCmb().removeAllItems();
+      getTinaSolidRenderingShadowTypeCmb().addItem(ShadowType.OFF);
+      getTinaSolidRenderingShadowTypeCmb().addItem(ShadowType.FAST);
+      getTinaSolidRenderingShadowTypeCmb().addItem(ShadowType.SMOOTH);
+
+      getTinaSolidRenderingShadowmapSizeCmb().removeAllItems();
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("512");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("1024");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("1536");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("2048");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("2560");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("3072");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("3584");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("4096");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("4608");
+      getTinaSolidRenderingShadowmapSizeCmb().addItem("5120");
 
       getXFormDrawModeCmb().removeAllItems();
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
@@ -9975,7 +9996,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton relWeightsResetAllButton;
   private JPanel panel_59;
   private JTabbedPane tinaSolidRenderingPane;
-  private JCheckBox tinaSolidRenderingEnableHardShadowsCBx;
   private JButton resetSolidRenderingMaterialsBtn;
   private JPanel panel_114;
   private JPanel panel_115;
@@ -10049,6 +10069,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton sendFlameToIRButton;
   private JWFNumberField tinaSolidRenderingShadowIntensityREd;
   private JSlider tinaSolidRenderingShadowIntensitySlider;
+  private JComboBox tinaSolidRenderingShadowmapSizeCmb;
+  private JComboBox tinaSolidRenderingShadowTypeCmb;
+  private JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd;
+  private JSlider tinaSolidRenderingShadowSmoothRadiusSlider;
+  private JButton resetSolidRenderingHardShadowOptionsBtn;
+  private JButton resetSolidRenderingAmbientShadowOptionsBtn;
+  private JWFNumberField tinaSolidRenderingShadowmapBiasREd;
+  private JSlider tinaSolidRenderingShadowmapBiasSlider;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -17178,10 +17206,6 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaSolidRenderingPane;
   }
 
-  public JCheckBox getTinaSolidRenderingEnableHardShadowsCBx() {
-    return tinaSolidRenderingEnableHardShadowsCBx;
-  }
-
   private JButton getResetSolidRenderingMaterialsBtn() {
     if (resetSolidRenderingMaterialsBtn == null) {
       resetSolidRenderingMaterialsBtn = new JButton();
@@ -17192,14 +17216,14 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      resetSolidRenderingMaterialsBtn.setToolTipText("Reset the material settings to the defaults");
+      resetSolidRenderingMaterialsBtn.setToolTipText("Reset the light settings to the defaults");
       resetSolidRenderingMaterialsBtn.setText("Reset");
       resetSolidRenderingMaterialsBtn.setPreferredSize(new Dimension(125, 24));
       resetSolidRenderingMaterialsBtn.setMinimumSize(new Dimension(100, 24));
       resetSolidRenderingMaterialsBtn.setMaximumSize(new Dimension(32000, 24));
       resetSolidRenderingMaterialsBtn.setIconTextGap(2);
       resetSolidRenderingMaterialsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetSolidRenderingMaterialsBtn.setBounds(6, 114, 100, 24);
+      resetSolidRenderingMaterialsBtn.setBounds(948, 6, 100, 24);
       resetSolidRenderingMaterialsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetSolidRenderingMaterialsBtn;
@@ -17695,7 +17719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetSolidRenderingLightsBtn.setMaximumSize(new Dimension(32000, 24));
       resetSolidRenderingLightsBtn.setIconTextGap(2);
       resetSolidRenderingLightsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetSolidRenderingLightsBtn.setBounds(592, 1, 100, 24);
+      resetSolidRenderingLightsBtn.setBounds(740, 1, 100, 24);
       resetSolidRenderingLightsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetSolidRenderingLightsBtn;
@@ -18433,6 +18457,25 @@ public class TinaInternalFrame extends JInternalFrame {
 
       panel.add(tinaSolidRenderingAOAffectDiffuseSlider);
       panel.add(getLblHintAmbientShadows());
+
+      resetSolidRenderingAmbientShadowOptionsBtn = new JButton();
+      resetSolidRenderingAmbientShadowOptionsBtn.setToolTipText("Reset the ambient-shadow-settings to the defaults");
+      resetSolidRenderingAmbientShadowOptionsBtn.setText("Reset");
+      resetSolidRenderingAmbientShadowOptionsBtn.setPreferredSize(new Dimension(125, 24));
+      resetSolidRenderingAmbientShadowOptionsBtn.setMinimumSize(new Dimension(100, 24));
+      resetSolidRenderingAmbientShadowOptionsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetSolidRenderingAmbientShadowOptionsBtn.setIconTextGap(2);
+      resetSolidRenderingAmbientShadowOptionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetSolidRenderingAmbientShadowOptionsBtn.setBounds(948, 6, 100, 24);
+      resetSolidRenderingAmbientShadowOptionsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      resetSolidRenderingAmbientShadowOptionsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingResetAmbientShadowsBtn_clicked();
+          }
+        }
+      });
+      panel.add(resetSolidRenderingAmbientShadowOptionsBtn);
     }
     return panel;
   }
@@ -18584,18 +18627,205 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_4 = new JPanel();
       panel_4.setLayout(null);
 
-      tinaSolidRenderingEnableHardShadowsCBx = new JCheckBox("Enable hard shadows");
-      tinaSolidRenderingEnableHardShadowsCBx.setBounds(16, 6, 169, 18);
-      panel_4.add(tinaSolidRenderingEnableHardShadowsCBx);
-      tinaSolidRenderingEnableHardShadowsCBx.addItemListener(new ItemListener() {
-        public void itemStateChanged(ItemEvent e) {
+      tinaSolidRenderingShadowSmoothRadiusREd = new JWFNumberField();
+      tinaSolidRenderingShadowSmoothRadiusREd.setMouseSpeed(0.08);
+      tinaSolidRenderingShadowSmoothRadiusREd.setValueStep(0.05);
+      tinaSolidRenderingShadowSmoothRadiusREd.setText("");
+      tinaSolidRenderingShadowSmoothRadiusREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowSmoothRadiusREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowSmoothRadiusREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingShadowSmoothRadiusREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingShadowSmoothRadiusREd.setLinkedMotionControlName("tinaSolidRenderingShadowSmoothRadiusSlider");
+      tinaSolidRenderingShadowSmoothRadiusREd.setLinkedLabelControlName("tinaSolidRenderingShadowSmoothRadiusLbl");
+      tinaSolidRenderingShadowSmoothRadiusREd.setHasMinValue(true);
+      tinaSolidRenderingShadowSmoothRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowSmoothRadiusREd.setBounds(98, 31, 100, 24);
+      tinaSolidRenderingShadowSmoothRadiusREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingShadowSmoothRadiusREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().solidRenderingEnableHardShadowsCBx_changed();
+            if (!tinaSolidRenderingShadowSmoothRadiusREd.isMouseAdjusting() || tinaSolidRenderingShadowSmoothRadiusREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingShadowSmoothRadiusSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingShadowSmoothRadiusREd_changed();
           }
         }
       });
+      panel_4.add(tinaSolidRenderingShadowSmoothRadiusREd);
 
-      tinaSolidRenderingEnableHardShadowsCBx.setActionCommand("Enable hard shadows");
+      JLabel tinaSolidRenderingShadowSmoothRadiusLbl = new JLabel();
+      tinaSolidRenderingShadowSmoothRadiusLbl.setText("Smooth radius");
+      tinaSolidRenderingShadowSmoothRadiusLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingShadowSmoothRadiusLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingShadowSmoothRadiusLbl.setName("tinaSolidRenderingShadowSmoothRadiusLbl");
+      tinaSolidRenderingShadowSmoothRadiusLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingShadowSmoothRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowSmoothRadiusLbl.setBounds(6, 31, 90, 22);
+      panel_4.add(tinaSolidRenderingShadowSmoothRadiusLbl);
+
+      tinaSolidRenderingShadowSmoothRadiusSlider = new JSlider();
+      tinaSolidRenderingShadowSmoothRadiusSlider.setValue(0);
+      tinaSolidRenderingShadowSmoothRadiusSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingShadowSmoothRadiusSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingShadowSmoothRadiusSlider.setName("tinaSolidRenderingShadowSmoothRadiusSlider");
+      tinaSolidRenderingShadowSmoothRadiusSlider.setMaximum(25000);
+      tinaSolidRenderingShadowSmoothRadiusSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingShadowSmoothRadiusSlider.setBounds(200, 31, 205, 19);
+      tinaSolidRenderingShadowSmoothRadiusSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingShadowSmoothRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingShadowSmoothRadiusSlider_stateChanged(e);
+        }
+      });
+      panel_4.add(tinaSolidRenderingShadowSmoothRadiusSlider);
+
+      tinaSolidRenderingShadowTypeCmb = new JComboBox();
+      tinaSolidRenderingShadowTypeCmb.setToolTipText("");
+      tinaSolidRenderingShadowTypeCmb.setPreferredSize(new Dimension(110, 24));
+      tinaSolidRenderingShadowTypeCmb.setMinimumSize(new Dimension(110, 24));
+      tinaSolidRenderingShadowTypeCmb.setMaximumSize(new Dimension(32767, 24));
+      tinaSolidRenderingShadowTypeCmb.setMaximumRowCount(48);
+      tinaSolidRenderingShadowTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowTypeCmb.setBounds(98, 5, 100, 24);
+      tinaSolidRenderingShadowTypeCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingShadowTypeCmb_changed();
+          }
+        }
+      });
+      panel_4.add(tinaSolidRenderingShadowTypeCmb);
+
+      JLabel tinaSolidRenderingShadowTypeLbl = new JLabel();
+      tinaSolidRenderingShadowTypeLbl.setText("Shadow type");
+      tinaSolidRenderingShadowTypeLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingShadowTypeLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingShadowTypeLbl.setName("tinaSolidRenderingShadowTypeLbl");
+      tinaSolidRenderingShadowTypeLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingShadowTypeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowTypeLbl.setBounds(6, 6, 90, 22);
+      panel_4.add(tinaSolidRenderingShadowTypeLbl);
+
+      JLabel tinaSolidRenderingShadowmapSizeLbl = new JLabel();
+      tinaSolidRenderingShadowmapSizeLbl.setText("Shadowmap size");
+      tinaSolidRenderingShadowmapSizeLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingShadowmapSizeLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingShadowmapSizeLbl.setName("tinaSolidRenderingShadowmapSizeLbl");
+      tinaSolidRenderingShadowmapSizeLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingShadowmapSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapSizeLbl.setBounds(417, 6, 90, 22);
+      panel_4.add(tinaSolidRenderingShadowmapSizeLbl);
+
+      tinaSolidRenderingShadowmapSizeCmb = new JComboBox();
+      tinaSolidRenderingShadowmapSizeCmb.setToolTipText("");
+      tinaSolidRenderingShadowmapSizeCmb.setPreferredSize(new Dimension(110, 24));
+      tinaSolidRenderingShadowmapSizeCmb.setMinimumSize(new Dimension(110, 24));
+      tinaSolidRenderingShadowmapSizeCmb.setMaximumSize(new Dimension(32767, 24));
+      tinaSolidRenderingShadowmapSizeCmb.setMaximumRowCount(48);
+      tinaSolidRenderingShadowmapSizeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapSizeCmb.setBounds(509, 5, 100, 24);
+      tinaSolidRenderingShadowmapSizeCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingShadowmapSizeCmb_changed();
+          }
+        }
+      });
+      panel_4.add(tinaSolidRenderingShadowmapSizeCmb);
+
+      JLabel tinaSolidRenderingShadowmapBiasLbl = new JLabel();
+      tinaSolidRenderingShadowmapBiasLbl.setText("Shadowmap bias");
+      tinaSolidRenderingShadowmapBiasLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingShadowmapBiasLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingShadowmapBiasLbl.setName("tinaSolidRenderingShadowmapBiasLbl");
+      tinaSolidRenderingShadowmapBiasLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingShadowmapBiasLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapBiasLbl.setBounds(417, 31, 90, 22);
+      panel_4.add(tinaSolidRenderingShadowmapBiasLbl);
+
+      tinaSolidRenderingShadowmapBiasREd = new JWFNumberField();
+      tinaSolidRenderingShadowmapBiasREd.setMouseSpeed(0.001);
+      tinaSolidRenderingShadowmapBiasREd.setToolTipText("Change this value if you see stripes or unwanted dots in shadow regions, depends on fractal scale and shadowmap-size");
+      tinaSolidRenderingShadowmapBiasREd.setValueStep(0.05);
+      tinaSolidRenderingShadowmapBiasREd.setText("");
+      tinaSolidRenderingShadowmapBiasREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowmapBiasREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingShadowmapBiasREd.setMotionPropertyName("camPosZ");
+      tinaSolidRenderingShadowmapBiasREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingShadowmapBiasREd.setLinkedMotionControlName("tinaSolidRenderingShadowmapBiasSlider");
+      tinaSolidRenderingShadowmapBiasREd.setLinkedLabelControlName("tinaSolidRenderingShadowmapBiasLbl");
+      tinaSolidRenderingShadowmapBiasREd.setHasMinValue(true);
+      tinaSolidRenderingShadowmapBiasREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowmapBiasREd.setBounds(509, 31, 100, 24);
+      tinaSolidRenderingShadowmapBiasREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      tinaSolidRenderingShadowmapBiasREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!tinaSolidRenderingShadowmapBiasREd.isMouseAdjusting() || tinaSolidRenderingShadowmapBiasREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingShadowmapBiasSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingShadowmapBiasREd_changed();
+          }
+        }
+      });
+      panel_4.add(tinaSolidRenderingShadowmapBiasREd);
+
+      tinaSolidRenderingShadowmapBiasSlider = new JSlider();
+      tinaSolidRenderingShadowmapBiasSlider.setValue(0);
+      tinaSolidRenderingShadowmapBiasSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingShadowmapBiasSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingShadowmapBiasSlider.setName("tinaSolidRenderingShadowmapBiasSlider");
+      tinaSolidRenderingShadowmapBiasSlider.setMaximum(500);
+      tinaSolidRenderingShadowmapBiasSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingShadowmapBiasSlider.setBounds(611, 31, 205, 19);
+      tinaSolidRenderingShadowmapBiasSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      tinaSolidRenderingShadowmapBiasSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingShadowmapBiasSlider_stateChanged(e);
+        }
+      });
+      panel_4.add(tinaSolidRenderingShadowmapBiasSlider);
+
+      resetSolidRenderingHardShadowOptionsBtn = new JButton();
+      resetSolidRenderingHardShadowOptionsBtn.setToolTipText("Reset the hard-shadow-settings to the defaults");
+      resetSolidRenderingHardShadowOptionsBtn.setText("Reset");
+      resetSolidRenderingHardShadowOptionsBtn.setPreferredSize(new Dimension(125, 24));
+      resetSolidRenderingHardShadowOptionsBtn.setMinimumSize(new Dimension(100, 24));
+      resetSolidRenderingHardShadowOptionsBtn.setMaximumSize(new Dimension(32000, 24));
+      resetSolidRenderingHardShadowOptionsBtn.setIconTextGap(2);
+      resetSolidRenderingHardShadowOptionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetSolidRenderingHardShadowOptionsBtn.setBounds(948, 5, 100, 24);
+      resetSolidRenderingHardShadowOptionsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
+      resetSolidRenderingHardShadowOptionsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingResetHardShadowsBtn_clicked();
+          }
+        }
+      });
+      panel_4.add(resetSolidRenderingHardShadowOptionsBtn);
     }
     return panel_4;
   }
@@ -18650,6 +18880,38 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaSolidRenderingShadowIntensitySlider() {
     return tinaSolidRenderingShadowIntensitySlider;
+  }
+
+  public JComboBox getTinaSolidRenderingShadowmapSizeCmb() {
+    return tinaSolidRenderingShadowmapSizeCmb;
+  }
+
+  public JComboBox getTinaSolidRenderingShadowTypeCmb() {
+    return tinaSolidRenderingShadowTypeCmb;
+  }
+
+  public JWFNumberField getTinaSolidRenderingShadowSmoothRadiusREd() {
+    return tinaSolidRenderingShadowSmoothRadiusREd;
+  }
+
+  public JSlider getTinaSolidRenderingShadowSmoothRadiusSlider() {
+    return tinaSolidRenderingShadowSmoothRadiusSlider;
+  }
+
+  public JButton getResetSolidRenderingHardShadowOptionsBtn() {
+    return resetSolidRenderingHardShadowOptionsBtn;
+  }
+
+  public JButton getResetSolidRenderingAmbientShadowOptionsBtn() {
+    return resetSolidRenderingAmbientShadowOptionsBtn;
+  }
+
+  public JWFNumberField getTinaSolidRenderingShadowmapBiasREd() {
+    return tinaSolidRenderingShadowmapBiasREd;
+  }
+
+  public JSlider getTinaSolidRenderingShadowmapBiasSlider() {
+    return tinaSolidRenderingShadowmapBiasSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

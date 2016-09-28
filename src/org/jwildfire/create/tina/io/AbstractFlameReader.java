@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -140,9 +141,12 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES = "sld_render_ao_azimuth_samples";
   public static final String ATTR_SLD_RENDER_AO_FALLOFF = "sld_render_ao_falloff";
   public static final String ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE = "sld_render_ao_affect_diffuse";
-  public static final String ATTR_SLD_RENDER_SHADOWS_ENABLED = "sld_render_shadows_enabled";
   public static final String ATTR_SLD_RENDER_MATERIAL_COUNT = "sld_render_material_count";
   public static final String ATTR_SLD_RENDER_LIGHT_COUNT = "sld_render_ligtht_count";
+  public static final String ATTR_SLD_RENDER_SHADOW_TYPE = "sld_render_shadow_type";
+  public static final String ATTR_SLD_RENDER_SHADOW_SMOOTH_RADIUS = "sld_render_shadow_smooth_radius";
+  public static final String ATTR_SLD_RENDER_SHADOWMAP_SIZE = "sld_render_shadowmap_size";
+  public static final String ATTR_SLD_RENDER_SHADOWMAP_BIAS = "sld_render_shadowmap_bias";
 
   public static final String ATTR_SLD_RENDER_MATERIAL_DIFFUSE = "sld_render_material_diffuse";
   public static final String ATTR_SLD_RENDER_MATERIAL_AMBIENT = "sld_render_material_ambient";
@@ -551,9 +555,24 @@ public class AbstractFlameReader {
       if ((hs = atts.get(ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE)) != null) {
         pFlame.getSolidRenderSettings().setAoAffectDiffuse(Double.parseDouble(hs));
       }
-      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWS_ENABLED)) != null) {
-        pFlame.getSolidRenderSettings().setHardShadowsEnabled(Integer.parseInt(hs) == 1);
+      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOW_TYPE)) != null) {
+        try {
+          pFlame.getSolidRenderSettings().setShadowType(ShadowType.valueOf(hs));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
       }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOW_SMOOTH_RADIUS)) != null) {
+        pFlame.getSolidRenderSettings().setShadowSmoothRadius(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWMAP_SIZE)) != null) {
+        pFlame.getSolidRenderSettings().setShadowmapSize(Integer.parseInt(hs));
+      }
+      if ((hs = atts.get(ATTR_SLD_RENDER_SHADOWMAP_BIAS)) != null) {
+        pFlame.getSolidRenderSettings().setShadowmapBias(Double.parseDouble(hs));
+      }
+
       if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_COUNT)) != null) {
         int materialCount = Integer.parseInt(hs);
         pFlame.getSolidRenderSettings().getMaterials().clear();

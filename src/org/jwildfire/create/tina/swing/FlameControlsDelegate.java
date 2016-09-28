@@ -43,6 +43,7 @@ import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -212,9 +213,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean disabled = getCurrFlame() == null || !getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled();
     boolean hasLights = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getLights().size() > 0;
     boolean hasMaterials = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().getMaterials().size() > 0;
-    boolean hasHardShadows = getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().isHardShadowsEnabled();
-    enableControl(data.tinaSolidRenderingEnableHardShadowsCBx, disabled);
     boolean aoEnabled = !disabled && getCurrFlame().getSolidRenderSettings().isAoEnabled();
+    boolean shadowEnabled = !disabled && ShadowType.areShadowsEnabled(getCurrFlame().getSolidRenderSettings().getShadowType());
     enableControl(data.tinaSolidRenderingAOIntensityREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOSearchRadiusREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOBlurRadiusREd, disabled || !aoEnabled);
@@ -222,7 +222,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingAORadiusSamplesREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOAzimuthSamplesREd, disabled || !aoEnabled);
     enableControl(data.tinaSolidRenderingAOAffectDiffuseREd, disabled || !aoEnabled);
+    enableControl(data.tinaSolidRenderingShadowTypeCmb, disabled);
+    enableControl(data.tinaSolidRenderingShadowmapSizeCmb, disabled || !shadowEnabled);
+    enableControl(data.tinaSolidRenderingShadowSmoothRadiusREd, disabled || !shadowEnabled || !ShadowType.SMOOTH.equals(getCurrFlame().getSolidRenderSettings().getShadowType()));
+    enableControl(data.tinaSolidRenderingShadowmapBiasREd, disabled || !shadowEnabled);
     enableControl(data.tinaSolidRenderingEnableAOCBx, disabled);
+    enableControl(data.resetSolidRenderingAmbientShadowOptionsBtn, disabled);
+    enableControl(data.resetSolidRenderingHardShadowOptionsBtn, disabled);
     enableControl(data.resetSolidRenderingMaterialsBtn, disabled);
     enableControl(data.resetSolidRenderingLightsBtn, disabled);
     enableControl(data.tinaSolidRenderingSelectedLightCmb, disabled || !hasLights);
@@ -821,7 +827,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
     data.solidRenderingToggleBtn.setSelected(settings.isSolidRenderingEnabled());
     data.tinaSolidRenderingEnableAOCBx.setSelected(settings.isAoEnabled());
-    data.tinaSolidRenderingEnableHardShadowsCBx.setSelected(settings.isHardShadowsEnabled());
     data.tinaSolidRenderingAOIntensityREd.setText(Tools.doubleToString(settings.getAoIntensity()));
     data.tinaSolidRenderingAOIntensitySlider.setValue(Tools.FTOI(settings.getAoIntensity() * TinaController.SLIDER_SCALE_CENTRE));
     data.tinaSolidRenderingAOSearchRadiusREd.setText(Tools.doubleToString(settings.getAoSearchRadius()));
@@ -836,6 +841,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.tinaSolidRenderingAOAzimuthSamplesSlider.setValue(Tools.FTOI(settings.getAoAzimuthSamples()));
     data.tinaSolidRenderingAOAffectDiffuseREd.setText(Tools.doubleToString(settings.getAoAffectDiffuse()));
     data.tinaSolidRenderingAOAffectDiffuseSlider.setValue(Tools.FTOI(settings.getAoAffectDiffuse() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingShadowTypeCmb.setSelectedItem(settings.getShadowType());
+    data.tinaSolidRenderingShadowmapSizeCmb.setSelectedItem(String.valueOf(settings.getShadowmapSize()));
+    if (data.tinaSolidRenderingShadowmapSizeCmb.getSelectedIndex() < 0) {
+      data.tinaSolidRenderingShadowmapSizeCmb.setSelectedIndex(0);
+    }
+    data.tinaSolidRenderingShadowSmoothRadiusREd.setText(Tools.doubleToString(settings.getShadowSmoothRadius()));
+    data.tinaSolidRenderingShadowSmoothRadiusSlider.setValue(Tools.FTOI(settings.getShadowSmoothRadius() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingShadowmapBiasREd.setText(Tools.doubleToString(settings.getShadowmapBias()));
+    data.tinaSolidRenderingShadowmapBiasSlider.setValue(Tools.FTOI(settings.getShadowmapBias() * TinaController.SLIDER_SCALE_CENTRE));
   }
 
   private void refreshSolidRenderingMaterialControls() {
@@ -1354,18 +1368,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  public void solidRenderingEnableHardShadowsCBx_changed() {
-    if (!isNoRefresh()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        owner.saveUndoPoint();
-        flame.getSolidRenderSettings().setHardShadowsEnabled(data.tinaSolidRenderingEnableHardShadowsCBx.isSelected());
-        enableControls();
-        owner.refreshFlameImage(true, false, 1, true, true);
-      }
-    }
-  }
-
   public void solidRenderingLightCastShadowsCBx_changed() {
     if (!isNoRefresh()) {
       PointLight light = getSolidRenderingSelectedLight();
@@ -1473,6 +1475,32 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     owner.refreshFlameImage(true, false, 1, true, true);
   }
 
+  public void solidRenderingResetHardShadowsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultHardShadowOptions();
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingGlobals();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
+  public void solidRenderingResetAmbientShadowsBtn_clicked() {
+    setNoRefresh(true);
+    try {
+      getCurrFlame().getSolidRenderSettings().setupDefaultAmbientShadowOptions();
+    }
+    finally {
+      setNoRefresh(false);
+    }
+    refreshSolidRenderingGlobals();
+    enableSolidRenderUI();
+    owner.refreshFlameImage(true, false, 1, true, true);
+  }
+
   public void solidRenderingAddMaterialBtn_clicked() {
     getCurrFlame().getSolidRenderSettings().addMaterial();
     setNoRefresh(true);
@@ -1516,13 +1544,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       setNoRefresh(false);
     }
     refreshSolidRenderingMaterialControls();
-    enableSolidRenderUI();
-    owner.refreshFlameImage(true, false, 1, true, true);
-  }
-
-  public void solidRenderingResetSettingsBtn_clicked() {
-    getCurrFlame().getSolidRenderSettings().setupDefaultGlobals();
-    refreshSolidRenderingGlobals();
     enableSolidRenderUI();
     owner.refreshFlameImage(true, false, 1, true, true);
   }
@@ -1862,5 +1883,46 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingMaterialReflectionMapIntensitySlider_stateChanged(ChangeEvent e) {
     solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialReflectionMapIntensitySlider, data.tinaSolidRenderingMaterialReflectionMapIntensityREd, "reflMapIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingShadowTypeCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        SolidRenderSettings settings = flame.getSolidRenderSettings();
+        owner.saveUndoPoint();
+        settings.setShadowType((ShadowType) data.tinaSolidRenderingShadowTypeCmb.getSelectedItem());
+        enableControls();
+        owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void solidRenderingShadowmapSizeCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        SolidRenderSettings settings = flame.getSolidRenderSettings();
+        owner.saveUndoPoint();
+        settings.setShadowmapSize(Integer.parseInt((String) data.tinaSolidRenderingShadowmapSizeCmb.getSelectedItem()));
+        owner.refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void solidRenderingShadowSmoothRadiusREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingShadowSmoothRadiusSlider, data.tinaSolidRenderingShadowSmoothRadiusREd, "shadowSmoothRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingShadowmapBiasREd_changed() {
+    solidRenderingTextFieldChanged(data.tinaSolidRenderingShadowmapBiasSlider, data.tinaSolidRenderingShadowmapBiasREd, "shadowmapBias", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingShadowmapBiasSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingShadowmapBiasSlider, data.tinaSolidRenderingShadowmapBiasREd, "shadowmapBias", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingShadowSmoothRadiusSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.tinaSolidRenderingShadowSmoothRadiusSlider, data.tinaSolidRenderingShadowSmoothRadiusREd, "shadowSmoothRadius", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 }

@@ -344,7 +344,10 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_AZIMUTH_SAMPLES, pFlame.getSolidRenderSettings().getAoAzimuthSamples()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_FALLOFF, pFlame.getSolidRenderSettings().getAoFalloff()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_AFFECT_DIFFUSE, pFlame.getSolidRenderSettings().getAoAffectDiffuse()));
-      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWS_ENABLED, pFlame.getSolidRenderSettings().isHardShadowsEnabled()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOW_TYPE, pFlame.getSolidRenderSettings().getShadowType().toString()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOW_SMOOTH_RADIUS, pFlame.getSolidRenderSettings().getShadowSmoothRadius()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWMAP_SIZE, pFlame.getSolidRenderSettings().getShadowmapSize()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWMAP_BIAS, pFlame.getSolidRenderSettings().getShadowmapBias()));
 
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));
       for (int i = 0; i < pFlame.getSolidRenderSettings().getMaterials().size(); i++) {
