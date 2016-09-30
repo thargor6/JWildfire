@@ -5060,7 +5060,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
         interactiveRendererFrame.getInteractiveResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
-        getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider());
+        getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
+        getTinaZBufferScaleREd(), getTinaZBufferScaleSlider());
 
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(), getTinaAppendToDancingFlamesButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
@@ -10077,6 +10078,9 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton resetSolidRenderingAmbientShadowOptionsBtn;
   private JWFNumberField tinaSolidRenderingShadowmapBiasREd;
   private JSlider tinaSolidRenderingShadowmapBiasSlider;
+  private JPanel panel_5;
+  private JWFNumberField tinaZBufferScaleREd;
+  private JSlider tinaZBufferScaleSlider;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -14329,6 +14333,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_1.add(getPostBlurFallOffREd(), null);
       panel_1.add(getPostBlurFallOffSlider(), null);
       panel_1.add(getResetPostBlurSettingsBtn());
+      tabbedPane_3.addTab("ZBuffer", null, getPanel_5(), null);
     }
     return tabbedPane_3;
   }
@@ -18912,6 +18917,74 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaSolidRenderingShadowmapBiasSlider() {
     return tinaSolidRenderingShadowmapBiasSlider;
+  }
+
+  private JPanel getPanel_5() {
+    if (panel_5 == null) {
+      panel_5 = new JPanel();
+      panel_5.setLayout(null);
+
+      tinaZBufferScaleREd = new JWFNumberField();
+      tinaZBufferScaleREd.setToolTipText("Scale applied to the z-buffer before exporting it. Positive values: black background, white near camera. Negative values: vice versa");
+      tinaZBufferScaleREd.setValueStep(0.05);
+      tinaZBufferScaleREd.setText("");
+      tinaZBufferScaleREd.setSize(new Dimension(100, 24));
+      tinaZBufferScaleREd.setPreferredSize(new Dimension(100, 24));
+      tinaZBufferScaleREd.setMotionPropertyName("centreX");
+      tinaZBufferScaleREd.setLocation(new Point(456, 4));
+      tinaZBufferScaleREd.setLinkedMotionControlName("tinaZBufferScaleSlider");
+      tinaZBufferScaleREd.setLinkedLabelControlName("tinaZBufferScaleLbl");
+      tinaZBufferScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaZBufferScaleREd.setBounds(90, 8, 100, 24);
+      tinaZBufferScaleREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (!tinaZBufferScaleREd.isMouseAdjusting() || tinaZBufferScaleREd.getMouseChangeCount() == 0) {
+            if (!tinaZBufferScaleSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+            }
+          }
+          tinaController.getFlameControls().zBufferScaleREd_changed();
+        }
+      });
+
+      panel_5.add(tinaZBufferScaleREd);
+
+      JLabel lblZbufferScale = new JLabel();
+      lblZbufferScale.setText("ZBuffer scale");
+      lblZbufferScale.setSize(new Dimension(68, 22));
+      lblZbufferScale.setPreferredSize(new Dimension(94, 22));
+      lblZbufferScale.setName("tinaZBufferScaleLbl");
+      lblZbufferScale.setLocation(new Point(390, 6));
+      lblZbufferScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblZbufferScale.setBounds(6, 8, 84, 22);
+      panel_5.add(lblZbufferScale);
+
+      tinaZBufferScaleSlider = new JSlider();
+      tinaZBufferScaleSlider.setValue(0);
+      tinaZBufferScaleSlider.setSize(new Dimension(205, 19));
+      tinaZBufferScaleSlider.setPreferredSize(new Dimension(220, 19));
+      tinaZBufferScaleSlider.setName("tinaZBufferScaleSlider");
+      tinaZBufferScaleSlider.setMinimum(-25000);
+      tinaZBufferScaleSlider.setMaximum(25000);
+      tinaZBufferScaleSlider.setLocation(new Point(558, 4));
+      tinaZBufferScaleSlider.setBounds(192, 8, 205, 19);
+      tinaZBufferScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().zBufferScaleSlider_changed();
+        }
+      });
+
+      panel_5.add(tinaZBufferScaleSlider);
+    }
+    return panel_5;
+  }
+
+  public JWFNumberField getTinaZBufferScaleREd() {
+    return tinaZBufferScaleREd;
+  }
+
+  public JSlider getTinaZBufferScaleSlider() {
+    return tinaZBufferScaleSlider;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

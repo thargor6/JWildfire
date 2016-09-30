@@ -524,6 +524,10 @@ public class AbstractFlameReader {
       pFlame.setPostBlurFallOff(Double.parseDouble(hs));
     }
 
+    if ((hs = atts.get(ATTR_ZBUFFER_SCALE)) != null) {
+      pFlame.setZBufferScale(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_SLD_RENDER_ENABLED)) != null) {
       pFlame.getSolidRenderSettings().setSolidRenderingEnabled(Integer.parseInt(hs) == 1);
     }
@@ -739,6 +743,7 @@ public class AbstractFlameReader {
   public static final String ATTR_POSTBLUR_RADIUS = "post_blur_radius";
   public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
   public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
+  public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);

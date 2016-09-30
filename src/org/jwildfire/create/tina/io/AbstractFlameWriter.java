@@ -334,6 +334,8 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FADE, pFlame.getPostBlurFade()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POSTBLUR_FALLOFF, pFlame.getPostBlurFallOff()));
 
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZBUFFER_SCALE, pFlame.getZBufferScale()));
+
     if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_ENABLED, pFlame.getSolidRenderSettings().isSolidRenderingEnabled()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_AO_ENABLED, pFlame.getSolidRenderSettings().isAoEnabled()));

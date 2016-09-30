@@ -602,6 +602,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.postBlurFallOffREd = parameterObject.postBlurFallOffREd;
     data.postBlurFallOffSlider = parameterObject.postBlurFallOffSlider;
 
+    data.tinaZBufferScaleREd = parameterObject.tinaZBufferScaleREd;
+    data.tinaZBufferScaleSlider = parameterObject.tinaZBufferScaleSlider;
+
     data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
     data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;

@@ -215,6 +215,8 @@ public class TinaControllerParameter {
   public JSlider postBlurFadeSlider;
   public JWFNumberField postBlurFallOffREd;
   public JSlider postBlurFallOffSlider;
+  public JWFNumberField tinaZBufferScaleREd;
+  public JSlider tinaZBufferScaleSlider;
   public JToggleButton pAffineScaleXButton;
   public JToggleButton pAffineScaleYButton;
   public JPanel pGradientLibraryPanel;
@@ -654,7 +656,8 @@ public class TinaControllerParameter {
       JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JToggleButton pMouseTransformSlowButton,
       JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
-      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider) {
+      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
+      JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider) {
     this.desktop = pDesktop;
     this.pTinaFrame = pTinaFrame;
     this.pErrorHandler = pErrorHandler;
@@ -809,6 +812,8 @@ public class TinaControllerParameter {
     this.pXFormAntialiasAmountSlider = pXFormAntialiasAmountSlider;
     this.pXFormAntialiasRadiusREd = pXFormAntialiasRadiusREd;
     this.pXFormAntialiasRadiusSlider = pXFormAntialiasRadiusSlider;
+    this.tinaZBufferScaleREd = tinaZBufferScaleREd;
+    this.tinaZBufferScaleSlider = tinaZBufferScaleSlider;
   }
 
   public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,

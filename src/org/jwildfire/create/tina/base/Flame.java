@@ -178,6 +178,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frame = 1;
   private int frameCount = 300;
   private int fps = 30;
+  private double zBufferScale = 1.0;
 
   private int postBlurRadius;
   private double postBlurFade;
@@ -707,6 +708,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     postBlurRadius = pFlame.postBlurRadius;
     postBlurFade = pFlame.postBlurFade;
     postBlurFallOff = pFlame.postBlurFallOff;
+    zBufferScale = pFlame.zBufferScale;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -826,7 +828,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
         !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
         postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
-        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON)) {
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1545,6 +1547,14 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
     setAntialiasAmount(0.0);
     setAntialiasRadius(0.0);
+  }
+
+  public double getZBufferScale() {
+    return zBufferScale;
+  }
+
+  public void setZBufferScale(double zBufferScale) {
+    this.zBufferScale = zBufferScale;
   }
 
 }

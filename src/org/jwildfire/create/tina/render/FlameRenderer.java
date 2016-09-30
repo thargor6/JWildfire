@@ -512,8 +512,7 @@ public class FlameRenderer {
   }
 
   private void renderZBuffer(SimpleGrayImage pGreyImage) {
-    // TODO
-    double zScale = 0.001;
+    double zScale = 0.001 * flame.getZBufferScale();
     if (pGreyImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
       if (threadCount < 1 || pGreyImage.getImageHeight() < 8 * threadCount) {

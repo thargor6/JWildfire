@@ -46,12 +46,22 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
           logDensityFilter.transformZPoint(accumSample, sample, j, i);
-          if (accumSample.hasZ) {
-            int grayValue = 0xffff + Tools.FTOI(-zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
-            img.setValue(j, i, grayValue);
+          // negative zScale: white to black (black near camera, white background)
+          if (zScale < 0.0) {
+            if (accumSample.hasZ) {
+              int grayValue = 0xffff + Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
+              img.setValue(j, i, grayValue);
+            }
+            else {
+              img.setValue(j, i, 0xffff);
+            }
           }
+          // positive zScale: black to white (white near camera, black background, which is the default)
           else {
-            img.setValue(j, i, 0xffff);
+            if (accumSample.hasZ) {
+              int grayValue = Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
+              img.setValue(j, i, grayValue);
+            }
           }
         }
       }

@@ -727,6 +727,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.postBlurFallOffSlider.setValue(Tools.FTOI(getCurrFlame().getPostBlurFallOff() * TinaController.SLIDER_SCALE_AMBIENT));
       data.postBlurFallOffREd.setText(Tools.doubleToString(getCurrFlame().getPostBlurFallOff()));
 
+      data.tinaZBufferScaleREd.setText(Tools.doubleToString(getCurrFlame().getZBufferScale()));
+      data.tinaZBufferScaleSlider.setValue(Tools.FTOI(getCurrFlame().getZBufferScale() * TinaController.SLIDER_SCALE_CENTRE));
+
       setupDOFParamsControls(getCurrFlame().getCamDOFShape());
       data.dofDOFShapeCmb.setSelectedItem(getCurrFlame().getCamDOFShape());
       refreshBokehParams();
@@ -1322,6 +1325,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void postBlurRadiusSlider_changed() {
     flameSliderChanged(data.postBlurRadiusSlider, data.postBlurRadiusREd, "postBlurRadius", 1.0, false);
+  }
+
+  public void zBufferScaleREd_changed() {
+    flameTextFieldChanged(data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void zBufferScaleSlider_changed() {
+    flameSliderChanged(data.tinaZBufferScaleSlider, data.tinaZBufferScaleREd, "zBufferScale", TinaController.SLIDER_SCALE_CENTRE, false);
   }
 
   public void postBlurFadeREd_changed() {
