@@ -41,15 +41,16 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
-import org.jwildfire.create.tina.render.image.RenderHDRIntensityMapThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleThread;
 import org.jwildfire.create.tina.render.image.RenderImageThread;
+import org.jwildfire.create.tina.render.image.RenderZBufferThread;
 import org.jwildfire.create.tina.render.postdof.PostDOFBuffer;
 import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleGrayImage;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
@@ -179,8 +180,8 @@ public class FlameRenderer {
 
       flame.setSampleDensity(quality);
       RenderedFlame res = new RenderedFlame();
-      res.init(renderInfo);
-      renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
+      res.init(renderInfo, flame);
+      renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
       return res;
     }
     finally {
@@ -195,12 +196,12 @@ public class FlameRenderer {
     }
     else {
       RenderedFlame res = new RenderedFlame();
-      res.init(pRenderInfo);
+      res.init(pRenderInfo, flame);
       if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
         renderImageSimple(res.getImage());
       }
       else {
-        renderImage(res.getImage(), res.getHDRImage(), res.getHDRIntensityMap());
+        renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
       }
       return res;
     }
@@ -251,7 +252,7 @@ public class FlameRenderer {
             case INTERPOLATED_IMAGES: {
               RenderInfo localRenderInfo = pRenderInfo.makeCopy();
               localRenderInfo.setRenderHDR(false);
-              localRenderInfo.setRenderHDRIntensityMap(false);
+              localRenderInfo.setRenderZBuffer(false);
 
               RenderedFlame leftRenders[] = new RenderedFlame[flame.getStereo3dInterpolatedImageCount()];
               double dAngle = storedAngle / (double) leftRenders.length;
@@ -282,7 +283,7 @@ public class FlameRenderer {
               RenderedFlame mergedRender = new RenderedFlame();
               localRenderInfo.setImageWidth(2 * pRenderInfo.getImageWidth());
               localRenderInfo.setImageHeight(leftRenders.length * pRenderInfo.getImageHeight());
-              mergedRender.init(localRenderInfo);
+              mergedRender.init(localRenderInfo, flame);
               SimpleImage mergedImg = mergedRender.getImage();
 
               ComposeTransformer composeTransformer = new ComposeTransformer();
@@ -331,7 +332,7 @@ public class FlameRenderer {
   private RenderedFlame renderStereo3dSideBySide(RenderInfo pRenderInfo) {
     RenderInfo localRenderInfo = pRenderInfo.makeCopy();
     localRenderInfo.setRenderHDR(false);
-    localRenderInfo.setRenderHDRIntensityMap(false);
+    localRenderInfo.setRenderZBuffer(false);
     eye = Stereo3dEye.LEFT;
     RenderedFlame leftRender = renderImageNormal(localRenderInfo, 2, 0);
     eye = Stereo3dEye.RIGHT;
@@ -346,7 +347,7 @@ public class FlameRenderer {
     RenderedFlame mergedRender = new RenderedFlame();
     localRenderInfo.setImageWidth(2 * leftRender.getImage().getImageWidth());
     localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
-    mergedRender.init(localRenderInfo);
+    mergedRender.init(localRenderInfo, flame);
     SimpleImage mergedImg = mergedRender.getImage();
 
     ComposeTransformer composeTransformer = new ComposeTransformer();
@@ -365,7 +366,7 @@ public class FlameRenderer {
   private RenderedFlame renderStereo3dAnaglyph(RenderInfo pRenderInfo) {
     RenderInfo localRenderInfo = pRenderInfo.makeCopy();
     localRenderInfo.setRenderHDR(false);
-    localRenderInfo.setRenderHDRIntensityMap(false);
+    localRenderInfo.setRenderZBuffer(false);
     eye = Stereo3dEye.LEFT;
     RenderedFlame leftRender = renderImageNormal(localRenderInfo, 2, 0);
     eye = Stereo3dEye.RIGHT;
@@ -387,7 +388,7 @@ public class FlameRenderer {
     RenderedFlame mergedRender = new RenderedFlame();
     localRenderInfo.setImageWidth(leftRender.getImage().getImageWidth());
     localRenderInfo.setImageHeight(leftRender.getImage().getImageHeight());
-    mergedRender.init(localRenderInfo);
+    mergedRender.init(localRenderInfo, flame);
     SimpleImage mergedImg = mergedRender.getImage();
 
     for (int i = 0; i < mergedImg.getImageHeight(); i++) {
@@ -419,13 +420,12 @@ public class FlameRenderer {
     progressDisplayPhaseCount = pTotalImagePartCount;
     progressDisplayPhase = pTotalImagePartIdx;
     RenderedFlame res = new RenderedFlame();
-    res.init(pRenderInfo);
+    res.init(pRenderInfo, flame);
     if (forceAbort)
       return res;
 
     boolean renderNormal = true;
     boolean renderHDR = pRenderInfo.isRenderHDR();
-    boolean renderHDRIntensityMap = pRenderInfo.isRenderHDRIntensityMap();
     if (!flame.isRenderable()) {
       if (renderNormal) {
         if (renderScale > 0) {
@@ -457,15 +457,11 @@ public class FlameRenderer {
     try {
       SimpleImage img = renderNormal ? res.getImage() : null;
       SimpleHDRImage hdrImg = renderHDR ? res.getHDRImage() : null;
-      SimpleHDRImage hdrIntensityMapImg = renderHDRIntensityMap ? res.getHDRIntensityMap() : null;
       if (renderNormal) {
         initRaster(img.getImageWidth(), img.getImageHeight());
       }
       else if (renderHDR) {
         initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
-      }
-      else if (renderHDRIntensityMap) {
-        initRaster(hdrIntensityMapImg.getImageWidth(), hdrIntensityMapImg.getImageHeight());
       }
       else {
         throw new IllegalStateException();
@@ -481,7 +477,7 @@ public class FlameRenderer {
           renderImageSimple(img);
         }
         else {
-          renderImage(img, hdrImg, hdrIntensityMapImg);
+          renderImage(img, hdrImg, res.getZBuffer());
         }
       }
     }
@@ -491,7 +487,7 @@ public class FlameRenderer {
     return res;
   }
 
-  private void renderImage(SimpleImage pImage, SimpleHDRImage pHDRImage, SimpleHDRImage pHDRIntensityMap) {
+  private void renderImage(SimpleImage pImage, SimpleHDRImage pHDRImage, SimpleGrayImage pZBufferImg) {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
@@ -500,9 +496,6 @@ public class FlameRenderer {
     }
     else if (pHDRImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
-    }
-    else if (pHDRIntensityMap != null) {
-      logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pHDRIntensityMap.getImageWidth(), pHDRIntensityMap.getImageHeight());
     }
     else {
       throw new IllegalStateException();
@@ -515,21 +508,23 @@ public class FlameRenderer {
       postFilterImage(pImage);
     }
     renderHDRImage(pHDRImage);
-    renderHDRIntensityMap(pHDRIntensityMap);
+    renderZBuffer(pZBufferImg);
   }
 
-  private void renderHDRIntensityMap(SimpleHDRImage pHDRIntensityMap) {
-    if (pHDRIntensityMap != null) {
+  private void renderZBuffer(SimpleGrayImage pGreyImage) {
+    // TODO
+    double zScale = 0.001;
+    if (pGreyImage != null) {
       int threadCount = prefs.getTinaRenderThreads();
-      if (threadCount < 1 || pHDRIntensityMap.getImageHeight() < 8 * threadCount) {
+      if (threadCount < 1 || pGreyImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
       }
-      int rowsPerThread = pHDRIntensityMap.getImageHeight() / threadCount;
-      List<RenderHDRIntensityMapThread> threads = new ArrayList<>();
+      int rowsPerThread = pGreyImage.getImageHeight() / threadCount;
+      List<RenderZBufferThread> threads = new ArrayList<>();
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
-        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRIntensityMap.getImageHeight();
-        RenderHDRIntensityMapThread thread = new RenderHDRIntensityMapThread(flame, logDensityFilter, startRow, endRow, pHDRIntensityMap);
+        int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pGreyImage.getImageHeight();
+        RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -576,8 +571,6 @@ public class FlameRenderer {
       if (threadCount < 1 || pImage.getImageHeight() < 8 * threadCount) {
         threadCount = 1;
       }
-      long t0 = System.currentTimeMillis();
-
       PostDOFBuffer dofBuffer = flame.getCamDOF() > MathLib.EPSILON && flame.getSolidRenderSettings().isSolidRenderingEnabled() ? new PostDOFBuffer(pImage) : null;
       int rowsPerThread = pImage.getImageHeight() / threadCount;
       List<RenderImageThread> threads = new ArrayList<RenderImageThread>();
@@ -594,10 +587,6 @@ public class FlameRenderer {
         }
       }
       ThreadTools.waitForThreads(threadCount, threads);
-
-      long t1 = System.currentTimeMillis();
-      System.out.println("IMAGE RENDER: " + (t1 - t0));
-
       if (dofBuffer != null) {
         dofBuffer.renderToImage(pImage);
       }
@@ -1026,7 +1015,7 @@ public class FlameRenderer {
           }
           RenderSlice slice = slices.get(0);
           RenderedFlame renderedFlame = new RenderedFlame();
-          renderedFlame.init(pSliceRenderInfo.createRenderInfo());
+          renderedFlame.init(pSliceRenderInfo.createRenderInfo(), flame);
           SimpleImage img = renderedFlame.getImage();
           logDensityFilter.setRaster(slice.getRaster(), rasterWidth, rasterHeight, img.getImageWidth(), img.getImageHeight());
           GammaCorrectedRGBPoint rbgPoint = new GammaCorrectedRGBPoint();

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -68,8 +68,9 @@ public class RenderMainFlameThread implements Runnable {
       flame.setHeight(info.getImageHeight());
       boolean renderHDR = qualProfile.isWithHDR();
       info.setRenderHDR(renderHDR);
-      boolean renderHDRIntensityMap = qualProfile.isWithHDRIntensityMap();
-      info.setRenderHDRIntensityMap(renderHDRIntensityMap);
+      boolean renderZBuffer = qualProfile.isWithZBuffer();
+      info.setRenderZBuffer(renderZBuffer);
+
       flame.setSampleDensity(qualProfile.getQuality());
       long t0, t1;
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
@@ -83,11 +84,12 @@ public class RenderMainFlameThread implements Runnable {
       t1 = Calendar.getInstance().getTimeInMillis();
       new ImageWriter().saveImage(res.getImage(), outFile.getAbsolutePath());
       if (res.getHDRImage() != null) {
-        new ImageWriter().saveImage(res.getHDRImage(), outFile.getAbsolutePath() + ".hdr");
+        new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(outFile.getAbsolutePath()));
       }
-      if (res.getHDRIntensityMap() != null) {
-        new ImageWriter().saveImage(res.getHDRIntensityMap(), outFile.getAbsolutePath() + ".intensity.hdr");
+      if (res.getZBuffer() != null) {
+        new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(outFile.getAbsolutePath()));
       }
+
       if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
         new FlameWriter().writeFlame(flame, outFile.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(outFile.getName()) + ".flame");
       }

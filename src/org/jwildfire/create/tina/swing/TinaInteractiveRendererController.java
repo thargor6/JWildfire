@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -325,7 +325,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       flame.setHeight(info.getImageHeight());
       flame.setSampleDensity(10);
       info.setRenderHDR(prefs.isTinaSaveHDRInIR());
-      info.setRenderHDRIntensityMap(false);
+      info.setRenderZBuffer(false);
       if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
         image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       }
@@ -439,10 +439,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
           RenderedFlame res = renderer.finishRenderFlame(displayUpdater.getSampleCount());
           new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
           if (res.getHDRImage() != null) {
-            new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+            new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(file.getAbsolutePath()));
           }
-          if (res.getHDRIntensityMap() != null) {
-            new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+          if (res.getZBuffer() != null) {
+            new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(file.getAbsolutePath()));
           }
           if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
             new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");

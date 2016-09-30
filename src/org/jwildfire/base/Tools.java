@@ -21,6 +21,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,7 +53,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 ALPHA 6 (16.09.2016)";
+  public static final String APP_VERSION = "3.00 BETA (29.09.2016)";
 
   public static boolean SPECIAL_VERSION = false;
 
@@ -584,6 +585,18 @@ public class Tools {
       in.close();
       return content.toString();
     }
+  }
+
+  public static String makeZBufferFilename(String absolutePath) {
+    File f = new File(absolutePath);
+    String name = Tools.trimFileExt(f.getName());
+    return new File(f.getParent(), name + "_zbuf.png").getAbsolutePath();
+  }
+
+  public static String makeHDRFilename(String absolutePath) {
+    File f = new File(absolutePath);
+    String name = Tools.trimFileExt(f.getName());
+    return new File(f.getParent(), name + ".hdr").getAbsolutePath();
   }
 
 }

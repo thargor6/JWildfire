@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -50,7 +50,7 @@ public class SliceRenderInfo implements Assignable<SliceRenderInfo>, Serializabl
   public RenderInfo createRenderInfo() {
     RenderInfo res = new RenderInfo(imageWidth, imageHeight, renderMode);
     res.setRenderHDR(false);
-    res.setRenderHDRIntensityMap(false);
+    res.setRenderZBuffer(false);
     return res;
   }
 

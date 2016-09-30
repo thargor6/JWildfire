@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,7 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -75,7 +76,7 @@ public class JobRenderThread implements Runnable {
             }
             RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
             info.setRenderHDR(qualityProfile.isWithHDR());
-            info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
+            info.setRenderZBuffer(qualityProfile.isWithZBuffer());
             List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
@@ -102,10 +103,10 @@ public class JobRenderThread implements Runnable {
                   job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
                   new ImageWriter().saveImage(res.getImage(), primaryFilename);
                   if (res.getHDRImage() != null) {
-                    new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
+                    new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getImageFilename(flame.getStereo3dMode())));
                   }
-                  if (res.getHDRIntensityMap() != null) {
-                    new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
+                  if (res.getZBuffer() != null) {
+                    new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getImageFilename(flame.getStereo3dMode())));
                   }
                 }
               }

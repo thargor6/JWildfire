@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base.raster;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
+import org.jwildfire.create.tina.render.ZBufferSample;
 
 public interface AbstractRaster {
 
@@ -37,5 +38,9 @@ public interface AbstractRaster {
   void addShadowMapSamples(int pShadowMapIdx, PlotSample[] pPlotBuffer, int pCount);
 
   void notifyInit(LightViewCalculator lightViewCalculator);
+
+  void readZBuffer(int pX, int pY, ZBufferSample pDest);
+
+  void readZBufferSafe(int pX, int pY, ZBufferSample pDest);
 
 }

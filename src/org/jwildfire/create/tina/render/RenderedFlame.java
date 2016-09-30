@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,13 +16,15 @@
 */
 package org.jwildfire.create.tina.render;
 
+import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.image.SimpleGrayImage;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
 public class RenderedFlame {
   private SimpleImage image;
   private SimpleHDRImage hdrImage;
-  private SimpleHDRImage hdrHeightMap;
+  private SimpleGrayImage zBuffer;
 
   public SimpleImage getImage() {
     return image;
@@ -32,17 +34,17 @@ public class RenderedFlame {
     return hdrImage;
   }
 
-  public SimpleHDRImage getHDRIntensityMap() {
-    return hdrHeightMap;
+  public SimpleGrayImage getZBuffer() {
+    return zBuffer;
   }
 
-  public void init(RenderInfo pRenderInfo) {
+  public void init(RenderInfo pRenderInfo, Flame pFlame) {
     image = new SimpleImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     if (pRenderInfo.isRenderHDR()) {
       hdrImage = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
-    if (pRenderInfo.isRenderHDRIntensityMap()) {
-      hdrHeightMap = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    if (pRenderInfo.isRenderZBuffer() && pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      zBuffer = new SimpleGrayImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
   }
 

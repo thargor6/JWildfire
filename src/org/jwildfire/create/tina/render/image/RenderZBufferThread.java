@@ -16,33 +16,27 @@
 */
 package org.jwildfire.create.tina.render.image;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.render.GammaCorrectedHDRPoint;
-import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
-import org.jwildfire.create.tina.render.LogDensityPoint;
-import org.jwildfire.create.tina.render.postdof.PostDOFCalculator;
-import org.jwildfire.image.SimpleHDRImage;
+import org.jwildfire.create.tina.render.ZBufferSample;
+import org.jwildfire.image.SimpleGrayImage;
 
-public class RenderHDRImageThread extends AbstractImageRenderThread {
+public class RenderZBufferThread extends AbstractImageRenderThread {
   private final LogDensityFilter logDensityFilter;
-  private final GammaCorrectionFilter gammaCorrectionFilter;
-
   private final int startRow, endRow;
-  private final LogDensityPoint logDensityPnt;
-  private final GammaCorrectedHDRPoint rbgPoint;
-  private final SimpleHDRImage img;
-  private final PostDOFCalculator dofCalculator;
+  private final ZBufferSample accumSample, sample;
+  private final SimpleGrayImage img;
+  private final double zScale;
 
-  public RenderHDRImageThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleHDRImage pImg, PostDOFCalculator pDofCalculator) {
+  public RenderZBufferThread(Flame pFlame, LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleGrayImage pImg, double pZScale) {
     logDensityFilter = pLogDensityFilter;
-    gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
     endRow = pEndRow;
-    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
-    rbgPoint = new GammaCorrectedHDRPoint();
+    sample = new ZBufferSample();
+    accumSample = new ZBufferSample();
     img = pImg;
-    dofCalculator = pDofCalculator;
+    zScale = pZScale;
   }
 
   @Override
@@ -51,12 +45,14 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
     try {
       for (int i = startRow; i < endRow; i++) {
         for (int j = 0; j < img.getImageWidth(); j++) {
-          logDensityFilter.transformPoint(logDensityPnt, j, i);
-          gammaCorrectionFilter.transformPointHDR(logDensityPnt, rbgPoint, j, i);
-          if (dofCalculator != null) {
-            dofCalculator.addSample(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue, logDensityPnt.dofDist, logDensityPnt.rp.zBuf);
+          logDensityFilter.transformZPoint(accumSample, sample, j, i);
+          if (accumSample.hasZ) {
+            int grayValue = 0xffff + Tools.FTOI(-zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
+            img.setValue(j, i, grayValue);
           }
-          img.setRGB(j, i, rbgPoint.red, rbgPoint.green, rbgPoint.blue);
+          else {
+            img.setValue(j, i, 0xffff);
+          }
         }
       }
     }
@@ -64,5 +60,4 @@ public class RenderHDRImageThread extends AbstractImageRenderThread {
       setDone(true);
     }
   }
-
 }

@@ -4504,6 +4504,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               try {
                 messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
                 mainController.loadImage(file.getAbsolutePath(), false);
+                File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath()));
+                if (zBuffer.exists()) {
+                  mainController.loadImage(zBuffer.getAbsolutePath(), false);
+                }
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);

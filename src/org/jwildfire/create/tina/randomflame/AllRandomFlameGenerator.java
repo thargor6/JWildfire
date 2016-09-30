@@ -58,9 +58,11 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SimpleRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new SierpinskyRandomFlameGenerator());
-    allGenerators.add(new SolidExperimentalRandomFlameGenerator());
-    allGenerators.add(new SolidStunningRandomFlameGenerator());
-    allGenerators.add(new SolidJulia3DRandomFlameGenerator());
+    if (!Prefs.getPrefs().isTinaDisableSolidFlameRandGens()) {
+      allGenerators.add(new SolidExperimentalRandomFlameGenerator());
+      allGenerators.add(new SolidStunningRandomFlameGenerator());
+      allGenerators.add(new SolidJulia3DRandomFlameGenerator());
+    }
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new SplitsRandomFlameGenerator());

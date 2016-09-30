@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
+import org.jwildfire.create.tina.render.ZBufferSample;
 
 public class RasterFloatInt implements AbstractRaster, Serializable {
   private static final long serialVersionUID = 1L;
@@ -56,7 +57,6 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
 
   @Override
   public void readRasterPointSafe(int pX, int pY, RasterPoint pDestRasterPoint) {
-    pDestRasterPoint.clear();
     if (pX >= 0 && pX < rasterWidth && pY >= 0 && pY < rasterHeight)
       readRasterPoint(pX, pY, pDestRasterPoint);
     else
@@ -88,6 +88,19 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   @Override
   public void notifyInit(LightViewCalculator lightViewCalculator) {
     // EMPTY    
+  }
+
+  @Override
+  public void readZBuffer(int pX, int pY, ZBufferSample pDest) {
+    // EMPTY    
+  }
+
+  @Override
+  public void readZBufferSafe(int pX, int pY, ZBufferSample pDest) {
+    if (pX >= 0 && pX < rasterWidth && pY >= 0 && pY < rasterHeight)
+      readZBuffer(pX, pY, pDest);
+    else
+      pDest.clear();
   }
 
 }

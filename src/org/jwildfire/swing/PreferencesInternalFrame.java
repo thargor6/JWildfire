@@ -30,6 +30,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
    */
   public PreferencesInternalFrame() {
     super();
+    setResizable(true);
     initialize();
   }
 

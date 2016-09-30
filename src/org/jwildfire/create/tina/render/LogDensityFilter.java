@@ -156,6 +156,10 @@ public class LogDensityFilter extends FilterHolder {
 
   }
 
+  private void getZSample(ZBufferSample pDest, int pX, int pY) {
+    raster.readZBufferSafe(pX, pY, pDest);
+  }
+
   private void getSample(LogDensityPoint pFilteredPnt, int pX, int pY) {
     if (jitter && !solidRendering) {
       final double epsilon = 0.0001;
@@ -345,6 +349,26 @@ public class LogDensityFilter extends FilterHolder {
       }
     }
     pFilteredPnt.clip();
+  }
+
+  public void transformZPoint(ZBufferSample pAccumSample, ZBufferSample pSample, int pX, int pY) {
+    pAccumSample.clear();
+    int solidSampleCount = 0;
+    for (int c = 0; c < colorOversampling; c++) {
+      for (int px = 0; px < oversample; px++) {
+        for (int py = 0; py < oversample; py++) {
+          getZSample(pSample, pX * oversample + px, pY * oversample + py);
+          if (pSample.hasZ) {
+            pAccumSample.z += pSample.z;
+            pAccumSample.hasZ = true;
+            solidSampleCount++;
+          }
+        }
+      }
+      if (solidSampleCount > 0) {
+        pAccumSample.z /= (double) solidSampleCount;
+      }
+    }
   }
 
   private boolean addSolidColors(LogDensityPoint dest, RasterPoint rp, double colorScale) {

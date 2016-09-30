@@ -24,6 +24,7 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
+import org.jwildfire.create.tina.render.ZBufferSample;
 
 public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   private static final long serialVersionUID = 1L;
@@ -218,6 +219,15 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   @Override
   public void addShadowMapSamples(int pShadowMapIdx, PlotSample[] pPlotBuffer, int pCount) {
     shadowCalculator.addShadowMapSamples(pShadowMapIdx, pPlotBuffer, pCount);
+  }
+
+  @Override
+  public void readZBuffer(int pX, int pY, ZBufferSample pDest) {
+    pDest.clear();
+    if (zBuf[pX][pY] != NormalsCalculator.ZBUF_ZMIN) {
+      pDest.hasZ = true;
+      pDest.z = zBuf[pX][pY];
+    }
   }
 
 }
