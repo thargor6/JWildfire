@@ -71,6 +71,7 @@ public class VariationFuncList {
     aliasMap.put(CircleLinearFunc.class, "CircleLinear");
     aliasMap.put(CircleRandFunc.class, "CircleRand");
     aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
+    aliasMap.put(MobiusNFunc.class, "MobiusN");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -471,6 +472,7 @@ public class VariationFuncList {
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
+    registerVariationFunc(MobiusNFunc.class);
 
     if (Tools.ENABLE_SOLID_RENDERING) {
       registerVariationFunc(OBJMeshWFFunc.class);
