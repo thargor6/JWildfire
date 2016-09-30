@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -66,7 +66,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_QUALITY_COUNT = "tina.profile.quality2.count";
   static final String KEY_TINA_PROFILE_QUALITY_QUALITY = "tina.profile.quality2.quality";
   static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR = "tina.profile.quality2.with_hdr";
-  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP = "tina.profile.quality2.with_hdr_intensity_map";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_ZBUFFER = "tina.profile.quality2.with_zbuffer";
   static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality2.caption";
   static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality2.default_profile";
 
@@ -89,6 +89,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.8";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.5";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
+
+  static final String KEY_TINA_DISABLE_SOLID_RANDGENS = "tina.disable_solid_randgens";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
@@ -217,6 +219,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditorColorFix = true;
+
+  @Property(description = "Disable solid-flame-random-generators inside the global \"All\"-random-generator. This may make sense when you do not like solid flames at all or when the calculation takes too long on your machine. You may still manually select solid-flame-random-generators. A change of this property requires a program-restart", category = PropertyCategory.TINA)
+  private boolean tinaDisableSolidFlameRandGens = false;
 
   @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private int tinaAdvancedCodeEditorFontSize = 10;
@@ -785,6 +790,7 @@ public class Prefs extends ManagedObject {
     desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
     desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
     showTipsAtStartup = pSrc.showTipsAtStartup;
+    tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1593,6 +1599,14 @@ public class Prefs extends ManagedObject {
 
   public void setShowTipsAtStartup(boolean showTipsAtStartup) {
     this.showTipsAtStartup = showTipsAtStartup;
+  }
+
+  public boolean isTinaDisableSolidFlameRandGens() {
+    return tinaDisableSolidFlameRandGens;
+  }
+
+  public void setTinaDisableSolidFlameRandGens(boolean tinaDisableSolidFlameRandGens) {
+    this.tinaDisableSolidFlameRandGens = tinaDisableSolidFlameRandGens;
   }
 
 }

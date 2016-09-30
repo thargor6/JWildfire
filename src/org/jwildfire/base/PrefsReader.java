@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -122,7 +122,7 @@ public class PrefsReader {
         pPrefs.setTinaJWFMoviePath(getProperty(props, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath()));
         pPrefs.setTinaJWFScriptPath(getProperty(props, Prefs.KEY_TINA_PATH_JWFSCRIPTS, pPrefs.getTinaJWFScriptPath()));
         pPrefs.setTinaCustomVariationsPath(getProperty(props, Prefs.KEY_TINA_PATH_CUSTOM_VARIATIONS, pPrefs.getTinaCustomVariationsPath()));
-
+        pPrefs.setTinaDisableSolidFlameRandGens(getBooleanProperty(props, Prefs.KEY_TINA_DISABLE_SOLID_RANDGENS, pPrefs.isTinaDisableSolidFlameRandGens()));
         pPrefs.setTinaGradientPath(getProperty(props, Prefs.KEY_TINA_PATH_GRADIENTS, pPrefs.getTinaGradientPath()));
         pPrefs.setTinaSVGPath(getProperty(props, Prefs.KEY_TINA_PATH_SVG, pPrefs.getTinaSVGPath()));
         pPrefs.setTinaRawMotionDataPath(getProperty(props, Prefs.KEY_TINA_PATH_RAW_MOTION_DATA, pPrefs.getTinaRawMotionDataPath()));
@@ -255,7 +255,7 @@ public class PrefsReader {
               profile.setDefaultProfile(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE + "." + i, false));
               profile.setQuality(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, 1));
               profile.setWithHDR(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, false));
-              profile.setWithHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, false));
+              profile.setWithZBuffer(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_ZBUFFER + "." + i, false));
               profile.setCaption(getProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, ""));
               pPrefs.getQualityProfiles().add(profile);
             }
