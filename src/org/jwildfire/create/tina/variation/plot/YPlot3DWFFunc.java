@@ -17,6 +17,9 @@
 
 package org.jwildfire.create.tina.variation.plot;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
@@ -29,7 +32,6 @@ import org.nfunk.jep.Node;
 public class YPlot3DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_USE_PRESET = "use_preset";
   private static final String PARAM_PRESET_ID = "preset_id";
   private static final String PARAM_XMIN = "xmin";
   private static final String PARAM_XMAX = "xmax";
@@ -41,12 +43,11 @@ public class YPlot3DWFFunc extends VariationFunc {
 
   private static final String RESSOURCE_FORMULA = "formula";
 
-  private static final String[] paramNames = { PARAM_USE_PRESET, PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR };
 
   private static final String[] ressourceNames = { RESSOURCE_FORMULA };
 
-  private int use_preset = 1;
-  private int preset_id;
+  private int preset_id = -1;
 
   private double xmin = -3.0;
   private double xmax = 2.0;
@@ -84,35 +85,32 @@ public class YPlot3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { use_preset, preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color };
+    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_USE_PRESET.equalsIgnoreCase(pName))
-      use_preset = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) {
-      int new_preset_id = Tools.FTOI(pValue);
-      if (use_preset > 0 && new_preset_id != preset_id) {
-        refreshFormulaFromPreset(new_preset_id);
+    if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) {
+      preset_id = Tools.FTOI(pValue);
+      if (preset_id >= 0) {
+        refreshFormulaFromPreset(preset_id);
       }
-      preset_id = new_preset_id;
     }
     else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        xmin = pValue;
+      xmin = pValue;
+      validatePresetId();
     }
     else if (PARAM_XMAX.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        xmax = pValue;
+      xmax = pValue;
+      validatePresetId();
     }
     else if (PARAM_YMIN.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        ymin = pValue;
+      ymin = pValue;
+      validatePresetId();
     }
     else if (PARAM_YMAX.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        ymax = pValue;
+      ymax = pValue;
+      validatePresetId();
     }
     else if (PARAM_ZMIN.equalsIgnoreCase(pName)) {
       zmin = pValue;
@@ -145,8 +143,8 @@ public class YPlot3DWFFunc extends VariationFunc {
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        formula = pValue != null ? new String(pValue) : "";
+      formula = pValue != null ? new String(pValue) : "";
+      validatePresetId();
     }
     else
       throw new IllegalArgumentException(pName);
@@ -197,6 +195,17 @@ public class YPlot3DWFFunc extends VariationFunc {
     super();
     preset_id = WFFuncPresetsStore.getYPlot3DWFFuncPresets().getRandomPresetId();
     refreshFormulaFromPreset(preset_id);
+  }
+
+  private void validatePresetId() {
+    if (preset_id >= 0) {
+      YPlot3DWFFuncPreset preset = WFFuncPresetsStore.getYPlot3DWFFuncPresets().getPreset(preset_id);
+      if (!preset.getFormula().equals(formula) ||
+          (fabs(xmin - preset.getXmin()) > EPSILON) || (fabs(xmax - preset.getXmax()) > EPSILON) ||
+          (fabs(ymin - preset.getYmin()) > EPSILON) || (fabs(ymax - preset.getYmax()) > EPSILON)) {
+        preset_id = -1;
+      }
+    }
   }
 
   private void refreshFormulaFromPreset(int presetId) {

@@ -17,6 +17,9 @@
 
 package org.jwildfire.create.tina.variation.plot;
 
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
@@ -29,7 +32,6 @@ import org.nfunk.jep.Node;
 public class ParPlot2DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_USE_PRESET = "use_preset";
   private static final String PARAM_PRESET_ID = "preset_id";
   private static final String PARAM_UMIN = "umin";
   private static final String PARAM_UMAX = "umax";
@@ -42,7 +44,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String RESSOURCE_YFORMULA = "yformula";
   private static final String RESSOURCE_ZFORMULA = "zformula";
 
-  private static final String[] paramNames = { PARAM_USE_PRESET, PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE };
 
   private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA };
 
@@ -50,8 +52,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final int CM_V = 1;
   private static final int CM_UV = 2;
 
-  private int use_preset = 1;
-  private int preset_id;
+  private int preset_id = -1;
 
   private double umin = 0.0;
   private double umax = 2.0 * Math.PI;
@@ -111,35 +112,32 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { use_preset, preset_id, umin, umax, vmin, vmax, direct_color, color_mode };
+    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_USE_PRESET.equalsIgnoreCase(pName))
-      use_preset = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    else if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) {
-      int new_preset_id = Tools.FTOI(pValue);
-      if (use_preset > 0 && new_preset_id != preset_id) {
-        refreshFormulaFromPreset(new_preset_id);
+    if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) {
+      preset_id = Tools.FTOI(pValue);
+      if (preset_id >= 0) {
+        refreshFormulaFromPreset(preset_id);
       }
-      preset_id = new_preset_id;
     }
     else if (PARAM_UMIN.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        umin = pValue;
+      umin = pValue;
+      validatePresetId();
     }
     else if (PARAM_UMAX.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        umax = pValue;
+      umax = pValue;
+      validatePresetId();
     }
     else if (PARAM_VMIN.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        vmin = pValue;
+      vmin = pValue;
+      validatePresetId();
     }
     else if (PARAM_VMAX.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        vmax = pValue;
+      vmax = pValue;
+      validatePresetId();
     }
     else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
@@ -169,16 +167,16 @@ public class ParPlot2DWFFunc extends VariationFunc {
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_XFORMULA.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        xformula = pValue != null ? new String(pValue) : "";
+      xformula = pValue != null ? new String(pValue) : "";
+      validatePresetId();
     }
     else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        yformula = pValue != null ? new String(pValue) : "";
+      yformula = pValue != null ? new String(pValue) : "";
+      validatePresetId();
     }
     else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
-      if (use_preset <= 0)
-        zformula = pValue != null ? new String(pValue) : "";
+      zformula = pValue != null ? new String(pValue) : "";
+      validatePresetId();
     }
     else
       throw new IllegalArgumentException(pName);
@@ -229,6 +227,17 @@ public class ParPlot2DWFFunc extends VariationFunc {
     super();
     preset_id = WFFuncPresetsStore.getParPlot2DWFFuncPresets().getRandomPresetId();
     refreshFormulaFromPreset(preset_id);
+  }
+
+  private void validatePresetId() {
+    if (preset_id >= 0) {
+      ParPlot2DWFFuncPreset preset = WFFuncPresetsStore.getParPlot2DWFFuncPresets().getPreset(preset_id);
+      if (!preset.getXformula().equals(xformula) || !preset.getYformula().equals(yformula) || !preset.getZformula().equals(zformula) ||
+          (fabs(umin - preset.getUmin()) > EPSILON) || (fabs(umax - preset.getUmax()) > EPSILON) ||
+          (fabs(vmin - preset.getVmin()) > EPSILON) || (fabs(vmax - preset.getVmax()) > EPSILON)) {
+        preset_id = -1;
+      }
+    }
   }
 
   private void refreshFormulaFromPreset(int presetId) {
