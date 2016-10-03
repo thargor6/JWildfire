@@ -51,6 +51,24 @@ public class SimpleMesh {
     return res;
   }
 
+  public int addVertex(double x, double y, double z, double u, double v) {
+    String key = calculateVertexKey(x, y, z);
+    Integer idx = verticesMap.get(key);
+    if (idx != null) {
+      return idx.intValue();
+    }
+    VertexWithUV p = new VertexWithUV();
+    p.x = (float) x;
+    p.y = (float) y;
+    p.z = (float) z;
+    p.u = (float) u;
+    p.v = (float) v;
+    int res = vertices.size();
+    vertices.add(p);
+    verticesMap.put(key, Integer.valueOf(res));
+    return res;
+  }
+
   public void addFace(int p1, int p2, int p3) {
     Face f = new Face();
     f.v1 = p1;
@@ -106,14 +124,13 @@ public class SimpleMesh {
       }
     }
     if (MathLib.fabs(areaMin - areaMax) > MathLib.EPSILON) {
-      int maxFaces = faces.size() < 10000 ? 10000 : 1000;
+      int maxFaces = faces.size() < 5000 ? 5000 : 500;
       List<Face> newFaces = new ArrayList<>();
       for (int i = 0; i < faces.size(); i++) {
         Face face = faces.get(i);
         int count = Math.min(Tools.FTOI(areaLst.get(i) / areaMin), maxFaces);
         for (int j = 0; j < count; j++) {
           newFaces.add(face);
-          //newFaces.add(new Face(face.p1, face.p3, face.p2));
         }
       }
       faces = newFaces;
@@ -167,17 +184,31 @@ public class SimpleMesh {
       Vertex v1 = getVertex(face.v1);
       Vertex v2 = getVertex(face.v2);
       Vertex v3 = getVertex(face.v3);
+      int nv1, nv2, nv3, nv4, nv5, nv6;
+      if (v1 instanceof VertexWithUV && v2 instanceof VertexWithUV && v3 instanceof VertexWithUV) {
+        VertexWithUV v4 = intersect((VertexWithUV) v1, (VertexWithUV) v2);
+        VertexWithUV v5 = intersect((VertexWithUV) v2, (VertexWithUV) v3);
+        VertexWithUV v6 = intersect((VertexWithUV) v3, (VertexWithUV) v1);
+        nv1 = newMesh.addVertex(v1.x, v1.y, v1.z, ((VertexWithUV) v1).u, ((VertexWithUV) v1).v);
+        nv2 = newMesh.addVertex(v2.x, v2.y, v2.z, ((VertexWithUV) v2).u, ((VertexWithUV) v2).v);
+        nv3 = newMesh.addVertex(v3.x, v3.y, v3.z, ((VertexWithUV) v3).u, ((VertexWithUV) v3).v);
+        nv4 = newMesh.addVertex(v4.x, v4.y, v4.z, v4.u, v4.v);
+        nv5 = newMesh.addVertex(v5.x, v5.y, v5.z, v5.u, v5.v);
+        nv6 = newMesh.addVertex(v6.x, v6.y, v6.z, v6.u, v6.v);
+      }
+      else {
+        Vertex v4 = intersect(v1, v2);
+        Vertex v5 = intersect(v2, v3);
+        Vertex v6 = intersect(v3, v1);
 
-      Vertex v4 = intersect(v1, v2);
-      Vertex v5 = intersect(v2, v3);
-      Vertex v6 = intersect(v3, v1);
+        nv1 = newMesh.addVertex(v1.x, v1.y, v1.z);
+        nv2 = newMesh.addVertex(v2.x, v2.y, v2.z);
+        nv3 = newMesh.addVertex(v3.x, v3.y, v3.z);
+        nv4 = newMesh.addVertex(v4.x, v4.y, v4.z);
+        nv5 = newMesh.addVertex(v5.x, v5.y, v5.z);
+        nv6 = newMesh.addVertex(v6.x, v6.y, v6.z);
+      }
 
-      int nv1 = newMesh.addVertex(v1.x, v1.y, v1.z);
-      int nv2 = newMesh.addVertex(v2.x, v2.y, v2.z);
-      int nv3 = newMesh.addVertex(v3.x, v3.y, v3.z);
-      int nv4 = newMesh.addVertex(v4.x, v4.y, v4.z);
-      int nv5 = newMesh.addVertex(v5.x, v5.y, v5.z);
-      int nv6 = newMesh.addVertex(v6.x, v6.y, v6.z);
       newMesh.addFace(nv1, nv4, nv6);
       newMesh.addFace(nv4, nv2, nv5);
       newMesh.addFace(nv5, nv3, nv6);
@@ -193,6 +224,16 @@ public class SimpleMesh {
     v.x = (float) (v1.x + (v2.x - v1.x) * 0.5);
     v.y = (float) (v1.y + (v2.y - v1.y) * 0.5);
     v.z = (float) (v1.z + (v2.z - v1.z) * 0.5);
+    return v;
+  }
+
+  private VertexWithUV intersect(VertexWithUV v1, VertexWithUV v2) {
+    VertexWithUV v = new VertexWithUV();
+    v.x = (float) (v1.x + (v2.x - v1.x) * 0.5);
+    v.y = (float) (v1.y + (v2.y - v1.y) * 0.5);
+    v.z = (float) (v1.z + (v2.z - v1.z) * 0.5);
+    v.u = (float) (v1.u + (v2.u - v1.u) * 0.5);
+    v.v = (float) (v1.v + (v2.v - v1.v) * 0.5);
     return v;
   }
 }

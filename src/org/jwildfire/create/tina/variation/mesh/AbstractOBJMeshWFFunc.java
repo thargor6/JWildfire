@@ -16,14 +16,26 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.GradientCreator;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleHDRImage;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.image.WFImage;
 
 import com.owens.oobjloader.builder.Build;
 import com.owens.oobjloader.parser.Parse;
@@ -59,26 +71,91 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   protected SimpleMesh mesh;
 
+  protected String uvMapFilename = null;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     Face f = mesh.getFace(pContext.random(mesh.getFaceCount()));
-    Vertex p1 = transform(mesh.getVertex(f.v1));
-    Vertex p2 = transform(mesh.getVertex(f.v2));
-    Vertex p3 = transform(mesh.getVertex(f.v3));
+    Vertex rawP1 = mesh.getVertex(f.v1);
+    Vertex rawP2 = mesh.getVertex(f.v2);
+    Vertex rawP3 = mesh.getVertex(f.v3);
+    if (uvMap != null && rawP1 instanceof VertexWithUV) {
+      VertexWithUV p1 = transform((VertexWithUV) rawP1);
+      VertexWithUV p2 = transform((VertexWithUV) rawP2);
+      VertexWithUV p3 = transform((VertexWithUV) rawP3);
 
-    // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
-    double sqrt_r1 = MathLib.sqrt(pContext.random());
-    double r2 = pContext.random();
-    double a = 1.0 - sqrt_r1;
-    double b = sqrt_r1 * (1.0 - r2);
-    double c = r2 * sqrt_r1;
-    double dx = a * p1.x + b * p2.x + c * p3.x;
-    double dy = a * p1.y + b * p2.y + c * p3.y;
-    double dz = a * p1.z + b * p2.z + c * p3.z;
+      // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
+      double sqrt_r1 = MathLib.sqrt(pContext.random());
+      double r2 = pContext.random();
+      double a = 1.0 - sqrt_r1;
+      double b = sqrt_r1 * (1.0 - r2);
+      double c = r2 * sqrt_r1;
+      double dx = a * p1.x + b * p2.x + c * p3.x;
+      double dy = a * p1.y + b * p2.y + c * p3.y;
+      double dz = a * p1.z + b * p2.z + c * p3.z;
 
-    pVarTP.x += pAmount * dx;
-    pVarTP.y += pAmount * dy;
-    pVarTP.z += pAmount * dz;
+      pVarTP.x += pAmount * dx;
+      pVarTP.y += pAmount * dy;
+      pVarTP.z += pAmount * dz;
+
+      double u = a * p1.u + b * p2.u + c * p3.u;
+      double v = a * p1.v + b * p2.v + c * p3.v;
+      int ix = Tools.FTOI(u * (uvMapWidth - 1));
+      if (ix < 0)
+        ix = -ix % uvMapWidth;
+      else if (ix >= uvMapWidth)
+        ix = uvMapWidth - ix % uvMapWidth;
+
+      int iy = uvMapHeight - 1 - Tools.FTOI(v * (uvMapHeight - 1));
+      if (iy < 0)
+        iy = -iy % uvMapHeight;
+      else if (iy >= uvMapHeight)
+        iy = uvMapHeight - iy % uvMapHeight;
+
+      if (ix >= 0 && ix < uvMapWidth && iy >= 0 && iy < uvMapHeight) {
+        if (uvMap instanceof SimpleImage) {
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(
+              ix, iy));
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = toolPixel.r;
+          pVarTP.greenColor = toolPixel.g;
+          pVarTP.blueColor = toolPixel.b;
+        }
+        else {
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix, iy);
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = rgbArray[0];
+          pVarTP.greenColor = rgbArray[0];
+          pVarTP.blueColor = rgbArray[0];
+        }
+      }
+      else {
+        pVarTP.rgbColor = true;
+        pVarTP.redColor = 0;
+        pVarTP.greenColor = 0;
+        pVarTP.blueColor = 0;
+      }
+      pVarTP.color = getUVColorIdx(pVarTP.redColor, pVarTP.greenColor, pVarTP.blueColor);
+    }
+    else {
+      Vertex p1 = transform(rawP1);
+      Vertex p2 = transform(rawP2);
+      Vertex p3 = transform(rawP3);
+
+      // uniform sampling:  http://math.stackexchange.com/questions/18686/uniform-random-point-in-triangle
+      double sqrt_r1 = MathLib.sqrt(pContext.random());
+      double r2 = pContext.random();
+      double a = 1.0 - sqrt_r1;
+      double b = sqrt_r1 * (1.0 - r2);
+      double c = r2 * sqrt_r1;
+      double dx = a * p1.x + b * p2.x + c * p3.x;
+      double dy = a * p1.y + b * p2.y + c * p3.y;
+      double dz = a * p1.z + b * p2.z + c * p3.z;
+
+      pVarTP.x += pAmount * dx;
+      pVarTP.y += pAmount * dy;
+      pVarTP.z += pAmount * dz;
+    }
   }
 
   private Vertex transform(Vertex p) {
@@ -86,6 +163,16 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     res.x = (float) (p.x * scaleX + offsetX);
     res.y = (float) (p.y * scaleY + offsetY);
     res.z = (float) (p.z * scaleZ + offsetZ);
+    return res;
+  }
+
+  private VertexWithUV transform(VertexWithUV p) {
+    VertexWithUV res = new VertexWithUV();
+    res.x = (float) (p.x * scaleX + offsetX);
+    res.y = (float) (p.y * scaleY + offsetY);
+    res.z = (float) (p.z * scaleZ + offsetZ);
+    res.u = p.u;
+    res.v = p.v;
     return res;
   }
 
@@ -146,18 +233,27 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   protected SimpleMesh loadMeshFromFile(String pFilename) throws Exception {
     Build builder = new Build();
-    /*Parse obj =*/new Parse(builder, pFilename);
+    /*    Parse obj =*/new Parse(builder, pFilename);
 
     SimpleMesh mesh = new SimpleMesh();
     for (com.owens.oobjloader.builder.Face face : builder.faces) {
       ArrayList<com.owens.oobjloader.builder.FaceVertex> vertices = face.vertices;
+
       if (vertices.size() == 3) {
         com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
         com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
         com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
-        int v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
-        int v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
-        int v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
+        int v0, v1, v2;
+        if (f1.t != null && f2.t != null && f3.t != null) {
+          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z, f1.t.u, f1.t.v);
+          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
+          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
+        }
+        else {
+          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
+          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
+          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
+        }
         mesh.addFace(v0, v1, v2);
       }
       else if (vertices.size() == 4) {
@@ -165,10 +261,19 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
         com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
         com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
         com.owens.oobjloader.builder.FaceVertex f4 = vertices.get(3);
-        int v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
-        int v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
-        int v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
-        int v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z);
+        int v0, v1, v2, v3;
+        if (f1.t != null && f2.t != null && f3.t != null && f4.t != null) {
+          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z, f1.t.u, f1.t.v);
+          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
+          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
+          v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z, f4.t.u, f4.t.v);
+        }
+        else {
+          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
+          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
+          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
+          v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z);
+        }
         mesh.addFace(v0, v1, v2);
         mesh.addFace(v0, v2, v3);
       }
@@ -185,6 +290,47 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     return mesh;
   }
 
+  private WFImage uvMap;
+  private RenderColor[] uvColors;
+  private Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
+  private int uvMapWidth, uvMapHeight;
+  private Pixel toolPixel = new Pixel();
+  private float[] rgbArray = new float[3];
+
+  protected void clearCurrUVMap() {
+    uvMap = null;
+    uvIdxMap.clear();
+  }
+
+  private double getUVColorIdx(double pR, double pG, double pB) {
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = uvIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = uvColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < uvColors.length; i++) {
+        color = uvColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      res = (double) nearestIdx / (double) (uvColors.length - 1);
+      uvIdxMap.put(pColor, res);
+    }
+    return res;
+  }
+
   protected String getMeshname(String prefix) {
     String res = prefix + "#" + subdiv_level;
     if (subdiv_level > 0) {
@@ -195,4 +341,34 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     }
     return res;
   }
+
+  @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    uvMap = null;
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    if (uvMapFilename != null && uvMapFilename.length() > 0) {
+      try {
+        uvMap = RessourceManager.getImage(uvMapFilename);
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    if (uvMap == null) {
+      uvMap = getDfltImage();
+    }
+    uvMapWidth = uvMap.getImageWidth();
+    uvMapHeight = uvMap.getImageHeight();
+  }
+
+  private static SimpleImage dfltImage = null;
+
+  private synchronized SimpleImage getDfltImage() {
+    if (dfltImage == null) {
+      GradientCreator creator = new GradientCreator();
+      dfltImage = creator.createImage(256, 256);
+    }
+    return dfltImage;
+  }
+
 }
