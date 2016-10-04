@@ -2545,8 +2545,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else if (varFunc.getParameterNames().length > 0) {
         pRow.getNonlinearParamsCmb().setSelectedIndex(0);
         Object val = varFunc.getParameterValues()[0];
+        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
         if (val instanceof Double) {
           pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+        }
+        else if (val instanceof Integer) {
+          pRow.getNonlinearParamsREd().setOnlyIntegers(true);
+          pRow.getNonlinearParamsREd().setText(val.toString());
         }
         else {
           pRow.getNonlinearParamsREd().setText(val.toString());
@@ -2556,6 +2561,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
         pRow.getNonlinearParamsREd().setText(null);
+        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
       }
     }
   }
@@ -3233,9 +3239,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           int idx;
           if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
             enableNonlinearControls(data.TinaNonlinearControlsRows[pIdx], false);
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(false);
             Object val = var.getFunc().getParameterValues()[idx];
             if (val instanceof Double) {
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+            }
+            else if (val instanceof Integer) {
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(true);
             }
             else {
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
