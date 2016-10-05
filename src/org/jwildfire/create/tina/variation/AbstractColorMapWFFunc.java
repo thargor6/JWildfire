@@ -120,8 +120,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
         ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
         pVarTP.rgbColor = true;
         pVarTP.redColor = rgbArray[0];
-        pVarTP.greenColor = rgbArray[0];
-        pVarTP.blueColor = rgbArray[0];
+        pVarTP.greenColor = rgbArray[1];
+        pVarTP.blueColor = rgbArray[2];
       }
     }
     else {
@@ -141,7 +141,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     else {
       pVarTP.z += dz;
     }
-    pVarTP.color = getColorIdx(pVarTP.redColor, pVarTP.greenColor, pVarTP.blueColor);
+    pVarTP.color = getColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
   }
 
   @Override
@@ -194,7 +194,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private RenderColor[] renderColors;
   private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
 
-  private double getColorIdx(double pR, double pG, double pB) {
+  private double getColorIdx(int pR, int pG, int pB) {
     RenderColor pColor = new RenderColor(pR, pG, pB);
     Double res = colorIdxMap.get(pColor);
     if (res == null) {
@@ -223,29 +223,6 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     return res;
   }
 
-  /*
-    private double getColorIdx(double pR, double pG, double pB) {
-      int nearestIdx = 0;
-      RenderColor color = renderColors[0];
-      double dr, dg, db;
-      dr = (color.red - pR);
-      dg = (color.green - pG);
-      db = (color.blue - pB);
-      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
-      for (int i = 1; i < renderColors.length; i++) {
-        color = renderColors[i];
-        dr = (color.red - pR);
-        dg = (color.green - pG);
-        db = (color.blue - pB);
-        double dist = sqrt(dr * dr + dg * dg + db * db);
-        if (dist < nearestDist) {
-          nearestDist = dist;
-          nearestIdx = i;
-        }
-      }
-      return (double) nearestIdx / (double) (renderColors.length - 1);
-    }
-  */
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMap = null;

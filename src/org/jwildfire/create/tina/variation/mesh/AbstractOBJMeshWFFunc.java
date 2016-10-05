@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
@@ -55,7 +56,9 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected static final String PARAM_SUBDIV_SMOOTH_LAMBDA = "subdiv_smooth_lambda";
   protected static final String PARAM_SUBDIV_SMOOTH_MU = "subdiv_smooth_mu";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU };
+  protected static final String PARAM_BLEND_UV_MAP = "blend_uv_map";
+
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_UV_MAP };
 
   protected double scaleX = 1.0;
   protected double scaleY = 1.0;
@@ -72,6 +75,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected SimpleMesh mesh;
 
   protected String uvMapFilename = null;
+  protected int blend_uv_map = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -100,42 +104,12 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
       double u = a * p1.u + b * p2.u + c * p3.u;
       double v = a * p1.v + b * p2.v + c * p3.v;
-      int ix = Tools.FTOI(u * (uvMapWidth - 1));
-      if (ix < 0)
-        ix = -ix % uvMapWidth;
-      else if (ix >= uvMapWidth)
-        ix = uvMapWidth - ix % uvMapWidth;
-
-      int iy = uvMapHeight - 1 - Tools.FTOI(v * (uvMapHeight - 1));
-      if (iy < 0)
-        iy = -iy % uvMapHeight;
-      else if (iy >= uvMapHeight)
-        iy = uvMapHeight - iy % uvMapHeight;
-
-      if (ix >= 0 && ix < uvMapWidth && iy >= 0 && iy < uvMapHeight) {
-        if (uvMap instanceof SimpleImage) {
-          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(
-              ix, iy));
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = toolPixel.r;
-          pVarTP.greenColor = toolPixel.g;
-          pVarTP.blueColor = toolPixel.b;
-        }
-        else {
-          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix, iy);
-          pVarTP.rgbColor = true;
-          pVarTP.redColor = rgbArray[0];
-          pVarTP.greenColor = rgbArray[0];
-          pVarTP.blueColor = rgbArray[0];
-        }
-      }
-      else {
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = 0;
-        pVarTP.greenColor = 0;
-        pVarTP.blueColor = 0;
-      }
-      pVarTP.color = getUVColorIdx(pVarTP.redColor, pVarTP.greenColor, pVarTP.blueColor);
+      double iu = GfxMathLib.clamp(u * (uvMapWidth - 1.0), 0.0, uvMapWidth - 1.0);
+      double iv = GfxMathLib.clamp(uvMapHeight - 1.0 - v * (uvMapHeight - 1.0), 0, uvMapHeight - 1.0);
+      int ix = (int) MathLib.trunc(iu);
+      int iy = (int) MathLib.trunc(iv);
+      applyImageColor(pVarTP, ix, iy, iu, iv, uvMap, uvMapWidth, uvMapHeight, blend_uv_map, toolPixel, rgbArray);
+      pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
     }
     else {
       Vertex p1 = transform(rawP1);
@@ -155,6 +129,95 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       pVarTP.x += pAmount * dx;
       pVarTP.y += pAmount * dy;
       pVarTP.z += pAmount * dz;
+    }
+  }
+
+  public static void applyImageColor(XYZPoint pVarTP, int ix, int iy, double iu, double iv, WFImage uvMap, int uvMapWidth, int uvMapHeight, int blend_uv_map, Pixel toolPixel, float[] rgbArray) {
+    if (ix >= 0 && ix < uvMapWidth && iy >= 0 && iy < uvMapHeight) {
+      if (uvMap instanceof SimpleImage) {
+        if (blend_uv_map > 0) {
+          int ix1 = ix + 1;
+          if (ix1 >= uvMapWidth)
+            ix1 = 0;
+          int iy1 = iy + 1;
+          if (iy1 >= uvMapHeight)
+            iy1 = 0;
+          double iufrac = MathLib.frac(iu);
+          double ivfrac = MathLib.frac(iv);
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(ix, iy));
+          int lur = toolPixel.r;
+          int lug = toolPixel.g;
+          int lub = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(ix1, iy));
+          int rur = toolPixel.r;
+          int rug = toolPixel.g;
+          int rub = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(ix, iy1));
+          int lbr = toolPixel.r;
+          int lbg = toolPixel.g;
+          int lbb = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(ix1, iy1));
+          int rbr = toolPixel.r;
+          int rbg = toolPixel.g;
+          int rbb = toolPixel.b;
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+          pVarTP.greenColor = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+          pVarTP.blueColor = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+        }
+        else {
+          toolPixel.setARGBValue(((SimpleImage) uvMap).getARGBValue(ix, iy));
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = toolPixel.r;
+          pVarTP.greenColor = toolPixel.g;
+          pVarTP.blueColor = toolPixel.b;
+        }
+      }
+      else {
+        if (blend_uv_map > 0) {
+          int ix1 = ix + 1;
+          if (ix1 >= uvMapWidth)
+            ix1 = 0;
+          int iy1 = iy + 1;
+          if (iy1 >= uvMapHeight)
+            iy1 = 0;
+          double iufrac = MathLib.frac(iu);
+          double ivfrac = MathLib.frac(iv);
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix, iy);
+          float lur = rgbArray[0];
+          float lug = rgbArray[1];
+          float lub = rgbArray[2];
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix1, iy);
+          float rur = rgbArray[0];
+          float rug = rgbArray[1];
+          float rub = rgbArray[2];
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix, iy1);
+          float lbr = rgbArray[0];
+          float lbg = rgbArray[1];
+          float lbb = rgbArray[2];
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix1, iy1);
+          float rbr = rgbArray[0];
+          float rbg = rgbArray[1];
+          float rbb = rgbArray[2];
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+          pVarTP.greenColor = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+          pVarTP.blueColor = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+        }
+        else {
+          ((SimpleHDRImage) uvMap).getRGBValues(rgbArray, ix, iy);
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = rgbArray[0];
+          pVarTP.greenColor = rgbArray[1];
+          pVarTP.blueColor = rgbArray[2];
+        }
+      }
+    }
+    else {
+      pVarTP.rgbColor = true;
+      pVarTP.redColor = 0;
+      pVarTP.greenColor = 0;
+      pVarTP.blueColor = 0;
     }
   }
 
@@ -183,7 +246,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, blend_uv_map };
   }
 
   @Override
@@ -208,6 +271,8 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       subdiv_smooth_lambda = pValue;
     else if (PARAM_SUBDIV_SMOOTH_MU.equalsIgnoreCase(pName))
       subdiv_smooth_mu = pValue;
+    else if (PARAM_BLEND_UV_MAP.equalsIgnoreCase(pName))
+      blend_uv_map = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -302,7 +367,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     uvIdxMap.clear();
   }
 
-  private double getUVColorIdx(double pR, double pG, double pB) {
+  private double getUVColorIdx(int pR, int pG, int pB) {
     RenderColor pColor = new RenderColor(pR, pG, pB);
     Double res = uvIdxMap.get(pColor);
     if (res == null) {

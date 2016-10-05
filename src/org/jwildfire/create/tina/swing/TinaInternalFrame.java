@@ -16783,11 +16783,6 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tinaSolidRenderingPane == null) {
       tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.LEFT);
 
-      if (!Tools.ENABLE_SOLID_RENDERING) {
-        tinaSolidRenderingPane.setVisible(false);
-        tinaSolidRenderingPane.setEnabled(false);
-
-      }
       tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
       tinaSolidRenderingPane.addTab("Hard shadows", null, getPanel_4(), null);
 
