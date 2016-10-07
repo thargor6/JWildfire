@@ -19,14 +19,9 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
-import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
-import org.jwildfire.image.WFImage;
 
 public class PlaneWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,17 +31,16 @@ public class PlaneWFFunc extends VariationFunc {
   private static final String PARAM_AXIS = "axis";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
   private static final String PARAM_COLOR_MODE = "color_mode";
-  private static final String PARAM_COLOR1 = "color1";
-  private static final String PARAM_COLOR2 = "color2";
-  private static final String PARAM_TEXTURE_PARAM1 = "texture_param1";
-  private static final String PARAM_TEXTURE_PARAM2 = "texture_param2";
   private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
+  private static final String PARAM_DISPL_AMOUNT = "displ_amount";
+  private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
 
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
+  private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_COLOR1, PARAM_COLOR2, PARAM_TEXTURE_PARAM1, PARAM_TEXTURE_PARAM2, PARAM_BLEND_COLORMAP };
+  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP };
 
-  private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME };
+  private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
   private static final int AXIS_XY = 0;
   private static final int AXIS_YZ = 1;
@@ -55,8 +49,7 @@ public class PlaneWFFunc extends VariationFunc {
   private static final int CM_U = 0;
   private static final int CM_V = 1;
   private static final int CM_UV = 2;
-  private static final int CM_CHECKERBOARD = 3; // uses texture_param1, color1, color2
-  private static final int CM_COLORMAP = 4; // no params
+  private static final int CM_COLORMAP = 4;
 
   private double position = 3.0;
   private double size = 10.0;
@@ -64,17 +57,8 @@ public class PlaneWFFunc extends VariationFunc {
   private int direct_color = 1;
   private int color_mode = CM_UV;
 
-  private double color1 = Math.random() * 0.5;
-  private double color2 = Math.random() * 0.5 + 0.5;
-  private double texture_param1 = Math.random() + 0.5;
-  private double texture_param2 = Math.random() * 0.25 + 0.75;
-
-  private WFImage colorMap;
-  private int colorMapWidth, colorMapHeight;
-  private String colormap_filename = null;
-  private int blend_colormap = 1;
-  private Pixel toolPixel = new Pixel();
-  private float[] rgbArray = new float[3];
+  private ColorMapHolder colorMapHolder = new ColorMapHolder();
+  private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -83,23 +67,23 @@ public class PlaneWFFunc extends VariationFunc {
       case AXIS_XY:
         x = 0.5 - pContext.random();
         y = 0.5 - pContext.random();
-        z = position;
+        z = position + displacementMapHolder.getDisplacement(pVarTP, x, y);
         setColor(pVarTP, x, y);
         x *= size;
         y *= size;
         break;
       case AXIS_YZ:
-        x = position;
         y = 0.5 - pContext.random();
         z = 0.5 - pContext.random();
+        x = position + displacementMapHolder.getDisplacement(pVarTP, y, z);
         setColor(pVarTP, y, z);
         y *= size;
         z *= size;
         break;
       case AXIS_ZX:
         x = 0.5 - pContext.random();
-        y = position;
         z = 0.5 - pContext.random();
+        y = position + displacementMapHolder.getDisplacement(pVarTP, z, x);
         setColor(pVarTP, z, x);
         x *= size;
         z *= size;
@@ -121,15 +105,12 @@ public class PlaneWFFunc extends VariationFunc {
         case CM_UV:
           pVarTP.color = (v + 0.5) * (u + 0.5);
           break;
-        case CM_CHECKERBOARD:
-          pVarTP.color = MathLib.fmod(MathLib.floor((u + 0.5) / texture_param1) + MathLib.floor((v + 0.5) / texture_param1), 2) < 1 ? color1 : color2;
-          break;
         case CM_COLORMAP: {
-          double iu = (u + 0.5) * colorMapWidth;
-          double iv = (v + 0.5) * colorMapHeight;
+          double iu = (u + 0.5) * colorMapHolder.getColorMapWidth();
+          double iv = (v + 0.5) * colorMapHolder.getColorMapHeight();
           int ix = (int) MathLib.trunc(iu);
           int iy = (int) MathLib.trunc(iv);
-          AbstractOBJMeshWFFunc.applyImageColor(pVarTP, ix, iy, iu, iv, colorMap, colorMapWidth, colorMapHeight, blend_colormap, toolPixel, rgbArray);
+          colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
         }
           break;
         case CM_U:
@@ -151,7 +132,7 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, direct_color, color_mode, color1, color2, texture_param1, texture_param2, blend_colormap };
+    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map() };
   }
 
   @Override
@@ -171,20 +152,14 @@ public class PlaneWFFunc extends VariationFunc {
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = limitIntVal(Tools.FTOI(pValue), CM_U, CM_COLORMAP);
     }
-    else if (PARAM_COLOR1.equalsIgnoreCase(pName)) {
-      color1 = limitVal(pValue, 0.0, 1.0);
-    }
-    else if (PARAM_COLOR2.equalsIgnoreCase(pName)) {
-      color2 = limitVal(pValue, 0.0, 1.0);
-    }
-    else if (PARAM_TEXTURE_PARAM1.equalsIgnoreCase(pName)) {
-      texture_param1 = pValue;
-    }
-    else if (PARAM_TEXTURE_PARAM2.equalsIgnoreCase(pName)) {
-      texture_param2 = pValue;
-    }
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
-      blend_colormap = limitIntVal(Tools.FTOI(pValue), 0, 1);
+      colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
+    else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
+    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_amount(pValue);
     }
     else
       throw new IllegalArgumentException(pName);
@@ -202,13 +177,16 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (colormap_filename != null ? colormap_filename.getBytes() : null) };
+    return new byte[][] { (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
-      colormap_filename = pValue != null ? new String(pValue) : "";
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
     }
     else
       throw new IllegalArgumentException(pName);
@@ -219,36 +197,17 @@ public class PlaneWFFunc extends VariationFunc {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
     }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    colorMap = null;
-    if (colormap_filename != null && colormap_filename.length() > 0) {
-      try {
-        colorMap = RessourceManager.getImage(colormap_filename);
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    if (colorMap == null) {
-      colorMap = getDfltImage();
-    }
-    colorMapWidth = colorMap.getImageWidth();
-    colorMapHeight = colorMap.getImageHeight();
-  }
-
-  private static SimpleImage dfltImage = null;
-
-  private synchronized SimpleImage getDfltImage() {
-    if (dfltImage == null) {
-      GradientCreator creator = new GradientCreator();
-      dfltImage = creator.createImage(256, 256);
-    }
-    return dfltImage;
+    colorMapHolder.init();
+    displacementMapHolder.init();
   }
 
 }

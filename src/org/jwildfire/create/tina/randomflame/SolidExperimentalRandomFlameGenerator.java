@@ -228,4 +228,8 @@ public class SolidExperimentalRandomFlameGenerator extends SolidRandomFlameGener
     return false;
   }
 
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

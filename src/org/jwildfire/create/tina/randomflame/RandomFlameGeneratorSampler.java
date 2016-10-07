@@ -127,7 +127,7 @@ public class RandomFlameGeneratorSampler {
         RGBPalette palette = randGradientGen.generatePalette(paletteSize, fadePaletteColors);
         layer.setPalette(palette);
       }
-      flame = randGen.postProcessFlame(randGenState, flame);
+      flame = randGen.postProcessFlameBeforeRendering(randGenState, flame);
       // render it   
       flame.setSampleDensity(25);
       RenderedFlame renderedFlame;
@@ -136,6 +136,7 @@ public class RandomFlameGeneratorSampler {
       try {
         FlameRenderer renderer = new FlameRenderer(flame, prefs, false, true);
         renderedFlame = renderer.renderFlame(info);
+        flame = randGen.postProcessFlameAfterRendering(randGenState, flame);
         if (j == quality.getMaxSamples() - 1) {
           renderedFlame = new FlameRenderer(bestFlame, prefs, false, true).renderFlame(info);
           return new RandomFlameGeneratorSample(bestFlame, renderedFlame.getImage());

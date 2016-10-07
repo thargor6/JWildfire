@@ -24,7 +24,9 @@ public abstract class RandomFlameGenerator {
 
   public abstract Flame prepareFlame(RandomFlameGeneratorState pState);
 
-  protected abstract Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame);
+  protected abstract Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame);
+
+  protected abstract Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame);
 
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     return new RandomFlameGeneratorState(pPrefs, pRandomGradientGenerator);

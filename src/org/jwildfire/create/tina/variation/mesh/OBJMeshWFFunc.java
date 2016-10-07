@@ -39,7 +39,7 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (objFilename != null ? objFilename.getBytes() : null), (uvMapFilename != null ? uvMapFilename.getBytes() : null) };
+    return new byte[][] { (objFilename != null ? objFilename.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null) };
   }
 
   @Override
@@ -48,7 +48,7 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
       objFilename = pValue != null ? new String(pValue) : "";
     }
     else if (RESSOURCE_UVMAP_FILENAME.equalsIgnoreCase(pName)) {
-      uvMapFilename = pValue != null ? new String(pValue) : "";
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       clearCurrUVMap();
     }
     else

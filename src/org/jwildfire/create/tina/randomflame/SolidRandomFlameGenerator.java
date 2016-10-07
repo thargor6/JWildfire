@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
@@ -111,9 +112,22 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     pFlame.setDefaultSolidRenderingSettings();
     pFlame.setSpatialOversampling(1);
+
+    if (pFlame.getSolidRenderSettings().getLights().size() > 1) {
+      PointLight light = pFlame.getSolidRenderSettings().getLights().get(0);
+      light.setX(1.0 - 2.0 * Math.random());
+      light.setY(1.0 - 2.0 * Math.random());
+      light.setZ(1.0 - 2.0 * Math.random());
+    }
+    if (pFlame.getSolidRenderSettings().getLights().size() > 2) {
+      PointLight light = pFlame.getSolidRenderSettings().getLights().get(1);
+      light.setX(1.0 - 2.0 * Math.random());
+      light.setY(1.0 - 2.0 * Math.random());
+      light.setZ(1.0 - 2.0 * Math.random());
+    }
     return pFlame;
   }
 }

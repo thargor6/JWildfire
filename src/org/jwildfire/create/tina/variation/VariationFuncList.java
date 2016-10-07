@@ -472,9 +472,10 @@ public class VariationFuncList {
     registerVariationFunc(YPlot3DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
     registerVariationFunc(MobiusNFunc.class);
-    registerVariationFunc(PlaneWFFunc.class);
     registerVariationFunc(OBJMeshWFFunc.class);
     registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
+    registerVariationFunc(PlaneWFFunc.class);
+    registerVariationFunc(CheckerboardWFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
