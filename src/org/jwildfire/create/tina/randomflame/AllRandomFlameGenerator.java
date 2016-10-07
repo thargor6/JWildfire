@@ -62,6 +62,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
       allGenerators.add(new SolidExperimentalRandomFlameGenerator());
       allGenerators.add(new SolidStunningRandomFlameGenerator());
       allGenerators.add(new SolidJulia3DRandomFlameGenerator());
+      allGenerators.add(new SolidShadowsRandomFlameGenerator());
     }
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
@@ -130,9 +131,14 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     RandomFlameGenerator generator = createRandGen(pState);
-    return generator.postProcessFlame(pState, pFlame);
+    return generator.postProcessFlameBeforeRendering(pState, pFlame);
   }
 
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    RandomFlameGenerator generator = createRandGen(pState);
+    return generator.postProcessFlameAfterRendering(pState, pFlame);
+  }
 }

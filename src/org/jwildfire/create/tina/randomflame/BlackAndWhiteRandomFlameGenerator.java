@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -63,6 +63,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SolidExperimentalRandomFlameGenerator());
     generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidJulia3DRandomFlameGenerator());
+    generators.add(new SolidShadowsRandomFlameGenerator());
     generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
@@ -113,7 +114,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     if (Math.random() < 0.42) {
       pFlame.setBGColorRed(0);
       pFlame.setBGColorGreen(0);
@@ -147,4 +148,8 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     return pFlame;
   }
 
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }
