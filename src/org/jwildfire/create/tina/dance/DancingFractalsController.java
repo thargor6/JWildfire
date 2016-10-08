@@ -225,7 +225,7 @@ public class DancingFractalsController {
   }
 
   private FlamePanel getFlamePanel() {
-    if (flamePanel == null && flameRootPanel != null) {
+    if (flamePanel == null) {  // flameRootPanel can't be null !?
       int borderWidth = flameRootPanel.getBorder().getBorderInsets(flameRootPanel).left;
       int width = flameRootPanel.getWidth() - borderWidth;
       int height = flameRootPanel.getHeight() - borderWidth;

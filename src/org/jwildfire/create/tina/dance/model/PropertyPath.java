@@ -45,11 +45,8 @@ public class PropertyPath implements Assignable<PropertyPath>, Serializable {
 
   @Override
   public boolean isEqual(PropertyPath pSrc) {
-    if (path == null && pSrc.path == null) {
-      return true;
-    }
-    else if (path == null && pSrc.path != null) {
-      return false;
+    if (path == null) {
+      return pSrc.path == null;
     }
     else {
       return path.equals(pSrc.path);

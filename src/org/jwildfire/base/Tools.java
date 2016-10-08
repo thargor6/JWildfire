@@ -527,12 +527,8 @@ public class Tools {
   }
 
   public static boolean stringEquals(String a, String b) {
-    if (a != null && b == null)
-      return false;
-    else if (a == null && b != null)
-      return false;
-    else if (a == null && b == null)
-      return true;
+    if (a == null)
+      return b == null;
     else
       return a.equals(b);
   }

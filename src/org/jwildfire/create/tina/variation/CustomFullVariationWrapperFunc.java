@@ -313,6 +313,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       else if (classesLoaded instanceof AbstractCollection) {
         classIter = ((AbstractCollection) classesLoaded).iterator();
       }
+      else {
+        throw new IllegalArgumentException("unknown class " + String.valueOf(classesLoaded));
+      }
       // construct full_variation as instance of first Class from classloader that is a subclass of VariationFunc
       while (classIter.hasNext()) {
         Object val = classIter.next();

@@ -1473,7 +1473,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 return layer.isVisible() ? "1" : "0";
               }
             case COL_WEIGHT:
-              return Tools.doubleToString(layer.getWeight());
+              if (layer != null) {
+                return Tools.doubleToString(layer.getWeight());
+              }
           }
         }
         return null;
