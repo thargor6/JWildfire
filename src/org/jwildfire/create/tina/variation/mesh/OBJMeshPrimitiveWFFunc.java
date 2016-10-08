@@ -27,6 +27,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.create.tina.variation.RessourceType;
 
 public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -42,6 +43,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   private String primitives[] = { "ball", "capsule", "cone", "diamond", "torus", "box", "gear15", "icosahedron", "tetrahedron",
       "octahedron", "dodecahedron", "wedge", "icosidodecahedron", "cubeoctahedron", "gears6a", "gears6s", "gears8a", "gears8s",
       "gears12a", "gears12s", "gears16a", "gears16s", "gears24a", "gears24s", "mandelbulb", "drop" };
+
+  private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
   @Override
   public String[] getParameterNames() {
@@ -68,6 +71,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    super.init(pContext, pLayer, pXForm, pAmount);
     String meshName = primitive >= 0 && primitive < primitives.length ? primitives[primitive] : null;
 
     if (meshName != null && meshName.length() > 0) {
@@ -111,4 +115,40 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     return tmpFile;
   }
 
+  @Override
+  public String[] getRessourceNames() {
+    return ressourceNames;
+  }
+
+  @Override
+  public byte[][] getRessourceValues() {
+    return new byte[][] { (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
+  }
+
+  @Override
+  public void setRessource(String pName, byte[] pValue) {
+    if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
+      colorMapHolder.clear();
+      uvIdxMap.clear();
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
+      displacementMapHolder.clear();
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
 }
