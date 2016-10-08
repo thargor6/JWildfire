@@ -283,9 +283,7 @@ public class Tools {
   }
 
   public static double stringToDouble(String pValue) {
-    if (pValue != null && pValue.indexOf(',') >= 0) {
-      pValue = pValue.replace(',', '.');
-    }
+    pValue = pValue.replace(',', '.');
     return Double.parseDouble(pValue);
   }
 

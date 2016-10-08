@@ -34,6 +34,7 @@ public class DefaultInternalFrameHolder<T extends JInternalFrame> extends Intern
     }
     catch (Exception ex) {
       Unchecker.rethrow(ex);
+      return null;  // NOT_REACHED
     }
 
     applyWindowPrefs(frame);
