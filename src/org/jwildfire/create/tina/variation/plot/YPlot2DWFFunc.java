@@ -27,6 +27,7 @@ import java.util.Map;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -91,6 +92,27 @@ public class YPlot2DWFFunc extends VariationFunc {
     double z = _zmin + randV * _dz;
     _parser.setVarValue("x", x);
     double y = (Double) _parser.evaluate(_node);
+
+    if (displacementMapHolder.isActive()) {
+      double eps = _dx / 100.0;
+      double x1 = x + eps;
+      _parser.setVarValue("x", x1);
+      double y1 = (Double) _parser.evaluate(_node);
+
+      VectorD av = new VectorD(eps, y1 - y, 0);
+      VectorD bv = new VectorD(0.0, 0.0, 1.0);
+      VectorD n = VectorD.cross(av, bv);
+      n.normalize();
+      double iu = GfxMathLib.clamp(randU * (displacementMapHolder.getDisplacementMapWidth() - 1.0), 0.0, displacementMapHolder.getDisplacementMapWidth() - 1.0);
+      double iv = GfxMathLib.clamp(displacementMapHolder.getDisplacementMapHeight() - 1.0 - randV * (displacementMapHolder.getDisplacementMapHeight() - 1.0), 0, displacementMapHolder.getDisplacementMapHeight() - 1.0);
+      int ix = (int) MathLib.trunc(iu);
+      int iy = (int) MathLib.trunc(iv);
+      double d = displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * _displ_amount;
+      pVarTP.x += pAmount * n.x * d;
+      pVarTP.y += pAmount * n.y * d;
+      pVarTP.z += pAmount * n.z * d;
+    }
+
     if (direct_color > 0) {
       switch (color_mode) {
         case CM_COLORMAP:

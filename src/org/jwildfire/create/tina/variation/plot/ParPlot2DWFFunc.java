@@ -19,13 +19,24 @@ package org.jwildfire.create.tina.variation.plot;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.variation.ColorMapHolder;
+import org.jwildfire.create.tina.variation.DisplacementMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.nfunk.jep.Node;
 
@@ -39,18 +50,24 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String PARAM_VMAX = "vmax";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
   private static final String PARAM_COLOR_MODE = "color_mode";
+  private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
+  private static final String PARAM_DISPL_AMOUNT = "displ_amount";
+  private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
 
   private static final String RESSOURCE_XFORMULA = "xformula";
   private static final String RESSOURCE_YFORMULA = "yformula";
   private static final String RESSOURCE_ZFORMULA = "zformula";
+  private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
+  private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP };
 
-  private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA };
+  private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
-  private static final int CM_U = 0;
-  private static final int CM_V = 1;
-  private static final int CM_UV = 2;
+  private static final int CM_COLORMAP = 0;
+  private static final int CM_U = 1;
+  private static final int CM_V = 2;
+  private static final int CM_UV = 3;
 
   private int preset_id = -1;
 
@@ -65,10 +82,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private String yformula;
   private String zformula;
 
+  private ColorMapHolder colorMapHolder = new ColorMapHolder();
+  private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double u = _umin + pContext.random() * _du;
-    double v = _vmin + pContext.random() * _dv;
+    double randU = pContext.random();
+    double randV = pContext.random();
+    double u = _umin + randU * _du;
+    double v = _vmin + randV * _dv;
 
     _xparser.setVarValue("u", u);
     _xparser.setVarValue("v", v);
@@ -82,17 +104,66 @@ public class ParPlot2DWFFunc extends VariationFunc {
     _zparser.setVarValue("v", v);
     double z = (Double) _zparser.evaluate(_znode);
 
+    if (displacementMapHolder.isActive()) {
+      double epsu = _du / 100.0;
+      double u1 = u + epsu;
+      _xparser.setVarValue("u", u1);
+      double x1 = (Double) _xparser.evaluate(_xnode);
+      _yparser.setVarValue("u", u1);
+      double y1 = (Double) _yparser.evaluate(_ynode);
+      _zparser.setVarValue("u", u1);
+      double z1 = (Double) _zparser.evaluate(_znode);
+
+      double epsv = _dv / 100.0;
+      double v1 = v + epsv;
+
+      _xparser.setVarValue("u", u);
+      _xparser.setVarValue("v", v1);
+      double x2 = (Double) _xparser.evaluate(_xnode);
+
+      _yparser.setVarValue("u", u);
+      _yparser.setVarValue("v", v1);
+      double y2 = (Double) _yparser.evaluate(_ynode);
+
+      _zparser.setVarValue("u", u);
+      _zparser.setVarValue("v", v1);
+      double z2 = (Double) _zparser.evaluate(_znode);
+
+      VectorD av = new VectorD(x1 - x, y1 - y, z1 - z);
+      VectorD bv = new VectorD(x2 - x, y2 - y, z2 - z);
+      VectorD n = VectorD.cross(av, bv);
+      n.normalize();
+      double iu = GfxMathLib.clamp(randU * (displacementMapHolder.getDisplacementMapWidth() - 1.0), 0.0, displacementMapHolder.getDisplacementMapWidth() - 1.0);
+      double iv = GfxMathLib.clamp(displacementMapHolder.getDisplacementMapHeight() - 1.0 - randV * (displacementMapHolder.getDisplacementMapHeight() - 1.0), 0, displacementMapHolder.getDisplacementMapHeight() - 1.0);
+      int ix = (int) MathLib.trunc(iu);
+      int iy = (int) MathLib.trunc(iv);
+      double d = displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * _displ_amount;
+      pVarTP.x += pAmount * n.x * d;
+      pVarTP.y += pAmount * n.y * d;
+      pVarTP.z += pAmount * n.z * d;
+    }
+
     if (direct_color > 0) {
       switch (color_mode) {
         case CM_V:
           pVarTP.color = (v - _vmin) / _dv;
           break;
+        case CM_U:
+          pVarTP.color = (u - _umin) / _du;
+          break;
+        case CM_COLORMAP:
+          if (colorMapHolder.isActive()) {
+            double iu = GfxMathLib.clamp(randU * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+            double iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - randV * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+            int ix = (int) MathLib.trunc(iu);
+            int iy = (int) MathLib.trunc(iv);
+            colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
+            pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+          }
+          break;
+        default:
         case CM_UV:
           pVarTP.color = (v - _vmin) / _dv * (u - _umin) / _du;
-          break;
-        case CM_U:
-        default:
-          pVarTP.color = (u - _umin) / _du;
           break;
       }
       if (pVarTP.color < 0.0)
@@ -112,7 +183,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode };
+    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map() };
   }
 
   @Override
@@ -145,6 +216,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = Tools.FTOI(pValue);
     }
+    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
+      colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
+    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_amount(pValue);
+    }
+    else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -161,7 +241,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null) };
+    return new byte[][] { (xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
   }
 
   @Override
@@ -178,6 +258,36 @@ public class ParPlot2DWFFunc extends VariationFunc {
       zformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
     }
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
+      colorMapHolder.clear();
+      uvIdxMap.clear();
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
+      displacementMapHolder.clear();
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_XFORMULA.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -186,9 +296,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private Node _xnode, _ynode, _znode;
   private double _umin, _umax, _du;
   private double _vmin, _vmax, _dv;
+  private double _displ_amount;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    colorMapHolder.init();
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    displacementMapHolder.init();
+    _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
+
     _xparser = new JEPWrapper();
     _xparser.addVariable("u", 0.0);
     _xparser.addVariable("v", 0.0);
@@ -249,5 +365,37 @@ public class ParPlot2DWFFunc extends VariationFunc {
     umax = preset.getUmax();
     vmin = preset.getVmin();
     vmax = preset.getVmax();
+  }
+
+  private RenderColor[] uvColors;
+  protected Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
+
+  private double getUVColorIdx(int pR, int pG, int pB) {
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = uvIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = uvColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < uvColors.length; i++) {
+        color = uvColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      res = (double) nearestIdx / (double) (uvColors.length - 1);
+      uvIdxMap.put(pColor, res);
+    }
+    return res;
   }
 }
