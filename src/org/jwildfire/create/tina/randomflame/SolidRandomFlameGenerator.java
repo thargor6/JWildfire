@@ -78,8 +78,8 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         varFunc = VariationFuncList.getVariationFuncInstance("parplot2d_wf", true);
         varFunc.setParameter("use_preset", 1);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getParPlot2DWFFuncPresets().getRandomPresetId());
-        varFunc.setParameter("umin", -3.14159265);
-        varFunc.setParameter("umax", 3.14159265);
+        varFunc.setParameter("umin", -Math.PI);
+        varFunc.setParameter("umax", Math.PI);
         varFunc.setParameter("vmin", -3);
         varFunc.setParameter("vmax", 8);
         varFunc.setParameter("direct_color", 1);
