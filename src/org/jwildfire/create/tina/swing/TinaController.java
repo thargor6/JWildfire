@@ -3141,7 +3141,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                   try {
                     File file = chooser.getSelectedFile();
                     String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
-                    byte[] valByteArray = svg != null ? svg.getBytes() : null;
+                    byte[] valByteArray = svg.getBytes();
                     var.getFunc().setRessource(rName, valByteArray);
                   }
                   catch (Exception ex) {

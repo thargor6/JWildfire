@@ -172,7 +172,6 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeInterpolationCmb.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
         if (ctrl != null) {
-          if (ctrl != null)
             ctrl.interpolationCmbChanged();
         }
       }

@@ -81,11 +81,11 @@ public class AnimationService {
       Class<?> fieldCls = field.getType();
       if (fieldCls == double.class || fieldCls == Double.class) {
         Double res = field.getDouble(pSource);
-        return res != null ? res.doubleValue() : 0.0;
+        return res;
       }
       else if (fieldCls == int.class || fieldCls == Integer.class) {
         Integer res = field.getInt(pSource);
-        return res != null ? Double.valueOf(res.intValue()) : 0.0;
+        return Double.valueOf(res.intValue());
       }
       else if (fieldCls == boolean.class || fieldCls == Boolean.class) {
         Boolean res = field.getBoolean(pSource);

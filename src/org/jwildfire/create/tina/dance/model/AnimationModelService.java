@@ -375,9 +375,6 @@ public class AnimationModelService {
                 break;
               case ADD:
                 Double o = pField.getDouble(pOwner);
-                if (o == null) {
-                  o = 0.0;
-                }
                 o += value;
                 pField.setDouble(pOwner, o);
                 break;

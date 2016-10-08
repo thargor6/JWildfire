@@ -165,9 +165,6 @@ public class RessourceDialog extends JDialog {
       if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
         String content = Tools.readUTF8Textfile(file.getAbsolutePath());
-        if (content == null) {
-          content = "";
-        }
         editorTextArea.setText(content);
         editorTextArea.setSelectionStart(0);
         editorTextArea.setSelectionEnd(0);

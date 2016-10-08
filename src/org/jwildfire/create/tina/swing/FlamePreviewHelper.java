@@ -550,9 +550,6 @@ public class FlamePreviewHelper implements IterationObserver {
       return;
     }
     Flame flame = flameHolder.getFlame().makeCopy();
-    if (flame == null) {
-      return;
-    }
     flame.applyFastOversamplingSettings();
     Rectangle panelBounds = pImgPanel.getParentImageBounds();
 
