@@ -176,8 +176,8 @@ public class ColorMapHolder implements Serializable {
     return colorMapHeight;
   }
 
-  public boolean isEmpty() {
-    return !(colormap_filename != null && colormap_filename.length() > 0);
+  public boolean isActive() {
+    return (colormap_filename != null && colormap_filename.length() > 0);
   }
 
   public void clear() {

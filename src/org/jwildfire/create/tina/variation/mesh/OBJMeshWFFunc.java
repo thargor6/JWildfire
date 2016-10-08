@@ -26,11 +26,10 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String RESSOURCE_OBJ_FILENAME = "obj_filename";
-  private static final String RESSOURCE_UVMAP_FILENAME = "uvmap_filename";
-
-  private static final String[] ressourceNames = { RESSOURCE_OBJ_FILENAME, RESSOURCE_UVMAP_FILENAME };
 
   private String objFilename = null;
+
+  private static final String[] ressourceNames = { RESSOURCE_OBJ_FILENAME, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
   @Override
   public String[] getRessourceNames() {
@@ -39,7 +38,7 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (objFilename != null ? objFilename.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null) };
+    return new byte[][] { (objFilename != null ? objFilename.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
   }
 
   @Override
@@ -47,9 +46,14 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
     if (RESSOURCE_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       objFilename = pValue != null ? new String(pValue) : "";
     }
-    else if (RESSOURCE_UVMAP_FILENAME.equalsIgnoreCase(pName)) {
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
-      clearCurrUVMap();
+      colorMapHolder.clear();
+      uvIdxMap.clear();
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
+      displacementMapHolder.clear();
     }
     else
       throw new IllegalArgumentException(pName);
@@ -60,7 +64,10 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
     if (RESSOURCE_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.OBJ_MESH;
     }
-    else if (RESSOURCE_UVMAP_FILENAME.equalsIgnoreCase(pName)) {
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
     }
     else

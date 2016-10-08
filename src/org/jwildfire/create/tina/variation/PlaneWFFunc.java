@@ -67,7 +67,7 @@ public class PlaneWFFunc extends VariationFunc {
       case AXIS_XY:
         x = 0.5 - pContext.random();
         y = 0.5 - pContext.random();
-        z = position + displacementMapHolder.getDisplacement(pVarTP, x, y);
+        z = position + getDisplacement(x, y);
         setColor(pVarTP, x, y);
         x *= size;
         y *= size;
@@ -75,7 +75,7 @@ public class PlaneWFFunc extends VariationFunc {
       case AXIS_YZ:
         y = 0.5 - pContext.random();
         z = 0.5 - pContext.random();
-        x = position + displacementMapHolder.getDisplacement(pVarTP, y, z);
+        x = position + getDisplacement(y, z);
         setColor(pVarTP, y, z);
         y *= size;
         z *= size;
@@ -83,7 +83,7 @@ public class PlaneWFFunc extends VariationFunc {
       case AXIS_ZX:
         x = 0.5 - pContext.random();
         z = 0.5 - pContext.random();
-        y = position + displacementMapHolder.getDisplacement(pVarTP, z, x);
+        y = position + getDisplacement(z, x);
         setColor(pVarTP, z, x);
         x *= size;
         z *= size;
@@ -94,6 +94,17 @@ public class PlaneWFFunc extends VariationFunc {
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
     pVarTP.z += pAmount * z;
+  }
+
+  private double getDisplacement(double u, double v) {
+    if (displacementMapHolder.isActive()) {
+      double iu = (u + 0.5) * displacementMapHolder.getDisplacementMapWidth();
+      double iv = (v + 0.5) * displacementMapHolder.getDisplacementMapHeight();
+      int ix = (int) MathLib.trunc(iu);
+      int iy = (int) MathLib.trunc(iv);
+      return displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) / 255.0 * displacementMapHolder.getDispl_amount();
+    }
+    return 0.0;
   }
 
   private void setColor(XYZPoint pVarTP, double u, double v) {

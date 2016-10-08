@@ -19,7 +19,6 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.PlainImageCreator;
-import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -94,18 +93,11 @@ public class DisplacementMapHolder {
     this.displ_amount = displ_amount;
   }
 
-  public double getDisplacement(XYZPoint pVarTP, double u, double v) {
-    if (MathLib.fabs(displ_amount) > MathLib.EPSILON) {
-      double iu = (u + 0.5) * displacementMapWidth;
-      double iv = (v + 0.5) * displacementMapHeight;
-      int ix = (int) MathLib.trunc(iu);
-      int iy = (int) MathLib.trunc(iv);
-      return calculateImageDisplacement(ix, iy, iu, iv) / 255.0 * displ_amount;
-    }
-    return 0;
+  public boolean isActive() {
+    return displ_map_filename != null && !displ_map_filename.isEmpty() && MathLib.fabs(displ_amount) > MathLib.EPSILON;
   }
 
-  private double calculateImageDisplacement(int ix, int iy, double iu, double iv) {
+  public double calculateImageDisplacement(int ix, int iy, double iu, double iv) {
     if (ix >= 0 && ix < displacementMapWidth && iy >= 0 && iy < displacementMapHeight) {
       if (displacementMap instanceof SimpleImage) {
         if (blend_displ_map > 0) {
@@ -159,6 +151,10 @@ public class DisplacementMapHolder {
       }
     }
     return 0.0;
+  }
+
+  public void clear() {
+    displacementMap = null;
   }
 
 }
