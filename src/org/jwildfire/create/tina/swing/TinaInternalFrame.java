@@ -16839,7 +16839,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JLabel tinaSolidRenderingLightPosXLbl = new JLabel();
       tinaSolidRenderingLightPosXLbl.setToolTipText("");
-      tinaSolidRenderingLightPosXLbl.setText("Position X");
+      tinaSolidRenderingLightPosXLbl.setText("Position X*");
       tinaSolidRenderingLightPosXLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightPosXLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightPosXLbl.setName("tinaSolidRenderingLightPosXLbl");
@@ -16901,7 +16901,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXSlider);
 
       JLabel tinaSolidRenderingLightPosYLbl = new JLabel();
-      tinaSolidRenderingLightPosYLbl.setText("Position Y");
+      tinaSolidRenderingLightPosYLbl.setText("Position Y*");
       tinaSolidRenderingLightPosYLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightPosYLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightPosYLbl.setName("tinaSolidRenderingLightPosYLbl");
@@ -16963,7 +16963,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYSlider);
 
       JLabel tinaSolidRenderingLightPosZLbl = new JLabel();
-      tinaSolidRenderingLightPosZLbl.setText("Position Z");
+      tinaSolidRenderingLightPosZLbl.setText("Position Z*");
       tinaSolidRenderingLightPosZLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightPosZLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightPosZLbl.setName("tinaSolidRenderingLightPosZLbl");
@@ -17040,7 +17040,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightColorBtn);
 
       JLabel lblLightColor = new JLabel();
-      lblLightColor.setText("Light color");
+      lblLightColor.setText("Light color*");
       lblLightColor.setSize(new Dimension(88, 22));
       lblLightColor.setPreferredSize(new Dimension(88, 22));
       lblLightColor.setLocation(new Point(4, 4));
@@ -17049,7 +17049,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(lblLightColor);
 
       JLabel tinaSolidRenderingLightIntensityLbl0 = new JLabel();
-      tinaSolidRenderingLightIntensityLbl0.setText("Light intensity");
+      tinaSolidRenderingLightIntensityLbl0.setText("Light intensity*");
       tinaSolidRenderingLightIntensityLbl0.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightIntensityLbl0.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightIntensityLbl0.setName("tinaSolidRenderingLightIntensityLbl0");
@@ -17253,7 +17253,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialSpecularColorBtn);
 
       JLabel lblSpecularColor = new JLabel();
-      lblSpecularColor.setText("Specular color");
+      lblSpecularColor.setText("Specular color*");
       lblSpecularColor.setSize(new Dimension(88, 22));
       lblSpecularColor.setPreferredSize(new Dimension(88, 22));
       lblSpecularColor.setLocation(new Point(4, 4));
@@ -17263,7 +17263,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JLabel tinaSolidRenderingMaterialSpecularSharpnessLbl = new JLabel();
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setToolTipText("Specular sharpness");
-      tinaSolidRenderingMaterialSpecularSharpnessLbl.setText("Spec size");
+      tinaSolidRenderingMaterialSpecularSharpnessLbl.setText("Spec size*");
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setName("tinaSolidRenderingMaterialSpecularSharpnessLbl");
@@ -17417,7 +17417,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JLabel tinaSolidRenderingMaterialDiffuseLbl = new JLabel();
       tinaSolidRenderingMaterialDiffuseLbl.setToolTipText("");
-      tinaSolidRenderingMaterialDiffuseLbl.setText("Diffuse");
+      tinaSolidRenderingMaterialDiffuseLbl.setText("Diffuse*");
       tinaSolidRenderingMaterialDiffuseLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialDiffuseLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialDiffuseLbl.setName("tinaSolidRenderingMaterialDiffuseLbl");
@@ -17448,7 +17448,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseSlider);
 
       JLabel tinaSolidRenderingMaterialAmbientLbl = new JLabel();
-      tinaSolidRenderingMaterialAmbientLbl.setText("Ambient");
+      tinaSolidRenderingMaterialAmbientLbl.setText("Ambient*");
       tinaSolidRenderingMaterialAmbientLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialAmbientLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialAmbientLbl.setName("tinaSolidRenderingMaterialAmbientLbl");
@@ -17510,7 +17510,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialAmbientSlider);
 
       JLabel tinaSolidRenderingMaterialSpecularLbl = new JLabel();
-      tinaSolidRenderingMaterialSpecularLbl.setText("Specular");
+      tinaSolidRenderingMaterialSpecularLbl.setText("Specular*");
       tinaSolidRenderingMaterialSpecularLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialSpecularLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialSpecularLbl.setName("tinaSolidRenderingMaterialSpecularLbl");
@@ -17589,7 +17589,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseResponseCmb);
 
       JLabel lblDiffuseResponse = new JLabel();
-      lblDiffuseResponse.setText("Diffuse response");
+      lblDiffuseResponse.setText("Diffuse response*");
       lblDiffuseResponse.setSize(new Dimension(68, 22));
       lblDiffuseResponse.setPreferredSize(new Dimension(94, 22));
       lblDiffuseResponse.setName("tinaSolidRenderingMaterialSpecularSharpnessLbl0");
@@ -17604,7 +17604,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       JLabel tinaSolidRenderingMaterialReflectionMapIntensityLbl = new JLabel();
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setToolTipText("Reflection map intensity");
-      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setText("Refl map");
+      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setText("Refl map*");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setName("tinaSolidRenderingMaterialReflectionMapIntensityLbl");
@@ -17683,7 +17683,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_114.add(tinaSolidRenderingMaterialReflectionMappingCmb);
 
       JLabel lblReflectionMapping = new JLabel();
-      lblReflectionMapping.setText("Reflection mapping");
+      lblReflectionMapping.setText("Reflection mapping*");
       lblReflectionMapping.setSize(new Dimension(68, 22));
       lblReflectionMapping.setPreferredSize(new Dimension(94, 22));
       lblReflectionMapping.setName("tinaSolidRenderingMaterialReflectionMappingLbl");
@@ -17935,7 +17935,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel getLblReflectionMap() {
     if (lblReflectionMap == null) {
       lblReflectionMap = new JLabel();
-      lblReflectionMap.setText("Reflection map");
+      lblReflectionMap.setText("Reflection map*");
       lblReflectionMap.setSize(new Dimension(94, 22));
       lblReflectionMap.setPreferredSize(new Dimension(94, 22));
       lblReflectionMap.setLocation(new Point(4, 4));
@@ -18006,7 +18006,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel.add(tinaSolidRenderingEnableAOCBx);
 
       JLabel tinaSolidRenderingAOIntensityLbl = new JLabel();
-      tinaSolidRenderingAOIntensityLbl.setText("Amb shadow intensity");
+      tinaSolidRenderingAOIntensityLbl.setText("Amb shadow intensity*");
       tinaSolidRenderingAOIntensityLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOIntensityLbl.setName("tinaSolidRenderingAOIntensityLbl");

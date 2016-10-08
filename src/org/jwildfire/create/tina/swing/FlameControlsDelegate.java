@@ -1374,7 +1374,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         owner.saveUndoPoint();
         flame.getSolidRenderSettings().setAoEnabled(data.tinaSolidRenderingEnableAOCBx.isSelected());
         enableControls();
-        owner.refreshFlameImage(true, false, 1, true, true);
+        owner.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -1431,12 +1431,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingSelectedMaterialCmb_changed() {
     refreshSolidRenderingMaterialControls();
-    enableSolidRenderUI();
   }
 
   public void solidRenderingSelectedLightCmb_changed() {
     refreshSolidRenderingLightControls();
-    enableSolidRenderUI();
   }
 
   public void solidRenderingAddLightBtn_clicked() {
@@ -1758,15 +1756,19 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightPosXREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+  }
+
+  private boolean areShadowsEnabled() {
+    return ShadowType.areShadowsEnabled((ShadowType) data.tinaSolidRenderingShadowTypeCmb.getSelectedItem());
   }
 
   public void solidRenderingLightPosYREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightPosZREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightIntensityREd_changed() {
@@ -1822,15 +1824,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightPosXSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightPosYSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightPosZSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, true);
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightIntensitySlider_stateChanged(ChangeEvent e) {
