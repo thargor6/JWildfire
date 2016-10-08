@@ -20,7 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 
-public class SimpleHDRImage implements WFImage {
+public class SimpleHDRImage implements WFImage, Cloneable {
   private Pixel toolPixel = new Pixel();
   private int imageWidth = -1;
   private int imageHeight = -1;

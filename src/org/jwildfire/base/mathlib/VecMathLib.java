@@ -91,7 +91,7 @@ public final class VecMathLib {
   }
 
   @SuppressWarnings("serial")
-  public static final class VectorD implements Serializable {
+  public static final class VectorD implements Serializable, Cloneable {
     public double x, y, z;
 
     public VectorD() {

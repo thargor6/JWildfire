@@ -31,7 +31,7 @@ import org.jwildfire.envelope.Envelope;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.BufferList;
 
-public class Action {
+public class Action implements Cloneable {
   private static final String TOKEN_INDENT = "  ";
   private static final String TOKEN_INPUT = "input";
   private static final String TOKEN_OUTPUT = "output";

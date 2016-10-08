@@ -18,7 +18,7 @@ package org.jwildfire.script;
 
 import org.jwildfire.envelope.Envelope;
 
-public class Parameter {
+public class Parameter implements Cloneable {
   private String name;
   private String value;
   private Envelope envelope;

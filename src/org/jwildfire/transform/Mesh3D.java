@@ -21,7 +21,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.SimpleImage;
 
 
-public class Mesh3D {
+public class Mesh3D implements Cloneable {
   private double x[];
   private double y[];
   private double z[];
