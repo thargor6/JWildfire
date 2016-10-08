@@ -475,7 +475,7 @@ public class AnimationService {
     }
   }
 
-  public static double DFLT_DURATION = 6.0;
+  public static final double DFLT_DURATION = 6.0;
 
   public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !XFormScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {

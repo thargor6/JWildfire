@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  public static boolean DEBUG = false;
+  public static final boolean DEBUG = false;
   private static final String RESSOURCE_CODE = "code_full_variation";
 
   private static HashMap<String, Class> builtin_variations;
