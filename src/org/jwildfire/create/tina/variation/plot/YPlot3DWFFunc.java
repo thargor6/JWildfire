@@ -19,13 +19,23 @@ package org.jwildfire.create.tina.variation.plot;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.variation.ColorMapHolder;
+import org.jwildfire.create.tina.variation.DisplacementMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.nfunk.jep.Node;
 
@@ -40,12 +50,18 @@ public class YPlot3DWFFunc extends VariationFunc {
   private static final String PARAM_ZMIN = "zmin";
   private static final String PARAM_ZMAX = "zmax";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
+  private static final String PARAM_COLOR_MODE = "color_mode";
+  private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
+  private static final String PARAM_DISPL_AMOUNT = "displ_amount";
+  private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
 
   private static final String RESSOURCE_FORMULA = "formula";
+  private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
+  private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP };
 
-  private static final String[] ressourceNames = { RESSOURCE_FORMULA };
+  private static final String[] ressourceNames = { RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
   private int preset_id = -1;
 
@@ -56,18 +72,54 @@ public class YPlot3DWFFunc extends VariationFunc {
   private double zmin = -2.0;
   private double zmax = 2.0;
   private int direct_color = 1;
+  private int color_mode = CM_Z;
+
+  private static final int CM_COLORMAP = 0;
+  private static final int CM_X = 1;
+  private static final int CM_Y = 2;
+  private static final int CM_Z = 3;
+  private static final int CM_XZ = 4;
 
   private String formula;
 
+  private ColorMapHolder colorMapHolder = new ColorMapHolder();
+  private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = _xmin + pContext.random() * _dx;
-    double z = _zmin + pContext.random() * _dz;
+    double randU = pContext.random();
+    double randV = pContext.random();
+    double x = _xmin + randU * _dx;
+    double z = _zmin + randV * _dz;
     _parser.setVarValue("x", x);
     _parser.setVarValue("z", z);
     double y = (Double) _parser.evaluate(_node);
     if (direct_color > 0) {
-      pVarTP.color = (y - _ymin) / _dy;
+      switch (color_mode) {
+        case CM_X:
+          pVarTP.color = (x - _xmin) / _dx;
+          break;
+        case CM_Y:
+          pVarTP.color = (y - _ymin) / _dy;
+          break;
+        case CM_COLORMAP:
+          if (colorMapHolder.isActive()) {
+            double iu = GfxMathLib.clamp(randU * (colorMapHolder.getColorMapWidth() - 1.0), 0.0, colorMapHolder.getColorMapWidth() - 1.0);
+            double iv = GfxMathLib.clamp(colorMapHolder.getColorMapHeight() - 1.0 - randV * (colorMapHolder.getColorMapHeight() - 1.0), 0, colorMapHolder.getColorMapHeight() - 1.0);
+            int ix = (int) MathLib.trunc(iu);
+            int iy = (int) MathLib.trunc(iv);
+            colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
+            pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+          }
+          break;
+        case CM_XZ:
+          pVarTP.color = (x - _xmin) / _dx * (z - _zmin) / _dz;
+          break;
+        default:
+        case CM_Z:
+          pVarTP.color = (z - _zmin) / _dz;
+          break;
+      }
       if (pVarTP.color < 0.0)
         pVarTP.color = 0.0;
       else if (pVarTP.color > 1.0)
@@ -85,7 +137,7 @@ public class YPlot3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color };
+    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map() };
   }
 
   @Override
@@ -121,6 +173,18 @@ public class YPlot3DWFFunc extends VariationFunc {
     else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
     }
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+      color_mode = Tools.FTOI(pValue);
+    }
+    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
+      colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
+    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_amount(pValue);
+    }
+    else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -137,7 +201,7 @@ public class YPlot3DWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (formula != null ? formula.getBytes() : null) };
+    return new byte[][] { (formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
   }
 
   @Override
@@ -145,6 +209,30 @@ public class YPlot3DWFFunc extends VariationFunc {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       formula = pValue != null ? new String(pValue) : "";
       validatePresetId();
+    }
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
+      colorMapHolder.clear();
+      uvIdxMap.clear();
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
+      displacementMapHolder.clear();
+    }
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
+    }
+    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.IMAGE_FILENAME;
     }
     else
       throw new IllegalArgumentException(pName);
@@ -155,9 +243,15 @@ public class YPlot3DWFFunc extends VariationFunc {
   private double _xmin, _xmax, _dx;
   private double _ymin, _ymax, _dy;
   private double _zmin, _zmax, _dz;
+  private double _displ_amount;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    colorMapHolder.init();
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    displacementMapHolder.init();
+    _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
+
     _parser = new JEPWrapper();
     _parser.addVariable("x", 0.0);
     _parser.addVariable("z", 0.0);
@@ -215,5 +309,37 @@ public class YPlot3DWFFunc extends VariationFunc {
     xmax = preset.getXmax();
     ymin = preset.getYmin();
     ymax = preset.getYmax();
+  }
+
+  private RenderColor[] uvColors;
+  protected Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
+
+  private double getUVColorIdx(int pR, int pG, int pB) {
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = uvIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = uvColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < uvColors.length; i++) {
+        color = uvColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      res = (double) nearestIdx / (double) (uvColors.length - 1);
+      uvIdxMap.put(pColor, res);
+    }
+    return res;
   }
 }
