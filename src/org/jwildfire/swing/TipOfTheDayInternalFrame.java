@@ -66,6 +66,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     southPanel.setLayout(null);
 
     JButton nextTipButton = new JButton("Next tip");
+    nextTipButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     nextTipButton.setDefaultCapable(false);
     nextTipButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -79,6 +80,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     southPanel.add(nextTipButton);
 
     showTipsAtStartupCBx = new JCheckBox("Show tips at startup");
+    showTipsAtStartupCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     showTipsAtStartupCBx.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         Prefs.getPrefs().setShowTipsAtStartup(showTipsAtStartupCBx.isSelected());
@@ -96,6 +98,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
     southPanel.add(showTipsAtStartupCBx);
 
     JButton prevTipButton = new JButton("Prev tip");
+    prevTipButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     prevTipButton.setPreferredSize(new Dimension(128, 24));
     prevTipButton.setDefaultCapable(false);
     prevTipButton.setBorderPainted(false);
@@ -142,7 +145,7 @@ public class TipOfTheDayInternalFrame extends JInternalFrame {
       helpPane = new JTextPane();
       helpPane.setBackground(SystemColor.menu);
 
-      helpPane.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
+      helpPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       helpPane.addHyperlinkListener(new HyperlinkListener() {
         public void hyperlinkUpdate(HyperlinkEvent e) {
           if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {

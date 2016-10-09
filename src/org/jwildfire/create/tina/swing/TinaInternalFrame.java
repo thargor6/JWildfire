@@ -3454,7 +3454,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModHueREd.setLocation(new Point(70, 21));
       xFormModHueREd.setHasMinValue(true);
       xFormModHueREd.setHasMaxValue(true);
-      xFormModHueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModHueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModHueREd.setBounds(68, 134, 55, 22);
       xFormModHueREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3476,7 +3476,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHue.setSize(new Dimension(64, 22));
       lblHue.setPreferredSize(new Dimension(64, 22));
       lblHue.setLocation(new Point(6, 21));
-      lblHue.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHue.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHue.setBounds(4, 134, 64, 22);
       panel_1.add(lblHue);
 
@@ -3486,7 +3486,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHueSpd.setSize(new Dimension(64, 22));
       lblHueSpd.setPreferredSize(new Dimension(64, 22));
       lblHueSpd.setLocation(new Point(6, 47));
-      lblHueSpd.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHueSpd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHueSpd.setBounds(4, 154, 64, 22);
       panel_1.add(lblHueSpd);
 
@@ -3500,7 +3500,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModHueSpeedREd.setLocation(new Point(70, 47));
       xFormModHueSpeedREd.setHasMinValue(true);
       xFormModHueSpeedREd.setHasMaxValue(true);
-      xFormModHueSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormModHueSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormModHueSpeedREd.setBounds(68, 154, 55, 22);
       xFormModHueSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3523,7 +3523,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModHueSlider.setMinimum(-100);
       xFormModHueSlider.setMaximum(100);
       xFormModHueSlider.setLocation(new Point(125, 21));
-      xFormModHueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModHueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModHueSlider.setBounds(125, 134, 156, 22);
       xFormModHueSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3545,7 +3545,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormModHueSpeedSlider.setMinimum(-100);
       xFormModHueSpeedSlider.setMaximum(100);
       xFormModHueSpeedSlider.setLocation(new Point(125, 47));
-      xFormModHueSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormModHueSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormModHueSpeedSlider.setBounds(125, 154, 156, 22);
       xFormModHueSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3875,7 +3875,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialLbl.setPreferredSize(new Dimension(64, 22));
       xFormMaterialLbl.setName("xFormMaterialLbl");
       xFormMaterialLbl.setLocation(new Point(6, 21));
-      xFormMaterialLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormMaterialLbl.setBounds(6, 146, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialLbl);
 
@@ -3890,7 +3890,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialREd.setLinkedLabelControlName("xFormMaterialLbl");
       xFormMaterialREd.setHasMinValue(true);
       xFormMaterialREd.setHasMaxValue(false);
-      xFormMaterialREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormMaterialREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormMaterialREd.setBounds(55, 146, 70, 24);
       xFormMaterialREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -3919,7 +3919,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialSlider.setMinimum(0);
       xFormMaterialSlider.setMaximum(300);
       xFormMaterialSlider.setLocation(new Point(125, 21));
-      xFormMaterialSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormMaterialSlider.setBounds(125, 146, 195, 22);
       xFormMaterialSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -3946,7 +3946,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialSpeedLbl.setPreferredSize(new Dimension(64, 22));
       xFormMaterialSpeedLbl.setName("xFormMaterialSpeedLbl");
       xFormMaterialSpeedLbl.setLocation(new Point(6, 47));
-      xFormMaterialSpeedLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSpeedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialSpeedLbl);
 
@@ -3963,7 +3963,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialSpeedREd.setLinkedLabelControlName("xFormMaterialSpeedLbl");
       xFormMaterialSpeedREd.setHasMinValue(true);
       xFormMaterialSpeedREd.setHasMaxValue(true);
-      xFormMaterialSpeedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      xFormMaterialSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
       xFormMaterialSpeedREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -3993,7 +3993,7 @@ public class TinaInternalFrame extends JInternalFrame {
       xFormMaterialSpeedSlider.setMinimum(-100);
       xFormMaterialSpeedSlider.setMaximum(100);
       xFormMaterialSpeedSlider.setLocation(new Point(125, 47));
-      xFormMaterialSpeedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      xFormMaterialSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
       xFormMaterialSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -17145,7 +17145,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowIntensityLbl0.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowIntensityLbl0.setName("tinaSolidRenderingShadowIntensityLbl0");
       tinaSolidRenderingShadowIntensityLbl0.setLocation(new Point(390, 6));
-      tinaSolidRenderingShadowIntensityLbl0.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowIntensityLbl0.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowIntensityLbl0.setBounds(434, 85, 90, 22);
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingShadowIntensityLbl0);
 
@@ -17161,7 +17161,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowIntensityREd.setLocation(new Point(456, 4));
       tinaSolidRenderingShadowIntensityREd.setLinkedMotionControlName("tinaSolidRenderingShadowIntensitySlider");
       tinaSolidRenderingShadowIntensityREd.setLinkedLabelControlName("tinaSolidRenderingShadowIntensityLbl");
-      tinaSolidRenderingShadowIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingShadowIntensityREd.setBounds(526, 85, 100, 24);
       tinaSolidRenderingShadowIntensityREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -17609,7 +17609,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setName("tinaSolidRenderingMaterialReflectionMapIntensityLbl");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setBounds(6, 112, 68, 22);
       panel_114.add(tinaSolidRenderingMaterialReflectionMapIntensityLbl);
 
@@ -17623,7 +17623,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialReflectionMapIntensityREd.setLinkedMotionControlName("tinaSolidRenderingMaterialReflectionMapIntensitySlider");
       tinaSolidRenderingMaterialReflectionMapIntensityREd.setLinkedLabelControlName("tinaSolidRenderingMaterialReflectionMapIntensityLbl");
       tinaSolidRenderingMaterialReflectionMapIntensityREd.setHasMinValue(true);
-      tinaSolidRenderingMaterialReflectionMapIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingMaterialReflectionMapIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingMaterialReflectionMapIntensityREd.setBounds(72, 112, 100, 24);
       tinaSolidRenderingMaterialReflectionMapIntensityREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -17671,7 +17671,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialReflectionMappingCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingMaterialReflectionMappingCmb.setMaximumSize(new Dimension(32767, 24));
       tinaSolidRenderingMaterialReflectionMappingCmb.setMaximumRowCount(48);
-      tinaSolidRenderingMaterialReflectionMappingCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialReflectionMappingCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialReflectionMappingCmb.setBounds(704, 113, 136, 24);
       tinaSolidRenderingMaterialReflectionMappingCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -17688,7 +17688,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblReflectionMapping.setPreferredSize(new Dimension(94, 22));
       lblReflectionMapping.setName("tinaSolidRenderingMaterialReflectionMappingLbl");
       lblReflectionMapping.setLocation(new Point(390, 6));
-      lblReflectionMapping.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblReflectionMapping.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblReflectionMapping.setBounds(734, 90, 100, 22);
       panel_114.add(lblReflectionMapping);
     }
@@ -17886,7 +17886,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialReflMapBtn.setVisible(false);
       tinaSolidRenderingMaterialReflMapBtn.setToolTipText("Set the background color of your fractal");
       tinaSolidRenderingMaterialReflMapBtn.setPreferredSize(new Dimension(190, 24));
-      tinaSolidRenderingMaterialReflMapBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialReflMapBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialReflMapBtn.setBackground(Color.BLACK);
       tinaSolidRenderingMaterialReflMapBtn.setBounds(487, 91, 56, 46);
     }
@@ -17907,7 +17907,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialSelectReflMapBtn.setToolTipText("Select an image to use as reflection map");
       tinaSolidRenderingMaterialSelectReflMapBtn.setText("Select image...");
       tinaSolidRenderingMaterialSelectReflMapBtn.setPreferredSize(new Dimension(190, 24));
-      tinaSolidRenderingMaterialSelectReflMapBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialSelectReflMapBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialSelectReflMapBtn.setBounds(544, 90, 148, 24);
     }
     return tinaSolidRenderingMaterialSelectReflMapBtn;
@@ -17926,7 +17926,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingMaterialRemoveReflMapBtn.setToolTipText("Remove the currently used image");
       tinaSolidRenderingMaterialRemoveReflMapBtn.setText("Remove image");
       tinaSolidRenderingMaterialRemoveReflMapBtn.setPreferredSize(new Dimension(190, 24));
-      tinaSolidRenderingMaterialRemoveReflMapBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingMaterialRemoveReflMapBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialRemoveReflMapBtn.setBounds(544, 113, 148, 24);
     }
     return tinaSolidRenderingMaterialRemoveReflMapBtn;
@@ -17939,7 +17939,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblReflectionMap.setSize(new Dimension(94, 22));
       lblReflectionMap.setPreferredSize(new Dimension(94, 22));
       lblReflectionMap.setLocation(new Point(4, 4));
-      lblReflectionMap.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblReflectionMap.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblReflectionMap.setBounds(391, 104, 94, 22);
     }
     return lblReflectionMap;
@@ -18011,7 +18011,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOIntensityLbl.setName("tinaSolidRenderingAOIntensityLbl");
       tinaSolidRenderingAOIntensityLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAOIntensityLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOIntensityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAOIntensityLbl.setBounds(26, 36, 124, 22);
       panel.add(tinaSolidRenderingAOIntensityLbl);
 
@@ -18025,7 +18025,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOIntensityREd.setLinkedMotionControlName("tinaSolidRenderingAOIntensitySlider");
       tinaSolidRenderingAOIntensityREd.setLinkedLabelControlName("tinaSolidRenderingAOIntensityLbl");
       tinaSolidRenderingAOIntensityREd.setHasMinValue(true);
-      tinaSolidRenderingAOIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOIntensityREd.setBounds(148, 36, 100, 24);
       tinaSolidRenderingAOIntensityREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18074,7 +18074,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOSearchRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOSearchRadiusLbl.setName("tinaSolidRenderingAOSearchRadiusLbl");
       tinaSolidRenderingAOSearchRadiusLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAOSearchRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOSearchRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAOSearchRadiusLbl.setBounds(26, 58, 124, 22);
       panel.add(tinaSolidRenderingAOSearchRadiusLbl);
 
@@ -18088,7 +18088,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOSearchRadiusREd.setLinkedMotionControlName("tinaSolidRenderingAOSearchRadiusSlider");
       tinaSolidRenderingAOSearchRadiusREd.setLinkedLabelControlName("tinaSolidRenderingAOSearchRadiusLbl");
       tinaSolidRenderingAOSearchRadiusREd.setHasMinValue(true);
-      tinaSolidRenderingAOSearchRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOSearchRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOSearchRadiusREd.setBounds(148, 58, 100, 24);
       tinaSolidRenderingAOSearchRadiusREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18136,7 +18136,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOBlurRadiusLbl.setName("tinaSolidRenderingAOBlurRadiusLbl");
       tinaSolidRenderingAOBlurRadiusLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAOBlurRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOBlurRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAOBlurRadiusLbl.setBounds(26, 80, 124, 22);
       panel.add(tinaSolidRenderingAOBlurRadiusLbl);
 
@@ -18150,7 +18150,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOBlurRadiusREd.setLinkedMotionControlName("tinaSolidRenderingAOBlurRadiusSlider");
       tinaSolidRenderingAOBlurRadiusREd.setLinkedLabelControlName("tinaSolidRenderingAOBlurRadiusLbl");
       tinaSolidRenderingAOBlurRadiusREd.setHasMinValue(true);
-      tinaSolidRenderingAOBlurRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOBlurRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOBlurRadiusREd.setBounds(148, 80, 100, 24);
       tinaSolidRenderingAOBlurRadiusREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18198,7 +18198,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOFalloffLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOFalloffLbl.setName("tinaSolidRenderingAOFalloffLbl");
       tinaSolidRenderingAOFalloffLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAOFalloffLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOFalloffLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAOFalloffLbl.setBounds(26, 101, 124, 22);
       panel.add(tinaSolidRenderingAOFalloffLbl);
 
@@ -18212,7 +18212,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOFalloffREd.setLinkedMotionControlName("tinaSolidRenderingAOFalloffSlider");
       tinaSolidRenderingAOFalloffREd.setLinkedLabelControlName("tinaSolidRenderingAOFalloffLbl");
       tinaSolidRenderingAOFalloffREd.setHasMinValue(true);
-      tinaSolidRenderingAOFalloffREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOFalloffREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOFalloffREd.setBounds(148, 101, 100, 24);
       tinaSolidRenderingAOFalloffREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18261,7 +18261,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAORadiusSamplesLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAORadiusSamplesLbl.setName("tinaSolidRenderingAORadiusSamplesLbl");
       tinaSolidRenderingAORadiusSamplesLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAORadiusSamplesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAORadiusSamplesLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAORadiusSamplesLbl.setBounds(485, 34, 124, 22);
       panel.add(tinaSolidRenderingAORadiusSamplesLbl);
 
@@ -18279,7 +18279,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAORadiusSamplesREd.setLinkedMotionControlName("tinaSolidRenderingAORadiusSamplesSlider");
       tinaSolidRenderingAORadiusSamplesREd.setLinkedLabelControlName("tinaSolidRenderingAORadiusSamplesLbl");
       tinaSolidRenderingAORadiusSamplesREd.setHasMinValue(true);
-      tinaSolidRenderingAORadiusSamplesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAORadiusSamplesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAORadiusSamplesREd.setBounds(607, 34, 100, 24);
       tinaSolidRenderingAORadiusSamplesREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18329,7 +18329,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOAzimuthSamplesLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOAzimuthSamplesLbl.setName("tinaSolidRenderingAOAzimuthSamplesLbl");
       tinaSolidRenderingAOAzimuthSamplesLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingAOAzimuthSamplesLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingAOAzimuthSamplesLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingAOAzimuthSamplesLbl.setBounds(485, 58, 124, 22);
       panel.add(tinaSolidRenderingAOAzimuthSamplesLbl);
 
@@ -18347,7 +18347,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOAzimuthSamplesREd.setLinkedMotionControlName("tinaSolidRenderingAOAzimuthSamplesSlider");
       tinaSolidRenderingAOAzimuthSamplesREd.setLinkedLabelControlName("tinaSolidRenderingAOAzimuthSamplesLbl");
       tinaSolidRenderingAOAzimuthSamplesREd.setHasMinValue(true);
-      tinaSolidRenderingAOAzimuthSamplesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOAzimuthSamplesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOAzimuthSamplesREd.setBounds(607, 58, 100, 24);
       tinaSolidRenderingAOAzimuthSamplesREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18397,7 +18397,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblAffectDiffuse.setPreferredSize(new Dimension(94, 22));
       lblAffectDiffuse.setName("tinaSolidRenderingAOBlurRadiusLbl");
       lblAffectDiffuse.setLocation(new Point(390, 6));
-      lblAffectDiffuse.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblAffectDiffuse.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblAffectDiffuse.setBounds(485, 99, 124, 22);
       panel.add(lblAffectDiffuse);
 
@@ -18413,7 +18413,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingAOAffectDiffuseREd.setLinkedMotionControlName("tinaSolidRenderingAOAffectDiffuseSlider");
       tinaSolidRenderingAOAffectDiffuseREd.setLinkedLabelControlName("tinaSolidRenderingAOAffectDiffuseLbl");
       tinaSolidRenderingAOAffectDiffuseREd.setHasMinValue(true);
-      tinaSolidRenderingAOAffectDiffuseREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingAOAffectDiffuseREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingAOAffectDiffuseREd.setBounds(607, 99, 100, 24);
       tinaSolidRenderingAOAffectDiffuseREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18465,7 +18465,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetSolidRenderingAmbientShadowOptionsBtn.setMinimumSize(new Dimension(100, 24));
       resetSolidRenderingAmbientShadowOptionsBtn.setMaximumSize(new Dimension(32000, 24));
       resetSolidRenderingAmbientShadowOptionsBtn.setIconTextGap(2);
-      resetSolidRenderingAmbientShadowOptionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetSolidRenderingAmbientShadowOptionsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetSolidRenderingAmbientShadowOptionsBtn.setBounds(948, 6, 100, 24);
       resetSolidRenderingAmbientShadowOptionsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       resetSolidRenderingAmbientShadowOptionsBtn.addActionListener(new ActionListener() {
@@ -18556,7 +18556,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_1 = new JLabel();
       label_1.setText("");
       label_1.setPreferredSize(new Dimension(42, 12));
-      label_1.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_1;
   }
@@ -18566,7 +18566,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_3 = new JLabel();
       label_3.setText("");
       label_3.setPreferredSize(new Dimension(42, 12));
-      label_3.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_3.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_3;
   }
@@ -18638,7 +18638,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowSmoothRadiusREd.setLinkedMotionControlName("tinaSolidRenderingShadowSmoothRadiusSlider");
       tinaSolidRenderingShadowSmoothRadiusREd.setLinkedLabelControlName("tinaSolidRenderingShadowSmoothRadiusLbl");
       tinaSolidRenderingShadowSmoothRadiusREd.setHasMinValue(true);
-      tinaSolidRenderingShadowSmoothRadiusREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowSmoothRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingShadowSmoothRadiusREd.setBounds(98, 31, 100, 24);
       tinaSolidRenderingShadowSmoothRadiusREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18665,7 +18665,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowSmoothRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowSmoothRadiusLbl.setName("tinaSolidRenderingShadowSmoothRadiusLbl");
       tinaSolidRenderingShadowSmoothRadiusLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingShadowSmoothRadiusLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowSmoothRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowSmoothRadiusLbl.setBounds(6, 31, 90, 22);
       panel_4.add(tinaSolidRenderingShadowSmoothRadiusLbl);
 
@@ -18696,7 +18696,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowTypeCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingShadowTypeCmb.setMaximumSize(new Dimension(32767, 24));
       tinaSolidRenderingShadowTypeCmb.setMaximumRowCount(48);
-      tinaSolidRenderingShadowTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowTypeCmb.setBounds(98, 5, 100, 24);
       tinaSolidRenderingShadowTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -18713,7 +18713,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowTypeLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowTypeLbl.setName("tinaSolidRenderingShadowTypeLbl");
       tinaSolidRenderingShadowTypeLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingShadowTypeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowTypeLbl.setBounds(6, 6, 90, 22);
       panel_4.add(tinaSolidRenderingShadowTypeLbl);
 
@@ -18723,7 +18723,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowmapSizeLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowmapSizeLbl.setName("tinaSolidRenderingShadowmapSizeLbl");
       tinaSolidRenderingShadowmapSizeLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingShadowmapSizeLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapSizeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowmapSizeLbl.setBounds(417, 6, 90, 22);
       panel_4.add(tinaSolidRenderingShadowmapSizeLbl);
 
@@ -18733,7 +18733,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowmapSizeCmb.setMinimumSize(new Dimension(110, 24));
       tinaSolidRenderingShadowmapSizeCmb.setMaximumSize(new Dimension(32767, 24));
       tinaSolidRenderingShadowmapSizeCmb.setMaximumRowCount(48);
-      tinaSolidRenderingShadowmapSizeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapSizeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowmapSizeCmb.setBounds(509, 5, 100, 24);
       tinaSolidRenderingShadowmapSizeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -18750,7 +18750,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowmapBiasLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowmapBiasLbl.setName("tinaSolidRenderingShadowmapBiasLbl");
       tinaSolidRenderingShadowmapBiasLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingShadowmapBiasLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingShadowmapBiasLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingShadowmapBiasLbl.setBounds(417, 31, 90, 22);
       panel_4.add(tinaSolidRenderingShadowmapBiasLbl);
 
@@ -18766,7 +18766,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingShadowmapBiasREd.setLinkedMotionControlName("tinaSolidRenderingShadowmapBiasSlider");
       tinaSolidRenderingShadowmapBiasREd.setLinkedLabelControlName("tinaSolidRenderingShadowmapBiasLbl");
       tinaSolidRenderingShadowmapBiasREd.setHasMinValue(true);
-      tinaSolidRenderingShadowmapBiasREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingShadowmapBiasREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaSolidRenderingShadowmapBiasREd.setBounds(509, 31, 100, 24);
       tinaSolidRenderingShadowmapBiasREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -18815,7 +18815,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetSolidRenderingHardShadowOptionsBtn.setMinimumSize(new Dimension(100, 24));
       resetSolidRenderingHardShadowOptionsBtn.setMaximumSize(new Dimension(32000, 24));
       resetSolidRenderingHardShadowOptionsBtn.setIconTextGap(2);
-      resetSolidRenderingHardShadowOptionsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetSolidRenderingHardShadowOptionsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetSolidRenderingHardShadowOptionsBtn.setBounds(948, 5, 100, 24);
       resetSolidRenderingHardShadowOptionsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       resetSolidRenderingHardShadowOptionsBtn.addActionListener(new ActionListener() {
@@ -18846,7 +18846,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblHintAmbientShadows.setPreferredSize(new Dimension(94, 22));
       lblHintAmbientShadows.setName("tinaCameraRollLbl");
       lblHintAmbientShadows.setLocation(new Point(4, 4));
-      lblHintAmbientShadows.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblHintAmbientShadows.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblHintAmbientShadows.setBounds(250, 5, 718, 22);
     }
     return lblHintAmbientShadows;
@@ -18929,7 +18929,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaZBufferScaleREd.setLocation(new Point(456, 4));
       tinaZBufferScaleREd.setLinkedMotionControlName("tinaZBufferScaleSlider");
       tinaZBufferScaleREd.setLinkedLabelControlName("tinaZBufferScaleLbl");
-      tinaZBufferScaleREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      tinaZBufferScaleREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaZBufferScaleREd.setBounds(90, 8, 100, 24);
       tinaZBufferScaleREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -18950,7 +18950,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblZbufferScale.setPreferredSize(new Dimension(94, 22));
       lblZbufferScale.setName("tinaZBufferScaleLbl");
       lblZbufferScale.setLocation(new Point(390, 6));
-      lblZbufferScale.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblZbufferScale.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblZbufferScale.setBounds(6, 8, 84, 22);
       panel_5.add(lblZbufferScale);
 

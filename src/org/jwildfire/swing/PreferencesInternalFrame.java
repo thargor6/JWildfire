@@ -100,7 +100,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JButton getSavePrefsButton() {
     if (savePrefsButton == null) {
       savePrefsButton = new JButton();
-      savePrefsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      savePrefsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       savePrefsButton.setText("Save and Close");
       savePrefsButton.setMnemonic(KeyEvent.VK_S);
       savePrefsButton.setPreferredSize(new Dimension(125, 24));
@@ -129,7 +129,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JButton getCancelButton() {
     if (cancelButton == null) {
       cancelButton = new JButton();
-      cancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      cancelButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       cancelButton.setText("Cancel and Close");
       cancelButton.setMnemonic(KeyEvent.VK_C);
       cancelButton.setPreferredSize(new Dimension(125, 24));
@@ -179,6 +179,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JPanel getMainPanel() {
     if (mainPanel == null) {
       mainPanel = new JPanel();
+      mainPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       mainPanel.setLayout(new BorderLayout());
       mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
     }

@@ -49,7 +49,6 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
     switch ((int) (Math.random() * 6.0)) {
       case 0: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot2d_wf", true);
-        varFunc.setParameter("use_preset", 1);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("xmin", -3);
         varFunc.setParameter("xmax", 2);
@@ -62,7 +61,6 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
       }
       case 1: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot3d_wf", true);
-        varFunc.setParameter("use_preset", 1);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot3DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("xmin", -3);
         varFunc.setParameter("xmax", 2);
@@ -76,7 +74,6 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
       case 2:
       case 3: {
         varFunc = VariationFuncList.getVariationFuncInstance("parplot2d_wf", true);
-        varFunc.setParameter("use_preset", 1);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getParPlot2DWFFuncPresets().getRandomPresetId());
         varFunc.setParameter("umin", -3.14159265);
         varFunc.setParameter("umax", 3.14159265);
@@ -108,7 +105,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public double getMaxCoverage() {
-    return 0.85;
+    return 0.75;
   }
 
   @Override

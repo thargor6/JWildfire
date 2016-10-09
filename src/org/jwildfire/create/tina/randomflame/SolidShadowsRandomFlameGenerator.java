@@ -37,13 +37,10 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
   static {
     generators = new ArrayList<RandomFlameGenerator>();
     generators.add(new SolidStunningRandomFlameGenerator());
-    generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidExperimentalRandomFlameGenerator());
     generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidStunningRandomFlameGenerator());
-    generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidJulia3DRandomFlameGenerator());
-    generators.add(new SolidStunningRandomFlameGenerator());
     generators.add(new SolidStunningRandomFlameGenerator());
   }
 

@@ -100,7 +100,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     saveSettingsBtn.setText("Save and Close");
     saveSettingsBtn.setPreferredSize(new Dimension(125, 24));
     saveSettingsBtn.setMnemonic(KeyEvent.VK_S);
-    saveSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    saveSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     saveSettingsBtn.setBounds(179, 6, 125, 24);
     southPanel.add(saveSettingsBtn);
 
@@ -121,7 +121,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     cancelBtn.setText("Cancel and Close");
     cancelBtn.setPreferredSize(new Dimension(125, 24));
     cancelBtn.setMnemonic(KeyEvent.VK_C);
-    cancelBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    cancelBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     cancelBtn.setBounds(309, 6, 125, 24);
     southPanel.add(cancelBtn);
 
@@ -139,7 +139,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     mainThemeCmb.setSize(new Dimension(125, 22));
     mainThemeCmb.setPreferredSize(new Dimension(125, 22));
     mainThemeCmb.setLocation(new Point(100, 4));
-    mainThemeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    mainThemeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     mainThemeCmb.setBounds(102, 6, 322, 24);
     panel_2.add(mainThemeCmb);
 
@@ -148,7 +148,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     lblMainTheme.setSize(new Dimension(94, 22));
     lblMainTheme.setPreferredSize(new Dimension(94, 22));
     lblMainTheme.setLocation(new Point(488, 2));
-    lblMainTheme.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblMainTheme.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     lblMainTheme.setBounds(6, 6, 94, 22);
     panel_2.add(lblMainTheme);
 
@@ -162,7 +162,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     subThemeCmb.setSize(new Dimension(125, 22));
     subThemeCmb.setPreferredSize(new Dimension(125, 22));
     subThemeCmb.setLocation(new Point(100, 4));
-    subThemeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+    subThemeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     subThemeCmb.setBounds(102, 33, 322, 24);
     panel_2.add(subThemeCmb);
 
@@ -171,7 +171,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     lblSubTheme.setSize(new Dimension(94, 22));
     lblSubTheme.setPreferredSize(new Dimension(94, 22));
     lblSubTheme.setLocation(new Point(488, 2));
-    lblSubTheme.setFont(new Font("Dialog", Font.BOLD, 10));
+    lblSubTheme.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     lblSubTheme.setBounds(6, 33, 94, 22);
     panel_2.add(lblSubTheme);
     setTitle("UI Themes");
@@ -196,7 +196,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     applyToApplicationBtn.setText("Apply to application");
     applyToApplicationBtn.setPreferredSize(new Dimension(125, 24));
     applyToApplicationBtn.setMnemonic(KeyEvent.VK_S);
-    applyToApplicationBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+    applyToApplicationBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     applyToApplicationBtn.setBounds(436, 6, 147, 51);
     panel_2.add(applyToApplicationBtn);
 

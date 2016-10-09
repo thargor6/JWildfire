@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,6 +18,7 @@ package org.jwildfire.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
@@ -33,6 +34,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.RessourceManager;
 
 public class SystemInfoInternalFrame extends JInternalFrame {
@@ -64,6 +66,8 @@ public class SystemInfoInternalFrame extends JInternalFrame {
       }
     });
     refreshButton.setPreferredSize(new Dimension(36, 36));
+    refreshButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
     getContentPane().add(refreshButton, BorderLayout.NORTH);
     JPanel mainPane = new JPanel();
     mainPane.setName("siif.sysInfoPanel");
@@ -75,6 +79,7 @@ public class SystemInfoInternalFrame extends JInternalFrame {
     mainPane.add(scrollPane, BorderLayout.CENTER);
 
     textPane = new JTextPane();
+    textPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     textPane.setEditable(false);
     textPane.setName("siif.text");
     scrollPane.setViewportView(textPane);
@@ -92,6 +97,7 @@ public class SystemInfoInternalFrame extends JInternalFrame {
       }
     });
     clearCacheButton.setPreferredSize(new Dimension(36, 36));
+    clearCacheButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     getContentPane().add(clearCacheButton, BorderLayout.SOUTH);
     pack();
   }
