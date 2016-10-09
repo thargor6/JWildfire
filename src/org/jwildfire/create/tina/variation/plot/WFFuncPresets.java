@@ -108,14 +108,14 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
 
   protected String parseAndValidateFormula(String preset, String token, String param1name, String param2name) {
     String formula = parseToken(preset, token);
-    JEPWrapper parser = new JEPWrapper();
-    if (param1name != null) {
-      parser.addVariable(param1name, 0.0);
-    }
-    if (param2name != null) {
-      parser.addVariable(param2name, 0.0);
-    }
-    parser.parse(formula);
+    //    JEPWrapper parser = new JEPWrapper();
+    //    if (param1name != null) {
+    //      parser.addVariable(param1name, 0.0);
+    //    }
+    //    if (param2name != null) {
+    //      parser.addVariable(param2name, 0.0);
+    //    }
+    //    parser.parse(formula);
 
     return formula;
   }

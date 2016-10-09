@@ -28,7 +28,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathlib.VecMathLib.VectorD;
-import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -38,7 +37,6 @@ import org.jwildfire.create.tina.variation.DisplacementMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
-import org.nfunk.jep.Node;
 
 public class ParPlot2DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -85,49 +83,35 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
   private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
+  ParPlot2DFormulaEvaluator evaluator;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if (evaluator == null) {
+      return;
+    }
     double randU = pContext.random();
     double randV = pContext.random();
     double u = _umin + randU * _du;
     double v = _vmin + randV * _dv;
 
-    _xparser.setVarValue("u", u);
-    _xparser.setVarValue("v", v);
-    double x = (Double) _xparser.evaluate(_xnode);
-
-    _yparser.setVarValue("u", u);
-    _yparser.setVarValue("v", v);
-    double y = (Double) _yparser.evaluate(_ynode);
-
-    _zparser.setVarValue("u", u);
-    _zparser.setVarValue("v", v);
-    double z = (Double) _zparser.evaluate(_znode);
+    double x = evaluator.evaluateX(u, v);
+    double y = evaluator.evaluateY(u, v);
+    double z = evaluator.evaluateZ(u, v);
 
     if (displacementMapHolder.isActive()) {
       double epsu = _du / 100.0;
       double u1 = u + epsu;
-      _xparser.setVarValue("u", u1);
-      double x1 = (Double) _xparser.evaluate(_xnode);
-      _yparser.setVarValue("u", u1);
-      double y1 = (Double) _yparser.evaluate(_ynode);
-      _zparser.setVarValue("u", u1);
-      double z1 = (Double) _zparser.evaluate(_znode);
+      double x1 = evaluator.evaluateX(u1, v);
+      double y1 = evaluator.evaluateY(u1, v);
+      double z1 = evaluator.evaluateZ(u1, v);
 
       double epsv = _dv / 100.0;
       double v1 = v + epsv;
 
-      _xparser.setVarValue("u", u);
-      _xparser.setVarValue("v", v1);
-      double x2 = (Double) _xparser.evaluate(_xnode);
-
-      _yparser.setVarValue("u", u);
-      _yparser.setVarValue("v", v1);
-      double y2 = (Double) _yparser.evaluate(_ynode);
-
-      _zparser.setVarValue("u", u);
-      _zparser.setVarValue("v", v1);
-      double z2 = (Double) _zparser.evaluate(_znode);
+      double x2 = evaluator.evaluateX(u, v1);
+      double y2 = evaluator.evaluateY(u, v1);
+      double z2 = evaluator.evaluateZ(u, v1);
 
       VectorD av = new VectorD(x1 - x, y1 - y, z1 - z);
       VectorD bv = new VectorD(x2 - x, y2 - y, z2 - z);
@@ -292,8 +276,6 @@ public class ParPlot2DWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  private JEPWrapper _xparser, _yparser, _zparser;
-  private Node _xnode, _ynode, _znode;
   private double _umin, _umax, _du;
   private double _vmin, _vmax, _dv;
   private double _displ_amount;
@@ -304,21 +286,6 @@ public class ParPlot2DWFFunc extends VariationFunc {
     uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
-
-    _xparser = new JEPWrapper();
-    _xparser.addVariable("u", 0.0);
-    _xparser.addVariable("v", 0.0);
-    _xnode = _xparser.parse(xformula);
-
-    _yparser = new JEPWrapper();
-    _yparser.addVariable("u", 0.0);
-    _yparser.addVariable("v", 0.0);
-    _ynode = _yparser.parse(yformula);
-
-    _zparser = new JEPWrapper();
-    _zparser.addVariable("u", 0.0);
-    _zparser.addVariable("v", 0.0);
-    _znode = _zparser.parse(zformula);
 
     _umin = umin;
     _umax = umax;
@@ -337,6 +304,30 @@ public class ParPlot2DWFFunc extends VariationFunc {
       _vmax = t;
     }
     _dv = _vmax - _vmin;
+
+    String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
+        "\r\n" +
+        "  public double evaluateX(double u,double v) {\r\n" +
+        "    double pi = M_PI;\r\n" +
+        "    return " + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ";\r\n" +
+        "  }\r\n" +
+        "  public double evaluateY(double u,double v) {\r\n" +
+        "    double pi = M_PI;\r\n" +
+        "    return " + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ";\r\n" +
+        "  }\r\n" +
+        "  public double evaluateZ(double u,double v) {\r\n" +
+        "    double pi = M_PI;\r\n" +
+        "    return " + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ";\r\n" +
+        "  }\r\n";
+    try {
+      evaluator = ParPlot2DFormulaEvaluator.compile(code);
+    }
+    catch (Exception e) {
+      evaluator = null;
+      e.printStackTrace();
+      System.out.println(code);
+      throw new IllegalArgumentException(e);
+    }
   }
 
   public ParPlot2DWFFunc() {

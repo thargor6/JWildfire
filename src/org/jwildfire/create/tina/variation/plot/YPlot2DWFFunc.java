@@ -28,7 +28,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathlib.VecMathLib.VectorD;
-import org.jwildfire.base.mathparser.JEPWrapper;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -38,7 +37,6 @@ import org.jwildfire.create.tina.variation.DisplacementMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
-import org.nfunk.jep.Node;
 
 public class YPlot2DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -84,20 +82,23 @@ public class YPlot2DWFFunc extends VariationFunc {
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
   private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
+  private YPlot2DFormulaEvaluator evaluator;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if (evaluator == null) {
+      return;
+    }
     double randU = pContext.random();
     double randV = pContext.random();
     double x = _xmin + randU * _dx;
     double z = _zmin + randV * _dz;
-    _parser.setVarValue("x", x);
-    double y = (Double) _parser.evaluate(_node);
+    double y = evaluator.evaluate(x);
 
     if (displacementMapHolder.isActive()) {
       double eps = _dx / 100.0;
       double x1 = x + eps;
-      _parser.setVarValue("x", x1);
-      double y1 = (Double) _parser.evaluate(_node);
+      double y1 = evaluator.evaluate(x1);
 
       VectorD av = new VectorD(eps, y1 - y, 0);
       VectorD bv = new VectorD(0.0, 0.0, 1.0);
@@ -249,8 +250,6 @@ public class YPlot2DWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  private JEPWrapper _parser;
-  private Node _node;
   private double _xmin, _xmax, _dx;
   private double _ymin, _ymax, _dy;
   private double _zmin, _zmax, _dz;
@@ -262,10 +261,6 @@ public class YPlot2DWFFunc extends VariationFunc {
     uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
-
-    _parser = new JEPWrapper();
-    _parser.addVariable("x", 0.0);
-    _node = _parser.parse(formula);
 
     _xmin = xmin;
     _xmax = xmax;
@@ -293,6 +288,26 @@ public class YPlot2DWFFunc extends VariationFunc {
       _zmax = t;
     }
     _dz = _zmax - _zmin;
+
+    evaluator = null;
+    if (!formula.isEmpty()) {
+      String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
+          "\r\n" +
+          "  public double evaluate(double x) {\r\n" +
+          "    double pi = M_PI;\r\n" +
+          "    return " + formula + ";\r\n" +
+          "  }\r\n";
+
+      try {
+        evaluator = YPlot2DFormulaEvaluator.compile(code);
+      }
+      catch (Exception e) {
+        evaluator = null;
+        e.printStackTrace();
+        System.out.println(code);
+        throw new IllegalArgumentException(e);
+      }
+    }
   }
 
   public YPlot2DWFFunc() {
