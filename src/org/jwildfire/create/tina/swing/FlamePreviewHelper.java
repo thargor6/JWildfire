@@ -101,9 +101,6 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
-    // TODO
-    //    pAllowUseCache = false;
-
     if (!pAllowUseCache) {
       prevRenderer = null;
     }
@@ -135,7 +132,6 @@ public class FlamePreviewHelper implements IterationObserver {
 
     if (pReRender && isProgressivePreviewEnabled(cfg) && pQuickRender) {
       if (pAllowUseCache) {
-        System.out.println("ATTEMPT REUSE");
         SimpleImage img = renderFlameImage(pQuickRender, pMouseDown, pDownScale, pAllowUseCache);
         if (img != null) {
           imgPanel.setImage(img);
@@ -237,13 +233,11 @@ public class FlamePreviewHelper implements IterationObserver {
 
             RenderedFlame res;
             if (prevRenderer != null && pAllowUseCache) {
-              System.out.println("!!!REUSE");
               res = prevRenderer.rerenderFlame(info);
             }
             else {
               res = renderer.renderFlame(info);
               prevRenderer = renderer;
-              System.out.println("NO REUSE!!!");
             }
 
             SimpleImage img = res.getImage();
@@ -578,7 +572,7 @@ public class FlamePreviewHelper implements IterationObserver {
       thread.setPriority(Thread.MIN_PRIORITY);
     }
 
-    updateDisplayThread = new UpdateDisplayThread(image);
+    updateDisplayThread = new UpdateDisplayThread(flame, image);
     updateDisplayExecuteThread = new Thread(updateDisplayThread);
     updateDisplayExecuteThread.setPriority(Thread.MIN_PRIORITY);
     updateDisplayExecuteThread.start();
@@ -616,10 +610,11 @@ public class FlamePreviewHelper implements IterationObserver {
     private int maxPreviewTimeInMilliseconds;
     private double maxPreviewQuality;
 
-    public UpdateDisplayThread(SimpleImage pImage) {
+    public UpdateDisplayThread(Flame flame, SimpleImage pImage) {
       Prefs prefs = Prefs.getPrefs();
       maxPreviewTimeInMilliseconds = Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderTime() * 1000.0);
-      maxPreviewQuality = prefs.getTinaEditorProgressivePreviewMaxRenderQuality();
+      double renderQualityScale = flame.getLayers().size() * (flame.getSolidRenderSettings().isSolidRenderingEnabled() ? 1.5 : 1.0);
+      maxPreviewQuality = Tools.FTOI(prefs.getTinaEditorProgressivePreviewMaxRenderQuality() * renderQualityScale);
       nextImageUpdate = INITIAL_IMAGE_UPDATE_INTERVAL;
       lastImageUpdateInterval = INITIAL_IMAGE_UPDATE_INTERVAL;
       image = pImage;
