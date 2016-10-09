@@ -428,7 +428,6 @@ public class QualityProfileDialog extends JDialog {
       return true;
     }
     catch (Throwable ex) {
-      ex.getStackTrace();
       getStatusLbl().setText(ex.getMessage());
       return false;
     }

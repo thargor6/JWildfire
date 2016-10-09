@@ -31,7 +31,8 @@ public class SunflowExporter implements SceneExporter<String> {
         .withFilter(ImageFilter.MITCHELL)
         .withSamples(8)
         .withResolution(pScene.getImageWidth(), pScene.getImageHeight())
-        .close();
+        // .close()
+        ;
     pScene.accept(new AddSceneObjectsVisitor(sceneBuilder));
     return sceneBuilder.getProduct();
   }
