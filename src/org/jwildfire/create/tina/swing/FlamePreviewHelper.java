@@ -249,7 +249,8 @@ public class FlamePreviewHelper implements IterationObserver {
             }
 
             if (layerPreviewBtn != null && layerPreviewBtn.isSelected() && layerHolder != null) {
-              showLayerPreview(img, renderScale, width, height);
+              SimpleImage layerImg = createLayerPreview(img, renderScale, width, height);
+              showLayerPreview(img, layerImg, renderScale, width, height);
             }
 
             if (pDownScale != 1) {
@@ -285,7 +286,7 @@ public class FlamePreviewHelper implements IterationObserver {
     return null;
   }
 
-  private void showLayerPreview(SimpleImage img, int renderScale, int width, int height) {
+  private SimpleImage createLayerPreview(SimpleImage img, int renderScale, int width, int height) {
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
     Flame flame = flameHolder.getFlame();
 
@@ -358,10 +359,16 @@ public class FlamePreviewHelper implements IterationObserver {
       rT.setWidth(lInfo.getImageWidth());
       rT.setHeight(lInfo.getImageHeight());
       rT.transformImage(layerImg);
+      return layerImg;
+    }
+    return null;
+  }
 
+  private void showLayerPreview(SimpleImage img, SimpleImage layerImg, int renderScale, int width, int height) {
+    if (layerImg != null) {
       ComposeTransformer cT = new ComposeTransformer();
       cT.setHAlign(ComposeTransformer.HAlignment.LEFT);
-      cT.setVAlign(ComposeTransformer.VAlignment.BOTTOM);
+      cT.setVAlign(ComposeTransformer.VAlignment.TOP);
       cT.setTop(10);
       cT.setLeft(10);
       cT.setForegroundImage(layerImg);
@@ -609,6 +616,7 @@ public class FlamePreviewHelper implements IterationObserver {
     private SimpleImage image;
     private int maxPreviewTimeInMilliseconds;
     private double maxPreviewQuality;
+    private SimpleImage layerImg;
 
     public UpdateDisplayThread(Flame flame, SimpleImage pImage) {
       Prefs prefs = Prefs.getPrefs();
@@ -706,7 +714,10 @@ public class FlamePreviewHelper implements IterationObserver {
       }
       if (layerPreviewBtn != null && layerPreviewBtn.isSelected() && layerHolder != null) {
         Rectangle panelBounds = flamePanelProvider.getFlamePanel().getParentImageBounds();
-        showLayerPreview(image, 1, panelBounds.width, panelBounds.height);
+        if (layerImg == null) {
+          layerImg = createLayerPreview(image, 1, panelBounds.width, panelBounds.height);
+        }
+        showLayerPreview(image, layerImg, 1, panelBounds.width, panelBounds.height);
       }
     }
 
