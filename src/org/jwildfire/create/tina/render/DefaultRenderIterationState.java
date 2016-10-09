@@ -367,12 +367,12 @@ public class DefaultRenderIterationState extends RenderIterationState {
       double height = map.getImageHeight() - 2;
       double fx = MathLib.fabs(x);
       double imageX = MathLib.fmod(fx * width, width);
-      if (((int) fx) % 2 == 1) {
+      if (((int) fx) % 2 != 0) {
         imageX = width - imageX;
       }
       double fy = MathLib.fabs(y);
       double imageY = MathLib.fmod(fy * height, height);
-      if (((int) fy) % 2 == 1) {
+      if (((int) fy) % 2 != 0) {
         imageY = height - imageY;
       }
 
