@@ -160,6 +160,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
     }
     if (shadowCalculator != null) {
       shadowCalculator.accelerateShadows();
+      shadowCalculator.finalizeRaster();
     }
   }
 

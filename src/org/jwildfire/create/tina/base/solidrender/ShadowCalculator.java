@@ -49,7 +49,7 @@ public class ShadowCalculator implements Serializable {
   private int shadowMapSize;
   private final double shadowMapXScale[], shadowMapYScale[], shadowMapXCentre[], shadowMapYCentre[];
 
-  private final int PRE_SHADOWMAP_SIZE = 256;
+  private final int PRE_SHADOWMAP_SIZE = 40960;
   private final float pre_shadowXBuf[][], pre_shadowYBuf[][], pre_shadowZBuf[][];
   private final int pre_shadowIndex[];
 
@@ -397,6 +397,17 @@ public class ShadowCalculator implements Serializable {
 
   public void setLightViewCalculator(LightViewCalculator lightViewCalculator) {
     this.lightViewCalculator = lightViewCalculator;
+  }
+
+  public void finalizeRaster() {
+    //    for (int i = 0; i < shadowZBuf.length; i++) {
+    //      if (shadowZBuf[i] != null) {
+    //        RasterTools.saveFloatBuffer(shadowZBuf[i], "D:\\TMP\\wf_shadowmap_" + i + ".png");
+    //      }
+    //      if (accLightProjectionZBuf[i] != null) {
+    //        RasterTools.saveFloatBuffer(accLightProjectionZBuf[i], "D:\\TMP\\wf_acc_shadowmap_" + i + ".png");
+    //      }
+    //    }
   }
 
 }
