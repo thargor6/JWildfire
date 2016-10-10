@@ -10081,6 +10081,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel panel_5;
   private JWFNumberField tinaZBufferScaleREd;
   private JSlider tinaZBufferScaleSlider;
+  private JButton button_1;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -17135,7 +17136,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       tinaSolidRenderingLightCastShadowsCBx.setActionCommand("");
-      tinaSolidRenderingLightCastShadowsCBx.setBounds(624, 21, 169, 18);
+      tinaSolidRenderingLightCastShadowsCBx.setBounds(664, 18, 169, 18);
 
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightCastShadowsCBx);
 
@@ -17202,6 +17203,24 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingShadowIntensitySlider);
+
+      JButton button = new JButton();
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().randomizeLightPosition();
+          }
+        }
+      });
+      button.setToolTipText("Randomize light position");
+      button.setSize(new Dimension(95, 24));
+      button.setSelected(false);
+      button.setPreferredSize(new Dimension(42, 24));
+      button.setLocation(new Point(4, 4));
+      button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      button.setBounds(380, 59, 42, 24);
+      tinaSolidRenderingLightPnl.add(button);
+      tinaSolidRenderingLightPnl.add(getButton_1());
     }
     return tinaSolidRenderingPane;
   }
@@ -18980,6 +18999,27 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JSlider getTinaZBufferScaleSlider() {
     return tinaZBufferScaleSlider;
+  }
+
+  private JButton getButton_1() {
+    if (button_1 == null) {
+      button_1 = new JButton();
+      button_1.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().randomizeLightColor();
+          }
+        }
+      });
+      button_1.setToolTipText("Randomize light color");
+      button_1.setSize(new Dimension(95, 24));
+      button_1.setSelected(false);
+      button_1.setPreferredSize(new Dimension(42, 24));
+      button_1.setLocation(new Point(4, 4));
+      button_1.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      button_1.setBounds(582, 17, 42, 24);
+    }
+    return button_1;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

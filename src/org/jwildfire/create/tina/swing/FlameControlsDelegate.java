@@ -45,6 +45,8 @@ import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -874,15 +876,19 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     refreshSolidRenderMaterialSpecularColorIndicator();
   }
 
+  private void refreshLightPosControls(PointLight light) {
+    data.tinaSolidRenderingLightPosXREd.setText(Tools.doubleToString(light.getX()));
+    data.tinaSolidRenderingLightPosXSlider.setValue(Tools.FTOI(light.getX() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingLightPosYREd.setText(Tools.doubleToString(light.getY()));
+    data.tinaSolidRenderingLightPosYSlider.setValue(Tools.FTOI(light.getY() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingLightPosZREd.setText(Tools.doubleToString(light.getZ()));
+    data.tinaSolidRenderingLightPosZSlider.setValue(Tools.FTOI(light.getZ() * TinaController.SLIDER_SCALE_CENTRE));
+  }
+
   private void refreshSolidRenderingLightControls() {
     PointLight light = getSolidRenderingSelectedLight();
     if (light != null) {
-      data.tinaSolidRenderingLightPosXREd.setText(Tools.doubleToString(light.getX()));
-      data.tinaSolidRenderingLightPosXSlider.setValue(Tools.FTOI(light.getX() * TinaController.SLIDER_SCALE_CENTRE));
-      data.tinaSolidRenderingLightPosYREd.setText(Tools.doubleToString(light.getY()));
-      data.tinaSolidRenderingLightPosYSlider.setValue(Tools.FTOI(light.getY() * TinaController.SLIDER_SCALE_CENTRE));
-      data.tinaSolidRenderingLightPosZREd.setText(Tools.doubleToString(light.getZ()));
-      data.tinaSolidRenderingLightPosZSlider.setValue(Tools.FTOI(light.getZ() * TinaController.SLIDER_SCALE_CENTRE));
+      refreshLightPosControls(light);
       data.tinaSolidRenderingLightCastShadowsCBx.setSelected(light.isCastShadows());
       data.tinaSolidRenderingLightIntensityREd.setText(Tools.doubleToString(light.getIntensity()));
       data.tinaSolidRenderingLightIntensitySlider.setValue(Tools.FTOI(light.getIntensity() * TinaController.SLIDER_SCALE_CENTRE));
@@ -1379,6 +1385,22 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
+  public void randomizeLightPosition() {
+    if (!isNoRefresh()) {
+      PointLight light = getSolidRenderingSelectedLight();
+      if (light != null) {
+        owner.saveUndoPoint();
+        light.setCastShadows(data.tinaSolidRenderingLightCastShadowsCBx.isSelected());
+        double scale = 7.0;
+        light.setX((0.5 - Math.random()) * scale);
+        light.setY((0.5 - Math.random()) * scale);
+        light.setZ((0.5 - Math.random()) * scale);
+        refreshLightPosControls(light);
+        owner.refreshFlameImage(true, false, 1, true, !areShadowsEnabled());
+      }
+    }
+  }
+
   public void solidRenderingLightCastShadowsCBx_changed() {
     if (!isNoRefresh()) {
       PointLight light = getSolidRenderingSelectedLight();
@@ -1410,6 +1432,17 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
+  public void randomizeLightColor() {
+    PointLight light = getSolidRenderingSelectedLight();
+    if (light != null) {
+      owner.undoManager.saveUndoPoint(getCurrFlame());
+      List<RGBColor> rndColors = new AllRandomGradientGenerator().generateKeyFrames(7);
+      RGBColor rndColor = rndColors.get((int) (Math.random() * rndColors.size()));
+      Color selectedColor = new Color(rndColor.getRed(), rndColor.getGreen(), rndColor.getBlue());
+      setLightColor(light, selectedColor);
+    }
+  }
+
   public void solidRenderingLightColorBtn_clicked() {
     PointLight light = getSolidRenderingSelectedLight();
     if (light != null) {
@@ -1419,13 +1452,17 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       String title = rm.getString("ColorPropertyEditor.title");
 
       Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)));
-      if (selectedColor != null) {
-        light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
-        light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
-        light.setBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
-        owner.refreshFlameImage(true, false, 1, true, true);
-        refreshSolidRenderLightColorIndicator();
-      }
+      setLightColor(light, selectedColor);
+    }
+  }
+
+  private void setLightColor(PointLight light, Color selectedColor) {
+    if (selectedColor != null) {
+      light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
+      light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
+      light.setBlue((double) selectedColor.getBlue() / GammaCorrectionFilter.COLORSCL);
+      owner.refreshFlameImage(true, false, 1, true, true);
+      refreshSolidRenderLightColorIndicator();
     }
   }
 
