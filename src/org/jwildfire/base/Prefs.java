@@ -137,6 +137,7 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
   public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
 
+  static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.5";
@@ -254,6 +255,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Generate and save HDR images in the interactive renderer", category = PropertyCategory.TINA)
   private boolean tinaSaveHDRInIR = false;
+
+  @Property(description = "Automatically re-load and display saved images from within the interactive renderer (in order to show the final result which may differ from the IR display). May be also activated per user-session in the IR itself", category = PropertyCategory.TINA)
+  private boolean tinaAutoloadSavedImagesInIR = true;
 
   @Property(description = "Disable the warning about the usage of Wikimedia Commons random-flame-generator", category = PropertyCategory.TINA)
   private boolean tinaDisableWikimediaCommonsWarning = false;
@@ -736,6 +740,7 @@ public class Prefs extends ManagedObject {
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaSaveFlamesWhenImageIsSaved = pSrc.tinaSaveFlamesWhenImageIsSaved;
     tinaSaveHDRInIR = pSrc.tinaSaveHDRInIR;
+    tinaAutoloadSavedImagesInIR = pSrc.tinaAutoloadSavedImagesInIR;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaRasterType = pSrc.tinaRasterType;
     tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
@@ -1607,6 +1612,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaDisableSolidFlameRandGens(boolean tinaDisableSolidFlameRandGens) {
     this.tinaDisableSolidFlameRandGens = tinaDisableSolidFlameRandGens;
+  }
+
+  public boolean isTinaAutoloadSavedImagesInIR() {
+    return tinaAutoloadSavedImagesInIR;
+  }
+
+  public void setTinaAutoloadSavedImagesInIR(boolean tinaAutoloadSavedImagesInIR) {
+    this.tinaAutoloadSavedImagesInIR = tinaAutoloadSavedImagesInIR;
   }
 
 }

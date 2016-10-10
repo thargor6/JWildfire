@@ -209,7 +209,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   final UndoManager<Flame> undoManager = new UndoManager<Flame>();
   private final QuickSaveFilenameGen qsaveFilenameGen;
 
-  private MainController mainController;
+  MainController mainController;
   private final JPanel rootPanel;
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;

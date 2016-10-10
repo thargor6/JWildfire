@@ -30,6 +30,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -63,7 +64,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
    * @return void
    */
   private void initialize() {
-    this.setSize(800, 600);
+    this.setSize(917, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 200, Desktop.DEFAULT_WINDOW_TOP + 80));
     this.setClosable(true);
@@ -149,6 +150,9 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private JToggleButton interactiveRendererShowPreviewButton;
   private JToggleButton interactiveFullSizeButton;
   private JToggleButton interactiveQuarterSizeButton;
+  private JPanel panel;
+  private JButton interactiveSaveZBufferButton;
+  private JCheckBox interactiveAutoLoadImageCBx;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -315,7 +319,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
     if (interactiveSaveImageButton == null) {
       interactiveSaveImageButton = new JButton();
       interactiveSaveImageButton.setMinimumSize(new Dimension(100, 24));
-      interactiveSaveImageButton.setMaximumSize(new Dimension(32000, 24));
+      interactiveSaveImageButton.setMaximumSize(new Dimension(160, 24));
       interactiveSaveImageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().saveImageButton_clicked();
@@ -554,14 +558,15 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private JPanel getPanel_33() {
     if (panel_33 == null) {
       panel_33 = new JPanel();
+      panel_33.setAlignmentX(Component.LEFT_ALIGNMENT);
       panel_33.setBorder(new EmptyBorder(0, 3, 0, 3));
       panel_33.setMaximumSize(new Dimension(150, 32767));
       panel_33.setLayout(new BoxLayout(panel_33, BoxLayout.Y_AXIS));
 
       interactivePauseButton = new JButton();
       panel_33.add(interactivePauseButton);
-      interactivePauseButton.setMinimumSize(new Dimension(100, 24));
-      interactivePauseButton.setMaximumSize(new Dimension(3200, 24));
+      interactivePauseButton.setMinimumSize(new Dimension(112, 24));
+      interactivePauseButton.setMaximumSize(new Dimension(160, 24));
       interactivePauseButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().pauseBtn_clicked();
@@ -569,10 +574,11 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       });
       interactivePauseButton.setToolTipText("Save the current state for later resuming");
       interactivePauseButton.setText("Save render state");
-      interactivePauseButton.setPreferredSize(new Dimension(125, 24));
+      interactivePauseButton.setPreferredSize(new Dimension(160, 24));
       interactivePauseButton.setMnemonic(KeyEvent.VK_T);
       interactivePauseButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      panel_33.add(getInteractiveSaveImageButton());
+      panel_33.add(getPanel());
+      panel_33.add(getInteractiveAutoLoadImageCBx());
     }
     return panel_33;
   }
@@ -646,6 +652,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       panel_110.setLayout(null);
 
       interactiveRendererShowStatsButton = new JToggleButton();
+      interactiveRendererShowStatsButton.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
       interactiveRendererShowStatsButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -661,6 +668,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       panel_110.add(interactiveRendererShowStatsButton);
 
       interactiveRendererShowPreviewButton = new JToggleButton();
+      interactiveRendererShowPreviewButton.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
       interactiveRendererShowPreviewButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -700,7 +708,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       interactiveFullSizeButton.setMnemonic(KeyEvent.VK_M);
       interactiveFullSizeButton.setMinimumSize(new Dimension(48, 24));
       interactiveFullSizeButton.setMaximumSize(new Dimension(32000, 24));
-      interactiveFullSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveFullSizeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       interactiveFullSizeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().fullRenderSizeButton_clicked();
@@ -719,7 +727,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       interactiveQuarterSizeButton.setMnemonic(KeyEvent.VK_M);
       interactiveQuarterSizeButton.setMinimumSize(new Dimension(48, 24));
       interactiveQuarterSizeButton.setMaximumSize(new Dimension(32000, 24));
-      interactiveQuarterSizeButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      interactiveQuarterSizeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       interactiveQuarterSizeButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getInteractiveRendererCtrl().quarterRenderSizeButton_clicked();
@@ -727,5 +735,43 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
       });
     }
     return interactiveQuarterSizeButton;
+  }
+
+  private JPanel getPanel() {
+    if (panel == null) {
+      panel = new JPanel();
+      panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+      panel.add(getInteractiveSaveImageButton());
+      panel.add(getInteractiveSaveZBufferButton());
+    }
+    return panel;
+  }
+
+  JButton getInteractiveSaveZBufferButton() {
+    if (interactiveSaveZBufferButton == null) {
+      interactiveSaveZBufferButton = new JButton();
+      interactiveSaveZBufferButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getInteractiveRendererCtrl().saveZBufferButton_clicked();
+        }
+      });
+      interactiveSaveZBufferButton.setToolTipText("Save Z-Buffer");
+      interactiveSaveZBufferButton.setText("Z");
+      interactiveSaveZBufferButton.setPreferredSize(new Dimension(36, 24));
+      interactiveSaveZBufferButton.setMnemonic(KeyEvent.VK_I);
+      interactiveSaveZBufferButton.setMinimumSize(new Dimension(36, 24));
+      interactiveSaveZBufferButton.setMaximumSize(new Dimension(36, 24));
+      interactiveSaveZBufferButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return interactiveSaveZBufferButton;
+  }
+
+  JCheckBox getInteractiveAutoLoadImageCBx() {
+    if (interactiveAutoLoadImageCBx == null) {
+      interactiveAutoLoadImageCBx = new JCheckBox("Autoload saved image");
+      interactiveAutoLoadImageCBx.setToolTipText("Automatically load a save image to immediately see the result");
+    }
+    return interactiveAutoLoadImageCBx;
   }
 }

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -81,6 +82,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JButton stopButton;
   private final JButton toClipboardButton;
   private final JButton saveImageButton;
+  private final JButton saveZBufferButton;
+  private final JCheckBox autoLoadImageCBx;
   private final JButton saveFlameButton;
   private final JComboBox randomStyleCmb;
   private final JToggleButton halveSizeButton;
@@ -106,7 +109,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
-      JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
+      JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveZBufferButton,
+      JCheckBox pAutoLoadImageCBx, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
       JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton, JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
       JToggleButton pShowStatsButton, JToggleButton pShowPreviewButton) {
@@ -121,6 +125,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
     stopButton = pStopButton;
     toClipboardButton = pToClipboardButton;
     saveImageButton = pSaveImageButton;
+    saveZBufferButton = pSaveZBufferButton;
+    autoLoadImageCBx = pAutoLoadImageCBx;
     saveFlameButton = pSaveFlameButton;
     randomStyleCmb = pRandomStyleCmb;
     halveSizeButton = pHalveSizeButton;
@@ -183,6 +189,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void enableControls() {
     saveImageButton.setEnabled(image != null);
+    saveZBufferButton.setEnabled(image != null && getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled());
     stopButton.setEnabled(state == State.RENDER);
     pauseButton.setEnabled(state == State.RENDER);
     resumeButton.setEnabled(state != State.RENDER);
@@ -420,6 +427,41 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
   }
 
+  public void saveZBufferButton_clicked() {
+    try {
+      pauseRenderThreads();
+      try {
+        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          RenderedFlame res = renderer.finishZBuffer(displayUpdater.getSampleCount());
+          if (res.getZBuffer() != null) {
+            new ImageWriter().saveImage(res.getZBuffer(), file.getAbsolutePath());
+            if (autoLoadImageCBx.isSelected()) {
+              parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
+            }
+          }
+
+        }
+      }
+      finally {
+        resumeRenderThreads();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+
+  }
+
   public void saveImageButton_clicked() {
     try {
       pauseRenderThreads();
@@ -446,6 +488,9 @@ public class TinaInteractiveRendererController implements IterationObserver {
           }
           if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
             new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
+          }
+          if (autoLoadImageCBx.isSelected()) {
+            parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
           }
         }
       }

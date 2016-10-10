@@ -5233,6 +5233,7 @@ public class TinaInternalFrame extends JInternalFrame {
           interactiveRendererFrame.getInteractiveLoadFlameButton(), interactiveRendererFrame.getInteractiveLoadFlameFromClipboardButton(),
           interactiveRendererFrame.getInteractiveNextButton(), interactiveRendererFrame.getInteractiveStopButton(),
           interactiveRendererFrame.getInteractiveFlameToClipboardButton(), interactiveRendererFrame.getInteractiveSaveImageButton(),
+          interactiveRendererFrame.getInteractiveSaveZBufferButton(), interactiveRendererFrame.getInteractiveAutoLoadImageCBx(),
           interactiveRendererFrame.getInteractiveSaveFlameButton(), interactiveRendererFrame.getInteractiveRandomStyleCmb(),
           interactiveRendererFrame.getInteractiveCenterTopPanel(), interactiveRendererFrame.getInteractiveStatsTextArea(),
           interactiveRendererFrame.getInteractiveHalveSizeButton(), interactiveRendererFrame.getInteractiveQuarterSizeButton(),
@@ -5240,6 +5241,7 @@ public class TinaInternalFrame extends JInternalFrame {
           interactiveRendererFrame.getInteractivePauseButton(), interactiveRendererFrame.getInteractiveResumeButton(),
           interactiveRendererFrame.getInteractiveRendererShowStatsButton(), interactiveRendererFrame.getInteractiveRendererShowPreviewButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
+      interactiveRendererFrame.getInteractiveAutoLoadImageCBx().setSelected(Prefs.getPrefs().isTinaAutoloadSavedImagesInIR());
 
       JComboBox[] globalScriptCmbArray = {
           easyMovieMakerFrame.getSwfAnimatorGlobalScript1Cmb(), easyMovieMakerFrame.getSwfAnimatorGlobalScript2Cmb(), easyMovieMakerFrame.getSwfAnimatorGlobalScript3Cmb(),
