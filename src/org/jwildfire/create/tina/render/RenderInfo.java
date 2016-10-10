@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.edit.Assignable;
 
 public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private static final long serialVersionUID = 1L;
+  private boolean renderImage = true;
   private boolean renderHDR;
   private boolean renderZBuffer;
   private int imageWidth;
@@ -69,6 +70,7 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   @Override
   public void assign(RenderInfo pSrc) {
+    renderImage = pSrc.renderImage;
     renderHDR = pSrc.renderHDR;
     renderZBuffer = pSrc.renderZBuffer;
     renderMode = pSrc.renderMode;
@@ -85,7 +87,7 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   @Override
   public boolean isEqual(RenderInfo pSrc) {
-    if (renderHDR != pSrc.renderHDR ||
+    if (renderImage != pSrc.renderImage || renderHDR != pSrc.renderHDR ||
         renderZBuffer != pSrc.renderZBuffer || renderMode != pSrc.renderMode ||
         imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight) {
       return false;
@@ -107,6 +109,14 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   public void setRenderZBuffer(boolean renderZBuffer) {
     this.renderZBuffer = renderZBuffer;
+  }
+
+  public boolean isRenderImage() {
+    return renderImage;
+  }
+
+  public void setRenderImage(boolean renderImage) {
+    this.renderImage = renderImage;
   }
 
 }

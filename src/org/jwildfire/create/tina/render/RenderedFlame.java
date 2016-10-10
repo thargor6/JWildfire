@@ -39,7 +39,9 @@ public class RenderedFlame {
   }
 
   public void init(RenderInfo pRenderInfo, Flame pFlame) {
-    image = new SimpleImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    if (pRenderInfo.isRenderImage()) {
+      image = new SimpleImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    }
     if (pRenderInfo.isRenderHDR()) {
       hdrImage = new SimpleHDRImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }

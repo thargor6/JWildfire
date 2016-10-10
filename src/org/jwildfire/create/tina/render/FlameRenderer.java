@@ -189,6 +189,30 @@ public class FlameRenderer {
     }
   }
 
+  public RenderedFlame finishZBuffer(long pSampleCount) {
+    if (renderInfo == null) {
+      throw new IllegalStateException();
+    }
+    double oldDensity = flame.getSampleDensity();
+    try {
+      double quality = logDensityFilter.calcDensity(pSampleCount, rasterSize);
+
+      flame.setSampleDensity(quality);
+      RenderedFlame res = new RenderedFlame();
+      RenderInfo tmpRenderInfo = new RenderInfo();
+      tmpRenderInfo.assign(renderInfo);
+      tmpRenderInfo.setRenderImage(false);
+      tmpRenderInfo.setRenderHDR(false);
+      tmpRenderInfo.setRenderZBuffer(true);
+      res.init(tmpRenderInfo, flame);
+      renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
+      return res;
+    }
+    finally {
+      flame.setSampleDensity(oldDensity);
+    }
+  }
+
   public RenderedFlame rerenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
     if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
@@ -493,6 +517,9 @@ public class FlameRenderer {
     }
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
+    }
+    else if (pZBufferImg != null) {
+      logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pZBufferImg.getImageWidth(), pZBufferImg.getImageHeight());
     }
     else if (pHDRImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pHDRImage.getImageWidth(), pHDRImage.getImageHeight());
