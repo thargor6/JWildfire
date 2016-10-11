@@ -38,7 +38,6 @@ public class GammaCorrectionFilter {
   private final int rasterWidth, rasterHeight;
   private final double alphaScale;
   private final int oversample;
-  private final int solidBGAlphaInt;
 
   public static class ColorF {
     public double r, g, b;
@@ -54,8 +53,6 @@ public class GammaCorrectionFilter {
     rasterWidth = pRasterWidth;
     rasterHeight = pRasterHeight;
     alphaScale = 1.0 - MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1.0)) / 1.25;
-
-    solidBGAlphaInt = Tools.roundColor((pFlame.getForegroundOpacity() - 1.0) * 255.0);
 
     oversample = pFlame.getSpatialOversampling();
     initFilter();
@@ -106,8 +103,16 @@ public class GammaCorrectionFilter {
         transfColor.r = logDensityPnt.solidRed;
         transfColor.g = logDensityPnt.solidGreen;
         transfColor.b = logDensityPnt.solidBlue;
-        inverseAlphaInt = solidBGAlphaInt;
-        pRGBPoint.alpha = 255;
+
+        double fixedGamma = 1.0 + gamma;
+        double alpha = pow(logDensityPnt.intensity, fixedGamma);
+        int alphaInt = (int) (alpha * 255 * alphaScale + 0.5);
+        if (alphaInt < 0)
+          alphaInt = 0;
+        else if (alphaInt > 255)
+          alphaInt = 255;
+        inverseAlphaInt = 255 - alphaInt;
+        pRGBPoint.alpha = withAlpha ? alphaInt : 255;
       }
       else {
         double alpha;

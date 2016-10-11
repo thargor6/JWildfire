@@ -223,7 +223,6 @@ public class LogDensityFilter extends FilterHolder {
   public void transformPoint(LogDensityPoint pFilteredPnt, int pX, int pY) {
     pFilteredPnt.clear();
     if (noiseFilterSize > 1) {
-
       if (solidRendering) {
         for (int c = 0; c < colorOversampling; c++) {
           for (int i = 0; i < noiseFilterSize; i++) {
@@ -233,6 +232,7 @@ public class LogDensityFilter extends FilterHolder {
                 double f = filter[i][j] / (double) (colorOversampling * oversample * oversample);
                 if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
                   pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
+                  pFilteredPnt.intensity += f;
                 }
               }
             }
@@ -346,6 +346,7 @@ public class LogDensityFilter extends FilterHolder {
         pFilteredPnt.solidRed *= dCount;
         pFilteredPnt.solidGreen *= dCount;
         pFilteredPnt.solidBlue *= dCount;
+        pFilteredPnt.intensity = (double) solidSampleCount / (double) (colorOversampling * oversample * oversample);
       }
     }
     pFilteredPnt.clip();
