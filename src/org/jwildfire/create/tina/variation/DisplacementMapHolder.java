@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.PlainImageCreator;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -68,21 +67,13 @@ public class DisplacementMapHolder {
         e.printStackTrace();
       }
     }
-    if (displacementMap == null) {
-      displacementMap = getDfltDisplacementImage();
+    if (displacementMap != null) {
+      displacementMapWidth = displacementMap.getImageWidth();
+      displacementMapHeight = displacementMap.getImageHeight();
     }
-    displacementMapWidth = displacementMap.getImageWidth();
-    displacementMapHeight = displacementMap.getImageHeight();
-  }
-
-  private static SimpleImage dfltDisplacementImage = null;
-
-  private synchronized SimpleImage getDfltDisplacementImage() {
-    if (dfltDisplacementImage == null) {
-      PlainImageCreator creator = new PlainImageCreator();
-      dfltDisplacementImage = creator.createImage(256, 256);
+    else {
+      displacementMapWidth = displacementMapHeight = 0;
     }
-    return dfltDisplacementImage;
   }
 
   public double getDispl_amount() {
@@ -94,7 +85,7 @@ public class DisplacementMapHolder {
   }
 
   public boolean isActive() {
-    return displ_map_filename != null && !displ_map_filename.isEmpty() && MathLib.fabs(displ_amount) > MathLib.EPSILON;
+    return displacementMap != null && MathLib.fabs(displ_amount) > MathLib.EPSILON;
   }
 
   public double calculateImageDisplacement(int ix, int iy, double iu, double iv) {

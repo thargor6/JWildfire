@@ -20,7 +20,6 @@ import java.io.Serializable;
 
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
@@ -62,21 +61,13 @@ public class ColorMapHolder implements Serializable {
         e.printStackTrace();
       }
     }
-    if (colorMap == null) {
-      colorMap = getDfltImage();
+    if (colorMap != null) {
+      colorMapWidth = colorMap.getImageWidth();
+      colorMapHeight = colorMap.getImageHeight();
     }
-    colorMapWidth = colorMap.getImageWidth();
-    colorMapHeight = colorMap.getImageHeight();
-  }
-
-  private static SimpleImage dfltImage = null;
-
-  private synchronized SimpleImage getDfltImage() {
-    if (dfltImage == null) {
-      GradientCreator creator = new GradientCreator();
-      dfltImage = creator.createImage(256, 256);
+    else {
+      colorMapWidth = colorMapHeight = 0;
     }
-    return dfltImage;
   }
 
   public void applyImageColor(XYZPoint pVarTP, int ix, int iy, double iu, double iv) {
@@ -177,7 +168,7 @@ public class ColorMapHolder implements Serializable {
   }
 
   public boolean isActive() {
-    return (colormap_filename != null && colormap_filename.length() > 0);
+    return (colorMap != null && colormap_filename.length() > 0);
   }
 
   public void clear() {
