@@ -16,12 +16,11 @@
 */
 package org.jwildfire.create.tina.base.motion;
 
-import java.io.Serializable;
-
+import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
 
-public class RotateMotionValueChangeHandler implements MotionValueChangeHandler, Serializable {
+public class RotateMotionValueChangeHandler extends EditPlaneAwareMotionValueChangeHandler {
   private static final long serialVersionUID = 1L;
 
   private RotateMotionValueChangeHandler() {
@@ -32,7 +31,14 @@ public class RotateMotionValueChangeHandler implements MotionValueChangeHandler,
 
   @Override
   public void processValueChange(Object pTarget, String pPropertyName, double pValue) {
-    XFormTransformService.rotate((XForm) pTarget, pValue, false);
+    EditPlane editPlane = getCurrEditPlane(pTarget);
+    try {
+      setEditPlaneByPropertyName(pTarget, pPropertyName);
+      XFormTransformService.rotate((XForm) pTarget, pValue, false);
+    }
+    finally {
+      setEditPlane(pTarget, editPlane);
+    }
   }
 
 }
