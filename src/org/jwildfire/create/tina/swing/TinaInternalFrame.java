@@ -4917,7 +4917,7 @@ public class TinaInternalFrame extends JInternalFrame {
   public TinaController createController(Desktop pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame,
       FlameBrowserInternalFrame flameBrowserFrame, EasyMovieMakerInternalFrame easyMovieMakerFrame,
       DancingFlamesInternalFrame dancingFlamesFrame, BatchFlameRendererInternalFrame batchFlameRendererFrame,
-      MeshGenInternalFrame meshGenFrame, InteractiveRendererInternalFrame interactiveRendererFrame, HelpInternalFrame helpFrame) {
+      MeshGenInternalFrame meshGenFrame, InteractiveRendererInternalFrame interactiveRendererFrame, FlamesGPURenderInternalFrame gpuRendererFrame, HelpInternalFrame helpFrame) {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null);
@@ -5242,6 +5242,17 @@ public class TinaInternalFrame extends JInternalFrame {
           interactiveRendererFrame.getInteractiveRendererShowStatsButton(), interactiveRendererFrame.getInteractiveRendererShowPreviewButton()));
       tinaController.getInteractiveRendererCtrl().enableControls();
       interactiveRendererFrame.getInteractiveAutoLoadImageCBx().setSelected(Prefs.getPrefs().isTinaAutoloadSavedImagesInIR());
+
+      tinaController.setGpuRendererCtrl(new FlamesGPURenderController(tinaController, pErrorHandler, pPrefs,
+          gpuRendererFrame.getInteractiveLoadFlameButton(), gpuRendererFrame.getInteractiveLoadFlameFromClipboardButton(),
+          gpuRendererFrame.getInteractiveStopButton(),
+          gpuRendererFrame.getInteractiveFlameToClipboardButton(), gpuRendererFrame.getInteractiveSaveImageButton(),
+          gpuRendererFrame.getInteractiveSaveFlameButton(),
+          gpuRendererFrame.getInteractiveCenterTopPanel(), gpuRendererFrame.getInteractiveStatsTextArea(),
+          gpuRendererFrame.getInteractiveHalveSizeButton(), gpuRendererFrame.getInteractiveQuarterSizeButton(),
+          gpuRendererFrame.getInteractiveFullSizeButton(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
+          gpuRendererFrame.getInteractiveRendererShowStatsButton(), gpuRendererFrame.getInteractiveRendererShowPreviewButton()));
+      tinaController.getGpuRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {
           easyMovieMakerFrame.getSwfAnimatorGlobalScript1Cmb(), easyMovieMakerFrame.getSwfAnimatorGlobalScript2Cmb(), easyMovieMakerFrame.getSwfAnimatorGlobalScript3Cmb(),
@@ -6141,7 +6152,7 @@ public class TinaInternalFrame extends JInternalFrame {
         public void actionPerformed(ActionEvent e) {
           if (java.awt.Desktop.isDesktopSupported()) {
             try {
-              java.awt.Desktop.getDesktop().browse(new URI("http://www.fractalgee.com/JFW_Guide.html"));
+              java.awt.Desktop.getDesktop().browse(new URI("http://www.andreas-maschke.de/java/JwildfireVariations200.htm"));
             }
             catch (Throwable ex) {
               ex.printStackTrace();
@@ -7225,7 +7236,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       randomizeBtn.setToolTipText("Randomize random parameters of the currently selected flame");
-      randomizeBtn.setText("???");
+      randomizeBtn.setText("Rnd");
       randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomizeBtn.setSelected(false);
       randomizeBtn.setPreferredSize(new Dimension(42, 24));
