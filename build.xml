@@ -115,7 +115,7 @@
        <fileset dir="build/launcher" includes="start_linux.sh start_mac.command"/>
      </copy>
   	<copy todir="${dist.dir}/">
-       <fileset file="CHANGES.txt" />
+       <fileset file="src/org/jwildfire/swing/CHANGES.txt" />
        <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
        <fileset file="README_SUPPORT.txt" />

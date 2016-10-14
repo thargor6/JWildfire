@@ -53,9 +53,10 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 BETA 2 (01.10.2016)";
+  public static final String APP_VERSION = "3.00 BETA 3 (15.10.2016)";
 
   public static boolean SPECIAL_VERSION = false;
+  public static boolean ENABLE_GPU_RENDER = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
   public static final int MAX_COLOR_OVERSAMPLING = 20;

@@ -178,6 +178,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private MeshGenController meshGenController;
   private BatchRendererController batchRendererController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
+  private FlamesGPURenderController gpuRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
   private FlameBrowserController flameBrowserController;
@@ -6136,6 +6137,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public Desktop getDesktop() {
     return desktop;
+  }
+
+  public FlamesGPURenderController getGpuRendererCtrl() {
+    return gpuRendererCtrl;
+  }
+
+  public void setGpuRendererCtrl(FlamesGPURenderController gpuRendererCtrl) {
+    this.gpuRendererCtrl = gpuRendererCtrl;
   }
 
 }

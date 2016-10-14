@@ -65,6 +65,7 @@ import org.jwildfire.create.tina.swing.BatchFlameRendererInternalFrame;
 import org.jwildfire.create.tina.swing.DancingFlamesInternalFrame;
 import org.jwildfire.create.tina.swing.EasyMovieMakerInternalFrame;
 import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
+import org.jwildfire.create.tina.swing.FlamesGPURenderInternalFrame;
 import org.jwildfire.create.tina.swing.HelpInternalFrame;
 import org.jwildfire.create.tina.swing.InteractiveRendererInternalFrame;
 import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
@@ -94,6 +95,9 @@ public class Desktop extends JApplet {
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
+    if (Tools.ENABLE_GPU_RENDER) {
+      mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
+    }
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(HelpInternalFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(IFlamesInternalFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(OperatorsInternalFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
@@ -127,6 +131,7 @@ public class Desktop extends JApplet {
     helpInternalFrames = new ArrayList<>();
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(SystemInfoInternalFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(WelcomeInternalFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(ListOfChangesInternalFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(TipOfTheDayInternalFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
 
@@ -194,6 +199,12 @@ public class Desktop extends JApplet {
         tipOfTheDayInternalFrame.setVisible(true);
       }
       tipOfTheDayInternalFrame.moveToFront();
+      try {
+        getInternalFrame(ListOfChangesInternalFrame.class).initChangesPane();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
 
       MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
       FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
@@ -202,10 +213,15 @@ public class Desktop extends JApplet {
       BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
       MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
       InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
+      FlamesGPURenderInternalFrame gpuRendererFrame = getInternalFrame(FlamesGPURenderInternalFrame.class);
+
+      if (!Tools.ENABLE_GPU_RENDER) {
+        gpuRendererFrame = new FlamesGPURenderInternalFrame();
+      }
       HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
 
       TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);
-      tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, helpFrame);
+      tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
       try {
         tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
       }

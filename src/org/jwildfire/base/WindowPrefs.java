@@ -48,6 +48,8 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   public static final String WINDOW_WELCOME = "WELCOME";
   public static final String WINDOW_TIPOFTHEDAY = "TIPOFTHEDAY";
   public static final String WINDOW_LOOKANDFEEL = "LOOKANDFEEL";
+  public static final String WINDOW_FLAMES_GPU = "FLAMESGPU";
+  public static final String WINDOW_LIST_OF_CHANGES = "LISTOFCHANGES";
 
   private int width;
   private int height;

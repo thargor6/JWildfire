@@ -390,7 +390,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       panel_89.add(getPanel_90(), BorderLayout.WEST);
 
       JPanel panel_1 = new JPanel();
-      panel_1.setBorder(new TitledBorder(null, "Voxelstack/Depthmap generation", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      panel_1.setBorder(new TitledBorder(null, "Voxelstack", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       panel_89.add(panel_1, BorderLayout.CENTER);
       panel_1.setLayout(new BorderLayout(0, 0));
 

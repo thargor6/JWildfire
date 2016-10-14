@@ -1,3 +1,68 @@
+V3.00 BETA 3 (15.10.2016)
+ - fixed a problem with animation motion curves in a plane different from XY
+ - improved image-quality for scaled image-display on the desktop (e. g. after loading an image or displaying a rendered image)
+ - support for using backgrounds (color or image) when rendering solid flames
+ - option to auto-reload saved images from the interactive renderer (in order so be able to check them quickly), may be turned off in the Preferences
+ - option to manually save a z-buffer-image in the interactive renderer
+ - buttons to easily randomize light-position and light-color (for solid flames)
+ - significantly increased the render-speed of *plot-variations by compiling the formulas rather then interpreting them 
+   (minor changes in formula where necessary, but any internal formulas may now be used) 
+ - improved the performance of preview-rendering of flames with multiple layers
+ - improved the behaviour of preview rendering of solid-flames  
+ - changed position of the layer-preview
+ - made the UI more consistent
+ - fixed some UI-refresh-problems
+ - added an option for displacement-mapping to the "obj_mesh_wf"-variation
+ - color- and displacement-mapping for "*plot_wf"-variations (slow, but cool)
+ - added options for color- and displacement-mapping to the "obj_mesh_primitive_wf"-variation
+ - added uv-coordinates to the default mesh-primitives (used by "obj_mesh_primitive_wf"-variation)
+ - new "plane_wf"-variation for easy creation of a textured plane
+ - new "blend_uv_map"-parameter for "obj_mesh_wf"-variation
+ - variations-editing: the controls use non-fractional step-size when changing a parameter having integer-values (like power of "julia3D"-variation) 
+ - added support of uv-mapping to the "obj_mesh_wf" (to make use of it, the object must also carry uv-map-coordinates, you may then select any image as actaul colormap)
+ - replaced the link to variation-guide, hosted by user FractalGee, which seems to be permanently off, by a link to the variations-list supplied by Don Town 
+
+V3.00 BETA 2 (29.09.2016)
+ - new "MobiusN"-variation by eralex
+ - removed the "use_preset"-param of *plot*_wf-variations and made the usage of presets more intuitive
+ - new option in the Prefrences to disable solid-flame-random-generators inside the global "All"-random-flame-generator
+ - experimental z-buffer-output, removed hdr-intensity-map-output
+
+V3.00 BETA (29.09.2016)
+ - UI-controls for hard shadow options
+ - *plot*_wf-variation: changing of parameter ranges and formulas is not possible when use_preset it set to 1
+ - new option of intensity of hard shadows (per lightsource)
+ - added a quarter-render-size option in the Interactive Renderer
+ - recreated the SystemInfo window and added a function to clear the cache (which hold resources like fonts, meshes, ... in order to speed up future calculations)
+ - improved calculation of hard shadows
+ - improved speed of AO and normals calculation
+ - improved quality of normals- and lighting calculation
+ - new "Transfer to Interactive Renderer"-button in the main editor
+ - removed the MutaGen-button in the main editor
+ - new option for type of mapping of reflection-maps
+ - FIXED: background rendering in solid mode
+ - FIXED: a bug in the "dinis_surface_wf"-variation
+ - new "Solid Julia3D"-random-flame-generator to create random solid flames
+ - new "Solid (experimental)"-random-flame-generator to create random solid flames
+ - new "Solid (stunning)"-random-flame-generator to create random solid flames
+ - slightly faster rendering in solid-rendering-mode
+ - new option to control the diffuse-part of ambient shadows (which is physically incorrect, but help to "dramatize" shadows) 
+
+V3.00 ALPHA 6 (16.09.2016)
+ - removed the combobox to select the edit-plane, and added three buttons in the main editor area instead
+ - have integrated 35 presets for parplot2d_wf-variation now - thanks to Frank Baumann and all others who contributed! (Tip: change preset_id to witch between presets)
+ - removed the rarely used brightness-slider in the main editor
+ - removed the black "halos" around edges
+ - new button in the main editor-area to toggle solid rendering mode
+ - new icon for solid rendering mode
+ - dropped the grey and monochrome icon sets
+ - formula Presets for the parplot2d_wf-variation are now stored in an external file parplot2d_wf_presets.txt and can be easily extended
+ - formula Presets for the yplot2d_wf-variation are now stored in an external file yplot2d_wf_presets.txt and can be easily extended
+ - formula Presets for the yplot3d_wf-variation are now stored in an external file yplot3d_wf_presets.txt and can be easily extended
+ - removed the Chaotica-bridge
+ - many additions to the hard-shadows-calculations (hidden feature yet)
+ - the "Next tip"-button in the "Tip of the day"-window now actually shows the next tip (in order), rather than displaying the next random tip
+
 V3.00 ALPHA 5 (03.09.2016)
  - New "parplot2d_wf"-variation to generate geometry by plotting arbitrary parametric functions
  - New visual controls for ambient shadows on a separate tab
