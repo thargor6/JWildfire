@@ -274,28 +274,46 @@ public class GammaCorrectionFilter {
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint, int pX, int pY) {
     calculateBGColor(pHDRPoint, pX, pY);
-    // TODO solid
     double logScl;
     double inverseAlphaInt;
-    if (logDensityPnt.intensity > 0.0) {
-      double alpha;
-      if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
-        double frac = logDensityPnt.intensity / flame.getGammaThreshold();
-        alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
+
+    if (logDensityPnt.intensity > 0.0 || logDensityPnt.hasSolidColors) {
+      ColorF transfColor;
+      if (logDensityPnt.hasSolidColors) {
+        transfColor = new ColorF();
+        transfColor.r = logDensityPnt.solidRed;
+        transfColor.g = logDensityPnt.solidGreen;
+        transfColor.b = logDensityPnt.solidBlue;
+
+        double fixedGamma = 1.0 + gamma;
+        double alpha = pow(logDensityPnt.intensity, fixedGamma);
+        double alphaInt = (alpha * ALPHA_RANGE * alphaScale);
+        if (alphaInt < 0.0)
+          alphaInt = 0.0;
+        else if (alphaInt > ALPHA_RANGE)
+          alphaInt = ALPHA_RANGE;
+        inverseAlphaInt = ALPHA_RANGE - alphaInt;
       }
       else {
-        alpha = pow(logDensityPnt.intensity, gamma);
+        double alpha;
+        if (logDensityPnt.intensity <= flame.getGammaThreshold()) {
+          double frac = logDensityPnt.intensity / flame.getGammaThreshold();
+          alpha = (1.0 - frac) * logDensityPnt.intensity * sclGamma + frac * pow(logDensityPnt.intensity, gamma);
+        }
+        else {
+          alpha = pow(logDensityPnt.intensity, gamma);
+        }
+
+        logScl = vibInt * alpha / logDensityPnt.intensity;
+        double alphaInt = alpha * ALPHA_RANGE;
+        if (alphaInt < 0.0)
+          alphaInt = 0.0;
+        else if (alphaInt > ALPHA_RANGE)
+          alphaInt = ALPHA_RANGE;
+        inverseAlphaInt = ALPHA_RANGE - alphaInt;
+
+        transfColor = applyLogScale(logDensityPnt, logScl);
       }
-
-      logScl = vibInt * alpha / logDensityPnt.intensity;
-      double alphaInt = alpha * ALPHA_RANGE;
-      if (alphaInt < 0.0)
-        alphaInt = 0.0;
-      else if (alphaInt > ALPHA_RANGE)
-        alphaInt = ALPHA_RANGE;
-      inverseAlphaInt = ALPHA_RANGE - alphaInt;
-
-      ColorF transfColor = applyLogScale(logDensityPnt, logScl);
       ColorF finalColor = addBackgroundF(pHDRPoint, transfColor, inverseAlphaInt);
 
       pHDRPoint.red = (float) (finalColor.r / ALPHA_RANGE);
