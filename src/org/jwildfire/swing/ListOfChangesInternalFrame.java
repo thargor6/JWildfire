@@ -35,7 +35,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.swing.Desktop;
 
 @SuppressWarnings("serial")
 public class ListOfChangesInternalFrame extends JInternalFrame {
@@ -118,7 +117,7 @@ public class ListOfChangesInternalFrame extends JInternalFrame {
   public void initChangesPane() {
     changesPane.setContentType("text/plain");
     try {
-      InputStream is = this.getClass().getResourceAsStream("./CHANGES.txt");
+      InputStream is = this.getClass().getResourceAsStream("CHANGES.txt");
       StringBuffer content = new StringBuffer();
       String lineFeed = System.getProperty("line.separator");
       String line;

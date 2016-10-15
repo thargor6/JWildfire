@@ -49,6 +49,7 @@
       <fileset dir="${src.dir}" includes="com/**/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
