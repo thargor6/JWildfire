@@ -1322,7 +1322,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
+  public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
     public Component getTableCellRendererComponent(JTable table,

@@ -291,7 +291,7 @@ public class GradientController {
     renameFolderBtn.setEnabled(userNodeSelected && node != userGradientsRootNode);
   }
 
-  private class GradientNode {
+  private static class GradientNode {
     private final String caption;
     private final SimpleImage image;
 
@@ -311,7 +311,7 @@ public class GradientController {
 
   }
 
-  private class GradientRenderer extends DefaultListCellRenderer {
+  private static class GradientRenderer extends DefaultListCellRenderer {
     private static final long serialVersionUID = 1L;
 
     private Map<GradientNode, ImageIcon> iconCache = new HashMap<GradientNode, ImageIcon>();

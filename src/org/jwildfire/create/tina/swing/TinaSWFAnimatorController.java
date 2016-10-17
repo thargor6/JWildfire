@@ -137,7 +137,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private boolean noRefresh;
 
-  private class MotionCurveEditInfo {
+  private static class MotionCurveEditInfo {
     private final MotionCurve curve;
     private final JWFNumberField field;
 
@@ -1642,7 +1642,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     return true;
   }
 
-  public class ScriptContainer {
+  public static class ScriptContainer {
     private final JComboBox scriptCmb;
     private final JWFNumberField scriptREd;
     private final MotionCurve motionCurve;

@@ -93,7 +93,7 @@ public class MutaGenController {
   private int selectedGenerationIdx = -1;
   private int selRow = -1, selCol = -1;
 
-  private class MutationSet {
+  private static class MutationSet {
     final int rows, cols;
     final Flame baseFlame;
     final Flame[][] flames;

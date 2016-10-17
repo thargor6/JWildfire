@@ -66,7 +66,7 @@ public class MedianCutQuantizer {
     }
   }
 
-  private class Box {
+  private static class Box {
     public int c0min, c0max;/* The bounds of the box (inclusive); expressed as histogram indexes */
     public int c1min, c1max;
     public int c2min, c2max;

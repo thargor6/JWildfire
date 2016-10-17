@@ -61,7 +61,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     IDLE, RENDER
   }
 
-  private class ImgSize {
+  private static class ImgSize {
     private final int width;
     private final int height;
 

@@ -80,7 +80,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
     }
   }
 
-  protected class Complex {
+  protected static class Complex {
     public double re;
     public double im;
   }
