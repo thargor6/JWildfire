@@ -602,10 +602,6 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaEastPanel() {
     if (tinaEastPanel == null) {
-      GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-      gridBagConstraints4.gridx = 1;
-      gridBagConstraints4.gridheight = 2;
-      gridBagConstraints4.gridy = 0;
       tinaEastPanel = new JPanel();
       tinaEastPanel.setLayout(new BorderLayout());
       tinaEastPanel.setPreferredSize(new Dimension(328, 0));
