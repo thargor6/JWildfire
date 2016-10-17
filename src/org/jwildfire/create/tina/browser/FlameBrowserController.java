@@ -185,11 +185,9 @@ public class FlameBrowserController {
     if (!refreshing) {
       enableControls();
       FlamesTreeNode selNode = getSelNode();
-      if (selNode.isLeaf()) {
+      if (selNode != null && selNode.isLeaf()) {
         clearImages();
-        if (selNode != null) {
-          showImages(selNode.getFlames());
-        }
+        showImages(selNode.getFlames());
         imagesPnl.validate();
 
         int idx = 0;
