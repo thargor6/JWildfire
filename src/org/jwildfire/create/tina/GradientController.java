@@ -45,8 +45,6 @@ public class GradientController {
   private final static int GRADIENT_THUMB_WIDTH = 200;
   private final static int GRADIENT_THUMB_HEIGHT = 18;
 
-  private JScrollPane gradientLibraryScrollPane;
-
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
@@ -416,12 +414,6 @@ public class GradientController {
       }
       else {
         gradientsList.setListData(new Vector<GradientNode>());
-        if (gradientLibraryScrollPane != null) {
-          gradientLibraryPanel.remove(gradientLibraryScrollPane);
-          gradientLibraryScrollPane = null;
-          gradientLibraryPanel.repaint();
-          gradientLibraryPanel.validate();
-        }
       }
     }
     finally {
