@@ -22,7 +22,7 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
-import org.jwildfire.create.tina.render.filter.SineBlurFilterKernel;
+import org.jwildfire.create.tina.render.filter.SinePow15FilterKernel;
 
 public class PostDOFCalculator {
   private final PostDOFBuffer buffer;
@@ -36,7 +36,7 @@ public class PostDOFCalculator {
     this.buffer = buffer;
     imgSize = MathLib.sqrt(MathLib.sqr(buffer.getWidth()) + MathLib.sqr(buffer.getHeight()));
 
-    kernel = new SineBlurFilterKernel();//new GaussianFilterKernel();
+    kernel = new SinePow15FilterKernel();//new GaussianFilterKernel();
 
     filteredSamples = new ArrayList<>();
 
@@ -61,12 +61,12 @@ public class PostDOFCalculator {
     double bokehBrightness = 1.0;
     double bokehSize = 2.0;
 
-    int bokehMinIntensity = 6;
+    double bokehActivation = 0.8;
 
     if (radius > 0.0) {
       filteredSamples.clear();
 
-      if (Math.random() > 1.0 - bokehIntensity && (sample.getR() >= bokehMinIntensity || sample.getG() >= bokehMinIntensity || sample.getB() >= bokehMinIntensity)) {
+      if (Math.random() > 1.0 - bokehIntensity && calcBrightness(sample.getR(), sample.getG(), sample.getB()) >= bokehActivation) {
         double intensity = (Math.random() + 1.0) / 5.0;
 
         sample.setR(Tools.FTOI(sample.getR() * intensity * radius * radius * bokehBrightness));
@@ -133,6 +133,10 @@ public class PostDOFCalculator {
       buffer.addSamples(filteredSamples, 1.0);
       filteredSamples.clear();
     }
+  }
+
+  private double calcBrightness(float r, float g, float b) {
+    return r * 0.2990 / 255.0 + g * 0.5880 / 255.0 + b * 0.1130 / 255.0;
   }
 
 }

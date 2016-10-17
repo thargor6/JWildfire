@@ -95,9 +95,7 @@ public class Desktop extends JApplet {
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
-    if (Tools.ENABLE_GPU_RENDER) {
-      mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
-    }
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(HelpInternalFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(IFlamesInternalFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(OperatorsInternalFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
@@ -215,9 +213,7 @@ public class Desktop extends JApplet {
       InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
       FlamesGPURenderInternalFrame gpuRendererFrame = getInternalFrame(FlamesGPURenderInternalFrame.class);
 
-      if (!Tools.ENABLE_GPU_RENDER) {
-        gpuRendererFrame = new FlamesGPURenderInternalFrame();
-      }
+      gpuRendererFrame = new FlamesGPURenderInternalFrame();
       HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
 
       TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);

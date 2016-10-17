@@ -5469,6 +5469,9 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(FilterKernelType.LANCZOS3);
     pCmb.addItem(FilterKernelType.MITCHELL);
     pCmb.addItem(FilterKernelType.QUADRATIC);
+    pCmb.addItem(FilterKernelType.SINEPOW5);
+    pCmb.addItem(FilterKernelType.SINEPOW10);
+    pCmb.addItem(FilterKernelType.SINEPOW15);
     pCmb.addItem(FilterKernelType.TRIANGLE);
     pCmb.setSelectedItem(FilterKernelType.GAUSSIAN);
   }

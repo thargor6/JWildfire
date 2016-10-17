@@ -85,32 +85,35 @@ public class NavigatorInternalFrame extends JInternalFrame {
         new WindowEntry("Dancing", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class),
         new WindowEntry("Batch", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class),
         new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class),
-        new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class)
+        new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class),
+        new WindowEntry("GPURender", "/org/jwildfire/swing/icons/new/opencl.png", FlamesGPURenderInternalFrame.class)
     };
 
     for (final WindowEntry window : windows) {
-      if (window.getFrameType() != null) {
-        JButton button = new JButton(window.getCaption());
-        button.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-        button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
-        button.setPreferredSize(new Dimension(100, 28));
-        //button.setIconTextGap(0);
-        button.setFont(new Font("Dialog", Font.BOLD, 9));
+      if (window != null) {
+        if (window.getFrameType() != null) {
+          JButton button = new JButton(window.getCaption());
+          button.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+          button.setIcon(new ImageIcon(OutlookBarMain.class.getResource(window.getIconpath())));
+          button.setPreferredSize(new Dimension(100, 28));
+          //button.setIconTextGap(0);
+          button.setFont(new Font("Dialog", Font.BOLD, 9));
 
-        button.addActionListener(new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent e) {
-            desktop.toggleInternalFrame(window.getFrameType());
-          }
-        });
+          button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+              desktop.toggleInternalFrame(window.getFrameType());
+            }
+          });
 
-        panel.add(button);
-      }
-      else if (window.getCaption() != null && !window.getCaption().isEmpty()) {
-        JLabel label = new JLabel();
-        label.setPreferredSize(new Dimension(100, 28));
-        label.setText(window.getCaption());
-        label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-        panel.add(label);
+          panel.add(button);
+        }
+        else if (window.getCaption() != null && !window.getCaption().isEmpty()) {
+          JLabel label = new JLabel();
+          label.setPreferredSize(new Dimension(100, 28));
+          label.setText(window.getCaption());
+          label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+          panel.add(label);
+        }
       }
     }
   }
