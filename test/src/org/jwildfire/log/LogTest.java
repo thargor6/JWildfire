@@ -61,6 +61,6 @@ public class LogTest
 	//TODO eats the exception and dumps to console
 	public void testLogListNullError() throws Exception
 	{
-		new LogList().addErrorEntry((Throwable)null);
+		new LogList().addErrorEntry(null);
 	}
 }

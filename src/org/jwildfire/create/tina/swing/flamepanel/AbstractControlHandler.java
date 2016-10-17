@@ -36,11 +36,11 @@ public abstract class AbstractControlHandler<T extends AbstractControlShape> {
   protected static final Color XFORM_COLOR = new Color(217, 219, 223);
   protected static final Color XFORM_POST_COLOR = new Color(255, 219, 160);
 
-  protected static BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
-  protected static BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
-  protected static BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
+  protected static final BasicStroke SELECTED_LINE_NEW = new BasicStroke(2.0f);
+  protected static final BasicStroke NORMAL_CIRCLE_LINE = new BasicStroke(1.0f);
+  protected static final BasicStroke SELECTED_CIRCLE_LINE = new BasicStroke(2.0f);
 
-  protected static BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
+  protected static final BasicStroke NORMAL_LINE_NEW = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 10, 4 }, 0);
 
   protected static final int SHADOW_DIST = 1;
 

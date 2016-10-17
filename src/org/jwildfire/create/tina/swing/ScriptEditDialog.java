@@ -318,18 +318,18 @@ public class ScriptEditDialog extends JDialog {
 
   public void setScriptNode(JWFScriptUserNode pScriptNode) throws Exception {
     String scriptname = pScriptNode.getUserObject().toString();
-    setTitle("Editing " + (scriptname != null ? scriptname : "script"));
+    setTitle("Editing " + scriptname);
 
     String script = pScriptNode.getScript();
     scriptEditor.setText("");
     scriptEditor.setContentType("text/java");
-    scriptEditor.setText(script != null ? script : "");
+    scriptEditor.setText(script);
     scriptEditor.setCaretPosition(0);
 
     String description = pScriptNode.getDescription();
     descriptionEditor.setText("");
     descriptionEditor.setContentType("text/plain");
-    descriptionEditor.setText(description != null ? description : "");
+    descriptionEditor.setText(description);
     descriptionEditor.setCaretPosition(0);
 
     scriptNode = pScriptNode;

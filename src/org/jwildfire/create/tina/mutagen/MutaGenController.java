@@ -223,9 +223,9 @@ public class MutaGenController {
 
   private SimpleImage renderFlame(Flame pFlame, Dimension pImgSize, boolean pWithTimeout) {
     int pImageWidth = pImgSize.width, pImageHeight = pImgSize.height;
-    SimpleImage img;
+    final SimpleImage img;
     if (pFlame != null && pImageWidth > 16 && pImageHeight > 16) {
-      return img = executeRenderThread(pFlame, pImageWidth, pImageHeight, pWithTimeout);
+      img = executeRenderThread(pFlame, pImageWidth, pImageHeight, pWithTimeout);
     }
     else {
       img = new SimpleImage(pImageWidth, pImageHeight);

@@ -111,8 +111,8 @@ public class HeadlessBatchRendererController implements JobRenderThreadControlle
           throw new Exception(filename + " does not exist");
         if (f.isDirectory())
         {
-          f.list();
-          for (File fi : f.listFiles())
+          final File[] listFiles = f.listFiles();
+          if (listFiles != null) for (File fi : listFiles)
           {
             if (fi.canRead() && fi.exists() && fi.getName().toLowerCase().endsWith(".flame"))
               files.add(fi);

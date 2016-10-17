@@ -18,11 +18,11 @@ package org.jwildfire.create.tina.random;
 
 public class SimpleRandomGenerator extends AbstractRandomGenerator {
 
-  private static int a = 1;
+  private int a = 1;
 
   private static final int RAND_MAX123 = 0x7fffffff;
 
-  private static double rrmax = 1.0 / (double) RAND_MAX123;
+  private static final double rrmax = 1.0 / (double) RAND_MAX123;
 
   @Override
   public void randomize(long pSeed) {

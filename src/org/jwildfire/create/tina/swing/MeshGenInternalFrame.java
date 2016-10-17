@@ -1288,7 +1288,6 @@ public class MeshGenInternalFrame extends JInternalFrame {
       panel_3.add(lblImageStep);
 
       JPanel panel_8 = new JPanel();
-      panel_8.getLayout();
       panel_8.setPreferredSize(new Dimension(132, 10));
       panel_2.add(panel_8, BorderLayout.EAST);
 

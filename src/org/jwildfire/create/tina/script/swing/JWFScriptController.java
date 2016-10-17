@@ -233,21 +233,20 @@ public class JWFScriptController {
   public void scanUserScripts(String path, DefaultMutableTreeNode pParentNode) {
     File root = new File(path);
     File[] list = root.listFiles();
-    try {
-      Arrays.sort(list, new Comparator<File>() {
-
-        @Override
-        public int compare(File o1, File o2) {
-          return o1.getName().compareTo(o2.getName());
-        }
-
-      });
-    }
-    catch (Exception ex) {
-      // ex.printStackTrace();
-    }
-
     if (list != null) {
+      try {
+        Arrays.sort(list, new Comparator<File>() {
+
+          @Override
+          public int compare(File o1, File o2) {
+            return o1.getName().compareTo(o2.getName());
+          }
+
+        });
+      }
+      catch (Exception ex) {
+        // ex.printStackTrace();
+      }
       for (File f : list) {
         if (f.isDirectory()) {
           DefaultMutableTreeNode newParentNode = new JWFScriptFolderNode(f.getName(), f.getAbsolutePath(), true);

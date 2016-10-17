@@ -23,7 +23,7 @@ import java.util.WeakHashMap;
 
 import org.jwildfire.base.Tools;
 
-public class Envelope implements Serializable {
+public class Envelope implements Serializable, Cloneable {
   private static final long serialVersionUID = 1L;
 
   public enum Interpolation {

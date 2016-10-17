@@ -42,11 +42,12 @@ public class CreatorsList {
 
   public static Vector<String> getItemVector() {
     if (itemVector == null) {
-      itemVector = new Vector<String>();
+      Vector<String> v = new Vector<String>();
       for (Class<? extends ImageCreator> creator : items) {
-        itemVector.add(creator.getSimpleName());
+        v.add(creator.getSimpleName());
       }
-      Collections.sort(itemVector);
+      Collections.sort(v);
+      itemVector = v;
     }
     return itemVector;
   }

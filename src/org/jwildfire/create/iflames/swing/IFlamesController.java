@@ -1764,20 +1764,20 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void _scanFiles(String pPath, List<String> pFilenames) {
     File root = new File(pPath);
     File[] list = root.listFiles();
-    try {
-      Arrays.sort(list, new Comparator<File>() {
-
-        @Override
-        public int compare(File o1, File o2) {
-          return o1.getName().compareTo(o2.getName());
-        }
-
-      });
-    }
-    catch (Exception ex) {
-      // ex.printStackTrace();
-    }
     if (list != null) {
+      try {
+        Arrays.sort(list, new Comparator<File>() {
+
+          @Override
+          public int compare(File o1, File o2) {
+            return o1.getName().compareTo(o2.getName());
+          }
+
+        });
+      }
+      catch (Exception ex) {
+        // ex.printStackTrace();
+      }
       for (File f : list) {
         if (f.isDirectory()) {
           _scanFiles(f.getAbsolutePath(), pFilenames);

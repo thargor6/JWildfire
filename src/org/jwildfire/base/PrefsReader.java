@@ -293,7 +293,7 @@ public class PrefsReader {
         pPrefs.setTinaMacroToolbarHeight(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_HEIGHT, pPrefs.getTinaMacroToolbarHeight()));
         {
           int count = getIntProperty(props, MacroButton.KEY_MACRO_BUTTON_COUNT, 0);
-          Prefs.getPrefs().getTinaMacroButtons().clear();
+          pPrefs.getTinaMacroButtons().clear();
           for (int i = 0; i < count; i++) {
             try {
               MacroButton macroButton = new MacroButton();
@@ -302,7 +302,7 @@ public class PrefsReader {
               macroButton.setImage(getProperty(props, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, ""));
               macroButton.setMacro(getProperty(props, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, ""));
               macroButton.setInternal(getBooleanProperty(props, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, false));
-              Prefs.getPrefs().getTinaMacroButtons().add(macroButton);
+              pPrefs.getTinaMacroButtons().add(macroButton);
             }
             catch (Throwable ex) {
               ex.printStackTrace();

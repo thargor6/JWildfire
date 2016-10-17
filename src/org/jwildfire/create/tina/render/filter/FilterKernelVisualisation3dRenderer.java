@@ -91,7 +91,6 @@ public class FilterKernelVisualisation3dRenderer extends FilterHolder implements
           imagePanel.setBounds(0, 0, pWidth, pHeight);
           api.render(SunflowAPI.DEFAULT_OPTIONS, imagePanel);
           img.setBufferedImage(imagePanel.getImage(), imagePanel.getWidth(), imagePanel.getHeight());
-          imagePanel.getImage();
         }
         catch (Exception e) {
           e.printStackTrace();

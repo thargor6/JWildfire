@@ -1119,13 +1119,14 @@ public class Prefs extends ManagedObject {
 
   public static Prefs getPrefs() {
     if (prefs == null) {
-      prefs = new Prefs();
+      Prefs p = new Prefs();
       try {
-        prefs.loadFromFile();
+        p.loadFromFile();
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+      prefs = p;
     }
     return prefs;
   }

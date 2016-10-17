@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  public static boolean DEBUG = false;
+  public static final boolean DEBUG = false;
   private static final String RESSOURCE_CODE = "code_full_variation";
 
   private static HashMap<String, Class> builtin_variations;
@@ -312,6 +312,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       }
       else if (classesLoaded instanceof AbstractCollection) {
         classIter = ((AbstractCollection) classesLoaded).iterator();
+      }
+      else {
+        throw new IllegalArgumentException("unknown class " + String.valueOf(classesLoaded));
       }
       // construct full_variation as instance of first Class from classloader that is a subclass of VariationFunc
       while (classIter.hasNext()) {

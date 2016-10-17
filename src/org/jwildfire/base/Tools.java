@@ -55,7 +55,7 @@ public class Tools {
   public static final String APP_TITLE = "JWildfire";
   public static final String APP_VERSION = "3.00 BETA 3 (15.10.2016)";
 
-  public static boolean SPECIAL_VERSION = false;
+  public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
   public static final int MAX_COLOR_OVERSAMPLING = 20;
@@ -283,9 +283,7 @@ public class Tools {
   }
 
   public static double stringToDouble(String pValue) {
-    if (pValue != null && pValue.indexOf(',') >= 0) {
-      pValue = pValue.replace(',', '.');
-    }
+    pValue = pValue.replace(',', '.');
     return Double.parseDouble(pValue);
   }
 
@@ -527,12 +525,8 @@ public class Tools {
   }
 
   public static boolean stringEquals(String a, String b) {
-    if (a != null && b == null)
-      return false;
-    else if (a == null && b != null)
-      return false;
-    else if (a == null && b == null)
-      return true;
+    if (a == null)
+      return b == null;
     else
       return a.equals(b);
   }

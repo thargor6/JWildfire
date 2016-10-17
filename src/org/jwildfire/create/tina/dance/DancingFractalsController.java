@@ -225,7 +225,7 @@ public class DancingFractalsController {
   }
 
   private FlamePanel getFlamePanel() {
-    if (flamePanel == null && flameRootPanel != null) {
+    if (flamePanel == null) {  // flameRootPanel can't be null !?
       int borderWidth = flameRootPanel.getBorder().getBorderInsets(flameRootPanel).left;
       int width = flameRootPanel.getWidth() - borderWidth;
       int height = flameRootPanel.getHeight() - borderWidth;
@@ -802,7 +802,7 @@ public class DancingFractalsController {
   public void flameCmb_changed() {
     if (!refreshing && renderThread != null) {
       Flame selFlame = flamesCmb.getSelectedIndex() >= 0 && flamesCmb.getSelectedIndex() < project.getFlames().size() ? project.getFlames().get(flamesCmb.getSelectedIndex()) : null;
-      if (selFlame != null && renderThread != null) {
+      if (selFlame != null) {
         int morphFrameCount = Integer.parseInt(morphFrameCountIEd.getText());
         renderThread.getFlameStack().addFlame(selFlame, morphFrameCount, project.getMotions(selFlame));
         if (actionRecorder != null)

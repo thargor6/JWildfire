@@ -154,7 +154,7 @@ public class NBlurFunc extends VariationFunc {
         angTmp -= this._angStart;
 
       if (this._negStripes == FALSE) {
-        if ((count % 2) == 1) {
+        if ((count % 2) != 0) {
           if (angXY > angTmp) {
             angXY = angXY + this._angStart;
             angMem = angMem + this._angStart;
@@ -248,7 +248,7 @@ public class NBlurFunc extends VariationFunc {
             count--;
           }
         }
-        if (((count % 2) == 1) && (this.ratioStripes > 1.0)) {
+        if (((count % 2) != 0) && (this.ratioStripes > 1.0)) {
           if ((angXY > angTmp) && (count != this._maxStripes)) {
             angMem = angMem - angXY + angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
@@ -262,7 +262,7 @@ public class NBlurFunc extends VariationFunc {
             y = cos(angMem);
           }
         }
-        if (((count % 2) == 1) && (this.ratioStripes < 1.0)) {
+        if (((count % 2) != 0) && (this.ratioStripes < 1.0)) {
           if ((fabs(angXY - angTmp) > this._speedCalc2) && (count != this._maxStripes)) {
             if ((angXY - angTmp) > this._speedCalc2) {
               ratioTmpNum = (angXY - (angTmp + this._speedCalc2)) * this._speedCalc2;

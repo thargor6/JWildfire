@@ -24,7 +24,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 
-public class SimpleImage implements WFImage {
+public class SimpleImage implements WFImage, Cloneable {
   private int imageWidth = -1;
   private int imageHeight = -1;
   private BufferedImage bufferedImg;

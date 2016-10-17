@@ -228,9 +228,9 @@ public class BaseFlameListCreator {
       }
 
       IFlamesIterator iterator = null;
-      String param1 = params != null && params.getFlameParam1() != null && params.getFlameParam1().length() > 0 ? params.getFlameParam1() : null;
-      String param2 = params != null && params.getFlameParam2() != null && params.getFlameParam2().length() > 0 ? params.getFlameParam2() : null;
-      String param3 = params != null && params.getFlameParam3() != null && params.getFlameParam3().length() > 0 ? params.getFlameParam3() : null;
+      String param1 = params.getFlameParam1() != null && params.getFlameParam1().length() > 0 ? params.getFlameParam1() : null;
+      String param2 = params.getFlameParam2() != null && params.getFlameParam2().length() > 0 ? params.getFlameParam2() : null;
+      String param3 = params.getFlameParam3() != null && params.getFlameParam3().length() > 0 ? params.getFlameParam3() : null;
 
       if (params.isInstancing()) {
         iterator = instances.get(params);
