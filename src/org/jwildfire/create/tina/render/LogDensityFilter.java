@@ -46,7 +46,7 @@ public class LogDensityFilter extends FilterHolder {
 
   private AbstractRaster raster;
   private int rasterWidth, rasterHeight, rasterSize;
-  private final int PRECALC_LOG_ARRAY_SIZE = 512;
+  private static final int PRECALC_LOG_ARRAY_SIZE = 512;
   private double precalcLogArray[];
   private double k1, k2;
   private double motionBlurScl;

@@ -3279,7 +3279,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     pRow.getNonlinearParamsREd().setEnabled(enabled && !pRessource);
   }
 
-  private final double DELTA_PARAM = 0.1;
+  private static final double DELTA_PARAM = 0.1;
 
   public void nonlinearParamsLeftButtonClicked(int pIdx) {
     nonlinearParamsREdChanged(pIdx, -DELTA_PARAM);
@@ -5543,7 +5543,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return gradientControls;
   }
 
-  final int DFLT_VERT_TOOLBAR_SIZE = 52;
+  private static final int DFLT_VERT_TOOLBAR_SIZE = 52;
 
   public void refreshMacroButtonsPanel() {
     if (prefs.isTinaMacroButtonsVertical()) {

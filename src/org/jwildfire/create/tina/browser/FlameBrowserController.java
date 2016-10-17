@@ -216,7 +216,7 @@ public class FlameBrowserController {
   private int selectedPnl = -1;
   private final Color deselectedCellColor = new Color(160, 160, 160);
   private final Color selectedCellColor = new Color(200, 0, 0);
-  private final int borderSize = 3;
+  private static final int borderSize = 3;
   private JPanel imgRootPanel;
 
   private void showImages(List<FlameFlatNode> pFlames) {

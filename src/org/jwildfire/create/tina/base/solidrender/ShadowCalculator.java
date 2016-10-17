@@ -43,13 +43,13 @@ public class ShadowCalculator implements Serializable {
   private double shadowDistBias;
 
   private final int lightCount;
-  private final boolean withAcceleration = true;
+  private static final boolean withAcceleration = true;
   private float[][][] accLightProjectionZBuf;
 
   private int shadowMapSize;
   private final double shadowMapXScale[], shadowMapYScale[], shadowMapXCentre[], shadowMapYCentre[];
 
-  private final int PRE_SHADOWMAP_SIZE = 40960;
+  private static final int PRE_SHADOWMAP_SIZE = 40960;
   private final float pre_shadowXBuf[][], pre_shadowYBuf[][], pre_shadowZBuf[][];
   private final int pre_shadowIndex[];
 

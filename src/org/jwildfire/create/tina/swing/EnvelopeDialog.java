@@ -1238,7 +1238,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     return path;
   }
 
-  private final String PATH_SEPARATOR = "#";
+  private static final String PATH_SEPARATOR = "#";
   private JPanel panel_3;
   private JPanel panel_4;
   private JButton envelopeImportMP3Button;

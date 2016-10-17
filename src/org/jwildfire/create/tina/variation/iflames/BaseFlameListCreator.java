@@ -52,7 +52,7 @@ public class BaseFlameListCreator {
 
   private final boolean preview;
 
-  private final int mainProgressSteps = 25;
+  private static final int mainProgressSteps = 25;
   private int currProgress;
   private int updateMainProgressStep;
   private int updatePreprocessStep;

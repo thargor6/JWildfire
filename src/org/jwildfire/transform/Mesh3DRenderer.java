@@ -27,8 +27,8 @@ public abstract class Mesh3DRenderer {
   public abstract void renderImage(Mesh3D pMesh3D, Mesh3DTransformer pMesh3DTransformer,
       SimpleImage pImg);
 
-  protected final double PZERO = 0.000001;
-  protected final int MAXLIGHT = 4;
+  protected static final double PZERO = 0.000001;
+  protected static final int MAXLIGHT = 4;
 
   protected int x12[], y12[], z12[];
   protected int x23[], y23[], z23[];
@@ -535,7 +535,7 @@ public abstract class Mesh3DRenderer {
       } \*/
   }
 
-  protected final int PASIZE = 4096;
+  protected static final int PASIZE = 4096;
   protected double dPhong = 0.0;
   protected double phongArray[] = new double[PASIZE + 4];
 

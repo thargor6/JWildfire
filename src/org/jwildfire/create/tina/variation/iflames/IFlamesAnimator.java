@@ -32,7 +32,7 @@ public class IFlamesAnimator implements Serializable {
   private boolean useMotionStore = true;
   private transient IFlamesAnimatorMotionStore motionStore;
 
-  private final float DT = 0.0025f;
+  private static final float DT = 0.0025f;
 
   public IFlamesAnimator(List<Particle> pParticles, MotionParams pMotionParams, Map<String, MotionCurve> pMotionCurves, IFlamesAnimatorMotionStore pMotionStore) {
     particles = pParticles;
