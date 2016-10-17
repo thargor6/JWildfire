@@ -60,7 +60,6 @@ public class ListOfChangesInternalFrame extends JInternalFrame {
     this.setTitle("List of Changes");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
     this.setContentPane(getJContentPane());
   }
 
@@ -115,7 +114,7 @@ public class ListOfChangesInternalFrame extends JInternalFrame {
   }
 
   public void initChangesPane() {
-    changesPane.setContentType("text/plain");
+    changesPane.setContentType("text/html");
     try {
       InputStream is = this.getClass().getResourceAsStream("CHANGES.txt");
       StringBuffer content = new StringBuffer();
@@ -128,7 +127,7 @@ public class ListOfChangesInternalFrame extends JInternalFrame {
       }
       in.close();
 
-      changesPane.setText(content.toString());
+      changesPane.setText("<pre>" + content.toString() + "</pre>");
       changesPane.setSelectionStart(0);
       changesPane.setSelectionEnd(0);
     }
