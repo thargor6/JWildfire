@@ -109,30 +109,29 @@ public class JDKScanner {
       return null;
     }
     byte[] res = (byte[]) regQueryValueEx.invoke(systemRoot, new Object[] {
-        new Integer(handles[0]), toCstr(value) });
-    regCloseKey.invoke(systemRoot, new Object[] { new Integer(handles[0]) });
+        Integer.valueOf(handles[0]), toCstr(value) });
+    regCloseKey.invoke(systemRoot, new Object[] { Integer.valueOf(handles[0]) });
     return res != null ? new String(res).trim() : null;
   }
 
   private List<String> readStringSubKeys(int hkey, String key) throws Exception {
     List<String> results = new ArrayList<String>();
     int[] handles = (int[]) regOpenKey.invoke(systemRoot, new Object[] {
-        new Integer(hkey), toCstr(key), new Integer(KEY_READ)
+        Integer.valueOf(hkey), toCstr(key), new Integer(KEY_READ)
     });
     if (handles[1] != 0) {
       return null;
     }
-    int[] info = (int[]) regQueryInfoKey.invoke(systemRoot, new Object[] { new Integer(handles[0]) });
+    int[] info = (int[]) regQueryInfoKey.invoke(systemRoot, new Object[] { Integer.valueOf(handles[0]) });
     int count = info[0]; // count  
     int maxlen = info[3]; // value length max
     for (int index = 0; index < count; index++) {
       byte[] name = (byte[]) regEnumKeyEx.invoke(systemRoot, new Object[] {
-          new Integer
-          (handles[0]), new Integer(index), new Integer(maxlen + 1)
+          Integer.valueOf(handles[0]), Integer.valueOf(index), Integer.valueOf(maxlen + 1)
       });
       results.add(new String(name).trim());
     }
-    regCloseKey.invoke(systemRoot, new Object[] { new Integer(handles[0]) });
+    regCloseKey.invoke(systemRoot, new Object[] { Integer.valueOf(handles[0]) });
     return results;
   }
 
