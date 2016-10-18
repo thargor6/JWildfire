@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -1301,11 +1302,12 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
         }
         else if (fieldValue instanceof Map) {
           Map<?, ?> map = (Map<?, ?>) fieldValue;
-          Set<?> keySet = map.keySet();
-          for (Object key : keySet) {
-            String pathExt = field.getName() + "[" + key.toString() + "]";
+          Set<?> entrySet = map.entrySet();
+          for (Object obj : entrySet) {
+            Entry<?, ?> entry = (Entry<?, ?>) obj;
+            String pathExt = field.getName() + "[" + entry.getKey().toString() + "]";
             String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
-            String subResult = findProperty(map.get(key), pProperty, subPath);
+            String subResult = findProperty(entry.getValue(), pProperty, subPath);
             if (subResult != null) {
               return subResult;
             }
