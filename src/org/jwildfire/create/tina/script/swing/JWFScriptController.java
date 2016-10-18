@@ -198,7 +198,7 @@ public class JWFScriptController {
           String resFilename = "scripts/" + ressource + "." + Tools.FILEEXT_JWFSCRIPT;
           InputStream is = reader.getClass().getResourceAsStream(resFilename);
           if (is != null) {
-
+            is.close();
             JWFScriptInternalNode node = new JWFScriptInternalNode(ressource, resFilename);
 
             if (defaultFolderNode == null) {
