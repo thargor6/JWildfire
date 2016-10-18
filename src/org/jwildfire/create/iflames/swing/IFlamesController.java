@@ -1452,6 +1452,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         case 2:
           fillMutationFields(getBaseFlame(), flameParams.getFlameParam3Min(), flameParams.getFlameParam3Max(), flameParams.getFlameParam3());
           break;
+        default: // nothing to do
+          break;
       }
     }
   }
@@ -2016,6 +2018,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3(path);
         break;
+      default: // nothing to do
+        break;
     }
     refreshIFlame();
     enableControls();
@@ -2041,6 +2045,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Min(paramMinValueField.getDoubleValue());
         break;
+      default: // nothing to do
+        break;
     }
     refreshIFlame();
     enableControls();
@@ -2057,6 +2063,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         break;
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Max(paramMaxValueField.getDoubleValue());
+        break;
+      default: // nothing to do
         break;
     }
     refreshIFlame();

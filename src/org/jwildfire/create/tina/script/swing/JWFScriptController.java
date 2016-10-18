@@ -435,6 +435,8 @@ public class JWFScriptController {
         sb.append("  flame.setPostSymmetryCentreX(" + Tools.doubleToString(pFlame.getPostSymmetryCentreX()) + ");\n");
         sb.append("  flame.setPostSymmetryCentreY(" + Tools.doubleToString(pFlame.getPostSymmetryCentreY()) + ");\n");
         break;
+      default: // nothing to do
+        break;
     }
 
     for (int i = 0; i < pFlame.getLayers().size(); i++) {
@@ -903,6 +905,8 @@ public class JWFScriptController {
               }
               break;
             }
+            default: // nothing to do
+              break;
           }
         }
         super.setValueAt(aValue, row, column);

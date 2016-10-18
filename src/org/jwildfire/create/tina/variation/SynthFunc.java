@@ -566,6 +566,8 @@ public class SynthFunc extends VariationFunc {
         pVarTP.x += pAmount * radius * s;
         pVarTP.y += pAmount * radius * c;
         break;
+      default: // nothing to do
+          break;
     }
 
     if (pContext.isPreserveZCoordinate()) {
@@ -804,6 +806,8 @@ public class SynthFunc extends VariationFunc {
           z = cos(y);
           x = z / (1.0 + EPS - z);
           break;
+        default: // nothing to do
+          break;
       }
 
       switch (b_layer) {
@@ -820,6 +824,8 @@ public class SynthFunc extends VariationFunc {
         case LAYER_MIN:
           z = a + b * x;
           theta_factor = (theta_factor < z ? theta_factor : z);
+          break;
+        default: // nothing to do
           break;
       }
     }
@@ -876,6 +882,8 @@ public class SynthFunc extends VariationFunc {
           z = cos(y);
           x = z / (1.0 + EPS - z);
           break;
+        default: // nothing to do
+          break;
       }
 
       switch (c_layer) {
@@ -892,6 +900,8 @@ public class SynthFunc extends VariationFunc {
         case LAYER_MIN:
           z = a + c * x;
           theta_factor = (theta_factor < z ? theta_factor : z);
+          break;
+        default: // nothing to do
           break;
       }
     }
@@ -948,6 +958,8 @@ public class SynthFunc extends VariationFunc {
           z = cos(y);
           x = z / (1.0 + EPS - z);
           break;
+        default: // nothing to do
+          break;
       }
 
       switch (d_layer) {
@@ -964,6 +976,8 @@ public class SynthFunc extends VariationFunc {
         case LAYER_MIN:
           z = a + d * x;
           theta_factor = (theta_factor < z ? theta_factor : z);
+          break;
+        default: // nothing to do
           break;
       }
     }
@@ -1020,7 +1034,8 @@ public class SynthFunc extends VariationFunc {
           z = cos(y);
           x = z / (1.0 + EPS - z);
           break;
-
+        default: // nothing to do
+          break;
       }
 
       switch (e_layer) {
@@ -1037,6 +1052,8 @@ public class SynthFunc extends VariationFunc {
         case LAYER_MIN:
           z = a + e * x;
           theta_factor = (theta_factor < z ? theta_factor : z);
+          break;
+        default: // nothing to do
           break;
       }
     }
@@ -1093,6 +1110,8 @@ public class SynthFunc extends VariationFunc {
           z = cos(y);
           x = z / (1.0 + EPS - z);
           break;
+        default: // nothing to do
+          break;
       }
 
       switch (f_layer) {
@@ -1109,6 +1128,8 @@ public class SynthFunc extends VariationFunc {
         case LAYER_MIN:
           z = a + f * x;
           theta_factor = (theta_factor < z ? theta_factor : z);
+          break;
+        default: // nothing to do
           break;
       }
     }
@@ -1229,6 +1250,8 @@ public class SynthFunc extends VariationFunc {
       case SINCOS_MIXIN:
         pair.s = (1.0 - mix) * pair.s + (synth_value(theta) - 1.0);
         pair.c = (1.0 - mix) * pair.c + (synth_value(theta + M_PI / 2.0) - 1.0);
+        break;
+      default: // nothing to do
         break;
     }
     return;

@@ -227,6 +227,8 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
         case 3:
           xForm.addVariation(Math.random() * 0.7 + 0.3, VariationFuncList.getVariationFuncInstance("spherical3D", true));
           break;
+        default: // nothing to do
+          break;
       }
       XFormTransformService.rotate(xForm, 180 - Math.random() * 360.0);
       if (Math.random() > 0.5) {

@@ -74,7 +74,8 @@ public class CheckerboardWFFunc extends VariationFunc {
         setColor(pVarTP, z, x);
         x *= size;
         z *= size;
-      default:
+        break;
+      default: // nothing to do
         break;
     }
 

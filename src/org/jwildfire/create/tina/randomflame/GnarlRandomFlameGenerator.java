@@ -165,6 +165,8 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           juliaN.setParameter("dist", Math.random() * 10 - 2);
           xForm.addVariation(Math.random() * 0.06 + 0.1, juliaN);
           break;
+        default: // nothing to do
+          break;
       }
       xForm.setColorSymmetry(-1);
     }

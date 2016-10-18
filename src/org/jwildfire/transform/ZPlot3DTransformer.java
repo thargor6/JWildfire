@@ -169,6 +169,8 @@ public class ZPlot3DTransformer extends Mesh3DTransformer {
         yMax = 2.0;
         formula = "100*cos(2*pi*(x+y))*(1-sqrt(x*x+y*y))";
         break;
+      default: // nothing to do
+        break;
     }
   }
 

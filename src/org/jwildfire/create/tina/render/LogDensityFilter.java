@@ -91,6 +91,9 @@ public class LogDensityFilter extends FilterHolder {
       case X_AXIS:
       case Y_AXIS:
         k1 /= 2.0;
+        break;
+      default: // nothing to do
+        break;
     }
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);

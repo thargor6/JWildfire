@@ -261,6 +261,8 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           sy = 3.0 * hx * hx * hy - hy * hy * hy;
           push(sx, sy);
           break;
+        default: // nothing to do
+          break;
       }
     }
     sx = pop();

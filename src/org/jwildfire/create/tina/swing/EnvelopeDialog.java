@@ -1208,6 +1208,8 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             }
           }
           break;
+        default: // nothing to do
+          break;
       }
       return res;
     }

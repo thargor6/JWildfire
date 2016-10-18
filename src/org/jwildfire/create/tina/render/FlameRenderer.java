@@ -892,6 +892,8 @@ public class FlameRenderer {
         case SIDE_BY_SIDE:
         case ANAGLYPH:
           return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
+        default: // nothing to do
+          break;
       }
     }
     return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);

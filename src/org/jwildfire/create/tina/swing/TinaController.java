@@ -1509,6 +1509,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               // refreshed automatically:
               // refreshFlameImage(false);
               break;
+            default: // nothing to do
+              break;
           }
         }
         super.setValueAt(aValue, row, column);
@@ -1622,6 +1624,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               break;
             case COL_BLUE:
               data.paletteKeyFrames.get(row).setBlue(Tools.limitColor(Tools.stringToInt(valStr)));
+              break;
+            default: // nothing to do
               break;
           }
           refreshPaletteColorsTable();

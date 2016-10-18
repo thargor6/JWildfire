@@ -417,6 +417,8 @@ public class AnimationModelService {
               case SET:
                 pField.setBoolean(pOwner, Tools.FTOI(value) != 0);
                 break;
+              default: // nothing to do
+                break;
             }
           }
           catch (IllegalArgumentException e) {

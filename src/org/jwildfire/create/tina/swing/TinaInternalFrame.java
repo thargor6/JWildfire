@@ -1305,6 +1305,8 @@ public class TinaInternalFrame extends JInternalFrame {
                   tinaController.getGradientController().onActivate();
                 }
                 break;
+              default: // nothing to do
+                break;
             }
           }
         }
@@ -2912,6 +2914,8 @@ public class TinaInternalFrame extends JInternalFrame {
                 if (tinaController.getJwfScriptController() != null) {
                   tinaController.getJwfScriptController().onActivate();
                 }
+                break;
+              default: // nothing to do
                 break;
             }
           }

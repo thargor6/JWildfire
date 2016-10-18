@@ -578,6 +578,8 @@ public class BaseFlameListCreator {
       case BRIGHTNESS:
         hslrgbConverter.fromRgb(pR / COLORSCL, pG / COLORSCL, pB / COLORSCL);
         return flameParams.getFlameIndex(calcIntensity(pR / COLORSCL, pG / COLORSCL, pB / COLORSCL));
+      default: // nothing to do
+        break;
     }
     return -1;
   }

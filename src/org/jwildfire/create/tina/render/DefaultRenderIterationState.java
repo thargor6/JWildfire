@@ -95,6 +95,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       case Y_AXIS:
         projector = new YAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryRotation());
         break;
+      default: // nothing to do
+        break;
     }
   }
 
