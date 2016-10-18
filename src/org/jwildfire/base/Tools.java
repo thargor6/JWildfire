@@ -602,6 +602,6 @@ public class Tools {
    * @return a random int value
    */
   public static int randomInt(int bound) {
-      return RANDOM.nextInt(bound);
+    return (int) (RANDOM.nextDouble() * bound);
   }
 }
