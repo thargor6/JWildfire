@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 
@@ -33,7 +34,7 @@ public class GradientPositionMutation implements Mutation {
       }
     }
     else {
-      pLayer.getPalette().setModShift(-256 + (int) (512 * Math.random()));
+      pLayer.getPalette().setModShift(-256 + Tools.randomInt(512));
     }
   }
 

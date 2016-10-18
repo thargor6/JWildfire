@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.mutagen;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -31,7 +32,7 @@ public class RandomFlameMutation implements Mutation {
   @Override
   public void execute(Layer pLayer) {
     RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
     int IMG_WIDTH = 80;
     int IMG_HEIGHT = 60;

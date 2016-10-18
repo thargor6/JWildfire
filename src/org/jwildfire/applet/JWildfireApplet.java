@@ -186,7 +186,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
     RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-    int palettePoints = 3 + (int) (Math.random() * 21.0);
+    int palettePoints = 3 + Tools.randomInt(21);
     boolean fadePaletteColors = Math.random() > 0.09;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, pQuality);
     currFlame = sampler.createSample().getFlame();

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -87,7 +88,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
 
       xForm.addVariation(1, w2);
 
-      switch ((int) (Math.random() * 36.0)) {
+      switch (Tools.randomInt(36)) {
         case 0:
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance("blur", true));
           break;
@@ -129,7 +130,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
           break;
         default: {
           int l = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-          String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * l)];
+          String fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(l)];
           xForm.addVariation(blurAmount, VariationFuncList.getVariationFuncInstance(fName, true));
         }
       }
@@ -208,7 +209,7 @@ public class ExperimentalGnarlRandomFlameGenerator extends RandomFlameGenerator 
       XForm xForm = secondXForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(_2ndWeight);
-      int f = (int) (Math.random() * 4);
+      int f = Tools.randomInt(4);
       switch (f) {
         case 0:
           xForm.addVariation(Math.random() * 0.7 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));

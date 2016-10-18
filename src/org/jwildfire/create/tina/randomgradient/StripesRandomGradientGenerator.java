@@ -38,8 +38,8 @@ public class StripesRandomGradientGenerator extends RandomGradientGenerator {
     RGBColor stripeColor = createStripeColor();
     List<RGBColor> baseColors = new StrongHueRandomGradientGenerator().generateKeyFrames(pKeyFrameCount);
     List<RGBColor> res = new ArrayList<RGBColor>();
-    int stripeWidth = 1 + (int) (Math.random() * 2);
-    int colorWidth = 3 + (int) (Math.random() * 5);
+    int stripeWidth = 1 + Tools.randomInt(2);
+    int colorWidth = 3 + Tools.randomInt(5);
     int colorIdx = 0;
     while (res.size() < RGBPalette.PALETTE_SIZE) {
       for (int i = 0; i < stripeWidth; i++) {

@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -39,7 +40,7 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
     // init
     // These vars affect the style of the centre effect
     double centre_synth = 0.7;
-    double centre_mode = (int) (20 * Math.random()); //5;
+    double centre_mode = Tools.randomInt(20); //5;
     double centre_noise = .0;
     double centre_power = -1.0;
     double centre_smooth = 1;
@@ -56,7 +57,7 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
 
       VariationFunc synth = VariationFuncList.getVariationFuncInstance("synth");
       xForm.addVariation(1.0, synth);
-      synth.setParameter("mode", (int) (20 * Math.random())); //3;
+      synth.setParameter("mode", Tools.randomInt(20)); //3;
       synth.setParameter("power", -0.2);
 
       int numWaves = (int) (Math.random() * 3.5 + 2);
@@ -64,17 +65,17 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
       synth.setParameter("a", 0.8 + (Math.random() * 0.4));
       // Wave #1
       synth.setParameter("b", Math.random() * 2);
-      synth.setParameter("b_type", (int) (Math.random() * 7));
-      synth.setParameter("b_frq", (int) (Math.random() * 7 + 1));
+      synth.setParameter("b_type", Tools.randomInt(7));
+      synth.setParameter("b_frq", Tools.randomInt(7) + 1);
       synth.setParameter("b_phs", Math.random() * M_PI);
-      synth.setParameter("b_layer", (int) (Math.random() * 4));
+      synth.setParameter("b_layer", Tools.randomInt(4));
       // Skew effect?
       if (Math.random() < 0.2) {
         synth.setParameter("b_skew", Math.random() * 2 - 1);
       }
       // Exceptionally high frequency?
       if (Math.random() < 0.1) {
-        synth.setParameter("b_frq", (int) (Math.random() * 20 + 7));
+        synth.setParameter("b_frq", Tools.randomInt(20) + 7);
       }
       // Usually higher frequencies affect the amplitude
       if (Math.random() < 0.8) {
@@ -83,17 +84,17 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
 
       // Wave #2
       synth.setParameter("c", Math.random());
-      synth.setParameter("c_type", (int) (Math.random() * 7));
-      synth.setParameter("c_frq", (int) (Math.random() * 7 + 1));
+      synth.setParameter("c_type", Tools.randomInt(7));
+      synth.setParameter("c_frq", Tools.randomInt(7) + 1);
       synth.setParameter("c_phs", Math.random() * M_PI);
-      synth.setParameter("c_layer", (int) (Math.random() * 4));
+      synth.setParameter("c_layer", Tools.randomInt(4));
       // Skew effect?
       if (Math.random() < 0.2) {
         synth.setParameter("c_skew", Math.random() * 2 - 1);
       }
       // Exceptionally high frequency?
       if (Math.random() < 0.1) {
-        synth.setParameter("c_frq", (int) (Math.random() * 20 + 7));
+        synth.setParameter("c_frq", Tools.randomInt(20) + 7);
       }
       // Usually higher frequencies affect the amplitude
       if (Math.random() < 0.8) {
@@ -103,17 +104,17 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
       // Wave #3
       if (numWaves >= 3) {
         synth.setParameter("d", Math.random());
-        synth.setParameter("d_type", (int) (Math.random() * 7));
-        synth.setParameter("d_frq", (int) (Math.random() * 7 + 1));
+        synth.setParameter("d_type", Tools.randomInt(7));
+        synth.setParameter("d_frq", Tools.randomInt(7) + 1);
         synth.setParameter("d_phs", Math.random() * M_PI);
-        synth.setParameter("d_layer", (int) (Math.random() * 4));
+        synth.setParameter("d_layer", Tools.randomInt(4));
         // Skew effect?
         if (Math.random() < 0.2) {
           synth.setParameter("d_skew", Math.random() * 2 - 1);
         }
         // Exceptionally high frequency?
         if (Math.random() < 0.1) {
-          synth.setParameter("d_frq", (int) (Math.random() * 20 + 7));
+          synth.setParameter("d_frq", Tools.randomInt(20) + 7);
         }
         // Usually higher frequencies affect the amplitude
         if (Math.random() < 0.8) {
@@ -124,17 +125,17 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
       // Wave #4
       if (numWaves >= 4) {
         synth.setParameter("e", Math.random());
-        synth.setParameter("e_type", (int) (Math.random() * 7));
-        synth.setParameter("e_frq", (int) (Math.random() * 7 + 1));
+        synth.setParameter("e_type", Tools.randomInt(7));
+        synth.setParameter("e_frq", Tools.randomInt(7) + 1);
         synth.setParameter("e_phs", Math.random() * M_PI);
-        synth.setParameter("e_layer", (int) (Math.random() * 4));
+        synth.setParameter("e_layer", Tools.randomInt(4));
         // Skew effect?
         if (Math.random() < 0.2) {
           synth.setParameter("e_skew", Math.random() * 2 - 1);
         }
         // Exceptionally high frequency?
         if (Math.random() < 0.1) {
-          synth.setParameter("e_frq", (int) (Math.random() * 20 + 7));
+          synth.setParameter("e_frq", Tools.randomInt(20) + 7);
         }
         // Usually higher frequencies affect the amplitude
         if (Math.random() < 0.8) {
@@ -145,17 +146,17 @@ public class SynthRandomFlameGenerator extends RandomFlameGenerator {
       // Wave #5
       if (numWaves >= 5) {
         synth.setParameter("f", Math.random());
-        synth.setParameter("f_type", (int) (Math.random() * 7));
-        synth.setParameter("f_frq", (int) (Math.random() * 7 + 1));
+        synth.setParameter("f_type", Tools.randomInt(7));
+        synth.setParameter("f_frq", Tools.randomInt(7) + 1);
         synth.setParameter("f_phs", Math.random() * M_PI);
-        synth.setParameter("f_layer", (int) (Math.random() * 4));
+        synth.setParameter("f_layer", Tools.randomInt(4));
         // Skew effect?
         if (Math.random() < 0.2) {
           synth.setParameter("f_skew", Math.random() * 2 - 1);
         }
         // Exceptionally high frequency?
         if (Math.random() < 0.1) {
-          synth.setParameter("f_frq", (int) (Math.random() * 20 + 7));
+          synth.setParameter("f_frq", Tools.randomInt(20) + 7);
         }
         // Usually higher frequencies affect the amplitude
         if (Math.random() < 0.8) {

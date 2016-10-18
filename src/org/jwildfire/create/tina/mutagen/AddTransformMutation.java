@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.randomflame.ExperimentalSimpleRandomFlameGenerator;
@@ -36,7 +37,7 @@ public class AddTransformMutation implements Mutation {
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(idx)];
       }
       else {
         fName = VariationFuncList.getRandomVariationname();
@@ -54,7 +55,7 @@ public class AddTransformMutation implements Mutation {
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(idx)];
       }
       else {
         while (true) {

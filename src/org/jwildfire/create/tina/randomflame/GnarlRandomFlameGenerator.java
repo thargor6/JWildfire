@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -149,7 +150,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(_2ndWeight);
-      int f = (int) (Math.random() * 3);
+      int f = Tools.randomInt(3);
       switch (f) {
         case 0:
           xForm.addVariation(Math.random() * 0.37 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));

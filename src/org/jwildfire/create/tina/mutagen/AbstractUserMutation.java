@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.mutagen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 
 public abstract class AbstractUserMutation implements Mutation {
@@ -47,7 +48,7 @@ public abstract class AbstractUserMutation implements Mutation {
   public void execute(Layer pLayer) {
     List<MutationType> types = getMutationTypes();
     if (types.size() > 0) {
-      Mutation mutation = types.get((int) (types.size() * Math.random())).createMutationInstance();
+      Mutation mutation = types.get(Tools.randomInt(types.size())).createMutationInstance();
       mutation.execute(pLayer);
     }
   }

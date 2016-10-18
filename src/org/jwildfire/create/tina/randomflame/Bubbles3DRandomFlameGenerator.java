@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -62,7 +63,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
         varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname());
       }
       else {
-        varFunc = VariationFuncList.getVariationFuncInstance(fncList[(int) (fncList.length * Math.random())], true);
+        varFunc = VariationFuncList.getVariationFuncInstance(fncList[Tools.randomInt(fncList.length)], true);
       }
 
       xForm.addVariation(-0.02 + 0.04 * Math.random(), varFunc);
@@ -96,7 +97,7 @@ public class Bubbles3DRandomFlameGenerator extends RandomFlameGenerator {
       layer.getXForms().add(xForm);
       xForm.setWeight(1.0 + Math.random() * 50.0);
       int fncCount = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-      String fncName = Math.random() > 0.5 ? ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (fncCount * Math.random())] : "eyefish";
+      String fncName = Math.random() > 0.5 ? ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(fncCount)] : "eyefish";
       xForm.addVariation(-1.5 + 2 * Math.random() * 3.0, VariationFuncList.getVariationFuncInstance(fncName, true));
       xForm.addVariation(1.0 - 3.5 * Math.random(), VariationFuncList.getVariationFuncInstance("hemisphere", true));
       xForm.setColor(0.0);

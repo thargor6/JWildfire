@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -102,7 +103,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     randGen.setUseSimpleGenerators(true);
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     Flame subFlame = sampler.createSample().getFlame();

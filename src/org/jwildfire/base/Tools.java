@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
@@ -591,4 +592,16 @@ public class Tools {
     return new File(f.getParent(), name + ".hdr").getAbsolutePath();
   }
 
+  public static final Random RANDOM = new Random();
+
+  /**
+   * Returns a pseudorandom, uniformly distributed {@code int} value
+   * between 0 (inclusive) and the specified value (exclusive).
+   * Uses {@link Random#nextInt(int)}
+   * @param bound the upper bound (exclusive). Must be positive.
+   * @return a random int value
+   */
+  public static int randomInt(int bound) {
+      return RANDOM.nextInt(bound);
+  }
 }

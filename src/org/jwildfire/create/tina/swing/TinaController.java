@@ -1183,7 +1183,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       final int IMG_WIDTH = 80;
       final int IMG_HEIGHT = 60;
       RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-      int palettePoints = 3 + (int) (Math.random() * 21.0);
+      int palettePoints = 3 + Tools.randomInt(21);
       boolean fadePaletteColors = Math.random() > 0.09;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
       Flame flame = sampler.createSample().getFlame();
@@ -2846,7 +2846,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
     RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance(pGradientGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
-      int palettePoints = 7 + (int) (Math.random() * 24.0);
+      int palettePoints = 7 + Tools.randomInt(24);
       boolean fadePaletteColors = Math.random() > 0.06;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
@@ -3974,7 +3974,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Flame flame = getCurrFlame();
     if (flame != null) {
       saveUndoPoint();
-      data.paletteShiftREd.setText(String.valueOf(255 - (int) (511 * Math.random())));
+      data.paletteShiftREd.setText(String.valueOf(255 - Tools.randomInt(511)));
     }
   }
 

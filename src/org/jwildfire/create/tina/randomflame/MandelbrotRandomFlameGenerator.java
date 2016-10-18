@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -54,7 +55,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
-      int varId = (int) (Math.random() * 6.0);
+      int varId = Tools.randomInt(6);
       switch (varId) {
         case 0:
           varFunc = VariationFuncList.getVariationFuncInstance("fract_dragon_wf", true);
