@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -59,7 +60,7 @@ public class SimpleTilingRandomFlameGenerator extends RandomFlameGenerator {
       XFormTransformService.rotate(xForm, -180.0 + Math.random() * 360.0);
     }
     // Tiling
-    int nForms = 2 + (int) (Math.random() * 5);
+    int nForms = 2 + Tools.randomInt(5);
     for (int i = 0; i < nForms; i++) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);

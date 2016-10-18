@@ -81,6 +81,8 @@ public class DCCubeFunc extends VariationFunc {
         else
           pVarTP.color = c6;
         break;
+      default: // nothing to do
+        break;
     }
     pVarTP.x += x * this.x;
     pVarTP.y += y * this.y;

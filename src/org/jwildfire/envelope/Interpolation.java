@@ -17,7 +17,7 @@
 package org.jwildfire.envelope;
 
 public abstract class Interpolation {
-  protected final double SMALL = 1.0e-5;
+  protected static final double SMALL = 1.0e-5;
   protected double[] src;
   protected int snum;
   protected double[] dest;

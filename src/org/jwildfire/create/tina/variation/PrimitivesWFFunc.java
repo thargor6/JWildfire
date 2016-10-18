@@ -106,6 +106,8 @@ public class PrimitivesWFFunc extends VariationFunc {
             dy = size * (pContext.random() - 0.5);
           }
           break;
+        default: // nothing to do
+          break;
       }
     }
     pVarTP.x += dx;
@@ -195,6 +197,8 @@ public class PrimitivesWFFunc extends VariationFunc {
           dz = size * (pContext.random() - 0.5);
         }
         break;
+      default: // nothing to do
+        break;
     }
     pVarTP.x += dx;
     pVarTP.y += dy;
@@ -247,6 +251,8 @@ public class PrimitivesWFFunc extends VariationFunc {
             dx = (pContext.random() < 0.5 ? tx : -tx) * 0.5;
             dy = 0.5 * size - P_SINA * ty;
             dz = size * 0.5 - P_COSA * ty;
+            break;
+          default: // nothing to do
             break;
         }
     }

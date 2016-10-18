@@ -338,6 +338,8 @@ public class BatchRendererController implements JobRenderThreadController {
                 errorHandler.handleError(new Exception("Invalid size <" + valStr + ">, size must be specified in the format <width>x<height>, e.g. 1920x1080"));
               }
               break;
+            default: // nothing to do
+              break;
           }
         }
         super.setValueAt(aValue, row, column);

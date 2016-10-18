@@ -172,7 +172,7 @@ public class AbstractFlameWriter {
     return attrList;
   }
 
-  protected class UniqueNamesMaker {
+  protected static class UniqueNamesMaker {
     private final Map<String, String> namesMap = new HashMap<String, String>();
 
     public String makeUnique(String pName) {

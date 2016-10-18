@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -124,7 +125,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(idx)];
       }
       else {
         fName = VariationFuncList.getRandomVariationname();
@@ -237,7 +238,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       String finals[] = { "falloff2", "bwrands", "bwraps7", "cosine", "falloff3", "bwrands", "bwrands", "falloff2" };
       VariationFunc var = VariationFuncList.getVariationFuncInstance(finals[(int) (Math.random() * finals.length)], true);
       if (var.getName().equals("bwrands")) {
-        var.setParameter("seed", (int) (Math.random() * Short.MAX_VALUE));
+        var.setParameter("seed", Tools.randomInt(Short.MAX_VALUE));
         var.setParameter("minpetals", (int) (3 + Math.random() * 3));
         var.setParameter("maxpetals", (int) (6 + Math.random() * 12));
       }

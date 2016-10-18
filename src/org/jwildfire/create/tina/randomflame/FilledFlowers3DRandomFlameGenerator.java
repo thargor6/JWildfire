@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -68,18 +69,18 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(0.00001 - Math.random() * 0.00002, VariationFuncList.getVariationFuncInstance("zcone", true));
         {
           String fncLst[] = { "bubble", "log" };
-          xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true));
+          xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
         {
           String fncLst[] = { "arch", "bipolar", "hyperbolic", "butterfly", "cannabiscurve_wf", "cell", "checks", "circlize", "conic",
               "coth", "cpow", "ex", "falloff2", "fan", "flux", "foci", "heart", "kaleidoscope", "log", "mobius", "ngon", "pdj",
               "oscilloscope", "spherical", "spiral" };
-          xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true));
+          xForm.addVariation(0.001 + Math.random() * 0.099, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
         {
           String fncLst[] = { "waves2", "waves2_wf", "waves3_wf", "waves4_wf" };
 
-          varFunc = VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true);
+          varFunc = VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true);
           varFunc.setParameter("scalex", 0.5 + Math.random());
           varFunc.setParameter("scaley", 0.5 + Math.random());
           varFunc.setParameter("freqx", 1.0 + Math.random() * 2.0);
@@ -88,7 +89,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
         }
         {
           String fncLst[] = { "cross", "checks", "conic", "kaleidoscope", "lazysusan", "log" };
-          xForm.addVariation(0.001 + Math.random() * 0.015, VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true));
+          xForm.addVariation(0.001 + Math.random() * 0.015, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
         }
       }
       xForm.setColor(0.33);
@@ -96,7 +97,7 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
     }
     // blur xForms
     {
-      int blurCount = (int) (Math.random() * 5.0);
+      int blurCount = Tools.randomInt(5);
       double weight = 0.25 + Math.random() * 0.5;
       for (int i = 0; i < blurCount; i++) {
         XForm xForm = new XForm();
@@ -120,16 +121,16 @@ public class FilledFlowers3DRandomFlameGenerator extends RandomFlameGenerator {
       layer.getXForms().add(xForm);
       xForm.setWeight(0.1 + Math.random() * 1.4);
       XFormTransformService.localTranslate(xForm, 0.3 - 0.6 * Math.random(), 0.3 - 0.6 * Math.random(), true);
-      switch ((int) (Math.random() * 3.0)) {
+      switch (Tools.randomInt(3)) {
         case 0:
           xForm.addVariation(0.05 + Math.random() * 0.15, VariationFuncList.getVariationFuncInstance("bubble", true));
-          xForm.addVariation(0.01 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true));
+          xForm.addVariation(0.01 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
           break;
         case 1:
           xForm.addVariation(0.05 + Math.random() * 0.15, VariationFuncList.getVariationFuncInstance("bubble", true));
           break;
         default:
-          xForm.addVariation(0.05 + Math.random() * 0.15, VariationFuncList.getVariationFuncInstance(fncLst[(int) (fncLst.length * Math.random())], true));
+          xForm.addVariation(0.05 + Math.random() * 0.15, VariationFuncList.getVariationFuncInstance(fncLst[Tools.randomInt(fncLst.length)], true));
           break;
       }
 

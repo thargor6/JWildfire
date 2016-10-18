@@ -736,6 +736,8 @@ public class FlamePanel extends ImagePanel {
                   selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
                 }
                 break;
+              default: // nothing to do
+                break;
             }
             return true;
           }
@@ -814,6 +816,8 @@ public class FlamePanel extends ImagePanel {
             reRender = gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, layer);
             return true;
           }
+          default: // nothing to do
+            break;
         }
       }
     }

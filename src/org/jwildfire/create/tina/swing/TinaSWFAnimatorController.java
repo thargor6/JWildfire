@@ -137,7 +137,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private boolean noRefresh;
 
-  private class MotionCurveEditInfo {
+  private static class MotionCurveEditInfo {
     private final MotionCurve curve;
     private final JWFNumberField field;
 
@@ -1522,10 +1522,10 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   private List<MovieThumbnail> randomBatch = new ArrayList<MovieThumbnail>();
 
-  private final int IMG_WIDTH = 66;
-  private final int IMG_COUNT = 5;
-  private final int IMG_HEIGHT = 50;
-  private final int BORDER_SIZE = 8;
+  private static final int IMG_WIDTH = 66;
+  private static final int IMG_COUNT = 5;
+  private static final int IMG_HEIGHT = 50;
+  private static final int BORDER_SIZE = 8;
 
   public void updateThumbnails() {
     if (randomBatchScrollPane != null) {
@@ -1642,7 +1642,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     return true;
   }
 
-  public class ScriptContainer {
+  public static class ScriptContainer {
     private final JComboBox scriptCmb;
     private final JWFNumberField scriptREd;
     private final MotionCurve motionCurve;

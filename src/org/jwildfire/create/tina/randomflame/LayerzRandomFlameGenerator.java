@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
@@ -42,7 +43,7 @@ public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
     randGen.setUseSimpleGenerators(true);
     final int IMG_WIDTH = 120;
     final int IMG_HEIGHT = 90;
-    int palettePoints = 3 + (int) (Math.random() * 17.0);
+    int palettePoints = 3 + Tools.randomInt(17);
     boolean fadePaletteColors = Math.random() > 0.125;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pState.getPrefs(), randGen, RandomSymmetryGeneratorList.NONE, pState.getGradientGenerator(), palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     return sampler.createSample().getFlame();

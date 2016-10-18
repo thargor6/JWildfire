@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -67,7 +68,7 @@ public class Flowers3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.addVariation(0.01 + 0.045 * Math.random(), VariationFuncList.getVariationFuncInstance("cross", true));
       if (Math.random() < 0.33) {
         VariationFunc ef = VariationFuncList.getVariationFuncInstance("epispiral_wf", true);
-        ef.setParameter("waves", 3 + (int) (Math.random() * 10.0));
+        ef.setParameter("waves", 3 + Tools.randomInt(10));
         xForm.addVariation(0.02 + 0.29 * Math.random(), ef);
         if (Math.random() < 0.33) {
           VariationFunc ef2 = VariationFuncList.getVariationFuncInstance("epispiral", true);

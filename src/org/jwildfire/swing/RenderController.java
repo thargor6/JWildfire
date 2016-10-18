@@ -99,7 +99,7 @@ public class RenderController implements RenderProgressReporter {
     renderDialog.setVisible(true);
   }
 
-  private class PreviewPanel {
+  private static class PreviewPanel {
     private final JLabel label;
     private String caption;
     private final JPanel panel;

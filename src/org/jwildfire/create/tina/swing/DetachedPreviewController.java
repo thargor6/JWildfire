@@ -39,7 +39,7 @@ public class DetachedPreviewController implements IterationObserver {
     IDLE, RENDER, PAUSE
   }
 
-  private class ImgSize {
+  private static class ImgSize {
     private final int width;
     private final int height;
 

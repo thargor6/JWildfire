@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.mutagen;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
@@ -32,10 +33,10 @@ public class AffineMutation implements Mutation {
   private void apply(Layer pLayer, double pAmount) {
     XForm xForm;
     if (pLayer.getFinalXForms().size() == 0 || Math.random() < 0.5) {
-      xForm = pLayer.getXForms().get((int) (pLayer.getXForms().size() * Math.random()));
+      xForm = pLayer.getXForms().get(Tools.randomInt(pLayer.getXForms().size()));
     }
     else {
-      xForm = pLayer.getFinalXForms().get((int) (pLayer.getFinalXForms().size() * Math.random()));
+      xForm = pLayer.getFinalXForms().get(Tools.randomInt(pLayer.getFinalXForms().size()));
     }
     if (Math.random() < 0.5) {
       if (Math.random() < 0.75) {

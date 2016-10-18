@@ -26,6 +26,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -52,7 +53,7 @@ public class PRose3DFunc extends VariationFunc {
   private static final String[] paramNames = { PARAM_L, PARAM_K, PARAM_C, PARAM_Z1, PARAM_Z2, PARAM_REF_SC, PARAM_OPT, PARAM_OPT_SC, PARAM_OPT3, PARAM_TRANSP, PARAM_DIST, PARAM_WAGSC, PARAM_CRVSC, PARAM_F, PARAM_WIGSC, PARAM_OFFSET };
 
   private double l = 1.0;
-  private double k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : (int) (Math.random() * 15.0));
+  private double k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : Tools.randomInt(15));
   private double c = 0.0;
   private double z1 = 1.0;
   private double z2 = 1.0;

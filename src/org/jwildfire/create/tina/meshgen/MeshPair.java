@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.meshgen;
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 
 public class MeshPair {
-  private final int PREVIEW_FACES = 150000;
+  private static final int PREVIEW_FACES = 150000;
   private final Mesh mesh;
   private Mesh reducedMesh;
 

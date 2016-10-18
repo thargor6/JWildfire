@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -29,7 +30,7 @@ public class SierpinskyRandomFlameGenerator extends RandomFlameGenerator {
     Flame flame = new Flame();
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
-    flame.setCamRoll((int) (Math.random() * 8.0) * -45.0);
+    flame.setCamRoll(Tools.randomInt(8) * -45.0);
     flame.setCentreY(0.0);
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();

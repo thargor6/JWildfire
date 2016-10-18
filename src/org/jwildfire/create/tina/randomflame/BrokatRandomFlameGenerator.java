@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -62,7 +63,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
       layer.getXForms().add(xForm);
       xForm.setWeight(0.05 + Math.random() * 0.35);
       String fncNames[] = { "juliascope", "julia3D", "julia3Dz", "julian" };
-      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncNames[(int) (fncNames.length * Math.random())], true);
+      VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(fncNames[Tools.randomInt(fncNames.length)], true);
       varFunc.setParameter("power", Math.random() < 0.33 ? 2 : Math.random() < 0.5 ? 3 : 4);
       xForm.addVariation(1.0, varFunc);
       xForm.setColor(0.5 + Math.random() * 0.5);
@@ -83,7 +84,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
         fncName = "bubble";
       }
       else {
-        fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
+        fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
       }
       xForm.addVariation(0.01 + Math.random() * 0.04, VariationFuncList.getVariationFuncInstance(fncName, true));
       xForm.addVariation(5.0 + Math.random() * 10.0, VariationFuncList.getVariationFuncInstance("pre_blur", true));
@@ -101,7 +102,7 @@ public class BrokatRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.4 + Math.random() * 0.2);
-      String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
+      String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
       xForm.addVariation(0.01 + Math.random() * 0.04, VariationFuncList.getVariationFuncInstance(fncName, true));
       if (Math.random() > 0.5) {
         xForm.addVariation((0.01 + Math.random() * 0.04) * 0.5, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true)).setPriority(-1);

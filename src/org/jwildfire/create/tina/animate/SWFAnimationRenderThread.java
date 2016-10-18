@@ -80,6 +80,8 @@ public class SWFAnimationRenderThread implements Runnable {
       case ANB:
         createANB();
         break;
+      default: // nothing to do
+        break;
     }
   }
 

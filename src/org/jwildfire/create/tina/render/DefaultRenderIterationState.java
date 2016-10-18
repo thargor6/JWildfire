@@ -95,6 +95,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       case Y_AXIS:
         projector = new YAxisSymmetryProjector(projector, flame.getPostSymmetryDistance(), flame.getPostSymmetryCentreX(), flame.getPostSymmetryCentreY(), flame.getPostSymmetryRotation());
         break;
+      default: // nothing to do
+        break;
     }
   }
 
@@ -627,7 +629,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   }
 
-  public class PointSymmetryProjector implements PointProjector {
+  public static class PointSymmetryProjector implements PointProjector {
     private final PointProjector parent;
     private final double centreX, centreY;
     private final int order;

@@ -46,7 +46,7 @@ public class LogDensityFilter extends FilterHolder {
 
   private AbstractRaster raster;
   private int rasterWidth, rasterHeight, rasterSize;
-  private final int PRECALC_LOG_ARRAY_SIZE = 512;
+  private static final int PRECALC_LOG_ARRAY_SIZE = 512;
   private double precalcLogArray[];
   private double k1, k2;
   private double motionBlurScl;
@@ -91,6 +91,9 @@ public class LogDensityFilter extends FilterHolder {
       case X_AXIS:
       case Y_AXIS:
         k1 /= 2.0;
+        break;
+      default: // nothing to do
+        break;
     }
     double pixelsPerUnit = flame.getPixelsPerUnit() * flame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);

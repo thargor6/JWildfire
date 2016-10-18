@@ -184,6 +184,8 @@ public class EnvelopeDlgController {
           case NONE:
             selectPoint(e);
             break;
+          default: // nothing to do
+            break;
         }
       }
     });

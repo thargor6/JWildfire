@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -46,7 +47,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
 
   protected VariationFunc getRandom3DShape() {
     VariationFunc varFunc;
-    switch ((int) (Math.random() * 6.0)) {
+    switch (Tools.randomInt(6)) {
       case 0: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId());
@@ -86,7 +87,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
       case 4:
       default: {
         varFunc = VariationFuncList.getVariationFuncInstance("obj_mesh_primitive_wf", true);
-        varFunc.setParameter("primitive", (int) (Math.random() * OBJMeshPrimitiveWFFunc.LOWPOLY_SHAPE_COUNT));
+        varFunc.setParameter("primitive", Tools.randomInt(OBJMeshPrimitiveWFFunc.LOWPOLY_SHAPE_COUNT));
         varFunc.setParameter("scale_x", 1);
         varFunc.setParameter("scale_y", 1);
         varFunc.setParameter("scale_z", 1);

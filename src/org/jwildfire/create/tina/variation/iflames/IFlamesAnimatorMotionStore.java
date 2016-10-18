@@ -26,7 +26,7 @@ import org.jwildfire.base.Tools;
 public class IFlamesAnimatorMotionStore {
   private final Map<Float, StoreEntry> store = new HashMap<Float, StoreEntry>();
 
-  private class StoreEntry {
+  private static class StoreEntry {
     private static final int MAX_PERMANENT_STORE = 1000;
     private static final int INITIAL_CAPACITY = 10000;
     private final float dt;

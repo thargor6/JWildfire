@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -45,7 +46,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
 
       String fName;
       if (Math.random() < 0.15) {
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(fncCount)];
       }
       else {
         fName = Math.random() < 0.8 ? "eyefish" : "fisheye";
@@ -89,7 +90,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
       if (Math.random() > 0.8) {
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(fncCount)];
       }
       else {
         fName = Math.random() > 0.5 ? "linear3D" : "noise";
@@ -108,7 +109,7 @@ public class BubblesRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.5 + Math.random() * 1.5);
       String fName;
       if (Math.random() > 0.8) {
-        fName = Math.random() > 0.75 ? VariationFuncList.getRandomVariationname() : ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * fncCount)];
+        fName = Math.random() > 0.75 ? VariationFuncList.getRandomVariationname() : ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(fncCount)];
       }
       else {
         fName = Math.random() > 0.5 ? "linear3D" : "gaussian_blur";

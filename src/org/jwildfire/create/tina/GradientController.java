@@ -45,8 +45,6 @@ public class GradientController {
   private final static int GRADIENT_THUMB_WIDTH = 200;
   private final static int GRADIENT_THUMB_HEIGHT = 18;
 
-  private JScrollPane gradientLibraryScrollPane;
-
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
@@ -293,7 +291,7 @@ public class GradientController {
     renameFolderBtn.setEnabled(userNodeSelected && node != userGradientsRootNode);
   }
 
-  private class GradientNode {
+  private static class GradientNode {
     private final String caption;
     private final SimpleImage image;
 
@@ -313,7 +311,7 @@ public class GradientController {
 
   }
 
-  private class GradientRenderer extends DefaultListCellRenderer {
+  private static class GradientRenderer extends DefaultListCellRenderer {
     private static final long serialVersionUID = 1L;
 
     private Map<GradientNode, ImageIcon> iconCache = new HashMap<GradientNode, ImageIcon>();
@@ -416,12 +414,6 @@ public class GradientController {
       }
       else {
         gradientsList.setListData(new Vector<GradientNode>());
-        if (gradientLibraryScrollPane != null) {
-          gradientLibraryPanel.remove(gradientLibraryScrollPane);
-          gradientLibraryScrollPane = null;
-          gradientLibraryPanel.repaint();
-          gradientLibraryPanel.validate();
-        }
       }
     }
     finally {

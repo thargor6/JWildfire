@@ -52,7 +52,7 @@ public class BaseFlameListCreator {
 
   private final boolean preview;
 
-  private final int mainProgressSteps = 25;
+  private static final int mainProgressSteps = 25;
   private int currProgress;
   private int updateMainProgressStep;
   private int updatePreprocessStep;
@@ -578,6 +578,8 @@ public class BaseFlameListCreator {
       case BRIGHTNESS:
         hslrgbConverter.fromRgb(pR / COLORSCL, pG / COLORSCL, pB / COLORSCL);
         return flameParams.getFlameIndex(calcIntensity(pR / COLORSCL, pG / COLORSCL, pB / COLORSCL));
+      default: // nothing to do
+        break;
     }
     return -1;
   }

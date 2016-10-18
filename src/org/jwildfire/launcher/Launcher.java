@@ -180,7 +180,7 @@ public class Launcher {
       }
       else {
         final int IMG_COUNT = 101;
-        int imageIdx = (int) (Math.random() * IMG_COUNT) + 1;
+        int imageIdx = Tools.randomInt(IMG_COUNT) + 1;
         String id = String.valueOf(imageIdx);
         while (id.length() < 3) {
           id = "0" + id;

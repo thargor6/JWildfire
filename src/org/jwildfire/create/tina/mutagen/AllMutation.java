@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.mutagen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 
 public class AllMutation implements Mutation {
@@ -63,7 +64,7 @@ public class AllMutation implements Mutation {
 
   @Override
   public void execute(Layer pLayer) {
-    Mutation mutation = types.get((int) (types.size() * Math.random())).createMutationInstance();
+    Mutation mutation = types.get(Tools.randomInt(types.size())).createMutationInstance();
     mutation.execute(pLayer);
   }
 

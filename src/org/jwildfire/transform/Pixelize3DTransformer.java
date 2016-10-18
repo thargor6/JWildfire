@@ -584,7 +584,7 @@ public class Pixelize3DTransformer extends Mesh3DTransformer {
   }
 
   private static class DetailedBlock extends Block {
-    private final int ZSEGMENTS = 3;
+    private static final int ZSEGMENTS = 3;
 
     public DetailedBlock(int pBlockWidth, int pBlockHeight) {
       blockWidth = pBlockWidth;

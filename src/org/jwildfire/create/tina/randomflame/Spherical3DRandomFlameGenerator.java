@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -127,12 +128,12 @@ public class Spherical3DRandomFlameGenerator extends RandomFlameGenerator {
       layer.getFinalXForms().add(xForm);
       xForm.setWeight(0.1);
       int power;
-      int style = (int) (3 * Math.random());
+      int style = Tools.randomInt(3);
       switch (style) {
         case 0:
         case 1:
           varFunc = VariationFuncList.getVariationFuncInstance(style == 1 ? "julia3D" : "julia3Dz", true);
-          power = -4 + (int) (Math.random() * 9.0);
+          power = -4 + Tools.randomInt(9);
           varFunc.setParameter("power", power != 0 ? power : 0);
           if (Math.random() > 0.5) {
             xForm.addVariation(0.005 + Math.random() * 0.5, VariationFuncList.getVariationFuncInstance("linear3D", true));

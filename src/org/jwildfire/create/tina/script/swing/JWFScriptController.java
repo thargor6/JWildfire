@@ -198,7 +198,7 @@ public class JWFScriptController {
           String resFilename = "scripts/" + ressource + "." + Tools.FILEEXT_JWFSCRIPT;
           InputStream is = reader.getClass().getResourceAsStream(resFilename);
           if (is != null) {
-
+            is.close();
             JWFScriptInternalNode node = new JWFScriptInternalNode(ressource, resFilename);
 
             if (defaultFolderNode == null) {
@@ -434,6 +434,8 @@ public class JWFScriptController {
         sb.append("  flame.setPostSymmetryRotation(" + Tools.doubleToString(pFlame.getPostSymmetryRotation()) + ");\n");
         sb.append("  flame.setPostSymmetryCentreX(" + Tools.doubleToString(pFlame.getPostSymmetryCentreX()) + ");\n");
         sb.append("  flame.setPostSymmetryCentreY(" + Tools.doubleToString(pFlame.getPostSymmetryCentreY()) + ");\n");
+        break;
+      default: // nothing to do
         break;
     }
 
@@ -903,6 +905,8 @@ public class JWFScriptController {
               }
               break;
             }
+            default: // nothing to do
+              break;
           }
         }
         super.setValueAt(aValue, row, column);

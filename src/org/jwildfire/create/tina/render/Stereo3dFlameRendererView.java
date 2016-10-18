@@ -34,6 +34,8 @@ public class Stereo3dFlameRendererView extends FlameRendererView {
         eyeAngle = -flame.getAnaglyph3dAngle() * M_PI / 180.0;
         eyeDist = flame.getAnaglyph3dEyeDist();
         break;
+      default: // nothing to do
+        break;
     }
     sinEye = sin(eyeAngle);
     cosEye = cos(eyeAngle);

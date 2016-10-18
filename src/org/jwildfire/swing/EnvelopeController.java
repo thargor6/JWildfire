@@ -102,6 +102,8 @@ public class EnvelopeController {
           case NONE:
             selectPoint(e);
             break;
+          default: // nothing to do
+            break;
         }
       }
     });
