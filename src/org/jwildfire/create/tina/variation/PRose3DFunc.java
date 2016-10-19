@@ -209,19 +209,9 @@ public class PRose3DFunc extends VariationFunc {
     }
     else // this is the option when optDir > 0.0
     {
-      if (posNeg < 0)
-      {
-        pVarTP.x += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * cth;
-        pVarTP.y += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * sth;
-        pVarTP.z += pAmount * 0.5 * ((scaleZ1 * waggle + sqr(rad * 0.5) * sin(wig) * wigScale) + (this.dist));
-
-      }
-      else
-      {
-        pVarTP.x += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * cth;
-        pVarTP.y += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * sth;
-        pVarTP.z += pAmount * 0.5 * ((scaleZ1 * waggle + sqr(rad * 0.5) * sin(wig) * wigScale) + (this.dist));
-      }
+      pVarTP.x += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * cth;
+      pVarTP.y += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * sth;
+      pVarTP.z += pAmount * 0.5 * ((scaleZ1 * waggle + sqr(rad * 0.5) * sin(wig) * wigScale) + (this.dist));
     }
   }
 
