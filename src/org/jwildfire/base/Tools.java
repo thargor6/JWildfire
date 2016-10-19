@@ -597,11 +597,11 @@ public class Tools {
   /**
    * Returns a pseudorandom, uniformly distributed {@code int} value
    * between 0 (inclusive) and the specified value (exclusive).
-   * Uses {@link Random#nextInt(int)}
-   * @param bound the upper bound (exclusive). Must be positive.
-   * @return a random int value
+   * Uses {@link Random#nextInt(int)}.
+   * @param bound the upper bound (exclusive). Must be positive. (greater than zero)
+   * @return a random int value between 0 (inclusive) and bound (exclusive)
    */
   public static int randomInt(int bound) {
-    return (int) (RANDOM.nextDouble() * bound);
+    return RANDOM.nextInt(bound);
   }
 }
