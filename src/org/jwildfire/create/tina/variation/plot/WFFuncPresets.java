@@ -128,6 +128,6 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
   }
 
   public int getRandomPresetId() {
-    return minId + Tools.randomInt(maxId - minId);
+    return minId + (int) ((maxId - minId) * Math.random());
   }
 }
