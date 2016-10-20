@@ -374,4 +374,15 @@ umax= 2 * pi
 vmin= 0
 vmax= 0.5
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+##35
+Under the sea Formula, supplied by Don Town, M=2,N=5
+=======
+xformula = u*cos(v)
+yformula = u*sin(v)
+zformula = exp(-u*u)*(sin(param_a*pi*(u))-u*cos(param_b*v))
+param_a = 2
+param_b = 5
+umin = 0.0
+umax= 2.0
+vmin = 0.0
+vmax = 2*pi
