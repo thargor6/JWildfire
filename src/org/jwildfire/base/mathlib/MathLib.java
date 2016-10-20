@@ -37,17 +37,11 @@ public final class MathLib {
   private static BaseMathLib baseLib = BaseMathLibType.FAST_MATH.createInstance();
 
   public static final int iabs(int var) {
-    if (var >= 0)
-      return var;
-    else
-      return 0 - var;
+    return Math.abs(var);
   }
 
   public static final double fabs(double var) {
-    if (var >= 0.0)
-      return var;
-    else
-      return 0.0 - var;
+    return Math.abs(var);
   }
 
   public static final int sign(double val) {
