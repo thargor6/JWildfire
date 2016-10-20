@@ -19,12 +19,19 @@ package org.jwildfire.create.tina.variation.plot;
 public class YPlot2DWFFuncPreset extends WFFuncPreset {
   private final String formula;
   private final double xmin, xmax;
+  private final double param_a, param_b, param_c, param_d, param_e, param_f;
 
-  public YPlot2DWFFuncPreset(int id, String formula, double xmin, double xmax) {
+  public YPlot2DWFFuncPreset(int id, String formula, double xmin, double xmax, double param_a, double param_b, double param_c, double param_d, double param_e, double param_f) {
     super(id);
     this.formula = formula;
     this.xmin = xmin;
     this.xmax = xmax;
+    this.param_a = param_a;
+    this.param_b = param_b;
+    this.param_c = param_c;
+    this.param_d = param_d;
+    this.param_e = param_e;
+    this.param_f = param_f;
   }
 
   public String getFormula() {
@@ -37,6 +44,30 @@ public class YPlot2DWFFuncPreset extends WFFuncPreset {
 
   public double getXmax() {
     return xmax;
+  }
+
+  public double getParam_a() {
+    return param_a;
+  }
+
+  public double getParam_b() {
+    return param_b;
+  }
+
+  public double getParam_c() {
+    return param_c;
+  }
+
+  public double getParam_d() {
+    return param_d;
+  }
+
+  public double getParam_e() {
+    return param_e;
+  }
+
+  public double getParam_f() {
+    return param_f;
   }
 
 }

@@ -22,8 +22,9 @@ public class ParPlot2DWFFuncPreset extends WFFuncPreset {
   private final String zformula;
   private final double umin, umax;
   private final double vmin, vmax;
+  private final double param_a, param_b, param_c, param_d, param_e, param_f;
 
-  public ParPlot2DWFFuncPreset(int id, String xformula, String yformula, String zformula, double umin, double umax, double vmin, double vmax) {
+  public ParPlot2DWFFuncPreset(int id, String xformula, String yformula, String zformula, double umin, double umax, double vmin, double vmax, double param_a, double param_b, double param_c, double param_d, double param_e, double param_f) {
     super(id);
     this.xformula = xformula;
     this.yformula = yformula;
@@ -32,6 +33,12 @@ public class ParPlot2DWFFuncPreset extends WFFuncPreset {
     this.umax = umax;
     this.vmin = vmin;
     this.vmax = vmax;
+    this.param_a = param_a;
+    this.param_b = param_b;
+    this.param_c = param_c;
+    this.param_d = param_d;
+    this.param_e = param_e;
+    this.param_f = param_f;
   }
 
   public String getXformula() {
@@ -64,6 +71,30 @@ public class ParPlot2DWFFuncPreset extends WFFuncPreset {
 
   public int getId() {
     return id;
+  }
+
+  public double getParam_a() {
+    return param_a;
+  }
+
+  public double getParam_b() {
+    return param_b;
+  }
+
+  public double getParam_c() {
+    return param_c;
+  }
+
+  public double getParam_d() {
+    return param_d;
+  }
+
+  public double getParam_e() {
+    return param_e;
+  }
+
+  public double getParam_f() {
+    return param_f;
   }
 
 }

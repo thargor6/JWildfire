@@ -24,7 +24,7 @@ public class ParPlot2DWFFuncPresets extends WFFuncPresets<ParPlot2DWFFuncPreset>
 
   @Override
   protected ParPlot2DWFFuncPreset createDefaultPreset() {
-    return new ParPlot2DWFFuncPreset(-1, "u", "0.0", "v", -1.0, 1.0, -1.0, 1.0);
+    return new ParPlot2DWFFuncPreset(-1, "u", "0.0", "v", -1.0, 1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   }
 
   @Override
@@ -39,7 +39,14 @@ public class ParPlot2DWFFuncPresets extends WFFuncPresets<ParPlot2DWFFuncPreset>
     double vmin = parseParam(preset, "vmin");
     double vmax = parseParam(preset, "vmax");
 
-    return new ParPlot2DWFFuncPreset(id, xformula, yformula, zformula, umin, umax, vmin, vmax);
+    double param_a = parseParam(preset, "param_a");
+    double param_b = parseParam(preset, "param_b");
+    double param_c = parseParam(preset, "param_c");
+    double param_d = parseParam(preset, "param_d");
+    double param_e = parseParam(preset, "param_e");
+    double param_f = parseParam(preset, "param_f");
+
+    return new ParPlot2DWFFuncPreset(id, xformula, yformula, zformula, umin, umax, vmin, vmax, param_a, param_b, param_c, param_d, param_e, param_f);
   }
 
 }

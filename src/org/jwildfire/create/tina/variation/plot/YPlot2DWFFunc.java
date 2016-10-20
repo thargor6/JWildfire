@@ -54,11 +54,18 @@ public class YPlot2DWFFunc extends VariationFunc {
   private static final String PARAM_DISPL_AMOUNT = "displ_amount";
   private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
 
+  private static final String PARAM_PARAM_A = "param_a";
+  private static final String PARAM_PARAM_B = "param_b";
+  private static final String PARAM_PARAM_C = "param_c";
+  private static final String PARAM_PARAM_D = "param_d";
+  private static final String PARAM_PARAM_E = "param_e";
+  private static final String PARAM_PARAM_F = "param_f";
+
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
 
   private static final String[] ressourceNames = { RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
@@ -72,6 +79,13 @@ public class YPlot2DWFFunc extends VariationFunc {
   private double zmax = 2.0;
   private int direct_color = 1;
   private int color_mode = CM_X;
+
+  private double param_a = 0.0;
+  private double param_b = 0.0;
+  private double param_c = 0.0;
+  private double param_d = 0.0;
+  private double param_e = 0.0;
+  private double param_f = 0.0;
 
   private static final int CM_COLORMAP = 0;
   private static final int CM_X = 1;
@@ -151,7 +165,7 @@ public class YPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map() };
+    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), param_a, param_b, param_c, param_d, param_e, param_f };
   }
 
   @Override
@@ -196,6 +210,24 @@ public class YPlot2DWFFunc extends VariationFunc {
     }
     else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
+    }
+    else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
+      param_a = pValue;
+    }
+    else if (PARAM_PARAM_B.equalsIgnoreCase(pName)) {
+      param_b = pValue;
+    }
+    else if (PARAM_PARAM_C.equalsIgnoreCase(pName)) {
+      param_c = pValue;
+    }
+    else if (PARAM_PARAM_D.equalsIgnoreCase(pName)) {
+      param_d = pValue;
+    }
+    else if (PARAM_PARAM_E.equalsIgnoreCase(pName)) {
+      param_e = pValue;
+    }
+    else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
+      param_f = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
@@ -295,6 +327,12 @@ public class YPlot2DWFFunc extends VariationFunc {
           "\r\n" +
           "  public double evaluate(double x) {\r\n" +
           "    double pi = M_PI;\r\n" +
+          "    double param_a = " + param_a + ";\r\n" +
+          "    double param_b = " + param_b + ";\r\n" +
+          "    double param_c = " + param_c + ";\r\n" +
+          "    double param_d = " + param_d + ";\r\n" +
+          "    double param_e = " + param_e + ";\r\n" +
+          "    double param_f = " + param_f + ";\r\n" +
           "    return " + formula + ";\r\n" +
           "  }\r\n";
 
@@ -331,6 +369,13 @@ public class YPlot2DWFFunc extends VariationFunc {
     formula = preset.getFormula();
     xmin = preset.getXmin();
     xmax = preset.getXmax();
+
+    param_a = preset.getParam_a();
+    param_b = preset.getParam_b();
+    param_c = preset.getParam_c();
+    param_d = preset.getParam_d();
+    param_e = preset.getParam_e();
+    param_f = preset.getParam_f();
   }
 
   private RenderColor[] uvColors;

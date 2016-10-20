@@ -24,7 +24,7 @@ public class YPlot3DWFFuncPresets extends WFFuncPresets<YPlot3DWFFuncPreset> {
 
   @Override
   protected YPlot3DWFFuncPreset createDefaultPreset() {
-    return new YPlot3DWFFuncPreset(-1, "0.0", -1.0, 1.0, -1.0, 1.0);
+    return new YPlot3DWFFuncPreset(-1, "0.0", -1.0, 1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   }
 
   @Override
@@ -37,7 +37,14 @@ public class YPlot3DWFFuncPresets extends WFFuncPresets<YPlot3DWFFuncPreset> {
     double zmin = parseParam(preset, "zmin");
     double zmax = parseParam(preset, "zmax");
 
-    return new YPlot3DWFFuncPreset(id, formula, xmin, xmax, zmin, zmax);
+    double param_a = parseParam(preset, "param_a");
+    double param_b = parseParam(preset, "param_b");
+    double param_c = parseParam(preset, "param_c");
+    double param_d = parseParam(preset, "param_d");
+    double param_e = parseParam(preset, "param_e");
+    double param_f = parseParam(preset, "param_f");
+
+    return new YPlot3DWFFuncPreset(id, formula, xmin, xmax, zmin, zmax, param_a, param_b, param_c, param_d, param_e, param_f);
   }
 
 }

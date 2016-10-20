@@ -86,7 +86,7 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
   }
 
   protected String parseToken(String preset, String token) {
-    int p1 = preset.indexOf(token);
+    int p1 = preset.indexOf("\n" + token);
     if (p1 >= 0) {
       int p2 = preset.indexOf("\n", p1 + 1);
       if (p2 < 0)
@@ -122,6 +122,9 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
 
   protected double parseParam(String preset, String token) {
     String value = parseToken(preset, token);
+    if (value == null) {
+      return 0.0;
+    }
     JEPWrapper parser = new JEPWrapper();
     Node node = parser.parse(value);
     return (Double) parser.evaluate(node);
