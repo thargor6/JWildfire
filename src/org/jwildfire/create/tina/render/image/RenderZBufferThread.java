@@ -49,7 +49,11 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
           // negative zScale: white to black (black near camera, white background)
           if (zScale < 0.0) {
             if (accumSample.hasZ) {
-              int grayValue = 0xffff + Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
+              int lvl = Tools.FTOI(-zScale * accumSample.z * 32767.0 + 32767.0);
+              if (lvl < 0) {
+                lvl = 0;
+              }
+              int grayValue = 0xffff - lvl & 0xffff;
               img.setValue(j, i, grayValue);
             }
             else {
@@ -59,7 +63,11 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
           // positive zScale: black to white (white near camera, black background, which is the default)
           else {
             if (accumSample.hasZ) {
-              int grayValue = Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0) & 0xffff;
+              int lvl = Tools.FTOI(zScale * accumSample.z * 32767.0 + 32767.0);
+              if (lvl < 0) {
+                lvl = 0;
+              }
+              int grayValue = lvl & 0xffff;
               img.setValue(j, i, grayValue);
             }
           }
