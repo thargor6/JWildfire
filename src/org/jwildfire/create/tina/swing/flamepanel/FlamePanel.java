@@ -206,12 +206,11 @@ public class FlamePanel extends ImagePanel {
       imageHeight = bounds.height;
       imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
     }
-    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
   public Rectangle getParentImageBounds() {
-    Rectangle bounds = this.getParent().getParent().getBounds();
+    Rectangle bounds = this.getParent().getBounds();
     double aspect = (double) bounds.width / (double) bounds.height;
     int imageWidth, imageHeight;
     if (aspect <= renderAspect) {
@@ -222,7 +221,6 @@ public class FlamePanel extends ImagePanel {
       imageHeight = bounds.height;
       imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
     }
-    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 

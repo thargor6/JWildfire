@@ -16,17 +16,15 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
-import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 
-public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
+public class LayersRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {
-    Prefs prefs = Prefs.getPrefs();
     Flame flame = createSubFlame(pState);
     int layerCount = 2 + ((Math.random() > 0.66) ? 1 : 0);
     for (int i = 1; i < layerCount; i++) {
@@ -51,7 +49,7 @@ public class LayerzRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public String getName() {
-    return "Layerz";
+    return "Layers";
   }
 
   @Override
