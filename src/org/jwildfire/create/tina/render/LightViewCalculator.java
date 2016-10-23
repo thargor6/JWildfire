@@ -18,23 +18,50 @@ package org.jwildfire.create.tina.render;
 
 import java.io.Serializable;
 
-import org.jwildfire.base.mathlib.VecMathLib.Matrix4D;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.base.mathlib.VecMathLib.Matrix3D;
 import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 
 @SuppressWarnings("serial")
 public class LightViewCalculator implements Serializable {
-  private final Matrix4D lightProjectionMatrix[];
+  private final Matrix3D lightProjectionMatrix[];
+  private final VectorD lightDir[];
 
   public LightViewCalculator(Flame flame) {
-    lightProjectionMatrix = new Matrix4D[flame.getSolidRenderSettings().getLights().size()];
+    lightProjectionMatrix = new Matrix3D[flame.getSolidRenderSettings().getLights().size()];
+    lightDir = new VectorD[flame.getSolidRenderSettings().getLights().size()];
     for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
-      PointLight light = flame.getSolidRenderSettings().getLights().get(i);
+      DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
+
+      double alpha = Math.toRadians(-light.getAltitude());
+      double beta = Math.toRadians(-light.getAzimuth());
+
+      double sina = MathLib.sin(alpha);
+      double cosa = MathLib.cos(alpha);
+      double sinb = MathLib.sin(beta);
+      double cosb = MathLib.cos(beta);
+
+      Matrix3D a = new Matrix3D();
+      a.m[0][0] = cosb;
+      a.m[0][1] = 0;
+      a.m[0][2] = sinb;
+
+      a.m[1][0] = sina * sinb;
+      a.m[1][1] = cosa;
+      a.m[1][2] = -sina * cosb;
+
+      a.m[2][0] = -cosa * sinb;
+      a.m[2][1] = sina;
+      a.m[2][2] = cosa * cosb;
+
+      lightDir[i] = Matrix3D.multiply(a, new VectorD(0.0, 0.0, -1.0));
+
       if (light.isCastShadows()) {
-        lightProjectionMatrix[i] = Matrix4D.lookAt(new VectorD(-light.getX(), light.getY(), light.getZ()), new VectorD(), new VectorD(0.0, 1.0, 0.0));
+        lightProjectionMatrix[i] = a;
       }
       else {
         lightProjectionMatrix[i] = null;
@@ -42,20 +69,16 @@ public class LightViewCalculator implements Serializable {
     }
   }
 
-  //  public VectorD applyLightProjection(int idx, double x, double y, double z) {
-  //    return Matrix4D.multiply(lightProjectionMatrix[idx], new VectorD(x, y, z));
-  //  }
-
   public double applyLightProjectionX(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[0][0] + y * lightProjectionMatrix[idx].m[0][1] + z * lightProjectionMatrix[idx].m[0][2] + lightProjectionMatrix[idx].m[0][3];
+    return x * lightProjectionMatrix[idx].m[0][0] + y * lightProjectionMatrix[idx].m[0][1] + z * lightProjectionMatrix[idx].m[0][2];
   }
 
   public double applyLightProjectionY(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[1][0] + y * lightProjectionMatrix[idx].m[1][1] + z * lightProjectionMatrix[idx].m[1][2] + lightProjectionMatrix[idx].m[1][3];
+    return x * lightProjectionMatrix[idx].m[1][0] + y * lightProjectionMatrix[idx].m[1][1] + z * lightProjectionMatrix[idx].m[1][2];
   }
 
   public double applyLightProjectionZ(int idx, double x, double y, double z) {
-    return x * lightProjectionMatrix[idx].m[2][0] + y * lightProjectionMatrix[idx].m[2][1] + z * lightProjectionMatrix[idx].m[2][2] + lightProjectionMatrix[idx].m[2][3];
+    return x * lightProjectionMatrix[idx].m[2][0] + y * lightProjectionMatrix[idx].m[2][1] + z * lightProjectionMatrix[idx].m[2][2];
   }
 
   public void project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
@@ -70,6 +93,10 @@ public class LightViewCalculator implements Serializable {
         pProjectedPoint.hasLight[i] = false;
       }
     }
+  }
+
+  public VectorD[] getLightDir() {
+    return lightDir;
   }
 
 }

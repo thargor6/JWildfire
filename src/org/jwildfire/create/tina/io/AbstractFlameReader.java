@@ -19,9 +19,9 @@ import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
@@ -148,6 +148,12 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_SHADOWMAP_SIZE = "sld_render_shadowmap_size";
   public static final String ATTR_SLD_RENDER_SHADOWMAP_BIAS = "sld_render_shadowmap_bias";
 
+  public static final String ATTR_POST_BOKEH_FILTER_KERNEL = "post_bokeh_filter_kernel";
+  public static final String ATTR_POST_BOKEH_INTENSITY = "post_bokeh_intensity";
+  public static final String ATTR_POST_BOKEH_BRIGHTNESS = "post_bokeh_brightness";
+  public static final String ATTR_POST_BOKEH_SIZE = "post_bokeh_size";
+  public static final String ATTR_POST_BOKEH_ACTIVATION = "post_bokeh_activation";
+
   public static final String ATTR_SLD_RENDER_MATERIAL_DIFFUSE = "sld_render_material_diffuse";
   public static final String ATTR_SLD_RENDER_MATERIAL_AMBIENT = "sld_render_material_ambient";
   public static final String ATTR_SLD_RENDER_MATERIAL_PHONG = "sld_render_material_phong";
@@ -160,9 +166,8 @@ public class AbstractFlameReader {
   public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAP_FILENAME = "sld_render_material_refl_map_filename";
   public static final String ATTR_SLD_RENDER_MATERIAL_REFL_MAPPING = "sld_render_material_refl_mappping";
 
-  public static final String ATTR_SLD_RENDER_LIGHT_X = "sld_render_light_x";
-  public static final String ATTR_SLD_RENDER_LIGHT_Y = "sld_render_light_y";
-  public static final String ATTR_SLD_RENDER_LIGHT_Z = "sld_render_light_z";
+  public static final String ATTR_SLD_RENDER_LIGHT_ALTITUDE = "sld_render_light_altitude";
+  public static final String ATTR_SLD_RENDER_LIGHT_AZIMUTH = "sld_render_light_azimuth";
   public static final String ATTR_SLD_RENDER_LIGHT_INTENSITY = "sld_render_light_intensity";
   public static final String ATTR_SLD_RENDER_LIGHT_RED = "sld_render_light_red";
   public static final String ATTR_SLD_RENDER_LIGHT_GREEN = "sld_render_light_green";
@@ -577,6 +582,27 @@ public class AbstractFlameReader {
         pFlame.getSolidRenderSettings().setShadowmapBias(Double.parseDouble(hs));
       }
 
+      if ((hs = atts.get(ATTR_POST_BOKEH_FILTER_KERNEL)) != null) {
+        try {
+          pFlame.getSolidRenderSettings().setPostBokehFilterKernel(FilterKernelType.valueOf(hs));
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      if ((hs = atts.get(ATTR_POST_BOKEH_INTENSITY)) != null) {
+        pFlame.getSolidRenderSettings().setPostBokehIntensity(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_POST_BOKEH_BRIGHTNESS)) != null) {
+        pFlame.getSolidRenderSettings().setPostBokehBrightness(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_POST_BOKEH_SIZE)) != null) {
+        pFlame.getSolidRenderSettings().setPostBokehSize(Double.parseDouble(hs));
+      }
+      if ((hs = atts.get(ATTR_POST_BOKEH_ACTIVATION)) != null) {
+        pFlame.getSolidRenderSettings().setPostBokehActivation(Double.parseDouble(hs));
+      }
+
       if ((hs = atts.get(ATTR_SLD_RENDER_MATERIAL_COUNT)) != null) {
         int materialCount = Integer.parseInt(hs);
         pFlame.getSolidRenderSettings().getMaterials().clear();
@@ -634,16 +660,13 @@ public class AbstractFlameReader {
         int lightCount = Integer.parseInt(hs);
         pFlame.getSolidRenderSettings().getLights().clear();
         for (int i = 0; i < lightCount; i++) {
-          PointLight light = new PointLight();
+          DistantLight light = new DistantLight();
           pFlame.getSolidRenderSettings().getLights().add(light);
-          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_X + i)) != null) {
-            light.setX(Double.parseDouble(hs));
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_ALTITUDE + i)) != null) {
+            light.setAltitude(Double.parseDouble(hs));
           }
-          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_Y + i)) != null) {
-            light.setY(Double.parseDouble(hs));
-          }
-          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_Z + i)) != null) {
-            light.setZ(Double.parseDouble(hs));
+          if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_AZIMUTH + i)) != null) {
+            light.setAzimuth(Double.parseDouble(hs));
           }
           if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_INTENSITY + i)) != null) {
             light.setIntensity(Double.parseDouble(hs));

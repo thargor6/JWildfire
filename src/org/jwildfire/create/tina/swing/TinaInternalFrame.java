@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -5123,8 +5122,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingAOAffectDiffuseREd(), getTinaSolidRenderingAOAffectDiffuseSlider(),
         getResetSolidRenderingMaterialsBtn(), getResetSolidRenderingLightsBtn(),
         getTinaSolidRenderingSelectedLightCmb(), getTinaSolidRenderingAddLightBtn(), getTinaSolidRenderingDeleteLightBtn(),
-        getTinaSolidRenderingLightPosXREd(), getTinaSolidRenderingLightPosYREd(), getTinaSolidRenderingLightPosZREd(),
-        getTinaSolidRenderingLightPosXSlider(), getTinaSolidRenderingLightPosYSlider(), getTinaSolidRenderingLightPosZSlider(),
+        getTinaSolidRenderingLightAltitudeREd(), getTinaSolidRenderingLightAzimuthREd(),
+        getTinaSolidRenderingLightAltitudeSlider(), getTinaSolidRenderingLightAzimuthSlider(),
         getTinaSolidRenderingLightColorBtn(), getTinaSolidRenderingLightCastShadowsCBx(), getTinaSolidRenderingLightIntensityREd0(),
         getTinaSolidRenderingLightIntensitySlider(), getTinaSolidRenderingShadowIntensityREd(),
         getTinaSolidRenderingShadowIntensitySlider(), getTinaSolidRenderingSelectedMaterialCmb(), getTinaSolidRenderingAddMaterialBtn(),
@@ -5140,8 +5139,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormMaterialREd(), getXFormMaterialSlider(), getXFormMaterialSpeedREd(), getXFormMaterialSpeedSlider(),
         getResetSolidRenderingHardShadowOptionsBtn(), getResetSolidRenderingAmbientShadowOptionsBtn(),
         getTinaSolidRenderingShadowTypeCmb(), getTinaSolidRenderingShadowmapSizeCmb(), getTinaSolidRenderingShadowSmoothRadiusREd(),
-        getTinaSolidRenderingShadowSmoothRadiusSlider(), getTinaSolidRenderingShadowmapBiasREd(), getTinaSolidRenderingShadowmapBiasSlider()
-        );
+        getTinaSolidRenderingShadowSmoothRadiusSlider(), getTinaSolidRenderingShadowmapBiasREd(), getTinaSolidRenderingShadowmapBiasSlider(),
+        getBokehSettingsPnl(), getPostBokehSettingsPnl());
 
     tinaController = new TinaController(params);
     getFilterKernelFlatPreviewBtn().setSelected(Prefs.getPrefs().isTinaDefaultFilterVisualisationFlat());
@@ -9848,7 +9847,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton motionCurvePlayPreviewButton;
   private JPanel panel_92;
   private JTabbedPane tabbedPane_3;
-  private JPanel panel_118;
+  private JPanel bokehSettingsPnl;
   private JComboBox dofDOFShapeCmb;
   private JLabel dofDOFScaleLbl;
   private JLabel dofDOFAngleLbl;
@@ -10019,12 +10018,10 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton resetSolidRenderingLightsBtn;
   private JComboBox tinaSolidRenderingSelectedLightCmb;
   private JButton tinaSolidRenderingAddLightBtn;
-  private JWFNumberField tinaSolidRenderingLightPosXREd;
-  private JWFNumberField tinaSolidRenderingLightPosYREd;
-  private JWFNumberField tinaSolidRenderingLightPosZREd;
-  private JSlider tinaSolidRenderingLightPosXSlider;
-  private JSlider tinaSolidRenderingLightPosYSlider;
-  private JSlider tinaSolidRenderingLightPosZSlider;
+  private JWFNumberField tinaSolidRenderingLightAltitudeREd;
+  private JWFNumberField tinaSolidRenderingLightAzimuthREd;
+  private JSlider tinaSolidRenderingLightAltitudeSlider;
+  private JSlider tinaSolidRenderingLightAzimuthSlider;
   private JButton tinaSolidRenderingLightColorBtn;
   private JCheckBox tinaSolidRenderingLightCastShadowsCBx;
   private JWFNumberField tinaSolidRenderingLightIntensityREd;
@@ -10098,6 +10095,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField tinaZBufferScaleREd;
   private JSlider tinaZBufferScaleSlider;
   private JButton button_1;
+  private JPanel postBokehSettingsPnl;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -14316,7 +14314,21 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tabbedPane_3 == null) {
       tabbedPane_3 = new JTabbedPane(JTabbedPane.LEFT);
       tabbedPane_3.addTab("DOF", null, tinaDOFPanel, null);
-      tabbedPane_3.addTab("Bokeh", null, getPanel_118(), null);
+      tabbedPane_3.addTab("Bokeh", null, getBokehSettingsPnl(), null);
+
+      postBokehSettingsPnl = new JPanel();
+      tabbedPane_3.addTab("Post bokeh", null, postBokehSettingsPnl, null);
+      postBokehSettingsPnl.setLayout(null);
+
+      JLabel label = new JLabel();
+      label.setText("Note: Post-bokeh-calculation is a post-effect which is applied after rendering, so it can not be displayed during progressive rendering.");
+      label.setSize(new Dimension(68, 22));
+      label.setPreferredSize(new Dimension(94, 22));
+      label.setName("tinaCameraRollLbl");
+      label.setLocation(new Point(4, 4));
+      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setBounds(6, 6, 718, 22);
+      postBokehSettingsPnl.add(label);
 
       JPanel panel_1 = new JPanel();
       tabbedPane_3.addTab("Post blur", null, panel_1, null);
@@ -14355,10 +14367,10 @@ public class TinaInternalFrame extends JInternalFrame {
     return tabbedPane_3;
   }
 
-  private JPanel getPanel_118() {
-    if (panel_118 == null) {
-      panel_118 = new JPanel();
-      panel_118.setLayout(null);
+  private JPanel getBokehSettingsPnl() {
+    if (bokehSettingsPnl == null) {
+      bokehSettingsPnl = new JPanel();
+      bokehSettingsPnl.setLayout(null);
 
       JLabel lblShape = new JLabel();
       lblShape.setText("Shape");
@@ -14367,7 +14379,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblShape.setLocation(new Point(488, 2));
       lblShape.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblShape.setBounds(6, 6, 94, 22);
-      panel_118.add(lblShape);
+      bokehSettingsPnl.add(lblShape);
 
       dofDOFScaleLbl = new JLabel();
       dofDOFScaleLbl.setText("Scale");
@@ -14377,7 +14389,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFScaleLbl.setLocation(new Point(488, 2));
       dofDOFScaleLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFScaleLbl.setBounds(6, 29, 94, 22);
-      panel_118.add(dofDOFScaleLbl);
+      bokehSettingsPnl.add(dofDOFScaleLbl);
 
       dofDOFScaleREd = new JWFNumberField();
       dofDOFScaleREd.setMotionPropertyName("camDOFScale");
@@ -14412,7 +14424,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
 
-      panel_118.add(dofDOFScaleREd);
+      bokehSettingsPnl.add(dofDOFScaleREd);
 
       dofDOFShapeCmb = new JComboBox();
       dofDOFShapeCmb.addItemListener(new ItemListener() {
@@ -14427,7 +14439,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFShapeCmb.setLocation(new Point(100, 4));
       dofDOFShapeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFShapeCmb.setBounds(102, 6, 322, 24);
-      panel_118.add(dofDOFShapeCmb);
+      bokehSettingsPnl.add(dofDOFShapeCmb);
 
       dofDOFScaleSlider = new JSlider();
       dofDOFScaleSlider.setValue(0);
@@ -14453,7 +14465,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
 
-      panel_118.add(dofDOFScaleSlider);
+      bokehSettingsPnl.add(dofDOFScaleSlider);
 
       dofDOFAngleREd = new JWFNumberField();
       dofDOFAngleREd.setMotionPropertyName("camDOFAngle");
@@ -14488,7 +14500,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
 
-      panel_118.add(dofDOFAngleREd);
+      bokehSettingsPnl.add(dofDOFAngleREd);
 
       dofDOFAngleLbl = new JLabel();
       dofDOFAngleLbl.setText("Rotate");
@@ -14498,7 +14510,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFAngleLbl.setLocation(new Point(488, 2));
       dofDOFAngleLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFAngleLbl.setBounds(6, 52, 94, 22);
-      panel_118.add(dofDOFAngleLbl);
+      bokehSettingsPnl.add(dofDOFAngleLbl);
 
       dofDOFAngleSlider = new JSlider();
       dofDOFAngleSlider.setValue(0);
@@ -14523,7 +14535,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFAngleSlider);
+      bokehSettingsPnl.add(dofDOFAngleSlider);
 
       dofDOFFadeLbl = new JLabel();
       dofDOFFadeLbl.setText("Fade");
@@ -14533,7 +14545,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFFadeLbl.setLocation(new Point(488, 2));
       dofDOFFadeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFFadeLbl.setBounds(6, 75, 94, 22);
-      panel_118.add(dofDOFFadeLbl);
+      bokehSettingsPnl.add(dofDOFFadeLbl);
 
       dofDOFFadeREd = new JWFNumberField();
       dofDOFFadeREd.setMotionPropertyName("camDOFFade");
@@ -14569,7 +14581,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFFadeREd);
+      bokehSettingsPnl.add(dofDOFFadeREd);
 
       dofDOFFadeSlider = new JSlider();
       dofDOFFadeSlider.setValue(0);
@@ -14594,7 +14606,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFFadeSlider);
+      bokehSettingsPnl.add(dofDOFFadeSlider);
 
       dofDOFParam1REd = new JWFNumberField();
       dofDOFParam1REd.setMotionPropertyName("camDOFParam1");
@@ -14628,7 +14640,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam1REd);
+      bokehSettingsPnl.add(dofDOFParam1REd);
 
       dofDOFParam1Lbl = new JLabel();
       dofDOFParam1Lbl.setText("Param 1");
@@ -14638,7 +14650,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam1Lbl.setLocation(new Point(488, 2));
       dofDOFParam1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam1Lbl.setBounds(6, 98, 94, 22);
-      panel_118.add(dofDOFParam1Lbl);
+      bokehSettingsPnl.add(dofDOFParam1Lbl);
 
       dofDOFParam1Slider = new JSlider();
       dofDOFParam1Slider.setValue(0);
@@ -14663,7 +14675,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam1Slider);
+      bokehSettingsPnl.add(dofDOFParam1Slider);
 
       dofDOFParam3REd = new JWFNumberField();
       dofDOFParam3REd.setMotionPropertyName("camDOFParam3");
@@ -14697,7 +14709,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam3REd);
+      bokehSettingsPnl.add(dofDOFParam3REd);
 
       dofDOFParam3Lbl = new JLabel();
       dofDOFParam3Lbl.setText("Param 3");
@@ -14707,7 +14719,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam3Lbl.setLocation(new Point(488, 2));
       dofDOFParam3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam3Lbl.setBounds(466, 29, 94, 22);
-      panel_118.add(dofDOFParam3Lbl);
+      bokehSettingsPnl.add(dofDOFParam3Lbl);
 
       dofDOFParam4Lbl = new JLabel();
       dofDOFParam4Lbl.setText("Param 4");
@@ -14717,7 +14729,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam4Lbl.setLocation(new Point(488, 2));
       dofDOFParam4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam4Lbl.setBounds(466, 52, 94, 22);
-      panel_118.add(dofDOFParam4Lbl);
+      bokehSettingsPnl.add(dofDOFParam4Lbl);
 
       dofDOFParam4REd = new JWFNumberField();
       dofDOFParam4REd.setMotionPropertyName("camDOFParam4");
@@ -14751,7 +14763,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam4REd);
+      bokehSettingsPnl.add(dofDOFParam4REd);
 
       dofDOFParam3Slider = new JSlider();
       dofDOFParam3Slider.setValue(0);
@@ -14776,7 +14788,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam3Slider);
+      bokehSettingsPnl.add(dofDOFParam3Slider);
 
       dofDOFParam4Slider = new JSlider();
       dofDOFParam4Slider.setValue(0);
@@ -14801,7 +14813,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam4Slider);
+      bokehSettingsPnl.add(dofDOFParam4Slider);
 
       dofDOFParam5REd = new JWFNumberField();
       dofDOFParam5REd.setMotionPropertyName("camDOFParam5");
@@ -14835,7 +14847,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam5REd);
+      bokehSettingsPnl.add(dofDOFParam5REd);
 
       dofDOFParam5Lbl = new JLabel();
       dofDOFParam5Lbl.setText("Param 5");
@@ -14845,7 +14857,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam5Lbl.setLocation(new Point(488, 2));
       dofDOFParam5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam5Lbl.setBounds(466, 75, 94, 22);
-      panel_118.add(dofDOFParam5Lbl);
+      bokehSettingsPnl.add(dofDOFParam5Lbl);
 
       dofDOFParam5Slider = new JSlider();
       dofDOFParam5Slider.setValue(0);
@@ -14870,7 +14882,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam5Slider);
+      bokehSettingsPnl.add(dofDOFParam5Slider);
 
       dofDOFParam6Lbl = new JLabel();
       dofDOFParam6Lbl.setText("Param 6");
@@ -14880,7 +14892,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam6Lbl.setLocation(new Point(488, 2));
       dofDOFParam6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam6Lbl.setBounds(466, 100, 98, 22);
-      panel_118.add(dofDOFParam6Lbl);
+      bokehSettingsPnl.add(dofDOFParam6Lbl);
 
       dofDOFParam6REd = new JWFNumberField();
       dofDOFParam6REd.setMotionPropertyName("camDOFParam6");
@@ -14914,7 +14926,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam6REd);
+      bokehSettingsPnl.add(dofDOFParam6REd);
 
       dofDOFParam6Slider = new JSlider();
       dofDOFParam6Slider.setValue(0);
@@ -14939,7 +14951,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam6Slider);
+      bokehSettingsPnl.add(dofDOFParam6Slider);
 
       dofDOFParam2Lbl = new JLabel();
       dofDOFParam2Lbl.setText("Param 2");
@@ -14949,7 +14961,7 @@ public class TinaInternalFrame extends JInternalFrame {
       dofDOFParam2Lbl.setLocation(new Point(488, 2));
       dofDOFParam2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       dofDOFParam2Lbl.setBounds(466, 6, 94, 22);
-      panel_118.add(dofDOFParam2Lbl);
+      bokehSettingsPnl.add(dofDOFParam2Lbl);
 
       dofDOFParam2REd = new JWFNumberField();
       dofDOFParam2REd.setMotionPropertyName("camDOFParam2");
@@ -14983,7 +14995,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam2REd);
+      bokehSettingsPnl.add(dofDOFParam2REd);
 
       dofDOFParam2Slider = new JSlider();
       dofDOFParam2Slider.setValue(0);
@@ -15008,10 +15020,10 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
-      panel_118.add(dofDOFParam2Slider);
-      panel_118.add(getResetBokehOptionsButton());
+      bokehSettingsPnl.add(dofDOFParam2Slider);
+      bokehSettingsPnl.add(getResetBokehOptionsButton());
     }
-    return panel_118;
+    return bokehSettingsPnl;
   }
 
   public JComboBox getDofDOFShapeCmb() {
@@ -16854,192 +16866,128 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingSelectedLightCmb);
 
-      JLabel tinaSolidRenderingLightPosXLbl = new JLabel();
-      tinaSolidRenderingLightPosXLbl.setToolTipText("");
-      tinaSolidRenderingLightPosXLbl.setText("Position X*");
-      tinaSolidRenderingLightPosXLbl.setSize(new Dimension(68, 22));
-      tinaSolidRenderingLightPosXLbl.setPreferredSize(new Dimension(94, 22));
-      tinaSolidRenderingLightPosXLbl.setName("tinaSolidRenderingLightPosXLbl");
-      tinaSolidRenderingLightPosXLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingLightPosXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingLightPosXLbl.setBounds(6, 37, 68, 22);
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXLbl);
+      JLabel tinaSolidRenderingLightAltitudeLbl = new JLabel();
+      tinaSolidRenderingLightAltitudeLbl.setToolTipText("");
+      tinaSolidRenderingLightAltitudeLbl.setText("Altitude*");
+      tinaSolidRenderingLightAltitudeLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingLightAltitudeLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingLightAltitudeLbl.setName("tinaSolidRenderingLightAltitudeLbl");
+      tinaSolidRenderingLightAltitudeLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingLightAltitudeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingLightAltitudeLbl.setBounds(6, 37, 68, 22);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAltitudeLbl);
 
-      tinaSolidRenderingLightPosXREd = new JWFNumberField();
-      tinaSolidRenderingLightPosXREd.setValueStep(0.05);
-      tinaSolidRenderingLightPosXREd.setText("");
-      tinaSolidRenderingLightPosXREd.setSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosXREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosXREd.setMotionPropertyName("camPosX");
-      tinaSolidRenderingLightPosXREd.setLocation(new Point(456, 4));
-      tinaSolidRenderingLightPosXREd.setLinkedMotionControlName("tinaSolidRenderingLightPosXSlider");
-      tinaSolidRenderingLightPosXREd.setLinkedLabelControlName("tinaSolidRenderingLightPosXLbl");
-      tinaSolidRenderingLightPosXREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSolidRenderingLightPosXREd.setBounds(72, 37, 100, 24);
-      tinaSolidRenderingLightPosXREd.addActionListener(new ActionListener() {
+      tinaSolidRenderingLightAltitudeREd = new JWFNumberField();
+      tinaSolidRenderingLightAltitudeREd.setText("");
+      tinaSolidRenderingLightAltitudeREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingLightAltitudeREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingLightAltitudeREd.setMotionPropertyName("camPosX");
+      tinaSolidRenderingLightAltitudeREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingLightAltitudeREd.setLinkedMotionControlName("tinaSolidRenderingLightAltitudeSlider");
+      tinaSolidRenderingLightAltitudeREd.setLinkedLabelControlName("tinaSolidRenderingLightAltitudeLbl");
+      tinaSolidRenderingLightAltitudeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingLightAltitudeREd.setBounds(72, 37, 100, 24);
+      tinaSolidRenderingLightAltitudeREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
         }
       });
-      tinaSolidRenderingLightPosXREd.addChangeListener(new ChangeListener() {
+      tinaSolidRenderingLightAltitudeREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!tinaSolidRenderingLightPosXREd.isMouseAdjusting() || tinaSolidRenderingLightPosXREd.getMouseChangeCount() == 0) {
-              if (!tinaSolidRenderingLightPosXSlider.getValueIsAdjusting()) {
+            if (!tinaSolidRenderingLightAltitudeREd.isMouseAdjusting() || tinaSolidRenderingLightAltitudeREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightAltitudeSlider.getValueIsAdjusting()) {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.getFlameControls().solidRenderingLightPosXREd_changed();
+            tinaController.getFlameControls().solidRenderingLightAltitudeREd_changed();
           }
         }
       });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXREd);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAltitudeREd);
 
-      tinaSolidRenderingLightPosXSlider = new JSlider();
-      tinaSolidRenderingLightPosXSlider.setValue(0);
-      tinaSolidRenderingLightPosXSlider.setSize(new Dimension(205, 19));
-      tinaSolidRenderingLightPosXSlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingLightPosXSlider.setName("tinaSolidRenderingLightPosXSlider");
-      tinaSolidRenderingLightPosXSlider.setMinimum(-25000);
-      tinaSolidRenderingLightPosXSlider.setMaximum(25000);
-      tinaSolidRenderingLightPosXSlider.setLocation(new Point(558, 4));
-      tinaSolidRenderingLightPosXSlider.setBounds(174, 37, 205, 19);
-      tinaSolidRenderingLightPosXSlider.addMouseListener(new MouseAdapter() {
+      tinaSolidRenderingLightAltitudeSlider = new JSlider();
+      tinaSolidRenderingLightAltitudeSlider.setValue(0);
+      tinaSolidRenderingLightAltitudeSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingLightAltitudeSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingLightAltitudeSlider.setName("tinaSolidRenderingLightAltitudeSlider");
+      tinaSolidRenderingLightAltitudeSlider.setMinimum(-450000);
+      tinaSolidRenderingLightAltitudeSlider.setMaximum(450000);
+      tinaSolidRenderingLightAltitudeSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingLightAltitudeSlider.setBounds(174, 37, 205, 19);
+      tinaSolidRenderingLightAltitudeSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
           tinaController.saveUndoPoint();
         }
       });
-      tinaSolidRenderingLightPosXSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+      tinaSolidRenderingLightAltitudeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().solidRenderingLightPosXSlider_stateChanged(e);
+          tinaController.getFlameControls().solidRenderingLightAltitudeSlider_stateChanged(e);
         }
       });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosXSlider);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAltitudeSlider);
 
-      JLabel tinaSolidRenderingLightPosYLbl = new JLabel();
-      tinaSolidRenderingLightPosYLbl.setText("Position Y*");
-      tinaSolidRenderingLightPosYLbl.setSize(new Dimension(68, 22));
-      tinaSolidRenderingLightPosYLbl.setPreferredSize(new Dimension(94, 22));
-      tinaSolidRenderingLightPosYLbl.setName("tinaSolidRenderingLightPosYLbl");
-      tinaSolidRenderingLightPosYLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingLightPosYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingLightPosYLbl.setBounds(6, 61, 68, 22);
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYLbl);
+      JLabel tinaSolidRenderingLightAzimuthLbl = new JLabel();
+      tinaSolidRenderingLightAzimuthLbl.setText("Azimuth*");
+      tinaSolidRenderingLightAzimuthLbl.setSize(new Dimension(68, 22));
+      tinaSolidRenderingLightAzimuthLbl.setPreferredSize(new Dimension(94, 22));
+      tinaSolidRenderingLightAzimuthLbl.setName("tinaSolidRenderingLightAzimuthLbl");
+      tinaSolidRenderingLightAzimuthLbl.setLocation(new Point(390, 6));
+      tinaSolidRenderingLightAzimuthLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaSolidRenderingLightAzimuthLbl.setBounds(6, 61, 68, 22);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAzimuthLbl);
 
-      tinaSolidRenderingLightPosYREd = new JWFNumberField();
-      tinaSolidRenderingLightPosYREd.setValueStep(0.05);
-      tinaSolidRenderingLightPosYREd.setText("");
-      tinaSolidRenderingLightPosYREd.setSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosYREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosYREd.setMotionPropertyName("camPosY");
-      tinaSolidRenderingLightPosYREd.setLocation(new Point(456, 4));
-      tinaSolidRenderingLightPosYREd.setLinkedMotionControlName("tinaSolidRenderingLightPosYSlider");
-      tinaSolidRenderingLightPosYREd.setLinkedLabelControlName("tinaSolidRenderingLightPosYLbl");
-      tinaSolidRenderingLightPosYREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSolidRenderingLightPosYREd.setBounds(72, 61, 100, 24);
-      tinaSolidRenderingLightPosYREd.addActionListener(new ActionListener() {
+      tinaSolidRenderingLightAzimuthREd = new JWFNumberField();
+      tinaSolidRenderingLightAzimuthREd.setText("");
+      tinaSolidRenderingLightAzimuthREd.setSize(new Dimension(100, 24));
+      tinaSolidRenderingLightAzimuthREd.setPreferredSize(new Dimension(100, 24));
+      tinaSolidRenderingLightAzimuthREd.setMotionPropertyName("camPosY");
+      tinaSolidRenderingLightAzimuthREd.setLocation(new Point(456, 4));
+      tinaSolidRenderingLightAzimuthREd.setLinkedMotionControlName("tinaSolidRenderingLightAzimuthSlider");
+      tinaSolidRenderingLightAzimuthREd.setLinkedLabelControlName("tinaSolidRenderingLightAzimuthLbl");
+      tinaSolidRenderingLightAzimuthREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      tinaSolidRenderingLightAzimuthREd.setBounds(72, 61, 100, 24);
+      tinaSolidRenderingLightAzimuthREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
         }
       });
-      tinaSolidRenderingLightPosYREd.addChangeListener(new ChangeListener() {
+      tinaSolidRenderingLightAzimuthREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!tinaSolidRenderingLightPosYREd.isMouseAdjusting() || tinaSolidRenderingLightPosYREd.getMouseChangeCount() == 0) {
-              if (!tinaSolidRenderingLightPosYSlider.getValueIsAdjusting()) {
+            if (!tinaSolidRenderingLightAzimuthREd.isMouseAdjusting() || tinaSolidRenderingLightAzimuthREd.getMouseChangeCount() == 0) {
+              if (!tinaSolidRenderingLightAzimuthSlider.getValueIsAdjusting()) {
                 tinaController.saveUndoPoint();
               }
             }
-            tinaController.getFlameControls().solidRenderingLightPosYREd_changed();
+            tinaController.getFlameControls().solidRenderingLightAzimuthREd_changed();
           }
         }
       });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYREd);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAzimuthREd);
 
-      tinaSolidRenderingLightPosYSlider = new JSlider();
-      tinaSolidRenderingLightPosYSlider.setValue(0);
-      tinaSolidRenderingLightPosYSlider.setSize(new Dimension(205, 19));
-      tinaSolidRenderingLightPosYSlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingLightPosYSlider.setName("tinaSolidRenderingLightPosYSlider");
-      tinaSolidRenderingLightPosYSlider.setMinimum(-25000);
-      tinaSolidRenderingLightPosYSlider.setMaximum(25000);
-      tinaSolidRenderingLightPosYSlider.setLocation(new Point(558, 4));
-      tinaSolidRenderingLightPosYSlider.setBounds(174, 61, 205, 19);
-      tinaSolidRenderingLightPosYSlider.addMouseListener(new MouseAdapter() {
+      tinaSolidRenderingLightAzimuthSlider = new JSlider();
+      tinaSolidRenderingLightAzimuthSlider.setValue(0);
+      tinaSolidRenderingLightAzimuthSlider.setSize(new Dimension(205, 19));
+      tinaSolidRenderingLightAzimuthSlider.setPreferredSize(new Dimension(220, 19));
+      tinaSolidRenderingLightAzimuthSlider.setName("tinaSolidRenderingLightAzimuthSlider");
+      tinaSolidRenderingLightAzimuthSlider.setMinimum(-450000);
+      tinaSolidRenderingLightAzimuthSlider.setMaximum(450000);
+      tinaSolidRenderingLightAzimuthSlider.setLocation(new Point(558, 4));
+      tinaSolidRenderingLightAzimuthSlider.setBounds(174, 61, 205, 19);
+      tinaSolidRenderingLightAzimuthSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
           tinaController.saveUndoPoint();
         }
       });
-      tinaSolidRenderingLightPosYSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+      tinaSolidRenderingLightAzimuthSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().solidRenderingLightPosYSlider_stateChanged(e);
+          tinaController.getFlameControls().solidRenderingLightAzimuthSlider_stateChanged(e);
         }
       });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosYSlider);
-
-      JLabel tinaSolidRenderingLightPosZLbl = new JLabel();
-      tinaSolidRenderingLightPosZLbl.setText("Position Z*");
-      tinaSolidRenderingLightPosZLbl.setSize(new Dimension(68, 22));
-      tinaSolidRenderingLightPosZLbl.setPreferredSize(new Dimension(94, 22));
-      tinaSolidRenderingLightPosZLbl.setName("tinaSolidRenderingLightPosZLbl");
-      tinaSolidRenderingLightPosZLbl.setLocation(new Point(390, 6));
-      tinaSolidRenderingLightPosZLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSolidRenderingLightPosZLbl.setBounds(7, 85, 68, 22);
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosZLbl);
-
-      tinaSolidRenderingLightPosZREd = new JWFNumberField();
-      tinaSolidRenderingLightPosZREd.setValueStep(0.05);
-      tinaSolidRenderingLightPosZREd.setText("");
-      tinaSolidRenderingLightPosZREd.setSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosZREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingLightPosZREd.setMotionPropertyName("camPosZ");
-      tinaSolidRenderingLightPosZREd.setLocation(new Point(456, 4));
-      tinaSolidRenderingLightPosZREd.setLinkedMotionControlName("tinaSolidRenderingLightPosZSlider");
-      tinaSolidRenderingLightPosZREd.setLinkedLabelControlName("tinaSolidRenderingLightPosZLbl");
-      tinaSolidRenderingLightPosZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSolidRenderingLightPosZREd.setBounds(73, 85, 100, 24);
-      tinaSolidRenderingLightPosZREd.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getFlameControls().editMotionCurve(e);
-        }
-      });
-      tinaSolidRenderingLightPosZREd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            if (!tinaSolidRenderingLightPosZREd.isMouseAdjusting() || tinaSolidRenderingLightPosZREd.getMouseChangeCount() == 0) {
-              if (!tinaSolidRenderingLightPosZSlider.getValueIsAdjusting()) {
-                tinaController.saveUndoPoint();
-              }
-            }
-            tinaController.getFlameControls().solidRenderingLightPosZREd_changed();
-          }
-        }
-      });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosZREd);
-
-      tinaSolidRenderingLightPosZSlider = new JSlider();
-      tinaSolidRenderingLightPosZSlider.setValue(0);
-      tinaSolidRenderingLightPosZSlider.setSize(new Dimension(205, 19));
-      tinaSolidRenderingLightPosZSlider.setPreferredSize(new Dimension(220, 19));
-      tinaSolidRenderingLightPosZSlider.setName("tinaSolidRenderingLightPosZSlider");
-      tinaSolidRenderingLightPosZSlider.setMinimum(-25000);
-      tinaSolidRenderingLightPosZSlider.setMaximum(25000);
-      tinaSolidRenderingLightPosZSlider.setLocation(new Point(558, 4));
-      tinaSolidRenderingLightPosZSlider.setBounds(175, 85, 205, 19);
-      tinaSolidRenderingLightPosZSlider.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-          tinaController.saveUndoPoint();
-        }
-      });
-      tinaSolidRenderingLightPosZSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent e) {
-          tinaController.getFlameControls().solidRenderingLightPosZSlider_stateChanged(e);
-        }
-      });
-      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightPosZSlider);
+      tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAzimuthSlider);
 
       tinaSolidRenderingLightColorBtn = new JButton();
       tinaSolidRenderingLightColorBtn.addActionListener(new ActionListener() {
@@ -17768,28 +17716,20 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaSolidRenderingAddLightBtn;
   }
 
-  public JWFNumberField getTinaSolidRenderingLightPosXREd() {
-    return tinaSolidRenderingLightPosXREd;
+  public JWFNumberField getTinaSolidRenderingLightAltitudeREd() {
+    return tinaSolidRenderingLightAltitudeREd;
   }
 
-  public JWFNumberField getTinaSolidRenderingLightPosYREd() {
-    return tinaSolidRenderingLightPosYREd;
+  public JWFNumberField getTinaSolidRenderingLightAzimuthREd() {
+    return tinaSolidRenderingLightAzimuthREd;
   }
 
-  public JWFNumberField getTinaSolidRenderingLightPosZREd() {
-    return tinaSolidRenderingLightPosZREd;
+  public JSlider getTinaSolidRenderingLightAltitudeSlider() {
+    return tinaSolidRenderingLightAltitudeSlider;
   }
 
-  public JSlider getTinaSolidRenderingLightPosXSlider() {
-    return tinaSolidRenderingLightPosXSlider;
-  }
-
-  public JSlider getTinaSolidRenderingLightPosYSlider() {
-    return tinaSolidRenderingLightPosYSlider;
-  }
-
-  public JSlider getTinaSolidRenderingLightPosZSlider() {
-    return tinaSolidRenderingLightPosZSlider;
+  public JSlider getTinaSolidRenderingLightAzimuthSlider() {
+    return tinaSolidRenderingLightAzimuthSlider;
   }
 
   public JButton getTinaSolidRenderingLightColorBtn() {
@@ -19036,6 +18976,10 @@ public class TinaInternalFrame extends JInternalFrame {
       button_1.setBounds(582, 17, 42, 24);
     }
     return button_1;
+  }
+
+  public JPanel getPostBokehSettingsPnl() {
+    return postBokehSettingsPnl;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
 

@@ -38,7 +38,7 @@ public class ShadowCalculator implements Serializable {
   private final float originYBuf[][];
   private final float originZBuf[][];
 
-  private double[] lightX, lightY, lightZ, shadowIntensity;
+  private double[] lightX, lightY, shadowIntensity;
 
   private double shadowDistBias;
 
@@ -82,7 +82,6 @@ public class ShadowCalculator implements Serializable {
 
     lightX = new double[lightCount];
     lightY = new double[lightCount];
-    lightZ = new double[lightCount];
     shadowIntensity = new double[lightCount];
 
     shadowMapSize = flame.getSolidRenderSettings().getShadowmapSize();
@@ -92,7 +91,7 @@ public class ShadowCalculator implements Serializable {
     shadowDistBias = flame.getSolidRenderSettings().getShadowmapBias();
 
     for (int i = 0; i < lightCount; i++) {
-      PointLight light = flame.getSolidRenderSettings().getLights().get(i);
+      DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
       if (light.isCastShadows()) {
         shadowZBuf[i] = new float[shadowMapSize][shadowMapSize];
         pre_shadowXBuf[i] = new float[PRE_SHADOWMAP_SIZE];
@@ -103,9 +102,8 @@ public class ShadowCalculator implements Serializable {
             shadowZBuf[i][k][l] = NormalsCalculator.ZBUF_ZMIN;
           }
         }
-        lightX[i] = light.getX();
-        lightY[i] = light.getY();
-        lightZ[i] = light.getZ();
+        lightX[i] = light.getAltitude();
+        lightY[i] = light.getAzimuth();
         shadowIntensity[i] = 1.0 - GfxMathLib.clamp(light.getShadowIntensity(), 0.0, 1.0);
       }
       else {
@@ -408,6 +406,10 @@ public class ShadowCalculator implements Serializable {
     //        RasterTools.saveFloatBuffer(accLightProjectionZBuf[i], "D:\\TMP\\wf_acc_shadowmap_" + i + ".png");
     //      }
     //    }
+  }
+
+  public LightViewCalculator getLightViewCalculator() {
+    return lightViewCalculator;
   }
 
 }

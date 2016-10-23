@@ -103,4 +103,10 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
       pDest.clear();
   }
 
+  @Override
+  public LightViewCalculator getLightViewCalculator() {
+    // EMPTY    
+    return null;
+  }
+
 }

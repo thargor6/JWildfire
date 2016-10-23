@@ -575,7 +575,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pHDRImage.getImageHeight();
-        RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer) : null);
+        RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();
@@ -603,7 +603,7 @@ public class FlameRenderer {
       for (int i = 0; i < threadCount; i++) {
         int startRow = i * rowsPerThread;
         int endRow = i < threadCount - 1 ? startRow + rowsPerThread : pImage.getImageHeight();
-        RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer) : null);
+        RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
         threads.add(thread);
         if (threadCount > 1) {
           new Thread(thread).start();

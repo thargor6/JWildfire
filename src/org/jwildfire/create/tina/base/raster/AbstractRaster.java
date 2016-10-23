@@ -43,4 +43,6 @@ public interface AbstractRaster {
 
   void readZBufferSafe(int pX, int pY, ZBufferSample pDest);
 
+  public LightViewCalculator getLightViewCalculator();
+
 }

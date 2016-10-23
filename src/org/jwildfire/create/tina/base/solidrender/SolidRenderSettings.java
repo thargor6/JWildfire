@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2016 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.base.solidrender;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
@@ -10,29 +26,43 @@ import java.util.List;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.FlameMorphService;
 import org.jwildfire.create.tina.edit.Assignable;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
 @SuppressWarnings("serial")
 public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Serializable {
   private boolean solidRenderingEnabled = false;
 
-  private boolean aoEnabled = true;
-  private double aoIntensity = 0.5;
-  private double aoSearchRadius = 12.0;
-  private double aoBlurRadius = 1.25;
-  private int aoRadiusSamples = 6;
-  private int aoAzimuthSamples = 7;
-  private double aoFalloff = 0.5;
-  private double aoAffectDiffuse = 0.2;
+  private boolean aoEnabled;
+  private double aoIntensity;
+  private double aoSearchRadius;
+  private double aoBlurRadius;
+  private int aoRadiusSamples;
+  private int aoAzimuthSamples;
+  private double aoFalloff;
+  private double aoAffectDiffuse;
 
-  private ShadowType shadowType = ShadowType.OFF;
-  private double shadowmapBias = 0.01;
-  private int shadowmapSize = 2048;
-  private double shadowSmoothRadius = 1.0;
+  private ShadowType shadowType;
+  private double shadowmapBias;
+  private int shadowmapSize;
+  private double shadowSmoothRadius;
+
+  private FilterKernelType postBokehFilterKernel;
+  private double postBokehIntensity;
+  private double postBokehBrightness;
+  private double postBokehSize;
+  private double postBokehActivation;
 
   private final List<MaterialSettings> materials = new ArrayList<>();
-  private final List<PointLight> lights = new ArrayList<>();
+  private final List<DistantLight> lights = new ArrayList<>();
+
+  public SolidRenderSettings() {
+    setupDefaultPostBokehOptions();
+    setupDefaultAmbientShadowOptions();
+    setupDefaultHardShadowOptions();
+  }
 
   public void setupDefaults() {
+    setupDefaultPostBokehOptions();
     setupDefaultAmbientShadowOptions();
     setupDefaultHardShadowOptions();
     setupDefaultMaterials();
@@ -42,31 +72,29 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   public void setupDefaultLights() {
     lights.clear();
     {
-      PointLight light = new PointLight();
+      DistantLight light = new DistantLight();
       lights.add(light);
-      light.setX(6.12);
-      light.setY(0.12);
-      light.setZ(0.7);
-      light.setIntensity(1.0);
+      light.setAltitude(60);
+      light.setAzimuth(-30.0);
+      light.setIntensity(0.8);
+      light.setShadowIntensity(0.8);
       light.setRed(1.0);
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(true);
-      light.setShadowIntensity(0.8);
     }
 
     {
-      PointLight light = new PointLight();
+      DistantLight light = new DistantLight();
       lights.add(light);
-      light.setX(-1.8);
-      light.setY(-0.22);
-      light.setZ(0.8);
+      light.setAltitude(55);
+      light.setAzimuth(-15.0);
       light.setIntensity(0.5);
+      light.setShadowIntensity(0.7);
       light.setRed(1.0);
       light.setGreen(1.0);
       light.setBlue(1.0);
       light.setCastShadows(false);
-      light.setShadowIntensity(0.7);
     }
 
   }
@@ -107,7 +135,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   }
 
   public MaterialSettings getInterpolatedMaterial(double materialIdx) {
-    //    System.out.println(materialIdx);
     if (materialIdx < 0 || materials.isEmpty()) {
       return null;
     }
@@ -125,7 +152,6 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     double scl = MathLib.frac(materialIdx);
     double EPS = 0.01;
 
-    //System.out.println(fromIdx + " " + toIdx + " " + scl + " " + materialIdx);
     if (scl < EPS) {
       return isValidMaterialIdx(fromIdx) ? materials.get(fromIdx) : null;
     }
@@ -162,7 +188,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     return morph;
   }
 
-  public List<PointLight> getLights() {
+  public List<DistantLight> getLights() {
     return lights;
   }
 
@@ -207,6 +233,12 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     shadowmapSize = pSrc.shadowmapSize;
     shadowSmoothRadius = pSrc.shadowSmoothRadius;
 
+    postBokehFilterKernel = pSrc.postBokehFilterKernel;
+    postBokehIntensity = pSrc.postBokehIntensity;
+    postBokehBrightness = pSrc.postBokehBrightness;
+    postBokehSize = pSrc.postBokehSize;
+    postBokehActivation = pSrc.postBokehActivation;
+
     materials.clear();
     for (MaterialSettings src : pSrc.getMaterials()) {
       MaterialSettings dst = new MaterialSettings();
@@ -214,8 +246,8 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
       materials.add(dst);
     }
     lights.clear();
-    for (PointLight src : pSrc.getLights()) {
-      PointLight dst = new PointLight();
+    for (DistantLight src : pSrc.getLights()) {
+      DistantLight dst = new DistantLight();
       dst.assign(src);
       lights.add(dst);
     }
@@ -242,7 +274,9 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
         fabs(aoIntensity - pSrc.aoIntensity) > EPSILON || fabs(aoSearchRadius - pSrc.aoSearchRadius) > EPSILON ||
         fabs(aoBlurRadius - pSrc.aoBlurRadius) > EPSILON || aoRadiusSamples != pSrc.aoRadiusSamples ||
         aoAzimuthSamples != pSrc.aoAzimuthSamples || fabs(aoFalloff - pSrc.aoFalloff) > EPSILON ||
-        fabs(aoAffectDiffuse - pSrc.aoAffectDiffuse) > EPSILON) {
+        !postBokehFilterKernel.equals(pSrc.postBokehFilterKernel) || fabs(postBokehIntensity - pSrc.postBokehIntensity) > EPSILON ||
+        fabs(postBokehBrightness - pSrc.postBokehBrightness) > EPSILON || fabs(postBokehSize - pSrc.postBokehSize) > EPSILON ||
+        fabs(postBokehActivation - pSrc.postBokehActivation) > EPSILON || fabs(aoAffectDiffuse - pSrc.aoAffectDiffuse) > EPSILON) {
       return false;
     }
     if (materials.size() != pSrc.materials.size()) {
@@ -268,14 +302,13 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     return materials;
   }
 
-  public PointLight addLight() {
-    PointLight light = new PointLight();
+  public DistantLight addLight() {
+    DistantLight light = new DistantLight();
     lights.add(light);
-    light.setX(-0.15);
-    light.setY(0.12);
-    light.setZ(0.7);
-    light.setIntensity(1.0);
-    light.setShadowIntensity(0.8);
+    light.setAltitude(60.0);
+    light.setAzimuth(-30.0);
+    light.setIntensity(0.7);
+    light.setShadowIntensity(0.6);
     light.setRed(1.0);
     light.setGreen(1.0);
     light.setBlue(1.0);
@@ -345,9 +378,17 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     this.aoAffectDiffuse = aoAffectDiffuse;
   }
 
+  private void setupDefaultPostBokehOptions() {
+    postBokehFilterKernel = FilterKernelType.SINEPOW5;
+    postBokehIntensity = 0.005;
+    postBokehBrightness = 1.0;
+    postBokehSize = 2.0;
+    postBokehActivation = 0.2;
+  }
+
   public void setupDefaultAmbientShadowOptions() {
     aoEnabled = true;
-    aoIntensity = 0.5;
+    aoIntensity = 0.6;
     aoSearchRadius = 12.0;
     aoBlurRadius = 1.25;
     aoRadiusSamples = 6;
@@ -393,6 +434,46 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   public void setShadowSmoothRadius(double shadowSmoothRadius) {
     this.shadowSmoothRadius = shadowSmoothRadius;
+  }
+
+  public FilterKernelType getPostBokehFilterKernel() {
+    return postBokehFilterKernel;
+  }
+
+  public void setPostBokehFilterKernel(FilterKernelType postBokehFilterKernel) {
+    this.postBokehFilterKernel = postBokehFilterKernel;
+  }
+
+  public double getPostBokehIntensity() {
+    return postBokehIntensity;
+  }
+
+  public void setPostBokehIntensity(double postBokehIntensity) {
+    this.postBokehIntensity = postBokehIntensity;
+  }
+
+  public double getPostBokehBrightness() {
+    return postBokehBrightness;
+  }
+
+  public void setPostBokehBrightness(double postBokehBrightness) {
+    this.postBokehBrightness = postBokehBrightness;
+  }
+
+  public double getPostBokehSize() {
+    return postBokehSize;
+  }
+
+  public void setPostBokehSize(double postBokehSize) {
+    this.postBokehSize = postBokehSize;
+  }
+
+  public double getPostBokehActivation() {
+    return postBokehActivation;
+  }
+
+  public void setPostBokehActivation(double postBokehActivation) {
+    this.postBokehActivation = postBokehActivation;
   }
 
 }

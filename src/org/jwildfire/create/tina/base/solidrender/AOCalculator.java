@@ -136,7 +136,6 @@ public class AOCalculator implements Serializable {
     return yi;
   }
 
-  @SuppressWarnings("serial")
   private class SmoothAOBufferThread extends AbstractImageRenderThread {
     private final float[][] srcBuf, dstBuf;
     private final int startRow, endRow;

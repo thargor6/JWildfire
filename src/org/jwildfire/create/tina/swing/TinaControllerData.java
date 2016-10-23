@@ -429,12 +429,10 @@ public class TinaControllerData {
   public JComboBox tinaSolidRenderingSelectedLightCmb;
   public JButton tinaSolidRenderingAddLightBtn;
   public JButton tinaSolidRenderingDeleteLightBtn;
-  public JWFNumberField tinaSolidRenderingLightPosXREd;
-  public JWFNumberField tinaSolidRenderingLightPosYREd;
-  public JWFNumberField tinaSolidRenderingLightPosZREd;
-  public JSlider tinaSolidRenderingLightPosXSlider;
-  public JSlider tinaSolidRenderingLightPosYSlider;
-  public JSlider tinaSolidRenderingLightPosZSlider;
+  public JWFNumberField tinaSolidRenderingLightAltitudeREd;
+  public JWFNumberField tinaSolidRenderingLightAzimuthREd;
+  public JSlider tinaSolidRenderingLightAltitudeSlider;
+  public JSlider tinaSolidRenderingLightAzimuthSlider;
   public JButton tinaSolidRenderingLightColorBtn;
   public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
   public JWFNumberField tinaSolidRenderingLightIntensityREd;
@@ -460,10 +458,10 @@ public class TinaControllerData {
   public JButton tinaSolidRenderingMaterialReflMapBtn;
   public JButton tinaSolidRenderingMaterialSelectReflMapBtn;
   public JButton tinaSolidRenderingMaterialRemoveReflMapBtn;
-
   public JWFNumberField xFormModHueREd;
   public JSlider xFormModHueSlider;
   public JWFNumberField xFormModHueSpeedREd;
   public JSlider xFormModHueSpeedSlider;
-
+  public JPanel bokehSettingsPnl;
+  public JPanel postBokehSettingsPnl;
 }

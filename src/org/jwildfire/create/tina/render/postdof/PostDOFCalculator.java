@@ -21,22 +21,31 @@ import java.util.List;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
-import org.jwildfire.create.tina.render.filter.SinePow15FilterKernel;
 
 public class PostDOFCalculator {
   private final PostDOFBuffer buffer;
   private final double imgSize;
-  private final FilterKernel kernel;
+  private final FilterKernel bokehKernel;
   private final List<PostDOFFilteredSample> filteredSamples;
   private final double kernelScale;
 
-  public PostDOFCalculator(PostDOFBuffer buffer) {
+  private final double bokehIntensity;
+  private final double bokehBrightness;
+  private final double bokehSize;
+  private final double bokehActivation;
+
+  public PostDOFCalculator(PostDOFBuffer buffer, Flame flame) {
     super();
     this.buffer = buffer;
     imgSize = MathLib.sqrt(MathLib.sqr(buffer.getWidth()) + MathLib.sqr(buffer.getHeight()));
 
-    kernel = new SinePow15FilterKernel();//new GaussianFilterKernel();
+    bokehKernel = flame.getSolidRenderSettings().getPostBokehFilterKernel().createFilterInstance();
+    bokehIntensity = flame.getSolidRenderSettings().getPostBokehIntensity() * 1000.0 / imgSize;
+    bokehBrightness = flame.getSolidRenderSettings().getPostBokehBrightness();
+    bokehSize = flame.getSolidRenderSettings().getPostBokehSize();
+    bokehActivation = flame.getSolidRenderSettings().getPostBokehActivation();
 
     filteredSamples = new ArrayList<>();
 
@@ -57,12 +66,6 @@ public class PostDOFCalculator {
       radius = 2.0;
     }
 
-    double bokehIntensity = 0.005 * 1000.0 / imgSize;
-    double bokehBrightness = 1.0;
-    double bokehSize = 2.0;
-
-    double bokehActivation = 0.8;
-
     if (radius > 0.0) {
       filteredSamples.clear();
 
@@ -79,7 +82,7 @@ public class PostDOFCalculator {
         radius *= (1.0 + (0.5 - Math.random()) * 0.1);
       }
 
-      double scaledInvRadius = 1.0 / plainRadius * kernelScale * kernel.getSpatialSupport();
+      double scaledInvRadius = 1.0 / plainRadius * kernelScale * bokehKernel.getSpatialSupport();
 
       double intensitySum = 0.0;
       //      double stepSize = (radius < 5.0) ? 0.5 : 1.0;
@@ -110,7 +113,7 @@ public class PostDOFCalculator {
           double dstY = sample.getY() + j;
 
           double r = MathLib.sqrt(i_square + MathLib.sqr(j * scaledInvRadius));
-          double intensity = kernel.getFilterCoeff(r);
+          double intensity = bokehKernel.getFilterCoeff(r);
 
           if (intensity > MathLib.EPSILON) {
             intensitySum += intensity;

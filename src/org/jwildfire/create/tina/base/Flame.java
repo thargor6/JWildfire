@@ -29,7 +29,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
@@ -1527,7 +1527,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     boolean res = getSolidRenderSettings().isSolidRenderingEnabled() && ShadowType.areShadowsEnabled(getSolidRenderSettings().getShadowType());
     if (res) {
       res = false;
-      for (PointLight light : getSolidRenderSettings().getLights()) {
+      for (DistantLight light : getSolidRenderSettings().getLights()) {
         if (light.isCastShadows()) {
           res = true;
           break;

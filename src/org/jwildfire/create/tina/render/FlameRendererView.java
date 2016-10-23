@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -37,7 +38,8 @@ public class FlameRendererView {
   protected double cameraMatrix[][] = new double[3][3];
   protected double camDOF_10;
   protected boolean useDOF;
-  protected boolean solidDOF;
+  protected boolean solidFlame;
+  protected boolean solidHardShadows;
   protected boolean legacyDOF;
   protected double cosa;
   protected double sina;
@@ -90,14 +92,16 @@ public class FlameRendererView {
     }
     useDOF = flame.isDOFActive();
 
-    if (flame.isWithShadows()) {
+    solidFlame = flame.getSolidRenderSettings().isSolidRenderingEnabled();
+    if (solidFlame) {
       lightViewCalculator = new LightViewCalculator(flame);
+      solidHardShadows = !ShadowType.OFF.equals(flame.getSolidRenderSettings().getShadowType());
     }
     else {
       lightViewCalculator = null;
+      solidHardShadows = false;
     }
 
-    solidDOF = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
@@ -163,7 +167,7 @@ public class FlameRendererView {
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
-      if (lightViewCalculator != null) {
+      if (solidHardShadows) {
         lightViewCalculator.project(pPoint, pProjectedPoint);
       }
 
@@ -196,7 +200,7 @@ public class FlameRendererView {
           double zdist = (flame.getCamZ() - camPoint.z);
           if (zdist > 0.0) {
             pProjectedPoint.dofDist = zdist;
-            if (solidDOF) {
+            if (solidFlame) {
               dofBlurShape.applyOnlyCamera(camPoint, pPoint, zdist, zr);
             }
             else {
@@ -216,7 +220,7 @@ public class FlameRendererView {
           double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1.0 / flame.getCamDOFExponent());
           if (dist > area) {
             pProjectedPoint.dofDist = dist;
-            if (solidDOF) {
+            if (solidFlame) {
               dofBlurShape.applyOnlyCamera(camPoint, pPoint, dist, zr);
             }
             else {
@@ -232,7 +236,7 @@ public class FlameRendererView {
             double sclDist = scl * dist;
 
             pProjectedPoint.dofDist = sclDist;
-            if (solidDOF) {
+            if (solidFlame) {
               dofBlurShape.applyOnlyCamera(camPoint, pPoint, sclDist, zr);
             }
             else {

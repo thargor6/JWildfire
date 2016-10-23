@@ -58,9 +58,9 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.Variation;
@@ -351,6 +351,12 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWMAP_SIZE, pFlame.getSolidRenderSettings().getShadowmapSize()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_SHADOWMAP_BIAS, pFlame.getSolidRenderSettings().getShadowmapBias()));
 
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_BOKEH_FILTER_KERNEL, pFlame.getSolidRenderSettings().getPostBokehFilterKernel().toString()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_BOKEH_INTENSITY, pFlame.getSolidRenderSettings().getPostBokehIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_BOKEH_BRIGHTNESS, pFlame.getSolidRenderSettings().getPostBokehBrightness()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_BOKEH_SIZE, pFlame.getSolidRenderSettings().getPostBokehSize()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_BOKEH_ACTIVATION, pFlame.getSolidRenderSettings().getPostBokehActivation()));
+
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_MATERIAL_COUNT, pFlame.getSolidRenderSettings().getMaterials().size()));
       for (int i = 0; i < pFlame.getSolidRenderSettings().getMaterials().size(); i++) {
         MaterialSettings material = pFlame.getSolidRenderSettings().getMaterials().get(i);
@@ -370,10 +376,9 @@ public class AbstractFlameWriter {
 
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_COUNT, pFlame.getSolidRenderSettings().getLights().size()));
       for (int i = 0; i < pFlame.getSolidRenderSettings().getLights().size(); i++) {
-        PointLight light = pFlame.getSolidRenderSettings().getLights().get(i);
-        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_X + i, light.getX()));
-        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Y + i, light.getY()));
-        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_Z + i, light.getZ()));
+        DistantLight light = pFlame.getSolidRenderSettings().getLights().get(i);
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_ALTITUDE + i, light.getAltitude()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_AZIMUTH + i, light.getAzimuth()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_INTENSITY + i, light.getIntensity()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_RED + i, light.getRed()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_GREEN + i, light.getGreen()));

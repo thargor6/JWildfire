@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
@@ -115,16 +115,14 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
     pFlame.setSpatialOversampling(1);
 
     if (pFlame.getSolidRenderSettings().getLights().size() > 1) {
-      PointLight light = pFlame.getSolidRenderSettings().getLights().get(0);
-      light.setX(1.0 - 2.0 * Math.random());
-      light.setY(1.0 - 2.0 * Math.random());
-      light.setZ(1.0 - 2.0 * Math.random());
+      DistantLight light = pFlame.getSolidRenderSettings().getLights().get(0);
+      light.setAltitude(60 - 120.0 * Math.random());
+      light.setAzimuth(30.0 - 60.0 * Math.random());
     }
     if (pFlame.getSolidRenderSettings().getLights().size() > 2) {
-      PointLight light = pFlame.getSolidRenderSettings().getLights().get(1);
-      light.setX(1.0 - 2.0 * Math.random());
-      light.setY(1.0 - 2.0 * Math.random());
-      light.setZ(1.0 - 2.0 * Math.random());
+      DistantLight light = pFlame.getSolidRenderSettings().getLights().get(1);
+      light.setAltitude(40.0 - 80.0 * Math.random());
+      light.setAzimuth(80.0 - 160.0 * Math.random());
     }
     return pFlame;
   }

@@ -52,6 +52,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
 
   private double imgSize;
 
+  private LightViewCalculator lightViewCalculator;
   private ShadowCalculator shadowCalculator;
 
   @Override
@@ -114,6 +115,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
 
   @Override
   public void notifyInit(LightViewCalculator lightViewCalculator) {
+    this.lightViewCalculator = lightViewCalculator;
     if (shadowCalculator != null) {
       shadowCalculator.setLightViewCalculator(lightViewCalculator);
     }
@@ -229,6 +231,11 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
       pDest.hasZ = true;
       pDest.z = zBuf[pX][pY];
     }
+  }
+
+  @Override
+  public LightViewCalculator getLightViewCalculator() {
+    return lightViewCalculator;
   }
 
 }

@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 
 import org.jwildfire.base.Prefs;
@@ -39,9 +40,9 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFunc;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
@@ -236,9 +237,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingSelectedLightCmb, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingAddLightBtn, disabled);
     enableControl(data.tinaSolidRenderingDeleteLightBtn, disabled || !hasLights);
-    enableControl(data.tinaSolidRenderingLightPosXREd, disabled || !hasLights);
-    enableControl(data.tinaSolidRenderingLightPosYREd, disabled || !hasLights);
-    enableControl(data.tinaSolidRenderingLightPosZREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightAltitudeREd, disabled || !hasLights);
+    enableControl(data.tinaSolidRenderingLightAzimuthREd, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingLightColorBtn, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingLightCastShadowsCBx, disabled || !hasLights);
     enableControl(data.tinaSolidRenderingLightIntensityREd, disabled || !hasLights);
@@ -257,6 +257,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingMaterialReflectionMappingCmb, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialSelectReflMapBtn, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialRemoveReflMapBtn, disabled || !hasMaterials);
+    enableBokehPanels();
   }
 
   private void enableStereo3dUI() {
@@ -780,7 +781,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     return data.tinaSolidRenderingSelectedLightCmb.getSelectedIndex();
   }
 
-  private PointLight getSolidRenderingSelectedLight() {
+  private DistantLight getSolidRenderingSelectedLight() {
     Flame flame = getCurrFlame();
     if (flame != null) {
       SolidRenderSettings settings = flame.getSolidRenderSettings();
@@ -809,7 +810,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   private void refreshSolidRenderLightColorIndicator() {
-    PointLight light = getSolidRenderingSelectedLight();
+    DistantLight light = getSolidRenderingSelectedLight();
     Color color = (light != null) ? new Color(Tools.roundColor(light.getRed() * GammaCorrectionFilter.COLORSCL),
         Tools.roundColor(light.getGreen() * GammaCorrectionFilter.COLORSCL), Tools.roundColor(light.getBlue() * GammaCorrectionFilter.COLORSCL)) : Color.BLACK;
     data.tinaSolidRenderingLightColorBtn.setBackground(color);
@@ -828,7 +829,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     refreshSolidRenderingMaterialControls();
   }
 
+  private void enableBokehPanels() {
+    if (getCurrFlame() != null) {
+      SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
+      ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(1, !settings.isSolidRenderingEnabled());
+      ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(2, settings.isSolidRenderingEnabled());
+    }
+  }
+
   private void refreshSolidRenderingGlobals() {
+    enableBokehPanels();
     SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
     data.solidRenderingToggleBtn.setSelected(settings.isSolidRenderingEnabled());
     data.tinaSolidRenderingEnableAOCBx.setSelected(settings.isAoEnabled());
@@ -876,17 +886,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     refreshSolidRenderMaterialSpecularColorIndicator();
   }
 
-  private void refreshLightPosControls(PointLight light) {
-    data.tinaSolidRenderingLightPosXREd.setText(Tools.doubleToString(light.getX()));
-    data.tinaSolidRenderingLightPosXSlider.setValue(Tools.FTOI(light.getX() * TinaController.SLIDER_SCALE_CENTRE));
-    data.tinaSolidRenderingLightPosYREd.setText(Tools.doubleToString(light.getY()));
-    data.tinaSolidRenderingLightPosYSlider.setValue(Tools.FTOI(light.getY() * TinaController.SLIDER_SCALE_CENTRE));
-    data.tinaSolidRenderingLightPosZREd.setText(Tools.doubleToString(light.getZ()));
-    data.tinaSolidRenderingLightPosZSlider.setValue(Tools.FTOI(light.getZ() * TinaController.SLIDER_SCALE_CENTRE));
+  private void refreshLightPosControls(DistantLight light) {
+    data.tinaSolidRenderingLightAltitudeREd.setText(Tools.doubleToString(light.getAltitude()));
+    data.tinaSolidRenderingLightAltitudeSlider.setValue(Tools.FTOI(light.getAltitude() * TinaController.SLIDER_SCALE_CENTRE));
+    data.tinaSolidRenderingLightAzimuthREd.setText(Tools.doubleToString(light.getAzimuth()));
+    data.tinaSolidRenderingLightAzimuthSlider.setValue(Tools.FTOI(light.getAzimuth() * TinaController.SLIDER_SCALE_CENTRE));
   }
 
   private void refreshSolidRenderingLightControls() {
-    PointLight light = getSolidRenderingSelectedLight();
+    DistantLight light = getSolidRenderingSelectedLight();
     if (light != null) {
       refreshLightPosControls(light);
       data.tinaSolidRenderingLightCastShadowsCBx.setSelected(light.isCastShadows());
@@ -1387,14 +1395,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void randomizeLightPosition() {
     if (!isNoRefresh()) {
-      PointLight light = getSolidRenderingSelectedLight();
+      DistantLight light = getSolidRenderingSelectedLight();
       if (light != null) {
         owner.saveUndoPoint();
         light.setCastShadows(data.tinaSolidRenderingLightCastShadowsCBx.isSelected());
-        double scale = 7.0;
-        light.setX((0.5 - Math.random()) * scale);
-        light.setY((0.5 - Math.random()) * scale);
-        light.setZ((0.5 - Math.random()) * scale);
+        light.setAltitude((0.5 - Math.random()) * 60.0);
+        light.setAzimuth((0.5 - Math.random()) * 40.0);
         refreshLightPosControls(light);
         owner.refreshFlameImage(true, false, 1, true, !areShadowsEnabled());
       }
@@ -1403,7 +1409,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingLightCastShadowsCBx_changed() {
     if (!isNoRefresh()) {
-      PointLight light = getSolidRenderingSelectedLight();
+      DistantLight light = getSolidRenderingSelectedLight();
       if (light != null) {
         owner.saveUndoPoint();
         light.setCastShadows(data.tinaSolidRenderingLightCastShadowsCBx.isSelected());
@@ -1433,7 +1439,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void randomizeLightColor() {
-    PointLight light = getSolidRenderingSelectedLight();
+    DistantLight light = getSolidRenderingSelectedLight();
     if (light != null) {
       owner.undoManager.saveUndoPoint(getCurrFlame());
       List<RGBColor> rndColors = new AllRandomGradientGenerator().generateKeyFrames(7);
@@ -1444,7 +1450,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightColorBtn_clicked() {
-    PointLight light = getSolidRenderingSelectedLight();
+    DistantLight light = getSolidRenderingSelectedLight();
     if (light != null) {
       owner.undoManager.saveUndoPoint(getCurrFlame());
 
@@ -1456,7 +1462,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  private void setLightColor(PointLight light, Color selectedColor) {
+  private void setLightColor(DistantLight light, Color selectedColor) {
     if (selectedColor != null) {
       light.setRed((double) selectedColor.getRed() / GammaCorrectionFilter.COLORSCL);
       light.setGreen((double) selectedColor.getGreen() / GammaCorrectionFilter.COLORSCL);
@@ -1792,20 +1798,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingMaterialTextFieldChanged(data.tinaSolidRenderingMaterialSpecularSharpnessSlider, data.tinaSolidRenderingMaterialSpecularSharpnessREd, "phongSize", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
-  public void solidRenderingLightPosXREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+  public void solidRenderingLightAltitudeREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   private boolean areShadowsEnabled() {
     return ShadowType.areShadowsEnabled((ShadowType) data.tinaSolidRenderingShadowTypeCmb.getSelectedItem());
   }
 
-  public void solidRenderingLightPosYREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
-  }
-
-  public void solidRenderingLightPosZREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+  public void solidRenderingLightAzimuthREd_changed() {
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightIntensityREd_changed() {
@@ -1860,16 +1862,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     solidRenderingMaterialSliderChanged(data.tinaSolidRenderingMaterialSpecularSharpnessSlider, data.tinaSolidRenderingMaterialSpecularSharpnessREd, "phongSize", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 
-  public void solidRenderingLightPosXSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosXSlider, data.tinaSolidRenderingLightPosXREd, "x", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+  public void solidRenderingLightAltitudeSlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
-  public void solidRenderingLightPosYSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosYSlider, data.tinaSolidRenderingLightPosYREd, "y", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
-  }
-
-  public void solidRenderingLightPosZSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightPosZSlider, data.tinaSolidRenderingLightPosZREd, "z", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+  public void solidRenderingLightAzimuthSlider_stateChanged(ChangeEvent e) {
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
   }
 
   public void solidRenderingLightIntensitySlider_stateChanged(ChangeEvent e) {

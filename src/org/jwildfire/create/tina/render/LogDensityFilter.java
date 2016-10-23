@@ -32,8 +32,8 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.base.raster.RasterPoint;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
-import org.jwildfire.create.tina.base.solidrender.PointLight;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
@@ -104,6 +104,7 @@ public class LogDensityFilter extends FilterHolder {
       double x = i * motionBlurScl;
       precalcLogArray[i] = (k1 * log10(1 + x * k2)) / (flame.getWhiteLevel() * x);
     }
+
   }
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
@@ -421,10 +422,11 @@ public class LogDensityFilter extends FilterHolder {
         VectorD normal = new VectorD(rp.nx, rp.ny, rp.nz);
         VectorD viewDir = new VectorD(0.0, 0.0, 1.0);
 
+        LightViewCalculator lightViewCalculator = raster.getLightViewCalculator();
+
         for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
-          PointLight light = flame.getSolidRenderSettings().getLights().get(i);
-          VectorD lightDir = new VectorD(light.getX(), light.getY(), light.getZ());
-          lightDir.normalize();
+          DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
+          VectorD lightDir = lightViewCalculator.getLightDir()[i];
           double visibility = light.isCastShadows() && rp.hasShadows ? rp.visibility[i] : avgVisibility;
 
           double cosa = VectorD.dot(lightDir, normal);
@@ -438,10 +440,10 @@ public class LogDensityFilter extends FilterHolder {
           if (specularIntensity > MathLib.EPSILON) {
             VectorD r = VectorD.reflect(lightDir, normal);
             double vr = VectorD.dot(viewDir, r);
-            if (vr > MathLib.EPSILON) {
-              double specularResponse = MathLib.pow(material.getLightDiffFunc().evaluate(vr), material.getPhongSize());
+            if (vr < MathLib.EPSILON) {
+              double specularResponse = MathLib.pow(-vr, material.getPhongSize());
               rawColor.addFrom(material.getPhongRed(), material.getPhongGreen(), material.getPhongBlue(),
-                  visibility * specularResponse * specularIntensity);
+                  visibility * specularResponse * specularIntensity * light.getIntensity());
             }
           }
 

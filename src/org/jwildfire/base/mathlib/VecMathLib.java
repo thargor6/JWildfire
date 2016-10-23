@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2016 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.base.mathlib;
 
 import java.io.Serializable;
@@ -150,7 +166,7 @@ public final class VecMathLib {
       return new VectorD(a.x + b.x, a.y + b.y, a.z + b.z);
     }
 
-    public static VectorD substract(VectorD a, VectorD b) {
+    public static VectorD subtract(VectorD a, VectorD b) {
       return new VectorD(a.x - b.x, a.y - b.y, a.z - b.z);
     }
   }
@@ -170,20 +186,17 @@ public final class VecMathLib {
 
     public static Matrix4D lookAt(VectorD eyePosition, VectorD lookAt, VectorD upVector) {
       VectorD e = eyePosition.clone();
-      e.normalize();
+      //      e.normalize();
       VectorD l = lookAt.clone();
-      l.normalize();
+      //      l.normalize();
       VectorD up = upVector.clone();
-      up.normalize();
+      //      up.normalize();
       // forward vector
-      VectorD forward = VectorD.substract(l, e);
-      forward.normalize();
+      VectorD forward = VectorD.subtract(l, e);
+      //      forward.normalize();
       // side vector
       VectorD side = VectorD.cross(forward, up);
-      side.normalize();
-
-      //    VectorD u = VectorD.cross(side, forward);
-      //  u.normalize();
+      //      side.normalize();
 
       Matrix4D rotmat = new Matrix4D();
 
@@ -196,12 +209,7 @@ public final class VecMathLib {
       rotmat.m[1][1] = up.y;
       rotmat.m[2][1] = up.z;
       rotmat.m[3][1] = 0.0;
-      /*
-      rotmat.m[0][1] = u.x;
-      rotmat.m[1][1] = u.y;
-      rotmat.m[2][1] = u.z;
-      rotmat.m[3][1] = 0.0;
-      */
+
       rotmat.m[0][2] = -forward.x;
       rotmat.m[1][2] = -forward.y;
       rotmat.m[2][2] = -forward.z;
@@ -244,4 +252,37 @@ public final class VecMathLib {
     }
   }
 
+  @SuppressWarnings("serial")
+  public static final class Matrix3D implements Serializable {
+    public final double m[][] = new double[3][3];
+
+    public static Matrix3D identity() {
+      Matrix3D res = new Matrix3D();
+      res.m[0][0] = 1.0;
+      res.m[1][1] = 1.0;
+      res.m[2][2] = 1.0;
+      return res;
+    }
+
+    public static Matrix3D multiply(Matrix3D a, Matrix3D b) {
+      Matrix3D res = new Matrix3D();
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          res.m[i][j] = 0.0;
+          for (int s = 0; s < 3; s++) {
+            res.m[i][j] += a.m[i][s] * b.m[s][j];
+          }
+        }
+      }
+      return res;
+    }
+
+    public static VectorD multiply(Matrix3D a, VectorD v) {
+      VectorD res = new VectorD();
+      res.x = v.x * a.m[0][0] + v.y * a.m[0][1] + v.z * a.m[0][2];
+      res.y = v.x * a.m[1][0] + v.y * a.m[1][1] + v.z * a.m[1][2];
+      res.z = v.x * a.m[2][0] + v.y * a.m[2][1] + v.z * a.m[2][2];
+      return res;
+    }
+  }
 }

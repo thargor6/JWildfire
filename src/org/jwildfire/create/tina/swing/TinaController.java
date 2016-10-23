@@ -641,6 +641,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingShadowSmoothRadiusSlider = parameterObject.tinaSolidRenderingShadowSmoothRadiusSlider;
     data.tinaSolidRenderingShadowmapBiasREd = parameterObject.tinaSolidRenderingShadowmapBiasREd;
     data.tinaSolidRenderingShadowmapBiasSlider = parameterObject.tinaSolidRenderingShadowmapBiasSlider;
+    data.bokehSettingsPnl = parameterObject.bokehSettingsPnl;
+    data.postBokehSettingsPnl = parameterObject.postBokehSettingsPnl;
 
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
@@ -649,12 +651,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingSelectedLightCmb = parameterObject.tinaSolidRenderingSelectedLightCmb;
     data.tinaSolidRenderingAddLightBtn = parameterObject.tinaSolidRenderingAddLightBtn;
     data.tinaSolidRenderingDeleteLightBtn = parameterObject.tinaSolidRenderingDeleteLightBtn;
-    data.tinaSolidRenderingLightPosXREd = parameterObject.tinaSolidRenderingLightPosXREd;
-    data.tinaSolidRenderingLightPosYREd = parameterObject.tinaSolidRenderingLightPosYREd;
-    data.tinaSolidRenderingLightPosZREd = parameterObject.tinaSolidRenderingLightPosZREd;
-    data.tinaSolidRenderingLightPosXSlider = parameterObject.tinaSolidRenderingLightPosXSlider;
-    data.tinaSolidRenderingLightPosYSlider = parameterObject.tinaSolidRenderingLightPosYSlider;
-    data.tinaSolidRenderingLightPosZSlider = parameterObject.tinaSolidRenderingLightPosZSlider;
+    data.tinaSolidRenderingLightAltitudeREd = parameterObject.tinaSolidRenderingLightPosAltitudeREd;
+    data.tinaSolidRenderingLightAzimuthREd = parameterObject.tinaSolidRenderingLightPosAzimuthREd;
+    data.tinaSolidRenderingLightAltitudeSlider = parameterObject.tinaSolidRenderingLightAltitudeSlider;
+    data.tinaSolidRenderingLightAzimuthSlider = parameterObject.tinaSolidRenderingLightAzimuthSlider;
     data.tinaSolidRenderingLightColorBtn = parameterObject.tinaSolidRenderingLightColorBtn;
     data.tinaSolidRenderingLightCastShadowsCBx = parameterObject.tinaSolidRenderingLightCastShadowsCBx;
     data.tinaSolidRenderingLightIntensityREd = parameterObject.tinaSolidRenderingLightIntensityREd;

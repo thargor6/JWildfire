@@ -611,12 +611,10 @@ public class TinaControllerParameter {
   public JComboBox tinaSolidRenderingSelectedLightCmb;
   public JButton tinaSolidRenderingAddLightBtn;
   public JButton tinaSolidRenderingDeleteLightBtn;
-  public JWFNumberField tinaSolidRenderingLightPosXREd;
-  public JWFNumberField tinaSolidRenderingLightPosYREd;
-  public JWFNumberField tinaSolidRenderingLightPosZREd;
-  public JSlider tinaSolidRenderingLightPosXSlider;
-  public JSlider tinaSolidRenderingLightPosYSlider;
-  public JSlider tinaSolidRenderingLightPosZSlider;
+  public JWFNumberField tinaSolidRenderingLightPosAltitudeREd;
+  public JWFNumberField tinaSolidRenderingLightPosAzimuthREd;
+  public JSlider tinaSolidRenderingLightAltitudeSlider;
+  public JSlider tinaSolidRenderingLightAzimuthSlider;
   public JButton tinaSolidRenderingLightColorBtn;
   public JCheckBox tinaSolidRenderingLightCastShadowsCBx;
   public JWFNumberField tinaSolidRenderingLightIntensityREd;
@@ -646,6 +644,8 @@ public class TinaControllerParameter {
   public JSlider xFormMaterialSlider;
   public JWFNumberField xFormMaterialSpeedREd;
   public JSlider xFormMaterialSpeedSlider;
+  public JPanel bokehSettingsPnl;
+  public JPanel postBokehSettingsPnl;
 
   public void setParams1(Desktop pDesktop, TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1061,8 +1061,8 @@ public class TinaControllerParameter {
       JWFNumberField tinaSolidRenderingAOAffectDiffuseREd, JSlider tinaSolidRenderingAOAffectDiffuseSlider,
       JButton resetSolidRenderingMaterialsBtn, JButton resetSolidRenderingLightsBtn,
       JComboBox tinaSolidRenderingSelectedLightCmb, JButton tinaSolidRenderingAddLightBtn, JButton tinaSolidRenderingDeleteLightBtn,
-      JWFNumberField tinaSolidRenderingLightPosXREd, JWFNumberField tinaSolidRenderingLightPosYREd, JWFNumberField tinaSolidRenderingLightPosZREd,
-      JSlider tinaSolidRenderingLightPosXSlider, JSlider tinaSolidRenderingLightPosYSlider, JSlider tinaSolidRenderingLightPosZSlider,
+      JWFNumberField tinaSolidRenderingLightPosAltitudeREd, JWFNumberField tinaSolidRenderingLightPosAzimuthREd,
+      JSlider tinaSolidRenderingLightPosAltitudeSlider, JSlider tinaSolidRenderingLightPosAzimuthSlider,
       JButton tinaSolidRenderingLightColorBtn, JCheckBox tinaSolidRenderingLightCastShadowsCBx, JWFNumberField tinaSolidRenderingLightIntensityREd,
       JSlider tinaSolidRenderingLightIntensitySlider, JWFNumberField tinaSolidRenderingShadowIntensityREd, JSlider tinaSolidRenderingShadowIntensitySlider,
       JComboBox tinaSolidRenderingSelectedMaterialCmb, JButton tinaSolidRenderingAddMaterialBtn,
@@ -1076,8 +1076,8 @@ public class TinaControllerParameter {
       JWFNumberField xFormMaterialREd, JSlider xFormMaterialSlider, JWFNumberField xFormMaterialSpeedREd, JSlider xFormMaterialSpeedSlider,
       JButton resetSolidRenderingHardShadowOptionsBtn, JButton resetSolidRenderingAmbientShadowOptionsBtn,
       JComboBox tinaSolidRenderingShadowTypeCmb, JComboBox tinaSolidRenderingShadowmapSizeCmb, JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd,
-      JSlider tinaSolidRenderingShadowSmoothRadiusSlider, JWFNumberField tinaSolidRenderingShadowmapBiasREd, JSlider tinaSolidRenderingShadowmapBiasSlider
-      ) {
+      JSlider tinaSolidRenderingShadowSmoothRadiusSlider, JWFNumberField tinaSolidRenderingShadowmapBiasREd, JSlider tinaSolidRenderingShadowmapBiasSlider,
+      JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1208,12 +1208,10 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingSelectedLightCmb = tinaSolidRenderingSelectedLightCmb;
     this.tinaSolidRenderingAddLightBtn = tinaSolidRenderingAddLightBtn;
     this.tinaSolidRenderingDeleteLightBtn = tinaSolidRenderingDeleteLightBtn;
-    this.tinaSolidRenderingLightPosXREd = tinaSolidRenderingLightPosXREd;
-    this.tinaSolidRenderingLightPosYREd = tinaSolidRenderingLightPosYREd;
-    this.tinaSolidRenderingLightPosZREd = tinaSolidRenderingLightPosZREd;
-    this.tinaSolidRenderingLightPosXSlider = tinaSolidRenderingLightPosXSlider;
-    this.tinaSolidRenderingLightPosYSlider = tinaSolidRenderingLightPosYSlider;
-    this.tinaSolidRenderingLightPosZSlider = tinaSolidRenderingLightPosZSlider;
+    this.tinaSolidRenderingLightPosAltitudeREd = tinaSolidRenderingLightPosAltitudeREd;
+    this.tinaSolidRenderingLightPosAzimuthREd = tinaSolidRenderingLightPosAzimuthREd;
+    this.tinaSolidRenderingLightAltitudeSlider = tinaSolidRenderingLightPosAltitudeSlider;
+    this.tinaSolidRenderingLightAzimuthSlider = tinaSolidRenderingLightPosAzimuthSlider;
     this.tinaSolidRenderingLightColorBtn = tinaSolidRenderingLightColorBtn;
     this.tinaSolidRenderingLightCastShadowsCBx = tinaSolidRenderingLightCastShadowsCBx;
     this.tinaSolidRenderingLightIntensityREd = tinaSolidRenderingLightIntensityREd;
@@ -1255,6 +1253,8 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingShadowSmoothRadiusSlider = tinaSolidRenderingShadowSmoothRadiusSlider;
     this.tinaSolidRenderingShadowmapBiasREd = tinaSolidRenderingShadowmapBiasREd;
     this.tinaSolidRenderingShadowmapBiasSlider = tinaSolidRenderingShadowmapBiasSlider;
+    this.bokehSettingsPnl = bokehSettingsPnl;
+    this.postBokehSettingsPnl = postBokehSettingsPnl;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

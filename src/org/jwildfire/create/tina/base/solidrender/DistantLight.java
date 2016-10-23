@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2016 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.base.solidrender;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
@@ -8,24 +24,20 @@ import java.io.Serializable;
 import org.jwildfire.create.tina.edit.Assignable;
 
 @SuppressWarnings("serial")
-public class PointLight implements Assignable<PointLight>, Serializable {
+public class DistantLight implements Assignable<DistantLight>, Serializable {
 
-  private double x, y, z;
+  private double altitude, azimuth;
   private double intensity = 0.5;
   private double red, green, blue;
   private boolean castShadows = true;
   private double shadowIntensity = 0.8;
 
-  public double getX() {
-    return x;
+  public double getAltitude() {
+    return altitude;
   }
 
-  public double getY() {
-    return y;
-  }
-
-  public double getZ() {
-    return z;
+  public double getAzimuth() {
+    return azimuth;
   }
 
   public double getRed() {
@@ -69,10 +81,9 @@ public class PointLight implements Assignable<PointLight>, Serializable {
   }
 
   @Override
-  public void assign(PointLight pSrc) {
-    x = pSrc.x;
-    y = pSrc.y;
-    z = pSrc.z;
+  public void assign(DistantLight pSrc) {
+    altitude = pSrc.altitude;
+    azimuth = pSrc.azimuth;
     intensity = pSrc.intensity;
     red = pSrc.red;
     green = pSrc.green;
@@ -82,16 +93,16 @@ public class PointLight implements Assignable<PointLight>, Serializable {
   }
 
   @Override
-  public PointLight makeCopy() {
-    PointLight res = new PointLight();
+  public DistantLight makeCopy() {
+    DistantLight res = new DistantLight();
     res.assign(this);
     return res;
   }
 
   @Override
-  public boolean isEqual(PointLight pSrc) {
-    if (fabs(x - pSrc.x) > EPSILON || fabs(y - pSrc.y) > EPSILON ||
-        fabs(z - pSrc.z) > EPSILON || fabs(intensity - pSrc.intensity) > EPSILON ||
+  public boolean isEqual(DistantLight pSrc) {
+    if (fabs(altitude - pSrc.altitude) > EPSILON || fabs(azimuth - pSrc.azimuth) > EPSILON ||
+        fabs(intensity - pSrc.intensity) > EPSILON ||
         fabs(red - pSrc.red) > EPSILON || fabs(green - pSrc.green) > EPSILON ||
         fabs(blue - pSrc.blue) > EPSILON || castShadows != pSrc.castShadows ||
         fabs(shadowIntensity - pSrc.shadowIntensity) > EPSILON) {
@@ -100,16 +111,12 @@ public class PointLight implements Assignable<PointLight>, Serializable {
     return false;
   }
 
-  public void setX(double x) {
-    this.x = x;
+  public void setAltitude(double altitude) {
+    this.altitude = altitude;
   }
 
-  public void setY(double y) {
-    this.y = y;
-  }
-
-  public void setZ(double z) {
-    this.z = z;
+  public void setAzimuth(double azimuth) {
+    this.azimuth = azimuth;
   }
 
   public double getShadowIntensity() {
