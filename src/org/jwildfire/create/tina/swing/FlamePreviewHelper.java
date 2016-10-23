@@ -317,6 +317,7 @@ public class FlamePreviewHelper implements IterationObserver {
       singleLayerFlame.setPixelsPerUnit((lWScl + lHScl) * 0.5 * singleLayerFlame.getPixelsPerUnit() * 0.5);
       singleLayerFlame.setWidth(lInfo.getImageWidth());
       singleLayerFlame.setHeight(lInfo.getImageHeight());
+      singleLayerFlame.setSampleDensity(prefs.getTinaRenderRealtimeQuality() * 2.0 / 3.0);
       FlameRenderer lRenderer = new FlameRenderer(singleLayerFlame, prefs, false, false);
       RenderedFlame lRes = lRenderer.renderFlame(lInfo);
       SimpleImage layerImg = lRes.getImage();
