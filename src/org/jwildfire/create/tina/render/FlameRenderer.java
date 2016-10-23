@@ -221,6 +221,12 @@ public class FlameRenderer {
     else {
       RenderedFlame res = new RenderedFlame();
       res.init(pRenderInfo, flame);
+
+      if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+        FlameRendererView view = createView(flame);
+        raster.notifyInit(view.getLightViewCalculator());
+      }
+
       if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
         renderImageSimple(res.getImage());
       }

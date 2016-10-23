@@ -1402,7 +1402,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         light.setAltitude((0.5 - Math.random()) * 60.0);
         light.setAzimuth((0.5 - Math.random()) * 40.0);
         refreshLightPosControls(light);
-        owner.refreshFlameImage(true, false, 1, true, !areShadowsEnabled());
+        owner.refreshFlameImage(true, false, 1, true, true /*!areShadowsEnabled()*/);
       }
     }
   }
@@ -1799,7 +1799,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightAltitudeREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, true/*!areShadowsEnabled()*/);
   }
 
   private boolean areShadowsEnabled() {
@@ -1807,7 +1807,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightAzimuthREd_changed() {
-    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+    solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, true /*!areShadowsEnabled()*/);
   }
 
   public void solidRenderingLightIntensityREd_changed() {
@@ -1863,11 +1863,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void solidRenderingLightAltitudeSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, true /*!areShadowsEnabled()*/);
   }
 
   public void solidRenderingLightAzimuthSlider_stateChanged(ChangeEvent e) {
-    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, !areShadowsEnabled());
+    solidRenderingLightSliderChanged(data.tinaSolidRenderingLightAzimuthSlider, data.tinaSolidRenderingLightAzimuthREd, "azimuth", TinaController.SLIDER_SCALE_CENTRE, true /*!areShadowsEnabled()*/);
   }
 
   public void solidRenderingLightIntensitySlider_stateChanged(ChangeEvent e) {
