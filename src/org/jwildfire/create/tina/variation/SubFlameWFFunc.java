@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -34,12 +35,17 @@ public class SubFlameWFFunc extends VariationFunc {
   public static final String PARAM_OFFSETX = "offset_x";
   public static final String PARAM_OFFSETY = "offset_y";
   public static final String PARAM_OFFSETZ = "offset_z";
-  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ };
+  public static final String PARAM_COLORSCALE_Z = "colorscale_z";
+  public static final String PARAM_USE_COLORS = "use_colors";
+
+  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_USE_COLORS };
   private static final String[] ressourceNames = { RESSOURCE_FLAME };
 
   private double offset_x = 0.0;
   private double offset_y = 0.0;
   private double offset_z = 0.0;
+  private double colorscale_z = 0.0;
+  private int use_colors = 0;
 
   private Flame flame;
   private XForm xf;
@@ -89,9 +95,21 @@ public class SubFlameWFFunc extends VariationFunc {
       break;
     }
 
-    pVarTP.x += q.x + offset_x;
-    pVarTP.y += q.y + offset_y;
-    pVarTP.z += q.z + offset_z;
+    if (!q.doHide) {
+      pVarTP.x += q.x + offset_x;
+      pVarTP.y += q.y + offset_y;
+      pVarTP.z += q.z + offset_z + colorscale_z * q.color;
+      if (use_colors == 1) {
+        pVarTP.color = q.color;
+        if (q.rgbColor) {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = q.redColor;
+          pVarTP.greenColor = q.greenColor;
+          pVarTP.blueColor = q.blueColor;
+        }
+      }
+    }
+
   }
 
   @Override
@@ -101,7 +119,7 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset_x, offset_y, offset_z };
+    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, use_colors };
   }
 
   @Override
@@ -112,6 +130,10 @@ public class SubFlameWFFunc extends VariationFunc {
       offset_y = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offset_z = pValue;
+    else if (PARAM_COLORSCALE_Z.equalsIgnoreCase(pName))
+      colorscale_z = pValue;
+    else if (PARAM_USE_COLORS.equalsIgnoreCase(pName))
+      use_colors = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
