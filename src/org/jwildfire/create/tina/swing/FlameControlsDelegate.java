@@ -757,7 +757,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         int selected = cmb.getSelectedIndex();
         cmb.removeAllItems();
         for (int i = 0; i < items.size(); i++) {
-          cmb.addItem(itemPrefix + (i + 1));
+          cmb.addItem(itemPrefix + String.valueOf(i));
         }
         if (selected < 0 && items.size() > 0) {
           selected = 0;
