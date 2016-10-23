@@ -43,6 +43,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.swing.Desktop;
 
 public class FlamesGPURenderInternalFrame extends JInternalFrame {
@@ -68,7 +69,7 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
-    this.setTitle("Interactive renderer");
+    this.setTitle("GPU renderer");
     this.setVisible(false);
     this.setResizable(true);
     this.setMaximizable(false);
@@ -86,7 +87,12 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      jContentPane.add(getInteractiveRenderPanel(), BorderLayout.CENTER);
+      if (Tools.ENABLE_GPU_WINDOW) {
+        jContentPane.add(getInteractiveRenderPanel(), BorderLayout.CENTER);
+      }
+      else {
+        getInteractiveRenderPanel();
+      }
     }
     return jContentPane;
   }

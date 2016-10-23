@@ -1,4 +1,20 @@
+V3.00 BETA 4 (15.10.2016)
+ - materials and lights in the solid-rendering-settings now start with "Material 0" and "Light 0", as the smallest index is 0 (rather than 1)
+ - improved the speed of the small layer-preview-render (when having multiple layers)
+ - fixed a bug regarding the position of the color-controls when the gradient-editor is active
+ - exchanged the light-implementation (which was some kind of distant light) by a more puristic approach of distant lights. 
+   Those lights have only two coordinates (altitude and azimuth) and are easier to handle. Additionally it simplified shadow calcucation.  
+ - Improved the results of the "Solid (shadows)"-random-flame-generator
+ - fixed a bug regarding the creating of zbuffer-images (value underflow)
+ - parplot2d_wf, yplot2d_wf, yplot3d_wf-vatation: formulas may now have up to 6 parameters ("param_a" ... "param_f"), which may be initialized inside the presets.txt, they can be modified like any other parameter
+ - new preset (at slot 35) for parplot2d_wf-variation, supplied by Don Town
+ - fixed a problem when loading a flame with multiple layers lost its title
+ - fixed the background-color of the script-description-area in the script-editing-dialog, which appeared to be dark on dark UI-themes
+ - hdr-rendering of solid flames
+ - 3 new SINEPOW-filter-kernels (with predefined power-levels)
+ 
 V3.00 BETA 3 (15.10.2016)
+ - Changed the display of the "List of changes"-window to html-dispaly, which works better on dark themes
  - New "List of changes"-window to display the list of changes made in the software 
  - fixed a problem with animation motion curves in a plane different from XY
  - improved image-quality for scaled image-display on the desktop (e. g. after loading an image or displaying a rendered image)

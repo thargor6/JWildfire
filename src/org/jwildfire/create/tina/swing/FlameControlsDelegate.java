@@ -399,11 +399,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void vibrancySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void saturationSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
@@ -416,11 +416,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void vibrancyREd_changed() {
-    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void saturationREd_changed() {
-    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
@@ -483,7 +483,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void gammaREd_changed() {
-    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
+    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, false);
   }
 
   public void gammaThresholdREd_changed() {
@@ -499,7 +499,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void gammaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
+    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, false);
   }
 
   public void pixelsPerUnitREd_changed() {
