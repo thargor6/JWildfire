@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.mutagen.RandomGradientMutation;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
+import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
@@ -93,6 +94,15 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    pFlame.setCamZoom(0.5 + Math.random() * 0.25);
+    pFlame.setCamPerspective(0.05 + Math.random() * 0.15);
+    pFlame.setCamPitch(-5.0 - Math.random() * 30.0);
+    pFlame.setCamYaw(-25.0 + Math.random() * 50.0);
+    pFlame.setCamRoll(0.0);
+
+    XForm xform0 = pFlame.getFirstLayer().getXForms().get(0);
+    Variation var0 = xform0.getVariation(0);
+    var0.setAmount(var0.getAmount() * (0.25 + Math.random() * 0.25));
 
     Layer layer = new Layer();
     layer.setWeight(0.25 + Math.random() * 0.5);
@@ -104,18 +114,18 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setWeight(0.5);
       if (Math.random() < 0.5) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("plane_wf", true);
-        varFunc.setParameter("axis", 0);
-        varFunc.setParameter("position", -Math.random() * 2.0 - 0.25);
+        varFunc.setParameter("axis", 2);
+        varFunc.setParameter("position", Math.random() * 2.0 - 0.25);
         varFunc.setParameter("color_mode", Tools.FTOI(4 * Math.random()));
-        xForm.addVariation(1.0, varFunc);
+        xForm.addVariation(1.0 + Math.random(), varFunc);
       }
       else {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("checkerboard_wf", true);
-        varFunc.setParameter("axis", 0);
-        varFunc.setParameter("position", -Math.random() * 2.0 - 0.25);
+        varFunc.setParameter("axis", 2);
+        varFunc.setParameter("position", Math.random() * 2.0 - 0.25);
         varFunc.setParameter("checker_size", 0.1 + Math.random() * 0.1);
         varFunc.setParameter("displ_amount", 0.01 + Math.random() * 0.05);
-        xForm.addVariation(1.0, varFunc);
+        xForm.addVariation(1.0 + Math.random(), varFunc);
       }
     }
 
