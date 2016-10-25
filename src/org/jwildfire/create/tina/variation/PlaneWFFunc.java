@@ -17,11 +17,17 @@
 
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.palette.RenderColor;
 
 public class PlaneWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,10 +52,10 @@ public class PlaneWFFunc extends VariationFunc {
   private static final int AXIS_YZ = 1;
   private static final int AXIS_ZX = 2;
 
-  private static final int CM_U = 0;
-  private static final int CM_V = 1;
-  private static final int CM_UV = 2;
-  private static final int CM_COLORMAP = 4;
+  private static final int CM_COLORMAP = 0;
+  private static final int CM_U = 1;
+  private static final int CM_V = 2;
+  private static final int CM_UV = 3;
 
   private double position = 3.0;
   private double size = 10.0;
@@ -123,6 +129,7 @@ public class PlaneWFFunc extends VariationFunc {
           int ix = (int) MathLib.trunc(iu);
           int iy = (int) MathLib.trunc(iv);
           colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
+          pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
         }
           break;
         case CM_U:
@@ -219,7 +226,40 @@ public class PlaneWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMapHolder.init();
+    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     displacementMapHolder.init();
+  }
+
+  private RenderColor[] uvColors;
+  protected Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
+
+  private double getUVColorIdx(int pR, int pG, int pB) {
+    RenderColor pColor = new RenderColor(pR, pG, pB);
+    Double res = uvIdxMap.get(pColor);
+    if (res == null) {
+
+      int nearestIdx = 0;
+      RenderColor color = uvColors[0];
+      double dr, dg, db;
+      dr = (color.red - pR);
+      dg = (color.green - pG);
+      db = (color.blue - pB);
+      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
+      for (int i = 1; i < uvColors.length; i++) {
+        color = uvColors[i];
+        dr = (color.red - pR);
+        dg = (color.green - pG);
+        db = (color.blue - pB);
+        double dist = sqrt(dr * dr + dg * dg + db * db);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestIdx = i;
+        }
+      }
+      res = (double) nearestIdx / (double) (uvColors.length - 1);
+      uvIdxMap.put(pColor, res);
+    }
+    return res;
   }
 
 }
