@@ -4943,6 +4943,8 @@ public class TinaInternalFrame extends JInternalFrame {
     nonlinearControlsRows[11] = new TinaNonlinearControlsRow(getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton());
 
+    initFilterKernelCmb(getPostBokehFilterKernelCmb());
+
     initFilterKernelCmb(getTinaFilterKernelCmb());
     initPostSymmetryTypeCmb(getPostSymmetryTypeCmb());
     initRandomGenCmb(getRandomStyleCmb());
@@ -5140,7 +5142,9 @@ public class TinaInternalFrame extends JInternalFrame {
         getResetSolidRenderingHardShadowOptionsBtn(), getResetSolidRenderingAmbientShadowOptionsBtn(),
         getTinaSolidRenderingShadowTypeCmb(), getTinaSolidRenderingShadowmapSizeCmb(), getTinaSolidRenderingShadowSmoothRadiusREd(),
         getTinaSolidRenderingShadowSmoothRadiusSlider(), getTinaSolidRenderingShadowmapBiasREd(), getTinaSolidRenderingShadowmapBiasSlider(),
-        getBokehSettingsPnl(), getPostBokehSettingsPnl());
+        getBokehSettingsPnl(), getPostBokehSettingsPnl(), getResetPostBokehSettingsBtn(), getPostBokehIntensityREd(), getPostBokehIntensitySlider(),
+        getPostBokehBrightnessREd(), getPostBokehBrightnessSlider(), getPostBokehSizeREd(), getPostBokehSizeSlider(), getPostBokehActivationREd(),
+        getPostBokehActivationSlider(), getPostBokehFilterKernelCmb());
 
     tinaController = new TinaController(params);
     getFilterKernelFlatPreviewBtn().setSelected(Prefs.getPrefs().isTinaDefaultFilterVisualisationFlat());
@@ -10221,7 +10225,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBlurRadiusSlider.setMaximum(6);
       postBlurRadiusSlider.setMinimum(0);
       postBlurRadiusSlider.setValue(0);
-      postBlurRadiusSlider.setSize(new Dimension(120, 19));
+      postBlurRadiusSlider.setSize(new Dimension(220, 19));
       postBlurRadiusSlider.setLocation(new Point(204, 6));
       postBlurRadiusSlider.setPreferredSize(new Dimension(120, 19));
       postBlurRadiusSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -10281,7 +10285,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBlurFadeSlider.setMaximum(100);
       postBlurFadeSlider.setMinimum(0);
       postBlurFadeSlider.setValue(0);
-      postBlurFadeSlider.setSize(new Dimension(120, 19));
+      postBlurFadeSlider.setSize(new Dimension(220, 19));
       postBlurFadeSlider.setLocation(new Point(204, 30));
       postBlurFadeSlider.setPreferredSize(new Dimension(120, 19));
       postBlurFadeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -14348,6 +14352,14 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehFilterKernelCmb.setLocation(new Point(100, 4));
       postBokehFilterKernelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
       postBokehFilterKernelCmb.setBounds(115, 72, 322, 24);
+      postBokehFilterKernelCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().solidRenderingPostBokehFilterKernelCmb_changed();
+          }
+        }
+      });
+
       postBokehSettingsPnl.add(postBokehFilterKernelCmb);
 
       JLabel lblBokehFilterKernel = new JLabel();
@@ -14379,10 +14391,27 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehSizeREd.setLocation(new Point(584, 2));
       postBokehSizeREd.setLinkedMotionControlName("postBokehSizeSlider");
       postBokehSizeREd.setHasMinValue(true);
-      postBokehSizeREd.setHasMaxValue(true);
       postBokehSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       postBokehSizeREd.setEditable(true);
       postBokehSizeREd.setBounds(115, 50, 100, 24);
+      postBokehSizeREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      postBokehSizeREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!postBokehSizeREd.isMouseAdjusting() || postBokehSizeREd.getMouseChangeCount() == 0) {
+              if (!postBokehSizeSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingPostBokehSizeREd_changed();
+          }
+        }
+      });
+
       postBokehSettingsPnl.add(postBokehSizeREd);
 
       postBokehSizeSlider = new JSlider();
@@ -14391,10 +14420,21 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehSizeSlider.setPreferredSize(new Dimension(220, 19));
       postBokehSizeSlider.setName("tinaFilterRadiusSlider");
       postBokehSizeSlider.setMinimum(0);
-      postBokehSizeSlider.setMaximum(200);
+      postBokehSizeSlider.setMaximum(20000);
       postBokehSizeSlider.setLocation(new Point(686, 2));
       postBokehSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       postBokehSizeSlider.setBounds(217, 50, 220, 24);
+      postBokehSizeSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postBokehSizeSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingPostBokehSizeSlider_stateChanged(e);
+        }
+      });
       postBokehSettingsPnl.add(postBokehSizeSlider);
 
       JLabel label_2 = new JLabel();
@@ -14409,7 +14449,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
       postBokehIntensityREd = new JWFNumberField();
       postBokehIntensityREd.setLinkedLabelControlName("postBokehIntensityLbl");
-      postBokehIntensityREd.setValueStep(0.05);
+      postBokehIntensityREd.setValueStep(0.005);
       postBokehIntensityREd.setText("");
       postBokehIntensityREd.setSize(new Dimension(100, 24));
       postBokehIntensityREd.setPreferredSize(new Dimension(100, 24));
@@ -14417,10 +14457,27 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehIntensityREd.setLocation(new Point(584, 2));
       postBokehIntensityREd.setLinkedMotionControlName("postBokehIntensitySlider");
       postBokehIntensityREd.setHasMinValue(true);
-      postBokehIntensityREd.setHasMaxValue(true);
       postBokehIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       postBokehIntensityREd.setEditable(true);
       postBokehIntensityREd.setBounds(115, 28, 100, 24);
+      postBokehIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      postBokehIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!postBokehIntensityREd.isMouseAdjusting() || postBokehIntensityREd.getMouseChangeCount() == 0) {
+              if (!postBokehIntensitySlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingPostBokehIntensityREd_changed();
+          }
+        }
+      });
+
       postBokehSettingsPnl.add(postBokehIntensityREd);
 
       postBokehIntensitySlider = new JSlider();
@@ -14433,6 +14490,18 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehIntensitySlider.setLocation(new Point(686, 2));
       postBokehIntensitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
       postBokehIntensitySlider.setBounds(217, 28, 220, 24);
+      postBokehIntensitySlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postBokehIntensitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingPostBokehIntensitySlider_stateChanged(e);
+        }
+      });
+
       postBokehSettingsPnl.add(postBokehIntensitySlider);
 
       resetPostBokehSettingsBtn = new JButton();
@@ -17972,7 +18041,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBlurFallOffSlider.setMaximum(100);
       postBlurFallOffSlider.setMinimum(0);
       postBlurFallOffSlider.setValue(0);
-      postBlurFallOffSlider.setSize(new Dimension(120, 19));
+      postBlurFallOffSlider.setSize(new Dimension(220, 19));
       postBlurFallOffSlider.setLocation(new Point(204, 54));
       postBlurFallOffSlider.setPreferredSize(new Dimension(120, 19));
       postBlurFallOffSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -19123,10 +19192,26 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehBrightnessREd.setLocation(new Point(584, 2));
       postBokehBrightnessREd.setLinkedMotionControlName("postBokehBrightnessSlider");
       postBokehBrightnessREd.setHasMinValue(true);
-      postBokehBrightnessREd.setHasMaxValue(true);
       postBokehBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       postBokehBrightnessREd.setEditable(true);
       postBokehBrightnessREd.setBounds(558, 28, 100, 24);
+      postBokehBrightnessREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      postBokehBrightnessREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!postBokehBrightnessREd.isMouseAdjusting() || postBokehBrightnessREd.getMouseChangeCount() == 0) {
+              if (!postBokehBrightnessSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingPostBokehBrightnessREd_changed();
+          }
+        }
+      });
     }
     return postBokehBrightnessREd;
   }
@@ -19153,10 +19238,21 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehBrightnessSlider.setPreferredSize(new Dimension(220, 19));
       postBokehBrightnessSlider.setName("tinaFilterRadiusSlider");
       postBokehBrightnessSlider.setMinimum(0);
-      postBokehBrightnessSlider.setMaximum(200);
+      postBokehBrightnessSlider.setMaximum(20000);
       postBokehBrightnessSlider.setLocation(new Point(686, 2));
       postBokehBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       postBokehBrightnessSlider.setBounds(660, 28, 220, 24);
+      postBokehBrightnessSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postBokehBrightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingPostBokehBrightnessSlider_stateChanged(e);
+        }
+      });
     }
     return postBokehBrightnessSlider;
   }
@@ -19187,10 +19283,26 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehActivationREd.setLocation(new Point(584, 2));
       postBokehActivationREd.setLinkedMotionControlName("postBokehActivationSlider");
       postBokehActivationREd.setHasMinValue(true);
-      postBokehActivationREd.setHasMaxValue(true);
       postBokehActivationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       postBokehActivationREd.setEditable(true);
       postBokehActivationREd.setBounds(558, 50, 100, 24);
+      postBokehActivationREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getFlameControls().editMotionCurve(e);
+        }
+      });
+      postBokehActivationREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            if (!postBokehActivationREd.isMouseAdjusting() || postBokehActivationREd.getMouseChangeCount() == 0) {
+              if (!postBokehActivationSlider.getValueIsAdjusting()) {
+                tinaController.saveUndoPoint();
+              }
+            }
+            tinaController.getFlameControls().solidRenderingPostBokehActivationREd_changed();
+          }
+        }
+      });
     }
     return postBokehActivationREd;
   }
@@ -19203,10 +19315,21 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehActivationSlider.setPreferredSize(new Dimension(220, 19));
       postBokehActivationSlider.setName("tinaFilterRadiusSlider");
       postBokehActivationSlider.setMinimum(0);
-      postBokehActivationSlider.setMaximum(200);
+      postBokehActivationSlider.setMaximum(255000);
       postBokehActivationSlider.setLocation(new Point(686, 2));
       postBokehActivationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
       postBokehActivationSlider.setBounds(660, 50, 220, 24);
+      postBokehActivationSlider.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+          tinaController.saveUndoPoint();
+        }
+      });
+      postBokehActivationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+        public void stateChanged(javax.swing.event.ChangeEvent e) {
+          tinaController.getFlameControls().solidRenderingPostBokehActivationSlider_stateChanged(e);
+        }
+      });
     }
     return postBokehActivationSlider;
   }

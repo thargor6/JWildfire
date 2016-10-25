@@ -464,4 +464,15 @@ public class TinaControllerData {
   public JSlider xFormModHueSpeedSlider;
   public JPanel bokehSettingsPnl;
   public JPanel postBokehSettingsPnl;
+  public JButton resetPostBokehSettingsBtn;
+  public JWFNumberField postBokehIntensityREd;
+  public JSlider postBokehIntensitySlider;
+  public JWFNumberField postBokehBrightnessREd;
+  public JSlider postBokehBrightnessSlider;
+  public JWFNumberField postBokehSizeREd;
+  public JSlider postBokehSizeSlider;
+  public JWFNumberField postBokehActivationREd;
+  public JSlider postBokehActivationSlider;
+  public JComboBox postBokehFilterKernelCmb;
+
 }

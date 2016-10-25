@@ -50,6 +50,7 @@ import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -257,7 +258,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.tinaSolidRenderingMaterialReflectionMappingCmb, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialSelectReflMapBtn, disabled || !hasMaterials);
     enableControl(data.tinaSolidRenderingMaterialRemoveReflMapBtn, disabled || !hasMaterials);
+
     enableBokehPanels();
+    enableControl(data.resetPostBokehSettingsBtn, disabled);
+    enableControl(data.postBokehIntensityREd, disabled);
+    enableControl(data.postBokehBrightnessREd, disabled);
+    enableControl(data.postBokehSizeREd, disabled);
+    enableControl(data.postBokehActivationREd, disabled);
+    enableControl(data.postBokehFilterKernelCmb, disabled);
   }
 
   private void enableStereo3dUI() {
@@ -865,6 +873,16 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.tinaSolidRenderingShadowSmoothRadiusSlider.setValue(Tools.FTOI(settings.getShadowSmoothRadius() * TinaController.SLIDER_SCALE_CENTRE));
     data.tinaSolidRenderingShadowmapBiasREd.setText(Tools.doubleToString(settings.getShadowmapBias()));
     data.tinaSolidRenderingShadowmapBiasSlider.setValue(Tools.FTOI(settings.getShadowmapBias() * TinaController.SLIDER_SCALE_CENTRE));
+
+    data.postBokehIntensityREd.setText(Tools.doubleToString(settings.getPostBokehIntensity()));
+    data.postBokehIntensitySlider.setValue(Tools.FTOI(settings.getPostBokehIntensity() * TinaController.SLIDER_SCALE_CENTRE));
+    data.postBokehBrightnessREd.setText(Tools.doubleToString(settings.getPostBokehBrightness()));
+    data.postBokehBrightnessSlider.setValue(Tools.FTOI(settings.getPostBokehBrightness() * TinaController.SLIDER_SCALE_CENTRE));
+    data.postBokehSizeREd.setText(Tools.doubleToString(settings.getPostBokehSize()));
+    data.postBokehSizeSlider.setValue(Tools.FTOI(settings.getPostBokehSize() * TinaController.SLIDER_SCALE_CENTRE));
+    data.postBokehActivationREd.setText(Tools.doubleToString(settings.getPostBokehActivation()));
+    data.postBokehActivationSlider.setValue(Tools.FTOI(settings.getPostBokehActivation() * TinaController.SLIDER_SCALE_CENTRE));
+    data.postBokehFilterKernelCmb.setSelectedItem(settings.getPostBokehFilterKernel());
   }
 
   private void refreshSolidRenderingMaterialControls() {
@@ -1972,5 +1990,48 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingShadowSmoothRadiusSlider_stateChanged(ChangeEvent e) {
     solidRenderingSliderChanged(data.tinaSolidRenderingShadowSmoothRadiusSlider, data.tinaSolidRenderingShadowSmoothRadiusREd, "shadowSmoothRadius", TinaController.SLIDER_SCALE_CENTRE, false);
+  }
+
+  public void solidRenderingPostBokehActivationSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.postBokehActivationSlider, data.postBokehActivationREd, "postBokehActivation", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehSizeREd_changed() {
+    solidRenderingTextFieldChanged(data.postBokehSizeSlider, data.postBokehSizeREd, "postBokehSize", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehBrightnessSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.postBokehBrightnessSlider, data.postBokehBrightnessREd, "postBokehBrightness", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehIntensityREd_changed() {
+    solidRenderingTextFieldChanged(data.postBokehIntensitySlider, data.postBokehIntensityREd, "postBokehIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehSizeSlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.postBokehSizeSlider, data.postBokehSizeREd, "postBokehSize", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehIntensitySlider_stateChanged(ChangeEvent e) {
+    solidRenderingSliderChanged(data.postBokehIntensitySlider, data.postBokehIntensityREd, "postBokehIntensity", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehFilterKernelCmb_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        SolidRenderSettings settings = flame.getSolidRenderSettings();
+        owner.saveUndoPoint();
+        settings.setPostBokehFilterKernel((FilterKernelType) data.postBokehFilterKernelCmb.getSelectedItem());
+      }
+    }
+  }
+
+  public void solidRenderingPostBokehBrightnessREd_changed() {
+    solidRenderingTextFieldChanged(data.postBokehBrightnessSlider, data.postBokehBrightnessREd, "postBokehBrightness", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void solidRenderingPostBokehActivationREd_changed() {
+    solidRenderingTextFieldChanged(data.postBokehActivationSlider, data.postBokehActivationREd, "postBokehActivation", TinaController.SLIDER_SCALE_CENTRE, true);
   }
 }

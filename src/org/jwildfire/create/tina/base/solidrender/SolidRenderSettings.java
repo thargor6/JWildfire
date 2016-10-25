@@ -378,7 +378,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
     this.aoAffectDiffuse = aoAffectDiffuse;
   }
 
-  private void setupDefaultPostBokehOptions() {
+  public void setupDefaultPostBokehOptions() {
     postBokehFilterKernel = FilterKernelType.SINEPOW5;
     postBokehIntensity = 0.005;
     postBokehBrightness = 1.0;

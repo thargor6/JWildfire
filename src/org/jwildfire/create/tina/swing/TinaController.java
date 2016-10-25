@@ -643,6 +643,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSolidRenderingShadowmapBiasSlider = parameterObject.tinaSolidRenderingShadowmapBiasSlider;
     data.bokehSettingsPnl = parameterObject.bokehSettingsPnl;
     data.postBokehSettingsPnl = parameterObject.postBokehSettingsPnl;
+    data.resetPostBokehSettingsBtn = parameterObject.resetPostBokehSettingsBtn;
+    data.postBokehIntensityREd = parameterObject.postBokehIntensityREd;
+    data.postBokehIntensitySlider = parameterObject.postBokehIntensitySlider;
+    data.postBokehBrightnessREd = parameterObject.postBokehBrightnessREd;
+    data.postBokehBrightnessSlider = parameterObject.postBokehBrightnessSlider;
+    data.postBokehSizeREd = parameterObject.postBokehSizeREd;
+    data.postBokehSizeSlider = parameterObject.postBokehSizeSlider;
+    data.postBokehActivationREd = parameterObject.postBokehActivationREd;
+    data.postBokehActivationSlider = parameterObject.postBokehActivationSlider;
+    data.postBokehFilterKernelCmb = parameterObject.postBokehFilterKernelCmb;
 
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
@@ -5491,6 +5501,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       saveUndoPoint();
       flame.resetPostBlurSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetPostBokehSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.getSolidRenderSettings().setupDefaultPostBokehOptions();
       refreshUI();
     }
   }

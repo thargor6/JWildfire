@@ -646,6 +646,16 @@ public class TinaControllerParameter {
   public JSlider xFormMaterialSpeedSlider;
   public JPanel bokehSettingsPnl;
   public JPanel postBokehSettingsPnl;
+  public JButton resetPostBokehSettingsBtn;
+  public JWFNumberField postBokehIntensityREd;
+  public JSlider postBokehIntensitySlider;
+  public JWFNumberField postBokehBrightnessREd;
+  public JSlider postBokehBrightnessSlider;
+  public JWFNumberField postBokehSizeREd;
+  public JSlider postBokehSizeSlider;
+  public JWFNumberField postBokehActivationREd;
+  public JSlider postBokehActivationSlider;
+  public JComboBox postBokehFilterKernelCmb;
 
   public void setParams1(Desktop pDesktop, TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1077,7 +1087,9 @@ public class TinaControllerParameter {
       JButton resetSolidRenderingHardShadowOptionsBtn, JButton resetSolidRenderingAmbientShadowOptionsBtn,
       JComboBox tinaSolidRenderingShadowTypeCmb, JComboBox tinaSolidRenderingShadowmapSizeCmb, JWFNumberField tinaSolidRenderingShadowSmoothRadiusREd,
       JSlider tinaSolidRenderingShadowSmoothRadiusSlider, JWFNumberField tinaSolidRenderingShadowmapBiasREd, JSlider tinaSolidRenderingShadowmapBiasSlider,
-      JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl) {
+      JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl, JButton resetPostBokehSettingsBtn, JWFNumberField postBokehIntensityREd, JSlider postBokehIntensitySlider,
+      JWFNumberField postBokehBrightnessREd, JSlider postBokehBrightnessSlider, JWFNumberField postBokehSizeREd, JSlider postBokehSizeSlider,
+      JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1255,6 +1267,16 @@ public class TinaControllerParameter {
     this.tinaSolidRenderingShadowmapBiasSlider = tinaSolidRenderingShadowmapBiasSlider;
     this.bokehSettingsPnl = bokehSettingsPnl;
     this.postBokehSettingsPnl = postBokehSettingsPnl;
+    this.resetPostBokehSettingsBtn = resetPostBokehSettingsBtn;
+    this.postBokehIntensityREd = postBokehIntensityREd;
+    this.postBokehIntensitySlider = postBokehIntensitySlider;
+    this.postBokehBrightnessREd = postBokehBrightnessREd;
+    this.postBokehBrightnessSlider = postBokehBrightnessSlider;
+    this.postBokehSizeREd = postBokehSizeREd;
+    this.postBokehSizeSlider = postBokehSizeSlider;
+    this.postBokehActivationREd = postBokehActivationREd;
+    this.postBokehActivationSlider = postBokehActivationSlider;
+    this.postBokehFilterKernelCmb = postBokehFilterKernelCmb;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {
