@@ -464,32 +464,31 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   }
 
   public boolean ressourceCanModifyParams(String resourceName) {
-    if (resourceName.equalsIgnoreCase(RESSOURCE_CODE)) { return true; }
-    else { return full_variation.ressourceCanModifyParams(resourceName); }
+    if (resourceName.equalsIgnoreCase(RESSOURCE_CODE)) {
+      return true;
+    }
+    else {
+      return full_variation.ressourceCanModifyParams(resourceName);
+    }
   }
-  
+
   @Override
   public boolean ressourceCanModifyParams() {
     return true;
   }
-    
+
   @Override
   public boolean dynamicParameterExpansion(String paramName) {
     return full_variation.dynamicParameterExpansion(paramName);
   }
-  
+
   public boolean dynamicParameterExpansion() {
-    return full_variation.dynamicParameterExpansion();
+    return full_variation != null ? full_variation.dynamicParameterExpansion() : false;
   }
 
   @Override
   public int getPriority() {
-    if (full_variation == null) {
-      return 0;
-    }
-    else {
-      return full_variation.getPriority();
-    }
+    return full_variation != null ? full_variation.getPriority() : 0;
   }
 
 }
