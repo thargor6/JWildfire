@@ -40,11 +40,12 @@ public class PlaneWFFunc extends VariationFunc {
   private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
   private static final String PARAM_DISPL_AMOUNT = "displ_amount";
   private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
+  private static final String PARAM_CALC_COLORIDX = "calc_color_idx";
 
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP };
+  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_CALC_COLORIDX };
 
   private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
@@ -62,6 +63,7 @@ public class PlaneWFFunc extends VariationFunc {
   private int axis = AXIS_ZX;
   private int direct_color = 1;
   private int color_mode = CM_UV;
+  private int calc_color_idx = 0;
 
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
   private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
@@ -129,7 +131,9 @@ public class PlaneWFFunc extends VariationFunc {
           int ix = (int) MathLib.trunc(iu);
           int iy = (int) MathLib.trunc(iv);
           colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
-          pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+          if (calc_color_idx == 1) {
+            pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+          }
         }
           break;
         case CM_U:
@@ -151,7 +155,7 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map() };
+    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), calc_color_idx };
   }
 
   @Override
@@ -169,7 +173,7 @@ public class PlaneWFFunc extends VariationFunc {
       direct_color = limitIntVal(Tools.FTOI(pValue), 0, 1);
     }
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
-      color_mode = limitIntVal(Tools.FTOI(pValue), CM_U, CM_COLORMAP);
+      color_mode = limitIntVal(Tools.FTOI(pValue), CM_COLORMAP, CM_UV);
     }
     else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
@@ -179,6 +183,9 @@ public class PlaneWFFunc extends VariationFunc {
     }
     else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_amount(pValue);
+    }
+    else if (PARAM_CALC_COLORIDX.equalsIgnoreCase(pName)) {
+      calc_color_idx = limitIntVal(Tools.FTOI(pValue), 0, 1);
     }
     else
       throw new IllegalArgumentException(pName);
