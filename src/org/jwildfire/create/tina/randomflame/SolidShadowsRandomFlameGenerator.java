@@ -45,13 +45,13 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SolidStunningRandomFlameGenerator());
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String SOLID_RANDGEN = "SOLID_RANDGEN";
 
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
-    state.getParams().put(RANDGEN, generator);
+    state.getParams().put(SOLID_RANDGEN, generator);
     return state;
   }
 
@@ -65,7 +65,7 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(SOLID_RANDGEN);
     return generator;
   }
 

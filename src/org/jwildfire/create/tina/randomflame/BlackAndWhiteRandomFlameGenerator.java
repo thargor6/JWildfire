@@ -60,10 +60,12 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SimpleTilingRandomFlameGenerator());
     generators.add(new SierpinskyRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
-    generators.add(new SolidExperimentalRandomFlameGenerator());
-    generators.add(new SolidStunningRandomFlameGenerator());
-    generators.add(new SolidJulia3DRandomFlameGenerator());
-    generators.add(new SolidShadowsRandomFlameGenerator());
+    if (!Prefs.getPrefs().isTinaDisableSolidFlameRandGens()) {
+      generators.add(new SolidExperimentalRandomFlameGenerator());
+      generators.add(new SolidStunningRandomFlameGenerator());
+      generators.add(new SolidJulia3DRandomFlameGenerator());
+      generators.add(new SolidShadowsRandomFlameGenerator());
+    }
     generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
@@ -79,13 +81,13 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new XenomorphRandomFlameGenerator());
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String BW_RANDGEN = "BW_RANDGEN";
 
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
-    state.getParams().put(RANDGEN, generator);
+    state.getParams().put(BW_RANDGEN, generator);
     return state;
   }
 
@@ -99,7 +101,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(BW_RANDGEN);
     return generator;
   }
 

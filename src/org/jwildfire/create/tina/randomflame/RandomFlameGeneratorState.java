@@ -45,4 +45,13 @@ public class RandomFlameGeneratorState {
     return gradientGenerator;
   }
 
+  public void mergeParams(RandomFlameGeneratorState src) {
+    for (String key : src.params.keySet()) {
+      if (params.containsKey(key)) {
+        System.out.println("WARNING: overwriting <" + key + "> param");
+      }
+      params.put(key, src.params.get(key));
+    }
+  }
+
 }

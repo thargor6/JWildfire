@@ -87,14 +87,16 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String ALL_RANDGEN = "ALL_RANDGEN";
 
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
-    state.getParams().put(RANDGEN, generator);
+    RandomFlameGeneratorState subState = generator.initState(pPrefs, pRandomGradientGenerator);
+    state.mergeParams(subState);
+    state.getParams().put(ALL_RANDGEN, generator);
     return state;
   }
 
@@ -108,7 +110,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(ALL_RANDGEN);
     return generator;
   }
 
