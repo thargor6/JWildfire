@@ -123,8 +123,9 @@ public class SolidShadowsRandomFlameGenerator extends RandomFlameGenerator {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("checkerboard_wf", true);
         varFunc.setParameter("axis", 2);
         varFunc.setParameter("position", Math.random() * 2.0 - 0.25);
-        varFunc.setParameter("checker_size", 0.1 + Math.random() * 0.1);
-        varFunc.setParameter("displ_amount", 0.01 + Math.random() * 0.05);
+        varFunc.setParameter("checker_size", 0.05 + Math.random() * 0.1);
+        varFunc.setParameter("displ_amount", 0.005 + Math.random() * 0.03);
+        varFunc.setParameter("with_sides", Math.random() > 0.25 ? 1 : 0);
         xForm.addVariation(1.0 + Math.random(), varFunc);
       }
     }

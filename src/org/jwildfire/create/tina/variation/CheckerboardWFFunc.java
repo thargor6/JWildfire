@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -31,9 +32,11 @@ public class CheckerboardWFFunc extends VariationFunc {
   private static final String PARAM_DISPL_AMOUNT = "displ_amount";
   private static final String PARAM_CHECKER_COLOR1 = "checker_color1";
   private static final String PARAM_CHECKER_COLOR2 = "checker_color2";
+  private static final String PARAM_SIDE_COLOR = "side_color";
   private static final String PARAM_CHECKER_SIZE = "checker_size";
+  private static final String PARAM_WITH_SIDES = "with_sides";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DISPL_AMOUNT, PARAM_CHECKER_COLOR1, PARAM_CHECKER_COLOR2, PARAM_CHECKER_SIZE };
+  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_CHECKER_SIZE, PARAM_DISPL_AMOUNT, PARAM_CHECKER_COLOR1, PARAM_CHECKER_COLOR2, PARAM_SIDE_COLOR, PARAM_WITH_SIDES };
 
   private static final int AXIS_XY = 0;
   private static final int AXIS_YZ = 1;
@@ -45,55 +48,75 @@ public class CheckerboardWFFunc extends VariationFunc {
   private double displ_amount = 0.05;
   private double checker_color1 = Math.random() * 0.5;
   private double checker_color2 = Math.random() * 0.5 + 0.5;
+  private double side_color = Math.random() * 0.75;
   private double checker_size = 0.1 + Math.random() * 0.2;
+  private int with_sides = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double x = 0.0, y = 0.0, z = 0.0;
-    switch (axis) {
-      case AXIS_XY:
-        x = 0.5 - pContext.random();
-        y = 0.5 - pContext.random();
-        z = position + getDisplacement(pVarTP, x, y);
-        setColor(pVarTP, x, y);
-        x *= size;
-        y *= size;
-        break;
-      case AXIS_YZ:
-        y = 0.5 - pContext.random();
-        z = 0.5 - pContext.random();
-        x = position + getDisplacement(pVarTP, y, z);
-        setColor(pVarTP, y, z);
-        y *= size;
-        z *= size;
-        break;
-      case AXIS_ZX:
-        x = 0.5 - pContext.random();
-        z = 0.5 - pContext.random();
-        y = position + getDisplacement(pVarTP, z, x);
-        setColor(pVarTP, z, x);
-        x *= size;
-        z *= size;
-        break;
-      default: // nothing to do
-        break;
+    double x, y, z;
+    if (with_sides == 0 || MathLib.fabs(displ_amount) < MathLib.EPSILON) {
+      x = pContext.random();
+      y = pContext.random();
+      z = getDisplacement(x, y);
+      pVarTP.color = getColor(x, y);
+    }
+    else {
+      if (_max_checks > 0 && pContext.random() < _side_prob) {
+        pVarTP.color = side_color;
+        if (pContext.random() < 0.5) {
+          x = pContext.random(_max_checks + 1) * checker_size;
+          y = pContext.random();
+        }
+        else {
+          x = pContext.random();
+          y = pContext.random(_max_checks + 1) * checker_size;
+        }
+        z = displ_amount * pContext.random();
+      }
+      else {
+        x = pContext.random();
+        y = pContext.random();
+        z = getDisplacement(x, y);
+        pVarTP.color = getColor(x, y);
+      }
     }
 
-    pVarTP.x += pAmount * x;
-    pVarTP.y += pAmount * y;
-    pVarTP.z += pAmount * z;
+    x = (x - 0.5) * size;
+    y = (y - 0.5) * size;
+    z = z * size + position;
+
+    switch (axis) {
+      case AXIS_XY:
+        pVarTP.x += pAmount * x;
+        pVarTP.y += pAmount * y;
+        pVarTP.z += pAmount * z;
+        break;
+      case AXIS_YZ:
+        pVarTP.y += pAmount * x;
+        pVarTP.z += pAmount * y;
+        pVarTP.x += pAmount * z;
+        break;
+      default:
+      case AXIS_ZX:
+        pVarTP.z += pAmount * x;
+        pVarTP.x += pAmount * y;
+        pVarTP.y += pAmount * z;
+        break;
+    }
   }
 
-  private void setColor(XYZPoint pVarTP, double u, double v) {
-    pVarTP.color = MathLib.fmod(MathLib.floor((u + 0.5) / checker_size) + MathLib.floor((v + 0.5) / checker_size), 2) < 1 ? checker_color1 : checker_color2;
-    if (pVarTP.color < 0.0)
-      pVarTP.color = 0.0;
-    else if (pVarTP.color > 1.0)
-      pVarTP.color = 1.0;
+  private double getColor(double u, double v) {
+    double color = MathLib.fmod(MathLib.floor(u / checker_size) + MathLib.floor(v / checker_size), 2) < 1 ? checker_color1 : checker_color2;
+    if (color < 0.0)
+      color = 0.0;
+    else if (color > 1.0)
+      color = 1.0;
+    return color;
   }
 
-  private double getDisplacement(XYZPoint pVarTP, double u, double v) {
-    return MathLib.fmod(MathLib.floor((u + 0.5) / checker_size) + MathLib.floor((v + 0.5) / checker_size), 2) < 1 ? displ_amount : 0.0;
+  private double getDisplacement(double u, double v) {
+    return MathLib.fmod(MathLib.floor(u / checker_size) + MathLib.floor(v / checker_size), 2) < 1 ? displ_amount : 0.0;
   }
 
   @Override
@@ -103,7 +126,7 @@ public class CheckerboardWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, displ_amount, checker_color1, checker_color2, checker_size };
+    return new Object[] { position, size, axis, checker_size, displ_amount, checker_color1, checker_color2, side_color, with_sides };
   }
 
   @Override
@@ -126,8 +149,14 @@ public class CheckerboardWFFunc extends VariationFunc {
     else if (PARAM_CHECKER_COLOR2.equalsIgnoreCase(pName)) {
       checker_color2 = limitVal(pValue, 0.0, 1.0);
     }
+    else if (PARAM_SIDE_COLOR.equalsIgnoreCase(pName)) {
+      side_color = limitVal(pValue, 0.0, 1.0);
+    }
     else if (PARAM_CHECKER_SIZE.equalsIgnoreCase(pName)) {
       checker_size = pValue;
+    }
+    else if (PARAM_WITH_SIDES.equalsIgnoreCase(pName)) {
+      with_sides = limitIntVal(Tools.FTOI(pValue), 0, 1);
     }
     else
       throw new IllegalArgumentException(pName);
@@ -136,6 +165,19 @@ public class CheckerboardWFFunc extends VariationFunc {
   @Override
   public String getName() {
     return "checkerboard_wf";
+  }
+
+  private double _side_prob;
+  private int _max_checks;
+
+  @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    double side_area = 4.0 * displ_amount;
+    _side_prob = side_area / (1.0 + side_area);
+    _max_checks = Tools.FTOI(1.0 / checker_size);
+    if ((_max_checks) * checker_size >= 1.0) {
+      _max_checks--;
+    }
   }
 
 }
