@@ -44,8 +44,9 @@ public class TruchetFunc extends VariationFunc {
   private static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_SIZE = "size";
   private static final String PARAM_SEED = "seed";
+  private static final String PARAM_DIRECT_COLOR = "direct_color";
 
-  private static final String[] paramNames = { PARAM_EXTENDED, PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED };
+  private static final String[] paramNames = { PARAM_EXTENDED, PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED, PARAM_DIRECT_COLOR };
 
   private int extended = 0;
   private double exponent = 2.0;
@@ -53,6 +54,7 @@ public class TruchetFunc extends VariationFunc {
   private double rotation = 0.0;
   private double size = 1.0;
   private double seed = 50.0;
+  private int direct_color = 0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -157,17 +159,23 @@ public class TruchetFunc extends VariationFunc {
 
     r = fabs(r0 - 0.5) / rmax;
     if (r < 1.0) {
+      if (direct_color == 1) {
+        pVarTP.color = limitVal(r0, 0.0, 1.0);
+      }
       pVarTP.x += size * (x + floor(pAffineTP.x));
       pVarTP.y += size * (y + floor(pAffineTP.y));
     }
 
     r = fabs(r1 - 0.5) / rmax;
     if (r < 1.0) {
+      if (direct_color == 1) {
+        pVarTP.color = limitVal(r1, 0.0, 1.0);
+      }
       pVarTP.x += size * (x + floor(pAffineTP.x));
       pVarTP.y += size * (y + floor(pAffineTP.y));
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
   }
 
@@ -178,13 +186,13 @@ public class TruchetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { extended, exponent, arc_width, rotation, size, seed };
+    return new Object[] { extended, exponent, arc_width, rotation, size, seed, direct_color };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_EXTENDED.equalsIgnoreCase(pName))
-      extended = Tools.FTOI(pValue);
+      extended = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else if (PARAM_EXPONENT.equalsIgnoreCase(pName))
       exponent = pValue;
     else if (PARAM_ARC_WIDTH.equalsIgnoreCase(pName))
@@ -195,6 +203,8 @@ public class TruchetFunc extends VariationFunc {
       size = pValue;
     else if (PARAM_SEED.equalsIgnoreCase(pName))
       seed = pValue;
+    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName))
+      direct_color = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
