@@ -169,7 +169,7 @@ public class TruchetFunc extends VariationFunc {
     r = fabs(r1 - 0.5) / rmax;
     if (r < 1.0) {
       if (direct_color == 1) {
-        pVarTP.color = limitVal(r1, 0.0, 1.0);
+        pVarTP.color = limitVal(1.0 - r1, 0.0, 1.0);
       }
       pVarTP.x += size * (x + floor(pAffineTP.x));
       pVarTP.y += size * (y + floor(pAffineTP.y));

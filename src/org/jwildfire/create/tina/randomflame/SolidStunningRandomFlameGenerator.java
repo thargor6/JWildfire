@@ -26,9 +26,6 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class SolidStunningRandomFlameGenerator extends SolidRandomFlameGenerator {
 
-  public SolidStunningRandomFlameGenerator() {
-  }
-
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {
     Flame flame = new Flame();

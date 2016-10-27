@@ -36,16 +36,24 @@ public class SubFlameWFFunc extends VariationFunc {
   public static final String PARAM_OFFSETY = "offset_y";
   public static final String PARAM_OFFSETZ = "offset_z";
   public static final String PARAM_COLORSCALE_Z = "colorscale_z";
-  public static final String PARAM_USE_COLORS = "use_colors";
+  public static final String PARAM_COLOR_MODE = "color_mode";
 
-  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_USE_COLORS };
+  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_COLOR_MODE };
   private static final String[] ressourceNames = { RESSOURCE_FLAME };
 
   private double offset_x = 0.0;
   private double offset_y = 0.0;
   private double offset_z = 0.0;
   private double colorscale_z = 0.0;
-  private int use_colors = 0;
+
+  private final static int CM_OFF = -1;
+  private final static int CM_DIRECT = 0;
+  private final static int CM_RED = 1;
+  private final static int CM_GREEN = 2;
+  private final static int CM_BLUE = 3;
+  private final static int CM_BRIGHTNESS = 4;
+
+  private int color_mode = CM_OFF;
 
   private Flame flame;
   private XForm xf;
@@ -99,17 +107,33 @@ public class SubFlameWFFunc extends VariationFunc {
       pVarTP.x += q.x + offset_x;
       pVarTP.y += q.y + offset_y;
       pVarTP.z += q.z + offset_z + colorscale_z * q.color;
-      if (use_colors == 1) {
-        pVarTP.color = q.color;
+
+      if (color_mode != CM_OFF) {
         if (q.rgbColor) {
           pVarTP.rgbColor = true;
           pVarTP.redColor = q.redColor;
           pVarTP.greenColor = q.greenColor;
           pVarTP.blueColor = q.blueColor;
         }
+        switch (color_mode) {
+          case CM_DIRECT:
+            pVarTP.color = q.color;
+            break;
+          case CM_RED:
+            pVarTP.color = pVarTP.redColor / 255.0;
+            break;
+          case CM_GREEN:
+            pVarTP.color = pVarTP.greenColor / 255.0;
+            break;
+          case CM_BLUE:
+            pVarTP.color = pVarTP.blueColor / 255.0;
+            break;
+          case CM_BRIGHTNESS:
+            pVarTP.color = (0.2990 * pVarTP.redColor + 0.5880 * pVarTP.greenColor + 0.1130 * pVarTP.blueColor) / 255.0;
+            break;
+        }
       }
     }
-
   }
 
   @Override
@@ -119,7 +143,7 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, use_colors };
+    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, color_mode };
   }
 
   @Override
@@ -132,8 +156,8 @@ public class SubFlameWFFunc extends VariationFunc {
       offset_z = pValue;
     else if (PARAM_COLORSCALE_Z.equalsIgnoreCase(pName))
       colorscale_z = pValue;
-    else if (PARAM_USE_COLORS.equalsIgnoreCase(pName))
-      use_colors = limitIntVal(Tools.FTOI(pValue), 0, 1);
+    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
+      color_mode = limitIntVal(Tools.FTOI(pValue), CM_OFF, CM_BRIGHTNESS);
     else
       throw new IllegalArgumentException(pName);
   }

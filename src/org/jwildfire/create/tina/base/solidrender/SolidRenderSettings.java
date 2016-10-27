@@ -379,7 +379,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   }
 
   public void setupDefaultPostBokehOptions() {
-    postBokehFilterKernel = FilterKernelType.SINEPOW5;
+    postBokehFilterKernel = FilterKernelType.SINEPOW15;
     postBokehIntensity = 0.005;
     postBokehBrightness = 1.0;
     postBokehSize = 2.0;
