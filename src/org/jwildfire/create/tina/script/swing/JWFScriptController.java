@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -43,6 +43,10 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
+import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
+import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.swing.ScriptEditDialog;
@@ -437,6 +441,78 @@ public class JWFScriptController {
         break;
       default: // nothing to do
         break;
+    }
+    if (pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      sb.append(" //// Begin of solid-rendering-settings\n");
+      sb.append(" flame.getSolidRenderSettings().setSolidRenderingEnabled(true);\n");
+      sb.append(" // Ambient shadows\n");
+      sb.append(" flame.getSolidRenderSettings().setAoEnabled(" + (pFlame.getSolidRenderSettings().isAoEnabled() ? "true" : "false") + ");\n");
+      if (pFlame.getSolidRenderSettings().isAoEnabled()) {
+        sb.append(" flame.getSolidRenderSettings().setAoIntensity(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getAoIntensity()) + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoSearchRadius(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getAoSearchRadius()) + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoBlurRadius(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getAoBlurRadius()) + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoRadiusSamples(" + pFlame.getSolidRenderSettings().getAoRadiusSamples() + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoAzimuthSamples(" + pFlame.getSolidRenderSettings().getAoAzimuthSamples() + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoFalloff(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getAoFalloff()) + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setAoAffectDiffuse(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getAoAffectDiffuse()) + ");\n");
+      }
+      sb.append(" // Hard shadows\n");
+      sb.append(" flame.getSolidRenderSettings().setShadowType(" + pFlame.getSolidRenderSettings().getShadowType().getClass().getName() + "." + pFlame.getSolidRenderSettings().getShadowType().toString() + ");\n");
+      if (!ShadowType.OFF.equals(pFlame.getSolidRenderSettings().getShadowType())) {
+        sb.append(" flame.getSolidRenderSettings().setShadowmapBias(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getShadowmapBias()) + ");\n");
+        sb.append(" flame.getSolidRenderSettings().setShadowmapSize(" + pFlame.getSolidRenderSettings().getShadowmapSize() + ");\n");
+        if (ShadowType.SMOOTH.equals(pFlame.getSolidRenderSettings().getShadowType())) {
+          sb.append(" flame.getSolidRenderSettings().setShadowSmoothRadius(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getShadowSmoothRadius()) + ");\n");
+        }
+      }
+      sb.append(" // Post bokeh\n");
+      sb.append(" flame.getSolidRenderSettings().setPostBokehFilterKernel(" + pFlame.getSolidRenderSettings().getPostBokehFilterKernel().getDeclaringClass().getName() + "." + pFlame.getSolidRenderSettings().getPostBokehFilterKernel().toString() + ");\n");
+      sb.append(" flame.getSolidRenderSettings().setPostBokehIntensity(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getPostBokehIntensity()) + ");\n");
+      sb.append(" flame.getSolidRenderSettings().setPostBokehBrightness(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getPostBokehBrightness()) + ");\n");
+      sb.append(" flame.getSolidRenderSettings().setPostBokehSize(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getPostBokehSize()) + ");\n");
+      sb.append(" flame.getSolidRenderSettings().setPostBokehActivation(" + Tools.doubleToString(pFlame.getSolidRenderSettings().getPostBokehActivation()) + ");\n");
+      sb.append(" // Materials\n");
+      sb.append(" flame.getSolidRenderSettings().getMaterials().clear();\n");
+      for (MaterialSettings material : pFlame.getSolidRenderSettings().getMaterials()) {
+        sb.append(" {\n");
+        sb.append("   org.jwildfire.create.tina.base.solidrender.MaterialSettings material = new org.jwildfire.create.tina.base.solidrender.MaterialSettings();\n");
+        sb.append("   flame.getSolidRenderSettings().getMaterials().add(material);\n");
+        sb.append("   material.setDiffuse(" + Tools.doubleToString(material.getDiffuse()) + ");\n");
+        sb.append("   material.setAmbient(" + Tools.doubleToString(material.getAmbient()) + ");\n");
+        sb.append("   material.setPhong(" + Tools.doubleToString(material.getPhong()) + ");\n");
+        sb.append("   material.setPhongSize(" + Tools.doubleToString(material.getPhongSize()) + ");\n");
+        sb.append("   material.setPhongRed(" + Tools.doubleToString(material.getPhongRed()) + ");\n");
+        sb.append("   material.setPhongGreen(" + Tools.doubleToString(material.getPhongGreen()) + ");\n");
+        sb.append("   material.setPhongBlue(" + Tools.doubleToString(material.getPhongBlue()) + ");\n");
+        sb.append("   material.setLightDiffFunc(" + ((LightDiffFuncPreset) material.getLightDiffFunc()).getDeclaringClass().getName() + "." + material.getLightDiffFunc().toString() + ");\n");
+        if (material.getReflMapFilename() != null && material.getReflMapFilename().length() > 0) {
+          sb.append("   material.setReflMapFilename(\"" + material.getReflMapFilename() + "\");\n");
+          sb.append("   material.setReflMapIntensity(" + Tools.doubleToString(material.getReflMapIntensity()) + ");\n");
+          sb.append("   material.setReflectionMapping(" + material.getReflectionMapping().getDeclaringClass().getName() + "." + material.getReflectionMapping().toString() + ");\n");
+        }
+        sb.append(" }\n");
+      }
+      sb.append(" // Lights\n");
+      sb.append(" flame.getSolidRenderSettings().getLights().clear();\n");
+      for (DistantLight light : pFlame.getSolidRenderSettings().getLights()) {
+        sb.append(" {\n");
+        sb.append("   org.jwildfire.create.tina.base.solidrender.DistantLight light = new org.jwildfire.create.tina.base.solidrender.DistantLight();\n");
+        sb.append("   flame.getSolidRenderSettings().getLights().add(light);\n");
+        sb.append("   light.setRed(" + Tools.doubleToString(light.getRed()) + ");\n");
+        sb.append("   light.setGreen(" + Tools.doubleToString(light.getGreen()) + ");\n");
+        sb.append("   light.setBlue(" + Tools.doubleToString(light.getBlue()) + ");\n");
+        sb.append("   light.setIntensity(" + Tools.doubleToString(light.getIntensity()) + ");\n");
+        sb.append("   light.setCastShadows(" + (light.isCastShadows() ? "true" : "false") + ");\n");
+        sb.append("   light.setAltitude(" + Tools.doubleToString(light.getAltitude()) + ");\n");
+        sb.append("   light.setAzimuth(" + Tools.doubleToString(light.getAzimuth()) + ");\n");
+        sb.append("   light.setShadowIntensity(" + Tools.doubleToString(light.getShadowIntensity()) + ");\n");
+        sb.append("   // randomize light positions (uncomment to play around)\n");
+        sb.append("   // light.setAltitude(180.0 - 360.0 * Math.random());\n");
+        sb.append("   // light.setAzimuth(360.0 - 720.0 * Math.random());\n");
+        sb.append(" }\n");
+      }
+
+      sb.append(" //// End of solid-rendering-settings\n");
     }
 
     for (int i = 0; i < pFlame.getLayers().size(); i++) {
