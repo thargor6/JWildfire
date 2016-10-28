@@ -108,7 +108,7 @@ public class DistantLight implements Assignable<DistantLight>, Serializable {
         fabs(shadowIntensity - pSrc.shadowIntensity) > EPSILON) {
       return false;
     }
-    return false;
+    return true;
   }
 
   public void setAltitude(double altitude) {

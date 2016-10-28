@@ -262,6 +262,7 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
 
   @Override
   public boolean isEqual(SolidRenderSettings pSrc) {
+
     // do not care when solid rendering is disabled
     if (!solidRenderingEnabled && !pSrc.solidRenderingEnabled) {
       return true;
@@ -279,17 +280,20 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
         fabs(postBokehActivation - pSrc.postBokehActivation) > EPSILON || fabs(aoAffectDiffuse - pSrc.aoAffectDiffuse) > EPSILON) {
       return false;
     }
+
     if (materials.size() != pSrc.materials.size()) {
       return false;
     }
     if (lights.size() != pSrc.lights.size()) {
       return false;
     }
+
     for (int i = 0; i < materials.size(); i++) {
       if (!materials.get(i).isEqual(pSrc.getMaterials().get(i))) {
         return false;
       }
     }
+
     for (int i = 0; i < lights.size(); i++) {
       if (!lights.get(i).isEqual(pSrc.getLights().get(i))) {
         return false;

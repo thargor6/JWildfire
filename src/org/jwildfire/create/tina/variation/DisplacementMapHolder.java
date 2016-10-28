@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import java.io.Serializable;
+
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
@@ -23,7 +25,8 @@ import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 
-public class DisplacementMapHolder {
+@SuppressWarnings("serial")
+public class DisplacementMapHolder implements Serializable {
   private double displ_amount = 0.1;
   private WFImage displacementMap;
   private int displacementMapWidth, displacementMapHeight;

@@ -74,5 +74,4 @@ public class DanceFlameTransformer {
     }
     return res;
   }
-
 }

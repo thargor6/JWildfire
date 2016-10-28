@@ -132,7 +132,7 @@ public class MaterialSettings implements Assignable<MaterialSettings>, Serializa
         !Tools.stringEquals(reflMapFilename, pSrc.reflMapFilename)) {
       return false;
     }
-    return false;
+    return true;
   }
 
   public String getReflMapFilename() {
