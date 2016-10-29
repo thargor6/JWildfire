@@ -108,6 +108,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   @Override
   public MotionCurve getCurveToEdit(String pPropName) {
+    if ("altitude".equals(pPropName)) {
+      return getSolidRenderingSelectedLight().getAltitudeCurve();
+    }
+    else if ("azimuth".equals(pPropName)) {
+      return getSolidRenderingSelectedLight().getAzimuthCurve();
+    }
     return AnimationService.getPropertyCurve(owner.getCurrFlame(), pPropName);
   }
 
@@ -161,6 +167,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.dofDOFParam4REd);
     res.add(data.dofDOFParam5REd);
     res.add(data.dofDOFParam6REd);
+
+    res.add(data.tinaSolidRenderingLightAltitudeREd);
+    res.add(data.tinaSolidRenderingLightAzimuthREd);
     return res;
   }
 
@@ -1818,10 +1827,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingLightAltitudeREd_changed() {
     solidRenderingLightTextFieldChanged(data.tinaSolidRenderingLightAltitudeSlider, data.tinaSolidRenderingLightAltitudeREd, "altitude", TinaController.SLIDER_SCALE_CENTRE, true/*!areShadowsEnabled()*/);
-  }
-
-  private boolean areShadowsEnabled() {
-    return ShadowType.areShadowsEnabled((ShadowType) data.tinaSolidRenderingShadowTypeCmb.getSelectedItem());
   }
 
   public void solidRenderingLightAzimuthREd_changed() {

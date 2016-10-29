@@ -17079,7 +17079,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightAltitudeREd.setText("");
       tinaSolidRenderingLightAltitudeREd.setSize(new Dimension(100, 24));
       tinaSolidRenderingLightAltitudeREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingLightAltitudeREd.setMotionPropertyName("camPosX");
+      tinaSolidRenderingLightAltitudeREd.setMotionPropertyName("altitude");
       tinaSolidRenderingLightAltitudeREd.setLocation(new Point(456, 4));
       tinaSolidRenderingLightAltitudeREd.setLinkedMotionControlName("tinaSolidRenderingLightAltitudeSlider");
       tinaSolidRenderingLightAltitudeREd.setLinkedLabelControlName("tinaSolidRenderingLightAltitudeLbl");
@@ -17140,7 +17140,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightAzimuthREd.setText("");
       tinaSolidRenderingLightAzimuthREd.setSize(new Dimension(100, 24));
       tinaSolidRenderingLightAzimuthREd.setPreferredSize(new Dimension(100, 24));
-      tinaSolidRenderingLightAzimuthREd.setMotionPropertyName("camPosY");
+      tinaSolidRenderingLightAzimuthREd.setMotionPropertyName("azimuth");
       tinaSolidRenderingLightAzimuthREd.setLocation(new Point(456, 4));
       tinaSolidRenderingLightAzimuthREd.setLinkedMotionControlName("tinaSolidRenderingLightAzimuthSlider");
       tinaSolidRenderingLightAzimuthREd.setLinkedLabelControlName("tinaSolidRenderingLightAzimuthLbl");
@@ -17222,7 +17222,6 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightIntensityLbl0);
 
       tinaSolidRenderingLightIntensityREd = new JWFNumberField();
-      tinaSolidRenderingLightIntensityREd.setHasMinValue(true);
       tinaSolidRenderingLightIntensityREd.setValueStep(0.05);
       tinaSolidRenderingLightIntensityREd.setText("");
       tinaSolidRenderingLightIntensityREd.setSize(new Dimension(100, 24));
@@ -17257,7 +17256,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightIntensitySlider.setSize(new Dimension(205, 19));
       tinaSolidRenderingLightIntensitySlider.setPreferredSize(new Dimension(220, 19));
       tinaSolidRenderingLightIntensitySlider.setName("tinaSolidRenderingLightIntensitySlider");
-      tinaSolidRenderingLightIntensitySlider.setMaximum(25000);
+      tinaSolidRenderingLightIntensitySlider.setMaximum(7500);
       tinaSolidRenderingLightIntensitySlider.setLocation(new Point(558, 4));
       tinaSolidRenderingLightIntensitySlider.setBounds(628, 61, 205, 19);
       tinaSolidRenderingLightIntensitySlider.addMouseListener(new MouseAdapter() {

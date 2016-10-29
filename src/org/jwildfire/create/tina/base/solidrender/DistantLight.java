@@ -21,12 +21,17 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.edit.Assignable;
 
 @SuppressWarnings("serial")
 public class DistantLight implements Assignable<DistantLight>, Serializable {
+  private double altitude;
+  private final MotionCurve altitudeCurve = new MotionCurve();
 
-  private double altitude, azimuth;
+  private double azimuth;
+  private final MotionCurve azimuthCurve = new MotionCurve();
+
   private double intensity = 0.5;
   private double red, green, blue;
   private boolean castShadows = true;
@@ -83,7 +88,9 @@ public class DistantLight implements Assignable<DistantLight>, Serializable {
   @Override
   public void assign(DistantLight pSrc) {
     altitude = pSrc.altitude;
+    altitudeCurve.assign(pSrc.altitudeCurve);
     azimuth = pSrc.azimuth;
+    azimuthCurve.assign(pSrc.azimuthCurve);
     intensity = pSrc.intensity;
     red = pSrc.red;
     green = pSrc.green;
@@ -101,7 +108,8 @@ public class DistantLight implements Assignable<DistantLight>, Serializable {
 
   @Override
   public boolean isEqual(DistantLight pSrc) {
-    if (fabs(altitude - pSrc.altitude) > EPSILON || fabs(azimuth - pSrc.azimuth) > EPSILON ||
+    if (fabs(altitude - pSrc.altitude) > EPSILON || !altitudeCurve.isEqual(pSrc.altitudeCurve) ||
+        fabs(azimuth - pSrc.azimuth) > EPSILON || !azimuthCurve.isEqual(pSrc.azimuthCurve) ||
         fabs(intensity - pSrc.intensity) > EPSILON ||
         fabs(red - pSrc.red) > EPSILON || fabs(green - pSrc.green) > EPSILON ||
         fabs(blue - pSrc.blue) > EPSILON || castShadows != pSrc.castShadows ||
@@ -125,5 +133,13 @@ public class DistantLight implements Assignable<DistantLight>, Serializable {
 
   public void setShadowIntensity(double shadowIntensity) {
     this.shadowIntensity = shadowIntensity;
+  }
+
+  public MotionCurve getAltitudeCurve() {
+    return altitudeCurve;
+  }
+
+  public MotionCurve getAzimuthCurve() {
+    return azimuthCurve;
   }
 }

@@ -55,6 +55,8 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -173,7 +175,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeInterpolationCmb.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
         if (ctrl != null) {
-            ctrl.interpolationCmbChanged();
+          ctrl.interpolationCmbChanged();
         }
       }
     });
@@ -1167,7 +1169,20 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
           FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
           renderer.setProgressUpdater(null);
-          flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
+          if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+            flame.setCamDOF(0.0);
+            flame.getSolidRenderSettings().setAoEnabled(false);
+            if (ShadowType.SMOOTH.equals(flame.getSolidRenderSettings().getShadowType())) {
+              flame.getSolidRenderSettings().setShadowType(ShadowType.FAST);
+            }
+            else {
+              flame.getSolidRenderSettings().setShadowType(ShadowType.OFF);
+            }
+            flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 2.0);
+          }
+          else {
+            flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
+          }
           flame.setSpatialFilterRadius(0.0);
           RenderedFlame res = renderer.renderFlame(info);
           imgPanel.setImage(res.getImage());
@@ -1320,6 +1335,15 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
           String pathExt = field.getName();
           String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
           String subResult = findProperty(palette, pProperty, subPath);
+          if (subResult != null) {
+            return subResult;
+          }
+        }
+        else if (fieldValue instanceof SolidRenderSettings) {
+          SolidRenderSettings settings = (SolidRenderSettings) fieldValue;
+          String pathExt = field.getName();
+          String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+          String subResult = findProperty(settings, pProperty, subPath);
           if (subResult != null) {
             return subResult;
           }

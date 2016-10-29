@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -182,6 +183,10 @@ public class AnimationService {
       else if (field.getType().isAssignableFrom(RGBPalette.class)) {
         RGBPalette gradient = (RGBPalette) field.get(pObject);
         _evalMotionCurves(gradient, pFrame);
+      }
+      else if (field.getType().isAssignableFrom(SolidRenderSettings.class)) {
+        SolidRenderSettings settings = (SolidRenderSettings) field.get(pObject);
+        _evalMotionCurves(settings, pFrame);
       }
     }
     if (pObject instanceof Variation) {

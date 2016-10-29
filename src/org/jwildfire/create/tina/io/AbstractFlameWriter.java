@@ -378,7 +378,9 @@ public class AbstractFlameWriter {
       for (int i = 0; i < pFlame.getSolidRenderSettings().getLights().size(); i++) {
         DistantLight light = pFlame.getSolidRenderSettings().getLights().get(i);
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_ALTITUDE + i, light.getAltitude()));
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_ALTITUDE + i, light.getAltitudeCurve());
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_AZIMUTH + i, light.getAzimuth()));
+        writeMotionCurve(xb, attrList, AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_AZIMUTH + i, light.getAzimuthCurve());
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_INTENSITY + i, light.getIntensity()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_RED + i, light.getRed()));
         attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_GREEN + i, light.getGreen()));

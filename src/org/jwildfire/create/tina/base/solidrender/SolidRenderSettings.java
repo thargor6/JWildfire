@@ -393,12 +393,12 @@ public class SolidRenderSettings implements Assignable<SolidRenderSettings>, Ser
   public void setupDefaultAmbientShadowOptions() {
     aoEnabled = true;
     aoIntensity = 0.6;
-    aoSearchRadius = 12.0;
-    aoBlurRadius = 1.25;
+    aoSearchRadius = 4.0;
+    aoBlurRadius = 1.5;
     aoRadiusSamples = 6;
     aoAzimuthSamples = 7;
     aoFalloff = 0.5;
-    aoAffectDiffuse = 0.2;
+    aoAffectDiffuse = 0.1;
   }
 
   public void setupDefaultHardShadowOptions() {

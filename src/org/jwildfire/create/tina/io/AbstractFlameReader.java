@@ -686,6 +686,16 @@ public class AbstractFlameReader {
           if ((hs = atts.get(ATTR_SLD_RENDER_LIGHT_SHADOWS + i)) != null) {
             light.setCastShadows(Integer.parseInt(hs) == 1);
           }
+          {
+            MotionCurve curve = light.getAltitudeCurve();
+            String namePrefix = AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_ALTITUDE + i + "_";
+            readMotionCurveAttributes(atts, curve, namePrefix);
+          }
+          {
+            MotionCurve curve = light.getAzimuthCurve();
+            String namePrefix = AbstractFlameReader.ATTR_SLD_RENDER_LIGHT_AZIMUTH + i + "_";
+            readMotionCurveAttributes(atts, curve, namePrefix);
+          }
         }
       }
     }
