@@ -38,6 +38,7 @@ import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 import org.jwildfire.create.tina.variation.RessourceManager;
+import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
 @SuppressWarnings("serial")
@@ -46,6 +47,7 @@ public class LogDensityFilter extends FilterHolder {
 
   private AbstractRaster raster;
   private int rasterWidth, rasterHeight, rasterSize;
+  private int destImageWidth, destImageHeight;
   private static final int PRECALC_LOG_ARRAY_SIZE = 512;
   private double precalcLogArray[];
   private double k1, k2;
@@ -54,6 +56,7 @@ public class LogDensityFilter extends FilterHolder {
   private final boolean jitter;
   private final int colorOversampling;
   private boolean solidRendering;
+  private SimpleImage bgImage;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
     super(pFlame);
@@ -75,6 +78,18 @@ public class LogDensityFilter extends FilterHolder {
     }
     else {
       dofRandGen = null;
+    }
+
+    if (flame.getBGImageFilename().length() > 0) {
+      try {
+        bgImage = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
+        if (bgImage.getImageWidth() < 2 || bgImage.getImageHeight() < 2) {
+          bgImage = null;
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
   }
 
@@ -104,7 +119,8 @@ public class LogDensityFilter extends FilterHolder {
       double x = i * motionBlurScl;
       precalcLogArray[i] = (k1 * log10(1 + x * k2)) / (flame.getWhiteLevel() * x);
     }
-
+    destImageWidth = pImageWidth;
+    destImageHeight = pImageHeight;
   }
 
   public void transformPointSimple(LogDensityPoint pFilteredPnt, int pX, int pY) {
@@ -114,10 +130,12 @@ public class LogDensityFilter extends FilterHolder {
       for (int py = 0; py < oversample; py++) {
         getSample(pFilteredPnt, pX * oversample + px, pY * oversample + py);
 
-        if (solidRendering && pFilteredPnt.rp.hasSolidColors && addSolidColors(pFilteredPnt, pFilteredPnt.rp, 1.0)) {
-          solidSampleCount++;
-          pFilteredPnt.dofDist += pFilteredPnt.rp.dofDist;
-          pFilteredPnt.intensity = 1.0;
+        if (solidRendering) {
+          if (pFilteredPnt.rp.hasSolidColors && addSolidColors(pFilteredPnt, pFilteredPnt.rp, 1.0)) {
+            solidSampleCount++;
+            pFilteredPnt.dofDist += pFilteredPnt.rp.dofDist;
+            pFilteredPnt.intensity = 1.0;
+          }
         }
         else {
           double logScale;
@@ -157,7 +175,7 @@ public class LogDensityFilter extends FilterHolder {
       pFilteredPnt.solidGreen *= dCount;
       pFilteredPnt.solidBlue *= dCount;
     }
-
+    calculateBGColor(pFilteredPnt, pX, pY);
   }
 
   private void getZSample(ZBufferSample pDest, int pX, int pY) {
@@ -344,16 +362,19 @@ public class LogDensityFilter extends FilterHolder {
           }
         }
       }
-      if (solidRendering && (solidSampleCount > 0)) {
-        double dCount = 1.0 / (double) solidSampleCount;
-        pFilteredPnt.dofDist *= dCount;
-        pFilteredPnt.solidRed *= dCount;
-        pFilteredPnt.solidGreen *= dCount;
-        pFilteredPnt.solidBlue *= dCount;
-        pFilteredPnt.intensity = (double) solidSampleCount / (double) (colorOversampling * oversample * oversample);
+      if (solidRendering) {
+        if (solidSampleCount > 0) {
+          double dCount = 1.0 / (double) solidSampleCount;
+          pFilteredPnt.dofDist *= dCount;
+          pFilteredPnt.solidRed *= dCount;
+          pFilteredPnt.solidGreen *= dCount;
+          pFilteredPnt.solidBlue *= dCount;
+          pFilteredPnt.intensity = (double) solidSampleCount / (double) (colorOversampling * oversample * oversample);
+        }
       }
     }
     pFilteredPnt.clip();
+    calculateBGColor(pFilteredPnt, pX, pY);
   }
 
   public void transformZPoint(ZBufferSample pAccumSample, ZBufferSample pSample, int pX, int pY) {
@@ -378,8 +399,39 @@ public class LogDensityFilter extends FilterHolder {
 
   private boolean addSolidColors(LogDensityPoint dest, RasterPoint rp, double colorScale) {
     if (solidRendering && rp.hasNormals) {
+      LightViewCalculator lightViewCalculator = raster.getLightViewCalculator();
+      double avgVisibility;
+      if (rp.hasShadows) {
+        avgVisibility = 0.0;
+        int shadowCount = 0;
+        for (int i = 0; i < rp.visibility.length; i++) {
+          avgVisibility += rp.visibility[i];
+          shadowCount++;
+        }
+        if (shadowCount > 0) {
+          avgVisibility /= (double) shadowCount;
+        }
+        else {
+          avgVisibility = 1.0;
+        }
+      }
+      else {
+        avgVisibility = 1.0;
+      }
+      RGBColorD rawColor;
+
       MaterialSettings material = flame.getSolidRenderSettings().getInterpolatedMaterial(rp.material);
-      if (material != null) {
+      if (material == null) {
+        RGBColorD bgColor = new RGBColorD(dest.bgRed, dest.bgGreen, dest.bgBlue, 1.0 / VecMathLib.COLORSCL);
+        double visibility = 0.0;
+        for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
+          DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
+          visibility += light.isCastShadows() && rp.hasShadows ? rp.visibility[i] : avgVisibility;
+        }
+        visibility = GfxMathLib.clamp(visibility);
+        rawColor = new RGBColorD(bgColor, visibility);
+      }
+      else {
         double aoInt = Tools.limitValue(flame.getSolidRenderSettings().getAoIntensity(), 0.0, 4.0);
         boolean withSSAO = flame.getSolidRenderSettings().isAoEnabled();
         double ambientIntensity = Math.max(0.0, withSSAO ? (material.getAmbient() - rp.ao * aoInt) : material.getAmbient());
@@ -398,31 +450,10 @@ public class LogDensityFilter extends FilterHolder {
           }
         }
 
-        double avgVisibility;
-        if (rp.hasShadows) {
-          avgVisibility = 0.0;
-          int shadowCount = 0;
-          for (int i = 0; i < rp.visibility.length; i++) {
-            avgVisibility += rp.visibility[i];
-            shadowCount++;
-          }
-          if (shadowCount > 0) {
-            avgVisibility /= (double) shadowCount;
-          }
-          else {
-            avgVisibility = 1.0;
-          }
-        }
-        else {
-          avgVisibility = 1.0;
-        }
-
         RGBColorD objColor = new RGBColorD(rp.solidRed, rp.solidGreen, rp.solidBlue, 1.0 / VecMathLib.COLORSCL);
-        RGBColorD rawColor = new RGBColorD(objColor, ambientIntensity * avgVisibility);
+        rawColor = new RGBColorD(objColor, ambientIntensity * avgVisibility);
         VectorD normal = new VectorD(rp.nx, rp.ny, rp.nz);
         VectorD viewDir = new VectorD(0.0, 0.0, 1.0);
-
-        LightViewCalculator lightViewCalculator = raster.getLightViewCalculator();
 
         for (int i = 0; i < flame.getSolidRenderSettings().getLights().size(); i++) {
           DistantLight light = flame.getSolidRenderSettings().getLights().get(i);
@@ -466,13 +497,58 @@ public class LogDensityFilter extends FilterHolder {
             rawColor.addFrom(reflMapColor.r, reflMapColor.g, reflMapColor.b, visibility * reflectionMapIntensity);
           }
         }
-        dest.solidRed += rawColor.r * colorScale * VecMathLib.COLORSCL;
-        dest.solidGreen += rawColor.g * colorScale * VecMathLib.COLORSCL;
-        dest.solidBlue += rawColor.b * colorScale * VecMathLib.COLORSCL;
-        dest.hasSolidColors = true;
-        return true;
       }
+      dest.solidRed += rawColor.r * colorScale * VecMathLib.COLORSCL;
+      dest.solidGreen += rawColor.g * colorScale * VecMathLib.COLORSCL;
+      dest.solidBlue += rawColor.b * colorScale * VecMathLib.COLORSCL;
+      dest.hasSolidColors = true;
+      return true;
     }
     return false;
+  }
+
+  private void calculateBGColor(LogDensityPoint dest, int pX, int pY) {
+    if (bgImage != null) {
+      Pixel toolPixel = dest.toolPixel;
+      if (destImageWidth == bgImage.getImageWidth() && destImageHeight == bgImage.getImageHeight()) {
+        toolPixel.setARGBValue(bgImage.getARGBValue(pX, pY));
+        dest.bgRed = toolPixel.r;
+        dest.bgGreen = toolPixel.g;
+        dest.bgBlue = toolPixel.b;
+      }
+      else {
+        double xCoord = (double) pX * (double) (bgImage.getImageWidth() - 1) / (double) (destImageWidth - 1);
+        double yCoord = (double) pY * (double) (bgImage.getImageHeight() - 1) / (double) (destImageHeight - 1);
+
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
+        int luR = toolPixel.r;
+        int luG = toolPixel.g;
+        int luB = toolPixel.b;
+
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, (int) yCoord));
+        int ruR = toolPixel.r;
+        int ruG = toolPixel.g;
+        int ruB = toolPixel.b;
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, ((int) yCoord) + 1));
+        int lbR = toolPixel.r;
+        int lbG = toolPixel.g;
+        int lbB = toolPixel.b;
+        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, ((int) yCoord) + 1));
+        int rbR = toolPixel.r;
+        int rbG = toolPixel.g;
+        int rbB = toolPixel.b;
+
+        double x = MathLib.frac(xCoord);
+        double y = MathLib.frac(yCoord);
+        dest.bgRed = Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y));
+        dest.bgGreen = Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y));
+        dest.bgBlue = Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y));
+      }
+    }
+    else {
+      dest.bgRed = flame.getBGColorRed();
+      dest.bgGreen = flame.getBGColorGreen();
+      dest.bgBlue = flame.getBGColorBlue();
+    }
   }
 }
