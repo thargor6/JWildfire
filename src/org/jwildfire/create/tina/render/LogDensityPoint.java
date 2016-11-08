@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.raster.RasterPoint;
+import org.jwildfire.image.Pixel;
 
 public class LogDensityPoint {
   public double red;
@@ -29,17 +30,20 @@ public class LogDensityPoint {
   public double solidGreen;
   public double solidBlue;
 
-  public boolean hasNormals;
   public double nx, ny, nz;
   public double ao;
   public double material;
   public double dofDist;
+  public boolean receiveOnlyShadows;
 
   public final RasterPoint rp;
   public final RasterPoint lu;
   public final RasterPoint ru;
   public final RasterPoint lb;
   public final RasterPoint rb;
+
+  public final Pixel toolPixel = new Pixel();
+  public int bgRed, bgGreen, bgBlue;
 
   public LogDensityPoint(int lightCount) {
     rp = new RasterPoint(lightCount);
@@ -52,7 +56,7 @@ public class LogDensityPoint {
   public void clear() {
     red = green = blue = intensity = 0.0;
     solidRed = solidGreen = solidBlue = 0.0;
-    hasNormals = hasSolidColors = false;
+    hasSolidColors = receiveOnlyShadows = false;
     nx = ny = nz = ao = material = dofDist = 0.0;
   }
 

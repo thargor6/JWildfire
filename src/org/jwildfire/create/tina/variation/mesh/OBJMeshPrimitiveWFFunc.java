@@ -34,7 +34,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   public static final String PARAM_PRIMITIVE = "primitive";
 
-  private static final String[] paramNames = { PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU };
+  private static final String[] paramNames = { PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS };
 
   private int primitive = 0;
 
@@ -53,7 +53,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu };
+    return new Object[] { primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows };
   }
 
   @Override

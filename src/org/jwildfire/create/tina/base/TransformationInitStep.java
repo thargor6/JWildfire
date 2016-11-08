@@ -29,6 +29,7 @@ public final class TransformationInitStep extends AbstractTransformationStep {
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     pAffineT.clear();
     pAffineT.doHide = pSrcPoint.doHide;
+    pAffineT.receiveOnlyShadows = false;
     pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
     pAffineT.material = pSrcPoint.material * xform.material1 + xform.material2;
     pAffineT.modGamma = pSrcPoint.modGamma * xform.modGamma1 + xform.modGamma2;

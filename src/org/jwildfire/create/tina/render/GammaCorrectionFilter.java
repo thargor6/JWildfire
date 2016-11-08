@@ -22,9 +22,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.variation.RessourceManager;
-import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
 
 public class GammaCorrectionFilter {
   private final Flame flame;
@@ -32,12 +29,9 @@ public class GammaCorrectionFilter {
   private int inverseVibInt;
   private double gamma;
   private double sclGamma;
-  private SimpleImage bgImage;
   private boolean withAlpha;
   private double modSaturation;
-  private final int rasterWidth, rasterHeight;
   private final double alphaScale;
-  private final int oversample;
 
   public static class ColorF {
     public double r, g, b;
@@ -50,11 +44,7 @@ public class GammaCorrectionFilter {
   public GammaCorrectionFilter(Flame pFlame, boolean pWithAlpha, int pRasterWidth, int pRasterHeight) {
     flame = pFlame;
     withAlpha = pWithAlpha;
-    rasterWidth = pRasterWidth;
-    rasterHeight = pRasterHeight;
     alphaScale = 1.0 - MathLib.atan(3.0 * (pFlame.getForegroundOpacity() - 1.0)) / 1.25;
-
-    oversample = pFlame.getSpatialOversampling();
     initFilter();
   }
 
@@ -75,28 +65,18 @@ public class GammaCorrectionFilter {
       sclGamma = pow(flame.getGammaThreshold(), gamma - 1);
     }
 
-    if (flame.getBGImageFilename().length() > 0) {
-      try {
-        bgImage = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
-        if (bgImage.getImageWidth() < 2 || bgImage.getImageHeight() < 2) {
-          bgImage = null;
-        }
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-
     modSaturation = flame.getSaturation() - 1.0;
     if (modSaturation < -1.0)
       modSaturation = -1.0;
   }
 
   public void transformPoint(LogDensityPoint logDensityPnt, GammaCorrectedRGBPoint pRGBPoint, int pX, int pY) {
-    calculateBGColor(pRGBPoint, pX, pY);
+    pRGBPoint.bgRed = logDensityPnt.bgRed;
+    pRGBPoint.bgGreen = logDensityPnt.bgGreen;
+    pRGBPoint.bgBlue = logDensityPnt.bgBlue;
     double logScl;
     int inverseAlphaInt;
-    if (logDensityPnt.intensity > 0.0 || logDensityPnt.hasSolidColors) {
+    if (logDensityPnt.intensity > 0.0 || logDensityPnt.hasSolidColors || logDensityPnt.receiveOnlyShadows) {
       ColorF transfColor;
       if (logDensityPnt.hasSolidColors) {
         transfColor = new ColorF();
@@ -113,6 +93,35 @@ public class GammaCorrectionFilter {
           alphaInt = 255;
         inverseAlphaInt = 255 - alphaInt;
         pRGBPoint.alpha = withAlpha ? alphaInt : 255;
+
+        ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
+        pRGBPoint.red = finalColor.r;
+        pRGBPoint.green = finalColor.g;
+        pRGBPoint.blue = finalColor.b;
+      }
+      else if (logDensityPnt.receiveOnlyShadows) {
+        transfColor = new ColorF();
+        double shadowInt = GfxMathLib.clamp(logDensityPnt.red);
+        if (shadowInt > MathLib.EPSILON && shadowInt < 1.0 - MathLib.EPSILON) {
+          int alphaInt = Tools.roundColor((1.0 - shadowInt) * 255.0);
+          inverseAlphaInt = 255 - alphaInt;
+
+          transfColor.r = 0.0;
+          transfColor.g = 0.0;
+          transfColor.b = 0.0;
+          pRGBPoint.alpha = withAlpha ? alphaInt : 255;
+
+          ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
+          pRGBPoint.red = finalColor.r;
+          pRGBPoint.green = finalColor.g;
+          pRGBPoint.blue = finalColor.b;
+        }
+        else {
+          pRGBPoint.red = pRGBPoint.bgRed;
+          pRGBPoint.green = pRGBPoint.bgGreen;
+          pRGBPoint.blue = pRGBPoint.bgBlue;
+          pRGBPoint.alpha = withAlpha ? 0 : 255;
+        }
       }
       else {
         double alpha;
@@ -133,13 +142,12 @@ public class GammaCorrectionFilter {
         pRGBPoint.alpha = withAlpha ? alphaInt : 255;
 
         transfColor = applyLogScale(logDensityPnt, logScl);
+
+        ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
+        pRGBPoint.red = finalColor.r;
+        pRGBPoint.green = finalColor.g;
+        pRGBPoint.blue = finalColor.b;
       }
-
-      ColorI finalColor = addBackground(pRGBPoint, transfColor, inverseAlphaInt);
-
-      pRGBPoint.red = finalColor.r;
-      pRGBPoint.green = finalColor.g;
-      pRGBPoint.blue = finalColor.b;
     }
     else {
       pRGBPoint.red = pRGBPoint.bgRed;
@@ -150,51 +158,6 @@ public class GammaCorrectionFilter {
 
     if (modSaturation != 0) {
       applyModSaturation(pRGBPoint, modSaturation);
-    }
-  }
-
-  private void calculateBGColor(PointWithBackgroundColor pBGColor, int pX, int pY) {
-    if (bgImage != null) {
-      Pixel toolPixel = pBGColor.toolPixel;
-      if (rasterWidth == bgImage.getImageWidth() * oversample && rasterHeight == bgImage.getImageHeight() * oversample) {
-        toolPixel.setARGBValue(bgImage.getARGBValue(pX, pY));
-        pBGColor.bgRed = toolPixel.r;
-        pBGColor.bgGreen = toolPixel.g;
-        pBGColor.bgBlue = toolPixel.b;
-      }
-      else {
-        double xCoord = (double) pX * (double) (bgImage.getImageWidth() * oversample - 1) / (double) (rasterWidth - 1);
-        double yCoord = (double) pY * (double) (bgImage.getImageHeight() * oversample - 1) / (double) (rasterHeight - 1);
-
-        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, (int) yCoord));
-        int luR = toolPixel.r;
-        int luG = toolPixel.g;
-        int luB = toolPixel.b;
-
-        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, (int) yCoord));
-        int ruR = toolPixel.r;
-        int ruG = toolPixel.g;
-        int ruB = toolPixel.b;
-        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds((int) xCoord, ((int) yCoord) + 1));
-        int lbR = toolPixel.r;
-        int lbG = toolPixel.g;
-        int lbB = toolPixel.b;
-        toolPixel.setARGBValue(bgImage.getARGBValueIgnoreBounds(((int) xCoord) + 1, ((int) yCoord) + 1));
-        int rbR = toolPixel.r;
-        int rbG = toolPixel.g;
-        int rbB = toolPixel.b;
-
-        double x = MathLib.frac(xCoord);
-        double y = MathLib.frac(yCoord);
-        pBGColor.bgRed = Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y));
-        pBGColor.bgGreen = Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y));
-        pBGColor.bgBlue = Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y));
-      }
-    }
-    else {
-      pBGColor.bgRed = flame.getBGColorRed();
-      pBGColor.bgGreen = flame.getBGColorGreen();
-      pBGColor.bgBlue = flame.getBGColorBlue();
     }
   }
 
@@ -273,7 +236,9 @@ public class GammaCorrectionFilter {
   public static final double COLORSCL = 255.0;
 
   public void transformPointHDR(LogDensityPoint logDensityPnt, GammaCorrectedHDRPoint pHDRPoint, int pX, int pY) {
-    calculateBGColor(pHDRPoint, pX, pY);
+    pHDRPoint.bgRed = logDensityPnt.bgRed;
+    pHDRPoint.bgGreen = logDensityPnt.bgGreen;
+    pHDRPoint.bgBlue = logDensityPnt.bgBlue;
     double logScl;
     double inverseAlphaInt;
 

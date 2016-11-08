@@ -130,6 +130,11 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
       final float z = (float) sample.z;
       if (z > zBuf[x][y]) {
         count[x][y] = 1;
+        zBuf[x][y] = z;
+        originXBuf[x][y] = (float) sample.originalX;
+        originYBuf[x][y] = (float) sample.originalY;
+        originZBuf[x][y] = (float) sample.originalZ;
+
         if (sample.r >= 0 && sample.g >= 0 && sample.b >= 0) {
           red[x][y] = (float) sample.r;
           green[x][y] = (float) sample.g;
@@ -138,15 +143,17 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
         else {
           red[x][y] = green[x][y] = blue[x][y] = 0;
         }
-        zBuf[x][y] = z;
-        originXBuf[x][y] = (float) sample.originalX;
-        originYBuf[x][y] = (float) sample.originalY;
-        originZBuf[x][y] = (float) sample.originalZ;
-        materialBuf[x][y] = material;
+
+        if (sample.receiveOnlyShadows) {
+          materialBuf[x][y] = -1;
+        }
+        else {
+          materialBuf[x][y] = material;
+        }
         if (withDOF) {
           dofBuf[x][y] = (float) sample.dofDist;
         }
-        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.6) || randGen.random() > 0.25) {
+        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.75) || randGen.random() > 0.33) {
           normalsCalculator.refreshNormalAtLocation(x, y);
         }
       }
@@ -199,10 +206,8 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
       pDestRasterPoint.ao = aoBuf[pX][pY];
     }
     // mat
-    if (materialBuf != null) {
-      pDestRasterPoint.hasMaterial = true;
-      pDestRasterPoint.material = materialBuf[pX][pY];
-    }
+    pDestRasterPoint.hasMaterial = true;
+    pDestRasterPoint.material = materialBuf[pX][pY];
 
     if (withDOF) {
       pDestRasterPoint.dofDist = calcDOF(dofBuf[pX][pY]);

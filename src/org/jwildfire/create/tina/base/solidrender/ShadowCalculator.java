@@ -239,7 +239,7 @@ public class ShadowCalculator implements Serializable {
   }
 
   private void calcSmoothShadowIntensity(int pX, int pY, RasterPoint pDestRasterPoint, int i, int shadowSmoothRadius, double[][] shadowSmoothKernel) {
-    pDestRasterPoint.visibility[i] = 0.0;
+    pDestRasterPoint.visibility[i] = 1.0;
     double totalIntensity = 0.0;
 
     if (accLightProjectionZBuf != null && accLightProjectionZBuf[i] != null) {

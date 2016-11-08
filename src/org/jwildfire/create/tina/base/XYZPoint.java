@@ -43,6 +43,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   public double blueColor;
   // material index for solid rendering
   public double material;
+  public boolean receiveOnlyShadows;
   // supress sample from drawing
   public boolean doHide;
   // often (but not always) used properties, calculation only if needed
@@ -74,6 +75,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     z = p.z;
     color = p.color;
     material = p.material;
+    receiveOnlyShadows = p.receiveOnlyShadows;
     modGamma = p.modGamma;
     modContrast = p.modContrast;
     modSaturation = p.modSaturation;
@@ -113,7 +115,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     redColor = greenColor = blueColor = 0.0;
     x = y = z = color = material = modGamma = modContrast = modSaturation = modHue = 0.0;
     sumsq = sqrt = atan = atanYX = sinA = cosA = 0.0;
-    validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = false;
+    validSumsq = validSqrt = validAtan = validAtanYX = validSinA = validCosA = receiveOnlyShadows = false;
   }
 
   public double getPrecalcSumsq() {
@@ -174,7 +176,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
         fabs(modHue - pSrc.modHue) > EPSILON ||
         rgbColor != pSrc.rgbColor || fabs(redColor - pSrc.redColor) > EPSILON ||
         fabs(greenColor - pSrc.greenColor) > EPSILON || fabs(blueColor - pSrc.blueColor) > EPSILON ||
-        doHide != pSrc.doHide || fabs(material - pSrc.material) > EPSILON) {
+        doHide != pSrc.doHide || fabs(material - pSrc.material) > EPSILON || receiveOnlyShadows != pSrc.receiveOnlyShadows) {
       return false;
     }
     return true;

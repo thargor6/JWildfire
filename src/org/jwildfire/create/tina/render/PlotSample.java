@@ -26,6 +26,7 @@ public class PlotSample implements Serializable {
   public double originalX, originalY, originalZ;
   public double material;
   public double dofDist;
+  public boolean receiveOnlyShadows;
 
   public void set(double x, double y, double z) {
     this.x = x;
@@ -33,7 +34,7 @@ public class PlotSample implements Serializable {
     this.z = z;
   }
 
-  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist, double originalX, double originalY, double originalZ) {
+  public void set(int screenX, int screenY, double r, double g, double b, double x, double y, double z, double material, double dofDist, double originalX, double originalY, double originalZ, boolean receiveOnlyShadows) {
     this.screenX = screenX;
     this.screenY = screenY;
     this.r = r;
@@ -47,5 +48,6 @@ public class PlotSample implements Serializable {
     this.originalZ = originalZ;
     this.material = material;
     this.dofDist = dofDist;
+    this.receiveOnlyShadows = receiveOnlyShadows;
   }
 }

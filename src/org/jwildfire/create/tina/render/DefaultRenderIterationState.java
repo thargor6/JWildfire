@@ -427,7 +427,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
-    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
+    plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
     if (plotBufferIdx >= plotBuffer.length) {
       applySamplesToRaster();
     }
@@ -679,7 +679,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
       // TODO overkill, need only xyz
       untransformed.assign(q);
       boolean insideView = view.project(q, prj);
-      if (prj.hasLight != null) {
+      if (prj.hasLight != null && !p.receiveOnlyShadows) {
         for (int i = 0; i < prj.hasLight.length; i++) {
           if (prj.hasLight[i]) {
             plotShadowMapPoint(i, prj.lightX[i], prj.lightY[i], prj.lightZ[i]);

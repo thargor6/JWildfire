@@ -80,7 +80,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
               double finalRed = plotRed * scl * prj.intensity;
               double finalGreen = plotGreen * scl * prj.intensity;
               double finalBlue = plotBlue * scl * prj.intensity;
-              plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
+              plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
               if (plotBufferIdx >= plotBuffer.length) {
                 applySamplesToRaster();
               }
@@ -99,7 +99,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
       double finalRed = plotRed * prj.intensity;
       double finalGreen = plotGreen * prj.intensity;
       double finalBlue = plotBlue * prj.intensity;
-      plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z);
+      plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
       if (plotBufferIdx >= plotBuffer.length) {
         applySamplesToRaster();
       }

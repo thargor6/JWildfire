@@ -33,6 +33,7 @@ public final class TransformationPreparePreVariationsStep extends AbstractTransf
     pVarT.x = pVarT.y = pVarT.z = 0.0;
     pVarT.color = pAffineT.color;
     pVarT.material = pAffineT.material;
+    pVarT.receiveOnlyShadows = pAffineT.receiveOnlyShadows;
     pVarT.modGamma = pAffineT.modGamma;
     pVarT.modContrast = pAffineT.modContrast;
     pVarT.modSaturation = pAffineT.modSaturation;
