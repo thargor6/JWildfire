@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render.image;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.LogDensityFilter;
 import org.jwildfire.create.tina.render.ZBufferSample;
@@ -28,6 +29,7 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
   private final ZBufferSample accumSample, sample;
   private final SimpleGrayImage img;
   private final double zScale;
+  private final double imgSize;
 
   public RenderZBufferThread(Flame pFlame, LogDensityFilter pLogDensityFilter, int pStartRow, int pEndRow, SimpleGrayImage pImg, double pZScale) {
     logDensityFilter = pLogDensityFilter;
@@ -36,7 +38,8 @@ public class RenderZBufferThread extends AbstractImageRenderThread {
     sample = new ZBufferSample();
     accumSample = new ZBufferSample();
     img = pImg;
-    zScale = pZScale;
+    imgSize = MathLib.sqrt(MathLib.sqr(pImg.getImageWidth()) + MathLib.sqr(pImg.getImageHeight()));
+    zScale = pZScale * 1000.0 / imgSize;
   }
 
   @Override
