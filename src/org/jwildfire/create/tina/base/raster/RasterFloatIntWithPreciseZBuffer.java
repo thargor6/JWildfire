@@ -153,7 +153,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
         if (withDOF) {
           dofBuf[x][y] = (float) sample.dofDist;
         }
-        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.75) || randGen.random() > 0.33) {
+        if ((normalsCalculator.hasNormalAtLocation(x, y) && randGen.random() > 0.85) || randGen.random() > 0.5) {
           normalsCalculator.refreshNormalAtLocation(x, y);
         }
       }

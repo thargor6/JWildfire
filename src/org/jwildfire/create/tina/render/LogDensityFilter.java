@@ -472,7 +472,7 @@ public class LogDensityFilter extends FilterHolder {
             VectorD r = VectorD.reflect(lightDir, normal);
             double vr = VectorD.dot(viewDir, r);
             if (vr < MathLib.EPSILON) {
-              double specularResponse = MathLib.pow(-vr, material.getPhongSize());
+              double specularResponse = MathLib.pow(material.getLightDiffFunc().evaluate(-vr), material.getPhongSize());
               rawColor.addFrom(material.getPhongRed(), material.getPhongGreen(), material.getPhongBlue(),
                   visibility * specularResponse * specularIntensity * light.getIntensity());
             }
