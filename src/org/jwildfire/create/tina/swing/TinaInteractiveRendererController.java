@@ -35,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -442,6 +443,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
         }
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
+          double zBufferScale = Double.parseDouble(
+              JOptionPane.showInputDialog(imageRootPanel,
+                  "Enter ZBuffer-Scale", currFlame.getZBufferScale()));
+          currFlame.setZBufferScale(zBufferScale);
           RenderedFlame res = renderer.finishZBuffer(displayUpdater.getSampleCount());
           if (res.getZBuffer() != null) {
             new ImageWriter().saveImage(res.getZBuffer(), file.getAbsolutePath());
@@ -449,7 +454,6 @@ public class TinaInteractiveRendererController implements IterationObserver {
               parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
             }
           }
-
         }
       }
       finally {
