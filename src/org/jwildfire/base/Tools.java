@@ -54,7 +54,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 BETA 5 (28.10.2016)";
+  public static final String APP_VERSION = "3.00 BETA 6 (29.10.2016)";
 
   public static final boolean SPECIAL_VERSION = false;
 
@@ -584,8 +584,7 @@ public class Tools {
 
   public static String makeZBufferFilename(String absolutePath) {
     File f = new File(absolutePath);
-    String name = Tools.trimFileExt(f.getName());
-    return new File(f.getParent(), name + "_zbuf.png").getAbsolutePath();
+    return new File(f.getParent(), "zbuf_" + f.getName()).getAbsolutePath();
   }
 
   public static String makeHDRFilename(String absolutePath) {
