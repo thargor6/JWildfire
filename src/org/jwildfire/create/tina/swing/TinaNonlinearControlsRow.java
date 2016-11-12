@@ -19,9 +19,11 @@ public class TinaNonlinearControlsRow {
   private final JToggleButton nonlinearParamsPreButton;
   private final JToggleButton nonlinearParamsPostButton;
   private final JButton nonlinearParamsUpButton;
+  private final JToggleButton toggleParamsPnlButton;
 
   public TinaNonlinearControlsRow(JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
-      JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton) {
+      JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
+      JToggleButton pToggleParamsPnlButton) {
     nonlinearVarCmb = pNonlinearVarCmb;
     nonlinearParamsCmb = pNonlinearParamsCmb;
     nonlinearVarREd = pNonlinearVarREd;
@@ -30,6 +32,7 @@ public class TinaNonlinearControlsRow {
     nonlinearParamsPreButton = pNonlinearParamsPreButton;
     nonlinearParamsPostButton = pNonlinearParamsPostButton;
     nonlinearParamsUpButton = pNonlinearParamsUpButton;
+    toggleParamsPnlButton = pToggleParamsPnlButton;
   }
 
   public void initControls() {
@@ -80,6 +83,10 @@ public class TinaNonlinearControlsRow {
 
   public JButton getNonlinearParamsUpButton() {
     return nonlinearParamsUpButton;
+  }
+
+  public JToggleButton getToggleParamsPnlButton() {
+    return toggleParamsPnlButton;
   }
 
 }

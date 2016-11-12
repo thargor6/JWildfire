@@ -6023,6 +6023,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
   }
 
+  public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
+    nonlinearParamsToggleParamsPanel(pIdx, data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected());
+  }
+
   public void nonlinearParamsUpButtonClicked(int pIdx) {
     if (cmbRefreshing) {
       return;
@@ -6044,6 +6048,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       cmbRefreshing = oldCmbRefreshing;
     }
+  }
+
+  public void nonlinearParamsToggleParamsPanel(int pIdx, boolean pExpanded) {
+    // TODO
   }
 
   public void nonlinearParamsPriorityChanged(int pIdx, int pPriority) {
