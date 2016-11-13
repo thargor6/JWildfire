@@ -816,8 +816,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     initHelpPane();
     initApophysisHintsPane();
 
-    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++)
+    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++) {
       initNonlinearControls(data.TinaNonlinearControlsRows[i]);
+      data.TinaNonlinearControlsRows[i].getToggleParamsPnlButton().setSelected(prefs.isTinaDefaultExpandNonlinearParams());
+    }
     nonlinearParamsPanel = (JPanel) data.TinaNonlinearControlsRows[0].getRootPanel().getParent();
     nonlinearParamsPanelBaseWidth = nonlinearParamsPanel.getPreferredSize().width;
     nonlinearParamsPanelBaseHeight = nonlinearParamsPanel.getPreferredSize().height;

@@ -137,6 +137,9 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
   public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
 
+  static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
+  static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
+
   static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
@@ -226,6 +229,12 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private int tinaAdvancedCodeEditorFontSize = 10;
+
+  @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
+  private boolean tinaDefaultExpandNonlinearParams = false;
+
+  @Property(description = "Path to the external OpenCl renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the OpenCL-rendering-window is displayed ", category = PropertyCategory.TINA)
+  private String tinaFACLRenderPath = null;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -796,6 +805,8 @@ public class Prefs extends ManagedObject {
     desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
     showTipsAtStartup = pSrc.showTipsAtStartup;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
+    tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
+    tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1623,6 +1634,22 @@ public class Prefs extends ManagedObject {
 
   public void setTinaAutoloadSavedImagesInIR(boolean tinaAutoloadSavedImagesInIR) {
     this.tinaAutoloadSavedImagesInIR = tinaAutoloadSavedImagesInIR;
+  }
+
+  public boolean isTinaDefaultExpandNonlinearParams() {
+    return tinaDefaultExpandNonlinearParams;
+  }
+
+  public void setTinaDefaultExpandNonlinearParams(boolean tinaDefaultExpandNonlinearParams) {
+    this.tinaDefaultExpandNonlinearParams = tinaDefaultExpandNonlinearParams;
+  }
+
+  public String getTinaFACLRenderPath() {
+    return tinaFACLRenderPath;
+  }
+
+  public void setTinaFACLRenderPath(String tinaFACLRenderPath) {
+    this.tinaFACLRenderPath = tinaFACLRenderPath;
   }
 
 }
