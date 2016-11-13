@@ -67,6 +67,10 @@ public class SubFlameWFFunc extends VariationFunc {
     int iter = 0;
     final int MAX_ITER = 1000;
 
+    if (p.isInfinite() || p.isNaN()) {
+      prefuseIter(pContext);
+    }
+
     while (xf != null) {
       if (++iter > MAX_ITER) {
         return;
@@ -104,6 +108,7 @@ public class SubFlameWFFunc extends VariationFunc {
     }
 
     if (!q.doHide) {
+      pVarTP.doHide = false;
       pVarTP.x += q.x + offset_x;
       pVarTP.y += q.y + offset_y;
       pVarTP.z += q.z + offset_z + colorscale_z * q.color;
@@ -133,6 +138,9 @@ public class SubFlameWFFunc extends VariationFunc {
             break;
         }
       }
+    }
+    else {
+      pVarTP.doHide = true;
     }
   }
 
@@ -187,6 +195,10 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    prefuseIter(pContext);
+  }
+
+  private void prefuseIter(FlameTransformationContext pContext) {
     if (flame != null) {
       Layer layer = flame.getFirstLayer();
       layer.refreshModWeightTables(pContext);
