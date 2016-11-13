@@ -1,15 +1,58 @@
-V3.00 BETA 4 (15.10.2016)
- - materials and lights in the solid-rendering-settings now start with "Material 0" and "Light 0", as the smallest index is 0 (rather than 1)
+V3.00 BETA 7 (12.11.2016)
+ - the params in the nonlinear-tab can now get "expanded" in order to access them all at one time, thanks to Martin Flink to the suggestion!
+ - exchanged some icons in the main editor
+
+V3.00 BETA 6 (12.11.2016)
+ - changed the naming of z-buffer-images in order to simplify the handling of sequences of them 
+ - new "Orchids"-random-flame-generator
+ - export of the z-buffer is not resolution-dependant anymore
+ - possibility to specify (and successively alter) z-buffer-scale
+ - support for invisible objects which can receive shadows. This way you can let fractals cast real-looking shadows 
+   on objects inside a background-image, inspired by Oak Fractal Sandbox by David Byrd (http://www.davidbyrd.io/)
+ - fixed a bug regarding the calculation of trhe size the background-image of fractals when using oversampling
+ - created (finally!) an native installer for Mac OS (the app on Mac OS does not the launcher then) 
+ - the dancing-flames-module now also works with solid flames
+ - light-position may be animated by motion-curves now
+ - created a new icon for the software
+ - created a MacOS installer
+
+V3.00 BETA 5 (28.10.2016)
+ - script-generator (which creates scripts from a flame) also creates solid-attributes for solid flames now
+ - fixed a UI-refresh-problem regarding the channel-mixer
+ - new "Solid Labyrinth"-random-flame-generator 
+ - added new parameters "axis", "centre_x", "centre_y" and "centre_y" to the "pre_wave3D_wf"-variation
+ - added experimental "direct_color"-parameter to the "truchet"-variation
+ - added parameters to create side_faces in the "checkerbaord_wf"-variation (which are enabled by default) 
+ - added UI-controls for the post-bokeh-effects
+ - added calculation of colorindex to the "plane_wf"-variation, new parameter "calc_color_idx" to enable it
+ - the "color_mode"-parameter of the "plane_wf"-variation behaves now as the same parameter of the *plot_wf-variations  
+ - fixed a bug in the "custom_wf_full"-variation which sometimes caused the subflame-random-flame-generator to halt
+ - fixed a general problem regarding nested random-flame-generators (e.g. All -> Solid Shadows -> Solid Stunning),
+   also causing improved performance 
+ - increased the range of light altitude and azimuth to -360..360
+
+V3.00 BETA 4 (24.10.2016)
+ - allowing fast refresh after changing ligh-settings, even if shadows are enabled (causing shadows displayed wrong, 
+   but allowing display of changes of other light-properties faster)
+ - added two new parameters to the "subflame_wf" variation: "colorscale_z" (adds depth to the outer flame according 
+   to the color-information of the inner flame) and "use_colors" (use the computed color-information of the inner 
+   flame as color of the outer flame)
+ - fixed some refrssh-problems at the coloring-tab
+ - materials and lights in the solid-rendering-settings now start with "Material 0" and "Light 0", as the smallest 
+ index is 0 (rather than 1)
  - improved the speed of the small layer-preview-render (when having multiple layers)
  - fixed a bug regarding the position of the color-controls when the gradient-editor is active
  - exchanged the light-implementation (which was some kind of distant light) by a more puristic approach of distant lights. 
-   Those lights have only two coordinates (altitude and azimuth) and are easier to handle. Additionally it simplified shadow calcucation.  
+   Those lights have only two coordinates (altitude and azimuth) and are easier to handle. Additionally it simplified 
+   shadow calcucation.  
  - Improved the results of the "Solid (shadows)"-random-flame-generator
  - fixed a bug regarding the creating of zbuffer-images (value underflow)
- - parplot2d_wf, yplot2d_wf, yplot3d_wf-vatation: formulas may now have up to 6 parameters ("param_a" ... "param_f"), which may be initialized inside the presets.txt, they can be modified like any other parameter
+ - parplot2d_wf, yplot2d_wf, yplot3d_wf-vatation: formulas may now have up to 6 parameters ("param_a" ... "param_f"), 
+   which may be initialized inside the presets.txt, they can be modified like any other parameter
  - new preset (at slot 35) for parplot2d_wf-variation, supplied by Don Town
  - fixed a problem when loading a flame with multiple layers lost its title
- - fixed the background-color of the script-description-area in the script-editing-dialog, which appeared to be dark on dark UI-themes
+ - fixed the background-color of the script-description-area in the script-editing-dialog, which appeared to be dark 
+   on dark UI-themes
  - hdr-rendering of solid flames
  - 3 new SINEPOW-filter-kernels (with predefined power-levels)
  
@@ -19,7 +62,8 @@ V3.00 BETA 3 (15.10.2016)
  - fixed a problem with animation motion curves in a plane different from XY
  - improved image-quality for scaled image-display on the desktop (e. g. after loading an image or displaying a rendered image)
  - support for using backgrounds (color or image) when rendering solid flames
- - option to auto-reload saved images from the interactive renderer (in order so be able to check them quickly), may be turned off in the Preferences
+ - option to auto-reload saved images from the interactive renderer (in order so be able to check them quickly), may be 
+   turned off in the Preferences
  - option to manually save a z-buffer-image in the interactive renderer
  - buttons to easily randomize light-position and light-color (for solid flames)
  - significantly increased the render-speed of *plot-variations by compiling the formulas rather then interpreting them 
@@ -35,9 +79,12 @@ V3.00 BETA 3 (15.10.2016)
  - added uv-coordinates to the default mesh-primitives (used by "obj_mesh_primitive_wf"-variation)
  - new "plane_wf"-variation for easy creation of a textured plane
  - new "blend_uv_map"-parameter for "obj_mesh_wf"-variation
- - variations-editing: the controls use non-fractional step-size when changing a parameter having integer-values (like power of "julia3D"-variation) 
- - added support of uv-mapping to the "obj_mesh_wf" (to make use of it, the object must also carry uv-map-coordinates, you may then select any image as actaul colormap)
- - replaced the link to variation-guide, hosted by user FractalGee, which seems to be permanently off, by a link to the variations-list supplied by Don Town 
+ - variations-editing: the controls use non-fractional step-size when changing a parameter having integer-values (like 
+   power of "julia3D"-variation) 
+ - added support of uv-mapping to the "obj_mesh_wf" (to make use of it, the object must also carry uv-map-coordinates, 
+   you may then select any image as actaul colormap)
+ - replaced the link to variation-guide, hosted by user FractalGee, which seems to be permanently off, by a link to 
+   the variations-list supplied by Don Town 
 
 V3.00 BETA 2 (29.09.2016)
  - new "MobiusN"-variation by eralex
@@ -50,7 +97,8 @@ V3.00 BETA (29.09.2016)
  - *plot*_wf-variation: changing of parameter ranges and formulas is not possible when use_preset it set to 1
  - new option of intensity of hard shadows (per lightsource)
  - added a quarter-render-size option in the Interactive Renderer
- - recreated the SystemInfo window and added a function to clear the cache (which hold resources like fonts, meshes, ... in order to speed up future calculations)
+ - recreated the SystemInfo window and added a function to clear the cache (which hold resources like fonts, meshes, ... 
+   in order to speed up future calculations)
  - improved calculation of hard shadows
  - improved speed of AO and normals calculation
  - improved quality of normals- and lighting calculation
@@ -67,7 +115,8 @@ V3.00 BETA (29.09.2016)
 
 V3.00 ALPHA 6 (16.09.2016)
  - removed the combobox to select the edit-plane, and added three buttons in the main editor area instead
- - have integrated 35 presets for parplot2d_wf-variation now - thanks to Frank Baumann and all others who contributed! (Tip: change preset_id to witch between presets)
+ - have integrated 35 presets for parplot2d_wf-variation now - thanks to Frank Baumann and all others who contributed! 
+   (Tip: change preset_id to witch between presets)
  - removed the rarely used brightness-slider in the main editor
  - removed the black "halos" around edges
  - new button in the main editor-area to toggle solid rendering mode

@@ -223,6 +223,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private Properties scriptProps = new Properties();
   private File scriptPropFile = new File(System.getProperty("user.home"), SCRIPT_PROPS_FILE);
 
+  private final JPanel nonlinearParamsPanel;
+  private final int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
+
   public TinaController(TinaControllerParameter parameterObject) {
     desktop = parameterObject.desktop;
     tinaFrame = parameterObject.pTinaFrame;
@@ -812,6 +815,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     initHelpPane();
     initApophysisHintsPane();
+
+    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++)
+      initNonlinearControls(data.TinaNonlinearControlsRows[i]);
+    nonlinearParamsPanel = (JPanel) data.TinaNonlinearControlsRows[0].getRootPanel().getParent();
+    nonlinearParamsPanelBaseWidth = nonlinearParamsPanel.getPreferredSize().width;
+    nonlinearParamsPanelBaseHeight = nonlinearParamsPanel.getPreferredSize().height;
 
     refreshPaletteColorsTable();
     getBatchRendererController().refreshRenderBatchJobsTable();
@@ -2262,6 +2271,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         refreshXFormUI(xForm);
         xFormControls.enableControls(xForm);
+        resizeNonlinearParamsPanel();
         refreshFlameImage(true, false, 1, pReRender, false);
       }
       finally {
@@ -2487,11 +2497,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int idx = 0;
         for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
-            refreshParamCmb(row, null, null);
+            refreshParamControls(row, null, null);
           }
           else {
             Variation var = pXForm.getVariation(idx);
-            refreshParamCmb(row, pXForm, var);
+            refreshParamControls(row, pXForm, var);
           }
           idx++;
         }
@@ -2507,7 +2517,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void refreshParamCmb(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
       pRow.getNonlinearVarREd().setText(null);
@@ -2519,6 +2530,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       pRow.getNonlinearParamsPreButton().setEnabled(false);
       pRow.getNonlinearParamsPostButton().setSelected(false);
       pRow.getNonlinearParamsPostButton().setEnabled(false);
+      pRow.getToggleParamsPnlButton().setEnabled(false);
+
       if (pRow.getNonlinearParamsUpButton() != null) {
         pRow.getNonlinearParamsUpButton().setEnabled(false);
       }
@@ -2554,6 +2567,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           pRow.getNonlinearParamsCmb().addItem(name);
         }
       }
+      if (paramNames != null && paramNames.length > 1) {
+        pRow.getToggleParamsPnlButton().setEnabled(true);
+      }
+      else {
+        pRow.getToggleParamsPnlButton().setEnabled(false);
+      }
+
       // preselection
       if (resCount > 0) {
         pRow.getNonlinearParamsCmb().setSelectedIndex(0);
@@ -2581,6 +2601,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         pRow.getNonlinearParamsREd().setOnlyIntegers(false);
       }
     }
+    pRow.rebuildParamsPnl(pXForm, pVar);
   }
 
   public void addLinkedXForm() {
@@ -2976,9 +2997,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           var.setAmount(Tools.stringToDouble(varStr));
           xForm.addVariation(var);
         }
-        refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
         refreshXFormUI(xForm);
         refreshFlameImage(true, false, 1, true, false);
+
         data.transformationsTable.invalidate();
         data.transformationsTable.repaint();
       }
@@ -2990,6 +3012,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void nonlinearVarREdChanged(int pIdx) {
     nonlinearVarREdChanged(pIdx, 0.0);
+  }
+
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null) {
+        if (pIdx < xForm.getVariationCount()) {
+          Variation var = xForm.getVariation(pIdx);
+          var.getFunc().setParameter(pPropertyName, pPropertyValue);
+          refreshFlameImage(true, false, 1, true, false);
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
   }
 
   public void nonlinearVarREdChanged(int pIdx, double pDelta) {
@@ -3057,10 +3099,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             if (var.getFunc().dynamicParameterExpansion(selected)) {
               // if setting the parameter can change the total number of parameters, 
               //    then refresh parameter UI (and reselect parameter that was changed)
-              this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
             }
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
+            data.TinaNonlinearControlsRows[pIdx].refreshParamWithoutRefresh(selected, val);
           }
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
             final String rName = var.getFunc().getRessourceNames()[idx];
@@ -3222,7 +3265,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     var.getFunc().setRessource(rName, valByteArray);
                     if (var.getFunc().ressourceCanModifyParams(rName)) {
                       // forcing refresh of params UI in case setting resource changes available params or param values
-                      this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
                     }
                   }
                   catch (Throwable ex) {
@@ -3235,9 +3278,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           refreshFlameImage(true, false, 1, true, false);
         }
       }
+      resizeNonlinearParamsPanel();
     }
     finally {
       cmbRefreshing = false;
+    }
+  }
+
+  private void resizeNonlinearParamsPanel() {
+    int currHeight = nonlinearParamsPanel.getPreferredSize().height;
+    int newHeight = nonlinearParamsPanelBaseHeight;
+    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++)
+      newHeight += data.TinaNonlinearControlsRows[i].getExtraPanelSize();
+    if (newHeight != currHeight) {
+      nonlinearParamsPanel.setPreferredSize(new Dimension(nonlinearParamsPanelBaseWidth, newHeight));
+
+      nonlinearParamsPanel.invalidate();
+      nonlinearParamsPanel.validate();
+      nonlinearParamsPanel.repaint();
+      nonlinearParamsPanel.getParent().invalidate();
+      nonlinearParamsPanel.getParent().validate();
+      nonlinearParamsPanel.getParent().repaint();
+      nonlinearParamsPanel.getParent().getParent().invalidate();
+      nonlinearParamsPanel.getParent().getParent().validate();
+      nonlinearParamsPanel.getParent().getParent().repaint();
+      nonlinearParamsPanel.getParent().getParent().getParent().invalidate();
+      nonlinearParamsPanel.getParent().getParent().getParent().validate();
+      nonlinearParamsPanel.getParent().getParent().getParent().repaint();
     }
   }
 
@@ -3284,6 +3351,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       cmbRefreshing = false;
     }
+  }
+
+  private void initNonlinearControls(TinaNonlinearControlsRow pRow) {
+    pRow.getNonlinearParamsLeftButton().setEnabled(false);
+    pRow.getNonlinearParamsPostButton().setEnabled(false);
+    pRow.getNonlinearParamsPreButton().setEnabled(false);
+    if (pRow.getNonlinearParamsUpButton() != null)
+      pRow.getNonlinearParamsUpButton().setEnabled(false);
+    pRow.getToggleParamsPnlButton().setEnabled(false);
   }
 
   private void enableNonlinearControls(TinaNonlinearControlsRow pRow, boolean pRessource) {
@@ -6024,7 +6100,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
-    nonlinearParamsToggleParamsPanel(pIdx, data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected());
+    XForm xForm = getCurrXForm();
+    Variation var;
+    if (xForm != null && pIdx < xForm.getVariationCount()) {
+      var = xForm.getVariation(pIdx);
+    }
+    else {
+      var = null;
+    }
+    data.TinaNonlinearControlsRows[pIdx].rebuildParamsPnl(xForm, var);
+    resizeNonlinearParamsPanel();
   }
 
   public void nonlinearParamsUpButtonClicked(int pIdx) {
@@ -6037,8 +6122,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrXForm();
       if (xForm != null && pIdx > 0 && pIdx < xForm.getVariationCount()) {
         saveUndoPoint();
+        boolean prevExpanded = data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().isSelected();
+        boolean selExpanded = data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected();
+
         xForm.getVariations().add(pIdx - 1, xForm.getVariations().get(pIdx));
         xForm.getVariations().remove(pIdx + 1);
+        data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().setSelected(selExpanded);
+        data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().setSelected(prevExpanded);
+
         refreshXFormUI(xForm);
         refreshFlameImage(true, false, 1, true, false);
         data.transformationsTable.invalidate();
@@ -6048,10 +6139,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       cmbRefreshing = oldCmbRefreshing;
     }
-  }
-
-  public void nonlinearParamsToggleParamsPanel(int pIdx, boolean pExpanded) {
-    // TODO
   }
 
   public void nonlinearParamsPriorityChanged(int pIdx, int pPriority) {
