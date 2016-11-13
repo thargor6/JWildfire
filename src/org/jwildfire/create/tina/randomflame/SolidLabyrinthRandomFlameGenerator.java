@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.Unchecker;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -45,7 +46,13 @@ public class SolidLabyrinthRandomFlameGenerator extends SolidRandomFlameGenerato
         String flameXML = new FlameWriter().getFlameXML(subFlame);
         var.setRessource("flame", flameXML.getBytes());
         var.setParameter("color_mode", 0);
-        var.setParameter("colorscale_z", (0.5 - Math.random()) * 1.5);
+
+        double cs = (1.5 - Math.random() * 3.0);
+        if (MathLib.fabs(cs) < 0.4) {
+          cs = (Math.random() < 0.5 ? -0.3 - Math.random() : 0.3 + Math.random());
+        }
+
+        var.setParameter("colorscale_z", cs);
         xForm.addVariation(1, var);
       }
       catch (Exception ex) {
