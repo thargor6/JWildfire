@@ -5014,7 +5014,8 @@ public class TinaInternalFrame extends JInternalFrame {
         batchFlameRendererFrame.getBatchRenderFilesMoveUpButton(), batchFlameRendererFrame.getBatchRenderFilesRemoveButton(),
         batchFlameRendererFrame.getBatchRenderFilesRemoveAllButton(), batchFlameRendererFrame.getBatchRenderStartButton(),
         batchFlameRendererFrame.getBatchQualityProfileCmb(), batchFlameRendererFrame.getBatchResolutionProfileCmb(),
-        batchFlameRendererFrame.getBatchRenderOverrideCBx(), batchFlameRendererFrame.getBatchRenderShowImageBtn());
+        batchFlameRendererFrame.getBatchRenderOverrideCBx(), batchFlameRendererFrame.getBatchRenderShowImageBtn(),
+        batchFlameRendererFrame.getEnableOpenClBtn());
 
     params.setMeshGenParams(meshGenFrame.getMeshGenFromEditorBtn(), meshGenFrame.getMeshGenFromClipboardBtn(), meshGenFrame.getMeshGenLoadFlameBtn(),
         meshGenFrame.getMeshGenSliceCountREd(), meshGenFrame.getMeshGenSlicesPerRenderREd(), meshGenFrame.getMeshGenRenderWidthREd(),

@@ -84,6 +84,9 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
+import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
+import org.jwildfire.create.tina.faclrender.FACLRenderResult;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -283,7 +286,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
 
     batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
-        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn);
+        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn);
 
     meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel,
         parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
@@ -4575,6 +4578,25 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void renderImageButton_actionPerformed() {
+    // TODO
+    if (getCurrFlame() != null) {
+      try {
+        Flame flame = getCurrFlame();
+        new FACLFlameWriter().writeFlame(flame, "D:\\DEV\\eclipse_pulsar_workspace\\JWildfire\\FAEngine\\test\\test2.flam3");
+
+        FACLRenderResult res = FACLRenderTools.invokeFACLRender("D:\\DEV\\eclipse_pulsar_workspace\\JWildfire\\FAEngine\\test\\test2.flam3", 800, 600, 500);
+        System.out.println(res.getCommand());
+        System.out.println(res.getReturnCode());
+        System.out.println(res.getMessage());
+      }
+      catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      return;
+    }
+
+    // TODO
     if (mainRenderThread != null) {
       mainRenderThread.setForceAbort();
       while (mainRenderThread.isFinished()) {

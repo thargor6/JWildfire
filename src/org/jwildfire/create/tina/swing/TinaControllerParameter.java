@@ -516,6 +516,7 @@ public class TinaControllerParameter {
   public JLabel dofDOFParam6Lbl;
   public JCheckBox batchRenderOverrideCBx;
   public JButton batchRenderShowImageBtn;
+  public JToggleButton enableOpenClBtn;
   public JButton resetCameraSettingsBtn;
   public JButton resetDOFSettingsButton;
   public JButton resetBokehOptionsButton;
@@ -1333,7 +1334,8 @@ public class TinaControllerParameter {
       JProgressBar pBatchRenderTotalProgressBar, ProgressUpdater pJobProgressUpdater, JButton pBatchRenderAddFilesButton,
       JButton pBatchRenderFilesMoveDownButton, JButton pBatchRenderFilesMoveUpButton, JButton pBatchRenderFilesRemoveButton,
       JButton pBatchRenderFilesRemoveAllButton, JButton pBatchRenderStartButton, JComboBox pBatchQualityProfileCmb,
-      JComboBox pBatchResolutionProfileCmb, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn) {
+      JComboBox pBatchResolutionProfileCmb, JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn,
+      JToggleButton pEnableOpenClBtn) {
     this.pRenderBatchJobsTable = pRenderBatchJobsTable;
     this.pBatchPreviewRootPanel = pBatchPreviewRootPanel;
     this.pBatchRenderJobProgressBar = pBatchRenderJobProgressBar;
@@ -1349,6 +1351,7 @@ public class TinaControllerParameter {
     this.pBatchResolutionProfileCmb = pBatchResolutionProfileCmb;
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
+    enableOpenClBtn = pEnableOpenClBtn;
   }
 
   public void setMeshGenParams(JButton pMeshGenFromEditorBtn, JButton pMeshGenFromClipboardBtn, JButton pMeshGenLoadFlameBtn,

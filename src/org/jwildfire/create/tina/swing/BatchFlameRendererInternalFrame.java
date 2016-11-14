@@ -27,6 +27,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -36,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -156,7 +158,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       batchQualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       JPanel panel_8 = new JPanel();
-      panel_8.setMaximumSize(new Dimension(159, 28));
+      panel_8.setMaximumSize(new Dimension(159, 56));
       panel_2.add(panel_8);
       panel_8.setLayout(null);
 
@@ -164,6 +166,15 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       batchRenderOverrideCBx.setBounds(4, 4, 149, 18);
       panel_8.add(batchRenderOverrideCBx);
       batchRenderOverrideCBx.setToolTipText("Overwrite already rendered images");
+
+      enableOpenClBtn = new JToggleButton();
+      enableOpenClBtn.setToolTipText("Use the external OpenCl-renderer for rendering, may not work for all flames, but is much faster");
+      enableOpenClBtn.setText("OpenCl");
+      enableOpenClBtn.setPreferredSize(new Dimension(72, 24));
+      enableOpenClBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      enableOpenClBtn.setBounds(0, 24, 160, 24);
+      enableOpenClBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/opencl.png")));
+      panel_8.add(enableOpenClBtn);
 
       JPanel panel_9 = new JPanel();
       panel_9.setMaximumSize(new Dimension(159, 36));
@@ -210,6 +221,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private JPanel batchPreviewRootPanel;
   private JCheckBox batchRenderOverrideCBx;
   private JButton batchRenderShowImageBtn;
+  private JToggleButton enableOpenClBtn;
 
   /**
    * This method initializes renderBatchJobsScrollPane	
@@ -434,7 +446,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private JPanel getPanel_20() {
     if (panel_20 == null) {
       panel_20 = new JPanel();
-      panel_20.setMaximumSize(new Dimension(159, 36));
+      panel_20.setMaximumSize(new Dimension(159, 32));
     }
     return panel_20;
   }
@@ -442,7 +454,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private JPanel getPanel_21() {
     if (panel_21 == null) {
       panel_21 = new JPanel();
-      panel_21.setMaximumSize(new Dimension(159, 36));
+      panel_21.setMaximumSize(new Dimension(159, 32));
     }
     return panel_21;
   }
@@ -450,7 +462,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private JPanel getPanel_22() {
     if (panel_22 == null) {
       panel_22 = new JPanel();
-      panel_22.setMaximumSize(new Dimension(32767, 36));
+      panel_22.setMaximumSize(new Dimension(32767, 32));
       panel_22.setLayout(null);
 
       JLabel lblGlobalSettings = new JLabel();
@@ -458,7 +470,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       lblGlobalSettings.setPreferredSize(new Dimension(100, 22));
       lblGlobalSettings.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGlobalSettings.setAlignmentX(1.0f);
-      lblGlobalSettings.setBounds(6, 20, 100, 14);
+      lblGlobalSettings.setBounds(6, 16, 100, 14);
       panel_22.add(lblGlobalSettings);
     }
     return panel_22;
@@ -541,4 +553,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
     this.tinaController = tinaController;
   }
 
+  public JToggleButton getEnableOpenClBtn() {
+    return enableOpenClBtn;
+  }
 }

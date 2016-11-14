@@ -60,11 +60,13 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new SierpinskyRandomFlameGenerator());
     if (!Prefs.getPrefs().isTinaDisableSolidFlameRandGens()) {
-      allGenerators.add(new SolidExperimentalRandomFlameGenerator());
-      allGenerators.add(new SolidStunningRandomFlameGenerator());
-      allGenerators.add(new SolidJulia3DRandomFlameGenerator());
-      allGenerators.add(new SolidShadowsRandomFlameGenerator());
-      allGenerators.add(new SolidLabyrinthRandomFlameGenerator());
+      for (int i = 0; i < 2; i++) {
+        allGenerators.add(new SolidExperimentalRandomFlameGenerator());
+        allGenerators.add(new SolidStunningRandomFlameGenerator());
+        allGenerators.add(new SolidJulia3DRandomFlameGenerator());
+        allGenerators.add(new SolidShadowsRandomFlameGenerator());
+        allGenerators.add(new SolidLabyrinthRandomFlameGenerator());
+      }
     }
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
@@ -80,7 +82,11 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     int i = 0;
     while (i < simpleGenerators.size()) {
       Class<?> cls = simpleGenerators.get(i).getClass();
-      if (LayersRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) || WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls)) {
+      if (LayersRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) ||
+          WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls) ||
+          SolidExperimentalRandomFlameGenerator.class.equals(cls) || SolidStunningRandomFlameGenerator.class.equals(cls) ||
+          SolidJulia3DRandomFlameGenerator.class.equals(cls) || SolidShadowsRandomFlameGenerator.class.equals(cls) ||
+          SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
         simpleGenerators.remove(i);
       }
       else {

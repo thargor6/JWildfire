@@ -233,7 +233,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
 
-  @Property(description = "Path to the external OpenCl renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the OpenCL-rendering-window is displayed ", category = PropertyCategory.TINA)
+  @Property(description = "Path to the external OpenCl renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the OpenCL-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
   private String tinaFACLRenderPath = null;
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)

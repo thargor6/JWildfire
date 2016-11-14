@@ -21,6 +21,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.swing.Desktop;
 
 import com.l2fprod.common.demo.OutlookBarMain;
@@ -77,17 +80,18 @@ public class NavigatorInternalFrame extends JInternalFrame {
   }
 
   private void addButtons(JPanel panel) {
-    WindowEntry[] windows = new WindowEntry[] {
-        new WindowEntry("Editor", "/org/jwildfire/swing/icons/new/brick2.png", TinaInternalFrame.class),
-        new WindowEntry("IRender", "/org/jwildfire/swing/icons/new/fraqtive.png", InteractiveRendererInternalFrame.class),
-        new WindowEntry("Browser", "/org/jwildfire/swing/icons/new/application-view-tile.png", FlameBrowserInternalFrame.class),
-        new WindowEntry("Movies", "/org/jwildfire/swing/icons/new/applications-multimedia.png", EasyMovieMakerInternalFrame.class),
-        new WindowEntry("Dancing", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class),
-        new WindowEntry("Batch", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class),
-        new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class),
-        new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class),
-        new WindowEntry("GPURender", "/org/jwildfire/swing/icons/new/opencl.png", FlamesGPURenderInternalFrame.class)
-    };
+    List<WindowEntry> windows = new ArrayList<>();
+    windows.add(new WindowEntry("Editor", "/org/jwildfire/swing/icons/new/brick2.png", TinaInternalFrame.class));
+    windows.add(new WindowEntry("IRender", "/org/jwildfire/swing/icons/new/fraqtive.png", InteractiveRendererInternalFrame.class));
+    windows.add(new WindowEntry("Browser", "/org/jwildfire/swing/icons/new/application-view-tile.png", FlameBrowserInternalFrame.class));
+    windows.add(new WindowEntry("Movies", "/org/jwildfire/swing/icons/new/applications-multimedia.png", EasyMovieMakerInternalFrame.class));
+    windows.add(new WindowEntry("Dancing", "/org/jwildfire/swing/icons/new/kipina.png", DancingFlamesInternalFrame.class));
+    windows.add(new WindowEntry("Batch", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class));
+    windows.add(new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class));
+    windows.add(new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class));
+    if (FACLRenderTools.isFaclRenderAvalailable()) {
+      windows.add(new WindowEntry("GPURender", "/org/jwildfire/swing/icons/new/opencl.png", FlamesGPURenderInternalFrame.class));
+    }
 
     for (final WindowEntry window : windows) {
       if (window != null) {

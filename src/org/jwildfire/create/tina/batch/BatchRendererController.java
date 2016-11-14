@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
+import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
 
 import org.jwildfire.base.Prefs;
@@ -35,6 +36,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -61,9 +63,10 @@ public class BatchRendererController implements JobRenderThreadController {
   private FlamePanel batchPreviewFlamePanel;
   private final JCheckBox batchRenderOverrideCBx;
   private final JButton batchRenderShowImageBtn;
+  private final JToggleButton enableOpenClBtn;
 
   public BatchRendererController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData, ProgressUpdater pJobProgressUpdater,
-      JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn) {
+      JCheckBox pBatchRenderOverrideCBx, JButton pBatchRenderShowImageBtn, JToggleButton pEnableOpenClBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -72,6 +75,12 @@ public class BatchRendererController implements JobRenderThreadController {
     jobProgressUpdater = pJobProgressUpdater;
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
+    enableOpenClBtn = pEnableOpenClBtn;
+    if (!FACLRenderTools.isFaclRenderAvalailable()) {
+      enableOpenClBtn.setSelected(false);
+      enableOpenClBtn.setEnabled(false);
+      enableOpenClBtn.setVisible(false);
+    }
   }
 
   private JobRenderThread jobRenderThread = null;
@@ -88,7 +97,7 @@ public class BatchRendererController implements JobRenderThreadController {
       }
     }
     if (activeJobList.size() > 0) {
-      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) data.batchQualityProfileCmb.getSelectedItem(), batchRenderOverrideCBx.isSelected());
+      jobRenderThread = new JobRenderThread(this, activeJobList, (ResolutionProfile) data.batchResolutionProfileCmb.getSelectedItem(), (QualityProfile) data.batchQualityProfileCmb.getSelectedItem(), batchRenderOverrideCBx.isSelected(), enableOpenClBtn.isSelected());
       new Thread(jobRenderThread).start();
     }
     enableJobRenderControls();

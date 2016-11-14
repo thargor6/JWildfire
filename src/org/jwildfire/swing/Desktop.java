@@ -57,6 +57,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.iflames.swing.IFlamesInternalFrame;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
@@ -95,7 +96,9 @@ public class Desktop extends JApplet {
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
+    if (FACLRenderTools.isFaclRenderAvalailable()) {
+      mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
+    }
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(HelpInternalFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(IFlamesInternalFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(OperatorsInternalFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
@@ -211,9 +214,8 @@ public class Desktop extends JApplet {
       BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
       MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
       InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
-      FlamesGPURenderInternalFrame gpuRendererFrame = getInternalFrame(FlamesGPURenderInternalFrame.class);
-
-      gpuRendererFrame = new FlamesGPURenderInternalFrame();
+      // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
+      FlamesGPURenderInternalFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getInternalFrame(FlamesGPURenderInternalFrame.class) : new FlamesGPURenderInternalFrame();
       HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
 
       TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);

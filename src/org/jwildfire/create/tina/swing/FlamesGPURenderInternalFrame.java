@@ -43,7 +43,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.base.Tools;
 import org.jwildfire.swing.Desktop;
 
 public class FlamesGPURenderInternalFrame extends JInternalFrame {
@@ -87,12 +86,7 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       jContentPane.setLayout(new BorderLayout());
       jContentPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       jContentPane.setSize(new Dimension(1097, 617));
-      if (Tools.ENABLE_GPU_WINDOW) {
-        jContentPane.add(getInteractiveRenderPanel(), BorderLayout.CENTER);
-      }
-      else {
-        getInteractiveRenderPanel();
-      }
+      jContentPane.add(getInteractiveRenderPanel(), BorderLayout.CENTER);
     }
     return jContentPane;
   }
