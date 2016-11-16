@@ -234,6 +234,7 @@ public class Desktop extends JApplet {
       batchFlameRendererFrame.setTinaController(tinaController);
       meshGenFrame.setTinaController(tinaController);
       interactiveRendererFrame.setTinaController(tinaController);
+      gpuRendererFrame.setTinaController(tinaController);
       helpFrame.setTinaController(tinaController);
 
       FormulaExplorerInternalFrame formulaExplorerFrame = getInternalFrame(FormulaExplorerInternalFrame.class);

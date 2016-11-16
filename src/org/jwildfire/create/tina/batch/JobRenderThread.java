@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.batch;
 
-import java.awt.Graphics;
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
@@ -149,19 +148,19 @@ public class JobRenderThread implements Runnable {
                   controller.refreshRenderBatchJobsTable();
                   controller.getRenderBatchJobsTable().invalidate();
                   controller.getRenderBatchJobsTable().validate();
-                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
-                  if (g != null) {
-                    controller.getRenderBatchJobsTable().getParent().paint(g);
-                  }
+                  //                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
+                  //                  if (g != null) {
+                  //                    controller.getRenderBatchJobsTable().getParent().paint(g);
+                  //                  }
                 }
                 {
                   controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
                   controller.getTotalProgressBar().invalidate();
                   controller.getTotalProgressBar().validate();
-                  Graphics g = controller.getTotalProgressBar().getGraphics();
-                  if (g != null) {
-                    controller.getTotalProgressBar().paint(g);
-                  }
+                  //                  Graphics g = controller.getTotalProgressBar().getGraphics();
+                  //                  if (g != null) {
+                  //                    controller.getTotalProgressBar().paint(g);
+                  //                  }
                 }
               }
               catch (Throwable ex) {

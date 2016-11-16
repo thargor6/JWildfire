@@ -5157,7 +5157,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaSolidRenderingShadowSmoothRadiusSlider(), getTinaSolidRenderingShadowmapBiasREd(), getTinaSolidRenderingShadowmapBiasSlider(),
         getBokehSettingsPnl(), getPostBokehSettingsPnl(), getResetPostBokehSettingsBtn(), getPostBokehIntensityREd(), getPostBokehIntensitySlider(),
         getPostBokehBrightnessREd(), getPostBokehBrightnessSlider(), getPostBokehSizeREd(), getPostBokehSizeSlider(), getPostBokehActivationREd(),
-        getPostBokehActivationSlider(), getPostBokehFilterKernelCmb());
+        getPostBokehActivationSlider(), getPostBokehFilterKernelCmb(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
+        gpuRendererFrame.getInteractiveQualityProfileCmb());
 
     tinaController = new TinaController(params);
 
@@ -5266,13 +5267,12 @@ public class TinaInternalFrame extends JInternalFrame {
 
       tinaController.setGpuRendererCtrl(new FlamesGPURenderController(tinaController, pErrorHandler, pPrefs,
           gpuRendererFrame.getInteractiveLoadFlameButton(), gpuRendererFrame.getInteractiveLoadFlameFromClipboardButton(),
-          gpuRendererFrame.getInteractiveStopButton(),
           gpuRendererFrame.getInteractiveFlameToClipboardButton(), gpuRendererFrame.getInteractiveSaveImageButton(),
-          gpuRendererFrame.getInteractiveSaveFlameButton(),
+          gpuRendererFrame.getInteractiveSaveFlameButton(), gpuRendererFrame.getInteractiveFlameToEditorButton(),
           gpuRendererFrame.getInteractiveCenterTopPanel(), gpuRendererFrame.getInteractiveStatsTextArea(),
           gpuRendererFrame.getInteractiveHalveSizeButton(), gpuRendererFrame.getInteractiveQuarterSizeButton(),
           gpuRendererFrame.getInteractiveFullSizeButton(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
-          gpuRendererFrame.getInteractiveRendererShowStatsButton(), gpuRendererFrame.getInteractiveRendererShowPreviewButton()));
+          gpuRendererFrame.getInteractiveQualityProfileCmb(), gpuRendererFrame.getLblGpuRenderInfo()));
       tinaController.getGpuRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {

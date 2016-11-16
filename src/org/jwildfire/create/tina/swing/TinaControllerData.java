@@ -40,6 +40,8 @@ import org.jwildfire.swing.ImagePanel;
 public class TinaControllerData {
   public JComboBox qualityProfileCmb;
   public JComboBox resolutionProfileCmb;
+  public JComboBox gpuQualityProfileCmb;
+  public JComboBox gpuResolutionProfileCmb;
   public JComboBox batchQualityProfileCmb;
   public JComboBox batchResolutionProfileCmb;
   public JComboBox interactiveResolutionProfileCmb;

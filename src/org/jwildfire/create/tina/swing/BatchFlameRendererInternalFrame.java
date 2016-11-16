@@ -168,8 +168,8 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
       batchRenderOverrideCBx.setToolTipText("Overwrite already rendered images");
 
       enableOpenClBtn = new JToggleButton();
-      enableOpenClBtn.setToolTipText("Use the external OpenCl-renderer for rendering, may not work for all flames, but is much faster");
-      enableOpenClBtn.setText("OpenCl");
+      enableOpenClBtn.setToolTipText("Use the external GPU-renderer for rendering, may not work for all flames, but is much faster");
+      enableOpenClBtn.setText("GPU");
       enableOpenClBtn.setPreferredSize(new Dimension(72, 24));
       enableOpenClBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       enableOpenClBtn.setBounds(0, 24, 160, 24);

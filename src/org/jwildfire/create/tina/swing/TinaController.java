@@ -84,9 +84,6 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
-import org.jwildfire.create.tina.faclrender.FACLRenderResult;
-import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -438,6 +435,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.resolutionProfileCmb = parameterObject.pResolutionProfileCmb;
     data.batchQualityProfileCmb = parameterObject.pBatchQualityProfileCmb;
     data.batchResolutionProfileCmb = parameterObject.pBatchResolutionProfileCmb;
+    data.gpuQualityProfileCmb = parameterObject.gpuQualityProfileCmb;
+    data.gpuResolutionProfileCmb = parameterObject.gpuResolutionProfileCmb;
     data.interactiveResolutionProfileCmb = parameterObject.pInteractiveResolutionProfileCmb;
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
     data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
@@ -838,9 +837,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshResolutionProfileCmb(data.resolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.batchResolutionProfileCmb, null);
+    refreshResolutionProfileCmb(data.gpuResolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, null);
     refreshQualityProfileCmb(data.qualityProfileCmb, null);
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
+    refreshQualityProfileCmb(data.gpuQualityProfileCmb, null);
     refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
@@ -4237,6 +4238,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
+        refreshQualityProfileCmb(data.gpuQualityProfileCmb, profile);
         refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, profile);
         qualityProfileCmb_changed();
       }
@@ -4270,6 +4272,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.batchResolutionProfileCmb, profile);
+        refreshResolutionProfileCmb(data.gpuResolutionProfileCmb, profile);
         resolutionProfileCmb_changed();
       }
       catch (Throwable ex) {
@@ -4578,25 +4581,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void renderImageButton_actionPerformed() {
-    // TODO
-    if (getCurrFlame() != null) {
-      try {
-        Flame flame = getCurrFlame();
-        new FACLFlameWriter().writeFlame(flame, "D:\\DEV\\eclipse_pulsar_workspace\\JWildfire\\FAEngine\\test\\test2.flam3");
-
-        FACLRenderResult res = FACLRenderTools.invokeFACLRender("D:\\DEV\\eclipse_pulsar_workspace\\JWildfire\\FAEngine\\test\\test2.flam3", 800, 600, 500);
-        System.out.println(res.getCommand());
-        System.out.println(res.getReturnCode());
-        System.out.println(res.getMessage());
-      }
-      catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      return;
-    }
-
-    // TODO
     if (mainRenderThread != null) {
       mainRenderThread.setForceAbort();
       while (mainRenderThread.isFinished()) {

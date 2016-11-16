@@ -229,6 +229,8 @@ public class TinaControllerParameter {
   public JComboBox pResolutionProfileCmb;
   public JComboBox pBatchQualityProfileCmb;
   public JComboBox pBatchResolutionProfileCmb;
+  public JComboBox gpuQualityProfileCmb;
+  public JComboBox gpuResolutionProfileCmb;
   public JComboBox pInteractiveResolutionProfileCmb;
   public JComboBox pSWFAnimatorResolutionProfileCmb;
   public JComboBox swfAnimatorQualityProfileCmb;
@@ -1090,7 +1092,8 @@ public class TinaControllerParameter {
       JSlider tinaSolidRenderingShadowSmoothRadiusSlider, JWFNumberField tinaSolidRenderingShadowmapBiasREd, JSlider tinaSolidRenderingShadowmapBiasSlider,
       JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl, JButton resetPostBokehSettingsBtn, JWFNumberField postBokehIntensityREd, JSlider postBokehIntensitySlider,
       JWFNumberField postBokehBrightnessREd, JSlider postBokehBrightnessSlider, JWFNumberField postBokehSizeREd, JSlider postBokehSizeSlider,
-      JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb) {
+      JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb,
+      JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1278,6 +1281,8 @@ public class TinaControllerParameter {
     this.postBokehActivationREd = postBokehActivationREd;
     this.postBokehActivationSlider = postBokehActivationSlider;
     this.postBokehFilterKernelCmb = postBokehFilterKernelCmb;
+    this.gpuQualityProfileCmb = gpuQualityProfileCmb;
+    this.gpuResolutionProfileCmb = gpuResolutionProfileCmb;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

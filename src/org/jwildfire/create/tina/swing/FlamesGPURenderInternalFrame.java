@@ -115,7 +115,6 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
   private JButton interactiveLoadFlameFromClipboardButton;
   private JButton interactiveLoadFlameButton;
   private JButton interactiveFlameToClipboardButton;
-  private JButton interactiveStopButton;
   private JButton interactiveSaveFlameButton;
   private JButton interactiveSaveImageButton;
   private JSplitPane interactiveCenterSplitPane;
@@ -125,27 +124,28 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
   private JTextArea interactiveStatsTextArea;
   private JToggleButton interactiveHalfSizeButton;
   private JComboBox interactiveResolutionProfileCmb;
+  private JComboBox interactiveQualityProfileCmb;
   private JButton interactiveFlameToEditorButton;
   private JButton interactiveLoadFlameFromMainButton;
   private JLabel label_1;
+  private JLabel label_2;
   private JPanel panel_27;
   private JPanel panel_28;
   private JPanel panel_29;
   private JPanel panel_36;
-  private JPanel panel_30;
-  private JPanel panel_31;
+  private JPanel panel_37;
   private JPanel panel_32;
   private JPanel panel_33;
+  private JPanel panel_34;
   private JPanel panel_35;
   private JPanel panel_17;
   private JPanel panel_18;
   private JPanel panel_110;
-  private JToggleButton interactiveRendererShowStatsButton;
-  private JToggleButton interactiveRendererShowPreviewButton;
   private JToggleButton interactiveFullSizeButton;
   private JToggleButton interactiveQuarterSizeButton;
   private JPanel panel;
   private JButton interactiveSaveZBufferButton;
+  private JLabel lblGpuRenderInfo;
 
   private JPanel getInteractiveNorthPanel() {
     if (interactiveNorthPanel == null) {
@@ -159,6 +159,7 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       interactiveNorthPanel.add(getPanel_28());
       interactiveNorthPanel.add(getPanel_32());
       interactiveNorthPanel.add(getPanel_33());
+      interactiveNorthPanel.add(getPanel_34());
       interactiveNorthPanel.add(getPanel_35());
     }
     return interactiveNorthPanel;
@@ -248,25 +249,6 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     return interactiveFlameToClipboardButton;
   }
 
-  JButton getInteractiveStopButton() {
-    if (interactiveStopButton == null) {
-      interactiveStopButton = new JButton();
-      interactiveStopButton.setMinimumSize(new Dimension(80, 24));
-      interactiveStopButton.setMaximumSize(new Dimension(150, 24));
-      interactiveStopButton.setToolTipText("Stop the render and free associated ressources");
-      interactiveStopButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.getGpuRendererCtrl().stopButton_clicked();
-        }
-      });
-      interactiveStopButton.setText("Stop");
-      interactiveStopButton.setPreferredSize(new Dimension(125, 24));
-      interactiveStopButton.setMnemonic(KeyEvent.VK_D);
-      interactiveStopButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-    }
-    return interactiveStopButton;
-  }
-
   JButton getInteractiveSaveFlameButton() {
     if (interactiveSaveFlameButton == null) {
       interactiveSaveFlameButton = new JButton();
@@ -290,14 +272,14 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     if (interactiveSaveImageButton == null) {
       interactiveSaveImageButton = new JButton();
       interactiveSaveImageButton.setMinimumSize(new Dimension(100, 24));
-      interactiveSaveImageButton.setMaximumSize(new Dimension(160, 24));
+      interactiveSaveImageButton.setMaximumSize(new Dimension(160, 48));
       interactiveSaveImageButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getGpuRendererCtrl().saveImageButton_clicked();
         }
       });
       interactiveSaveImageButton.setText("Save image");
-      interactiveSaveImageButton.setPreferredSize(new Dimension(125, 24));
+      interactiveSaveImageButton.setPreferredSize(new Dimension(125, 48));
       interactiveSaveImageButton.setMnemonic(KeyEvent.VK_I);
       interactiveSaveImageButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
@@ -318,7 +300,7 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
   JPanel getInteractiveCenterTopPanel() {
     if (interactiveCenterTopPanel == null) {
       interactiveCenterTopPanel = new JPanel();
-      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "Progressive preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+      interactiveCenterTopPanel.setBorder(new TitledBorder(null, "GPU render result", TitledBorder.LEADING, TitledBorder.TOP, null, null));
       interactiveCenterTopPanel.setLayout(new BorderLayout(0, 0));
     }
     return interactiveCenterTopPanel;
@@ -373,6 +355,25 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     return interactiveResolutionProfileCmb;
   }
 
+  JComboBox getInteractiveQualityProfileCmb() {
+    if (interactiveQualityProfileCmb == null) {
+      interactiveQualityProfileCmb = new JComboBox();
+      interactiveQualityProfileCmb.setMaximumSize(new Dimension(32767, 24));
+      interactiveQualityProfileCmb.setMinimumSize(new Dimension(100, 24));
+      interactiveQualityProfileCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null && tinaController.getGpuRendererCtrl() != null) {
+            tinaController.getGpuRendererCtrl().qualityProfile_changed();
+          }
+        }
+      });
+      interactiveQualityProfileCmb.setPreferredSize(new Dimension(125, 24));
+      interactiveQualityProfileCmb.setMaximumRowCount(32);
+      interactiveQualityProfileCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return interactiveQualityProfileCmb;
+  }
+
   public JButton getInteractiveFlameToEditorButton() {
     return interactiveFlameToEditorButton;
   }
@@ -390,6 +391,17 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       label_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return label_1;
+  }
+
+  private JLabel getLabel_2() {
+    if (label_2 == null) {
+      label_2 = new JLabel();
+      label_2.setMinimumSize(new Dimension(80, 22));
+      label_2.setText("Quality");
+      label_2.setPreferredSize(new Dimension(62, 22));
+      label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return label_2;
   }
 
   private JPanel getPanel_27() {
@@ -428,7 +440,7 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel_28.setLayout(new BoxLayout(panel_28, BoxLayout.Y_AXIS));
       panel_28.add(getPanel_36());
       panel_28.add(getPanel_29());
-      panel_28.add(getPanel_30());
+      panel_28.add(getPanel_37());
     }
     return panel_28;
   }
@@ -441,6 +453,16 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel_29.add(getInteractiveResolutionProfileCmb());
     }
     return panel_29;
+  }
+
+  private JPanel getPanel_37() {
+    if (panel_37 == null) {
+      panel_37 = new JPanel();
+      panel_37.setLayout(new BoxLayout(panel_37, BoxLayout.X_AXIS));
+      panel_37.add(getLabel_2());
+      panel_37.add(getInteractiveQualityProfileCmb());
+    }
+    return panel_37;
   }
 
   private JPanel getPanel_36() {
@@ -468,22 +490,6 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     return panel_36;
   }
 
-  private JPanel getPanel_30() {
-    if (panel_30 == null) {
-      panel_30 = new JPanel();
-      panel_30.setLayout(new BoxLayout(panel_30, BoxLayout.X_AXIS));
-    }
-    return panel_30;
-  }
-
-  private JPanel getPanel_31() {
-    if (panel_31 == null) {
-      panel_31 = new JPanel();
-      panel_31.setLayout(new BoxLayout(panel_31, BoxLayout.X_AXIS));
-    }
-    return panel_31;
-  }
-
   private JPanel getPanel_32() {
     if (panel_32 == null) {
       panel_32 = new JPanel();
@@ -491,9 +497,19 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel_32.setMinimumSize(new Dimension(200, 10));
       panel_32.setMaximumSize(new Dimension(250, 32767));
       panel_32.setLayout(new BoxLayout(panel_32, BoxLayout.Y_AXIS));
-      panel_32.add(getPanel_31());
     }
     return panel_32;
+  }
+
+  private JPanel getPanel_34() {
+    if (panel_34 == null) {
+      panel_34 = new JPanel();
+      panel_34.setBorder(new EmptyBorder(0, 11, 9, 11));
+      panel_34.setMinimumSize(new Dimension(200, 10));
+      panel_34.setMaximumSize(new Dimension(250, 32767));
+      panel_34.setLayout(new BoxLayout(panel_34, BoxLayout.Y_AXIS));
+    }
+    return panel_34;
   }
 
   private JPanel getPanel_33() {
@@ -542,7 +558,6 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel_17.setMaximumSize(new Dimension(150, 32767));
       panel_17.setLayout(new BoxLayout(panel_17, BoxLayout.Y_AXIS));
       panel_17.add(getPanel_18());
-      panel_17.add(getInteractiveStopButton());
     }
     return panel_17;
   }
@@ -558,50 +573,18 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
   private JPanel getPanel_110() {
     if (panel_110 == null) {
       panel_110 = new JPanel();
-      panel_110.setPreferredSize(new Dimension(10, 32));
+      panel_110.setPreferredSize(new Dimension(10, 24));
       panel_110.setLayout(null);
 
-      interactiveRendererShowStatsButton = new JToggleButton();
-      interactiveRendererShowStatsButton.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
-      interactiveRendererShowStatsButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null) {
-            tinaController.getGpuRendererCtrl().showStatsBtn_changed();
-          }
-        }
-      });
-      interactiveRendererShowStatsButton.setText("Stats");
-      interactiveRendererShowStatsButton.setToolTipText("Show statistics (may slightly slow down rendering)");
-      interactiveRendererShowStatsButton.setSelected(true);
-      interactiveRendererShowStatsButton.setPreferredSize(new Dimension(42, 24));
-      interactiveRendererShowStatsButton.setBounds(4, 4, 72, 24);
-      panel_110.add(interactiveRendererShowStatsButton);
-
-      interactiveRendererShowPreviewButton = new JToggleButton();
-      interactiveRendererShowPreviewButton.setFont(Prefs.getPrefs().getFont("SansSerif", Font.PLAIN, 12));
-      interactiveRendererShowPreviewButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController != null) {
-            tinaController.getGpuRendererCtrl().showPreviewBtn_changed();
-          }
-        }
-      });
-      interactiveRendererShowPreviewButton.setToolTipText("Show previews (may slow down rendering)");
-      interactiveRendererShowPreviewButton.setText("Preview");
-      interactiveRendererShowPreviewButton.setSelected(true);
-      interactiveRendererShowPreviewButton.setPreferredSize(new Dimension(42, 24));
-      interactiveRendererShowPreviewButton.setBounds(81, 4, 72, 24);
-      panel_110.add(interactiveRendererShowPreviewButton);
+      lblGpuRenderInfo = new JLabel();
+      lblGpuRenderInfo.setText("GPU render info");
+      lblGpuRenderInfo.setPreferredSize(new Dimension(62, 22));
+      lblGpuRenderInfo.setMinimumSize(new Dimension(80, 22));
+      lblGpuRenderInfo.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGpuRenderInfo.setBounds(6, 4, 181, 14);
+      panel_110.add(lblGpuRenderInfo);
     }
     return panel_110;
-  }
-
-  public JToggleButton getInteractiveRendererShowStatsButton() {
-    return interactiveRendererShowStatsButton;
-  }
-
-  public JToggleButton getInteractiveRendererShowPreviewButton() {
-    return interactiveRendererShowPreviewButton;
   }
 
   public void setTinaController(TinaController tinaController) {
@@ -655,5 +638,9 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel.add(getInteractiveSaveImageButton());
     }
     return panel;
+  }
+
+  public JLabel getLblGpuRenderInfo() {
+    return lblGpuRenderInfo;
   }
 }
