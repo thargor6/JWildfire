@@ -26,6 +26,8 @@ import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -54,11 +56,16 @@ import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
 
 public class FlamesGPURenderController {
+  private enum State {
+    RENDERING, IDLE
+  }
+
   private final TinaController parentCtrl;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
   private final JButton loadFlameButton;
   private final JButton fromClipboardButton;
+  private final JButton fromEditorButton;
   private final JButton toClipboardButton;
   private final JButton saveImageButton;
   private final JButton saveFlameButton;
@@ -69,18 +76,23 @@ public class FlamesGPURenderController {
   private final JComboBox interactiveResolutionProfileCmb;
   private final JComboBox interactiveQualityProfileCmb;
   private final JPanel imageRootPanel;
+  private final JPanel progressPanel;
   private JScrollPane imageScrollPane;
   private final JTextArea statsTextArea;
   private SimpleImage image;
   private Flame currFlame;
   private boolean refreshing = false;
   private final JLabel gpuRenderInfoLbl;
+  private final Icon loaderIcon;
+  private JLabel loaderLabel;
+  private State state = State.IDLE;
 
   public FlamesGPURenderController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pToClipboardButton, JButton pSaveImageButton,
       JButton pSaveFlameButton, JButton pToEditorButton, JPanel pImagePanel, JTextArea pStatsTextArea,
       JToggleButton pHalveSizeButton, JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb, JLabel pGpuRenderInfoLbl) {
+      JComboBox pInteractiveResolutionProfileCmb, JComboBox pInteractiveQualityProfileCmb, JLabel pGpuRenderInfoLbl,
+      JPanel pProgressPanel, JButton pFromEditorButton) {
 
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -95,7 +107,9 @@ public class FlamesGPURenderController {
     quarterSizeButton = pQuarterSizeButton;
     fullSizeButton = pFullSizeButton;
     toEditorButton = pToEditorButton;
+    fromEditorButton = pFromEditorButton;
     gpuRenderInfoLbl = pGpuRenderInfoLbl;
+    progressPanel = pProgressPanel;
 
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     interactiveQualityProfileCmb = pInteractiveQualityProfileCmb;
@@ -103,6 +117,7 @@ public class FlamesGPURenderController {
     // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
+    loaderIcon = new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/ajax-loader.gif"));
     enableControls();
   }
 
@@ -155,10 +170,20 @@ public class FlamesGPURenderController {
   }
 
   public void enableControls() {
-    toClipboardButton.setEnabled(currFlame != null);
-    saveFlameButton.setEnabled(currFlame != null);
-    toEditorButton.setEnabled(currFlame != null);
-    saveImageButton.setEnabled(image != null);
+    boolean isRendering = State.RENDERING.equals(state);
+    fromClipboardButton.setEnabled(!isRendering);
+    fromEditorButton.setEnabled(!isRendering);
+    loadFlameButton.setEnabled(!isRendering);
+    halveSizeButton.setEnabled(!isRendering);
+    quarterSizeButton.setEnabled(!isRendering);
+    fullSizeButton.setEnabled(!isRendering);
+    interactiveResolutionProfileCmb.setEnabled(!isRendering);
+    interactiveQualityProfileCmb.setEnabled(!isRendering);
+
+    toClipboardButton.setEnabled(currFlame != null && !isRendering);
+    saveFlameButton.setEnabled(currFlame != null && !isRendering);
+    toEditorButton.setEnabled(currFlame != null && !isRendering);
+    saveImageButton.setEnabled(image != null && !isRendering);
   }
 
   public void fromClipboardButton_clicked() {
@@ -247,76 +272,103 @@ public class FlamesGPURenderController {
       return;
     }
     try {
-      try {
-        clearScreen();
-        ResolutionProfile resProfile = getResolutionProfile();
-        QualityProfile qualityProfile = getQualityProfile();
-        int width = resProfile.getWidth();
-        int height = resProfile.getHeight();
-        if (quarterSizeButton.isSelected()) {
-          width /= 4;
-          height /= 4;
-        }
-        else if (halveSizeButton.isSelected()) {
-          width /= 2;
-          height /= 2;
-        }
-        enableControls();
+      clearScreen();
+      ResolutionProfile resProfile = getResolutionProfile();
+      QualityProfile qualityProfile = getQualityProfile();
+      int width = resProfile.getWidth();
+      int height = resProfile.getHeight();
+      if (quarterSizeButton.isSelected()) {
+        width /= 4;
+        height /= 4;
+      }
+      else if (halveSizeButton.isSelected()) {
+        width /= 2;
+        height /= 2;
+      }
+      setState(State.RENDERING);
 
-        File tmpFile = File.createTempFile(System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
-        try {
-          new FACLFlameWriter().writeFlame(getCurrFlame(), tmpFile.getAbsolutePath());
-          long t0 = System.currentTimeMillis();
-          FACLRenderResult renderResult = FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, qualityProfile.getQuality());
-          long t1 = System.currentTimeMillis();
-          try {
-            if (renderResult.getReturnCode() == 0) {
-              if (renderResult.getMessage() != null) {
-                statsTextArea.setText(renderResult.getMessage() + "\n");
-              }
-              SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
-              if (img.getImageWidth() == image.getImageWidth() && img.getImageHeight() == image.getImageHeight()) {
-                image.setBufferedImage(img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
-                imageRootPanel.repaint();
-                gpuRenderInfoLbl.setText("Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
-              }
-              else {
-                throw new Exception("Invalid image size <" + img.getImageWidth() + "x" + img.getImageHeight() + ">");
-              }
-            }
-            else {
-              statsTextArea.setText((renderResult.getMessage() != null ? renderResult.getMessage() : "") + "\n\n" + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
-            }
-          }
-          finally {
-            try {
-              if (renderResult.getOutputFilename() != null && !renderResult.getOutputFilename().isEmpty()) {
-                File f = new File(renderResult.getOutputFilename());
-                if (f.exists()) {
-                  if (!f.delete()) {
-                    f.deleteOnExit();
-                  }
-                }
-              }
-            }
-            catch (Exception innerError) {
-              innerError.printStackTrace();
-            }
-          }
-        }
-        finally {
-          if (!tmpFile.delete()) {
-            tmpFile.deleteOnExit();
-          }
-        }
-        enableControls();
-      }
-      catch (Throwable ex) {
-        statsTextArea.setText(Tools.getStacktrace(ex));
-      }
+      GPURenderThread renderThread = new GPURenderThread(width, height, qualityProfile.getQuality());
+      new Thread(renderThread).start();
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
+    }
+  }
+
+  private class GPURenderThread implements Runnable {
+    private final int width, height, quality;
+    private Throwable error;
+    private boolean failed;
+
+    public GPURenderThread(int width, int height, int quality) {
+      this.width = width;
+      this.height = height;
+      this.quality = quality;
+    }
+
+    @Override
+    public void run() {
+      failed = false;
+      try {
+        try {
+          File tmpFile = File.createTempFile(System.currentTimeMillis() + "_" + Thread.currentThread().getId(), ".flam3");
+          try {
+            new FACLFlameWriter().writeFlame(getCurrFlame(), tmpFile.getAbsolutePath());
+            long t0 = System.currentTimeMillis();
+            FACLRenderResult renderResult = FACLRenderTools.invokeFACLRender(tmpFile.getAbsolutePath(), width, height, quality);
+            long t1 = System.currentTimeMillis();
+            try {
+              if (renderResult.getReturnCode() == 0) {
+                if (renderResult.getMessage() != null) {
+                  statsTextArea.setText(renderResult.getMessage() + "\n");
+                }
+                SimpleImage img = new ImageReader().loadImage(renderResult.getOutputFilename());
+                if (img.getImageWidth() == image.getImageWidth() && img.getImageHeight() == image.getImageHeight()) {
+                  image.setBufferedImage(img.getBufferedImg(), img.getImageWidth(), img.getImageHeight());
+                  imageRootPanel.repaint();
+                  gpuRenderInfoLbl.setText("Elapsed: " + Tools.doubleToString((t1 - t0) / 1000.0) + "s");
+                }
+                else {
+                  throw new Exception("Invalid image size <" + img.getImageWidth() + "x" + img.getImageHeight() + ">");
+                }
+              }
+              else {
+                statsTextArea.setText((renderResult.getMessage() != null ? renderResult.getMessage() : "") + "\n\n" + (renderResult.getCommand() != null ? renderResult.getCommand() : ""));
+              }
+            }
+            finally {
+              try {
+                if (renderResult.getOutputFilename() != null && !renderResult.getOutputFilename().isEmpty()) {
+                  File f = new File(renderResult.getOutputFilename());
+                  if (f.exists()) {
+                    if (!f.delete()) {
+                      f.deleteOnExit();
+                    }
+                  }
+                }
+              }
+              catch (Exception innerError) {
+                innerError.printStackTrace();
+              }
+            }
+          }
+          finally {
+            if (!tmpFile.delete()) {
+              tmpFile.deleteOnExit();
+            }
+          }
+        }
+        catch (Throwable ex) {
+          failed = true;
+          error = ex;
+        }
+      }
+      finally {
+        setState(State.IDLE);
+        if (failed) {
+          statsTextArea.setText(Tools.getStacktrace(error));
+        }
+      }
     }
   }
 
@@ -501,6 +553,37 @@ public class FlamesGPURenderController {
       // Nothing special here
       changeRenderSizeButton_clicked();
     }
+  }
+
+  private void setState(State pState) {
+    state = pState;
+    enableControls();
+    if (state == State.RENDERING) {
+      showLoaderLabel(true);
+    }
+    else {
+      showLoaderLabel(false);
+    }
+  }
+
+  private void showLoaderLabel(boolean pShow) {
+    if (pShow) {
+      if (loaderLabel != null) {
+        progressPanel.remove(loaderLabel);
+        loaderLabel = null;
+      }
+      loaderLabel = new JLabel(loaderIcon);
+      progressPanel.add(loaderLabel, BorderLayout.CENTER);
+    }
+    else {
+      if (loaderLabel != null) {
+        progressPanel.remove(loaderLabel);
+        loaderLabel = null;
+      }
+    }
+    progressPanel.invalidate();
+    progressPanel.validate();
+    progressPanel.repaint();
   }
 
 }

@@ -139,7 +139,6 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
   private JPanel panel_34;
   private JPanel panel_35;
   private JPanel panel_17;
-  private JPanel panel_18;
   private JPanel panel_110;
   private JToggleButton interactiveFullSizeButton;
   private JToggleButton interactiveQuarterSizeButton;
@@ -490,13 +489,13 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
     return panel_36;
   }
 
-  private JPanel getPanel_32() {
+  JPanel getPanel_32() {
     if (panel_32 == null) {
       panel_32 = new JPanel();
       panel_32.setBorder(new EmptyBorder(0, 11, 9, 11));
       panel_32.setMinimumSize(new Dimension(200, 10));
       panel_32.setMaximumSize(new Dimension(250, 32767));
-      panel_32.setLayout(new BoxLayout(panel_32, BoxLayout.Y_AXIS));
+      panel_32.setLayout(new BorderLayout(0, 0));
     }
     return panel_32;
   }
@@ -556,18 +555,9 @@ public class FlamesGPURenderInternalFrame extends JInternalFrame {
       panel_17 = new JPanel();
       panel_17.setMinimumSize(new Dimension(110, 10));
       panel_17.setMaximumSize(new Dimension(150, 32767));
-      panel_17.setLayout(new BoxLayout(panel_17, BoxLayout.Y_AXIS));
-      panel_17.add(getPanel_18());
+      panel_17.setLayout(new BoxLayout(panel_17, BoxLayout.X_AXIS));
     }
     return panel_17;
-  }
-
-  private JPanel getPanel_18() {
-    if (panel_18 == null) {
-      panel_18 = new JPanel();
-      panel_18.setMaximumSize(new Dimension(32767, 24));
-    }
-    return panel_18;
   }
 
   private JPanel getPanel_110() {

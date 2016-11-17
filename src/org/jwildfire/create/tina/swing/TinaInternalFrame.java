@@ -5272,7 +5272,8 @@ public class TinaInternalFrame extends JInternalFrame {
           gpuRendererFrame.getInteractiveCenterTopPanel(), gpuRendererFrame.getInteractiveStatsTextArea(),
           gpuRendererFrame.getInteractiveHalveSizeButton(), gpuRendererFrame.getInteractiveQuarterSizeButton(),
           gpuRendererFrame.getInteractiveFullSizeButton(), gpuRendererFrame.getInteractiveResolutionProfileCmb(),
-          gpuRendererFrame.getInteractiveQualityProfileCmb(), gpuRendererFrame.getLblGpuRenderInfo()));
+          gpuRendererFrame.getInteractiveQualityProfileCmb(), gpuRendererFrame.getLblGpuRenderInfo(), gpuRendererFrame.getPanel_32(),
+          gpuRendererFrame.getInteractiveLoadFlameFromMainButton()));
       tinaController.getGpuRendererCtrl().enableControls();
 
       JComboBox[] globalScriptCmbArray = {
