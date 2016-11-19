@@ -71,7 +71,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
 
     for (int i = 0; i < pWidth; i++) {
       for (int j = 0; j < pHeight; j++) {
-        zBuf[i][j] = NormalsCalculator.ZBUF_ZMIN;
+        nxBuf[i][j] = zBuf[i][j] = NormalsCalculator.ZBUF_ZMIN;
       }
     }
 
