@@ -319,12 +319,12 @@ public class PrefsReader {
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
         //
-        setupDefaultProfiles(pPrefs);
       }
       finally {
         inputStream.close();
       }
     }
+    setupDefaultProfiles(pPrefs);
   }
 
   private void addMacroButton(Prefs prefs, String caption, String hint, String script) {
