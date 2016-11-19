@@ -454,7 +454,7 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  private LookAndFeelType lookAndFeelType = LookAndFeelType.NIMBUS;
+  private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
   private String lookAndFeelTheme = "";
 
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)

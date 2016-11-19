@@ -809,12 +809,14 @@ public class Desktop extends JApplet {
     catch (Throwable ex) {
       ex.printStackTrace();
     }
-    try {
-      LookAndFeelType.NIMBUS.changeTo();
-      return;
-    }
-    catch (Throwable ex) {
-      ex.printStackTrace();
+    if (!Tools.OSType.MAC.equals(Tools.getOSType())) {
+      try {
+        LookAndFeelType.NIMBUS.changeTo();
+        return;
+      }
+      catch (Throwable ex) {
+        ex.printStackTrace();
+      }
     }
     try {
       LookAndFeelType.SYSTEM.changeTo();
