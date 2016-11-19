@@ -1074,7 +1074,7 @@ public class EnvelopeDlgController {
   public void importRawDataFromFile() {
     try {
       Prefs prefs = Prefs.getPrefs();
-      JFileChooser chooser = new TxtFileChooser(prefs);
+      JFileChooser chooser = new SplineDataFileChooser(prefs);
       if (prefs.getTinaRawMotionDataPath() != null) {
         try {
           chooser.setCurrentDirectory(new File(prefs.getTinaRawMotionDataPath()));
@@ -1132,7 +1132,7 @@ public class EnvelopeDlgController {
     StringTokenizer rowTokenizer = new StringTokenizer(pData, "\n\r");
     while (rowTokenizer.hasMoreElements()) {
       String row = rowTokenizer.nextToken().trim();
-      if (row.length() > 0 && !row.startsWith("#") && !row.startsWith(";")) {
+      if (row.length() > 0 && !row.startsWith("#") && !row.startsWith(";") && !row.startsWith("DFSP")) {
         List<Double> col = new ArrayList<Double>();
         rows.add(col);
         StringTokenizer colTokenizer = new StringTokenizer(row, " \t");
@@ -1173,7 +1173,7 @@ public class EnvelopeDlgController {
 
   public void exportRawDataToFile() {
     Prefs prefs = Prefs.getPrefs();
-    JFileChooser chooser = new TxtFileChooser(prefs);
+    JFileChooser chooser = new SplineDataFileChooser(prefs);
     if (prefs.getTinaRawMotionDataPath() != null) {
       try {
         chooser.setCurrentDirectory(new File(prefs.getTinaRawMotionDataPath()));
@@ -1190,9 +1190,9 @@ public class EnvelopeDlgController {
         ex.printStackTrace();
       }
     }
-    if (chooser.showOpenDialog(envelopePanel) == JFileChooser.APPROVE_OPTION) {
+    if (chooser.showSaveDialog(envelopePanel) == JFileChooser.APPROVE_OPTION) {
       try {
-        String motionData = getRawMotionData();
+        String motionData = getRawMotionData(chooser.getSelectedFile().getAbsolutePath());
         Tools.writeUTF8Textfile(chooser.getSelectedFile().getAbsolutePath(), motionData);
       }
       catch (Exception ex) {
@@ -1202,14 +1202,18 @@ public class EnvelopeDlgController {
   }
 
   public void exportRawDataToClipboard() {
-    String motionData = getRawMotionData();
+    String motionData = getRawMotionData("");
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     StringSelection data = new StringSelection(motionData);
     clipboard.setContents(data, data);
   }
 
-  private String getRawMotionData() {
+  private String getRawMotionData(String pFilename) {
+    boolean fusionCompatible = Tools.FILEEXT_SPL.equalsIgnoreCase(Tools.getFileExt(pFilename));
     StringBuilder sb = new StringBuilder();
+    if (fusionCompatible) {
+      sb.append("DFSP\n");
+    }
     int x[] = envelope.getX();
     double y[] = envelope.getY();
     for (int i = 0; i < x.length; i++) {

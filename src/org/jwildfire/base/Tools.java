@@ -56,7 +56,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.00 BETA 7 (14.11.2016)";
+  public static final String APP_VERSION = "3.00 (19.11.2016)";
 
   public static final boolean SPECIAL_VERSION = false;
 
@@ -87,6 +87,7 @@ public class Tools {
   public static final String FILEEXT_OBJ = "obj";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_PNS = "pns";
+  public static final String FILEEXT_SPL = "spl";
   public static final String FILEEXT_SUNFLOW_SCENE = "sc";
   public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";
@@ -527,6 +528,14 @@ public class Tools {
     return pName;
   }
 
+  public static String getFileExt(String pName) {
+    int p = pName.lastIndexOf(".");
+    if (p > 0 && p < pName.length() - 1) {
+      return pName.substring(p + 1, pName.length());
+    }
+    return pName;
+  }
+
   public static boolean stringEquals(String a, String b) {
     if (a == null)
       return b == null;
@@ -618,5 +627,21 @@ public class Tools {
     catch (Exception innerError) {
       throw new RuntimeException(innerError);
     }
+  }
+
+  public enum OSType {
+    WINDOWS, MAC, LINUX, UNKNOWN
+  }
+
+  public static OSType getOSType() {
+    String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+    if (os.startsWith("mac os"))
+      return OSType.MAC;
+    else if (os.startsWith("windows"))
+      return OSType.WINDOWS;
+    else if (os.startsWith("linux"))
+      return OSType.LINUX;
+    else
+      return OSType.UNKNOWN;
   }
 }
