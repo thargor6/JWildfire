@@ -42,7 +42,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 public class MutaGenInternalFrame extends JInternalFrame {
   private TinaController tinaController;
@@ -62,7 +62,7 @@ public class MutaGenInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(1000, 700);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 80, Desktop.DEFAULT_WINDOW_TOP + 20));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 80, JWildfire.DEFAULT_WINDOW_TOP + 20));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
