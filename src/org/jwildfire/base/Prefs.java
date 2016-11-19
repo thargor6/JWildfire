@@ -104,7 +104,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
-  static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.2";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.3";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality";
@@ -275,7 +275,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaSaveFlamesWhenImageIsSaved = false;
 
   @Property(description = "Used a colored display for affine transforms", category = PropertyCategory.TINA)
-  private boolean tinaEditorControlsWithColor = false;
+  private boolean tinaEditorControlsWithColor = true;
 
   @Property(description = "Turn on progressive preview-display in the main-editor by default", category = PropertyCategory.TINA)
   private boolean tinaEditorProgressivePreview = true;
