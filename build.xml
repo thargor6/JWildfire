@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="3.00BETA" />
+  <property name="release" value="3.00" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -52,6 +52,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
@@ -75,7 +76,7 @@
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
       <manifest>
-        <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
+        <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
       </manifest>			
 		</jar>
 	</target>
