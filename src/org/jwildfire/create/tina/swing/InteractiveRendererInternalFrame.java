@@ -45,7 +45,7 @@ import javax.swing.border.TitledBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 public class InteractiveRendererInternalFrame extends JInternalFrame {
   private TinaController tinaController; //  @jve:decl-index=0:
@@ -66,7 +66,7 @@ public class InteractiveRendererInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(917, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 200, Desktop.DEFAULT_WINDOW_TOP + 80));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 200, JWildfire.DEFAULT_WINDOW_TOP + 80));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);

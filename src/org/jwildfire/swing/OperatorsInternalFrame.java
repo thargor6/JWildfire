@@ -31,7 +31,7 @@ import org.jwildfire.transform.TransformersList;
 
 public class OperatorsInternalFrame extends JInternalFrame {
   private MainController mainController = null; // @jve:decl-index=0:
-  private Desktop desktop = null;// @jve:decl-index=0:
+  private JWildfire desktop = null;// @jve:decl-index=0:
   private Object currTransformerPropertyPanel = null; // @jve:decl-index=0:
   private Object currCreatorPropertyPanel = null; // @jve:decl-index=0:
   private Object currLoaderPropertyPanel = null; // @jve:decl-index=0:
@@ -851,7 +851,7 @@ public class OperatorsInternalFrame extends JInternalFrame {
     this.mainController = mainController;
   }
 
-  public void setDesktop(Desktop desktop) {
+  public void setDesktop(JWildfire desktop) {
     this.desktop = desktop;
   }
 

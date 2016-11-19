@@ -22,7 +22,7 @@ import org.jwildfire.base.Unchecker;
 
 public class DefaultInternalFrameHolder<T extends JInternalFrame> extends InternalFrameHolder<T> {
 
-  public DefaultInternalFrameHolder(Class<T> frameType, Desktop desktop, String windowPrefsName, String menuCaption) {
+  public DefaultInternalFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
     super(frameType, desktop, windowPrefsName, menuCaption);
   }
 

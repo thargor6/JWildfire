@@ -13,12 +13,12 @@ import org.jwildfire.base.WindowPrefs;
 public abstract class InternalFrameHolder<T extends JInternalFrame> {
   protected JCheckBoxMenuItem menuItem = null;
   protected T internalFrame;
-  protected final Desktop desktop;
+  protected final JWildfire desktop;
   protected final Class<T> frameType;
   protected final String windowPrefsName;
   protected final String menuCaption;
 
-  public InternalFrameHolder(Class<T> frameType, Desktop desktop, String windowPrefsName, String menuCaption) {
+  public InternalFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
     this.frameType = frameType;
     this.desktop = desktop;
     this.windowPrefsName = windowPrefsName;

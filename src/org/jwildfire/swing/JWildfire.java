@@ -79,12 +79,12 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.transform.BalancingTransformer;
 
-public class Desktop extends JApplet {
+public class JWildfire extends JApplet {
   private final List<InternalFrameHolder<?>> mainInternalFrames;
   private final List<InternalFrameHolder<?>> settingsInternalFrames;
   private final List<InternalFrameHolder<?>> helpInternalFrames;
 
-  public Desktop() {
+  public JWildfire() {
     mainInternalFrames = new ArrayList<>();
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(NavigatorInternalFrame.class, this, WindowPrefs.WINDOW_NAVIGATOR, "Navigator"));
 
@@ -109,7 +109,7 @@ public class Desktop extends JApplet {
 
       @Override
       protected LookAndFeelInternalFrame createInternalFrame() {
-        LookAndFeelInternalFrame frame = new LookAndFeelInternalFrame(Desktop.this, mainDesktopPane, errorHandler, Prefs.getPrefs());
+        LookAndFeelInternalFrame frame = new LookAndFeelInternalFrame(JWildfire.this, mainDesktopPane, errorHandler, Prefs.getPrefs());
 
         applyWindowPrefs(frame);
 
@@ -782,7 +782,7 @@ public class Desktop extends JApplet {
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         setUserLookAndFeel();
-        Desktop application = new Desktop();
+        JWildfire application = new JWildfire();
         application.getJFrame().setVisible(true);
         application.initApp();
         try {

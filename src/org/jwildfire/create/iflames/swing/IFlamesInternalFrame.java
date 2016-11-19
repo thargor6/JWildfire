@@ -50,7 +50,7 @@ import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.create.tina.swing.JWFNumberField;
 import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
 import org.jwildfire.swing.StandardErrorHandler;
 
@@ -206,7 +206,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
    */
   private void initialize() {
     this.setSize(1188, 740);
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);

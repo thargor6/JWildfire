@@ -137,7 +137,7 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
@@ -200,7 +200,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
 
-  private final Desktop desktop;
+  private final JWildfire desktop;
   private final Prefs prefs;
   final ErrorHandler errorHandler;
   boolean gridRefreshing = false;
@@ -6263,7 +6263,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     relWeightsTableClicked();
   }
 
-  public Desktop getDesktop() {
+  public JWildfire getDesktop() {
     return desktop;
   }
 

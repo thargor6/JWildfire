@@ -33,14 +33,14 @@ import javax.swing.WindowConstants;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 import com.l2fprod.common.demo.OutlookBarMain;
 
 @SuppressWarnings("serial")
 public class NavigatorInternalFrame extends JInternalFrame {
   private JPanel jContentPane = null;
-  private Desktop desktop;
+  private JWildfire desktop;
   private JButton interactiveRendererButton;
 
   public NavigatorInternalFrame() {
@@ -148,7 +148,7 @@ public class NavigatorInternalFrame extends JInternalFrame {
 
   }
 
-  public void setDesktop(Desktop desktop) {
+  public void setDesktop(JWildfire desktop) {
     this.desktop = desktop;
   }
 

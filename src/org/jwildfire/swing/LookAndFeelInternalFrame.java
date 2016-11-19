@@ -42,7 +42,7 @@ import org.jwildfire.base.Prefs;
 public class LookAndFeelInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
   private final ErrorHandler errorHandler;
-  private final Desktop desktop;
+  private final JWildfire desktop;
   private final JDesktopPane rootPane;
 
   private final Prefs prefs;
@@ -51,7 +51,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
   private boolean noRefresh;
   private JButton applyToApplicationBtn;
 
-  public LookAndFeelInternalFrame(Desktop pDesktop, JDesktopPane pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
+  public LookAndFeelInternalFrame(JWildfire pDesktop, JDesktopPane pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
     desktop = pDesktop;
     noRefresh = true;
     rootPane = pRootPane;
@@ -86,7 +86,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
         }
 
         try {
-          Desktop.setUserLookAndFeel();
+          JWildfire.setUserLookAndFeel();
           applyThemeToApplication();
         }
         catch (Exception ex) {
@@ -108,7 +108,7 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
     cancelBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         try {
-          Desktop.setUserLookAndFeel();
+          JWildfire.setUserLookAndFeel();
           applyThemeToApplication();
         }
         catch (Exception ex) {

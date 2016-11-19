@@ -55,7 +55,7 @@ import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 public class DancingFlamesInternalFrame extends JInternalFrame {
   private TinaController tinaController;
@@ -75,7 +75,7 @@ public class DancingFlamesInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(1188, 700);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 20, Desktop.DEFAULT_WINDOW_TOP + 20));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 20, JWildfire.DEFAULT_WINDOW_TOP + 20));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);

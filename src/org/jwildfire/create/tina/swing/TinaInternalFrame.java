@@ -94,7 +94,7 @@ import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
 
 public class TinaInternalFrame extends JInternalFrame {
@@ -509,7 +509,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT, Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);
@@ -1194,7 +1194,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Anti-Aliasing / Filter", null, getAntialiasPanel(), null);
 
       tinaSouthTabbedPane.addTab("Gradient ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")), getTinaPalettePanel(), null);
-      tinaSouthTabbedPane.addTab("Solid rendering", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/view-preview.png")), getPanel_59(), null);
+      tinaSouthTabbedPane.addTab("Solid rendering", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")), getPanel_59(), null);
 
       tinaSouthTabbedPane.addTab("Stereo3d ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layer-novisible.png")), getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
@@ -4913,7 +4913,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaPaletteBrightnessSlider;
   }
 
-  public TinaController createController(Desktop pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame,
+  public TinaController createController(JWildfire pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenInternalFrame mutaGenFrame,
       FlameBrowserInternalFrame flameBrowserFrame, EasyMovieMakerInternalFrame easyMovieMakerFrame,
       DancingFlamesInternalFrame dancingFlamesFrame, BatchFlameRendererInternalFrame batchFlameRendererFrame,
       MeshGenInternalFrame meshGenFrame, InteractiveRendererInternalFrame interactiveRendererFrame, FlamesGPURenderInternalFrame gpuRendererFrame, HelpInternalFrame helpFrame) {
@@ -14546,7 +14546,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JTabbedPane getTabbedPane_3() {
     if (tabbedPane_3 == null) {
-      tabbedPane_3 = new JTabbedPane(JTabbedPane.LEFT);
+      tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
       tabbedPane_3.addTab("DOF", null, tinaDOFPanel, null);
       tabbedPane_3.addTab("Bokeh", null, getBokehSettingsPnl(), null);
 
@@ -14730,7 +14730,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetPostBokehSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetPostBokehSettingsBtn.setIconTextGap(2);
       resetPostBokehSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
-      resetPostBokehSettingsBtn.setBounds(115, 99, 100, 24);
+      resetPostBokehSettingsBtn.setBounds(892, 5, 100, 24);
       resetPostBokehSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       resetPostBokehSettingsBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -15630,7 +15630,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetBokehOptionsButton.setMaximumSize(new Dimension(32000, 24));
       resetBokehOptionsButton.setIconTextGap(2);
       resetBokehOptionsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      resetBokehOptionsButton.setBounds(102, 120, 100, 24);
+      resetBokehOptionsButton.setBounds(896, 5, 100, 24);
       resetBokehOptionsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
     }
     return resetBokehOptionsButton;
@@ -17226,7 +17226,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private JTabbedPane getTinaSolidRenderingPane() {
     if (tinaSolidRenderingPane == null) {
-      tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.LEFT);
+      tinaSolidRenderingPane = new JTabbedPane(JTabbedPane.TOP);
 
       tinaSolidRenderingPane.addTab("Ambient shadows", null, getPanel(), null);
       tinaSolidRenderingPane.addTab("Hard shadows", null, getPanel_4(), null);

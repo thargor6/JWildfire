@@ -45,7 +45,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private TinaController tinaController;
@@ -78,7 +78,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(600, 620);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(200 + Desktop.DEFAULT_WINDOW_LEFT, 50 + Desktop.DEFAULT_WINDOW_TOP));
+    this.setLocation(new Point(200 + JWildfire.DEFAULT_WINDOW_LEFT, 50 + JWildfire.DEFAULT_WINDOW_TOP));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);

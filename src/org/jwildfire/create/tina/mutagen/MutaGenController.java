@@ -257,7 +257,7 @@ public class MutaGenController {
         flame.setPixelsPerUnit((wScl + hScl) * 0.5 * flame.getPixelsPerUnit());
         flame.setWidth(imageWidth);
         flame.setHeight(imageHeight);
-        flame.setSampleDensity(20.0);
+        flame.setSampleDensity(18.0);
         renderer = new FlameRenderer(flame, prefs, false, false);
         RenderedFlame res = renderer.renderFlame(info);
         renderResult = res.getImage();
@@ -288,7 +288,7 @@ public class MutaGenController {
     flame.applyFastOversamplingSettings();
 
     RenderThread thread = new RenderThread(flame, pImageWidth, pImageHeight);
-    long tMax = 600;
+    long tMax = 300;
     long t0 = System.currentTimeMillis();
     new Thread(thread).start();
     while (!thread.isDone()) {
@@ -493,7 +493,7 @@ public class MutaGenController {
 
       if (selectedGenerationIdx >= 0 && selectedGenerationIdx < mutationList.size()) {
         Dimension renderSize = calcImageSize();
-        Dimension probeSize = new Dimension(60, 40);
+        Dimension probeSize = new Dimension(50, 40);
 
         MutationSet selectedSet = mutationList.get(selectedGenerationIdx);
         final int rows = MUTA_ROWS;
@@ -520,8 +520,8 @@ public class MutaGenController {
               int x = (i - centreX);
               int y = (j - centreY);
               final int MAX_ITER = 10;
-              final double MIN_RENDER_COVERAGE = 0.36;
-              final double MIN_DIFF_COVERAGE = 0.22;
+              final double MIN_RENDER_COVERAGE = 0.32;
+              final double MIN_DIFF_COVERAGE = 0.18;
               final double INVALID_COVERAGE = -1.0;
               int iter = 0;
               double bestCoverage = INVALID_COVERAGE;

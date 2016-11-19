@@ -36,7 +36,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.jwildfire.base.Prefs;
-import org.jwildfire.swing.Desktop;
+import org.jwildfire.swing.JWildfire;
 
 public class FlameBrowserInternalFrame extends JInternalFrame {
   private TinaController tinaController;
@@ -56,7 +56,7 @@ public class FlameBrowserInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(800, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-    this.setLocation(new Point(Desktop.DEFAULT_WINDOW_LEFT + 160, Desktop.DEFAULT_WINDOW_TOP + 80));
+    this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 160, JWildfire.DEFAULT_WINDOW_TOP + 80));
     this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setIconifiable(true);

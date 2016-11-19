@@ -16,7 +16,7 @@ import org.jwildfire.base.Prefs;
 
 public class PreferencesInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
-  private Desktop desktop = null;// @jve:decl-index=0:
+  private JWildfire desktop = null;// @jve:decl-index=0:
   private MainController mainController = null; //  @jve:decl-index=0:
   private Prefs prefs = null; //  @jve:decl-index=0:
   private Prefs editPrefs = null; //  @jve:decl-index=0:
@@ -67,7 +67,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
 
   }
 
-  public void setDesktop(Desktop desktop) {
+  public void setDesktop(JWildfire desktop) {
     this.desktop = desktop;
   }
 
