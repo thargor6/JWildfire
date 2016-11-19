@@ -137,10 +137,10 @@ import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
-import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
@@ -1372,8 +1372,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     final int COL_TRANSFORM = 0;
     final int COL_VARIATIONS = 1;
     final int COL_WEIGHT = 2;
-    if (prefs.isTinaEditorControlsWithColor()) {
+    if (data.toggleTriangleWithColorsButton.isSelected()) {
       data.transformationsTable.setDefaultRenderer(Object.class, new TransformationsTableCellRenderer());
+    }
+    else {
+      data.transformationsTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
     }
 
     data.transformationsTable.setModel(new DefaultTableModel() {
@@ -5305,6 +5308,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flamePanel != null) {
         flamePanel.getConfig().setWithColoredTransforms(data.toggleTriangleWithColorsButton.isSelected());
       }
+      refreshTransformationsTable();
       refreshFlameImage(true, false, 1, false, false);
     }
     finally {
