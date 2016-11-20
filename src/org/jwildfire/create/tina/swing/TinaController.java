@@ -4988,6 +4988,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (getCurrRandomizeFlame() != null) {
       saveUndoPoint();
 
+      if (!getCurrRandomizeFlame().isRenderable()) {
+        _currRandomizeFlame = getCurrFlame().makeCopy();
+      }
+
       final int MAX_ITER = 10;
       final double MIN_RENDER_COVERAGE = 0.42;
       final double MIN_DIFF_COVERAGE = 0.28;
