@@ -967,6 +967,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LOOKANDFEEL));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMES_GPU));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {

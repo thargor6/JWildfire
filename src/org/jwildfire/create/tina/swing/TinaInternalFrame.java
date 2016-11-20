@@ -1194,7 +1194,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSouthTabbedPane.addTab("Anti-Aliasing / Filter", null, getAntialiasPanel(), null);
 
       tinaSouthTabbedPane.addTab("Gradient ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-graphics-2.png")), getTinaPalettePanel(), null);
-      tinaSouthTabbedPane.addTab("Solid rendering", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")), getPanel_59(), null);
+      tinaSouthTabbedPane.addTab("3D (solid) rendering", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")), getPanel_59(), null);
 
       tinaSouthTabbedPane.addTab("Stereo3d ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/layer-novisible.png")), getPanel_82(), null);
       tinaSouthTabbedPane.addTab("Post symmetry", null, getPanel_34(), null);
@@ -7306,7 +7306,7 @@ public class TinaInternalFrame extends JInternalFrame {
           tinaController.randomizeBtn_clicked();
         }
       });
-      randomizeBtn.setToolTipText("Randomize random parameters of the currently selected flame");
+      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
       randomizeBtn.setText("Rnd");
       randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomizeBtn.setSelected(false);
@@ -7854,7 +7854,7 @@ public class TinaInternalFrame extends JInternalFrame {
     if (nonlinearScrollPane == null) {
       nonlinearScrollPane = new JScrollPane();
       nonlinearScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-      nonlinearScrollPane.setViewportBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+      nonlinearScrollPane.setViewportBorder(null);
       nonlinearScrollPane.setPreferredSize(new Dimension(318, 200));
       nonlinearScrollPane.setViewportView(getNonlinearControlsPanel());
       nonlinearScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -11668,7 +11668,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       btnQsave.setToolTipText("Quicksave the current flame");
       btnQsave.setText("Q");
-      btnQsave.setPreferredSize(new Dimension(60, 24));
+      btnQsave.setPreferredSize(new Dimension(42, 24));
       btnQsave.setMnemonic(KeyEvent.VK_Q);
       btnQsave.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
@@ -13200,9 +13200,9 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_66.setAlignmentX(Component.LEFT_ALIGNMENT);
       panel_66.setMaximumSize(new Dimension(200, 24));
       panel_66.setPreferredSize(new Dimension(125, 24));
-      panel_66.setLayout(new BoxLayout(panel_66, BoxLayout.X_AXIS));
+      panel_66.setLayout(new BorderLayout(0, 0));
       panel_66.add(getTinaSaveFlameButton());
-      panel_66.add(getBtnQsave());
+      panel_66.add(getBtnQsave(), BorderLayout.EAST);
     }
     return panel_66;
   }
@@ -14548,10 +14548,10 @@ public class TinaInternalFrame extends JInternalFrame {
     if (tabbedPane_3 == null) {
       tabbedPane_3 = new JTabbedPane(JTabbedPane.TOP);
       tabbedPane_3.addTab("DOF", null, tinaDOFPanel, null);
-      tabbedPane_3.addTab("Bokeh", null, getBokehSettingsPnl(), null);
+      tabbedPane_3.addTab("Bokeh (non-3D only)", null, getBokehSettingsPnl(), null);
 
       postBokehSettingsPnl = new JPanel();
-      tabbedPane_3.addTab("Post bokeh", null, postBokehSettingsPnl, null);
+      tabbedPane_3.addTab("Post bokeh (3D only)", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")), postBokehSettingsPnl, null);
       postBokehSettingsPnl.setLayout(null);
 
       JLabel label = new JLabel();

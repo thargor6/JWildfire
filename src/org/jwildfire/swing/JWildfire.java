@@ -133,6 +133,7 @@ public class JWildfire extends JApplet {
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(SystemInfoInternalFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(WelcomeInternalFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(ListOfChangesInternalFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
+    helpInternalFrames.add(new DefaultInternalFrameHolder<>(GPURenderInfoInternalFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
     helpInternalFrames.add(new DefaultInternalFrameHolder<>(TipOfTheDayInternalFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
 
@@ -202,6 +203,12 @@ public class JWildfire extends JApplet {
       tipOfTheDayInternalFrame.moveToFront();
       try {
         getInternalFrame(ListOfChangesInternalFrame.class).initChangesPane();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+      try {
+        getInternalFrame(GPURenderInfoInternalFrame.class).initChangesPane();
       }
       catch (Exception ex) {
         ex.printStackTrace();

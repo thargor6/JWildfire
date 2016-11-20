@@ -1,6 +1,29 @@
-V3.00 BETA 7 (12.11.2016)
+V3.00 BETA 8 (20.11.2016)
+ - the "Rnd"-button now can also operate on newly created flames
+ - new info-window about GPU-rendering
+ - fixed a bug regarding display of background-colors in solid rendering
+ - support for loading and saving Fusion-compatible *.spl-files in the motion-curve-editor
+ - colored display for affine transforms is now enabled by default
+ - fixed a bug regarding switching between colored/monochrome affine-controls 
+ - refined the default resolution- and quality-profiles
+ - renamed the main class to JWildfire in order to get "JWildfire" displayed as application on Mac
+ - changed to initial directory for the directory-select-box in the flame-browser (works now on Mac)
+ - improved the speed of the MutaGen
+ - set up default resolution- and quality-profiles when no preferences file could be found
+ - changes the layout of the sub-tabs "DoF" and "Solid rendering"
+ - made "System" the default theme under MacOS
+ - new GPU-render window to interactively render flames, only available under Windows. 
+   Quick way to test out if a certain flame works, you would usually do this, before you 
+   animate it, and then finally use the batch-renderer with enabled GPU-renderer to render a sequence. 
+ - integrated the external OpenCL-renderer in the batch-renderer
+ 
+V3.00 BETA 7 (14.11.2016)
+ - new parameter tinaDefaultExpandNonlinearParams in the Preferences to turn the expansion of the nonlinear-param-controls per default to on
+ - changing of light-properties in the editor now (again) cause a re-render when hard shadows are enabled
+ - the subflame_wf-variation also respect hidden samples now and can recover iteration after receiving invalid results (e. g. division by zero)  
  - the params in the nonlinear-tab can now get "expanded" in order to access them all at one time, thanks to Martin Flink to the suggestion!
  - exchanged some icons in the main editor
+ - improved the "Solid Labyrinth"-random-flame-generator
 
 V3.00 BETA 6 (12.11.2016)
  - changed the naming of z-buffer-images in order to simplify the handling of sequences of them 
@@ -9,7 +32,7 @@ V3.00 BETA 6 (12.11.2016)
  - possibility to specify (and successively alter) z-buffer-scale
  - support for invisible objects which can receive shadows. This way you can let fractals cast real-looking shadows 
    on objects inside a background-image, inspired by Oak Fractal Sandbox by David Byrd (http://www.davidbyrd.io/)
- - fixed a bug regarding the calculation of trhe size the background-image of fractals when using oversampling
+ - fixed a bug regarding the calculation of the size the background-image of fractals when using oversampling
  - created (finally!) an native installer for Mac OS (the app on Mac OS does not the launcher then) 
  - the dancing-flames-module now also works with solid flames
  - light-position may be animated by motion-curves now
