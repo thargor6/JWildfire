@@ -2871,9 +2871,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchPanel.validate();
   }
 
-  public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, String pGradientGeneratorname, RandomBatchQuality pQuality) {
+  public boolean createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
     stopPreviewRendering();
-    if (!confirmNewRandomBatch(pGeneratorname))
+    if (!confirmNewRandomBatch(randGen.getName()))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
       randomBatch.clear();
@@ -2882,9 +2882,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
-    RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
-    RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
-    RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance(pGradientGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
       int palettePoints = 7 + Tools.randomInt(24);
       boolean fadePaletteColors = Math.random() > 0.06;

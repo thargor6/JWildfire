@@ -59,8 +59,12 @@ import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.iflames.swing.IFlamesInternalFrame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
+import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
+import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
+import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.swing.BatchFlameRendererInternalFrame;
 import org.jwildfire.create.tina.swing.DancingFlamesInternalFrame;
@@ -228,7 +232,14 @@ public class JWildfire extends JApplet {
       TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);
       tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
       try {
-        tinaController.createRandomBatch(2, RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME, RandomBatchQuality.LOW);
+        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
+        if (randGen instanceof AllRandomFlameGenerator) {
+          ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
+        }
+        RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
+        RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
+
+        tinaController.createRandomBatch(2, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
       }
       catch (Exception ex) {
         ex.printStackTrace();
