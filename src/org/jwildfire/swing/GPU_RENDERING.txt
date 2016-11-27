@@ -37,7 +37,7 @@ but it can be very difficult to find out which change was responsible.
 1.3 Requirements
 You will need a modern graphics card with plenty of memory to make out the most of this 
 stuff. I'm using a GeForce GFX 980 with 4 GB of video memory, which works very well,
-but probably similar AMD-devices will work nicely, too. 
+but probably similar AMD-devices will work nicely, too. Only 64Bit is supported at all.
 ##############################################################################################  
 2. Installation
 FACLRender comes as a separate package, you must download separately. This enables us to
@@ -55,6 +55,13 @@ In this example, enter "D:\Program Files\FACLRender"
 5. Start JWildfire again, now you should see a new "GPURender"-button in the Navigator-window
 as well as new entry "Fractal flames: GPU render"-entry in the main Window-menu.
 
+2.1 Self-Test
+To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke
+the self-test. Just enter the directory where you installed FACLRender and open the sub-folder
+"selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
+Double click at the selftest.bat. If everything works as expected, you should see that 
+"selftest.png" was created. Otherwise, the console output hopefully helps to solve the
+problem. 
 ##############################################################################################  
 3. Rendering flames using the GPU
 Use the "GPU renderer"-window to play with flames. This window works similar to the 
@@ -78,8 +85,33 @@ one of the flames to the "GPU renderer"-window and see if it works.
 
 ##############################################################################################  
 
-4. References
+4. Troubleshooting
+If rendering fails, you should check if the FACLRender.exe can detect any devices (or is 
+missung some vital library, for example). To do so, open a console/terminal window
+and enter the directory where the FACLRender.exe resides.
+Enter the command: 
+  FACLRender
+If the programm can be started at all, it should output a list of options, one of then
+being "-list"
+
+So, enter the command:
+  FACLRender -list
+to get a list of detected devices. When something is wrong, you hopefully will get some 
+usefull information displayed here.
+
+4.1 Visual C++ Redistributable for Visual Studio 2015
+If some *.dlls are missing, installing the the
+  "Visual C++ Redistributable for Visual Studio 2015"-Kit
+from Microsoft will help in the most cases.
+
+4.2 OpenCl drivers
+Also, be sure to have OpenCl-drivers for your graphics card installed.
+
+##############################################################################################  
+
+5. References
 FAEngine: https://bitbucket.org/sbrodhead/faengine
 Fractal Architect Blog: http://www.fractalarchitect.net/blog/
-JWildfire blog: http://www.andreas-maschke.com/ 
+JWildfire blog: http://www.andreas-maschke.com/
+Visual C++ Redistributable for Visual Studio 2015: https://www.microsoft.com/en-US/download/details.aspx?id=48145 
   

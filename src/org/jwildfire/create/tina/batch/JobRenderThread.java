@@ -24,6 +24,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
 import org.jwildfire.create.tina.faclrender.FACLRenderResult;
@@ -100,7 +101,8 @@ public class JobRenderThread implements Runnable {
                 if (useOpenCl) {
                   String openClFlameFilename = Tools.trimFileExt(job.getFlameFilename()) + ".flam3";
                   try {
-                    new FACLFlameWriter().writeFlame(flame, openClFlameFilename);
+                    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+                    new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
                     long t0 = Calendar.getInstance().getTimeInMillis();
                     FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
                     long t1 = Calendar.getInstance().getTimeInMillis();

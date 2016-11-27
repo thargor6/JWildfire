@@ -22,6 +22,8 @@ import java.util.List;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.AbstractRandomGenerator;
+import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 
 public class PostDOFCalculator {
@@ -36,6 +38,8 @@ public class PostDOFCalculator {
   private final double bokehSize;
   private final double bokehActivation;
 
+  private final AbstractRandomGenerator randGen;
+
   public PostDOFCalculator(PostDOFBuffer buffer, Flame flame) {
     super();
     this.buffer = buffer;
@@ -46,6 +50,8 @@ public class PostDOFCalculator {
     bokehBrightness = flame.getSolidRenderSettings().getPostBokehBrightness();
     bokehSize = flame.getSolidRenderSettings().getPostBokehSize();
     bokehActivation = flame.getSolidRenderSettings().getPostBokehActivation();
+
+    randGen = new MarsagliaRandomGenerator();
 
     filteredSamples = new ArrayList<>();
 
@@ -69,17 +75,17 @@ public class PostDOFCalculator {
     if (radius > 0.0) {
       filteredSamples.clear();
 
-      if (Math.random() > 1.0 - bokehIntensity && calcBrightness(sample.getR(), sample.getG(), sample.getB()) >= bokehActivation) {
-        double intensity = (Math.random() + 1.0) / 5.0;
+      if (randGen.random() > 1.0 - bokehIntensity && calcBrightness(sample.getR(), sample.getG(), sample.getB()) >= bokehActivation) {
+        double intensity = (randGen.random() + 1.0) / 5.0;
 
         sample.setR(Tools.FTOI(sample.getR() * intensity * radius * radius * bokehBrightness));
         sample.setG(Tools.FTOI(sample.getG() * intensity * radius * radius * bokehBrightness));
         sample.setB(Tools.FTOI(sample.getB() * intensity * radius * radius * bokehBrightness));
 
-        radius *= bokehSize * (1.0 + Math.random() * 2.0);
+        radius *= bokehSize * (1.0 + randGen.random() * bokehSize);
       }
       else {
-        radius *= (1.0 + (0.5 - Math.random()) * 0.1);
+        radius *= (1.0 + (0.5 - randGen.random()) * 0.1);
       }
 
       double scaledInvRadius = 1.0 / plainRadius * kernelScale * bokehKernel.getSpatialSupport();
@@ -97,21 +103,33 @@ public class PostDOFCalculator {
         stepSize = 0.25;
       }
       else if (radius < 5.0) {
-        stepSize = 0.5;
+        stepSize = 0.375;
       }
       else if (radius < 6.0) {
+        stepSize = 0.5;
+      }
+      else if (radius < 7.0) {
+        stepSize = 0.625;
+      }
+      else if (radius < 8.0) {
         stepSize = 0.75;
+      }
+      else if (radius < 9.0) {
+        stepSize = 0.875;
       }
       else {
         stepSize = 1.0;
       }
+      int maxSteps = 200;
+      if ((radius / stepSize) > maxSteps) {
+        stepSize = radius / (double) maxSteps;
+      }
 
       for (double i = -radius; i < radius + MathLib.EPSILON; i += stepSize) {
-        double dstX = sample.getX() + i;
         double i_square = MathLib.sqr(i * scaledInvRadius);
+        double dstX = sample.getX() + i;
         for (double j = -radius; j < radius + MathLib.EPSILON; j += stepSize) {
           double dstY = sample.getY() + j;
-
           double r = MathLib.sqrt(i_square + MathLib.sqr(j * scaledInvRadius));
           double intensity = bokehKernel.getFilterCoeff(r);
 

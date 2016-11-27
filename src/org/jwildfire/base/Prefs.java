@@ -139,6 +139,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
   static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
+  static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts";
 
   static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
@@ -233,8 +234,11 @@ public class Prefs extends ManagedObject {
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
 
-  @Property(description = "Path to the external OpenCl renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the OpenCL-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
+  @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
   private String tinaFACLRenderPath = null;
+
+  @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
+  private String tinaFACLRenderOptions = "-nde";
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -807,6 +811,7 @@ public class Prefs extends ManagedObject {
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
     tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
+    tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -1651,6 +1656,14 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFACLRenderPath(String tinaFACLRenderPath) {
     this.tinaFACLRenderPath = tinaFACLRenderPath;
+  }
+
+  public String getTinaFACLRenderOptions() {
+    return tinaFACLRenderOptions;
+  }
+
+  public void setTinaFACLRenderOptions(String pTinaFACLRenderOptions) {
+    tinaFACLRenderOptions = pTinaFACLRenderOptions;
   }
 
 }

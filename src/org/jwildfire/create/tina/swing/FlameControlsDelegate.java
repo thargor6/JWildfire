@@ -629,6 +629,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean oldNoRefrsh = isNoRefresh();
     setNoRefresh(true);
     try {
+      refreshReflMapColorIndicator();
+
       refreshSolidRenderingSelectedLightCmb();
       refreshSolidRenderingSelectedMaterialCmb();
 
@@ -850,7 +852,9 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     if (getCurrFlame() != null) {
       SolidRenderSettings settings = getCurrFlame().getSolidRenderSettings();
       ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(1, !settings.isSolidRenderingEnabled());
+      data.bokehSettingsPnl.setEnabled(!settings.isSolidRenderingEnabled());
       ((JTabbedPane) data.bokehSettingsPnl.getParent()).setEnabledAt(2, settings.isSolidRenderingEnabled());
+      data.bokehSettingsPnl.setEnabled(settings.isSolidRenderingEnabled());
     }
   }
 
@@ -1911,6 +1915,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     if (material != null) {
       owner.saveUndoPoint();
       material.setReflMapFilename(null);
+      refreshReflMapColorIndicator();
       owner.refreshFlameImage(true, false, 1, true, true);
     }
   }
@@ -1944,6 +1949,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
           owner.saveUndoPoint();
           material.setReflMapFilename(filename);
+
+          refreshReflMapColorIndicator();
           owner.refreshFlameImage(true, false, 1, true, false);
         }
         catch (Throwable ex) {
@@ -1951,6 +1958,38 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
         }
       }
     }
+  }
+
+  private void refreshReflMapColorIndicator() {
+    MaterialSettings material = getSolidRenderingSelectedMaterial();
+    Color color = Color.BLACK;
+    if (material != null && material.getReflMapFilename() != null && !material.getReflMapFilename().isEmpty()) {
+      try {
+        WFImage img = RessourceManager.getImage(material.getReflMapFilename());
+        if (img instanceof SimpleImage) {
+          SimpleImage sImg = (SimpleImage) img;
+          int samples = 6;
+          int dx = sImg.getImageWidth() / samples;
+          int dy = sImg.getImageHeight() / samples;
+          double r = 0.0, g = 0.0, b = 0.0;
+          for (int x = 0; x < sImg.getImageWidth(); x += dx) {
+            for (int y = 0; y < sImg.getImageHeight(); y += dy) {
+              r += sImg.getRValue(x, y);
+              g += sImg.getGValue(x, y);
+              b += sImg.getBValue(x, y);
+            }
+          }
+          color = new Color(Tools.roundColor(r / (samples * samples)), Tools.roundColor(g / (samples * samples)), Tools.roundColor(b / (samples * samples)));
+        }
+        else {
+          color = Color.RED;
+        }
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    data.tinaSolidRenderingMaterialReflMapBtn.setBackground(color);
   }
 
   public void solidRenderingMaterialReflectionMapIntensityREd_changed() {

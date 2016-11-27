@@ -89,7 +89,11 @@ public class FACLRenderTools {
     }
     cmd.append(" " + fn);
     cmd.append(" -q " + pQuality);
-    cmd.append(" -nde");
+
+    String opts = Prefs.getPrefs().getTinaFACLRenderOptions();
+    if (opts != null && opts.length() > 0) {
+      cmd.append(" " + opts);
+    }
     return cmd.toString();
   }
 

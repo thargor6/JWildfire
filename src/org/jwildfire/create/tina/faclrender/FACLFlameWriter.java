@@ -31,7 +31,14 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 public class FACLFlameWriter extends AbstractFlameWriter {
 
   public void writeFlame(Flame pFlame, String pFilename) throws Exception {
-    Tools.writeUTF8Textfile(pFilename, getFlameXML(pFlame));
+    Tools.writeUTF8Textfile(pFilename, getFlameXML(translateFlame(pFlame)));
+  }
+
+  private Flame translateFlame(Flame pFlame) {
+    Flame flame = pFlame.makeCopy();
+    flame.setPixelsPerUnit(flame.getPixelsPerUnit() * flame.getCamZoom());
+    flame.setCamZoom(1.0);
+    return flame;
   }
 
   public String getFlameXML(Flame pFlame) throws Exception {
