@@ -41,11 +41,12 @@ public class PlaneWFFunc extends VariationFunc {
   private static final String PARAM_DISPL_AMOUNT = "displ_amount";
   private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
   private static final String PARAM_CALC_COLORIDX = "calc_color_idx";
+  private static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_CALC_COLORIDX };
+  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_CALC_COLORIDX, PARAM_RECEIVE_ONLY_SHADOWS };
 
   private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
@@ -64,6 +65,8 @@ public class PlaneWFFunc extends VariationFunc {
   private int direct_color = 1;
   private int color_mode = CM_UV;
   private int calc_color_idx = 0;
+
+  private int receive_only_shadows = 0;
 
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
   private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
@@ -146,6 +149,9 @@ public class PlaneWFFunc extends VariationFunc {
       else if (pVarTP.color > 1.0)
         pVarTP.color = 1.0;
     }
+    if (receive_only_shadows == 1) {
+      pVarTP.receiveOnlyShadows = true;
+    }
   }
 
   @Override
@@ -155,7 +161,7 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), calc_color_idx };
+    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), calc_color_idx, receive_only_shadows };
   }
 
   @Override
@@ -186,6 +192,9 @@ public class PlaneWFFunc extends VariationFunc {
     }
     else if (PARAM_CALC_COLORIDX.equalsIgnoreCase(pName)) {
       calc_color_idx = limitIntVal(Tools.FTOI(pValue), 0, 1);
+    }
+    else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName)) {
+      receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
     }
     else
       throw new IllegalArgumentException(pName);

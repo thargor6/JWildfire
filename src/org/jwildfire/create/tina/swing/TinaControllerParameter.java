@@ -35,8 +35,8 @@ import javax.swing.JTree;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.mutagen.MutationType;
 import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.ErrorHandler;
+import org.jwildfire.swing.JWildfire;
 
 public class TinaControllerParameter {
   public JWildfire desktop;
@@ -324,7 +324,6 @@ public class TinaControllerParameter {
   public JButton sendToIRButton;
   public JButton bokehButton;
   public JToggleButton solidRenderingToggleBtn;
-  public JButton dancingFlamesButton;
   public JButton movieButton;
   public JToggleButton transformSlowButton;
   public JToggleButton transparencyButton;
@@ -894,7 +893,7 @@ public class TinaControllerParameter {
   }
 
   public void setParams2(JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pSendToIRButton,
-      JButton pDancingFlamesButton, JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
+      JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
       JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
@@ -928,7 +927,6 @@ public class TinaControllerParameter {
     this.snapShotButton = pSnapShotButton;
     this.qSaveButton = pQSaveButton;
     this.sendToIRButton = pSendToIRButton;
-    this.dancingFlamesButton = pDancingFlamesButton;
     this.movieButton = pMovieButton;
     this.transformSlowButton = pTransformSlowButton;
     this.transparencyButton = pTransparencyButton;

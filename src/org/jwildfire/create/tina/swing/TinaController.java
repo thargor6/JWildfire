@@ -722,7 +722,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.qSaveButton = parameterObject.qSaveButton;
     data.sendToIRButton = parameterObject.sendToIRButton;
     data.bokehButton = parameterObject.bokehButton;
-    data.dancingFlamesButton = parameterObject.dancingFlamesButton;
     data.movieButton = parameterObject.movieButton;
     data.transformSlowButton = parameterObject.transformSlowButton;
     data.transparencyButton = parameterObject.transparencyButton;
@@ -2328,7 +2327,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.sendToIRButton.setEnabled(enabled);
     data.bokehButton.setEnabled(enabled);
     data.solidRenderingToggleBtn.setEnabled(enabled);
-    data.dancingFlamesButton.setEnabled(enabled);
     data.movieButton.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);

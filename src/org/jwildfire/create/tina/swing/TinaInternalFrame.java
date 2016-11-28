@@ -2929,6 +2929,24 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaEastTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
       tinaEastTabbedPane.addTab("Scripts", null, getScriptPanel(), null);
+
+      JPanel panel_1 = new JPanel();
+      tinaEastTabbedPane.addTab("Misc", null, panel_1, null);
+      panel_1.setLayout(null);
+
+      randomizeBtn = new JButton();
+      randomizeBtn.setBounds(6, 6, 213, 24);
+      panel_1.add(randomizeBtn);
+      randomizeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.randomizeBtn_clicked();
+        }
+      });
+      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
+      randomizeBtn.setText("Randomize all");
+      randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      randomizeBtn.setSelected(false);
+      randomizeBtn.setPreferredSize(new Dimension(42, 24));
     }
     return tinaEastTabbedPane;
   }
@@ -5084,7 +5102,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getTinaZBufferScaleREd(), getTinaZBufferScaleSlider());
 
-    params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(), getTinaAppendToDancingFlamesButton(),
+    params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getRescanScriptsBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
@@ -7310,21 +7328,6 @@ public class TinaInternalFrame extends JInternalFrame {
       centerNorthPanel.add(getToggleVariationsButton());
       centerNorthPanel.add(getToggleTransparencyButton());
 
-      randomizeBtn = new JButton();
-      randomizeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.randomizeBtn_clicked();
-        }
-      });
-      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
-      randomizeBtn.setText("Rnd");
-      randomizeBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
-      randomizeBtn.setSelected(false);
-      randomizeBtn.setPreferredSize(new Dimension(42, 24));
-      randomizeBtn.setBounds(new Rectangle(434, 4, 72, 24));
-      randomizeBtn.setBounds(1, 4, 72, 24);
-      centerNorthPanel.add(randomizeBtn);
-
       toggleDrawGridButton = new JToggleButton();
       toggleDrawGridButton.addMouseListener(new MouseAdapter() {
         @Override
@@ -7344,7 +7347,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDrawGridButton.setSelected(false);
       toggleDrawGridButton.setPreferredSize(new Dimension(42, 24));
       toggleDrawGridButton.setLocation(new Point(4, 4));
-      toggleDrawGridButton.setBounds(471, 4, 42, 24);
+      toggleDrawGridButton.setBounds(451, 4, 42, 24);
       toggleDrawGridButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/grid.png")));
       centerNorthPanel.add(toggleDrawGridButton);
       centerNorthPanel.add(getAffineEditPostTransformSmallButton());
@@ -7360,7 +7363,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTriangleWithColorsButton.setPreferredSize(new Dimension(42, 24));
       toggleTriangleWithColorsButton.setMnemonic(KeyEvent.VK_P);
       toggleTriangleWithColorsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      toggleTriangleWithColorsButton.setBounds(625, 4, 42, 24);
+      toggleTriangleWithColorsButton.setBounds(605, 4, 42, 24);
       centerNorthPanel.add(toggleTriangleWithColorsButton);
 
       triangleStyleCmb = new JComboBox();
@@ -7369,7 +7372,7 @@ public class TinaInternalFrame extends JInternalFrame {
       triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
       triangleStyleCmb.setMaximumRowCount(32);
       triangleStyleCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      triangleStyleCmb.setBounds(557, 4, 68, 24);
+      triangleStyleCmb.setBounds(537, 4, 68, 24);
       triangleStyleCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -7391,7 +7394,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleDrawGuidesButton.setSelected(false);
       toggleDrawGuidesButton.setPreferredSize(new Dimension(42, 24));
       toggleDrawGuidesButton.setLocation(new Point(4, 4));
-      toggleDrawGuidesButton.setBounds(514, 4, 42, 24);
+      toggleDrawGuidesButton.setBounds(494, 4, 42, 24);
       toggleDrawGuidesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/guides.png")));
       centerNorthPanel.add(toggleDrawGuidesButton);
 
@@ -7408,7 +7411,7 @@ public class TinaInternalFrame extends JInternalFrame {
       realtimePreviewToggleButton.setPreferredSize(new Dimension(42, 24));
       realtimePreviewToggleButton.setLocation(new Point(402, 4));
       realtimePreviewToggleButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      realtimePreviewToggleButton.setBounds(379, 4, 90, 24);
+      realtimePreviewToggleButton.setBounds(181, 4, 90, 24);
       realtimePreviewToggleButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
 
       centerNorthPanel.add(realtimePreviewToggleButton);
@@ -7429,7 +7432,7 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleVariationsButton.setSelected(false);
       toggleVariationsButton.setPreferredSize(new Dimension(42, 24));
       toggleVariationsButton.setLocation(new Point(4, 4));
-      toggleVariationsButton.setBounds(74, 4, 42, 24);
+      toggleVariationsButton.setBounds(3, 4, 42, 24);
       toggleVariationsButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/oscilloscope.png")));
     }
     return toggleVariationsButton;
@@ -7446,7 +7449,6 @@ public class TinaInternalFrame extends JInternalFrame {
       centerWestPanel.setPreferredSize(new Dimension(74, 0));
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 3));
       centerWestPanel.add(getSendFlameToIRButton());
-      centerWestPanel.add(getTinaAppendToDancingFlamesButton());
       centerWestPanel.add(getTinaAppendToMovieButton());
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
@@ -7544,7 +7546,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JToggleButton getAffineEditPostTransformSmallButton() {
     if (affineEditPostTransformSmallButton == null) {
       affineEditPostTransformSmallButton = new JToggleButton();
-      affineEditPostTransformSmallButton.setBounds(667, 4, 42, 24);
+      affineEditPostTransformSmallButton.setBounds(647, 4, 42, 24);
       affineEditPostTransformSmallButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
       affineEditPostTransformSmallButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineEditPostTransformSmallButton.setToolTipText("Toggle post transform mode");
@@ -7563,8 +7565,8 @@ public class TinaInternalFrame extends JInternalFrame {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(126, 14));
-      renderProgressBar.setLocation(new Point(253, 9));
+      renderProgressBar.setSize(new Dimension(175, 14));
+      renderProgressBar.setLocation(new Point(273, 9));
       renderProgressBar.setPreferredSize(new Dimension(169, 14));
       renderProgressBar.setStringPainted(true);
     }
@@ -9825,7 +9827,7 @@ public class TinaInternalFrame extends JInternalFrame {
       mouseTransformSlowButton.setSelected(false);
       mouseTransformSlowButton.setText("Fine Edit");
       mouseTransformSlowButton.setSize(new Dimension(92, 24));
-      mouseTransformSlowButton.setLocation(new Point(160, 4));
+      mouseTransformSlowButton.setLocation(new Point(88, 4));
       mouseTransformSlowButton.setToolTipText("Toggle fine triangle adjustment mode");
       mouseTransformSlowButton.setPreferredSize(new Dimension(42, 24));
       mouseTransformSlowButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9875,7 +9877,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel label_6;
   private JToggleButton toggleTransparencyButton;
   private JCheckBox bgTransparencyCBx;
-  private JButton tinaAppendToDancingFlamesButton;
   private JToggleButton mouseTransformEditViewButton;
   private JCheckBox dofNewDOFCBx;
   private JWFNumberField dofDOFREd;
@@ -11709,35 +11710,13 @@ public class TinaInternalFrame extends JInternalFrame {
       toggleTransparencyButton.setSelected(false);
       toggleTransparencyButton.setPreferredSize(new Dimension(42, 24));
       toggleTransparencyButton.setLocation(new Point(4, 4));
-      toggleTransparencyButton.setBounds(117, 4, 42, 24);
+      toggleTransparencyButton.setBounds(46, 4, 42, 24);
     }
     return toggleTransparencyButton;
   }
 
   public JCheckBox getBgTransparencyCBx() {
     return bgTransparencyCBx;
-  }
-
-  private JButton getTinaAppendToDancingFlamesButton() {
-    if (tinaAppendToDancingFlamesButton == null) {
-      tinaAppendToDancingFlamesButton = new JButton();
-      tinaAppendToDancingFlamesButton.setIconTextGap(0);
-      tinaAppendToDancingFlamesButton.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          if (tinaController.getCurrFlame() != null) {
-            tinaController.getDancingFractalsController().importFlame(tinaController.getCurrFlame());
-            tinaController.getDesktop().showInternalFrame(DancingFlamesInternalFrame.class);
-          }
-        }
-      });
-      tinaAppendToDancingFlamesButton.setToolTipText("Append to dancing flames show");
-      tinaAppendToDancingFlamesButton.setText("Dance");
-      tinaAppendToDancingFlamesButton.setPreferredSize(new Dimension(72, 24));
-      tinaAppendToDancingFlamesButton.setMnemonic(KeyEvent.VK_D);
-      tinaAppendToDancingFlamesButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaAppendToDancingFlamesButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kipina.png")));
-    }
-    return tinaAppendToDancingFlamesButton;
   }
 
   public JToggleButton getMouseTransformViewButton() {
@@ -19632,6 +19611,5 @@ public class TinaInternalFrame extends JInternalFrame {
   public JToggleButton getNonlinearParams12ToggleParamsPnlButton() {
     return nonlinearParams12ToggleParamsPnlButton;
   }
-
 } //  @jve:decl-index=0:visual-constraint="10,10"
 
