@@ -112,6 +112,7 @@ Also, be sure to have OpenCl-drivers for your graphics card installed.
 5. References
 FAEngine: https://bitbucket.org/sbrodhead/faengine
 Fractal Architect Blog: http://www.fractalarchitect.net/blog/
-JWildfire blog: http://www.andreas-maschke.com/
-Visual C++ Redistributable for Visual Studio 2015: https://www.microsoft.com/en-US/download/details.aspx?id=48145 
+JWildfire blog (visit for newest officially tested FACLRender): http://www.andreas-maschke.com/
+Visual C++ Redistributable for Visual Studio 2015: https://www.microsoft.com/en-US/download/details.aspx?id=48145
+ 
   

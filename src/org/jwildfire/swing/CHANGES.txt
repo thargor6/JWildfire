@@ -1,213 +1,150 @@
-V3.00 BETA 8 (20.11.2016)
- - the "Rnd"-button now can also operate on newly created flames
- - new info-window about GPU-rendering
- - fixed a bug regarding display of background-colors in solid rendering
- - support for loading and saving Fusion-compatible *.spl-files in the motion-curve-editor
- - colored display for affine transforms is now enabled by default
- - fixed a bug regarding switching between colored/monochrome affine-controls 
- - refined the default resolution- and quality-profiles
- - renamed the main class to JWildfire in order to get "JWildfire" displayed as application on Mac
- - changed to initial directory for the directory-select-box in the flame-browser (works now on Mac)
- - improved the speed of the MutaGen
- - set up default resolution- and quality-profiles when no preferences file could be found
- - changes the layout of the sub-tabs "DoF" and "Solid rendering"
- - made "System" the default theme under MacOS
- - new GPU-render window to interactively render flames, only available under Windows. 
-   Quick way to test out if a certain flame works, you would usually do this, before you 
-   animate it, and then finally use the batch-renderer with enabled GPU-renderer to render a sequence. 
- - integrated the external OpenCL-renderer in the batch-renderer
+V3.00 (29.11.2016)
+3D SOLID RENDERING
+ - completely new 3d (solid) rendering mode for flame fractals, featuring
+     - ambient shadows
+     - distant light-sources
+     - specular lighting, several diffuse-response functions
+     - reflection-mapping
+     - hard and soft shadows
+     - z-buffer-output
+
+ - new "obj_mesh_wf" and "obj_mesh_primitive_wf"-variations to allow you to integrate 
+   meshes as shapes into your fractals. While "obj_mesh_wf" allows you to load arbitrary
+   meshes (e .g. found in the web, there are tons of free meshes out there), you may
+   use "obj_mesh_primitive_wf" to use numerous predifined presets     
+ - both variations support:
+    - uv-colormaps
+    - uv-displacement-maps
+    - geometry-smoothing (using the Taubin-smooth-algorithm)        
+
+ - new "yplot2d_wf"-, "yplot3d_wf"- and "parplot2d_wf"-variations to generate geometry
+   by plotting arbitrary mathematical functions (e.g. "sin(x*x+z*z)")
+ - all of those variations contain many very cool presets, e.g. there are 35 presets
+   included in the "parplot2d_wf"-variaton, just slide through them by changing the 
+   "preset_id"
  
-V3.00 BETA 7 (14.11.2016)
- - new parameter tinaDefaultExpandNonlinearParams in the Preferences to turn the expansion of the nonlinear-param-controls per default to on
- - changing of light-properties in the editor now (again) cause a re-render when hard shadows are enabled
- - the subflame_wf-variation also respect hidden samples now and can recover iteration after receiving invalid results (e. g. division by zero)  
- - the params in the nonlinear-tab can now get "expanded" in order to access them all at one time, thanks to Martin Flink to the suggestion!
- - exchanged some icons in the main editor
- - improved the "Solid Labyrinth"-random-flame-generator
-
-V3.00 BETA 6 (12.11.2016)
- - changed the naming of z-buffer-images in order to simplify the handling of sequences of them 
- - new "Orchids"-random-flame-generator
- - export of the z-buffer is not resolution-dependant anymore
- - possibility to specify (and successively alter) z-buffer-scale
- - support for invisible objects which can receive shadows. This way you can let fractals cast real-looking shadows 
-   on objects inside a background-image, inspired by Oak Fractal Sandbox by David Byrd (http://www.davidbyrd.io/)
- - fixed a bug regarding the calculation of the size the background-image of fractals when using oversampling
- - created (finally!) an native installer for Mac OS (the app on Mac OS does not the launcher then) 
- - the dancing-flames-module now also works with solid flames
- - light-position may be animated by motion-curves now
- - created a new icon for the software
- - created a MacOS installer
-
-V3.00 BETA 5 (28.10.2016)
- - script-generator (which creates scripts from a flame) also creates solid-attributes for solid flames now
- - fixed a UI-refresh-problem regarding the channel-mixer
- - new "Solid Labyrinth"-random-flame-generator 
- - added new parameters "axis", "centre_x", "centre_y" and "centre_y" to the "pre_wave3D_wf"-variation
- - added experimental "direct_color"-parameter to the "truchet"-variation
- - added parameters to create side_faces in the "checkerbaord_wf"-variation (which are enabled by default) 
- - added UI-controls for the post-bokeh-effects
- - added calculation of colorindex to the "plane_wf"-variation, new parameter "calc_color_idx" to enable it
- - the "color_mode"-parameter of the "plane_wf"-variation behaves now as the same parameter of the *plot_wf-variations  
- - fixed a bug in the "custom_wf_full"-variation which sometimes caused the subflame-random-flame-generator to halt
- - fixed a general problem regarding nested random-flame-generators (e.g. All -> Solid Shadows -> Solid Stunning),
-   also causing improved performance 
- - increased the range of light altitude and azimuth to -360..360
-
-V3.00 BETA 4 (24.10.2016)
- - allowing fast refresh after changing ligh-settings, even if shadows are enabled (causing shadows displayed wrong, 
-   but allowing display of changes of other light-properties faster)
- - added two new parameters to the "subflame_wf" variation: "colorscale_z" (adds depth to the outer flame according 
-   to the color-information of the inner flame) and "use_colors" (use the computed color-information of the inner 
-   flame as color of the outer flame)
- - fixed some refrssh-problems at the coloring-tab
- - materials and lights in the solid-rendering-settings now start with "Material 0" and "Light 0", as the smallest 
- index is 0 (rather than 1)
- - improved the speed of the small layer-preview-render (when having multiple layers)
- - fixed a bug regarding the position of the color-controls when the gradient-editor is active
- - exchanged the light-implementation (which was some kind of distant light) by a more puristic approach of distant lights. 
-   Those lights have only two coordinates (altitude and azimuth) and are easier to handle. Additionally it simplified 
-   shadow calcucation.  
- - Improved the results of the "Solid (shadows)"-random-flame-generator
- - fixed a bug regarding the creating of zbuffer-images (value underflow)
- - parplot2d_wf, yplot2d_wf, yplot3d_wf-vatation: formulas may now have up to 6 parameters ("param_a" ... "param_f"), 
-   which may be initialized inside the presets.txt, they can be modified like any other parameter
- - new preset (at slot 35) for parplot2d_wf-variation, supplied by Don Town
- - fixed a problem when loading a flame with multiple layers lost its title
- - fixed the background-color of the script-description-area in the script-editing-dialog, which appeared to be dark 
-   on dark UI-themes
- - hdr-rendering of solid flames
- - 3 new SINEPOW-filter-kernels (with predefined power-levels)
- 
-V3.00 BETA 3 (15.10.2016)
- - Changed the display of the "List of changes"-window to html-dispaly, which works better on dark themes
- - New "List of changes"-window to display the list of changes made in the software 
- - fixed a problem with animation motion curves in a plane different from XY
- - improved image-quality for scaled image-display on the desktop (e. g. after loading an image or displaying a rendered image)
- - support for using backgrounds (color or image) when rendering solid flames
- - option to auto-reload saved images from the interactive renderer (in order so be able to check them quickly), may be 
-   turned off in the Preferences
- - option to manually save a z-buffer-image in the interactive renderer
- - buttons to easily randomize light-position and light-color (for solid flames)
- - significantly increased the render-speed of *plot-variations by compiling the formulas rather then interpreting them 
-   (minor changes in formula where necessary, but any internal formulas may now be used) 
- - improved the performance of preview-rendering of flames with multiple layers
- - improved the behaviour of preview rendering of solid-flames  
- - changed position of the layer-preview
- - made the UI more consistent
- - fixed some UI-refresh-problems
- - added an option for displacement-mapping to the "obj_mesh_wf"-variation
- - color- and displacement-mapping for "*plot_wf"-variations (slow, but cool)
- - added options for color- and displacement-mapping to the "obj_mesh_primitive_wf"-variation
- - added uv-coordinates to the default mesh-primitives (used by "obj_mesh_primitive_wf"-variation)
  - new "plane_wf"-variation for easy creation of a textured plane
- - new "blend_uv_map"-parameter for "obj_mesh_wf"-variation
- - variations-editing: the controls use non-fractional step-size when changing a parameter having integer-values (like 
-   power of "julia3D"-variation) 
- - added support of uv-mapping to the "obj_mesh_wf" (to make use of it, the object must also carry uv-map-coordinates, 
-   you may then select any image as actaul colormap)
- - replaced the link to variation-guide, hosted by user FractalGee, which seems to be permanently off, by a link to 
-   the variations-list supplied by Don Town 
+ - script-generator (which creates scripts from a flame) also creates solid-attributes 
+   for solid flames
+ 
+ - support for invisible objects which can receive shadows. This way you can let 
+   fractals cast real-looking shadows on objects inside a background-image, inspired 
+   by Oak Fractal Sandbox by David Byrd (http://www.davidbyrd.io/)
+ - this options is supported by the variations "obj_mesh_wf", "obj_mesh_primitive_wf"
+   and "plane_wf"  
 
-V3.00 BETA 2 (29.09.2016)
- - new "MobiusN"-variation by eralex
- - removed the "use_preset"-param of *plot*_wf-variations and made the usage of presets more intuitive
- - new option in the Prefrences to disable solid-flame-random-generators inside the global "All"-random-flame-generator
- - experimental z-buffer-output, removed hdr-intensity-map-output
+ - completely new DOF for solid rendering with bokeh-effects. This DOF is a post-effect 
+   (and works totally different than the regular DOF) and is not visible in the fast-preview(!). 
+   But, it also gives better results.
+   One way to adjust the DOF is to turn solid rendering of in order to show the regular DOF 
+   in fast-preview, adjust it (position and strength), 
+   and then turn solid rendering on again 
 
-V3.00 BETA (29.09.2016)
- - UI-controls for hard shadow options
- - *plot*_wf-variation: changing of parameter ranges and formulas is not possible when use_preset it set to 1
- - new option of intensity of hard shadows (per lightsource)
- - added a quarter-render-size option in the Interactive Renderer
- - recreated the SystemInfo window and added a function to clear the cache (which hold resources like fonts, meshes, ... 
-   in order to speed up future calculations)
- - improved calculation of hard shadows
- - improved speed of AO and normals calculation
- - improved quality of normals- and lighting calculation
- - new "Transfer to Interactive Renderer"-button in the main editor
- - removed the MutaGen-button in the main editor
- - new option for type of mapping of reflection-maps
- - FIXED: background rendering in solid mode
- - FIXED: a bug in the "dinis_surface_wf"-variation
  - new "Solid Julia3D"-random-flame-generator to create random solid flames
  - new "Solid (experimental)"-random-flame-generator to create random solid flames
  - new "Solid (stunning)"-random-flame-generator to create random solid flames
- - slightly faster rendering in solid-rendering-mode
- - new option to control the diffuse-part of ambient shadows (which is physically incorrect, but help to "dramatize" shadows) 
+ - new "Solid Labyrinth"-random-flame-generator 
+ - new option in the Prefrences to disable solid-flame-random-generators inside the global "All"-random-flame-generator
 
-V3.00 ALPHA 6 (16.09.2016)
- - removed the combobox to select the edit-plane, and added three buttons in the main editor area instead
- - have integrated 35 presets for parplot2d_wf-variation now - thanks to Frank Baumann and all others who contributed! 
-   (Tip: change preset_id to witch between presets)
- - removed the rarely used brightness-slider in the main editor
- - removed the black "halos" around edges
- - new button in the main editor-area to toggle solid rendering mode
- - new icon for solid rendering mode
- - dropped the grey and monochrome icon sets
- - formula Presets for the parplot2d_wf-variation are now stored in an external file parplot2d_wf_presets.txt and can be easily extended
- - formula Presets for the yplot2d_wf-variation are now stored in an external file yplot2d_wf_presets.txt and can be easily extended
- - formula Presets for the yplot3d_wf-variation are now stored in an external file yplot3d_wf_presets.txt and can be easily extended
- - removed the Chaotica-bridge
- - many additions to the hard-shadows-calculations (hidden feature yet)
- - the "Next tip"-button in the "Tip of the day"-window now actually shows the next tip (in order), rather than displaying the next random tip
-
-V3.00 ALPHA 5 (03.09.2016)
- - New "parplot2d_wf"-variation to generate geometry by plotting arbitrary parametric functions
- - New visual controls for ambient shadows on a separate tab
- - Customizable background and convenience-darkening effect (see desktopBackgroundImagePath and desktopBackgroundDarkenAmount in the Preferences)
- - FIXED: when importing params with a missign reflection-map the programm should not slow down anymore
- - Redesigned the Navigator-window to be fully resizable (may be resized to be horizontal for example)
- - Navigator actually hides windows rather than iconifying them
- - The "Tip of the day"-window may be now disabled/enabled at any time by using a new checkbox "Show Tips at startup"
- - New experimental monochrome icon set
- - Exchanged some icons in the main editor window
-
-V3.00 ALPHA 4 (28.08.2016)
- - redesigned the default window-positions and sizes (of inner windows)
- - new "Tips of the day", only 2 tips currently available
- - visibility of windows will not be restored at programm startup, instead the editor is always shown per default 
- - because it seems to confuse some users and is not really necessary, inner windows can not be maximized anymore 
- - removed the unnecessary tabs (which become unnecessary after splitting the main window) on several windows
- - implemented transfer of flames between windows (instead of different tabs)
- - the Welcome-window is not show pr default, but you can reach it in the menu
- - new "yplot2d_wf" and "yplot3d_wf"-variation to generate geometry by plotting arbitrary mathematical functions (e.g. "sin(x*x+z*z)")
-    
- 
-V3.00 ALPHA 3 (27.08.2016)
- - solid rendering: new implementation of ambient shadows, but not finished yet
- - obj_mesh_wf and obj_primitive_wf have now options to smooth meshes:
-     - subdiv_level: number of smoothing passes, a value of 0..2 is recommended
-     - subdiv_...: all other params are related to the Taubin-smooth-algorithm, leave them unchangd unless you know what you are doing     
- - solid rendering: improvement of calculation of normals
- - huge UI change: the main flame-window was broken into multiple smaller windows, still work in progress!
+IMPROVED UI 
+ - huge UI change: the main flame-window was broken into multiple smaller windows
  - new Navigator-window to make it easier to navigate between windows
- - changed the default background image
- - new window-menues
- - window-state for all windows inside the desktoip is now saved in the Preferences
- - affine-controls in the editor are now monochrome per default, but you may change this bot in the editor and in the prefs
+ - window-state for all windows inside the desktoip is saved in the Preferences
+ - new "Tips of the day"-window, may be turned off 
+ - the Welcome-window (still providing some useful links) is not show per default, 
+   but you can reach it in the menu
+ - Customizable background and convenience-darkening effect (see 
+   desktopBackgroundImagePath  and desktopBackgroundDarkenAmount in the Preferences)
+ - supplied a background-image from my own library  
+ - removed the combobox to select the edit-plane, and added three buttons in the 
+   main editor area instead
+ - new "List of changes"-window to display the list of changes made in the software 
+ - improved image-quality for scaled image-display on the desktop (e. g. after 
+   loading an image or displaying a rendered image)
+ - option to auto-reload saved images from the interactive renderer (in order so be 
+   able to check them quickly), may be turned off in the Preferences
+ - option to manually save a z-buffer-image in the interactive renderer
+ - buttons to easily randomize light-position and light-color (for solid flames)
+ - the params in the nonlinear-tab can now get "expanded" in order to access them
+   all at one time, thanks to Martin Flink to the suggestion!
+ - new parameter tinaDefaultExpandNonlinearParams in the Preferences to turn the 
+   expansion of the nonlinear-param-controls per default to on
+ - exchanged some icons in the main editor
+ - variations-editing: the controls use non-fractional step-size when changing a parameter having integer-values (like 
+   power of "julia3D"-variation) 
+ 
+GPU RENDERING
+ - experimental gpu-rendering by integration of FACLRender, and external GPU
+   renderer, made by Steven Brodhead (see the integrated info-window for more
+   details) 
+ - new info-window about GPU-rendering
+ - new GPU-render window to interactively render flames, only available 
+   under Windows. 
+   Quick way to test out if a certain flame works, you would usually do this, 
+   before you animate it, and then finally use the batch-renderer with enabled 
+   GPU-renderer to render a sequence. 
+ - integrated the external OpenCL-renderer in the batch-renderer
+ - new option tinaFACLRenderOptions in the Preferences to influence the options 
+   used to invoke the external GPU render 
 
-V3.00 ALPHA 2 (17.08.2016)
- - Completely new DOF for solid rendering with bokeh-effects. This DOF is a post-effect (and works totally different than the regular DOF) 
-   and is not visible in the fast-preview (!). But, it also gives better results. 
-   One way to adjust the DOF is to turn solid rendering of in order to show the regular DOF in fast-preview, adjust it (position and strength), 
-   and then turn solid rendering on again 
- - "obj_mesh_primitive_wf" got a new shape (set the "primitive" parameter to 25 to try it out)
- - Solid rendering supports also spatial oversampling (the default is 2)
- - Lots of internal changes to the solid rendering
+MAC OS X SUPPORT
+ - native installer for Mac OS
+ - some optimizations for Mac OS X to improve user experience 
+ - made "System" the default theme under MacOS
+ - renamed the main class to JWildfire in order to get "JWildfire" displayed as application on Mac
+ - changed to initial directory for the directory-select-box in the flame-browser (works now on Mac)
+ - set up default resolution- and quality-profiles when no preferences file could be found
+
+MISC
+ - new "Orchids"-random-flame-generator
+ 
  - New local hue parameter at the Local Gamma tab (called "Gamma"), allowing much more variations in color than using only the default coloring
  - New randomizer-buttons at the Local Gamma tab, to randomize each parameter individually
  
-V3.00 ALPHA 1 (30.07.2016)
- - Highly experimental solid renderer for flame-fractals
-     - ambient shadows
-     - point-light-sources, specular lighting, several diffuse-response functions
-     - reflection-mapping
- - New "obj_mesh_wf" and "obj_mesh_primitive_wf" to integrate meshes as shapes into your fractals      
+ - added a quarter-render-size option in the Interactive Renderer
+
  - Removed the Shading-tab and all the options for Blur-Shading, Distance-Color-Shading and Pseudo3D-Shading. 
      - the popular blur-shading was re-introduced as new option under the "DOF / Bokeh" - tab as "Post blur"
-     - distance-color-shading was removed completely, if you liked it, please keed an old version
-     - Pseudo3D-shading will be obsolete when the solid-rendering will be finished  
+     - distance-color-shading was removed completely, if you liked it, please keep an old version
+     - Pseudo3D-shading is obsolete due to new 3d rendering   
+
+ - removed the rarely used brightness-slider in the main editor
+ - removed the rarely used Chaotica-bridge
+
+ - recreated the SystemInfo window and added a function to clear the cache (which hold resources like fonts, meshes, ... 
+   in order to speed up future calculations)
+ - new "Transfer to Interactive Renderer"-button in the main editor
+ - removed the MutaGen-button in the main editor
+
+ - added two new parameters to the "subflame_wf" variation: "colorscale_z" (adds depth to the outer flame according 
+   to the color-information of the inner flame) and "use_colors" (use the computed color-information of the inner 
+   flame as color of the outer flame)
+ - the "subflame_wf"-variation also respect hidden samples now and can recover iteration after receiving 
+   invalid results (e. g. division by zero)  
+
+ - added new parameters "axis", "centre_x", "centre_y" and "centre_y" to the "pre_wave3D_wf"-variation
+ - added experimental "direct_color"-parameter to the "truchet"-variation
+
+ - new "MobiusN"-variation by eralex
+
+ - replaced the link to variation-guide, hosted by user FractalGee, which seems to be permanently off, by a link to 
+   the variations-list supplied by Don Town 
+ 
+ - 3 new SINEPOW-filter-kernels (with predefined power-levels)
+ 
+ - the "Rnd"-button now can also operate on newly created flames
+ 
+ - refined the default resolution- and quality-profiles
+ 
+ - improved the speed of the MutaGen
+ 
+ - changed the layout of the sub-tabs "DoF" and "Solid rendering"
+
+ - slightly shorter startup time due to the use of more simple random-flames-generator at startup
+ 
+ - support for loading and saving Fusion-compatible *.spl-files in the motion-curve-editor
+
+ - moved the "Rnd"-button at a new "Misc"-tab  
      
 V2.60 REVISION 2 (26.10.2015):
  - Experimental font-scale (for screens with much higher resolution)
