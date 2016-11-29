@@ -154,7 +154,7 @@ public class FlamePanel extends ImagePanel {
       drawTriangles(g2d);
     }
     if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
-      gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getImageBounds());
+      gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getParentImageBounds());
     }
   }
 
