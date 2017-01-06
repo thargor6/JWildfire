@@ -85,6 +85,9 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if (mesh == null || mesh.getFaceCount() == 0) {
+      return;
+    }
     Face f = mesh.getFace(pContext.random(mesh.getFaceCount()));
     Vertex rawP1 = mesh.getVertex(f.v1);
     Vertex rawP2 = mesh.getVertex(f.v2);

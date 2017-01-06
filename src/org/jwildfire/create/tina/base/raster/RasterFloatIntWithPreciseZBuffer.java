@@ -122,7 +122,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   }
 
   @Override
-  public synchronized void addSamples(PlotSample[] pPlotBuffer, int pCount) {
+  public/* synchronized */void addSamples(PlotSample[] pPlotBuffer, int pCount) {
     for (int i = 0; i < pCount; i++) {
       PlotSample sample = pPlotBuffer[i];
       final int x = sample.screenX, y = sample.screenY;

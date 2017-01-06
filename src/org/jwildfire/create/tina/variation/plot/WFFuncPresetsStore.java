@@ -24,6 +24,7 @@ public class WFFuncPresetsStore {
   private static ParPlot2DWFFuncPresets parPlot2DWFFuncPresets;
   private static YPlot2DWFFuncPresets yPlot2DWFFuncPresets;
   private static YPlot3DWFFuncPresets yPlot3DWFFuncPresets;
+  private static IsoSFPlot3DWFFuncPresets isoSFPlot3DWFFuncPresets;
 
   public static ParPlot2DWFFuncPresets getParPlot2DWFFuncPresets() {
     if (parPlot2DWFFuncPresets == null) {
@@ -46,4 +47,10 @@ public class WFFuncPresetsStore {
     return yPlot3DWFFuncPresets;
   }
 
+  public static IsoSFPlot3DWFFuncPresets getIsoSFPlot3DWFFuncPresets() {
+    if (isoSFPlot3DWFFuncPresets == null) {
+      isoSFPlot3DWFFuncPresets = new IsoSFPlot3DWFFuncPresets();
+    }
+    return isoSFPlot3DWFFuncPresets;
+  }
 }

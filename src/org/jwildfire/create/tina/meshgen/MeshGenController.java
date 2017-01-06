@@ -597,6 +597,7 @@ public class MeshGenController {
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       gradient.setColor(i, 225, 225, 225);
     }
+    res.getSolidRenderSettings().setSolidRenderingEnabled(false);
     res.getFirstLayer().setPalette(gradient);
     return res;
   }

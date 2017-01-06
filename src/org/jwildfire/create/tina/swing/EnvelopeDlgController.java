@@ -423,13 +423,18 @@ public class EnvelopeDlgController {
   }
 
   public void refreshEnvelope() {
-    refreshInterpolationField();
-    refreshXField();
-    refreshXMinField();
-    refreshXMaxField();
-    refreshYField();
-    refreshYMinField();
-    refreshYMaxField();
+    try {
+      refreshInterpolationField();
+      refreshXField();
+      refreshXMinField();
+      refreshXMaxField();
+      refreshYField();
+      refreshYMinField();
+      refreshYMaxField();
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
     envelopePanel.repaint();
   }
 

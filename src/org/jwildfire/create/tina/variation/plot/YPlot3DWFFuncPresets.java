@@ -30,7 +30,7 @@ public class YPlot3DWFFuncPresets extends WFFuncPresets<YPlot3DWFFuncPreset> {
   @Override
   protected YPlot3DWFFuncPreset parsePreset(String preset) {
     int id = parseId(preset);
-    String formula = parseAndValidateFormula(preset, "formula", "x", "z");
+    String formula = parseFormula(preset, "formula");
 
     double xmin = parseParam(preset, "xmin");
     double xmax = parseParam(preset, "xmax");

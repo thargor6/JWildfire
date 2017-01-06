@@ -30,9 +30,9 @@ public class ParPlot2DWFFuncPresets extends WFFuncPresets<ParPlot2DWFFuncPreset>
   @Override
   protected ParPlot2DWFFuncPreset parsePreset(String preset) {
     int id = parseId(preset);
-    String xformula = parseAndValidateFormula(preset, "xformula", "u", "v");
-    String yformula = parseAndValidateFormula(preset, "yformula", "u", "v");
-    String zformula = parseAndValidateFormula(preset, "zformula", "u", "v");
+    String xformula = parseFormula(preset, "xformula");
+    String yformula = parseFormula(preset, "yformula");
+    String zformula = parseFormula(preset, "zformula");
 
     double umin = parseParam(preset, "umin");
     double umax = parseParam(preset, "umax");

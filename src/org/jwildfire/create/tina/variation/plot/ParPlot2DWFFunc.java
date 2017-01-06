@@ -20,6 +20,7 @@ package org.jwildfire.create.tina.variation.plot;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
+import static org.jwildfire.base.mathlib.MathLib.trunc;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
   private DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
-  ParPlot2DFormulaEvaluator evaluator;
+  private ParPlot2DFormulaEvaluator evaluator;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -133,8 +134,8 @@ public class ParPlot2DWFFunc extends VariationFunc {
       n.normalize();
       double iu = GfxMathLib.clamp(randU * (displacementMapHolder.getDisplacementMapWidth() - 1.0), 0.0, displacementMapHolder.getDisplacementMapWidth() - 1.0);
       double iv = GfxMathLib.clamp(displacementMapHolder.getDisplacementMapHeight() - 1.0 - randV * (displacementMapHolder.getDisplacementMapHeight() - 1.0), 0, displacementMapHolder.getDisplacementMapHeight() - 1.0);
-      int ix = (int) MathLib.trunc(iu);
-      int iy = (int) MathLib.trunc(iv);
+      int ix = (int) trunc(iu);
+      int iy = (int) trunc(iv);
       double d = displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * _displ_amount;
       pVarTP.x += pAmount * n.x * d;
       pVarTP.y += pAmount * n.y * d;
