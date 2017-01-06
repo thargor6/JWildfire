@@ -98,7 +98,6 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     if (mesh == null) {
       mesh = createDfltMesh();
     }
-
   }
 
   private File stream2file(InputStream in) throws Exception {
