@@ -50,9 +50,9 @@ public class RenderProgressUpdater implements ProgressUpdater {
   public void updateProgress(int pStep) {
     try {
       parent.getRenderProgressBar().setValue(pStep);
-      //        parent.getRenderProgressBar().invalidate();
-      //        parent.getRenderProgressBar().validate();
-      //        parent.getRenderProgressBar().invalidate();
+      //      parent.getRenderProgressBar().invalidate();
+      //      parent.getRenderProgressBar().validate();
+      //      parent.getRenderProgressBar().invalidate();
       manager.markCompletelyDirty(parent.getRenderProgressBar());
       manager.paintDirtyRegions();
     }
