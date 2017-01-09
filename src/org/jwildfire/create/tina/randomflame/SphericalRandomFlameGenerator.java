@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -92,12 +93,12 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColorSymmetry(0);
     }
 
-    int max = (int) (Math.random() * 4.0);
+    int max = Tools.randomInt(4);
     for (int i = 0; i < max; i++) {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.5 + 0.3 * Math.random());
-      String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
+      String fncName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
 
       varFunc = VariationFuncList.getVariationFuncInstance(fncName, true);
       xForm.addVariation(1.0, varFunc);
@@ -123,7 +124,12 @@ public class SphericalRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

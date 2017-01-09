@@ -102,6 +102,8 @@ public class Grid3DWFFunc extends VariationFunc {
         dz = sizescl * (front ? -0.5 : 0.5);
         pVarTP.color = front ? c5 : c6;
         break;
+      default: // nothing to do
+        break;
     }
 
     if (doRotate) {

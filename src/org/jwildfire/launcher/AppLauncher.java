@@ -27,8 +27,8 @@ import org.jwildfire.base.Tools;
 
 public class AppLauncher {
   private final LauncherPrefs prefs;
-  private final String JWFILDFIRE_JAR = "j-wildfire.jar";
-  private final String JWILDFIRE_MAIN_CLASS = "org.jwildfire.swing.Desktop";
+  private static final String JWFILDFIRE_JAR = "j-wildfire.jar";
+  private static final String JWILDFIRE_MAIN_CLASS = "org.jwildfire.swing.JWildfire";
 
   public AppLauncher(LauncherPrefs pPrefs) {
     prefs = pPrefs;

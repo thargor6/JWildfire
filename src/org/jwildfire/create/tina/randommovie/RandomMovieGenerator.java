@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randommovie;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.FlameMovie;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -41,7 +42,7 @@ public abstract class RandomMovieGenerator {
   protected Flame genRandomFlame(RandomFlameGenerator pRandGen, Prefs pPrefs) {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pPrefs, pRandGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
     return sampler.createSample().getFlame();

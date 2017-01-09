@@ -17,9 +17,10 @@
 package org.jwildfire.image;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 
-public class SimpleHDRImage implements WFImage {
+public class SimpleHDRImage implements WFImage, Cloneable {
   private Pixel toolPixel = new Pixel();
   private int imageWidth = -1;
   private int imageHeight = -1;
@@ -299,9 +300,9 @@ public class SimpleHDRImage implements WFImage {
 
           double x = MathLib.frac(xCoord);
           double y = MathLib.frac(yCoord);
-          float r = (float) Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y)) / 255.0f;
-          float g = (float) Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y)) / 255.f;
-          float b = (float) Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y)) / 255.f;
+          float r = (float) Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y)) / 255.0f;
+          float g = (float) Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y)) / 255.f;
+          float b = (float) Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y)) / 255.f;
           setRGB(j, i, r, g, b);
         }
       }

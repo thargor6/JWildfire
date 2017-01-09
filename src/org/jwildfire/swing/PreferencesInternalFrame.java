@@ -16,7 +16,7 @@ import org.jwildfire.base.Prefs;
 
 public class PreferencesInternalFrame extends JInternalFrame {
   private static final long serialVersionUID = 1L;
-  private Desktop desktop = null;// @jve:decl-index=0:
+  private JWildfire desktop = null;// @jve:decl-index=0:
   private MainController mainController = null; //  @jve:decl-index=0:
   private Prefs prefs = null; //  @jve:decl-index=0:
   private Prefs editPrefs = null; //  @jve:decl-index=0:
@@ -30,6 +30,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
    */
   public PreferencesInternalFrame() {
     super();
+    setResizable(true);
     initialize();
   }
 
@@ -66,7 +67,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
 
   }
 
-  public void setDesktop(Desktop desktop) {
+  public void setDesktop(JWildfire desktop) {
     this.desktop = desktop;
   }
 
@@ -99,7 +100,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JButton getSavePrefsButton() {
     if (savePrefsButton == null) {
       savePrefsButton = new JButton();
-      savePrefsButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      savePrefsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       savePrefsButton.setText("Save and Close");
       savePrefsButton.setMnemonic(KeyEvent.VK_S);
       savePrefsButton.setPreferredSize(new Dimension(125, 24));
@@ -107,7 +108,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
         public void actionPerformed(java.awt.event.ActionEvent e) {
           try {
             prefs.assign(editPrefs);
-            prefs.saveToFromFile();
+            prefs.saveToFile();
           }
           catch (Exception ex) {
             mainController.handleError(ex);
@@ -128,7 +129,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JButton getCancelButton() {
     if (cancelButton == null) {
       cancelButton = new JButton();
-      cancelButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      cancelButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       cancelButton.setText("Cancel and Close");
       cancelButton.setMnemonic(KeyEvent.VK_C);
       cancelButton.setPreferredSize(new Dimension(125, 24));
@@ -178,6 +179,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   private JPanel getMainPanel() {
     if (mainPanel == null) {
       mainPanel = new JPanel();
+      mainPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       mainPanel.setLayout(new BorderLayout());
       mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
     }

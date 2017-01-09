@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -149,7 +150,7 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(_2ndWeight);
-      int f = (int) (Math.random() * 3);
+      int f = Tools.randomInt(3);
       switch (f) {
         case 0:
           xForm.addVariation(Math.random() * 0.37 + 0.1, VariationFuncList.getVariationFuncInstance("radial_blur", true));
@@ -164,6 +165,8 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
           juliaN.setParameter("power", 50 - Math.random() * 100);
           juliaN.setParameter("dist", Math.random() * 10 - 2);
           xForm.addVariation(Math.random() * 0.06 + 0.1, juliaN);
+          break;
+        default: // nothing to do
           break;
       }
       xForm.setColorSymmetry(-1);
@@ -247,7 +250,12 @@ public class GnarlRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

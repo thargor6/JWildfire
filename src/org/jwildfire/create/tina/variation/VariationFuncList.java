@@ -24,6 +24,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
+import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
+import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
@@ -65,6 +71,7 @@ public class VariationFuncList {
     aliasMap.put(CircleLinearFunc.class, "CircleLinear");
     aliasMap.put(CircleRandFunc.class, "CircleRand");
     aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
+    aliasMap.put(MobiusNFunc.class, "MobiusN");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -462,10 +469,20 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
+
+    registerVariationFunc(YPlot2DWFFunc.class);
+    registerVariationFunc(YPlot3DWFFunc.class);
+    registerVariationFunc(ParPlot2DWFFunc.class);
+    registerVariationFunc(MobiusNFunc.class);
+    registerVariationFunc(OBJMeshWFFunc.class);
+    registerVariationFunc(OBJMeshPrimitiveWFFunc.class);
+    registerVariationFunc(PlaneWFFunc.class);
+    registerVariationFunc(CheckerboardWFFunc.class);
+    registerVariationFunc(IsoSFPlot3DWFFunc.class);
     
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
-    
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -57,12 +57,10 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -79,7 +77,6 @@ import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Shading;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -87,8 +84,6 @@ import org.jwildfire.create.tina.batch.BatchRendererController;
 import org.jwildfire.create.tina.browser.FlameBrowserController;
 import org.jwildfire.create.tina.dance.DancingFractalsController;
 import org.jwildfire.create.tina.edit.UndoManager;
-import org.jwildfire.create.tina.integration.chaotica.ChaosFlameWriter;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaLauncher;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
@@ -145,6 +140,7 @@ import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
 import org.jwildfire.transform.TextTransformer;
 import org.jwildfire.transform.TextTransformer.FontStyle;
@@ -158,7 +154,6 @@ import com.l2fprod.common.util.ResourceManager;
 
 public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnvironment, UndoManagerHolder<Flame>, JWFScriptExecuteController, GradientSelectionProvider,
     DetachedPreviewProvider, FlamePanelProvider, RandomBatchHolder, RenderProgressBarHolder {
-  public static final int PAGE_INDEX = 0;
 
   static final double SLIDER_SCALE_PERSPECTIVE = 100.0;
   static final double SLIDER_SCALE_CENTRE = 5000.0;
@@ -183,6 +178,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private MeshGenController meshGenController;
   private BatchRendererController batchRendererController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
+  private FlamesGPURenderController gpuRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
   private JWFScriptController jwfScriptController;
   private FlameBrowserController flameBrowserController;
@@ -204,8 +200,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
 
+  private final JWildfire desktop;
   private final Prefs prefs;
-  private final ErrorHandler errorHandler;
+  final ErrorHandler errorHandler;
   boolean gridRefreshing = false;
   boolean cmbRefreshing = false;
   boolean refreshing = false;
@@ -213,8 +210,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   final UndoManager<Flame> undoManager = new UndoManager<Flame>();
   private final QuickSaveFilenameGen qsaveFilenameGen;
 
-  private MainController mainController;
-  private final JTabbedPane rootTabbedPane;
+  MainController mainController;
+  private final JPanel rootPanel;
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
@@ -226,14 +223,18 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private Properties scriptProps = new Properties();
   private File scriptPropFile = new File(System.getProperty("user.home"), SCRIPT_PROPS_FILE);
 
+  private final JPanel nonlinearParamsPanel;
+  private final int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
+
   public TinaController(TinaControllerParameter parameterObject) {
+    desktop = parameterObject.desktop;
     tinaFrame = parameterObject.pTinaFrame;
     tinaFrameTitle = tinaFrame.getTitle();
     errorHandler = parameterObject.pErrorHandler;
     prefs = parameterObject.pPrefs;
     centerPanel = parameterObject.pCenterPanel;
 
-    dancingFractalsController = new DancingFractalsController(this, parameterObject.pErrorHandler, parameterObject.pRootTabbedPane, parameterObject.pDancingFlamesFlamePnl, parameterObject.pDancingFlamesGraph1Pnl,
+    dancingFractalsController = new DancingFractalsController(this, parameterObject.pErrorHandler, parameterObject.pRootPanel, parameterObject.pDancingFlamesFlamePnl, parameterObject.pDancingFlamesGraph1Pnl,
         parameterObject.pDancingFlamesLoadSoundBtn, parameterObject.pDancingFlamesAddFromClipboardBtn, parameterObject.pDancingFlamesAddFromEditorBtn,
         parameterObject.pDancingFlamesAddFromDiscBtn, parameterObject.pDancingFlamesRandomCountIEd, parameterObject.pDancingFlamesGenRandFlamesBtn,
         parameterObject.pDancingFlamesRandomGenCmb, parameterObject.pDancingFlamesPoolFlamePreviewPnl, parameterObject.pDancingFlamesBorderSizeSlider,
@@ -274,17 +275,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       flamePanels[22] = parameterObject.mutaGen23Pnl;
       flamePanels[23] = parameterObject.mutaGen24Pnl;
       flamePanels[24] = parameterObject.mutaGen25Pnl;
-      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, flamePanels,
+      mutaGenController = new MutaGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, flamePanels,
           parameterObject.mutaGenLoadFlameFromEditorBtn, parameterObject.mutaGenLoadFlameFromFileBtn, parameterObject.mutaGenProgressBar,
           parameterObject.mutaGenAmountREd, parameterObject.mutaGenHorizontalTrend1Cmb, parameterObject.mutaGenHorizontalTrend2Cmb,
           parameterObject.mutaGenVerticalTrend1Cmb, parameterObject.mutaGenVerticalTrend2Cmb, parameterObject.mutaGenBackBtn, parameterObject.mutaGenForwardBtn,
           parameterObject.mutaGenHintPane, parameterObject.mutaGenSaveFlameToEditorBtn, parameterObject.mutaGenSaveFlameToFileBtn);
     }
 
-    batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane, data,
-        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn);
+    batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
+        parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn);
 
-    meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootTabbedPane,
+    meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel,
         parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
         parameterObject.meshGenSliceCountREd, parameterObject.meshGenSlicesPerRenderREd, parameterObject.meshGenRenderWidthREd,
         parameterObject.meshGenRenderHeightREd, parameterObject.meshGenRenderQualityREd, parameterObject.meshGenProgressbar,
@@ -304,7 +305,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
         parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
         parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenThicknessModREd, parameterObject.meshGenThicknessSamplesREd,
-        parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd);
+        parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd,
+        parameterObject.meshGenOutputTypeCmb);
 
     data.macroButtonsTable = parameterObject.macroButtonsTable;
     data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;
@@ -433,6 +435,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.resolutionProfileCmb = parameterObject.pResolutionProfileCmb;
     data.batchQualityProfileCmb = parameterObject.pBatchQualityProfileCmb;
     data.batchResolutionProfileCmb = parameterObject.pBatchResolutionProfileCmb;
+    data.gpuQualityProfileCmb = parameterObject.gpuQualityProfileCmb;
+    data.gpuResolutionProfileCmb = parameterObject.gpuResolutionProfileCmb;
     data.interactiveResolutionProfileCmb = parameterObject.pInteractiveResolutionProfileCmb;
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
     data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
@@ -482,6 +486,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormColorSlider = parameterObject.pXFormColorSlider;
     data.xFormSymmetryREd = parameterObject.pXFormSymmetryREd;
     data.xFormSymmetrySlider = parameterObject.pXFormSymmetrySlider;
+
+    data.xFormMaterialREd = parameterObject.xFormMaterialREd;
+    data.xFormMaterialSlider = parameterObject.xFormMaterialSlider;
+    data.xFormMaterialSpeedREd = parameterObject.xFormMaterialSpeedREd;
+    data.xFormMaterialSpeedSlider = parameterObject.xFormMaterialSpeedSlider;
+
     data.xFormModGammaREd = parameterObject.pXFormModGammaREd;
     data.xFormModGammaSlider = parameterObject.pXFormModGammaSlider;
     data.xFormModGammaSpeedREd = parameterObject.pXFormModGammaSpeedREd;
@@ -496,6 +506,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormModSaturationSlider = parameterObject.pXFormModSaturationSlider;
     data.xFormModSaturationSpeedREd = parameterObject.pXFormModSaturationSpeedREd;
     data.xFormModSaturationSpeedSlider = parameterObject.pXFormModSaturationSpeedSlider;
+
+    data.xFormModHueREd = parameterObject.pXFormModHueREd;
+    data.xFormModHueSlider = parameterObject.pXFormModHueSlider;
+    data.xFormModHueSpeedREd = parameterObject.pXFormModHueSpeedREd;
+    data.xFormModHueSpeedSlider = parameterObject.pXFormModHueSpeedSlider;
 
     data.xFormOpacityREd = parameterObject.pXFormOpacityREd;
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
@@ -585,54 +600,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     mainProgressUpdater = new RenderProgressUpdater(this);
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
-    data.shadingCmb = parameterObject.pShadingCmb;
-    data.shadingAmbientREd = parameterObject.pShadingAmbientREd;
-    data.shadingAmbientSlider = parameterObject.pShadingAmbientSlider;
-    data.shadingDiffuseREd = parameterObject.pShadingDiffuseREd;
-    data.shadingDiffuseSlider = parameterObject.pShadingDiffuseSlider;
-    data.shadingPhongREd = parameterObject.pShadingPhongREd;
-    data.shadingPhongSlider = parameterObject.pShadingPhongSlider;
-    data.shadingPhongSizeREd = parameterObject.pShadingPhongSizeREd;
-    data.shadingPhongSizeSlider = parameterObject.pShadingPhongSizeSlider;
-    data.shadingLightCmb = parameterObject.pShadingLightCmb;
-    data.shadingLightXREd = parameterObject.pShadingLightXREd;
-    data.shadingLightXSlider = parameterObject.pShadingLightXSlider;
-    data.shadingLightYREd = parameterObject.pShadingLightYREd;
-    data.shadingLightYSlider = parameterObject.pShadingLightYSlider;
-    data.shadingLightZREd = parameterObject.pShadingLightZREd;
-    data.shadingLightZSlider = parameterObject.pShadingLightZSlider;
-    data.shadingLightRedREd = parameterObject.pShadingLightRedREd;
-    data.shadingLightRedSlider = parameterObject.pShadingLightRedSlider;
-    data.shadingLightGreenREd = parameterObject.pShadingLightGreenREd;
-    data.shadingLightGreenSlider = parameterObject.pShadingLightGreenSlider;
-    data.shadingLightBlueREd = parameterObject.pShadingLightBlueREd;
-    data.shadingLightBlueSlider = parameterObject.pShadingLightBlueSlider;
 
-    data.shadingBlurRadiusREd = parameterObject.pShadingBlurRadiusREd;
-    data.shadingBlurRadiusSlider = parameterObject.pShadingBlurRadiusSlider;
-    data.shadingBlurFadeREd = parameterObject.pShadingBlurFadeREd;
-    data.shadingBlurFadeSlider = parameterObject.pShadingBlurFadeSlider;
-    data.shadingBlurFallOffREd = parameterObject.pShadingBlurFallOffREd;
-    data.shadingBlurFallOffSlider = parameterObject.pShadingBlurFallOffSlider;
+    data.postBlurRadiusREd = parameterObject.postBlurRadiusREd;
+    data.postBlurRadiusSlider = parameterObject.postBlurRadiusSlider;
+    data.postBlurFadeREd = parameterObject.postBlurFadeREd;
+    data.postBlurFadeSlider = parameterObject.postBlurFadeSlider;
+    data.postBlurFallOffREd = parameterObject.postBlurFallOffREd;
+    data.postBlurFallOffSlider = parameterObject.postBlurFallOffSlider;
 
-    data.shadingDistanceColorRadiusREd = parameterObject.pShadingDistanceColorRadiusREd;
-    data.shadingDistanceColorRadiusSlider = parameterObject.pShadingDistanceColorRadiusSlider;
-    data.shadingDistanceColorScaleREd = parameterObject.pShadingDistanceColorScaleREd;
-    data.shadingDistanceColorScaleSlider = parameterObject.pShadingDistanceColorScaleSlider;
-    data.shadingDistanceColorExponentREd = parameterObject.pShadingDistanceColorExponentREd;
-    data.shadingDistanceColorExponentSlider = parameterObject.pShadingDistanceColorExponentSlider;
-    data.shadingDistanceColorOffsetXREd = parameterObject.pShadingDistanceColorOffsetXREd;
-    data.shadingDistanceColorOffsetXSlider = parameterObject.pShadingDistanceColorOffsetXSlider;
-    data.shadingDistanceColorOffsetYREd = parameterObject.pShadingDistanceColorOffsetYREd;
-    data.shadingDistanceColorOffsetYSlider = parameterObject.pShadingDistanceColorOffsetYSlider;
-    data.shadingDistanceColorOffsetZREd = parameterObject.pShadingDistanceColorOffsetZREd;
-    data.shadingDistanceColorOffsetZSlider = parameterObject.pShadingDistanceColorOffsetZSlider;
-    data.shadingDistanceColorStyleREd = parameterObject.pShadingDistanceColorStyleREd;
-    data.shadingDistanceColorStyleSlider = parameterObject.pShadingDistanceColorStyleSlider;
-    data.shadingDistanceColorCoordinateREd = parameterObject.pShadingDistanceColorCoordinateREd;
-    data.shadingDistanceColorCoordinateSlider = parameterObject.pShadingDistanceColorCoordinateSlider;
-    data.shadingDistanceColorShiftREd = parameterObject.pShadingDistanceColorShiftREd;
-    data.shadingDistanceColorShiftSlider = parameterObject.pShadingDistanceColorShiftSlider;
+    data.tinaZBufferScaleREd = parameterObject.tinaZBufferScaleREd;
+    data.tinaZBufferScaleSlider = parameterObject.tinaZBufferScaleSlider;
 
     data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
@@ -646,6 +623,78 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaPostNoiseThresholdSlider = parameterObject.tinaPostNoiseThresholdSlider;
     data.foregroundOpacityField = parameterObject.foregroundOpacityField;
     data.foregroundOpacitySlider = parameterObject.foregroundOpacitySlider;
+
+    data.solidRenderingToggleBtn = parameterObject.solidRenderingToggleBtn;
+    data.tinaSolidRenderingEnableAOCBx = parameterObject.tinaSolidRenderingEnableAOCBx;
+    data.tinaSolidRenderingAOIntensityREd = parameterObject.tinaSolidRenderingAOIntensityREd;
+    data.tinaSolidRenderingAOIntensitySlider = parameterObject.tinaSolidRenderingAOIntensitySlider;
+    data.tinaSolidRenderingAOSearchRadiusREd = parameterObject.tinaSolidRenderingAOSearchRadiusREd;
+    data.tinaSolidRenderingAOSearchRadiusSlider = parameterObject.tinaSolidRenderingAOSearchRadiusSlider;
+    data.tinaSolidRenderingAOBlurRadiusREd = parameterObject.tinaSolidRenderingAOBlurRadiusREd;
+    data.tinaSolidRenderingAOBlurRadiusSlider = parameterObject.tinaSolidRenderingAOBlurRadiusSlider;
+    data.tinaSolidRenderingAOFalloffREd = parameterObject.tinaSolidRenderingAOFalloffREd;
+    data.tinaSolidRenderingAOFalloffSlider = parameterObject.tinaSolidRenderingAOFalloffSlider;
+    data.tinaSolidRenderingAORadiusSamplesREd = parameterObject.tinaSolidRenderingAORadiusSamplesREd;
+    data.tinaSolidRenderingAORadiusSamplesSlider = parameterObject.tinaSolidRenderingAORadiusSamplesSlider;
+    data.tinaSolidRenderingAOAzimuthSamplesREd = parameterObject.tinaSolidRenderingAOAzimuthSamplesREd;
+    data.tinaSolidRenderingAOAzimuthSamplesSlider = parameterObject.tinaSolidRenderingAOAzimuthSamplesSlider;
+    data.tinaSolidRenderingAOAffectDiffuseREd = parameterObject.tinaSolidRenderingAOAffectDiffuseREd;
+    data.tinaSolidRenderingAOAffectDiffuseSlider = parameterObject.tinaSolidRenderingAOAffectDiffuseSlider;
+    data.tinaSolidRenderingShadowTypeCmb = parameterObject.tinaSolidRenderingShadowTypeCmb;
+    data.tinaSolidRenderingShadowmapSizeCmb = parameterObject.tinaSolidRenderingShadowmapSizeCmb;
+    data.tinaSolidRenderingShadowSmoothRadiusREd = parameterObject.tinaSolidRenderingShadowSmoothRadiusREd;
+    data.tinaSolidRenderingShadowSmoothRadiusSlider = parameterObject.tinaSolidRenderingShadowSmoothRadiusSlider;
+    data.tinaSolidRenderingShadowmapBiasREd = parameterObject.tinaSolidRenderingShadowmapBiasREd;
+    data.tinaSolidRenderingShadowmapBiasSlider = parameterObject.tinaSolidRenderingShadowmapBiasSlider;
+    data.bokehSettingsPnl = parameterObject.bokehSettingsPnl;
+    data.postBokehSettingsPnl = parameterObject.postBokehSettingsPnl;
+    data.resetPostBokehSettingsBtn = parameterObject.resetPostBokehSettingsBtn;
+    data.postBokehIntensityREd = parameterObject.postBokehIntensityREd;
+    data.postBokehIntensitySlider = parameterObject.postBokehIntensitySlider;
+    data.postBokehBrightnessREd = parameterObject.postBokehBrightnessREd;
+    data.postBokehBrightnessSlider = parameterObject.postBokehBrightnessSlider;
+    data.postBokehSizeREd = parameterObject.postBokehSizeREd;
+    data.postBokehSizeSlider = parameterObject.postBokehSizeSlider;
+    data.postBokehActivationREd = parameterObject.postBokehActivationREd;
+    data.postBokehActivationSlider = parameterObject.postBokehActivationSlider;
+    data.postBokehFilterKernelCmb = parameterObject.postBokehFilterKernelCmb;
+
+    data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
+    data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
+    data.resetSolidRenderingHardShadowOptionsBtn = parameterObject.resetSolidRenderingHardShadowOptionsBtn;
+    data.resetSolidRenderingAmbientShadowOptionsBtn = parameterObject.resetSolidRenderingAmbientShadowOptionsBtn;
+    data.tinaSolidRenderingSelectedLightCmb = parameterObject.tinaSolidRenderingSelectedLightCmb;
+    data.tinaSolidRenderingAddLightBtn = parameterObject.tinaSolidRenderingAddLightBtn;
+    data.tinaSolidRenderingDeleteLightBtn = parameterObject.tinaSolidRenderingDeleteLightBtn;
+    data.tinaSolidRenderingLightAltitudeREd = parameterObject.tinaSolidRenderingLightPosAltitudeREd;
+    data.tinaSolidRenderingLightAzimuthREd = parameterObject.tinaSolidRenderingLightPosAzimuthREd;
+    data.tinaSolidRenderingLightAltitudeSlider = parameterObject.tinaSolidRenderingLightAltitudeSlider;
+    data.tinaSolidRenderingLightAzimuthSlider = parameterObject.tinaSolidRenderingLightAzimuthSlider;
+    data.tinaSolidRenderingLightColorBtn = parameterObject.tinaSolidRenderingLightColorBtn;
+    data.tinaSolidRenderingLightCastShadowsCBx = parameterObject.tinaSolidRenderingLightCastShadowsCBx;
+    data.tinaSolidRenderingLightIntensityREd = parameterObject.tinaSolidRenderingLightIntensityREd;
+    data.tinaSolidRenderingLightIntensitySlider = parameterObject.tinaSolidRenderingLightIntensitySlider;
+    data.tinaSolidRenderingShadowIntensityREd = parameterObject.tinaSolidRenderingShadowIntensityREd;
+    data.tinaSolidRenderingShadowIntensitySlider = parameterObject.tinaSolidRenderingShadowIntensitySlider;
+    data.tinaSolidRenderingSelectedMaterialCmb = parameterObject.tinaSolidRenderingSelectedMaterialCmb;
+    data.tinaSolidRenderingAddMaterialBtn = parameterObject.tinaSolidRenderingAddMaterialBtn;
+    data.tinaSolidRenderingDeleteMaterialBtn = parameterObject.tinaSolidRenderingDeleteMaterialBtn;
+    data.tinaSolidRenderingMaterialDiffuseREd = parameterObject.tinaSolidRenderingMaterialDiffuseREd;
+    data.tinaSolidRenderingMaterialDiffuseSlider = parameterObject.tinaSolidRenderingMaterialDiffuseSlider;
+    data.tinaSolidRenderingMaterialAmbientREd = parameterObject.tinaSolidRenderingMaterialAmbientREd;
+    data.tinaSolidRenderingMaterialAmbientSlider = parameterObject.tinaSolidRenderingMaterialAmbientSlider;
+    data.tinaSolidRenderingMaterialSpecularREd = parameterObject.tinaSolidRenderingMaterialSpecularREd;
+    data.tinaSolidRenderingMaterialSpecularSlider = parameterObject.tinaSolidRenderingMaterialSpecularSlider;
+    data.tinaSolidRenderingMaterialSpecularSharpnessREd = parameterObject.tinaSolidRenderingMaterialSpecularSharpnessREd;
+    data.tinaSolidRenderingMaterialSpecularSharpnessSlider = parameterObject.tinaSolidRenderingMaterialSpecularSharpnessSlider;
+    data.tinaSolidRenderingMaterialSpecularColorBtn = parameterObject.tinaSolidRenderingMaterialSpecularColorBtn;
+    data.tinaSolidRenderingMaterialDiffuseResponseCmb = parameterObject.tinaSolidRenderingMaterialDiffuseResponseCmb;
+    data.tinaSolidRenderingMaterialReflectionMapIntensityREd = parameterObject.tinaSolidRenderingMaterialReflectionMapIntensityREd;
+    data.tinaSolidRenderingMaterialReflectionMapIntensitySlider = parameterObject.tinaSolidRenderingMaterialReflectionMapIntensitySlider;
+    data.tinaSolidRenderingMaterialReflectionMappingCmb = parameterObject.tinaSolidRenderingMaterialReflectionMappingCmb;
+    data.tinaSolidRenderingMaterialReflMapBtn = parameterObject.tinaSolidRenderingMaterialReflMapBtn;
+    data.tinaSolidRenderingMaterialSelectReflMapBtn = parameterObject.tinaSolidRenderingMaterialSelectReflMapBtn;
+    data.tinaSolidRenderingMaterialRemoveReflMapBtn = parameterObject.tinaSolidRenderingMaterialRemoveReflMapBtn;
 
     data.mouseTransformSlowButton = parameterObject.pMouseTransformSlowButton;
     data.toggleTriangleWithColorsButton = parameterObject.toggleTriangleWithColorsButton;
@@ -661,7 +710,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.batchRenderFilesRemoveButton = parameterObject.pBatchRenderFilesRemoveButton;
     data.batchRenderFilesRemoveAllButton = parameterObject.pBatchRenderFilesRemoveAllButton;
     data.batchRenderStartButton = parameterObject.pBatchRenderStartButton;
-    rootTabbedPane = parameterObject.pRootTabbedPane;
+    rootPanel = parameterObject.pRootPanel;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
 
@@ -671,9 +720,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton = parameterObject.editFlameTileButton;
     data.snapShotButton = parameterObject.snapShotButton;
     data.qSaveButton = parameterObject.qSaveButton;
-    data.quickMutationButton = parameterObject.quickMutationButton;
+    data.sendToIRButton = parameterObject.sendToIRButton;
     data.bokehButton = parameterObject.bokehButton;
-    data.dancingFlamesButton = parameterObject.dancingFlamesButton;
     data.movieButton = parameterObject.movieButton;
     data.transformSlowButton = parameterObject.transformSlowButton;
     data.transparencyButton = parameterObject.transparencyButton;
@@ -693,7 +741,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
     data.toggleDrawGuidesButton = parameterObject.toggleDrawGuidesButton;
     data.triangleStyleCmb = parameterObject.triangleStyleCmb;
-    data.editorFractalBrightnessSlider = parameterObject.editorFractalBrightnessSlider;
     data.channelMixerResetBtn = parameterObject.channelMixerResetBtn;
     data.channelMixerModeCmb = parameterObject.channelMixerModeCmb;
     data.channelMixerRRRootPanel = parameterObject.channelMixerRRRootPanel;
@@ -746,13 +793,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.macroButtonHorizPanel = parameterObject.macroButtonHorizPanel;
     data.gradientResetBtn = parameterObject.gradientResetBtn;
     data.macroButtonHorizRootPanel = parameterObject.macroButtonHorizRootPanel;
-    data.affineEditPlaneCmb = parameterObject.affineEditPlaneCmb;
-
+    data.affineXYEditPlaneToggleBtn = parameterObject.affineXYEditPlaneToggleBtn;
+    data.affineYZEditPlaneToggleBtn = parameterObject.affineYZEditPlaneToggleBtn;
+    data.affineZXEditPlaneToggleBtn = parameterObject.affineZXEditPlaneToggleBtn;
     // end create
-    flameControls = new FlameControlsDelegate(this, data, rootTabbedPane);
-    xFormControls = new XFormControlsDelegate(this, data, rootTabbedPane);
-    gradientControls = new GradientControlsDelegate(this, data, rootTabbedPane);
-    channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootTabbedPane, true);
+    flameControls = new FlameControlsDelegate(this, data, rootPanel);
+    xFormControls = new XFormControlsDelegate(this, data, rootPanel);
+    gradientControls = new GradientControlsDelegate(this, data, rootPanel);
+    channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
 
     messageHelper = new JInternalFrameFlameMessageHelper(tinaFrame);
 
@@ -769,6 +817,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     initHelpPane();
     initApophysisHintsPane();
 
+    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++) {
+      initNonlinearControls(data.TinaNonlinearControlsRows[i]);
+      data.TinaNonlinearControlsRows[i].getToggleParamsPnlButton().setSelected(prefs.isTinaDefaultExpandNonlinearParams());
+    }
+    nonlinearParamsPanel = (JPanel) data.TinaNonlinearControlsRows[0].getRootPanel().getParent();
+    nonlinearParamsPanelBaseWidth = nonlinearParamsPanel.getPreferredSize().width;
+    nonlinearParamsPanelBaseHeight = nonlinearParamsPanel.getPreferredSize().height;
+
     refreshPaletteColorsTable();
     getBatchRendererController().refreshRenderBatchJobsTable();
 
@@ -780,9 +836,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshResolutionProfileCmb(data.resolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.batchResolutionProfileCmb, null);
+    refreshResolutionProfileCmb(data.gpuResolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, null);
     refreshQualityProfileCmb(data.qualityProfileCmb, null);
     refreshQualityProfileCmb(data.batchQualityProfileCmb, null);
+    refreshQualityProfileCmb(data.gpuQualityProfileCmb, null);
     refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, null);
 
     getFlameBrowserController().init();
@@ -955,7 +1013,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         @Override
         public void mouseReleased(MouseEvent e) {
           if (dragging) {
-            refreshFlameImage(true, false, 1, true);
+            refreshFlameImage(true, false, 1, true, false);
             flamePanel_mouseReleased(e);
           }
           dragging = false;
@@ -1149,7 +1207,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       final int IMG_WIDTH = 80;
       final int IMG_HEIGHT = 60;
       RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-      int palettePoints = 3 + (int) (Math.random() * 21.0);
+      int palettePoints = 3 + Tools.randomInt(21);
       boolean fadePaletteColors = Math.random() > 0.09;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
       Flame flame = sampler.createSample().getFlame();
@@ -1223,8 +1281,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return getFlamePanel().getConfig();
   }
 
-  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender) {
-    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, pReRender);
+  public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
+    flamePreviewHelper.refreshFlameImage(pQuickRender, pMouseDown, pDownScale, pReRender, pAllowUseCache);
   }
 
   public void fastRefreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale) {
@@ -1278,10 +1336,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       transformationChanged(true);
 
-      data.shadingLightCmb.setSelectedIndex(0);
-
       enableControls();
-      flameControls.refreshShadingUI();
       enableLayerControls();
       channelMixerControls.refreshValues(true);
       refreshPaletteUI(getCurrLayer().getPalette());
@@ -1291,7 +1346,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
+  public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
     public Component getTableCellRendererComponent(JTable table,
@@ -1316,8 +1371,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     final int COL_TRANSFORM = 0;
     final int COL_VARIATIONS = 1;
     final int COL_WEIGHT = 2;
-    if (prefs.isTinaEditorControlsWithColor()) {
+    if (data.toggleTriangleWithColorsButton.isSelected()) {
       data.transformationsTable.setDefaultRenderer(Object.class, new TransformationsTableCellRenderer());
+    }
+    else {
+      data.transformationsTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
     }
 
     data.transformationsTable.setModel(new DefaultTableModel() {
@@ -1378,7 +1436,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           saveUndoPoint();
           xForm.setWeight(Tools.stringToDouble(valStr));
           refreshXFormUI(xForm);
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1443,7 +1501,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 return layer.isVisible() ? "1" : "0";
               }
             case COL_WEIGHT:
-              return Tools.doubleToString(layer.getWeight());
+              if (layer != null) {
+                return Tools.doubleToString(layer.getWeight());
+              }
           }
         }
         return null;
@@ -1467,7 +1527,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               saveUndoPoint();
               layer.setVisible("1".equals(aValue));
               data.layerVisibleBtn.setSelected(layer.isVisible());
-              refreshFlameImage(true, false, 1, true);
+              refreshFlameImage(true, false, 1, true, false);
               break;
             case COL_WEIGHT:
               saveUndoPoint();
@@ -1475,6 +1535,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               data.layerWeightEd.setValue(layer.getWeight());
               // refreshed automatically:
               // refreshFlameImage(false);
+              break;
+            default: // nothing to do
               break;
           }
         }
@@ -1590,6 +1652,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             case COL_BLUE:
               data.paletteKeyFrames.get(row).setBlue(Tools.limitColor(Tools.stringToInt(valStr)));
               break;
+            default: // nothing to do
+              break;
           }
           refreshPaletteColorsTable();
           RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
@@ -1597,7 +1661,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           getCurrLayer().setPalette(palette);
           setLastGradient(palette);
           refreshPaletteUI(palette);
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1698,7 +1762,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           saveUndoPoint();
           xForm.getModifiedWeights()[row] = Tools.stringToDouble(valStr);
           relWeightsTableClicked();
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
         super.setValueAt(aValue, row, column);
       }
@@ -1794,7 +1858,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -1827,7 +1891,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -1868,7 +1932,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -1906,7 +1970,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ex.printStackTrace();
       }
       refreshPaletteImg();
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -1940,7 +2004,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -1979,7 +2043,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       catch (Throwable ex) {
         ex.printStackTrace();
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       noRefresh = false;
@@ -2046,7 +2110,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       getCurrLayer().setPalette(palette);
       setLastGradient(palette);
       refreshPaletteUI(palette);
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -2072,7 +2136,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       setLastGradient(palette);
       refreshPaletteColorsTable();
       refreshPaletteUI(palette);
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -2151,7 +2215,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void saveFlameButton_actionPerformed(ActionEvent e) {
     try {
       if (getCurrFlame() != null) {
-        JFileChooser chooser = new FlameFileChooser(prefs, !prefs.isTinaIntegrationChaoticaDisabled());
+        JFileChooser chooser = new FlameFileChooser(prefs);
         if (prefs.getOutputFlamePath() != null) {
           try {
             chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
@@ -2162,21 +2226,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
-          FileFilter filter = chooser.getFileFilter();
           String filename = file.getAbsolutePath();
-          if ((filter != null && filter instanceof ChaosFileFilter) || filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
-            if (!filename.endsWith("." + Tools.FILEEXT_CHAOS)) {
-              filename += "." + Tools.FILEEXT_CHAOS;
-            }
-            new ChaosFlameWriter(generateExportFlame(getCurrFlame())).writeFlame(filename);
+          if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
+            filename += "." + Tools.FILEEXT_FLAME;
           }
-          else {
-            if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
-              filename += "." + Tools.FILEEXT_FLAME;
-            }
-            new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
-            getCurrFlame().setLastFilename(file.getName());
-          }
+          new FlameWriter().writeFlame(generateExportFlame(getCurrFlame()), filename);
+          getCurrFlame().setLastFilename(file.getName());
           messageHelper.showStatusMessage(getCurrFlame(), "flame saved to disc");
           prefs.setLastOutputFlameFile(file);
         }
@@ -2224,7 +2279,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         }
         refreshXFormUI(xForm);
         xFormControls.enableControls(xForm);
-        refreshFlameImage(true, false, 1, pReRender);
+        resizeNonlinearParamsPanel();
+        refreshFlameImage(true, false, 1, pReRender, false);
       }
       finally {
         cmbRefreshing = oldCmbRefreshing;
@@ -2268,9 +2324,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton.setEnabled(enabled);
     data.snapShotButton.setEnabled(enabled);
     data.qSaveButton.setEnabled(enabled);
-    data.quickMutationButton.setEnabled(enabled);
+    data.sendToIRButton.setEnabled(enabled);
     data.bokehButton.setEnabled(enabled);
-    data.dancingFlamesButton.setEnabled(enabled);
+    data.solidRenderingToggleBtn.setEnabled(enabled);
     data.movieButton.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
@@ -2352,7 +2408,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     boolean oldNoRefresh = noRefresh;
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-      data.affineEditPlaneCmb.setSelectedItem(getCurrFlame().getEditPlane());
+      refreshEditPlaneToggleButtons(getCurrFlame().getEditPlane());
       if (pXForm != null) {
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
@@ -2376,6 +2432,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormSymmetryREd.setText(Tools.doubleToString(pXForm.getColorSymmetry()));
         data.xFormSymmetrySlider.setValue(Tools.FTOI(pXForm.getColorSymmetry() * SLIDER_SCALE_COLOR));
 
+        data.xFormMaterialREd.setText(Tools.doubleToString(pXForm.getMaterial()));
+        data.xFormMaterialSlider.setValue(Tools.FTOI(pXForm.getMaterial() * SLIDER_SCALE_COLOR));
+        data.xFormMaterialSpeedREd.setText(Tools.doubleToString(pXForm.getMaterialSpeed()));
+        data.xFormMaterialSpeedSlider.setValue(Tools.FTOI(pXForm.getMaterialSpeed() * SLIDER_SCALE_COLOR));
+
         data.xFormModGammaREd.setText(Tools.doubleToString(pXForm.getModGamma()));
         data.xFormModGammaSlider.setValue(Tools.FTOI(pXForm.getModGamma() * SLIDER_SCALE_COLOR));
         data.xFormModGammaSpeedREd.setText(Tools.doubleToString(pXForm.getModGammaSpeed()));
@@ -2390,6 +2451,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormModSaturationSlider.setValue(Tools.FTOI(pXForm.getModSaturation() * SLIDER_SCALE_COLOR));
         data.xFormModSaturationSpeedREd.setText(Tools.doubleToString(pXForm.getModSaturationSpeed()));
         data.xFormModSaturationSpeedSlider.setValue(Tools.FTOI(pXForm.getModSaturationSpeed() * SLIDER_SCALE_COLOR));
+
+        data.xFormModHueREd.setText(Tools.doubleToString(pXForm.getModHue()));
+        data.xFormModHueSlider.setValue(Tools.FTOI(pXForm.getModHue() * SLIDER_SCALE_COLOR));
+        data.xFormModHueSpeedREd.setText(Tools.doubleToString(pXForm.getModHueSpeed()));
+        data.xFormModHueSpeedSlider.setValue(Tools.FTOI(pXForm.getModHueSpeed() * SLIDER_SCALE_COLOR));
 
         data.xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
@@ -2408,6 +2474,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormColorSlider.setValue(0);
         data.xFormSymmetryREd.setText(null);
         data.xFormSymmetrySlider.setValue(0);
+        data.xFormMaterialREd.setText(null);
+        data.xFormMaterialSlider.setValue(0);
+        data.xFormMaterialSpeedREd.setText(null);
+        data.xFormMaterialSpeedSlider.setValue(0);
         data.xFormModGammaREd.setText(null);
         data.xFormModGammaSlider.setValue(0);
         data.xFormModGammaSpeedREd.setText(null);
@@ -2420,6 +2490,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormModSaturationSlider.setValue(0);
         data.xFormModSaturationSpeedREd.setText(null);
         data.xFormModSaturationSpeedSlider.setValue(0);
+        data.xFormModHueREd.setText(null);
+        data.xFormModHueSlider.setValue(0);
+        data.xFormModHueSpeedREd.setText(null);
+        data.xFormModHueSpeedSlider.setValue(0);
         data.xFormOpacityREd.setText(null);
         data.xFormOpacitySlider.setValue(0);
         data.transformationWeightREd.setText(null);
@@ -2430,11 +2504,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int idx = 0;
         for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
-            refreshParamCmb(row, null, null);
+            refreshParamControls(row, null, null);
           }
           else {
             Variation var = pXForm.getVariation(idx);
-            refreshParamCmb(row, pXForm, var);
+            refreshParamControls(row, pXForm, var);
           }
           idx++;
         }
@@ -2450,7 +2524,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void refreshParamCmb(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
       pRow.getNonlinearVarREd().setText(null);
@@ -2462,6 +2537,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       pRow.getNonlinearParamsPreButton().setEnabled(false);
       pRow.getNonlinearParamsPostButton().setSelected(false);
       pRow.getNonlinearParamsPostButton().setEnabled(false);
+      pRow.getToggleParamsPnlButton().setEnabled(false);
+
       if (pRow.getNonlinearParamsUpButton() != null) {
         pRow.getNonlinearParamsUpButton().setEnabled(false);
       }
@@ -2497,6 +2574,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           pRow.getNonlinearParamsCmb().addItem(name);
         }
       }
+      if (paramNames != null && paramNames.length > 1) {
+        pRow.getToggleParamsPnlButton().setEnabled(true);
+      }
+      else {
+        pRow.getToggleParamsPnlButton().setEnabled(false);
+      }
+
       // preselection
       if (resCount > 0) {
         pRow.getNonlinearParamsCmb().setSelectedIndex(0);
@@ -2505,8 +2589,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else if (varFunc.getParameterNames().length > 0) {
         pRow.getNonlinearParamsCmb().setSelectedIndex(0);
         Object val = varFunc.getParameterValues()[0];
+        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
         if (val instanceof Double) {
           pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+        }
+        else if (val instanceof Integer) {
+          pRow.getNonlinearParamsREd().setOnlyIntegers(true);
+          pRow.getNonlinearParamsREd().setText(val.toString());
         }
         else {
           pRow.getNonlinearParamsREd().setText(val.toString());
@@ -2516,8 +2605,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       else {
         pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
         pRow.getNonlinearParamsREd().setText(null);
+        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
       }
     }
+    pRow.rebuildParamsPnl(pXForm, pVar);
   }
 
   public void addLinkedXForm() {
@@ -2558,7 +2649,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     int row = getCurrLayer().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void duplicateXForm() {
@@ -2575,7 +2666,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     int row = getCurrLayer().getXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void deleteXForm() {
@@ -2594,7 +2685,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       gridRefreshing = false;
     }
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void addFinalXForm() {
@@ -2611,7 +2702,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     int row = getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size() - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   private void forceTriangleMode() {
@@ -2778,9 +2869,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchPanel.validate();
   }
 
-  public boolean createRandomBatch(int pCount, String pGeneratorname, String pSymmetryGeneratorname, String pGradientGeneratorname, RandomBatchQuality pQuality) {
+  public boolean createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
     stopPreviewRendering();
-    if (!confirmNewRandomBatch(pGeneratorname))
+    if (!confirmNewRandomBatch(randGen.getName()))
       return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
       randomBatch.clear();
@@ -2789,11 +2880,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     mainProgressUpdater.initProgress(maxCount);
-    RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(pGeneratorname, true);
-    RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(pSymmetryGeneratorname, true);
-    RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance(pGradientGeneratorname, true);
     for (int i = 0; i < maxCount; i++) {
-      int palettePoints = 7 + (int) (Math.random() * 24.0);
+      int palettePoints = 7 + Tools.randomInt(24);
       boolean fadePaletteColors = Math.random() > 0.06;
       RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
@@ -2913,9 +3001,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           var.setAmount(Tools.stringToDouble(varStr));
           xForm.addVariation(var);
         }
-        refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
         refreshXFormUI(xForm);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
+
         data.transformationsTable.invalidate();
         data.transformationsTable.repaint();
       }
@@ -2927,6 +3016,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void nonlinearVarREdChanged(int pIdx) {
     nonlinearVarREdChanged(pIdx, 0.0);
+  }
+
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue) {
+    if (cmbRefreshing) {
+      return;
+    }
+    cmbRefreshing = true;
+    try {
+      XForm xForm = getCurrXForm();
+      if (xForm != null) {
+        if (pIdx < xForm.getVariationCount()) {
+          Variation var = xForm.getVariation(pIdx);
+          var.getFunc().setParameter(pPropertyName, pPropertyValue);
+          refreshFlameImage(true, false, 1, true, false);
+        }
+      }
+    }
+    finally {
+      cmbRefreshing = false;
+    }
   }
 
   public void nonlinearVarREdChanged(int pIdx, double pDelta) {
@@ -2945,7 +3054,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
           var.setAmount(Tools.stringToDouble(varStr) + pDelta);
           data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd().setText(Tools.doubleToString(var.getAmount()));
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
     }
@@ -2994,10 +3103,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             if (var.getFunc().dynamicParameterExpansion(selected)) {
               // if setting the parameter can change the total number of parameters, 
               //    then refresh parameter UI (and reselect parameter that was changed)
-              this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
             }
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
+            data.TinaNonlinearControlsRows[pIdx].refreshParamWithoutRefresh(selected, val);
           }
           else if ((idx = var.getFunc().getRessourceIndex(selected)) >= 0) {
             final String rName = var.getFunc().getRessourceNames()[idx];
@@ -3093,8 +3203,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                   try {
                     File file = chooser.getSelectedFile();
                     String svg = Tools.readUTF8Textfile(file.getAbsolutePath());
-                    byte[] valByteArray = svg != null ? svg.getBytes() : null;
+                    byte[] valByteArray = svg.getBytes();
                     var.getFunc().setRessource(rName, valByteArray);
+                  }
+                  catch (Exception ex) {
+                    errorHandler.handleError(ex);
+                  }
+                }
+              }
+                break;
+              case OBJ_MESH: {
+                JFileChooser chooser = new MeshFileChooser(prefs);
+                if (prefs.getTinaMeshPath() != null) {
+                  try {
+                    chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  try {
+                    File file = chooser.getSelectedFile();
+                    var.getFunc().setRessource(rName, file.getAbsolutePath().getBytes());
                   }
                   catch (Exception ex) {
                     errorHandler.handleError(ex);
@@ -3138,7 +3269,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     var.getFunc().setRessource(rName, valByteArray);
                     if (var.getFunc().ressourceCanModifyParams(rName)) {
                       // forcing refresh of params UI in case setting resource changes available params or param values
-                      this.refreshParamCmb(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
                     }
                   }
                   catch (Throwable ex) {
@@ -3148,12 +3279,36 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               }
             }
           }
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
+      resizeNonlinearParamsPanel();
     }
     finally {
       cmbRefreshing = false;
+    }
+  }
+
+  private void resizeNonlinearParamsPanel() {
+    int currHeight = nonlinearParamsPanel.getPreferredSize().height;
+    int newHeight = nonlinearParamsPanelBaseHeight;
+    for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++)
+      newHeight += data.TinaNonlinearControlsRows[i].getExtraPanelSize();
+    if (newHeight != currHeight) {
+      nonlinearParamsPanel.setPreferredSize(new Dimension(nonlinearParamsPanelBaseWidth, newHeight));
+
+      nonlinearParamsPanel.invalidate();
+      nonlinearParamsPanel.validate();
+      nonlinearParamsPanel.repaint();
+      nonlinearParamsPanel.getParent().invalidate();
+      nonlinearParamsPanel.getParent().validate();
+      nonlinearParamsPanel.getParent().repaint();
+      nonlinearParamsPanel.getParent().getParent().invalidate();
+      nonlinearParamsPanel.getParent().getParent().validate();
+      nonlinearParamsPanel.getParent().getParent().repaint();
+      nonlinearParamsPanel.getParent().getParent().getParent().invalidate();
+      nonlinearParamsPanel.getParent().getParent().getParent().validate();
+      nonlinearParamsPanel.getParent().getParent().getParent().repaint();
     }
   }
 
@@ -3172,9 +3327,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           int idx;
           if ((idx = var.getFunc().getParameterIndex(selected)) >= 0) {
             enableNonlinearControls(data.TinaNonlinearControlsRows[pIdx], false);
+            data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(false);
             Object val = var.getFunc().getParameterValues()[idx];
             if (val instanceof Double) {
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+            }
+            else if (val instanceof Integer) {
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
+              data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setOnlyIntegers(true);
             }
             else {
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(val.toString());
@@ -3197,6 +3357,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  private void initNonlinearControls(TinaNonlinearControlsRow pRow) {
+    pRow.getNonlinearParamsLeftButton().setEnabled(false);
+    pRow.getNonlinearParamsPostButton().setEnabled(false);
+    pRow.getNonlinearParamsPreButton().setEnabled(false);
+    if (pRow.getNonlinearParamsUpButton() != null)
+      pRow.getNonlinearParamsUpButton().setEnabled(false);
+    pRow.getToggleParamsPnlButton().setEnabled(false);
+  }
+
   private void enableNonlinearControls(TinaNonlinearControlsRow pRow, boolean pRessource) {
     String selected = (String) pRow.getNonlinearParamsCmb().getSelectedItem();
     boolean enabled = selected != null && selected.length() > 0;
@@ -3204,7 +3373,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     pRow.getNonlinearParamsREd().setEnabled(enabled && !pRessource);
   }
 
-  private final double DELTA_PARAM = 0.1;
+  private static final double DELTA_PARAM = 0.1;
 
   public void nonlinearParamsLeftButtonClicked(int pIdx) {
     nonlinearParamsREdChanged(pIdx, -DELTA_PARAM);
@@ -3212,10 +3381,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void nonlinearParamsRightButtonClicked(int pIdx) {
     nonlinearParamsREdChanged(pIdx, DELTA_PARAM);
-  }
-
-  public void xFormSymmetrySlider_changed() {
-    xFormSliderChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
   public void xFormOpacityREd_changed() {
@@ -3231,10 +3396,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrXForm();
       if (xForm != null && data.xFormDrawModeCmb.getSelectedItem() != null) {
         xForm.setDrawMode((DrawMode) data.xFormDrawModeCmb.getSelectedItem());
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
         xFormControls.enableControls(xForm);
       }
     }
+  }
+
+  public void xFormColorREd_changed() {
+    xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
   }
 
   public void xFormColorSlider_changed() {
@@ -3245,8 +3414,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormTextFieldChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
   }
 
-  public void xFormColorREd_changed() {
-    xFormTextFieldChanged(data.xFormColorSlider, data.xFormColorREd, "color", SLIDER_SCALE_COLOR);
+  public void xFormSymmetrySlider_changed() {
+    xFormSliderChanged(data.xFormSymmetrySlider, data.xFormSymmetryREd, "colorSymmetry", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSlider, data.xFormMaterialREd, "material", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormMaterialSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormMaterialSpeedSlider, data.xFormMaterialSpeedREd, "materialSpeed", SLIDER_SCALE_COLOR);
   }
 
   public void xFormModGammaREd_changed() {
@@ -3297,6 +3482,22 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xFormSliderChanged(data.xFormModSaturationSpeedSlider, data.xFormModSaturationSpeedREd, "modSaturationSpeed", SLIDER_SCALE_COLOR);
   }
 
+  public void xFormModHueREd_changed() {
+    xFormTextFieldChanged(data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSlider_changed() {
+    xFormSliderChanged(data.xFormModHueSlider, data.xFormModHueREd, "modHue", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSpeedREd_changed() {
+    xFormTextFieldChanged(data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
+  }
+
+  public void xFormModHueSpeedSlider_changed() {
+    xFormSliderChanged(data.xFormModHueSpeedSlider, data.xFormModHueSpeedREd, "modHueSpeed", SLIDER_SCALE_COLOR);
+  }
+
   private void setRelWeight(double pValue) {
     if (gridRefreshing)
       return;
@@ -3314,7 +3515,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       try {
         refreshRelWeightsTable();
         data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       finally {
         gridRefreshing = false;
@@ -3345,7 +3546,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int row = data.transformationsTable.getSelectedRow();
         refreshTransformationsTable();
         data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       finally {
         gridRefreshing = false;
@@ -3369,7 +3570,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void renderModeCmb_changed() {
     if (!refreshing && !cmbRefreshing) {
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -3387,7 +3588,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flamePanel.mouseDragged(e.getX(), e.getY(), leftButton, rightButton, middleButton)) {
         if (flamePanel.isReRender()) {
           refreshXFormUI(getCurrXForm());
-          refreshFlameImage(true, true, 1, true);
+          refreshFlameImage(true, true, 1, true, false);
           refreshPaletteImg();
         }
         else {
@@ -3414,7 +3615,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flamePanel != null) {
       if (flamePanel.mouseWheelMoved(e.getWheelRotation())) {
         refreshXFormUI(getCurrXForm());
-        refreshFlameImage(true, true, 1, true);
+        refreshFlameImage(true, true, 1, true, false);
         flameControls.refreshVisualCamValues();
       }
     }
@@ -3428,7 +3629,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.transformationsTable.getSelectionModel().setSelectionInterval(pRow, pRow);
       refreshXFormUI(pXForm);
       xFormControls.enableControls(pXForm);
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
     }
     finally {
       gridRefreshing = lastGridRefreshing;
@@ -3460,7 +3661,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
           if (flamePanel.isRedrawAfterMouseClick()) {
             if (flamePanel.isReRender()) {
-              refreshFlameImage(true, false, 1, true);
+              refreshFlameImage(true, false, 1, true, false);
               refreshPaletteImg();
             }
             else {
@@ -3518,7 +3719,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformMoveTrianglesButton.isSelected() ? MouseDragOperation.MOVE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -3541,7 +3742,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditFocusPointButton.isSelected() ? MouseDragOperation.FOCUS : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
       finally {
@@ -3568,7 +3769,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       xFormControls.enableControls(xForm);
       refreshXFormUI(xForm);
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
       data.affineEditPostTransformSmallButton.setSelected(data.affineEditPostTransformButton.isSelected());
     }
     finally {
@@ -3636,7 +3837,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       flame.setNewCamDOF(data.newDOFCBx.isSelected());
       flameControls.enableDOFUI();
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -3685,27 +3886,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       ResolutionProfile profile = getResolutionProfile();
       getCurrFlame().setResolutionProfile(profile);
       removeFlamePanel();
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
       data.resolutionProfileCmb.requestFocus();
-    }
-    finally {
-      noRefresh = false;
-    }
-  }
-
-  public void shadingCmb_changed() {
-    if (noRefresh) {
-      return;
-    }
-    if (getCurrFlame() == null) {
-      return;
-    }
-    noRefresh = true;
-    try {
-      getCurrFlame().getShadingInfo().setShading((Shading) data.shadingCmb.getSelectedItem());
-      flameControls.enableShadingUI();
-      flameControls.refreshShadingUI();
-      refreshFlameImage(true, false, 1, true);
     }
     finally {
       noRefresh = false;
@@ -3882,7 +4064,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     Flame flame = getCurrFlame();
     if (flame != null) {
       saveUndoPoint();
-      data.paletteShiftREd.setText(String.valueOf(255 - (int) (511 * Math.random())));
+      data.paletteShiftREd.setText(String.valueOf(255 - Tools.randomInt(511)));
     }
   }
 
@@ -3984,7 +4166,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     if (flamePanel != null) {
       flamePanel.setDrawVariations(data.toggleVariationsButton.isSelected());
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
     }
   }
 
@@ -4003,7 +4185,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (getCurrFlame() != null) {
       saveUndoPoint();
       getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -4050,10 +4232,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         QualityProfile profile = getQualityProfile();
         prefs.getQualityProfiles().clear();
         prefs.getQualityProfiles().addAll(dlg.getProfiles());
-        prefs.saveToFromFile();
+        prefs.saveToFile();
 
         refreshQualityProfileCmb(data.qualityProfileCmb, profile);
         refreshQualityProfileCmb(data.batchQualityProfileCmb, profile);
+        refreshQualityProfileCmb(data.gpuQualityProfileCmb, profile);
         refreshQualityProfileCmb(data.swfAnimatorQualityProfileCmb, profile);
         qualityProfileCmb_changed();
       }
@@ -4082,11 +4265,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         ResolutionProfile profile = getResolutionProfile();
         prefs.getResolutionProfiles().clear();
         prefs.getResolutionProfiles().addAll(dlg.getProfiles());
-        prefs.saveToFromFile();
+        prefs.saveToFile();
         refreshResolutionProfileCmb(data.resolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.swfAnimatorResolutionProfileCmb, profile);
         refreshResolutionProfileCmb(data.batchResolutionProfileCmb, profile);
+        refreshResolutionProfileCmb(data.gpuResolutionProfileCmb, profile);
         resolutionProfileCmb_changed();
       }
       catch (Throwable ex) {
@@ -4098,12 +4282,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
     if (getCurrFlame() != null) {
       getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
-      rootTabbedPane.setSelectedIndex(TinaSWFAnimatorController.PAGE_INDEX);
+      desktop.showInternalFrame(EasyMovieMakerInternalFrame.class);
     }
   }
 
-  public JTabbedPane getRootTabbedPane() {
-    return rootTabbedPane;
+  public JPanel getRootPanel() {
+    return rootPanel;
   }
 
   public void mouseTransformEditPointsButton_clicked() {
@@ -4120,7 +4304,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditPointsButton.isSelected() ? MouseDragOperation.POINTS : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.POINTS);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -4143,7 +4327,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditViewButton.isSelected() ? MouseDragOperation.VIEW : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -4281,7 +4465,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         setLastGradient(palette);
         refreshPaletteColorsTable();
         refreshPaletteUI(palette);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       catch (Throwable ex) {
         errorHandler.handleError(ex);
@@ -4314,7 +4498,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         setLastGradient(getCurrLayer().getPalette());
         refreshPaletteColorsTable();
         refreshPaletteUI(getCurrLayer().getPalette());
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       catch (Throwable ex) {
         errorHandler.handleError(ex);
@@ -4328,7 +4512,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     setLastGradient(getCurrLayer().getPalette());
     refreshPaletteColorsTable();
     refreshPaletteUI(getCurrLayer().getPalette());
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void paletteInvertBtn_clicked() {
@@ -4380,7 +4564,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     if (flamePanel != null) {
       flamePanel.setShowTransparency(data.toggleTransparencyButton.isSelected());
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -4433,6 +4617,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               try {
                 messageHelper.showStatusMessage(flame, "render time: " + Tools.doubleToString(pElapsedTime) + "s");
                 mainController.loadImage(file.getAbsolutePath(), false);
+                File zBuffer = new File(Tools.makeZBufferFilename(file.getAbsolutePath()));
+                if (zBuffer.exists()) {
+                  mainController.loadImage(zBuffer.getAbsolutePath(), false);
+                }
               }
               catch (Throwable ex) {
                 errorHandler.handleError(ex);
@@ -4468,7 +4656,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flame != null) {
         saveUndoPoint();
         flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
         refreshFilterKernelPreviewImg();
       }
     }
@@ -4477,18 +4665,28 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      rootTabbedPane.setSelectedIndex(MutaGenController.PAGE_INDEX);
-      rootTabbedPane.getParent().invalidate();
+      desktop.showInternalFrame(MutaGenInternalFrame.class);
+      rootPanel.getParent().invalidate();
       try {
-        Graphics g = rootTabbedPane.getParent().getGraphics();
+        Graphics g = rootPanel.getParent().getGraphics();
         if (g != null) {
-          rootTabbedPane.getParent().paint(g);
+          rootPanel.getParent().paint(g);
         }
       }
       catch (Throwable ex) {
         ex.printStackTrace();
       }
       mutaGenController.importFlame(flame);
+    }
+  }
+
+  public void sendFlameToIRButton_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
+        interactiveRendererCtrl.importFlame(flame);
+        desktop.showInternalFrame(InteractiveRendererInternalFrame.class);
+      }
     }
   }
 
@@ -4513,7 +4711,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void editFlameTitleBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter the new title:", flame.getName());
+      String s = StandardDialogs.promptForText(rootPanel, "Please enter the new title:", flame.getName());
       if (s != null) {
         flame.setName(s);
         messageHelper.showStatusMessage(flame, "Title changed");
@@ -4524,7 +4722,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void editTransformCaptionBtn_clicked() {
     XForm xForm = getCurrXForm();
     if (xForm != null) {
-      String s = StandardDialogs.promptForText(rootTabbedPane, "Please enter a new name:", xForm.getName());
+      String s = StandardDialogs.promptForText(rootPanel, "Please enter a new name:", xForm.getName());
       if (s != null) {
         xForm.setName(s);
         int row = data.transformationsTable.getSelectedRow();
@@ -4554,7 +4752,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformRotateTrianglesButton.isSelected() ? MouseDragOperation.ROTATE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.ROTATE_TRIANGLE);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -4577,7 +4775,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformScaleTrianglesButton.isSelected() ? MouseDragOperation.SCALE_TRIANGLE : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.SCALE_TRIANGLE);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -4620,7 +4818,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditGradientButton.isSelected() ? MouseDragOperation.GRADIENT : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(false);
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
       finally {
@@ -4632,41 +4830,41 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void gradientFadeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientFade();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientInvertBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientInvert();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientReverseBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientReverse();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientSortBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientSort();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientSelectAllBtn_clicked() {
     getFlamePanel().gradientSelectAll();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void gradientApplyBalancingBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().applyBalancing();
     refreshUI();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
@@ -4674,7 +4872,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().applyTX();
     refreshUI();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
@@ -4708,28 +4906,28 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void gradientPasteRangeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientPasteRange();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientEraseRangeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientEraseRange();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientMononchromeBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientMonochrome();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
   public void gradientFadeAllBtn_clicked() {
     undoManager.saveUndoPoint(getCurrFlame());
     getFlamePanel().gradientFadeAll();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
     refreshPaletteImg();
   }
 
@@ -4740,12 +4938,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
 
-      Color selectedColor = JColorChooser.showDialog(rootTabbedPane, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
       if (selectedColor != null) {
         getCurrFlame().setBGColorRed(selectedColor.getRed());
         getCurrFlame().setBGColorGreen(selectedColor.getGreen());
         getCurrFlame().setBGColorBlue(selectedColor.getBlue());
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
         refreshBGColorIndicator();
       }
     }
@@ -4784,6 +4982,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void randomizeBtn_clicked() {
     if (getCurrRandomizeFlame() != null) {
       saveUndoPoint();
+
+      if (!getCurrRandomizeFlame().isRenderable()) {
+        _currRandomizeFlame = getCurrFlame().makeCopy();
+      }
 
       final int MAX_ITER = 10;
       final double MIN_RENDER_COVERAGE = 0.42;
@@ -4926,7 +5128,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -4944,7 +5146,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -4970,7 +5172,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -4990,16 +5192,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       finally {
         gridRefreshing = oldGridRefreshing;
       }
-      refreshFlameImage(true, false, 1, true);
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
   public void layerAppendModeBtnClicked() {
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public void layerPreviewBtnClicked() {
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   public boolean isNoRefresh() {
@@ -5029,6 +5231,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.transformationWeightREd);
     animationController.registerMotionPropertyControls(data.xFormColorREd);
     animationController.registerMotionPropertyControls(data.xFormSymmetryREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialREd);
+    animationController.registerMotionPropertyControls(data.xFormMaterialSpeedREd);
     animationController.registerMotionPropertyControls(data.xFormOpacityREd);
 
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
@@ -5057,7 +5261,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flamePanel != null) {
       FlamePanelControlStyle style = (FlamePanelControlStyle) data.triangleStyleCmb.getSelectedItem();
       flamePanel.setFlamePanelTriangleMode(style);
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
     }
   }
 
@@ -5067,19 +5271,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     if (flamePanel != null) {
       flamePanel.setWithGrid(data.toggleDrawGridButton.isSelected());
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
     }
-  }
-
-  public void editorFractalBrightnessSliderChanged() {
-    if (refreshing) {
-      return;
-    }
-    if (flamePanel != null) {
-      flamePanel.setImageBrightness(data.editorFractalBrightnessSlider.getValue());
-      refreshFlameImage(true, false, 1, true);
-    }
-
   }
 
   public void mouseTransformTriangleViewButton_clicked() {
@@ -5096,7 +5289,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (flamePanel != null) {
           flamePanel.getConfig().setMouseDragOperation(data.mouseTransformEditTriangleViewButton.isSelected() ? MouseDragOperation.TRIANGLE_VIEW : MouseDragOperation.NONE);
           flamePanel.setDrawTriangles(flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW);
-          refreshFlameImage(true, false, 1, false);
+          refreshFlameImage(true, false, 1, false, false);
         }
       }
       finally {
@@ -5114,7 +5307,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flamePanel != null) {
         flamePanel.getConfig().setWithColoredTransforms(data.toggleTriangleWithColorsButton.isSelected());
       }
-      refreshFlameImage(true, false, 1, false);
+      refreshTransformationsTable();
+      refreshFlameImage(true, false, 1, false, false);
     }
     finally {
       refreshing = false;
@@ -5129,7 +5323,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         saveUndoPoint();
         variationControlsDelegates[pIdx].editMotionCurve(propertyName, "variation amount");
         variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearVarREd(), propertyName, false);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -5159,7 +5353,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           variationControlsDelegates[pIdx].editMotionCurve(curve, initialValue, propertyname, "variation property \"" + propertyname + "\"");
           // Doesnt work after changing parameter -> now enable it always
           // variationControlsDelegates[pIdx].enableControl(data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd(), curve, false);
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
     }
@@ -5173,7 +5367,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     variationControlsDelegates = pVariationControlsDelegates;
   }
 
-  public void xFormModGammaRandomizeBtn_Clicked(boolean pWholeFractal) {
+  public void xFormModLocalGammaRandomizeAllBtn_Clicked(boolean pWholeFractal) {
     if (pWholeFractal) {
       Flame flame = getCurrFlame();
       if (flame != null) {
@@ -5184,7 +5378,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
         }
         refreshXFormUI(getCurrXForm(XFormType.BOTH));
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
@@ -5193,12 +5387,112 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         saveUndoPoint();
         xForm.randomizeModColorEffects();
         refreshXFormUI(xForm);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
 
-  public void xFormModGammaResetBtn_Clicked(boolean pWholeFractal) {
+  public void xFormModGammaRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModGamma();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModGamma();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModContrastRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModContrast();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModContrast();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModSaturationRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModSaturation();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModSaturation();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModHueRandomizeBtn_Clicked(boolean pWholeFractal) {
+    if (pWholeFractal) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        for (Layer layer : flame.getLayers()) {
+          for (XForm xForm : layer.getXForms()) {
+            xForm.randomizeModHue();
+          }
+        }
+        refreshXFormUI(getCurrXForm(XFormType.BOTH));
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm(XFormType.NORMAL);
+      if (xForm != null) {
+        saveUndoPoint();
+        xForm.randomizeModHue();
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
+  public void xFormModLocalGammaResetAllBtn_Clicked(boolean pWholeFractal) {
     if (pWholeFractal) {
       Flame flame = getCurrFlame();
       if (flame != null) {
@@ -5209,7 +5503,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
         }
         refreshXFormUI(getCurrXForm(XFormType.BOTH));
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
     }
     else {
@@ -5218,7 +5512,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         saveUndoPoint();
         xForm.resetModColorEffects();
         refreshXFormUI(xForm);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -5289,11 +5583,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void resetShadingSettings() {
+  public void resetPostBlurSettings() {
     Flame flame = getCurrFlame();
     if (flame != null) {
       saveUndoPoint();
-      flame.resetShadingSettings();
+      flame.resetPostBlurSettings();
+      refreshUI();
+    }
+  }
+
+  public void resetPostBokehSettings() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      flame.getSolidRenderSettings().setupDefaultPostBokehOptions();
       refreshUI();
     }
   }
@@ -5342,7 +5645,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     if (flamePanel != null) {
       flamePanel.setWithGuides(data.toggleDrawGuidesButton.isSelected());
-      refreshFlameImage(true, false, 1, false);
+      refreshFlameImage(true, false, 1, false, false);
     }
   }
 
@@ -5350,7 +5653,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return gradientControls;
   }
 
-  final int DFLT_VERT_TOOLBAR_SIZE = 52;
+  private static final int DFLT_VERT_TOOLBAR_SIZE = 52;
 
   public void refreshMacroButtonsPanel() {
     if (prefs.isTinaMacroButtonsVertical()) {
@@ -5492,7 +5795,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void resetGridToDefaults() {
     flamePanel.resetGridToDefaults();
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, false);
   }
 
   DetachedPreviewWindow detachedPreviewWindow;
@@ -5536,12 +5839,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     return _lastGradient;
   }
 
-  public void affineEditPlaneCmb_changed() {
+  public void changeAffineEditPlane(EditPlane editPlane) {
     if (gridRefreshing || cmbRefreshing || getCurrFlame() == null) {
       return;
     }
-    getCurrFlame().setEditPlane((EditPlane) data.affineEditPlaneCmb.getSelectedItem());
+    getCurrFlame().setEditPlane(editPlane);
+    refreshEditPlaneToggleButtons(editPlane);
     transformationChanged(true);
+  }
+
+  private void refreshEditPlaneToggleButtons(EditPlane editPlane) {
+    boolean oldCmbRefreshing = cmbRefreshing;
+    try {
+      cmbRefreshing = true;
+      data.affineXYEditPlaneToggleBtn.setSelected(EditPlane.XY.equals(editPlane));
+      data.affineYZEditPlaneToggleBtn.setSelected(EditPlane.YZ.equals(editPlane));
+      data.affineZXEditPlaneToggleBtn.setSelected(EditPlane.ZX.equals(editPlane));
+    }
+    finally {
+      cmbRefreshing = oldCmbRefreshing;
+    }
   }
 
   public void selectImageForBackgroundButton_actionPerformed(ActionEvent e) {
@@ -5571,7 +5888,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         saveUndoPoint();
         getCurrFlame().setBGImageFilename(filename);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       catch (Throwable ex) {
         errorHandler.handleError(ex);
@@ -5582,7 +5899,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void removeBackgroundImageButton_actionPerformed(ActionEvent e) {
     saveUndoPoint();
     getCurrFlame().setBGImageFilename(null);
-    refreshFlameImage(true, false, 1, true);
+    refreshFlameImage(true, false, 1, true, true);
   }
 
   public void gradientColorMapHorizOffsetREd_changed() {
@@ -5643,7 +5960,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
-    refreshFlameImage(false, false, 1, true);
+    refreshFlameImage(false, false, 1, true, false);
   }
 
   private void runJWFScript(ScriptRunner pScript) {
@@ -5711,20 +6028,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     else {
       return propVal;
-    }
-  }
-
-  public void exportToChaotica() {
-    try {
-      if (getCurrFlame() != null) {
-        closeDetachedPreview();
-        data.toggleDetachedPreviewButton.setSelected(false);
-        new ChaoticaLauncher().launchChaotica(generateExportFlame(getCurrFlame()));
-        messageHelper.showStatusMessage(getCurrFlame(), "flame sucessfully exported");
-      }
-    }
-    catch (Throwable ex) {
-      errorHandler.handleError(ex);
     }
   }
 
@@ -5807,6 +6110,19 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
   }
 
+  public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
+    XForm xForm = getCurrXForm();
+    Variation var;
+    if (xForm != null && pIdx < xForm.getVariationCount()) {
+      var = xForm.getVariation(pIdx);
+    }
+    else {
+      var = null;
+    }
+    data.TinaNonlinearControlsRows[pIdx].rebuildParamsPnl(xForm, var);
+    resizeNonlinearParamsPanel();
+  }
+
   public void nonlinearParamsUpButtonClicked(int pIdx) {
     if (cmbRefreshing) {
       return;
@@ -5817,10 +6133,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrXForm();
       if (xForm != null && pIdx > 0 && pIdx < xForm.getVariationCount()) {
         saveUndoPoint();
+        boolean prevExpanded = data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().isSelected();
+        boolean selExpanded = data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().isSelected();
+
         xForm.getVariations().add(pIdx - 1, xForm.getVariations().get(pIdx));
         xForm.getVariations().remove(pIdx + 1);
+        data.TinaNonlinearControlsRows[pIdx - 1].getToggleParamsPnlButton().setSelected(selExpanded);
+        data.TinaNonlinearControlsRows[pIdx].getToggleParamsPnlButton().setSelected(prevExpanded);
+
         refreshXFormUI(xForm);
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
         data.transformationsTable.invalidate();
         data.transformationsTable.repaint();
       }
@@ -5848,7 +6170,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           if (pPriority <= 0) {
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().setSelected(false);
           }
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
     }
@@ -5883,7 +6205,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.mouseTransformRotateTrianglesButton.setSelected(false);
         if (flamePanel != null) {
           flamePanel.getConfig().setProgressivePreview(data.realtimePreviewToggleButton.isSelected());
-          refreshFlameImage(true, false, 1, true);
+          refreshFlameImage(true, false, 1, true, false);
         }
       }
       finally {
@@ -5908,7 +6230,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (xaosRow >= 0) {
           data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
         }
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       finally {
         gridRefreshing = false;
@@ -5934,7 +6256,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (xaosRow >= 0) {
           data.relWeightsTable.getSelectionModel().setSelectionInterval(xaosRow, xaosRow);
         }
-        refreshFlameImage(true, false, 1, true);
+        refreshFlameImage(true, false, 1, true, false);
       }
       finally {
         gridRefreshing = false;
@@ -5943,4 +6265,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     relWeightsTableClicked();
   }
+
+  public JWildfire getDesktop() {
+    return desktop;
+  }
+
+  public FlamesGPURenderController getGpuRendererCtrl() {
+    return gpuRendererCtrl;
+  }
+
+  public void setGpuRendererCtrl(FlamesGPURenderController gpuRendererCtrl) {
+    this.gpuRendererCtrl = gpuRendererCtrl;
+  }
+
 }

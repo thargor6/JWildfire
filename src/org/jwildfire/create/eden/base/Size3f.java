@@ -19,7 +19,7 @@ package org.jwildfire.create.eden.base;
 public class Size3f {
   private float x, y, z;
 
-  public static Size3f OPTIONAL = new Size3f(1.0f, 1.0f, 1.0f);
+  public static final Size3f OPTIONAL = new Size3f(1.0f, 1.0f, 1.0f);
 
   public Size3f() {
 

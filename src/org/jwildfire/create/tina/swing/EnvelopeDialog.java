@@ -36,6 +36,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -54,6 +55,8 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -172,8 +175,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeInterpolationCmb.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
         if (ctrl != null) {
-          if (ctrl != null)
-            ctrl.interpolationCmbChanged();
+          ctrl.interpolationCmbChanged();
         }
       }
     });
@@ -1167,7 +1169,20 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
 
           FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
           renderer.setProgressUpdater(null);
-          flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
+          if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+            flame.setCamDOF(0.0);
+            flame.getSolidRenderSettings().setAoEnabled(false);
+            if (ShadowType.SMOOTH.equals(flame.getSolidRenderSettings().getShadowType())) {
+              flame.getSolidRenderSettings().setShadowType(ShadowType.FAST);
+            }
+            else {
+              flame.getSolidRenderSettings().setShadowType(ShadowType.OFF);
+            }
+            flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 2.0);
+          }
+          else {
+            flame.setSampleDensity(Prefs.getPrefs().getTinaRenderRealtimeQuality() * 6.0);
+          }
           flame.setSpatialFilterRadius(0.0);
           RenderedFlame res = renderer.renderFlame(info);
           imgPanel.setImage(res.getImage());
@@ -1208,6 +1223,8 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
             }
           }
           break;
+        default: // nothing to do
+          break;
       }
       return res;
     }
@@ -1239,7 +1256,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     return path;
   }
 
-  private final String PATH_SEPARATOR = "#";
+  private static final String PATH_SEPARATOR = "#";
   private JPanel panel_3;
   private JPanel panel_4;
   private JButton envelopeImportMP3Button;
@@ -1302,11 +1319,12 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
         }
         else if (fieldValue instanceof Map) {
           Map<?, ?> map = (Map<?, ?>) fieldValue;
-          Set<?> keySet = map.keySet();
-          for (Object key : keySet) {
-            String pathExt = field.getName() + "[" + key.toString() + "]";
+          Set<?> entrySet = map.entrySet();
+          for (Object obj : entrySet) {
+            Entry<?, ?> entry = (Entry<?, ?>) obj;
+            String pathExt = field.getName() + "[" + entry.getKey().toString() + "]";
             String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
-            String subResult = findProperty(map.get(key), pProperty, subPath);
+            String subResult = findProperty(entry.getValue(), pProperty, subPath);
             if (subResult != null) {
               return subResult;
             }
@@ -1317,6 +1335,15 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
           String pathExt = field.getName();
           String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
           String subResult = findProperty(palette, pProperty, subPath);
+          if (subResult != null) {
+            return subResult;
+          }
+        }
+        else if (fieldValue instanceof SolidRenderSettings) {
+          SolidRenderSettings settings = (SolidRenderSettings) fieldValue;
+          String pathExt = field.getName();
+          String subPath = pPath == null ? pathExt : pPath + PATH_SEPARATOR + pathExt;
+          String subResult = findProperty(settings, pProperty, subPath);
           if (subResult != null) {
             return subResult;
           }

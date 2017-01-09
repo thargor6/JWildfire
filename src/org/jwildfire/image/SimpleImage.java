@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,10 +21,10 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 
-public class SimpleImage implements WFImage {
-  private Pixel toolPixel = new Pixel();
+public class SimpleImage implements WFImage, Cloneable {
   private int imageWidth = -1;
   private int imageHeight = -1;
   private BufferedImage bufferedImg;
@@ -92,15 +92,11 @@ public class SimpleImage implements WFImage {
   }
 
   public void setRGB(int pX, int pY, int pR, int pG, int pB) {
-    toolPixel.setRGB(pR, pG, pB);
-    int argb = toolPixel.getARGBValue();
-    getBufferedImg().setRGB(pX, pY, argb);
+    getBufferedImg().setRGB(pX, pY, getARGB(255, pR, pG, pB));
   }
 
   public void setARGB(int pX, int pY, int pA, int pR, int pG, int pB) {
-    toolPixel.setARGB(pA, pR, pG, pB);
-    int argb = toolPixel.getARGBValue();
-    getBufferedImg().setRGB(pX, pY, argb);
+    getBufferedImg().setRGB(pX, pY, getARGB(pA, pR, pG, pB));
   }
 
   private void setARGBValue(int pX, int pY, int pARGBValue) {
@@ -125,10 +121,25 @@ public class SimpleImage implements WFImage {
     }
   }
 
+  public int getAValue(int pX, int pY) {
+    return getA(getARGBValue(pX, pY));
+  }
+
+  public int getRValue(int pX, int pY) {
+    return getR(getARGBValue(pX, pY));
+  }
+
+  public int getGValue(int pX, int pY) {
+    return getG(getARGBValue(pX, pY));
+  }
+
+  public int getBValue(int pX, int pY) {
+    return getB(getARGBValue(pX, pY));
+  }
+
   public int getRGBEValue(int pX, int pY) {
     try {
-      toolPixel.setARGBValue(getBufferedImg().getRGB(pX, pY));
-      return convertRGBToRGBE(toolPixel.r, toolPixel.g, toolPixel.b);
+      return convertRGBToRGBE(getRValue(pX, pY), getGValue(pX, pY), getBValue(pX, pY));
     }
     catch (Exception ex) {
       throw new RuntimeException("(" + pX + ", " + pY + ") is out of bounds (0.."
@@ -161,21 +172,6 @@ public class SimpleImage implements WFImage {
       return getGValue(pX, pY);
   }
 
-  public int getRValue(int pX, int pY) {
-    toolPixel.setARGBValue(getARGBValue(pX, pY));
-    return toolPixel.r;
-  }
-
-  public int getGValue(int pX, int pY) {
-    toolPixel.setARGBValue(getARGBValue(pX, pY));
-    return toolPixel.g;
-  }
-
-  public int getBValue(int pX, int pY) {
-    toolPixel.setARGBValue(getARGBValue(pX, pY));
-    return toolPixel.b;
-  }
-
   public void fillBackground(int pR, int pG, int pB) {
     Graphics g = bufferedImg.getGraphics();
     g.setColor(new Color(pR, pG, pB));
@@ -203,6 +199,7 @@ public class SimpleImage implements WFImage {
   }
 
   public void fillBackground(SimpleImage pImage) {
+    Pixel toolPixel = new Pixel();
     if (pImage.getImageWidth() == imageWidth && pImage.getImageHeight() == imageHeight) {
       for (int i = 0; i < imageHeight; i++) {
         for (int j = 0; j < imageWidth; j++) {
@@ -236,12 +233,33 @@ public class SimpleImage implements WFImage {
 
           double x = MathLib.frac(xCoord);
           double y = MathLib.frac(yCoord);
-          int r = Tools.roundColor(Tools.blerp(luR, ruR, lbR, rbR, x, y));
-          int g = Tools.roundColor(Tools.blerp(luG, ruG, lbG, rbG, x, y));
-          int b = Tools.roundColor(Tools.blerp(luB, ruB, lbB, rbB, x, y));
+          int r = Tools.roundColor(GfxMathLib.blerp(luR, ruR, lbR, rbR, x, y));
+          int g = Tools.roundColor(GfxMathLib.blerp(luG, ruG, lbG, rbG, x, y));
+          int b = Tools.roundColor(GfxMathLib.blerp(luB, ruB, lbB, rbB, x, y));
           setRGB(j, i, r, g, b);
         }
       }
     }
   }
+
+  private int getARGB(int a, int r, int g, int b) {
+    return (a << 24) | (r << 16) | (g << 8) | b;
+  }
+
+  private int getA(int argb) {
+    return (argb >>> 24) & 0xff;
+  }
+
+  private int getR(int argb) {
+    return (argb >>> 16) & 0xff;
+  }
+
+  private int getG(int argb) {
+    return (argb >>> 8) & 0xff;
+  }
+
+  private int getB(int argb) {
+    return argb & 0xff;
+  }
+
 }

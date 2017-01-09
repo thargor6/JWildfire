@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2016 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.applet;
 
 import java.awt.BorderLayout;
@@ -21,6 +37,7 @@ import javax.swing.SwingUtilities;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -44,7 +61,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     IDLE, RENDER
   }
 
-  private class ImgSize {
+  private static class ImgSize {
     private final int width;
     private final int height;
 
@@ -169,7 +186,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
     RandomFlameGenerator randGen = new AllRandomFlameGenerator();
-    int palettePoints = 3 + (int) (Math.random() * 21.0);
+    int palettePoints = 3 + Tools.randomInt(21);
     boolean fadePaletteColors = Math.random() > 0.09;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, pQuality);
     currFlame = sampler.createSample().getFlame();
@@ -187,7 +204,7 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10);
     info.setRenderHDR(false);
-    info.setRenderHDRIntensityMap(false);
+    info.setRenderZBuffer(false);
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
     }
@@ -254,9 +271,9 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    int x = pX / pEventSource.getOversample();
-    int y = pY / pEventSource.getOversample();
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
+    int x = pPlotX / pEventSource.getOversample();
+    int y = pPlotY / pEventSource.getOversample();
     iterationCount[pEventSource.getThreadId()] = pEventSource.getCurrSample();
     long iteration = calculateSampleCount();
     if (x >= 0 && x < image.getImageWidth() && y >= 0 && y < image.getImageHeight()) {

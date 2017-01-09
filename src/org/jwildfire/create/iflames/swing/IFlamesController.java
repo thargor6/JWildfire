@@ -580,7 +580,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     int renderId = prepareIFlame();
     try {
       if (displayPreprocessedImageButton.isSelected()) {
-        flamePreviewHelper.renderFlameImage(true, true, 1);
+        flamePreviewHelper.renderFlameImage(true, true, 1, false);
         ImageParams imageParams = getIFlamesFunc().getImageParams();
         imageParams.init(new FlameTransformationContext(null, null, 0));
         SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
@@ -589,7 +589,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
           return;
         }
       }
-      flamePreviewHelper.refreshFlameImage(true, false, 1, true);
+      flamePreviewHelper.refreshFlameImage(true, false, 1, true, false);
     }
     finally {
       unprepareIFlame(renderId);
@@ -823,7 +823,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   }
 
   public void renderFlameButton_clicked() {
-    flamePreviewHelper.refreshFlameImage(false, false, 1, true);
+    flamePreviewHelper.refreshFlameImage(false, false, 1, true, false);
   }
 
   public void loadImagesButton_clicked() {
@@ -1452,6 +1452,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         case 2:
           fillMutationFields(getBaseFlame(), flameParams.getFlameParam3Min(), flameParams.getFlameParam3Max(), flameParams.getFlameParam3());
           break;
+        default: // nothing to do
+          break;
       }
     }
   }
@@ -1764,20 +1766,20 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   public void _scanFiles(String pPath, List<String> pFilenames) {
     File root = new File(pPath);
     File[] list = root.listFiles();
-    try {
-      Arrays.sort(list, new Comparator<File>() {
-
-        @Override
-        public int compare(File o1, File o2) {
-          return o1.getName().compareTo(o2.getName());
-        }
-
-      });
-    }
-    catch (Exception ex) {
-      // ex.printStackTrace();
-    }
     if (list != null) {
+      try {
+        Arrays.sort(list, new Comparator<File>() {
+
+          @Override
+          public int compare(File o1, File o2) {
+            return o1.getName().compareTo(o2.getName());
+          }
+
+        });
+      }
+      catch (Exception ex) {
+        // ex.printStackTrace();
+      }
       for (File f : list) {
         if (f.isDirectory()) {
           _scanFiles(f.getAbsolutePath(), pFilenames);
@@ -2016,6 +2018,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3(path);
         break;
+      default: // nothing to do
+        break;
     }
     refreshIFlame();
     enableControls();
@@ -2041,6 +2045,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Min(paramMinValueField.getDoubleValue());
         break;
+      default: // nothing to do
+        break;
     }
     refreshIFlame();
     enableControls();
@@ -2057,6 +2063,8 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
         break;
       case 2:
         getIFlamesFunc().getFlameParams(getCurrFlameIndex()).setFlameParam3Max(paramMaxValueField.getDoubleValue());
+        break;
+      default: // nothing to do
         break;
     }
     refreshIFlame();

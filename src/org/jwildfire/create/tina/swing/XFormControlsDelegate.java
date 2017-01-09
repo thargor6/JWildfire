@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.DrawMode;
@@ -29,8 +29,8 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class XFormControlsDelegate extends AbstractControlsDelegate {
 
-  public XFormControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane) {
-    super(pOwner, pData, pRootTabbedPane, true);
+  public XFormControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel) {
+    super(pOwner, pData, pRootPanel, true);
     setUpMotionControls();
   }
 
@@ -151,6 +151,10 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormColorSlider.setEnabled(enabled);
     data.xFormSymmetryREd.setEnabled(enabled);
     data.xFormSymmetrySlider.setEnabled(enabled);
+    data.xFormMaterialREd.setEnabled(enabled);
+    data.xFormMaterialSlider.setEnabled(enabled);
+    data.xFormMaterialSpeedREd.setEnabled(enabled);
+    data.xFormMaterialSpeedSlider.setEnabled(enabled);
     data.xFormModGammaREd.setEnabled(enabled);
     data.xFormModGammaSlider.setEnabled(enabled);
     data.xFormModGammaSpeedREd.setEnabled(enabled);
@@ -163,6 +167,10 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormModSaturationSlider.setEnabled(enabled);
     data.xFormModSaturationSpeedREd.setEnabled(enabled);
     data.xFormModSaturationSpeedSlider.setEnabled(enabled);
+    data.xFormModHueREd.setEnabled(enabled);
+    data.xFormModHueSlider.setEnabled(enabled);
+    data.xFormModHueSpeedREd.setEnabled(enabled);
+    data.xFormModHueSpeedSlider.setEnabled(enabled);
     data.xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);

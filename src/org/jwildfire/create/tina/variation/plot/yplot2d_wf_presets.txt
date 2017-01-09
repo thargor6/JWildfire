@@ -1,0 +1,19 @@
+Formula presets for the yplot2d_wf-variation of JWildfire.
+
+
+
+Formulas provided by Andreas Maschke
+##0
+formula = (sin(x)+2*sin(2*x)+1*sin(4*x))
+xmin = -3.0
+xmax = 2.0
+
+##1
+formula = sin(x)*cos(x)
+xmin = -3.0
+xmax = 2.0
+
+##2
+formula = sin(2*x*x)
+xmin = -3.0
+xmax = 2.0

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -124,7 +125,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       String fName;
       if (Math.random() < 0.33) {
         int idx = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length;
-        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (Math.random() * idx)];
+        fName = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(idx)];
       }
       else {
         fName = VariationFuncList.getRandomVariationname();
@@ -157,7 +158,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff21(0);
 
       // variation 1
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 4
     {
@@ -180,7 +181,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff11(1);
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 5
     {
@@ -204,7 +205,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
 
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // create transform 6
     {
@@ -228,7 +229,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setPostCoeff20(0);
       xForm.setPostCoeff21(0);
 
-      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance("linear", true));
+      xForm.addVariation(1, VariationFuncList.getVariationFuncInstance(Math.random() > 0.5 ? "linear" : getRandomVariationName(), true));
     }
     // final transform
     if (Math.random() > 0.33) {
@@ -237,7 +238,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
       String finals[] = { "falloff2", "bwrands", "bwraps7", "cosine", "falloff3", "bwrands", "bwrands", "falloff2" };
       VariationFunc var = VariationFuncList.getVariationFuncInstance(finals[(int) (Math.random() * finals.length)], true);
       if (var.getName().equals("bwrands")) {
-        var.setParameter("seed", (int) (Math.random() * Short.MAX_VALUE));
+        var.setParameter("seed", Tools.randomInt(Short.MAX_VALUE));
         var.setParameter("minpetals", (int) (3 + Math.random() * 3));
         var.setParameter("maxpetals", (int) (6 + Math.random() * 12));
       }
@@ -254,6 +255,15 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
     return flame;
   }
 
+  private String getRandomVariationName() {
+    while (true) {
+      String name = VariationFuncList.getRandomVariationname();
+      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_")) {
+        return name;
+      }
+    }
+  }
+
   @Override
   public String getName() {
     return "Rays";
@@ -265,7 +275,12 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

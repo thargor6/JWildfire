@@ -23,10 +23,12 @@ import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
@@ -36,6 +38,8 @@ public class FlameRendererView {
   protected double cameraMatrix[][] = new double[3][3];
   protected double camDOF_10;
   protected boolean useDOF;
+  protected boolean solidFlame;
+  protected boolean solidHardShadows;
   protected boolean legacyDOF;
   protected double cosa;
   protected double sina;
@@ -59,6 +63,7 @@ public class FlameRendererView {
   private final DOFBlurShape dofBlurShape;
   protected final Stereo3dEye eye;
   private double area, fade, areaMinusFade;
+  private LightViewCalculator lightViewCalculator;
 
   public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
     flame = pFlame;
@@ -79,25 +84,42 @@ public class FlameRendererView {
   }
 
   protected void init3D() {
-    double yaw = -flame.getCamYaw() * M_PI / 180.0;
-    double pitch = flame.getCamPitch() * M_PI / 180.0;
-    double roll = flame.getCamRoll() * M_PI / 180.0;
-    cameraMatrix[0][0] = cos(yaw) * cos(roll) - sin(roll) * sin(yaw) * cos(pitch);
-    cameraMatrix[1][0] = -sin(yaw) * cos(roll) - cos(yaw) * cos(pitch) * sin(roll);
-    cameraMatrix[2][0] = sin(roll) * sin(pitch);
-    cameraMatrix[0][1] = cos(yaw) * sin(roll) + cos(roll) * sin(yaw) * cos(pitch);
-    cameraMatrix[1][1] = -sin(yaw) * sin(roll) + cos(yaw) * cos(pitch) * cos(roll);
-    cameraMatrix[2][1] = -cos(roll) * sin(pitch);
-    cameraMatrix[0][2] = sin(yaw) * sin(pitch);
-    cameraMatrix[1][2] = cos(yaw) * sin(pitch);
-    cameraMatrix[2][2] = cos(pitch);
+    {
+      double yaw = -flame.getCamYaw() * M_PI / 180.0;
+      double pitch = flame.getCamPitch() * M_PI / 180.0;
+      double roll = flame.getCamRoll() * M_PI / 180.0;
+      createProjectionMatrix(cameraMatrix, yaw, pitch, roll);
+    }
     useDOF = flame.isDOFActive();
+
+    solidFlame = flame.getSolidRenderSettings().isSolidRenderingEnabled();
+    if (solidFlame) {
+      lightViewCalculator = new LightViewCalculator(flame);
+      solidHardShadows = !ShadowType.OFF.equals(flame.getSolidRenderSettings().getShadowType());
+    }
+    else {
+      lightViewCalculator = null;
+      solidHardShadows = false;
+    }
+
     doProject3D = flame.is3dProjectionRequired();
     legacyDOF = !flame.isNewCamDOF();
     camDOF_10 = 0.1 * flame.getCamDOF();
     area = flame.getCamDOFArea();
-    fade = flame.getCamDOFArea() / 1.25;
+    fade = flame.getCamDOFArea() / 2.25;
     areaMinusFade = area - fade;
+  }
+
+  private void createProjectionMatrix(double m[][], double yaw, double pitch, double roll) {
+    m[0][0] = cos(yaw) * cos(roll) - sin(roll) * sin(yaw) * cos(pitch);
+    m[1][0] = -sin(yaw) * cos(roll) - cos(yaw) * cos(pitch) * sin(roll);
+    m[2][0] = sin(roll) * sin(pitch);
+    m[0][1] = cos(yaw) * sin(roll) + cos(roll) * sin(yaw) * cos(pitch);
+    m[1][1] = -sin(yaw) * sin(roll) + cos(yaw) * cos(pitch) * cos(roll);
+    m[2][1] = -cos(roll) * sin(pitch);
+    m[0][2] = sin(yaw) * sin(pitch);
+    m[1][2] = cos(yaw) * sin(pitch);
+    m[2][2] = cos(pitch);
   }
 
   public void initView() {
@@ -145,6 +167,10 @@ public class FlameRendererView {
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {
     if (doProject3D) {
+      if (solidHardShadows) {
+        lightViewCalculator.project(pPoint, pProjectedPoint);
+      }
+
       applyCameraMatrix(pPoint);
       camPoint.x += flame.getCamPosX();
       camPoint.y += flame.getCamPosY();
@@ -154,6 +180,7 @@ public class FlameRendererView {
       if (zr < EPSILON) {
         return false;
       }
+      pProjectedPoint.z = camPoint.z;
 
       if (flame.getDimishZ() > EPSILON) {
         double zdist = (flame.getCamZ() - camPoint.z);
@@ -172,9 +199,16 @@ public class FlameRendererView {
         if (legacyDOF) {
           double zdist = (flame.getCamZ() - camPoint.z);
           if (zdist > 0.0) {
-            dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist, zr);
+            pProjectedPoint.dofDist = zdist;
+            if (solidFlame) {
+              dofBlurShape.applyOnlyCamera(camPoint, pPoint, zdist, zr);
+            }
+            else {
+              dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist, zr);
+            }
           }
           else {
+            pProjectedPoint.dofDist = 0.0;
             dofBlurShape.applyOnlyCamera(camPoint, pPoint, zdist, zr);
           }
         }
@@ -184,15 +218,33 @@ public class FlameRendererView {
           double zdist = (camPoint.z - flame.getFocusZ());
 
           double dist = Math.pow(xdist * xdist + ydist * ydist + zdist * zdist, 1.0 / flame.getCamDOFExponent());
-
           if (dist > area) {
-            dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist, zr);
+            pProjectedPoint.dofDist = dist;
+            if (solidFlame) {
+              dofBlurShape.applyOnlyCamera(camPoint, pPoint, dist, zr);
+            }
+            else {
+              dofBlurShape.applyDOFAndCamera(camPoint, pPoint, dist, zr);
+            }
           }
           else if (dist > areaMinusFade) {
-            double scl = (dist - areaMinusFade) / fade;
-            dofBlurShape.applyDOFAndCamera(camPoint, pPoint, zdist * scl * scl, zr);
+            /*
+                        double scl = (dist - areaMinusFade) / fade;
+                        double sclDist = dist * scl * scl;*/
+
+            double scl = GfxMathLib.smootherstep(0.0, 1.0, (dist - areaMinusFade) / fade);
+            double sclDist = scl * dist;
+
+            pProjectedPoint.dofDist = sclDist;
+            if (solidFlame) {
+              dofBlurShape.applyOnlyCamera(camPoint, pPoint, sclDist, zr);
+            }
+            else {
+              dofBlurShape.applyDOFAndCamera(camPoint, pPoint, sclDist, zr);
+            }
           }
           else {
+            pProjectedPoint.dofDist = 0.0;
             dofBlurShape.applyOnlyCamera(camPoint, pPoint, zdist, zr);
           }
         }
@@ -200,6 +252,7 @@ public class FlameRendererView {
       else {
         pPoint.x = camPoint.x / zr;
         pPoint.y = camPoint.y / zr;
+        pProjectedPoint.dofDist = 0.0;
       }
     }
     else {
@@ -211,7 +264,6 @@ public class FlameRendererView {
     pProjectedPoint.y = pPoint.y * cosa - pPoint.x * sina + rcY;
     if ((pProjectedPoint.y < 0) || (pProjectedPoint.y > camH))
       return false;
-    // pProjectedPoint.z = camPoint.z;
     return true;
   }
 
@@ -219,6 +271,26 @@ public class FlameRendererView {
     camPoint.x = cameraMatrix[0][0] * pPoint.x + cameraMatrix[1][0] * pPoint.y + cameraMatrix[2][0] * pPoint.z;
     camPoint.y = cameraMatrix[0][1] * pPoint.x + cameraMatrix[1][1] * pPoint.y + cameraMatrix[2][1] * pPoint.z;
     camPoint.z = cameraMatrix[0][2] * pPoint.x + cameraMatrix[1][2] * pPoint.y + cameraMatrix[2][2] * pPoint.z;
+  }
+
+  public double getRcX() {
+    return rcX;
+  }
+
+  public double getRcY() {
+    return rcY;
+  }
+
+  public double getBws() {
+    return bws;
+  }
+
+  public double getBhs() {
+    return bhs;
+  }
+
+  public LightViewCalculator getLightViewCalculator() {
+    return lightViewCalculator;
   }
 
 }

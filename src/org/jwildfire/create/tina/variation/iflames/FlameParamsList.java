@@ -503,7 +503,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
         SimpleImage map = null;
         if (filename.length() > 0) {
           try {
-            WFImage img = (SimpleImage) RessourceManager.getImage(filename);
+            WFImage img = RessourceManager.getImage(filename);
             if (img.getImageWidth() < 8 || img.getImageHeight() < 8 || !(img instanceof SimpleImage)) {
               throw new Exception("Invalid param map");
             }
@@ -525,7 +525,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
         SimpleImage map = null;
         if (filename.length() > 0) {
           try {
-            WFImage img = (SimpleImage) RessourceManager.getImage(filename);
+            WFImage img = RessourceManager.getImage(filename);
             if (img.getImageWidth() < 8 || img.getImageHeight() < 8 || !(img instanceof SimpleImage)) {
               throw new Exception("Invalid param map");
             }
@@ -547,7 +547,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
         SimpleImage map = null;
         if (filename.length() > 0) {
           try {
-            WFImage img = (SimpleImage) RessourceManager.getImage(filename);
+            WFImage img = RessourceManager.getImage(filename);
             if (img.getImageWidth() < 8 || img.getImageHeight() < 8 || !(img instanceof SimpleImage)) {
               throw new Exception("Invalid param map");
             }

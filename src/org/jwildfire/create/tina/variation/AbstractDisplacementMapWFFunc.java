@@ -178,6 +178,8 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
         pVarTP.color = getColorIdx(r, g, b);
       }
         break;
+      default: // nothing to do
+        break;
     }
 
   }

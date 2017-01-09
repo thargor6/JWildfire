@@ -251,6 +251,8 @@ public class ParPlot3DTransformer extends Mesh3DTransformer {
         yFormula = "sin(u)*((cos(3*u)+2)*sin(v)+0.5)";
         zFormula = "(cos(3*u)+2)*cos(v)";
         break;
+      default: // nothing to do
+        break;
     }
 
   }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,6 +27,7 @@ import javax.imageio.ImageIO;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
+import org.jwildfire.image.SimpleGrayImage;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 
@@ -42,6 +43,10 @@ public class ImageWriter {
 
   public void saveImage(SimpleImage pImg, String pFilename) throws Exception {
     saveImage(pImg, pFilename, false);
+  }
+
+  public void saveImage(SimpleGrayImage pImg, String pFilename) throws Exception {
+    ImageIO.write(pImg.getBufferedImg(), "png", new File(pFilename));
   }
 
   public void saveImage(SimpleImage pImg, String pFilename, boolean pQuiet) throws Exception {

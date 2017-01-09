@@ -48,8 +48,8 @@ public class FlameFilePreview extends JPanel implements PropertyChangeListener {
   private ImageIcon currThumbnail = null;
   private File currFile = null;
 
-  final int BUTTON_WIDTH = 100;
-  final int BUTTON_HEIGHT = 24;
+  private static final int BUTTON_WIDTH = 100;
+  private static final int BUTTON_HEIGHT = 24;
 
   public FlameFilePreview(JFileChooser pFileChooser, Prefs pPrefs) {
     fileChooser = pFileChooser;

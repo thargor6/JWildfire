@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
@@ -30,15 +30,15 @@ public class ChannelMixerControlsDelegate {
   private final ErrorHandler errorHandler;
   private final TinaController owner;
   private final TinaControllerData data;
-  private final JTabbedPane rootTabbedPane;
+  private final JPanel rootPanel;
   private final boolean useUndoManager;
   private List<ChannelMixerPanelDelegate> channelMixerPanels;
 
-  public ChannelMixerControlsDelegate(TinaController pOwner, ErrorHandler pErrorHandler, TinaControllerData pData, JTabbedPane pRootTabbedPane, boolean pUseUndoManager) {
+  public ChannelMixerControlsDelegate(TinaController pOwner, ErrorHandler pErrorHandler, TinaControllerData pData, JPanel pRootPanel, boolean pUseUndoManager) {
     owner = pOwner;
     errorHandler = pErrorHandler;
     data = pData;
-    rootTabbedPane = pRootTabbedPane;
+    rootPanel = pRootPanel;
     useUndoManager = pUseUndoManager;
     channelMixerPanels = createMixerPanels();
     setupPanels();
@@ -165,7 +165,7 @@ public class ChannelMixerControlsDelegate {
       }
       flame.setChannelMixerMode((ChannelMixerMode) data.channelMixerModeCmb.getSelectedItem());
       refreshValues(true);
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -230,7 +230,7 @@ public class ChannelMixerControlsDelegate {
     }
     flame.resetMixerCurves();
     refreshValues(false);
-    owner.refreshFlameImage(true, false, 1, true);
+    owner.refreshFlameImage(true, false, 1, true, false);
   }
 
   protected TinaController getOwner() {

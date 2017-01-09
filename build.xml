@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="2.60" />
+  <property name="release" value="3.00" />
   <property name="dist.dir" location="build/dist" />
-  <property name="dist.win64.dir" location="build/dist-win64" />
-  <property name="dist.win64.name" value="build/j-wildfire-win64-${release}.zip" />
-  <property name="dist.dll32.dir" location="build/dist-dlls-win32" />
-  <property name="dist.dll64.dir" location="build/dist-dlls-win64" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
 	<property name="lib.dir" location="lib" />
@@ -29,12 +25,6 @@
 		<mkdir dir="${build.dir}" />
     <delete dir="${dist.dir}" />
     <mkdir dir="${dist.dir}" />
-    <delete dir="${dist.win64.dir}" />
-    <mkdir dir="${dist.win64.dir}" />
-    <delete dir="${dist.dll32.dir}" />    
-    <mkdir dir="${dist.dll32.dir}" />    
-    <delete dir="${dist.dll64.dir}" />    
-    <mkdir dir="${dist.dll64.dir}" />    
 	</target>
 
 	<target name="compile" depends="init" 
@@ -59,12 +49,18 @@
       <fileset dir="${src.dir}" includes="com/**/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.xml"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/GPU_RENDERING.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.png"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/swing/backgrounds/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/welcomescreen/*.jpg"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.jwfscript"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/io/scripts/*.txt"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/*.obj"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
@@ -79,8 +75,9 @@
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
       <zipfileset src="lib/jsyntaxpane-0.9.5-b29.modified.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
+      <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
       <manifest>
-        <attribute name="Main-Class" value="org.jwildfire.swing.Desktop"/>
+        <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
       </manifest>			
 		</jar>
 	</target>
@@ -115,25 +112,22 @@
      </copy>
      -->
     <copy todir="${dist.dir}/">
-        <!--  
-       <fileset dir="build/launcher" includes="start_linux.sh start_windows.bat start_mac.command"/>
-       -->
-       <fileset dir="build/launcher" includes="start_linux.sh start_mac.command"/>
+       <fileset dir="build/launcher" includes="start_linux.sh"/>
      </copy>
   	<copy todir="${dist.dir}/">
-       <fileset file="CHANGES.txt" />
+       <fileset file="src/org/jwildfire/swing/CHANGES.txt" />
+       <fileset file="src/org/jwildfire/swing/GPU_RENDERING.txt" />
        <fileset file="README_LAUNCHING_JWILDFIRE.txt" />
        <fileset file="README!!!.txt" />
        <fileset file="README_SUPPORT.txt" />
-       <fileset file="README_CHAOTICA_SUPPORT.txt" />
        <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
        <fileset file="Delphi/JWildfire.exe" />
     </copy>    
     <copy todir="${dist.dir}/lib/x64">
-       <fileset file="${src.dir}/../lib/x64/*.dll" />
+       <fileset file="${src.dir}/../lib/x64/*.txt" />
     </copy>    
     <copy todir="${dist.dir}/lib/x86">
-       <fileset file="${src.dir}/../lib/x86/*.dll" />
+       <fileset file="${src.dir}/../lib/x86/*.txt" />
     </copy>    
     	<zip destfile="${dist.name}">
       <zipfileset dir="${dist.dir}/" excludes="start_*" />
@@ -141,62 +135,6 @@
     </zip>
   </target>
   
-  <target name="packageDistWin64" depends="packageJWildfireJar, packageLauncherJar" description="Package the distributable zip file for Win64">
-     <copy todir="${dist.win64.dir}/">
-      <fileset dir="${src.dir}/../jres/win64" />
-     </copy>    
-    <copy todir="${dist.win64.dir}/lib">
-       <fileset file="${jwildfire.jar.name}"/>
-     </copy>    
-    <copy todir="${dist.win64.dir}/">
-       <fileset file="${launcher.jar.name}"/>
-     </copy>    
-    <copy todir="${dist.win64.dir}/">
-       <fileset file="${applet.jar.name}"/>
-     </copy>
-    <copy todir="${dist.win64.dir}/">
-       <fileset file="CHANGES.txt" />
-       <fileset file="README_SUPPORT.txt" />
-       <fileset file="README_CHAOTICA_SUPPORT.txt" />
-       <fileset file="README_LEAP_MOTION_SUPPORT.txt" />
-       <fileset file="Delphi/JWildfire.exe" />
-    </copy>      
-    <copy todir="${dist.win64.dir}/lib/x64">
-       <fileset file="${src.dir}/../lib/x64/*.dll" />
-    </copy>    
-    <zip destfile="${dist.win64.name}">
-      <zipfileset dir="${dist.win64.dir}/" excludes="start_*" />
-    </zip>
-  </target>
-  
-  <target name="packageDlls32" description="Package the Win32-dlls">
-    <copy todir="${dist.dll32.dir}/plugins32">
-      <fileset dir="${src.dir}/../plugins32" includes="*.dll"/>
-     </copy>
-<!--
-  	<copy todir="${dist.dll32.dir}/lib/x86">
-       <fileset file="${src.dir}/../lib/x86/*.dll" />
-    </copy>
--->    
-    <zip destfile="${dist.dll32.name}">
-      <zipfileset dir="${dist.dll32.dir}/" />
-    </zip>
-  </target>
-  
-  <target name="packageDlls64" description="Package the Win64-dlls">
-    <copy todir="${dist.dll64.dir}/plugins64">
-      <fileset dir="${src.dir}/../plugins64" includes="*.dll"/>
-     </copy>
-<!--
-  	<copy todir="${dist.dll64.dir}/lib/x64">
-       <fileset file="${src.dir}/../lib/x64/*.dll" />
-    </copy>
--->    
-    <zip destfile="${dist.dll64.name}">
-      <zipfileset dir="${dist.dll64.dir}/" />
-    </zip>
-  </target>
-
-  <target name="packageAll" depends="packageDist,packageDlls32,packageDlls64,packageDistWin64" description="Package all"/>
+  <target name="packageAll" depends="packageDist" description="Package all"/>
 	
 </project>

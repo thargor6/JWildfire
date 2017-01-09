@@ -7,8 +7,8 @@ import org.jwildfire.create.eden.base.*;
  */
 public class EdenTest 
 {
-	final double alphad = 1.2;
-	final float alphaf = 16f;
+	static final double alphad = 1.2;
+	static final float alphaf = 16f;
 	@Test
 	public void testAngle3Unitd()
 	{

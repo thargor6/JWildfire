@@ -64,6 +64,8 @@ public class WaffleFunc extends VariationFunc {
         a = (pContext.random(slices) + xthickness + pContext.random() * (1 - xthickness)) / slices;
         r = pContext.random();
         break;
+      default: // nothing to do
+        break;
     }
     pVarTP.x += (vcosr * a + vsinr * r); // note that post-transforms make this redundant!
     pVarTP.y += (-vsinr * a + vcosr * r);

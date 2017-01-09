@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -61,7 +61,7 @@ public class QualityProfileDialog extends JDialog {
   private JTextField qualityREd;
   private JLabel lblQuality;
   private JCheckBox withHDRCBx;
-  private JCheckBox withHdrIntensityMapCBx;
+  private JCheckBox withZBufferCBx;
 
   /**
    * Create the dialog.
@@ -213,10 +213,10 @@ public class QualityProfileDialog extends JDialog {
     withHDRCBx.setBounds(125, 152, 223, 18);
     contentPanel.add(withHDRCBx);
 
-    withHdrIntensityMapCBx = new JCheckBox("with HDR intensity map");
-    withHdrIntensityMapCBx.setEnabled(false);
-    withHdrIntensityMapCBx.setBounds(125, 182, 223, 18);
-    contentPanel.add(withHdrIntensityMapCBx);
+    withZBufferCBx = new JCheckBox("with Z-Buffer");
+    withZBufferCBx.setEnabled(false);
+    withZBufferCBx.setBounds(125, 182, 223, 18);
+    contentPanel.add(withZBufferCBx);
     {
       JPanel buttonPane = new JPanel();
       buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -351,7 +351,7 @@ public class QualityProfileDialog extends JDialog {
     getCaptionREd().setEnabled(edit);
     getQualityREd().setEnabled(edit);
     getWithHDRCBx().setEnabled(edit);
-    getWithHdrIntensityMapCBx().setEnabled(edit);
+    getWithZBufferCBx().setEnabled(edit);
     getDefaultCBx().setEnabled(edit);
   }
 
@@ -367,14 +367,14 @@ public class QualityProfileDialog extends JDialog {
       getCaptionREd().setText("");
       getQualityREd().setText("");
       getWithHDRCBx().setSelected(false);
-      getWithHdrIntensityMapCBx().setSelected(false);
+      getWithZBufferCBx().setSelected(false);
       getDefaultCBx().setSelected(false);
     }
     else {
       getCaptionREd().setText(profile.getCaption());
       getQualityREd().setText(String.valueOf(profile.getQuality()));
       getWithHDRCBx().setSelected(profile.isWithHDR());
-      getWithHdrIntensityMapCBx().setSelected(profile.isWithHDRIntensityMap());
+      getWithZBufferCBx().setSelected(profile.isWithZBuffer());
       getDefaultCBx().setSelected(profile.isDefaultProfile());
     }
   }
@@ -401,7 +401,7 @@ public class QualityProfileDialog extends JDialog {
       profile.setCaption(caption);
       profile.setQuality(quality);
       profile.setWithHDR(getWithHDRCBx().isSelected());
-      profile.setWithHDRIntensityMap(getWithHdrIntensityMapCBx().isSelected());
+      profile.setWithZBuffer(getWithZBufferCBx().isSelected());
       profile.setDefaultProfile(getDefaultCBx().isSelected());
       if (editStatus == EditStatus.NEW) {
         refreshing = true;
@@ -428,7 +428,6 @@ public class QualityProfileDialog extends JDialog {
       return true;
     }
     catch (Throwable ex) {
-      ex.getStackTrace();
       getStatusLbl().setText(ex.getMessage());
       return false;
     }
@@ -454,8 +453,8 @@ public class QualityProfileDialog extends JDialog {
     return withHDRCBx;
   }
 
-  public JCheckBox getWithHdrIntensityMapCBx() {
-    return withHdrIntensityMapCBx;
+  public JCheckBox getWithZBufferCBx() {
+    return withZBufferCBx;
   }
 
   public JTextField getCaptionREd() {

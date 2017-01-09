@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -102,7 +103,7 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     randGen.setUseSimpleGenerators(true);
     final int IMG_WIDTH = 80;
     final int IMG_HEIGHT = 60;
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
     Flame subFlame = sampler.createSample().getFlame();
@@ -122,7 +123,6 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
     flame.setCamYaw(0);
     flame.setPixelsPerUnit(200);
     return flame;
-
   }
 
   @Override
@@ -136,7 +136,12 @@ public class SubFlameRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

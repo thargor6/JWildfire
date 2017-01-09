@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -46,6 +48,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final String PARAM_TILEX = "tile_x";
   private static final String PARAM_TILEY = "tile_y";
   private static final String PARAM_RESETZ = "reset_z";
+  private static final String PARAM_DC_COLOR = "dc_color";
+  private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
   private static final String PARAM_IS_SEQUENCE = "is_sequence";
   private static final String PARAM_SEQUENCE_START = "sequence_start";
   private static final String PARAM_SEQUENCE_DIGITS = "sequence_digits";
@@ -55,7 +59,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public static final String RESSOURCE_IMAGE_SRC = "image_src";
   public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS };
+  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_DC_COLOR, PARAM_BLEND_COLORMAP, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC };
 
   private double scaleX = 1.0;
@@ -67,6 +71,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private int tileX = 1;
   private int tileY = 1;
   private int resetZ = 1;
+  private int dc_color = 1;
+  private int blend_colormap = 0;
   private String imageFilename = null;
   private byte[] inlinedImage = null;
   private String imageDescSrc = null;
@@ -82,10 +88,17 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private float[] rgbArray = new float[3];
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount, double pInputX, double pInputY) {
-    double x = (pInputX - (offsetX + 0.5) + 1.0) / scaleX * (double) (imgWidth - 1);
-    double y = (pInputY - (offsetY + 0.5) + 1.0) / scaleY * (double) (imgHeight - 1);
-    int ix = Tools.FTOI(x);
-    int iy = Tools.FTOI(y);
+    double x = (pInputX - (offsetX + 0.5) + 1.0) / scaleX * (double) (imgWidth - 2);
+    double y = (pInputY - (offsetY + 0.5) + 1.0) / scaleY * (double) (imgHeight - 2);
+    int ix, iy;
+    if (blend_colormap > 0) {
+      ix = (int) MathLib.trunc(x);
+      iy = (int) MathLib.trunc(y);
+    }
+    else {
+      ix = Tools.FTOI(x);
+      iy = Tools.FTOI(y);
+    }
     if (this.tileX == 1) {
       if (ix < 0) {
         int nx = ix / imgWidth - 1;
@@ -107,32 +120,101 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       }
     }
 
+    double r, g, b;
     if (ix >= 0 && ix < imgWidth && iy >= 0 && iy < imgHeight) {
       if (colorMap instanceof SimpleImage) {
-        toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-            ix, iy));
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = toolPixel.r;
-        pVarTP.greenColor = toolPixel.g;
-        pVarTP.blueColor = toolPixel.b;
+        if (blend_colormap > 0) {
+          double iufrac = MathLib.frac(x);
+          double ivfrac = MathLib.frac(y);
+          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+              ix, iy));
+          int lur = toolPixel.r;
+          int lug = toolPixel.g;
+          int lub = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+              ix + 1, iy));
+          int rur = toolPixel.r;
+          int rug = toolPixel.g;
+          int rub = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+              ix, iy + 1));
+          int lbr = toolPixel.r;
+          int lbg = toolPixel.g;
+          int lbb = toolPixel.b;
+          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+              ix + 1, iy + 1));
+          int rbr = toolPixel.r;
+          int rbg = toolPixel.g;
+          int rbb = toolPixel.b;
+          r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+          g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+          b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+        }
+        else {
+          toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
+              ix, iy));
+          r = toolPixel.r;
+          g = toolPixel.g;
+          b = toolPixel.b;
+        }
+        if (dc_color > 0) {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = r;
+          pVarTP.greenColor = g;
+          pVarTP.blueColor = b;
+        }
       }
       else {
-        ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
-        pVarTP.rgbColor = true;
-        pVarTP.redColor = rgbArray[0];
-        pVarTP.greenColor = rgbArray[0];
-        pVarTP.blueColor = rgbArray[0];
+        if (blend_colormap > 0) {
+          double iufrac = MathLib.frac(x);
+          double ivfrac = MathLib.frac(y);
+
+          ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
+          double lur = rgbArray[0];
+          double lug = rgbArray[1];
+          double lub = rgbArray[2];
+          ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy);
+          double rur = rgbArray[0];
+          double rug = rgbArray[1];
+          double rub = rgbArray[2];
+          ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy + 1);
+          double lbr = rgbArray[0];
+          double lbg = rgbArray[1];
+          double lbb = rgbArray[2];
+          ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy + 1);
+          double rbr = rgbArray[0];
+          double rbg = rgbArray[1];
+          double rbb = rgbArray[2];
+          r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
+          g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+          b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
+        }
+        else {
+          ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
+          r = rgbArray[0];
+          g = rgbArray[1];
+          b = rgbArray[2];
+        }
+        if (dc_color > 0) {
+          pVarTP.rgbColor = true;
+          pVarTP.redColor = r;
+          pVarTP.greenColor = g;
+          pVarTP.blueColor = b;
+        }
       }
     }
     else {
-      pVarTP.rgbColor = true;
-      pVarTP.redColor = 0;
-      pVarTP.greenColor = 0;
-      pVarTP.blueColor = 0;
+      r = g = b = 0.0;
+      if (dc_color > 0) {
+        pVarTP.rgbColor = true;
+        pVarTP.redColor = r;
+        pVarTP.greenColor = g;
+        pVarTP.blueColor = b;
+      }
     }
     double dz = this.offsetZ;
     if (fabs(scaleZ) > EPSILON) {
-      double intensity = (0.299 * pVarTP.redColor + 0.588 * pVarTP.greenColor + 0.113 * pVarTP.blueColor) / 255.0;
+      double intensity = (0.299 * r + 0.588 * g + 0.113 * b) / 255.0;
       dz += scaleZ * intensity;
     }
     if (resetZ != 0) {
@@ -141,7 +223,9 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     else {
       pVarTP.z += dz;
     }
-    pVarTP.color = getColorIdx(pVarTP.redColor, pVarTP.greenColor, pVarTP.blueColor);
+    if (dc_color > 0) {
+      pVarTP.color = getColorIdx(Tools.FTOI(r), Tools.FTOI(g), Tools.FTOI(b));
+    }
   }
 
   @Override
@@ -151,7 +235,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, is_sequence, sequence_start, sequence_digits };
+    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, dc_color, blend_colormap, is_sequence, sequence_start, sequence_digits };
   }
 
   @Override
@@ -174,6 +258,10 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       tileY = Tools.FTOI(pValue);
     else if (PARAM_RESETZ.equalsIgnoreCase(pName))
       resetZ = Tools.FTOI(pValue);
+    else if (PARAM_DC_COLOR.equalsIgnoreCase(pName))
+      dc_color = Tools.FTOI(pValue);
+    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName))
+      blend_colormap = Tools.FTOI(pValue);
     else if (PARAM_IS_SEQUENCE.equalsIgnoreCase(pName)) {
       is_sequence = Tools.FTOI(pValue);
       clearCurrColorMap();
@@ -194,7 +282,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private RenderColor[] renderColors;
   private Map<RenderColor, Double> colorIdxMap = new HashMap<RenderColor, Double>();
 
-  private double getColorIdx(double pR, double pG, double pB) {
+  private double getColorIdx(int pR, int pG, int pB) {
     RenderColor pColor = new RenderColor(pR, pG, pB);
     Double res = colorIdxMap.get(pColor);
     if (res == null) {
@@ -223,29 +311,6 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     return res;
   }
 
-  /*
-    private double getColorIdx(double pR, double pG, double pB) {
-      int nearestIdx = 0;
-      RenderColor color = renderColors[0];
-      double dr, dg, db;
-      dr = (color.red - pR);
-      dg = (color.green - pG);
-      db = (color.blue - pB);
-      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
-      for (int i = 1; i < renderColors.length; i++) {
-        color = renderColors[i];
-        dr = (color.red - pR);
-        dg = (color.green - pG);
-        db = (color.blue - pB);
-        double dist = sqrt(dr * dr + dg * dg + db * db);
-        if (dist < nearestDist) {
-          nearestDist = dist;
-          nearestIdx = i;
-        }
-      }
-      return (double) nearestIdx / (double) (renderColors.length - 1);
-    }
-  */
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMap = null;

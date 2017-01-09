@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.random;
 
 // A random generator following ideas of George Marsaglia, http://programmingpraxis.com/2010/10/05/george-marsaglias-random-number-generators/
+@SuppressWarnings("serial")
 public class MarsagliaRandomGenerator extends AbstractRandomGenerator {
   private int u = 12244355;
   private int v = 34384;

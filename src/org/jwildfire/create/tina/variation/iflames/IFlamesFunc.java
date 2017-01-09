@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -271,9 +272,9 @@ public class IFlamesFunc extends VariationFunc {
     int rbG = toolPixel.g;
     int rbB = toolPixel.b;
 
-    double r = Tools.blerp(luR, ruR, lbR, rbR, MathLib.frac(xCoord), MathLib.frac(yCoord));
-    double g = Tools.blerp(luG, ruG, lbG, rbG, MathLib.frac(xCoord), MathLib.frac(yCoord));
-    double b = Tools.blerp(luB, ruB, lbB, rbB, MathLib.frac(xCoord), MathLib.frac(yCoord));
+    double r = GfxMathLib.blerp(luR, ruR, lbR, rbR, MathLib.frac(xCoord), MathLib.frac(yCoord));
+    double g = GfxMathLib.blerp(luG, ruG, lbG, rbG, MathLib.frac(xCoord), MathLib.frac(yCoord));
+    double b = GfxMathLib.blerp(luB, ruB, lbB, rbB, MathLib.frac(xCoord), MathLib.frac(yCoord));
 
     pVarTP.rgbColor = true;
     pVarTP.redColor = r * imageParams.getImage_brightness();

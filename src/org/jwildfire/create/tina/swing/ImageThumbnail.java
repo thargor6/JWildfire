@@ -29,7 +29,6 @@ public class ImageThumbnail {
   public static final int BORDER_SIZE = 8;
 
   private final String filename;
-  private Flame flame;
   private SimpleImage preview;
   private ImagePanel imgPanel;
   private final ThumbnailCacheKey cacheKey;
@@ -73,10 +72,6 @@ public class ImageThumbnail {
       preview = generatePreview();
     }
     return preview;
-  }
-
-  public Flame getFlame() {
-    return flame;
   }
 
   public ImagePanel getImgPanel() {

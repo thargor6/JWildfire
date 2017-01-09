@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,7 +16,6 @@
 */
 package org.jwildfire.create.tina.batch;
 
-import java.awt.Graphics;
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
@@ -24,7 +23,12 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.faclrender.FACLFlameWriter;
+import org.jwildfire.create.tina.faclrender.FACLRenderResult;
+import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -41,13 +45,15 @@ public class JobRenderThread implements Runnable {
   private boolean cancelSignalled;
   private final boolean doOverwriteExisting;
   private FlameRenderer renderer;
+  private final boolean useOpenCl;
 
-  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting) {
+  public JobRenderThread(JobRenderThreadController pController, List<Job> pActiveJobList, ResolutionProfile pResolutionProfile, QualityProfile pQualityProfile, boolean pDoOverwriteExisting, boolean pUseOpenCl) {
     controller = pController;
     activeJobList = pActiveJobList;
     resolutionProfile = pResolutionProfile;
     qualityProfile = pQualityProfile;
     doOverwriteExisting = pDoOverwriteExisting;
+    useOpenCl = pUseOpenCl;
   }
 
   @Override
@@ -75,7 +81,7 @@ public class JobRenderThread implements Runnable {
             }
             RenderInfo info = new RenderInfo(width, height, RenderMode.PRODUCTION);
             info.setRenderHDR(qualityProfile.isWithHDR());
-            info.setRenderHDRIntensityMap(qualityProfile.isWithHDRIntensityMap());
+            info.setRenderZBuffer(qualityProfile.isWithZBuffer());
             List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlames(job.getFlameFilename());
             Flame flame = flames.get(0);
             String primaryFilename = job.getImageFilename(flame.getStereo3dMode());
@@ -92,24 +98,46 @@ public class JobRenderThread implements Runnable {
                 controller.getJobProgressUpdater().updateProgress(1);
               }
               else {
-                flame.setSampleDensity(job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality());
-                renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
-                renderer.setProgressUpdater(controller.getJobProgressUpdater());
-                long t0 = Calendar.getInstance().getTimeInMillis();
-                RenderedFlame res = renderer.renderFlame(info);
-                if (!cancelSignalled) {
-                  long t1 = Calendar.getInstance().getTimeInMillis();
-                  job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
-                  new ImageWriter().saveImage(res.getImage(), primaryFilename);
-                  if (res.getHDRImage() != null) {
-                    new ImageWriter().saveImage(res.getHDRImage(), job.getImageFilename(flame.getStereo3dMode()) + ".hdr");
+                if (useOpenCl) {
+                  String openClFlameFilename = Tools.trimFileExt(job.getFlameFilename()) + ".flam3";
+                  try {
+                    Flame newFlame = AnimationService.evalMotionCurves(flame.makeCopy(), flame.getFrame());
+                    new FACLFlameWriter().writeFlame(newFlame, openClFlameFilename);
+                    long t0 = Calendar.getInstance().getTimeInMillis();
+                    FACLRenderResult openClRenderRes = FACLRenderTools.invokeFACLRender(openClFlameFilename, width, height, qualityProfile.getQuality());
+                    long t1 = Calendar.getInstance().getTimeInMillis();
+                    if (openClRenderRes.getReturnCode() != 0) {
+                      throw new Exception(openClRenderRes.getMessage());
+                    }
+                    else {
+                      job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                    }
                   }
-                  if (res.getHDRIntensityMap() != null) {
-                    new ImageWriter().saveImage(res.getHDRIntensityMap(), job.getImageFilename(flame.getStereo3dMode()) + ".intensity.hdr");
+                  finally {
+                    if (!new File(openClFlameFilename).delete()) {
+                      new File(openClFlameFilename).deleteOnExit();
+                    }
+                  }
+                }
+                else {
+                  flame.setSampleDensity(job.getCustomQuality() > 0 ? job.getCustomQuality() : qualityProfile.getQuality());
+                  renderer = new FlameRenderer(flame, Prefs.getPrefs(), flame.isBGTransparency(), false);
+                  renderer.setProgressUpdater(controller.getJobProgressUpdater());
+                  long t0 = Calendar.getInstance().getTimeInMillis();
+                  RenderedFlame res = renderer.renderFlame(info);
+                  if (!cancelSignalled) {
+                    long t1 = Calendar.getInstance().getTimeInMillis();
+                    job.setElapsedSeconds(((double) (t1 - t0) / 1000.0));
+                    new ImageWriter().saveImage(res.getImage(), primaryFilename);
+                    if (res.getHDRImage() != null) {
+                      new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(job.getImageFilename(flame.getStereo3dMode())));
+                    }
+                    if (res.getZBuffer() != null) {
+                      new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(job.getImageFilename(flame.getStereo3dMode())));
+                    }
                   }
                 }
               }
-
               if (!cancelSignalled) {
                 job.setFinished(true);
               }
@@ -122,19 +150,19 @@ public class JobRenderThread implements Runnable {
                   controller.refreshRenderBatchJobsTable();
                   controller.getRenderBatchJobsTable().invalidate();
                   controller.getRenderBatchJobsTable().validate();
-                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
-                  if (g != null) {
-                    controller.getRenderBatchJobsTable().getParent().paint(g);
-                  }
+                  //                  Graphics g = controller.getRenderBatchJobsTable().getParent().getGraphics();
+                  //                  if (g != null) {
+                  //                    controller.getRenderBatchJobsTable().getParent().paint(g);
+                  //                  }
                 }
                 {
                   controller.getTotalProgressBar().setValue(controller.getTotalProgressBar().getValue() + 1);
                   controller.getTotalProgressBar().invalidate();
                   controller.getTotalProgressBar().validate();
-                  Graphics g = controller.getTotalProgressBar().getGraphics();
-                  if (g != null) {
-                    controller.getTotalProgressBar().paint(g);
-                  }
+                  //                  Graphics g = controller.getTotalProgressBar().getGraphics();
+                  //                  if (g != null) {
+                  //                    controller.getTotalProgressBar().paint(g);
+                  //                  }
                 }
               }
               catch (Throwable ex) {

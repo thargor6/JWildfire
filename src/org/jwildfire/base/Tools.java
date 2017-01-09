@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -21,6 +21,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,8 +33,10 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -46,15 +49,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "2.60 REVISION 2 (26.10.2015)";
+  public static final String APP_VERSION = "3.01 (07.01.2017)";
 
-  public static boolean SPECIAL_VERSION = false;
+  public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
   public static final int MAX_COLOR_OVERSAMPLING = 20;
@@ -66,7 +70,6 @@ public class Tools {
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
   public static final String FILEEXT_ANB = "anb";
-  public static final String FILEEXT_CHAOS = "chaos";
   public static final String FILEEXT_FLAME = "flame";
   public static final String FILEEXT_GRADIENT = "gradient";
   public static final String FILEEXT_GIF = "gif";
@@ -84,6 +87,7 @@ public class Tools {
   public static final String FILEEXT_OBJ = "obj";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_PNS = "pns";
+  public static final String FILEEXT_SPL = "spl";
   public static final String FILEEXT_SUNFLOW_SCENE = "sc";
   public static final String FILEEXT_SVG = "svg";
   public static final String FILEEXT_TXT = "txt";
@@ -94,9 +98,6 @@ public class Tools {
   public static final String FILEEXT_MAP = "map";
 
   public static final String CURVE_POSTFIX = "Curve";
-
-  public static final int TINA_EDITOR_TAB_IDX = 0;
-  public static final int TINA_MESHGEN_TAB_IDX = 7;
 
   public static final double fmod33(double arg) {
     return (arg - (double) ((int) arg));
@@ -286,9 +287,7 @@ public class Tools {
   }
 
   public static double stringToDouble(String pValue) {
-    if (pValue != null && pValue.indexOf(',') >= 0) {
-      pValue = pValue.replace(',', '.');
-    }
+    pValue = pValue.replace(',', '.');
     return Double.parseDouble(pValue);
   }
 
@@ -529,23 +528,19 @@ public class Tools {
     return pName;
   }
 
+  public static String getFileExt(String pName) {
+    int p = pName.lastIndexOf(".");
+    if (p > 0 && p < pName.length() - 1) {
+      return pName.substring(p + 1, pName.length());
+    }
+    return pName;
+  }
+
   public static boolean stringEquals(String a, String b) {
-    if (a != null && b == null)
-      return false;
-    else if (a == null && b != null)
-      return false;
-    else if (a == null && b == null)
-      return true;
+    if (a == null)
+      return b == null;
     else
       return a.equals(b);
-  }
-
-  public static double lerp(double s, double e, double t) {
-    return s + (e - s) * t;
-  }
-
-  public static double blerp(double c00, double c10, double c01, double c11, double tx, double ty) {
-    return lerp(lerp(c00, c10, tx), lerp(c01, c11, tx), ty);
   }
 
   public static void writeObjectToFile(Object pObject, String pFilename) {
@@ -571,5 +566,82 @@ public class Tools {
       Unchecker.rethrow(ex);
       return null;
     }
+  }
+
+  public static double limitValue(double value, double min, double max) {
+    return value < min ? min : value > max ? max : value;
+  }
+
+  public static int limitValue(int value, int min, int max) {
+    return value < min ? min : value > max ? max : value;
+  }
+
+  public static String getRessourceAsString(Class<?> parent, String ressource) throws Exception {
+    try (InputStream is = parent.getResourceAsStream(ressource)) {
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+      return content.toString();
+    }
+  }
+
+  public static String makeZBufferFilename(String absolutePath) {
+    File f = new File(absolutePath);
+    return new File(f.getParent(), "zbuf_" + f.getName()).getAbsolutePath();
+  }
+
+  public static String makeHDRFilename(String absolutePath) {
+    File f = new File(absolutePath);
+    String name = Tools.trimFileExt(f.getName());
+    return new File(f.getParent(), name + ".hdr").getAbsolutePath();
+  }
+
+  public static final Random RANDOM = new Random();
+
+  /**
+   * Returns a pseudorandom, uniformly distributed {@code int} value
+   * between 0 (inclusive) and the specified value (exclusive).
+   * Uses {@link Random#nextInt(int)}.
+   * @param bound the upper bound (exclusive). Must be positive. (greater than zero)
+   * @return a random int value between 0 (inclusive) and bound (exclusive)
+   */
+  public static int randomInt(int bound) {
+    return RANDOM.nextInt(bound);
+  }
+
+  public static String getStacktrace(Throwable ex) {
+    try {
+      try (StringWriter sw = new StringWriter()) {
+        try (PrintWriter pw = new PrintWriter(sw)) {
+          ex.printStackTrace(pw);
+          return sw.toString();
+        }
+      }
+    }
+    catch (Exception innerError) {
+      throw new RuntimeException(innerError);
+    }
+  }
+
+  public enum OSType {
+    WINDOWS, MAC, LINUX, UNKNOWN
+  }
+
+  public static OSType getOSType() {
+    String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+    if (os.startsWith("mac os"))
+      return OSType.MAC;
+    else if (os.startsWith("windows"))
+      return OSType.WINDOWS;
+    else if (os.startsWith("linux"))
+      return OSType.LINUX;
+    else
+      return OSType.UNKNOWN;
   }
 }

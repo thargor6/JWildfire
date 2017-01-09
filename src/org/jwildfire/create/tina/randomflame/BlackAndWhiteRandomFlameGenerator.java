@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -39,6 +39,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new Bubbles3DRandomFlameGenerator());
     generators.add(new CrossRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new DuckiesRandomFlameGenerator());
     generators.add(new ExperimentalBubbles3DRandomFlameGenerator());
     generators.add(new ExperimentalGnarlRandomFlameGenerator());
@@ -47,10 +48,11 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new Flowers3DRandomFlameGenerator());
     generators.add(new GnarlRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new Gnarl3DRandomFlameGenerator());
     generators.add(new JulianDiscRandomFlameGenerator());
     generators.add(new JuliansRandomFlameGenerator());
-    generators.add(new LayerzRandomFlameGenerator());
+    generators.add(new LayersRandomFlameGenerator());
     generators.add(new LinearRandomFlameGenerator());
     generators.add(new MandelbrotRandomFlameGenerator());
     generators.add(new RaysRandomFlameGenerator());
@@ -58,9 +60,18 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new SimpleTilingRandomFlameGenerator());
     generators.add(new SierpinskyRandomFlameGenerator());
     generators.add(new DualityRandomFlameGenerator());
+    if (!Prefs.getPrefs().isTinaDisableSolidFlameRandGens()) {
+      generators.add(new SolidExperimentalRandomFlameGenerator());
+      generators.add(new SolidStunningRandomFlameGenerator());
+      generators.add(new SolidJulia3DRandomFlameGenerator());
+      generators.add(new SolidShadowsRandomFlameGenerator());
+      generators.add(new SolidLabyrinthRandomFlameGenerator());
+    }
+    generators.add(new GalaxiesRandomFlameGenerator());
     generators.add(new SphericalRandomFlameGenerator());
     generators.add(new Spherical3DRandomFlameGenerator());
     generators.add(new GhostsRandomFlameGenerator());
+    generators.add(new OrchidsRandomFlameGenerator());
     generators.add(new SpiralsRandomFlameGenerator());
     generators.add(new Spirals3DRandomFlameGenerator());
     generators.add(new SplitsRandomFlameGenerator());
@@ -72,13 +83,13 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new XenomorphRandomFlameGenerator());
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String BW_RANDGEN = "BW_RANDGEN";
 
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
-    state.getParams().put(RANDGEN, generator);
+    state.getParams().put(BW_RANDGEN, generator);
     return state;
   }
 
@@ -92,7 +103,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(BW_RANDGEN);
     return generator;
   }
 
@@ -107,7 +118,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     if (Math.random() < 0.42) {
       pFlame.setBGColorRed(0);
       pFlame.setBGColorGreen(0);
@@ -141,4 +152,8 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     return pFlame;
   }
 
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
 }

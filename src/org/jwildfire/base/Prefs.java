@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -45,6 +45,10 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SCRIPTS = "general.path.scripts";
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
+  static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH = "general.desktop_background_imagepath";
+  static final String KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT = "general.desktop_background_darken_amount";
+
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
   static final String KEY_GENERAL_PATH_THUMBNAILS = "general.path.thumbnails";
@@ -62,7 +66,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_PROFILE_QUALITY_COUNT = "tina.profile.quality2.count";
   static final String KEY_TINA_PROFILE_QUALITY_QUALITY = "tina.profile.quality2.quality";
   static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR = "tina.profile.quality2.with_hdr";
-  static final String KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP = "tina.profile.quality2.with_hdr_intensity_map";
+  static final String KEY_TINA_PROFILE_QUALITY_WITH_ZBUFFER = "tina.profile.quality2.with_zbuffer";
   static final String KEY_TINA_PROFILE_QUALITY_CAPTION = "tina.profile.quality2.caption";
   static final String KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE = "tina.profile.quality2.default_profile";
 
@@ -86,6 +90,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_RADIUS = "tina.render.default_antialiasing_radius.5";
   static final String KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES = "tina.profile.associate_with_flames";
 
+  static final String KEY_TINA_DISABLE_SOLID_RANDGENS = "tina.disable_solid_randgens";
+
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
@@ -98,7 +104,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_RANDOMBATCH_BGCOLOR_BLUE = "tina.random_batch.bg_color.blue";
   static final String KEY_TINA_RANDOMBATCH_REFRESH_TYPE = "tina.random_batch.refresh_type";
 
-  static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.3";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality";
@@ -117,7 +123,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.2";
   static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling.2";
   static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
@@ -131,6 +137,11 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL = "tina.default.fade_to_white_level";
   public static final String KEY_TINA_DEFAULT_FPS = "tina.default.fps";
 
+  static final String KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS = "tina.initially_expand_nonlinear_params";
+  static final String KEY_TINA_FACLRENDER_PATH = "tina.faclrender_path";
+  static final String KEY_TINA_FACLRENDER_OPTS = "tina.faclrender_opts";
+
+  static final String KEY_TINA_AUTOLOAD_IMAGES_IN_IR = "tina.autoload_images_in_ir";
   static final String KEY_TINA_SAVING_STORE_HDR_IN_IR = "tina.saving.store_hdr_in_ir";
   static final String KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE = "tina.saving.store_flames_when_saving_image";
   static final String KEY_TINA_OPTIMIZED_RENDERING_IR = "tina.optimized_rendering_ir.5";
@@ -152,12 +163,6 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_HORIZ2 = "tina.mutagen.mutationtype_horiz2";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT1 = "tina.mutagen.mutationtype_vert1";
   public static final String KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2 = "tina.mutagen.mutationtype_vert2";
-
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DISABLED = "tina.integration.chaotica.disabled.2";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_DRAWER = "tina.integration.chaotica.drawer";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE = "tina.integration.chaotica.executable";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER = "tina.integration.chaotica.flame_drawer";
-  public static final String KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT = "tina.integration.chaotica.animation_export";
 
   static final String KEY_IFLAMES_LIBRARY_PATH_FLAMES = "iflames.library_path.flames";
   static final String KEY_IFLAMES_LIBRARY_PATH_IMAGES = "iflames.library_path.images";
@@ -196,6 +201,15 @@ public class Prefs extends ManagedObject {
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
 
+  @Property(description = "Background-image for the desktop, a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
+  private String desktopBackgroundImagePath = null;
+
+  @Property(description = "Convenience background-image darken-amount (because a regular usually is too bright), a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
+  private double desktopBackgroundDarkenAmount = 1.0;
+
+  @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
+  private boolean showTipsAtStartup = true;
+
   @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
   private String iflamesFlameLibraryPath = null;
 
@@ -211,8 +225,20 @@ public class Prefs extends ManagedObject {
   @Property(description = "Make background color of advanced code editor white, overriding any look and feel settings. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private boolean tinaAdvancedCodeEditorColorFix = true;
 
+  @Property(description = "Disable solid-flame-random-generators inside the global \"All\"-random-generator. This may make sense when you do not like solid flames at all or when the calculation takes too long on your machine. You may still manually select solid-flame-random-generators. A change of this property requires a program-restart", category = PropertyCategory.TINA)
+  private boolean tinaDisableSolidFlameRandGens = false;
+
   @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
   private int tinaAdvancedCodeEditorFontSize = 10;
+
+  @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
+  private boolean tinaDefaultExpandNonlinearParams = false;
+
+  @Property(description = "Path to the external GPU renderer, currently only Windows-plattforms are supported. The software searches this path at program-start for a file called \"FACLRender.exe\", only when this file exists, the GPU-rendering-window is displayed, a change of this property requires a program-restart.", category = PropertyCategory.TINA)
+  private String tinaFACLRenderPath = null;
+
+  @Property(description = "Commandline-options added when invokling the external GPU-renderer. Refer to the documentation or sourcecode for more information.", category = PropertyCategory.TINA)
+  private String tinaFACLRenderOptions = "-nde";
 
   @Property(description = "JWFMovie file drawer", category = PropertyCategory.TINA)
   private String tinaJWFMoviePath = null;
@@ -242,6 +268,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Generate and save HDR images in the interactive renderer", category = PropertyCategory.TINA)
   private boolean tinaSaveHDRInIR = false;
+
+  @Property(description = "Automatically re-load and display saved images from within the interactive renderer (in order to show the final result which may differ from the IR display). May be also activated per user-session in the IR itself", category = PropertyCategory.TINA)
+  private boolean tinaAutoloadSavedImagesInIR = true;
 
   @Property(description = "Disable the warning about the usage of Wikimedia Commons random-flame-generator", category = PropertyCategory.TINA)
   private boolean tinaDisableWikimediaCommonsWarning = false;
@@ -274,7 +303,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultSpatialOversampling = 2;
+  private int tinaDefaultSpatialOversampling = 1;
 
   @Property(description = "Default color oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
   private int tinaDefaultColorOversampling = 3;
@@ -373,21 +402,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Create a vertical toolbar to hold macro-buttons instead of the horizontal one (restart of program after change required)", category = PropertyCategory.TINA)
   private boolean tinaMacroButtonsVertical = false;
 
-  @Property(description = "Disable the Chaotica-support inside the flame-module", category = PropertyCategory.TINA)
-  private boolean tinaIntegrationChaoticaDisabled = true;
-
-  @Property(description = "Allow the animation-export from with the Chaotica-bridge. Please note that this reduces the maximum possible resolution in Chaotica when you do not have a Studio licence", category = PropertyCategory.TINA)
-  private boolean tinaIntegrationChaoticaAnimationExport = false;
-
-  @Property(description = "Installation drawer where the Chaotica-software resides", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaDrawer = "C:\\Program Files\\Chaotica";
-
-  @Property(description = "Executable which is invoked when launching Chaotica from with the flame-editor (typically chaotica.exe under Windows)", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaExecutable = "chaotica.exe";
-
-  @Property(description = "Drawer to store flames in the Chaotica-format", category = PropertyCategory.TINA)
-  private String tinaIntegrationChaoticaFlameDrawer = "";
-
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
@@ -444,7 +458,7 @@ public class Prefs extends ManagedObject {
     }
   }
 
-  private LookAndFeelType lookAndFeelType = LookAndFeelType.NIMBUS;
+  private LookAndFeelType lookAndFeelType = Tools.OSType.MAC.equals(Tools.getOSType()) ? LookAndFeelType.SYSTEM : LookAndFeelType.NIMBUS;
   private String lookAndFeelTheme = "";
 
   @Property(description = "Default number of frames for a movie", category = PropertyCategory.TINA)
@@ -649,7 +663,7 @@ public class Prefs extends ManagedObject {
     new PrefsReader().readPrefs(this);
   }
 
-  public void saveToFromFile() throws Exception {
+  public void saveToFile() throws Exception {
     new PrefsWriter().writePrefs(this);
   }
 
@@ -739,6 +753,7 @@ public class Prefs extends ManagedObject {
     tinaAssociateProfilesWithFlames = pSrc.tinaAssociateProfilesWithFlames;
     tinaSaveFlamesWhenImageIsSaved = pSrc.tinaSaveFlamesWhenImageIsSaved;
     tinaSaveHDRInIR = pSrc.tinaSaveHDRInIR;
+    tinaAutoloadSavedImagesInIR = pSrc.tinaAutoloadSavedImagesInIR;
     tinaDefaultBGTransparency = pSrc.tinaDefaultBGTransparency;
     tinaRasterType = pSrc.tinaRasterType;
     tinaJWFScriptPath = pSrc.tinaJWFScriptPath;
@@ -772,11 +787,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFadeToWhiteLevel = pSrc.tinaDefaultFadeToWhiteLevel;
     tinaEditorDoubleClickAction = pSrc.tinaEditorDoubleClickAction;
 
-    tinaIntegrationChaoticaDisabled = pSrc.tinaIntegrationChaoticaDisabled;
-    tinaIntegrationChaoticaDrawer = pSrc.tinaIntegrationChaoticaDrawer;
-    tinaIntegrationChaoticaExecutable = pSrc.tinaIntegrationChaoticaExecutable;
-    tinaIntegrationChaoticaFlameDrawer = pSrc.tinaIntegrationChaoticaFlameDrawer;
-    tinaIntegrationChaoticaAnimationExport = pSrc.tinaIntegrationChaoticaAnimationExport;
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
     tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
@@ -795,6 +805,13 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
+    desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
+    desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
+    showTipsAtStartup = pSrc.showTipsAtStartup;
+    tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
+    tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
+    tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
+    tinaFACLRenderOptions = pSrc.tinaFACLRenderOptions;
 
     resolutionProfiles.clear();
     for (ResolutionProfile profile : pSrc.resolutionProfiles) {
@@ -935,8 +952,27 @@ public class Prefs extends ManagedObject {
   private Prefs() {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_NAVIGATOR));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA_PREVIEW));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FORMULAEXPLORER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IMAGEPROCESSING));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMEBROWSER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_EASYMOVIEMAKER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DANCINGFLAMES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MUTAGEN));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_HELP));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_INTERACTIVERENDERER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_MESHGEN));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_BATCHFLAMERENDERER));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_PREFERENCES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_SYSTEMINFO));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_WELCOME));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TIPOFTHEDAY));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LOOKANDFEEL));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMES_GPU));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {
@@ -1100,13 +1136,14 @@ public class Prefs extends ManagedObject {
 
   public static Prefs getPrefs() {
     if (prefs == null) {
-      prefs = new Prefs();
+      Prefs p = new Prefs();
       try {
-        prefs.loadFromFile();
+        p.loadFromFile();
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+      prefs = p;
     }
     return prefs;
   }
@@ -1363,38 +1400,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFadeToWhiteLevel = pTinaDefaultFadeToWhiteLevel;
   }
 
-  public boolean isTinaIntegrationChaoticaDisabled() {
-    return tinaIntegrationChaoticaDisabled;
-  }
-
-  public void setTinaIntegrationChaoticaDisabled(boolean pTinaIntegrationChaoticaDisabled) {
-    tinaIntegrationChaoticaDisabled = pTinaIntegrationChaoticaDisabled;
-  }
-
-  public String getTinaIntegrationChaoticaDrawer() {
-    return tinaIntegrationChaoticaDrawer;
-  }
-
-  public void setTinaIntegrationChaoticaDrawer(String pTinaIntegrationChaoticaDrawer) {
-    tinaIntegrationChaoticaDrawer = pTinaIntegrationChaoticaDrawer;
-  }
-
-  public String getTinaIntegrationChaoticaExecutable() {
-    return tinaIntegrationChaoticaExecutable;
-  }
-
-  public void setTinaIntegrationChaoticaExecutable(String pTinaIntegrationChaoticaExecutable) {
-    tinaIntegrationChaoticaExecutable = pTinaIntegrationChaoticaExecutable;
-  }
-
-  public String getTinaIntegrationChaoticaFlameDrawer() {
-    return tinaIntegrationChaoticaFlameDrawer;
-  }
-
-  public void setTinaIntegrationChaoticaFlameDrawer(String pTinaIntegrationChaoticaFlameDrawer) {
-    tinaIntegrationChaoticaFlameDrawer = pTinaIntegrationChaoticaFlameDrawer;
-  }
-
   public int getTinaDefaultFPS() {
     return tinaDefaultFPS;
   }
@@ -1409,14 +1414,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaRawMotionDataPath(String pTinaRawMotionDataPath) {
     tinaRawMotionDataPath = pTinaRawMotionDataPath;
-  }
-
-  public boolean isTinaIntegrationChaoticaAnimationExport() {
-    return tinaIntegrationChaoticaAnimationExport;
-  }
-
-  public void setTinaIntegrationChaoticaAnimationExport(boolean pTinaIntegrationChaoticaAnimationExport) {
-    tinaIntegrationChaoticaAnimationExport = pTinaIntegrationChaoticaAnimationExport;
   }
 
   public int getTinaDefaultSpatialOversampling() {
@@ -1603,6 +1600,70 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFontScale(double pTinaFontScale) {
     tinaFontScale = pTinaFontScale;
+  }
+
+  public String getDesktopBackgroundImagePath() {
+    return desktopBackgroundImagePath;
+  }
+
+  public void setDesktopBackgroundImagePath(String desktopBackgroundImagePath) {
+    this.desktopBackgroundImagePath = desktopBackgroundImagePath;
+  }
+
+  public double getDesktopBackgroundDarkenAmount() {
+    return desktopBackgroundDarkenAmount;
+  }
+
+  public void setDesktopBackgroundDarkenAmount(double desktopBackgroundDarkenAmount) {
+    this.desktopBackgroundDarkenAmount = desktopBackgroundDarkenAmount;
+  }
+
+  public boolean isShowTipsAtStartup() {
+    return showTipsAtStartup;
+  }
+
+  public void setShowTipsAtStartup(boolean showTipsAtStartup) {
+    this.showTipsAtStartup = showTipsAtStartup;
+  }
+
+  public boolean isTinaDisableSolidFlameRandGens() {
+    return tinaDisableSolidFlameRandGens;
+  }
+
+  public void setTinaDisableSolidFlameRandGens(boolean tinaDisableSolidFlameRandGens) {
+    this.tinaDisableSolidFlameRandGens = tinaDisableSolidFlameRandGens;
+  }
+
+  public boolean isTinaAutoloadSavedImagesInIR() {
+    return tinaAutoloadSavedImagesInIR;
+  }
+
+  public void setTinaAutoloadSavedImagesInIR(boolean tinaAutoloadSavedImagesInIR) {
+    this.tinaAutoloadSavedImagesInIR = tinaAutoloadSavedImagesInIR;
+  }
+
+  public boolean isTinaDefaultExpandNonlinearParams() {
+    return tinaDefaultExpandNonlinearParams;
+  }
+
+  public void setTinaDefaultExpandNonlinearParams(boolean tinaDefaultExpandNonlinearParams) {
+    this.tinaDefaultExpandNonlinearParams = tinaDefaultExpandNonlinearParams;
+  }
+
+  public String getTinaFACLRenderPath() {
+    return tinaFACLRenderPath;
+  }
+
+  public void setTinaFACLRenderPath(String tinaFACLRenderPath) {
+    this.tinaFACLRenderPath = tinaFACLRenderPath;
+  }
+
+  public String getTinaFACLRenderOptions() {
+    return tinaFACLRenderOptions;
+  }
+
+  public void setTinaFACLRenderOptions(String pTinaFACLRenderOptions) {
+    tinaFACLRenderOptions = pTinaFACLRenderOptions;
   }
 
 }

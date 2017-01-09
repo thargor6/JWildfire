@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -106,10 +106,13 @@ public class PrefsReader {
         pPrefs.setTinaAdvancedCodeEditor(getBooleanProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR, pPrefs.isTinaAdvancedCodeEditor()));
         pPrefs.setTinaAdvancedCodeEditorColorFix(getBooleanProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX, pPrefs.isTinaAdvancedCodeEditorColorFix()));
         pPrefs.setTinaAdvancedCodeEditorFontSize(getIntProperty(props, Prefs.KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE, pPrefs.getTinaAdvancedCodeEditorFontSize()));
-
+        pPrefs.setShowTipsAtStartup(getBooleanProperty(props, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup()));
+        pPrefs.setDesktopBackgroundImagePath(getProperty(props, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH, pPrefs.getDesktopBackgroundImagePath()));
+        pPrefs.setDesktopBackgroundDarkenAmount(getDoubleProperty(props, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT, pPrefs.getDesktopBackgroundDarkenAmount()));
         pPrefs.setTinaAssociateProfilesWithFlames(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames()));
         pPrefs.setTinaSaveFlamesWhenImageIsSaved(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved()));
         pPrefs.setTinaSaveHDRInIR(getBooleanProperty(props, Prefs.KEY_TINA_SAVING_STORE_HDR_IN_IR, pPrefs.isTinaSaveHDRInIR()));
+        pPrefs.setTinaAutoloadSavedImagesInIR(getBooleanProperty(props, Prefs.KEY_TINA_AUTOLOAD_IMAGES_IN_IR, pPrefs.isTinaAutoloadSavedImagesInIR()));
         pPrefs.setTinaOptimizedRenderingIR(getBooleanProperty(props, Prefs.KEY_TINA_OPTIMIZED_RENDERING_IR, pPrefs.isTinaOptimizedRenderingIR()));
         //        pPrefs.setTinaUseExperimentalOpenClCode(getBooleanProperty(props, Prefs.KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE, pPrefs.isTinaUseExperimentalOpenClCode()));
         pPrefs.setTinaDefaultBGTransparency(getBooleanProperty(props, Prefs.KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY, pPrefs.isTinaDefaultBGTransparency()));
@@ -120,7 +123,7 @@ public class PrefsReader {
         pPrefs.setTinaJWFMoviePath(getProperty(props, Prefs.KEY_TINA_PATH_JWFMOVIES, pPrefs.getTinaJWFMoviePath()));
         pPrefs.setTinaJWFScriptPath(getProperty(props, Prefs.KEY_TINA_PATH_JWFSCRIPTS, pPrefs.getTinaJWFScriptPath()));
         pPrefs.setTinaCustomVariationsPath(getProperty(props, Prefs.KEY_TINA_PATH_CUSTOM_VARIATIONS, pPrefs.getTinaCustomVariationsPath()));
-
+        pPrefs.setTinaDisableSolidFlameRandGens(getBooleanProperty(props, Prefs.KEY_TINA_DISABLE_SOLID_RANDGENS, pPrefs.isTinaDisableSolidFlameRandGens()));
         pPrefs.setTinaGradientPath(getProperty(props, Prefs.KEY_TINA_PATH_GRADIENTS, pPrefs.getTinaGradientPath()));
         pPrefs.setTinaSVGPath(getProperty(props, Prefs.KEY_TINA_PATH_SVG, pPrefs.getTinaSVGPath()));
         pPrefs.setTinaRawMotionDataPath(getProperty(props, Prefs.KEY_TINA_PATH_RAW_MOTION_DATA, pPrefs.getTinaRawMotionDataPath()));
@@ -171,12 +174,6 @@ public class PrefsReader {
         pPrefs.setTinaMutaGenMutationTypeVert2(getProperty(props, Prefs.KEY_TINA_MUTAGEN_MUTATIONTYPE_VERT2, pPrefs.getTinaMutaGenMutationTypeVert2()));
         pPrefs.setTinaFreeCacheInBatchRenderer(getBooleanProperty(props, Prefs.KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER, pPrefs.isTinaFreeCacheInBatchRenderer()));
 
-        pPrefs.setTinaIntegrationChaoticaDisabled(getBooleanProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DISABLED, pPrefs.isTinaIntegrationChaoticaDisabled()));
-        pPrefs.setTinaIntegrationChaoticaAnimationExport(getBooleanProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT, pPrefs.isTinaIntegrationChaoticaAnimationExport()));
-        pPrefs.setTinaIntegrationChaoticaDrawer(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DRAWER, pPrefs.getTinaIntegrationChaoticaDrawer()));
-        pPrefs.setTinaIntegrationChaoticaExecutable(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE, pPrefs.getTinaIntegrationChaoticaExecutable()));
-        pPrefs.setTinaIntegrationChaoticaFlameDrawer(getProperty(props, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER, pPrefs.getTinaIntegrationChaoticaFlameDrawer()));
-
         pPrefs.setIflamesFlameLibraryPath(getProperty(props, Prefs.KEY_IFLAMES_LIBRARY_PATH_FLAMES, pPrefs.getIflamesFlameLibraryPath()));
         pPrefs.setIflamesImageLibraryPath(getProperty(props, Prefs.KEY_IFLAMES_LIBRARY_PATH_IMAGES, pPrefs.getIflamesImageLibraryPath()));
         pPrefs.setIflamesLoadLibraryAtStartup(getBooleanProperty(props, Prefs.KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP, pPrefs.isIflamesLoadLibraryAtStartup()));
@@ -200,6 +197,10 @@ public class PrefsReader {
         pPrefs.setTinaDefaultFPS(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_FPS, pPrefs.getTinaDefaultFPS()));
 
         pPrefs.setTinaRandGenColorMapImagePath(getProperty(props, Prefs.KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH, pPrefs.getTinaRandGenColorMapImagePath()));
+
+        pPrefs.setTinaFACLRenderPath(getProperty(props, Prefs.KEY_TINA_FACLRENDER_PATH, pPrefs.getTinaFACLRenderPath()));
+        pPrefs.setTinaFACLRenderOptions(getProperty(props, Prefs.KEY_TINA_FACLRENDER_OPTS, pPrefs.getTinaFACLRenderOptions()));
+        pPrefs.setTinaDefaultExpandNonlinearParams(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams()));
 
         try {
           RasterCreator rasterPointPrecision = RasterCreator.valueOf(getProperty(props, Prefs.KEY_TINA_RASTER_TYPE, RasterCreator.getDefaultValue().toString()));
@@ -259,7 +260,7 @@ public class PrefsReader {
               profile.setDefaultProfile(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_DEFAULT_PROFILE + "." + i, false));
               profile.setQuality(getIntProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, 1));
               profile.setWithHDR(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, false));
-              profile.setWithHDRIntensityMap(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, false));
+              profile.setWithZBuffer(getBooleanProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_ZBUFFER + "." + i, false));
               profile.setCaption(getProperty(props, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, ""));
               pPrefs.getQualityProfiles().add(profile);
             }
@@ -282,6 +283,7 @@ public class PrefsReader {
                 windowPrefs.setWidth(getIntProperty(props, WindowPrefs.KEY_WIDTH + "." + i, 0));
                 windowPrefs.setHeight(getIntProperty(props, WindowPrefs.KEY_HEIGHT + "." + i, 0));
                 windowPrefs.setMaximized(getBooleanProperty(props, WindowPrefs.KEY_MAXIMIZED + "." + i, false));
+                windowPrefs.setVisible(getBooleanProperty(props, WindowPrefs.KEY_VISIBLE + "." + i, false));
               }
             }
             catch (Throwable ex) {
@@ -295,7 +297,7 @@ public class PrefsReader {
         pPrefs.setTinaMacroToolbarHeight(getIntProperty(props, Prefs.KEY_TINA_MACRO_TOOLBAR_HEIGHT, pPrefs.getTinaMacroToolbarHeight()));
         {
           int count = getIntProperty(props, MacroButton.KEY_MACRO_BUTTON_COUNT, 0);
-          Prefs.getPrefs().getTinaMacroButtons().clear();
+          pPrefs.getTinaMacroButtons().clear();
           for (int i = 0; i < count; i++) {
             try {
               MacroButton macroButton = new MacroButton();
@@ -304,7 +306,7 @@ public class PrefsReader {
               macroButton.setImage(getProperty(props, MacroButton.KEY_MACRO_BUTTON_IMAGE + "." + i, ""));
               macroButton.setMacro(getProperty(props, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, ""));
               macroButton.setInternal(getBooleanProperty(props, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, false));
-              Prefs.getPrefs().getTinaMacroButtons().add(macroButton);
+              pPrefs.getTinaMacroButtons().add(macroButton);
             }
             catch (Throwable ex) {
               ex.printStackTrace();
@@ -318,12 +320,12 @@ public class PrefsReader {
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
         //
-        setupDefaultProfiles(pPrefs);
       }
       finally {
         inputStream.close();
       }
     }
+    setupDefaultProfiles(pPrefs);
   }
 
   private void addMacroButton(Prefs prefs, String caption, String hint, String script) {
@@ -351,14 +353,15 @@ public class PrefsReader {
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(true, 800, 600));
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1024, 768));
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1680, 1050));
+      pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1440, 900));
       pPrefs.getResolutionProfiles().add(new ResolutionProfile(false, 1920, 1080));
     }
     if (pPrefs.getQualityProfiles().size() == 0) {
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 200, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Low quality", 500, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 800, false, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High quality", 1000, true, false));
-      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 2000, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very low quality", 100, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Low quality", 200, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Medium quality", 300, true, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(true, "High quality", 500, false, false));
+      pPrefs.getQualityProfiles().add(new QualityProfile(false, "Very high quality", 1000, true, false));
     }
   }
 

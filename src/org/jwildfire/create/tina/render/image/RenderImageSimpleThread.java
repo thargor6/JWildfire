@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.render.image;
 
+import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.GammaCorrectedRGBPoint;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.LogDensityFilter;
@@ -30,12 +31,12 @@ public class RenderImageSimpleThread extends AbstractImageRenderThread {
   private final GammaCorrectedRGBPoint rbgPoint;
   private final SimpleImage img;
 
-  public RenderImageSimpleThread(LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg) {
+  public RenderImageSimpleThread(Flame pFlame, LogDensityFilter pLogDensityFilter, GammaCorrectionFilter pGammaCorrectionFilter, int pStartRow, int pEndRow, SimpleImage pImg) {
     logDensityFilter = pLogDensityFilter;
     gammaCorrectionFilter = pGammaCorrectionFilter;
     startRow = pStartRow;
     endRow = pEndRow;
-    logDensityPnt = new LogDensityPoint();
+    logDensityPnt = new LogDensityPoint(pFlame.getActiveLightCount());
     rbgPoint = new GammaCorrectedRGBPoint();
     img = pImg;
   }

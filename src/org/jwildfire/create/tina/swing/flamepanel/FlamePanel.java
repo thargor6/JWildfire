@@ -154,7 +154,7 @@ public class FlamePanel extends ImagePanel {
       drawTriangles(g2d);
     }
     if (config.getMouseDragOperation() == MouseDragOperation.GRADIENT && flameHolder.getFlame() != null && layerHolder != null) {
-      gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getImageBounds());
+      gradientOverlay.paintGradient((Graphics2D) g, layerHolder.getLayer().getPalette(), this.getParentImageBounds());
     }
   }
 
@@ -206,7 +206,6 @@ public class FlamePanel extends ImagePanel {
       imageHeight = bounds.height;
       imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
     }
-    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
@@ -222,7 +221,6 @@ public class FlamePanel extends ImagePanel {
       imageHeight = bounds.height;
       imageWidth = Tools.FTOI((double) imageHeight * renderAspect);
     }
-    //    System.out.println(bounds.width + "x" + bounds.height + "->" + imageWidth + "x" + imageHeight);
     return new Rectangle(0, 0, imageWidth, imageHeight);
   }
 
@@ -736,6 +734,8 @@ public class FlamePanel extends ImagePanel {
                   selectedXForm.setCoeff11(selectedXForm.getCoeff11() + dy);
                 }
                 break;
+              default: // nothing to do
+                break;
             }
             return true;
           }
@@ -814,6 +814,8 @@ public class FlamePanel extends ImagePanel {
             reRender = gradientOverlay.mouseDragged(dx, xBeginDrag, yBeginDrag, layer);
             return true;
           }
+          default: // nothing to do
+            break;
         }
       }
     }

@@ -45,8 +45,6 @@ public class GradientController {
   private final static int GRADIENT_THUMB_WIDTH = 200;
   private final static int GRADIENT_THUMB_HEIGHT = 18;
 
-  private JScrollPane gradientLibraryScrollPane;
-
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
@@ -243,21 +241,20 @@ public class GradientController {
   public void scanUserGradients(String path, GradientUserNode pParentNode) {
     File root = new File(path);
     File[] list = root.listFiles();
-    try {
-      Arrays.sort(list, new Comparator<File>() {
-
-        @Override
-        public int compare(File o1, File o2) {
-          return o1.getName().compareTo(o2.getName());
-        }
-
-      });
-    }
-    catch (Exception ex) {
-      // ex.printStackTrace();
-    }
-
     if (list != null) {
+      try {
+        Arrays.sort(list, new Comparator<File>() {
+
+          @Override
+          public int compare(File o1, File o2) {
+            return o1.getName().compareTo(o2.getName());
+          }
+
+        });
+      }
+      catch (Exception ex) {
+        // ex.printStackTrace();
+      }
       List<String> filenames = new ArrayList<String>();
       for (File f : list) {
         if (f.isDirectory()) {
@@ -294,7 +291,7 @@ public class GradientController {
     renameFolderBtn.setEnabled(userNodeSelected && node != userGradientsRootNode);
   }
 
-  private class GradientNode {
+  private static class GradientNode {
     private final String caption;
     private final SimpleImage image;
 
@@ -314,7 +311,7 @@ public class GradientController {
 
   }
 
-  private class GradientRenderer extends DefaultListCellRenderer {
+  private static class GradientRenderer extends DefaultListCellRenderer {
     private static final long serialVersionUID = 1L;
 
     private Map<GradientNode, ImageIcon> iconCache = new HashMap<GradientNode, ImageIcon>();
@@ -361,7 +358,7 @@ public class GradientController {
         tinaController.setLastGradient(palette);
         tinaController.registerToEditor(tinaController.getCurrFlame(), tinaController.getCurrLayer());
         tinaController.refreshPaletteUI(palette);
-        tinaController.refreshFlameImage(true, false, 1, true);
+        tinaController.refreshFlameImage(true, false, 1, true, false);
       }
     }
   }
@@ -417,12 +414,6 @@ public class GradientController {
       }
       else {
         gradientsList.setListData(new Vector<GradientNode>());
-        if (gradientLibraryScrollPane != null) {
-          gradientLibraryPanel.remove(gradientLibraryScrollPane);
-          gradientLibraryScrollPane = null;
-          gradientLibraryPanel.repaint();
-          gradientLibraryPanel.validate();
-        }
       }
     }
     finally {

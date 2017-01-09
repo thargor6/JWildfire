@@ -415,7 +415,6 @@ public class ResolutionProfileDialog extends JDialog {
       return true;
     }
     catch (Throwable ex) {
-      ex.getStackTrace();
       getStatusLbl().setText(ex.getMessage());
       return false;
     }

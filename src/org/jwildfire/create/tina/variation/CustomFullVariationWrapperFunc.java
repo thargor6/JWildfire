@@ -35,7 +35,7 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  public static boolean DEBUG = false;
+  public static final boolean DEBUG = false;
   private static final String RESSOURCE_CODE = "code_full_variation";
 
   private static HashMap<String, Class> builtin_variations;
@@ -313,6 +313,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       else if (classesLoaded instanceof AbstractCollection) {
         classIter = ((AbstractCollection) classesLoaded).iterator();
       }
+      else {
+        throw new IllegalArgumentException("unknown class " + String.valueOf(classesLoaded));
+      }
       // construct full_variation as instance of first Class from classloader that is a subclass of VariationFunc
       while (classIter.hasNext()) {
         Object val = classIter.next();
@@ -461,32 +464,31 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   }
 
   public boolean ressourceCanModifyParams(String resourceName) {
-    if (resourceName.equalsIgnoreCase(RESSOURCE_CODE)) { return true; }
-    else { return full_variation.ressourceCanModifyParams(resourceName); }
+    if (resourceName.equalsIgnoreCase(RESSOURCE_CODE)) {
+      return true;
+    }
+    else {
+      return full_variation.ressourceCanModifyParams(resourceName);
+    }
   }
-  
+
   @Override
   public boolean ressourceCanModifyParams() {
     return true;
   }
-    
+
   @Override
   public boolean dynamicParameterExpansion(String paramName) {
     return full_variation.dynamicParameterExpansion(paramName);
   }
-  
+
   public boolean dynamicParameterExpansion() {
-    return full_variation.dynamicParameterExpansion();
+    return full_variation != null ? full_variation.dynamicParameterExpansion() : false;
   }
 
   @Override
   public int getPriority() {
-    if (full_variation == null) {
-      return 0;
-    }
-    else {
-      return full_variation.getPriority();
-    }
+    return full_variation != null ? full_variation.getPriority() : 0;
   }
 
 }

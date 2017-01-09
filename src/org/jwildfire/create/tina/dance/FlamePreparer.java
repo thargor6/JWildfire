@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.dance;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
 
 public class FlamePreparer {
   private final Prefs prefs;
@@ -47,7 +48,15 @@ public class FlamePreparer {
     //res.getPalette().setModSaturation(-160);
     //    res.getPalette().setModRed(20);
     //    res.getPalette().setModBlue(-20);
-    res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
+    if (res.getSolidRenderSettings().isSolidRenderingEnabled()) {
+      res.getSolidRenderSettings().setAoEnabled(false);
+      res.getSolidRenderSettings().setShadowType(ShadowType.OFF);
+      res.setCamDOF(0.0);
+      res.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+    }
+    else {
+      res.setSampleDensity(2 * prefs.getTinaRenderRealtimeQuality());
+    }
 
     return res;
   }

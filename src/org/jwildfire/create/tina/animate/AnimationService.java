@@ -32,6 +32,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -81,11 +82,11 @@ public class AnimationService {
       Class<?> fieldCls = field.getType();
       if (fieldCls == double.class || fieldCls == Double.class) {
         Double res = field.getDouble(pSource);
-        return res != null ? res.doubleValue() : 0.0;
+        return res;
       }
       else if (fieldCls == int.class || fieldCls == Integer.class) {
         Integer res = field.getInt(pSource);
-        return res != null ? Double.valueOf(res.intValue()) : 0.0;
+        return Double.valueOf(res.intValue());
       }
       else if (fieldCls == boolean.class || fieldCls == Boolean.class) {
         Boolean res = field.getBoolean(pSource);
@@ -182,6 +183,10 @@ public class AnimationService {
       else if (field.getType().isAssignableFrom(RGBPalette.class)) {
         RGBPalette gradient = (RGBPalette) field.get(pObject);
         _evalMotionCurves(gradient, pFrame);
+      }
+      else if (field.getType().isAssignableFrom(SolidRenderSettings.class)) {
+        SolidRenderSettings settings = (SolidRenderSettings) field.get(pObject);
+        _evalMotionCurves(settings, pFrame);
       }
     }
     if (pObject instanceof Variation) {
@@ -475,7 +480,7 @@ public class AnimationService {
     }
   }
 
-  public static double DFLT_DURATION = 6.0;
+  public static final double DFLT_DURATION = 6.0;
 
   public static void addMotionCurve(Flame pFlame, XFormScript pScript, int pFrame, int pFrameCount, double pFPS) {
     if (pScript != null && pScript.getScriptType() != null && !XFormScriptType.NONE.equals(pScript.getScriptType()) && fabs(pScript.getAmplitude()) > EPSILON) {

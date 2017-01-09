@@ -28,7 +28,7 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
 
   private String getNonBlurRandomFunc() {
     while (true) {
-      String res = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[(int) (ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length * Math.random())];
+      String res = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
       if (res.indexOf("blur") < 0 && res.indexOf("pre_") < 0 && res.indexOf("post_") < 0 && res.indexOf("inflate") < 0) {
         return res;
       }
@@ -152,7 +152,12 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

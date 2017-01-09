@@ -179,6 +179,8 @@ public class BenoitCreator extends ImageCreator {
         case 5:
           img.setRGB(x, y, MAX_COL, 0, MAX_COL - value);
           break;
+        default: // nothing to do
+          break;
       }
     }
   }
@@ -871,6 +873,8 @@ public class BenoitCreator extends ImageCreator {
           sx = hx * hx * hx - 3.0 * hx * hy * hy;
           sy = 3.0 * hx * hx * hy - hy * hy * hy;
           push(sx, sy);
+          break;
+        default: // nothing to do
           break;
       }
     }

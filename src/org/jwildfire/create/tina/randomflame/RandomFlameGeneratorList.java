@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jwildfire.base.Unchecker;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaBridgeRandomFlameGenerator;
 
 public class RandomFlameGeneratorList {
   public static final String DEFAULT_GENERATOR_NAME = new AllRandomFlameGenerator().getName();
@@ -37,30 +36,35 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(Brokat3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(BubblesRandomFlameGenerator.class);
     registerRandomFlameGenerator(Bubbles3DRandomFlameGenerator.class);
-    registerRandomFlameGenerator(ChaoticaBridgeRandomFlameGenerator.class);
     registerRandomFlameGenerator(CrossRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalBubbles3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(DualityRandomFlameGenerator.class);
     registerRandomFlameGenerator(DuckiesRandomFlameGenerator.class);
+    registerRandomFlameGenerator(GalaxiesRandomFlameGenerator.class);
     registerRandomFlameGenerator(GnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Gnarl3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalGnarlRandomFlameGenerator.class);
     registerRandomFlameGenerator(Flowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(FilledFlowers3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(GhostsRandomFlameGenerator.class);
+    registerRandomFlameGenerator(OrchidsRandomFlameGenerator.class);
     registerRandomFlameGenerator(SpiralsRandomFlameGenerator.class);
     registerRandomFlameGenerator(Spirals3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(JulianDiscRandomFlameGenerator.class);
     registerRandomFlameGenerator(JuliansRandomFlameGenerator.class);
-    registerRandomFlameGenerator(LayerzRandomFlameGenerator.class);
+    registerRandomFlameGenerator(LayersRandomFlameGenerator.class);
     registerRandomFlameGenerator(MandelbrotRandomFlameGenerator.class);
-    registerRandomFlameGenerator(Pseudo3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(RaysRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(ExperimentalSimpleRandomFlameGenerator.class);
     registerRandomFlameGenerator(LinearRandomFlameGenerator.class);
     registerRandomFlameGenerator(SierpinskyRandomFlameGenerator.class);
     registerRandomFlameGenerator(SimpleTilingRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SolidExperimentalRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SolidStunningRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SolidLabyrinthRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SolidJulia3DRandomFlameGenerator.class);
+    registerRandomFlameGenerator(SolidShadowsRandomFlameGenerator.class);
     registerRandomFlameGenerator(SphericalRandomFlameGenerator.class);
     registerRandomFlameGenerator(Spherical3DRandomFlameGenerator.class);
     registerRandomFlameGenerator(SplitsRandomFlameGenerator.class);

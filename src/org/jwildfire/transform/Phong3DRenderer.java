@@ -20,7 +20,7 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3DTransformer.Faces;
 
 public class Phong3DRenderer extends Mesh3DRenderer {
-  private final int NMAX = 256;
+  private static final int NMAX = 256;
 
   // TODO : Faces.MIRRORED currently not supported
 

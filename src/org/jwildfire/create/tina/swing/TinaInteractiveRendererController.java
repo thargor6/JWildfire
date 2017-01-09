@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2012 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -32,8 +32,10 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -45,6 +47,7 @@ import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -80,9 +83,13 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private final JButton stopButton;
   private final JButton toClipboardButton;
   private final JButton saveImageButton;
+  private final JButton saveZBufferButton;
+  private final JCheckBox autoLoadImageCBx;
   private final JButton saveFlameButton;
   private final JComboBox randomStyleCmb;
   private final JToggleButton halveSizeButton;
+  private final JToggleButton quarterSizeButton;
+  private final JToggleButton fullSizeButton;
   private final JComboBox interactiveResolutionProfileCmb;
   private final JButton pauseButton;
   private final JButton resumeButton;
@@ -99,12 +106,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
   private State state = State.IDLE;
   private final QuickSaveFilenameGen qsaveFilenameGen;
   private InteractiveRendererDisplayUpdater displayUpdater = new EmptyInteractiveRendererDisplayUpdater();
+  private boolean refreshing = false;
 
   public TinaInteractiveRendererController(TinaController pParentCtrl, ErrorHandler pErrorHandler, Prefs pPrefs,
       JButton pLoadFlameButton, JButton pFromClipboardButton, JButton pNextButton,
-      JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveFlameButton,
+      JButton pStopButton, JButton pToClipboardButton, JButton pSaveImageButton, JButton pSaveZBufferButton,
+      JCheckBox pAutoLoadImageCBx, JButton pSaveFlameButton,
       JComboBox pRandomStyleCmb, JPanel pImagePanel, JTextArea pStatsTextArea, JToggleButton pHalveSizeButton,
-      JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
+      JToggleButton pQuarterSizeButton, JToggleButton pFullSizeButton, JComboBox pInteractiveResolutionProfileCmb, JButton pPauseButton, JButton pResumeButton,
       JToggleButton pShowStatsButton, JToggleButton pShowPreviewButton) {
     parentCtrl = pParentCtrl;
     prefs = pPrefs;
@@ -117,9 +126,14 @@ public class TinaInteractiveRendererController implements IterationObserver {
     stopButton = pStopButton;
     toClipboardButton = pToClipboardButton;
     saveImageButton = pSaveImageButton;
+    saveZBufferButton = pSaveZBufferButton;
+    autoLoadImageCBx = pAutoLoadImageCBx;
     saveFlameButton = pSaveFlameButton;
     randomStyleCmb = pRandomStyleCmb;
     halveSizeButton = pHalveSizeButton;
+    quarterSizeButton = pQuarterSizeButton;
+    fullSizeButton = pFullSizeButton;
+
     interactiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;
     imageRootPanel = pImagePanel;
     pauseButton = pPauseButton;
@@ -130,7 +144,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
     state = State.IDLE;
-    genRandomFlame();
+    //genRandomFlame();
     enableControls();
   }
 
@@ -150,7 +164,11 @@ public class TinaInteractiveRendererController implements IterationObserver {
     ResolutionProfile profile = getResolutionProfile();
     int width = profile.getWidth();
     int height = profile.getHeight();
-    if (halveSizeButton.isSelected()) {
+    if (quarterSizeButton.isSelected()) {
+      width /= 4;
+      height /= 4;
+    }
+    else if (halveSizeButton.isSelected()) {
       width /= 2;
       height /= 2;
     }
@@ -172,6 +190,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
 
   public void enableControls() {
     saveImageButton.setEnabled(image != null);
+    saveZBufferButton.setEnabled(image != null && getCurrFlame() != null && getCurrFlame().getSolidRenderSettings().isSolidRenderingEnabled());
     stopButton.setEnabled(state == State.RENDER);
     pauseButton.setEnabled(state == State.RENDER);
     resumeButton.setEnabled(state != State.RENDER);
@@ -182,7 +201,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
     final int IMG_HEIGHT = 60;
 
     RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
-    int palettePoints = 3 + (int) (Math.random() * 68.0);
+    int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
     RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.HIGH);
     currFlame = sampler.createSample().getFlame();
@@ -270,16 +289,21 @@ public class TinaInteractiveRendererController implements IterationObserver {
         Flame newFlame = flames.get(0);
         prefs.setLastInputFlameFile(file);
         currFlame = newFlame;
-        storeCurrFlame();
-        cancelRender();
-        setupProfiles(currFlame);
-        renderButton_clicked();
-        enableControls();
+        importFlame(newFlame);
       }
     }
     catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
+  }
+
+  public void importFlame(Flame flame) {
+    currFlame = flame.makeCopy();
+    storeCurrFlame();
+    cancelRender();
+    setupProfiles(currFlame);
+    renderButton_clicked();
+    enableControls();
   }
 
   public void renderButton_clicked() {
@@ -288,7 +312,11 @@ public class TinaInteractiveRendererController implements IterationObserver {
       ResolutionProfile resProfile = getResolutionProfile();
       int width = resProfile.getWidth();
       int height = resProfile.getHeight();
-      if (halveSizeButton.isSelected()) {
+      if (quarterSizeButton.isSelected()) {
+        width /= 4;
+        height /= 4;
+      }
+      else if (halveSizeButton.isSelected()) {
         width /= 2;
         height /= 2;
       }
@@ -305,7 +333,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
       flame.setHeight(info.getImageHeight());
       flame.setSampleDensity(10);
       info.setRenderHDR(prefs.isTinaSaveHDRInIR());
-      info.setRenderHDRIntensityMap(false);
+      info.setRenderZBuffer(false);
       if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
         image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
       }
@@ -356,6 +384,10 @@ public class TinaInteractiveRendererController implements IterationObserver {
     enableControls();
   }
 
+  public boolean isRendering() {
+    return state == State.RENDER;
+  }
+
   private void cancelRender() {
     if (state == State.RENDER) {
       if (updateDisplayThread != null) {
@@ -396,32 +428,73 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
   }
 
-  public void saveImageButton_clicked() {
+  public void saveZBufferButton_clicked() {
     try {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (prefs.getOutputImagePath() != null) {
-        try {
-          chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
       pauseRenderThreads();
       try {
+        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          double zBufferScale = Double.parseDouble(
+              JOptionPane.showInputDialog(imageRootPanel,
+                  "Enter ZBuffer-Scale", currFlame.getZBufferScale()));
+          currFlame.setZBufferScale(zBufferScale);
+          RenderedFlame res = renderer.finishZBuffer(displayUpdater.getSampleCount());
+          if (res.getZBuffer() != null) {
+            new ImageWriter().saveImage(res.getZBuffer(), file.getAbsolutePath());
+            if (autoLoadImageCBx.isSelected()) {
+              parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
+            }
+          }
+        }
+      }
+      finally {
+        resumeRenderThreads();
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+
+  }
+
+  public void saveImageButton_clicked() {
+    try {
+      pauseRenderThreads();
+      try {
+        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+        if (prefs.getOutputImagePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
         if (chooser.showSaveDialog(imageRootPanel) == JFileChooser.APPROVE_OPTION) {
           File file = chooser.getSelectedFile();
           prefs.setLastOutputImageFile(file);
           RenderedFlame res = renderer.finishRenderFlame(displayUpdater.getSampleCount());
           new ImageWriter().saveImage(res.getImage(), file.getAbsolutePath());
           if (res.getHDRImage() != null) {
-            new ImageWriter().saveImage(res.getHDRImage(), file.getAbsolutePath() + ".hdr");
+            new ImageWriter().saveImage(res.getHDRImage(), Tools.makeHDRFilename(file.getAbsolutePath()));
           }
-          if (res.getHDRIntensityMap() != null) {
-            new ImageWriter().saveImage(res.getHDRIntensityMap(), file.getAbsolutePath() + ".intensity.hdr");
+          if (res.getZBuffer() != null) {
+            new ImageWriter().saveImage(res.getZBuffer(), Tools.makeZBufferFilename(file.getAbsolutePath()));
           }
           if (prefs.isTinaSaveFlamesWhenImageIsSaved()) {
             new FlameWriter().writeFlame(getCurrFlame(), file.getParentFile().getAbsolutePath() + File.separator + Tools.trimFileExt(file.getName()) + ".flame");
+          }
+          if (autoLoadImageCBx.isSelected()) {
+            parentCtrl.mainController.loadImage(file.getAbsolutePath(), false);
           }
         }
       }
@@ -635,22 +708,70 @@ public class TinaInteractiveRendererController implements IterationObserver {
     }
   }
 
-  public void halveSizeButton_clicked() {
-    boolean rendering = state == State.RENDER;
-    if (rendering) {
-      stopButton_clicked();
+  public void halveRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(true);
+      quarterSizeButton.setSelected(false);
+      fullSizeButton.setSelected(false);
     }
-    refreshImagePanel();
-    enableControls();
-    if (rendering) {
-      renderButton_clicked();
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void quarterRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(false);
+      quarterSizeButton.setSelected(true);
+      fullSizeButton.setSelected(false);
+    }
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void fullRenderSizeButton_clicked() {
+    refreshing = true;
+    try {
+      halveSizeButton.setSelected(false);
+      quarterSizeButton.setSelected(false);
+      fullSizeButton.setSelected(true);
+    }
+    finally {
+      refreshing = false;
+    }
+    changeRenderSizeButton_clicked();
+  }
+
+  public void changeRenderSizeButton_clicked() {
+    if (!refreshing) {
+      boolean oldRefreshing = refreshing;
+      refreshing = true;
+      try {
+        boolean rendering = state == State.RENDER;
+        if (rendering) {
+          stopButton_clicked();
+        }
+        refreshImagePanel();
+        enableControls();
+        if (rendering) {
+          renderButton_clicked();
+        }
+      }
+      finally {
+        refreshing = oldRefreshing;
+      }
     }
   }
 
   public void resolutionProfile_changed() {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
-      halveSizeButton_clicked();
+      changeRenderSizeButton_clicked();
     }
   }
 
@@ -686,7 +807,7 @@ public class TinaInteractiveRendererController implements IterationObserver {
   public void qualityProfile_changed() {
     if (!parentCtrl.cmbRefreshing) {
       // Nothing special here
-      halveSizeButton_clicked();
+      changeRenderSizeButton_clicked();
     }
   }
 
@@ -715,11 +836,15 @@ public class TinaInteractiveRendererController implements IterationObserver {
           int width = newRenderer.getRenderInfo().getImageWidth();
           int height = newRenderer.getRenderInfo().getImageHeight();
           ResolutionProfile selected = null;
+          boolean full = false;
           boolean halve = false;
+          boolean quarter = false;
+
           for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
             ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
             if (profile.getWidth() == width && profile.getHeight() == height) {
               selected = profile;
+              full = true;
               break;
             }
           }
@@ -734,14 +859,34 @@ public class TinaInteractiveRendererController implements IterationObserver {
             }
           }
           if (selected == null) {
+            for (int i = 0; i < interactiveResolutionProfileCmb.getItemCount(); i++) {
+              ResolutionProfile profile = (ResolutionProfile) interactiveResolutionProfileCmb.getItemAt(i);
+              if (profile.getWidth() / 4 == width && profile.getHeight() / 4 == height) {
+                selected = profile;
+                quarter = true;
+                break;
+              }
+            }
+          }
+          if (selected == null) {
             selected = new ResolutionProfile(false, width, height);
-            halve = false;
+            full = true;
             interactiveResolutionProfileCmb.addItem(selected);
           }
+          boolean wasQuarterSelected = quarterSizeButton.isSelected();
           boolean wasHalveSelected = halveSizeButton.isSelected();
-          halveSizeButton.setSelected(halve);
+          boolean wasFullSelected = fullSizeButton.isSelected();
+          refreshing = true;
+          try {
+            quarterSizeButton.setSelected(quarter);
+            halveSizeButton.setSelected(halve);
+            fullSizeButton.setSelected(full);
+          }
+          finally {
+            refreshing = false;
+          }
           ResolutionProfile currSel = (ResolutionProfile) interactiveResolutionProfileCmb.getSelectedItem();
-          if (currSel == null || !currSel.equals(selected) || wasHalveSelected != halve) {
+          if (currSel == null || !currSel.equals(selected) || wasQuarterSelected != quarter || wasHalveSelected != halve || wasFullSelected != full) {
             interactiveResolutionProfileCmb.setSelectedItem(selected);
             refreshImagePanel();
           }
@@ -829,8 +974,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
+    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
   }
 
 }

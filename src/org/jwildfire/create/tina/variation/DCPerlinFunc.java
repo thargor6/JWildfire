@@ -119,6 +119,8 @@ public class DCPerlinFunc extends VariationFunc {
           Vx = 0.5 * r * s;
           Vy = 0.5 * r * c;
           break;
+        default: // nothing to do
+          break;
       }
 
       // Assign V for noise vector position according to map

@@ -111,12 +111,13 @@ public class HeadlessBatchRendererController implements JobRenderThreadControlle
           throw new Exception(filename + " does not exist");
         if (f.isDirectory())
         {
-          f.list();
-          for (File fi : f.listFiles())
-          {
-            if (fi.canRead() && fi.exists() && fi.getName().toLowerCase().endsWith(".flame"))
-              files.add(fi);
-          }
+          final File[] listFiles = f.listFiles();
+          if (listFiles != null)
+            for (File fi : listFiles)
+            {
+              if (fi.canRead() && fi.exists() && fi.getName().toLowerCase().endsWith(".flame"))
+                files.add(fi);
+            }
         }
         else if (f.getName().toLowerCase().endsWith(".flame"))
           files.add(f);
@@ -143,7 +144,7 @@ public class HeadlessBatchRendererController implements JobRenderThreadControlle
     }
     QualityProfile qualpro = new QualityProfile();
     qualpro.setQuality(quality);
-    JobRenderThread job = new JobRenderThread(controller, joblist, respro, qualpro, true);
+    JobRenderThread job = new JobRenderThread(controller, joblist, respro, qualpro, true, false);
     job.run();
     System.out.println((System.nanoTime() - start) / 1000 / 1000 + " ms");
   }

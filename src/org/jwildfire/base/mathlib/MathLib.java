@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -32,21 +32,16 @@ public final class MathLib {
   public static final double M_SQRT2 = Math.sqrt(2.0);
   public final static double M_E = 2.7182818284590452354;
   public final static double M_LOG2E = 1.4426950408889634074;
+  public final static double C_255 = 255.0;
 
   private static BaseMathLib baseLib = BaseMathLibType.FAST_MATH.createInstance();
 
   public static final int iabs(int var) {
-    if (var >= 0)
-      return var;
-    else
-      return 0 - var;
+    return Math.abs(var);
   }
 
   public static final double fabs(double var) {
-    if (var >= 0.0)
-      return var;
-    else
-      return 0.0 - var;
+    return Math.abs(var);
   }
 
   public static final int sign(double val) {
@@ -128,6 +123,14 @@ public final class MathLib {
 
   public static final double min(double a, double b) {
     return Math.min(a, b);
+  }
+
+  public static final int iMin(int a, int b) {
+    return a < b ? a : b;
+  }
+
+  public static final int iMax(int a, int b) {
+    return a > b ? a : b;
   }
 
   public static final double max(double a, double b) {

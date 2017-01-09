@@ -61,7 +61,7 @@ public class CollideoscopeFunc extends VariationFunc {
     else
     {
       alt = (int) (-a * kn_pi);
-      if (alt % 2 == 1)
+      if (alt % 2 != 0)
       {
         a = -(alt * pi_kn + fmod(-ka_kn - a, pi_kn));
       }

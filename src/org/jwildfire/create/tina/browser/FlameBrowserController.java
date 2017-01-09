@@ -31,8 +31,10 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.io.FlameReader;
+import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
+import org.jwildfire.create.tina.swing.TinaInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -183,11 +185,9 @@ public class FlameBrowserController {
     if (!refreshing) {
       enableControls();
       FlamesTreeNode selNode = getSelNode();
-      if (selNode.isLeaf()) {
+      if (selNode != null && selNode.isLeaf()) {
         clearImages();
-        if (selNode != null) {
-          showImages(selNode.getFlames());
-        }
+        showImages(selNode.getFlames());
         imagesPnl.validate();
 
         int idx = 0;
@@ -216,7 +216,7 @@ public class FlameBrowserController {
   private int selectedPnl = -1;
   private final Color deselectedCellColor = new Color(160, 160, 160);
   private final Color selectedCellColor = new Color(200, 0, 0);
-  private final int borderSize = 3;
+  private static final int borderSize = 3;
   private JPanel imgRootPanel;
 
   private void showImages(List<FlameFlatNode> pFlames) {
@@ -395,10 +395,8 @@ public class FlameBrowserController {
   public void changeFolderBtn_clicked() {
     JFileChooser chooser = new JFileChooser();
     chooser = new JFileChooser();
-    chooser.setCurrentDirectory(new java.io.File("."));
     chooser.setDialogTitle("Specify flame-directory to scan");
     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    chooser.setAcceptAllFileFilterUsed(false);
     if (chooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
       currRootDrawer = chooser.getSelectedFile().getAbsolutePath();
       enableControls();
@@ -420,10 +418,8 @@ public class FlameBrowserController {
       try {
         JFileChooser chooser = new JFileChooser();
         chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
         chooser.setDialogTitle("Specify destination-directory");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
         File srcFile = new File(node.getFilename());
 
         File preselected = lastCopyToDrawer != null ? new File(lastCopyToDrawer, srcFile.getName()) : new File(srcFile.getName());
@@ -532,7 +528,7 @@ public class FlameBrowserController {
       for (Flame flame : flames) {
         tinaController.importFlame(flame, true);
       }
-      tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_EDITOR_TAB_IDX);
+      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
     }
   }
 
@@ -556,7 +552,7 @@ public class FlameBrowserController {
         List<Flame> flames = new FlameReader(prefs).readFlames(node.getFilename());
         if (flames.size() > 0) {
           tinaController.getMeshGenController().importFlame(flames.get(0));
-          tinaController.getRootTabbedPane().setSelectedIndex(Tools.TINA_MESHGEN_TAB_IDX);
+          tinaController.getDesktop().showInternalFrame(MeshGenInternalFrame.class);
         }
       }
     }

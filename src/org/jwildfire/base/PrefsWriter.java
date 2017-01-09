@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,6 +31,9 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL, pPrefs.getLookAndFeelType().toString());
       addValue(sb, Prefs.KEY_GENERAL_LOOK_AND_FEEL_THEME, pPrefs.getLookAndFeelTheme());
     }
+    addValue(sb, Prefs.KEY_GENERAL_SHOW_TIPS_AT_STARTUP, pPrefs.isShowTipsAtStartup());
+    addValue(sb, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH, pPrefs.getDesktopBackgroundImagePath());
+    addValue(sb, Prefs.KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT, pPrefs.getDesktopBackgroundDarkenAmount());
     addValue(sb, Prefs.KEY_GENERAL_PATH_IMAGES, pPrefs.getImagePath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_SCRIPTS, pPrefs.getScriptPath());
     addValue(sb, Prefs.KEY_GENERAL_PATH_THUMBNAILS, pPrefs.getThumbnailPath());
@@ -45,6 +48,8 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_PROFILE_ASSOCIATE_WITH_FLAMES, pPrefs.isTinaAssociateProfilesWithFlames());
     addValue(sb, Prefs.KEY_TINA_SAVING_STORE_FLAMES_WHEN_SAVING_IMAGE, pPrefs.isTinaSaveFlamesWhenImageIsSaved());
     addValue(sb, Prefs.KEY_TINA_SAVING_STORE_HDR_IN_IR, pPrefs.isTinaSaveHDRInIR());
+    addValue(sb, Prefs.KEY_TINA_AUTOLOAD_IMAGES_IN_IR, pPrefs.isTinaAutoloadSavedImagesInIR());
+
     addValue(sb, Prefs.KEY_TINA_OPTIMIZED_RENDERING_IR, pPrefs.isTinaOptimizedRenderingIR());
     //    addValue(sb, Prefs.KEY_TINA_USE_EXPERIMENTAL_OPENCL_CODE, pPrefs.isTinaUseExperimentalOpenClCode());
     addValue(sb, Prefs.KEY_TINA_PATH_MESHES, pPrefs.getTinaMeshPath());
@@ -102,12 +107,6 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1, pPrefs.getTinaRandGenDualityPreferedVariationProbability1());
     addValue(sb, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2());
 
-    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DISABLED, pPrefs.isTinaIntegrationChaoticaDisabled());
-    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_ANIMATION_EXPORT, pPrefs.isTinaIntegrationChaoticaAnimationExport());
-    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_DRAWER, pPrefs.getTinaIntegrationChaoticaDrawer());
-    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_EXECUTABLE, pPrefs.getTinaIntegrationChaoticaExecutable());
-    addValue(sb, Prefs.KEY_TINA_INTEGRATION_CHAOTICA_FLAME_DRAWER, pPrefs.getTinaIntegrationChaoticaFlameDrawer());
-
     addValue(sb, Prefs.KEY_IFLAMES_LIBRARY_PATH_FLAMES, pPrefs.getIflamesFlameLibraryPath());
     addValue(sb, Prefs.KEY_IFLAMES_LIBRARY_PATH_IMAGES, pPrefs.getIflamesImageLibraryPath());
     addValue(sb, Prefs.KEY_IFLAMES_LOAD_LIBRARY_AT_STARTUP, pPrefs.isIflamesLoadLibraryAtStartup());
@@ -121,6 +120,11 @@ public class PrefsWriter {
     addValue(sb, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER, pPrefs.isTinaDefaultPostNoiseFilter());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD, pPrefs.getTinaDefaultPostNoiseFilterThreshold());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FOREGROUND_OPACITY, pPrefs.getTinaDefaultForegroundOpacity());
+    addValue(sb, Prefs.KEY_TINA_DISABLE_SOLID_RANDGENS, pPrefs.isTinaDisableSolidFlameRandGens());
+
+    addValue(sb, Prefs.KEY_TINA_DEFAULT_EXPAND_NONLINEAR_PARAMS, pPrefs.isTinaDefaultExpandNonlinearParams());
+    addValue(sb, Prefs.KEY_TINA_FACLRENDER_PATH, pPrefs.getTinaFACLRenderPath());
+    addValue(sb, Prefs.KEY_TINA_FACLRENDER_OPTS, pPrefs.getTinaFACLRenderOptions());
 
     addValue(sb, Prefs.KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION, pPrefs.getTinaEditorDoubleClickAction().toString());
     addValue(sb, Prefs.KEY_TINA_DEFAULT_FADE_TO_WHITE_LEVEL, pPrefs.getTinaDefaultFadeToWhiteLevel());
@@ -141,7 +145,7 @@ public class PrefsWriter {
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_CAPTION + "." + i, profile.getCaption());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_QUALITY + "." + i, profile.getQuality());
       addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR + "." + i, profile.isWithHDR());
-      addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_HDR_INTENSITY_MAP + "." + i, profile.isWithHDRIntensityMap());
+      addValue(sb, Prefs.KEY_TINA_PROFILE_QUALITY_WITH_ZBUFFER + "." + i, profile.isWithZBuffer());
     }
     // window prefs
     addValue(sb, WindowPrefs.KEY_WINDOW_COUNT, pPrefs.getWindowPrefs().size());
@@ -153,6 +157,7 @@ public class PrefsWriter {
       addValue(sb, WindowPrefs.KEY_WIDTH + "." + i, prefs.getWidth());
       addValue(sb, WindowPrefs.KEY_HEIGHT + "." + i, prefs.getHeight());
       addValue(sb, WindowPrefs.KEY_MAXIMIZED + "." + i, prefs.isMaximized());
+      addValue(sb, WindowPrefs.KEY_VISIBLE + "." + i, prefs.isVisible());
     }
     // macro buttons
     addValue(sb, Prefs.KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS, pPrefs.isCreateTinaDefaultMacroButtons());

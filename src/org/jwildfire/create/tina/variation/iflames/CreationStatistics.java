@@ -30,7 +30,7 @@ public class CreationStatistics {
     SCALE, ERODE, CONV_NORTH, CONV_EAST, CONV_SOUTH, CONV_WEST, CONV_MERGE, CREATE_STRUCTURE
   }
 
-  public class Action {
+  public static class Action {
     private final ActionType actionType;
     private long duration;
 

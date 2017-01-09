@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,8 +22,9 @@ import org.jwildfire.create.tina.edit.Assignable;
 
 public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private static final long serialVersionUID = 1L;
+  private boolean renderImage = true;
   private boolean renderHDR;
-  private boolean renderHDRIntensityMap;
+  private boolean renderZBuffer;
   private int imageWidth;
   private int imageHeight;
   private RenderMode renderMode = RenderMode.PRODUCTION;
@@ -51,14 +52,6 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
     this.renderHDR = renderHDR;
   }
 
-  public boolean isRenderHDRIntensityMap() {
-    return renderHDRIntensityMap;
-  }
-
-  public void setRenderHDRIntensityMap(boolean renderHDRIntensityMap) {
-    this.renderHDRIntensityMap = renderHDRIntensityMap;
-  }
-
   public int getImageWidth() {
     return imageWidth;
   }
@@ -77,8 +70,10 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   @Override
   public void assign(RenderInfo pSrc) {
+    renderImage = pSrc.renderImage;
     renderHDR = pSrc.renderHDR;
-    renderHDRIntensityMap = pSrc.renderHDRIntensityMap;
+    renderZBuffer = pSrc.renderZBuffer;
+    renderMode = pSrc.renderMode;
     imageWidth = pSrc.imageWidth;
     imageHeight = pSrc.imageHeight;
   }
@@ -92,7 +87,8 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   @Override
   public boolean isEqual(RenderInfo pSrc) {
-    if (renderHDR != pSrc.renderHDR || renderHDRIntensityMap != pSrc.renderHDRIntensityMap ||
+    if (renderImage != pSrc.renderImage || renderHDR != pSrc.renderHDR ||
+        renderZBuffer != pSrc.renderZBuffer || renderMode != pSrc.renderMode ||
         imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight) {
       return false;
     }
@@ -105,6 +101,22 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   public void setRenderMode(RenderMode renderMode) {
     this.renderMode = renderMode;
+  }
+
+  public boolean isRenderZBuffer() {
+    return renderZBuffer;
+  }
+
+  public void setRenderZBuffer(boolean renderZBuffer) {
+    this.renderZBuffer = renderZBuffer;
+  }
+
+  public boolean isRenderImage() {
+    return renderImage;
+  }
+
+  public void setRenderImage(boolean renderImage) {
+    this.renderImage = renderImage;
   }
 
 }

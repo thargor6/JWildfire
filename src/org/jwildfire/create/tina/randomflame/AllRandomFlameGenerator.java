@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.integration.chaotica.ChaoticaBridgeRandomFlameGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
 public class AllRandomFlameGenerator extends RandomFlameGenerator {
@@ -37,7 +36,6 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new Brokat3DRandomFlameGenerator());
     allGenerators.add(new BubblesRandomFlameGenerator());
     allGenerators.add(new Bubbles3DRandomFlameGenerator());
-    allGenerators.add(new ChaoticaBridgeRandomFlameGenerator());
     allGenerators.add(new CrossRandomFlameGenerator());
     allGenerators.add(new DualityRandomFlameGenerator());
     allGenerators.add(new DuckiesRandomFlameGenerator());
@@ -46,7 +44,9 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new ExperimentalSimpleRandomFlameGenerator());
     allGenerators.add(new FilledFlowers3DRandomFlameGenerator());
     allGenerators.add(new Flowers3DRandomFlameGenerator());
+    allGenerators.add(new GalaxiesRandomFlameGenerator());
     allGenerators.add(new GhostsRandomFlameGenerator());
+    allGenerators.add(new OrchidsRandomFlameGenerator());
     allGenerators.add(new SpiralsRandomFlameGenerator());
     allGenerators.add(new Spirals3DRandomFlameGenerator());
     allGenerators.add(new GnarlRandomFlameGenerator());
@@ -55,11 +55,17 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     allGenerators.add(new JuliansRandomFlameGenerator());
     allGenerators.add(new LinearRandomFlameGenerator());
     allGenerators.add(new MandelbrotRandomFlameGenerator());
-    allGenerators.add(new Pseudo3DRandomFlameGenerator());
     allGenerators.add(new RaysRandomFlameGenerator());
     allGenerators.add(new SimpleRandomFlameGenerator());
     allGenerators.add(new SimpleTilingRandomFlameGenerator());
     allGenerators.add(new SierpinskyRandomFlameGenerator());
+    if (!Prefs.getPrefs().isTinaDisableSolidFlameRandGens()) {
+      allGenerators.add(new SolidExperimentalRandomFlameGenerator());
+      allGenerators.add(new SolidStunningRandomFlameGenerator());
+      allGenerators.add(new SolidJulia3DRandomFlameGenerator());
+      allGenerators.add(new SolidShadowsRandomFlameGenerator());
+      allGenerators.add(new SolidLabyrinthRandomFlameGenerator());
+    }
     allGenerators.add(new SphericalRandomFlameGenerator());
     allGenerators.add(new Spherical3DRandomFlameGenerator());
     allGenerators.add(new SplitsRandomFlameGenerator());
@@ -74,7 +80,11 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     int i = 0;
     while (i < simpleGenerators.size()) {
       Class<?> cls = simpleGenerators.get(i).getClass();
-      if (LayerzRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) || WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls)) {
+      if (LayersRandomFlameGenerator.class.equals(cls) || SubFlameRandomFlameGenerator.class.equals(cls) ||
+          WikimediaCommonsRandomFlameGenerator.class.equals(cls) || ColorMapRandomFlameGenerator.class.equals(cls) ||
+          SolidExperimentalRandomFlameGenerator.class.equals(cls) || SolidStunningRandomFlameGenerator.class.equals(cls) ||
+          SolidJulia3DRandomFlameGenerator.class.equals(cls) || SolidShadowsRandomFlameGenerator.class.equals(cls) ||
+          SolidLabyrinthRandomFlameGenerator.class.equals(cls)) {
         simpleGenerators.remove(i);
       }
       else {
@@ -83,14 +93,16 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
     }
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String ALL_RANDGEN = "ALL_RANDGEN";
 
   @Override
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     List<RandomFlameGenerator> generators = useSimpleGenerators ? simpleGenerators : allGenerators;
     RandomFlameGenerator generator = generators.get((int) (Math.random() * generators.size()));
-    state.getParams().put(RANDGEN, generator);
+    RandomFlameGeneratorState subState = generator.initState(pPrefs, pRandomGradientGenerator);
+    state.mergeParams(subState);
+    state.getParams().put(ALL_RANDGEN, generator);
     return state;
   }
 
@@ -104,7 +116,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(ALL_RANDGEN);
     return generator;
   }
 
@@ -127,9 +139,14 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     RandomFlameGenerator generator = createRandGen(pState);
-    return generator.postProcessFlame(pState, pFlame);
+    return generator.postProcessFlameBeforeRendering(pState, pFlame);
   }
 
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    RandomFlameGenerator generator = createRandGen(pState);
+    return generator.postProcessFlameAfterRendering(pState, pFlame);
+  }
 }

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,7 @@ import javax.swing.JToggleButton;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
@@ -38,7 +39,7 @@ public class DetachedPreviewController implements IterationObserver {
     IDLE, RENDER, PAUSE
   }
 
-  private class ImgSize {
+  private static class ImgSize {
     private final int width;
     private final int height;
 
@@ -107,7 +108,7 @@ public class DetachedPreviewController implements IterationObserver {
     flame.setHeight(info.getImageHeight());
     flame.setSampleDensity(10);
     info.setRenderHDR(false);
-    info.setRenderHDRIntensityMap(false);
+    info.setRenderZBuffer(false);
     if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
       image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
     }
@@ -226,7 +227,7 @@ public class DetachedPreviewController implements IterationObserver {
   }
 
   @Override
-  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pX, int pY) {
+  public void notifyIterationFinished(AbstractRenderThread pEventSource, int pPlotX, int pPlotY, XYZProjectedPoint pProjectedPoint, double pX, double pY, double pZ, double pColorRed, double pColorGreen, double pColorBlue) {
     while (paused) {
       try {
         Thread.sleep(1);
@@ -235,7 +236,7 @@ public class DetachedPreviewController implements IterationObserver {
         e.printStackTrace();
       }
     }
-    displayUpdater.iterationFinished(pEventSource, pX, pY);
+    displayUpdater.iterationFinished(pEventSource, pPlotX, pPlotY);
   }
 
   private void updateStats() {

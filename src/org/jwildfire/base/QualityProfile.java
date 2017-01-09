@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,19 +25,19 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
   private String caption;
   private int quality;
   private boolean withHDR;
-  private boolean withHDRIntensityMap;
+  private boolean withZBuffer;
   private boolean defaultProfile;
 
   public QualityProfile() {
 
   }
 
-  public QualityProfile(boolean pDefaultProfile, String pCaption, int pQuality, boolean pWithHDR, boolean pWithHDRIntensityMap) {
+  public QualityProfile(boolean pDefaultProfile, String pCaption, int pQuality, boolean pWithHDR, boolean pWithZBuffer) {
     defaultProfile = pDefaultProfile;
     caption = pCaption;
     quality = pQuality;
     withHDR = pWithHDR;
-    withHDRIntensityMap = pWithHDRIntensityMap;
+    withZBuffer = pWithZBuffer;
   }
 
   @Override
@@ -69,14 +69,6 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
     this.withHDR = withHDR;
   }
 
-  public boolean isWithHDRIntensityMap() {
-    return withHDRIntensityMap;
-  }
-
-  public void setWithHDRIntensityMap(boolean withHDRIntensityMap) {
-    this.withHDRIntensityMap = withHDRIntensityMap;
-  }
-
   public boolean isDefaultProfile() {
     return defaultProfile;
   }
@@ -98,7 +90,7 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
     caption = pSrc.caption;
     quality = pSrc.quality;
     withHDR = pSrc.withHDR;
-    withHDRIntensityMap = pSrc.withHDRIntensityMap;
+    withZBuffer = pSrc.withZBuffer;
     defaultProfile = pSrc.defaultProfile;
   }
 
@@ -112,11 +104,19 @@ public class QualityProfile implements Assignable<QualityProfile>, Serializable 
   @Override
   public boolean isEqual(QualityProfile pSrc) {
     if (!Tools.stringEquals(caption, pSrc.caption) || quality != pSrc.quality ||
-        withHDR != pSrc.withHDR || withHDRIntensityMap != pSrc.withHDRIntensityMap ||
+        withHDR != pSrc.withHDR || withZBuffer != pSrc.withZBuffer ||
         defaultProfile != pSrc.defaultProfile) {
       return false;
     }
     return true;
+  }
+
+  public boolean isWithZBuffer() {
+    return withZBuffer;
+  }
+
+  public void setWithZBuffer(boolean withZBuffer) {
+    this.withZBuffer = withZBuffer;
   }
 
 }

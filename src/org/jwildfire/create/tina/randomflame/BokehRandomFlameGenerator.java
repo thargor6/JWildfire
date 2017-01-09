@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.mutagen.BokehMutation;
 public class BokehRandomFlameGenerator extends BlackAndWhiteRandomFlameGenerator {
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     new BokehMutation().execute(pFlame.getFirstLayer());
     return pFlame;
   }

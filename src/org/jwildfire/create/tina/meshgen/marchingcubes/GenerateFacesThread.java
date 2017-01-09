@@ -65,7 +65,7 @@ public class GenerateFacesThread implements Runnable {
           }
         }
         if (progressUpdater != null) {
-          progressOfAllThreads.add(new Integer(z));
+          progressOfAllThreads.add(Integer.valueOf(z));
           progressUpdater.updateProgress(progressOfAllThreads.size());
         }
         if (forceAbort) {

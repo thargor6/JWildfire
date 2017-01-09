@@ -22,7 +22,7 @@ import java.util.List;
 import org.jwildfire.create.tina.base.Flame;
 
 public class AllRandomSymmetryGenerator implements RandomSymmetryGenerator {
-  protected static List<RandomSymmetryGenerator> allGenerators;
+  protected static final List<RandomSymmetryGenerator> allGenerators;
 
   static {
     allGenerators = new ArrayList<RandomSymmetryGenerator>();

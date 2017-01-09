@@ -100,7 +100,8 @@ public class ExampleScenes {
         .withName("Plane")
         .withShader("ground")
         .withMesh(mesh)
-        .close();
+        // .close()
+        ;
     return scene;
   }
 

@@ -80,7 +80,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
     }
   }
 
-  protected class Complex {
+  protected static class Complex {
     public double re;
     public double im;
   }
@@ -260,6 +260,8 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           sx = hx * hx * hx - 3.0 * hx * hy * hy;
           sy = 3.0 * hx * hx * hy - hy * hy * hy;
           push(sx, sy);
+          break;
+        default: // nothing to do
           break;
       }
     }

@@ -47,7 +47,7 @@ public class MedianCutQuantizer {
   private final static int C2_SCALE = B_SCALE;
 
   private final Pixel toolPixel = new Pixel();
-  private final int colors = RGBPalette.PALETTE_SIZE;
+  private static final int colors = RGBPalette.PALETTE_SIZE;
   private final int cmap[][] = new int[3][colors];
   private int histogram[][][] = new int[HIST_C0_ELEMS][HIST_C1_ELEMS][HIST_C2_ELEMS];
 
@@ -66,7 +66,7 @@ public class MedianCutQuantizer {
     }
   }
 
-  private class Box {
+  private static class Box {
     public int c0min, c0max;/* The bounds of the box (inclusive); expressed as histogram indexes */
     public int c1min, c1max;
     public int c2min, c2max;

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.randomflame;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -54,7 +55,7 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
       XForm xForm = new XForm();
       layer.getXForms().add(xForm);
       xForm.setWeight(0.5);
-      int varId = (int) (Math.random() * 6.0);
+      int varId = Tools.randomInt(6);
       switch (varId) {
         case 0:
           varFunc = VariationFuncList.getVariationFuncInstance("fract_dragon_wf", true);
@@ -144,7 +145,12 @@ public class MandelbrotRandomFlameGenerator extends RandomFlameGenerator {
   }
 
   @Override
-  protected Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame) {
+  protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
+    return pFlame;
+  }
+
+  @Override
+  protected Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     return pFlame;
   }
 }

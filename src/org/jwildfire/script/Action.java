@@ -31,7 +31,7 @@ import org.jwildfire.envelope.Envelope;
 import org.jwildfire.swing.Buffer;
 import org.jwildfire.swing.BufferList;
 
-public class Action {
+public class Action implements Cloneable {
   private static final String TOKEN_INDENT = "  ";
   private static final String TOKEN_INPUT = "input";
   private static final String TOKEN_OUTPUT = "output";
@@ -111,13 +111,13 @@ public class Action {
               String strVal = parameter.getValue();
               Class<?> cls = prop.getPropertyType();
               if (cls == Integer.class)
-                val = new Integer(Integer.parseInt(strVal));
+                val = Integer.valueOf(strVal);
               else if (cls == int.class)
                 val = Tools.FTOI(Double.parseDouble(strVal));
               else if (cls == String.class)
                 val = strVal;
               else if (cls == Double.class)
-                val = new Double(Double.parseDouble(strVal));
+                val = Double.valueOf(strVal);
               else if (cls == double.class)
                 val = Double.parseDouble(strVal);
               else if (cls == Boolean.class)

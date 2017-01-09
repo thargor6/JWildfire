@@ -120,7 +120,7 @@ public class ScriptProcessor {
     return buffer;
   }
 
-  public class TransformResult {
+  public static class TransformResult {
     private final Buffer inBuffer;
     private final Buffer outBuffer;
     private final Buffer outHDRBuffer;

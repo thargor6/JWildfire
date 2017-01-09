@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,6 +29,9 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.solidrender.DistantLight;
+import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.solidrender.SolidRenderSettings;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
@@ -38,6 +41,7 @@ import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
   private static final long serialVersionUID = 1L;
+  private static final int DFLT_SOLID_SPATIAL_OVERSAMPLING = 2;
   @AnimAware
   private double centreX;
   private final MotionCurve centreXCurve = new MotionCurve();
@@ -163,7 +167,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final List<Layer> layers = new LayerList(this);
 
   @AnimAware
-  private ShadingInfo shadingInfo;
   private String lastFilename = null;
   private double antialiasAmount;
   private double antialiasRadius;
@@ -175,6 +178,11 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int frame = 1;
   private int frameCount = 300;
   private int fps = 30;
+  private double zBufferScale = 1.0;
+
+  private int postBlurRadius;
+  private double postBlurFade;
+  private double postBlurFallOff;
 
   private PostSymmetryType postSymmetryType;
   private int postSymmetryOrder;
@@ -204,6 +212,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve mixerBGCurve = new MotionCurve();
   private final MotionCurve mixerBBCurve = new MotionCurve();
 
+  private SolidRenderSettings solidRenderSettings = new SolidRenderSettings();
+
   private EditPlane editPlane;
 
   public Flame() {
@@ -221,12 +231,17 @@ public class Flame implements Assignable<Flame>, Serializable {
     resetCameraSettings();
     resetDOFSettings();
     resetBokehSettings();
-    resetShadingSettings();
+    resetPostBlurSettings();
     resetStereo3DSettings();
     resetPostSymmetrySettings();
     resetMotionBlurSettings();
+    resetSolidRenderSettings();
     channelMixerMode = ChannelMixerMode.OFF;
     resetMixerCurves();
+  }
+
+  private void resetSolidRenderSettings() {
+    solidRenderSettings.setupDefaults();
   }
 
   public void resetMotionBlurSettings() {
@@ -257,9 +272,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     stereo3dSwapSides = false;
   }
 
-  public void resetShadingSettings() {
-    shadingInfo = new ShadingInfo();
-    shadingInfo.init();
+  public void resetPostBlurSettings() {
+    postBlurRadius = 0;
+    postBlurFade = 0.95;
+    postBlurFallOff = 2.0;
   }
 
   public void resetAntialiasingSettings() {
@@ -568,14 +584,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.camDOFExponent = camDOFExponent;
   }
 
-  public ShadingInfo getShadingInfo() {
-    return shadingInfo;
-  }
-
-  public void setShadingInfo(ShadingInfo shadingInfo) {
-    this.shadingInfo = shadingInfo;
-  }
-
   public String getResolutionProfile() {
     return resolutionProfile;
   }
@@ -686,7 +694,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
-    shadingInfo.assign(pFlame.shadingInfo);
     name = pFlame.name;
     bgImageFilename = pFlame.bgImageFilename;
     lastFilename = pFlame.lastFilename;
@@ -698,6 +705,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     postNoiseFilter = pFlame.postNoiseFilter;
     postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
     foregroundOpacity = pFlame.foregroundOpacity;
+    postBlurRadius = pFlame.postBlurRadius;
+    postBlurFade = pFlame.postBlurFade;
+    postBlurFallOff = pFlame.postBlurFallOff;
+    zBufferScale = pFlame.zBufferScale;
 
     motionBlurLength = pFlame.motionBlurLength;
     motionBlurTimeStep = pFlame.motionBlurTimeStep;
@@ -740,6 +751,7 @@ public class Flame implements Assignable<Flame>, Serializable {
       layers.add(layer.makeCopy());
     }
 
+    solidRenderSettings.assign(pFlame.solidRenderSettings);
   }
 
   public List<Layer> getLayers() {
@@ -797,7 +809,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
         (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
-        !shadingInfo.isEqual(pFlame.shadingInfo) || !name.equals(pFlame.name) ||
+        !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
         (layers.size() != pFlame.layers.size()) || (motionBlurLength != pFlame.motionBlurLength) || (fps != pFlame.fps) ||
@@ -814,7 +826,9 @@ public class Flame implements Assignable<Flame>, Serializable {
         (channelMixerMode != pFlame.channelMixerMode) || !mixerRRCurve.isEqual(pFlame.mixerRRCurve) || !mixerRGCurve.isEqual(pFlame.mixerRGCurve) ||
         !mixerRBCurve.isEqual(pFlame.mixerRBCurve) || !mixerGRCurve.isEqual(pFlame.mixerGRCurve) || !mixerGGCurve.isEqual(pFlame.mixerGGCurve) ||
         !mixerGBCurve.isEqual(pFlame.mixerGBCurve) || !mixerBRCurve.isEqual(pFlame.mixerBRCurve) || !mixerBGCurve.isEqual(pFlame.mixerBGCurve) ||
-        !mixerBBCurve.isEqual(pFlame.mixerBBCurve)) {
+        !mixerBBCurve.isEqual(pFlame.mixerBBCurve) || !solidRenderSettings.isEqual(pFlame.solidRenderSettings) ||
+        postBlurRadius != pFlame.postBlurRadius || (fabs(postBlurFade - pFlame.postBlurFade) > EPSILON) ||
+        (fabs(postBlurFallOff - pFlame.postBlurFallOff) > EPSILON) || (fabs(zBufferScale - pFlame.zBufferScale) > EPSILON)) {
       return false;
     }
     for (int i = 0; i < layers.size(); i++) {
@@ -1167,7 +1181,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean is3dProjectionRequired() {
-    return fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
+    return getSolidRenderSettings().isSolidRenderingEnabled() ||
+        fabs(getCamYaw()) > EPSILON || fabs(getCamPitch()) > EPSILON || fabs(getCamPerspective()) > EPSILON || isDOFActive() ||
         fabs(getDimishZ()) > EPSILON || fabs(getCamPosX()) > EPSILON || fabs(getCamPosY()) > EPSILON || fabs(getCamPosZ()) > EPSILON;
   }
 
@@ -1450,7 +1465,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void applyDefaultOversamplingSettings() {
     Prefs prefs = Prefs.getPrefs();
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
-    setSpatialOversampling(prefs.getTinaDefaultSpatialOversampling());
+    setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
     setColorOversampling(prefs.getTinaDefaultColorOversampling());
     setSampleJittering(prefs.isTinaDefaultSampleJittering());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
@@ -1478,6 +1493,68 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setForegroundOpacity(double pForegroundOpacity) {
     foregroundOpacity = pForegroundOpacity;
+  }
+
+  public SolidRenderSettings getSolidRenderSettings() {
+    return solidRenderSettings;
+  }
+
+  public int getPostBlurRadius() {
+    return postBlurRadius;
+  }
+
+  public void setPostBlurRadius(int postBlurRadius) {
+    this.postBlurRadius = postBlurRadius;
+  }
+
+  public double getPostBlurFade() {
+    return postBlurFade;
+  }
+
+  public void setPostBlurFade(double postBlurFade) {
+    this.postBlurFade = postBlurFade;
+  }
+
+  public double getPostBlurFallOff() {
+    return postBlurFallOff;
+  }
+
+  public void setPostBlurFallOff(double postBlurFallOff) {
+    this.postBlurFallOff = postBlurFallOff;
+  }
+
+  public boolean isWithShadows() {
+    boolean res = getSolidRenderSettings().isSolidRenderingEnabled() && ShadowType.areShadowsEnabled(getSolidRenderSettings().getShadowType());
+    if (res) {
+      res = false;
+      for (DistantLight light : getSolidRenderSettings().getLights()) {
+        if (light.isCastShadows()) {
+          res = true;
+          break;
+        }
+      }
+    }
+    return res;
+  }
+
+  public int getActiveLightCount() {
+    return isWithShadows() ? getSolidRenderSettings().getLights().size() : 0;
+  }
+
+  public void setDefaultSolidRenderingSettings() {
+    setSpatialOversampling(DFLT_SOLID_SPATIAL_OVERSAMPLING);
+    setSpatialFilterRadius(0.5);
+    setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
+    setAntialiasAmount(0.0);
+    setAntialiasRadius(0.0);
+  }
+
+  public double getZBufferScale() {
+    return zBufferScale;
+  }
+
+  public void setZBufferScale(double zBufferScale) {
+    this.zBufferScale = zBufferScale;
   }
 
 }

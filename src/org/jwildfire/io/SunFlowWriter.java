@@ -262,7 +262,7 @@ public class SunFlowWriter {
     Tools.writeUTF8Textfile(pAbsolutePath, sb.toString());
   }
 
-  private class AvgNormal {
+  private static class AvgNormal {
     public double sumNX, sumNY, sumNZ;
     public int count;
   }

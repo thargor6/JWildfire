@@ -49,7 +49,7 @@ public class JWFFlameReader extends AbstractFlameReader {
             break;
           }
         }
-        String hs = flameXML.substring(ps + 7, pe);
+        String hs = flameXML.substring(ps + 11, pe);
         parseFlameAttributes(flame, hs);
       }
       flame.getLayers().clear();

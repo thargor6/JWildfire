@@ -1,0 +1,118 @@
+##############################################################################################  
+#                                                                                            #
+#                               GPU rendering in JWildfire                                   #
+#                                                                                            #
+##############################################################################################  
+1. Introducing FAEngine and FACLRender
+
+GPU rendering in JWildfire is enabled by integrating FAEngine, an GPU-rendering-engine, 
+created by Steven Brodhead.
+Steven is the author of Fractal Architect, a flame-fractal-software for the Mac OS-platform, 
+and has decided to make his GPU-render-capable engine open source, and also port it to 
+the Windows-platform.
+
+FACLRender is a command-line-tool to invoke the engine and render a flame. It is the current
+way to integrate this engine into JWildfire. While this has some drawbacks in terms of
+performance, it has advantages in terms of stability and maintainability. For example,
+the GPU-render can never crash your current JWildfire session and we can update the 
+engine independently from the main program.    
+
+1.1 Limitations
+Currently, the engine is limited in terms of features (e.g. supported variations) and
+supported frameworks, but it actually works. And, it works very well. 
+
+Steven and I are collaborating in order to improve the integration into JWildfire and add
+more features to it.
+
+For now, it only supports the Windows-plattform, uses OpenCl and has a very limited
+set of features (in comparison to the full JWildfire application, e. g. 3D-rendering
+is completely missed). 
+
+1.2 Further improvements
+You may expect an continous improvement in terms of added features, but this progress 
+will not be very fast. This is because, parallel computing can be rather complicated
+and is not easy to debug. E.g., a simple change can break overall performance easily,
+but it can be very difficult to find out which change was responsible. 
+  
+1.3 Requirements
+You will need a modern graphics card with plenty of memory to make out the most of this 
+stuff. I'm using a GeForce GFX 980 with 4 GB of video memory, which works very well,
+but probably similar AMD-devices will work nicely, too. Only 64Bit is supported at all.
+##############################################################################################  
+2. Installation
+FACLRender comes as a separate package, you must download separately. This enables us to
+update it more often than the main JWildfire application, if required.
+
+The overall installation is simple:
+1. Download the recent FACLRender-package from http://www.andreas-maschke.com/ 
+2. Extract the download *.zip-file to some permanent path on you hard-disk, preferably
+not on the Desktop, e. g. on D:\Program Files\FACLRender. 
+If you look into this folder, you should see a file FACLRender.exe
+3. Start JWildfire and open the Preferences-window. Locate the property named 
+tinaFACLRenderPath and enter the path to folder which contains the FACLRender.exe.
+In this example, enter "D:\Program Files\FACLRender"
+4. Press the "Save and Close"-button and exit JWildfire
+5. Start JWildfire again, now you should see a new "GPURender"-button in the Navigator-window
+as well as new entry "Fractal flames: GPU render"-entry in the main Window-menu.
+
+2.1 Self-Test
+To test the GPU-rendering itself (and to simplify further troubleshooting), please invoke
+the self-test. Just enter the directory where you installed FACLRender and open the sub-folder
+"selftest" ( In this example "D:\Program Files\FACLRender\selftest" ).
+Double click at the selftest.bat. If everything works as expected, you should see that 
+"selftest.png" was created. Otherwise, the console output hopefully helps to solve the
+problem. 
+##############################################################################################  
+3. Rendering flames using the GPU
+Use the "GPU renderer"-window to play with flames. This window works similar to the 
+Interactive renderer, you may import flames from the editor or load them from harddisc etc.
+
+Most flames will not work flawless, as most flames have at least one feature which is not
+supported by GPU-rendering at this time. But, of course, you will be able to create endless
+beautiful flames, though. 
+
+3.1 Using the "Linear Only"-random-flame-generator 
+A good starting point is to use the "Linear Only"-random-flame-generator to create a batch
+of flames which are guaranteed to work. Pick some nice one, transfer it to the GPU-render
+and see how it performs. Add some feature, see if it is still supported by GPU, etc.
+
+3.2 Batch rendering
+When FACLRender is propertly integrated into JWildfire there appears a new "GPU"-button 
+in the Batch-renderer. You may use it to render whole batches by using the GPU.
+But, before you render a huge sequence, you should be sure that the flames do not use
+features which are not supported by FACLRender. You may quickly do so by transfering 
+one of the flames to the "GPU renderer"-window and see if it works.  
+
+##############################################################################################  
+
+4. Troubleshooting
+If rendering fails, you should check if the FACLRender.exe can detect any devices (or is 
+missung some vital library, for example). To do so, open a console/terminal window
+and enter the directory where the FACLRender.exe resides.
+Enter the command: 
+  FACLRender
+If the programm can be started at all, it should output a list of options, one of then
+being "-list"
+
+So, enter the command:
+  FACLRender -list
+to get a list of detected devices. When something is wrong, you hopefully will get some 
+usefull information displayed here.
+
+4.1 Visual C++ Redistributable for Visual Studio 2015
+If some *.dlls are missing, installing the the
+  "Visual C++ Redistributable for Visual Studio 2015"-Kit
+from Microsoft will help in the most cases.
+
+4.2 OpenCl drivers
+Also, be sure to have OpenCl-drivers for your graphics card installed.
+
+##############################################################################################  
+
+5. References
+FAEngine: https://bitbucket.org/sbrodhead/faengine
+Fractal Architect Blog: http://www.fractalarchitect.net/blog/
+JWildfire blog (visit for newest officially tested FACLRender): http://www.andreas-maschke.com/
+Visual C++ Redistributable for Visual Studio 2015: https://www.microsoft.com/en-US/download/details.aspx?id=48145
+ 
+  

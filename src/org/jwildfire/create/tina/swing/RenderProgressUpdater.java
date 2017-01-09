@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 
 public class RenderProgressUpdater implements ProgressUpdater {
   private final RenderProgressBarHolder parent;
+  RepaintManager manager;
 
   public RenderProgressUpdater(RenderProgressBarHolder pParent) {
     parent = pParent;
@@ -36,7 +37,7 @@ public class RenderProgressUpdater implements ProgressUpdater {
       parent.getRenderProgressBar().invalidate();
       parent.getRenderProgressBar().validate();
       parent.getRenderProgressBar().invalidate();
-      RepaintManager manager = RepaintManager.currentManager(parent.getRenderProgressBar());
+      manager = RepaintManager.currentManager(parent.getRenderProgressBar());
       manager.markCompletelyDirty(parent.getRenderProgressBar());
       manager.paintDirtyRegions();
     }
@@ -49,10 +50,9 @@ public class RenderProgressUpdater implements ProgressUpdater {
   public void updateProgress(int pStep) {
     try {
       parent.getRenderProgressBar().setValue(pStep);
-      parent.getRenderProgressBar().invalidate();
-      parent.getRenderProgressBar().validate();
-      parent.getRenderProgressBar().invalidate();
-      RepaintManager manager = RepaintManager.currentManager(parent.getRenderProgressBar());
+      //      parent.getRenderProgressBar().invalidate();
+      //      parent.getRenderProgressBar().validate();
+      //      parent.getRenderProgressBar().invalidate();
       manager.markCompletelyDirty(parent.getRenderProgressBar());
       manager.paintDirtyRegions();
     }

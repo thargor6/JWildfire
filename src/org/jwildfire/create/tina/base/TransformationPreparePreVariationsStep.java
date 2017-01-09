@@ -32,9 +32,12 @@ public final class TransformationPreparePreVariationsStep extends AbstractTransf
     pVarT.invalidate();
     pVarT.x = pVarT.y = pVarT.z = 0.0;
     pVarT.color = pAffineT.color;
+    pVarT.material = pAffineT.material;
+    pVarT.receiveOnlyShadows = pAffineT.receiveOnlyShadows;
     pVarT.modGamma = pAffineT.modGamma;
     pVarT.modContrast = pAffineT.modContrast;
     pVarT.modSaturation = pAffineT.modSaturation;
+    pVarT.modHue = pAffineT.modHue;
     pVarT.rgbColor = pAffineT.rgbColor;
     pVarT.redColor = pAffineT.redColor;
     pVarT.greenColor = pAffineT.greenColor;

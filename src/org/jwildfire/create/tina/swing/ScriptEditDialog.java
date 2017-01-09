@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.SystemColor;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -94,7 +95,7 @@ public class ScriptEditDialog extends JDialog {
         //     because it will automatically pick the right monospaced font for the platform.
         //   -----------------------------------------------------------------------------
         Configuration config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-        config.put("DefaultFont","monospaced " + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
+        config.put("DefaultFont", "monospaced " + Integer.toString(Prefs.getPrefs().getTinaAdvancedCodeEditorFontSize()));
       }
       catch (Exception ex) {
         ex.printStackTrace();
@@ -230,10 +231,10 @@ public class ScriptEditDialog extends JDialog {
       LookAndFeel laf = UIManager.getLookAndFeel();
       String laf_name = laf.getName();
       boolean using_dark_theme = laf_name.equalsIgnoreCase("HiFi") || laf_name.equalsIgnoreCase("Noire");
-      if (using_dark_theme && 
-              Prefs.getPrefs().isTinaAdvancedCodeEditor() && 
-              Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
-          scriptEditor.setBackground(Color.white);
+      if (using_dark_theme &&
+          Prefs.getPrefs().isTinaAdvancedCodeEditor() &&
+          Prefs.getPrefs().isTinaAdvancedCodeEditorColorFix()) {
+        scriptEditor.setBackground(Color.white);
       }
     }
     return scriptEditor;
@@ -318,18 +319,19 @@ public class ScriptEditDialog extends JDialog {
 
   public void setScriptNode(JWFScriptUserNode pScriptNode) throws Exception {
     String scriptname = pScriptNode.getUserObject().toString();
-    setTitle("Editing " + (scriptname != null ? scriptname : "script"));
+    setTitle("Editing " + scriptname);
 
     String script = pScriptNode.getScript();
     scriptEditor.setText("");
     scriptEditor.setContentType("text/java");
-    scriptEditor.setText(script != null ? script : "");
+    scriptEditor.setText(script);
     scriptEditor.setCaretPosition(0);
 
     String description = pScriptNode.getDescription();
+    descriptionEditor.setBackground(SystemColor.menu);
     descriptionEditor.setText("");
     descriptionEditor.setContentType("text/plain");
-    descriptionEditor.setText(description != null ? description : "");
+    descriptionEditor.setText(description);
     descriptionEditor.setCaretPosition(0);
 
     scriptNode = pScriptNode;

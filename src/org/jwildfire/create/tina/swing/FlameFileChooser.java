@@ -34,17 +34,10 @@ public class FlameFileChooser extends DefaultFileChooser {
   }
 
   public FlameFileChooser(Prefs pPrefs) {
-    this(pPrefs, false);
-  }
-
-  public FlameFileChooser(Prefs pPrefs, boolean pWithChaos) {
     setPreferredSize(new Dimension(960, 600));
     FileFilter filter = new FlameFileFilter();
     addChoosableFileFilter(filter);
     defaultExt = Tools.FILEEXT_FLAME;
-    if (pWithChaos) {
-      addChoosableFileFilter(new ChaosFileFilter());
-    }
     setFileFilter(filter);
     setAcceptAllFileFilterUsed(false);
     setAccessory(new FlameFilePreview(this, pPrefs));

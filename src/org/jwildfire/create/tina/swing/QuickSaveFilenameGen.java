@@ -39,7 +39,7 @@ public class QuickSaveFilenameGen {
     if (res == null) {
       return null;
     }
-    if (res != null && res.length() > 0 && res.charAt(res.length() - 1) != '\\' && res.charAt(res.length() - 1) != '/' && res.charAt(res.length() - 1) != ':')
+    if (res.length() > 0 && res.charAt(res.length() - 1) != '\\' && res.charAt(res.length() - 1) != '/' && res.charAt(res.length() - 1) != ':')
       res += File.separator;
     return res + pFilename;
   }

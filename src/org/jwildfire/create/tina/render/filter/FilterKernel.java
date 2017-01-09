@@ -20,7 +20,10 @@ import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
-public abstract class FilterKernel {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class FilterKernel implements Serializable {
   public abstract double getSpatialSupport();
 
   public abstract double getFilterCoeff(double x);
@@ -63,4 +66,12 @@ public abstract class FilterKernel {
     }
   }
 
+  public double getFilterRadius(int pFilterSize, int pOversample) {
+    if (pFilterSize <= 0) {
+      return 0;
+    }
+    else {
+      return (double) (pFilterSize - 1) / (2.0 * (double) pOversample * getSpatialSupport());
+    }
+  }
 }

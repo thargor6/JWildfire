@@ -52,7 +52,7 @@ public abstract class AbstractAffine3DRandomFlameGenerator extends RandomFlameGe
     return false;
   }
 
-  private static final String RANDGEN = "RANDGEN";
+  private static final String AFFINE_RANDGEN = "AFFINE_RANDGEN";
 
   protected abstract RandomFlameGenerator selectRandGen();
 
@@ -60,12 +60,12 @@ public abstract class AbstractAffine3DRandomFlameGenerator extends RandomFlameGe
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     RandomFlameGeneratorState state = super.initState(pPrefs, pRandomGradientGenerator);
     RandomFlameGenerator generator = selectRandGen();
-    state.getParams().put(RANDGEN, generator);
+    state.getParams().put(AFFINE_RANDGEN, generator);
     return state;
   }
 
   private RandomFlameGenerator createRandGen(RandomFlameGeneratorState pState) {
-    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(RANDGEN);
+    RandomFlameGenerator generator = (RandomFlameGenerator) pState.getParams().get(AFFINE_RANDGEN);
     return generator;
   }
 

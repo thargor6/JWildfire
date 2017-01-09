@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2016 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,7 +24,9 @@ public abstract class RandomFlameGenerator {
 
   public abstract Flame prepareFlame(RandomFlameGeneratorState pState);
 
-  protected abstract Flame postProcessFlame(RandomFlameGeneratorState pState, Flame pFlame);
+  protected abstract Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame);
+
+  protected abstract Flame postProcessFlameAfterRendering(RandomFlameGeneratorState pState, Flame pFlame);
 
   public RandomFlameGeneratorState initState(Prefs pPrefs, RandomGradientGenerator pRandomGradientGenerator) {
     return new RandomFlameGeneratorState(pPrefs, pRandomGradientGenerator);
@@ -47,6 +49,10 @@ public abstract class RandomFlameGenerator {
 
   public boolean supportsSymmetry() {
     return true;
+  }
+
+  public double getMaxCoverage() {
+    return 1.0;
   }
 
 }

@@ -22,7 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.jwildfire.create.tina.base.Flame;
@@ -32,7 +32,7 @@ import org.jwildfire.envelope.Envelope;
 public abstract class AbstractControlsDelegate {
   protected final TinaController owner;
   protected final TinaControllerData data;
-  protected final JTabbedPane rootTabbedPane;
+  protected final JPanel rootPanel;
   protected final boolean useUndoManager;
 
   public abstract String getEditingTitle(JWFNumberField sender);
@@ -43,10 +43,10 @@ public abstract class AbstractControlsDelegate {
 
   public abstract boolean isEnabled();
 
-  public AbstractControlsDelegate(TinaController pOwner, TinaControllerData pData, JTabbedPane pRootTabbedPane, boolean pUseUndoManager) {
+  public AbstractControlsDelegate(TinaController pOwner, TinaControllerData pData, JPanel pRootPanel, boolean pUseUndoManager) {
     owner = pOwner;
     data = pData;
-    rootTabbedPane = pRootTabbedPane;
+    rootPanel = pRootPanel;
     useUndoManager = pUseUndoManager;
   }
 
@@ -75,7 +75,7 @@ public abstract class AbstractControlsDelegate {
       envelope.setValues(x, y);
     }
 
-    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootTabbedPane), owner.getErrorHandler(), envelope, true);
+    EnvelopeDialog dlg = new EnvelopeDialog(SwingUtilities.getWindowAncestor(rootPanel), owner.getErrorHandler(), envelope, true);
     dlg.setFlameToPreview(EnvelopeDialogFlamePreviewType.MOTION_CURVE, owner.getCurrFlame(), pCurve);
 
     dlg.setTitle("Editing " + pLabel);
@@ -93,7 +93,7 @@ public abstract class AbstractControlsDelegate {
         pCurve.assignFromEnvelope(envelope);
         pCurve.setEnabled(true);
       }
-      owner.refreshFlameImage(true, false, 1, true);
+      owner.refreshFlameImage(true, false, 1, true, false);
     }
   }
 
@@ -201,6 +201,10 @@ public abstract class AbstractControlsDelegate {
   }
 
   public void enableControl(JComboBox pSender, boolean pDisabled) {
+    pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
+  }
+
+  public void enableControl(JButton pSender, boolean pDisabled) {
     pSender.setEnabled(!pDisabled && owner.getCurrFlame() != null);
   }
 
