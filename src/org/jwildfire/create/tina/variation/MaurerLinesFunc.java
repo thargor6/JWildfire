@@ -110,6 +110,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_DIFF_MODE = "diff_mode";
   
   private static final String PARAM_RANDOMIZE = "randomize";
+  private static final String PARAM_SKIP_X_LINES = "skip_x_lines";
   
   /**
    *   CURVE MODES
@@ -369,6 +370,7 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private int filter_count = 0;
   private List filters = new ArrayList();
+  private int skip_x_lines = 0;
   
   private  int meta_mode = OFF;
   private double meta_min_value = 30;
@@ -704,6 +706,13 @@ public class MaurerLinesFunc extends VariationFunc {
       double r = 0.5 * (exp(cos(t)) - (2 * cos(4 * t)) - pow(sin(t / 12), 5));
       point.x = r * sin(t);
       point.y = r * cos(t);
+    }
+    
+    @Override
+    public double getCyclesToClose() {
+        double radians_to_close = 2 * M_PI * M_PI * M_PI;   // radians to close is 2 * (PI^3)
+        double cycles_to_close = radians_to_close / (2 * M_PI);
+        return cycles_to_close;
     }
   }
   
@@ -2382,6 +2391,11 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
     }
+    if (skip_x_lines != 0) {
+      if ((step_number % (skip_x_lines + 1)) != 0) {
+        cumulative_pass = false;
+      }
+    }
     pVarTP.doHide = !cumulative_pass;
     //
     // END FILTERING
@@ -2592,6 +2606,7 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_DIRECT_COLOR_THRESHOLDING, direct_color_thesholding);
     plist.put(PARAM_COLOR_LOW_THRESH, color_low_thresh);
     plist.put(PARAM_COLOR_HIGH_THRESH, color_high_thresh);
+    plist.put(PARAM_SKIP_X_LINES, skip_x_lines);
     plist.put(PARAM_FILTER_COUNT, filter_count);
     while (filter_count > filters.size()) {
       MaurerFilter mfil = new MaurerFilter();
@@ -2695,6 +2710,10 @@ public class MaurerLinesFunc extends VariationFunc {
     }
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
+    }
+    else if (PARAM_SKIP_X_LINES.equalsIgnoreCase(pName)) {
+      skip_x_lines = (int)pValue;
+      // System.out.println("setting skip_x_lines: " + skip_x_lines);
     }
     else if (PARAM_FILTER_COUNT.equalsIgnoreCase(pName)) {
       filter_count = (int)pValue;
