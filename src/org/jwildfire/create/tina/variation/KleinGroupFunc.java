@@ -52,7 +52,9 @@ public class KleinGroupFunc extends VariationFunc {
   private static int GRANDMA_STANDARD = 0;
   private static int MASKIT_MU = 1;
   private static int JORGENSEN = 2;
-  
+  private static int RILEY = 3;
+  private static int RILEY_MODIFIED = 4;
+  private static int MASKIT_MU_MODIFIED = 5;
 
   private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE, PARAM_AVOID_REVERSAL };
   
@@ -139,8 +141,17 @@ public class KleinGroupFunc extends VariationFunc {
     else if (recipe == MASKIT_MU) {
       generators = calcMaskitGenerators();
     }
+    else if (recipe == MASKIT_MU_MODIFIED) {
+      generators = calcModifiedMaskitGenerators();
+    }
     else if (recipe == JORGENSEN) {
       generators = calcJorgensenGenerators(); 
+    }
+    else if (recipe == RILEY) {
+      generators = calcRileyGenerators();
+    }
+    else if (recipe == RILEY_MODIFIED) {
+      generators = calcModifiedRileyGenerators();
     }
     else {
       // default to GRANDMA_STANDARD
@@ -206,6 +217,33 @@ public class KleinGroupFunc extends VariationFunc {
   }
   
   /*
+  *    Riley recipe only uses one complex parameter, c
+  *    So using a_re and a_im to construct c, and ignoring b_re and b_im parameters
+  */
+  public Complex[][] calcRileyGenerators() {
+    Complex c = new Complex(a_re, a_im);
+    Complex[] mat_a = new Complex[]{ re1, zero, c, re1 }; 
+    Complex[] mat_b = new Complex[]{ re1, re2, zero, re1 };
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
+  public Complex[][] calcModifiedRileyGenerators() {
+    Complex c = new Complex(a_re, a_im);
+    // modifying Riley to utilize b_re and b_im
+    Complex b1 = new Complex(b_re, b_im);
+    Complex[] mat_a = new Complex[]{ re1, zero, c, re1 }; 
+    // Complex[] mat_b = new Complex[]{ re1, re2, zero, re1 };
+    Complex[] mat_b = new Complex[]{ re1, b1, zero, re1 };
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
+    /*
   *   for Maskit recipe using complex parameter a for mu rather than for Trace(generator_a)
   *      Trace(generator_a) = ta = -i*mu 
   */
@@ -219,8 +257,20 @@ public class KleinGroupFunc extends VariationFunc {
     return generators;
   }
   
+  public Complex[][] calcModifiedMaskitGenerators() {
+    Complex mu = new Complex(a_re, a_im);
+    // modifying Maskit to utilize b_re and b_im
+    Complex b1 = new Complex(b_re, b_im);
+    Complex[] mat_a = new Complex[]{ mu.mul(-1).mul(im1), im1.mul(-1), im1.mul(-1), zero};
+    // Complex[] mat_b = new Complex[]{ re1, re2, zero, re1};
+    Complex[] mat_b = new Complex[]{ re1, b1, zero, re1};
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
   public Complex[][] calcGrandmaGenerators() {
-    
     Complex traceA = new Complex(a_re, a_im);
     Complex traceB = new Complex(b_re, b_im);
     // using "Grandma's special parabolic commutator groups" recipe
