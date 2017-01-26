@@ -38,12 +38,27 @@ public class KleinGroupFunc extends VariationFunc {
   private static final String PARAM_A_IM = "a_im";
   private static final String PARAM_B_RE = "b_re";
   private static final String PARAM_B_IM = "b_im";
+  private static final String PARAM_RECIPE = "recipe";
+  
+  static Complex zero = new Complex(0, 0);
+  static Complex re1 = new Complex(1, 0);
+  static Complex re2 = new Complex(2, 0);
+  static Complex re4 = new Complex(4, 0);
+  static Complex im1 = new Complex(0, 1);
+  static Complex im2 = new Complex(0, 2);
+  static Complex im4 = new Complex(0, 4);
+  
+  private static int GRANDMA_STANDARD = 0;
+  private static int MASKIT_MU = 1;
 
-  private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM };
+  private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE };
+  
+  private double a_re = 2;
+  private double a_im = 0;
+  private double b_re = 2;
+  private double b_im = 0;
+  private int recipe = GRANDMA_STANDARD;
 
-  // set defaults to traces for standard Apollonian gasket
-  private Complex traceA = new Complex(2, 0);
-  private Complex traceB = new Complex(2, 0);
   // private Complex traceAB = new Complex();
   // for the generator matrices, 
   //    [0, 1, 2, 3] = [a, b, c, d]  ==> f(z)= (az+b)/(cz+d)
@@ -52,16 +67,18 @@ public class KleinGroupFunc extends VariationFunc {
   protected Complex[] mat_a_inv = new Complex[4];
   protected Complex[] mat_b = new Complex[4];
   protected Complex[] mat_b_inv = new Complex[4];
-  protected Complex zin = new Complex();
-  protected Complex num = new Complex();
-  protected Complex denom = new Complex();
-  // protected Complex zout = new Complex();
 
   protected Object[] mtransforms;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // randomly pick one of the four calculated Mobius transforms matrices, a, b, A, B ahere A = inverse(a), B = inverse(b)
+    // TODO (next version?): 
+    //       give the variation some internal "memory"
+    //       for a first pass, remember last used matrix (out of a, b, A, B) 
+    //       and use that to choose different mtransforms sets of matrices to randomly sample from 
+    //       for example to avoid getting successive pairs of matrix m and inverse M, which 
+    //       would cancel each other out: m(z)M(z) = z
     int mindex = pContext.random(4);
     Complex[] mat = (Complex[]) mtransforms[mindex];
     // then use selected matrix for Mobius transformation:
@@ -72,8 +89,8 @@ public class KleinGroupFunc extends VariationFunc {
     Complex c = mat[2];
     Complex d = mat[3];
     
-    zin = new Complex(pAffineTP.x, pAffineTP.y);
-   // zin.mult(a).add(b)).div(zin.mult(c).add(d)))
+    Complex zin = new Complex(pAffineTP.x, pAffineTP.y);
+    // zin.mult(a).add(b)).div(zin.mult(c).add(d)))
     Complex zout = zin.mul(a).add(b).div(zin.mul(c).add(d));
     
     pVarTP.x += pAmount * zout.re();
@@ -84,48 +101,45 @@ public class KleinGroupFunc extends VariationFunc {
     }
   }
   
-  // test by setting transforms for Apollonian gasket using params 
-  //   from book Indra's Pearls:
-  //  matrix a = ( 1, 0, -2i, 1)
-  //  matrix b = ( 1-i, 1, 1, 1+i)
-  public void testWithApollonian() {
-    
-    mat_a[0] = new Complex( 1,  0);
-    mat_a[1] = new Complex( 0,  0);
-    mat_a[2] = new Complex( 0, -2);
-    mat_a[3] = new Complex( 1,  0);
-    
-    mat_a_inv[0] = new Complex( 1,  0);
-    mat_a_inv[1] = new Complex( 0,  0);
-    mat_a_inv[2] = new Complex( 0,  2);
-    mat_a_inv[3] = new Complex( 1,  0);
-    
-    mat_b[0] = new Complex( 1, -1);
-    mat_b[1] = new Complex( 1,  0);
-    mat_b[2] = new Complex( 1,  0);
-    mat_b[3] = new Complex( 1,  1);
-    
-    mat_b_inv[0] = new Complex( 1,  1);
-    mat_b_inv[1] = new Complex(-1,  0);
-    mat_b_inv[2] = new Complex(-1,  0);
-    mat_b_inv[3] = new Complex( 1, -1);
-
-    mtransforms = new Object[] {mat_a, mat_a_inv, mat_b, mat_b_inv };    
-
-  }
-  
-  public boolean TEST_APOLLONIAN = false;
-  
-  static Complex re1 = new Complex(1, 0);
-  static Complex re2 = new Complex(2, 0);
-  static Complex re4 = new Complex(4, 0);
-  static Complex im1 = new Complex(0, 1);
-  static Complex im2 = new Complex(0, 2);
-  static Complex im4 = new Complex(0, 4);
-  
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-
+    Complex generators[][];
+    if (recipe == GRANDMA_STANDARD) {
+      generators = calcGrandmaGenerators();
+    }
+    else if (recipe == MASKIT_MU) {
+      generators = calcMaskitGenerators();
+    }
+    else {
+      // default to GRANDMA_STANDARD
+      generators = calcGrandmaGenerators();
+    }
+    
+    mat_a = generators[0];
+    mat_b = generators[1];
+    Complex[] mat_a_inv = matrixInverse(mat_a);
+    Complex[] mat_b_inv = matrixInverse(mat_b);
+    mtransforms = new Object[] {mat_a, mat_a_inv, mat_b, mat_b_inv };    
+  }
+  
+  /*
+  *   for Maskit recipe using complex parameter a for mu rather than for Trace(generator_a)
+  *      Trace(generator_a) = ta = -i*mu 
+  */
+  public Complex[][] calcMaskitGenerators() {
+    Complex mu = new Complex(a_re, a_im);
+    Complex[] mat_a = new Complex[]{ mu.mul(-1).mul(im1), im1.mul(-1), im1.mul(-1), zero};
+    Complex[] mat_b = new Complex[]{ re1, re2, zero, re1};
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
+  public Complex[][] calcGrandmaGenerators() {
+    
+    Complex traceA = new Complex(a_re, a_im);
+    Complex traceB = new Complex(b_re, b_im);
     // using "Grandma's special parabolic commutator groups" recipe
     // solve for traceAB: 
     //     traceAB^2 - (traceA * traceB * traceAB) + traceA^2 + traceB^2 = 0
@@ -141,13 +155,10 @@ public class KleinGroupFunc extends VariationFunc {
     Complex ac4 = c.mul(4);
     Complex trABplus  = b.mul(-1).add( bsq.sub(ac4).sqrt()).div(re2);
     Complex trABminus = b.mul(-1).sub( bsq.sub(ac4).sqrt()).div(re2);
-    // Complex traceAB = trABminus;
-    Complex traceAB = trABplus;
-    // System.out.println("bsq: " + bsq);
-    // System.out.println("ac4: " + ac4);
+    Complex traceAB = trABminus;
+
     System.out.println("trABplus:  " + trABplus);
     System.out.println("trABminus: " + trABminus);
-    
     System.out.println("traceAB: " + traceAB);
     
     // z0 = ((traceAB - 2) * traceB) / ((traceB * traceAB) - (2 * traceA) + (2i * traceAB))
@@ -165,48 +176,27 @@ public class KleinGroupFunc extends VariationFunc {
     Complex a2denom = traceAB.mul(re2).sub(re4);
     Complex a2 = a2num.div(a2denom);
     Complex a3 = traceA.div(re2);
-    System.out.println("a0: " + a0);
-    System.out.println("a1: " + a1);
-    System.out.println("a2: " + a2);
-    System.out.println("a3: " + a3);
-    
+  
     Complex b0 = traceB.sub(im2).div(re2);
     Complex b1 = traceB.div(re2);
     Complex b2 = traceB.div(re2);
     Complex b3 = traceB.add(im2).div(re2);
-    
-   /*
-    System.out.println("b0: " + b0);
-    System.out.println("b1: " + b1);
-    System.out.println("b2: " + b2);
-    System.out.println("b3: " + b3);
-    */
-
-    if (TEST_APOLLONIAN) {
-      testWithApollonian();
-    }
-    else {
-      mat_a[0] = a0;
-      mat_a[1] = a1;
-      mat_a[2] = a2;
-      mat_a[3] = a3;
-      mat_b[0] = b0;
-      mat_b[1] = b1;
-      mat_b[2] = b2;      
-      mat_b[3] = b3;
-      mat_b_inv[0] = b3;
-      mat_b_inv[1] = b1.mul(-1);
-      mat_b_inv[2] = b2.mul(-1);
-      mat_b_inv[3] = b0;
-      
-      mat_a_inv[0] = a3;
-      mat_a_inv[1] = a1.mul(-1);
-      mat_a_inv[2] = a2.mul(-1);
-      mat_a_inv[3] = a0;
-      
-      mtransforms = new Object[] {mat_a, mat_a_inv, mat_b, mat_b_inv };    
-    }
-
+ 
+    mat_a = new Complex[]{a0, a1, a2, a3};
+    mat_b = new Complex[]{b0, b1, b2, b3};
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
+  public Complex[] matrixInverse(Complex[] mat) {
+      Complex[] matinv = new Complex[4];
+      matinv[0] = mat[3];
+      matinv[1] = mat[1].mul(-1);
+      matinv[2] = mat[2].mul(-1);
+      matinv[3] = mat[0];
+      return matinv;
   }
   
   @Override
@@ -216,23 +206,25 @@ public class KleinGroupFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { traceA.re(), traceA.im(), traceB.re(), traceB.im() };
-    
+    return new Object[] { a_re, a_im, b_re, b_im, recipe };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A_RE.equalsIgnoreCase(pName)) {
-      traceA.setRe(pValue);
+      a_re = pValue;
     }
     else if (PARAM_A_IM.equalsIgnoreCase(pName)) {
-      traceA.setIm(pValue);
+      a_im = pValue;
     }
     else if (PARAM_B_RE.equalsIgnoreCase(pName)) {
-      traceB.setRe(pValue);
+      b_re = pValue;
     }
     else if (PARAM_B_IM.equalsIgnoreCase(pName)) {
-      traceB.setIm(pValue);
+      b_im = pValue;
+    }
+    else if (PARAM_RECIPE.equalsIgnoreCase(pName)) {
+      recipe = (int)Math.floor(pValue);
     }
     else {
       throw new IllegalArgumentException(pName);
