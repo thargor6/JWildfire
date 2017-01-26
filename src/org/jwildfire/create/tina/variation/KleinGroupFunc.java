@@ -39,6 +39,7 @@ public class KleinGroupFunc extends VariationFunc {
   private static final String PARAM_B_RE = "b_re";
   private static final String PARAM_B_IM = "b_im";
   private static final String PARAM_RECIPE = "recipe";
+  private static final String PARAM_AVOID_REVERSAL = "avoid_reversal";
   
   static Complex zero = new Complex(0, 0);
   static Complex re1 = new Complex(1, 0);
@@ -51,24 +52,34 @@ public class KleinGroupFunc extends VariationFunc {
   private static int GRANDMA_STANDARD = 0;
   private static int MASKIT_MU = 1;
 
-  private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE };
+  private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE, PARAM_AVOID_REVERSAL };
   
   private double a_re = 2;
   private double a_im = 0;
   private double b_re = 2;
   private double b_im = 0;
   private int recipe = GRANDMA_STANDARD;
+  private boolean avoid_reversal = false;
 
   // private Complex traceAB = new Complex();
   // for the generator matrices, 
   //    [0, 1, 2, 3] = [a, b, c, d]  ==> f(z)= (az+b)/(cz+d)
   //     
   protected Complex[] mat_a = new Complex[4];
-  protected Complex[] mat_a_inv = new Complex[4];
+  protected Complex[] mat_A = new Complex[4];  // mat_A = inverse(mat_a)
   protected Complex[] mat_b = new Complex[4];
-  protected Complex[] mat_b_inv = new Complex[4];
+  protected Complex[] mat_B = new Complex[4];  // mat_B = inverse(mat_b);
+  
+  protected Complex[] prev_matrix;
 
-  protected Object[] mtransforms;
+  // mtransforms is four element array, all of a, A, b, B
+  protected Complex[][] all_matrices;
+  // not_x is a three element array, all of a, A, b, B transforms except x
+  //    so not_A = [mat_a, mat_b, mat_b_inv]
+  protected Complex[][] not_a;
+  protected Complex[][] not_A;
+  protected Complex[][] not_b;
+  protected Complex[][] not_B;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -79,8 +90,23 @@ public class KleinGroupFunc extends VariationFunc {
     //       and use that to choose different mtransforms sets of matrices to randomly sample from 
     //       for example to avoid getting successive pairs of matrix m and inverse M, which 
     //       would cancel each other out: m(z)M(z) = z
-    int mindex = pContext.random(4);
-    Complex[] mat = (Complex[]) mtransforms[mindex];
+    Complex[][] mtransforms;
+
+    if (avoid_reversal) {
+      if      (prev_matrix == mat_a) { mtransforms = not_a; }
+      else if (prev_matrix == mat_A) { mtransforms = not_A; }
+      else if (prev_matrix == mat_b) { mtransforms = not_b; }
+      else if (prev_matrix == mat_B) { mtransforms = not_B; }
+      // shouldn't get here...
+      else  { mtransforms = all_matrices; }
+    }
+    else {
+      mtransforms = all_matrices;
+    }
+    
+    // get an integer from 0 to mtransforms.length-1
+    int mindex = pContext.random(mtransforms.length);
+    Complex[] mat = mtransforms[mindex];
     // then use selected matrix for Mobius transformation:
     //  f(z) = (az + b) / (cz + d);
 
@@ -99,6 +125,7 @@ public class KleinGroupFunc extends VariationFunc {
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
+    prev_matrix = mat;
   }
   
   @Override
@@ -117,9 +144,15 @@ public class KleinGroupFunc extends VariationFunc {
     
     mat_a = generators[0];
     mat_b = generators[1];
-    Complex[] mat_a_inv = matrixInverse(mat_a);
-    Complex[] mat_b_inv = matrixInverse(mat_b);
-    mtransforms = new Object[] {mat_a, mat_a_inv, mat_b, mat_b_inv };    
+    Complex[] mat_A = matrixInverse(mat_a);
+    Complex[] mat_B = matrixInverse(mat_b);
+    all_matrices = new Complex[][] {mat_a, mat_A, mat_b, mat_B };    
+    not_a = new Complex[][] { mat_A, mat_b, mat_B };
+    not_A = new Complex[][] { mat_a, mat_b, mat_B };
+    not_b = new Complex[][] { mat_a, mat_A, mat_B };
+    not_B = new Complex[][] { mat_a, mat_A, mat_b };
+    // arbitrarily initialize prev_matrix to mat_a
+    prev_matrix = mat_a;
   }
   
   /*
@@ -206,7 +239,7 @@ public class KleinGroupFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a_re, a_im, b_re, b_im, recipe };
+    return new Object[] { a_re, a_im, b_re, b_im, recipe, avoid_reversal ? 1 : 0 };
   }
 
   @Override
@@ -225,6 +258,9 @@ public class KleinGroupFunc extends VariationFunc {
     }
     else if (PARAM_RECIPE.equalsIgnoreCase(pName)) {
       recipe = (int)Math.floor(pValue);
+    }
+    else if (PARAM_AVOID_REVERSAL.equalsIgnoreCase(pName)) {
+      avoid_reversal = (pValue == 1);
     }
     else {
       throw new IllegalArgumentException(pName);
