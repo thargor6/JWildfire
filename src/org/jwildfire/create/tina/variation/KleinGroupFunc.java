@@ -3,6 +3,7 @@ package org.jwildfire.create.tina.variation;
 import static java.lang.Math.random;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -55,6 +56,7 @@ public class KleinGroupFunc extends VariationFunc {
   private static int RILEY = 3;
   private static int RILEY_MODIFIED = 4;
   private static int MASKIT_MU_MODIFIED = 5;
+  private static int MASKIT_LEYS_MODIFIED = 6;
 
   private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE, PARAM_AVOID_REVERSAL };
   
@@ -87,20 +89,25 @@ public class KleinGroupFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // if avoid_reversals is false, 
     // randomly pick one of the four calculated Mobius transforms matrices, a, b, A, B ahere A = inverse(a), B = inverse(b)
-    // TODO (next version?): 
-    //       give the variation some internal "memory"
+    // 
+    //  if avoid_reversals is true trying to give the variation some internal "memory"
     //       for a first pass, remember last used matrix (out of a, b, A, B) 
-    //       and use that to choose different mtransforms sets of matrices to randomly sample from 
+    //       and use that to choose different sets of matrices to randomly sample from 
     //       for example to avoid getting successive pairs of matrix m and inverse M, which 
     //       would cancel each other out: m(z)M(z) = z
+    //       so selecting randomly each time from the set of transforms that won't cause a reversal
     Complex[][] mtransforms;
 
+    // first attempt to give variation some internal "memory" to avoid 
+    //    successive transforms that use a matrix and its inverse 
+    //    (aA, bB, Aa, Bb)
     if (avoid_reversal) {
-      if      (prev_matrix == mat_a) { mtransforms = not_a; }
-      else if (prev_matrix == mat_A) { mtransforms = not_A; }
-      else if (prev_matrix == mat_b) { mtransforms = not_b; }
-      else if (prev_matrix == mat_B) { mtransforms = not_B; }
+      if      (prev_matrix == mat_a) { mtransforms = not_A; }
+      else if (prev_matrix == mat_A) { mtransforms = not_a; }
+      else if (prev_matrix == mat_b) { mtransforms = not_B; }
+      else if (prev_matrix == mat_B) { mtransforms = not_b; }
       // shouldn't get here...
       else  { mtransforms = all_matrices; }
     }
@@ -108,19 +115,16 @@ public class KleinGroupFunc extends VariationFunc {
       mtransforms = all_matrices;
     }
     
-    // get an integer from 0 to mtransforms.length-1
+    // randomly select a matrix from the list of matrices
     int mindex = pContext.random(mtransforms.length);
     Complex[] mat = mtransforms[mindex];
     // then use selected matrix for Mobius transformation:
     //  f(z) = (az + b) / (cz + d);
-
+    Complex zin = new Complex(pAffineTP.x, pAffineTP.y);
     Complex a = mat[0];
     Complex b = mat[1];
     Complex c = mat[2];
     Complex d = mat[3];
-    
-    Complex zin = new Complex(pAffineTP.x, pAffineTP.y);
-    // zin.mult(a).add(b)).div(zin.mult(c).add(d)))
     Complex zout = zin.mul(a).add(b).div(zin.mul(c).add(d));
     
     pVarTP.x += pAmount * zout.re();
@@ -152,6 +156,9 @@ public class KleinGroupFunc extends VariationFunc {
     }
     else if (recipe == RILEY_MODIFIED) {
       generators = calcModifiedRileyGenerators();
+    }
+    else if (recipe == MASKIT_LEYS_MODIFIED) {
+      generators = calcMaskitLeysModifiedGenerators();
     }
     else {
       // default to GRANDMA_STANDARD
@@ -189,10 +196,6 @@ public class KleinGroupFunc extends VariationFunc {
     Complex trABminus = b.mul(-1).sub( bsq.sub(ac4).sqrt()).div(re2);
     Complex traceAB = trABminus;
 
-    System.out.println("trABplus:  " + trABplus);
-    System.out.println("trABminus: " + trABminus);
-    System.out.println("traceAB: " + traceAB);
-    
     // a0 = ta - (tb/tab)
     Complex a0 = traceA.sub(traceB.div(traceAB));
     // a1 = ta / tab^2
@@ -270,6 +273,26 @@ public class KleinGroupFunc extends VariationFunc {
     return generators;
   }
   
+  /**
+   * based on modified Maskit parameterization discussed in Jos Leys' article 
+   *     "A fast algorithm for limit sets of Kleinian groups with the Maskit parametrisation", 
+   *     section 4.1
+   *  replaces b(z) = z + 2
+   *      with b(z) = z + k
+   *   where k = 2*cos(PI/n) and n is integer
+   *   here we also allow imaginary component for k, to be set by b_im
+   */
+  public Complex[][] calcMaskitLeysModifiedGenerators() {
+    Complex mu = new Complex(a_re, a_im);
+    Complex[] mat_a = new Complex[]{ mu.mul(-1).mul(im1), im1.mul(-1), im1.mul(-1), zero};
+    Complex b1 = new Complex(2*cos(M_PI/b_re), b_im);
+    Complex[] mat_b = new Complex[]{ re1, b1, zero, re1};
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
+  }
+  
   public Complex[][] calcGrandmaGenerators() {
     Complex traceA = new Complex(a_re, a_im);
     Complex traceB = new Complex(b_re, b_im);
@@ -290,16 +313,11 @@ public class KleinGroupFunc extends VariationFunc {
     Complex trABminus = b.mul(-1).sub( bsq.sub(ac4).sqrt()).div(re2);
     Complex traceAB = trABminus;
 
-    System.out.println("trABplus:  " + trABplus);
-    System.out.println("trABminus: " + trABminus);
-    System.out.println("traceAB: " + traceAB);
-    
     // z0 = ((traceAB - 2) * traceB) / ((traceB * traceAB) - (2 * traceA) + (2i * traceAB))
     // z0 = traceAB.sub(2).mult(traceB).div(traceB.mult(traceAB).sub(traceA.mult(2)).add(traceAB.mult(Complex.I).mult(2)) ) 
     Complex znum = traceAB.sub(re2).mul(traceB);
     Complex zdenom = traceB.mul(traceAB).sub(traceA.mul(re2)).add(traceAB.mul(im2));
     Complex z0 = znum.div(zdenom);
-    System.out.println("z0: " + z0);
     
     Complex a0 = traceA.div(re2);
     Complex a1num = traceA.mul(traceAB).sub(traceB.mul(re2)).add(im4);
