@@ -51,6 +51,8 @@ public class KleinGroupFunc extends VariationFunc {
   
   private static int GRANDMA_STANDARD = 0;
   private static int MASKIT_MU = 1;
+  private static int JORGENSEN = 2;
+  
 
   private static final String[] paramNames = { PARAM_A_RE, PARAM_A_IM, PARAM_B_RE, PARAM_B_IM, PARAM_RECIPE, PARAM_AVOID_REVERSAL };
   
@@ -137,6 +139,9 @@ public class KleinGroupFunc extends VariationFunc {
     else if (recipe == MASKIT_MU) {
       generators = calcMaskitGenerators();
     }
+    else if (recipe == JORGENSEN) {
+      generators = calcJorgensenGenerators(); 
+    }
     else {
       // default to GRANDMA_STANDARD
       generators = calcGrandmaGenerators();
@@ -153,6 +158,51 @@ public class KleinGroupFunc extends VariationFunc {
     not_B = new Complex[][] { mat_a, mat_A, mat_b };
     // arbitrarily initialize prev_matrix to mat_a
     prev_matrix = mat_a;
+  }
+
+  public Complex[][] calcJorgensenGenerators() {
+    Complex traceA = new Complex(a_re, a_im);
+    Complex traceB = new Complex(b_re, b_im);
+    // solve for traceAB: 
+    //     traceAB^2 - (traceA * traceB * traceAB) + traceA^2 + traceB^2 = 0
+    // x = (-b +- sqrt(b^2 - 4ac)) / 2a
+    // x = traceAB
+    // a = 1
+    // b = -1 * traceA * traceB
+    // c = traceA^2 + traceB^2
+    Complex b = traceA.mul(traceB).mul(-1);
+    Complex c = traceA.power(2).add(traceB.power(2));
+    Complex bsq = b.power(2);
+    Complex ac4 = c.mul(4);
+    Complex trABplus  = b.mul(-1).add( bsq.sub(ac4).sqrt()).div(re2);
+    Complex trABminus = b.mul(-1).sub( bsq.sub(ac4).sqrt()).div(re2);
+    Complex traceAB = trABminus;
+
+    System.out.println("trABplus:  " + trABplus);
+    System.out.println("trABminus: " + trABminus);
+    System.out.println("traceAB: " + traceAB);
+    
+    // a0 = ta - (tb/tab)
+    Complex a0 = traceA.sub(traceB.div(traceAB));
+    // a1 = ta / tab^2
+    Complex a1 = traceA.div(traceAB.power(2));
+    Complex a2 = traceA;
+    Complex a3 = traceB.div(traceAB);
+    
+    // b0 = tb - (ta/tab)
+    Complex b0 = traceB.sub(traceA.div(traceAB));
+    // b1 = -tb/tab^2
+    Complex b1 = traceB.mul(-1).div(traceAB.power(2));
+    Complex b2 = traceB.mul(-1);
+    Complex b3 = traceA.div(traceAB);
+    
+    mat_a = new Complex[]{a0, a1, a2, a3};
+    mat_b = new Complex[]{b0, b1, b2, b3};
+    
+    Complex[][] generators = new Complex[2][4];
+    generators[0] = mat_a;
+    generators[1] = mat_b;
+    return generators;
   }
   
   /*
