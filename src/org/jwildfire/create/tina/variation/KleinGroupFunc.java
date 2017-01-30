@@ -1,33 +1,29 @@
 package org.jwildfire.create.tina.variation;
 
-import static java.lang.Math.random;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.Layer;
 
-// import org.jwildfire.base.mathlib.Complex;
-import org.nfunk.jep.type.Complex;
-
-/* using org.nfunk.jep.type.Complex for complex numbers 
+/** Using org.nfunk.jep.type.Complex for complex numbers 
 //     instead of org.jwildfire.base.mathlib.Complex because
-//     its methods return new complex numbers (instead of modifying in place like ...mathlib.Complex)
+//     JEP's methods return new complex numbers (instead of modifying in place like ...mathlib.Complex)
 //     which makes chaining methods together for long calcs possible 
-// there is a performance hit relative to ...mathlib.Complex, since creating lots of 
-//     intermediary complex objects. But compared performance within transform() loop to 
-//     using ...mathlib.Complex instead, and only get ~20% slower. If really becomes a problem 
+//  Note that there is a performance hit for JEP relative to ...mathlib.Complex, since creating lots of 
+//     intermediary complex objects. But in a performance comparison within transform() loop to 
+//     using ...mathlib.Complex instead, JEP was only ~20% slower. If really becomes a problem 
 //     could later convert to using ...mathlib.Complex
-*/    
+*/
+import org.nfunk.jep.type.Complex;
+// import org.jwildfire.base.mathlib.Complex;
 
 /**
- * 
  * KleinGroupFunc is meant to make it easier to create "interesting" Kleinian group limit sets 
- *     internally uses two Mobius transform as generators (plus their inverses)
+ *     internally uses two Mobius transformations as generators (plus their inverses)
  *     Takes the input parameters and uses strategies from "Indra's Pearls" book 
- *     (https://en.wikipedia.org/wiki/Indra%27s_Pearls_(book)) 
+ *     (https://en.wikipedia.org/wiki/Indra%27s_Pearls_(book)), 
  *     to create transform groups that have a reasonable chance of being "interesting" 
  * 
  *  Author: Gregg Helt
@@ -67,14 +63,10 @@ public class KleinGroupFunc extends VariationFunc {
   private int recipe = GRANDMA_STANDARD;
   private boolean avoid_reversal = false;
 
-  // private Complex traceAB = new Complex();
-  // for the generator matrices, 
-  //    [0, 1, 2, 3] = [a, b, c, d]  ==> f(z)= (az+b)/(cz+d)
-  //     
   protected Complex[] mat_a = new Complex[4];
-  protected Complex[] mat_A = new Complex[4];  // mat_A = inverse(mat_a)
+  protected Complex[] mat_inv_a = new Complex[4];  // mat_inv_a = inverse(mat_a)
   protected Complex[] mat_b = new Complex[4];
-  protected Complex[] mat_B = new Complex[4];  // mat_B = inverse(mat_b);
+  protected Complex[] mat_inv_b = new Complex[4];  // mat_inv_b = inverse(mat_b);
   
   protected Complex[] prev_matrix;
 
@@ -90,7 +82,7 @@ public class KleinGroupFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // if avoid_reversals is false, 
-    // randomly pick one of the four calculated Mobius transforms matrices, a, b, A, B ahere A = inverse(a), B = inverse(b)
+    // randomly pick one of the four calculated Mobius transformation matrices, a, b, A, B where A = inverse(a), B = inverse(b)
     // 
     //  if avoid_reversals is true trying to give the variation some internal "memory"
     //       for a first pass, remember last used matrix (out of a, b, A, B) 
@@ -105,9 +97,9 @@ public class KleinGroupFunc extends VariationFunc {
     //    (aA, bB, Aa, Bb)
     if (avoid_reversal) {
       if      (prev_matrix == mat_a) { mtransforms = not_A; }
-      else if (prev_matrix == mat_A) { mtransforms = not_a; }
+      else if (prev_matrix == mat_inv_a) { mtransforms = not_a; }
       else if (prev_matrix == mat_b) { mtransforms = not_B; }
-      else if (prev_matrix == mat_B) { mtransforms = not_b; }
+      else if (prev_matrix == mat_inv_b) { mtransforms = not_b; }
       // shouldn't get here...
       else  { mtransforms = all_matrices; }
     }
@@ -119,7 +111,10 @@ public class KleinGroupFunc extends VariationFunc {
     int mindex = pContext.random(mtransforms.length);
     Complex[] mat = mtransforms[mindex];
     // then use selected matrix for Mobius transformation:
-    //  f(z) = (az + b) / (cz + d);
+    //    f(z) = (az + b) / (cz + d);
+    // for the generator matrices 
+    //    [0, 1, 2, 3] = [a, b, c, d]  ==> f(z)= (az+b)/(cz+d)
+    //     
     Complex zin = new Complex(pAffineTP.x, pAffineTP.y);
     Complex a = mat[0];
     Complex b = mat[1];
@@ -167,13 +162,13 @@ public class KleinGroupFunc extends VariationFunc {
     
     mat_a = generators[0];
     mat_b = generators[1];
-    Complex[] mat_A = matrixInverse(mat_a);
-    Complex[] mat_B = matrixInverse(mat_b);
-    all_matrices = new Complex[][] {mat_a, mat_A, mat_b, mat_B };    
-    not_a = new Complex[][] { mat_A, mat_b, mat_B };
-    not_A = new Complex[][] { mat_a, mat_b, mat_B };
-    not_b = new Complex[][] { mat_a, mat_A, mat_B };
-    not_B = new Complex[][] { mat_a, mat_A, mat_b };
+    mat_inv_a = matrixInverse(mat_a);
+    mat_inv_b = matrixInverse(mat_b);
+    all_matrices = new Complex[][] {mat_a, mat_inv_a, mat_b, mat_inv_b };    
+    not_a = new Complex[][] { mat_inv_a, mat_b, mat_inv_b };
+    not_A = new Complex[][] { mat_a, mat_b, mat_inv_b };
+    not_b = new Complex[][] { mat_a, mat_inv_a, mat_inv_b };
+    not_B = new Complex[][] { mat_a, mat_inv_a, mat_b };
     // arbitrarily initialize prev_matrix to mat_a
     prev_matrix = mat_a;
   }
@@ -246,7 +241,7 @@ public class KleinGroupFunc extends VariationFunc {
     return generators;
   }
   
-    /*
+ /*
   *   for Maskit recipe using complex parameter a for mu rather than for Trace(generator_a)
   *      Trace(generator_a) = ta = -i*mu 
   */
@@ -292,11 +287,15 @@ public class KleinGroupFunc extends VariationFunc {
     generators[1] = mat_b;
     return generators;
   }
-  
+
+  /**
+   * using "Grandma's special parabolic commutator groups" recipe
+   *   from the book "Indra's Pearls: the Vision of Felix Klein"
+   */
   public Complex[][] calcGrandmaGenerators() {
     Complex traceA = new Complex(a_re, a_im);
     Complex traceB = new Complex(b_re, b_im);
-    // using "Grandma's special parabolic commutator groups" recipe
+
     // solve for traceAB: 
     //     traceAB^2 - (traceA * traceB * traceAB) + traceA^2 + traceB^2 = 0
     // x = (-b +- sqrt(b^2 - 4ac)) / 2a
