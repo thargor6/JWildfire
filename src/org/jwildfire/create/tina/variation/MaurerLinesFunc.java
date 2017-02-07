@@ -41,6 +41,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 /**
  * Maurer Lines variation by CozyG
+ *    Copyright 2016- Gregg Helt
+ *    (released under same GNU Lesser General Public License as above)
  * Initially based on the "Maurer Rose", as described by Peter Maurer,
  *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
  *    for more information on Maurer Lines see http://genomancer.org
