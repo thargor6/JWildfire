@@ -1,3 +1,23 @@
+V3.02 (12.03.2016)
+ - new and powerful "dla3d_wf"-variation ("diffusion limited aggregation") which may even utilize 3d-meshes as nodes/junctions
+ - solid-random-flame-generators also make use of the "dla3d_wf"-variation
+ - improved the speed of the "dla_wf"-variation
+ - bugfix in the "mobiusN"-variation
+ - small improvements/bugfixes
+
+V3.01 (06.01.2016)
+ - Fixed a serious bug in the Mesh-Generator: when rendering image-stacks 
+   each image inside a slice was the same. This causing meshes to be very 
+   "chunky", depending on slice-size. 
+   The only workaround was to set slice-size to, i. e. rendering one image 
+   per slice, which causes a major slowdown. 
+ - minor improvement in rendering speed
+ - new "isosfplot3d_wf"-variation for plotting iso-surfaces (may be very slow on old machines)
+ - new "dc_color"-parameter for the "colormap_wf" and "post_colormap_wf"-variations
+   to turn coloring off (in case you want only use the image as heightmap)
+ - new "blend_colormap" -parameter for the "colormap_wf" and "post_colormap_wf"-variations
+   to improve quality
+    
 V3.00 (29.11.2016)
 3D SOLID RENDERING
  - completely new 3d (solid) rendering mode for flame fractals, featuring

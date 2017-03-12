@@ -412,7 +412,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void brightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void vibrancySlider_stateChanged(ChangeEvent e) {
@@ -508,7 +508,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void contrastREd_changed() {
-    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void whiteLevelREd_changed() {
@@ -524,11 +524,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void brightnessREd_changed() {
-    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void contrastSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
+    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void whiteLevelSlider_stateChanged(ChangeEvent e) {
