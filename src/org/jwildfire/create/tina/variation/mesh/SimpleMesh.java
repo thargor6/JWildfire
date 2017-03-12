@@ -29,6 +29,63 @@ public class SimpleMesh {
   private List<Vertex> vertices = new ArrayList<>();
   private Map<String, Integer> verticesMap = new HashMap<>();
   private List<Face> faces = new ArrayList<>();
+  private BoundingBox boundingBox;
+
+  public class BoundingBox {
+    private final double xmin, xmax, xcentre;
+    private final double ymin, ymax, ycentre;
+    private final double zmin, zmax, zcentre;
+
+    public BoundingBox(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {
+      super();
+      this.xmin = xmin;
+      this.xmax = xmax;
+      this.xcentre = this.xmin + (this.xmax - this.xmin) / 2.0;
+      this.ymin = ymin;
+      this.ymax = ymax;
+      this.ycentre = this.ymin + (this.ymax - this.ymin) / 2.0;
+      this.zmin = zmin;
+      this.zmax = zmax;
+      this.zcentre = this.zmin + (this.zmax - this.zmin) / 2.0;
+    }
+
+    public double getXmin() {
+      return xmin;
+    }
+
+    public double getXmax() {
+      return xmax;
+    }
+
+    public double getYmin() {
+      return ymin;
+    }
+
+    public double getYmax() {
+      return ymax;
+    }
+
+    public double getZmin() {
+      return zmin;
+    }
+
+    public double getZmax() {
+      return zmax;
+    }
+
+    public double getXcentre() {
+      return xcentre;
+    }
+
+    public double getYcentre() {
+      return ycentre;
+    }
+
+    public double getZcentre() {
+      return zcentre;
+    }
+
+  }
 
   private String calculateVertexKey(double x, double y, double z) {
     final double prec = 10000.0;
@@ -48,6 +105,7 @@ public class SimpleMesh {
     int res = vertices.size();
     vertices.add(p);
     verticesMap.put(key, Integer.valueOf(res));
+    boundingBox = null;
     return res;
   }
 
@@ -66,6 +124,7 @@ public class SimpleMesh {
     int res = vertices.size();
     vertices.add(p);
     verticesMap.put(key, Integer.valueOf(res));
+    boundingBox = null;
     return res;
   }
 
@@ -235,5 +294,36 @@ public class SimpleMesh {
     v.u = (float) (v1.u + (v2.u - v1.u) * 0.5);
     v.v = (float) (v1.v + (v2.v - v1.v) * 0.5);
     return v;
+  }
+
+  public BoundingBox getBoundingBox() {
+    if (boundingBox == null) {
+      double xmin = Double.MAX_VALUE, xmax = Double.MIN_VALUE;
+      double ymin = Double.MAX_VALUE, ymax = Double.MIN_VALUE;
+      double zmin = Double.MAX_VALUE, zmax = Double.MIN_VALUE;
+      for (int i = 0; i < vertices.size(); i++) {
+        Vertex v = getVertex(i);
+        if (v.x < xmin) {
+          xmin = v.x;
+        }
+        if (v.x > xmax) {
+          xmax = v.x;
+        }
+        if (v.y < ymin) {
+          ymin = v.y;
+        }
+        if (v.y > ymax) {
+          ymax = v.y;
+        }
+        if (v.z < zmin) {
+          zmin = v.z;
+        }
+        if (v.z > zmax) {
+          zmax = v.z;
+        }
+      }
+      boundingBox = new BoundingBox(xmin, xmax, ymin, ymax, zmin, zmax);
+    }
+    return boundingBox;
   }
 }

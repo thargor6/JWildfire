@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,8 +14,27 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.variation.mesh;
+package org.jwildfire.create.tina.variation;
 
-public class VertexWithUV extends Vertex {
-  public float u, v;
+import org.jwildfire.base.mathlib.VecMathLib.Matrix3D;
+
+public class DLA3DWFFuncPoint {
+  int pathLength;
+  double relDepth;
+  DLA3DWFFuncPoint parent;
+  double x, y, z;
+  double azimuth, elevation;
+  Matrix3D rotation;
+
+  public DLA3DWFFuncPoint() {
+  }
+
+  public DLA3DWFFuncPoint(DLA3DWFFuncPoint parent, double x, double y, double z) {
+    this.parent = parent;
+    this.pathLength = parent.pathLength + 1;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
 }

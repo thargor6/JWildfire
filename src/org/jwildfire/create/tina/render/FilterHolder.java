@@ -26,6 +26,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelType;
 @SuppressWarnings("serial")
 public class FilterHolder implements Serializable {
   protected final Flame flame;
+  protected double preFilter[][];
   protected double filter[][];
   protected int noiseFilterSize;
   protected final FilterKernel filterKernel;
@@ -51,25 +52,22 @@ public class FilterHolder implements Serializable {
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
     double adjust = filterKernel.getFilterAdjust(pFilterRadius, oversample);
+    double sum = 0.0;
     for (int i = 0; i < pFilterSize; i++) {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
         //  pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
-        pFilter[i][j] = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
+        double f = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
+        sum += f;
+        pFilter[i][j] = f;
       }
     }
     // normalize
     {
-      double t = 0.0;
       for (int i = 0; i < pFilterSize; i++) {
         for (int j = 0; j < pFilterSize; j++) {
-          t += pFilter[i][j];
-        }
-      }
-      for (int i = 0; i < pFilterSize; i++) {
-        for (int j = 0; j < pFilterSize; j++) {
-          pFilter[i][j] = pFilter[i][j] / t * oversample * oversample;
+          pFilter[i][j] = pFilter[i][j] / sum * oversample * oversample;
         }
       }
     }
