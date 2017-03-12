@@ -72,9 +72,9 @@ public class MobiusNFunc extends VariationFunc {
     // letting x and y form a matrix through which we modify the points [realA,imagA] and [realC,imagC]
     //[Ux,Uy] = [x,-y; y,-x]*[realA, imagA] + [realB, imagB]
     realU = realA * x - imagA * y + realB;
-    imagU = realA * y - imagA * x + imagB;
+    imagU = realA * y + imagA * x + imagB;
     realV = realC * x - imagC * y + realD;
-    imagV = realC * y - imagC * x + imagD;
+    imagV = realC * y + imagC * x + imagD;
     radV = sqr(realV) + sqr(imagV);
 
     x = (realU * realV + imagU * imagV) / radV;
