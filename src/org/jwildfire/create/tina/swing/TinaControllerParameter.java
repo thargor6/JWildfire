@@ -243,6 +243,7 @@ public class TinaControllerParameter {
   public JToggleButton pToggleVariationsButton;
   public JToggleButton pToggleTransparencyButton;
   public JToggleButton pAffinePreserveZButton;
+  public JToggleButton pAffineMirrorPrePostTranslationsButton;
   public JComboBox pQualityProfileCmb;
   public JComboBox pResolutionProfileCmb;
   public JComboBox pBatchQualityProfileCmb;
@@ -696,10 +697,11 @@ public class TinaControllerParameter {
       JComboBox pXFormDrawModeCmb, JTable pRelWeightsTable, JButton pRelWeightsZeroButton, JButton pRelWeightsOneButton, JWFNumberField pRelWeightREd, JToggleButton pMouseTransformMoveButton, JToggleButton pMouseTransformScaleButton, JToggleButton pMouseTransformShearButton, JToggleButton pMouseTransformViewButton, JToggleButton pAffineEditPostTransformButton, JToggleButton pAffineEditPostTransformSmallButton, JButton pAffineResetTransformButton, JTable pCreatePaletteColorsTable,
       JToggleButton pMouseTransformSlowButton,
       JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
-      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
+      JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JToggleButton pAffineMirrorPrePostTranslationsButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx,
       JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
       JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider) {
+
     this.desktop = pDesktop;
     this.pTinaFrame = pTinaFrame;
     this.pErrorHandler = pErrorHandler;
@@ -841,6 +843,8 @@ public class TinaControllerParameter {
     this.pToggleVariationsButton = pToggleVariationsButton;
     this.pToggleTransparencyButton = pToggleTransparencyButton;
     this.pAffinePreserveZButton = pAffinePreserveZButton;
+    this.pAffineMirrorPrePostTranslationsButton = pAffineMirrorPrePostTranslationsButton;
+    // System.out.println("set TinalControllerParameter mirror button: " + pAffineMirrorPrePostTranslationsButton);
     this.pQualityProfileCmb = pQualityProfileCmb;
     this.pResolutionProfileCmb = pResolutionProfileCmb;
     this.pInteractiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;

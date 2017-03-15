@@ -492,6 +492,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineScaleEditMotionCurveBtn = parameterObject.affineScaleEditMotionCurveBtn;
     data.affineEditPostTransformSmallButton = parameterObject.pAffineEditPostTransformSmallButton;
     data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
+    data.affineMirrorPrePostTranslationsButton = parameterObject.pAffineMirrorPrePostTranslationsButton;
+    // System.out.println("set TinaController mirror button: " + data.affineMirrorPrePostTranslationsButton);
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
 
@@ -2460,6 +2462,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       refreshEditPlaneToggleButtons(getCurrFlame().getEditPlane());
       if (pXForm != null) {
+        // System.out.println("refreshing xform ui");
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
           data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
@@ -2475,6 +2478,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           data.affineC11REd.setText(Tools.doubleToString(pXForm.getCoeff11()));
           data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
           data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
+        }
+        // System.out.println(data.affineMirrorPrePostTranslationsButton);
+        if (data.affineMirrorPrePostTranslationsButton != null) { 
+          // System.out.println("setting mirror button: " + pXForm.mirrorPrePostTranslations);
+          data.affineMirrorPrePostTranslationsButton.setSelected(pXForm.mirrorPrePostTranslations);
         }
 
         data.xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
@@ -4300,6 +4308,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
       refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  public void affineMirrorPrePostChanged(boolean mirror) {
+    if (this.getCurrXForm() != null) {
+      this.getCurrXForm().mirrorPrePostTranslations = mirror;
     }
   }
 

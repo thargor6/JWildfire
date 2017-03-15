@@ -206,6 +206,7 @@ public class TinaControllerData {
   public JToggleButton affineEditPostTransformButton;
   public JToggleButton affineEditPostTransformSmallButton;
   public JToggleButton affinePreserveZButton;
+  public JToggleButton affineMirrorPrePostTranslationsButton;
   public JButton randomizeButton;
   public JToggleButton toggleVariationsButton;
   public JToggleButton toggleTransparencyButton;

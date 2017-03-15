@@ -36,6 +36,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
 public final class XForm implements Assignable<XForm>, Serializable {
+  public boolean mirrorPrePostTranslations = false;
   private static final long serialVersionUID = 1L;
   private Layer owner;
   @AnimAware
@@ -497,9 +498,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
   }
-
+  
   @Override
   public void assign(XForm pXForm) {
+    mirrorPrePostTranslations = pXForm.mirrorPrePostTranslations;
     weight = pXForm.weight;
     weightCurve.assign(pXForm.weightCurve);
     color = pXForm.color;
@@ -884,18 +886,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyCoeff20;
   }
 
-  public void setXYCoeff20(double xyCoeff20) {
-    this.xyCoeff20 = xyCoeff20;
+  // public void setXYCoeff20(double xyCoeff20) {
+  public void setXYCoeff20(double val) {
+    this.xyCoeff20 = val;
     updateHasXYCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.xyPostCoeff20 = -val;
+      this.updateHasXYPostCoeffs();
+    }
   }
 
   public double getXYCoeff21() {
     return xyCoeff21;
   }
 
-  public void setXYCoeff21(double xyCoeff21) {
-    this.xyCoeff21 = xyCoeff21;
+  // public void setXYCoeff21(double xyCoeff21) {
+  public void setXYCoeff21(double val) {
+    this.xyCoeff21 = val;
     updateHasXYCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.xyPostCoeff21 = -val;
+      this.updateHasXYPostCoeffs();
+    }
   }
 
   public double getXYPostCoeff00() {
@@ -938,18 +950,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyPostCoeff20;
   }
 
-  public void setXYPostCoeff20(double xyPostCoeff20) {
-    this.xyPostCoeff20 = xyPostCoeff20;
+//  public void setXYPostCoeff20(double xyPostCoeff20) {
+  public void setXYPostCoeff20(double val) {
+    this.xyPostCoeff20 = val;
     updateHasXYPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.xyCoeff20 = -val;
+      this.updateHasXYCoeffs();
+    }
   }
 
   public double getXYPostCoeff21() {
     return xyPostCoeff21;
   }
 
-  public void setXYPostCoeff21(double xyPostCoeff21) {
-    this.xyPostCoeff21 = xyPostCoeff21;
+//   public void setXYPostCoeff21(double xyPostCoeff21) {
+  public void setXYPostCoeff21(double val) {
+    this.xyPostCoeff21 = val;
     updateHasXYPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.xyCoeff21 = -val;
+      this.updateHasXYCoeffs();
+    }
   }
 
   public double getYZCoeff00() {
@@ -992,18 +1014,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return yzCoeff20;
   }
 
-  public void setYZCoeff20(double yzCoeff20) {
-    this.yzCoeff20 = yzCoeff20;
+  // public void setYZCoeff20(double yzCoeff20) {
+  public void setYZCoeff20(double val) {
+    this.yzCoeff20 = val;
     updateHasYZCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.yzPostCoeff20 = -val;
+      this.updateHasYZPostCoeffs();
+    }
   }
 
   public double getYZCoeff21() {
     return yzCoeff21;
   }
 
-  public void setYZCoeff21(double yzCoeff21) {
-    this.yzCoeff21 = yzCoeff21;
+  public void setYZCoeff21(double val) {
+  // public void setYZCoeff21(double yzCoeff21) {
+    this.yzCoeff21 = val;
     updateHasYZCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.yzPostCoeff21 = -val;
+      this.updateHasYZPostCoeffs();
+    }
   }
 
   public double getYZPostCoeff00() {
@@ -1046,18 +1078,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return yzPostCoeff20;
   }
 
-  public void setYZPostCoeff20(double yzPostCoeff20) {
-    this.yzPostCoeff20 = yzPostCoeff20;
+  public void setYZPostCoeff20(double val) {
+  // public void setYZPostCoeff20(double yzPostCoeff20) {
+    this.yzPostCoeff20 = val;
     updateHasYZPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.yzCoeff20 = -val;
+      this.updateHasYZCoeffs();
+    }
   }
 
   public double getYZPostCoeff21() {
     return yzPostCoeff21;
   }
 
-  public void setYZPostCoeff21(double yzPostCoeff21) {
-    this.yzPostCoeff21 = yzPostCoeff21;
+  public void setYZPostCoeff21(double val) {
+  // public void setYZPostCoeff21(double yzPostCoeff21) {
+    this.yzPostCoeff21 = val;
     updateHasYZPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.yzCoeff21 = -val;
+      this.updateHasYZCoeffs();
+    }
   }
 
   public double getZXCoeff00() {
@@ -1100,18 +1142,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return zxCoeff20;
   }
 
-  public void setZXCoeff20(double zxCoeff20) {
-    this.zxCoeff20 = zxCoeff20;
+  public void setZXCoeff20(double val) {
+  // public void setZXCoeff20(double zxCoeff20) {
+    this.zxCoeff20 = val;
     updateHasZXCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.zxPostCoeff20 = -val;
+      this.updateHasZXPostCoeffs();
+    }
   }
 
   public double getZXCoeff21() {
     return zxCoeff21;
   }
 
-  public void setZXCoeff21(double zxCoeff21) {
-    this.zxCoeff21 = zxCoeff21;
+  public void setZXCoeff21(double val) {
+  // public void setZXCoeff21(double zxCoeff21) {
+    this.zxCoeff21 = val;
     updateHasZXCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.zxPostCoeff21 = -val;
+      this.updateHasZXPostCoeffs();
+    }
   }
 
   public double getZXPostCoeff00() {
@@ -1154,18 +1206,28 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return zxPostCoeff20;
   }
 
-  public void setZXPostCoeff20(double zxPostCoeff20) {
-    this.zxPostCoeff20 = zxPostCoeff20;
+  public void setZXPostCoeff20(double val) {
+    // public void setZXPostCoeff20(double zxPostCoeff20) {
+    this.zxPostCoeff20 = val;
     updateHasZXPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.zxCoeff20 = -val;
+      this.updateHasZXCoeffs();
+    }
   }
 
   public double getZXPostCoeff21() {
     return zxPostCoeff21;
   }
 
-  public void setZXPostCoeff21(double zxPostCoeff21) {
-    this.zxPostCoeff21 = zxPostCoeff21;
+  public void setZXPostCoeff21(double val) {
+  // public void setZXPostCoeff21(double zxPostCoeff21) {
+    this.zxPostCoeff21 = val;
     updateHasZXPostCoeffs();
+    if (mirrorPrePostTranslations) {
+      this.zxCoeff21 = -val;
+      this.updateHasZXCoeffs();
+    }
   }
 
   private EditPlane getEditPlane() {

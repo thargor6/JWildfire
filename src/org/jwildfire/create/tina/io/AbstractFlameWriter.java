@@ -74,6 +74,7 @@ public class AbstractFlameWriter {
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
+    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, pXForm.mirrorPrePostTranslations ? 1 : 0));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL, pXForm.getMaterial()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, pXForm.getMaterialSpeed()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, pXForm.getModGamma()));
