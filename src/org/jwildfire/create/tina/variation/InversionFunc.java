@@ -1,6 +1,7 @@
 package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.asin;
 import java.math.BigInteger;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
@@ -50,8 +51,8 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_ZMODE = "zmode";
   public static final String PARAM_INVERSION_MODE = "imode";
   public static final String PARAM_HIDE_UNINVERTED = "hide_uninverted";
-  // public static final String PARAM_RING_MIN = "ring_min";
-  // public static final String PARAM_RING_MAX = "ring_max";
+  public static final String PARAM_RING_SCALE = "ring_scale";
+  public static final String PARAM_RING_MODE = "ring_mode";
   public static final String PARAM_P= "p";
   public static final String PARAM_P2 = "p2";
   public static final String PARAM_DRAW_CIRCLE = "draw_circle";
@@ -63,12 +64,17 @@ public class InversionFunc extends VariationFunc {
     PARAM_SHAPE, 
     PARAM_ZMODE, 
     PARAM_INVERSION_MODE, PARAM_HIDE_UNINVERTED, 
-    // PARAM_RING_MIN, PARAM_RING_MAX, 
+    PARAM_RING_MODE, 
+    PARAM_RING_SCALE,
     PARAM_P, PARAM_P2, PARAM_DRAW_CIRCLE, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, 
     PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN, 
   };
   
+  public static int IGNORE_RING = 0;
+  public static int INVERSION_INSIDE_RING_ONLY = 1;
+  public static int INVERSION_OUTSIDE_RING_ONLY = 2;
+
   public static int STANDARD = 0;
   public static int EXTERNAL_INVERSION_ONLY = 1;
   public static int INTERNAL_INVERSION_ONLY = 2;
@@ -425,10 +431,10 @@ public class InversionFunc extends VariationFunc {
   
   double p = 2;
   double p2 = 2;
-  // double ring_min_ratio = 0;
-  // double ring_max_ratio = 1;
-  // double ring_min;
-  // double ring_max;
+  double ring_scale = 1;
+  int ring_mode = IGNORE_RING;
+  double ring_rmin;
+  double ring_rmax;
   double draw_shape = 0;
   boolean guides_enabled = true;
   int inversion_mode = STANDARD;
@@ -478,11 +484,28 @@ public class InversionFunc extends VariationFunc {
         else {
           double split = pContext.random() * 1.1;
           if (split < 1) {
-            shape.getCurvePoint(theta, curve_point);
-            pVarTP.x += curve_point.x;
-            pVarTP.y += curve_point.y;
-            //pVarTP.z += curve_point.z;
-            // pVarTP.z += z0;
+            if (ring_mode == IGNORE_RING) {
+              shape.getCurvePoint(theta, curve_point);
+              pVarTP.x += curve_point.x;
+              pVarTP.y += curve_point.y;
+            }
+            else {
+              if (split < 0.5) {
+                shape.getCurvePoint(theta, curve_point);
+                pVarTP.x += curve_point.x;
+                pVarTP.y += curve_point.y;
+              }
+              else if (split < 0.75) {
+                // draw ring_rmin
+                pVarTP.x += ring_rmin * cos(theta);
+                pVarTP.y += ring_rmin * sin(theta);
+              }
+              else {
+                pVarTP.x += ring_rmax * cos(theta);
+                pVarTP.y += ring_rmax * sin(theta);
+                // draw ring_rmax
+              }
+            }
           }
           else {  // draw point at center of shape
             // pVarTP.x += x0;
@@ -539,6 +562,18 @@ public class InversionFunc extends VariationFunc {
       do_inversion = true;
     }
     
+    // if constraining to ring, then fruther restrict to:
+    //   if inside of curve radius, make sure is > ring_min (based on ring scale)
+    //   if outside of curve radius, make sure is < ring_max (based on inversion of ring_min)
+    if (do_inversion && (ring_mode != IGNORE_RING) && (ring_scale != 1)) {
+      if (ring_mode == INVERSION_INSIDE_RING_ONLY) {
+        do_inversion = (rin >= ring_rmin) && (rin <= ring_rmax);
+      }
+      else if (ring_mode == INVERSION_OUTSIDE_RING_ONLY) {
+        do_inversion = (rin <= ring_rmin) || (rin >= ring_rmax);
+      }
+    }
+
     if (do_inversion) {
       double num_scale = rcurve * rcurve;
       double denom_scale;
@@ -578,7 +613,8 @@ public class InversionFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     shape_rotation_radians = M_PI * rotation_pi_fraction;
-    // ring_min = ring_min_ratio * r;
+
+    
     // ring_max = ring_max_ratio * r;
     if (shape_mode == CIRCLE) {
       shape = new Circle();
@@ -597,6 +633,41 @@ public class InversionFunc extends VariationFunc {
     }
     else if (shape_mode == SUPERSHAPE) {
       shape = new SuperShape();
+    }
+    
+    if (ring_scale <= scale) {
+      ring_rmin = ring_scale * scale;
+      // ring_rmax = ring_rmin * (scale*scale) / (ring_rmin * ring_rmin);
+      ring_rmax =  (scale*scale) / ring_rmin;
+    }
+    else {
+      ring_rmax = ring_scale * scale;
+      // ring_rmin = ring_rmax * (scale*scale) / (ring_rmax * ring_rmax);
+      ring_rmin = (scale*scale) / ring_rmax;
+    }
+    // System.out.println("ring rmin: " + ring_rmin);
+    // System.out.println("ring rmax: " + ring_rmax);
+    
+    if (shape_mode == CIRCLE && f != 0) {
+      System.out.println("testing");
+      // hacking for calc of intersecting angles, 
+      // f = distance between centers
+      // radius of circle 1 = scale
+      // assume radius of circle 2 = 1
+      double D = f;
+      double P = scale;
+      double Q = 1;
+      // θ = sin-1[ sqrt(2P^2Q^2 + 2P^2D^2 + 2Q^2D^2 - P^44 - Q^4 - D^4)/(2PQ) ]
+      double theta = asin(sqrt(2*P*P*Q*Q + 2*P*P*D*D + 2*Q*Q*D*D - P*P*P*P - Q*Q*Q*Q - D*D*D*D)/(2*P*Q));
+      double tdegrees = Math.toDegrees(theta);
+      double rho = 180 - tdegrees;
+      double submult = M_PI / theta;
+      // and the angle of intersection by the formula
+      // φ = 180° - θ
+      System.out.println("theta = " + theta);
+      System.out.println("degrees = " + tdegrees);
+      System.out.println("rho deg = " + rho);
+      System.out.println("submult = " + submult);
     }
   }
 
@@ -618,7 +689,7 @@ public class InversionFunc extends VariationFunc {
       shape_mode, 
       zmode ? 1 : 0, 
       inversion_mode, hide_uninverted ? 1 : 0, 
-      // ring_min_ratio, ring_max_ratio, 
+      ring_mode, ring_scale, 
       p, p2, draw_shape, passthrough, guides_enabled ? 1 : 0, 
       a, b, c, d, e, f, 
       x0, y0, z0, 
@@ -635,19 +706,17 @@ public class InversionFunc extends VariationFunc {
       rotation_pi_fraction = pValue;
     }
     else if (PARAM_SHAPE.equalsIgnoreCase(pName)) {
-      shape_mode = (int)floor(pValue);
+      shape_mode = (int)pValue;
     }
-        else if (PARAM_ZMODE.equalsIgnoreCase(pName)) {
+    else if (PARAM_ZMODE.equalsIgnoreCase(pName)) {
       zmode = (pValue == 1) ? true : false;
     }
-   /*
-    else if (PARAM_RING_MIN.equalsIgnoreCase(pName)) {
-      ring_min_ratio = pValue;
+    else if (PARAM_RING_MODE.equalsIgnoreCase(pName)) {
+      ring_mode = (int)pValue;
     }
-    else if (PARAM_RING_MAX.equalsIgnoreCase(pName)) {
-      ring_max_ratio = pValue;
+    else if (PARAM_RING_SCALE.equalsIgnoreCase(pName)) {
+      ring_scale = pValue;
     }
-    */
     else if (PARAM_P.equalsIgnoreCase(pName)) {
       p = pValue;
     }
