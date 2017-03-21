@@ -480,6 +480,13 @@ public class VariationFuncList {
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
     registerVariationFunc(DLA3DWFFunc.class);
 
+    registerVariationFunc(Waves2RadialFunc.class);
+    registerVariationFunc(CirclesplitFunc.class);
+    registerVariationFunc(LogTile2Func.class);
+    registerVariationFunc(MobiqFunc.class);
+    registerVariationFunc(TileHlpFunc.class);
+    registerVariationFunc(SplipticBSFunc.class);
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
