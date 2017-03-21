@@ -42,8 +42,8 @@ public class TaurusDOFBlurShape extends AbstractDOFBlurShape {
     d.assign(pSrc);
     double fade = doFade();
     double dr = Math.abs(camDOF_10 * pZDist * scale * fade) * 0.25;
-    s.x = (2.0 * M_PI - 4.0 * Math.random() * M_PI) * fade;
-    s.y = (2.0 * M_PI - 4.0 * Math.random() * M_PI) * fade;
+    s.x = (2.0 * M_PI - 4.0 * randGen.random() * M_PI) * fade;
+    s.y = (2.0 * M_PI - 4.0 * randGen.random() * M_PI) * fade;
     fnc.transform(flameTransformationContext, xform, s, d, dr);
     rotate(pSrc, d);
     pDest.x = d.x / pZR;
