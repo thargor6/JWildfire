@@ -521,6 +521,9 @@ public class FlameRenderer {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
+
+    raster.applyDE(new LogScaleCalculator(flame, pImage.getImageWidth(), pImage.getImageHeight(), flame.getSpatialOversampling()));
+
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }

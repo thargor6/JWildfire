@@ -201,6 +201,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.saturationREd, false);
     enableControl(data.gammaREd, false);
     enableControl(data.gammaThresholdREd, false);
+    enableControl(data.lowDensityBrightnessREd, false);
+    enableControl(data.balanceRedREd, false);
+    enableControl(data.balanceGreenREd, false);
+    enableControl(data.balanceBlueREd, false);
 
     enableControl(data.dofDOFShapeCmb, false);
     setupDOFParamsControls((DOFBlurShapeType) data.dofDOFShapeCmb.getSelectedItem());
@@ -419,6 +423,22 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
+  public void lowDensityBrightnessSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceRedSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceGreenSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceBlueSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
   public void saturationSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
@@ -434,6 +454,22 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void vibrancyREd_changed() {
     flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void lowDensityBrightnessREd_changed() {
+    flameTextFieldChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceRedREd_changed() {
+    flameTextFieldChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceGreenREd_changed() {
+    flameTextFieldChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+  }
+
+  public void balanceBlueREd_changed() {
+    flameTextFieldChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
   }
 
   public void saturationREd_changed() {
@@ -684,6 +720,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
+
+      data.lowDensityBrightnessREd.setText(Tools.doubleToString(getCurrFlame().getLowDensityBrightness()));
+      data.lowDensityBrightnessSlider.setValue(Tools.FTOI(getCurrFlame().getLowDensityBrightness() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.balanceRedREd.setText(Tools.doubleToString(getCurrFlame().getBalanceRed()));
+      data.balanceRedSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceRed() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.balanceGreenREd.setText(Tools.doubleToString(getCurrFlame().getBalanceGreen()));
+      data.balanceGreenSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceGreen() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
+      data.balanceBlueREd.setText(Tools.doubleToString(getCurrFlame().getBalanceBlue()));
+      data.balanceBlueSlider.setValue(Tools.FTOI(getCurrFlame().getBalanceBlue() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
 
       data.tinaSpatialOversamplingREd.setText(String.valueOf(getCurrFlame().getSpatialOversampling()));
       data.tinaSpatialOversamplingSlider.setValue(getCurrFlame().getSpatialOversampling());

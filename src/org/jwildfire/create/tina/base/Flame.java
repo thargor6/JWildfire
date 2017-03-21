@@ -158,6 +158,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double vibrancy;
   private final MotionCurve vibrancyCurve = new MotionCurve();
+
+  private double lowDensityBrightness;
+  private double balanceRed;
+  private double balanceGreen;
+  private double balanceBlue;
+
   private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
@@ -300,6 +306,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
     foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
+    lowDensityBrightness = 5.0;
+    balanceRed = 1.16;
+    balanceGreen = 0.9;
+    balanceBlue = 0.95;
   }
 
   public void resetBokehSettings() {
@@ -691,6 +701,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     contrastCurve.assign(pFlame.contrastCurve);
     vibrancy = pFlame.vibrancy;
     vibrancyCurve.assign(pFlame.vibrancyCurve);
+    lowDensityBrightness = pFlame.lowDensityBrightness;
+    balanceRed = pFlame.balanceRed;
+    balanceGreen = pFlame.balanceGreen;
+    balanceBlue = pFlame.balanceBlue;
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
@@ -804,11 +818,15 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
+        (fabs(lowDensityBrightness - pFlame.lowDensityBrightness) > EPSILON) || (fabs(balanceRed - pFlame.balanceRed) > EPSILON) ||
+        (fabs(balanceGreen - pFlame.balanceGreen) > EPSILON) || (fabs(balanceBlue - pFlame.balanceBlue) > EPSILON) ||
         (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
-        (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
+            (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile)))
+        ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
-        (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
+            (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile)))
+        ||
         !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
@@ -1555,6 +1573,38 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setZBufferScale(double zBufferScale) {
     this.zBufferScale = zBufferScale;
+  }
+
+  public double getLowDensityBrightness() {
+    return lowDensityBrightness;
+  }
+
+  public void setLowDensityBrightness(double lowDensityBrightness) {
+    this.lowDensityBrightness = lowDensityBrightness;
+  }
+
+  public double getBalanceRed() {
+    return balanceRed;
+  }
+
+  public void setBalanceRed(double balanceRed) {
+    this.balanceRed = balanceRed;
+  }
+
+  public double getBalanceGreen() {
+    return balanceGreen;
+  }
+
+  public void setBalanceGreen(double balanceGreen) {
+    this.balanceGreen = balanceGreen;
+  }
+
+  public double getBalanceBlue() {
+    return balanceBlue;
+  }
+
+  public void setBalanceBlue(double balanceBlue) {
+    this.balanceBlue = balanceBlue;
   }
 
 }

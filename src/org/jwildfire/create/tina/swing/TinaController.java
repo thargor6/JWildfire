@@ -391,6 +391,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.gammaSlider = parameterObject.pGammaSlider;
     data.vibrancyREd = parameterObject.pVibrancyREd;
     data.vibrancySlider = parameterObject.pVibrancySlider;
+    data.lowDensityBrightnessREd = parameterObject.lowDensityBrightnessREd;
+    data.lowDensityBrightnessSlider = parameterObject.lowDensityBrightnessSlider;
+    data.balanceRedREd = parameterObject.balanceRedREd;
+    data.balanceRedSlider = parameterObject.balanceRedSlider;
+    data.balanceGreenREd = parameterObject.balanceGreenREd;
+    data.balanceGreenSlider = parameterObject.balanceGreenSlider;
+    data.balanceBlueREd = parameterObject.balanceBlueREd;
+    data.balanceBlueSlider = parameterObject.balanceBlueSlider;
     data.saturationREd = parameterObject.saturationREd;
     data.saturationSlider = parameterObject.saturationSlider;
     data.filterRadiusREd = parameterObject.pFilterRadiusREd;
@@ -1042,7 +1050,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             boolean shiftPressed = e.isShiftDown();
             boolean ctrlPressed = e.isControlDown();
             switch (e.getKeyCode()) {
-            // left
+              // left
               case 37:
                 if (flamePanel.getConfig().getMouseDragOperation() == MouseDragOperation.MOVE_TRIANGLE) {
                   if (altPressed) {

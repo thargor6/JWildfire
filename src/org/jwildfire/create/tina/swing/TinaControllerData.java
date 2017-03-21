@@ -96,6 +96,16 @@ public class TinaControllerData {
   public JSlider gammaSlider;
   public JWFNumberField vibrancyREd;
   public JSlider vibrancySlider;
+
+  public JWFNumberField lowDensityBrightnessREd;
+  public JSlider lowDensityBrightnessSlider;
+  public JWFNumberField balanceRedREd;
+  public JSlider balanceRedSlider;
+  public JWFNumberField balanceGreenREd;
+  public JSlider balanceGreenSlider;
+  public JWFNumberField balanceBlueREd;
+  public JSlider balanceBlueSlider;
+
   public JWFNumberField saturationREd;
   public JSlider saturationSlider;
   public JWFNumberField filterRadiusREd;

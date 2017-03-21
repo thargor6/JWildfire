@@ -188,6 +188,11 @@ public class AbstractFlameReader {
   public static final String CURVE_ATTR_X = "x";
   public static final String CURVE_ATTR_Y = "y";
 
+  public static final String ATTR_LOW_DENSITY_BRIGHTNESS = "low_density_brightness";
+  public static final String ATTR_BALANCING_RED = "balancing_red";
+  public static final String ATTR_BALANCING_GREEN = "balancing_green";
+  public static final String ATTR_BALANCING_BLUE = "balancing_blue";
+
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
   }
@@ -302,6 +307,19 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_VIBRANCY)) != null) {
       pFlame.setVibrancy(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_LOW_DENSITY_BRIGHTNESS)) != null) {
+      pFlame.setLowDensityBrightness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_RED)) != null) {
+      pFlame.setBalanceRed(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_GREEN)) != null) {
+      pFlame.setBalanceGreen(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_BLUE)) != null) {
+      pFlame.setBalanceBlue(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_CONTRAST)) != null) {
       pFlame.setContrast(Double.parseDouble(hs));
     }

@@ -87,6 +87,14 @@ public class TinaControllerParameter {
   public JSlider pGammaSlider;
   public JWFNumberField pVibrancyREd;
   public JSlider pVibrancySlider;
+  public JWFNumberField lowDensityBrightnessREd;
+  public JSlider lowDensityBrightnessSlider;
+  public JWFNumberField balanceRedREd;
+  public JSlider balanceRedSlider;
+  public JWFNumberField balanceGreenREd;
+  public JSlider balanceGreenSlider;
+  public JWFNumberField balanceBlueREd;
+  public JSlider balanceBlueSlider;
   public JWFNumberField saturationREd;
   public JSlider saturationSlider;
   public JWFNumberField pFilterRadiusREd;
@@ -1091,7 +1099,9 @@ public class TinaControllerParameter {
       JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl, JButton resetPostBokehSettingsBtn, JWFNumberField postBokehIntensityREd, JSlider postBokehIntensitySlider,
       JWFNumberField postBokehBrightnessREd, JSlider postBokehBrightnessSlider, JWFNumberField postBokehSizeREd, JSlider postBokehSizeSlider,
       JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb,
-      JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb) {
+      JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb,
+      JWFNumberField lowDensityBrightnessREd, JSlider lowDensityBrightnessSlider, JWFNumberField balanceRedREd, JSlider balanceRedSlider,
+      JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1281,6 +1291,14 @@ public class TinaControllerParameter {
     this.postBokehFilterKernelCmb = postBokehFilterKernelCmb;
     this.gpuQualityProfileCmb = gpuQualityProfileCmb;
     this.gpuResolutionProfileCmb = gpuResolutionProfileCmb;
+    this.lowDensityBrightnessREd = lowDensityBrightnessREd;
+    this.lowDensityBrightnessSlider = lowDensityBrightnessSlider;
+    this.balanceRedREd = balanceRedREd;
+    this.balanceRedSlider = balanceRedSlider;
+    this.balanceGreenREd = balanceGreenREd;
+    this.balanceGreenSlider = balanceGreenSlider;
+    this.balanceBlueREd = balanceBlueREd;
+    this.balanceBlueSlider = balanceBlueSlider;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

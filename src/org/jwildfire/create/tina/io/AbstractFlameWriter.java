@@ -260,6 +260,11 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("new_dof", "1"));
     }
 
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_LOW_DENSITY_BRIGHTNESS, pFlame.getLowDensityBrightness()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_RED, pFlame.getBalanceRed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_GREEN, pFlame.getBalanceGreen()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_BLUE, pFlame.getBalanceBlue()));
+
     attrList.add(xb.createAttr(ATTR_CAM_DOF_SHAPE, pFlame.getCamDOFShape().toString()));
     attrList.add(xb.createAttr(ATTR_CAM_DOF_SCALE, pFlame.getCamDOFScale()));
     attrList.add(xb.createAttr(ATTR_CAM_DOF_ROTATE, pFlame.getCamDOFAngle()));
