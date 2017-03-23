@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -185,9 +185,22 @@ public class FlameMorphService {
     res.setCamRoll(morphValue(pFlame1.getCamRoll(), pFlame2.getCamRoll(), fScl));
     res.setFocusZ(morphValue(pFlame1.getFocusZ(), pFlame2.getFocusZ(), fScl));
     res.setCamZoom(morphValue(pFlame1.getCamZoom(), pFlame2.getCamZoom(), fScl));
-    res.setBGColorRed(morphColorValue(pFlame1.getBGColorRed(), pFlame2.getBGColorRed(), fScl));
-    res.setBGColorGreen(morphColorValue(pFlame1.getBGColorGreen(), pFlame2.getBGColorGreen(), fScl));
-    res.setBGColorBlue(morphColorValue(pFlame1.getBGColorBlue(), pFlame2.getBGColorBlue(), fScl));
+    res.setBgColorRed(morphColorValue(pFlame1.getBgColorRed(), pFlame2.getBgColorRed(), fScl));
+    res.setBgColorGreen(morphColorValue(pFlame1.getBgColorGreen(), pFlame2.getBgColorGreen(), fScl));
+    res.setBgColorBlue(morphColorValue(pFlame1.getBgColorBlue(), pFlame2.getBgColorBlue(), fScl));
+    res.setBgColorType(pFlame2.getBgColorType());
+    res.setBgColorULRed(morphColorValue(pFlame1.getBgColorULRed(), pFlame2.getBgColorULRed(), fScl));
+    res.setBgColorULGreen(morphColorValue(pFlame1.getBgColorULGreen(), pFlame2.getBgColorULGreen(), fScl));
+    res.setBgColorULBlue(morphColorValue(pFlame1.getBgColorULBlue(), pFlame2.getBgColorULBlue(), fScl));
+    res.setBgColorURRed(morphColorValue(pFlame1.getBgColorURRed(), pFlame2.getBgColorURRed(), fScl));
+    res.setBgColorURGreen(morphColorValue(pFlame1.getBgColorURGreen(), pFlame2.getBgColorURGreen(), fScl));
+    res.setBgColorURBlue(morphColorValue(pFlame1.getBgColorURBlue(), pFlame2.getBgColorURBlue(), fScl));
+    res.setBgColorLLRed(morphColorValue(pFlame1.getBgColorLLRed(), pFlame2.getBgColorLLRed(), fScl));
+    res.setBgColorLLGreen(morphColorValue(pFlame1.getBgColorLLGreen(), pFlame2.getBgColorLLGreen(), fScl));
+    res.setBgColorLLBlue(morphColorValue(pFlame1.getBgColorLLBlue(), pFlame2.getBgColorLLBlue(), fScl));
+    res.setBgColorLRRed(morphColorValue(pFlame1.getBgColorLRRed(), pFlame2.getBgColorLRRed(), fScl));
+    res.setBgColorLRGreen(morphColorValue(pFlame1.getBgColorLRGreen(), pFlame2.getBgColorLRGreen(), fScl));
+    res.setBgColorLRBlue(morphColorValue(pFlame1.getBgColorLRBlue(), pFlame2.getBgColorLRBlue(), fScl));
     res.setBrightness(morphValue(pFlame1.getBrightness(), pFlame2.getBrightness(), fScl));
     res.setCentreX(morphValue(pFlame1.getCentreX(), pFlame2.getCentreX(), fScl));
     res.setCentreY(morphValue(pFlame1.getCentreY(), pFlame2.getCentreY(), fScl));

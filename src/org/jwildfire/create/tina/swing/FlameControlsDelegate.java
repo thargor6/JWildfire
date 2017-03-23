@@ -34,6 +34,7 @@ import javax.swing.event.ChangeEvent;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
@@ -187,6 +188,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.camPosZREd, false);
 
     enableControl(data.bgTransparencyCBx, false);
+    enableControl(data.backgroundColorTypeCmb, false);
     enableControl(data.foregroundOpacityField, false);
 
     enableControl(data.motionBlurLengthField, false);
@@ -651,6 +653,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.postSymmetryCentreYREd, !axisSymmEnabled && !pointSymmEnabled);
   }
 
+  public void enableBGColorUI() {
+    boolean enabled = getCurrFlame() != null && BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType());
+    data.backgroundColorURIndicatorBtn.setEnabled(enabled);
+    data.backgroundColorLLIndicatorBtn.setEnabled(enabled);
+    data.backgroundColorLRIndicatorBtn.setEnabled(enabled);
+  }
+
   public void enableDEFilterUI() {
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
@@ -745,6 +754,8 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.gammaThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getGammaThreshold() * TinaController.SLIDER_SCALE_GAMMA_THRESHOLD));
 
       data.bgTransparencyCBx.setSelected(getCurrFlame().isBGTransparency());
+      data.backgroundColorTypeCmb.setSelectedItem(getCurrFlame().getBgColorType());
+      enableBGColorUI();
 
       data.xFormAntialiasAmountREd.setText(Tools.doubleToString(getCurrFlame().getAntialiasAmount()));
       data.xFormAntialiasAmountSlider.setValue(Tools.FTOI(getCurrFlame().getAntialiasAmount() * TinaController.SLIDER_SCALE_COLOR));

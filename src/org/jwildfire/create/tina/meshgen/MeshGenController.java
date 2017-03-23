@@ -49,6 +49,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.eden.sunflow.ExampleScenes;
 import org.jwildfire.create.eden.sunflow.SunflowSceneBuilder;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
@@ -580,9 +581,10 @@ public class MeshGenController {
     res.setCamPosY(0.0);
     res.setCamPosZ(0.0);
     res.setStereo3dMode(Stereo3dMode.NONE);
-    res.setBGColorRed(0);
-    res.setBGColorGreen(0);
-    res.setBGColorBlue(0);
+    res.setBgColorType(BGColorType.SINGLE_COLOR);
+    res.setBgColorRed(0);
+    res.setBgColorGreen(0);
+    res.setBgColorBlue(0);
     res.setBGTransparency(false);
     res.setGamma(3.0);
     // hack to force 3d-projection mode to be on

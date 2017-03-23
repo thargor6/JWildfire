@@ -73,6 +73,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.iflames.swing.JInternalFrameFlameMessageHelper;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
@@ -745,7 +746,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.scriptRunBtn = parameterObject.scriptRunBtn;
     data.scriptEditBtn = parameterObject.scriptEditBtn;
     data.gradientLibTree = parameterObject.gradientLibTree;
+    data.backgroundColorTypeCmb = parameterObject.backgroundColorTypeCmb;
     data.backgroundColorIndicatorBtn = parameterObject.backgroundColorIndicatorBtn;
+    data.backgroundColorURIndicatorBtn = parameterObject.backgroundColorURIndicatorBtn;
+    data.backgroundColorLLIndicatorBtn = parameterObject.backgroundColorLLIndicatorBtn;
+    data.backgroundColorLRIndicatorBtn = parameterObject.backgroundColorLRIndicatorBtn;
     data.toggleDrawGridButton = parameterObject.toggleDrawGridButton;
     data.toggleDrawGuidesButton = parameterObject.toggleDrawGuidesButton;
     data.triangleStyleCmb = parameterObject.triangleStyleCmb;
@@ -1331,7 +1336,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     try {
       flameControls.refreshFlameValues();
 
-      refreshBGColorIndicator();
+      refreshBGColorIndicators();
 
       data.affinePreserveZButton.setSelected(getCurrFlame().isPreserveZ());
 
@@ -1352,6 +1357,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       noRefresh = false;
     }
+  }
+
+  private void refreshBGColorIndicators() {
+    refreshBGColorIndicator();
+    refreshBGColorURIndicator();
+    refreshBGColorLLIndicator();
+    refreshBGColorLRIndicator();
   }
 
   public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
@@ -4670,6 +4682,21 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void backgroundColorTypeCmb_changed() {
+    if (!noRefresh) {
+      Flame flame = getCurrFlame();
+      if (flame != null && !flame.getBgColorType().equals(data.backgroundColorTypeCmb.getSelectedItem())) {
+        saveUndoPoint();
+        flame.setBgColorType(((BGColorType) data.backgroundColorTypeCmb.getSelectedItem()));
+
+        System.out.println("####" + flame.getBgColorType());
+        getFlameControls().enableBGColorUI();
+        refreshBGColorIndicators();
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
+  }
+
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
@@ -4946,20 +4973,105 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
       String title = rm.getString("ColorPropertyEditor.title");
 
-      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()));
+      if (BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType())) {
+        Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBgColorULRed(), getCurrFlame().getBgColorULGreen(), getCurrFlame().getBgColorULBlue()));
+        if (selectedColor != null) {
+          getCurrFlame().setBgColorULRed(selectedColor.getRed());
+          getCurrFlame().setBgColorULGreen(selectedColor.getGreen());
+          getCurrFlame().setBgColorULBlue(selectedColor.getBlue());
+          refreshFlameImage(true, false, 1, true, false);
+          refreshBGColorIndicator();
+        }
+      }
+      else {
+        Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBgColorRed(), getCurrFlame().getBgColorGreen(), getCurrFlame().getBgColorBlue()));
+        if (selectedColor != null) {
+          getCurrFlame().setBgColorRed(selectedColor.getRed());
+          getCurrFlame().setBgColorGreen(selectedColor.getGreen());
+          getCurrFlame().setBgColorBlue(selectedColor.getBlue());
+          refreshFlameImage(true, false, 1, true, false);
+          refreshBGColorIndicator();
+        }
+      }
+    }
+  }
+
+  public void backgroundColorURBtn_clicked() {
+    if (getCurrFlame() != null) {
+      undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBgColorURRed(), getCurrFlame().getBgColorURGreen(), getCurrFlame().getBgColorURBlue()));
       if (selectedColor != null) {
-        getCurrFlame().setBGColorRed(selectedColor.getRed());
-        getCurrFlame().setBGColorGreen(selectedColor.getGreen());
-        getCurrFlame().setBGColorBlue(selectedColor.getBlue());
+        getCurrFlame().setBgColorURRed(selectedColor.getRed());
+        getCurrFlame().setBgColorURGreen(selectedColor.getGreen());
+        getCurrFlame().setBgColorURBlue(selectedColor.getBlue());
         refreshFlameImage(true, false, 1, true, false);
-        refreshBGColorIndicator();
+        refreshBGColorURIndicator();
+      }
+    }
+  }
+
+  public void backgroundColorLLBtn_clicked() {
+    if (getCurrFlame() != null) {
+      undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBgColorLLRed(), getCurrFlame().getBgColorLLGreen(), getCurrFlame().getBgColorLLBlue()));
+      if (selectedColor != null) {
+        getCurrFlame().setBgColorLLRed(selectedColor.getRed());
+        getCurrFlame().setBgColorLLGreen(selectedColor.getGreen());
+        getCurrFlame().setBgColorLLBlue(selectedColor.getBlue());
+        refreshFlameImage(true, false, 1, true, false);
+        refreshBGColorLLIndicator();
+      }
+    }
+  }
+
+  public void backgroundColorLRBtn_clicked() {
+    if (getCurrFlame() != null) {
+      undoManager.saveUndoPoint(getCurrFlame());
+
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getBgColorLRRed(), getCurrFlame().getBgColorLRGreen(), getCurrFlame().getBgColorLRBlue()));
+      if (selectedColor != null) {
+        getCurrFlame().setBgColorLRRed(selectedColor.getRed());
+        getCurrFlame().setBgColorLRGreen(selectedColor.getGreen());
+        getCurrFlame().setBgColorLRBlue(selectedColor.getBlue());
+        refreshFlameImage(true, false, 1, true, false);
+        refreshBGColorLRIndicator();
       }
     }
   }
 
   private void refreshBGColorIndicator() {
-    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getBGColorRed(), getCurrFlame().getBGColorGreen(), getCurrFlame().getBGColorBlue()) : Color.BLACK;
+    Color color = getCurrFlame() != null ? BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType()) ? new Color(getCurrFlame().getBgColorULRed(), getCurrFlame().getBgColorULGreen(), getCurrFlame().getBgColorULBlue())
+        : new Color(getCurrFlame().getBgColorRed(), getCurrFlame().getBgColorGreen(), getCurrFlame().getBgColorBlue()) : Color.BLACK;
     data.backgroundColorIndicatorBtn.setBackground(color);
+  }
+
+  private void refreshBGColorURIndicator() {
+    Color color = getCurrFlame() != null ? BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType()) ? new Color(getCurrFlame().getBgColorURRed(), getCurrFlame().getBgColorURGreen(), getCurrFlame().getBgColorURBlue())
+        : Color.BLACK : Color.BLACK;
+    data.backgroundColorURIndicatorBtn.setBackground(color);
+  }
+
+  private void refreshBGColorLLIndicator() {
+    Color color = getCurrFlame() != null ? BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType()) ? new Color(getCurrFlame().getBgColorLLRed(), getCurrFlame().getBgColorLLGreen(), getCurrFlame().getBgColorLLBlue())
+        : Color.BLACK : Color.BLACK;
+    data.backgroundColorLLIndicatorBtn.setBackground(color);
+  }
+
+  private void refreshBGColorLRIndicator() {
+    Color color = getCurrFlame() != null ? BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType()) ? new Color(getCurrFlame().getBgColorLRRed(), getCurrFlame().getBgColorLRGreen(), getCurrFlame().getBgColorLRBlue())
+        : Color.BLACK : Color.BLACK;
+    data.backgroundColorLRIndicatorBtn.setBackground(color);
   }
 
   private List<MutationType> createRandomMutationTypes() {

@@ -350,7 +350,11 @@ public class TinaControllerParameter {
   public JButton gradientLibraryNewFolderBtn;
   public JButton gradientLibraryRenameFolderBtn;
   public JList gradientsList;
+  public JComboBox backgroundColorTypeCmb;
   public JButton backgroundColorIndicatorBtn;
+  public JButton backgroundColorURIndicatorBtn;
+  public JButton backgroundColorLLIndicatorBtn;
+  public JButton backgroundColorLRIndicatorBtn;
   public JButton randomizeButton;
   public JTree flameBrowserTree;
   public JPanel flameBrowersImagesPnl;
@@ -1101,7 +1105,8 @@ public class TinaControllerParameter {
       JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb,
       JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb,
       JWFNumberField lowDensityBrightnessREd, JSlider lowDensityBrightnessSlider, JWFNumberField balanceRedREd, JSlider balanceRedSlider,
-      JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider) {
+      JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider,
+      JButton backgroundColorURIndicatorBtn, JButton backgroundColorLLIndicatorBtn, JButton backgroundColorLRIndicatorBtn, JComboBox backgroundColorTypeCmb) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1299,6 +1304,10 @@ public class TinaControllerParameter {
     this.balanceGreenSlider = balanceGreenSlider;
     this.balanceBlueREd = balanceBlueREd;
     this.balanceBlueSlider = balanceBlueSlider;
+    this.backgroundColorURIndicatorBtn = backgroundColorURIndicatorBtn;
+    this.backgroundColorLLIndicatorBtn = backgroundColorLLIndicatorBtn;
+    this.backgroundColorLRIndicatorBtn = backgroundColorLRIndicatorBtn;
+    this.backgroundColorTypeCmb = backgroundColorTypeCmb;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

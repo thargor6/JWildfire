@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBColor;
@@ -120,9 +121,18 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
   @Override
   protected Flame postProcessFlameBeforeRendering(RandomFlameGeneratorState pState, Flame pFlame) {
     if (Math.random() < 0.42) {
-      pFlame.setBGColorRed(0);
-      pFlame.setBGColorGreen(0);
-      pFlame.setBGColorBlue(0);
+      if (Math.random() < 0.5) {
+        pFlame.setBgColorType(BGColorType.SINGLE_COLOR);
+        pFlame.setBgColorRed(0);
+        pFlame.setBgColorGreen(0);
+        pFlame.setBgColorBlue(0);
+      }
+      else {
+        pFlame.setBgColorType(BGColorType.GRADIENT_2X2);
+        pFlame.setBgColorRed((int) (Math.random() * 64));
+        pFlame.setBgColorGreen((int) (Math.random() * 64));
+        pFlame.setBgColorBlue((int) (Math.random() * 64));
+      }
       List<RGBColor> colors = new ArrayList<RGBColor>();
       colors.add(new RGBColor(255, 255, 255));
       RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true);
@@ -131,9 +141,18 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
       }
     }
     else {
-      pFlame.setBGColorRed(255);
-      pFlame.setBGColorGreen(255);
-      pFlame.setBGColorBlue(255);
+      if (Math.random() < 0.5) {
+        pFlame.setBgColorType(BGColorType.SINGLE_COLOR);
+        pFlame.setBgColorRed(255);
+        pFlame.setBgColorGreen(255);
+        pFlame.setBgColorBlue(255);
+      }
+      else {
+        pFlame.setBgColorType(BGColorType.GRADIENT_2X2);
+        pFlame.setBgColorRed((int) (255 - Math.random() * 64));
+        pFlame.setBgColorGreen((int) (255 - Math.random() * 64));
+        pFlame.setBgColorBlue((int) (255 - Math.random() * 64));
+      }
       List<RGBColor> colors = new ArrayList<RGBColor>();
       colors.add(new RGBColor(0, 0, 0));
       RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true);

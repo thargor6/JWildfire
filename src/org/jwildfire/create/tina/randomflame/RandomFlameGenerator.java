@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.randomflame;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 
@@ -39,9 +40,10 @@ public abstract class RandomFlameGenerator {
     if (flame.getName() == null || flame.getName().length() == 0)
       flame.setName(this.getName() + " - " + flame.hashCode());
     flame.setBGTransparency(pPrefs.isTinaDefaultBGTransparency());
-    flame.setBGColorRed(pPrefs.getTinaRandomBatchBGColorRed());
-    flame.setBGColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
-    flame.setBGColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
+    flame.setBgColorType(BGColorType.SINGLE_COLOR);
+    flame.setBgColorRed(pPrefs.getTinaRandomBatchBGColorRed());
+    flame.setBgColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
+    flame.setBgColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
     return flame;
   }
 

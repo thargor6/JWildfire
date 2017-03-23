@@ -282,6 +282,10 @@ public class TinaControllerData {
   public JButton scriptEditBtn;
   public JTree gradientLibTree;
   public JButton backgroundColorIndicatorBtn;
+  public JButton backgroundColorURIndicatorBtn;
+  public JButton backgroundColorLLIndicatorBtn;
+  public JButton backgroundColorLRIndicatorBtn;
+  public JComboBox backgroundColorTypeCmb;
   public JWFNumberField layerWeightEd;
   public JButton layerAddBtn;
   public JButton layerDuplicateBtn;

@@ -461,7 +461,6 @@ public class FlameRenderer {
         if (renderScale > 0) {
           res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);
         }
-        res.getImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         if (flame.getBGImageFilename().length() > 0) {
           try {
             res.getImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
@@ -470,9 +469,12 @@ public class FlameRenderer {
             ex.printStackTrace();
           }
         }
+        else {
+          new FlameBGColorHandler(flame).fillBackground(res.getImage());
+        }
       }
       if (renderHDR) {
-        res.getHDRImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        res.getHDRImage().fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
         try {
           res.getHDRImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
         }

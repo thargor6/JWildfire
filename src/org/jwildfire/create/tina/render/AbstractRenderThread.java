@@ -59,9 +59,9 @@ public abstract class AbstractRenderThread implements Runnable {
     sliceThicknessSamples = pSliceThicknessSamples;
     prefs = pPrefs;
     Flame flame = pRenderPackets.get(0).getFlame();
-    bgRed = flame.getBGColorRed();
-    bgGreen = flame.getBGColorGreen();
-    bgBlue = flame.getBGColorBlue();
+    bgRed = flame.getBgColorRed();
+    bgGreen = flame.getBgColorGreen();
+    bgBlue = flame.getBgColorBlue();
     bgImagefile = flame.getBGImageFilename();
     oversample = flame.getSpatialOversampling();
     ctx = new FlameTransformationContext(pRenderer, randGen, flame.getFrame());

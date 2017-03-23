@@ -133,12 +133,28 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean postNoiseFilter;
   private double postNoiseFilterThreshold;
   private double foregroundOpacity;
+
+  private BGColorType bgColorType = BGColorType.GRADIENT_2X2;
   @AnimAware
   private int bgColorRed;
   @AnimAware
   private int bgColorGreen;
   @AnimAware
   private int bgColorBlue;
+
+  private int bgColorULRed;
+  private int bgColorULGreen;
+  private int bgColorULBlue;
+  private int bgColorURRed;
+  private int bgColorURGreen;
+  private int bgColorURBlue;
+  private int bgColorLLRed;
+  private int bgColorLLGreen;
+  private int bgColorLLBlue;
+  private int bgColorLRRed;
+  private int bgColorLRGreen;
+  private int bgColorLRBlue;
+
   private double gamma;
   private final MotionCurve gammaCurve = new MotionCurve();
   private double gammaThreshold;
@@ -302,14 +318,16 @@ public class Flame implements Assignable<Flame>, Serializable {
     gamma = 4.0;
     gammaThreshold = 0.01;
     vibrancy = 1;
+    bgColorType = BGColorType.SINGLE_COLOR;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
+    bgColorULRed = bgColorULGreen = bgColorULBlue = bgColorURRed = bgColorURGreen = bgColorURBlue = bgColorLLRed = bgColorLLGreen = bgColorLLBlue = bgColorLRRed = bgColorLRGreen = bgColorLRBlue = 0;
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
     foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
-    lowDensityBrightness = 5.0;
-    balanceRed = 1.16;
-    balanceGreen = 0.9;
-    balanceBlue = 0.95;
+    lowDensityBrightness = 0.5;
+    balanceRed = 1.0;
+    balanceGreen = 1.0;
+    balanceBlue = 1.0;
   }
 
   public void resetBokehSettings() {
@@ -507,27 +525,27 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.camZoom = camZoom;
   }
 
-  public int getBGColorRed() {
+  public int getBgColorRed() {
     return bgColorRed;
   }
 
-  public void setBGColorRed(int bgColorRed) {
+  public void setBgColorRed(int bgColorRed) {
     this.bgColorRed = bgColorRed;
   }
 
-  public int getBGColorGreen() {
+  public int getBgColorGreen() {
     return bgColorGreen;
   }
 
-  public void setBGColorGreen(int bgColorGreen) {
+  public void setBgColorGreen(int bgColorGreen) {
     this.bgColorGreen = bgColorGreen;
   }
 
-  public int getBGColorBlue() {
+  public int getBgColorBlue() {
     return bgColorBlue;
   }
 
-  public void setBGColorBlue(int bgColorBlue) {
+  public void setBgColorBlue(int bgColorBlue) {
     this.bgColorBlue = bgColorBlue;
   }
 
@@ -685,6 +703,19 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgColorRed = pFlame.bgColorRed;
     bgColorGreen = pFlame.bgColorGreen;
     bgColorBlue = pFlame.bgColorBlue;
+    bgColorType = pFlame.bgColorType;
+    bgColorULRed = pFlame.bgColorULRed;
+    bgColorULGreen = pFlame.bgColorULGreen;
+    bgColorULBlue = pFlame.bgColorULBlue;
+    bgColorURRed = pFlame.bgColorURRed;
+    bgColorURGreen = pFlame.bgColorURGreen;
+    bgColorURBlue = pFlame.bgColorURBlue;
+    bgColorLLRed = pFlame.bgColorLLRed;
+    bgColorLLGreen = pFlame.bgColorLLGreen;
+    bgColorLLBlue = pFlame.bgColorLLBlue;
+    bgColorLRRed = pFlame.bgColorLRRed;
+    bgColorLRGreen = pFlame.bgColorLRGreen;
+    bgColorLRBlue = pFlame.bgColorLRBlue;
     gamma = pFlame.gamma;
     gammaCurve.assign(pFlame.gammaCurve);
     gammaThreshold = pFlame.gammaThreshold;
@@ -808,8 +839,17 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
         !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
-        (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
-        (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
+        (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) ||
+        !bgColorType.equals(pFlame.bgColorType) ||
+        (bgColorType.equals(BGColorType.SINGLE_COLOR) && ((bgColorRed != pFlame.bgColorRed) ||
+            (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue)))
+        ||
+        (bgColorType.equals(BGColorType.GRADIENT_2X2) && ((bgColorLLRed != pFlame.bgColorLLRed) || (bgColorLLGreen != pFlame.bgColorLLGreen) || (bgColorLLBlue != pFlame.bgColorLLBlue) ||
+            (bgColorLRRed != pFlame.bgColorLRRed) || (bgColorLRGreen != pFlame.bgColorLRGreen) || (bgColorLRBlue != pFlame.bgColorLRBlue) ||
+            (bgColorULRed != pFlame.bgColorULRed) || (bgColorULGreen != pFlame.bgColorULGreen) || (bgColorULBlue != pFlame.bgColorULBlue) ||
+            (bgColorURRed != pFlame.bgColorURRed) || (bgColorURGreen != pFlame.bgColorURGreen) || (bgColorURBlue != pFlame.bgColorURBlue)))
+        ||
+
         (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
         (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) || !gammaThresholdCurve.isEqual(pFlame.gammaThresholdCurve) ||
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
@@ -1605,6 +1645,110 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setBalanceBlue(double balanceBlue) {
     this.balanceBlue = balanceBlue;
+  }
+
+  public BGColorType getBgColorType() {
+    return bgColorType;
+  }
+
+  public void setBgColorType(BGColorType bgColorType) {
+    this.bgColorType = bgColorType;
+  }
+
+  public int getBgColorULRed() {
+    return bgColorULRed;
+  }
+
+  public void setBgColorULRed(int bgColorULRed) {
+    this.bgColorULRed = bgColorULRed;
+  }
+
+  public int getBgColorULGreen() {
+    return bgColorULGreen;
+  }
+
+  public void setBgColorULGreen(int bgColorULGreen) {
+    this.bgColorULGreen = bgColorULGreen;
+  }
+
+  public int getBgColorULBlue() {
+    return bgColorULBlue;
+  }
+
+  public void setBgColorULBlue(int bgColorULBlue) {
+    this.bgColorULBlue = bgColorULBlue;
+  }
+
+  public int getBgColorURRed() {
+    return bgColorURRed;
+  }
+
+  public void setBgColorURRed(int bgColorURRed) {
+    this.bgColorURRed = bgColorURRed;
+  }
+
+  public int getBgColorURGreen() {
+    return bgColorURGreen;
+  }
+
+  public void setBgColorURGreen(int bgColorURGreen) {
+    this.bgColorURGreen = bgColorURGreen;
+  }
+
+  public int getBgColorURBlue() {
+    return bgColorURBlue;
+  }
+
+  public void setBgColorURBlue(int bgColorURBlue) {
+    this.bgColorURBlue = bgColorURBlue;
+  }
+
+  public int getBgColorLLRed() {
+    return bgColorLLRed;
+  }
+
+  public void setBgColorLLRed(int bgColorLLRed) {
+    this.bgColorLLRed = bgColorLLRed;
+  }
+
+  public int getBgColorLLGreen() {
+    return bgColorLLGreen;
+  }
+
+  public void setBgColorLLGreen(int bgColorLLGreen) {
+    this.bgColorLLGreen = bgColorLLGreen;
+  }
+
+  public int getBgColorLLBlue() {
+    return bgColorLLBlue;
+  }
+
+  public void setBgColorLLBlue(int bgColorLLBlue) {
+    this.bgColorLLBlue = bgColorLLBlue;
+  }
+
+  public int getBgColorLRRed() {
+    return bgColorLRRed;
+  }
+
+  public void setBgColorLRRed(int bgColorLRRed) {
+    this.bgColorLRRed = bgColorLRRed;
+  }
+
+  public int getBgColorLRGreen() {
+    return bgColorLRGreen;
+  }
+
+  public void setBgColorLRGreen(int bgColorLRGreen) {
+    this.bgColorLRGreen = bgColorLRGreen;
+  }
+
+  public int getBgColorLRBlue() {
+    return bgColorLRBlue;
+  }
+
+  public void setBgColorLRBlue(int bgColorLRBlue) {
+    this.bgColorLRBlue = bgColorLRBlue;
   }
 
 }

@@ -30,6 +30,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
+import org.jwildfire.create.tina.render.FlameBGColorHandler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -568,7 +569,7 @@ public class FlamePreviewHelper implements IterationObserver {
     renderer.registerIterationObserver(this);
 
     SimpleImage image = new SimpleImage(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
-    initImage(image, flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue(), flame.getBGImageFilename());
+    initImage(image, flame);
 
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
     displayUpdater.initRender(prefs.getTinaRenderThreads());
@@ -583,21 +584,18 @@ public class FlamePreviewHelper implements IterationObserver {
     updateDisplayExecuteThread.start();
   }
 
-  private void initImage(SimpleImage pImage, int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
-    if (pBGRed > 0 || pBGGreen > 0 || pBGBlue > 0) {
-      pImage.fillBackground(pBGRed, pBGGreen, pBGBlue);
-    }
-    else {
-      pImage.fillBackground(0, 0, 0);
-    }
-    if (pBGImagefile != null && pBGImagefile.length() > 0) {
+  private void initImage(SimpleImage pImage, Flame flame) {
+    if (flame.getBGImageFilename() != null && !flame.getBGImageFilename().isEmpty()) {
       try {
-        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
+        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
         pImage.fillBackground(bgImg);
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+    }
+    else {
+      new FlameBGColorHandler(flame).fillBackground(pImage);
     }
   }
 
