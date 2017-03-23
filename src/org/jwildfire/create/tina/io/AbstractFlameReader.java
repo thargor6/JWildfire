@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2017 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.io;
 
 import java.util.List;
@@ -10,6 +26,7 @@ import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -60,6 +77,11 @@ public class AbstractFlameReader {
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
+  public static final String ATTR_BACKGROUND_TYPE = "background_type";
+  public static final String ATTR_BACKGROUND_UL = "background_ul";
+  public static final String ATTR_BACKGROUND_UR = "background_ur";
+  public static final String ATTR_BACKGROUND_LL = "background_ll";
+  public static final String ATTR_BACKGROUND_LR = "background_lr";
   public static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
   public static final String ATTR_BRIGHTNESS = "brightness";
   public static final String ATTR_SATURATION = "saturation";
@@ -280,12 +302,46 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_BACKGROUND_TYPE)) != null) {
+      try {
+        pFlame.setBgColorType(BGColorType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");
-      pFlame.setBGColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
-      pFlame.setBGColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
-      pFlame.setBGColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+      pFlame.setBgColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
     }
+    if ((hs = atts.get(ATTR_BACKGROUND_UL)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorULRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorULGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorULBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_UR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorURRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorURGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorURBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_LL)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorLLRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorLLGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorLLBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_LR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorLRRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorLRGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorLRBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {
       pFlame.setBrightness(Double.parseDouble(hs));
     }
