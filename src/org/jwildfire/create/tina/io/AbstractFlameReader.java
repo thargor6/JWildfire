@@ -71,7 +71,6 @@ public class AbstractFlameReader {
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
   public static final String ATTR_COLOR_OVERSAMPLE = "color_oversample";
-  public static final String ATTR_SAMPLE_JITTERING = "sample_jittering";
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
@@ -289,9 +288,6 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR_OVERSAMPLE)) != null) {
       pFlame.setColorOversampling(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SAMPLE_JITTERING)) != null) {
-      pFlame.setSampleJittering(Integer.parseInt(hs) == 1);
     }
     if ((hs = atts.get(ATTR_POST_NOISE_FILTER)) != null) {
       pFlame.setPostNoiseFilter(Integer.parseInt(hs) == 1);
