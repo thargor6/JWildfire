@@ -125,7 +125,6 @@ public class Flame implements Assignable<Flame>, Serializable {
   private boolean newCamDOF;
   private int spatialOversampling;
   private int colorOversampling;
-  private boolean sampleJittering;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
   private double sampleDensity;
@@ -305,7 +304,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialFilterKernel = Prefs.getPrefs().getTinaDefaultSpatialFilterKernel();
     spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
     colorOversampling = Prefs.getPrefs().getTinaDefaultColorOversampling();
-    sampleJittering = Prefs.getPrefs().isTinaDefaultSampleJittering();
     postNoiseFilter = Prefs.getPrefs().isTinaDefaultPostNoiseFilter();
     postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
@@ -324,7 +322,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
     foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
-    lowDensityBrightness = 0.5;
+    lowDensityBrightness = 0.36;
     balanceRed = 1.0;
     balanceGreen = 1.0;
     balanceBlue = 1.0;
@@ -746,7 +744,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     antialiasRadius = pFlame.antialiasRadius;
     spatialOversampling = pFlame.spatialOversampling;
     colorOversampling = pFlame.colorOversampling;
-    sampleJittering = pFlame.sampleJittering;
     postNoiseFilter = pFlame.postNoiseFilter;
     postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
     foregroundOpacity = pFlame.foregroundOpacity;
@@ -819,7 +816,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
-        (colorOversampling != pFlame.colorOversampling) || (sampleJittering != pFlame.sampleJittering) ||
+        (colorOversampling != pFlame.colorOversampling) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
         (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
@@ -1504,19 +1501,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     }
   }
 
-  public boolean isSampleJittering() {
-    return sampleJittering;
-  }
-
-  public void setSampleJittering(boolean pSampleJittering) {
-    sampleJittering = pSampleJittering;
-  }
-
   public void applyFastOversamplingSettings() {
     setSpatialFilterRadius(0.0);
     setSpatialOversampling(1);
     setColorOversampling(1);
-    setSampleJittering(false);
     setPostNoiseFilter(false);
   }
 
@@ -1525,7 +1513,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
     setColorOversampling(prefs.getTinaDefaultColorOversampling());
-    setSampleJittering(prefs.isTinaDefaultSampleJittering());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
   }
 
