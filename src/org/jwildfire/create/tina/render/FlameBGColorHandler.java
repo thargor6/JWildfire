@@ -39,6 +39,9 @@ public class FlameBGColorHandler {
       if (flame.getBgColorRed() > 0 || flame.getBgColorGreen() > 0 || flame.getBgColorBlue() > 0) {
         image.fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
       }
+      else {
+        image.fillBackground(0, 0, 0);
+      }
     }
     else if (BGColorType.GRADIENT_2X2.equals(flame.getBgColorType())) {
       if (flame.getBgColorULRed() > 0 || flame.getBgColorULGreen() > 0 || flame.getBgColorULBlue() > 0 ||
@@ -51,6 +54,9 @@ public class FlameBGColorHandler {
         creator.setLlColor(new Color(flame.getBgColorLLRed(), flame.getBgColorLLGreen(), flame.getBgColorLLBlue()));
         creator.setLrColor(new Color(flame.getBgColorLRRed(), flame.getBgColorLRGreen(), flame.getBgColorLRBlue()));
         creator.fillImage(image);
+      }
+      else {
+        image.fillBackground(0, 0, 0);
       }
     }
   }
