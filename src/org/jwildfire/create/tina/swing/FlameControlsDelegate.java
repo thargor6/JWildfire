@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -664,8 +664,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
     enableControl(data.tinaSpatialOversamplingREd, false);
-    enableControl(data.tinaColorOversamplingREd, !data.tinaSampleJitteringCheckBox.isSelected());
-    enableControl(data.tinaSampleJitteringCheckBox, false);
+    enableControl(data.tinaColorOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
   }
@@ -743,7 +742,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
       data.tinaSpatialOversamplingSlider.setValue(getCurrFlame().getSpatialOversampling());
       data.tinaColorOversamplingREd.setText(String.valueOf(getCurrFlame().getColorOversampling()));
       data.tinaColorOversamplingSlider.setValue(getCurrFlame().getColorOversampling());
-      data.tinaSampleJitteringCheckBox.setSelected(getCurrFlame().isSampleJittering());
       data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
       data.tinaPostNoiseThresholdField.setText(String.valueOf(getCurrFlame().getPostNoiseFilterThreshold()));
       data.tinaPostNoiseThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getPostNoiseFilterThreshold() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
@@ -1369,17 +1367,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void colorOversamplingREd_changed() {
     flameTextFieldChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0, false);
-  }
-
-  public void sampleJitteringCbx_changed() {
-    if (!isNoRefresh()) {
-      Flame flame = getCurrFlame();
-      if (flame != null) {
-        owner.saveUndoPoint();
-        flame.setSampleJittering(data.tinaSampleJitteringCheckBox.isSelected());
-        enableControls();
-      }
-    }
   }
 
   public void flameTransparencyCbx_changed() {

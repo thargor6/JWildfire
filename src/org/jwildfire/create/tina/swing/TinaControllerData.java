@@ -407,7 +407,6 @@ public class TinaControllerData {
   public JSlider tinaSpatialOversamplingSlider;
   public JWFNumberField tinaColorOversamplingREd;
   public JSlider tinaColorOversamplingSlider;
-  public JCheckBox tinaSampleJitteringCheckBox;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;

@@ -589,7 +589,6 @@ public class TinaControllerParameter {
   public JSlider tinaSpatialOversamplingSlider;
   public JWFNumberField tinaColorOversamplingREd;
   public JSlider tinaColorOversamplingSlider;
-  public JCheckBox tinaSampleJitteringCheckBox;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;
@@ -1072,7 +1071,7 @@ public class TinaControllerParameter {
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
-      JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
+      JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
@@ -1206,7 +1205,6 @@ public class TinaControllerParameter {
     tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
     tinaColorOversamplingREd = pTinaColorOversamplingREd;
     tinaColorOversamplingSlider = pTinaColorOversamplingSlider;
-    tinaSampleJitteringCheckBox = pTinaSampleJitteringCheckBox;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
     tinaPostNoiseFilterCheckBox = pTinaPostNoiseFilterCheckBox;
     tinaPostNoiseThresholdField = pTinaPostNoiseThresholdField;

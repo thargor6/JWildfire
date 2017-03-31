@@ -1628,7 +1628,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastLbl = new JLabel();
       tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast");
-      tinaContrastLbl.setLocation(new Point(4, 27));
+      tinaContrastLbl.setLocation(new Point(409, 96));
       tinaContrastLbl.setSize(new Dimension(94, 22));
       tinaContrastLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaContrastLbl.setPreferredSize(new Dimension(94, 22));
@@ -1686,7 +1686,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationLbl.setName("tinaSaturationLbl");
       tinaSaturationLbl.setLocation(new Point(4, 100));
       tinaSaturationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSaturationLbl.setBounds(406, 117, 94, 22);
+      tinaSaturationLbl.setBounds(409, 118, 94, 22);
       tinaColoringPanel.add(tinaSaturationLbl);
 
       tinaSaturationREd = new JWFNumberField();
@@ -1702,7 +1702,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationREd.setLinkedLabelControlName("tinaSaturationLbl");
       tinaSaturationREd.setHasMinValue(true);
       tinaSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaSaturationREd.setBounds(502, 117, 100, 24);
+      tinaSaturationREd.setBounds(505, 118, 100, 24);
       tinaSaturationREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -1731,7 +1731,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSaturationSlider.setMaximum(200);
       tinaSaturationSlider.setLocation(new Point(202, 100));
       tinaSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaSaturationSlider.setBounds(604, 117, 195, 19);
+      tinaSaturationSlider.setBounds(607, 118, 195, 19);
       tinaSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1755,7 +1755,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFadeToWhite.setName("tinaWhiteLevelLbl");
       lblFadeToWhite.setLocation(new Point(4, 100));
       lblFadeToWhite.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblFadeToWhite.setBounds(406, 94, 94, 22);
+      lblFadeToWhite.setBounds(409, 73, 94, 22);
       tinaColoringPanel.add(lblFadeToWhite);
 
       tinaWhiteLevelREd = new JWFNumberField();
@@ -1772,7 +1772,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWhiteLevelREd.setHasMinValue(true);
       tinaWhiteLevelREd.setHasMaxValue(true);
       tinaWhiteLevelREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaWhiteLevelREd.setBounds(502, 94, 100, 24);
+      tinaWhiteLevelREd.setBounds(505, 73, 100, 24);
       tinaWhiteLevelREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -1802,7 +1802,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaWhiteLevelSlider.setMaximum(500);
       tinaWhiteLevelSlider.setLocation(new Point(202, 100));
       tinaWhiteLevelSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaWhiteLevelSlider.setBounds(604, 94, 195, 19);
+      tinaWhiteLevelSlider.setBounds(607, 73, 195, 19);
       tinaWhiteLevelSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1917,7 +1917,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lowDensityBrightnessREd.setLinkedMotionControlName("lowDensityBrightnessSlider");
       lowDensityBrightnessREd.setLinkedLabelControlName("lowDensityBrightnessLbl");
       lowDensityBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      lowDensityBrightnessREd.setBounds(502, 4, 100, 24);
+      lowDensityBrightnessREd.setBounds(100, 27, 100, 24);
       lowDensityBrightnessREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -1947,7 +1947,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lowDensityBrightnessSlider.setMaximum(2000);
       lowDensityBrightnessSlider.setLocation(new Point(202, 100));
       lowDensityBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      lowDensityBrightnessSlider.setBounds(604, 4, 195, 19);
+      lowDensityBrightnessSlider.setBounds(202, 27, 195, 19);
       lowDensityBrightnessSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -1970,10 +1970,12 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBgBrightness.setName("lowDensityBrightnessLbl");
       lblBgBrightness.setLocation(new Point(4, 100));
       lblBgBrightness.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblBgBrightness.setBounds(406, 4, 94, 22);
+      lblBgBrightness.setBounds(4, 27, 94, 22);
       tinaColoringPanel.add(lblBgBrightness);
 
       balanceRedREd = new JWFNumberField();
+      balanceRedREd.setMouseSpeed(0.04);
+      balanceRedREd.setForeground(Color.BLACK);
       balanceRedREd.setValueStep(0.01);
       balanceRedREd.setText("");
       balanceRedREd.setSize(new Dimension(100, 24));
@@ -1986,7 +1988,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceRedREd.setHasMinValue(true);
       balanceRedREd.setHasMaxValue(true);
       balanceRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      balanceRedREd.setBounds(502, 27, 100, 24);
+      balanceRedREd.setBounds(505, 4, 100, 24);
       balanceRedREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -2008,7 +2010,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceRedREd);
 
       JLabel lblRedBalance = new JLabel();
-      lblRedBalance.setForeground(Color.BLACK);
+      lblRedBalance.setForeground(new Color(165, 42, 42));
       lblRedBalance.setToolTipText("");
       lblRedBalance.setText("Red balance");
       lblRedBalance.setSize(new Dimension(94, 22));
@@ -2016,7 +2018,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRedBalance.setName("balanceRedLbl");
       lblRedBalance.setLocation(new Point(4, 100));
       lblRedBalance.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRedBalance.setBounds(406, 27, 94, 22);
+      lblRedBalance.setBounds(409, 4, 94, 22);
       tinaColoringPanel.add(lblRedBalance);
 
       balanceRedSlider = new JSlider();
@@ -2027,7 +2029,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceRedSlider.setMaximum(200);
       balanceRedSlider.setLocation(new Point(202, 100));
       balanceRedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      balanceRedSlider.setBounds(604, 27, 195, 19);
+      balanceRedSlider.setBounds(607, 4, 195, 19);
       balanceRedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2043,6 +2045,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceRedSlider);
 
       balanceGreenREd = new JWFNumberField();
+      balanceGreenREd.setMouseSpeed(0.04);
       balanceGreenREd.setValueStep(0.01);
       balanceGreenREd.setText("");
       balanceGreenREd.setSize(new Dimension(100, 24));
@@ -2055,7 +2058,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceGreenREd.setHasMinValue(true);
       balanceGreenREd.setHasMaxValue(true);
       balanceGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      balanceGreenREd.setBounds(502, 50, 100, 24);
+      balanceGreenREd.setBounds(505, 27, 100, 24);
       balanceGreenREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -2076,7 +2079,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceGreenREd);
 
       JLabel lblGreenBalance = new JLabel();
-      lblGreenBalance.setForeground(Color.BLACK);
+      lblGreenBalance.setForeground(new Color(34, 139, 34));
       lblGreenBalance.setToolTipText("");
       lblGreenBalance.setText("Green balance");
       lblGreenBalance.setSize(new Dimension(94, 22));
@@ -2084,7 +2087,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGreenBalance.setName("balanceGreenLbl");
       lblGreenBalance.setLocation(new Point(4, 100));
       lblGreenBalance.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblGreenBalance.setBounds(406, 50, 94, 22);
+      lblGreenBalance.setBounds(409, 27, 94, 22);
       tinaColoringPanel.add(lblGreenBalance);
 
       balanceGreenSlider = new JSlider();
@@ -2095,7 +2098,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceGreenSlider.setMaximum(200);
       balanceGreenSlider.setLocation(new Point(202, 100));
       balanceGreenSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      balanceGreenSlider.setBounds(604, 50, 195, 19);
+      balanceGreenSlider.setBounds(607, 27, 195, 19);
       balanceGreenSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2111,6 +2114,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceGreenSlider);
 
       balanceBlueREd = new JWFNumberField();
+      balanceBlueREd.setMouseSpeed(0.04);
       balanceBlueREd.setValueStep(0.01);
       balanceBlueREd.setText("");
       balanceBlueREd.setSize(new Dimension(100, 24));
@@ -2123,7 +2127,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceBlueREd.setHasMinValue(true);
       balanceBlueREd.setHasMaxValue(true);
       balanceBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      balanceBlueREd.setBounds(502, 73, 100, 24);
+      balanceBlueREd.setBounds(505, 50, 100, 24);
       balanceBlueREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getFlameControls().editMotionCurve(e);
@@ -2145,6 +2149,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceBlueREd);
 
       JLabel lblRedBalancing = new JLabel();
+      lblRedBalancing.setForeground(new Color(0, 0, 205));
       lblRedBalancing.setToolTipText("");
       lblRedBalancing.setText("Blue balance");
       lblRedBalancing.setSize(new Dimension(94, 22));
@@ -2152,7 +2157,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRedBalancing.setName("balanceBlueLbl");
       lblRedBalancing.setLocation(new Point(4, 100));
       lblRedBalancing.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRedBalancing.setBounds(406, 73, 94, 22);
+      lblRedBalancing.setBounds(409, 50, 94, 22);
       tinaColoringPanel.add(lblRedBalancing);
 
       balanceBlueSlider = new JSlider();
@@ -2163,7 +2168,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceBlueSlider.setMaximum(200);
       balanceBlueSlider.setLocation(new Point(202, 100));
       balanceBlueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
-      balanceBlueSlider.setBounds(604, 73, 195, 19);
+      balanceBlueSlider.setBounds(607, 50, 195, 19);
       balanceBlueSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2969,7 +2974,7 @@ public class TinaInternalFrame extends JInternalFrame {
       });
       tinaContrastREd.setPreferredSize(new Dimension(100, 24));
       tinaContrastREd.setText("");
-      tinaContrastREd.setLocation(new Point(100, 27));
+      tinaContrastREd.setLocation(new Point(505, 96));
       tinaContrastREd.setSize(new Dimension(100, 24));
       tinaContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
@@ -3117,7 +3122,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaContrastSlider.setValue(0);
       tinaContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaContrastSlider.setSize(new Dimension(195, 19));
-      tinaContrastSlider.setLocation(new Point(202, 27));
+      tinaContrastSlider.setLocation(new Point(607, 96));
       tinaContrastSlider.setPreferredSize(new Dimension(220, 19));
       tinaContrastSlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -5492,7 +5497,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getLeapMotionOffsetField(), getLeapMotionAddButton(), getLeapMotionDuplicateButton(),
         getLeapMotionDeleteButton(), getLeapMotionClearButton(), getLeapMotionResetConfigButton(),
         getFilterKernelPreviewRootPnl(), getTinaSpatialOversamplingREd(), getTinaSpatialOversamplingSlider(), getTinaColorOversamplingREd(),
-        getTinaColorOversamplingSlider(), getTinaSampleJitteringCheckBox(), getFilterKernelFlatPreviewBtn(),
+        getTinaColorOversamplingSlider(), getFilterKernelFlatPreviewBtn(),
         getTinaPostNoiseFilterCheckBox(), getTinaPostNoiseThresholdField(), getTinaPostNoiseThresholdSlider(),
         getForegroundOpacityField(), getForegroundOpacitySlider(), getScriptEditBtn(), getRealtimePreviewToggleButton(),
         getSolidRenderingToggleBtn(), getTinaSolidRenderingEnableAOCBx(), getTinaSolidRenderingAOIntensityREd(),
@@ -10530,7 +10535,6 @@ public class TinaInternalFrame extends JInternalFrame {
   private JWFNumberField tinaSpatialOversamplingREd;
   private JSlider tinaSpatialOversamplingSlider;
   private JPanel filterKernelPreviewRootPnl;
-  private JCheckBox tinaSampleJitteringCheckBox;
   private JWFNumberField tinaColorOversamplingREd;
   private JSlider tinaColorOversamplingSlider;
   private JToggleButton filterKernelFlatPreviewBtn;
@@ -11544,18 +11548,6 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       antialiasPanel.add(tinaColorOversamplingSlider);
-
-      tinaSampleJitteringCheckBox = new JCheckBox("Sample jittering");
-      tinaSampleJitteringCheckBox.setBounds(115, 90, 169, 18);
-      tinaSampleJitteringCheckBox.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
-            tinaController.getFlameControls().sampleJitteringCbx_changed();
-          }
-        }
-      });
-
-      antialiasPanel.add(tinaSampleJitteringCheckBox);
 
       filterKernelFlatPreviewBtn = new JToggleButton();
       filterKernelFlatPreviewBtn.addItemListener(new ItemListener() {
@@ -17177,10 +17169,6 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JPanel getFilterKernelPreviewRootPnl() {
     return filterKernelPreviewRootPnl;
-  }
-
-  public JCheckBox getTinaSampleJitteringCheckBox() {
-    return tinaSampleJitteringCheckBox;
   }
 
   public JWFNumberField getTinaColorOversamplingREd() {
