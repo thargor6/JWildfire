@@ -66,8 +66,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected final ColorProvider colorProvider;
   protected final boolean solidRendering;
 
-  public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+  public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen, boolean pUsePlotBuffer) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
+    plotBuffer = initPlotBuffer(pUsePlotBuffer ? Tools.PLOT_BUFFER_SIZE : 1);
     solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     projector = new DefaultPointProjector();
     if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
@@ -203,15 +204,17 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   private void addNoise(XYZPoint pSrc, XYZPoint pDst, double pRadius) {
-    double angle = randGen.random() * 2 * M_PI;
-    double sina = sin(angle);
-    double cosa = cos(angle);
-    angle = randGen.random() * M_PI;
-    double sinb = sin(angle);
-    double cosb = cos(angle);
-    pDst.x = pSrc.x + pRadius * sinb * cosa;
-    pDst.y = pSrc.y + pRadius * sinb * sina;
-    pDst.z = pSrc.z + pRadius * cosb;
+    if (pRadius > 0.01) {
+      double angle = randGen.random() * 2 * M_PI;
+      double sina = sin(angle);
+      double cosa = cos(angle);
+      angle = randGen.random() * M_PI;
+      double sinb = sin(angle);
+      double cosb = cos(angle);
+      pDst.x = pSrc.x + pRadius * sinb * cosa;
+      pDst.y = pSrc.y + pRadius * sinb * sina;
+      pDst.z = pSrc.z + pRadius * cosb;
+    }
   }
 
   private boolean setupSliceRaster(XYZPoint pPoint, List<RenderSlice> pSlices) {
@@ -271,7 +274,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   protected int plotBufferIdx = 0;
 
-  protected PlotSample[] plotBuffer = initPlotBuffer();
+  protected PlotSample[] plotBuffer;
 
   protected int shadowMapPlotBufferIdx[] = initShadowMapPlotBufferIdx();
   protected PlotSample[][] shadowMapPlotBuffer = initShadowMapPlotBuffer();
@@ -485,8 +488,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  private PlotSample[] initPlotBuffer() {
-    PlotSample[] res = new PlotSample[Tools.PLOT_BUFFER_SIZE];
+  private PlotSample[] initPlotBuffer(int pSize) {
+    PlotSample[] res = new PlotSample[pSize];
     for (int i = 0; i < res.length; i++) {
       res[i] = new PlotSample();
     }

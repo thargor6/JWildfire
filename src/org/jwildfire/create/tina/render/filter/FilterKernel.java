@@ -66,6 +66,15 @@ public abstract class FilterKernel implements Serializable {
     }
   }
 
+  public double getFilterRadius(double pFilterSize, int pOversample) {
+    if (pFilterSize < 2) {
+      return 0;
+    }
+    else {
+      return (pFilterSize - 1.0) / (2.0 * pOversample * getSpatialSupport());
+    }
+  }
+
   public double getFilterRadius(int pFilterSize, int pOversample) {
     if (pFilterSize <= 0) {
       return 0;

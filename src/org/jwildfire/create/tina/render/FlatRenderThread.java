@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -30,10 +30,10 @@ public final class FlatRenderThread extends DefaultRenderThread {
   @Override
   protected DefaultRenderIterationState createState(RenderPacket pRenderPacket, Layer pLayer) {
     if (pRenderPacket.getFlame().getPostBlurRadius() > 0) {
-      return new PostBlurRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
+      return new PostBlurRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen, slices == null);
     }
     else {
-      return new DefaultRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen);
+      return new DefaultRenderIterationState(this, renderer, pRenderPacket, pLayer, ctx, randGen, slices == null);
     }
   }
 
