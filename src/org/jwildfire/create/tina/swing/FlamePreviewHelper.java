@@ -28,6 +28,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
 import org.jwildfire.create.tina.render.FlameBGColorHandler;
@@ -102,9 +103,6 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
-    if (!pAllowUseCache) {
-      prevRenderer = null;
-    }
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
@@ -166,11 +164,12 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private FlameRenderer prevRenderer;
+  private AbstractRaster prevRaster;
+  private Flame prevFlame;
 
   public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
     if (!pAllowUseCache) {
-      prevRenderer = null;
+      prevRaster = null;
     }
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
@@ -193,10 +192,13 @@ public class FlamePreviewHelper implements IterationObserver {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame flame = flameHolder.getFlame();
       if (flame != null) {
+        if (prevFlame != flame) {
+          prevRaster = null;
+        }
+        prevFlame = flame;
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        int oldColorOversampling = flame.getColorOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -209,6 +211,7 @@ public class FlamePreviewHelper implements IterationObserver {
             if (pQuickRender) {
               flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
               flame.applyFastOversamplingSettings();
+              flame.setSpatialOversampling(oldSpatialOversampling);
             }
             else {
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
@@ -232,12 +235,16 @@ public class FlamePreviewHelper implements IterationObserver {
             renderer.setRenderScale(renderScale);
 
             RenderedFlame res;
-            if (prevRenderer != null && pAllowUseCache) {
-              res = prevRenderer.rerenderFlame(info);
+            if (prevRaster != null && pAllowUseCache) {
+              info.setStoreRaster(false);
+              info.setRestoredRaster(prevRaster);
+              flame.setSampleDensity(prevRaster.getSampleDensity());
+              res = renderer.renderFlame(info);
             }
             else {
+              info.setStoreRaster(true);
               res = renderer.renderFlame(info);
-              prevRenderer = renderer;
+              prevRaster = res.getRaster();
             }
 
             SimpleImage img = res.getImage();
@@ -277,7 +284,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setColorOversampling(oldColorOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }
@@ -421,7 +427,6 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        int oldColorOversampling = flame.getColorOversampling();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -454,7 +459,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setColorOversampling(oldColorOversampling);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }

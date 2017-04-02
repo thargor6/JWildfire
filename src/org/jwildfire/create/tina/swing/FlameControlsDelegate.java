@@ -418,31 +418,31 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void brightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void vibrancySlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void lowDensityBrightnessSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceRedSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceGreenSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceBlueSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void saturationSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void filterRadiusSlider_stateChanged(ChangeEvent e) {
@@ -455,27 +455,27 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void vibrancyREd_changed() {
-    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.vibrancySlider, data.vibrancyREd, "vibrancy", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void lowDensityBrightnessREd_changed() {
-    flameTextFieldChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.lowDensityBrightnessSlider, data.lowDensityBrightnessREd, "lowDensityBrightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceRedREd_changed() {
-    flameTextFieldChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.balanceRedSlider, data.balanceRedREd, "balanceRed", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceGreenREd_changed() {
-    flameTextFieldChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.balanceGreenSlider, data.balanceGreenREd, "balanceGreen", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void balanceBlueREd_changed() {
-    flameTextFieldChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.balanceBlueSlider, data.balanceBlueREd, "balanceBlue", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void saturationREd_changed() {
-    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.saturationSlider, data.saturationREd, "saturation", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void pixelsPerUnitSlider_stateChanged(ChangeEvent e) {
@@ -538,7 +538,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void gammaREd_changed() {
-    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, false);
+    flameTextFieldChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
   }
 
   public void gammaThresholdREd_changed() {
@@ -546,7 +546,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void contrastREd_changed() {
-    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void whiteLevelREd_changed() {
@@ -554,7 +554,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void gammaSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, false);
+    flameSliderChanged(data.gammaSlider, data.gammaREd, "gamma", TinaController.SLIDER_SCALE_GAMMA, true);
   }
 
   public void pixelsPerUnitREd_changed() {
@@ -562,11 +562,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void brightnessREd_changed() {
-    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameTextFieldChanged(data.brightnessSlider, data.brightnessREd, "brightness", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void contrastSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, false);
+    flameSliderChanged(data.contrastSlider, data.contrastREd, "contrast", TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY, true);
   }
 
   public void whiteLevelSlider_stateChanged(ChangeEvent e) {
@@ -664,7 +664,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.filterRadiusREd, false);
     enableControl(data.filterKernelCmb, false);
     enableControl(data.tinaSpatialOversamplingREd, false);
-    enableControl(data.tinaColorOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
   }
@@ -740,8 +739,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.tinaSpatialOversamplingREd.setText(String.valueOf(getCurrFlame().getSpatialOversampling()));
       data.tinaSpatialOversamplingSlider.setValue(getCurrFlame().getSpatialOversampling());
-      data.tinaColorOversamplingREd.setText(String.valueOf(getCurrFlame().getColorOversampling()));
-      data.tinaColorOversamplingSlider.setValue(getCurrFlame().getColorOversampling());
       data.tinaPostNoiseFilterCheckBox.setSelected(getCurrFlame().isPostNoiseFilter());
       data.tinaPostNoiseThresholdField.setText(String.valueOf(getCurrFlame().getPostNoiseFilterThreshold()));
       data.tinaPostNoiseThresholdSlider.setValue(Tools.FTOI(getCurrFlame().getPostNoiseFilterThreshold() * TinaController.SLIDER_SCALE_POST_NOISE_FILTER_THRESHOLD));
@@ -1359,14 +1356,6 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void spatialOversamplingREd_changed() {
     flameTextFieldChanged(data.tinaSpatialOversamplingSlider, data.tinaSpatialOversamplingREd, "spatialOversampling", 1.0, false);
     owner.refreshFilterKernelPreviewImg();
-  }
-
-  public void colorOversamplingSlider_stateChanged(ChangeEvent e) {
-    flameSliderChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0, false);
-  }
-
-  public void colorOversamplingREd_changed() {
-    flameTextFieldChanged(data.tinaColorOversamplingSlider, data.tinaColorOversamplingREd, "colorOversampling", 1.0, false);
   }
 
   public void flameTransparencyCbx_changed() {

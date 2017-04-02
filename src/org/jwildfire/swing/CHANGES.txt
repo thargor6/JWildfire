@@ -1,11 +1,36 @@
-V3.02 (12.03.2016)
+V3.10 (xx.xx.2017)
+/*
+  - experimental adaptive pre-filtering in order to improve image quality, by keeping sharp details while smoothening larger areas with less details
+   (always enabled in the EARLY PREVIEW-version, no parameters, requires the double of amount of memory)
+  */ 
+ - improved the quality of the preview in the main editor    
+ - reimplemented the preview-cache (all options at the coloring-tab do not need a recalculation do show changes). In general, all properties
+   which do not need a re-render are indicated by a star at the label, e.g. "Brightness*". Is is recommended to do a quickrender before adjusting them,
+   so can apply changes in almsot realtime to a decent image.
+ - the channel-mixer also works in "realtime-mode" now   
+ - new 2x2 gradient-type for the background of fractals
+ - new "low brightness"-property to show/hide areas with lower density, increasing this value usually leads to more detail, while decreasing 
+   this value may help to hide unwanted border areas
+ - new color-balancing options at the "Coloring"-tab
+ - rearranged some controls at the coloring-tab
+ - new variations, provided by Brad Stefanov ("waves2_radial", "spliptic_bs", "circlesplit", "log_tile2", "mobiq", "tile_hlp")
+ - increased default oversampling to 2 in order to increase default quality
+ - lots of new presets for the "isosfplot3d_wf"-variation, provided by Frank Baumann and Brad Stefanov
+ - some performance increase on some of the DOF-blur-shapes
+ - increased quality of DOF in 3D-mode, but needs much more time to compute
+ - removed the color-oversampling/jittering-option
+ - fixed (again) a serious bug in the Mesh-Generator: when rendering image-stacks 
+   each image inside a slice was the same. This causing meshes to be very 
+   "chunky", depending on slice-size. (The original fix was lost due to an unknown reason)
+ 
+V3.02 (12.03.2017)
  - new and powerful "dla3d_wf"-variation ("diffusion limited aggregation") which may even utilize 3d-meshes as nodes/junctions
  - solid-random-flame-generators also make use of the "dla3d_wf"-variation
  - improved the speed of the "dla_wf"-variation
  - bugfix in the "mobiusN"-variation
  - small improvements/bugfixes
 
-V3.01 (06.01.2016)
+V3.01 (06.01.2017)
  - Fixed a serious bug in the Mesh-Generator: when rendering image-stacks 
    each image inside a slice was the same. This causing meshes to be very 
    "chunky", depending on slice-size. 

@@ -68,7 +68,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen, boolean pUsePlotBuffer) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
-    plotBuffer = initPlotBuffer(pUsePlotBuffer ? Tools.PLOT_BUFFER_SIZE : 1);
+    plotBuffer = initPlotBuffer(pUsePlotBuffer ? (RenderMode.PRODUCTION.equals(pRenderer.getRenderInfo().getRenderMode()) ? Tools.PLOT_BUFFER_SIZE : Tools.PLOT_BUFFER_SIZE / 2) : 1);
     solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     projector = new DefaultPointProjector();
     if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
@@ -471,21 +471,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  long t0 = System.currentTimeMillis();
-
   protected void applySamplesToRaster() {
     raster.addSamples(plotBuffer, plotBufferIdx);
     plotBufferIdx = 0;
-    long t1 = System.currentTimeMillis();
-    if (t1 - t0 > 100) {
-      try {
-        Thread.sleep(1);
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      t0 = t1;
-    }
   }
 
   private PlotSample[] initPlotBuffer(int pSize) {

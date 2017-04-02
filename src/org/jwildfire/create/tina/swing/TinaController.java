@@ -623,8 +623,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.tinaSpatialOversamplingREd = parameterObject.tinaSpatialOversamplingREd;
     data.tinaSpatialOversamplingSlider = parameterObject.tinaSpatialOversamplingSlider;
     data.filterKernelPreviewRootPnl = parameterObject.filterKernelPreviewRootPnl;
-    data.tinaColorOversamplingREd = parameterObject.tinaColorOversamplingREd;
-    data.tinaColorOversamplingSlider = parameterObject.tinaColorOversamplingSlider;
     data.filterKernelFlatPreviewBtn = parameterObject.filterKernelFlatPreviewBtn;
     data.tinaPostNoiseFilterCheckBox = parameterObject.tinaPostNoiseFilterCheckBox;
     data.tinaPostNoiseThresholdField = parameterObject.tinaPostNoiseThresholdField;
@@ -4687,11 +4685,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (flame != null && !flame.getBgColorType().equals(data.backgroundColorTypeCmb.getSelectedItem())) {
         saveUndoPoint();
         flame.setBgColorType(((BGColorType) data.backgroundColorTypeCmb.getSelectedItem()));
-
-        System.out.println("####" + flame.getBgColorType());
         getFlameControls().enableBGColorUI();
         refreshBGColorIndicators();
-        refreshFlameImage(true, false, 1, true, false);
+        refreshFlameImage(true, false, 1, true, true);
       }
     }
   }
@@ -4978,7 +4974,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           getCurrFlame().setBgColorULRed(selectedColor.getRed());
           getCurrFlame().setBgColorULGreen(selectedColor.getGreen());
           getCurrFlame().setBgColorULBlue(selectedColor.getBlue());
-          refreshFlameImage(true, false, 1, true, false);
+          refreshFlameImage(true, false, 1, true, true);
           refreshBGColorIndicator();
         }
       }
@@ -4988,7 +4984,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           getCurrFlame().setBgColorRed(selectedColor.getRed());
           getCurrFlame().setBgColorGreen(selectedColor.getGreen());
           getCurrFlame().setBgColorBlue(selectedColor.getBlue());
-          refreshFlameImage(true, false, 1, true, false);
+          refreshFlameImage(true, false, 1, true, true);
           refreshBGColorIndicator();
         }
       }
@@ -5007,7 +5003,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         getCurrFlame().setBgColorURRed(selectedColor.getRed());
         getCurrFlame().setBgColorURGreen(selectedColor.getGreen());
         getCurrFlame().setBgColorURBlue(selectedColor.getBlue());
-        refreshFlameImage(true, false, 1, true, false);
+        refreshFlameImage(true, false, 1, true, true);
         refreshBGColorURIndicator();
       }
     }
@@ -5025,7 +5021,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         getCurrFlame().setBgColorLLRed(selectedColor.getRed());
         getCurrFlame().setBgColorLLGreen(selectedColor.getGreen());
         getCurrFlame().setBgColorLLBlue(selectedColor.getBlue());
-        refreshFlameImage(true, false, 1, true, false);
+        refreshFlameImage(true, false, 1, true, true);
         refreshBGColorLLIndicator();
       }
     }
@@ -5043,7 +5039,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         getCurrFlame().setBgColorLRRed(selectedColor.getRed());
         getCurrFlame().setBgColorLRGreen(selectedColor.getGreen());
         getCurrFlame().setBgColorLRBlue(selectedColor.getBlue());
-        refreshFlameImage(true, false, 1, true, false);
+        refreshFlameImage(true, false, 1, true, true);
         refreshBGColorLRIndicator();
       }
     }
@@ -6007,7 +6003,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         saveUndoPoint();
         getCurrFlame().setBGImageFilename(filename);
-        refreshFlameImage(true, false, 1, true, false);
+        refreshFlameImage(true, false, 1, true, true);
       }
       catch (Throwable ex) {
         errorHandler.handleError(ex);

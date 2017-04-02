@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.image.SimpleGrayImage;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -25,6 +26,7 @@ public class RenderedFlame {
   private SimpleImage image;
   private SimpleHDRImage hdrImage;
   private SimpleGrayImage zBuffer;
+  private AbstractRaster raster;
 
   public SimpleImage getImage() {
     return image;
@@ -48,6 +50,14 @@ public class RenderedFlame {
     if (pRenderInfo.isRenderZBuffer() && pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       zBuffer = new SimpleGrayImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
+  }
+
+  public AbstractRaster getRaster() {
+    return raster;
+  }
+
+  public void setRaster(AbstractRaster raster) {
+    this.raster = raster;
   }
 
 }

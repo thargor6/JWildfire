@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -29,6 +29,7 @@ public class FilterHolder implements Serializable {
   protected double preFilter[][];
   protected double filter[][];
   protected int noiseFilterSize;
+  protected int noiseFilterSizeHalve;
   protected final FilterKernel filterKernel;
   protected final int oversample;
 
@@ -37,6 +38,7 @@ public class FilterHolder implements Serializable {
     oversample = pFlame.getSpatialOversampling();
     filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius(), oversample);
+    noiseFilterSizeHalve = noiseFilterSize / 2;
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
   }
@@ -46,6 +48,7 @@ public class FilterHolder implements Serializable {
     oversample = pSpatialOversampling;
     filterKernel = pSpatialFilterKernel.createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pSpatialFilterRadius, oversample);
+    noiseFilterSizeHalve = noiseFilterSize / 2;
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pSpatialFilterRadius, noiseFilterSize, filter);
   }

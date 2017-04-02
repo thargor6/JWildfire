@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -587,8 +587,6 @@ public class TinaControllerParameter {
   public JPanel filterKernelPreviewRootPnl;
   public JWFNumberField tinaSpatialOversamplingREd;
   public JSlider tinaSpatialOversamplingSlider;
-  public JWFNumberField tinaColorOversamplingREd;
-  public JSlider tinaColorOversamplingSlider;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;
@@ -1071,7 +1069,6 @@ public class TinaControllerParameter {
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
-      JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
@@ -1203,8 +1200,6 @@ public class TinaControllerParameter {
     filterKernelPreviewRootPnl = pFilterKernelPreviewRootPnl;
     tinaSpatialOversamplingREd = pTinaSpatialOversamplingREd;
     tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
-    tinaColorOversamplingREd = pTinaColorOversamplingREd;
-    tinaColorOversamplingSlider = pTinaColorOversamplingSlider;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
     tinaPostNoiseFilterCheckBox = pTinaPostNoiseFilterCheckBox;
     tinaPostNoiseThresholdField = pTinaPostNoiseThresholdField;

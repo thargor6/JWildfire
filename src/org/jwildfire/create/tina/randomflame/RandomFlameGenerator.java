@@ -40,10 +40,12 @@ public abstract class RandomFlameGenerator {
     if (flame.getName() == null || flame.getName().length() == 0)
       flame.setName(this.getName() + " - " + flame.hashCode());
     flame.setBGTransparency(pPrefs.isTinaDefaultBGTransparency());
-    flame.setBgColorType(BGColorType.SINGLE_COLOR);
-    flame.setBgColorRed(pPrefs.getTinaRandomBatchBGColorRed());
-    flame.setBgColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
-    flame.setBgColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
+    if ((pPrefs.getTinaRandomBatchBGColorRed() > 0 || pPrefs.getTinaRandomBatchBGColorGreen() > 0 || pPrefs.getTinaRandomBatchBGColorBlue() > 0)) {
+      flame.setBgColorType(BGColorType.SINGLE_COLOR);
+      flame.setBgColorRed(pPrefs.getTinaRandomBatchBGColorRed());
+      flame.setBgColorGreen(pPrefs.getTinaRandomBatchBGColorGreen());
+      flame.setBgColorBlue(pPrefs.getTinaRandomBatchBGColorBlue());
+    }
     return flame;
   }
 

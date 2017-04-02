@@ -149,12 +149,23 @@ public class FlameRenderer {
     rasterSize = rasterWidth * rasterHeight;
   }
 
-  private void initRaster(int pImageWidth, int pImageHeight) {
+  private void initRaster(RenderInfo pRenderInfo, int pImageWidth, int pImageHeight, double pSampleDensity) {
     initRasterSizes(pImageWidth, pImageHeight);
-    raster = allocRaster();
+    if (pRenderInfo.getRestoredRaster() != null) {
+      if (rasterWidth != pRenderInfo.getRestoredRaster().getRasterWidth()) {
+        throw new RuntimeException("Raster width does not match (" + rasterWidth + " != " + pRenderInfo.getRestoredRaster().getRasterWidth() + ")");
+      }
+      if (rasterHeight != pRenderInfo.getRestoredRaster().getRasterHeight()) {
+        throw new RuntimeException("Raster height does not match (" + rasterHeight + " != " + pRenderInfo.getRestoredRaster().getRasterHeight() + ")");
+      }
+      raster = pRenderInfo.getRestoredRaster();
+    }
+    else {
+      raster = allocRaster(oversample, pSampleDensity);
+    }
   }
 
-  private AbstractRaster allocRaster() {
+  private AbstractRaster allocRaster(int pOversample, double pSampleDensity) {
     Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass(flame);
     AbstractRaster raster;
     try {
@@ -166,7 +177,7 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    raster.allocRaster(flame, rasterWidth, rasterHeight);
+    raster.allocRaster(flame, rasterWidth, rasterHeight, pOversample, pSampleDensity);
     return raster;
   }
 
@@ -210,30 +221,6 @@ public class FlameRenderer {
     }
     finally {
       flame.setSampleDensity(oldDensity);
-    }
-  }
-
-  public RenderedFlame rerenderFlame(RenderInfo pRenderInfo) {
-    renderInfo = pRenderInfo;
-    if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
-      return renderImageStereo3d(pRenderInfo);
-    }
-    else {
-      RenderedFlame res = new RenderedFlame();
-      res.init(pRenderInfo, flame);
-
-      if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
-        FlameRendererView view = createView(flame);
-        raster.notifyInit(view.getLightViewCalculator());
-      }
-
-      if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
-        renderImageSimple(res.getImage());
-      }
-      else {
-        renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
-      }
-      return res;
     }
   }
 
@@ -490,20 +477,25 @@ public class FlameRenderer {
       SimpleImage img = renderNormal ? res.getImage() : null;
       SimpleHDRImage hdrImg = renderHDR ? res.getHDRImage() : null;
       if (renderNormal) {
-        initRaster(img.getImageWidth(), img.getImageHeight());
+        initRaster(pRenderInfo, img.getImageWidth(), img.getImageHeight(), flame.getSampleDensity());
       }
       else if (renderHDR) {
-        initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
+        initRaster(pRenderInfo, hdrImg.getImageWidth(), hdrImg.getImageHeight(), flame.getSampleDensity());
       }
       else {
         throw new IllegalStateException();
       }
-      List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
-      for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+      if (pRenderInfo.getRestoredRaster() == null) {
+        List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
+        for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+          renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+        }
+        forceAbort = false;
+        iterate(0, 1, renderFlames, null, 1.0, 1);
+        if (pRenderInfo.isStoreRaster()) {
+          res.setRaster(raster);
+        }
       }
-      forceAbort = false;
-      iterate(0, 1, renderFlames, null, 1.0, 1);
       if (!forceAbort) {
         if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
           renderImageSimple(img);
@@ -912,7 +904,7 @@ public class FlameRenderer {
 
   public RenderThreads startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
-    initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    initRaster(pRenderInfo, pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight(), flame.getSampleDensity());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
       renderFlames.add(createRenderPackets(flame, flame.getFrame()));
@@ -937,7 +929,7 @@ public class FlameRenderer {
         for (int i = 0; i < header.numThreads; i++) {
           state[i] = (RenderThreadPersistentState) in.readObject();
         }
-        initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
+        initRaster(renderInfo, renderInfo.getImageWidth(), renderInfo.getImageHeight(), flame.getSampleDensity());
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
           renderFlames.add(createRenderPackets(flame, flame.getFrame()));
@@ -1033,7 +1025,7 @@ public class FlameRenderer {
       initRasterSizes(pSliceRenderInfo.getImageWidth(), pSliceRenderInfo.getImageHeight());
       List<RenderSlice> slices = new ArrayList<RenderSlice>();
       for (int i = 0; i < pSliceRenderInfo.getSlicesPerRender() && currSlice < pSliceRenderInfo.getSlices(); i++) {
-        RenderSlice slice = new RenderSlice(allocRaster(), currZ - thickness, currZ);
+        RenderSlice slice = new RenderSlice(allocRaster(flame.getSpatialOversampling(), flame.getSampleDensity()), currZ - thickness, currZ);
         slices.add(slice);
         currZ -= thickness;
         currSlice++;
@@ -1089,16 +1081,6 @@ public class FlameRenderer {
 
   protected AbstractRaster getRaster() {
     return raster;
-  }
-
-  public void renderPointCloud(String pFilename, double pZmin, double pZmax) {
-    initRaster(flame.getWidth(), flame.getHeight());
-
-    List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
-    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
-    }
-    iterate(0, 1, renderFlames, null, 1.0, 1);
   }
 
 }
