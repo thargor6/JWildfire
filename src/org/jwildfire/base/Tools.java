@@ -56,16 +56,15 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.10 EARLY PREVIEW (27.03.2017)";
+  public static final String APP_VERSION = "3.10 BETA 1 (02.04.2017)";
 
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
-  public static final int MAX_COLOR_OVERSAMPLING = 20;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
-  public static final int PLOT_BUFFER_SIZE = 1024;
+  public static final int PLOT_BUFFER_SIZE = 4096;
 
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";

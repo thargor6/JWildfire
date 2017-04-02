@@ -70,7 +70,6 @@ public class AbstractFlameReader {
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
-  public static final String ATTR_COLOR_OVERSAMPLE = "color_oversample";
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
@@ -286,9 +285,6 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversampling(Integer.parseInt(hs));
     }
-    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLE)) != null) {
-      pFlame.setColorOversampling(Integer.parseInt(hs));
-    }
     if ((hs = atts.get(ATTR_POST_NOISE_FILTER)) != null) {
       pFlame.setPostNoiseFilter(Integer.parseInt(hs) == 1);
     }
@@ -312,6 +308,10 @@ public class AbstractFlameReader {
       pFlame.setBgColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
       pFlame.setBgColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
       pFlame.setBgColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+      // old flames without a bg color type
+      if (atts.get(ATTR_BACKGROUND_TYPE) == null) {
+        pFlame.setBgColorType(BGColorType.SINGLE_COLOR);
+      }
     }
     if ((hs = atts.get(ATTR_BACKGROUND_UL)) != null) {
       String s[] = hs.split(" ");

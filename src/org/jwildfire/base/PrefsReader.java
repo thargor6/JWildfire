@@ -151,7 +151,6 @@ public class PrefsReader {
         pPrefs.setTinaRandGenDualityPreferedVariationProbability2(getDoubleProperty(props, Prefs.KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY2, pPrefs.getTinaRandGenDualityPreferedVariationProbability2()));
 
         pPrefs.setTinaDefaultSpatialOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING, pPrefs.getTinaDefaultSpatialOversampling()));
-        pPrefs.setTinaDefaultColorOversampling(getIntProperty(props, Prefs.KEY_TINA_DEFAULT_COLOR_OVERSAMPLING, pPrefs.getTinaDefaultColorOversampling()));
         pPrefs.setTinaDefaultFilterVisualisationFlat(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT, pPrefs.isTinaDefaultFilterVisualisationFlat()));
         pPrefs.setTinaDefaultPostNoiseFilter(getBooleanProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER, pPrefs.isTinaDefaultPostNoiseFilter()));
         pPrefs.setTinaDefaultPostNoiseFilterThreshold(getDoubleProperty(props, Prefs.KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD, pPrefs.getTinaDefaultPostNoiseFilterThreshold()));

@@ -124,7 +124,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
   static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.3";
-  static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
@@ -303,9 +302,6 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
   private int tinaDefaultSpatialOversampling = 2;
-
-  @Property(description = "Default color oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultColorOversampling = 3;
 
   @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
   private boolean tinaDefaultPostNoiseFilter = false;
@@ -786,7 +782,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
     tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
-    tinaDefaultColorOversampling = pSrc.tinaDefaultColorOversampling;
     tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
     tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
     tinaDefaultFilterVisualisationFlat = pSrc.tinaDefaultFilterVisualisationFlat;
@@ -1422,20 +1417,6 @@ public class Prefs extends ManagedObject {
     }
     else if (tinaDefaultSpatialOversampling > Tools.MAX_SPATIAL_OVERSAMPLING) {
       tinaDefaultSpatialOversampling = Tools.MAX_SPATIAL_OVERSAMPLING;
-    }
-  }
-
-  public int getTinaDefaultColorOversampling() {
-    return tinaDefaultColorOversampling;
-  }
-
-  public void setTinaDefaultColorOversampling(int pTinaDefaultColorOversampling) {
-    tinaDefaultColorOversampling = pTinaDefaultColorOversampling;
-    if (tinaDefaultColorOversampling < 1) {
-      tinaDefaultColorOversampling = 1;
-    }
-    else if (tinaDefaultColorOversampling > Tools.MAX_COLOR_OVERSAMPLING) {
-      tinaDefaultColorOversampling = Tools.MAX_COLOR_OVERSAMPLING;
     }
   }
 

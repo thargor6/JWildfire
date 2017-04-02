@@ -225,7 +225,6 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
     attrList.add(xb.createAttr("filter_kernel", pFlame.getSpatialFilterKernel().toString()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SPATIAL_OVERSAMPLE, pFlame.getSpatialOversampling()));
-    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_COLOR_OVERSAMPLE, pFlame.getColorOversampling()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER, pFlame.isPostNoiseFilter() ? 1 : 0));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER_THRESHOLD, pFlame.getPostNoiseFilterThreshold()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
