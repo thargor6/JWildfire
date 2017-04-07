@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.marchingcubes.FacesMerger;
 import org.jwildfire.create.tina.meshgen.marchingcubes.GenerateFacesThread;
@@ -105,7 +106,10 @@ public class GenerateMeshThread implements Runnable {
       return null;
     }
 
-    Mesh mesh = FacesMerger.generateMesh(rawFaces);
+    double imgSize = MathLib.min(sampler.getImageWidth(), sampler.getImageHeight());
+    double zScale = (double) sampler.getImageCount() / (imgSize * 4.0 * imageDownSample);
+
+    Mesh mesh = FacesMerger.generateMesh(rawFaces, (float) zScale);
     if (forceAbort) {
       return null;
     }
