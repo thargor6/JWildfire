@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -305,9 +305,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
         parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
-        parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenThicknessModREd, parameterObject.meshGenThicknessSamplesREd,
-        parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd,
-        parameterObject.meshGenOutputTypeCmb);
+        parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb,
+        parameterObject.meshGenImageStepREd, parameterObject.meshGenOutputTypeCmb);
 
     data.macroButtonsTable = parameterObject.macroButtonsTable;
     data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;

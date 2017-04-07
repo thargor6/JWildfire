@@ -491,7 +491,7 @@ public class FlameRenderer {
           renderFlames.add(createRenderPackets(flame, flame.getFrame()));
         }
         forceAbort = false;
-        iterate(0, 1, renderFlames, null, 1.0, 1);
+        iterate(0, 1, renderFlames, null);
         if (pRenderInfo.isStoreRaster()) {
           res.setRaster(raster);
         }
@@ -693,13 +693,12 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices);
   }
 
-  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    int SliceThicknessMultiplier = pSliceThicknessMod > MathLib.EPSILON && pSliceThicknessSamples > 0 ? pSliceThicknessSamples : 1;
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier / (double) (oversample) + 0.5));
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices) {
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) (oversample) + 0.5));
     int PROGRESS_STEPS = 21;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
@@ -710,7 +709,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -745,7 +744,7 @@ public class FlameRenderer {
     List<Thread> executingThreads = new ArrayList<Thread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pFlames.get(i), -1, null, 0.0, 0);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pFlames.get(i), -1, null);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -996,7 +995,7 @@ public class FlameRenderer {
     preview = pPreview;
   }
 
-  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern, double pSliceThicknessMod, int pSliceThicknessSamples) {
+  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern) {
     if (!flame.isRenderable())
       throw new RuntimeException("Slices can not be created of empty flames");
 
@@ -1036,7 +1035,7 @@ public class FlameRenderer {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
 
-      iterate(0, 1, renderFlames, slices, pSliceThicknessMod, pSliceThicknessSamples);
+      iterate(0, 1, renderFlames, slices);
 
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint(flame.getActiveLightCount());

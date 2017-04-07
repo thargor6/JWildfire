@@ -27,7 +27,6 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -41,7 +40,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
-import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -160,7 +158,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     projector.projectPoint(q);
   }
 
-  public void iterateNext(List<RenderSlice> pSlices, double pThicknessMod, int pTicknessSamples) {
+  public void iterateNext(List<RenderSlice> pSlices) {
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
@@ -179,41 +177,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
       applyEmptyFinalTransform();
     }
 
-    if (pThicknessMod > EPSILON && pTicknessSamples > 0) {
-      XYZPoint w = new XYZPoint();
-      w.assign(q);
-      try {
-        for (int i = 0; i < pTicknessSamples; i++) {
-          addNoise(w, q, pThicknessMod);
-          List<AbstractRaster> sliceRasters = collectSliceRasters(q, pSlices);
-          for (AbstractRaster sliceRaster : sliceRasters) {
-            raster = sliceRaster;
-            projector.projectPoint(q);
-          }
-        }
-      }
-      finally {
-        q.assign(w);
-      }
-    }
-    else {
-      if (setupSliceRaster(q, pSlices)) {
-        projector.projectPoint(q);
-      }
-    }
-  }
-
-  private void addNoise(XYZPoint pSrc, XYZPoint pDst, double pRadius) {
-    if (pRadius > 0.01) {
-      double angle = randGen.random() * 2 * M_PI;
-      double sina = sin(angle);
-      double cosa = cos(angle);
-      angle = randGen.random() * M_PI;
-      double sinb = sin(angle);
-      double cosb = cos(angle);
-      pDst.x = pSrc.x + pRadius * sinb * cosa;
-      pDst.y = pSrc.y + pRadius * sinb * sina;
-      pDst.z = pSrc.z + pRadius * cosb;
+    if (setupSliceRaster(q, pSlices)) {
+      projector.projectPoint(q);
     }
   }
 
@@ -227,21 +192,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       raster = null;
       return false;
     }
-  }
-
-  private List<AbstractRaster> collectSliceRasters(XYZPoint pPoint, List<RenderSlice> pSlices) {
-    List<AbstractRaster> res = new ArrayList<AbstractRaster>();
-    int sliceIdx = -1;
-    while (true) {
-      sliceIdx = getSliceIndex(pPoint, pSlices, sliceIdx + 1);
-      if (sliceIdx >= 0) {
-        res.add(pSlices.get(sliceIdx).getRaster());
-      }
-      else {
-        break;
-      }
-    }
-    return res;
   }
 
   private int getSliceIndex(XYZPoint pPoint, List<RenderSlice> pSlices, int pStartIndex) {

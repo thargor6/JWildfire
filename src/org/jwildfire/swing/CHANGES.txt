@@ -2,7 +2,14 @@ V3.10 (xx.xx.2017)
 /*
   - experimental adaptive pre-filtering in order to improve image quality, by keeping sharp details while smoothening larger areas with less details
    (always enabled in the EARLY PREVIEW-version, no parameters, requires the double of amount of memory)
-  */ 
+  */
+  
+ - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") 
+ - improved the rotation-behaviour of the mesh-preview in the Mesh-Generator  
+ - restricted the range of the "Contrast"-slider causing more visually "interesting" changes
+ - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   
+  
+  
  - reimplemented the preview-cache (all options at the coloring-tab do not need a recalculation do show changes). In general, all properties
    which do not need a re-render are indicated by a star at the label, e.g. "Brightness*". Is is recommended to do a quickrender before adjusting them,
    so can apply changes in almsot realtime to a decent image.
@@ -22,8 +29,6 @@ V3.10 (xx.xx.2017)
  - fixed (again) a serious bug in the Mesh-Generator: when rendering image-stacks 
    each image inside a slice was the same. This causing meshes to be very 
    "chunky", depending on slice-size. (The original fix was lost due to an unknown reason)
- - restricted the range of the "Contrast"-slider causing more visually "interesting" changes
- - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   
  
 V3.02 (12.03.2017)
  - new and powerful "dla3d_wf"-variation ("diffusion limited aggregation") which may even utilize 3d-meshes as nodes/junctions

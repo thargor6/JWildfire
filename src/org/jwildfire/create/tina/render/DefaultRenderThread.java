@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2017 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.render;
 
 import java.util.ArrayList;
@@ -12,8 +28,8 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
 
   protected List<DefaultRenderIterationState> iterationState;
 
-  public DefaultRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    super(pPrefs, pThreadId, pThreadGroupSize, pRenderer, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+  public DefaultRenderThread(Prefs pPrefs, int pThreadId, int pThreadGroupSize, FlameRenderer pRenderer, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    super(pPrefs, pThreadId, pThreadGroupSize, pRenderer, pRenderPackets, pSamples, pSlices);
 
     iterationState = new ArrayList<DefaultRenderIterationState>();
 
@@ -120,7 +136,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
   }
 
   @Override
-  protected void iterateSlices(List<RenderSlice> pSlices, double pThicknessMod, int pThicknessSamples) {
+  protected void iterateSlices(List<RenderSlice> pSlices) {
     final int iterInc = iterationState.size();
     if (iterInc < 1) {
       return;
@@ -140,7 +156,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
         }
       }
       for (DefaultRenderIterationState state : iterationState) {
-        state.iterateNext(pSlices, pThicknessMod, pThicknessSamples);
+        state.iterateNext(pSlices);
       }
     }
   }

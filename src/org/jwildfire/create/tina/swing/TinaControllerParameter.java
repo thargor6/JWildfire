@@ -485,8 +485,6 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenPreviewPolygonsREd;
   public JButton meshGenRefreshPreviewBtn;
   public JButton meshGenPreviewSunflowExportBtn;
-  public JWFNumberField meshGenThicknessModREd;
-  public JWFNumberField meshGenThicknessSamplesREd;
   public JButton channelMixerResetBtn;
   public JComboBox channelMixerModeCmb;
   public JPanel channelMixerRRRootPanel;
@@ -1393,8 +1391,8 @@ public class TinaControllerParameter {
       JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
       JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
       JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
-      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenThicknessModREd,
-      JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
+      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn,
+      JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
       JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
@@ -1449,8 +1447,6 @@ public class TinaControllerParameter {
     meshGenPreviewPolygonsREd = pMeshGenPreviewPolygonsREd;
     meshGenRefreshPreviewBtn = pMeshGenRefreshPreviewBtn;
     meshGenPreviewSunflowExportBtn = pMeshGenPreviewSunflowExportBtn;
-    meshGenThicknessModREd = pMeshGenThicknessModREd;
-    meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
     meshGenPreFilter1Cmb = pMeshGenPreFilter1Cmb;
     meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
     meshGenImageStepREd = pMeshGenImageStepREd;

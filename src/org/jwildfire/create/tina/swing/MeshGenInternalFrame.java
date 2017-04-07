@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -183,10 +183,8 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenPreviewPolygonsREd;
   private JButton meshGenRefreshPreviewBtn;
   private JButton meshGenPreviewSunflowExportBtn;
-  private JWFNumberField meshGenSliceThicknessModREd;
   private JButton channelMixerResetBtn;
   private JComboBox channelMixerModeCmb;
-  private JWFNumberField meshGenSliceThicknessSamplesREd;
   private JComboBox meshGenPreFilter1Cmb;
   private JComboBox meshGenPreFilter2Cmb;
   private JWFNumberField meshGenImageStepREd;
@@ -406,7 +404,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       panel_2.add(meshGenProgressbar, BorderLayout.CENTER);
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(810, 10));
+      panel_3.setPreferredSize(new Dimension(620, 10));
       panel_1.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -541,7 +539,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenRenderQualityREd.setHasMinValue(true);
       meshGenRenderQualityREd.setHasMaxValue(false);
       meshGenRenderQualityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenRenderQualityREd.setBounds(508, 26, 100, 24);
+      meshGenRenderQualityREd.setBounds(521, 0, 100, 24);
       panel_3.add(meshGenRenderQualityREd);
 
       JLabel lblRenderQuality = new JLabel();
@@ -551,56 +549,8 @@ public class MeshGenInternalFrame extends JInternalFrame {
       lblRenderQuality.setName("");
       lblRenderQuality.setLocation(new Point(4, 76));
       lblRenderQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblRenderQuality.setBounds(428, 26, 79, 22);
+      lblRenderQuality.setBounds(441, 0, 79, 22);
       panel_3.add(lblRenderQuality);
-
-      meshGenSliceThicknessModREd = new JWFNumberField();
-      meshGenSliceThicknessModREd.setValueStep(0.01);
-      meshGenSliceThicknessModREd.setText("");
-      meshGenSliceThicknessModREd.setSize(new Dimension(100, 24));
-      meshGenSliceThicknessModREd.setPreferredSize(new Dimension(100, 24));
-      meshGenSliceThicknessModREd.setMaxValue(1.0);
-      meshGenSliceThicknessModREd.setLocation(new Point(71, 76));
-      meshGenSliceThicknessModREd.setHasMinValue(true);
-      meshGenSliceThicknessModREd.setHasMaxValue(true);
-      meshGenSliceThicknessModREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenSliceThicknessModREd.setBounds(708, 26, 100, 24);
-      panel_3.add(meshGenSliceThicknessModREd);
-
-      JLabel lblSliceThickness = new JLabel();
-      lblSliceThickness.setToolTipText("Thickness modifier of the generated model");
-      lblSliceThickness.setText("Thickness mod");
-      lblSliceThickness.setSize(new Dimension(68, 22));
-      lblSliceThickness.setPreferredSize(new Dimension(94, 22));
-      lblSliceThickness.setName("");
-      lblSliceThickness.setLocation(new Point(4, 76));
-      lblSliceThickness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSliceThickness.setBounds(611, 28, 100, 22);
-      panel_3.add(lblSliceThickness);
-
-      meshGenSliceThicknessSamplesREd = new JWFNumberField();
-      meshGenSliceThicknessSamplesREd.setValueStep(1.0);
-      meshGenSliceThicknessSamplesREd.setText("");
-      meshGenSliceThicknessSamplesREd.setSize(new Dimension(100, 24));
-      meshGenSliceThicknessSamplesREd.setPreferredSize(new Dimension(100, 24));
-      meshGenSliceThicknessSamplesREd.setOnlyIntegers(true);
-      meshGenSliceThicknessSamplesREd.setMaxValue(200.0);
-      meshGenSliceThicknessSamplesREd.setLocation(new Point(71, 76));
-      meshGenSliceThicknessSamplesREd.setHasMinValue(true);
-      meshGenSliceThicknessSamplesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenSliceThicknessSamplesREd.setBounds(708, 48, 100, 24);
-      panel_3.add(meshGenSliceThicknessSamplesREd);
-
-      JLabel lblThicknessSamples = new JLabel();
-      lblThicknessSamples.setToolTipText("Number of samples for calculating thickness mod");
-      lblThicknessSamples.setText("Thickness samples");
-      lblThicknessSamples.setSize(new Dimension(68, 22));
-      lblThicknessSamples.setPreferredSize(new Dimension(94, 22));
-      lblThicknessSamples.setName("");
-      lblThicknessSamples.setLocation(new Point(4, 76));
-      lblThicknessSamples.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblThicknessSamples.setBounds(611, 50, 100, 22);
-      panel_3.add(lblThicknessSamples);
 
       meshGenOutputTypeCmb = new JComboBox();
       meshGenOutputTypeCmb.addItemListener(new ItemListener() {
@@ -1865,20 +1815,12 @@ public class MeshGenInternalFrame extends JInternalFrame {
     return meshGenPreviewSunflowExportBtn;
   }
 
-  public JWFNumberField getMeshGenThicknessREd() {
-    return meshGenSliceThicknessModREd;
-  }
-
   public JButton getChannelMixerResetBtn() {
     return channelMixerResetBtn;
   }
 
   public JComboBox getChannelMixerModeCmb() {
     return channelMixerModeCmb;
-  }
-
-  public JWFNumberField getMeshGenThicknessSamplesREd() {
-    return meshGenSliceThicknessSamplesREd;
   }
 
   public JComboBox getMeshGenPreFilter1Cmb() {

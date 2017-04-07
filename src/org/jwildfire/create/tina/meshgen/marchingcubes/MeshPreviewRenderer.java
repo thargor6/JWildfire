@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3D;
 import org.jwildfire.transform.Mesh3DTransformer.Light;
+import org.jwildfire.transform.Mesh3DTransformer.Rotate;
 import org.jwildfire.transform.PerspectiveTransformer;
 
 public class MeshPreviewRenderer {
@@ -100,6 +101,7 @@ public class MeshPreviewRenderer {
     trans.setCentreY(trans.getCentreY() * (1.0 - pPositionY));
     trans.setZoom(pSize * 0.5);
     trans.setLight(Light.NORMAL);
+    trans.setDoRotate(Rotate.YZ);
     trans.setSmoothing(0);
     trans.setAmbient(0.4);
     trans.setDoCam(false);

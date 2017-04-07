@@ -5405,7 +5405,7 @@ public class TinaInternalFrame extends JInternalFrame {
         meshGenFrame.getMeshGenPreviewPositionYREd(), meshGenFrame.getMeshGenPreviewSizeREd(), meshGenFrame.getMeshGenPreviewScaleZREd(),
         meshGenFrame.getMeshGenPreviewRotateAlphaREd(), meshGenFrame.getMeshGenPreviewRotateBetaREd(), meshGenFrame.getMeshGenPreviewPointsREd(),
         meshGenFrame.getMeshGenPreviewPolygonsREd(), meshGenFrame.getMeshGenRefreshPreviewBtn(), meshGenFrame.getMeshGenPreviewSunflowExportBtn(),
-        meshGenFrame.getMeshGenThicknessREd(), meshGenFrame.getMeshGenThicknessSamplesREd(), meshGenFrame.getMeshGenPreFilter1Cmb(),
+        meshGenFrame.getMeshGenPreFilter1Cmb(),
         meshGenFrame.getMeshGenPreFilter2Cmb(), meshGenFrame.getMeshGenImageStepREd(), meshGenFrame.getMeshGenOutputTypeCmb());
 
     params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane());

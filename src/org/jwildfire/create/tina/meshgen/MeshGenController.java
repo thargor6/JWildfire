@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -151,8 +151,6 @@ public class MeshGenController {
   private final JWFNumberField previewPolygonsREd;
   private final JButton previewRefreshBtn;
   private final JButton previewSunflowExportBtn;
-  private final JWFNumberField thicknessModREd;
-  private final JWFNumberField thicknessSamplesREd;
   private final JComboBox preFilter1Cmb;
   private final JComboBox preFilter2Cmb;
   private final JWFNumberField imageStepREd;
@@ -177,7 +175,7 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JWFNumberField pThicknessModREd, JWFNumberField pThicknessSamplesREd,
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn,
       JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb, JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
@@ -240,8 +238,6 @@ public class MeshGenController {
     previewPolygonsREd = pPreviewPolygonsREd;
     previewRefreshBtn = pRefreshPreviewBtn;
     previewSunflowExportBtn = pPreviewSunflowExportBtn;
-    thicknessModREd = pThicknessModREd;
-    thicknessSamplesREd = pThicknessSamplesREd;
     preFilter1Cmb = pPreFilter1Cmb;
     preFilter2Cmb = pPreFilter2Cmb;
     imageStepREd = pImageStepREd;
@@ -264,8 +260,6 @@ public class MeshGenController {
       renderWidthREd.setValue(512);
       renderHeightREd.setValue(512);
       renderQualityREd.setValue(300);
-      thicknessModREd.setValue(0.0);
-      thicknessSamplesREd.setValue(100.0);
       preFilter1Cmb.setSelectedItem(PreFilterType.NONE);
       preFilter2Cmb.setSelectedItem(PreFilterType.NONE);
 
@@ -817,8 +811,6 @@ public class MeshGenController {
     renderWidthREd.setEnabled(!isRendering);
     renderHeightREd.setEnabled(!isRendering);
     renderQualityREd.setEnabled(!isRendering);
-    thicknessModREd.setEnabled(!isRendering);
-    thicknessSamplesREd.setEnabled(!isRendering);
     preFilter1Cmb.setEnabled(!isRendering);
     preFilter2Cmb.setEnabled(!isRendering);
     imageStepREd.setEnabled(!isRendering);
@@ -908,7 +900,7 @@ public class MeshGenController {
               renderSlicesThread = new RenderSlicesThread(
                   prefs, flame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
                   sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
-                  zmaxREd.getDoubleValue(), thicknessModREd.getDoubleValue(), thicknessSamplesREd.getIntValue());
+                  zmaxREd.getDoubleValue());
 
               lastRenderedSequenceOutFilePattern = outfilenamePattern;
               break;
