@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,8 +16,11 @@
 */
 package org.jwildfire.create.tina.meshgen.marchingcubes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.jwildfire.create.tina.variation.mesh.NeightboursList;
 
 public class Mesh {
   private List<Point3f> vertices;
@@ -145,4 +148,42 @@ public class Mesh {
     }
     dirty = true;
   }
+
+  public void laplaceSmooth(NeightboursList neighbours, double strength) {
+    List<Point3f> displacements = new ArrayList<>();
+    // Calc displacements
+    for (int i = 0; i < vertices.size(); i++) {
+      Point3f d = new Point3f();
+      displacements.add(d);
+      List<Integer> nList = neighbours.getNeighbours(i);
+      if (nList.size() > 1) {
+        double weight = 1.0 / (double) nList.size();
+        Point3f v = vertices.get(i);
+        for (Integer n : nList) {
+          Point3f vn = vertices.get(n);
+          d.x += (vn.x - v.x) * weight;
+          d.y += (vn.y - v.y) * weight;
+          d.z += (vn.z - v.z) * weight;
+        }
+      }
+    }
+
+    // Apply displacements
+    for (int i = 0; i < vertices.size(); i++) {
+      Point3f v = vertices.get(i);
+      Point3f d = displacements.get(i);
+      v.x += d.x * strength;
+      v.y += d.y * strength;
+      v.z += d.z * strength;
+    }
+  }
+
+  public void taubinSmooth(int passes, double lambda, double mu) {
+    NeightboursList neightbours = new NeightboursList(this);
+    for (int i = 0; i < passes; i++) {
+      laplaceSmooth(neightbours, lambda);
+      laplaceSmooth(neightbours, mu);
+    }
+  }
+
 }

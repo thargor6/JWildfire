@@ -485,6 +485,11 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenPreviewPolygonsREd;
   public JButton meshGenRefreshPreviewBtn;
   public JButton meshGenPreviewSunflowExportBtn;
+  public JCheckBox meshGenTaubinSmoothCbx;
+  public JWFNumberField meshGenSmoothPassesREd;
+  public JWFNumberField meshGenSmoothLambdaREd;
+  public JWFNumberField meshGenSmoothMuREd;
+
   public JButton channelMixerResetBtn;
   public JComboBox channelMixerModeCmb;
   public JPanel channelMixerRRRootPanel;
@@ -498,6 +503,7 @@ public class TinaControllerParameter {
   public JPanel channelMixerBBRootPanel;
   public JComboBox meshGenPreFilter1Cmb;
   public JComboBox meshGenPreFilter2Cmb;
+
   public JWFNumberField meshGenImageStepREd;
   public JButton motionCurvePlayPreviewButton;
   public JComboBox dofDOFShapeCmb;
@@ -1391,9 +1397,9 @@ public class TinaControllerParameter {
       JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
       JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
       JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
-      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn,
-      JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
-      JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb) {
+      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
+      JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb, JCheckBox pMeshGenTaubinSmoothCbx, JWFNumberField pMeshGenSmoothPassesREd,
+      JWFNumberField pMeshGenSmoothLambdaREd, JWFNumberField pMeshGenSmoothMuREd) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1451,6 +1457,10 @@ public class TinaControllerParameter {
     meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
     meshGenImageStepREd = pMeshGenImageStepREd;
     meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
+    meshGenTaubinSmoothCbx = pMeshGenTaubinSmoothCbx;
+    meshGenSmoothPassesREd = pMeshGenSmoothPassesREd;
+    meshGenSmoothLambdaREd = pMeshGenSmoothLambdaREd;
+    meshGenSmoothMuREd = pMeshGenSmoothMuREd;
   }
 
   public void setHelpParams(JTextPane pMeshGenHintPane, JTextPane pHelpPane, JTextPane pApophysisHintsPane) {

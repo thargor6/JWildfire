@@ -306,7 +306,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
         parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
         parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb,
-        parameterObject.meshGenImageStepREd, parameterObject.meshGenOutputTypeCmb);
+        parameterObject.meshGenImageStepREd, parameterObject.meshGenOutputTypeCmb, parameterObject.meshGenTaubinSmoothCbx,
+        parameterObject.meshGenSmoothPassesREd, parameterObject.meshGenSmoothLambdaREd, parameterObject.meshGenSmoothMuREd);
 
     data.macroButtonsTable = parameterObject.macroButtonsTable;
     data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;

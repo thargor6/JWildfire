@@ -155,6 +155,10 @@ public class MeshGenController {
   private final JComboBox preFilter2Cmb;
   private final JWFNumberField imageStepREd;
   private final JComboBox outputTypeCmb;
+  public final JCheckBox meshGenTaubinSmoothCbx;
+  public final JWFNumberField meshGenSmoothPassesREd;
+  public final JWFNumberField meshGenSmoothLambdaREd;
+  public final JWFNumberField meshGenSmoothMuREd;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -175,8 +179,9 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn,
-      JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb, JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb) {
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb,
+      JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb, JCheckBox pMeshGenTaubinSmoothCbx, JWFNumberField pMeshGenSmoothPassesREd,
+      JWFNumberField pMeshGenSmoothLambdaREd, JWFNumberField pMeshGenSmoothMuREd) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -242,6 +247,10 @@ public class MeshGenController {
     preFilter2Cmb = pPreFilter2Cmb;
     imageStepREd = pImageStepREd;
     outputTypeCmb = pOutputTypeCmb;
+    meshGenTaubinSmoothCbx = pMeshGenTaubinSmoothCbx;
+    meshGenSmoothPassesREd = pMeshGenSmoothPassesREd;
+    meshGenSmoothLambdaREd = pMeshGenSmoothLambdaREd;
+    meshGenSmoothMuREd = pMeshGenSmoothMuREd;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
@@ -275,6 +284,15 @@ public class MeshGenController {
       previewRotateAlphaREd.setValue(27.0);
       previewRotateBetaREd.setValue(56.0);
       imageStepREd.setValue(1);
+
+      meshGenTaubinSmoothCbx.setSelected(false);
+      //      meshGenSmoothPassesREd.setValue(12);
+      //      meshGenSmoothLambdaREd.setValue(0.42);
+      //      meshGenSmoothMuREd.setValue(-0.45);
+
+      meshGenSmoothPassesREd.setValue(20);
+      meshGenSmoothLambdaREd.setValue(0.84);
+      meshGenSmoothMuREd.setValue(-0.90);
 
       setZMinValue(0.0);
       setZMaxValue(0.5);
@@ -815,6 +833,11 @@ public class MeshGenController {
     preFilter2Cmb.setEnabled(!isRendering);
     imageStepREd.setEnabled(!isRendering);
 
+    boolean smoothing = meshGenTaubinSmoothCbx.isSelected();
+    meshGenSmoothPassesREd.setEnabled(smoothing);
+    meshGenSmoothLambdaREd.setEnabled(smoothing);
+    meshGenSmoothMuREd.setEnabled(smoothing);
+
     sequenceFromRendererBtn.setEnabled(lastRenderedSequenceOutFilePattern != null && !isRendering);
     loadSequenceBtn.setEnabled(!isRendering);
     sequenceDownSampleREd.setEnabled(!isRendering);
@@ -1052,7 +1075,8 @@ public class MeshGenController {
 
           generateMeshThread = new GenerateMeshThread(outFile.getAbsolutePath(), finishEvent, generateMeshProgressUpdater,
               getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), imageStepREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
-              sequenceDownSampleREd.getIntValue(), true, getPreFilterList());
+              sequenceDownSampleREd.getIntValue(), true, getPreFilterList(), meshGenTaubinSmoothCbx.isSelected(), meshGenSmoothPassesREd.getIntValue(),
+              meshGenSmoothLambdaREd.getDoubleValue(), meshGenSmoothMuREd.getDoubleValue());
 
           enableControls();
           new Thread(generateMeshThread).start();
@@ -1253,6 +1277,10 @@ public class MeshGenController {
 
   private MeshGenRenderOutputType getOutputType() {
     return (MeshGenRenderOutputType) outputTypeCmb.getSelectedItem();
+  }
+
+  public void taubinSmoothCbx_clicked() {
+    enableControls();
   }
 
 }
