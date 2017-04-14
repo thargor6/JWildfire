@@ -355,6 +355,7 @@ public class TinaControllerParameter {
   public JButton backgroundColorURIndicatorBtn;
   public JButton backgroundColorLLIndicatorBtn;
   public JButton backgroundColorLRIndicatorBtn;
+  public JButton backgroundColorCCIndicatorBtn;
   public JButton randomizeButton;
   public JTree flameBrowserTree;
   public JPanel flameBrowersImagesPnl;
@@ -1106,7 +1107,8 @@ public class TinaControllerParameter {
       JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb,
       JWFNumberField lowDensityBrightnessREd, JSlider lowDensityBrightnessSlider, JWFNumberField balanceRedREd, JSlider balanceRedSlider,
       JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider,
-      JButton backgroundColorURIndicatorBtn, JButton backgroundColorLLIndicatorBtn, JButton backgroundColorLRIndicatorBtn, JComboBox backgroundColorTypeCmb) {
+      JButton backgroundColorURIndicatorBtn, JButton backgroundColorLLIndicatorBtn, JButton backgroundColorLRIndicatorBtn, JComboBox backgroundColorTypeCmb,
+      JButton backgroundColorCCIndicatorBtn) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1305,6 +1307,7 @@ public class TinaControllerParameter {
     this.backgroundColorLLIndicatorBtn = backgroundColorLLIndicatorBtn;
     this.backgroundColorLRIndicatorBtn = backgroundColorLRIndicatorBtn;
     this.backgroundColorTypeCmb = backgroundColorTypeCmb;
+    this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

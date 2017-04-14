@@ -1826,7 +1826,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundSelectImageBtn.setText("Select image...");
       backgroundSelectImageBtn.setPreferredSize(new Dimension(190, 24));
       backgroundSelectImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      backgroundSelectImageBtn.setBounds(873, 49, 148, 24);
+      backgroundSelectImageBtn.setBounds(873, 70, 148, 24);
       tinaColoringPanel.add(backgroundSelectImageBtn);
 
       backgroundRemoveImageBtn = new JButton();
@@ -1834,7 +1834,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundRemoveImageBtn.setText("Remove image");
       backgroundRemoveImageBtn.setPreferredSize(new Dimension(190, 24));
       backgroundRemoveImageBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      backgroundRemoveImageBtn.setBounds(1022, 49, 148, 24);
+      backgroundRemoveImageBtn.setBounds(1022, 70, 148, 24);
       backgroundRemoveImageBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.removeBackgroundImageButton_actionPerformed(e);
@@ -1854,7 +1854,7 @@ public class TinaInternalFrame extends JInternalFrame {
       foregroundOpacityField.setHasMaxValue(true);
       foregroundOpacityField.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       foregroundOpacityField.setEditable(true);
-      foregroundOpacityField.setBounds(873, 73, 100, 24);
+      foregroundOpacityField.setBounds(873, 94, 100, 24);
       foregroundOpacityField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -1877,7 +1877,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblOpacity.setPreferredSize(new Dimension(94, 22));
       lblOpacity.setLocation(new Point(488, 2));
       lblOpacity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblOpacity.setBounds(806, 73, 65, 22);
+      lblOpacity.setBounds(806, 94, 65, 22);
       tinaColoringPanel.add(lblOpacity);
 
       foregroundOpacitySlider = new JSlider();
@@ -1888,7 +1888,7 @@ public class TinaInternalFrame extends JInternalFrame {
       foregroundOpacitySlider.setMaximum(2000);
       foregroundOpacitySlider.setLocation(new Point(686, 2));
       foregroundOpacitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      foregroundOpacitySlider.setBounds(975, 73, 195, 24);
+      foregroundOpacitySlider.setBounds(975, 94, 195, 24);
       foregroundOpacitySlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -2190,7 +2190,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBgImage.setPreferredSize(new Dimension(94, 22));
       lblBgImage.setLocation(new Point(4, 4));
       lblBgImage.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblBgImage.setBounds(806, 52, 65, 22);
+      lblBgImage.setBounds(806, 73, 65, 22);
       tinaColoringPanel.add(lblBgImage);
 
       backgroundColorTypeCmb = new JComboBox();
@@ -2214,7 +2214,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorLLIndicatorBtn.setPreferredSize(new Dimension(190, 24));
       backgroundColorLLIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       backgroundColorLLIndicatorBtn.setBackground(Color.BLACK);
-      backgroundColorLLIndicatorBtn.setBounds(1027, 26, 30, 24);
+      backgroundColorLLIndicatorBtn.setBounds(1027, 28, 30, 24);
       backgroundColorLLIndicatorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.backgroundColorLLBtn_clicked();
@@ -2227,7 +2227,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorURIndicatorBtn.setPreferredSize(new Dimension(190, 24));
       backgroundColorURIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       backgroundColorURIndicatorBtn.setBackground(Color.BLACK);
-      backgroundColorURIndicatorBtn.setBounds(1057, 3, 30, 24);
+      backgroundColorURIndicatorBtn.setBounds(1086, 4, 30, 24);
       backgroundColorURIndicatorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.backgroundColorURBtn_clicked();
@@ -2240,13 +2240,26 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorLRIndicatorBtn.setPreferredSize(new Dimension(190, 24));
       backgroundColorLRIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
       backgroundColorLRIndicatorBtn.setBackground(Color.BLACK);
-      backgroundColorLRIndicatorBtn.setBounds(1057, 26, 30, 24);
+      backgroundColorLRIndicatorBtn.setBounds(1086, 28, 30, 24);
       backgroundColorLRIndicatorBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.backgroundColorLRBtn_clicked();
         }
       });
       tinaColoringPanel.add(backgroundColorLRIndicatorBtn);
+
+      backgroundColorCCIndicatorBtn = new JButton();
+      backgroundColorCCIndicatorBtn.setToolTipText("Set the background color of your fractal");
+      backgroundColorCCIndicatorBtn.setPreferredSize(new Dimension(190, 24));
+      backgroundColorCCIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorCCIndicatorBtn.setBackground(Color.BLACK);
+      backgroundColorCCIndicatorBtn.setBounds(1057, 12, 30, 32);
+      backgroundColorCCIndicatorBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.backgroundColorCCBtn_clicked();
+        }
+      });
+      tinaColoringPanel.add(backgroundColorCCIndicatorBtn);
     }
     return tinaColoringPanel;
   }
@@ -5532,7 +5545,8 @@ public class TinaInternalFrame extends JInternalFrame {
         gpuRendererFrame.getInteractiveQualityProfileCmb(),
         getLowDensityBrightnessREd(), getLowDensityBrightnessSlider(), getBalanceRedREd(), getBalanceRedSlider(),
         getBalanceGreenREd(), getBalanceGreenSlider(), getBalanceBlueREd(), getBalanceBlueSlider(),
-        getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb());
+        getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
+        getBackgroundColorCCIndicatorBtn());
 
     tinaController = new TinaController(params);
 
@@ -5755,6 +5769,7 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.removeAllItems();
     pCmb.addItem(BGColorType.SINGLE_COLOR);
     pCmb.addItem(BGColorType.GRADIENT_2X2);
+    pCmb.addItem(BGColorType.GRADIENT_2X2_C);
   }
 
   private void initGlobalScriptCmb(JComboBox pCmb) {
@@ -10705,6 +10720,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton backgroundColorURIndicatorBtn;
   private JButton backgroundColorLLIndicatorBtn;
   private JButton backgroundColorLRIndicatorBtn;
+  private JButton backgroundColorCCIndicatorBtn;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -19933,5 +19949,9 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getBackgroundColorLRIndicatorBtn() {
     return backgroundColorLRIndicatorBtn;
+  }
+
+  public JButton getBackgroundColorCCIndicatorBtn() {
+    return backgroundColorCCIndicatorBtn;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

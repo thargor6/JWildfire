@@ -16,11 +16,10 @@
 */
 package org.jwildfire.create.tina.render;
 
-import java.awt.Color;
-
-import org.jwildfire.create.GradientCreator;
+import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 import org.jwildfire.image.SimpleImage;
 
 public class FlameBGColorHandler {
@@ -35,30 +34,44 @@ public class FlameBGColorHandler {
     if (flame.getBGImageFilename() != null && !flame.getBGImageFilename().isEmpty()) {
       return;
     }
+
+    // fast skip
     if (BGColorType.SINGLE_COLOR.equals(flame.getBgColorType())) {
-      if (flame.getBgColorRed() > 0 || flame.getBgColorGreen() > 0 || flame.getBgColorBlue() > 0) {
-        image.fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
-      }
-      else {
+      if (!(flame.getBgColorRed() > 0 || flame.getBgColorGreen() > 0 || flame.getBgColorBlue() > 0)) {
         image.fillBackground(0, 0, 0);
+        return;
       }
     }
     else if (BGColorType.GRADIENT_2X2.equals(flame.getBgColorType())) {
-      if (flame.getBgColorULRed() > 0 || flame.getBgColorULGreen() > 0 || flame.getBgColorULBlue() > 0 ||
+      if (!(flame.getBgColorULRed() > 0 || flame.getBgColorULGreen() > 0 || flame.getBgColorULBlue() > 0 ||
           flame.getBgColorURRed() > 0 || flame.getBgColorURGreen() > 0 || flame.getBgColorURBlue() > 0 ||
           flame.getBgColorLLRed() > 0 || flame.getBgColorLLGreen() > 0 || flame.getBgColorLLBlue() > 0 ||
-          flame.getBgColorLRRed() > 0 || flame.getBgColorLRGreen() > 0 || flame.getBgColorLRBlue() > 0) {
-        GradientCreator creator = new GradientCreator();
-        creator.setUlColor(new Color(flame.getBgColorULRed(), flame.getBgColorULGreen(), flame.getBgColorULBlue()));
-        creator.setUrColor(new Color(flame.getBgColorURRed(), flame.getBgColorURGreen(), flame.getBgColorURBlue()));
-        creator.setLlColor(new Color(flame.getBgColorLLRed(), flame.getBgColorLLGreen(), flame.getBgColorLLBlue()));
-        creator.setLrColor(new Color(flame.getBgColorLRRed(), flame.getBgColorLRGreen(), flame.getBgColorLRBlue()));
-        creator.fillImage(image);
-      }
-      else {
+          flame.getBgColorLRRed() > 0 || flame.getBgColorLRGreen() > 0 || flame.getBgColorLRBlue() > 0)) {
         image.fillBackground(0, 0, 0);
+        return;
       }
     }
+    else if (BGColorType.GRADIENT_2X2_C.equals(flame.getBgColorType())) {
+      if (!(flame.getBgColorULRed() > 0 || flame.getBgColorULGreen() > 0 || flame.getBgColorULBlue() > 0 ||
+          flame.getBgColorURRed() > 0 || flame.getBgColorURGreen() > 0 || flame.getBgColorURBlue() > 0 ||
+          flame.getBgColorLLRed() > 0 || flame.getBgColorLLGreen() > 0 || flame.getBgColorLLBlue() > 0 ||
+          flame.getBgColorLRRed() > 0 || flame.getBgColorLRGreen() > 0 || flame.getBgColorLRBlue() > 0 ||
+          flame.getBgColorCCRed() > 0 || flame.getBgColorCCGreen() > 0 || flame.getBgColorCCBlue() > 0)) {
+        image.fillBackground(0, 0, 0);
+        return;
+      }
+    }
+
+    LogDensityFilter logDensityFilter = new LogDensityFilter(flame, new MarsagliaRandomGenerator());
+    logDensityFilter.setRaster(null, 0, 0, image.getImageWidth(), image.getImageHeight());
+    LogDensityPoint logDensityPoint = new LogDensityPoint(1);
+    for (int y = 0; y < image.getImageHeight(); y++) {
+      for (int x = 0; x < image.getImageWidth(); x++) {
+        logDensityFilter.calculateBGColor(logDensityPoint, x, y);
+        image.setRGB(x, y, Tools.roundColor(logDensityPoint.bgRed), Tools.roundColor(logDensityPoint.bgGreen), Tools.roundColor(logDensityPoint.bgBlue));
+      }
+    }
+
   }
 
 }

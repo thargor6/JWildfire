@@ -285,6 +285,7 @@ public class TinaControllerData {
   public JButton backgroundColorURIndicatorBtn;
   public JButton backgroundColorLLIndicatorBtn;
   public JButton backgroundColorLRIndicatorBtn;
+  public JButton backgroundColorCCIndicatorBtn;
   public JComboBox backgroundColorTypeCmb;
   public JWFNumberField layerWeightEd;
   public JButton layerAddBtn;

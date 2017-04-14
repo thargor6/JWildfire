@@ -80,6 +80,7 @@ public class AbstractFlameReader {
   public static final String ATTR_BACKGROUND_UR = "background_ur";
   public static final String ATTR_BACKGROUND_LL = "background_ll";
   public static final String ATTR_BACKGROUND_LR = "background_lr";
+  public static final String ATTR_BACKGROUND_CC = "background_cc";
   public static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
   public static final String ATTR_BRIGHTNESS = "brightness";
   public static final String ATTR_SATURATION = "saturation";
@@ -336,6 +337,12 @@ public class AbstractFlameReader {
       pFlame.setBgColorLRRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
       pFlame.setBgColorLRGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
       pFlame.setBgColorLRBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_CC)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorCCRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorCCGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorCCBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
     }
 
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {

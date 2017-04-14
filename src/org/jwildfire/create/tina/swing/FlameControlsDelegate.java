@@ -654,10 +654,12 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void enableBGColorUI() {
-    boolean enabled = getCurrFlame() != null && BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType());
+    boolean enabled = getCurrFlame() != null && (BGColorType.GRADIENT_2X2.equals(getCurrFlame().getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(getCurrFlame().getBgColorType()));
+    data.backgroundColorIndicatorBtn.setEnabled(enabled);
     data.backgroundColorURIndicatorBtn.setEnabled(enabled);
     data.backgroundColorLLIndicatorBtn.setEnabled(enabled);
     data.backgroundColorLRIndicatorBtn.setEnabled(enabled);
+    data.backgroundColorCCIndicatorBtn.setEnabled(getCurrFlame() != null && (BGColorType.SINGLE_COLOR.equals(getCurrFlame().getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(getCurrFlame().getBgColorType())));
   }
 
   public void enableDEFilterUI() {

@@ -18,5 +18,5 @@
 package org.jwildfire.create.tina.base;
 
 public enum BGColorType {
-  SINGLE_COLOR, GRADIENT_2X2
+  SINGLE_COLOR, GRADIENT_2X2, GRADIENT_2X2_C
 }

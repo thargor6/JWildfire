@@ -229,13 +229,16 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER_THRESHOLD, pFlame.getPostNoiseFilterThreshold()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_TYPE, pFlame.getBgColorType().toString()));
-    if (BGColorType.GRADIENT_2X2.equals(pFlame.getBgColorType())) {
+    if (BGColorType.GRADIENT_2X2.equals(pFlame.getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(pFlame.getBgColorType())) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_UL, (double) pFlame.getBgColorULRed() / 255.0 + " " + (double) pFlame.getBgColorULGreen() / 255.0 + " " + (double) pFlame.getBgColorULBlue() / 255.0));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_UR, (double) pFlame.getBgColorURRed() / 255.0 + " " + (double) pFlame.getBgColorURGreen() / 255.0 + " " + (double) pFlame.getBgColorURBlue() / 255.0));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_LL, (double) pFlame.getBgColorLLRed() / 255.0 + " " + (double) pFlame.getBgColorLLGreen() / 255.0 + " " + (double) pFlame.getBgColorLLBlue() / 255.0));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_LR, (double) pFlame.getBgColorLRRed() / 255.0 + " " + (double) pFlame.getBgColorLRGreen() / 255.0 + " " + (double) pFlame.getBgColorLRBlue() / 255.0));
     }
-    else {
+    if (BGColorType.GRADIENT_2X2_C.equals(pFlame.getBgColorType())) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_CC, (double) pFlame.getBgColorCCRed() / 255.0 + " " + (double) pFlame.getBgColorCCGreen() / 255.0 + " " + (double) pFlame.getBgColorCCBlue() / 255.0));
+    }
+    if (BGColorType.SINGLE_COLOR.equals(pFlame.getBgColorType())) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND, (double) pFlame.getBgColorRed() / 255.0 + " " + (double) pFlame.getBgColorGreen() / 255.0 + " " + (double) pFlame.getBgColorBlue() / 255.0));
     }
     attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));

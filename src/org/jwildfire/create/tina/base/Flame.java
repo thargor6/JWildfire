@@ -152,6 +152,9 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int bgColorLRRed;
   private int bgColorLRGreen;
   private int bgColorLRBlue;
+  private int bgColorCCRed;
+  private int bgColorCCGreen;
+  private int bgColorCCBlue;
 
   private double gamma;
   private final MotionCurve gammaCurve = new MotionCurve();
@@ -317,10 +320,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgColorType = BGColorType.GRADIENT_2X2;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     bgColorULRed = bgColorULGreen = bgColorULBlue = bgColorURRed = bgColorURGreen = bgColorURBlue = bgColorLLRed = bgColorLLGreen = bgColorLLBlue = bgColorLRRed = bgColorLRGreen = bgColorLRBlue = 0;
+    bgColorCCRed = bgColorCCGreen = bgColorCCBlue = 0;
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
     foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
-    lowDensityBrightness = 0.36;
+    lowDensityBrightness = 0.24;
     balanceRed = 1.0;
     balanceGreen = 1.0;
     balanceBlue = 1.0;
@@ -712,6 +716,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     bgColorLRRed = pFlame.bgColorLRRed;
     bgColorLRGreen = pFlame.bgColorLRGreen;
     bgColorLRBlue = pFlame.bgColorLRBlue;
+    bgColorCCRed = pFlame.bgColorCCRed;
+    bgColorCCGreen = pFlame.bgColorCCGreen;
+    bgColorCCBlue = pFlame.bgColorCCBlue;
     gamma = pFlame.gamma;
     gammaCurve.assign(pFlame.gammaCurve);
     gammaThreshold = pFlame.gammaThreshold;
@@ -841,6 +848,12 @@ public class Flame implements Assignable<Flame>, Serializable {
             (bgColorLRRed != pFlame.bgColorLRRed) || (bgColorLRGreen != pFlame.bgColorLRGreen) || (bgColorLRBlue != pFlame.bgColorLRBlue) ||
             (bgColorULRed != pFlame.bgColorULRed) || (bgColorULGreen != pFlame.bgColorULGreen) || (bgColorULBlue != pFlame.bgColorULBlue) ||
             (bgColorURRed != pFlame.bgColorURRed) || (bgColorURGreen != pFlame.bgColorURGreen) || (bgColorURBlue != pFlame.bgColorURBlue)))
+        ||
+        (bgColorType.equals(BGColorType.GRADIENT_2X2_C) && ((bgColorLLRed != pFlame.bgColorLLRed) || (bgColorLLGreen != pFlame.bgColorLLGreen) || (bgColorLLBlue != pFlame.bgColorLLBlue) ||
+            (bgColorLRRed != pFlame.bgColorLRRed) || (bgColorLRGreen != pFlame.bgColorLRGreen) || (bgColorLRBlue != pFlame.bgColorLRBlue) ||
+            (bgColorULRed != pFlame.bgColorULRed) || (bgColorULGreen != pFlame.bgColorULGreen) || (bgColorULBlue != pFlame.bgColorULBlue) ||
+            (bgColorURRed != pFlame.bgColorURRed) || (bgColorURGreen != pFlame.bgColorURGreen) || (bgColorURBlue != pFlame.bgColorURBlue) ||
+            (bgColorCCRed != pFlame.bgColorCCRed) || (bgColorCCGreen != pFlame.bgColorCCGreen) || (bgColorCCBlue != pFlame.bgColorCCBlue)))
         ||
 
         (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
@@ -1716,6 +1729,30 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setBgColorLRBlue(int bgColorLRBlue) {
     this.bgColorLRBlue = bgColorLRBlue;
+  }
+
+  public int getBgColorCCRed() {
+    return bgColorCCRed;
+  }
+
+  public void setBgColorCCRed(int bgColorCCRed) {
+    this.bgColorCCRed = bgColorCCRed;
+  }
+
+  public int getBgColorCCGreen() {
+    return bgColorCCGreen;
+  }
+
+  public void setBgColorCCGreen(int bgColorCCGreen) {
+    this.bgColorCCGreen = bgColorCCGreen;
+  }
+
+  public int getBgColorCCBlue() {
+    return bgColorCCBlue;
+  }
+
+  public void setBgColorCCBlue(int bgColorCCBlue) {
+    this.bgColorCCBlue = bgColorCCBlue;
   }
 
 }

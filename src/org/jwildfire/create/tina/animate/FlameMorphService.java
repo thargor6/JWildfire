@@ -201,6 +201,9 @@ public class FlameMorphService {
     res.setBgColorLRRed(morphColorValue(pFlame1.getBgColorLRRed(), pFlame2.getBgColorLRRed(), fScl));
     res.setBgColorLRGreen(morphColorValue(pFlame1.getBgColorLRGreen(), pFlame2.getBgColorLRGreen(), fScl));
     res.setBgColorLRBlue(morphColorValue(pFlame1.getBgColorLRBlue(), pFlame2.getBgColorLRBlue(), fScl));
+    res.setBgColorCCRed(morphColorValue(pFlame1.getBgColorCCRed(), pFlame2.getBgColorCCRed(), fScl));
+    res.setBgColorCCGreen(morphColorValue(pFlame1.getBgColorCCGreen(), pFlame2.getBgColorCCGreen(), fScl));
+    res.setBgColorCCBlue(morphColorValue(pFlame1.getBgColorCCBlue(), pFlame2.getBgColorCCBlue(), fScl));
     res.setBrightness(morphValue(pFlame1.getBrightness(), pFlame2.getBrightness(), fScl));
     res.setCentreX(morphValue(pFlame1.getCentreX(), pFlame2.getCentreX(), fScl));
     res.setCentreY(morphValue(pFlame1.getCentreY(), pFlame2.getCentreY(), fScl));
