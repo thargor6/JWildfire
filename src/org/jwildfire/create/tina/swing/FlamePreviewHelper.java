@@ -165,7 +165,6 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private AbstractRaster prevRaster;
-  private Flame prevFlame;
 
   public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
     if (!pAllowUseCache) {
@@ -192,10 +191,6 @@ public class FlamePreviewHelper implements IterationObserver {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       Flame flame = flameHolder.getFlame();
       if (flame != null) {
-        if (prevFlame != flame) {
-          prevRaster = null;
-        }
-        prevFlame = flame;
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
@@ -549,6 +544,7 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private void startBackgroundRender(FlamePanel pImgPanel) {
+    prevRaster = null;
     if (flameHolder == null) {
       return;
     }

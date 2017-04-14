@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.LightViewCalculator;
 import org.jwildfire.create.tina.render.PlotSample;
 import org.jwildfire.create.tina.render.ZBufferSample;
+import org.jwildfire.create.tina.render.filter.FilterKernel;
 
 public class RasterFloatInt implements AbstractRaster, Serializable {
   private static final long serialVersionUID = 1L;
@@ -30,6 +31,11 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   protected float blue[][];
   protected int count[][];
   protected int rasterWidth, rasterHeight;
+  private int oversample;
+  private double sampleDensity;
+  private FilterKernel filterKernel;
+  private final int filterOversample = 1;
+  private Flame flame;
 
   @Override
   public void incCount(int pX, int pY) {
@@ -37,9 +43,12 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public void allocRaster(Flame flame, int pWidth, int pHeight) {
+  public void allocRaster(Flame pFlame, int pWidth, int pHeight, int pOversample, double pSampleDensity) {
+    flame = pFlame;
     rasterWidth = pWidth;
     rasterHeight = pHeight;
+    oversample = pOversample;
+    sampleDensity = pSampleDensity;
     red = new float[pWidth][pHeight];
     green = new float[pWidth][pHeight];
     blue = new float[pWidth][pHeight];
@@ -77,7 +86,7 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
 
   @Override
   public void finalizeRaster() {
-    // EMPTY    
+    // EMPTY
   }
 
   @Override
@@ -107,6 +116,26 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   public LightViewCalculator getLightViewCalculator() {
     // EMPTY    
     return null;
+  }
+
+  @Override
+  public int getRasterWidth() {
+    return rasterWidth;
+  }
+
+  @Override
+  public int getRasterHeight() {
+    return rasterHeight;
+  }
+
+  @Override
+  public int getOversample() {
+    return oversample;
+  }
+
+  @Override
+  public double getSampleDensity() {
+    return sampleDensity;
   }
 
 }

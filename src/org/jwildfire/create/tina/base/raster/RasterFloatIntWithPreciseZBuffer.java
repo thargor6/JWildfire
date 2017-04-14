@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -56,8 +56,8 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   private ShadowCalculator shadowCalculator;
 
   @Override
-  public void allocRaster(Flame flame, int pWidth, int pHeight) {
-    super.allocRaster(flame, pWidth, pHeight);
+  public void allocRaster(Flame flame, int pWidth, int pHeight, int pOversample, double pSampleDensity) {
+    super.allocRaster(flame, pWidth, pHeight, pOversample, pSampleDensity);
 
     imgSize = MathLib.sqrt(MathLib.sqr(pWidth) + MathLib.sqr(pHeight));
 
@@ -162,6 +162,7 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
 
   @Override
   public void finalizeRaster() {
+    // No call to super here
     normalsCalculator.refreshAllNormals();
     aoBuf = new float[rasterWidth][rasterHeight];
     if (aoCalculator != null) {
