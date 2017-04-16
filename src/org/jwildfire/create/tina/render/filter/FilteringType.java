@@ -16,26 +16,6 @@
 */
 package org.jwildfire.create.tina.render.filter;
 
-// Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
-public class BellFilterKernel extends FilterKernel {
-
-  @Override
-  public double getSpatialSupport() {
-    return 1.5;
-  }
-
-  @Override
-  public double getFilterCoeff(double t) {
-    /* box (*) box (*) box */
-    if (t < 0)
-      t = -t;
-    if (t < .5)
-      return (.75 - (t * t));
-    if (t < 1.5) {
-      t = (t - 1.5);
-      return (.5 * (t * t));
-    }
-    return (0.0);
-  }
-
+public enum FilteringType {
+  GLOBAL_SMOOTHING, GLOBAL_SHARPENING, ADAPTIVE
 }

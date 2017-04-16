@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2013 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -16,26 +16,16 @@
 */
 package org.jwildfire.create.tina.render.filter;
 
-// Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
-public class BellFilterKernel extends FilterKernel {
+public class MitchellSmoothFilterKernel extends MitchellFilterKernel {
 
-  @Override
-  public double getSpatialSupport() {
-    return 1.5;
+  // b + 2 * c = 1
+
+  protected double getMitchell_b() {
+    return 0.42;
   }
 
-  @Override
-  public double getFilterCoeff(double t) {
-    /* box (*) box (*) box */
-    if (t < 0)
-      t = -t;
-    if (t < .5)
-      return (.75 - (t * t));
-    if (t < 1.5) {
-      t = (t - 1.5);
-      return (.5 * (t * t));
-    }
-    return (0.0);
+  protected double getMitchell_c() {
+    return 0.29;
   }
 
 }

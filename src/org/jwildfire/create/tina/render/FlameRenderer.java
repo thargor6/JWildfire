@@ -492,6 +492,7 @@ public class FlameRenderer {
         }
         forceAbort = false;
         iterate(0, 1, renderFlames, null);
+        raster.finalizeRaster();
         if (pRenderInfo.isStoreRaster()) {
           res.setRaster(raster);
         }
@@ -516,8 +517,6 @@ public class FlameRenderer {
       throw new IllegalArgumentException("renderScale != 1");
     }
 
-    raster.applyDE(new LogScaleCalculator(flame, pImage.getImageWidth(), pImage.getImageHeight(), flame.getSpatialOversampling()));
-
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }
@@ -530,8 +529,6 @@ public class FlameRenderer {
     else {
       throw new IllegalStateException();
     }
-
-    raster.finalizeRaster();
 
     renderImage(pImage);
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {

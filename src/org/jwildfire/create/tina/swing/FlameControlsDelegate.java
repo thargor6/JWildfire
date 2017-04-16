@@ -52,6 +52,7 @@ import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -221,7 +222,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     enableControl(data.dofDOFParam6REd, false);
 
     enableStereo3dUI();
-    enableDEFilterUI();
+    enableFilterUI();
     enablePostSymmetryUI();
     enableDOFUI();
 
@@ -662,9 +663,15 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.backgroundColorCCIndicatorBtn.setEnabled(getCurrFlame() != null && (BGColorType.SINGLE_COLOR.equals(getCurrFlame().getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(getCurrFlame().getBgColorType())));
   }
 
-  public void enableDEFilterUI() {
-    enableControl(data.filterRadiusREd, false);
-    enableControl(data.filterKernelCmb, false);
+  public void enableFilterUI() {
+    enableControl(data.tinaFilterTypeCmb, false);
+    boolean filterDisabled = data.tinaFilterTypeCmb.getSelectedItem() == null;
+    enableControl(data.filterKernelCmb, filterDisabled);
+    enableControl(data.filterRadiusREd, filterDisabled);
+    // TODO
+    enableControl(data.tinaFilterIndicatorCBx, true);
+//  enableControl(data.tinaFilterIndicatorCBx, !FilteringType.ADAPTIVE.equals(data.tinaFilterTypeCmb.getSelectedItem()));
+
     enableControl(data.tinaSpatialOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
     enableControl(data.tinaPostNoiseThresholdField, !data.tinaPostNoiseFilterCheckBox.isSelected());
@@ -728,7 +735,11 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
+
+      data.tinaFilterTypeCmb.setSelectedItem(getCurrFlame().getSpatialFilteringType());
+      fillFilterKernelCmb(getCurrFlame().getSpatialFilteringType());
       data.filterKernelCmb.setSelectedItem(getCurrFlame().getSpatialFilterKernel());
+      enableFilterUI();
 
       data.lowDensityBrightnessREd.setText(Tools.doubleToString(getCurrFlame().getLowDensityBrightness()));
       data.lowDensityBrightnessSlider.setValue(Tools.FTOI(getCurrFlame().getLowDensityBrightness() * TinaController.SLIDER_SCALE_BRIGHTNESS_CONTRAST_VIBRANCY));
@@ -1372,6 +1383,18 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   }
 
   public void postNoiseFilterCheckBox_changed() {
+    if (!isNoRefresh()) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        owner.saveUndoPoint();
+        flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
+        enableControls();
+      }
+    }
+  }
+
+  // TODO
+  public void filterIndicatorCheckBox_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
       if (flame != null) {
@@ -2116,5 +2139,26 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void solidRenderingPostBokehActivationREd_changed() {
     solidRenderingTextFieldChanged(data.postBokehActivationSlider, data.postBokehActivationREd, "postBokehActivation", TinaController.SLIDER_SCALE_CENTRE, true);
+  }
+
+  public void fillFilterKernelCmb(FilteringType filteringType) {
+    data.filterKernelCmb.removeAllItems();
+    switch (filteringType) {
+      case GLOBAL_SHARPENING:
+        for (FilterKernelType kernel : FilterKernelType.getSharpeningFilters()) {
+          data.filterKernelCmb.addItem(kernel);
+        }
+        break;
+      case GLOBAL_SMOOTHING:
+        for (FilterKernelType kernel : FilterKernelType.getSmoothingFilters()) {
+          data.filterKernelCmb.addItem(kernel);
+        }
+        break;
+      case ADAPTIVE:
+        for (FilterKernelType kernel : FilterKernelType.getAdapativeFilters()) {
+          data.filterKernelCmb.addItem(kernel);
+        }
+        break;
+    }
   }
 }

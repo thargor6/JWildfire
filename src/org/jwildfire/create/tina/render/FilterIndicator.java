@@ -14,28 +14,28 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.render.filter;
+package org.jwildfire.create.tina.render;
 
-// Filter based on code of the flam3 project: http://flam3.com/index.cgi?&menu=code
-public class BellFilterKernel extends FilterKernel {
+public enum FilterIndicator {
+  GREY(1.0, 1.0, 1.0), RED(1.0, 0.2, 0.0), GREEN(0.0, 0.9, 0.0), BLUE(0.0, 0.2, 1.1);
 
-  @Override
-  public double getSpatialSupport() {
-    return 1.5;
+  private final double r, g, b;
+
+  private FilterIndicator(double r, double g, double b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
   }
 
-  @Override
-  public double getFilterCoeff(double t) {
-    /* box (*) box (*) box */
-    if (t < 0)
-      t = -t;
-    if (t < .5)
-      return (.75 - (t * t));
-    if (t < 1.5) {
-      t = (t - 1.5);
-      return (.5 * (t * t));
-    }
-    return (0.0);
+  public double getR() {
+    return r;
   }
 
+  public double getG() {
+    return g;
+  }
+
+  public double getB() {
+    return b;
+  }
 }

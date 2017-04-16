@@ -37,6 +37,7 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
@@ -126,6 +127,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   private int spatialOversampling;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
+  private FilteringType spatialFilteringType;
+  private boolean spatialFilterIndicator;
   private double sampleDensity;
   private boolean bgTransparency;
   private boolean postNoiseFilter;
@@ -304,7 +307,21 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void resetAntialiasingSettings() {
     spatialFilterRadius = Prefs.getPrefs().getTinaDefaultSpatialFilterRadius();
     spatialFilterKernel = Prefs.getPrefs().getTinaDefaultSpatialFilterKernel();
+    if (FilterKernelType.getSharpeningFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.GLOBAL_SHARPENING;
+    }
+    else if (FilterKernelType.getSmoothingFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.GLOBAL_SMOOTHING;
+    }
+    else if (FilterKernelType.getAdapativeFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.ADAPTIVE;
+    }
+    else {
+      spatialFilteringType = FilteringType.GLOBAL_SMOOTHING;
+      spatialFilterKernel = FilterKernelType.SINEPOW10;
+    }
     spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
+    spatialFilterIndicator = false;
     postNoiseFilter = Prefs.getPrefs().isTinaDefaultPostNoiseFilter();
     postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
@@ -698,6 +715,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponentCurve.assign(pFlame.camDOFExponentCurve);
     spatialFilterRadius = pFlame.spatialFilterRadius;
     spatialFilterKernel = pFlame.spatialFilterKernel;
+    spatialFilteringType = pFlame.spatialFilteringType;
+    spatialFilterIndicator = pFlame.spatialFilterIndicator;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
@@ -838,7 +857,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPosZ - pFlame.camPosZ) > EPSILON) || !camPosZCurve.isEqual(pFlame.camPosZCurve) ||
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
-        !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
+        !spatialFilteringType.equals(pFlame.spatialFilteringType) || !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
+        spatialFilterIndicator != pFlame.spatialFilterIndicator ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) ||
         !bgColorType.equals(pFlame.bgColorType) ||
         (bgColorType.equals(BGColorType.SINGLE_COLOR) && ((bgColorRed != pFlame.bgColorRed) ||
@@ -1582,6 +1602,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setDefaultSolidRenderingSettings() {
     setSpatialOversampling(DFLT_SOLID_SPATIAL_OVERSAMPLING);
     setSpatialFilterRadius(0.5);
+    setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
     setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
     setAntialiasAmount(0.0);
     setAntialiasRadius(0.0);
@@ -1753,6 +1774,22 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setBgColorCCBlue(int bgColorCCBlue) {
     this.bgColorCCBlue = bgColorCCBlue;
+  }
+
+  public FilteringType getSpatialFilteringType() {
+    return spatialFilteringType;
+  }
+
+  public void setSpatialFilteringType(FilteringType spatialFilteringType) {
+    this.spatialFilteringType = spatialFilteringType;
+  }
+
+  public boolean isSpatialFilterIndicator() {
+    return spatialFilterIndicator;
+  }
+
+  public void setSpatialFilterIndicator(boolean spatialFilterIndicator) {
+    this.spatialFilterIndicator = spatialFilterIndicator;
   }
 
 }

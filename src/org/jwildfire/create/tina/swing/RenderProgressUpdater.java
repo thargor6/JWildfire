@@ -37,7 +37,6 @@ public class RenderProgressUpdater implements ProgressUpdater {
       parent.getRenderProgressBar().setMaximum(pMaxSteps);
       parent.getRenderProgressBar().invalidate();
       parent.getRenderProgressBar().validate();
-      parent.getRenderProgressBar().invalidate();
       manager = RepaintManager.currentManager(parent.getRenderProgressBar());
       manager.markCompletelyDirty(parent.getRenderProgressBar());
       manager.paintDirtyRegions();
@@ -53,8 +52,7 @@ public class RenderProgressUpdater implements ProgressUpdater {
       parent.getRenderProgressBar().setValue(pStep);
       parent.getRenderProgressBar().invalidate();
       parent.getRenderProgressBar().validate();
-      parent.getRenderProgressBar().invalidate();
-      manager.markCompletelyDirty((JComponent) parent.getRenderProgressBar().getParent());
+      manager.markCompletelyDirty((JComponent) parent.getRenderProgressBar());
       manager.paintDirtyRegions();
     }
     catch (Throwable ex) {

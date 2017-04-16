@@ -23,32 +23,27 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
-@SuppressWarnings("serial")
 public class FilterHolder implements Serializable {
-  protected final Flame flame;
-  protected double preFilter[][];
   protected double filter[][];
   protected int noiseFilterSize;
   protected int noiseFilterSizeHalve;
   protected final FilterKernel filterKernel;
+  private final FilterKernelType filterKernelType;
   protected final int oversample;
+  private final double intensity;
+  private FilterIndicator filterIndicator = FilterIndicator.GREY;
 
   public FilterHolder(Flame pFlame) {
-    flame = pFlame;
-    oversample = pFlame.getSpatialOversampling();
-    filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
-    noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius(), oversample);
-    noiseFilterSizeHalve = noiseFilterSize / 2;
-    filter = new double[noiseFilterSize][noiseFilterSize];
-    initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
+    this(pFlame.getSpatialFilterKernel(), pFlame.getSpatialOversampling(), pFlame.getSpatialFilterRadius());
   }
 
-  public FilterHolder(Flame pFlame, FilterKernelType pSpatialFilterKernel, int pSpatialOversampling, double pSpatialFilterRadius) {
-    flame = pFlame;
+  public FilterHolder(FilterKernelType pSpatialFilterKernel, int pSpatialOversampling, double pSpatialFilterRadius) {
     oversample = pSpatialOversampling;
-    filterKernel = pSpatialFilterKernel.createFilterInstance();
+    filterKernelType = pSpatialFilterKernel;
+    filterKernel = filterKernelType.createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pSpatialFilterRadius, oversample);
-    noiseFilterSizeHalve = noiseFilterSize / 2;
+    noiseFilterSizeHalve = noiseFilterSize / 2 - 1;
+    intensity = pSpatialFilterRadius;
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pSpatialFilterRadius, noiseFilterSize, filter);
   }
@@ -60,8 +55,8 @@ public class FilterHolder implements Serializable {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        //  pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
         double f = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
+        //        double f = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
         sum += f;
         pFilter[i][j] = f;
       }
@@ -82,6 +77,26 @@ public class FilterHolder implements Serializable {
 
   public double[][] getFilter() {
     return filter;
+  }
+
+  public boolean isEmpty() {
+    return noiseFilterSize <= 1;
+  }
+
+  public FilterIndicator getFilterIndicator() {
+    return filterIndicator;
+  }
+
+  public void setFilterIndicator(FilterIndicator filterIndicator) {
+    this.filterIndicator = filterIndicator;
+  }
+
+  public double getIntensity() {
+    return intensity;
+  }
+
+  public FilterKernelType getFilterKernelType() {
+    return filterKernelType;
   }
 
 }

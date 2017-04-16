@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,8 +22,8 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public abstract class FilterKernel implements Serializable {
+
   public abstract double getSpatialSupport();
 
   public abstract double getFilterCoeff(double x);
@@ -83,4 +83,5 @@ public abstract class FilterKernel implements Serializable {
       return (double) (pFilterSize - 1) / (2.0 * (double) pOversample * getSpatialSupport());
     }
   }
+
 }
