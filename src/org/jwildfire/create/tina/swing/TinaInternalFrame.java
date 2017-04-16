@@ -45,7 +45,9 @@ import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -97,6 +99,7 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanelControlStyle;
 import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.StandardErrorHandler;
@@ -591,6 +594,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getRandomBatchPanel() {
     if (randomBatchPanel == null) {
       randomBatchPanel = new JPanel();
+      addPopup(randomBatchPanel, getThumbnailPopupMenu());
       randomBatchPanel.setLayout(new BorderLayout());
       randomBatchPanel.setPreferredSize(new Dimension(128, 0));
       randomBatchPanel.setVisible(true);
@@ -5339,7 +5343,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
     initFilterKernelCmb(getPostBokehFilterKernelCmb());
 
-    initFilterKernelCmb(getTinaFilterKernelCmb());
+    initFilterTypeCmb(getTinaFilterTypeCmb());
     initPostSymmetryTypeCmb(getPostSymmetryTypeCmb());
     initRandomGenCmb(getRandomStyleCmb());
     initRandomSymmetryCmb(getRandomSymmetryCmb());
@@ -5459,7 +5463,8 @@ public class TinaInternalFrame extends JInternalFrame {
         interactiveRendererFrame.getInteractiveResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
-        getTinaZBufferScaleREd(), getTinaZBufferScaleSlider());
+        getTinaZBufferScaleREd(), getTinaZBufferScaleSlider(), getTinaFilterTypeCmb(), getTinaFilterKernelCmbLbl(), getTinaFilterRadiusLbl(),
+        getTinaFilterIndicatorCBx(), getThumbnailPopupMenu());
 
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
@@ -5484,7 +5489,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getAffineRotateEditMotionCurveBtn(), getAffineScaleEditMotionCurveBtn(),
         getTriangleStyleCmb(), getXFormModGammaREd(), getXFormModGammaSlider(), getXFormModGammaSpeedREd(), getXFormModGammaSpeedSlider(),
         getXFormModContrastREd(), getXFormModContrastSlider(), getXFormModContrastSpeedREd(), getXFormModContrastSpeedSlider(),
-        getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider());
+        getXFormModSaturationREd(), getXFormModSaturationSlider(), getXFormModSaturationSpeedREd(), getXFormModSaturationSpeedSlider(),
+        getBtnAllSave());
 
     params.setParams3(getChannelMixerResetBtn(), getChannelMixerModeCmb(),
         getChannelMixerRedRedRootPanel(), getChannelMixerRedGreenRootPanel(), getChannelMixerRedBlueRootPanel(), getChannelMixerGreenRedRootPanel(),
@@ -5869,6 +5875,14 @@ public class TinaInternalFrame extends JInternalFrame {
     pCmb.addItem(PostSymmetryType.X_AXIS);
     pCmb.addItem(PostSymmetryType.Y_AXIS);
     pCmb.addItem(PostSymmetryType.POINT);
+  }
+
+  private void initFilterTypeCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(FilteringType.GLOBAL_SHARPENING);
+    pCmb.addItem(FilteringType.GLOBAL_SMOOTHING);
+    pCmb.addItem(FilteringType.ADAPTIVE);
+    pCmb.setSelectedItem(FilteringType.GLOBAL_SHARPENING);
   }
 
   private void initFilterKernelCmb(JComboBox pCmb) {
@@ -10244,6 +10258,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton tinaPaletteReverseBtn;
   private JButton snapShotButton;
   private JButton btnQsave;
+  private JButton btnAllSave;
   private JLabel label_6;
   private JToggleButton toggleTransparencyButton;
   private JCheckBox bgTransparencyCBx;
@@ -10348,6 +10363,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JSlider keyframesFrameSlider;
   private JToggleButton motionCurveEditModeButton;
   private JPanel panel_66;
+  private JPanel panel_66a;
   private JWFNumberField motionBlurLengthField;
   private JSlider motionBlurLengthSlider;
   private JWFNumberField motionBlurTimeStepField;
@@ -10721,6 +10737,14 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton backgroundColorLLIndicatorBtn;
   private JButton backgroundColorLRIndicatorBtn;
   private JButton backgroundColorCCIndicatorBtn;
+  private JComboBox tinaFilterTypeCmb;
+  private JLabel tinaFilterKernelLbl;
+  private JLabel tinaFilterRadiusLbl;
+  private JCheckBox tinaFilterIndicatorCBx;
+  private JPopupMenu thumbnailPopupMenu;
+  private JMenuItem mntmNewMenuItem;
+  private JMenuItem mntmRemoveAll;
+  private JMenuItem mntmDeselectAll;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -11327,14 +11351,14 @@ public class TinaInternalFrame extends JInternalFrame {
       antialiasPanel.add(getXFormAntialiasRadiusLbl());
       antialiasPanel.add(getXFormAntialiasRadiusSlider());
 
-      JLabel lblSpatialFilterRadius = new JLabel();
-      lblSpatialFilterRadius.setText("Spatial filter radius");
-      lblSpatialFilterRadius.setSize(new Dimension(94, 22));
-      lblSpatialFilterRadius.setPreferredSize(new Dimension(94, 22));
-      lblSpatialFilterRadius.setLocation(new Point(488, 2));
-      lblSpatialFilterRadius.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSpatialFilterRadius.setBounds(6, 58, 107, 22);
-      antialiasPanel.add(lblSpatialFilterRadius);
+      tinaFilterRadiusLbl = new JLabel();
+      tinaFilterRadiusLbl.setText("Filter radius");
+      tinaFilterRadiusLbl.setSize(new Dimension(94, 22));
+      tinaFilterRadiusLbl.setPreferredSize(new Dimension(94, 22));
+      tinaFilterRadiusLbl.setLocation(new Point(488, 2));
+      tinaFilterRadiusLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaFilterRadiusLbl.setBounds(6, 86, 107, 22);
+      antialiasPanel.add(tinaFilterRadiusLbl);
 
       tinaFilterRadiusREd = new JWFNumberField();
       tinaFilterRadiusREd.setLinkedMotionControlName("tinaFilterRadiusSlider");
@@ -11360,7 +11384,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusREd.setHasMaxValue(true);
       tinaFilterRadiusREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaFilterRadiusREd.setEditable(true);
-      tinaFilterRadiusREd.setBounds(115, 58, 100, 24);
+      tinaFilterRadiusREd.setBounds(115, 86, 100, 24);
       antialiasPanel.add(tinaFilterRadiusREd);
 
       tinaFilterRadiusSlider = new JSlider();
@@ -11385,7 +11409,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterRadiusSlider.setMaximum(200);
       tinaFilterRadiusSlider.setLocation(new Point(686, 2));
       tinaFilterRadiusSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaFilterRadiusSlider.setBounds(217, 58, 220, 24);
+      tinaFilterRadiusSlider.setBounds(217, 86, 220, 24);
       antialiasPanel.add(tinaFilterRadiusSlider);
 
       tinaFilterKernelCmb = new JComboBox();
@@ -11400,17 +11424,17 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterKernelCmb.setPreferredSize(new Dimension(125, 22));
       tinaFilterKernelCmb.setLocation(new Point(100, 4));
       tinaFilterKernelCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaFilterKernelCmb.setBounds(115, 34, 322, 24);
+      tinaFilterKernelCmb.setBounds(115, 62, 322, 24);
       antialiasPanel.add(tinaFilterKernelCmb);
 
-      JLabel lblSpatialFilterKernel = new JLabel();
-      lblSpatialFilterKernel.setText("Spatial filter kernel");
-      lblSpatialFilterKernel.setSize(new Dimension(94, 22));
-      lblSpatialFilterKernel.setPreferredSize(new Dimension(94, 22));
-      lblSpatialFilterKernel.setLocation(new Point(488, 2));
-      lblSpatialFilterKernel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSpatialFilterKernel.setBounds(6, 34, 107, 22);
-      antialiasPanel.add(lblSpatialFilterKernel);
+      tinaFilterKernelLbl = new JLabel();
+      tinaFilterKernelLbl.setText("Filter kernel");
+      tinaFilterKernelLbl.setSize(new Dimension(94, 22));
+      tinaFilterKernelLbl.setPreferredSize(new Dimension(94, 22));
+      tinaFilterKernelLbl.setLocation(new Point(488, 2));
+      tinaFilterKernelLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      tinaFilterKernelLbl.setBounds(6, 62, 107, 22);
+      antialiasPanel.add(tinaFilterKernelLbl);
 
       resetAntialiasOptionsButton = new JButton();
       resetAntialiasOptionsButton.addActionListener(new ActionListener() {
@@ -11591,6 +11615,42 @@ public class TinaInternalFrame extends JInternalFrame {
       });
 
       antialiasPanel.add(tinaPostNoiseThresholdSlider);
+
+      tinaFilterTypeCmb = new JComboBox();
+      tinaFilterTypeCmb.setSize(new Dimension(125, 22));
+      tinaFilterTypeCmb.setPreferredSize(new Dimension(125, 22));
+      tinaFilterTypeCmb.setLocation(new Point(100, 4));
+      tinaFilterTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterTypeCmb.setBounds(115, 38, 322, 24);
+      tinaFilterTypeCmb.addItemListener(new ItemListener() {
+        public void itemStateChanged(ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.spatialFilterTypeCmb_changed();
+          }
+        }
+      });
+
+      antialiasPanel.add(tinaFilterTypeCmb);
+
+      JLabel lblFiltering = new JLabel();
+      lblFiltering.setText("Filtering");
+      lblFiltering.setSize(new Dimension(94, 22));
+      lblFiltering.setPreferredSize(new Dimension(94, 22));
+      lblFiltering.setLocation(new Point(488, 2));
+      lblFiltering.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFiltering.setBounds(6, 38, 107, 22);
+      antialiasPanel.add(lblFiltering);
+
+      tinaFilterIndicatorCBx = new JCheckBox("Indicator (red=sharp, green=smooth, blue=low density)");
+      tinaFilterIndicatorCBx.setBounds(115, 116, 322, 18);
+      tinaFilterIndicatorCBx.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getFlameControls() != null) {
+            tinaController.getFlameControls().filterIndicatorCheckBox_changed();
+          }
+        }
+      });
+      antialiasPanel.add(tinaFilterIndicatorCBx);
     }
     return antialiasPanel;
   }
@@ -11623,7 +11683,7 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_13 = new JPanel();
       panel_13.setBorder(new EmptyBorder(0, 0, 0, 8));
       panel_13.setLayout(new BoxLayout(panel_13, BoxLayout.Y_AXIS));
-      panel_13.add(getSaveFlameToClipboardButton());
+      panel_13.add(getPanel_66a());
       panel_13.add(getPanel_66());
     }
     return panel_13;
@@ -11970,6 +12030,23 @@ public class TinaInternalFrame extends JInternalFrame {
       snapShotButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     }
     return snapShotButton;
+  }
+
+  private JButton getBtnAllSave() {
+    if (btnAllSave == null) {
+      btnAllSave = new JButton();
+      btnAllSave.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.allsaveButton_clicked();
+        }
+      });
+      btnAllSave.setToolTipText("Save all selected flames");
+      btnAllSave.setText("A");
+      btnAllSave.setPreferredSize(new Dimension(42, 24));
+      btnAllSave.setMnemonic(KeyEvent.VK_A);
+      btnAllSave.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+    }
+    return btnAllSave;
   }
 
   private JButton getBtnQsave() {
@@ -13493,9 +13570,22 @@ public class TinaInternalFrame extends JInternalFrame {
       panel_66.setPreferredSize(new Dimension(125, 24));
       panel_66.setLayout(new BorderLayout(0, 0));
       panel_66.add(getTinaSaveFlameButton());
-      panel_66.add(getBtnQsave(), BorderLayout.EAST);
+      panel_66.add(getBtnAllSave(), BorderLayout.EAST);
     }
     return panel_66;
+  }
+
+  private JPanel getPanel_66a() {
+    if (panel_66a == null) {
+      panel_66a = new JPanel();
+      panel_66a.setAlignmentX(Component.LEFT_ALIGNMENT);
+      panel_66a.setMaximumSize(new Dimension(200, 24));
+      panel_66a.setPreferredSize(new Dimension(125, 24));
+      panel_66a.setLayout(new BorderLayout(0, 0));
+      panel_66a.add(getSaveFlameToClipboardButton());
+      panel_66a.add(getBtnQsave(), BorderLayout.EAST);
+    }
+    return panel_66a;
   }
 
   public JWFNumberField getMotionBlurLengthField() {
@@ -19953,5 +20043,87 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JButton getBackgroundColorCCIndicatorBtn() {
     return backgroundColorCCIndicatorBtn;
+  }
+
+  public JComboBox getTinaFilterTypeCmb() {
+    return tinaFilterTypeCmb;
+  }
+
+  public JLabel getTinaFilterKernelCmbLbl() {
+    return tinaFilterKernelLbl;
+  }
+
+  public JLabel getTinaFilterRadiusLbl() {
+    return tinaFilterRadiusLbl;
+  }
+
+  public JCheckBox getTinaFilterIndicatorCBx() {
+    return tinaFilterIndicatorCBx;
+  }
+
+  private JPopupMenu getThumbnailPopupMenu() {
+    if (thumbnailPopupMenu == null) {
+      thumbnailPopupMenu = new JPopupMenu();
+      thumbnailPopupMenu.add(getMntmNewMenuItem());
+      thumbnailPopupMenu.add(getMntmDeselectAll());
+      thumbnailPopupMenu.add(getMntmRemoveAll());
+    }
+    return thumbnailPopupMenu;
+  }
+
+  private static void addPopup(Component component, final JPopupMenu popup) {
+    component.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        if (e.isPopupTrigger()) {
+          showMenu(e);
+        }
+      }
+
+      public void mouseReleased(MouseEvent e) {
+        if (e.isPopupTrigger()) {
+          showMenu(e);
+        }
+      }
+
+      private void showMenu(MouseEvent e) {
+        popup.show(e.getComponent(), e.getX(), e.getY());
+      }
+    });
+  }
+
+  private JMenuItem getMntmNewMenuItem() {
+    if (mntmNewMenuItem == null) {
+      mntmNewMenuItem = new JMenuItem("Toggle all");
+      mntmNewMenuItem.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.toggleThumbnailSelectionAll();
+        }
+      });
+    }
+    return mntmNewMenuItem;
+  }
+
+  private JMenuItem getMntmRemoveAll() {
+    if (mntmRemoveAll == null) {
+      mntmRemoveAll = new JMenuItem("Remove all");
+      mntmRemoveAll.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.removeAllThumbnails();
+        }
+      });
+    }
+    return mntmRemoveAll;
+  }
+
+  private JMenuItem getMntmDeselectAll() {
+    if (mntmDeselectAll == null) {
+      mntmDeselectAll = new JMenuItem("Deselect all");
+      mntmDeselectAll.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.deselectAllThumbnails();
+        }
+      });
+    }
+    return mntmDeselectAll;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

@@ -10,6 +10,7 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 
 public class JWFFlameReader extends AbstractFlameReader {
+  public static final String ATTR_FLAME = "flame";
   public static final String ATTR_JWF_FLAME = "jwf-flame";
   public static final String ATTR_LAYER = "layer";
 

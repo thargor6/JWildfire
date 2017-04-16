@@ -1,10 +1,18 @@
-V3.10 (xx.xx.2017)
-/*
-  - experimental adaptive pre-filtering in order to improve image quality, by keeping sharp details while smoothening larger areas with less details
-   (always enabled in the EARLY PREVIEW-version, no parameters, requires the double of amount of memory)
-  */
-  
- - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") 
+V3.10 BETA 3 (16.04.2017)
+ - new SaveAll-button which saves all selected flames into a single file (thanks to Michael Bourne for the suggestion)
+ - selection buttons at the thumbail ribbon
+ - addded a context menu at the selection button (toogle all, deselect all, remove all)
+ - added confirmation dialog to the thumbnail-delete button 
+
+ - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
+   NONE, GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.
+ - new MITCHELL_SMOOTH-filter kernel (derived from MITCHELL), which is now the default  
+ - changed the behaviour of sharpening filters
+ - new experimental adaptive MITCHELL_SINEPOW-filter (sharpenung details, smoothing "unsharp" areas as well as areas with low density)        
+ - new 2x2+c gradient-type for the background of fractals
+ - fixed a problem with the preview cache
+ - optional post-smooth (Taubin-smooth) in the mesh generator  
+ - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") in the mesh generator 
  - improved the rotation-behaviour of the mesh-preview in the Mesh-Generator  
  - restricted the range of the "Contrast"-slider causing more visually "interesting" changes
  - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   

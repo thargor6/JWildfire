@@ -45,6 +45,7 @@ import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -73,6 +74,8 @@ public class AbstractFlameReader {
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
+  public static final String ATTR_FILTER_TYPE = "filter_type";
+  public static final String ATTR_FILTER_INDICATOR = "filter_indicator";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
   public static final String ATTR_BACKGROUND_TYPE = "background_type";
@@ -274,14 +277,41 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_FILTER)) != null) {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_FILTER_KERNEL)) != null) {
+    if ((hs = atts.get(ATTR_FILTER_TYPE)) != null) {
       try {
-        FilterKernelType kernel = FilterKernelType.valueOf(hs);
-        pFlame.setSpatialFilterKernel(kernel);
+        FilteringType filteringType = FilteringType.valueOf(hs);
+        pFlame.setSpatialFilteringType(filteringType);
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+    }
+    if ((hs = atts.get(ATTR_FILTER_KERNEL)) != null) {
+      try {
+        FilterKernelType kernel = FilterKernelType.valueOf(hs);
+        pFlame.setSpatialFilterKernel(kernel);
+        if (atts.get(ATTR_FILTER_TYPE) == null) {
+          if (FilterKernelType.getAdapativeFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.ADAPTIVE);
+          }
+          else if (FilterKernelType.getSharpeningFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SHARPENING);
+          }
+          else if (FilterKernelType.getSmoothingFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+          }
+          else {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+            pFlame.setSpatialFilterKernel(FilterKernelType.SINEPOW10);
+          }
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_FILTER_INDICATOR)) != null) {
+      pFlame.setSpatialFilterIndicator(Integer.parseInt(hs) == 1);
     }
     if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversampling(Integer.parseInt(hs));

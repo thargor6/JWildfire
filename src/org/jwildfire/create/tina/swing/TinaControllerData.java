@@ -23,6 +23,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -111,6 +112,12 @@ public class TinaControllerData {
   public JWFNumberField filterRadiusREd;
   public JSlider filterRadiusSlider;
   public JComboBox filterKernelCmb;
+
+  public JComboBox tinaFilterTypeCmb;
+  public JLabel tinaFilterKernelCmbLbl;
+  public JLabel tinaFilterRadiusLbl;
+  public JCheckBox tinaFilterIndicatorCBx;
+
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;
@@ -264,6 +271,7 @@ public class TinaControllerData {
   public JButton editFlameTileButton;
   public JButton snapShotButton;
   public JButton qSaveButton;
+  public JButton saveAllButton;
   public JButton sendToIRButton;
   public JButton bokehButton;
   public JButton movieButton;
@@ -487,5 +495,6 @@ public class TinaControllerData {
   public JWFNumberField postBokehActivationREd;
   public JSlider postBokehActivationSlider;
   public JComboBox postBokehFilterKernelCmb;
+  public JPopupMenu thumbnailPopupMenu;
 
 }

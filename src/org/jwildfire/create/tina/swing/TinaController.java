@@ -50,6 +50,7 @@ import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -119,6 +120,7 @@ import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationRenderer;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.script.ScriptParam;
 import org.jwildfire.create.tina.script.ScriptRunner;
 import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;
@@ -405,6 +407,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.filterRadiusREd = parameterObject.pFilterRadiusREd;
     data.filterRadiusSlider = parameterObject.pFilterRadiusSlider;
     data.filterKernelCmb = parameterObject.pFilterKernelCmb;
+    data.tinaFilterTypeCmb = parameterObject.tinaFilterTypeCmb;
+    data.tinaFilterKernelCmbLbl = parameterObject.tinaFilterKernelCmbLbl;
+    data.tinaFilterRadiusLbl = parameterObject.tinaFilterRadiusLbl;
+    data.tinaFilterIndicatorCBx = parameterObject.tinaFilterIndicatorCBx;
     data.gammaThresholdREd = parameterObject.pGammaThresholdREd;
     data.gammaThresholdSlider = parameterObject.pGammaThresholdSlider;
     data.bgTransparencyCBx = parameterObject.pBGTransparencyCBx;
@@ -664,6 +670,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.postBokehActivationREd = parameterObject.postBokehActivationREd;
     data.postBokehActivationSlider = parameterObject.postBokehActivationSlider;
     data.postBokehFilterKernelCmb = parameterObject.postBokehFilterKernelCmb;
+    data.thumbnailPopupMenu = parameterObject.thumbnailPopupMenu;
 
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
@@ -726,6 +733,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton = parameterObject.editFlameTileButton;
     data.snapShotButton = parameterObject.snapShotButton;
     data.qSaveButton = parameterObject.qSaveButton;
+    data.saveAllButton = parameterObject.saveAllButton;
     data.sendToIRButton = parameterObject.sendToIRButton;
     data.bokehButton = parameterObject.bokehButton;
     data.movieButton = parameterObject.movieButton;
@@ -2102,7 +2110,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           updateThumbnails();
           setupProfiles(getCurrFlame());
           refreshUI();
-          messageHelper.showStatusMessage(getCurrFlame(), "opened from disc");
+          if (flames.size() > 1) {
+            messageHelper.showStatusMessage(flames.size() + " flame opened from disc");
+          }
+          else {
+            messageHelper.showStatusMessage(getCurrFlame(), "opened from disc");
+          }
         }
       }
     }
@@ -2343,6 +2356,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.editFlameTileButton.setEnabled(enabled);
     data.snapShotButton.setEnabled(enabled);
     data.qSaveButton.setEnabled(enabled);
+    {
+      boolean hasSelFlames = false;
+      if (randomBatch != null) {
+        for (FlameThumbnail thumnnail : randomBatch) {
+          if (thumnnail.getSelectCheckbox() != null && thumnnail.getSelectCheckbox().isSelected()) {
+            hasSelFlames = true;
+          }
+        }
+      }
+      data.saveAllButton.setEnabled(hasSelFlames);
+    }
     data.sendToIRButton.setEnabled(enabled);
     data.bokehButton.setEnabled(enabled);
     data.solidRenderingToggleBtn.setEnabled(enabled);
@@ -2871,6 +2895,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       randomBatch.get(i).setImgPanel(imgPanel);
       final int idx = i;
       addRemoveButton(imgPanel, idx);
+      JCheckBox checkbox = addSelectCheckbox(imgPanel, idx);
+      randomBatch.get(i).setSelectCheckbox(checkbox);
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
@@ -2918,6 +2944,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       mainProgressUpdater.updateProgress(i + 1);
     }
     updateThumbnails();
+    enableControls();
     return true;
   }
 
@@ -2960,11 +2987,28 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     pImgPanel.invalidate();
   }
 
+  private JCheckBox addSelectCheckbox(ImagePanel pImgPanel, final int pIdx) {
+    final int BTN_WIDTH = 20;
+    final int BTN_HEIGHT = 20;
+    final int BORDER = 0;
+    final JCheckBox checkbox = new JCheckBox();
+    checkbox.setSelected(true);
+    checkbox.setMinimumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    checkbox.setMaximumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    checkbox.setPreferredSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
+    checkbox.setComponentPopupMenu(data.thumbnailPopupMenu);
+
+    pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
+    pImgPanel.add(checkbox);
+    pImgPanel.invalidate();
+    return checkbox;
+  }
+
   protected void removeThumbnail(int pIdx) {
-    //    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove this flame\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
-    randomBatch.remove(pIdx);
-    updateThumbnails();
-    //    }
+    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove this flame\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
+      randomBatch.remove(pIdx);
+      updateThumbnails();
+    }
   }
 
   public void importFromRandomBatch(int pIdx) {
@@ -4669,12 +4713,53 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void spatialFilterTypeCmb_changed() {
+    if (!noRefresh) {
+      Flame flame = getCurrFlame();
+      if (flame != null) {
+        saveUndoPoint();
+        boolean oldNoRefresh = noRefresh;
+        try {
+          noRefresh = true;
+          FilteringType filteringType = (FilteringType) data.tinaFilterTypeCmb.getSelectedItem();
+          if (filteringType == null) {
+            filteringType = FilteringType.GLOBAL_SMOOTHING;
+          }
+
+          flame.setSpatialFilteringType(filteringType);
+
+          getFlameControls().fillFilterKernelCmb(filteringType);
+
+          switch (filteringType) {
+            case GLOBAL_SHARPENING:
+              data.filterKernelCmb.setSelectedItem(FilterKernelType.MITCHELL);
+              break;
+            case GLOBAL_SMOOTHING:
+              data.filterKernelCmb.setSelectedItem(FilterKernelType.SINEPOW10);
+              break;
+            default:
+              data.filterKernelCmb.setSelectedIndex(0);
+              break;
+          }
+          noRefresh = false;
+          spatialFilterKernelCmb_changed();
+        }
+        finally {
+          noRefresh = oldNoRefresh;
+        }
+      }
+    }
+  }
+
   public void spatialFilterKernelCmb_changed() {
     if (!noRefresh) {
       Flame flame = getCurrFlame();
       if (flame != null) {
         saveUndoPoint();
         flame.setSpatialFilterKernel((FilterKernelType) data.filterKernelCmb.getSelectedItem());
+        if (getFlameControls() != getFlameControls()) {
+          getFlameControls().enableFilterUI();
+        }
         refreshFlameImage(true, false, 1, true, false);
         refreshFilterKernelPreviewImg();
       }
@@ -6430,6 +6515,65 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void setGpuRendererCtrl(FlamesGPURenderController gpuRendererCtrl) {
     this.gpuRendererCtrl = gpuRendererCtrl;
+  }
+
+  public void allsaveButton_clicked() {
+    try {
+      List<Flame> flames = new ArrayList<>();
+      for (FlameThumbnail thumbnail : randomBatch) {
+        if (thumbnail.getSelectCheckbox() != null && thumbnail.getSelectCheckbox().isSelected()) {
+          flames.add(generateExportFlame(thumbnail.getFlame()));
+        }
+      }
+      if (!flames.isEmpty()) {
+        JFileChooser chooser = new FlameFileChooser(prefs);
+        if (prefs.getOutputFlamePath() != null) {
+          try {
+            chooser.setCurrentDirectory(new File(prefs.getOutputFlamePath()));
+          }
+          catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+        if (chooser.showSaveDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+          File file = chooser.getSelectedFile();
+          String filename = file.getAbsolutePath();
+          if (!filename.endsWith("." + Tools.FILEEXT_FLAME)) {
+            filename += "." + Tools.FILEEXT_FLAME;
+          }
+          new FlameWriter().writeFlames(flames, filename);
+          messageHelper.showStatusMessage(getCurrFlame(), flames.size() + " " + (flames.size() > 1 ? "flames" : "flame") + " saved to disc");
+          prefs.setLastOutputFlameFile(file);
+        }
+      }
+    }
+    catch (Throwable ex) {
+      errorHandler.handleError(ex);
+    }
+
+  }
+
+  public void toggleThumbnailSelectionAll() {
+    for (FlameThumbnail thumbnail : randomBatch) {
+      if (thumbnail.getSelectCheckbox() != null) {
+        thumbnail.getSelectCheckbox().setSelected(!thumbnail.getSelectCheckbox().isSelected());
+      }
+    }
+  }
+
+  public void removeAllThumbnails() {
+    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove all flames\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
+      randomBatch.clear();
+      updateThumbnails();
+    }
+  }
+
+  public void deselectAllThumbnails() {
+    for (FlameThumbnail thumbnail : randomBatch) {
+      if (thumbnail.getSelectCheckbox() != null) {
+        thumbnail.getSelectCheckbox().setSelected(false);
+      }
+    }
   }
 
 }
