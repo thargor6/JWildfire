@@ -497,6 +497,12 @@ public class FlameRenderer {
           res.setRaster(raster);
         }
       }
+      else {
+        if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+          FlameRendererView view = createView(flame);
+          raster.notifyInit(view.getLightViewCalculator());
+        }
+      }
       if (!forceAbort) {
         if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
           renderImageSimple(img);

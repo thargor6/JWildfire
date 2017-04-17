@@ -1,8 +1,15 @@
-V3.10 BETA 3 (16.04.2017)
+V3.10 BETA 4 (17.04.2017)
+ - fixed some labels which were not scale accordingly the global "tinaFontScale"-property
+ - splitted the new thumbnail-popupmenu into two (remove and select, attached to the remove and select-button)
+ - added a "Remove selected"-popupmenu-item
+ - color-balancing now also affects solid renderings
+ - light altitude/azimuth now works with the new preview-cache as well (affects only solid renders)
+
  - new SaveAll-button which saves all selected flames into a single file (thanks to Michael Bourne for the suggestion)
  - selection buttons at the thumbail ribbon
  - addded a context menu at the selection button (toogle all, deselect all, remove all)
- - added confirmation dialog to the thumbnail-delete button 
+ - added confirmation dialog to the thumbnail-delete button
+ - removed the NONE-filtering option 
 
  - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
    NONE, GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.
