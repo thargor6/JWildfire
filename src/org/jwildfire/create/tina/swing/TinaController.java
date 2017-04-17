@@ -670,7 +670,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.postBokehActivationREd = parameterObject.postBokehActivationREd;
     data.postBokehActivationSlider = parameterObject.postBokehActivationSlider;
     data.postBokehFilterKernelCmb = parameterObject.postBokehFilterKernelCmb;
-    data.thumbnailPopupMenu = parameterObject.thumbnailPopupMenu;
+    data.thumbnailSelectPopupMenu = parameterObject.thumbnailSelectPopupMenu;
+    data.thumbnailRemovePopupMenu = parameterObject.thumbnailRemovePopupMenu;
 
     data.resetSolidRenderingMaterialsBtn = parameterObject.resetSolidRenderingMaterialsBtn;
     data.resetSolidRenderingLightsBtn = parameterObject.resetSolidRenderingLightsBtn;
@@ -2359,8 +2360,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     {
       boolean hasSelFlames = false;
       if (randomBatch != null) {
-        for (FlameThumbnail thumnnail : randomBatch) {
-          if (thumnnail.getSelectCheckbox() != null && thumnnail.getSelectCheckbox().isSelected()) {
+        for (FlameThumbnail thumbnail : randomBatch) {
+          if (thumbnail.getSelectCheckbox() != null && thumbnail.getSelectCheckbox().isSelected()) {
             hasSelFlames = true;
           }
         }
@@ -2981,6 +2982,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         removeThumbnail(pIdx);
       }
     });
+    btn.setComponentPopupMenu(data.thumbnailRemovePopupMenu);
 
     pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
     pImgPanel.add(btn);
@@ -2996,7 +2998,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     checkbox.setMinimumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
     checkbox.setMaximumSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
     checkbox.setPreferredSize(new Dimension(BTN_WIDTH, BTN_HEIGHT));
-    checkbox.setComponentPopupMenu(data.thumbnailPopupMenu);
+    checkbox.setComponentPopupMenu(data.thumbnailSelectPopupMenu);
 
     pImgPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, BORDER, BORDER));
     pImgPanel.add(checkbox);
@@ -6562,8 +6564,22 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void removeAllThumbnails() {
-    if (StandardDialogs.confirm(flamePanel, "Do you really want to remove all flames\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
+    if (!randomBatch.isEmpty() && StandardDialogs.confirm(flamePanel, "Do you really want to remove all " + randomBatch.size() + " " + (randomBatch.size() > 1 ? "flames" : "flame") + "\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
       randomBatch.clear();
+      updateThumbnails();
+    }
+  }
+
+  public void removeSelectedThumbnails() {
+    List<FlameThumbnail> newRandomBatch = new ArrayList<>();
+    for (FlameThumbnail thumbnail : randomBatch) {
+      if (thumbnail.getSelectCheckbox() == null || !thumbnail.getSelectCheckbox().isSelected()) {
+        newRandomBatch.add(thumbnail);
+      }
+    }
+    int delta = randomBatch.size() - newRandomBatch.size();
+    if (delta > 0 && StandardDialogs.confirm(flamePanel, "Do you really want to remove " + delta + " " + (delta > 1 ? "flames" : "flame") + "\n from the thumbnail-ribbon?\n (Please note that this cannot be undone)")) {
+      randomBatch = newRandomBatch;
       updateThumbnails();
     }
   }

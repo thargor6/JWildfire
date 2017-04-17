@@ -495,6 +495,7 @@ public class TinaControllerData {
   public JWFNumberField postBokehActivationREd;
   public JSlider postBokehActivationSlider;
   public JComboBox postBokehFilterKernelCmb;
-  public JPopupMenu thumbnailPopupMenu;
+  public JPopupMenu thumbnailSelectPopupMenu;
+  public JPopupMenu thumbnailRemovePopupMenu;
 
 }

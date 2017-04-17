@@ -594,7 +594,8 @@ public class TinaInternalFrame extends JInternalFrame {
   private JPanel getRandomBatchPanel() {
     if (randomBatchPanel == null) {
       randomBatchPanel = new JPanel();
-      addPopup(randomBatchPanel, getThumbnailPopupMenu());
+      addPopup(randomBatchPanel, getThumbnailSelectPopupMenu());
+      addPopup(randomBatchPanel, getThumbnailRemovePopupMenu());
       randomBatchPanel.setLayout(new BorderLayout());
       randomBatchPanel.setPreferredSize(new Dimension(128, 0));
       randomBatchPanel.setVisible(true);
@@ -745,6 +746,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       dofNewDOFCBx.setBounds(102, 6, 104, 18);
+      dofNewDOFCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaDOFPanel.add(dofNewDOFCBx);
 
       JLabel lblArea = new JLabel();
@@ -1670,6 +1672,7 @@ public class TinaInternalFrame extends JInternalFrame {
         }
       });
       bgTransparencyCBx.setBounds(873, 118, 169, 18);
+      bgTransparencyCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       tinaColoringPanel.add(bgTransparencyCBx);
       tinaColoringPanel.add(getBackgroundColorIndicatorBtn());
 
@@ -1920,7 +1923,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lowDensityBrightnessREd.setLocation(new Point(100, 100));
       lowDensityBrightnessREd.setLinkedMotionControlName("lowDensityBrightnessSlider");
       lowDensityBrightnessREd.setLinkedLabelControlName("lowDensityBrightnessLbl");
-      lowDensityBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      lowDensityBrightnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       lowDensityBrightnessREd.setBounds(100, 27, 100, 24);
       lowDensityBrightnessREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -1950,7 +1953,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lowDensityBrightnessSlider.setMinimum(-1000);
       lowDensityBrightnessSlider.setMaximum(1000);
       lowDensityBrightnessSlider.setLocation(new Point(202, 100));
-      lowDensityBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      lowDensityBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lowDensityBrightnessSlider.setBounds(202, 27, 195, 19);
       lowDensityBrightnessSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -1973,7 +1976,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBgBrightness.setPreferredSize(new Dimension(94, 22));
       lblBgBrightness.setName("lowDensityBrightnessLbl");
       lblBgBrightness.setLocation(new Point(4, 100));
-      lblBgBrightness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBgBrightness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBgBrightness.setBounds(4, 27, 94, 22);
       tinaColoringPanel.add(lblBgBrightness);
 
@@ -1991,7 +1994,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceRedREd.setLinkedLabelControlName("balanceRedLbl");
       balanceRedREd.setHasMinValue(true);
       balanceRedREd.setHasMaxValue(true);
-      balanceRedREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      balanceRedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       balanceRedREd.setBounds(505, 4, 100, 24);
       balanceRedREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -2021,7 +2024,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRedBalance.setPreferredSize(new Dimension(94, 22));
       lblRedBalance.setName("balanceRedLbl");
       lblRedBalance.setLocation(new Point(4, 100));
-      lblRedBalance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRedBalance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRedBalance.setBounds(409, 4, 94, 22);
       tinaColoringPanel.add(lblRedBalance);
 
@@ -2030,9 +2033,9 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceRedSlider.setSize(new Dimension(220, 19));
       balanceRedSlider.setPreferredSize(new Dimension(220, 19));
       balanceRedSlider.setName("balanceRedSlider");
-      balanceRedSlider.setMaximum(200);
+      balanceRedSlider.setMaximum(300);
       balanceRedSlider.setLocation(new Point(202, 100));
-      balanceRedSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      balanceRedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceRedSlider.setBounds(607, 4, 195, 19);
       balanceRedSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -2061,7 +2064,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceGreenREd.setLinkedLabelControlName("balanceGreenLbl");
       balanceGreenREd.setHasMinValue(true);
       balanceGreenREd.setHasMaxValue(true);
-      balanceGreenREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      balanceGreenREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceGreenREd.setBounds(505, 27, 100, 24);
       balanceGreenREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -2090,7 +2093,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblGreenBalance.setPreferredSize(new Dimension(94, 22));
       lblGreenBalance.setName("balanceGreenLbl");
       lblGreenBalance.setLocation(new Point(4, 100));
-      lblGreenBalance.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblGreenBalance.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGreenBalance.setBounds(409, 27, 94, 22);
       tinaColoringPanel.add(lblGreenBalance);
 
@@ -2099,9 +2102,9 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceGreenSlider.setSize(new Dimension(220, 19));
       balanceGreenSlider.setPreferredSize(new Dimension(220, 19));
       balanceGreenSlider.setName("balanceGreenSlider");
-      balanceGreenSlider.setMaximum(200);
+      balanceGreenSlider.setMaximum(300);
       balanceGreenSlider.setLocation(new Point(202, 100));
-      balanceGreenSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      balanceGreenSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceGreenSlider.setBounds(607, 27, 195, 19);
       balanceGreenSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -2130,7 +2133,7 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceBlueREd.setLinkedLabelControlName("balanceBlueLbl");
       balanceBlueREd.setHasMinValue(true);
       balanceBlueREd.setHasMaxValue(true);
-      balanceBlueREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      balanceBlueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       balanceBlueREd.setBounds(505, 50, 100, 24);
       balanceBlueREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -2160,7 +2163,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblRedBalancing.setPreferredSize(new Dimension(94, 22));
       lblRedBalancing.setName("balanceBlueLbl");
       lblRedBalancing.setLocation(new Point(4, 100));
-      lblRedBalancing.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRedBalancing.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRedBalancing.setBounds(409, 50, 94, 22);
       tinaColoringPanel.add(lblRedBalancing);
 
@@ -2169,9 +2172,9 @@ public class TinaInternalFrame extends JInternalFrame {
       balanceBlueSlider.setSize(new Dimension(220, 19));
       balanceBlueSlider.setPreferredSize(new Dimension(220, 19));
       balanceBlueSlider.setName("balanceBlueSlider");
-      balanceBlueSlider.setMaximum(200);
+      balanceBlueSlider.setMaximum(300);
       balanceBlueSlider.setLocation(new Point(202, 100));
-      balanceBlueSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      balanceBlueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       balanceBlueSlider.setBounds(607, 50, 195, 19);
       balanceBlueSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -2193,7 +2196,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBgImage.setSize(new Dimension(94, 22));
       lblBgImage.setPreferredSize(new Dimension(94, 22));
       lblBgImage.setLocation(new Point(4, 4));
-      lblBgImage.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBgImage.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBgImage.setBounds(806, 73, 65, 22);
       tinaColoringPanel.add(lblBgImage);
 
@@ -2201,7 +2204,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorTypeCmb.setSize(new Dimension(125, 22));
       backgroundColorTypeCmb.setPreferredSize(new Dimension(125, 22));
       backgroundColorTypeCmb.setLocation(new Point(100, 4));
-      backgroundColorTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorTypeCmb.setBounds(873, 3, 150, 24);
       backgroundColorTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -2216,7 +2219,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorLLIndicatorBtn = new JButton();
       backgroundColorLLIndicatorBtn.setToolTipText("Set the background color of your fractal");
       backgroundColorLLIndicatorBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundColorLLIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorLLIndicatorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorLLIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorLLIndicatorBtn.setBounds(1027, 28, 30, 24);
       backgroundColorLLIndicatorBtn.addActionListener(new ActionListener() {
@@ -2229,7 +2232,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorURIndicatorBtn = new JButton();
       backgroundColorURIndicatorBtn.setToolTipText("Set the background color of your fractal");
       backgroundColorURIndicatorBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundColorURIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorURIndicatorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorURIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorURIndicatorBtn.setBounds(1086, 4, 30, 24);
       backgroundColorURIndicatorBtn.addActionListener(new ActionListener() {
@@ -2242,7 +2245,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorLRIndicatorBtn = new JButton();
       backgroundColorLRIndicatorBtn.setToolTipText("Set the background color of your fractal");
       backgroundColorLRIndicatorBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundColorLRIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorLRIndicatorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorLRIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorLRIndicatorBtn.setBounds(1086, 28, 30, 24);
       backgroundColorLRIndicatorBtn.addActionListener(new ActionListener() {
@@ -2255,7 +2258,7 @@ public class TinaInternalFrame extends JInternalFrame {
       backgroundColorCCIndicatorBtn = new JButton();
       backgroundColorCCIndicatorBtn.setToolTipText("Set the background color of your fractal");
       backgroundColorCCIndicatorBtn.setPreferredSize(new Dimension(190, 24));
-      backgroundColorCCIndicatorBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      backgroundColorCCIndicatorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       backgroundColorCCIndicatorBtn.setBackground(Color.BLACK);
       backgroundColorCCIndicatorBtn.setBounds(1057, 12, 30, 32);
       backgroundColorCCIndicatorBtn.addActionListener(new ActionListener() {
@@ -5464,7 +5467,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getTinaZBufferScaleREd(), getTinaZBufferScaleSlider(), getTinaFilterTypeCmb(), getTinaFilterKernelCmbLbl(), getTinaFilterRadiusLbl(),
-        getTinaFilterIndicatorCBx(), getThumbnailPopupMenu());
+        getTinaFilterIndicatorCBx(), getThumbnailSelectPopupMenu(), getThumbnailRemovePopupMenu());
 
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
@@ -6646,7 +6649,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams1ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams1ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams1ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams1ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams1ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams1ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams1ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6767,7 +6770,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams2ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams2ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams2ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams2ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams2ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams2ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams2ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams2ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -6998,7 +7001,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams3ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams3ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams3ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams3ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams3ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams3ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams3ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams3ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8066,7 +8069,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams4ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams4ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams4ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams4ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams4ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams4ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams4ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams4ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8373,7 +8376,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams5ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams5ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams5ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams5ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams5ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams5ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams5ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams5ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8603,7 +8606,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams6ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams6ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams6ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams6ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams6ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams6ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams6ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams6ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -8833,7 +8836,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams7ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams7ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams7ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams7ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams7ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams7ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams7ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams7ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9064,7 +9067,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams8ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams8ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams8ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams8ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams8ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams8ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams8ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams8ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9295,7 +9298,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams9ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams9ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams9ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams9ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams9ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams9ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams9ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams9ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9526,7 +9529,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams10ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams10ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams10ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams10ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams10ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams10ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams10ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams10ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9756,7 +9759,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams11ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams11ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams11ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams11ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams11ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams11ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams11ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -9987,7 +9990,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams12ToggleParamsPnlButton.setSize(new Dimension(22, 22));
       nonlinearParams12ToggleParamsPnlButton.setPreferredSize(new Dimension(22, 22));
       nonlinearParams12ToggleParamsPnlButton.setLocation(new Point(269, 26));
-      nonlinearParams12ToggleParamsPnlButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      nonlinearParams12ToggleParamsPnlButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams12ToggleParamsPnlButton.setBounds(42, 26, 22, 24);
       nonlinearParams12ToggleParamsPnlButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/arrow-down-3.png")));
       nonlinearParams12ToggleParamsPnlButton.addActionListener(new java.awt.event.ActionListener() {
@@ -10741,10 +10744,12 @@ public class TinaInternalFrame extends JInternalFrame {
   private JLabel tinaFilterKernelLbl;
   private JLabel tinaFilterRadiusLbl;
   private JCheckBox tinaFilterIndicatorCBx;
-  private JPopupMenu thumbnailPopupMenu;
+  private JPopupMenu thumbnailSelectPopupMenu;
+  private JPopupMenu thumbnailRemovePopupMenu;
   private JMenuItem mntmNewMenuItem;
   private JMenuItem mntmRemoveAll;
   private JMenuItem mntmDeselectAll;
+  private JMenuItem mntmRemoveSelected;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -11549,6 +11554,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
+      tinaPostNoiseFilterCheckBox.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
 
       antialiasPanel.add(tinaPostNoiseFilterCheckBox);
 
@@ -11620,7 +11626,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaFilterTypeCmb.setSize(new Dimension(125, 22));
       tinaFilterTypeCmb.setPreferredSize(new Dimension(125, 22));
       tinaFilterTypeCmb.setLocation(new Point(100, 4));
-      tinaFilterTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      tinaFilterTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaFilterTypeCmb.setBounds(115, 38, 322, 24);
       tinaFilterTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -11637,7 +11643,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblFiltering.setSize(new Dimension(94, 22));
       lblFiltering.setPreferredSize(new Dimension(94, 22));
       lblFiltering.setLocation(new Point(488, 2));
-      lblFiltering.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblFiltering.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblFiltering.setBounds(6, 38, 107, 22);
       antialiasPanel.add(lblFiltering);
 
@@ -11650,6 +11656,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
+      tinaFilterIndicatorCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       antialiasPanel.add(tinaFilterIndicatorCBx);
     }
     return antialiasPanel;
@@ -14941,7 +14948,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label.setPreferredSize(new Dimension(94, 22));
       label.setName("tinaCameraRollLbl");
       label.setLocation(new Point(4, 4));
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label.setBounds(115, 6, 765, 22);
       postBokehSettingsPnl.add(label);
 
@@ -14949,7 +14956,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehFilterKernelCmb.setSize(new Dimension(125, 22));
       postBokehFilterKernelCmb.setPreferredSize(new Dimension(125, 22));
       postBokehFilterKernelCmb.setLocation(new Point(100, 4));
-      postBokehFilterKernelCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      postBokehFilterKernelCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postBokehFilterKernelCmb.setBounds(115, 72, 322, 24);
       postBokehFilterKernelCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -14966,7 +14973,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBokehFilterKernel.setSize(new Dimension(94, 22));
       lblBokehFilterKernel.setPreferredSize(new Dimension(94, 22));
       lblBokehFilterKernel.setLocation(new Point(488, 2));
-      lblBokehFilterKernel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBokehFilterKernel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBokehFilterKernel.setBounds(6, 72, 107, 22);
       postBokehSettingsPnl.add(lblBokehFilterKernel);
 
@@ -14976,7 +14983,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBokehIntensity.setSize(new Dimension(94, 22));
       lblBokehIntensity.setPreferredSize(new Dimension(94, 22));
       lblBokehIntensity.setLocation(new Point(488, 2));
-      lblBokehIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBokehIntensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBokehIntensity.setBounds(6, 50, 107, 22);
       postBokehSettingsPnl.add(lblBokehIntensity);
 
@@ -14990,7 +14997,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehSizeREd.setLocation(new Point(584, 2));
       postBokehSizeREd.setLinkedMotionControlName("postBokehSizeSlider");
       postBokehSizeREd.setHasMinValue(true);
-      postBokehSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postBokehSizeREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postBokehSizeREd.setEditable(true);
       postBokehSizeREd.setBounds(115, 50, 100, 24);
       postBokehSizeREd.addActionListener(new ActionListener() {
@@ -15021,7 +15028,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehSizeSlider.setMinimum(0);
       postBokehSizeSlider.setMaximum(20000);
       postBokehSizeSlider.setLocation(new Point(686, 2));
-      postBokehSizeSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postBokehSizeSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postBokehSizeSlider.setBounds(217, 50, 220, 24);
       postBokehSizeSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -15042,7 +15049,7 @@ public class TinaInternalFrame extends JInternalFrame {
       label_2.setSize(new Dimension(94, 22));
       label_2.setPreferredSize(new Dimension(94, 22));
       label_2.setLocation(new Point(488, 2));
-      label_2.setFont(new Font("Dialog", Font.BOLD, 10));
+      label_2.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       label_2.setBounds(6, 28, 107, 22);
       postBokehSettingsPnl.add(label_2);
 
@@ -15056,7 +15063,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehIntensityREd.setLocation(new Point(584, 2));
       postBokehIntensityREd.setLinkedMotionControlName("postBokehIntensitySlider");
       postBokehIntensityREd.setHasMinValue(true);
-      postBokehIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postBokehIntensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postBokehIntensityREd.setEditable(true);
       postBokehIntensityREd.setBounds(115, 28, 100, 24);
       postBokehIntensityREd.addActionListener(new ActionListener() {
@@ -15087,7 +15094,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehIntensitySlider.setMinimum(0);
       postBokehIntensitySlider.setMaximum(20000);
       postBokehIntensitySlider.setLocation(new Point(686, 2));
-      postBokehIntensitySlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postBokehIntensitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postBokehIntensitySlider.setBounds(217, 28, 220, 24);
       postBokehIntensitySlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -15110,7 +15117,7 @@ public class TinaInternalFrame extends JInternalFrame {
       resetPostBokehSettingsBtn.setMinimumSize(new Dimension(100, 24));
       resetPostBokehSettingsBtn.setMaximumSize(new Dimension(32000, 24));
       resetPostBokehSettingsBtn.setIconTextGap(2);
-      resetPostBokehSettingsBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      resetPostBokehSettingsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       resetPostBokehSettingsBtn.setBounds(892, 5, 100, 24);
       resetPostBokehSettingsBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/edit-undo-6.png")));
       resetPostBokehSettingsBtn.addActionListener(new ActionListener() {
@@ -17663,6 +17670,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAltitudeLbl);
 
       tinaSolidRenderingLightAltitudeREd = new JWFNumberField();
+      tinaSolidRenderingLightAltitudeREd.setMouseSpeed(0.1);
       tinaSolidRenderingLightAltitudeREd.setText("");
       tinaSolidRenderingLightAltitudeREd.setSize(new Dimension(100, 24));
       tinaSolidRenderingLightAltitudeREd.setPreferredSize(new Dimension(100, 24));
@@ -17724,6 +17732,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingLightAzimuthLbl);
 
       tinaSolidRenderingLightAzimuthREd = new JWFNumberField();
+      tinaSolidRenderingLightAzimuthREd.setMouseSpeed(0.1);
       tinaSolidRenderingLightAzimuthREd.setText("");
       tinaSolidRenderingLightAzimuthREd.setSize(new Dimension(100, 24));
       tinaSolidRenderingLightAzimuthREd.setPreferredSize(new Dimension(100, 24));
@@ -18762,6 +18771,7 @@ public class TinaInternalFrame extends JInternalFrame {
           }
         }
       });
+      tinaSolidRenderingEnableAOCBx.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       panel.add(tinaSolidRenderingEnableAOCBx);
 
       JLabel tinaSolidRenderingAOIntensityLbl = new JLabel();
@@ -19779,7 +19789,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehBrightnessREd.setLocation(new Point(584, 2));
       postBokehBrightnessREd.setLinkedMotionControlName("postBokehBrightnessSlider");
       postBokehBrightnessREd.setHasMinValue(true);
-      postBokehBrightnessREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postBokehBrightnessREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postBokehBrightnessREd.setEditable(true);
       postBokehBrightnessREd.setBounds(558, 28, 100, 24);
       postBokehBrightnessREd.addActionListener(new ActionListener() {
@@ -19811,7 +19821,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBokehBrightness.setSize(new Dimension(94, 22));
       lblBokehBrightness.setPreferredSize(new Dimension(94, 22));
       lblBokehBrightness.setLocation(new Point(488, 2));
-      lblBokehBrightness.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBokehBrightness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBokehBrightness.setBounds(449, 28, 107, 22);
     }
     return lblBokehBrightness;
@@ -19827,7 +19837,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehBrightnessSlider.setMinimum(0);
       postBokehBrightnessSlider.setMaximum(20000);
       postBokehBrightnessSlider.setLocation(new Point(686, 2));
-      postBokehBrightnessSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postBokehBrightnessSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postBokehBrightnessSlider.setBounds(660, 28, 220, 24);
       postBokehBrightnessSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -19852,7 +19862,7 @@ public class TinaInternalFrame extends JInternalFrame {
       lblBokehActivation.setSize(new Dimension(94, 22));
       lblBokehActivation.setPreferredSize(new Dimension(94, 22));
       lblBokehActivation.setLocation(new Point(488, 2));
-      lblBokehActivation.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblBokehActivation.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblBokehActivation.setBounds(449, 50, 107, 22);
     }
     return lblBokehActivation;
@@ -19870,7 +19880,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehActivationREd.setLocation(new Point(584, 2));
       postBokehActivationREd.setLinkedMotionControlName("postBokehActivationSlider");
       postBokehActivationREd.setHasMinValue(true);
-      postBokehActivationREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      postBokehActivationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       postBokehActivationREd.setEditable(true);
       postBokehActivationREd.setBounds(558, 50, 100, 24);
       postBokehActivationREd.addActionListener(new ActionListener() {
@@ -19904,7 +19914,7 @@ public class TinaInternalFrame extends JInternalFrame {
       postBokehActivationSlider.setMinimum(0);
       postBokehActivationSlider.setMaximum(255000);
       postBokehActivationSlider.setLocation(new Point(686, 2));
-      postBokehActivationSlider.setFont(new Font("Dialog", Font.BOLD, 10));
+      postBokehActivationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       postBokehActivationSlider.setBounds(660, 50, 220, 24);
       postBokehActivationSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -20061,14 +20071,22 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaFilterIndicatorCBx;
   }
 
-  private JPopupMenu getThumbnailPopupMenu() {
-    if (thumbnailPopupMenu == null) {
-      thumbnailPopupMenu = new JPopupMenu();
-      thumbnailPopupMenu.add(getMntmNewMenuItem());
-      thumbnailPopupMenu.add(getMntmDeselectAll());
-      thumbnailPopupMenu.add(getMntmRemoveAll());
+  private JPopupMenu getThumbnailSelectPopupMenu() {
+    if (thumbnailSelectPopupMenu == null) {
+      thumbnailSelectPopupMenu = new JPopupMenu();
+      thumbnailSelectPopupMenu.add(getMntmNewMenuItem());
+      thumbnailSelectPopupMenu.add(getMntmDeselectAll());
     }
-    return thumbnailPopupMenu;
+    return thumbnailSelectPopupMenu;
+  }
+
+  private JPopupMenu getThumbnailRemovePopupMenu() {
+    if (thumbnailRemovePopupMenu == null) {
+      thumbnailRemovePopupMenu = new JPopupMenu();
+      thumbnailRemovePopupMenu.add(getMntmRemoveSelected());
+      thumbnailRemovePopupMenu.add(getMntmRemoveAll());
+    }
+    return thumbnailRemovePopupMenu;
   }
 
   private static void addPopup(Component component, final JPopupMenu popup) {
@@ -20125,5 +20143,18 @@ public class TinaInternalFrame extends JInternalFrame {
       });
     }
     return mntmDeselectAll;
+  }
+
+  private JMenuItem getMntmRemoveSelected() {
+    if (mntmRemoveSelected == null) {
+      mntmRemoveSelected = new JMenuItem("Remove selected");
+      mntmRemoveSelected.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.removeSelectedThumbnails();
+        }
+      });
+
+    }
+    return mntmRemoveSelected;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"
