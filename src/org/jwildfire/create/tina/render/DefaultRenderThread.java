@@ -23,6 +23,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Layer;
 
 public abstract class DefaultRenderThread extends AbstractRenderThread {
+  private static final int MAX_ERRORS = 100;
   protected long startIter;
   protected long iter;
 
@@ -104,7 +105,7 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
     for (DefaultRenderIterationState state : iterationState) {
       state.init();
     }
-
+    int errors = 0;
     try {
       for (iter = startIter; !forceAbort && (samples < 0 || iter < samples); iter += iterInc) {
         if (iter % 1000 == 0) {
@@ -118,7 +119,13 @@ public abstract class DefaultRenderThread extends AbstractRenderThread {
             state.iterateNext();
           }
           catch (Exception ex) {
+            errors++;
             state.validateState();
+            if (errors > MAX_ERRORS) {
+              System.out.println("INVALID FLAME");
+              iter = samples;
+              break;
+            }
           }
         }
       }
