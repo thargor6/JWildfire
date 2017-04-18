@@ -1981,7 +1981,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(lblBgBrightness);
 
       balanceRedREd = new JWFNumberField();
-      balanceRedREd.setMouseSpeed(0.04);
+      balanceRedREd.setMouseSpeed(0.1);
       balanceRedREd.setForeground(Color.BLACK);
       balanceRedREd.setValueStep(0.01);
       balanceRedREd.setText("");
@@ -2052,7 +2052,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceRedSlider);
 
       balanceGreenREd = new JWFNumberField();
-      balanceGreenREd.setMouseSpeed(0.04);
+      balanceGreenREd.setMouseSpeed(0.1);
       balanceGreenREd.setValueStep(0.01);
       balanceGreenREd.setText("");
       balanceGreenREd.setSize(new Dimension(100, 24));
@@ -2121,7 +2121,7 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaColoringPanel.add(balanceGreenSlider);
 
       balanceBlueREd = new JWFNumberField();
-      balanceBlueREd.setMouseSpeed(0.04);
+      balanceBlueREd.setMouseSpeed(0.1);
       balanceBlueREd.setValueStep(0.01);
       balanceBlueREd.setText("");
       balanceBlueREd.setSize(new Dimension(100, 24));
