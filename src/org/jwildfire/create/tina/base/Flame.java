@@ -129,13 +129,15 @@ public class Flame implements Assignable<Flame>, Serializable {
   private FilterKernelType spatialFilterKernel;
   private FilteringType spatialFilteringType;
   private boolean spatialFilterIndicator;
+  private double spatialFilterSharpness;
+  private double spatialFilterLowDensity;
   private double sampleDensity;
   private boolean bgTransparency;
   private boolean postNoiseFilter;
   private double postNoiseFilterThreshold;
   private double foregroundOpacity;
 
-  private BGColorType bgColorType = BGColorType.GRADIENT_2X2;
+  private BGColorType bgColorType = BGColorType.GRADIENT_2X2_C;
   @AnimAware
   private int bgColorRed;
   @AnimAware
@@ -307,6 +309,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void resetAntialiasingSettings() {
     spatialFilterRadius = Prefs.getPrefs().getTinaDefaultSpatialFilterRadius();
     spatialFilterKernel = Prefs.getPrefs().getTinaDefaultSpatialFilterKernel();
+    spatialFilterSharpness = 4.0;
+    spatialFilterLowDensity = 0.025;
     if (FilterKernelType.getSharpeningFilters().contains(spatialFilterKernel)) {
       spatialFilteringType = FilteringType.GLOBAL_SHARPENING;
     }
@@ -334,7 +338,7 @@ public class Flame implements Assignable<Flame>, Serializable {
     gamma = 4.0;
     gammaThreshold = 0.01;
     vibrancy = 1;
-    bgColorType = BGColorType.GRADIENT_2X2;
+    bgColorType = BGColorType.GRADIENT_2X2_C;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
     bgColorULRed = bgColorULGreen = bgColorULBlue = bgColorURRed = bgColorURGreen = bgColorURBlue = bgColorLLRed = bgColorLLGreen = bgColorLLBlue = bgColorLRRed = bgColorLRGreen = bgColorLRBlue = 0;
     bgColorCCRed = bgColorCCGreen = bgColorCCBlue = 0;
@@ -717,6 +721,8 @@ public class Flame implements Assignable<Flame>, Serializable {
     spatialFilterKernel = pFlame.spatialFilterKernel;
     spatialFilteringType = pFlame.spatialFilteringType;
     spatialFilterIndicator = pFlame.spatialFilterIndicator;
+    spatialFilterSharpness = pFlame.spatialFilterSharpness;
+    spatialFilterLowDensity = pFlame.spatialFilterLowDensity;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
@@ -857,6 +863,7 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPosZ - pFlame.camPosZ) > EPSILON) || !camPosZCurve.isEqual(pFlame.camPosZCurve) ||
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
+        (fabs(spatialFilterSharpness - pFlame.spatialFilterSharpness) > EPSILON) || (fabs(spatialFilterLowDensity - pFlame.spatialFilterLowDensity) > EPSILON) ||
         !spatialFilteringType.equals(pFlame.spatialFilteringType) || !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
         spatialFilterIndicator != pFlame.spatialFilterIndicator ||
         (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) ||
@@ -1790,6 +1797,22 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setSpatialFilterIndicator(boolean spatialFilterIndicator) {
     this.spatialFilterIndicator = spatialFilterIndicator;
+  }
+
+  public double getSpatialFilterSharpness() {
+    return spatialFilterSharpness;
+  }
+
+  public void setSpatialFilterSharpness(double spatialFilterSharpness) {
+    this.spatialFilterSharpness = spatialFilterSharpness;
+  }
+
+  public double getSpatialFilterLowDensity() {
+    return spatialFilterLowDensity;
+  }
+
+  public void setSpatialFilterLowDensity(double spatialFilterLowDensity) {
+    this.spatialFilterLowDensity = spatialFilterLowDensity;
   }
 
 }

@@ -112,6 +112,10 @@ public class TinaControllerData {
   public JWFNumberField filterRadiusREd;
   public JSlider filterRadiusSlider;
   public JComboBox filterKernelCmb;
+  public JWFNumberField tinaFilterSharpnessREd;
+  public JSlider tinaFilterSharpnessSlider;
+  public JWFNumberField tinaFilterLowDensityREd;
+  public JSlider tinaFilterLowDensitySlider;
 
   public JComboBox tinaFilterTypeCmb;
   public JLabel tinaFilterKernelCmbLbl;

@@ -226,6 +226,8 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_TYPE, pFlame.getSpatialFilteringType().toString()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_KERNEL, pFlame.getSpatialFilterKernel().toString()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_INDICATOR, pFlame.isSpatialFilterIndicator() ? 1 : 0));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_SHARPNESS, pFlame.getSpatialFilterSharpness()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_LOW_DENSITY, pFlame.getSpatialFilterLowDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SPATIAL_OVERSAMPLE, pFlame.getSpatialOversampling()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER, pFlame.isPostNoiseFilter() ? 1 : 0));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER_THRESHOLD, pFlame.getPostNoiseFilterThreshold()));

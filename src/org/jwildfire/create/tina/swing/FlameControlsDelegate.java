@@ -451,6 +451,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     owner.refreshFilterKernelPreviewImg();
   }
 
+  public void filterSharpnessSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaFilterSharpnessSlider, data.tinaFilterSharpnessREd, "spatialFilterSharpness", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
+  }
+
+  public void filterLowDensitySlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
+  }
+
   public void gammaThresholdSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.gammaThresholdSlider, data.gammaThresholdREd, "gammaThreshold", TinaController.SLIDER_SCALE_GAMMA_THRESHOLD, true);
   }
@@ -536,6 +544,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
   public void filterRadiusREd_changed() {
     flameTextFieldChanged(data.filterRadiusSlider, data.filterRadiusREd, "spatialFilterRadius", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
     owner.refreshFilterKernelPreviewImg();
+  }
+
+  public void filterSharpnessREd_changed() {
+    flameTextFieldChanged(data.tinaFilterSharpnessSlider, data.tinaFilterSharpnessREd, "spatialFilterSharpness", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
+  }
+
+  public void filterLowDensityREd_changed() {
+    flameTextFieldChanged(data.tinaFilterLowDensitySlider, data.tinaFilterLowDensityREd, "spatialFilterLowDensity", TinaController.SLIDER_SCALE_FILTER_RADIUS, false);
   }
 
   public void gammaREd_changed() {
@@ -668,9 +684,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     boolean filterDisabled = data.tinaFilterTypeCmb.getSelectedItem() == null;
     enableControl(data.filterKernelCmb, filterDisabled);
     enableControl(data.filterRadiusREd, filterDisabled);
-    // TODO
-    enableControl(data.tinaFilterIndicatorCBx, true);
-//  enableControl(data.tinaFilterIndicatorCBx, !FilteringType.ADAPTIVE.equals(data.tinaFilterTypeCmb.getSelectedItem()));
+    boolean adapativeOptionsDisabled = !FilteringType.ADAPTIVE.equals(data.tinaFilterTypeCmb.getSelectedItem());
+    enableControl(data.tinaFilterIndicatorCBx, adapativeOptionsDisabled);
+    enableControl(data.tinaFilterLowDensityREd, adapativeOptionsDisabled);
+    enableControl(data.tinaFilterIndicatorCBx, adapativeOptionsDisabled);
 
     enableControl(data.tinaSpatialOversamplingREd, false);
     enableControl(data.tinaPostNoiseFilterCheckBox, false);
@@ -735,6 +752,14 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.filterRadiusREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterRadius()));
       data.filterRadiusSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterRadius() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
+
+      data.tinaFilterSharpnessREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterSharpness()));
+      data.tinaFilterSharpnessSlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterSharpness() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
+
+      data.tinaFilterLowDensityREd.setText(Tools.doubleToString(getCurrFlame().getSpatialFilterLowDensity()));
+      data.tinaFilterLowDensitySlider.setValue(Tools.FTOI(getCurrFlame().getSpatialFilterLowDensity() * TinaController.SLIDER_SCALE_FILTER_RADIUS));
+
+      data.tinaFilterIndicatorCBx.setSelected(getCurrFlame().isSpatialFilterIndicator());
 
       data.tinaFilterTypeCmb.setSelectedItem(getCurrFlame().getSpatialFilteringType());
       fillFilterKernelCmb(getCurrFlame().getSpatialFilteringType());
@@ -1393,14 +1418,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     }
   }
 
-  // TODO
   public void filterIndicatorCheckBox_changed() {
     if (!isNoRefresh()) {
       Flame flame = getCurrFlame();
       if (flame != null) {
         owner.saveUndoPoint();
-        flame.setPostNoiseFilter(data.tinaPostNoiseFilterCheckBox.isSelected());
-        enableControls();
+        flame.setSpatialFilterIndicator(data.tinaFilterIndicatorCBx.isSelected());
+        owner.refreshFlameImage(true, false, 1, true, true);
       }
     }
   }

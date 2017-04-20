@@ -1,50 +1,56 @@
-V3.10 BETA 4 (17.04.2017)
- - fixed some labels which were not scale accordingly the global "tinaFontScale"-property
- - splitted the new thumbnail-popupmenu into two (remove and select, attached to the remove and select-button)
- - added a "Remove selected"-popupmenu-item
- - color-balancing now also affects solid renderings
- - light altitude/azimuth now works with the new preview-cache as well (affects only solid renders)
-
- - new SaveAll-button which saves all selected flames into a single file (thanks to Michael Bourne for the suggestion)
- - selection buttons at the thumbail ribbon
- - addded a context menu at the selection button (toogle all, deselect all, remove all)
- - added confirmation dialog to the thumbnail-delete button
- - removed the NONE-filtering option 
-
- - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
-   NONE, GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.
- - new MITCHELL_SMOOTH-filter kernel (derived from MITCHELL), which is now the default  
- - changed the behaviour of sharpening filters
- - new experimental adaptive MITCHELL_SINEPOW-filter (sharpenung details, smoothing "unsharp" areas as well as areas with low density)        
- - new 2x2+c gradient-type for the background of fractals
- - fixed a problem with the preview cache
- - optional post-smooth (Taubin-smooth) in the mesh generator  
- - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") in the mesh generator 
- - improved the rotation-behaviour of the mesh-preview in the Mesh-Generator  
- - restricted the range of the "Contrast"-slider causing more visually "interesting" changes
- - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   
-  
-  
- - reimplemented the preview-cache (all options at the coloring-tab do not need a recalculation do show changes). In general, all properties
-   which do not need a re-render are indicated by a star at the label, e.g. "Brightness*". Is is recommended to do a quickrender before adjusting them,
-   so can apply changes in almsot realtime to a decent image.
- - improved the quality of the preview in the main editor    
- - the channel-mixer also works in "realtime-mode" now   
- - new 2x2 gradient-type for the background of fractals (which is the new default), may also be changed in "realtime mode"
- - new "low brightness"-property to show/hide areas with lower density, increasing this value usually leads to more detail, while decreasing 
-   this value may help to hide unwanted border areas
- - new color-balancing options at the "Coloring"-tab
- - rearranged some controls at the coloring-tab
- - new variations, provided by Brad Stefanov ("waves2_radial", "spliptic_bs", "circlesplit", "log_tile2", "mobiq", "tile_hlp")
- - increased default oversampling to 2 in order to increase default quality
- - lots of new presets for the "isosfplot3d_wf"-variation, provided by Frank Baumann and Brad Stefanov
- - some performance increase on some of the DOF-blur-shapes
- - increased quality of DOF in 3D-mode, but needs much more time to compute
- - removed the color-oversampling/jittering-option
- - fixed (again) a serious bug in the Mesh-Generator: when rendering image-stacks 
-   each image inside a slice was the same. This causing meshes to be very 
-   "chunky", depending on slice-size. (The original fix was lost due to an unknown reason)
+V3.10 BETA 5 (17.04.2017)
+ - Image-quality:
+   - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
+     GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.
+   - new MITCHELL_SMOOTH-filter kernel (derived from MITCHELL), which is now the default  
+   - improved the behaviour of sharpening filters (causing less artifacts)
+   - "Sharpness indicator" and "Low density"-parameters at the "Anti-Aliasing/Filter"-tab (affects only adaptive filtering)
+   - new experimental adaptive MITCHELL_SINEPOW-filter (sharpenung details, smoothing "unsharp" areas as well as areas with low density)        
+   - new "low brightness"-property to show/hide areas with lower density, increasing this value usually leads to more detail, while decreasing 
+     this value may help to hide unwanted border areas
+   - increased default oversampling to 2 in order to increase default quality
  
+ - Editing:
+   - reimplemented the preview-cache (all options at the coloring-tab do not need a recalculation do show changes). In general, all properties
+     which do not need a re-render are indicated by a star at the label, e.g. "Brightness*". Is is recommended to do a quickrender before adjusting them,
+     so can apply changes in almsot realtime to a decent image.
+   - improved the quality of the preview in the main editor    
+   - the channel-mixer also works in "realtime-mode" now   
+   - new color-balancing options at the "Coloring"-tab
+
+ - Flame-saving/flame-thumbnail-selection
+   - new SaveAll-button which saves all selected flames into a single file (thanks to Michael Bourne for the suggestion)
+   - new checkbox at each flame-thumbnail to (de)select it
+   - new popup-menus at the flame-thumbnails (press the right mouse-button over a button to display the menu):
+     - remove-button: new popup-menu to remove all or remove selected flames
+     - checkbox (sometimes referred as "select-button": new popoup-menu to toggle selection or deselect all
+     - added confirmation dialog to the thumbnail-delete button
+ 
+ - Background-gradients:
+   - new 2x2 gradient-type for the background of fractals , may also be changed in "realtime mode"
+   - new 2x2+c gradient-type for the background of fractals (which is the new default)
+   
+ - Mesh-Generator: 
+   - optional post-smooth (Taubin-smooth) in the mesh generator  
+   - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") in the mesh generator 
+   - improved the rotation-behaviour of the mesh-preview in the Mesh-Generator  
+   - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   
+   - fixed (again) a serious bug in the Mesh-Generator: when rendering image-stacks 
+     each image inside a slice was the same. This causing meshes to be very 
+     "chunky", depending on slice-size. (The original fix was lost due to an unknown reason)
+
+ - Misc
+   - new "Machine"-random-flame-generator
+   - detect flames with invalid (xaos) settings and stop to render them
+   - indicator-mode for adapative filtering (i. e. showing sharp/smooth regions)
+   - fixed some labels which were not scale accordingly the global "tinaFontScale"-property
+   - rearranged some controls at the coloring-tab
+   - new variations, provided by Brad Stefanov ("waves2_radial", "spliptic_bs", "circlesplit", "log_tile2", "mobiq", "tile_hlp")
+   - lots of new presets for the "isosfplot3d_wf"-variation, provided by Frank Baumann and Brad Stefanov
+   - some performance increase on some of the DOF-blur-shapes
+   - increased quality of DOF in 3D-mode, but needs much more time to compute
+   - removed the color-oversampling/jittering-option
+  
 V3.02 (12.03.2017)
  - new and powerful "dla3d_wf"-variation ("diffusion limited aggregation") which may even utilize 3d-meshes as nodes/junctions
  - solid-random-flame-generators also make use of the "dla3d_wf"-variation

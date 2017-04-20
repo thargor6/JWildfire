@@ -405,6 +405,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.saturationREd = parameterObject.saturationREd;
     data.saturationSlider = parameterObject.saturationSlider;
     data.filterRadiusREd = parameterObject.pFilterRadiusREd;
+    data.tinaFilterSharpnessREd = parameterObject.tinaFilterSharpnessREd;
+    data.tinaFilterSharpnessSlider = parameterObject.tinaFilterSharpnessSlider;
+    data.tinaFilterLowDensityREd = parameterObject.tinaFilterLowDensityREd;
+    data.tinaFilterLowDensitySlider = parameterObject.tinaFilterLowDensitySlider;
+
     data.filterRadiusSlider = parameterObject.pFilterRadiusSlider;
     data.filterKernelCmb = parameterObject.pFilterKernelCmb;
     data.tinaFilterTypeCmb = parameterObject.tinaFilterTypeCmb;
@@ -4745,6 +4750,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           }
           noRefresh = false;
           spatialFilterKernelCmb_changed();
+          flameControls.enableFilterUI();
         }
         finally {
           noRefresh = oldNoRefresh;

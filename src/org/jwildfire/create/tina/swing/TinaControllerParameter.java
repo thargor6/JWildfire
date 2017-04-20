@@ -100,6 +100,11 @@ public class TinaControllerParameter {
   public JSlider saturationSlider;
   public JWFNumberField pFilterRadiusREd;
   public JSlider pFilterRadiusSlider;
+  public JWFNumberField tinaFilterSharpnessREd;
+  public JSlider tinaFilterSharpnessSlider;
+  public JWFNumberField tinaFilterLowDensityREd;
+  public JSlider tinaFilterLowDensitySlider;
+
   public JComboBox pFilterKernelCmb;
   public JComboBox tinaFilterTypeCmb;
   public JLabel tinaFilterKernelCmbLbl;
@@ -692,7 +697,8 @@ public class TinaControllerParameter {
       JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
       JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
       JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx,
-      JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu) {
+      JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
+      JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider) {
     this.desktop = pDesktop;
     this.pTinaFrame = pTinaFrame;
     this.pErrorHandler = pErrorHandler;
@@ -855,6 +861,10 @@ public class TinaControllerParameter {
     this.tinaFilterIndicatorCBx = tinaFilterIndicatorCBx;
     this.thumbnailSelectPopupMenu = thumbnailSelectPopupMenu;
     this.thumbnailRemovePopupMenu = thumbnailRemovePopupMenu;
+    this.tinaFilterSharpnessREd = tinaFilterSharpnessREd;
+    this.tinaFilterSharpnessSlider = tinaFilterSharpnessSlider;
+    this.tinaFilterLowDensityREd = tinaFilterLowDensityREd;
+    this.tinaFilterLowDensitySlider = tinaFilterLowDensitySlider;
   }
 
   public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,

@@ -75,6 +75,8 @@ public class AbstractFlameReader {
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
   public static final String ATTR_FILTER_TYPE = "filter_type";
+  public static final String ATTR_FILTER_SHARPNESS = "filter_sharpness";
+  public static final String ATTR_FILTER_LOW_DENSITY = "filter_low_density";
   public static final String ATTR_FILTER_INDICATOR = "filter_indicator";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
@@ -276,6 +278,12 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_FILTER)) != null) {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_FILTER_SHARPNESS)) != null) {
+      pFlame.setSpatialFilterSharpness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_FILTER_LOW_DENSITY)) != null) {
+      pFlame.setSpatialFilterLowDensity(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_FILTER_TYPE)) != null) {
       try {
