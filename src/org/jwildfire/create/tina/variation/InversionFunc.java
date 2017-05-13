@@ -56,8 +56,15 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_P= "p";
   public static final String PARAM_P2 = "p2";
   public static final String PARAM_DRAW_CIRCLE = "draw_circle";
+  public static final String PARAM_SHAPE_THICKNESS = "shape_thickness";
   public static final String PARAM_GUIDES_ENABLED = "guides_enabled";
   public static final String PARAM_PASSTHROUGH = "passthrough";
+  
+  private static final String PARAM_DIRECT_COLOR_MEASURE = "color_measure";
+  private static final String PARAM_DIRECT_COLOR_GRADIENT = "color_gradient";
+  // private static final String PARAM_DIRECT_COLOR_THRESHOLDING = "color_thresholding";
+  private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
+  private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   
   private static final String[] paramNames = { 
     PARAM_SCALE, PARAM_ROTATION, 
@@ -66,8 +73,11 @@ public class InversionFunc extends VariationFunc {
     PARAM_INVERSION_MODE, PARAM_HIDE_UNINVERTED, 
     PARAM_RING_MODE, 
     PARAM_RING_SCALE,
-    PARAM_P, PARAM_P2, PARAM_DRAW_CIRCLE, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
+    PARAM_P, PARAM_P2, PARAM_DRAW_CIRCLE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, 
+    PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, 
+    // PARAM_DIRECT_COLOR_THRESHOLDING, 
+    PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
     PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN, 
   };
   
@@ -91,10 +101,31 @@ public class InversionFunc extends VariationFunc {
   public static int SUPERSHAPE = 5;
 //  public static int WELDED_CIRCLES = 6;
   
+// direct color modes
+public static int DST_DISTANCE_FROM_BOUNDARY = 1;
+public static int RADIAL_DIFFERENCE1 = 10;
+// additional possible color modes, not yet implemented
+ // public static int SRC_DISTANCE_FROM_BOUNDARY = 0;
+ // public static int SRC_DISTANCE_FROM_CENTER = 2;
+ // public static int DST_DISTANCE_FROM_CENTER = 3;
+ // public static int SIGNED_SRC_DISTANCE_FROM_BOUNDARY = 4;
+ // public static int SIGNED_DST_DISTANCE_FROM_BOUNDARY = 5;
+ // public static int SIGNED_SRC_DISTANCE_FROM_CENTER = 6;
+ //  public static int SIGNED_DST_DISTANCE_FROM_CENTER = 7;
+  
+  private static final int OFF = 0;
+  private static final int NONE = 0;
+  private static final int COLORMAP_CLAMP = 1;
+  private static final int COLORMAP_WRAP = 2;
+  // color thresholding
+  // private static final int PERCENT = 0;
+  // private static final int VALUE = 1;
+  
   ParametricShape shape;
   boolean draw_guides = false;
   double rotation_pi_fraction = 0;
   double shape_rotation_radians;
+  double scalesqr;
   
   public void setDrawGuides(boolean draw) {
     draw_guides = draw;
@@ -436,12 +467,23 @@ public class InversionFunc extends VariationFunc {
   double ring_rmin;
   double ring_rmax;
   double draw_shape = 0;
+  double shape_thickness = 0;
   boolean guides_enabled = true;
   int inversion_mode = STANDARD;
   boolean hide_uninverted = false;
   boolean zmode = false;
+  
+    // Color Handling
+  private int direct_color_gradient = OFF;
+  private int direct_color_measure = RADIAL_DIFFERENCE1;
+  // private int direct_color_thesholding = VALUE;
+    //  private double color_scaling = 100;
+  private double color_low_thresh = 0;
+  private double color_high_thresh = 1.0;
+  
 
   PolarPoint2D curve_point = new PolarPoint2D();
+  PolarPoint2D circle_inversion_point = new PolarPoint2D();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -449,6 +491,9 @@ public class InversionFunc extends VariationFunc {
     double yin = pAffineTP.y;
     double zin = pAffineTP.z;
 
+    XYZPoint srcPoint, dstPoint;
+    srcPoint = pAffineTP;
+    dstPoint = pVarTP;
 
     double iscale;
     if (draw_guides && guides_enabled) { 
@@ -523,6 +568,10 @@ public class InversionFunc extends VariationFunc {
         shape.getCurvePoint(theta, curve_point);
         pVarTP.x += curve_point.x;
         pVarTP.y += curve_point.y;
+        if (shape_thickness != 0) {
+          pVarTP.x += 0.01 * (pContext.random() - 0.5) * shape_thickness;
+          pVarTP.y += 0.01 * (pContext.random() - 0.5) * shape_thickness;
+        }
         return;
       }
     }
@@ -601,6 +650,7 @@ public class InversionFunc extends VariationFunc {
       pVarTP.y += pAmount * yout;
       pVarTP.z += pAmount * zout;
       pVarTP.doHide = false;
+      setColor(srcPoint, dstPoint, curve_point, pAmount);
     }
     else { // if didn't do inversion, check to see if should hide
       pVarTP.x += xin;
@@ -609,11 +659,80 @@ public class InversionFunc extends VariationFunc {
       pVarTP.doHide = hide_uninverted;
     }
   }
+    
+  public void setColor(XYZPoint srcPoint, XYZPoint dstPoint, PolarPoint2D curvePoint, double pAmount) {
+    if (direct_color_measure != NONE && direct_color_gradient != OFF) {
+      double val = 0;
+      double[] sampled_vals;
+      if (direct_color_measure == DST_DISTANCE_FROM_BOUNDARY) {
+        double xdiff = dstPoint.x - curvePoint.x;
+        double ydiff = dstPoint.y - curvePoint.y;
+        double d = sqrt((xdiff * xdiff) + (ydiff * ydiff));
+        val = d;
+      }
+      else if (direct_color_measure == RADIAL_DIFFERENCE1) {
+        // compare dstPoint to standard circle inversion (ratio will be 1 if shape == CIRCLE && p == 2 && p2 == 2)
+        // abs(dstPoint.radius/circleInversion.radius) ==>
+        double r_shape_inversion = sqrt((dstPoint.x * dstPoint.x) + (dstPoint.y * dstPoint.y));
+        
+        double iscale = (scale * scale) / (sqr(srcPoint.x) + sqr(srcPoint.y));
+        double cx = iscale * srcPoint.x * pAmount;
+        double cy = iscale * srcPoint.y * pAmount;
+        double r_circle_inversion = sqrt(cx * cx + cy * cy);
+        double radial_ratio = r_shape_inversion / r_circle_inversion;
+        val = radial_ratio;
+      }
+      else { return; }  // value not recognized, default back to normal coloring mode
+        
+      /* else if (direct_color_measure == META_INDEX && meta_mode != OFF) {
+        val = current_meta_step;
+        sampled_vals = null;
+      }
+        */
+      double baseColor = 0;
+      double low_value, high_value;
+
+      // else {  // default is by value
+      low_value = color_low_thresh;
+      high_value = color_high_thresh;
+      // }
+      if (low_value > high_value) {
+        double temp = low_value;
+        low_value = high_value;
+        high_value = temp;
+      }
+      
+      if (val < low_value) { baseColor = 0; }
+      else if (val >= high_value) { baseColor = 255; }
+      else { baseColor = ((val - low_value)/(high_value - low_value)) * 255; }
+      if (direct_color_gradient == COLORMAP_CLAMP) {
+        dstPoint.rgbColor = false;
+        dstPoint.color = baseColor / 255.0;
+        if (dstPoint.color < 0) { dstPoint.color = 0; }
+        if (dstPoint.color > 1.0) { dstPoint.color = 1.0; }
+      }
+      else if (direct_color_gradient == COLORMAP_WRAP) {
+        dstPoint.rgbColor = false;
+        // if val is outside range, wrap it around (cylce) to keep within range
+        if (val < low_value) {
+          val = high_value - ((low_value - val) % (high_value - low_value));
+        }
+        else if (val > high_value) {
+          val = low_value + ((val - low_value) % (high_value - low_value));
+        }
+        baseColor = ((val - low_value)/(high_value - low_value)) * 255; 
+        dstPoint.color = baseColor / 255.0;
+        if (dstPoint.color < 0) { dstPoint.color = 0; }
+        if (dstPoint.color > 1.0) { dstPoint.color = 1.0; }
+      }
+    } // END color_mode != normal
+
+  }
   
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     shape_rotation_radians = M_PI * rotation_pi_fraction;
-
+    scalesqr = scale * scale;
     
     // ring_max = ring_max_ratio * r;
     if (shape_mode == CIRCLE) {
@@ -690,8 +809,11 @@ public class InversionFunc extends VariationFunc {
       zmode ? 1 : 0, 
       inversion_mode, hide_uninverted ? 1 : 0, 
       ring_mode, ring_scale, 
-      p, p2, draw_shape, passthrough, guides_enabled ? 1 : 0, 
+      p, p2, draw_shape, shape_thickness, passthrough, guides_enabled ? 1 : 0, 
       a, b, c, d, e, f, 
+      direct_color_measure, direct_color_gradient, 
+//      direct_color_thesholding, 
+      color_low_thresh, color_high_thresh, 
       x0, y0, z0, 
     };
     
@@ -732,6 +854,9 @@ public class InversionFunc extends VariationFunc {
     else if (PARAM_DRAW_CIRCLE.equalsIgnoreCase(pName)) {
       draw_shape = pValue;
     }
+    else if (PARAM_SHAPE_THICKNESS.equalsIgnoreCase(pName)) {
+      shape_thickness = pValue;
+    }
     else if (PARAM_PASSTHROUGH.equalsIgnoreCase(pName)) {
       passthrough = pValue;
     }
@@ -756,12 +881,27 @@ public class InversionFunc extends VariationFunc {
     else if (PARAM_F.equalsIgnoreCase(pName)) {
       f = pValue;
     }
+    else if (PARAM_DIRECT_COLOR_MEASURE.equalsIgnoreCase(pName)) {
+      direct_color_measure = (int)pValue;
+    }
+    else if (PARAM_DIRECT_COLOR_GRADIENT.equalsIgnoreCase(pName)) {
+      direct_color_gradient = (int)pValue;
+    }
+    else if (PARAM_COLOR_LOW_THRESH.equalsIgnoreCase(pName)) {
+      color_low_thresh = pValue;
+    }
+    else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
+      color_high_thresh = pValue;
+    }
+    // XORIGIN IS DEPRECATED
     else if (PARAM_XORIGIN.equalsIgnoreCase(pName)) {
       x0 = pValue;
     }
+    // YORIGIN IS DEPRECATED
     else if (PARAM_YORIGIN.equalsIgnoreCase(pName)) {
       y0 = pValue;
     }
+    // ZORIGIN IS DEPRECATED
     else if (PARAM_ZORIGIN.equalsIgnoreCase(pName)) {
       z0 = pValue;
     }
