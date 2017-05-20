@@ -16,26 +16,26 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class TileHlpFunc extends VariationFunc {
+
+public class TileHlp extends VariationFunc {
   private static final long serialVersionUID = 1L;
+
   private static final String PARAM_WIDTH = "width";
-  private static final String PARAM_HEIGHT = "height";
-  private static final String[] paramNames = { PARAM_WIDTH, PARAM_HEIGHT };
+
+  private static final String[] paramNames = { PARAM_WIDTH};
+
   private double width = 1.0;
-  private double height = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // "tile_hlp" variation created by Zy0rg implemented into JWildfire by Tatyana Zabanova and Brad Stefanov
+      // "tile_hlp" variation created by Zy0rg implemented into JWildfire by Tatyana Zabanova and Brad Stefanov
     double width2 = width * pAmount;
-    double height2 = height * pAmount;
     double x = pAffineTP.x / width;
-    double y = pAffineTP.y / height;
     double aux = 0;
     if (x > 0.0) {
       aux = x - (int) x;
@@ -43,7 +43,7 @@ public class TileHlpFunc extends VariationFunc {
     else {
       aux = x + (int) x;
     }
-    aux = cos(aux);
+    aux = cos(aux * M_PI);
     double aux2 = 0;
     if (aux < pContext.random() * 2.0 - 1.0) {
       if (x > 0) {
@@ -54,28 +54,11 @@ public class TileHlpFunc extends VariationFunc {
       }
     }
 
-    double aux3 = 0;
-    if (y > 0.0) {
-      aux3 = y - (int) y;
-    }
-    else {
-      aux3 = y + (int) y;
-    }
-    aux3 = cos(aux3);
-    double aux4 = 0;
-    if (aux3 < pContext.random() * 2.0 - 1.0) {
-      if (y > 0) {
-        aux4 = -height2;
-      }
-      else {
-        aux4 = height2;
-      }
-    }
     pVarTP.x += pAffineTP.x * pAmount + aux2;
-    pVarTP.y += pAffineTP.y * pAmount + aux4;
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
+    pVarTP.y += pAmount * pAffineTP.y;
+if (pContext.isPreserveZCoordinate()) {
+  pVarTP.z += pAmount * pAffineTP.z;
+}
   }
 
   @Override
@@ -85,15 +68,13 @@ public class TileHlpFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { width, height };
+    return new Object[] { width };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_WIDTH.equalsIgnoreCase(pName))
       width = pValue;
-    else if (PARAM_HEIGHT.equalsIgnoreCase(pName))
-      height = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
@@ -102,4 +83,6 @@ public class TileHlpFunc extends VariationFunc {
   public String getName() {
     return "tile_hlp";
   }
+
 }
+
