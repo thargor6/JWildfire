@@ -30,10 +30,10 @@ public class FanFunc extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double dx = M_PI * pXForm.getXYCoeff20() * pXForm.getXYCoeff20() + SMALL_EPSILON;
+    double dx = M_PI * pXForm.getCoeff20() * pXForm.getCoeff20() + SMALL_EPSILON;
     double dx2 = dx / 2;
     double a;
-    if ((pAffineTP.getPrecalcAtan() + pXForm.getXYCoeff21() - ((int) ((pAffineTP.getPrecalcAtan() + pXForm.getXYCoeff21()) / dx)) * dx) > dx2)
+    if ((pAffineTP.getPrecalcAtan() + pXForm.getCoeff21() - ((int) ((pAffineTP.getPrecalcAtan() + pXForm.getCoeff21()) / dx)) * dx) > dx2)
       a = pAffineTP.getPrecalcAtan() - dx2;
     else
       a = pAffineTP.getPrecalcAtan() + dx2;
