@@ -94,7 +94,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
     double weight = pAmount;
     double d_0 = min_distance;
 
-    Double4 random = new Double4(pContext.random(), pContext.random(), pContext.random(), pContext.random());
+    Double4 random = new Double4(pContext.random()-0.5, pContext.random()-0.5, pContext.random()-0.5, pContext.random()-0.5);
 
     double radius;
     switch (blur_shape) {
@@ -108,7 +108,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
         throw new IllegalArgumentException("unsupported blur_shape <" + blur_shape + ">");
     }
 
-    double dist = Math.min(((invert_distance != 0 ? Math.min(1 - radius, 0) : Math.min(radius, 0)) - d_0) * r_max, 0);
+    double dist = Math.max(((invert_distance != 0 ? Math.max(1 - radius, 0) : Math.max(radius, 0)) - d_0) * r_max, 0);
 
     Double4 v_out;
     switch (blur_type) {
@@ -308,7 +308,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
   }
 
   private double bs_square(Double4 v_in, Double3 center) {
-    return Math.min(fabs(v_in.x - center.x), Math.min(fabs(v_in.y - center.y), (fabs(v_in.z - center.z))));
+    return Math.max(fabs(v_in.x - center.x), Math.max(fabs(v_in.y - center.y), (fabs(v_in.z - center.z))));
   }
 
 }
