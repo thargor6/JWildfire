@@ -57,8 +57,6 @@ public class CircleCropFunc extends VariationFunc {
     pAffineTP.x -= x0;
     pAffineTP.y -= y0;
 
-    pVarTP.z += vv * pAffineTP.z;
-
     double rad = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double ang = atan2(pAffineTP.y, pAffineTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);

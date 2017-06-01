@@ -57,8 +57,6 @@ public class PostCircleCropFunc extends VariationFunc {
     pVarTP.x -= x0;
     pVarTP.y -= y0;
 
-    pVarTP.z += vv * pVarTP.z;
-
     double rad = sqrt(pVarTP.x * pVarTP.x + pVarTP.y * pVarTP.y);
     double ang = atan2(pVarTP.y, pVarTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);
@@ -75,16 +73,16 @@ public class PostCircleCropFunc extends VariationFunc {
       pVarTP.doHide = true;
     }
     else if (cr0 && !esc) {
-      pVarTP.x += vv * pVarTP.x + x0;
-      pVarTP.y += vv * pVarTP.y + y0;
+      pVarTP.x = vv * pVarTP.x + x0;
+      pVarTP.y = vv * pVarTP.y + y0;
     }
     else if (!cr0 && esc) {
-      pVarTP.x += vv * rdc * c + x0;
-      pVarTP.y += vv * rdc * s + y0;
+      pVarTP.x = vv * rdc * c + x0;
+      pVarTP.y = vv * rdc * s + y0;
     }
     else if (!cr0 && !esc) {
-      pVarTP.x += vv * pVarTP.x + x0;
-      pVarTP.y += vv * pVarTP.y + y0;
+      pVarTP.x = vv * pVarTP.x + x0;
+      pVarTP.y = vv * pVarTP.y + y0;
     }
   }
 

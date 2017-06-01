@@ -18,9 +18,8 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 */
 
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.atan;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
@@ -85,13 +84,7 @@ public class PostHeatFunc extends VariationFunc {
 
     double sint, cost, sinp, cosp, atant, acosp;
 
-    // avoid dividing by zero
-    if (pVarTP.x != 0) {
-      atant = atan(pVarTP.y / pVarTP.x);
-    }
-    else {
-      atant = M_PI / 2.0;
-    }
+    atant = atan2(pVarTP.y, pVarTP.x);
 
     r += ar * sin(br * r + cr);
 
@@ -110,9 +103,9 @@ public class PostHeatFunc extends VariationFunc {
     cosp = cos(sinp);
     sinp = sin(sinp);
 
-    pVarTP.x += r * cost * sinp;
-    pVarTP.y += r * sint * sinp;
-    pVarTP.z += r * cosp;
+    pVarTP.x = r * cost * sinp;
+    pVarTP.y = r * sint * sinp;
+    pVarTP.z = r * cosp;
   }
 
   @Override

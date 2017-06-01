@@ -45,8 +45,8 @@ public class PostJuliaQFunc extends VariationFunc {
     double sina = sin(a);
     double cosa = cos(a);
     double r = pAmount * pow(sqr(pVarTP.x) + sqr(pVarTP.y), half_inv_power);
-    pVarTP.x += r * cosa;
-    pVarTP.y += r * sina;
+    pVarTP.x = r * cosa;
+    pVarTP.y = r * sina;
   }
 
   @Override
