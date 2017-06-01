@@ -487,7 +487,21 @@ public class VariationFuncList {
     registerVariationFunc(MobiqFunc.class);
     registerVariationFunc(TileHlpFunc.class);
     registerVariationFunc(SplipticBSFunc.class);
-    registerVariationFunc(Tile_LogFunc.class);      
+    registerVariationFunc(Tile_LogFunc.class);   
+    registerVariationFunc(Cos2_BSFunc.class);      
+    registerVariationFunc(Cot2_BSFunc.class);      
+    registerVariationFunc(Csc2_BSFunc.class);         
+    registerVariationFunc(Tan2_BSFunc.class);          
+    registerVariationFunc(Sec2_BSFunc.class);     
+    registerVariationFunc(Exp2_BSFunc.class);  
+    registerVariationFunc(Sin2_BSFunc.class);  
+    registerVariationFunc(Csch2_BSFunc.class);  
+    registerVariationFunc(Cosh2_BSFunc.class);  
+    registerVariationFunc(Sech2_BSFunc.class);     
+    registerVariationFunc(Coth2_BSFunc.class);     
+    registerVariationFunc(Sinh2_BSFunc.class);  
+    registerVariationFunc(Tanh2_BSFunc.class);          
+    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
