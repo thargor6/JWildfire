@@ -43,7 +43,9 @@ public class Hypershift extends VariationFunc {
        rad = pAmount * scale / (x * x + y * y);
        pVarTP.x += rad * x + shift;
        pVarTP.y += rad * y*stretch;
-       pVarTP.z += pAmount * pAffineTP.z;
+       if (pContext.isPreserveZCoordinate()) {
+         pVarTP.z += pAmount * pAffineTP.z;
+       }
     // ----------------------------------
     // ...
   }
