@@ -500,7 +500,20 @@ public class VariationFuncList {
     registerVariationFunc(Sech2_BSFunc.class);     
     registerVariationFunc(Coth2_BSFunc.class);     
     registerVariationFunc(Sinh2_BSFunc.class);  
-    registerVariationFunc(Tanh2_BSFunc.class);          
+    registerVariationFunc(Tanh2_BSFunc.class); 
+    registerVariationFunc(CosqFunc.class); 
+    registerVariationFunc(SinqFunc.class); 
+    registerVariationFunc(TanqFunc.class);     
+    registerVariationFunc(TanhqFunc.class); 
+    registerVariationFunc(CoshqFunc.class); 
+    registerVariationFunc(SinhqFunc.class); 
+    registerVariationFunc(CotqFunc.class);     
+    registerVariationFunc(CothqFunc.class);   
+    registerVariationFunc(CscqFunc.class);      
+    registerVariationFunc(CschqFunc.class);  
+    registerVariationFunc(EstiqFunc.class);      
+    registerVariationFunc(SecqFunc.class);
+    registerVariationFunc(SechqFunc.class);    
     
 
     resolvedAliasMap = new HashMap<>();
