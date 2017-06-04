@@ -22,7 +22,7 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 
-public class TileHlp extends VariationFunc {
+public class TileHlpFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_WIDTH = "width";
