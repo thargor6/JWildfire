@@ -1,4 +1,20 @@
-V3.10 BETA 5 (17.04.2017)
+V3.11 (04.06.2017)
+- New Variations 
+  - Cot2_BS,Csc2_BS,Tan2_BS,Sec2_BS,Exp2_BS,Sin2_BS,Csch2_BS,Cosh2_BS,Sech2_BS,Coth2_BS,Sinh2_BS,andTanh2_BS complex variations by cothe with added variables by Brad Stefanov
+  - Cosq,Sinq,Tanq,Tanhq,Coshq,Sinhq,Cotq,Cothq,Cscq,Cschq,Estiq,Secq,Sechq from the Quaternion Apo Plugin Pack by zephyrtronium implemented into JWF by Brad Stefanov
+- Fixes
+  - Fixed bug in TileHlp. by Brad Stefanov
+  - Fixed Log_tile with new variation Tile_log for keeping compatibility ... will keep both variations since they work in different ways. By Brad Stefanov
+  - Fixed bugs in XTrb by Rick Sidwell
+  - Changed getCoeffxy to getXYCoeffxy for variations that use them. By Rick Sidwell
+  - Fixed bugs with the Falloff3 variations. By Rick Sidwell
+  - Fix misc. variation bugs. Most pre and post variations should assign, not add their results. Fixed this in multiple variations to match the original apo plugins. By Rick Sidwell
+- Misc  
+  - rendering/processor-usage is more smooth now, avoids blocking (may slightly decrease render speed, but is more responsive on most systems. 
+    If max render speed is extremely important for you, than keep the old version) - by Andreas Maschke
+  - "subflame_wf" - variation now also supports flame-sequences as input (to animate the subflame) - by Andreas Maschke  
+    
+V3.10 (21.04.2017)
  - Image-quality:
    - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
      GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.

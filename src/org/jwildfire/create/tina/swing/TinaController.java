@@ -3236,7 +3236,42 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                 }
               }
                 break;
-
+              case FLAME_FILENAME: {
+                String oldFilename = null;
+                {
+                  byte val[] = var.getFunc().getRessourceValues()[idx];
+                  if (val != null) {
+                    oldFilename = new String(val);
+                  }
+                }
+                JFileChooser chooser = new FlameFileChooser(Prefs.getPrefs());
+                if (oldFilename != null && oldFilename.length() > 0) {
+                  try {
+                    chooser.setCurrentDirectory(new File(oldFilename).getAbsoluteFile().getParentFile());
+                    chooser.setSelectedFile(new File(oldFilename));
+                  }
+                  catch (Exception ex) {
+                    ex.printStackTrace();
+                  }
+                }
+                else {
+                  if (prefs.getInputImagePath() != null) {
+                    try {
+                      chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()));
+                    }
+                    catch (Exception ex) {
+                      ex.printStackTrace();
+                    }
+                  }
+                }
+                if (chooser.showOpenDialog(centerPanel) == JFileChooser.APPROVE_OPTION) {
+                  File file = chooser.getSelectedFile();
+                  String valStr = file.getAbsolutePath();
+                  byte[] valByteArray = valStr != null ? valStr.getBytes() : null;
+                  var.getFunc().setRessource(rName, valByteArray);
+                }
+              }
+                break;
               case IMAGE_FILE: {
                 JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
                 if (prefs.getInputImagePath() != null) {

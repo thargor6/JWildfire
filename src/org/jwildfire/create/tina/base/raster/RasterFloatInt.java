@@ -73,7 +73,7 @@ public class RasterFloatInt implements AbstractRaster, Serializable {
   }
 
   @Override
-  public/* synchronized */void addSamples(PlotSample[] pPlotBuffer, int pCount) {
+  public synchronized void addSamples(PlotSample[] pPlotBuffer, int pCount) {
     for (int i = 0; i < pCount; i++) {
       PlotSample sample = pPlotBuffer[i];
       int x = sample.screenX, y = sample.screenY;

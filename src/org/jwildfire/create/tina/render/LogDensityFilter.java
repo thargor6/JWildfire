@@ -30,13 +30,14 @@ import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
-@SuppressWarnings("serial")
-public class LogDensityFilter extends FilterHolder {
+public class LogDensityFilter {
   private final ColorFunc colorFunc;
 
   private AbstractRaster raster;
@@ -47,12 +48,30 @@ public class LogDensityFilter extends FilterHolder {
   private boolean solidRendering;
   private SimpleImage bgImage;
   private LogScaleCalculator logScaleCalculator;
+  private final Flame flame;
+  private final int oversample;
+  private final FilterHolder primaryFilter;
+  private final FilterHolder smoothingFilter;
+  private final FilterKernelType filterKernelType;
+  private boolean showIndicators;
+  private final double filterRadiusA;
+  private final double sharpness;
+  private final double lowDensity;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
-    super(pFlame);
+    flame = pFlame;
+    oversample = flame.getSpatialOversampling();
+    filterKernelType = flame.getSpatialFilterKernel();
+    primaryFilter = LogDensityFilterKernelProvider.getFilter(filterKernelType, flame.getSpatialOversampling(), flame.getSpatialFilterRadius());
+    filterRadiusA = flame.getSpatialFilterRadius() + 0.25;
+    sharpness = flame.getSpatialFilterSharpness();
+    lowDensity = flame.getSpatialFilterLowDensity();
+
+    smoothingFilter = LogDensityFilterKernelProvider.getFilter(FilterKernelType.GAUSSIAN, flame.getSpatialOversampling(), 0.75);
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
-    solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
-    if (solidRendering && flame.getCamDOF() > MathLib.EPSILON) {
+    solidRendering = pFlame.getSolidRenderSettings().isSolidRenderingEnabled();
+    showIndicators = pFlame.isSpatialFilterIndicator() && FilteringType.ADAPTIVE.equals(flame.getSpatialFilteringType());
+    if (solidRendering && pFlame.getCamDOF() > MathLib.EPSILON) {
       dofRandGen = new MarsagliaRandomGenerator();
       dofRandGen.randomize(pFlame.hashCode());
     }
@@ -60,9 +79,9 @@ public class LogDensityFilter extends FilterHolder {
       dofRandGen = null;
     }
 
-    if (flame.getBGImageFilename().length() > 0) {
+    if (pFlame.getBGImageFilename().length() > 0) {
       try {
-        bgImage = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
+        bgImage = (SimpleImage) RessourceManager.getImage(pFlame.getBGImageFilename());
         if (bgImage.getImageWidth() < 2 || bgImage.getImageHeight() < 2) {
           bgImage = null;
         }
@@ -162,128 +181,262 @@ public class LogDensityFilter extends FilterHolder {
   }
 
   public void transformPoint(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    double balanceRed = logScaleCalculator.getBalanceRed();
-    double balanceGreen = logScaleCalculator.getBalanceGreen();
-    double balanceBlue = logScaleCalculator.getBalanceBlue();
     pFilteredPnt.clear();
-    if (noiseFilterSize > 1) {
-      if (solidRendering) {
-        for (int i = 0; i < noiseFilterSize; i++) {
-          for (int j = 0; j < noiseFilterSize; j++) {
-            getSample(pFilteredPnt, pX * oversample + j - noiseFilterSizeHalve, pY * oversample + i - noiseFilterSizeHalve);
-            if (pFilteredPnt.rp.hasSolidColors) {
-              double f = filter[i][j] / (double) (oversample * oversample);
-              if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
-                pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
-                pFilteredPnt.intensity += f;
+
+    if (showIndicators && !solidRendering) {
+
+      FilterHolder filter = getFilter(pX * oversample, pY * oversample, pFilteredPnt.rp);
+      for (int px = 0; px < oversample; px++) {
+        for (int py = 0; py < oversample; py++) {
+          getSample(pFilteredPnt, pX * oversample + px, pY * oversample + py);
+          double logScale;
+          long pCount = pFilteredPnt.rp.count;
+          if (pCount > 0) {
+            if (pCount < precalcLogArray.length) {
+              logScale = precalcLogArray[(int) pCount];
+            }
+            else {
+              logScale = logScaleCalculator.calcLogScale(pCount);
+            }
+            double lumValue = lumInt(logScale * pFilteredPnt.rp.red, logScale * pFilteredPnt.rp.green, logScale * pFilteredPnt.rp.blue);
+
+            if (filter.isEmpty()) {
+              pFilteredPnt.red += lumValue;
+              pFilteredPnt.green += lumValue;
+              pFilteredPnt.blue += lumValue;
+            }
+            else {
+              pFilteredPnt.red += lumValue * filter.getIntensity() * filter.getFilterIndicator().getR();
+              pFilteredPnt.green += lumValue * filter.getIntensity() * filter.getFilterIndicator().getG();
+              pFilteredPnt.blue += lumValue * filter.getIntensity() * filter.getFilterIndicator().getB();
+            }
+
+            pFilteredPnt.intensity += (logScale * pFilteredPnt.rp.count) * flame.getWhiteLevel();
+          }
+        }
+      }
+
+    }
+    else {
+      double balanceRed = logScaleCalculator.getBalanceRed();
+      double balanceGreen = logScaleCalculator.getBalanceGreen();
+      double balanceBlue = logScaleCalculator.getBalanceBlue();
+      FilterHolder filter = getFilter(pX * oversample, pY * oversample, pFilteredPnt.rp);
+      if (!filter.isEmpty()) {
+        if (solidRendering) {
+          for (int i = 0; i < filter.noiseFilterSize; i++) {
+            for (int j = 0; j < filter.noiseFilterSize; j++) {
+              getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+              if (pFilteredPnt.rp.hasSolidColors) {
+                double f = filter.filter[i][j] / (double) (oversample * oversample);
+                if (addSolidColors(pFilteredPnt, pFilteredPnt.rp, f)) {
+                  pFilteredPnt.dofDist += f * pFilteredPnt.rp.dofDist;
+                  pFilteredPnt.intensity += f;
+                }
+              }
+            }
+          }
+        }
+        else {
+          if (colorFunc == ColorFunc.NULL) {
+            if (filter.getFilterKernelType().isSharpening()) {
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+                    pFilteredPnt.red += filter.filter[i][j] * logScale * (pFilteredPnt.rp.red * balanceRed);
+                    pFilteredPnt.green += filter.filter[i][j] * logScale * (pFilteredPnt.rp.green * balanceGreen);
+                    pFilteredPnt.blue += filter.filter[i][j] * logScale * (pFilteredPnt.rp.blue * balanceBlue);
+
+                  }
+                }
+              }
+
+              filter = smoothingFilter;
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+
+                    pFilteredPnt.intensity += (filter.filter[i][j] * flame.getWhiteLevel()) * (logScale * count);
+                  }
+                }
+              }
+            }
+            else {
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+                    pFilteredPnt.red += filter.filter[i][j] * logScale * (pFilteredPnt.rp.red * balanceRed);
+                    pFilteredPnt.green += filter.filter[i][j] * logScale * (pFilteredPnt.rp.green * balanceGreen);
+                    pFilteredPnt.blue += filter.filter[i][j] * logScale * (pFilteredPnt.rp.blue * balanceBlue);
+
+                    pFilteredPnt.intensity += (filter.filter[i][j] * flame.getWhiteLevel()) * (logScale * count);
+                  }
+                }
+              }
+            }
+          }
+          else {
+            if (filter.getFilterKernelType().isSharpening()) {
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+                    final double scale = ChannelMixerCurves.FILTER_SCALE;
+                    double rawR = pFilteredPnt.rp.red * scale / (double) count;
+                    double rawG = pFilteredPnt.rp.green * scale / (double) count;
+                    double rawB = pFilteredPnt.rp.blue * scale / (double) count;
+                    double transR = colorFunc.mapRGBToR(rawR, rawG, rawB) * count / scale;
+                    double transG = colorFunc.mapRGBToG(rawR, rawG, rawB) * count / scale;
+                    double transB = colorFunc.mapRGBToB(rawR, rawG, rawB) * count / scale;
+                    pFilteredPnt.red += (filter.filter[i][j] * logScale) * (transR * balanceRed);
+                    pFilteredPnt.green += (filter.filter[i][j] * logScale) * (transG * balanceGreen);
+                    pFilteredPnt.blue += (filter.filter[i][j] * logScale) * (transB * balanceBlue);
+                  }
+                }
+              }
+
+              filter = smoothingFilter;
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+
+                    pFilteredPnt.intensity += (filter.filter[i][j] * flame.getWhiteLevel()) * (logScale * count);
+                  }
+                }
+              }
+
+            }
+            else {
+              for (int i = 0; i < filter.noiseFilterSize; i++) {
+                for (int j = 0; j < filter.noiseFilterSize; j++) {
+                  getSample(pFilteredPnt, pX * oversample + j - filter.noiseFilterSizeHalve, pY * oversample + i - filter.noiseFilterSizeHalve);
+                  long count = pFilteredPnt.rp.count;
+                  int pIdx = (int) count;
+                  if (pIdx > 0) {
+                    double logScale;
+                    if (pIdx < precalcLogArray.length) {
+                      logScale = precalcLogArray[pIdx];
+                    }
+                    else {
+                      logScale = logScaleCalculator.calcLogScale(count);
+                    }
+                    final double scale = ChannelMixerCurves.FILTER_SCALE;
+                    double rawR = pFilteredPnt.rp.red * scale / (double) count;
+                    double rawG = pFilteredPnt.rp.green * scale / (double) count;
+                    double rawB = pFilteredPnt.rp.blue * scale / (double) count;
+                    double transR = colorFunc.mapRGBToR(rawR, rawG, rawB) * count / scale;
+                    double transG = colorFunc.mapRGBToG(rawR, rawG, rawB) * count / scale;
+                    double transB = colorFunc.mapRGBToB(rawR, rawG, rawB) * count / scale;
+                    pFilteredPnt.red += (filter.filter[i][j] * logScale) * (transR * balanceRed);
+                    pFilteredPnt.green += (filter.filter[i][j] * logScale) * (transG * balanceGreen);
+                    pFilteredPnt.blue += (filter.filter[i][j] * logScale) * (transB * balanceBlue);
+                    pFilteredPnt.intensity += (filter.filter[i][j] * flame.getWhiteLevel()) * (logScale * count);
+                  }
+                }
               }
             }
           }
         }
       }
       else {
-        if (colorFunc == ColorFunc.NULL) {
-          for (int i = 0; i < noiseFilterSize; i++) {
-            for (int j = 0; j < noiseFilterSize; j++) {
-              getSample(pFilteredPnt, pX * oversample + j - noiseFilterSizeHalve, pY * oversample + i - noiseFilterSizeHalve);
-              long count = pFilteredPnt.rp.count;
-              int pIdx = (int) count;
-              if (pIdx > 0) {
-                double logScale;
-                if (pIdx < precalcLogArray.length) {
-                  logScale = precalcLogArray[pIdx];
+        int solidSampleCount = 0;
+        for (int px = 0; px < oversample; px++) {
+          for (int py = 0; py < oversample; py++) {
+            getSample(pFilteredPnt, pX * oversample + px, pY * oversample + py);
+            if (solidRendering) {
+              if (pFilteredPnt.rp.hasSolidColors && addSolidColors(pFilteredPnt, pFilteredPnt.rp, 1.0)) {
+                pFilteredPnt.dofDist += pFilteredPnt.rp.dofDist;
+                solidSampleCount++;
+              }
+            }
+            else {
+              double logScale;
+              long pCount = pFilteredPnt.rp.count;
+              if (pCount > 0) {
+                if (pCount < precalcLogArray.length) {
+                  logScale = precalcLogArray[(int) pCount];
                 }
                 else {
-                  logScale = logScaleCalculator.calcLogScale(count);
+                  logScale = logScaleCalculator.calcLogScale(pCount);
                 }
-                pFilteredPnt.red += filter[i][j] * logScale * pFilteredPnt.rp.red * balanceRed;
-                pFilteredPnt.green += filter[i][j] * logScale * pFilteredPnt.rp.green * balanceGreen;
-                pFilteredPnt.blue += filter[i][j] * logScale * pFilteredPnt.rp.blue * balanceBlue;
-                pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel();
-              }
-            }
-          }
-        }
-        else {
-          for (int i = 0; i < noiseFilterSize; i++) {
-            for (int j = 0; j < noiseFilterSize; j++) {
-              getSample(pFilteredPnt, pX * oversample + j - noiseFilterSizeHalve, pY * oversample + i - noiseFilterSizeHalve);
-              long count = pFilteredPnt.rp.count;
-              int pIdx = (int) count;
-              if (pIdx > 0) {
-                double logScale;
-                if (pIdx < precalcLogArray.length) {
-                  logScale = precalcLogArray[pIdx];
+                if (colorFunc == ColorFunc.NULL) {
+                  pFilteredPnt.red += logScale * pFilteredPnt.rp.red * balanceRed;
+                  pFilteredPnt.green += logScale * pFilteredPnt.rp.green * balanceGreen;
+                  pFilteredPnt.blue += logScale * pFilteredPnt.rp.blue * balanceBlue;
                 }
                 else {
-                  logScale = logScaleCalculator.calcLogScale(count);
-                }
-                final double scale = ChannelMixerCurves.FILTER_SCALE;
-                double rawR = pFilteredPnt.rp.red * scale / (double) count;
-                double rawG = pFilteredPnt.rp.green * scale / (double) count;
-                double rawB = pFilteredPnt.rp.blue * scale / (double) count;
-                double transR = colorFunc.mapRGBToR(rawR, rawG, rawB) * count / scale;
-                double transG = colorFunc.mapRGBToG(rawR, rawG, rawB) * count / scale;
-                double transB = colorFunc.mapRGBToB(rawR, rawG, rawB) * count / scale;
-                pFilteredPnt.red += filter[i][j] * logScale * transR * balanceRed;
-                pFilteredPnt.green += filter[i][j] * logScale * transG * balanceGreen;
-                pFilteredPnt.blue += filter[i][j] * logScale * transB * balanceBlue;
-                pFilteredPnt.intensity += filter[i][j] * logScale * count * flame.getWhiteLevel();
-              }
-            }
-          }
-        }
-      }
-    }
-    else {
-      int solidSampleCount = 0;
-      for (int px = 0; px < oversample; px++) {
-        for (int py = 0; py < oversample; py++) {
-          getSample(pFilteredPnt, pX * oversample + px - noiseFilterSizeHalve, pY * oversample + py - noiseFilterSizeHalve);
-          if (solidRendering) {
-            if (pFilteredPnt.rp.hasSolidColors && addSolidColors(pFilteredPnt, pFilteredPnt.rp, 1.0)) {
-              pFilteredPnt.dofDist += pFilteredPnt.rp.dofDist;
-              solidSampleCount++;
-            }
-          }
-          else {
-            double logScale;
-            long pCount = pFilteredPnt.rp.count;
-            if (pCount > 0) {
-              if (pCount < precalcLogArray.length) {
-                logScale = precalcLogArray[(int) pCount];
-              }
-              else {
-                logScale = logScaleCalculator.calcLogScale(pCount);
-              }
-              if (colorFunc == ColorFunc.NULL) {
-                pFilteredPnt.red += logScale * pFilteredPnt.rp.red * balanceRed;
-                pFilteredPnt.green += logScale * pFilteredPnt.rp.green * balanceGreen;
-                pFilteredPnt.blue += logScale * pFilteredPnt.rp.blue * balanceBlue;
-              }
-              else {
-                final double scale = ChannelMixerCurves.FILTER_SCALE;
-                double rawR = pFilteredPnt.rp.red * scale / pCount;
-                double rawG = pFilteredPnt.rp.green * scale / pCount;
-                double rawB = pFilteredPnt.rp.blue * scale / pCount;
+                  final double scale = ChannelMixerCurves.FILTER_SCALE;
+                  double rawR = pFilteredPnt.rp.red * scale / pCount;
+                  double rawG = pFilteredPnt.rp.green * scale / pCount;
+                  double rawB = pFilteredPnt.rp.blue * scale / pCount;
 
-                pFilteredPnt.red += logScale * colorFunc.mapRGBToR(rawR, rawG, rawB) * pCount * balanceRed / scale;
-                pFilteredPnt.green += logScale * colorFunc.mapRGBToG(rawR, rawG, rawB) * pCount * balanceGreen / scale;
-                pFilteredPnt.blue += logScale * colorFunc.mapRGBToB(rawR, rawG, rawB) * pCount * balanceBlue / scale;
+                  pFilteredPnt.red += (logScale * pCount) * (colorFunc.mapRGBToR(rawR, rawG, rawB) * balanceRed) / scale;
+                  pFilteredPnt.green += (logScale * pCount) * (colorFunc.mapRGBToG(rawR, rawG, rawB) * balanceGreen) / scale;
+                  pFilteredPnt.blue += (logScale * pCount) * (colorFunc.mapRGBToB(rawR, rawG, rawB) * balanceBlue) / scale;
+                }
+                pFilteredPnt.intensity += (logScale * pFilteredPnt.rp.count) * flame.getWhiteLevel();
               }
-              pFilteredPnt.intensity += logScale * pFilteredPnt.rp.count * flame.getWhiteLevel();
             }
           }
         }
-      }
-      if (solidRendering) {
-        if (solidSampleCount > 0) {
-          double dCount = 1.0 / (double) solidSampleCount;
-          pFilteredPnt.dofDist *= dCount;
-          pFilteredPnt.solidRed *= dCount;
-          pFilteredPnt.solidGreen *= dCount;
-          pFilteredPnt.solidBlue *= dCount;
-          pFilteredPnt.intensity = (double) solidSampleCount / (double) (oversample * oversample);
+        if (solidRendering) {
+          if (solidSampleCount > 0) {
+            double dCount = 1.0 / (double) solidSampleCount;
+            pFilteredPnt.dofDist *= dCount;
+            pFilteredPnt.solidRed *= dCount;
+            pFilteredPnt.solidGreen *= dCount;
+            pFilteredPnt.solidBlue *= dCount;
+            pFilteredPnt.intensity = (double) solidSampleCount / (double) (oversample * oversample);
+          }
         }
       }
     }
@@ -362,7 +515,7 @@ public class LogDensityFilter extends FilterHolder {
           }
         }
 
-        RGBColorD objColor = new RGBColorD(rp.solidRed, rp.solidGreen, rp.solidBlue, 1.0 / VecMathLib.COLORSCL);
+        RGBColorD objColor = new RGBColorD(rp.solidRed * logScaleCalculator.getBalanceRed(), rp.solidGreen * logScaleCalculator.getBalanceGreen(), rp.solidBlue * logScaleCalculator.getBalanceBlue(), 1.0 / VecMathLib.COLORSCL);
         rawColor = new RGBColorD(objColor, ambientIntensity * avgVisibility);
         VectorD normal = new VectorD(rp.nx, rp.ny, rp.nz);
         VectorD viewDir = new VectorD(0.0, 0.0, 1.0);
@@ -406,7 +559,7 @@ public class LogDensityFilter extends FilterHolder {
                 break;
             }
             RGBColorD reflMapColor = uv.getColorFromMap(reflectionMap);
-            rawColor.addFrom(reflMapColor.r, reflMapColor.g, reflMapColor.b, visibility * reflectionMapIntensity);
+            rawColor.addFrom(reflMapColor.r * logScaleCalculator.getBalanceRed(), reflMapColor.g * logScaleCalculator.getBalanceGreen(), reflMapColor.b * logScaleCalculator.getBalanceBlue(), visibility * reflectionMapIntensity);
           }
         }
       }
@@ -419,7 +572,7 @@ public class LogDensityFilter extends FilterHolder {
     return false;
   }
 
-  private void calculateBGColor(LogDensityPoint dest, int pX, int pY) {
+  public void calculateBGColor(LogDensityPoint dest, int pX, int pY) {
     if (bgImage != null) {
       Pixel toolPixel = dest.toolPixel;
       if (destImageWidth == bgImage.getImageWidth() && destImageHeight == bgImage.getImageHeight()) {
@@ -459,12 +612,104 @@ public class LogDensityFilter extends FilterHolder {
     }
     else {
       switch (flame.getBgColorType()) {
-        case GRADIENT_2X2:
+        case GRADIENT_2X2: {
           double x = (double) pX / (double) (destImageWidth - 1);
           double y = (double) pY / (double) (destImageHeight - 1);
           dest.bgRed = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULRed(), flame.getBgColorURRed(), flame.getBgColorLLRed(), flame.getBgColorLRRed(), x, y));
           dest.bgGreen = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), x, y));
           dest.bgBlue = Tools.roundColor(GfxMathLib.blerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), x, y));
+
+        }
+          break;
+        case GRADIENT_2X2_C: {
+          int w2 = destImageWidth / 2 - 1;
+          int h2 = destImageHeight / 2 - 1;
+          double x, y;
+          double ulRed, urRed, llRed, lrRed;
+          double ulGreen, urGreen, llGreen, lrGreen;
+          double ulBlue, urBlue, llBlue, lrBlue;
+
+          if (pX <= w2) {
+            x = (double) pX / (double) w2;
+            if (pY <= h2) {
+              y = (double) pY / (double) h2;
+              ulRed = flame.getBgColorULRed();
+              urRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorURRed(), 0.5);
+              llRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorULRed(), 0.5);
+              lrRed = flame.getBgColorCCRed();
+
+              ulGreen = flame.getBgColorULGreen();
+              urGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), 0.5);
+              llGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorULGreen(), 0.5);
+              lrGreen = flame.getBgColorCCGreen();
+
+              ulBlue = flame.getBgColorULBlue();
+              urBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), 0.5);
+              llBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorULBlue(), 0.5);
+              lrBlue = flame.getBgColorCCBlue();
+            }
+            else {
+              y = (double) (pY - h2) / (double) h2;
+              ulRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorLLRed(), 0.5);
+              urRed = flame.getBgColorCCRed();
+              llRed = flame.getBgColorLLRed();
+              lrRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorLRRed(), 0.5);
+
+              ulGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorLLGreen(), 0.5);
+              urGreen = flame.getBgColorCCGreen();
+              llGreen = flame.getBgColorLLGreen();
+              lrGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), 0.5);
+
+              ulBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorLLBlue(), 0.5);
+              urBlue = flame.getBgColorCCBlue();
+              llBlue = flame.getBgColorLLBlue();
+              lrBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), 0.5);
+            }
+          }
+          else {
+            x = (double) (pX - w2) / (double) w2;
+            if (pY <= h2) {
+              y = (double) pY / (double) h2;
+
+              ulRed = GfxMathLib.lerp(flame.getBgColorULRed(), flame.getBgColorURRed(), 0.5);
+              urRed = flame.getBgColorURRed();
+              llRed = flame.getBgColorCCRed();
+              lrRed = GfxMathLib.lerp(flame.getBgColorURRed(), flame.getBgColorLRRed(), 0.5);
+
+              ulGreen = GfxMathLib.lerp(flame.getBgColorULGreen(), flame.getBgColorURGreen(), 0.5);
+              urGreen = flame.getBgColorURGreen();
+              llGreen = flame.getBgColorCCGreen();
+              lrGreen = GfxMathLib.lerp(flame.getBgColorURGreen(), flame.getBgColorLRGreen(), 0.5);
+
+              ulBlue = GfxMathLib.lerp(flame.getBgColorULBlue(), flame.getBgColorURBlue(), 0.5);
+              urBlue = flame.getBgColorURBlue();
+              llBlue = flame.getBgColorCCBlue();
+              lrBlue = GfxMathLib.lerp(flame.getBgColorURBlue(), flame.getBgColorLRBlue(), 0.5);
+            }
+            else {
+              y = (double) (pY - h2) / (double) h2;
+              ulRed = flame.getBgColorCCRed();
+              urRed = GfxMathLib.lerp(flame.getBgColorURRed(), flame.getBgColorLRRed(), 0.5);
+              llRed = GfxMathLib.lerp(flame.getBgColorLLRed(), flame.getBgColorLRRed(), 0.5);
+              lrRed = flame.getBgColorLRRed();
+
+              ulGreen = flame.getBgColorCCGreen();
+              urGreen = GfxMathLib.lerp(flame.getBgColorURGreen(), flame.getBgColorLRGreen(), 0.5);
+              llGreen = GfxMathLib.lerp(flame.getBgColorLLGreen(), flame.getBgColorLRGreen(), 0.5);
+              lrGreen = flame.getBgColorLRGreen();
+
+              ulBlue = flame.getBgColorCCBlue();
+              urBlue = GfxMathLib.lerp(flame.getBgColorURBlue(), flame.getBgColorLRBlue(), 0.5);
+              llBlue = GfxMathLib.lerp(flame.getBgColorLLBlue(), flame.getBgColorLRBlue(), 0.5);
+              lrBlue = flame.getBgColorLRBlue();
+
+            }
+          }
+
+          dest.bgRed = Tools.roundColor(GfxMathLib.blerp(ulRed, urRed, llRed, lrRed, x, y));
+          dest.bgGreen = Tools.roundColor(GfxMathLib.blerp(ulGreen, urGreen, llGreen, lrGreen, x, y));
+          dest.bgBlue = Tools.roundColor(GfxMathLib.blerp(ulBlue, urBlue, llBlue, lrBlue, x, y));
+        }
           break;
         default:
           dest.bgRed = flame.getBgColorRed();
@@ -474,4 +719,83 @@ public class LogDensityFilter extends FilterHolder {
       }
     }
   }
+
+  public int getNoiseFilterSize() {
+    return primaryFilter.getNoiseFilterSize();
+  }
+
+  private double lumInt(double r, double g, double b) {
+    return 0.299 * r + 0.588 * g + 0.113 * b;
+  }
+
+  private double lum(int x, int y, RasterPoint rp) {
+    raster.readRasterPointSafe(x, y, rp);
+    return lumInt(rp.red, rp.green, rp.blue);
+  }
+
+  private double scharr_x(int x, int y, RasterPoint rp) {
+    return 3.0 * lum(x - 1, y - 1, rp) - 3.0 * lum(x + 1, y - 1, rp) +
+        10.0 * lum(x - 1, y, rp) - 10.0 * lum(x + 1, y - 1, rp) +
+        3.0 * lum(x - 1, y + 1, rp) - 3.0 * lum(x + 1, y + 1, rp);
+  }
+
+  private double scharr_y(int x, int y, RasterPoint rp) {
+    return 3.0 * lum(x - 1, y - 1, rp) + 10.0 * lum(x, y - 1, rp) + 3.0 * lum(x + 1, y - 1, rp) +
+        -3.0 * lum(x - 1, y + 1, rp) - 10.0 * lum(x, y + 1, rp) - 3.0 * lum(x + 1, y + 1, rp);
+  }
+
+  private double scharr(int x, int y, RasterPoint rp) {
+    double sx = scharr_x(x, y, rp);
+    double sy = scharr_y(x, y, rp);
+    return MathLib.sqrt(sx * sx + sy * sy);
+  }
+
+  FilterIndicator softenFilterIndicator = FilterIndicator.GREEN;
+  FilterIndicator detailFilterIndicator = FilterIndicator.RED;
+  FilterIndicator lowDensityFilterIndicator = FilterIndicator.BLUE;
+
+  private FilterHolder getFilter(int pX, int pY, RasterPoint rp) {
+    if (solidRendering || !filterKernelType.isAdaptive() || filterRadiusA < 0.5) {
+      return primaryFilter;
+    }
+
+    raster.readRasterPointSafe(pX, pY, rp);
+
+    FilterKernelType daFilterKernel;
+    double daIntensity;
+    FilterIndicator daFilterIndicator;
+
+    double logScale;
+
+    if (rp.count < precalcLogArray.length) {
+      logScale = precalcLogArray[(int) rp.count];
+    }
+    else {
+      logScale = logScaleCalculator.calcLogScale(rp.count);
+    }
+    double intensity = logScale * rp.count * flame.getWhiteLevel();
+
+    if (intensity < lowDensity) {
+      daFilterKernel = filterKernelType.getLowDensityKernelType();
+      daIntensity = 1.5 * filterRadiusA;
+      daFilterIndicator = lowDensityFilterIndicator;
+    }
+    else {
+      double s = MathLib.log10(1.0 + scharr(pX, pY, rp));
+      if (s < sharpness) {
+        daFilterKernel = filterKernelType.getSmoothingKernelType();
+        daIntensity = 1.0 * filterRadiusA;
+        daFilterIndicator = softenFilterIndicator;
+      }
+      else {
+        daFilterKernel = filterKernelType;
+        daIntensity = 0.75 * filterRadiusA;
+        daFilterIndicator = detailFilterIndicator;
+      }
+    }
+    FilterHolder filter = LogDensityFilterKernelProvider.getFilter(daFilterKernel, flame.getSpatialOversampling(), daIntensity);
+    filter.setFilterIndicator(daFilterIndicator);
+    return filter;
+  }
+
 }
