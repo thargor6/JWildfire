@@ -46,7 +46,7 @@ public class LogScaleCalculator {
     double pixelsPerUnit = pFlame.getPixelsPerUnit() * pFlame.getCamZoom();
     double area = ((double) pImageWidth * (double) pImageHeight) / (pixelsPerUnit * pixelsPerUnit);
     this.k1 = _k1;
-    this.k2 = brightness / (pFlame.getContrast() * area * pFlame.getSampleDensity());
+    this.k2 = /* brightness */ 1.0 / (pFlame.getContrast() * area * pFlame.getSampleDensity());
     this.motionBlurScl = pFlame.getMotionBlurLength() <= 0 ? 1.0 : 1.0 / (pFlame.getMotionBlurLength() + 1.0);
 
     bg_glow = pFlame.getLowDensityBrightness() * k2 * area / (double) (oversample);

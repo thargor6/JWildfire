@@ -191,6 +191,7 @@ public class FlameRenderer {
 
       flame.setSampleDensity(quality);
       RenderedFlame res = new RenderedFlame();
+      raster.finalizeRaster();
       res.init(renderInfo, flame);
       renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
       return res;
