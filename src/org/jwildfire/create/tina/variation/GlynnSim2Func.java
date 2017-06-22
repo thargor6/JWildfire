@@ -121,6 +121,11 @@ public class GlynnSim2Func extends VariationFunc {
     return "glynnSim2";
   }
 
+  @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "GlynnSim2_radius", "GlynnSim2_thickness", "GlynnSim2_contrast", "GlynnSim2_pow", "GlynnSim2_Phi1", "GlynnSim2_Phi2" };
+  }
+
   private Point toolPoint = new Point();
   private double _phi10, _phi20, _gamma, _delta, _absPow;
 
