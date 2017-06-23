@@ -513,8 +513,7 @@ public class VariationFuncList {
     registerVariationFunc(CschqFunc.class);  
     registerVariationFunc(EstiqFunc.class);      
     registerVariationFunc(SecqFunc.class);
-    registerVariationFunc(SechqFunc.class);
-    registerVariationFunc(Spirograph3DFunc.class);
+    registerVariationFunc(SechqFunc.class);    
     
 
     resolvedAliasMap = new HashMap<>();
