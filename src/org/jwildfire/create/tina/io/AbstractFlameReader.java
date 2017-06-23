@@ -1045,7 +1045,7 @@ public class AbstractFlameReader {
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
-          String priority = atts.get(varName + "_" + ATTR_FX_PRIORITY);
+          String priority = atts.get(rawName + "_" + ATTR_FX_PRIORITY);
           if (priority != null && priority.length() > 0) {
             variation.setPriority(Integer.parseInt(priority));
           }
@@ -1055,7 +1055,7 @@ public class AbstractFlameReader {
             if (ressNames != null) {
               for (String pName : ressNames) {
                 String pHs;
-                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                if ((pHs = atts.get(rawName + "_" + pName)) != null) {
                   variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
                 }
               }
