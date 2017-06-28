@@ -515,6 +515,7 @@ public class VariationFuncList {
     registerVariationFunc(SecqFunc.class);
     registerVariationFunc(SechqFunc.class);
     registerVariationFunc(Spirograph3DFunc.class);
+    registerVariationFunc(HypershiftFunc.class);
     
 
     resolvedAliasMap = new HashMap<>();
