@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.base.XYZPoint;
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-public class Hypershift extends VariationFunc {
+public class HypershiftFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
