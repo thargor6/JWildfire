@@ -37,8 +37,10 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
@@ -1080,6 +1082,46 @@ public class FlameRenderer {
     pFlame.setDimishZ(0.0);
     pFlame.setCamDOF(0.0);
     pFlame.setCamPerspective(0.0);
+  }
+
+  private void prepareFlameForPointCloudRendering(Flame pFlame) {
+    pFlame.setStereo3dMode(Stereo3dMode.NONE);
+    pFlame.setDimishZ(0.0);
+    pFlame.setCamDOF(0.0);
+    pFlame.setCamPerspective(0.0);
+    pFlame.setSpatialOversampling(1);
+    pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+    pFlame.setSpatialFilterRadius(0.0);
+  }
+
+  public void renderPointCloud(PointCloudRenderInfo pPointCloudRenderInfo, String pFilenamePattern) {
+    if (!flame.isRenderable())
+      throw new RuntimeException("Point clouds can not be created of empty flames");
+
+    renderInfo = pPointCloudRenderInfo.createRenderInfo();
+
+    progressDisplayPhaseCount = 1;
+    progressDisplayPhase = 0;
+
+    double zmin = pPointCloudRenderInfo.getZmin() < pPointCloudRenderInfo.getZmax() ? pPointCloudRenderInfo.getZmin() : pPointCloudRenderInfo.getZmax();
+    double zmax = pPointCloudRenderInfo.getZmin() < pPointCloudRenderInfo.getZmax() ? pPointCloudRenderInfo.getZmax() : pPointCloudRenderInfo.getZmin();
+
+    Flame currFlame = flame.makeCopy();
+    prepareFlameForPointCloudRendering(currFlame);
+
+    initRasterSizes(pPointCloudRenderInfo.getImageWidth(), pPointCloudRenderInfo.getImageHeight());
+
+    raster = new RasterPointCloud(zmin, zmax);
+    raster.allocRaster(flame, rasterWidth, rasterHeight, flame.getSpatialOversampling(), flame.getSampleDensity());
+
+    List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
+    for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+    }
+
+    iterate(0, 1, renderFlames, null);
+
+    raster.finalizeRaster();
   }
 
   protected AbstractRaster getRaster() {

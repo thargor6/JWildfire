@@ -5755,6 +5755,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private void initMeshGenOutputTypeCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
     pCmb.addItem(MeshGenRenderOutputType.VOXELSTACK);
+    pCmb.addItem(MeshGenRenderOutputType.POINTCLOUD);
     pCmb.setSelectedItem(MeshGenRenderOutputType.VOXELSTACK);
   }
 

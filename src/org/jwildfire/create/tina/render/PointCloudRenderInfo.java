@@ -23,28 +23,24 @@ import java.io.Serializable;
 
 import org.jwildfire.create.tina.edit.Assignable;
 
-public class SliceRenderInfo implements Assignable<SliceRenderInfo>, Serializable {
+public class PointCloudRenderInfo implements Assignable<PointCloudRenderInfo>, Serializable {
   private static final long serialVersionUID = 1L;
   private int imageWidth;
   private int imageHeight;
   private RenderMode renderMode = RenderMode.PRODUCTION;
-  private int slices = 240;
   private double zmin = 0.0;
   private double zmax = 1.0;
-  private int slicesPerRender = 10;
 
-  protected SliceRenderInfo() {
+  protected PointCloudRenderInfo() {
 
   }
 
-  public SliceRenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode, int pSlices, double pZMin, double pZMax, int pSlicesPerRender) {
+  public PointCloudRenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode, double pZMin, double pZMax) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     renderMode = pRenderMode;
-    slices = pSlices;
     zmin = pZMin;
     zmax = pZMax;
-    slicesPerRender = pSlicesPerRender;
   }
 
   public RenderInfo createRenderInfo() {
@@ -71,26 +67,24 @@ public class SliceRenderInfo implements Assignable<SliceRenderInfo>, Serializabl
   }
 
   @Override
-  public void assign(SliceRenderInfo pSrc) {
+  public void assign(PointCloudRenderInfo pSrc) {
     imageWidth = pSrc.imageWidth;
     imageHeight = pSrc.imageHeight;
-    slices = pSrc.slices;
     zmin = pSrc.zmin;
     zmax = pSrc.zmax;
-    slicesPerRender = pSrc.slicesPerRender;
   }
 
   @Override
-  public SliceRenderInfo makeCopy() {
-    SliceRenderInfo res = new SliceRenderInfo();
+  public PointCloudRenderInfo makeCopy() {
+    PointCloudRenderInfo res = new PointCloudRenderInfo();
     res.assign(this);
     return res;
   }
 
   @Override
-  public boolean isEqual(SliceRenderInfo pSrc) {
-    if (imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight || slices != pSrc.slices || (fabs(zmin - pSrc.zmin) > EPSILON) ||
-        (fabs(zmax - pSrc.zmax) > EPSILON) || slicesPerRender != pSrc.slicesPerRender) {
+  public boolean isEqual(PointCloudRenderInfo pSrc) {
+    if (imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight || (fabs(zmin - pSrc.zmin) > EPSILON) ||
+        (fabs(zmax - pSrc.zmax) > EPSILON)) {
       return false;
     }
     return true;
@@ -102,14 +96,6 @@ public class SliceRenderInfo implements Assignable<SliceRenderInfo>, Serializabl
 
   public void setRenderMode(RenderMode pRenderMode) {
     renderMode = pRenderMode;
-  }
-
-  public int getSlices() {
-    return slices;
-  }
-
-  public void setSlices(int pSlices) {
-    slices = pSlices;
   }
 
   public double getZmin() {
@@ -126,14 +112,6 @@ public class SliceRenderInfo implements Assignable<SliceRenderInfo>, Serializabl
 
   public void setZmax(double pZmax) {
     zmax = pZmax;
-  }
-
-  public int getSlicesPerRender() {
-    return slicesPerRender;
-  }
-
-  public void setSlicesPerRender(int pSlicesPerRender) {
-    slicesPerRender = pSlicesPerRender;
   }
 
 }
