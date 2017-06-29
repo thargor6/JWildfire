@@ -74,7 +74,7 @@ public class HypershiftFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "Hypershift";
+    return "hypershift";
   }
 
 }
