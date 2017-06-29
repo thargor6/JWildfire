@@ -14,8 +14,34 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.meshgen.render;
+package org.jwildfire.create.tina;
 
-public enum MeshGenRenderOutputType {
-  VOXELSTACK, POINTCLOUD
+public class OctreeValue {
+  private final double x, y, z;
+  private final Object value;
+
+  public OctreeValue(double x, double y, double z, Object value) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.value = value;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  public double getZ() {
+    return z;
+  }
+
+  public Object getValue() {
+    return value;
+  }
+
 }

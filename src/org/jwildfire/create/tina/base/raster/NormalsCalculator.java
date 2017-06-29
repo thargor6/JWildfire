@@ -88,90 +88,6 @@ public class NormalsCalculator implements Serializable {
     }
   }
 
-  private final Corners[] CORNERS = new Corners[] {
-      new Corners(new Corner(-1, 0), new Corner(-1, -1), new Corner(0, 0)),
-      new Corners(new Corner(0, -1), new Corner(1, -1), new Corner(0, 0)),
-      new Corners(new Corner(1, 0), new Corner(1, 1), new Corner(0, 0)),
-      new Corners(new Corner(0, 1), new Corner(-1, 1), new Corner(0, 0)),
-      new Corners(new Corner(-1, -1), new Corner(0, -1), new Corner(0, 0)),
-      new Corners(new Corner(1, -1), new Corner(1, 0), new Corner(0, 0)),
-      new Corners(new Corner(1, 1), new Corner(0, 1), new Corner(0, 0)),
-      new Corners(new Corner(-1, 1), new Corner(-1, 0), new Corner(0, 0))
-  };
-
-  private final Corners[] CORNERS2 = new Corners[] {
-      new Corners(new Corner(-1, 1), new Corner(1, -1), new Corner(1, 1)),
-      new Corners(new Corner(-1, 1), new Corner(-1, -1), new Corner(1, -1)),
-      new Corners(new Corner(1, 1), new Corner(-1, 1), new Corner(-1, -1)),
-      new Corners(new Corner(1, 1), new Corner(-1, -1), new Corner(1, -1)),
-
-      new Corners(new Corner(-1, 0), new Corner(-1, -1), new Corner(0, 0)),
-      new Corners(new Corner(0, -1), new Corner(1, -1), new Corner(0, 0)),
-      new Corners(new Corner(1, 0), new Corner(1, 1), new Corner(0, 0)),
-      new Corners(new Corner(0, 1), new Corner(-1, 1), new Corner(0, 0)),
-      new Corners(new Corner(-1, -1), new Corner(0, -1), new Corner(0, 0)),
-      new Corners(new Corner(1, -1), new Corner(1, 0), new Corner(0, 0)),
-      new Corners(new Corner(1, 1), new Corner(0, 1), new Corner(0, 0)),
-      new Corners(new Corner(-1, 1), new Corner(-1, 0), new Corner(0, 0))
-  };
-
-  public void refreshNormalAtLocation2(int x, int y) {
-    double xb = originXBuf[x][y];
-    double yb = originYBuf[x][y];
-    double zb = originZBuf[x][y];
-    nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
-    if (zb != ZBUF_ZMIN) {
-      double nx = 0.0, ny = 0.0, nz = 0.0;
-      int samples = 0;
-      double maxz = 0.0;
-      final double SCALE = 100.0;
-      for (int k = 0; k < CORNERS.length; k++) {
-        if (CORNERS[k].isInside(x, y)) {
-          int adx = CORNERS[k].a.dx - CORNERS[k].c.dx;
-          int ady = CORNERS[k].a.dy - CORNERS[k].c.dy;
-          double azb = originZBuf[x + adx][y + ady];
-          if (azb != ZBUF_ZMIN) {
-            double ax = (xb - originXBuf[x + adx][y + ady]) * SCALE;
-            double ay = (yb - originYBuf[x + adx][y + ady]) * SCALE;
-            double az = (zb - azb) * SCALE;
-
-            int bdx = CORNERS[k].b.dx - CORNERS[k].c.dx;
-            int bdy = CORNERS[k].b.dy - CORNERS[k].c.dy;
-            double bzb = originZBuf[x + bdx][y + bdy];
-            if (bzb != ZBUF_ZMIN) {
-              double bx = (xb - originXBuf[x + bdx][y + bdy]) * SCALE;
-              double by = (yb - originYBuf[x + bdx][y + bdy]) * SCALE;
-              double bz = (zb - bzb) * SCALE;
-
-              double nnx = ay * bz - az * by;
-              double nny = az * bx - ax * bz;
-              double nnz = ax * by - ay * bx;
-              double z = MathLib.fabs(nnz);
-              if (z > 0.00001 && z < 100000.0) {
-                samples++;
-                double r = MathLib.sqrt(nnx * nnx + nny * nny + nnz * nnz);
-                nx += nnx / r;
-                ny += nny / r;
-                nz += nnz / r;
-              }
-            }
-          }
-        }
-      }
-      if (samples > 0) {
-        double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
-        if (r > MathLib.EPSILON) {
-          nx /= r;
-          ny /= r;
-          nz /= r;
-        }
-        nxBuf[x][y] = (float) nx;
-        nyBuf[x][y] = (float) ny;
-        nzBuf[x][y] = (float) nz;
-      }
-    }
-  }
-
   private final CornerPair[] NNEIGHBOURS_COARSE = new CornerPair[] {
       new CornerPair(new Corner(-1, 0), new Corner(-1, -1)),
       new CornerPair(new Corner(0, -1), new Corner(1, -1)),
@@ -187,7 +103,7 @@ public class NormalsCalculator implements Serializable {
     return nxBuf[x][y] != ZBUF_ZMIN;
   }
 
-  public void refreshNormalAtLocation0(int x, int y) {
+  public void refreshNormalAtLocation(int x, int y) {
     double xb = originXBuf[x][y];
     double yb = originYBuf[x][y];
     double zb = originZBuf[x][y];
@@ -226,59 +142,6 @@ public class NormalsCalculator implements Serializable {
         }
         if (samples > 5) {
           break;
-        }
-      }
-      if (samples > 0) {
-        double r = MathLib.sqrt(nx * nx + ny * ny + nz * nz);
-        if (r > MathLib.EPSILON) {
-          nx /= r;
-          ny /= r;
-          nz /= r;
-        }
-        nxBuf[x][y] = (float) nx;
-        nyBuf[x][y] = (float) ny;
-        nzBuf[x][y] = (float) nz;
-      }
-    }
-  }
-
-  public void refreshNormalAtLocation(int x, int y) {
-    double xb = originXBuf[x][y];
-    double yb = originYBuf[x][y];
-    double zb = originZBuf[x][y];
-    nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
-    if (zb != ZBUF_ZMIN) {
-      double nx = 0.0, ny = 0.0, nz = 0.0;
-      int samples = 0;
-      for (int k = 0; k < NNEIGHBOURS_COARSE.length; k++) {
-        if (NNEIGHBOURS_COARSE[k].isInside(x, y)) {
-          int adx = NNEIGHBOURS_COARSE[k].a.dx;
-          int ady = NNEIGHBOURS_COARSE[k].a.dy;
-          double azb = originZBuf[x + adx][y + ady];
-          if (azb != ZBUF_ZMIN) {
-            double ax = xb - originXBuf[x + adx][y + ady];
-            double ay = yb - originYBuf[x + adx][y + ady];
-            double az = zb - azb;
-
-            int bdx = NNEIGHBOURS_COARSE[k].b.dx;
-            int bdy = NNEIGHBOURS_COARSE[k].b.dy;
-            double bzb = originZBuf[x + bdx][y + bdy];
-            if (bzb != ZBUF_ZMIN) {
-              double bx = xb - originXBuf[x + bdx][y + bdy];
-              double by = yb - originYBuf[x + bdx][y + bdy];
-              double bz = zb - bzb;
-              double nnx = ay * bz - az * by;
-              double nny = az * bx - ax * bz;
-              double nnz = ax * by - ay * bx;
-              double r = MathLib.sqrt(nnx * nnx + nny * nny + nnz * nnz);
-              if (r > 0.00001) {
-                samples++;
-                nx += nnx / r;
-                ny += nny / r;
-                nz += nnz / r;
-              }
-            }
-          }
         }
       }
       if (samples > 0) {

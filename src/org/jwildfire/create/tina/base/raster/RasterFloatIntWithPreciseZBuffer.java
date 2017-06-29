@@ -163,30 +163,11 @@ public class RasterFloatIntWithPreciseZBuffer extends RasterFloatInt {
   @Override
   public void finalizeRaster() {
     // No call to super here
-    System.out.println("###FINALIZE");
-
-    //    zBuf = RasterTools.medianCut(zBuf);
-    //    originXBuf = RasterTools.medianCut(originXBuf);
-    //    originYBuf = RasterTools.medianCut(originYBuf);
-    //    originZBuf = RasterTools.medianCut(originZBuf);
-    //    normalsCalculator = new NormalsCalculator(rasterWidth, rasterHeight, nxBuf, nyBuf, nzBuf, originXBuf, originYBuf, originZBuf);
-
     normalsCalculator.refreshAllNormals();
 
     nxBuf = RasterTools.medianCut(nxBuf);
     nyBuf = RasterTools.medianCut(nyBuf);
     nzBuf = RasterTools.medianCut(nzBuf);
-
-    if (nxBuf.length > 400) {
-      RasterTools.saveFloatBuffer(zBuf, "D:\\TMP\\wf_z.png");
-      RasterTools.saveFloatBuffer(originXBuf, "D:\\TMP\\wf_ox.png");
-      RasterTools.saveFloatBuffer(originYBuf, "D:\\TMP\\wf_oy.png");
-      RasterTools.saveFloatBuffer(originZBuf, "D:\\TMP\\wf_oz.png");
-
-      RasterTools.saveFloatBuffer(nxBuf, "D:\\TMP\\wf_nx.png");
-      RasterTools.saveFloatBuffer(nxBuf, "D:\\TMP\\wf_ny.png");
-      RasterTools.saveFloatBuffer(nxBuf, "D:\\TMP\\wf_nz.png");
-    }
 
     aoBuf = new float[rasterWidth][rasterHeight];
     if (aoCalculator != null) {

@@ -60,6 +60,7 @@ import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshPreviewRenderer;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderThread;
+import org.jwildfire.create.tina.meshgen.render.RenderPointCloudThread;
 import org.jwildfire.create.tina.meshgen.render.RenderSlicesThread;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -606,13 +607,14 @@ public class MeshGenController {
 
   protected Flame createBaseFlame(Flame pFlame) {
     Flame res = pFlame.makeCopy();
-
+    /*
     RGBPalette gradient = new RGBPalette();
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       gradient.setColor(i, 225, 225, 225);
     }
-    res.getSolidRenderSettings().setSolidRenderingEnabled(false);
     res.getFirstLayer().setPalette(gradient);
+    */
+    res.getSolidRenderSettings().setSolidRenderingEnabled(false);
     return res;
   }
 
@@ -920,12 +922,26 @@ public class MeshGenController {
           switch (getOutputType()) {
             case VOXELSTACK: {
               String outfilenamePattern = SequenceFilenameGen.createFilenamePattern(file);
+
+              Flame grayFlame = flame.makeCopy();
+              RGBPalette gradient = new RGBPalette();
+              for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+                gradient.setColor(i, 225, 225, 225);
+              }
+              grayFlame.getFirstLayer().setPalette(gradient);
+
               renderSlicesThread = new RenderSlicesThread(
-                  prefs, flame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
+                  prefs, grayFlame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
                   sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
                   zmaxREd.getDoubleValue());
 
               lastRenderedSequenceOutFilePattern = outfilenamePattern;
+              break;
+            }
+            case POINTCLOUD: {
+              renderSlicesThread = new RenderPointCloudThread(
+                  prefs, flame, file.getAbsolutePath(), finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
+                  renderQualityREd.getIntValue(), zminREd.getDoubleValue(), zmaxREd.getDoubleValue());
               break;
             }
           }
