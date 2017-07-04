@@ -516,6 +516,19 @@ public class VariationFuncList {
     registerVariationFunc(SechqFunc.class);
     registerVariationFunc(Spirograph3DFunc.class);
     registerVariationFunc(HypershiftFunc.class);
+    registerVariationFunc(D_sphericalFunc.class);    
+    registerVariationFunc(CircularFunc.class);        
+    registerVariationFunc(Circular2Func.class);  
+    registerVariationFunc(ErfFunc.class);  
+    registerVariationFunc(Erf3DFunc.class); 
+    registerVariationFunc(XErfFunc.class);  
+    registerVariationFunc(Pressure_WaveFunc.class);  
+    registerVariationFunc(AtanFunc.class);  
+    registerVariationFunc(HelixFunc.class); 
+    registerVariationFunc(HelicoidFunc.class); 
+    registerVariationFunc(GammaFunc.class); 
+    registerVariationFunc(ShiftFunc.class);     
+    registerVariationFunc(ChunkFunc.class); 
     
 
     resolvedAliasMap = new HashMap<>();
