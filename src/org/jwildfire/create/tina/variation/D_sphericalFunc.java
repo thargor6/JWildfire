@@ -39,9 +39,15 @@ public class D_sphericalFunc extends VariationFunc {
 		        double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
 		        pVarTP.x += pAffineTP.x * r;
 		        pVarTP.y += pAffineTP.y * r;
+			if (pContext.isPreserveZCoordinate()) {
+     			 pVarTP.z += pAmount * pAffineTP.z;
+    			}	
 			} else {
 		        pVarTP.x += pAffineTP.x * pAmount;
 		        pVarTP.y += pAffineTP.y * pAmount;
+			if (pContext.isPreserveZCoordinate()) {
+     			 pVarTP.z += pAmount * pAffineTP.z;
+    			}	
 			}
     }
   }
