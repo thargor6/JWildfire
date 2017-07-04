@@ -63,7 +63,7 @@ public class ShiftFunc extends VariationFunc {
   }
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "shift_x, shift_y,angle" };
+    return new String[] { "shift_x", "shift_y", "shift_angle" };
   }
   @Override
   public void setParameter(String pName, double pValue) {
