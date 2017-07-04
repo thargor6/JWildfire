@@ -43,6 +43,9 @@ public class Pressure_WaveFunc extends VariationFunc {
 
  pVarTP.x += pAmount*(pAffineTP.x + (ipwx*sin(pwx*pAffineTP.x)));
  pVarTP.y += pAmount*(pAffineTP.y + (ipwy*sin(pwy*pAffineTP.y)));
+  if (pContext.isPreserveZCoordinate()) {
+     pVarTP.z += pAmount * pAffineTP.z;
+   }   
   }
 
 
