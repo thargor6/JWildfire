@@ -75,7 +75,7 @@ public class AtanFunc extends  VariationFunc {
   }
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "Mode,Stretch " };
+    return new String[] { "atanMode", "atanStretch" };
   }
   @Override
   public void setParameter(String pName, double pValue) {
