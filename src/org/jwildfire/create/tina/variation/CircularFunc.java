@@ -38,9 +38,10 @@ public class CircularFunc extends VariationFunc {
     aux = aux - (int) aux;
     double rnd = (2 * (Math.random() + aux) - 2.0)  * c_a;
     double rad = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
-    double angle = atan2(pAffineTP.y, pAffineTP.x);
-    double by = sin(angle+rnd);
-    double bx=cos(angle+rnd);
+    double ang = atan2(pAffineTP.y, pAffineTP.x);
+    double by = sin(ang+rnd);
+    double bx = cos(ang+rnd);
+
 
 
    
