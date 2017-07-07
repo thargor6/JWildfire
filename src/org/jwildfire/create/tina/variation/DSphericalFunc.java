@@ -23,7 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.*;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class D_sphericalFunc extends VariationFunc {
+public class DSphericalFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_D_SPHER_WEIGHT = "d_spher_weight";
