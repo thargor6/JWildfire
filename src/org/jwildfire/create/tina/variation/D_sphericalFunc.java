@@ -33,7 +33,7 @@ public class D_sphericalFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // asteria by dark-beam, http://jwildfire.org/forum/viewtopic.php?f=23&t=1464
+    // dspherical by Tatyana Zabanova converted for JWildfire by Brad Stefanov
 	  {
 			if (Math.random() < (d_spher_weight)) {
 		        double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
