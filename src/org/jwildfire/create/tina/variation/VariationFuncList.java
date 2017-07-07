@@ -516,7 +516,7 @@ public class VariationFuncList {
     registerVariationFunc(SechqFunc.class);
     registerVariationFunc(Spirograph3DFunc.class);
     registerVariationFunc(HypershiftFunc.class);
-    registerVariationFunc(D_sphericalFunc.class);    
+    registerVariationFunc(DSphericalFunc.class);    
     registerVariationFunc(CircularFunc.class);        
     registerVariationFunc(Circular2Func.class);  
     registerVariationFunc(ErfFunc.class);  
