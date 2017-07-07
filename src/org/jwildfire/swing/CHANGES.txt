@@ -1,3 +1,17 @@
+V3.12 (06.07.2017)
+- New Variations - Thanks to dark-beam (Luca) and Brad Stefanov for conversions
+  - Spirograph3D by Rick Sidwell.
+  - Hypershift, Helicoid, Helix by Zy0rg.
+  - Atan by FractalDesire.
+  - Chunk, Erf, Erf3D, Gamma, XErf by zephyrtronium.
+  - Circular, DSpherical, Shift by Tatyana Zabanova.
+  - Circular2 by Tatyana Zabanova variables added by Brad Stefanov.
+  - Pressure_wave by timothy-vincent.
+ - Fixes
+  - Fixed issue reading apo parameters in GlynnSim variations. By Rick Sidwell
+  - Fix bug reading repeated variations in a transform. By Rick Sidwell
+  - Added lgamma to Math.lib for gamma variation to work. 
+  
 V3.11r2 (05.06.2017)
  - fixed a problem with calculation of normals in solid rendering
 
