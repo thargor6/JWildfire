@@ -25,6 +25,9 @@ import java.io.Writer;
 
 import javax.imageio.ImageIO;
 
+import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleGrayImage;
@@ -34,7 +37,12 @@ import org.jwildfire.image.SimpleImage;
 public class ImageWriter {
 
   public void saveAsJPEG(SimpleImage pImg, String pFilename) throws Exception {
-    ImageIO.write(pImg.getBufferedImg(), "jpg", new File(pFilename));
+	  // JPEG doesn't support alpha channel, so convert from ARGB to RGB before saving
+      BufferedImage img = new BufferedImage(pImg.getImageWidth(),pImg.getImageHeight(), BufferedImage.TYPE_INT_RGB);
+      Graphics2D g2d = img.createGraphics();
+      g2d.drawImage(pImg.getBufferedImg(), 0, 0, null);
+      g2d.dispose();
+	  ImageIO.write(img, "jpg", new File(pFilename));
   }
 
   public void saveAsPNG(SimpleImage pImg, String pFilename) throws Exception {
