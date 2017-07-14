@@ -56,7 +56,7 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.11r2 (05.06.2017)";
+  public static final String APP_VERSION = "3.20 (30.06.2017)";
 
   public static final boolean SPECIAL_VERSION = false;
 
@@ -84,6 +84,7 @@ public class Tools {
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
   public static final String FILEEXT_MP3 = "mp3";
   public static final String FILEEXT_OBJ = "obj";
+  public static final String FILEEXT_PLY = "ply";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_PNS = "pns";
   public static final String FILEEXT_SPL = "spl";
@@ -532,7 +533,7 @@ public class Tools {
     if (p > 0 && p < pName.length() - 1) {
       return pName.substring(p + 1, pName.length());
     }
-    return pName;
+    return "";
   }
 
   public static boolean stringEquals(String a, String b) {

@@ -45,6 +45,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.swing.JWildfire;
 
 public class MeshGenInternalFrame extends JInternalFrame {
@@ -193,6 +194,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenSmoothPassesREd;
   private JWFNumberField meshGenSmoothLambdaREd;
   private JWFNumberField meshGenSmoothMuREd;
+  private JWFNumberField meshGenCellSizeREd;
 
   public JWFNumberField getSwfAnimatorFramesPerSecondREd() {
     return swfAnimatorFramesPerSecondREd;
@@ -582,6 +584,31 @@ public class MeshGenInternalFrame extends JInternalFrame {
       lblOutputType.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOutputType.setBounds(0, 2, 151, 22);
       panel_3.add(lblOutputType);
+
+      meshGenCellSizeREd = new JWFNumberField();
+      meshGenCellSizeREd.setMinValue(RasterPointCloud.MIN_OCTREE_CELL_SIZE);
+      meshGenCellSizeREd.setMaxValue(RasterPointCloud.MAX_OCTREE_CELL_SIZE);
+      meshGenCellSizeREd.setValueStep(0.001);
+      meshGenCellSizeREd.setText("");
+      meshGenCellSizeREd.setSize(new Dimension(100, 24));
+      meshGenCellSizeREd.setPreferredSize(new Dimension(100, 24));
+      meshGenCellSizeREd.setLocation(new Point(71, 76));
+      meshGenCellSizeREd.setHasMinValue(true);
+      meshGenCellSizeREd.setHasMaxValue(true);
+      meshGenCellSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenCellSizeREd.setBounds(521, 26, 100, 24);
+      panel_3.add(meshGenCellSizeREd);
+
+      JLabel lblCellSize = new JLabel();
+      lblCellSize.setToolTipText("The smaller the cellsize the more detail is generated, and vice versa");
+      lblCellSize.setText("Cell size");
+      lblCellSize.setSize(new Dimension(68, 22));
+      lblCellSize.setPreferredSize(new Dimension(94, 22));
+      lblCellSize.setName("");
+      lblCellSize.setLocation(new Point(4, 76));
+      lblCellSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCellSize.setBounds(441, 26, 79, 22);
+      panel_3.add(lblCellSize);
 
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(132, 10));
@@ -1959,5 +1986,9 @@ public class MeshGenInternalFrame extends JInternalFrame {
 
   public JWFNumberField getMeshGenSmoothMuREd() {
     return meshGenSmoothMuREd;
+  }
+
+  public JWFNumberField getMeshGenCellSizeREd() {
+    return meshGenCellSizeREd;
   }
 }

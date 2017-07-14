@@ -53,6 +53,7 @@ import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
@@ -83,6 +84,7 @@ import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.PointCloudOutputFileChooser;
 
 public class MeshGenController {
   private static final double Z_SCALE = 10000.0;
@@ -122,12 +124,13 @@ public class MeshGenController {
   private final JSlider zminSlider;
   private final JWFNumberField zmaxREd;
   private final JSlider zmaxSlider;
+  private final JButton loadSequenceBtn;
+  private final JWFNumberField meshGenCellSizeREd;
   private final JButton topViewRenderBtn;
   private final JButton frontViewRenderBtn;
   private final JButton perspectiveViewRenderBtn;
   private final JButton topViewToEditorBtn;
   private final JButton sequenceFromRendererBtn;
-  private final JButton loadSequenceBtn;
   private final JWFNumberField sequenceWidthREd;
   private final JWFNumberField sequenceHeightREd;
   private final JWFNumberField sequenceSlicesREd;
@@ -171,7 +174,7 @@ public class MeshGenController {
       JPanel pFrontViewRootPnl, JPanel pPerspectiveViewRootPnl, JTextPane pHintPane, JWFNumberField pCentreXREd,
       JSlider pCentreXSlider, JWFNumberField pCentreYREd, JSlider pCentreYSlider, JWFNumberField pZoomREd,
       JSlider pZoomSlider, JWFNumberField pZMinREd, JSlider pZMinSlider, JWFNumberField pZMaxREd,
-      JSlider pZMaxSlider, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
+      JSlider pZMaxSlider, JWFNumberField pMeshGenCellSizeREd, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
       JButton pTopViewToEditorBtn, JButton pLoadSequenceBtn, JWFNumberField pSequenceWidthREd, JWFNumberField pSequenceHeightREd,
       JWFNumberField pSequenceSlicesREd, JWFNumberField pSequenceDownSampleREd, JWFNumberField pSequenceFilterRadiusREd,
       JProgressBar pGenerateMeshProgressbar, JButton pGenerateMeshBtn, JButton pSequenceFromRendererBtn,
@@ -213,6 +216,7 @@ public class MeshGenController {
     zminSlider = pZMinSlider;
     zmaxREd = pZMaxREd;
     zmaxSlider = pZMaxSlider;
+    meshGenCellSizeREd = pMeshGenCellSizeREd;
     topViewRenderBtn = pTopViewRenderBtn;
     frontViewRenderBtn = pFrontViewRenderBtn;
     perspectiveViewRenderBtn = pPerspectiveViewRenderBtn;
@@ -260,6 +264,8 @@ public class MeshGenController {
     previewPointsREd.setEditable(false);
     previewPolygonsREd.setEditable(false);
     setDefaults();
+
+    enableControls();
   }
 
   private void setDefaults() {
@@ -300,6 +306,7 @@ public class MeshGenController {
       setCentreXValue(0.0);
       setCentreYValue(0.0);
       setZoomValue(1.0);
+      setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
     }
     finally {
       refreshing = false;
@@ -572,12 +579,14 @@ public class MeshGenController {
       setZoomValue(currBaseFlame.getCamZoom());
       setZMinValue(0.0);
       setZMaxValue(1.0);
+      setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
     }
     finally {
       refreshing = false;
     }
     enableControls();
-    refreshAllPreviews(true);
+    zminREd_changed();
+    //    refreshAllPreviews(true);
   }
 
   protected Flame stripFlame(Flame pFlame) {
@@ -637,6 +646,10 @@ public class MeshGenController {
   private void setZMaxValue(double pValue) {
     zmaxREd.setValue(pValue);
     zmaxSlider.setValue(Tools.FTOI(Z_SCALE * pValue));
+  }
+
+  private void setMaxOctreeCellSizeValue(double pValue) {
+    meshGenCellSizeREd.setValue(pValue);
   }
 
   private void setCentreXValue(double pValue) {
@@ -804,33 +817,41 @@ public class MeshGenController {
 
   public void enableControls() {
     boolean isRendering = renderSlicesThread != null || generateMeshThread != null;
-    generateBtn.setEnabled(currBaseFlame != null && generateMeshThread == null);
+    boolean hasFlame = currBaseFlame != null;
+    generateBtn.setEnabled(hasFlame && generateMeshThread == null);
     generateMeshBtn.setEnabled(renderSlicesThread == null && sequenceSlicesREd.getIntValue() > 0);
     generateBtn.setText(renderSlicesThread == null ? "Generate" : "Cancel");
     generateMeshBtn.setText(generateMeshThread == null ? "Generate" : "Cancel");
 
-    centreXREd.setEnabled(currBaseFlame != null && !isRendering);
-    centreXSlider.setEnabled(currBaseFlame != null && !isRendering);
-    centreYREd.setEnabled(currBaseFlame != null && !isRendering);
-    centreYSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zoomREd.setEnabled(currBaseFlame != null && !isRendering);
-    zoomSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zminREd.setEnabled(currBaseFlame != null && !isRendering);
-    zminSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zmaxREd.setEnabled(currBaseFlame != null && !isRendering);
-    zmaxSlider.setEnabled(currBaseFlame != null && !isRendering);
-    topViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    frontViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    perspectiveViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    topViewToEditorBtn.setEnabled(currBaseFlame != null && !isRendering);
+    boolean pointCloudMode = isPointCloudMode();
+
+    centreXREd.setEnabled(hasFlame && !isRendering);
+    centreXSlider.setEnabled(hasFlame && !isRendering);
+    centreYREd.setEnabled(hasFlame && !isRendering);
+    centreYSlider.setEnabled(hasFlame && !isRendering);
+    zoomREd.setEnabled(hasFlame && !isRendering);
+    zoomSlider.setEnabled(hasFlame && !isRendering);
+    zminREd.setEnabled(hasFlame && !isRendering);
+    zminSlider.setEnabled(hasFlame && !isRendering);
+    zmaxREd.setEnabled(hasFlame && !isRendering);
+    zmaxSlider.setEnabled(hasFlame && !isRendering);
+    meshGenCellSizeREd.setEnabled(hasFlame && !isRendering && pointCloudMode);
+
+    topViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    frontViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    perspectiveViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    topViewToEditorBtn.setEnabled(hasFlame && !isRendering);
     fromEditorBtn.setEnabled(!isRendering);
     fromClipboardBtn.setEnabled(!isRendering);
     loadFlameBtn.setEnabled(!isRendering);
-    sliceCountREd.setEnabled(!isRendering);
-    slicesPerRenderREd.setEnabled(!isRendering);
-    renderWidthREd.setEnabled(!isRendering);
-    renderHeightREd.setEnabled(!isRendering);
-    renderQualityREd.setEnabled(!isRendering);
+    sliceCountREd.setEnabled(hasFlame && !isRendering && !pointCloudMode);
+    slicesPerRenderREd.setEnabled(hasFlame && !isRendering && !pointCloudMode);
+    renderWidthREd.setEnabled(hasFlame && !isRendering);
+    renderHeightREd.setEnabled(hasFlame && !isRendering);
+    renderQualityREd.setEnabled(hasFlame && !isRendering);
+
+    outputTypeCmb.setEnabled(hasFlame && !isRendering);
+
     preFilter1Cmb.setEnabled(!isRendering);
     preFilter2Cmb.setEnabled(!isRendering);
     imageStepREd.setEnabled(!isRendering);
@@ -860,6 +881,10 @@ public class MeshGenController {
     previewSunflowExportBtn.setEnabled(hashMesh);
   }
 
+  private boolean isPointCloudMode() {
+    return MeshGenRenderOutputType.POINTCLOUD.equals(outputTypeCmb.getSelectedItem());
+  }
+
   private MeshGenRenderThread renderSlicesThread = null;
   private GenerateMeshThread generateMeshThread = null;
   private String lastRenderedSequenceOutFilePattern = null;
@@ -882,13 +907,27 @@ public class MeshGenController {
     }
     else if (currBaseFlame != null) {
       try {
-        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+        JFileChooser chooser;
+        if (isPointCloudMode()) {
+          chooser = new PointCloudOutputFileChooser(Tools.FILEEXT_PLY);
+          if (prefs.getTinaMeshPath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
           }
-          catch (Exception ex) {
-            ex.printStackTrace();
+        }
+        else {
+          chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+          if (prefs.getOutputImagePath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
           }
         }
         if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
@@ -941,7 +980,7 @@ public class MeshGenController {
             case POINTCLOUD: {
               renderSlicesThread = new RenderPointCloudThread(
                   prefs, flame, file.getAbsolutePath(), finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
-                  renderQualityREd.getIntValue(), zminREd.getDoubleValue(), zmaxREd.getDoubleValue());
+                  renderQualityREd.getIntValue(), zminREd.getDoubleValue(), zmaxREd.getDoubleValue(), meshGenCellSizeREd.getDoubleValue());
               break;
             }
           }

@@ -297,19 +297,20 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         parameterObject.meshGenCentreXSlider, parameterObject.meshGenCentreYREd, parameterObject.meshGenCentreYSlider,
         parameterObject.meshGenZoomREd, parameterObject.meshGenZoomSlider, parameterObject.meshGenZMinREd,
         parameterObject.meshGenZMinSlider, parameterObject.meshGenZMaxREd, parameterObject.meshGenZMaxSlider,
-        parameterObject.meshGenTopViewRenderBtn, parameterObject.meshGenFrontViewRenderBtn, parameterObject.meshGenPerspectiveViewRenderBtn,
-        parameterObject.meshGenTopViewToEditorBtn, parameterObject.meshGenLoadSequenceBtn, parameterObject.meshGenSequenceWidthREd,
-        parameterObject.meshGenSequenceHeightREd, parameterObject.meshGenSequenceSlicesREd, parameterObject.meshGenSequenceDownSampleREd,
-        parameterObject.meshGenSequenceFilterRadiusREd, parameterObject.meshGenGenerateMeshProgressbar, parameterObject.meshGenGenerateMeshBtn,
-        parameterObject.meshGenSequenceFromRendererBtn, parameterObject.meshGenSequenceThresholdREd, parameterObject.meshGenSequenceLbl,
-        parameterObject.meshGenPreviewRootPanel, parameterObject.meshGenAutoPreviewCBx, parameterObject.meshGenPreviewImportLastGeneratedMeshBtn,
-        parameterObject.meshGenPreviewImportFromFileBtn, parameterObject.meshGenClearPreviewBtn, parameterObject.meshGenPreviewPositionXREd,
-        parameterObject.meshGenPreviewPositionYREd, parameterObject.meshGenPreviewSizeREd,
-        parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd, parameterObject.meshGenPreviewRotateBetaREd,
-        parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd, parameterObject.meshGenRefreshPreviewBtn,
-        parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenPreFilter1Cmb, parameterObject.meshGenPreFilter2Cmb,
-        parameterObject.meshGenImageStepREd, parameterObject.meshGenOutputTypeCmb, parameterObject.meshGenTaubinSmoothCbx,
-        parameterObject.meshGenSmoothPassesREd, parameterObject.meshGenSmoothLambdaREd, parameterObject.meshGenSmoothMuREd);
+        parameterObject.meshGenCellSizeREd, parameterObject.meshGenTopViewRenderBtn, parameterObject.meshGenFrontViewRenderBtn,
+        parameterObject.meshGenPerspectiveViewRenderBtn, parameterObject.meshGenTopViewToEditorBtn,
+        parameterObject.meshGenLoadSequenceBtn, parameterObject.meshGenSequenceWidthREd, parameterObject.meshGenSequenceHeightREd,
+        parameterObject.meshGenSequenceSlicesREd, parameterObject.meshGenSequenceDownSampleREd, parameterObject.meshGenSequenceFilterRadiusREd,
+        parameterObject.meshGenGenerateMeshProgressbar, parameterObject.meshGenGenerateMeshBtn, parameterObject.meshGenSequenceFromRendererBtn,
+        parameterObject.meshGenSequenceThresholdREd, parameterObject.meshGenSequenceLbl, parameterObject.meshGenPreviewRootPanel,
+        parameterObject.meshGenAutoPreviewCBx, parameterObject.meshGenPreviewImportLastGeneratedMeshBtn, parameterObject.meshGenPreviewImportFromFileBtn,
+        parameterObject.meshGenClearPreviewBtn, parameterObject.meshGenPreviewPositionXREd, parameterObject.meshGenPreviewPositionYREd,
+        parameterObject.meshGenPreviewSizeREd, parameterObject.meshGenPreviewScaleZREd, parameterObject.meshGenPreviewRotateAlphaREd,
+        parameterObject.meshGenPreviewRotateBetaREd, parameterObject.meshGenPreviewPointsREd, parameterObject.meshGenPreviewPolygonsREd,
+        parameterObject.meshGenRefreshPreviewBtn, parameterObject.meshGenPreviewSunflowExportBtn, parameterObject.meshGenPreFilter1Cmb,
+        parameterObject.meshGenPreFilter2Cmb, parameterObject.meshGenImageStepREd, parameterObject.meshGenOutputTypeCmb,
+        parameterObject.meshGenTaubinSmoothCbx, parameterObject.meshGenSmoothPassesREd, parameterObject.meshGenSmoothLambdaREd,
+        parameterObject.meshGenSmoothMuREd);
 
     data.macroButtonsTable = parameterObject.macroButtonsTable;
     data.macroButtonMoveUpBtn = parameterObject.macroButtonMoveUpBtn;

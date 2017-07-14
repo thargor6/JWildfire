@@ -29,6 +29,7 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ThreadTools;
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
@@ -37,7 +38,10 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
+import org.jwildfire.create.tina.base.raster.PointCloudOBJWriter;
+import org.jwildfire.create.tina.base.raster.PointCloudPLYWriter;
 import org.jwildfire.create.tina.base.raster.RasterPointCloud;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud.PCPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.render.filter.FilteringType;
@@ -1094,7 +1098,7 @@ public class FlameRenderer {
     pFlame.setSpatialFilterRadius(0.0);
   }
 
-  public void renderPointCloud(PointCloudRenderInfo pPointCloudRenderInfo, String pFilenamePattern) {
+  public void renderPointCloud(PointCloudRenderInfo pPointCloudRenderInfo, String pFilename) {
     if (!flame.isRenderable())
       throw new RuntimeException("Point clouds can not be created of empty flames");
 
@@ -1111,7 +1115,9 @@ public class FlameRenderer {
 
     initRasterSizes(pPointCloudRenderInfo.getImageWidth(), pPointCloudRenderInfo.getImageHeight());
 
-    raster = new RasterPointCloud(zmin, zmax);
+    RasterPointCloud pcraster = new RasterPointCloud(zmin, zmax, pPointCloudRenderInfo.getMaxOctreeCellSize());
+
+    raster = pcraster;
     raster.allocRaster(flame, rasterWidth, rasterHeight, flame.getSpatialOversampling(), flame.getSampleDensity());
 
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
@@ -1122,6 +1128,22 @@ public class FlameRenderer {
     iterate(0, 1, renderFlames, null);
 
     raster.finalizeRaster();
+
+    List<PCPoint> points = pcraster.getGeneratedPoints();
+    if (points != null && !points.isEmpty()) {
+      if (Tools.getFileExt(pFilename).isEmpty()) {
+        pFilename = pFilename + "." + Tools.FILEEXT_PLY;
+      }
+      if (Tools.FILEEXT_PLY.equalsIgnoreCase(Tools.getFileExt(pFilename))) {
+        new PointCloudPLYWriter().writePLY(points, pFilename);
+      }
+      else if (Tools.FILEEXT_OBJ.equalsIgnoreCase(Tools.getFileExt(pFilename))) {
+        new PointCloudOBJWriter().writeOBJ(points, pFilename);
+      }
+      else {
+        throw new RuntimeException("Unvalid file extension <" + Tools.getFileExt(pFilename) + ">");
+      }
+    }
   }
 
   protected AbstractRaster getRaster() {

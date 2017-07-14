@@ -466,6 +466,7 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenZMinREd;
   public JSlider meshGenZMinSlider;
   public JWFNumberField meshGenZMaxREd;
+  public JWFNumberField meshGenCellSizeREd;
   public JSlider meshGenZMaxSlider;
   public JButton meshGenTopViewRenderBtn;
   public JButton meshGenFrontViewRenderBtn;
@@ -1416,7 +1417,8 @@ public class TinaControllerParameter {
       JButton pMeshGenGenerateBtn, JPanel pMeshGenTopViewRootPnl, JPanel pMeshGenFrontViewRootPnl, JPanel pMeshGenPerspectiveViewRootPnl,
       JWFNumberField pMeshGenCentreXREd, JSlider pMeshGenCentreXSlider, JWFNumberField pMeshGenCentreYREd,
       JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
-      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JButton pMeshGenTopViewRenderBtn,
+      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider,
+      JWFNumberField pMeshGenCellSizeREd, JButton pMeshGenTopViewRenderBtn,
       JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
       JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
       JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
@@ -1452,6 +1454,7 @@ public class TinaControllerParameter {
     meshGenZMinSlider = pMeshGenZMinSlider;
     meshGenZMaxREd = pMeshGenZMaxREd;
     meshGenZMaxSlider = pMeshGenZMaxSlider;
+    meshGenCellSizeREd = pMeshGenCellSizeREd;
     meshGenTopViewRenderBtn = pMeshGenTopViewRenderBtn;
     meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
     meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;

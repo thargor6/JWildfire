@@ -5415,19 +5415,20 @@ public class TinaInternalFrame extends JInternalFrame {
         meshGenFrame.getMeshGenCentreXSlider(), meshGenFrame.getMeshGenCentreYREd(), meshGenFrame.getMeshGenCentreYSlider(),
         meshGenFrame.getMeshGenZoomREd(), meshGenFrame.getMeshGenZoomSlider(), meshGenFrame.getMeshGenZMinREd(),
         meshGenFrame.getMeshGenZMinSlider(), meshGenFrame.getMeshGenZMaxREd(), meshGenFrame.getMeshGenZMaxSlider(),
-        meshGenFrame.getMeshGenTopViewRenderBtn(), meshGenFrame.getMeshGenFrontViewRenderBtn(), meshGenFrame.getMeshGenPerspectiveViewRenderBtn(),
-        meshGenFrame.getMeshGenTopViewToEditorBtn(), meshGenFrame.getMeshGenLoadSequenceBtn(), meshGenFrame.getMeshGenSequenceWidthREd(),
-        meshGenFrame.getMeshGenSequenceHeightREd(), meshGenFrame.getMeshGenSequenceSlicesREd(), meshGenFrame.getMeshGenSequenceDownSampleREd(),
-        meshGenFrame.getMeshGenSequenceFilterRadiusREd(), meshGenFrame.getMeshGenGenerateMeshProgressbar(), meshGenFrame.getMeshGenGenerateMeshBtn(),
-        meshGenFrame.getMeshGenSequenceFromRendererBtn(), meshGenFrame.getMeshGenSequenceThresholdREd(), meshGenFrame.getMeshGenSequenceLbl(),
-        meshGenFrame.getMeshGenPreviewRootPanel(), meshGenFrame.getMeshGenAutoPreviewCBx(), meshGenFrame.getMeshGenPreviewImportLastGeneratedMeshBtn(),
-        meshGenFrame.getMeshGenPreviewImportFromFileBtn(), meshGenFrame.getMeshGenClearPreviewBtn(), meshGenFrame.getMeshGenPreviewPositionXREd(),
-        meshGenFrame.getMeshGenPreviewPositionYREd(), meshGenFrame.getMeshGenPreviewSizeREd(), meshGenFrame.getMeshGenPreviewScaleZREd(),
-        meshGenFrame.getMeshGenPreviewRotateAlphaREd(), meshGenFrame.getMeshGenPreviewRotateBetaREd(), meshGenFrame.getMeshGenPreviewPointsREd(),
-        meshGenFrame.getMeshGenPreviewPolygonsREd(), meshGenFrame.getMeshGenRefreshPreviewBtn(), meshGenFrame.getMeshGenPreviewSunflowExportBtn(),
-        meshGenFrame.getMeshGenPreFilter1Cmb(), meshGenFrame.getMeshGenPreFilter2Cmb(), meshGenFrame.getMeshGenImageStepREd(),
-        meshGenFrame.getMeshGenOutputTypeCmb(), meshGenFrame.getMeshGenTaubinSmoothCbx(), meshGenFrame.getMeshGenSmoothPassesREd(),
-        meshGenFrame.getMeshGenSmoothLambdaREd(), meshGenFrame.getMeshGenSmoothMuREd());
+        meshGenFrame.getMeshGenCellSizeREd(), meshGenFrame.getMeshGenTopViewRenderBtn(), meshGenFrame.getMeshGenFrontViewRenderBtn(),
+        meshGenFrame.getMeshGenPerspectiveViewRenderBtn(), meshGenFrame.getMeshGenTopViewToEditorBtn(), meshGenFrame.getMeshGenLoadSequenceBtn(),
+        meshGenFrame.getMeshGenSequenceWidthREd(), meshGenFrame.getMeshGenSequenceHeightREd(), meshGenFrame.getMeshGenSequenceSlicesREd(),
+        meshGenFrame.getMeshGenSequenceDownSampleREd(), meshGenFrame.getMeshGenSequenceFilterRadiusREd(), meshGenFrame.getMeshGenGenerateMeshProgressbar(),
+        meshGenFrame.getMeshGenGenerateMeshBtn(), meshGenFrame.getMeshGenSequenceFromRendererBtn(), meshGenFrame.getMeshGenSequenceThresholdREd(),
+        meshGenFrame.getMeshGenSequenceLbl(), meshGenFrame.getMeshGenPreviewRootPanel(), meshGenFrame.getMeshGenAutoPreviewCBx(),
+        meshGenFrame.getMeshGenPreviewImportLastGeneratedMeshBtn(), meshGenFrame.getMeshGenPreviewImportFromFileBtn(),
+        meshGenFrame.getMeshGenClearPreviewBtn(), meshGenFrame.getMeshGenPreviewPositionXREd(), meshGenFrame.getMeshGenPreviewPositionYREd(),
+        meshGenFrame.getMeshGenPreviewSizeREd(), meshGenFrame.getMeshGenPreviewScaleZREd(), meshGenFrame.getMeshGenPreviewRotateAlphaREd(),
+        meshGenFrame.getMeshGenPreviewRotateBetaREd(), meshGenFrame.getMeshGenPreviewPointsREd(), meshGenFrame.getMeshGenPreviewPolygonsREd(),
+        meshGenFrame.getMeshGenRefreshPreviewBtn(), meshGenFrame.getMeshGenPreviewSunflowExportBtn(), meshGenFrame.getMeshGenPreFilter1Cmb(),
+        meshGenFrame.getMeshGenPreFilter2Cmb(), meshGenFrame.getMeshGenImageStepREd(), meshGenFrame.getMeshGenOutputTypeCmb(),
+        meshGenFrame.getMeshGenTaubinSmoothCbx(), meshGenFrame.getMeshGenSmoothPassesREd(), meshGenFrame.getMeshGenSmoothLambdaREd(),
+        meshGenFrame.getMeshGenSmoothMuREd());
 
     params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane());
 

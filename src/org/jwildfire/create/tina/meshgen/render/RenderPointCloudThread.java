@@ -26,12 +26,12 @@ import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 
 public class RenderPointCloudThread extends MeshGenRenderThread {
-  public static final double DFLT_ANTIALIAS_RADIUS = 0.16;
-  public static final double DFLT_ANTIALIAS_AMOUNT = 0.5;
+  private double maxOctreeCellSize;
 
   public RenderPointCloudThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pQuality,
-      double pZMin, double pZMax) {
+      double pZMin, double pZMax, double pMaxOctreeCellSize) {
     super(pPrefs, pFlame, pOutFilePattern, pFinishEvent, pProgressUpdater, pRenderWidth, pRenderHeight, pQuality, pZMin, pZMax);
+    maxOctreeCellSize = pMaxOctreeCellSize;
   }
 
   @Override
@@ -52,7 +52,7 @@ public class RenderPointCloudThread extends MeshGenRenderThread {
     flame.setSampleDensity(quality);
 
     renderer.setProgressUpdater(progressUpdater);
-    PointCloudRenderInfo renderInfo = new PointCloudRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, zmin, zmax);
+    PointCloudRenderInfo renderInfo = new PointCloudRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, zmin, zmax, maxOctreeCellSize);
 
     renderer.renderPointCloud(renderInfo, outFilePattern);
   }

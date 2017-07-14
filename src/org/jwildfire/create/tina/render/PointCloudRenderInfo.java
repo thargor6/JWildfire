@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class PointCloudRenderInfo implements Assignable<PointCloudRenderInfo>, Serializable {
@@ -30,17 +31,19 @@ public class PointCloudRenderInfo implements Assignable<PointCloudRenderInfo>, S
   private RenderMode renderMode = RenderMode.PRODUCTION;
   private double zmin = 0.0;
   private double zmax = 1.0;
+  private double maxOctreeCellSize = RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE;
 
   protected PointCloudRenderInfo() {
 
   }
 
-  public PointCloudRenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode, double pZMin, double pZMax) {
+  public PointCloudRenderInfo(int pImageWidth, int pImageHeight, RenderMode pRenderMode, double pZMin, double pZMax, double pMaxOctreeCellSize) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     renderMode = pRenderMode;
     zmin = pZMin;
     zmax = pZMax;
+    maxOctreeCellSize = pMaxOctreeCellSize;
   }
 
   public RenderInfo createRenderInfo() {
@@ -112,6 +115,10 @@ public class PointCloudRenderInfo implements Assignable<PointCloudRenderInfo>, S
 
   public void setZmax(double pZmax) {
     zmax = pZmax;
+  }
+
+  public double getMaxOctreeCellSize() {
+    return maxOctreeCellSize;
   }
 
 }
