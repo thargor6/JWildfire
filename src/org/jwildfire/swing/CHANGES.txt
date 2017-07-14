@@ -1,5 +1,28 @@
-V3.12 (06.07.2017)
-- New Variations - Thanks to dark-beam (Luca) and Brad Stefanov for conversions
+V3.20 (15.07.2017)
+ - New "POINTCLOUD"-generator inside the Mesh-Generator. Pointclouds basically are meshes with 1-point-polygons. 
+   In contrast to the solid meshes, the "points" of the generated point-clouds may carry also a color and an alpha channel 
+   (which may be used in rendering).
+        
+   3D-Packages like Houdini can render point-clouds in the way that each point is represented by a little sphere 
+   (you usually can adjust the size of those spheres), generating a "solid" shape.
+   You can apply material to it like to any regular mesh. Especially in Houdini, the points keep their individual 
+   (diffuse) color.
+   
+   You can also generate "solid" meshes from point-clouds, for example using the ball-pivoting-algorithm inside
+   MeshLab.   
+   
+   Important Parameters for point-cloud-generation in JWildfire (use "Output type" POINTCLOUD to enable it):
+     CELL-SIZE: the program uses an octree to quantize the space into little small cubes. All samples inside a cube
+                are later condensed into one point of the point-cloud. So, this setting basically affects the 
+                "resolution" of the generated mesh. But beware, please make it only smaller in small steps, 
+                otherwise memory consumption may grow in an "explosive" way   
+     RENDER QUALITY: overall number of samples, increase it only if your mesh has noise/holes in it  
+     OUTPUT FORMAT: you may either use *.ply or *.obj. But beware, this option has also an impact on the generation
+                    of the point-cloud:
+                      PLY-Format: only vertices ("points"), with color and alpha channel (works good for Houdini)
+                      OBJ-Format: vertices and 1-point-polygons, NO color and NO alpha channel (works good for Lightwave Hypervoxels)   
+ 
+ - New Variations - Thanks to dark-beam (Luca) and Brad Stefanov for conversions
   - Spirograph3D by Rick Sidwell.
   - Hypershift, Helicoid, Helix by Zy0rg.
   - Atan by FractalDesire.
@@ -10,7 +33,8 @@ V3.12 (06.07.2017)
  - Fixes
   - Fixed issue reading apo parameters in GlynnSim variations. By Rick Sidwell
   - Fix bug reading repeated variations in a transform. By Rick Sidwell
-  - Added lgamma to Math.lib for gamma variation to work. 
+  - Added lgamma to Math.lib for gamma variation to work.
+  - Fixed some performance problem in solid rendering 
   
 V3.11r2 (05.06.2017)
  - fixed a problem with calculation of normals in solid rendering
