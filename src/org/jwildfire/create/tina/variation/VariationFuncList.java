@@ -528,7 +528,9 @@ public class VariationFuncList {
     registerVariationFunc(HelicoidFunc.class); 
     registerVariationFunc(GammaFunc.class); 
     registerVariationFunc(ShiftFunc.class);     
-    registerVariationFunc(ChunkFunc.class); 
+    registerVariationFunc(ChunkFunc.class);
+    registerVariationFunc(CrobFunc.class);
+    registerVariationFunc(Hole2Func.class);
     
 
     resolvedAliasMap = new HashMap<>();
