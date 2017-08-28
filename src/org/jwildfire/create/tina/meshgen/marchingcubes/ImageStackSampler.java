@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -38,6 +38,8 @@ public class ImageStackSampler {
   private final int stackYSize;
   private final int stackZSize;
 
+  private final int imageWidth, imageHeight, imageCount;
+
   private final List<SimpleImage> images = new ArrayList<SimpleImage>();
   private final List<Integer> imagesIndex = new ArrayList<Integer>();
 
@@ -65,9 +67,12 @@ public class ImageStackSampler {
     String filename = String.format(inputfilename, 1);
     images.set(0, new ImageReader().loadImage(filename));
 
-    stackXSize = images.get(0).getImageWidth() / downsample;
-    stackYSize = images.get(0).getImageHeight() / downsample;
-    stackZSize = images.size();
+    imageWidth = images.get(0).getImageWidth();
+    stackXSize = imageWidth / downsample;
+    imageHeight = images.get(0).getImageHeight();
+    stackYSize = imageHeight / downsample;
+    imageCount = images.size();
+    stackZSize = imageCount;
 
     spatialFilterRadius = pSpatialFilterRadius < MIN_SPATIAL_FILTER_RADIUS ? MIN_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius > MAX_SPATIAL_FILTER_RADIUS ? MAX_SPATIAL_FILTER_RADIUS : pSpatialFilterRadius;
 
@@ -192,6 +197,18 @@ public class ImageStackSampler {
 
   public int getStackZSize() {
     return stackZSize;
+  }
+
+  public int getImageWidth() {
+    return imageWidth;
+  }
+
+  public int getImageHeight() {
+    return imageHeight;
+  }
+
+  public int getImageCount() {
+    return imageCount;
   }
 
 }

@@ -47,7 +47,7 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
 
   protected VariationFunc getRandom3DShape() {
     VariationFunc varFunc;
-    switch (Tools.randomInt(6)) {
+    switch (Tools.randomInt(7)) {
       case 0: {
         varFunc = VariationFuncList.getVariationFuncInstance("yplot2d_wf", true);
         varFunc.setParameter("preset_id", WFFuncPresetsStore.getYPlot2DWFFuncPresets().getRandomPresetId());
@@ -85,6 +85,15 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
         break;
       }
       case 4:
+      case 6: {
+        varFunc = VariationFuncList.getVariationFuncInstance("dla3d_wf", true);
+        varFunc.setParameter("max_iter", 100 + Math.random() * 200);
+        varFunc.setParameter("inner_blur_radius", Math.random() * 0.5 + 0.1);
+        varFunc.setParameter("outer_blur_radius", Math.random() * 0.5);
+        varFunc.setParameter("glue_radius", 0.6 + Math.random() * 0.8);
+        break;
+      }
+      case 5:
       default: {
         varFunc = VariationFuncList.getVariationFuncInstance("obj_mesh_primitive_wf", true);
         varFunc.setParameter("primitive", Tools.randomInt(OBJMeshPrimitiveWFFunc.LOWPOLY_SHAPE_COUNT));

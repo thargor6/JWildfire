@@ -16,12 +16,6 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -29,14 +23,10 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.DisplacementMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.VariationFunc;
-
-import com.owens.oobjloader.builder.Build;
-import com.owens.oobjloader.parser.Parse;
 
 public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -83,6 +73,8 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
   protected ColorMapHolder colorMapHolder = new ColorMapHolder();
   protected DisplacementMapHolder displacementMapHolder = new DisplacementMapHolder();
 
+  protected UVColorMapper uvColorMapper = new UVColorMapper();
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (mesh == null || mesh.getFaceCount() == 0) {
@@ -120,7 +112,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
         int ix = (int) MathLib.trunc(iu);
         int iy = (int) MathLib.trunc(iv);
         colorMapHolder.applyImageColor(pVarTP, ix, iy, iu, iv);
-        pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
+        pVarTP.color = uvColorMapper.getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
       }
       if (displacementMapHolder.isActive()) {
         VectorD av = new VectorD(p2.x - p1.x, p2.y - p1.y, p2.y - p1.y);
@@ -223,133 +215,12 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
       throw new IllegalArgumentException(pName);
   }
 
-  protected SimpleMesh createDfltMesh() {
-    SimpleMesh mesh = new SimpleMesh();
-    int v0 = mesh.addVertex(-1.0, -1.0, 1.0);
-    int v1 = mesh.addVertex(1.0, -1.0, 1.0);
-    int v2 = mesh.addVertex(1.0, 1.0, 1.0);
-    int v3 = mesh.addVertex(-1.0, 1.0, 1.0);
-    int v4 = mesh.addVertex(-1.0, -1.0, -1.0);
-    int v5 = mesh.addVertex(1.0, -1.0, -1.0);
-    int v6 = mesh.addVertex(1.0, 1.0, -1.0);
-    int v7 = mesh.addVertex(-1.0, 1.0, -1.0);
-    mesh.addFace(v0, v1, v2, v3);
-    mesh.addFace(v1, v5, v6, v2);
-    mesh.addFace(v5, v6, v7, v4);
-    mesh.addFace(v4, v7, v3, v0);
-    mesh.addFace(v3, v2, v6, v7);
-    mesh.addFace(v0, v1, v5, v4);
-    return mesh;
-  }
-
-  protected SimpleMesh loadMeshFromFile(String pFilename) throws Exception {
-    Build builder = new Build();
-    /*    Parse obj =*/new Parse(builder, pFilename);
-
-    SimpleMesh mesh = new SimpleMesh();
-    for (com.owens.oobjloader.builder.Face face : builder.faces) {
-      ArrayList<com.owens.oobjloader.builder.FaceVertex> vertices = face.vertices;
-
-      if (vertices.size() == 3) {
-        com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
-        com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
-        com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
-        int v0, v1, v2;
-        if (f1.t != null && f2.t != null && f3.t != null) {
-          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z, f1.t.u, f1.t.v);
-          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
-          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
-        }
-        else {
-          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
-          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
-          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
-        }
-        mesh.addFace(v0, v1, v2);
-      }
-      else if (vertices.size() == 4) {
-        com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
-        com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
-        com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
-        com.owens.oobjloader.builder.FaceVertex f4 = vertices.get(3);
-        int v0, v1, v2, v3;
-        if (f1.t != null && f2.t != null && f3.t != null && f4.t != null) {
-          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z, f1.t.u, f1.t.v);
-          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
-          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
-          v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z, f4.t.u, f4.t.v);
-        }
-        else {
-          v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
-          v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
-          v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
-          v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z);
-        }
-        mesh.addFace(v0, v1, v2);
-        mesh.addFace(v0, v2, v3);
-      }
-    }
-    if (subdiv_level > 0) {
-      for (int i = 0; i < subdiv_level; i++) {
-        mesh = mesh.interpolate();
-        mesh.taubinSmooth(subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
-      }
-    }
-    else {
-      mesh.distributeFaces();
-    }
-    return mesh;
-  }
-
-  private RenderColor[] uvColors;
-  protected Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
-
-  private double getUVColorIdx(int pR, int pG, int pB) {
-    RenderColor pColor = new RenderColor(pR, pG, pB);
-    Double res = uvIdxMap.get(pColor);
-    if (res == null) {
-
-      int nearestIdx = 0;
-      RenderColor color = uvColors[0];
-      double dr, dg, db;
-      dr = (color.red - pR);
-      dg = (color.green - pG);
-      db = (color.blue - pB);
-      double nearestDist = sqrt(dr * dr + dg * dg + db * db);
-      for (int i = 1; i < uvColors.length; i++) {
-        color = uvColors[i];
-        dr = (color.red - pR);
-        dg = (color.green - pG);
-        db = (color.blue - pB);
-        double dist = sqrt(dr * dr + dg * dg + db * db);
-        if (dist < nearestDist) {
-          nearestDist = dist;
-          nearestIdx = i;
-        }
-      }
-      res = (double) nearestIdx / (double) (uvColors.length - 1);
-      uvIdxMap.put(pColor, res);
-    }
-    return res;
-  }
-
-  protected String getMeshname(String prefix) {
-    String res = prefix + "#" + subdiv_level;
-    if (subdiv_level > 0) {
-      res += "#" + subdiv_smooth_passes;
-      if (subdiv_smooth_passes > 0) {
-        res += "#" + subdiv_smooth_lambda + "#" + subdiv_smooth_mu;
-      }
-    }
-    return res;
-  }
-
   private double _displ_amount;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     colorMapHolder.init();
-    uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
+    uvColorMapper.initFromLayer(pContext, pLayer);
     displacementMapHolder.init();
     _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
   }

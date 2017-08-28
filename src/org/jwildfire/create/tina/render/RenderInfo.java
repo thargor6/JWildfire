@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -18,6 +18,7 @@ package org.jwildfire.create.tina.render;
 
 import java.io.Serializable;
 
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.edit.Assignable;
 
 public class RenderInfo implements Assignable<RenderInfo>, Serializable {
@@ -25,6 +26,8 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private boolean renderImage = true;
   private boolean renderHDR;
   private boolean renderZBuffer;
+  private boolean storeRaster;
+  private transient AbstractRaster restoredRaster;
   private int imageWidth;
   private int imageHeight;
   private RenderMode renderMode = RenderMode.PRODUCTION;
@@ -76,6 +79,8 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
     renderMode = pSrc.renderMode;
     imageWidth = pSrc.imageWidth;
     imageHeight = pSrc.imageHeight;
+    storeRaster = pSrc.storeRaster;
+    restoredRaster = pSrc.restoredRaster;
   }
 
   @Override
@@ -89,7 +94,8 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   public boolean isEqual(RenderInfo pSrc) {
     if (renderImage != pSrc.renderImage || renderHDR != pSrc.renderHDR ||
         renderZBuffer != pSrc.renderZBuffer || renderMode != pSrc.renderMode ||
-        imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight) {
+        imageWidth != pSrc.imageWidth || imageHeight != pSrc.imageHeight ||
+        storeRaster != pSrc.storeRaster || restoredRaster != pSrc.restoredRaster) {
       return false;
     }
     return true;
@@ -117,6 +123,22 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
 
   public void setRenderImage(boolean renderImage) {
     this.renderImage = renderImage;
+  }
+
+  public boolean isStoreRaster() {
+    return storeRaster;
+  }
+
+  public void setStoreRaster(boolean storeRaster) {
+    this.storeRaster = storeRaster;
+  }
+
+  public AbstractRaster getRestoredRaster() {
+    return restoredRaster;
+  }
+
+  public void setRestoredRaster(AbstractRaster restoredRaster) {
+    this.restoredRaster = restoredRaster;
   }
 
 }

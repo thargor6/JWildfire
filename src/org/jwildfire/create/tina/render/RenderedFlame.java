@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.render;
 
 import org.jwildfire.create.tina.base.Flame;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.image.SimpleGrayImage;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -25,6 +26,7 @@ public class RenderedFlame {
   private SimpleImage image;
   private SimpleHDRImage hdrImage;
   private SimpleGrayImage zBuffer;
+  private AbstractRaster raster;
 
   public SimpleImage getImage() {
     return image;
@@ -48,6 +50,14 @@ public class RenderedFlame {
     if (pRenderInfo.isRenderZBuffer() && pFlame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       zBuffer = new SimpleGrayImage(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
     }
+  }
+
+  public AbstractRaster getRaster() {
+    return raster;
+  }
+
+  public void setRaster(AbstractRaster raster) {
+    this.raster = raster;
   }
 
 }

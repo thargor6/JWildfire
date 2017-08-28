@@ -17,26 +17,44 @@
 package org.jwildfire.create.tina.base.raster;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageWriter;
 
 public class RasterTools {
+  private final static double RANGE = 10000.0;
+
+  private static boolean inRange(double value) {
+    return value > -RANGE && value < RANGE;
+  }
 
   public static void saveFloatBuffer(float buf[][], String filename) {
     double min, max;
     min = max = buf[0][0];
     for (int i = 0; i < buf.length; i++) {
       for (int j = 0; j < buf[0].length; j++) {
-        if (buf[i][j] < min)
-          min = buf[i][j];
-        else if (buf[i][j] > max && !Double.isInfinite(buf[i][j]))
-          max = buf[i][j];
+        if (inRange(buf[i][j])) {
+          min = max = buf[i][j];
+          break;
+        }
+      }
+    }
+
+    for (int i = 0; i < buf.length; i++) {
+      for (int j = 0; j < buf[0].length; j++) {
+        if (inRange(buf[i][j])) {
+          if (buf[i][j] < min)
+            min = buf[i][j];
+          else if (buf[i][j] > max && !Double.isInfinite(buf[i][j]))
+            max = buf[i][j];
+        }
       }
     }
     double d = max - min;
-    System.out.println("Saving float buffer \\" + new File(filename).getName() + "\", min = " + min + ", max = " + max);
+    System.out.println("Saving float buffer \"" + new File(filename).getName() + "\", min = " + min + ", max = " + max);
     SimpleImage img = new SimpleImage(buf.length, buf[0].length);
     for (int i = 0; i < buf.length; i++) {
       for (int j = 0; j < buf[0].length; j++) {
@@ -92,6 +110,29 @@ public class RasterTools {
     catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public static float[][] medianCut(float[][] buf) {
+    final int windowSize = 1;
+    final ArrayList<Float> values = new ArrayList<>();
+    final int width = buf.length;
+    final int height = buf[0].length;
+    float[][] res = new float[width][height];
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        values.clear();
+        for (int k = -windowSize; k <= windowSize; k++) {
+          int x = i + k;
+          for (int l = -windowSize; l <= windowSize; l++) {
+            int y = j + l;
+            values.add(x >= 0 && x < width && y >= 0 && y < height ? buf[x][y] : 0.0f);
+          }
+        }
+        Collections.sort(values);
+        res[i][j] = values.get(values.size() / 2);
+      }
+    }
+    return res;
   }
 
 }

@@ -44,28 +44,28 @@ public class PreBoarders2Func extends VariationFunc {
     double offsetX = pAffineTP.x - roundX;
     double offsetY = pAffineTP.y - roundY;
     if (pContext.random() >= _cr) {
-      pAffineTP.x += pAmount * (offsetX * _c + roundX);
-      pAffineTP.y += pAmount * (offsetY * _c + roundY);
+      pAffineTP.x = pAmount * (offsetX * _c + roundX);
+      pAffineTP.y = pAmount * (offsetY * _c + roundY);
     }
     else {
       if (fabs(offsetX) >= fabs(offsetY)) {
         if (offsetX >= 0.0) {
-          pAffineTP.x += pAmount * (offsetX * _c + roundX + _cl);
-          pAffineTP.y += pAmount * (offsetY * _c + roundY + _cl * offsetY / offsetX);
+          pAffineTP.x = pAmount * (offsetX * _c + roundX + _cl);
+          pAffineTP.y = pAmount * (offsetY * _c + roundY + _cl * offsetY / offsetX);
         }
         else {
-          pAffineTP.x += pAmount * (offsetX * _c + roundX - _cl);
-          pAffineTP.y += pAmount * (offsetY * _c + roundY - _cl * offsetY / offsetX);
+          pAffineTP.x = pAmount * (offsetX * _c + roundX - _cl);
+          pAffineTP.y = pAmount * (offsetY * _c + roundY - _cl * offsetY / offsetX);
         }
       }
       else {
         if (offsetY >= 0.0) {
-          pAffineTP.y += pAmount * (offsetY * _c + roundY + _cl);
-          pAffineTP.x += pAmount * (offsetX * _c + roundX + offsetX / offsetY * _cl);
+          pAffineTP.y = pAmount * (offsetY * _c + roundY + _cl);
+          pAffineTP.x = pAmount * (offsetX * _c + roundX + offsetX / offsetY * _cl);
         }
         else {
-          pAffineTP.y += pAmount * (offsetY * _c + roundY - _cl);
-          pAffineTP.x += pAmount * (offsetX * _c + roundX - offsetX / offsetY * _cl);
+          pAffineTP.y = pAmount * (offsetY * _c + roundY - _cl);
+          pAffineTP.x = pAmount * (offsetX * _c + roundX - offsetX / offsetY * _cl);
         }
       }
     }

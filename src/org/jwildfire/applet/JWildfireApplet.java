@@ -45,6 +45,7 @@ import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
+import org.jwildfire.create.tina.render.FlameBGColorHandler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -205,9 +206,9 @@ public class JWildfireApplet extends JApplet implements IterationObserver {
     flame.setSampleDensity(10);
     info.setRenderHDR(false);
     info.setRenderZBuffer(false);
-    if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
-      image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
-    }
+
+    new FlameBGColorHandler(flame).fillBackground(image);
+
     initRender(prefs.getTinaRenderThreads());
     renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
     renderer.registerIterationObserver(this);

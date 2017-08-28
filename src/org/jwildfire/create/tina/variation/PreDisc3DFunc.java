@@ -42,9 +42,9 @@ public class PreDisc3DFunc extends VariationFunc {
     double sr = sin(a);
     double cr = cos(a);
     double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + EPSILON);
-    pAffineTP.x += vv * sr;
-    pAffineTP.y += vv * cr;
-    pAffineTP.z += vv * (r * cos(pAffineTP.z));
+    pAffineTP.x = vv * sr;
+    pAffineTP.y = vv * cr;
+    pAffineTP.z = vv * (r * cos(pAffineTP.z));
   }
 
   @Override

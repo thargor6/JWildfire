@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -87,11 +88,28 @@ public class TinaControllerParameter {
   public JSlider pGammaSlider;
   public JWFNumberField pVibrancyREd;
   public JSlider pVibrancySlider;
+  public JWFNumberField lowDensityBrightnessREd;
+  public JSlider lowDensityBrightnessSlider;
+  public JWFNumberField balanceRedREd;
+  public JSlider balanceRedSlider;
+  public JWFNumberField balanceGreenREd;
+  public JSlider balanceGreenSlider;
+  public JWFNumberField balanceBlueREd;
+  public JSlider balanceBlueSlider;
   public JWFNumberField saturationREd;
   public JSlider saturationSlider;
   public JWFNumberField pFilterRadiusREd;
   public JSlider pFilterRadiusSlider;
+  public JWFNumberField tinaFilterSharpnessREd;
+  public JSlider tinaFilterSharpnessSlider;
+  public JWFNumberField tinaFilterLowDensityREd;
+  public JSlider tinaFilterLowDensitySlider;
+
   public JComboBox pFilterKernelCmb;
+  public JComboBox tinaFilterTypeCmb;
+  public JLabel tinaFilterKernelCmbLbl;
+  public JLabel tinaFilterRadiusLbl;
+  public JCheckBox tinaFilterIndicatorCBx;
   public JWFNumberField pGammaThresholdREd;
   public JSlider pGammaThresholdSlider;
   public JCheckBox pBGTransparencyCBx;
@@ -321,6 +339,7 @@ public class TinaControllerParameter {
   public JButton editFlameTileButton;
   public JButton snapShotButton;
   public JButton qSaveButton;
+  public JButton saveAllButton;
   public JButton sendToIRButton;
   public JButton bokehButton;
   public JToggleButton solidRenderingToggleBtn;
@@ -342,7 +361,12 @@ public class TinaControllerParameter {
   public JButton gradientLibraryNewFolderBtn;
   public JButton gradientLibraryRenameFolderBtn;
   public JList gradientsList;
+  public JComboBox backgroundColorTypeCmb;
   public JButton backgroundColorIndicatorBtn;
+  public JButton backgroundColorURIndicatorBtn;
+  public JButton backgroundColorLLIndicatorBtn;
+  public JButton backgroundColorLRIndicatorBtn;
+  public JButton backgroundColorCCIndicatorBtn;
   public JButton randomizeButton;
   public JTree flameBrowserTree;
   public JPanel flameBrowersImagesPnl;
@@ -442,6 +466,7 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenZMinREd;
   public JSlider meshGenZMinSlider;
   public JWFNumberField meshGenZMaxREd;
+  public JWFNumberField meshGenCellSizeREd;
   public JSlider meshGenZMaxSlider;
   public JButton meshGenTopViewRenderBtn;
   public JButton meshGenFrontViewRenderBtn;
@@ -473,8 +498,11 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenPreviewPolygonsREd;
   public JButton meshGenRefreshPreviewBtn;
   public JButton meshGenPreviewSunflowExportBtn;
-  public JWFNumberField meshGenThicknessModREd;
-  public JWFNumberField meshGenThicknessSamplesREd;
+  public JCheckBox meshGenTaubinSmoothCbx;
+  public JWFNumberField meshGenSmoothPassesREd;
+  public JWFNumberField meshGenSmoothLambdaREd;
+  public JWFNumberField meshGenSmoothMuREd;
+
   public JButton channelMixerResetBtn;
   public JComboBox channelMixerModeCmb;
   public JPanel channelMixerRRRootPanel;
@@ -488,6 +516,7 @@ public class TinaControllerParameter {
   public JPanel channelMixerBBRootPanel;
   public JComboBox meshGenPreFilter1Cmb;
   public JComboBox meshGenPreFilter2Cmb;
+
   public JWFNumberField meshGenImageStepREd;
   public JButton motionCurvePlayPreviewButton;
   public JComboBox dofDOFShapeCmb;
@@ -575,9 +604,6 @@ public class TinaControllerParameter {
   public JPanel filterKernelPreviewRootPnl;
   public JWFNumberField tinaSpatialOversamplingREd;
   public JSlider tinaSpatialOversamplingSlider;
-  public JWFNumberField tinaColorOversamplingREd;
-  public JSlider tinaColorOversamplingSlider;
-  public JCheckBox tinaSampleJitteringCheckBox;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;
@@ -658,6 +684,8 @@ public class TinaControllerParameter {
   public JWFNumberField postBokehActivationREd;
   public JSlider postBokehActivationSlider;
   public JComboBox postBokehFilterKernelCmb;
+  public JPopupMenu thumbnailSelectPopupMenu;
+  public JPopupMenu thumbnailRemovePopupMenu;
 
   public void setParams1(JWildfire pDesktop, TinaInternalFrame pTinaFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
       JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -669,7 +697,9 @@ public class TinaControllerParameter {
       JToggleButton pMouseTransformSlowButton,
       JPanel pRootPanel, JButton pAffineFlipHorizontalButton, JButton pAffineFlipVerticalButton, JWFNumberField pPostBlurRadiusREd, JSlider pPostBlurRadiusSlider, JWFNumberField pPostBlurFadeREd, JSlider pPostBlurFadeSlider, JWFNumberField pPostBlurFallOffREd, JSlider pPostBlurFallOffSlider,
       JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
-      JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider) {
+      JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx,
+      JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
+      JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider) {
     this.desktop = pDesktop;
     this.pTinaFrame = pTinaFrame;
     this.pErrorHandler = pErrorHandler;
@@ -826,6 +856,16 @@ public class TinaControllerParameter {
     this.pXFormAntialiasRadiusSlider = pXFormAntialiasRadiusSlider;
     this.tinaZBufferScaleREd = tinaZBufferScaleREd;
     this.tinaZBufferScaleSlider = tinaZBufferScaleSlider;
+    this.tinaFilterTypeCmb = tinaFilterTypeCmb;
+    this.tinaFilterKernelCmbLbl = tinaFilterKernelCmbLbl;
+    this.tinaFilterRadiusLbl = tinaFilterRadiusLbl;
+    this.tinaFilterIndicatorCBx = tinaFilterIndicatorCBx;
+    this.thumbnailSelectPopupMenu = thumbnailSelectPopupMenu;
+    this.thumbnailRemovePopupMenu = thumbnailRemovePopupMenu;
+    this.tinaFilterSharpnessREd = tinaFilterSharpnessREd;
+    this.tinaFilterSharpnessSlider = tinaFilterSharpnessSlider;
+    this.tinaFilterLowDensityREd = tinaFilterLowDensityREd;
+    this.tinaFilterLowDensitySlider = tinaFilterLowDensitySlider;
   }
 
   public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,
@@ -921,11 +961,12 @@ public class TinaControllerParameter {
       JComboBox pTriangleStyleCmb, JWFNumberField pXFormModGammaREd, JSlider pXFormModGammaSlider, JWFNumberField pXFormModGammaSpeedREd,
       JSlider pXFormModGammaSpeedSlider, JWFNumberField pXFormModContrastREd, JSlider pXFormModContrastSlider, JWFNumberField pXFormModContrastSpeedREd,
       JSlider pXFormModContrastSpeedSlider, JWFNumberField pXFormModSaturationREd, JSlider pXFormModSaturationSlider, JWFNumberField pXFormModSaturationSpeedREd,
-      JSlider pXFormModSaturationSpeedSlider) {
+      JSlider pXFormModSaturationSpeedSlider, JButton saveAllButton) {
     this.editTransformCaptionButton = pEditTransformCaptionButton;
     this.editFlameTileButton = pEditFlameTileButton;
     this.snapShotButton = pSnapShotButton;
     this.qSaveButton = pQSaveButton;
+    this.saveAllButton = saveAllButton;
     this.sendToIRButton = pSendToIRButton;
     this.movieButton = pMovieButton;
     this.transformSlowButton = pTransformSlowButton;
@@ -1060,7 +1101,6 @@ public class TinaControllerParameter {
       JWFNumberField pLeapMotionOffsetField, JButton pLeapMotionAddButton, JButton pLeapMotionDuplicateButton,
       JButton pLeapMotionDeleteButton, JButton pLeapMotionClearButton, JButton pLeapMotionResetConfigButton,
       JPanel pFilterKernelPreviewRootPnl, JWFNumberField pTinaSpatialOversamplingREd, JSlider pTinaSpatialOversamplingSlider,
-      JWFNumberField pTinaColorOversamplingREd, JSlider pTinaColorOversamplingSlider, JCheckBox pTinaSampleJitteringCheckBox,
       JToggleButton pFilterKernelFlatPreviewBtn, JCheckBox pTinaPostNoiseFilterCheckBox, JWFNumberField pTinaPostNoiseThresholdField,
       JSlider pTinaPostNoiseThresholdSlider, JWFNumberField pForegroundOpacityField, JSlider pForegroundOpacitySlider,
       JButton pScriptEditBtn, JToggleButton pRealtimePreviewToggleButton,
@@ -1091,7 +1131,11 @@ public class TinaControllerParameter {
       JPanel bokehSettingsPnl, JPanel postBokehSettingsPnl, JButton resetPostBokehSettingsBtn, JWFNumberField postBokehIntensityREd, JSlider postBokehIntensitySlider,
       JWFNumberField postBokehBrightnessREd, JSlider postBokehBrightnessSlider, JWFNumberField postBokehSizeREd, JSlider postBokehSizeSlider,
       JWFNumberField postBokehActivationREd, JSlider postBokehActivationSlider, JComboBox postBokehFilterKernelCmb,
-      JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb) {
+      JComboBox gpuResolutionProfileCmb, JComboBox gpuQualityProfileCmb,
+      JWFNumberField lowDensityBrightnessREd, JSlider lowDensityBrightnessSlider, JWFNumberField balanceRedREd, JSlider balanceRedSlider,
+      JWFNumberField balanceGreenREd, JSlider balanceGreenSlider, JWFNumberField balanceBlueREd, JSlider balanceBlueSlider,
+      JButton backgroundColorURIndicatorBtn, JButton backgroundColorLLIndicatorBtn, JButton backgroundColorLRIndicatorBtn, JComboBox backgroundColorTypeCmb,
+      JButton backgroundColorCCIndicatorBtn) {
     channelMixerResetBtn = pChannelMixerResetBtn;
     channelMixerModeCmb = pChannelMixerModeCmb;
     channelMixerRRRootPanel = pChannelMixerRRRootPanel;
@@ -1189,9 +1233,6 @@ public class TinaControllerParameter {
     filterKernelPreviewRootPnl = pFilterKernelPreviewRootPnl;
     tinaSpatialOversamplingREd = pTinaSpatialOversamplingREd;
     tinaSpatialOversamplingSlider = pTinaSpatialOversamplingSlider;
-    tinaColorOversamplingREd = pTinaColorOversamplingREd;
-    tinaColorOversamplingSlider = pTinaColorOversamplingSlider;
-    tinaSampleJitteringCheckBox = pTinaSampleJitteringCheckBox;
     filterKernelFlatPreviewBtn = pFilterKernelFlatPreviewBtn;
     tinaPostNoiseFilterCheckBox = pTinaPostNoiseFilterCheckBox;
     tinaPostNoiseThresholdField = pTinaPostNoiseThresholdField;
@@ -1281,6 +1322,19 @@ public class TinaControllerParameter {
     this.postBokehFilterKernelCmb = postBokehFilterKernelCmb;
     this.gpuQualityProfileCmb = gpuQualityProfileCmb;
     this.gpuResolutionProfileCmb = gpuResolutionProfileCmb;
+    this.lowDensityBrightnessREd = lowDensityBrightnessREd;
+    this.lowDensityBrightnessSlider = lowDensityBrightnessSlider;
+    this.balanceRedREd = balanceRedREd;
+    this.balanceRedSlider = balanceRedSlider;
+    this.balanceGreenREd = balanceGreenREd;
+    this.balanceGreenSlider = balanceGreenSlider;
+    this.balanceBlueREd = balanceBlueREd;
+    this.balanceBlueSlider = balanceBlueSlider;
+    this.backgroundColorURIndicatorBtn = backgroundColorURIndicatorBtn;
+    this.backgroundColorLLIndicatorBtn = backgroundColorLLIndicatorBtn;
+    this.backgroundColorLRIndicatorBtn = backgroundColorLRIndicatorBtn;
+    this.backgroundColorTypeCmb = backgroundColorTypeCmb;
+    this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {
@@ -1363,7 +1417,8 @@ public class TinaControllerParameter {
       JButton pMeshGenGenerateBtn, JPanel pMeshGenTopViewRootPnl, JPanel pMeshGenFrontViewRootPnl, JPanel pMeshGenPerspectiveViewRootPnl,
       JWFNumberField pMeshGenCentreXREd, JSlider pMeshGenCentreXSlider, JWFNumberField pMeshGenCentreYREd,
       JSlider pMeshGenCentreYSlider, JWFNumberField pMeshGenZoomREd, JSlider pMeshGenZoomSlider, JWFNumberField pMeshGenZMinREd,
-      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider, JButton pMeshGenTopViewRenderBtn,
+      JSlider pMeshGenZMinSlider, JWFNumberField pMeshGenZMaxREd, JSlider pMeshGenZMaxSlider,
+      JWFNumberField pMeshGenCellSizeREd, JButton pMeshGenTopViewRenderBtn,
       JButton pMeshGenFrontViewRenderBtn, JButton pMeshGenPerspectiveViewRenderBtn, JButton pMeshGenTopViewToEditorBtn,
       JButton pMeshGenLoadSequenceBtn, JWFNumberField pMeshGenSequenceWidthREd, JWFNumberField pMeshGenSequenceHeightREd,
       JWFNumberField pMeshGenSequenceSlicesREd, JWFNumberField pMeshGenSequenceDownSampleREd, JWFNumberField pMeshGenSequenceFilterRadiusREd,
@@ -1373,9 +1428,9 @@ public class TinaControllerParameter {
       JWFNumberField pMeshGenPreviewPositionXREd, JWFNumberField pMeshGenPreviewPositionYREd,
       JWFNumberField pMeshGenPreviewSizeREd, JWFNumberField pMeshGenPreviewScaleZREd, JWFNumberField pMeshGenPreviewRotateAlphaREd,
       JWFNumberField pMeshGenPreviewRotateBetaREd, JWFNumberField pMeshGenPreviewPointsREd, JWFNumberField pMeshGenPreviewPolygonsREd,
-      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn, JWFNumberField pMeshGenThicknessModREd,
-      JWFNumberField pMeshGenThicknessSamplesREd, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
-      JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb) {
+      JButton pMeshGenRefreshPreviewBtn, JButton pMeshGenPreviewSunflowExportBtn, JComboBox pMeshGenPreFilter1Cmb, JComboBox pMeshGenPreFilter2Cmb,
+      JWFNumberField pMeshGenImageStepREd, JComboBox pMeshGenOutputTypeCmb, JCheckBox pMeshGenTaubinSmoothCbx, JWFNumberField pMeshGenSmoothPassesREd,
+      JWFNumberField pMeshGenSmoothLambdaREd, JWFNumberField pMeshGenSmoothMuREd) {
     meshGenFromEditorBtn = pMeshGenFromEditorBtn;
     meshGenFromClipboardBtn = pMeshGenFromClipboardBtn;
     meshGenLoadFlameBtn = pMeshGenLoadFlameBtn;
@@ -1399,6 +1454,7 @@ public class TinaControllerParameter {
     meshGenZMinSlider = pMeshGenZMinSlider;
     meshGenZMaxREd = pMeshGenZMaxREd;
     meshGenZMaxSlider = pMeshGenZMaxSlider;
+    meshGenCellSizeREd = pMeshGenCellSizeREd;
     meshGenTopViewRenderBtn = pMeshGenTopViewRenderBtn;
     meshGenFrontViewRenderBtn = pMeshGenFrontViewRenderBtn;
     meshGenPerspectiveViewRenderBtn = pMeshGenPerspectiveViewRenderBtn;
@@ -1429,12 +1485,14 @@ public class TinaControllerParameter {
     meshGenPreviewPolygonsREd = pMeshGenPreviewPolygonsREd;
     meshGenRefreshPreviewBtn = pMeshGenRefreshPreviewBtn;
     meshGenPreviewSunflowExportBtn = pMeshGenPreviewSunflowExportBtn;
-    meshGenThicknessModREd = pMeshGenThicknessModREd;
-    meshGenThicknessSamplesREd = pMeshGenThicknessSamplesREd;
     meshGenPreFilter1Cmb = pMeshGenPreFilter1Cmb;
     meshGenPreFilter2Cmb = pMeshGenPreFilter2Cmb;
     meshGenImageStepREd = pMeshGenImageStepREd;
     meshGenOutputTypeCmb = pMeshGenOutputTypeCmb;
+    meshGenTaubinSmoothCbx = pMeshGenTaubinSmoothCbx;
+    meshGenSmoothPassesREd = pMeshGenSmoothPassesREd;
+    meshGenSmoothLambdaREd = pMeshGenSmoothLambdaREd;
+    meshGenSmoothMuREd = pMeshGenSmoothMuREd;
   }
 
   public void setHelpParams(JTextPane pMeshGenHintPane, JTextPane pHelpPane, JTextPane pApophysisHintsPane) {

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import java.io.File;
 import java.util.List;
 
 import org.jwildfire.base.Prefs;
@@ -32,19 +33,28 @@ public class SubFlameWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String RESSOURCE_FLAME = "flame";
+  public static final String RESSOURCE_FLAME_FILENAME = "flame_filename";
+
   public static final String PARAM_OFFSETX = "offset_x";
   public static final String PARAM_OFFSETY = "offset_y";
   public static final String PARAM_OFFSETZ = "offset_z";
   public static final String PARAM_COLORSCALE_Z = "colorscale_z";
   public static final String PARAM_COLOR_MODE = "color_mode";
 
-  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_COLOR_MODE };
-  private static final String[] ressourceNames = { RESSOURCE_FLAME };
+  private static final String PARAM_FLAME_IS_SEQUENCE = "flame_is_sequence";
+  private static final String PARAM_FLAME_SEQUENCE_START = "flame_sequence_start";
+  private static final String PARAM_FLAME_SEQUENCE_DIGITS = "flame_sequence_digits";
+
+  private static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_COLOR_MODE, PARAM_FLAME_IS_SEQUENCE, PARAM_FLAME_SEQUENCE_START, PARAM_FLAME_SEQUENCE_DIGITS };
+  private static final String[] ressourceNames = { RESSOURCE_FLAME, RESSOURCE_FLAME_FILENAME };
 
   private double offset_x = 0.0;
   private double offset_y = 0.0;
   private double offset_z = 0.0;
   private double colorscale_z = 0.0;
+  private int flame_is_sequence = 0;
+  private int flame_sequence_start = 1;
+  private int flame_sequence_digits = 4;
 
   private final static int CM_OFF = -1;
   private final static int CM_DIRECT = 0;
@@ -55,7 +65,10 @@ public class SubFlameWFFunc extends VariationFunc {
 
   private int color_mode = CM_OFF;
 
+  private String flame_filename = null;
+
   private Flame flame;
+
   private XForm xf;
   private XYZPoint p;
   private XYZPoint q = new XYZPoint();
@@ -151,7 +164,7 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, color_mode };
+    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, color_mode, flame_is_sequence, flame_sequence_start, flame_sequence_digits };
   }
 
   @Override
@@ -166,6 +179,12 @@ public class SubFlameWFFunc extends VariationFunc {
       colorscale_z = pValue;
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
       color_mode = limitIntVal(Tools.FTOI(pValue), CM_OFF, CM_BRIGHTNESS);
+    else if (PARAM_FLAME_IS_SEQUENCE.equalsIgnoreCase(pName))
+      flame_is_sequence = Tools.FTOI(pValue);
+    else if (PARAM_FLAME_SEQUENCE_START.equalsIgnoreCase(pName))
+      flame_sequence_start = Tools.FTOI(pValue);
+    else if (PARAM_FLAME_SEQUENCE_DIGITS.equalsIgnoreCase(pName))
+      flame_sequence_digits = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -175,12 +194,24 @@ public class SubFlameWFFunc extends VariationFunc {
     return "subflame_wf";
   }
 
-  private void parseFlame() {
+  private void parseFlame(FlameTransformationContext pContext) {
     flame = null;
     xf = null;
     p = null;
     try {
-      List<Flame> flames = new FlameReader(Prefs.getPrefs()).readFlamesfromXML(flameXML);
+      List<Flame> flames;
+      String filename = getCurrFlameFilename(pContext);
+
+      if (filename != null && !filename.isEmpty()) {
+        if (!new File(filename).exists()) {
+          throw new RuntimeException("Flame <" + filename + "> not found");
+        }
+        flames = new FlameReader(Prefs.getPrefs()).readFlames(filename);
+      }
+      else {
+        flames = new FlameReader(Prefs.getPrefs()).readFlamesfromXML(flameXML);
+      }
+
       if (flames.size() > 0) {
         flame = flames.get(0);
       }
@@ -195,6 +226,7 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    parseFlame(pContext);
     prefuseIter(pContext);
   }
 
@@ -260,17 +292,54 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (flameXML != null ? flameXML.getBytes() : null) };
+    return new byte[][] { (flameXML != null ? flameXML.getBytes() : null), (flame_filename != null ? flame_filename.getBytes() : null) };
+  }
+
+  @Override
+  public RessourceType getRessourceType(String pName) {
+    if (RESSOURCE_FLAME_FILENAME.equalsIgnoreCase(pName)) {
+      return RessourceType.FLAME_FILENAME;
+    }
+    else if (RESSOURCE_FLAME.equalsIgnoreCase(pName)) {
+      return RessourceType.BYTEARRAY;
+    }
+    else
+      throw new IllegalArgumentException(pName);
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_FLAME.equalsIgnoreCase(pName)) {
       flameXML = pValue != null ? new String(pValue) : "";
-      parseFlame();
+    }
+    else if (RESSOURCE_FLAME_FILENAME.equalsIgnoreCase(pName)) {
+      flame_filename = pValue != null ? new String(pValue) : "";
     }
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  private String getCurrFlameFilename(FlameTransformationContext pContext) {
+    if (flame_is_sequence > 0 && flame_filename != null && !flame_filename.isEmpty()) {
+      int frame = pContext.getFrame() - 1 + flame_sequence_start;
+      String baseFilename;
+      String fileExt;
+      int p = flame_filename.lastIndexOf(".");
+      if (p < 0 || p <= flame_sequence_digits || p == flame_filename.length() - 1)
+        return flame_filename;
+      baseFilename = flame_filename.substring(0, p - flame_sequence_digits);
+      fileExt = flame_filename.substring(p, flame_filename.length());
+
+      String number = String.valueOf(frame);
+      while (number.length() < flame_sequence_digits) {
+        number = "0" + number;
+      }
+      return baseFilename + number + fileExt;
+
+    }
+    else {
+      return flame_filename;
+    }
   }
 
 }

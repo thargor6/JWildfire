@@ -120,7 +120,10 @@ public class PostDOFCalculator {
       else {
         stepSize = 1.0;
       }
-      int maxSteps = 200;
+
+      stepSize *= 0.5;
+
+      int maxSteps = (int) imgSize;
       if ((radius / stepSize) > maxSteps) {
         stepSize = radius / (double) maxSteps;
       }

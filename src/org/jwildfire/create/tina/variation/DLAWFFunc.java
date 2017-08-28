@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import odk.lang.DoubleWrapper;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
@@ -33,6 +31,8 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+
+import odk.lang.DoubleWrapper;
 
 public class DLAWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -105,6 +105,7 @@ public class DLAWFFunc extends VariationFunc {
 
   private DoubleWrapper sina = new DoubleWrapper();
   private DoubleWrapper cosa = new DoubleWrapper();
+  private List<Point> _points;
 
   private List<Point> getPoints() {
     double jitterRadius = Math.max(Math.min(1.0, jitter), 0.0);
@@ -148,9 +149,8 @@ public class DLAWFFunc extends VariationFunc {
   }
 
   private Point getRandomPoint() {
-    List<Point> points = getPoints();
-    if (points.size() > 0) {
-      return points.get((int) (Math.random() * points.size()));
+    if (_points.size() > 0) {
+      return _points.get((int) (Math.random() * _points.size()));
     }
     else
       return ZERO;
@@ -234,5 +234,6 @@ public class DLAWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _max_iter = pContext.isPreview() ? (max_iter < 6000) ? max_iter : 6000 : max_iter;
+    _points = getPoints();
   }
 }

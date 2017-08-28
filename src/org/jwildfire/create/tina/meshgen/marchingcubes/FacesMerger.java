@@ -60,7 +60,7 @@ public class FacesMerger {
 
   }
 
-  public static Mesh generateMesh(RawFaces pRawFaces) {
+  public static Mesh generateMesh(RawFaces pRawFaces, float zScale) {
     List<Point3f> vertices = pRawFaces.getVertices();
     List<Point3f> faceNormals = pRawFaces.getNormals();
 
@@ -148,7 +148,7 @@ public class FacesMerger {
         }
         point.x = (point.x + dx) * scale;
         point.y = (point.y + dy) * scale;
-        point.z = (point.z + dz) * scale;
+        point.z = (point.z + dz) * scale * zScale;
       }
       t1 = System.currentTimeMillis();
       System.out.println("SCALING POINTS: " + (t1 - t0) / 1000.0 + "s");
@@ -158,7 +158,7 @@ public class FacesMerger {
       for (Point3f point : points) {
         point.x = (point.x + dx) * scale;
         point.y = (point.y + dy) * scale;
-        point.z = (point.z + dz) * scale;
+        point.z = (point.z + dz) * scale * zScale;
       }
       t1 = System.currentTimeMillis();
       System.out.println("SCALING POINTS: " + (t1 - t0) / 1000.0 + "s");

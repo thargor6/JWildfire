@@ -334,8 +334,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
       flame.setSampleDensity(10);
       info.setRenderHDR(prefs.isTinaSaveHDRInIR());
       info.setRenderZBuffer(false);
-      if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
-        image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+      if (flame.getBgColorRed() > 0 || flame.getBgColorGreen() > 0 || flame.getBgColorBlue() > 0) {
+        image.fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
       }
       renderer = new FlameRenderer(flame, prefs, flame.isBGTransparency(), false);
       renderer.registerIterationObserver(this);
@@ -897,8 +897,8 @@ public class TinaInteractiveRendererController implements IterationObserver {
         //
         renderer = newRenderer;
         setupProfiles(currFlame);
-        if (flame.getBGColorRed() > 0 || flame.getBGColorGreen() > 0 || flame.getBGColorBlue() > 0) {
-          image.fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        if (flame.getBgColorRed() > 0 || flame.getBgColorGreen() > 0 || flame.getBgColorBlue() > 0) {
+          image.fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
         }
         renderer.registerIterationObserver(this);
         displayUpdater = createDisplayUpdater();

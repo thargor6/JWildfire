@@ -72,6 +72,7 @@ public class VariationFuncList {
     aliasMap.put(CircleRandFunc.class, "CircleRand");
     aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
     aliasMap.put(MobiusNFunc.class, "MobiusN");
+    aliasMap.put(Tile_LogFunc.class, "tile_log");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -480,6 +481,74 @@ public class VariationFuncList {
     registerVariationFunc(CheckerboardWFFunc.class);
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
     
+    registerVariationFunc(DLA3DWFFunc.class);
+
+    registerVariationFunc(Waves2RadialFunc.class);
+    registerVariationFunc(CirclesplitFunc.class);
+    registerVariationFunc(LogTile2Func.class);
+    registerVariationFunc(MobiqFunc.class);
+    registerVariationFunc(TileHlpFunc.class);
+    registerVariationFunc(SplipticBSFunc.class);
+    registerVariationFunc(Tile_LogFunc.class);   
+    registerVariationFunc(Cos2_BSFunc.class);      
+    registerVariationFunc(Cot2_BSFunc.class);      
+    registerVariationFunc(Csc2_BSFunc.class);         
+    registerVariationFunc(Tan2_BSFunc.class);          
+    registerVariationFunc(Sec2_BSFunc.class);     
+    registerVariationFunc(Exp2_BSFunc.class);  
+    registerVariationFunc(Sin2_BSFunc.class);  
+    registerVariationFunc(Csch2_BSFunc.class);  
+    registerVariationFunc(Cosh2_BSFunc.class);  
+    registerVariationFunc(Sech2_BSFunc.class);     
+    registerVariationFunc(Coth2_BSFunc.class);     
+    registerVariationFunc(Sinh2_BSFunc.class);  
+    registerVariationFunc(Tanh2_BSFunc.class); 
+    registerVariationFunc(CosqFunc.class); 
+    registerVariationFunc(SinqFunc.class); 
+    registerVariationFunc(TanqFunc.class);     
+    registerVariationFunc(TanhqFunc.class); 
+    registerVariationFunc(CoshqFunc.class); 
+    registerVariationFunc(SinhqFunc.class); 
+    registerVariationFunc(CotqFunc.class);     
+    registerVariationFunc(CothqFunc.class);   
+    registerVariationFunc(CscqFunc.class);      
+    registerVariationFunc(CschqFunc.class);  
+    registerVariationFunc(EstiqFunc.class);      
+    registerVariationFunc(SecqFunc.class);
+    registerVariationFunc(SechqFunc.class);
+    registerVariationFunc(Spirograph3DFunc.class);
+    registerVariationFunc(HypershiftFunc.class);
+    registerVariationFunc(DSphericalFunc.class);    
+    registerVariationFunc(CircularFunc.class);        
+    registerVariationFunc(Circular2Func.class);  
+    registerVariationFunc(ErfFunc.class);  
+    registerVariationFunc(Erf3DFunc.class); 
+    registerVariationFunc(XErfFunc.class);  
+    registerVariationFunc(Pressure_WaveFunc.class);  
+    registerVariationFunc(AtanFunc.class);  
+    registerVariationFunc(HelixFunc.class); 
+    registerVariationFunc(HelicoidFunc.class); 
+    registerVariationFunc(GammaFunc.class); 
+    registerVariationFunc(ShiftFunc.class);     
+    registerVariationFunc(ChunkFunc.class);
+    registerVariationFunc(CrobFunc.class);
+    registerVariationFunc(Hole2Func.class);
+    registerVariationFunc(CPow2Func.class);
+    registerVariationFunc(GridoutFunc.class);     
+    registerVariationFunc(Gridout2Func.class);    
+    registerVariationFunc(BlurLinearFunc.class);     
+    registerVariationFunc(SigmoidFunc.class); 
+    registerVariationFunc(DCCracklePWFFunc.class); 
+    registerVariationFunc(MinkQMFunc.class); 
+    registerVariationFunc(MinkowskopeFunc.class); 
+    registerVariationFunc(R_CircleblurFunc.class); 
+    registerVariationFunc(TruchetAEFunc.class); 
+    registerVariationFunc(TruchetFillFunc.class); 
+    // registerVariationFunc(SphTiling3Func.class); 
+    registerVariationFunc(SphTiling3V2Func.class); 
+    registerVariationFunc(Panorama1Func.class); 
+    registerVariationFunc(Panorama2Func.class);
+
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
 

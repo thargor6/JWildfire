@@ -73,14 +73,29 @@ public class NormalsCalculator implements Serializable {
     }
   }
 
+  public static class Corners implements Serializable {
+    public final Corner a, b, c;
+
+    public Corners(Corner a, Corner b, Corner c) {
+      super();
+      this.a = a;
+      this.b = b;
+      this.c = c;
+    }
+
+    public boolean isInside(int xOff, int yOff) {
+      return a.isInside(xOff, yOff) && b.isInside(xOff, yOff) && c.isInside(xOff, yOff);
+    }
+  }
+
   private final CornerPair[] NNEIGHBOURS_COARSE = new CornerPair[] {
       new CornerPair(new Corner(-1, 0), new Corner(-1, -1)),
-      new CornerPair(new Corner(-1, -1), new Corner(0, -1)),
       new CornerPair(new Corner(0, -1), new Corner(1, -1)),
-      new CornerPair(new Corner(1, -1), new Corner(1, 0)),
       new CornerPair(new Corner(1, 0), new Corner(1, 1)),
-      new CornerPair(new Corner(1, 1), new Corner(0, 1)),
       new CornerPair(new Corner(0, 1), new Corner(-1, 1)),
+      new CornerPair(new Corner(-1, -1), new Corner(0, -1)),
+      new CornerPair(new Corner(1, -1), new Corner(1, 0)),
+      new CornerPair(new Corner(1, 1), new Corner(0, 1)),
       new CornerPair(new Corner(-1, 1), new Corner(-1, 0))
   };
 
@@ -95,21 +110,25 @@ public class NormalsCalculator implements Serializable {
     nxBuf[x][y] = nyBuf[x][y] = nzBuf[x][y] = ZBUF_ZMIN;
     if (zb != ZBUF_ZMIN) {
       double nx = 0.0, ny = 0.0, nz = 0.0;
-      double minzdist = MathLib.fabs(ZBUF_ZMIN * 10.0);
+      double minzdist = MathLib.fabs((double) ZBUF_ZMIN * 10.0);
       int samples = 0;
       for (int k = 0; k < NNEIGHBOURS_COARSE.length; k++) {
         if (NNEIGHBOURS_COARSE[k].isInside(x, y)) {
-          double azb = originZBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
+          int adx = NNEIGHBOURS_COARSE[k].a.dx;
+          int ady = NNEIGHBOURS_COARSE[k].a.dy;
+          double azb = originZBuf[x + adx][y + ady];
           if (azb != ZBUF_ZMIN) {
-            double ax = xb - originXBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
-            double ay = yb - originYBuf[x + NNEIGHBOURS_COARSE[k].a.dx][y + NNEIGHBOURS_COARSE[k].a.dy];
+            double ax = xb - originXBuf[x + adx][y + ady];
+            double ay = yb - originYBuf[x + adx][y + ady];
             double az = zb - azb;
 
-            double bzb = originZBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
+            int bdx = NNEIGHBOURS_COARSE[k].b.dx;
+            int bdy = NNEIGHBOURS_COARSE[k].b.dy;
+            double bzb = originZBuf[x + bdx][y + bdy];
             if (bzb != ZBUF_ZMIN) {
               samples++;
-              double bx = xb - originXBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
-              double by = yb - originYBuf[x + NNEIGHBOURS_COARSE[k].b.dx][y + NNEIGHBOURS_COARSE[k].b.dy];
+              double bx = xb - originXBuf[x + bdx][y + bdy];
+              double by = yb - originYBuf[x + bdx][y + bdy];
               double bz = zb - bzb;
               double zdist = MathLib.fabs(az) + MathLib.fabs(bz);
               if (zdist < minzdist) {

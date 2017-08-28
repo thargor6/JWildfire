@@ -44,9 +44,6 @@ public class PostPointSymmetryWFFunc extends VariationFunc {
     int idx = pContext.random(order);
     pVarTP.x = centre_x + dx * _cosa[idx] + dy * _sina[idx];
     pVarTP.y = centre_y + dy * _cosa[idx] - dx * _sina[idx];
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
   }
 
   @Override

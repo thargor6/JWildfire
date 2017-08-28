@@ -29,17 +29,13 @@ public class RenderSlicesThread extends MeshGenRenderThread {
   public static final double DFLT_ANTIALIAS_RADIUS = 0.16;
   public static final double DFLT_ANTIALIAS_AMOUNT = 0.5;
   private int slicesCount, slicesPerRender;
-  private final double thicknessMod;
-  private final int thicknessSamples;
 
   public RenderSlicesThread(Prefs pPrefs, Flame pFlame, String pOutFilePattern, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater, int pRenderWidth, int pRenderHeight, int pSlicesCount, int pSlicesPerRender, int pQuality,
-      double pZMin, double pZMax, double pThicknessMod, int pThicknessSamples) {
+      double pZMin, double pZMax) {
     super(pPrefs, pFlame, pOutFilePattern, pFinishEvent, pProgressUpdater, pRenderWidth, pRenderHeight, pQuality,
         pZMin, pZMax);
     slicesCount = pSlicesCount;
     slicesPerRender = pSlicesPerRender;
-    thicknessMod = pThicknessMod;
-    thicknessSamples = pThicknessSamples;
   }
 
   @Override
@@ -62,7 +58,7 @@ public class RenderSlicesThread extends MeshGenRenderThread {
     renderer.setProgressUpdater(progressUpdater);
     SliceRenderInfo renderInfo = new SliceRenderInfo(renderWidth, renderHeight, RenderMode.PRODUCTION, slicesCount, zmin, zmax, slicesPerRender);
 
-    renderer.renderSlices(renderInfo, outFilePattern, thicknessMod, thicknessSamples);
+    renderer.renderSlices(renderInfo, outFilePattern);
   }
 
 }

@@ -1,3 +1,19 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2017 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
 package org.jwildfire.create.tina.io;
 
 import java.util.List;
@@ -10,6 +26,7 @@ import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -28,6 +45,7 @@ import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
@@ -53,13 +71,21 @@ public class AbstractFlameReader {
   public static final String ATTR_ROTATE = "rotate";
   public static final String ATTR_FILTER = "filter";
   public static final String ATTR_SPATIAL_OVERSAMPLE = "oversample";
-  public static final String ATTR_COLOR_OVERSAMPLE = "color_oversample";
-  public static final String ATTR_SAMPLE_JITTERING = "sample_jittering";
   public static final String ATTR_POST_NOISE_FILTER = "post_noise_filter";
   public static final String ATTR_POST_NOISE_FILTER_THRESHOLD = "post_noise_filter_threshold";
   public static final String ATTR_FILTER_KERNEL = "filter_kernel";
+  public static final String ATTR_FILTER_TYPE = "filter_type";
+  public static final String ATTR_FILTER_SHARPNESS = "filter_sharpness";
+  public static final String ATTR_FILTER_LOW_DENSITY = "filter_low_density";
+  public static final String ATTR_FILTER_INDICATOR = "filter_indicator";
   public static final String ATTR_QUALITY = "quality";
   public static final String ATTR_BACKGROUND = "background";
+  public static final String ATTR_BACKGROUND_TYPE = "background_type";
+  public static final String ATTR_BACKGROUND_UL = "background_ul";
+  public static final String ATTR_BACKGROUND_UR = "background_ur";
+  public static final String ATTR_BACKGROUND_LL = "background_ll";
+  public static final String ATTR_BACKGROUND_LR = "background_lr";
+  public static final String ATTR_BACKGROUND_CC = "background_cc";
   public static final String ATTR_BG_TRANSPARENCY = "bg_transparency";
   public static final String ATTR_BRIGHTNESS = "brightness";
   public static final String ATTR_SATURATION = "saturation";
@@ -188,6 +214,11 @@ public class AbstractFlameReader {
   public static final String CURVE_ATTR_X = "x";
   public static final String CURVE_ATTR_Y = "y";
 
+  public static final String ATTR_LOW_DENSITY_BRIGHTNESS = "low_density_brightness";
+  public static final String ATTR_BALANCING_RED = "balancing_red";
+  public static final String ATTR_BALANCING_GREEN = "balancing_green";
+  public static final String ATTR_BALANCING_BLUE = "balancing_blue";
+
   protected AbstractFlameReader(Prefs pPrefs) {
     prefs = pPrefs;
   }
@@ -248,23 +279,50 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_FILTER)) != null) {
       pFlame.setSpatialFilterRadius(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_FILTER_KERNEL)) != null) {
+    if ((hs = atts.get(ATTR_FILTER_SHARPNESS)) != null) {
+      pFlame.setSpatialFilterSharpness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_FILTER_LOW_DENSITY)) != null) {
+      pFlame.setSpatialFilterLowDensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_FILTER_TYPE)) != null) {
       try {
-        FilterKernelType kernel = FilterKernelType.valueOf(hs);
-        pFlame.setSpatialFilterKernel(kernel);
+        FilteringType filteringType = FilteringType.valueOf(hs);
+        pFlame.setSpatialFilteringType(filteringType);
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
     }
+    if ((hs = atts.get(ATTR_FILTER_KERNEL)) != null) {
+      try {
+        FilterKernelType kernel = FilterKernelType.valueOf(hs);
+        pFlame.setSpatialFilterKernel(kernel);
+        if (atts.get(ATTR_FILTER_TYPE) == null) {
+          if (FilterKernelType.getAdapativeFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.ADAPTIVE);
+          }
+          else if (FilterKernelType.getSharpeningFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SHARPENING);
+          }
+          else if (FilterKernelType.getSmoothingFilters().contains(kernel)) {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+          }
+          else {
+            pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+            pFlame.setSpatialFilterKernel(FilterKernelType.SINEPOW10);
+          }
+        }
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_FILTER_INDICATOR)) != null) {
+      pFlame.setSpatialFilterIndicator(Integer.parseInt(hs) == 1);
+    }
     if ((hs = atts.get(ATTR_SPATIAL_OVERSAMPLE)) != null) {
       pFlame.setSpatialOversampling(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_COLOR_OVERSAMPLE)) != null) {
-      pFlame.setColorOversampling(Integer.parseInt(hs));
-    }
-    if ((hs = atts.get(ATTR_SAMPLE_JITTERING)) != null) {
-      pFlame.setSampleJittering(Integer.parseInt(hs) == 1);
     }
     if ((hs = atts.get(ATTR_POST_NOISE_FILTER)) != null) {
       pFlame.setPostNoiseFilter(Integer.parseInt(hs) == 1);
@@ -275,12 +333,56 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_QUALITY)) != null) {
       pFlame.setSampleDensity(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_BACKGROUND_TYPE)) != null) {
+      try {
+        pFlame.setBgColorType(BGColorType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if ((hs = atts.get(ATTR_BACKGROUND)) != null) {
       String s[] = hs.split(" ");
-      pFlame.setBGColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
-      pFlame.setBGColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
-      pFlame.setBGColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+      pFlame.setBgColorRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+      // old flames without a bg color type
+      if (atts.get(ATTR_BACKGROUND_TYPE) == null) {
+        pFlame.setBgColorType(BGColorType.SINGLE_COLOR);
+      }
     }
+    if ((hs = atts.get(ATTR_BACKGROUND_UL)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorULRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorULGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorULBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_UR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorURRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorURGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorURBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_LL)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorLLRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorLLGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorLLBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_LR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorLRRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorLRGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorLRBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_BACKGROUND_CC)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setBgColorCCRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setBgColorCCGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setBgColorCCBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+
     if ((hs = atts.get(ATTR_BRIGHTNESS)) != null) {
       pFlame.setBrightness(Double.parseDouble(hs));
     }
@@ -302,6 +404,19 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_VIBRANCY)) != null) {
       pFlame.setVibrancy(Double.parseDouble(hs));
     }
+    if ((hs = atts.get(ATTR_LOW_DENSITY_BRIGHTNESS)) != null) {
+      pFlame.setLowDensityBrightness(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_RED)) != null) {
+      pFlame.setBalanceRed(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_GREEN)) != null) {
+      pFlame.setBalanceGreen(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_BALANCING_BLUE)) != null) {
+      pFlame.setBalanceBlue(Double.parseDouble(hs));
+    }
+
     if ((hs = atts.get(ATTR_CONTRAST)) != null) {
       pFlame.setContrast(Double.parseDouble(hs));
     }
@@ -930,7 +1045,7 @@ public class AbstractFlameReader {
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
           Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
-          String priority = atts.get(varName + "_" + ATTR_FX_PRIORITY);
+          String priority = atts.get(rawName + "_" + ATTR_FX_PRIORITY);
           if (priority != null && priority.length() > 0) {
             variation.setPriority(Integer.parseInt(priority));
           }
@@ -940,7 +1055,7 @@ public class AbstractFlameReader {
             if (ressNames != null) {
               for (String pName : ressNames) {
                 String pHs;
-                if ((pHs = atts.get(name + "_" + pName)) != null) {
+                if ((pHs = atts.get(rawName + "_" + pName)) != null) {
                   variation.getFunc().setRessource(pName, Tools.hexStringToByteArray(pHs));
                 }
               }

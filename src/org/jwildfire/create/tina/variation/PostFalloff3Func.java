@@ -28,9 +28,9 @@ public class PostFalloff3Func extends AbstractFalloff3Func {
 
   @Override
   protected void applyVOut(XYZPoint pAffineTP, XYZPoint pVarTP, Double4 pVOut, double pWeight) {
-    pVarTP.x += pVOut.x * pWeight;
-    pVarTP.y += pVOut.y * pWeight;
-    pVarTP.z += pVOut.z * pWeight;
+    pVarTP.x = pVOut.x * pWeight;
+    pVarTP.y = pVOut.y * pWeight;
+    pVarTP.z = pVOut.z * pWeight;
   }
 
   @Override

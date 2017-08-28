@@ -29,6 +29,7 @@ import java.util.List;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ThreadTools;
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.Flame;
@@ -37,8 +38,13 @@ import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dEye;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.raster.AbstractRaster;
+import org.jwildfire.create.tina.base.raster.PointCloudOBJWriter;
+import org.jwildfire.create.tina.base.raster.PointCloudPLYWriter;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud.PCPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.render.image.PostFilterImageThread;
 import org.jwildfire.create.tina.render.image.RenderHDRImageThread;
 import org.jwildfire.create.tina.render.image.RenderImageSimpleScaledThread;
@@ -149,12 +155,23 @@ public class FlameRenderer {
     rasterSize = rasterWidth * rasterHeight;
   }
 
-  private void initRaster(int pImageWidth, int pImageHeight) {
+  private void initRaster(RenderInfo pRenderInfo, int pImageWidth, int pImageHeight, double pSampleDensity) {
     initRasterSizes(pImageWidth, pImageHeight);
-    raster = allocRaster();
+    if (pRenderInfo.getRestoredRaster() != null) {
+      if (rasterWidth != pRenderInfo.getRestoredRaster().getRasterWidth()) {
+        throw new RuntimeException("Raster width does not match (" + rasterWidth + " != " + pRenderInfo.getRestoredRaster().getRasterWidth() + ")");
+      }
+      if (rasterHeight != pRenderInfo.getRestoredRaster().getRasterHeight()) {
+        throw new RuntimeException("Raster height does not match (" + rasterHeight + " != " + pRenderInfo.getRestoredRaster().getRasterHeight() + ")");
+      }
+      raster = pRenderInfo.getRestoredRaster();
+    }
+    else {
+      raster = allocRaster(oversample, pSampleDensity);
+    }
   }
 
-  private AbstractRaster allocRaster() {
+  private AbstractRaster allocRaster(int pOversample, double pSampleDensity) {
     Class<? extends AbstractRaster> rasterClass = prefs.getTinaRasterType().getRasterClass(flame);
     AbstractRaster raster;
     try {
@@ -166,7 +183,7 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
-    raster.allocRaster(flame, rasterWidth, rasterHeight);
+    raster.allocRaster(flame, rasterWidth, rasterHeight, pOversample, pSampleDensity);
     return raster;
   }
 
@@ -180,6 +197,7 @@ public class FlameRenderer {
 
       flame.setSampleDensity(quality);
       RenderedFlame res = new RenderedFlame();
+      raster.finalizeRaster();
       res.init(renderInfo, flame);
       renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
       return res;
@@ -210,30 +228,6 @@ public class FlameRenderer {
     }
     finally {
       flame.setSampleDensity(oldDensity);
-    }
-  }
-
-  public RenderedFlame rerenderFlame(RenderInfo pRenderInfo) {
-    renderInfo = pRenderInfo;
-    if (!Stereo3dMode.NONE.equals(flame.getStereo3dMode())) {
-      return renderImageStereo3d(pRenderInfo);
-    }
-    else {
-      RenderedFlame res = new RenderedFlame();
-      res.init(pRenderInfo, flame);
-
-      if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
-        FlameRendererView view = createView(flame);
-        raster.notifyInit(view.getLightViewCalculator());
-      }
-
-      if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
-        renderImageSimple(res.getImage());
-      }
-      else {
-        renderImage(res.getImage(), res.getHDRImage(), res.getZBuffer());
-      }
-      return res;
     }
   }
 
@@ -461,7 +455,6 @@ public class FlameRenderer {
         if (renderScale > 0) {
           res.getImage().resetImage(res.getImage().getImageWidth() * renderScale, res.getImage().getImageHeight() * renderScale);
         }
-        res.getImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
         if (flame.getBGImageFilename().length() > 0) {
           try {
             res.getImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
@@ -470,9 +463,12 @@ public class FlameRenderer {
             ex.printStackTrace();
           }
         }
+        else {
+          new FlameBGColorHandler(flame).fillBackground(res.getImage());
+        }
       }
       if (renderHDR) {
-        res.getHDRImage().fillBackground(flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue());
+        res.getHDRImage().fillBackground(flame.getBgColorRed(), flame.getBgColorGreen(), flame.getBgColorBlue());
         try {
           res.getHDRImage().fillBackground((SimpleImage) RessourceManager.getImage(flame.getBGImageFilename()));
         }
@@ -488,20 +484,32 @@ public class FlameRenderer {
       SimpleImage img = renderNormal ? res.getImage() : null;
       SimpleHDRImage hdrImg = renderHDR ? res.getHDRImage() : null;
       if (renderNormal) {
-        initRaster(img.getImageWidth(), img.getImageHeight());
+        initRaster(pRenderInfo, img.getImageWidth(), img.getImageHeight(), flame.getSampleDensity());
       }
       else if (renderHDR) {
-        initRaster(hdrImg.getImageWidth(), hdrImg.getImageHeight());
+        initRaster(pRenderInfo, hdrImg.getImageWidth(), hdrImg.getImageHeight(), flame.getSampleDensity());
       }
       else {
         throw new IllegalStateException();
       }
-      List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
-      for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+      if (pRenderInfo.getRestoredRaster() == null) {
+        List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
+        for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
+          renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+        }
+        forceAbort = false;
+        iterate(0, 1, renderFlames, null);
+        raster.finalizeRaster();
+        if (pRenderInfo.isStoreRaster()) {
+          res.setRaster(raster);
+        }
       }
-      forceAbort = false;
-      iterate(0, 1, renderFlames, null, 1.0, 1);
+      else {
+        if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
+          FlameRendererView view = createView(flame);
+          raster.notifyInit(view.getLightViewCalculator());
+        }
+      }
       if (!forceAbort) {
         if ((flame.getSampleDensity() <= 10.0 && flame.getSpatialFilterRadius() <= MathLib.EPSILON) || renderScale > 1) {
           renderImageSimple(img);
@@ -521,6 +529,7 @@ public class FlameRenderer {
     if (renderScale > 1) {
       throw new IllegalArgumentException("renderScale != 1");
     }
+
     if (pImage != null) {
       logDensityFilter.setRaster(raster, rasterWidth, rasterHeight, pImage.getImageWidth(), pImage.getImageHeight());
     }
@@ -533,8 +542,6 @@ public class FlameRenderer {
     else {
       throw new IllegalStateException();
     }
-
-    raster.finalizeRaster();
 
     renderImage(pImage);
     if (flame.isPostNoiseFilter() && flame.getPostNoiseFilterThreshold() > MathLib.EPSILON) {
@@ -696,13 +703,12 @@ public class FlameRenderer {
     }
   }
 
-  private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+  private AbstractRenderThread createFlameRenderThread(int pThreadId, int pThreadGroupSize, List<RenderPacket> pRenderPackets, long pSamples, List<RenderSlice> pSlices) {
+    return new FlatRenderThread(prefs, pThreadId, pThreadGroupSize, this, pRenderPackets, pSamples, pSlices);
   }
 
-  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices, double pSliceThicknessMod, int pSliceThicknessSamples) {
-    int SliceThicknessMultiplier = pSliceThicknessMod > MathLib.EPSILON && pSliceThicknessSamples > 0 ? pSliceThicknessSamples : 1;
-    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) SliceThicknessMultiplier / (double) (oversample) + 0.5));
+  private void iterate(int pPart, int pParts, List<List<RenderPacket>> pPackets, List<RenderSlice> pSlices) {
+    long nSamples = (long) ((flame.getSampleDensity() * (double) rasterSize / (double) flame.calcPostSymmetrySampleMultiplier() / (double) flame.calcStereo3dSampleMultiplier() / (double) (oversample) + 0.5));
     int PROGRESS_STEPS = 21;
     if (progressUpdater != null && pPart == 0) {
       progressChangePerPhase = (PROGRESS_STEPS - 1) * pParts;
@@ -713,7 +719,7 @@ public class FlameRenderer {
     runningThreads = new ArrayList<AbstractRenderThread>();
     int nThreads = pPackets.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices, pSliceThicknessMod, pSliceThicknessSamples);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices);
       runningThreads.add(t);
       new Thread(t).start();
     }
@@ -748,7 +754,7 @@ public class FlameRenderer {
     List<Thread> executingThreads = new ArrayList<Thread>();
     int nThreads = pFlames.size();
     for (int i = 0; i < nThreads; i++) {
-      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pFlames.get(i), -1, null, 0.0, 0);
+      AbstractRenderThread t = createFlameRenderThread(i, nThreads, pFlames.get(i), -1, null);
       if (pState != null) {
         t.setResumeState(pState[i]);
       }
@@ -907,7 +913,7 @@ public class FlameRenderer {
 
   public RenderThreads startRenderFlame(RenderInfo pRenderInfo) {
     renderInfo = pRenderInfo;
-    initRaster(pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight());
+    initRaster(pRenderInfo, pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight(), flame.getSampleDensity());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
       renderFlames.add(createRenderPackets(flame, flame.getFrame()));
@@ -932,7 +938,7 @@ public class FlameRenderer {
         for (int i = 0; i < header.numThreads; i++) {
           state[i] = (RenderThreadPersistentState) in.readObject();
         }
-        initRaster(renderInfo.getImageWidth(), renderInfo.getImageHeight());
+        initRaster(renderInfo, renderInfo.getImageWidth(), renderInfo.getImageHeight(), flame.getSampleDensity());
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
           renderFlames.add(createRenderPackets(flame, flame.getFrame()));
@@ -999,7 +1005,7 @@ public class FlameRenderer {
     preview = pPreview;
   }
 
-  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern, double pSliceThicknessMod, int pSliceThicknessSamples) {
+  public void renderSlices(SliceRenderInfo pSliceRenderInfo, String pFilenamePattern) {
     if (!flame.isRenderable())
       throw new RuntimeException("Slices can not be created of empty flames");
 
@@ -1028,7 +1034,7 @@ public class FlameRenderer {
       initRasterSizes(pSliceRenderInfo.getImageWidth(), pSliceRenderInfo.getImageHeight());
       List<RenderSlice> slices = new ArrayList<RenderSlice>();
       for (int i = 0; i < pSliceRenderInfo.getSlicesPerRender() && currSlice < pSliceRenderInfo.getSlices(); i++) {
-        RenderSlice slice = new RenderSlice(allocRaster(), currZ - thickness, currZ);
+        RenderSlice slice = new RenderSlice(allocRaster(flame.getSpatialOversampling(), flame.getSampleDensity()), currZ - thickness, currZ);
         slices.add(slice);
         currZ -= thickness;
         currSlice++;
@@ -1039,7 +1045,7 @@ public class FlameRenderer {
         renderFlames.add(createRenderPackets(flame, flame.getFrame()));
       }
 
-      iterate(0, 1, renderFlames, slices, pSliceThicknessMod, pSliceThicknessSamples);
+      iterate(0, 1, renderFlames, slices);
 
       if (!forceAbort) {
         LogDensityPoint logDensityPnt = new LogDensityPoint(flame.getActiveLightCount());
@@ -1082,18 +1088,66 @@ public class FlameRenderer {
     pFlame.setCamPerspective(0.0);
   }
 
-  protected AbstractRaster getRaster() {
-    return raster;
+  private void prepareFlameForPointCloudRendering(Flame pFlame) {
+    pFlame.setStereo3dMode(Stereo3dMode.NONE);
+    pFlame.setDimishZ(0.0);
+    pFlame.setCamDOF(0.0);
+    pFlame.setCamPerspective(0.0);
+    pFlame.setSpatialOversampling(1);
+    pFlame.setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
+    pFlame.setSpatialFilterRadius(0.0);
   }
 
-  public void renderPointCloud(String pFilename, double pZmin, double pZmax) {
-    initRaster(flame.getWidth(), flame.getHeight());
+  public void renderPointCloud(PointCloudRenderInfo pPointCloudRenderInfo, String pFilename) {
+    if (!flame.isRenderable())
+      throw new RuntimeException("Point clouds can not be created of empty flames");
+
+    renderInfo = pPointCloudRenderInfo.createRenderInfo();
+
+    progressDisplayPhaseCount = 1;
+    progressDisplayPhase = 0;
+
+    double zmin = pPointCloudRenderInfo.getZmin() < pPointCloudRenderInfo.getZmax() ? pPointCloudRenderInfo.getZmin() : pPointCloudRenderInfo.getZmax();
+    double zmax = pPointCloudRenderInfo.getZmin() < pPointCloudRenderInfo.getZmax() ? pPointCloudRenderInfo.getZmax() : pPointCloudRenderInfo.getZmin();
+
+    Flame currFlame = flame.makeCopy();
+    prepareFlameForPointCloudRendering(currFlame);
+
+    initRasterSizes(pPointCloudRenderInfo.getImageWidth(), pPointCloudRenderInfo.getImageHeight());
+
+    RasterPointCloud pcraster = new RasterPointCloud(zmin, zmax, pPointCloudRenderInfo.getMaxOctreeCellSize());
+
+    raster = pcraster;
+    raster.allocRaster(flame, rasterWidth, rasterHeight, flame.getSpatialOversampling(), flame.getSampleDensity());
 
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
       renderFlames.add(createRenderPackets(flame, flame.getFrame()));
     }
-    iterate(0, 1, renderFlames, null, 1.0, 1);
+
+    iterate(0, 1, renderFlames, null);
+
+    raster.finalizeRaster();
+
+    List<PCPoint> points = pcraster.getGeneratedPoints();
+    if (points != null && !points.isEmpty()) {
+      if (Tools.getFileExt(pFilename).isEmpty()) {
+        pFilename = pFilename + "." + Tools.FILEEXT_PLY;
+      }
+      if (Tools.FILEEXT_PLY.equalsIgnoreCase(Tools.getFileExt(pFilename))) {
+        new PointCloudPLYWriter().writePLY(points, pFilename);
+      }
+      else if (Tools.FILEEXT_OBJ.equalsIgnoreCase(Tools.getFileExt(pFilename))) {
+        new PointCloudOBJWriter().writeOBJ(points, pFilename);
+      }
+      else {
+        throw new RuntimeException("Unvalid file extension <" + Tools.getFileExt(pFilename) + ">");
+      }
+    }
+  }
+
+  protected AbstractRaster getRaster() {
+    return raster;
   }
 
 }

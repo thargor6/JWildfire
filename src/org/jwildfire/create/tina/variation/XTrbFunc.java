@@ -162,7 +162,7 @@ public class XTrbFunc extends VariationFunc {
     sinC = sin(angle_Cr);
     cosC = cos(angle_Cr);
 
-    double a = radius * sinC2 / cosC2 + sinB2 / cosB2; //sides
+    double a = radius * (sinC2 / cosC2 + sinB2 / cosB2); //sides
     double b = radius * (sinC2 / cosC2 + sinA2 / cosA2);
     double c = radius * (sinB2 / cosB2 + sinA2 / cosA2);
 

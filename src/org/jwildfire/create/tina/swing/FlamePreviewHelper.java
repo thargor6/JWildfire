@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,8 +28,10 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
+import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.render.DrawFocusPointFlameRenderer;
+import org.jwildfire.create.tina.render.FlameBGColorHandler;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.IterationObserver;
 import org.jwildfire.create.tina.render.ProgressUpdater;
@@ -101,9 +103,6 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   public void refreshFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pReRender, boolean pAllowUseCache) {
-    if (!pAllowUseCache) {
-      prevRenderer = null;
-    }
     cancelBackgroundRender();
     if (pQuickRender && detachedPreviewProvider != null && detachedPreviewProvider.getDetachedPreviewController() != null && pDownScale == 1) {
       detachedPreviewProvider.getDetachedPreviewController().setFlame(flameHolder.getFlame());
@@ -165,11 +164,11 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private FlameRenderer prevRenderer;
+  private AbstractRaster prevRaster;
 
   public SimpleImage renderFlameImage(boolean pQuickRender, boolean pMouseDown, int pDownScale, boolean pAllowUseCache) {
     if (!pAllowUseCache) {
-      prevRenderer = null;
+      prevRaster = null;
     }
     FlamePanel imgPanel = flamePanelProvider.getFlamePanel();
     FlamePanelConfig cfg = flamePanelProvider.getFlamePanelConfig();
@@ -195,8 +194,6 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        int oldColorOversampling = flame.getColorOversampling();
-        boolean oldSampleJittering = flame.isSampleJittering();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -209,6 +206,7 @@ public class FlamePreviewHelper implements IterationObserver {
             if (pQuickRender) {
               flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
               flame.applyFastOversamplingSettings();
+              flame.setSpatialOversampling(oldSpatialOversampling);
             }
             else {
               flame.setSampleDensity(prefs.getTinaRenderPreviewQuality());
@@ -232,12 +230,16 @@ public class FlamePreviewHelper implements IterationObserver {
             renderer.setRenderScale(renderScale);
 
             RenderedFlame res;
-            if (prevRenderer != null && pAllowUseCache) {
-              res = prevRenderer.rerenderFlame(info);
+            if (prevRaster != null && pAllowUseCache) {
+              info.setStoreRaster(false);
+              info.setRestoredRaster(prevRaster);
+              flame.setSampleDensity(prevRaster.getSampleDensity());
+              res = renderer.renderFlame(info);
             }
             else {
+              info.setStoreRaster(true);
               res = renderer.renderFlame(info);
-              prevRenderer = renderer;
+              prevRaster = res.getRaster();
             }
 
             SimpleImage img = res.getImage();
@@ -277,8 +279,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setColorOversampling(oldColorOversampling);
-          flame.setSampleJittering(oldSampleJittering);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }
@@ -422,8 +422,6 @@ public class FlamePreviewHelper implements IterationObserver {
         double oldSpatialFilterRadius = flame.getSpatialFilterRadius();
         double oldSampleDensity = flame.getSampleDensity();
         int oldSpatialOversampling = flame.getSpatialOversampling();
-        int oldColorOversampling = flame.getColorOversampling();
-        boolean oldSampleJittering = flame.isSampleJittering();
         boolean oldPostNoiseFilter = flame.isPostNoiseFilter();
         try {
           double wScl = (double) info.getImageWidth() / (double) flame.getWidth();
@@ -456,8 +454,6 @@ public class FlamePreviewHelper implements IterationObserver {
           flame.setSampleDensity(oldSampleDensity);
           flame.setSpatialFilterRadius(oldSpatialFilterRadius);
           flame.setSpatialOversampling(oldSpatialOversampling);
-          flame.setColorOversampling(oldColorOversampling);
-          flame.setSampleJittering(oldSampleJittering);
           flame.setPostNoiseFilter(oldPostNoiseFilter);
         }
       }
@@ -548,6 +544,7 @@ public class FlamePreviewHelper implements IterationObserver {
   }
 
   private void startBackgroundRender(FlamePanel pImgPanel) {
+    prevRaster = null;
     if (flameHolder == null) {
       return;
     }
@@ -568,7 +565,7 @@ public class FlamePreviewHelper implements IterationObserver {
     renderer.registerIterationObserver(this);
 
     SimpleImage image = new SimpleImage(pImgPanel.getImage().getImageWidth(), pImgPanel.getImage().getImageHeight());
-    initImage(image, flame.getBGColorRed(), flame.getBGColorGreen(), flame.getBGColorBlue(), flame.getBGImageFilename());
+    initImage(image, flame);
 
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
     displayUpdater.initRender(prefs.getTinaRenderThreads());
@@ -583,21 +580,18 @@ public class FlamePreviewHelper implements IterationObserver {
     updateDisplayExecuteThread.start();
   }
 
-  private void initImage(SimpleImage pImage, int pBGRed, int pBGGreen, int pBGBlue, String pBGImagefile) {
-    if (pBGRed > 0 || pBGGreen > 0 || pBGBlue > 0) {
-      pImage.fillBackground(pBGRed, pBGGreen, pBGBlue);
-    }
-    else {
-      pImage.fillBackground(0, 0, 0);
-    }
-    if (pBGImagefile != null && pBGImagefile.length() > 0) {
+  private void initImage(SimpleImage pImage, Flame flame) {
+    if (flame.getBGImageFilename() != null && !flame.getBGImageFilename().isEmpty()) {
       try {
-        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(pBGImagefile);
+        SimpleImage bgImg = (SimpleImage) RessourceManager.getImage(flame.getBGImageFilename());
         pImage.fillBackground(bgImg);
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
+    }
+    else {
+      new FlameBGColorHandler(flame).fillBackground(pImage);
     }
   }
 

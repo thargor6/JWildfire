@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -106,7 +106,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.3";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
-  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time.2";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
@@ -123,13 +123,11 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.2";
-  static final String KEY_TINA_DEFAULT_COLOR_OVERSAMPLING = "tina.default.color_oversampling.2";
-  static final String KEY_TINA_DEFAULT_SAMPLE_JITTERING = "tina.default.sample_jittering.2";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.3";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
-  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel";
+  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.4";
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
@@ -285,7 +283,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorProgressivePreview = true;
 
   @Property(description = "Maximum render-time for the progressive preview-display", category = PropertyCategory.TINA)
-  private double tinaEditorProgressivePreviewMaxRenderTime = 15.0;
+  private double tinaEditorProgressivePreviewMaxRenderTime = 25.0;
 
   @Property(description = "Font-scale for the flame-fractal-editor (experimental, to apply changes a restart of the program is required)", category = PropertyCategory.TINA)
   private double tinaFontScale = 1.0;
@@ -303,13 +301,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultSpatialOversampling = 1;
-
-  @Property(description = "Default color oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultColorOversampling = 3;
-
-  @Property(description = "Default jitter setting for reducing aliasing artifacts, used when creating a new flame", category = PropertyCategory.TINA)
-  private boolean tinaDefaultSampleJittering = false;
+  private int tinaDefaultSpatialOversampling = 2;
 
   @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
   private boolean tinaDefaultPostNoiseFilter = false;
@@ -324,7 +316,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDefaultFilterVisualisationFlat = false;
 
   @Property(description = "Default spatial filter-kernel, used when creating a new flame", category = PropertyCategory.TINA, editorClass = FilterKernelTypeEditor.class)
-  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL;
+  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL_SINEPOW;
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
   private double tinaDefaultSpatialFilterRadius = 0.75;
@@ -790,8 +782,6 @@ public class Prefs extends ManagedObject {
     tinaDefaultFPS = pSrc.tinaDefaultFPS;
     tinaRawMotionDataPath = pSrc.tinaRawMotionDataPath;
     tinaDefaultSpatialOversampling = pSrc.tinaDefaultSpatialOversampling;
-    tinaDefaultColorOversampling = pSrc.tinaDefaultColorOversampling;
-    tinaDefaultSampleJittering = pSrc.tinaDefaultSampleJittering;
     tinaDefaultSpatialFilterKernel = pSrc.tinaDefaultSpatialFilterKernel;
     tinaDefaultSpatialFilterRadius = pSrc.tinaDefaultSpatialFilterRadius;
     tinaDefaultFilterVisualisationFlat = pSrc.tinaDefaultFilterVisualisationFlat;
@@ -1428,28 +1418,6 @@ public class Prefs extends ManagedObject {
     else if (tinaDefaultSpatialOversampling > Tools.MAX_SPATIAL_OVERSAMPLING) {
       tinaDefaultSpatialOversampling = Tools.MAX_SPATIAL_OVERSAMPLING;
     }
-  }
-
-  public int getTinaDefaultColorOversampling() {
-    return tinaDefaultColorOversampling;
-  }
-
-  public void setTinaDefaultColorOversampling(int pTinaDefaultColorOversampling) {
-    tinaDefaultColorOversampling = pTinaDefaultColorOversampling;
-    if (tinaDefaultColorOversampling < 1) {
-      tinaDefaultColorOversampling = 1;
-    }
-    else if (tinaDefaultColorOversampling > Tools.MAX_COLOR_OVERSAMPLING) {
-      tinaDefaultColorOversampling = Tools.MAX_COLOR_OVERSAMPLING;
-    }
-  }
-
-  public boolean isTinaDefaultSampleJittering() {
-    return tinaDefaultSampleJittering;
-  }
-
-  public void setTinaDefaultSampleJittering(boolean pTinaDefaultSampleJittering) {
-    tinaDefaultSampleJittering = pTinaDefaultSampleJittering;
   }
 
   public FilterKernelType getTinaDefaultSpatialFilterKernel() {

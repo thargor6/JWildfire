@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2013 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.marchingcubes.FacesMerger;
 import org.jwildfire.create.tina.meshgen.marchingcubes.GenerateFacesThread;
@@ -47,11 +48,14 @@ public class GenerateMeshThread implements Runnable {
   private final List<GenerateFacesThread> threads = new ArrayList<GenerateFacesThread>();
   private final List<PreFilter> preFilterList;
   private boolean forceAbort;
+  private boolean taubinSmooth;
+  private int smoothPasses;
+  private double smoothLambda, smoothMu;
   private Mesh mesh;
 
   public GenerateMeshThread(String pOutFilename, MeshGenGenerateThreadFinishEvent pFinishEvent, ProgressUpdater pProgressUpdater,
       String pInputSequencePattern, int pInputSequenceSize, int pInputSequenceStep, int pThreshold, double pSpatialFilterRadius, int pImageDownSample, boolean pWithNormals,
-      List<PreFilter> pPreFilterList) {
+      List<PreFilter> pPreFilterList, boolean pTaubinSmooth, int pSmoothPasses, double pSmoothLambda, double pSmoothMu) {
     outFilename = pOutFilename;
     finishEvent = pFinishEvent;
     progressUpdater = pProgressUpdater;
@@ -63,6 +67,10 @@ public class GenerateMeshThread implements Runnable {
     imageDownSample = pImageDownSample;
     withNormals = pWithNormals;
     preFilterList = pPreFilterList;
+    taubinSmooth = pTaubinSmooth;
+    smoothPasses = pSmoothPasses;
+    smoothLambda = pSmoothLambda;
+    smoothMu = pSmoothMu;
   }
 
   @Override
@@ -105,9 +113,16 @@ public class GenerateMeshThread implements Runnable {
       return null;
     }
 
-    Mesh mesh = FacesMerger.generateMesh(rawFaces);
+    double imgSize = MathLib.min(sampler.getImageWidth(), sampler.getImageHeight());
+    double zScale = (double) sampler.getImageCount() / (imgSize * 3.0 * imageDownSample);
+
+    Mesh mesh = FacesMerger.generateMesh(rawFaces, (float) zScale);
     if (forceAbort) {
       return null;
+    }
+
+    if (taubinSmooth && smoothPasses > 0 && (MathLib.fabs(smoothLambda) > MathLib.EPSILON || MathLib.fabs(smoothMu) > MathLib.EPSILON)) {
+      mesh.taubinSmooth(smoothPasses, smoothLambda, smoothMu);
     }
 
     MeshWriter.saveMesh(mesh, outFilename);

@@ -48,13 +48,13 @@ public class PostDCZTranslFunc extends VariationFunc {
     double zf = factor * (pAffineTP.color - _x0) / _x1_m_x0;
     if (clamp != 0)
       zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;
-    pVarTP.x += pAmount * pVarTP.x;
-    pVarTP.y += pAmount * pVarTP.y;
+    pVarTP.x = pAmount * pVarTP.x;
+    pVarTP.y = pAmount * pVarTP.y;
 
     if (overwrite == 0)
-      pVarTP.z += pAmount * pVarTP.z * zf;
+      pVarTP.z = pAmount * pVarTP.z * zf;
     else
-      pVarTP.z += pAmount * zf;
+      pVarTP.z = pAmount * zf;
   }
 
   @Override

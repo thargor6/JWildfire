@@ -52,6 +52,7 @@ import java.util.Map;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -222,14 +223,28 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("scale", pFlame.getPixelsPerUnit()));
     attrList.add(xb.createAttr("rotate", pFlame.getCamRoll()));
     attrList.add(xb.createAttr("filter", pFlame.getSpatialFilterRadius()));
-    attrList.add(xb.createAttr("filter_kernel", pFlame.getSpatialFilterKernel().toString()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_TYPE, pFlame.getSpatialFilteringType().toString()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_KERNEL, pFlame.getSpatialFilterKernel().toString()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_INDICATOR, pFlame.isSpatialFilterIndicator() ? 1 : 0));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_SHARPNESS, pFlame.getSpatialFilterSharpness()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_FILTER_LOW_DENSITY, pFlame.getSpatialFilterLowDensity()));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SPATIAL_OVERSAMPLE, pFlame.getSpatialOversampling()));
-    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_COLOR_OVERSAMPLE, pFlame.getColorOversampling()));
-    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_SAMPLE_JITTERING, pFlame.isSampleJittering() ? 1 : 0));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER, pFlame.isPostNoiseFilter() ? 1 : 0));
     attrList.add(xb.createAttr(AbstractFlameReader.ATTR_POST_NOISE_FILTER_THRESHOLD, pFlame.getPostNoiseFilterThreshold()));
     attrList.add(xb.createAttr("quality", pFlame.getSampleDensity()));
-    attrList.add(xb.createAttr("background", (double) pFlame.getBGColorRed() / 255.0 + " " + (double) pFlame.getBGColorGreen() / 255.0 + " " + (double) pFlame.getBGColorBlue() / 255.0));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_TYPE, pFlame.getBgColorType().toString()));
+    if (BGColorType.GRADIENT_2X2.equals(pFlame.getBgColorType()) || BGColorType.GRADIENT_2X2_C.equals(pFlame.getBgColorType())) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_UL, (double) pFlame.getBgColorULRed() / 255.0 + " " + (double) pFlame.getBgColorULGreen() / 255.0 + " " + (double) pFlame.getBgColorULBlue() / 255.0));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_UR, (double) pFlame.getBgColorURRed() / 255.0 + " " + (double) pFlame.getBgColorURGreen() / 255.0 + " " + (double) pFlame.getBgColorURBlue() / 255.0));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_LL, (double) pFlame.getBgColorLLRed() / 255.0 + " " + (double) pFlame.getBgColorLLGreen() / 255.0 + " " + (double) pFlame.getBgColorLLBlue() / 255.0));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_LR, (double) pFlame.getBgColorLRRed() / 255.0 + " " + (double) pFlame.getBgColorLRGreen() / 255.0 + " " + (double) pFlame.getBgColorLRBlue() / 255.0));
+    }
+    if (BGColorType.GRADIENT_2X2_C.equals(pFlame.getBgColorType())) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND_CC, (double) pFlame.getBgColorCCRed() / 255.0 + " " + (double) pFlame.getBgColorCCGreen() / 255.0 + " " + (double) pFlame.getBgColorCCBlue() / 255.0));
+    }
+    if (BGColorType.SINGLE_COLOR.equals(pFlame.getBgColorType())) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BACKGROUND, (double) pFlame.getBgColorRed() / 255.0 + " " + (double) pFlame.getBgColorGreen() / 255.0 + " " + (double) pFlame.getBgColorBlue() / 255.0));
+    }
     attrList.add(xb.createAttr("bg_transparency", pFlame.isBGTransparency() ? "1" : "0"));
     attrList.add(xb.createAttr("brightness", pFlame.getBrightness()));
     attrList.add(xb.createAttr(ATTR_SATURATION, pFlame.getSaturation()));
@@ -259,6 +274,11 @@ public class AbstractFlameWriter {
     if (pFlame.isNewCamDOF()) {
       attrList.add(xb.createAttr("new_dof", "1"));
     }
+
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_LOW_DENSITY_BRIGHTNESS, pFlame.getLowDensityBrightness()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_RED, pFlame.getBalanceRed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_GREEN, pFlame.getBalanceGreen()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_BALANCING_BLUE, pFlame.getBalanceBlue()));
 
     attrList.add(xb.createAttr(ATTR_CAM_DOF_SHAPE, pFlame.getCamDOFShape().toString()));
     attrList.add(xb.createAttr(ATTR_CAM_DOF_SCALE, pFlame.getCamDOFScale()));

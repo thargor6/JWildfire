@@ -49,10 +49,10 @@ public class PostJulia3DQFunc extends VariationFunc {
     double z = pVarTP.z * abs_inv_power;
     double r2d = sqr(pVarTP.x) + sqr(pVarTP.y);
     double r = pAmount * pow(r2d + sqr(z), half_inv_power);
-    pVarTP.z += r * z;
+    pVarTP.z = r * z;
     r *= sqrt(r2d);
-    pVarTP.x += r * cosa;
-    pVarTP.y += r * sina;
+    pVarTP.x = r * cosa;
+    pVarTP.y = r * sina;
   }
 
   @Override

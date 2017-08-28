@@ -17,7 +17,7 @@
 package org.jwildfire.create.tina.variation.mesh;
 
 public class Face {
-  int v1, v2, v3;
+  public int v1, v2, v3;
 
   public Face() {
 

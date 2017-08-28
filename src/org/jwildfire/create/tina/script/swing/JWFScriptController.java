@@ -424,6 +424,7 @@ public class JWFScriptController {
     sb.append("  flame.setHeight(" + pFlame.getHeight() + ");\n");
     sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
     sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
+    sb.append("  flame.setBGTransparency(" + pFlame.isBGTransparency() + ");\n");
     switch (pFlame.getPostSymmetryType()) {
       case POINT:
         sb.append("  flame.setPostSymmetryType(org.jwildfire.create.tina.base.PostSymmetryType." + pFlame.getPostSymmetryType().toString() + ");\n");

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -45,6 +45,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.swing.JWildfire;
 
 public class MeshGenInternalFrame extends JInternalFrame {
@@ -183,14 +184,17 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private JWFNumberField meshGenPreviewPolygonsREd;
   private JButton meshGenRefreshPreviewBtn;
   private JButton meshGenPreviewSunflowExportBtn;
-  private JWFNumberField meshGenSliceThicknessModREd;
   private JButton channelMixerResetBtn;
   private JComboBox channelMixerModeCmb;
-  private JWFNumberField meshGenSliceThicknessSamplesREd;
   private JComboBox meshGenPreFilter1Cmb;
   private JComboBox meshGenPreFilter2Cmb;
   private JWFNumberField meshGenImageStepREd;
   private JComboBox meshGenOutputTypeCmb;
+  private JCheckBox meshGenTaubinSmoothCbx;
+  private JWFNumberField meshGenSmoothPassesREd;
+  private JWFNumberField meshGenSmoothLambdaREd;
+  private JWFNumberField meshGenSmoothMuREd;
+  private JWFNumberField meshGenCellSizeREd;
 
   public JWFNumberField getSwfAnimatorFramesPerSecondREd() {
     return swfAnimatorFramesPerSecondREd;
@@ -406,7 +410,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       panel_2.add(meshGenProgressbar, BorderLayout.CENTER);
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(810, 10));
+      panel_3.setPreferredSize(new Dimension(620, 10));
       panel_1.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -541,7 +545,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenRenderQualityREd.setHasMinValue(true);
       meshGenRenderQualityREd.setHasMaxValue(false);
       meshGenRenderQualityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenRenderQualityREd.setBounds(508, 26, 100, 24);
+      meshGenRenderQualityREd.setBounds(521, 0, 100, 24);
       panel_3.add(meshGenRenderQualityREd);
 
       JLabel lblRenderQuality = new JLabel();
@@ -551,56 +555,8 @@ public class MeshGenInternalFrame extends JInternalFrame {
       lblRenderQuality.setName("");
       lblRenderQuality.setLocation(new Point(4, 76));
       lblRenderQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblRenderQuality.setBounds(428, 26, 79, 22);
+      lblRenderQuality.setBounds(441, 0, 79, 22);
       panel_3.add(lblRenderQuality);
-
-      meshGenSliceThicknessModREd = new JWFNumberField();
-      meshGenSliceThicknessModREd.setValueStep(0.01);
-      meshGenSliceThicknessModREd.setText("");
-      meshGenSliceThicknessModREd.setSize(new Dimension(100, 24));
-      meshGenSliceThicknessModREd.setPreferredSize(new Dimension(100, 24));
-      meshGenSliceThicknessModREd.setMaxValue(1.0);
-      meshGenSliceThicknessModREd.setLocation(new Point(71, 76));
-      meshGenSliceThicknessModREd.setHasMinValue(true);
-      meshGenSliceThicknessModREd.setHasMaxValue(true);
-      meshGenSliceThicknessModREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenSliceThicknessModREd.setBounds(708, 26, 100, 24);
-      panel_3.add(meshGenSliceThicknessModREd);
-
-      JLabel lblSliceThickness = new JLabel();
-      lblSliceThickness.setToolTipText("Thickness modifier of the generated model");
-      lblSliceThickness.setText("Thickness mod");
-      lblSliceThickness.setSize(new Dimension(68, 22));
-      lblSliceThickness.setPreferredSize(new Dimension(94, 22));
-      lblSliceThickness.setName("");
-      lblSliceThickness.setLocation(new Point(4, 76));
-      lblSliceThickness.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblSliceThickness.setBounds(611, 28, 100, 22);
-      panel_3.add(lblSliceThickness);
-
-      meshGenSliceThicknessSamplesREd = new JWFNumberField();
-      meshGenSliceThicknessSamplesREd.setValueStep(1.0);
-      meshGenSliceThicknessSamplesREd.setText("");
-      meshGenSliceThicknessSamplesREd.setSize(new Dimension(100, 24));
-      meshGenSliceThicknessSamplesREd.setPreferredSize(new Dimension(100, 24));
-      meshGenSliceThicknessSamplesREd.setOnlyIntegers(true);
-      meshGenSliceThicknessSamplesREd.setMaxValue(200.0);
-      meshGenSliceThicknessSamplesREd.setLocation(new Point(71, 76));
-      meshGenSliceThicknessSamplesREd.setHasMinValue(true);
-      meshGenSliceThicknessSamplesREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      meshGenSliceThicknessSamplesREd.setBounds(708, 48, 100, 24);
-      panel_3.add(meshGenSliceThicknessSamplesREd);
-
-      JLabel lblThicknessSamples = new JLabel();
-      lblThicknessSamples.setToolTipText("Number of samples for calculating thickness mod");
-      lblThicknessSamples.setText("Thickness samples");
-      lblThicknessSamples.setSize(new Dimension(68, 22));
-      lblThicknessSamples.setPreferredSize(new Dimension(94, 22));
-      lblThicknessSamples.setName("");
-      lblThicknessSamples.setLocation(new Point(4, 76));
-      lblThicknessSamples.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblThicknessSamples.setBounds(611, 50, 100, 22);
-      panel_3.add(lblThicknessSamples);
 
       meshGenOutputTypeCmb = new JComboBox();
       meshGenOutputTypeCmb.addItemListener(new ItemListener() {
@@ -628,6 +584,31 @@ public class MeshGenInternalFrame extends JInternalFrame {
       lblOutputType.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOutputType.setBounds(0, 2, 151, 22);
       panel_3.add(lblOutputType);
+
+      meshGenCellSizeREd = new JWFNumberField();
+      meshGenCellSizeREd.setMinValue(RasterPointCloud.MIN_OCTREE_CELL_SIZE);
+      meshGenCellSizeREd.setMaxValue(RasterPointCloud.MAX_OCTREE_CELL_SIZE);
+      meshGenCellSizeREd.setValueStep(0.001);
+      meshGenCellSizeREd.setText("");
+      meshGenCellSizeREd.setSize(new Dimension(100, 24));
+      meshGenCellSizeREd.setPreferredSize(new Dimension(100, 24));
+      meshGenCellSizeREd.setLocation(new Point(71, 76));
+      meshGenCellSizeREd.setHasMinValue(true);
+      meshGenCellSizeREd.setHasMaxValue(true);
+      meshGenCellSizeREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenCellSizeREd.setBounds(521, 26, 100, 24);
+      panel_3.add(meshGenCellSizeREd);
+
+      JLabel lblCellSize = new JLabel();
+      lblCellSize.setToolTipText("The smaller the cellsize the more detail is generated, and vice versa");
+      lblCellSize.setText("Cell size");
+      lblCellSize.setSize(new Dimension(68, 22));
+      lblCellSize.setPreferredSize(new Dimension(94, 22));
+      lblCellSize.setName("");
+      lblCellSize.setLocation(new Point(4, 76));
+      lblCellSize.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblCellSize.setBounds(441, 26, 79, 22);
+      panel_3.add(lblCellSize);
 
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(132, 10));
@@ -1133,7 +1114,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
   private JPanel getPanel_98() {
     if (panel_98 == null) {
       panel_98 = new JPanel();
-      panel_98.setPreferredSize(new Dimension(10, 116));
+      panel_98.setPreferredSize(new Dimension(10, 202));
       panel_98.setLayout(new BorderLayout(0, 0));
       panel_98.add(getPanel_99(), BorderLayout.WEST);
 
@@ -1148,7 +1129,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       panel_2.setLayout(new BorderLayout(0, 0));
 
       JPanel panel_3 = new JPanel();
-      panel_3.setPreferredSize(new Dimension(610, 10));
+      panel_3.setPreferredSize(new Dimension(430, 10));
       panel_2.add(panel_3, BorderLayout.WEST);
       panel_3.setLayout(null);
 
@@ -1224,46 +1205,6 @@ public class MeshGenInternalFrame extends JInternalFrame {
       lblBrightnessThreshold.setBounds(218, 8, 108, 22);
       panel_3.add(lblBrightnessThreshold);
 
-      JLabel lblPrefilter = new JLabel();
-      lblPrefilter.setText("PreFilter 1");
-      lblPrefilter.setSize(new Dimension(68, 22));
-      lblPrefilter.setPreferredSize(new Dimension(94, 22));
-      lblPrefilter.setName("");
-      lblPrefilter.setLocation(new Point(6, 76));
-      lblPrefilter.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblPrefilter.setBounds(428, 8, 59, 22);
-      panel_3.add(lblPrefilter);
-
-      meshGenPreFilter1Cmb = new JComboBox();
-      meshGenPreFilter1Cmb.setToolTipText("Random-Symmetry-Geneator");
-      meshGenPreFilter1Cmb.setPreferredSize(new Dimension(50, 24));
-      meshGenPreFilter1Cmb.setMinimumSize(new Dimension(100, 24));
-      meshGenPreFilter1Cmb.setMaximumSize(new Dimension(32767, 24));
-      meshGenPreFilter1Cmb.setMaximumRowCount(32);
-      meshGenPreFilter1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      meshGenPreFilter1Cmb.setBounds(487, 6, 117, 24);
-      panel_3.add(meshGenPreFilter1Cmb);
-
-      meshGenPreFilter2Cmb = new JComboBox();
-      meshGenPreFilter2Cmb.setToolTipText("Random-Symmetry-Geneator");
-      meshGenPreFilter2Cmb.setPreferredSize(new Dimension(50, 24));
-      meshGenPreFilter2Cmb.setMinimumSize(new Dimension(100, 24));
-      meshGenPreFilter2Cmb.setMaximumSize(new Dimension(32767, 24));
-      meshGenPreFilter2Cmb.setMaximumRowCount(32);
-      meshGenPreFilter2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      meshGenPreFilter2Cmb.setBounds(487, 30, 117, 24);
-      panel_3.add(meshGenPreFilter2Cmb);
-
-      JLabel lblPrefilter_1 = new JLabel();
-      lblPrefilter_1.setText("PreFilter 2");
-      lblPrefilter_1.setSize(new Dimension(68, 22));
-      lblPrefilter_1.setPreferredSize(new Dimension(94, 22));
-      lblPrefilter_1.setName("");
-      lblPrefilter_1.setLocation(new Point(6, 76));
-      lblPrefilter_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblPrefilter_1.setBounds(428, 32, 59, 22);
-      panel_3.add(lblPrefilter_1);
-
       meshGenImageStepREd = new JWFNumberField();
       meshGenImageStepREd.setValueStep(1.0);
       meshGenImageStepREd.setText("");
@@ -1308,6 +1249,144 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenGenerateMeshProgressbar.setStringPainted(true);
       meshGenGenerateMeshProgressbar.setPreferredSize(new Dimension(568, 21));
       panel_1.add(meshGenGenerateMeshProgressbar, BorderLayout.SOUTH);
+
+      JPanel panel = new JPanel();
+      panel.setPreferredSize(new Dimension(10, 86));
+      panel_98.add(panel, BorderLayout.SOUTH);
+      panel.setLayout(new BorderLayout(0, 0));
+
+      JPanel panel_4 = new JPanel();
+      panel_4.setBorder(new TitledBorder(null, "Image pre-filtering", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+      panel_4.setPreferredSize(new Dimension(400, 10));
+      panel.add(panel_4, BorderLayout.WEST);
+      panel_4.setLayout(null);
+
+      meshGenPreFilter1Cmb = new JComboBox();
+      meshGenPreFilter1Cmb.setBounds(82, 19, 117, 24);
+      panel_4.add(meshGenPreFilter1Cmb);
+      meshGenPreFilter1Cmb.setToolTipText("");
+      meshGenPreFilter1Cmb.setPreferredSize(new Dimension(50, 24));
+      meshGenPreFilter1Cmb.setMinimumSize(new Dimension(100, 24));
+      meshGenPreFilter1Cmb.setMaximumSize(new Dimension(32767, 24));
+      meshGenPreFilter1Cmb.setMaximumRowCount(32);
+      meshGenPreFilter1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
+      JLabel lblPrefilter = new JLabel();
+      lblPrefilter.setBounds(23, 21, 59, 22);
+      panel_4.add(lblPrefilter);
+      lblPrefilter.setText("PreFilter 1");
+      lblPrefilter.setPreferredSize(new Dimension(94, 22));
+      lblPrefilter.setName("");
+      lblPrefilter.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
+      JLabel lblPrefilter_1 = new JLabel();
+      lblPrefilter_1.setBounds(23, 45, 59, 22);
+      panel_4.add(lblPrefilter_1);
+      lblPrefilter_1.setText("PreFilter 2");
+      lblPrefilter_1.setPreferredSize(new Dimension(94, 22));
+      lblPrefilter_1.setName("");
+      lblPrefilter_1.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
+      meshGenPreFilter2Cmb = new JComboBox();
+      meshGenPreFilter2Cmb.setBounds(82, 43, 117, 24);
+      panel_4.add(meshGenPreFilter2Cmb);
+      meshGenPreFilter2Cmb.setToolTipText("");
+      meshGenPreFilter2Cmb.setPreferredSize(new Dimension(50, 24));
+      meshGenPreFilter2Cmb.setMinimumSize(new Dimension(100, 24));
+      meshGenPreFilter2Cmb.setMaximumSize(new Dimension(32767, 24));
+      meshGenPreFilter2Cmb.setMaximumRowCount(32);
+      meshGenPreFilter2Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+
+      JPanel panel_5 = new JPanel();
+      panel_5.setBorder(new TitledBorder(null, "Post smoothing", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+      panel.add(panel_5, BorderLayout.CENTER);
+      panel_5.setLayout(null);
+
+      meshGenTaubinSmoothCbx = new JCheckBox("Taubin-Smooth");
+      meshGenTaubinSmoothCbx.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getMeshGenController().taubinSmoothCbx_clicked();
+        }
+      });
+      meshGenTaubinSmoothCbx.setToolTipText("");
+      meshGenTaubinSmoothCbx.setSelected(true);
+      meshGenTaubinSmoothCbx.setBounds(24, 18, 207, 18);
+      panel_5.add(meshGenTaubinSmoothCbx);
+
+      JLabel lblPasses = new JLabel();
+      lblPasses.setText("Passes");
+      lblPasses.setSize(new Dimension(68, 22));
+      lblPasses.setPreferredSize(new Dimension(94, 22));
+      lblPasses.setName("");
+      lblPasses.setLocation(new Point(6, 76));
+      lblPasses.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblPasses.setBounds(24, 44, 108, 22);
+      panel_5.add(lblPasses);
+
+      meshGenSmoothPassesREd = new JWFNumberField();
+      meshGenSmoothPassesREd.setMouseSpeed(0.2);
+      meshGenSmoothPassesREd.setValueStep(1.0);
+      meshGenSmoothPassesREd.setText("");
+      meshGenSmoothPassesREd.setSize(new Dimension(100, 24));
+      meshGenSmoothPassesREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSmoothPassesREd.setOnlyIntegers(true);
+      meshGenSmoothPassesREd.setMaxValue(12.0);
+      meshGenSmoothPassesREd.setLocation(new Point(71, 76));
+      meshGenSmoothPassesREd.setHasMinValue(true);
+      meshGenSmoothPassesREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSmoothPassesREd.setBounds(131, 42, 100, 24);
+      panel_5.add(meshGenSmoothPassesREd);
+
+      meshGenSmoothLambdaREd = new JWFNumberField();
+      meshGenSmoothLambdaREd.setMouseSpeed(0.04);
+      meshGenSmoothLambdaREd.setMinValue(-10.0);
+      meshGenSmoothLambdaREd.setHasMinValue(true);
+      meshGenSmoothLambdaREd.setHasMaxValue(true);
+      meshGenSmoothLambdaREd.setValueStep(0.01);
+      meshGenSmoothLambdaREd.setText("");
+      meshGenSmoothLambdaREd.setSize(new Dimension(100, 24));
+      meshGenSmoothLambdaREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSmoothLambdaREd.setMaxValue(10.0);
+      meshGenSmoothLambdaREd.setLocation(new Point(71, 76));
+      meshGenSmoothLambdaREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSmoothLambdaREd.setBounds(343, 18, 100, 24);
+      panel_5.add(meshGenSmoothLambdaREd);
+
+      JLabel lblLambda = new JLabel();
+      lblLambda.setText("Lambda");
+      lblLambda.setSize(new Dimension(68, 22));
+      lblLambda.setPreferredSize(new Dimension(94, 22));
+      lblLambda.setName("");
+      lblLambda.setLocation(new Point(6, 76));
+      lblLambda.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblLambda.setBounds(236, 20, 108, 22);
+      panel_5.add(lblLambda);
+
+      JLabel lblMu = new JLabel();
+      lblMu.setText("Mu");
+      lblMu.setSize(new Dimension(68, 22));
+      lblMu.setPreferredSize(new Dimension(94, 22));
+      lblMu.setName("");
+      lblMu.setLocation(new Point(6, 76));
+      lblMu.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMu.setBounds(236, 44, 108, 22);
+      panel_5.add(lblMu);
+
+      meshGenSmoothMuREd = new JWFNumberField();
+      meshGenSmoothMuREd.setMouseSpeed(0.04);
+      meshGenSmoothMuREd.setMaxValue(10.0);
+      meshGenSmoothMuREd.setValueStep(0.01);
+      meshGenSmoothMuREd.setText("");
+      meshGenSmoothMuREd.setSize(new Dimension(100, 24));
+      meshGenSmoothMuREd.setPreferredSize(new Dimension(100, 24));
+      meshGenSmoothMuREd.setMinValue(-10.0);
+      meshGenSmoothMuREd.setLocation(new Point(71, 76));
+      meshGenSmoothMuREd.setHasMinValue(true);
+      meshGenSmoothMuREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      meshGenSmoothMuREd.setBounds(343, 42, 100, 24);
+      panel_5.add(meshGenSmoothMuREd);
     }
     return panel_98;
   }
@@ -1865,20 +1944,12 @@ public class MeshGenInternalFrame extends JInternalFrame {
     return meshGenPreviewSunflowExportBtn;
   }
 
-  public JWFNumberField getMeshGenThicknessREd() {
-    return meshGenSliceThicknessModREd;
-  }
-
   public JButton getChannelMixerResetBtn() {
     return channelMixerResetBtn;
   }
 
   public JComboBox getChannelMixerModeCmb() {
     return channelMixerModeCmb;
-  }
-
-  public JWFNumberField getMeshGenThicknessSamplesREd() {
-    return meshGenSliceThicknessSamplesREd;
   }
 
   public JComboBox getMeshGenPreFilter1Cmb() {
@@ -1901,4 +1972,23 @@ public class MeshGenInternalFrame extends JInternalFrame {
     return meshGenOutputTypeCmb;
   }
 
+  public JCheckBox getMeshGenTaubinSmoothCbx() {
+    return meshGenTaubinSmoothCbx;
+  }
+
+  public JWFNumberField getMeshGenSmoothPassesREd() {
+    return meshGenSmoothPassesREd;
+  }
+
+  public JWFNumberField getMeshGenSmoothLambdaREd() {
+    return meshGenSmoothLambdaREd;
+  }
+
+  public JWFNumberField getMeshGenSmoothMuREd() {
+    return meshGenSmoothMuREd;
+  }
+
+  public JWFNumberField getMeshGenCellSizeREd() {
+    return meshGenCellSizeREd;
+  }
 }
