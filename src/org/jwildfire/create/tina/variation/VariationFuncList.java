@@ -542,7 +542,7 @@ public class VariationFuncList {
     registerVariationFunc(R_CircleblurFunc.class); 
     registerVariationFunc(TruchetAEFunc.class); 
     registerVariationFunc(TruchetFillFunc.class); 
-    registerVariationFunc(SphTiling3Func.class); 
+    // registerVariationFunc(SphTiling3Func.class); 
     registerVariationFunc(SphTiling3V2Func.class); 
     registerVariationFunc(Panorama1Func.class); 
     registerVariationFunc(Panorama2Func.class); 
