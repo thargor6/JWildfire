@@ -21,6 +21,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -39,7 +40,7 @@ public class CPow2Func extends VariationFunc {
 
   private double p_r = 1.0;
   private double p_a = 0.0;
-  private int divisor = 1;
+  private double divisor = 1;
   private int range = 1;
   
   double ang, c, half_c, d, half_d, inv_range, full_range;
@@ -70,7 +71,7 @@ public class CPow2Func extends VariationFunc {
     double lnr2 = log(pAffineTP.getPrecalcSumsq());  // logarithm * 2
     
     double r = pAmount * exp(half_c * lnr2 - d * a);
-    double th = c * a + half_d * lnr2 + ang * pContext.random(2147483647);
+    double th = c * a + half_d * lnr2 + ang * floor(divisor * pContext.random());
     
     pVarTP.x += r * cos(th);
     pVarTP.y += r * sin(th);
@@ -96,7 +97,7 @@ public class CPow2Func extends VariationFunc {
     else if (PARAM_A.equalsIgnoreCase(pName))
       p_a = pValue;
     else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
-      divisor = (pValue == 0) ? 1 : Tools.FTOI(pValue);
+      divisor = (pValue == 0) ? 1 : pValue;
     else if (PARAM_RANGE.equalsIgnoreCase(pName))
       range = (pValue < 1)? 1 : Tools.FTOI(pValue);
     else
