@@ -531,6 +531,7 @@ public class VariationFuncList {
     registerVariationFunc(ChunkFunc.class);
     registerVariationFunc(CrobFunc.class);
     registerVariationFunc(Hole2Func.class);
+    registerVariationFunc(CPow2Func.class);
     registerVariationFunc(GridoutFunc.class);     
     registerVariationFunc(Gridout2Func.class);    
     registerVariationFunc(BlurLinearFunc.class);     
