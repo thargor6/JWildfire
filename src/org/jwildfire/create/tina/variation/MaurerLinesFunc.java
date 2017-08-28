@@ -1129,17 +1129,8 @@ public class MaurerLinesFunc extends VariationFunc {
   
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /*
-    k = kn/kd
-    r = cos(k * theta)
-    or, alternatively, as a pair of Cartesian parametric equations of the form
-    t = atan2(y,x)
-    x = cos(kt)cos(t)
-    y = cos(kt)sin(t)
-    */
     count++;
     setValues();
-    // double actual_step_size = getStepSize();
     
     double xin = pAffineTP.x;
     double yin = pAffineTP.y;
@@ -1198,10 +1189,6 @@ public class MaurerLinesFunc extends VariationFunc {
     // find the slope and length of the line
     double ydiff = y2 - y1;
     double xdiff = x2 - x1;
-   /* if (xdiff == 0) {
-      xdiff =
-    }
-    */
 
     // slope of line (m in y=mx+b line equation)
     double line_slope = ydiff / xdiff;  
@@ -1300,19 +1287,9 @@ public class MaurerLinesFunc extends VariationFunc {
        */
       if (render_mode == LINES || render_mode == DEFAULT) {
         // draw lines
-        /*
-        line_delta = Math.random() * line_length;
-        xoffset = line_delta / Math.sqrt(1 + line_slope*line_slope);
-        if (x2 < x1) { xoffset = -1 * xoffset; }  // determine sign based on p2
-        yoffset = Math.abs(line_slope * xoffset);
-        if (y2 < y1) { yoffset = -1 * yoffset; }
-        xout = x1 + xoffset;
-        yout = y1 + yoffset;
-        */
         xout = mpoint.x;
         yout = mpoint.y;
       }
-  
       else if (render_mode == CIRCLES) {
         // draw circles
         //   circles centered on midpoint of "Maurer line"
@@ -2251,20 +2228,6 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
     }
-    
-    // circles centered on points
-    // and use midlenth of Maurer line as radius
-    /*
-    xoffset = (midlength * sin(ang));
-    yoffset = (midlength * cos(ang));
-    */
-    
-    // circles centered on points
-    // and use length of Maurer line as radius
-    /*
-    xoffset = (line_length * sin(ang));
-    yoffset = (line_length * cos(ang));
-    */
     
     //
     // FILTERING
