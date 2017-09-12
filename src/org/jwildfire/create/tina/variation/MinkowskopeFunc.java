@@ -154,4 +154,11 @@ private double minkowski(double x) {
     _noDamping = fabs(damping) <= EPSILON;
     _altWave = frequencyx <= 0.0d;
   }
+  
+  @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "mskope_separation", "mskope_frequencyx", "mskope_frequencyy", "mskope_amplitude", "mskope_perturbation", "mskope_damping" };
+  }
+
 }
+
