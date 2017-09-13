@@ -134,6 +134,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RIGGE2 = 14;
   private static final int RIGGED_RHODONEA_PLUS = 15;
   private static final int RIGGED_RHODONEA_MINUS = 16;
+  private static final int SUPER_ELLIPSE = 17;
   private static final int SUPER_RHODONEA = 18;
   
 
@@ -565,6 +566,14 @@ public class MaurerLinesFunc extends VariationFunc {
     }
   }
   
+  class SuperEllipseCurve extends ParametricCurve {
+    @Override
+    public void getCurvePoint(double t, DoublePoint2D point) {
+      point.x = pow(abs(cos(t)), 2.0/c) * a * Math.signum(cos(t));
+      point.y = pow(abs(sin(t)), 2.0/d) * b * Math.signum(sin(t));
+    }
+  }
+  
   class EpitrochoidCurve extends ParametricCurve {
     @Override
     public void getCurvePoint(double t, DoublePoint2D point) {
@@ -830,6 +839,7 @@ public class MaurerLinesFunc extends VariationFunc {
     else if (curve_index == RIGGE2) { new_curve = new Rigge2Curve(); }
     else if (curve_index == RIGGED_RHODONEA_PLUS) { new_curve = new RiggedRhodoneaPlusCurve(); }
     else if (curve_index == RIGGED_RHODONEA_MINUS) { new_curve = new RiggedRhodoneaMinusCurve(); }
+    else if (curve_index == SUPER_ELLIPSE) { new_curve = new SuperEllipseCurve(); }
     else { new_curve = new CircleCurve(); } // default to circle curve
     return new_curve;
   }
