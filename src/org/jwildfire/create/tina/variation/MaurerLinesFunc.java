@@ -222,6 +222,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int REFLECTED_FILL_TO_CURVE = 10;
   private static final int BOTH_FILL_TO_CURVE = 11;
   private static final int ALTERNATING_FILL_TO_CURVE = 12;
+  private static final int FILL_BETWEEN_LINE_CURVE = 13;   // ignores render mode
+  private static final int FILL_BETWEEN_LINE_CURVE_SWIZZLE = 14;  // ignores render mode
   
   private static final int Z_STROKE = 15;
   private static final int Z_REFLECTED_STROKE = 16;
@@ -2160,6 +2162,16 @@ public class MaurerLinesFunc extends VariationFunc {
         double rfill = Math.random();
         xout = (xout * (1-rfill)) + (opoint.x * rfill);
         yout = (yout * (1-rfill)) + (opoint.y * rfill);
+      }
+      else if (render_submode == FILL_BETWEEN_LINE_CURVE) { // ignores render mode
+        double rfill = Math.random();
+        xout = (mpoint.x * (1-rfill)) + (curve_point.x * rfill);
+        yout = (mpoint.y * (1-rfill)) + (curve_point.y * rfill);
+      }
+      else if (render_submode == FILL_BETWEEN_LINE_CURVE_SWIZZLE) {  // ignores render mode
+        double rfill = Math.random();
+        xout = (mpoint.x * (1-rfill)) + (curve_point.y * rfill);
+        yout = (mpoint.y * (1-rfill)) + (curve_point.x * rfill);
       }
       else if (render_submode == REFLECTED_FILL_TO_LINE || render_submode == REFLECTED_FILL_TO_CURVE) {
         DoublePoint2D opoint;
