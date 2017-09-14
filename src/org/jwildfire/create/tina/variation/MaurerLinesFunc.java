@@ -1,6 +1,6 @@
 /*
 JWildfire - an image and animation processor written in Java
-Copyright (C) 1995-2011 Andreas Maschke
+Copyright (C) 1995-2016 Andreas Maschke
 
 This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
 General Public License as published by the Free Software Foundation; either version 2.1 of the
@@ -14,6 +14,16 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
+/**
+ * Maurer Lines variation by CozyG
+ *    Copyright 2016- Gregg Helt
+ *    (released under same GNU Lesser General Public License as above)
+ * Initially based on the "Maurer Rose", as described by Peter Maurer,
+ *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
+ * For information on some of the ideas explored in this variation, see the paper
+ *     "A Rose by Any Other Name...", Gregg Helt, Bridges Conference, 2016:
+ *     http://archive.bridgesmathart.org/2016/bridges2016-445.html
+ */
 package org.jwildfire.create.tina.variation;
 
 import static java.lang.Math.abs;
@@ -39,14 +49,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-/**
- * Maurer Lines variation by CozyG
- *    Copyright 2016- Gregg Helt
- *    (released under same GNU Lesser General Public License as above)
- * Initially based on the "Maurer Rose", as described by Peter Maurer,
- *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
- *    for more information on Maurer Lines see http://genomancer.org
- */
 public class MaurerLinesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private boolean DEBUG_RELATIVE_ANGLE = false;
@@ -57,10 +59,15 @@ public class MaurerLinesFunc extends VariationFunc {
   private boolean DEBUG_COSETS_INIT = false;
   private boolean DEBUG_TANGENTS = false;
   
-  // PARAM_KNUMER ==> PARAM_A
-  // PARAM_KDENOM ==> PARAM_B
-  // PARAM_RADIAL_OFFSET ==> PARAM_C
-  // PARAM_THICKNESS ==> split into PARAM_CURVE_THICKNESS, PARAM_LINE_THICKNESS, PARAM_POINT_THICKNESS
+  /*
+  *   curve params
+  *   usage depends on curve_mode
+  *   For example, if curve_mode = RHODONEA:  r = cos((kn/kd) * t) + c
+  *      param_a => kn
+  *      param_b => kd
+  *      param_c => c 
+  *      other param_[defgh] are unused for RHODONEA
+  */
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
@@ -112,7 +119,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_DIFF_MODE = "diff_mode";
   
   private static final String PARAM_RANDOMIZE = "randomize";
-  private static final String PARAM_SKIP_X_LINES = "skip_x_lines";
   
   /**
    *   CURVE MODES
@@ -204,7 +210,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT3 = 19;  // same as ACCIDENT1, but flip/reflect signs for y in tangents
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT4 = 20;  // same as ACCIDENT1, but flip/reflect signs for both x and y in tangents
 
-  private static final int CUBIC_HERMITE_TANGENT_FORM2 = 25;
+  private static final int CUBIC_HERMITE_TANGENT_FORM2 = 21;
+  private static final int CUBIC_HERMITE_TANGENT_FORM2_COPY = 25; // for backward compatibility
   // private static final int ORIGIN_TRIANGLE_FILL = 30;
   
   /**
@@ -318,27 +325,27 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int F_LINEAR_INCREMENT = 7;
   private static final int INITIAL_OFFSET = 8;
   private static final int A_B_LINEAR_INCREMENT = 9;
+  private static final int RENDER_MODIFIER1 = 10;
+  private static final int RENDER_MODIFIER2 = 11;
+  private static final int RENDER_MODIFIER3 = 12;
   
+  
+  // line thickness strategy (so far random is the only one working well)
   private static final int RANDOM = 0;
   private static final int PERPENDICULAR = 1;
   private static final int ROUNDED_CAPS = 2;
   
-  private double a_param = 2; // numerator of k in rose curve equations,   k = kn/kd  (n1 in supershape equation)
-  private double b_param = 1; // denominator of k in rose curve equations, k = kn/kd  (n2 in supershape equation)
-  private double c_param = 0; // often called "c" in rose curve modifier equations    (n3 in supershape equation)
-  private double d_param = 1; // used for n3 in supershape equation
+
+  private double a_param = 2; // 
+  private double b_param = 1; // 
+  private double c_param = 0; //
+  private double d_param = 1; 
   private double e_param = 1;
   private double f_param = 1;
   private double g_param = 1;
   private double h_param = 1;
   
   private double a, b, c, d, e, f, g, h;
-  
-  // rhodonea vars
-  // private double kn, kd, k, radial_offset; // k = kn/kd
-  // epitrochoid / hypotrochoid vars
-  private double a_radius, b_radius, c_radius;
-  
   private double line_count = 360;
   private double theta_step_size_param = 71;  // specified in degrees
   private double initial_theta_param = 0; // specified in degrees
@@ -375,7 +382,6 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private int filter_count = 0;
   private List filters = new ArrayList();
-  private int skip_x_lines = 0;
   
   private  int meta_mode = OFF;
   private double meta_min_value = 30;
@@ -1123,11 +1129,26 @@ public class MaurerLinesFunc extends VariationFunc {
       else if (meta_mode == D_LINEAR_INCREMENT) {
         d = meta_value;
       }
+      else if (meta_mode == E_LINEAR_INCREMENT) {
+        e = meta_value;
+      }
+      else if (meta_mode == F_LINEAR_INCREMENT) {
+        f = meta_value;
+      }
       else if (meta_mode == A_B_LINEAR_INCREMENT) {
         // treat a param as meta param -- meta_min_value determines min
         // treat b similar, but b_param determines min b
         a = meta_value;
         b = b_param + (current_meta_step * meta_step_value);
+      }
+      else if (meta_mode == RENDER_MODIFIER1) {
+        render_modifier1 = meta_value;
+      }
+      else if (meta_mode == RENDER_MODIFIER2) {
+        render_modifier2 = meta_value;
+      }
+      else if (meta_mode == RENDER_MODIFIER3) {
+        render_modifier3 = meta_value;
       }
       if (DEBUG_META_MODE && count % 50000 == 0) {
         System.out.println("count: " + count + ", metacount = " + (int)(count / 50000));
@@ -1467,44 +1488,6 @@ public class MaurerLinesFunc extends VariationFunc {
           // yout = perp_offset;
         }
       }
-/*
-      else if (render_mode == ZELLIPSES) {
-        // ang ==> [-Pi : +Pi]  or [ 0 : 2Pi ] ?
-        // double  ang = (Math.random() * M_2PI) - M_PI;  // ==> [ -Pi : +Pi ]
-        double ang = (Math.random() * M_2PI);   // ==> [ 0 : 2Pi ]
-
-        // offset along line (relative to start of line)
-        // if render_modifier1 == 1, then ranges are
-        //    delta_from_midlength ==> [-midlength : +midlength]
-        //    delta_from_start ==> [0 : line_length]
-        double delta_from_midlength = (midlength * render_modifier1) * cos(ang);
-        double delta_from_start = midlength - delta_from_midlength;
-        line_delta = delta_from_start;
-        
-        // offset perpendicular to line:
-        // shift angle by -pi/2 get range=>[-1:1] as line_ofset=>[0=>line_length], 
-        //   then adding 1 to gets range=>[0:2], 
-        //   then scaling by line_length/2 * amplitude gets perp_offset: [0:(line_length*amplitude)]
-        double relative_perp_offset = (midlength * (render_modifier2/2))* sin(ang);
-                
-        // shift to make offsets relative to start point (x1, y1)
-        double line_offset = delta_from_midlength + x1 - midlength;
-        double perp_offset = relative_perp_offset + y1;
-        // then consider (line_offset, perp_offset) as point and rotate around start point (x1, y1) ?
-        // should already have angle (raw_line_angle)
-        // 2D rotation transformation of point B about a given fixed point A to give point C
-        // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
-        // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
-
-        // drop last term for xout and yout since y offset (perp_offset) = y1  [[ or B.y = A.y in above equation ]
-        // double newx = x1 + ((line_offset - x1) * cos(raw_line_angle)) - ((perp_offset - y1) * sin(raw_line_angle));
-        // double newy = y1 + ((line_offset - x1) * sin(raw_line_angle)) + ((perp_offset - y1) * cos(raw_line_angle));
-        xout = x1 + ((line_offset - x1) * cos(raw_line_angle + M_PI));  
-        yout = y1 + ((line_offset - x1) * sin(raw_line_angle + M_PI));  // drop last term since y offset (perp_offset) = 0
-        zout = relative_perp_offset;
-
-      }
-      */
       else if (render_mode == SINE_WAVES) {
         // amplitude calculated such that when render_modifier = 1, relative_perp_offset range: [0 ==> line_length/2]
         double amplitude = (line_length/4) * render_modifier1; 
@@ -1563,7 +1546,6 @@ public class MaurerLinesFunc extends VariationFunc {
           yout = newy;
         }
       }
-      
       else if (render_mode == SEQUIN_CIRCLE_SPLINE) {
         // Circle Splines with angle-based trionometric interpolation
         // attempting to implement strategy described by Sequin, Lee, Yen in paper
@@ -2034,7 +2016,7 @@ public class MaurerLinesFunc extends VariationFunc {
       } // end CUBIC_HERMITE_TANGENTS
 
           
-      else if (render_mode == CUBIC_HERMITE_TANGENT_FORM2) {
+      else if (render_mode == CUBIC_HERMITE_TANGENT_FORM2 || render_mode == CUBIC_HERMITE_TANGENT_FORM2_COPY) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
         // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf
         // for SPLINE6, attempting to introduce render modifier parameters (somewhat analogous to KB tension, continuity, bias?) 
@@ -2378,11 +2360,6 @@ public class MaurerLinesFunc extends VariationFunc {
         }
       }
     }
-    if (skip_x_lines != 0) {
-      if ((step_number % (skip_x_lines + 1)) != 0) {
-        cumulative_pass = false;
-      }
-    }
     pVarTP.doHide = !cumulative_pass;
     //
     // END FILTERING
@@ -2593,7 +2570,6 @@ public class MaurerLinesFunc extends VariationFunc {
     plist.put(PARAM_DIRECT_COLOR_THRESHOLDING, direct_color_thesholding);
     plist.put(PARAM_COLOR_LOW_THRESH, color_low_thresh);
     plist.put(PARAM_COLOR_HIGH_THRESH, color_high_thresh);
-    plist.put(PARAM_SKIP_X_LINES, skip_x_lines);
     plist.put(PARAM_FILTER_COUNT, filter_count);
     while (filter_count > filters.size()) {
       MaurerFilter mfil = new MaurerFilter();
@@ -2697,10 +2673,6 @@ public class MaurerLinesFunc extends VariationFunc {
     }
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
-    }
-    else if (PARAM_SKIP_X_LINES.equalsIgnoreCase(pName)) {
-      skip_x_lines = (int)pValue;
-      // System.out.println("setting skip_x_lines: " + skip_x_lines);
     }
     else if (PARAM_FILTER_COUNT.equalsIgnoreCase(pName)) {
       filter_count = (int)pValue;
