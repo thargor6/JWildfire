@@ -20,7 +20,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
  *    (released under same GNU Lesser General Public License as above)
  * Initially based on the "Maurer Rose", as described by Peter Maurer,
  *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
- * For information on some of the ideas explored in this variation, see the paper
+ * For more information on some of the ideas explored in this variation, see the paper
  *     "A Rose by Any Other Name...", Gregg Helt, Bridges Conference, 2016:
  *     http://archive.bridgesmathart.org/2016/bridges2016-445.html
  */
@@ -89,7 +89,6 @@ public class MaurerLinesFunc extends VariationFunc {
   
   private static final String PARAM_DIRECT_COLOR_MEASURE = "direct_color_measure";
   private static final String PARAM_DIRECT_COLOR_GRADIENT = "direct_color_gradient";
-//  private static final String PARAM_COLOR_SCALING = "color_scaling";
   private static final String PARAM_DIRECT_COLOR_THRESHOLDING = "direct_color_thresholding";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
@@ -142,37 +141,11 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RIGGED_RHODONEA_MINUS = 16;
   private static final int SUPER_ELLIPSE = 17;
   private static final int SUPER_RHODONEA = 18;
-  
-
-  // color mode
-  // 0 NORMAL_VECTOR --> normal (no direct coloring)
-  // 1 LINE_LENGTH_LINES --> color by line length
-  // 2 LINE_ANGLE_LINES --> color by absolute angle
-  // 3 LINE_RELATIVE_ANGLE --> color by relative angle
-  
-  // where does percentage vs absolute numbers come in?
-  
-  // color gradient
-  // 0 NORMAL_VECTOR --> normal (uses flame/layer colormap, but in standard way)
-  // 1 COLORMAP --> flame/layer colormap used for direct coloring
-  // 2 ALTERNATIVE_COLORMAP --> reserved for specifying colormap for direct coloring that is different from flame
-  // 3 --> RED_GREEN
-  // 4 --> RED_BLUE
-  // 5 --> BLUE_GREEN
-  
-  // so for flames using earlier versions, need to split
-  // PARAM_COLOR_MODE into PARAM_DIRECT_COLOR_GRADIENT and PARAM_DIRECT_COLOR_MODE
-  // NORMAL_VECTOR ==> NORMAL_VECTOR, NORMAL_VECTOR
-  // RED ==> no equivalent (other than normal red coloring based on colormap)
-  // GREEN ==> no equivalent
-  // BLUE ==> no equivalent
-  // LINE_LENGTH_RG ==> LINE_LENGTH_LINES, RED_GREEN
-  // LINE_LENGTH_RB ==> LINE_LENGTH_LINES, RED_BLUE
-  // LINE_LENGTH_BG ==> LINE_LENGTH_LINES, BLUE_GREEN
-  // LINE_LENGTH_COLORMAP => LINE_LENGTH_LINES, STANDARD_COLORMAP
-  // and etc for LINE_ANGLE_* and LINE_ANGLE_RELATIVE_*
  
   private static final int DEFAULT = 0;  // used for render_mode, render_submode, tangent_mode (for cubic interpolations)
+  private static final int NORMAL = 0;
+  private static final int NONE = 0;
+  private static final int OFF = 0;
   
   /**
    * RENDER MODES
@@ -182,13 +155,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int ELLIPSES = 3;
   private static final int SINE_WAVES = 4;
   private static final int QUADRATIC_BEZIER = 5;
-  
+
   private static final int SEQUIN_CIRCLE_SPLINE = 9;
+  // CUBIC_HERMITE_SPLINE and CUBIC_HERMITE_SPLINE_FORM2 require first derivative of curve, 
+  //     which is currently only calculated for RHODONEA curve_mode
+  //     so for now if curve_mode != RHODONEA, these modes leave point unchanged
   private static final int CUBIC_HERMITE_SPLINE = 10;
 
-  // CARDINAL_SPLINE also include uniform Catmull-Rom splines as a special case (when tightness param is set to 0)
-  private static final int CARDINAL_SPLINE = 11;
-
+  // private static final int FINITE_DIFFERENCE_SPLINE = 12;
   // finite difference spline in this context becomes equivalent to Catmull-Rom, so removing it
         // m1 ==> finite difference calculated tangent for end_point1        
         // m2 ==> finite difference calculated tangent for end_point2
@@ -198,8 +172,9 @@ public class MaurerLinesFunc extends VariationFunc {
         // M1 = (P2 - P0)/2
         // M2 = (P3 - P1)/2
         // so is equivalent to Catmull-Rom
-  // private static final int FINITE_DIFFERENCE_SPLINE = 12;
-  
+  private static final int CARDINAL_SPLINE = 11;
+  // UNIFORM_CATMULL_ROM_SPLINE is same as CARDINAL_SPLINE with tightness param is set to 0
+  private static final int UNIFORM_CATMULL_ROM_SPLINE = 12;
   private static final int NONUNIFORM_CATMULL_ROM_SPLINE = 13;
   private static final int CHORDAL_CATMULL_ROM_SPLINE = 14;  // special case of nonuniform Catmull-Rom spline
   private static final int CENTRIPETAL_CATMULL_ROM_SPLINE = 15;  // special case of nonuniform Catmull-Rom spline
@@ -209,10 +184,22 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT2 = 18;  // same as ACCIDENT1, but flip/reflect signs for x in tangents
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT3 = 19;  // same as ACCIDENT1, but flip/reflect signs for y in tangents
   private static final int CUBIC_HERMITE_HAPPY_ACCIDENT4 = 20;  // same as ACCIDENT1, but flip/reflect signs for both x and y in tangents
+  private static final int CUBIC_HERMITE_HAPPY_ACCIDENT5 = 21;  // same as ACCIDENT1, but switch tangent points
+  
+  // *_SWIZZLE1
+  //    same as *, but switch point0 x<->y, and point3 x<->y
+  // *_SWIZZLE2
+  //    same as *, but switch point0 <-> point3
+  // *_SWIZZLE3
+  //    same as *, but switch point0 <-> point3, point0 x<->y, point 3 x<->y
+  private static final int CARDINAL_SPLINE_SWIZZLE1 = 6;
+  private static final int CARDINAL_SPLINE_SWIZZLE2 = 7;
+  private static final int CARDINAL_SPLINE_SWIZZLE3 = 8;
+  private static final int KOCHANEK_BARTELS_SPLINE_SWIZZLE1 = 22;
+  private static final int KOCHANEK_BARTELS_SPLINE_SWIZZLE2 = 23;
+  private static final int KOCHANEK_BARTELS_SPLINE_SWIZZLE3 = 24;
 
-  private static final int CUBIC_HERMITE_TANGENT_FORM2 = 21;
-  private static final int CUBIC_HERMITE_TANGENT_FORM2_COPY = 25; // for backward compatibility
-  // private static final int ORIGIN_TRIANGLE_FILL = 30;
+  private static final int CUBIC_HERMITE_TANGENT_FORM2 = 25; 
   
   /**
    * RENDER SUBMODES
@@ -238,7 +225,8 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int Z_ALTERNATING_STROKE = 18;
   
   /**
-   * TANGENT SUBMODES (only applies to interpolation/spline render modes?)
+   * TANGENT SUBMODES
+   *    currently only applies to CUBIC_HERMITE_SPLINE and CUBIC_HERMITE_HAPPY_ACCIDENT* modes
    */
   private static final int TANGENT = 1;      // velocity ==> f'(t)
   private static final int UNIT_TANGENT = 2; // normalized velocity ==> f'(t) / |f'(t)|   
@@ -252,19 +240,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int THETA_TANGENT = 10;     // specify theta +/- offset from P1/P2 Maurer endpoints to use for determining tangent
   private static final int INDEX_TANGENT = 11;     // specify endpoint index +/- offset from P1/P2 Maurer endpoint to use for determining tangent
   private static final int XY_SCALE_TANGENT = 12;
-  
-  private static final int NORMAL = 0;
-  private static final int NONE = 0;
-  private static final int OFF = 0;
-  
-  // direct color gradient -- should be near bottom of parameter list,
-  //   since (now that colormap options is working) will be almost always COLORMAP
-  private static final int COLORMAP_CLAMP = 1;
-  private static final int COLORMAP_WRAP = 2;
-  private static final int RED_GREEN = 3;
-  private static final int RED_BLUE = 4;
-  private static final int BLUE_GREEN = 5;
-  
+
   /**
    *  COSET MODES
    */
@@ -272,6 +248,13 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int CLASSIC_COSETS = 1;  // cosets as implemented in original Maurer rose paper -- 
   private static final int CLOSURE_COSETS = 2;  // improved cosets as implemented in Helt rose paper -- line_count is for full curve closure 
   private static final int HYBRID_COSETS = 3;   // hybrid of CLASSIC and CLOSURE -- line_count is for full_curve_closure/2Pi 
+    
+  // direct color gradient handling
+  private static final int COLORMAP_CLAMP = 1;
+  private static final int COLORMAP_WRAP = 2;
+  private static final int RED_GREEN = 3;
+  private static final int RED_BLUE = 4;
+  private static final int BLUE_GREEN = 5;
   
   // direct color measures (and filters)
   /**
@@ -293,7 +276,6 @@ public class MaurerLinesFunc extends VariationFunc {
   // private static final int CURRENT_COSET = 12;  
   // private static final int CURRENT_POLYLINE_SEGMENT = 13;
   
-  // measure thresholding
   private static final int PERCENT = 0;
   private static final int VALUE = 1;
   // other possibilties -- distance or deviation from mean?
@@ -308,10 +290,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int AND = 0;
   private static final int OR = 1;
   private static final int XOR = 2;
-  // not sure if should include ANOTB and BNOTA
-  // these can be done just as easily by using  BAND_PASS and BAND_STOP
-  // so to simplify may want to either eliminate ANOTB and BNOTA options for filter.operator,
-  //    or eliminate BAND_STOP_VALUE and BAND_STOP_PERCENT options for filter.measure
   private static final int ANOTB = 3;
   private static final int BNOTA = 4;
   
@@ -329,16 +307,14 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int RENDER_MODIFIER2 = 11;
   private static final int RENDER_MODIFIER3 = 12;
   
-  
   // line thickness strategy (so far random is the only one working well)
   private static final int RANDOM = 0;
   private static final int PERPENDICULAR = 1;
   private static final int ROUNDED_CAPS = 2;
-  
 
-  private double a_param = 2; // 
-  private double b_param = 1; // 
-  private double c_param = 0; //
+  private double a_param = 2; 
+  private double b_param = 1; 
+  private double c_param = 0; 
   private double d_param = 1; 
   private double e_param = 1;
   private double f_param = 1;
@@ -356,7 +332,6 @@ public class MaurerLinesFunc extends VariationFunc {
   private double render_modifier2 = 1.0;
   private double render_modifier3 = 1.0;
   
-  // private double coset_d;
   private double theta_step_radians;
   private double initial_theta_radians;
   private double cycles; // 1 cycle = 2*PI
@@ -453,7 +428,6 @@ public class MaurerLinesFunc extends VariationFunc {
       return Double.NaN;
     }
   }
-  
  
   class RhodoneaCurve extends ParametricCurve {
     @Override
@@ -1623,11 +1597,13 @@ public class MaurerLinesFunc extends VariationFunc {
         // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
         xout = x1 + ((linex-x1) * cos(pa)) - ((liney-y1) * sin(pa));
         yout = y1 + ((linex-x1) * sin(pa)) + ((liney-y1) * cos(pa));
-        
-        
       }
       
-      else if (render_mode == CARDINAL_SPLINE) {
+      else if (render_mode == CARDINAL_SPLINE || 
+               render_mode == UNIFORM_CATMULL_ROM_SPLINE || 
+               render_mode == CARDINAL_SPLINE_SWIZZLE1 || 
+               render_mode == CARDINAL_SPLINE_SWIZZLE2 || 
+               render_mode == CARDINAL_SPLINE_SWIZZLE3) {
         // cobbled together from:
         //    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
         //    http://paulbourke.net/miscellaneous/interpolation/
@@ -1648,10 +1624,31 @@ public class MaurerLinesFunc extends VariationFunc {
         double theta3 = theta2 + theta_step_radians;
         curve.getCurvePoint(theta0, end_point0);
         curve.getCurvePoint(theta3, end_point3);
-        double x0 = end_point0.x;
-        double y0 = end_point0.y;
-        double x3 = end_point3.x;
-        double y3 = end_point3.y;
+        double x0, y0, x3, y3;
+        if (render_mode == CARDINAL_SPLINE_SWIZZLE1) {
+          x0 = end_point0.y;
+          y0 = end_point0.x;
+          x3 = end_point3.y;
+          y3 = end_point3.x;
+        }
+        else if (render_mode == CARDINAL_SPLINE_SWIZZLE2) {
+          x0 = end_point3.x;
+          y0 = end_point3.y;
+          x3 = end_point0.x;
+          y3 = end_point0.y;
+        }
+        else if (render_mode == CARDINAL_SPLINE_SWIZZLE3) {
+          x0 = end_point3.y;
+          y0 = end_point3.x;
+          x3 = end_point0.y;
+          y3 = end_point0.x;
+        }
+        else {  // render_mode == CARDINAL_SPLINE or UNIFORM_CATMULL_ROM_SPLINE
+          x0 = end_point0.x;
+          y0 = end_point0.y;
+          x3 = end_point3.x;
+          y3 = end_point3.y;
+        }
 
         // m1 ==> cardinal spline calculated tangent for end_point1        
         // m2 ==> cardinal spline calculated tangent for end_point1        
@@ -1668,9 +1665,16 @@ public class MaurerLinesFunc extends VariationFunc {
         double m2y = 0.5 * (y3-y1);
 
         // also trying addition of a tightness parameter
-        // for the case where render_modifier1 = 0, get the uniform Catmull-Rom spline as a special case of cardinal splines
-        // for the case where render_modifier1 = 1, tangents have no effect
-        double tanscale = (1-render_modifier1);
+        // for the case where tanscale = 1 (render_modifier1 = 0), 
+        //      get the uniform Catmull-Rom spline as a special case of cardinal splines
+        // for the case where transcale = 0 (render_modifier1 = 1), tangents have no effect
+        double tanscale;
+        if (render_mode == UNIFORM_CATMULL_ROM_SPLINE) {
+          tanscale = 1;
+        }
+        else {
+          tanscale = (1-render_modifier1);
+        }
 
         m1x = m1x * tanscale;
         m1y = m1y * tanscale;
@@ -1682,7 +1686,6 @@ public class MaurerLinesFunc extends VariationFunc {
         // line_delta = t1 * line_length;
         xout = xnew;
         yout = ynew;
-        
       }
       
       else if (render_mode == NONUNIFORM_CATMULL_ROM_SPLINE || 
@@ -1770,7 +1773,10 @@ public class MaurerLinesFunc extends VariationFunc {
         
       }
       
-      else if (render_mode == KOCHANEK_BARTELS_SPLINE) {
+      else if (render_mode == KOCHANEK_BARTELS_SPLINE || 
+              render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE1 || 
+              render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE2 ||    
+              render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE3) {
         // cobbled together from:
         // Online:
         //    https://en.wikipedia.org/wiki/Kochanek%E2%80%93Bartels_spline
@@ -1796,10 +1802,32 @@ public class MaurerLinesFunc extends VariationFunc {
         double theta3 = theta2 + theta_step_radians;
         curve.getCurvePoint(theta0, end_point0);
         curve.getCurvePoint(theta3, end_point3);
-        double x0 = end_point0.x;
-        double y0 = end_point0.y;
-        double x3 = end_point3.x;
-        double y3 = end_point3.y;
+        
+        double x0,y0,x3,y3;
+        if (render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE1) {
+          x0 = end_point0.y;
+          y0 = end_point0.x;
+          x3 = end_point3.y;
+          y3 = end_point3.x;
+        }
+        else if (render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE2) {
+          x0 = end_point3.x;
+          y0 = end_point3.y;
+          x3 = end_point0.x;
+          y3 = end_point0.y;
+        }
+        else if (render_mode == KOCHANEK_BARTELS_SPLINE_SWIZZLE3) {
+          x0 = end_point3.y;
+          y0 = end_point3.x;
+          x3 = end_point0.y;
+          y3 = end_point0.x;
+        }
+        else {  // KOCHANEK_BARTELS_SPLINE
+          x0 = end_point0.x;
+          y0 = end_point0.y;
+          x3 = end_point3.x;
+          y3 = end_point3.y;
+        }
 
         // but want defaults for tension, bias, continuity to be 0?
         double tension = render_modifier1;
@@ -1838,7 +1866,8 @@ public class MaurerLinesFunc extends VariationFunc {
               render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT1 ||
               render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT2 || 
               render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT3 || 
-              render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT4) {
+              render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT4 || 
+              render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT5) {
          // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
          // using formulation for interpolation on an arbitrary interval: 
          //     https://en.wikipedia.org/wiki/Cubic_Hermite_spline
@@ -1880,7 +1909,8 @@ public class MaurerLinesFunc extends VariationFunc {
         if (render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT1 || 
                 render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT2 || 
                 render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT3 ||
-                render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT4) {
+                render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT4 ||
+                render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT5) {
           // using wrong (but interesting) calculations for first derivative
           double k = a/b;
           first_derivative_point1.x = -(cos(k*dt1) + c) * sin(dt1);
@@ -1901,9 +1931,14 @@ public class MaurerLinesFunc extends VariationFunc {
             first_derivative_point1.y = -1 * first_derivative_point1.y;
             first_derivative_point2.y = -1 * first_derivative_point2.y;
           }
+          else if (render_mode == CUBIC_HERMITE_HAPPY_ACCIDENT5) { // flip tangent points
+            DoublePoint2D ptmp = first_derivative_point1;
+            first_derivative_point1 = first_derivative_point2;
+            first_derivative_point2 = ptmp;
+          }
 
         }
-        else {
+        else { // CUBIC_HERMITE 
           // calculating tangent vectors
           // use first derivative of curve (currently using rhodonea) at each endpoint for tangent vectors
           //     tangent = f'(t)   
@@ -1915,108 +1950,108 @@ public class MaurerLinesFunc extends VariationFunc {
         tan1y = first_derivative_point1.y;
         tan2x = first_derivative_point2.x;
         tan2y = first_derivative_point2.y;
-        double tanscale;
-        
-        // if *_UNSCALED_* then don't apply scaling adjustment to vectors
-        if (tangent_submode == UNSCALED_TANGENT ||
-                tangent_submode == UNSCALED_UNIT_TANGENT ||
-                tangent_submode == UNSCALED_NORMAL || 
-                tangent_submode == UNSCALED_UNIT_NORMAL) {
-          tanscale = 1;
+        if (Double.isNaN(tan1x) || Double.isNaN(tan1y) || 
+            Double.isNaN(tan2x) || Double.isNaN(tan2y)) {
+          // if can't find first derivative, bailout with point unchanged
+          xout = xin; 
+          yout = yin; 
         }
-        else {  // apply standard Hermite non-unit-interval scaling to vectors
-          // TANGENT (or NORMAL?)
-          tanscale = theta2 - theta1;
+        else {
+          double tanscale;
+          // if *_UNSCALED_* then don't apply scaling adjustment to vectors
+          if (tangent_submode == UNSCALED_TANGENT ||
+                  tangent_submode == UNSCALED_UNIT_TANGENT ||
+                  tangent_submode == UNSCALED_NORMAL ||
+                  tangent_submode == UNSCALED_UNIT_NORMAL) {
+            tanscale = 1;
+          }
+          else {  // apply standard Hermite non-unit-interval scaling to vectors
+            // TANGENT (or NORMAL?)
+            tanscale = theta2 - theta1;
+          }
+          
+          double dx1, dx2, dy1, dy2;
+          // if *_NORMAL_* then set (dx1, dy1) and (dx2, dy2) to normal vectors instead of tangent vectors
+          if (tangent_submode == NORMAL_VECTOR ||
+                  tangent_submode == UNIT_NORMAL ||
+                  tangent_submode == UNSCALED_NORMAL ||
+                  tangent_submode == UNSCALED_UNIT_NORMAL) {
+            // rotate tangent vector around point to get normal vector?
+            // 2D rotation transformation of point B about a given fixed point A to give point C
+            // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
+            // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
+            double rota = -M_PI / 2.0;
+            dx1 = x1 + ((tan1x - x1) * cos(rota)) - ((tan1y - y1) * sin(rota));
+            dy1 = y1 + ((tan1x - x1) * sin(rota)) + ((tan1y - y1) * cos(rota));
+            dx2 = x2 + ((tan2x - x2) * cos(rota)) - ((tan2y - y2) * sin(rota));
+            dy2 = y2 + ((tan2x - x2) * sin(rota)) + ((tan2y - y2) * cos(rota));
+          }
+          else if (tangent_submode == ROTATION_TANGENT) {
+            // user render_modifier2 to determine angle (in degrees) to rotate tangent1
+            // user render_modifier3 to determine angle (in degrees) to rotate tangent2
+            //   (or maybe should only use one modifier, and rotates both tangents?)
+            //   (or one to modify x of both tangents, one to modify y of both tangents? ==> like happy_accident modes?)
+            double rota1 = (render_modifier2 / 360) * M_2PI;
+            dx1 = x1 + ((tan1x - x1) * cos(rota1)) - ((tan1y - y1) * sin(rota1));
+            dy1 = y1 + ((tan1x - x1) * sin(rota1)) + ((tan1y - y1) * cos(rota1));
+            double rota2 = (render_modifier3 / 360) * M_2PI;
+            dx2 = x2 + ((tan2x - x2) * cos(rota2)) - ((tan2y - y2) * sin(rota2));
+            dy2 = y2 + ((tan2x - x2) * sin(rota2)) + ((tan2y - y2) * cos(rota2));
+          }
+          // attempting to apply reflection/scaling used in happy-accident modes to other modes
+          // scale x of tangent by render_modifier2 param
+          // scale y of tangent by render_modifier3 param
+          else if (tangent_submode == XY_SCALE_TANGENT) {
+            dx1 = tan1x * render_modifier2;
+            dx2 = tan2x * render_modifier2;
+            dy1 = tan1y * render_modifier3;
+            dy2 = tan2y * render_modifier3;
+          }
+          else { // otherwise set (dx1,dy1) and (dx2,dy2) to tangent vectors
+            dx1 = tan1x;
+            dy1 = tan1y;
+            dx2 = tan2x;
+            dy2 = tan2y;
+          }
+          
+          // if *_UNIT_* then normalize to unit vectors
+          if (tangent_submode == UNIT_TANGENT ||
+                  tangent_submode == UNIT_NORMAL ||
+                  tangent_submode == UNSCALED_UNIT_TANGENT ||
+                  tangent_submode == UNSCALED_UNIT_NORMAL) {
+            // normalizing the vectors
+            double sr1 = sqrt(dx1*dx1 + dy1*dy1);
+            double sr2 = sqrt(dx2*dx2 + dy2*dy2);
+            dx1 = dx1/sr1;
+            dy1 = dy1/sr1;
+            dx2 = dx2/sr2;
+            dy2 = dy2/sr2;
+          }
+          else {
+            // otherwise leave unnormalized
+          }
+          // apply tension -- use render_modifier1 as tension parameter for cubic Hermite interpolation
+          //    by applying a (1 - tension) scaling factor to the tangent vector Hermite terms
+          //    thus if tension = 1, tangent terms will drop out and cubic Hermite interpolation will
+          //    reduce to linear interoplation ==> Maurer lines
+          tanscale = (1 - render_modifier1) * tanscale;
+          // trying to add parameter similar to Kochanek-Bartels "bias"
+          // at tension = -1, first tangent term (h10) will be factored out
+          // at tension = +1, second tangnt term (h11) will be factored out
+          // double tanscale10 = (1 + render_modifier2) * tanscale;
+          // double tanscale11 = (1 - render_modifier2) * tanscale;
+          
+          //double xnew = (h00 * x1) + (h10 * dx1 * tanscale10 ) + (h01 * x2) + (h11 * dx2 * tanscale11);
+          //double ynew = (h00 * y1) + (h10 * dy1 * tanscale10 ) + (h01 * y2) + (h11 * dy2 * tanscale11);
+          double xnew = (h00 * x1) + (h10 * dx1 * tanscale) + (h01 * x2) + (h11 * dx2 * tanscale);
+          double ynew = (h00 * y1) + (h10 * dy1 * tanscale) + (h01 * y2) + (h11 * dy2 * tanscale);
+          xout = xnew;
+          yout = ynew;
         }
-        
-        double dx1, dx2, dy1, dy2;
-        
-        // if *_NORMAL_* then set (dx1, dy1) and (dx2, dy2) to normal vectors instead of tangent vectors
-        if (tangent_submode == NORMAL_VECTOR || 
-                tangent_submode == UNIT_NORMAL || 
-                tangent_submode == UNSCALED_NORMAL || 
-                tangent_submode == UNSCALED_UNIT_NORMAL) {
-          // rotate tangent vector around point to get normal vector?
-          // 2D rotation transformation of point B about a given fixed point A to give point C
-          // C.x = A.x + (B.x - A.x) * cos(theta) - (B.y - A.y) * sin(theta)
-          // C.y = A.y + (B.x - A.x) * sin(theta) + (B.y - A.y) * cos(theta)
-          double rota = -M_PI / 2.0;
-          dx1 = x1 + ((tan1x - x1) * cos(rota)) - ((tan1y - y1) * sin(rota));
-          dy1 = y1 + ((tan1x - x1) * sin(rota)) + ((tan1y - y1) * cos(rota));
-          dx2 = x2 + ((tan2x - x2) * cos(rota)) - ((tan2y - y2) * sin(rota));
-          dy2 = y2 + ((tan2x - x2) * sin(rota)) + ((tan2y - y2) * cos(rota));
-        }
-        else if (tangent_submode == ROTATION_TANGENT) {
-          // user render_modifier2 to determine angle (in degrees) to rotate tangent1
-          // user render_modifier3 to determine angle (in degrees) to rotate tangent2
-          //   (or maybe should only use one modifier, and rotates both tangents?)
-          //   (or one to modify x of both tangents, one to modify y of both tangents? ==> like happy_accident modes?)
-          double rota1 = (render_modifier2 / 360) * M_2PI;
-          dx1 = x1 + ((tan1x - x1) * cos(rota1)) - ((tan1y - y1) * sin(rota1));
-          dy1 = y1 + ((tan1x - x1) * sin(rota1)) + ((tan1y - y1) * cos(rota1));
-          double rota2 = (render_modifier3 / 360) * M_2PI;
-          dx2 = x2 + ((tan2x - x2) * cos(rota2)) - ((tan2y - y2) * sin(rota2));
-          dy2 = y2 + ((tan2x - x2) * sin(rota2)) + ((tan2y - y2) * cos(rota2));
-        }
-        // attempting to apply reflection/scaling used in happy-accident modes to other modes
-        // scale x of tangent by render_modifier2 param
-        // scale y of tangent by render_modifier3 param
-        else if (tangent_submode == XY_SCALE_TANGENT) {
-          dx1 = tan1x * render_modifier2;
-          dx2 = tan2x * render_modifier2;
-          dy1 = tan1y * render_modifier3;
-          dy2 = tan2y * render_modifier3;
-        }
-        else { // otherwise set (dx1,dy1) and (dx2,dy2) to tangent vectors
-          dx1 = tan1x;
-          dy1 = tan1y;
-          dx2 = tan2x;
-          dy2 = tan2y;
-        }
-
-        // if *_UNIT_* then normalize to unit vectors
-        if (tangent_submode == UNIT_TANGENT || 
-                tangent_submode == UNIT_NORMAL || 
-                tangent_submode == UNSCALED_UNIT_TANGENT ||
-                tangent_submode == UNSCALED_UNIT_NORMAL) {
-          // normalizing the vectors
-          double sr1 = sqrt(dx1*dx1 + dy1*dy1);
-          double sr2 = sqrt(dx2*dx2 + dy2*dy2);
-          dx1 = dx1/sr1;
-          dy1 = dy1/sr1;
-          dx2 = dx2/sr2;
-          dy2 = dy2/sr2;
-        }
-        else {  
-          // otherwise leave unnormalized
-        }
-       
-        
-        // apply tension -- use render_modifier1 as tension parameter for cubic Hermite interpolation
-        //    by applying a (1 - tension) scaling factor to the tangent vector Hermite terms
-        //    thus if tension = 1, tangent terms will drop out and cubic Hermite interpolation will 
-        //    reduce to linear interoplation ==> Maurer lines
-        tanscale = (1 - render_modifier1) * tanscale;
-        // trying to add parameter similar to Kochanek-Bartels "bias"
-        // at tension = -1, first tangent term (h10) will be factored out
-        // at tension = +1, second tangnt term (h11) will be factored out
-        // double tanscale10 = (1 + render_modifier2) * tanscale;
-        // double tanscale11 = (1 - render_modifier2) * tanscale;
-        
-        //double xnew = (h00 * x1) + (h10 * dx1 * tanscale10 ) + (h01 * x2) + (h11 * dx2 * tanscale11);
-        //double ynew = (h00 * y1) + (h10 * dy1 * tanscale10 ) + (h01 * y2) + (h11 * dy2 * tanscale11);
-        double xnew = (h00 * x1) + (h10 * dx1 * tanscale) + (h01 * x2) + (h11 * dx2 * tanscale);
-        double ynew = (h00 * y1) + (h10 * dy1 * tanscale) + (h01 * y2) + (h11 * dy2 * tanscale);
-        
-        // line_delta = t1 * line_length;
-        
-        xout = xnew;
-        yout = ynew;
-        
       } // end CUBIC_HERMITE_TANGENTS
 
           
-      else if (render_mode == CUBIC_HERMITE_TANGENT_FORM2 || render_mode == CUBIC_HERMITE_TANGENT_FORM2_COPY) {
+      else if (render_mode == CUBIC_HERMITE_TANGENT_FORM2) {
         // using general cubic hermite spline, with tangent vectors determined by derivative of underlying curve
         // trying long-form 3rd degree hermite polynomial equation from http://www3.nd.edu/~zxu2/acms40390F12/Lec-3.4-5.pdf
         // for SPLINE6, attempting to introduce render modifier parameters (somewhat analogous to KB tension, continuity, bias?) 
@@ -2040,14 +2075,10 @@ public class MaurerLinesFunc extends VariationFunc {
         double fw1 = x2;
         double gw1 = y2;    
         
-        // random value ranging from [0:1]
-        // double p = Math.random();
         if (Double.isNaN(ffw0) || Double.isNaN(ggw0) || Double.isNaN(ffw1) || Double.isNaN(ggw1)) {
-          // if can't find first derivatives, just default to linear line interpolation
-          xout = (x1 * (1-t1)) + x2*t1;
-          // same as xout = x1 + (v * (x2-x1));
-          yout = (y1 * (1-t1)) + y2*t1;
-          // same as yout = y1 + (v * (y2-y1));
+          // if can't find first derivatives, bailout with point unchanged
+          xout = xin;
+          yout = yin;
         }
         else {
           // w (standing in for x from above hermite equation) ranges from [theta1:theta2]
@@ -2060,15 +2091,11 @@ public class MaurerLinesFunc extends VariationFunc {
               double fraction_of_line = 2 * point_threshold;
               xout = (fw0 * (1-fraction_of_line)) + (ffw0 * fraction_of_line);
               yout = (gw0 * (1-fraction_of_line)) + (ggw0 * fraction_of_line);
-              // xout = ffw0;
-              // yout = ggw0;
             }
             else {
               double fraction_of_line = 2 * (point_threshold - 0.5);
               xout = (fw1 * (1-fraction_of_line)) + (ffw1 * fraction_of_line);
               yout = (gw1 * (1-fraction_of_line)) + (ggw1 * fraction_of_line);
-              // xout = ffw1;
-              // yout = ggw1;
             }
           }
           
@@ -2093,22 +2120,15 @@ public class MaurerLinesFunc extends VariationFunc {
             yout = gw;
           }
         }
-        
-        // line_delta = t1 * line_length;
-        
       } // end CUBIC_HERMITE_TANGENT_FORM2
-
-      /* else if (render_mode == ORIGIN_TRIANGLE_FILL) {   
-        xout = 0;
-        yout = 0;
-        // zout = 0;
-      }
-      */
       else {
         // default to Maurer lines
         xout = mpoint.x;
         yout = mpoint.y;
       }
+      //
+      //  END RENDER_MODES
+      // 
 
       // 
       // RENDER_SUBMODES
