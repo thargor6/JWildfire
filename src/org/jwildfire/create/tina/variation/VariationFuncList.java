@@ -551,6 +551,7 @@ public class VariationFuncList {
 
     registerVariationFunc(MaurerRoseFunc.class);
     registerVariationFunc(MaurerLinesFunc.class);
+    registerVariationFunc(CPow3WFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
