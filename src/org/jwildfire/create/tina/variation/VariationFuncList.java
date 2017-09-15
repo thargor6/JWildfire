@@ -470,6 +470,7 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
+
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
@@ -479,6 +480,7 @@ public class VariationFuncList {
     registerVariationFunc(PlaneWFFunc.class);
     registerVariationFunc(CheckerboardWFFunc.class);
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
+    
     registerVariationFunc(DLA3DWFFunc.class);
 
     registerVariationFunc(Waves2RadialFunc.class);
@@ -545,8 +547,10 @@ public class VariationFuncList {
     // registerVariationFunc(SphTiling3Func.class); 
     registerVariationFunc(SphTiling3V2Func.class); 
     registerVariationFunc(Panorama1Func.class); 
-    registerVariationFunc(Panorama2Func.class); 
-    
+    registerVariationFunc(Panorama2Func.class);
+
+    registerVariationFunc(MaurerRoseFunc.class);
+    registerVariationFunc(MaurerLinesFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
