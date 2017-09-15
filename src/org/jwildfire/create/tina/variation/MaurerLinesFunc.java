@@ -18,11 +18,14 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
  * Maurer Lines variation by CozyG
  *    Copyright 2016- Gregg Helt
  *    (released under same GNU Lesser General Public License as above)
- * Initially based on the "Maurer Rose", as described by Peter Maurer,
+ * Initially based on the "Maurer Rose", as described by Peter Maurer
  *    for more information on Maurer Roses see https://en.wikipedia.org/wiki/Maurer_rose
+ * But Maurer Lines greatly expands on this and explores other ideas as well
  * For more information on some of the ideas explored in this variation, see the paper
  *     "A Rose by Any Other Name...", Gregg Helt, Bridges Conference, 2016:
  *     http://archive.bridgesmathart.org/2016/bridges2016-445.html
+ * For a simpler subset of this functionality that is much closer to the original Maurer Rose, 
+ *     see the "maurer_rose" variation
  */
 package org.jwildfire.create.tina.variation;
 
@@ -43,7 +46,6 @@ import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -51,7 +53,6 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class MaurerLinesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  private boolean DEBUG_RELATIVE_ANGLE = false;
   private boolean DEBUG_META_MODE = false;
   private boolean DEBUG_SAMPLING = false;
   private boolean DEBUG_DYNAMIC_PARAMETERS = false;
