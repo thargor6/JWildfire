@@ -14,22 +14,17 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-
-/*
-     CPow3 by CozyG
-     Started as attempt to port CPow2 Apophysis Plugin to JWildfire Variation, 
-          but by happy accident became something else? 
-          (doesn't look at all like cpow2 in Apophysis7x.15D (2.10.15.3))
-          original CPow2 Apophysis plugin written by xyrus02:
-             http://sourceforge.net/p/apo-plugins/code/HEAD/tree/personal/georgkiehne/updated_for_x64/cpow2.c
- */
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.round;
+
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -39,72 +34,54 @@ public class CPow3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_R = "r";
-  private static final String PARAM_A = "a";
+  private static final String PARAM_D = "d";
   private static final String PARAM_DIVISOR = "divisor";
   private static final String PARAM_SPREAD = "spread";
-  private static final String PARAM_DISCRETE_SPREAD = "discrete_spread";
-  private static final String PARAM_SPREAD2 = "spread2";
-  private static final String PARAM_OFFSET2 = "offset2";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_A, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
+  private static final String[] paramNames = { PARAM_R, PARAM_D, PARAM_DIVISOR, PARAM_SPREAD };
 
-  // Parameters
-  private double r = 1.0;
-  private double a = 0.1;
-  private double divisor = 1.0;
-  private double spread = 1.0;
-  private double discrete_spread = 1.0;
-  private double spread2 = 0.0;
-  private double offset2 = 1.0;
-
-  // Internal fields set in init (based on parameters)
-  double c;
-  double d;
-  double half_c;
-  double half_d;
-  double ang;
-  double inv_spread;
-  double full_spread;
+  private double p_r = 1.0;
+  private double p_d = 0.0;
+  private double divisor = 1;
+  private double spread = 1;
+  
+  double ang,p_a, c, half_c, d, half_d, coeff, full_spread;
 
   @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+	  ang = 2.0 * M_PI / divisor;
+	  p_a = atan2((p_d < 0? -log(-p_d): log(p_d)) * p_r,2*M_PI);
+	  c = cos(p_a)*p_r * cos (p_a)/ divisor;
+	  d = cos(p_a)*p_r * sin (p_a)/ divisor;
+	  half_c = c / 2.0;
+	  half_d = d / 2.0;
+	  coeff = d == 0 ? 0 : -0.095 * spread /d;
+
+  }
+	  
+  @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* CPow2 PluginVarCalc
-      double sn, cs;
-      double a = atan2(FTy, FTx);
-      int n = rand() % VAR(cpow2_spread);
-      if (a < 0) n++;
-      a += 2*M_PI*n;
-      if (cos(a*VAR(inv_spread)) < rand()*2.0/RAND_MAX - 1.0)
-          a -= VAR(full_spread);
-      double lnr2 = log(FTx*FTx + FTy*FTy); // logarithm * 2
-      double r = VVAR * exp(VAR(half_c) * lnr2 - VAR(d) * a);
-      fsincos(VAR(c) * a + VAR(half_d) * lnr2 + VAR(ang) * rand(),
-          &sn, &cs);
-      FPx += r * cs;
-      FPy += r * sn;
-      */
+    /* cpow3 by Peter Sdobnov (Zueuk) translated by Brad Stefanov and Rick Sidwell  */
+    
+		double a = pAffineTP.getPrecalcAtanYX();
 
-    double ai = pAffineTP.getPrecalcAtanYX();
-    double n = pContext.random() * spread;
-    if (discrete_spread >= 1.0) {
-      n = (int) n;
-    }
-    if (ai < 0) {
-      n++;
-    }
-    ai += 2 * M_PI * n;
-    if (cos(ai * inv_spread) < (pContext.random() * 2.0 - 1.0)) {
-      ai -= full_spread;
-    }
-    double lnr2 = log(pAffineTP.getPrecalcSumsq());
-    double ri = pAmount * exp(half_c * lnr2 - d * ai);
-    double ang2 = c * ai * half_d * lnr2 * ang * (pContext.random() * spread2 + offset2);
-    pVarTP.x += ri * cos(ang2);
-    pVarTP.y += ri * sin(ang2);
+	    if (a < 0) a += 2*M_PI;
 
-    if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+;
+	    if (cos(a / 2) < pContext.random() * 2.0 - 1.0)
+	    	a -= 2*M_PI;
+    	
+	a += ( (pContext.random() < 0.5)? 2*M_PI : -2*M_PI) * round (log(pContext.random()) * coeff);
+    
+    double lnr2 = log(pAffineTP.getPrecalcSumsq());  // logarithm * 2
+    
+    double r = pAmount * exp(half_c * lnr2 - d * a);
+    double th = c * a + half_d * lnr2 + ang * floor(divisor * pContext.random());
+    
+    pVarTP.x += r * cos(th);
+    pVarTP.y += r * sin(th);
+    
+    if (pContext.isPreserveZCoordinate()) pVarTP.z += pAmount * pAffineTP.z;
 
   }
 
@@ -115,56 +92,31 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, a, divisor, spread, discrete_spread, spread2, offset2 };
+    return new Object[] { p_r, p_d, divisor, spread };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_R.equalsIgnoreCase(pName))
-      r = pValue;
-    else if (PARAM_A.equalsIgnoreCase(pName))
-      a = pValue;
+      p_r = pValue;
+    else if (PARAM_D.equalsIgnoreCase(pName))
+      p_d = pValue;
     else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
-      divisor = pValue;
-    else if (PARAM_SPREAD.equalsIgnoreCase(pName)) {
-      spread = pValue;
-    }
-    else if (PARAM_DISCRETE_SPREAD.equalsIgnoreCase(pName)) {
-      discrete_spread = pValue;
-    }
-    else if (PARAM_SPREAD2.equalsIgnoreCase(pName)) {
-      spread2 = pValue;
-    }
-    else if (PARAM_OFFSET2.equalsIgnoreCase(pName)) {
-      offset2 = pValue;
-    }
+      divisor = (pValue == 0) ? 1 : pValue;
+    else if (PARAM_SPREAD.equalsIgnoreCase(pName))
+      spread = pValue ;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
-  public String getName() {
-    return "cpow3";
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "cpow_r", "cpow_d", "cpow_divisor", "cpow_spread" };
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    /* CPow2 PluginVarPrepare()
-    VAR(ang) = 2*M_PI / ((double) VAR(cpow2_divisor));
-    VAR(c) = VAR(cpow2_r) * cos(M_PI/2*VAR(cpow2_a)) / ((double) VAR(cpow2_divisor));
-    VAR(d) = VAR(cpow2_r) * sin(M_PI/2*VAR(cpow2_a)) / ((double) VAR(cpow2_divisor));
-    VAR(half_c) = VAR(c) / 2;
-    VAR(half_d) = VAR(d) / 2;
-    VAR(inv_spread) = 0.5 / VAR(cpow2_spread);
-    VAR(full_spread) = 2*M_PI*VAR(cpow2_spread);
-    */
-    ang = 2.0 * M_PI / divisor;
-    c = r * cos(M_PI / 2 * a) / divisor;
-    d = r * sin(M_PI / 2 * a) / divisor;
-    half_c = c / 2;
-    half_d = d / 2;
-    inv_spread = 0.5 / spread;
-    full_spread = 2 * M_PI * spread;
+  public String getName() {
+    return "cpow3";
   }
 
 }
