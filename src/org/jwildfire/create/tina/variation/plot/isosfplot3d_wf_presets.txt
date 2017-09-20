@@ -291,7 +291,7 @@ param_b = 2.0
 
 ##26
 Bretzel (multiple holes) from Frank Baumann 
-formula = (param_a*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)+60*z*z-2
+formula = (param_a*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)+60*z*z-2)
 xmin = -pi
 xmax =  pi
 ymin = -pi
