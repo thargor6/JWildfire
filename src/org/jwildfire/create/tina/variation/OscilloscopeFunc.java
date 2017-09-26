@@ -91,6 +91,11 @@ public class OscilloscopeFunc extends VariationFunc {
   }
 
   @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "oscope_separation", "oscope_frequency", "oscope_amplitude", "oscope_damping" };
+  }
+  
+  @Override
   public String getName() {
     return "oscilloscope";
   }
