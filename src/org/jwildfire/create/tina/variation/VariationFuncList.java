@@ -555,7 +555,7 @@ public class VariationFuncList {
     registerVariationFunc(DCCylinderFunc.class);
     registerVariationFunc(DCCylinder2Func.class);
     registerVariationFunc(Swirl3Func.class);
-    registerVariationFunc(CardiodFunc.class);
+    registerVariationFunc(CardioidFunc.class);
     registerVariationFunc(ShredradFunc.class);
 
     resolvedAliasMap = new HashMap<>();

@@ -25,18 +25,20 @@ import static org.jwildfire.base.mathlib.MathLib.sqr;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class CardiodFunc extends VariationFunc {
+public class CardioidFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
   private static final String[] paramNames = { PARAM_A };
 
-  private double cardiod_a = 1.0;
+  private double cardioid_a = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double a = atan2(pAffineTP.y, pAffineTP.x);
-    double r = pAmount*sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)+sin(a*cardiod_a)+1.0);
+    // cardioid by Michael Faber
+	  
+	double a = atan2(pAffineTP.y, pAffineTP.x);
+    double r = pAmount*sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y)+sin(a*cardioid_a)+1.0);
     double c = cos(a);
     double s = sin(a);
 
@@ -54,20 +56,20 @@ public class CardiodFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cardiod_a };
+    return new Object[] { cardioid_a };
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A.equalsIgnoreCase(pName))
-      cardiod_a = pValue;
+      cardioid_a = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String getName() {
-    return "cardiod";
+    return "cardioid";
   }
 
 }
