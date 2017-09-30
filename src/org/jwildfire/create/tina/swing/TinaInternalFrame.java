@@ -19482,6 +19482,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineXYEditPlaneToggleBtn.setText("XY");
       affineXYEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the XY-plane ");
       affineXYEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
+      affineXYEditPlaneToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineXYEditPlaneToggleBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -19499,6 +19500,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineYZEditPlaneToggleBtn.setText("YZ");
       affineYZEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the YZ-plane ");
       affineYZEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
+      affineYZEditPlaneToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineYZEditPlaneToggleBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (tinaController != null) {
@@ -19515,6 +19517,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineZXEditPlaneToggleBtn = new JToggleButton();
       affineZXEditPlaneToggleBtn.setText("ZX");
       affineZXEditPlaneToggleBtn.setToolTipText("Edit affine transforms in the ZX-plane ");
+      affineZXEditPlaneToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineZXEditPlaneToggleBtn.setPreferredSize(new Dimension(42, 24));
       affineZXEditPlaneToggleBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {

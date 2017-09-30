@@ -1,13 +1,24 @@
-V3.21 (24.09.2017)
-	- Add setBGTransparency line to scripts converted from flames  … When a script creates a new flame, it sets bgTransparency to true by 
-	  default, so scripts converted from flames didn't preserve the setting from the flame. Added a setBGTransparency call to do so. By Rick Sidwell
-	- Compatibility for addLinkedXForm  … Made addLinkedXForm set the draw mode of the from xform to HIDDEN and the symmetry 
-	  of the to xform to 1. This matches the behavior of Apophysis, making it easier to follow tutorials for that program. By Rick Sidwell
-	- New variations  Thanks to Gregg Helt, dark-beam (Luca), Rick Sidwell and Brad Stefanov for conversions and new variations.
-		- MaurerLines, MaurerRose, Minkowskope, TruchetFill, Panorama2, Panorama1, SphTiling3V2, TruchetAE, R_Circleblur, MinkQM,
-		  Sigmoid, BlurLinear, Gridout2, Gridout, Crob, Hole2, Cpow2, Cpow3_wf and DCCracklePWF.
-		- Added Apo Cpow3 and had to rename previous Cpow3 by Gregg Helt too Cpow3_wf
-		- Bugfix on isoplot variation formula 26
+V3.21 (30.09.2017)
+ - Add setBGTransparency line to scripts converted from flames. When a script creates a new flame, it sets bgTransparency to true by 
+   default, so scripts converted from flames didn't preserve the setting from the flame. Added a setBGTransparency call to do so. By Rick Sidwell
+ - Compatibility for addLinkedXForm. Made addLinkedXForm set the draw mode of the from xform to HIDDEN and the symmetry 
+   of the to xform to 1. This matches the behavior of Apophysis, making it easier to follow tutorials for that program. By Rick Sidwell
+ - New variations  (Thanks to Gregg Helt, dark-beam (Luca), Rick Sidwell and Brad Stefanov for conversions and new variations):
+   - MaurerLines, MaurerRose, Minkowskope, TruchetFill, Panorama2, Panorama1, SphTiling3V2, TruchetAE, R_Circleblur, MinkQM,
+     Sigmoid, BlurLinear, Gridout2, Gridout, Crob, Hole2, Cpow2, Cpow3_wf and DCCracklePWF.
+   - Added Apo Cpow3 and had to rename previous Cpow3 by Gregg Helt too Cpow3_wf
+   - Bugfix on isoplot variation formula 26
+ - Even more work on variations, contributed by Rick Sidwell:
+   - dc_cylinder
+   - dc_cylinder2
+   - swirl3
+   - cardiod
+   - shredrad
+   - improved backwards-compatibility for oscilloscope and oscilloscope2   
+ - experimental "UI scale"-setting in the launcher. Works only since Java9. Scales up the UI, in a consistent manner, by the given factor.
+   (To use Java9: install it from oracle, then in the launcher chose "Add runtime". Navigate to "C:\Program Files\Java\jdk-9\bin" and select "java.exe")
+   (For good results, you should reset the value of "tina.general.font_scale" in the Preferences to 1, if you used a higher value)
+ - fixed the font-size of the edit-plane-buttons   
 
 V3.20 (15.07.2017)
  - New "POINTCLOUD"-generator inside the Mesh-Generator. Pointclouds basically are meshes with 1-point-polygons. 
