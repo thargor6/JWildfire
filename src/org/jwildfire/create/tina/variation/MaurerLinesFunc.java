@@ -29,6 +29,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
  */
 package org.jwildfire.create.tina.variation;
 
+import java.io.Serializable;
 import static java.lang.Math.abs;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -758,7 +759,7 @@ public class MaurerLinesFunc extends VariationFunc {
    *  only using z coordinate for specific modes
    */
   
-  class DoublePoint2D {
+  class DoublePoint2D implements Serializable {
     public double x;
     public double y;
   }
