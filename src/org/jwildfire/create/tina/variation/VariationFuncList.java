@@ -73,6 +73,7 @@ public class VariationFuncList {
     aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
     aliasMap.put(MobiusNFunc.class, "MobiusN");
     aliasMap.put(Tile_LogFunc.class, "tile_log");
+    aliasMap.put(DCTriTileFunc.class, "FiveFold");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -557,6 +558,7 @@ public class VariationFuncList {
     registerVariationFunc(Swirl3Func.class);
     registerVariationFunc(CardioidFunc.class);
     registerVariationFunc(ShredradFunc.class);
+    registerVariationFunc(DCTriTileFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
