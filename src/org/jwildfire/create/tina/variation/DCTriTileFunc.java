@@ -25,6 +25,7 @@ import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 
+import java.io.Serializable;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -71,7 +72,8 @@ public class DCTriTileFunc extends VariationFunc {
 	  return ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff)  / (double) 0x7fffffff;
   }
 
-  private class triangle {
+  private class triangle implements Serializable {
+	  private static final long serialVersionUID = 1L;
 	  int type;
 	  double x1, y1, x2, y2, x3, y3;
 	  double col;
