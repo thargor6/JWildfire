@@ -174,7 +174,8 @@ public class TinaNonlinearControlsRow {
   private void createParamsPnlComponents(XForm pXForm, Variation pVar) {
     if (pXForm != null && pVar != null) {
       String[] paramNames = pVar.getFunc().getParameterNames();
-      if (paramNames != null && paramNames.length > 1) {
+      String[] resNames = pVar.getFunc().getRessourceNames();
+      if (paramNames != null && (paramNames.length > 1 || resNames != null && resNames.length > 0 && paramNames.length > 0)) {
         int pnlHeight = rootPnlBaseHeight;
         Object[] paramValues = pVar.getFunc().getParameterValues();
         for (int i = 0; i < paramNames.length; i++) {

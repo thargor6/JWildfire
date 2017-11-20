@@ -2624,7 +2624,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           pRow.getNonlinearParamsCmb().addItem(name);
         }
       }
-      if (paramNames != null && paramNames.length > 1) {
+      if (paramNames != null && (paramNames.length > 1 || paramNames.length > 0 && resCount > 0)) {
         pRow.getToggleParamsPnlButton().setEnabled(true);
       }
       else {
