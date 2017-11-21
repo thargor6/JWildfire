@@ -2659,6 +2659,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
     }
     pRow.rebuildParamsPnl(pXForm, pVar);
+    resizeNonlinearParamsPanel();
   }
 
   public void addLinkedXForm() {
@@ -3106,7 +3107,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               // if setting the parameter can change the total number of parameters, 
               //    then refresh parameter UI
               this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
-              resizeNonlinearParamsPanel();
             }
           refreshFlameImage(true, false, 1, true, false);
         }
