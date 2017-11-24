@@ -41,7 +41,7 @@ public class CPow3Func extends VariationFunc {
   private static final String[] paramNames = { PARAM_R, PARAM_D, PARAM_DIVISOR, PARAM_SPREAD };
 
   private double p_r = 1.0;
-  private double p_d = 0.0;
+  private double p_d = 1.0;
   private double divisor = 1;
   private double spread = 1;
   

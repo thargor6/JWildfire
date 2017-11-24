@@ -2624,7 +2624,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           pRow.getNonlinearParamsCmb().addItem(name);
         }
       }
-      if (paramNames != null && paramNames.length > 1) {
+      if (paramNames != null && (paramNames.length > 1 || paramNames.length > 0 && resCount > 0)) {
         pRow.getToggleParamsPnlButton().setEnabled(true);
       }
       else {
@@ -2659,6 +2659,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
     }
     pRow.rebuildParamsPnl(pXForm, pVar);
+    resizeNonlinearParamsPanel();
   }
 
   public void addLinkedXForm() {
@@ -3102,6 +3103,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
+          if (var.getFunc().dynamicParameterExpansion(pPropertyName)) {
+              // if setting the parameter can change the total number of parameters, 
+              //    then refresh parameter UI
+              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+            }
           refreshFlameImage(true, false, 1, true, false);
         }
       }
