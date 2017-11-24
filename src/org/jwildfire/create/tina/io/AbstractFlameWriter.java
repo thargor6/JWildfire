@@ -314,10 +314,8 @@ public class AbstractFlameWriter {
       attrList.add(xb.createAttr("resolution_profile", pFlame.getResolutionProfile()));
     if (pFlame.getQualityProfile() != null && pFlame.getQualityProfile().length() > 0)
       attrList.add(xb.createAttr("quality_profile", pFlame.getQualityProfile()));
-    if (pFlame.getAntialiasAmount() > EPSILON) {
-      attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
-      attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
-    }
+    attrList.add(xb.createAttr("antialias_amount", pFlame.getAntialiasAmount()));
+    attrList.add(xb.createAttr("antialias_radius", pFlame.getAntialiasRadius()));
     if (pFlame.getMotionBlurLength() > 0) {
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_LENGTH, pFlame.getMotionBlurLength()));
       attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOTIONBLUR_TIMESTEP, pFlame.getMotionBlurTimeStep()));
