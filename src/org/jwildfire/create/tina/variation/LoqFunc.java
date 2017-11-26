@@ -18,38 +18,34 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
 
-
-//import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class DSphericalFunc extends VariationFunc {
+public class LoqFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
-  private static final String PARAM_D_SPHER_WEIGHT = "d_spher_weight";
-  private static final String[] paramNames = { PARAM_D_SPHER_WEIGHT };
-
-  private double d_spher_weight = 0.5;
+  private static final String PARAM_BASE = "base";
+  
+  private static final String[] paramNames = { PARAM_BASE };
+  
+  private double base = M_E;
+  private double denom;
 
   @Override
+  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+	  denom = 0.5 * pAmount / log(base);
+  }
+  
+  @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    // d_spherical by Tatyana Zabanova, https://tatasz.deviantart.com/art/Utilities-Plugin-Pack-684337906
-	  {
-			if (Math.random() < (d_spher_weight)) {
-		        double r = pAmount / (sqr(pAffineTP.x) + sqr(pAffineTP.y));
-		        pVarTP.x += pAffineTP.x * r;
-		        pVarTP.y += pAffineTP.y * r;
-			if (pContext.isPreserveZCoordinate()) {
-     			 pVarTP.z += pAmount * pAffineTP.z;
-    			}	
-			} else {
-		        pVarTP.x += pAffineTP.x * pAmount;
-		        pVarTP.y += pAffineTP.y * pAmount;
-			if (pContext.isPreserveZCoordinate()) {
-     			 pVarTP.z += pAmount * pAffineTP.z;
-    			}	
-			}
-    }
+    /* Loq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
+
+	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);
+    double C = pAmount * atan2(abs_v, pAffineTP.x) / abs_v;
+    pVarTP.x += log(sqr(pAffineTP.x) + sqr(abs_v)) * denom;
+    pVarTP.y += C * pAffineTP.y;
+    pVarTP.z += C * pAffineTP.z; 
   }
 
   @Override
@@ -59,25 +55,20 @@ public class DSphericalFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { d_spher_weight };
+    return new Object[] { base };
   }
-  @Override
-  public String[] getParameterAlternativeNames() {
-    return new String[] { "d_spher_weight" };
-  }
+
   @Override
   public void setParameter(String pName, double pValue) {
-    if (PARAM_D_SPHER_WEIGHT.equalsIgnoreCase(pName))
-    	d_spher_weight= pValue;
+    if (PARAM_BASE.equalsIgnoreCase(pName))
+      base = pValue;
     else
-      throw new IllegalArgumentException(pName);
-  }
+        throw new IllegalArgumentException(pName);
+    }
 
   @Override
   public String getName() {
-    return "d_spherical";
+    return "loq";
   }
-
- 
 
 }
