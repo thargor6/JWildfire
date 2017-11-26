@@ -559,6 +559,9 @@ public class VariationFuncList {
     registerVariationFunc(CardioidFunc.class);
     registerVariationFunc(ShredradFunc.class);
     registerVariationFunc(DCTriTileFunc.class);
+    registerVariationFunc(JubiQFunc.class); 
+    registerVariationFunc(ComplexFunc.class); 
+    registerVariationFunc(QuaternionFunc.class); 
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
