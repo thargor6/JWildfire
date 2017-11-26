@@ -517,6 +517,7 @@ public class VariationFuncList {
     registerVariationFunc(EstiqFunc.class);      
     registerVariationFunc(SecqFunc.class);
     registerVariationFunc(SechqFunc.class);
+    registerVariationFunc(LoqFunc.class);
     registerVariationFunc(Spirograph3DFunc.class);
     registerVariationFunc(HypershiftFunc.class);
     registerVariationFunc(DSphericalFunc.class);    
@@ -562,6 +563,8 @@ public class VariationFuncList {
     registerVariationFunc(JubiQFunc.class); 
     registerVariationFunc(ComplexFunc.class); 
     registerVariationFunc(QuaternionFunc.class); 
+    registerVariationFunc(Crop3DFunc.class);
+    registerVariationFunc(SphereCropFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
