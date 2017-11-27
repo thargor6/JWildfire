@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.Tools.limitValue;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -31,22 +32,24 @@ public class DCBubbleFunc extends VariationFunc {
   private static final String PARAM_CENTERX = "centerx";
   private static final String PARAM_CENTERY = "centery";
   private static final String PARAM_SCALE = "scale";
+  private static final String PARAM_INVERT = "invert";
 
-  private static final String[] paramNames = { PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE };
+  private static final String[] paramNames = { PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE, PARAM_INVERT };
 
   private double centerx = 0.0;
   private double centery = 0.0;
   private double scale = 1.0;
+  private int invert = 1;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    /* dc_bubble by Xyrus02, http://apophysis-7x.org/extensions */
-    double r = (sqr(pAffineTP.x) + sqr(pAffineTP.y));
-    double r4_1 = r / 4.0 + 1.0;
-    r4_1 = pAmount / r4_1;
-    pVarTP.x += pVarTP.x + r4_1 * pAffineTP.x;
-    pVarTP.y += pVarTP.y + r4_1 * pAffineTP.y;
-    pVarTP.z += pVarTP.z + pAmount * (2.0 / r4_1 - 1.0);
+    /* corrected version of dc_bubble by Xyrus02, http://apophysis-7x.org/extensions */
+
+	double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
+	double t = pAmount / r;
+	pVarTP.x += t * pAffineTP.x;
+	pVarTP.y += t * pAffineTP.y;
+	pVarTP.z += pAmount * (2.0 / (invert == 1 ? t : r) - 1.0);
 
     pVarTP.color = fmod(fabs(bdcs * (sqr(pVarTP.x + centerx) + sqr(pVarTP.y + centery))), 1.0);
   }
@@ -58,7 +61,7 @@ public class DCBubbleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { centerx, centery, scale };
+    return new Object[] { centerx, centery, scale, invert };
   }
 
   @Override
@@ -69,6 +72,8 @@ public class DCBubbleFunc extends VariationFunc {
       centery = pValue;
     else if (PARAM_SCALE.equalsIgnoreCase(pName))
       scale = pValue;
+    else if (PARAM_INVERT.equalsIgnoreCase(pName))
+      invert = limitValue((int) pValue, 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
