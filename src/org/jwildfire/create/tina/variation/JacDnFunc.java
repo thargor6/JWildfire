@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.create.tina.variation.JacCnFunc.Jacobi_elliptic;
 
@@ -45,7 +45,7 @@ public class JacDnFunc extends VariationFunc {
     NumX = jac_x.dn * jac_y.cn * jac_y.dn;
     NumY = -jac_x.cn * jac_x.sn * jac_y.sn * k;
     Denom = sqr(jac_x.sn) * sqr(jac_y.sn) * k + sqr(jac_y.cn);
-    Denom = pAmount / (EPSILON + Denom);
+    Denom = pAmount / (SMALL_EPSILON + Denom);
     pVarTP.x += Denom * NumX;
     pVarTP.y += Denom * NumY;
     if (pContext.isPreserveZCoordinate()) {

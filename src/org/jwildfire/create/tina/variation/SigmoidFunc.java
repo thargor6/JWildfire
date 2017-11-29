@@ -37,7 +37,7 @@ public class SigmoidFunc extends VariationFunc {
 	  double sy = shifty;
 	    if (sx < 1 && sx > -1) {
 	       if (sx == 0) {
-	          sx = EPSILON; ax = 1.0;
+	          sx = SMALL_EPSILON; ax = 1.0;
 	       } else {
 	         ax = (sx < 0 ? -1 : 1);
 	         sx = 1 / sx;
@@ -45,7 +45,7 @@ public class SigmoidFunc extends VariationFunc {
 	    }
 	    if (sy < 1 && sy > -1) {
 	       if (sy == 0) {
-	          sy = EPSILON; ay = 1.0;
+	          sy = SMALL_EPSILON; ay = 1.0;
 	       } else {
 	         ay = (sy < 0 ? -1 : 1);
 	         sy = 1 / sy;

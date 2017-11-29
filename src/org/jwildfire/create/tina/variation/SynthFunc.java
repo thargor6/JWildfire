@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.asin;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
@@ -742,7 +742,7 @@ public class SynthFunc extends VariationFunc {
   private static final int SINCOS_MULTIPLY = 0;
   private static final int SINCOS_MIXIN = 1;
 
-  private static final double EPS = EPSILON;
+  private static final double EPS = SMALL_EPSILON;
 
   // -------------------------------------------------------------
   // synth_value calculates the wave height y from theta, which is an abstract

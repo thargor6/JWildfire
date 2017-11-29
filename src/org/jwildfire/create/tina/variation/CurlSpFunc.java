@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sign;
@@ -110,7 +110,7 @@ public class CurlSpFunc extends VariationFunc {
     power_inv = 1.0 / zeps(power);
 
     if (power == 0) {
-      power = EPSILON;
+      power = SMALL_EPSILON;
     }
   }
 
@@ -131,7 +131,7 @@ public class CurlSpFunc extends VariationFunc {
   }
 
   private double zeps(double x) {
-    return ((x) == 0 ? EPSILON : (x));
+    return ((x) == 0 ? SMALL_EPSILON : (x));
   }
 
 }

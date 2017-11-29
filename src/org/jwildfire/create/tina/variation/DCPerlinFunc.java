@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.floor;
@@ -132,7 +132,7 @@ public class DCPerlinFunc extends VariationFunc {
           break;
 
         case MAP_SPHERICAL:
-          r = 1.0 / (Vx * Vx + Vy * Vy + EPSILON);
+          r = 1.0 / (Vx * Vx + Vy * Vy + SMALL_EPSILON);
           V[0] = this.scale * Vx * r;
           V[1] = this.scale * Vy * r;
           V[2] = this.scale * this.z;

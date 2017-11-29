@@ -32,7 +32,7 @@ public class XErfFunc extends SimpleVariationFunc {
       // "xerf" variation created by zephyrtronium implemented into JWildfire by darkbeam
 
     double r2 = sqr(sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(pAffineTP.z))); // sqr sqrt??? whatever
-    if (r2 <=EPSILON) r2 = EPSILON; // no overflow fix by Dark
+    if (r2 <=SMALL_EPSILON) r2 = SMALL_EPSILON; // no overflow fix by Dark
 
     pVarTP.x += ( (fabs(pAffineTP.x) >= 2.0) ? (pAffineTP.x / r2 ): erf(pAffineTP.x)) * pAmount;
     pVarTP.y += ( (fabs(pAffineTP.y) >= 2.0) ? (pAffineTP.y / r2 ): erf(pAffineTP.y)) * pAmount;

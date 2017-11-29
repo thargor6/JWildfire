@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
@@ -38,7 +38,7 @@ public class OctagonFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* octagon from FracFx, http://fracfx.deviantart.com/art/FracFx-Plugin-Pack-171806681 */
-    double r = pAmount / ((sqr(pAffineTP.x * pAffineTP.x) + sqr(pAffineTP.z) + sqr(pAffineTP.y * pAffineTP.y) + sqr(pAffineTP.z)) + EPSILON);
+    double r = pAmount / ((sqr(pAffineTP.x * pAffineTP.x) + sqr(pAffineTP.z) + sqr(pAffineTP.y * pAffineTP.y) + sqr(pAffineTP.z)) + SMALL_EPSILON);
     if (r < 2.0) {
       pVarTP.x += pAffineTP.x * r;
       pVarTP.y += pAffineTP.y * r;
@@ -51,7 +51,7 @@ public class OctagonFunc extends VariationFunc {
   pVarTP.z += pAmount * pAffineTP.z;
 }
     }
-    double t = pAmount / ((sqrt(pAffineTP.x * pAffineTP.x) + sqrt(pAffineTP.z) + sqrt(pAffineTP.y * pAffineTP.y) + sqrt(pAffineTP.z)) + EPSILON);
+    double t = pAmount / ((sqrt(pAffineTP.x * pAffineTP.x) + sqrt(pAffineTP.z) + sqrt(pAffineTP.y * pAffineTP.y) + sqrt(pAffineTP.z)) + SMALL_EPSILON);
     if (r >= 0) {
       pVarTP.x += pAffineTP.x * t;
       pVarTP.y += pAffineTP.y * t;

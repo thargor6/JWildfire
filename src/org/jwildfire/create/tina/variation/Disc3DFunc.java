@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -38,11 +38,11 @@ public class Disc3DFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* disc3D by Larry Berlin, http://aporev.deviantart.com/art/3D-Plugins-Collection-One-138514007?q=gallery%3Aaporev%2F8229210&qo=15 */
-    double r = sqrt(pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + EPSILON);
+    double r = sqrt(pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + SMALL_EPSILON);
     double a = this.pi * r;
     double sr = sin(a);
     double cr = cos(a);
-    double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + EPSILON);
+    double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + SMALL_EPSILON);
     pVarTP.x += vv * sr;
     pVarTP.y += vv * cr;
     pVarTP.z += vv * (r * cos(pAffineTP.z));
@@ -69,12 +69,6 @@ public class Disc3DFunc extends VariationFunc {
   @Override
   public String getName() {
     return "disc3d";
-  }
-
-  @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    if (pi == 0)
-      pi = EPSILON;
   }
 
 }

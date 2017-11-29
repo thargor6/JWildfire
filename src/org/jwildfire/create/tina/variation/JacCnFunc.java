@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.cosh;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
@@ -49,7 +49,7 @@ public class JacCnFunc extends VariationFunc {
     NumX = jac_x.cn * jac_y.cn;
     NumY = -jac_x.dn * jac_x.sn * jac_y.dn * jac_y.sn;
     Denom = sqr(jac_x.sn) * sqr(jac_y.sn) * k + sqr(jac_y.cn);
-    Denom = pAmount / (EPSILON + Denom);
+    Denom = pAmount / (SMALL_EPSILON + Denom);
     pVarTP.x += Denom * NumX;
     pVarTP.y += Denom * NumY;
     if (pContext.isPreserveZCoordinate()) {

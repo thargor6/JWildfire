@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.tan;
@@ -31,7 +31,7 @@ public class Rays2Func extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // rays2 by Raykoid666, http://raykoid666.deviantart.com/art/re-pack-1-new-plugins-100092186 
     double t = sqr(pAffineTP.x) + sqr(pAffineTP.y);
-    double u = 1.0 / cos((t + EPSILON) * tan(1.0 / t + EPSILON));
+    double u = 1.0 / cos((t + SMALL_EPSILON) * tan(1.0 / t + SMALL_EPSILON));
 
     pVarTP.x = (pAmount / 10.0) * u * t / pAffineTP.x;
     pVarTP.y = (pAmount / 10.0) * u * t / pAffineTP.y;
