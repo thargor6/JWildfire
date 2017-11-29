@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
@@ -31,7 +31,7 @@ public class Loonie3Func extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* loonie2 by dark-beam, http://dark-beam.deviantart.com/art/Loonie2-update-2-Loonie3-457414891 */
     double r2 = 2 * _sqrvvar;
-    if (pAffineTP.x > EPSILON) {
+    if (pAffineTP.x > SMALL_EPSILON) {
       r2 = sqr((sqr(pAffineTP.x) + sqr(pAffineTP.y)) / pAffineTP.x);
     }
     if (r2 < _sqrvvar) {

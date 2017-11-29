@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
@@ -32,7 +32,7 @@ public class SpiralwingFunc extends SimpleVariationFunc {
     // spiralwing by Raykoid666, http://raykoid666.deviantart.com/art/re-pack-1-new-plugins-100092186 
     double c1 = sqr(pAffineTP.x);
     double c2 = sqr(pAffineTP.y);
-    double d = pAmount / (c1 + c2 + EPSILON);
+    double d = pAmount / (c1 + c2 + SMALL_EPSILON);
     c2 = sin(c2); // speedup
 
     pVarTP.x += d * cos(c1) * c2;

@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -58,8 +58,8 @@ public class RippleFunc extends VariationFunc {
 
     // calculate distance from center but constrain it to EPS
     double d = _fixed_dist_calc ? sqrt(x * x + y * y) : sqrt(x * x * y * y);
-    if (d < EPSILON)
-      d = EPSILON;
+    if (d < SMALL_EPSILON)
+      d = SMALL_EPSILON;
 
     // normalize (x,y)
     double nx = x / d, ny = y / d;
@@ -134,7 +134,7 @@ public class RippleFunc extends VariationFunc {
     _p = phase * M_2PI - M_PI;
 
     // scale must not be zero
-    _s = scale == 0 ? EPSILON : scale;
+    _s = scale == 0 ? SMALL_EPSILON : scale;
 
     // we will need the inverse scale
     _is = 1.0 / _s;

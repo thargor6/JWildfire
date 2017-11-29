@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.log;
@@ -36,7 +36,7 @@ public class SplipticBSFunc extends VariationFunc {
   private double y = 0.05;
 
   private double sqrt_safe(double x) {
-    return (x < EPSILON) ? 0.0 : sqrt(x);
+    return (x < SMALL_EPSILON) ? 0.0 : sqrt(x);
   }
 
   @Override

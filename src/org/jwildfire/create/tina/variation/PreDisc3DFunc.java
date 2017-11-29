@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -37,11 +37,11 @@ public class PreDisc3DFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* pre_disc by gossamer light */
-    double r = sqrt(pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + EPSILON);
+    double r = sqrt(pAffineTP.y * pAffineTP.y + pAffineTP.x * pAffineTP.x + SMALL_EPSILON);
     double a = this.pi * r;
     double sr = sin(a);
     double cr = cos(a);
-    double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + EPSILON);
+    double vv = pAmount * atan2(pAffineTP.x, pAffineTP.y) / (this.pi + SMALL_EPSILON);
     pAffineTP.x = vv * sr;
     pAffineTP.y = vv * cr;
     pAffineTP.z = vv * (r * cos(pAffineTP.z));

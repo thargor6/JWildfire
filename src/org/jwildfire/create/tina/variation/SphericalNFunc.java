@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -51,7 +51,7 @@ public class SphericalNFunc extends VariationFunc {
     double sina = sin(alpha);
     double cosa = cos(alpha);
 
-    if (R > EPSILON) {
+    if (R > SMALL_EPSILON) {
       pVarTP.x += pAmount * cosa / R;
       pVarTP.y += pAmount * sina / R;
     }

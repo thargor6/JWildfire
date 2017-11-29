@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -45,7 +45,7 @@ public class WedgeSphFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Wedge_sph from apo plugins pack */
 
-    double r = 1.0 / (pAffineTP.getPrecalcSqrt() + EPSILON);
+    double r = 1.0 / (pAffineTP.getPrecalcSqrt() + SMALL_EPSILON);
     double a = pAffineTP.getPrecalcAtanYX() + swirl * r;
     double c = floor((count * a + M_PI) * M_1_PI * 0.5);
 
