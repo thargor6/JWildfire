@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -73,7 +73,7 @@ public class Rings2Func extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _dx = val * val + SMALL_EPSILON;
+    _dx = val * val + EPSILON;
   }
 
 }

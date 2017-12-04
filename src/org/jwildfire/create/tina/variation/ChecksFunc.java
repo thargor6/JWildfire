@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -100,7 +100,7 @@ public class ChecksFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     // Multiplication is faster than division, so divide in precalc, multiply in calc.
-    _cs = 1.0 / (size + SMALL_EPSILON);
+    _cs = 1.0 / (size + EPSILON);
     // -X- Then precalculate -checkx_x, -checks_y
     _ncx = x * -1.0;
     _ncy = y * -1.0;

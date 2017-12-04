@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 
@@ -72,7 +72,7 @@ public class ShredradFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_N.equalsIgnoreCase(pName)) {
-      n = (pValue==0) ? SMALL_EPSILON : pValue;
+      n = (pValue==0) ? EPSILON : pValue;
       alpha = M_2PI / n;
     }
     else if (PARAM_WIDTH.equalsIgnoreCase(pName))
