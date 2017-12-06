@@ -566,7 +566,19 @@ public class VariationFuncList {
     
     registerVariationFunc(LsystemFunc.class);
     registerVariationFunc(LSystem3DWFFunc.class);
+    registerVariationFunc(HamidFunc.class);
+    registerVariationFunc(TreeFunc.class);
+    registerVariationFunc(HilbertFunc.class);
+    registerVariationFunc(BrownianFunc.class);
+    
 
+    registerVariationFunc(DragonFunc.class);
+    registerVariationFunc(GosperIslandFunc.class);    
+    registerVariationFunc(HtreeFunc.class);   
+    registerVariationFunc(KochFunc.class);
+    registerVariationFunc(RsquaresFunc.class);
+
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
