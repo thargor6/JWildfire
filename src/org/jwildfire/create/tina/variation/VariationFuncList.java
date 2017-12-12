@@ -577,6 +577,21 @@ public class VariationFuncList {
     registerVariationFunc(HtreeFunc.class);   
     registerVariationFunc(KochFunc.class);
     registerVariationFunc(RsquaresFunc.class);
+    
+    registerVariationFunc(SattractorFunc.class);
+    registerVariationFunc(WallPaperFunc.class);
+    registerVariationFunc(HadamardFunc.class);
+    registerVariationFunc(CrownFunc.class);
+    registerVariationFunc(ApocarpetFunc.class);
+    registerVariationFunc(InvTreeFunc.class);
+    registerVariationFunc(SiercarpetFunc.class);
+    registerVariationFunc(WoggleFunc.class);
+    registerVariationFunc(LaceFunc.class);
+    registerVariationFunc(HarmonographFunc.class);  
+    registerVariationFunc(CliffordFunc.class);
+    registerVariationFunc(DeJongFunc.class);
+    registerVariationFunc(SvenssonFunc.class);
+    registerVariationFunc(LorenzFunc.class);
 
     
     resolvedAliasMap = new HashMap<>();
