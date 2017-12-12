@@ -561,6 +561,9 @@ public class VariationFuncList {
     registerVariationFunc(CardioidFunc.class);
     registerVariationFunc(ShredradFunc.class);
     registerVariationFunc(DCTriTileFunc.class);
+    registerVariationFunc(JubiQFunc.class); 
+    registerVariationFunc(ComplexFunc.class); 
+    registerVariationFunc(QuaternionFunc.class); 
     registerVariationFunc(Crop3DFunc.class);
     registerVariationFunc(SphereCropFunc.class);
     
