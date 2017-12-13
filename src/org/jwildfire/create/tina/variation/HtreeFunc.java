@@ -40,7 +40,7 @@ import java.util.Arrays;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.variation.HilbertFunc.DoublePoint2D;
+
 
 
 

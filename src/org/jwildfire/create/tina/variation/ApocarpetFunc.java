@@ -75,6 +75,10 @@ public class ApocarpetFunc extends SimpleVariationFunc {
                 
 				pVarTP.x += x*pAmount;
 				pVarTP.y += y*pAmount;
+			    if (pContext.isPreserveZCoordinate())
+			    {
+			        pVarTP.z += pAmount * pAffineTP.z;
+			    }
 
 //			    pVarTP.color = fmod(fabs( (sqr(pVarTP.x) + sqr(pVarTP.y ))), 1.0);
 			  }
