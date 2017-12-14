@@ -595,6 +595,10 @@ public class VariationFuncList {
     registerVariationFunc(DeJongFunc.class);
     registerVariationFunc(SvenssonFunc.class);
     registerVariationFunc(LorenzFunc.class);
+    
+    registerVariationFunc(PreStabilizeFunc.class);
+    registerVariationFunc(PreSphericalFunc.class);
+    registerVariationFunc(PostSphericalFunc.class);
 
     
     resolvedAliasMap = new HashMap<>();
