@@ -597,6 +597,7 @@ public class VariationFuncList {
     registerVariationFunc(LorenzFunc.class);
     
     registerVariationFunc(PreStabilizeFunc.class);
+    registerVariationFunc(PreSphericalFunc.class);
 
     
     resolvedAliasMap = new HashMap<>();
