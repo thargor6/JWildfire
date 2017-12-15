@@ -34,15 +34,13 @@ public class GlynnSim3Func extends VariationFunc {
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_THICKNESS = "thickness";
-  private static final String PARAM_THICKNESS2 = "thickness2";
   private static final String PARAM_CONTRAST = "contrast";
   private static final String PARAM_POW = "pow";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_THICKNESS, PARAM_THICKNESS2, PARAM_CONTRAST, PARAM_POW };
+  private static final String[] paramNames = { PARAM_RADIUS, PARAM_THICKNESS, PARAM_CONTRAST, PARAM_POW };
 
   private double radius = 1.0;
   private double thickness = 0.1;
-  private double thickness2 = 0.1;
   private double contrast = 0.5;
   private double pow = 1.5;
 
@@ -101,7 +99,7 @@ public class GlynnSim3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, thickness, thickness2, contrast, pow };
+    return new Object[] { radius, thickness, contrast, pow };
   }
 
   @Override
@@ -110,8 +108,6 @@ public class GlynnSim3Func extends VariationFunc {
       radius = pValue;
     else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
       thickness = pValue;
-    else if (PARAM_THICKNESS2.equalsIgnoreCase(pName))
-      thickness2 = pValue;
     else if (PARAM_CONTRAST.equalsIgnoreCase(pName))
       contrast = limitVal(pValue, 0.0, 1.0);
     else if (PARAM_POW.equalsIgnoreCase(pName))

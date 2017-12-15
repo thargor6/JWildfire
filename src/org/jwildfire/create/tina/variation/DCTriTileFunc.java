@@ -23,6 +23,7 @@ import static org.jwildfire.base.mathlib.MathLib.fmod;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.Tools.limitValue;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public class DCTriTileFunc extends VariationFunc {
   private int tiling = 1;
   private int t = 2;
   private double col1 = Math.round(Math.random() * 35 + 10) / 100.0, col2 = Math.round(Math.random() * 35 + 55) / 100.0;
-  private double on = Math.round(Math.random()), on1 = Math.round(Math.random()), on2 = Math.round(Math.random());
+  private int on = (int) (Math.random() * 2), on1 = (int) (Math.random() * 2), on2 = (int) (Math.random() * 2);
   private int itt = (int) (Math.random() * 5 + 1), itt1 = (int) (Math.random() * 5), itt2 = (int) (Math.random() * 5);
   private int eq = (int) (Math.random() * 2 + 1), eq1 = (int) (Math.random() * 2 + 1), eq2 = (int) (Math.random() * 2 + 1);
   private int depth = (int) (Math.random() * 4), depth1 = (int) (Math.random() * 4), depth2 = (int) (Math.random() * 4);
@@ -768,7 +769,7 @@ public class DCTriTileFunc extends VariationFunc {
 		  devis(t1, t2);
 		  t1.assign(t2);
 		  
-		  if (on < 0.5) {
+		  if (on == 0) {
 			  if ((k == itt) && (t1.type != eq)) n = n + depth;
 		  }
 		  else {
@@ -787,7 +788,7 @@ public class DCTriTileFunc extends VariationFunc {
 			  devis(t1, t2);
 			  t1.assign(t2);
 			  m = 2 * m + t2.type - 1;
-			  if (on1 < 0.5) {
+			  if (on1 == 0) {
 				  if ((k == itt1) && (t1.type != eq1)) n = n + depth1;
 			  }
 			  else {
@@ -805,7 +806,7 @@ public class DCTriTileFunc extends VariationFunc {
 			  devis(t1, t2);
 			  t1.assign(t2);
 			  m = 2 * m + t2.type - 1;
-			  if (on2 < 0.5) {
+			  if (on2 == 0) {
 				  if ((k == itt2) && (t1.type != eq2)) n = n + depth2;
 			  }
 			  else {
@@ -845,7 +846,7 @@ public class DCTriTileFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_TILING.equalsIgnoreCase(pName))
-        tiling = Tools.FTOI(pValue);
+        tiling = limitValue((int) pValue, 1, 6);
     else if (PARAM_T.equalsIgnoreCase(pName))
         t = Tools.FTOI(pValue);
     else if (PARAM_COL1.equalsIgnoreCase(pName))
@@ -853,27 +854,27 @@ public class DCTriTileFunc extends VariationFunc {
     else if (PARAM_COL2.equalsIgnoreCase(pName))
         col2 = pValue;
     else if (PARAM_ON.equalsIgnoreCase(pName))
-        on = pValue;
+        on = limitValue((int) pValue, 0, 1);
     else if (PARAM_ITT.equalsIgnoreCase(pName))
         itt = Tools.FTOI(pValue);
     else if (PARAM_EQ.equalsIgnoreCase(pName))
-        eq = Tools.FTOI(pValue);
+        eq = limitValue((int) pValue, 0, 2);
     else if (PARAM_DEPTH.equalsIgnoreCase(pName))
         depth = Tools.FTOI(pValue);
     else if (PARAM_ON1.equalsIgnoreCase(pName))
-        on1 = pValue;
+        on1 = limitValue((int) pValue, 0, 1);
     else if (PARAM_ITT1.equalsIgnoreCase(pName))
         itt1 = Tools.FTOI(pValue);
     else if (PARAM_EQ1.equalsIgnoreCase(pName))
-        eq1 = Tools.FTOI(pValue);
+        eq1 = limitValue((int) pValue, 0, 2);
     else if (PARAM_DEPTH1.equalsIgnoreCase(pName))
         depth1 = Tools.FTOI(pValue);
     else if (PARAM_ON2.equalsIgnoreCase(pName))
-        on2 = pValue;
+        on2 = limitValue((int) pValue, 0, 1);
     else if (PARAM_ITT2.equalsIgnoreCase(pName))
         itt2 = Tools.FTOI(pValue);
     else if (PARAM_EQ2.equalsIgnoreCase(pName))
-        eq2 = Tools.FTOI(pValue);
+        eq2 = limitValue((int) pValue, 0, 2);
     else if (PARAM_DEPTH2.equalsIgnoreCase(pName))
         depth2 = Tools.FTOI(pValue);
     else
