@@ -844,7 +844,6 @@ public class TinaControllerParameter {
     this.pToggleTransparencyButton = pToggleTransparencyButton;
     this.pAffinePreserveZButton = pAffinePreserveZButton;
     this.pAffineMirrorPrePostTranslationsButton = pAffineMirrorPrePostTranslationsButton;
-    // System.out.println("set TinalControllerParameter mirror button: " + pAffineMirrorPrePostTranslationsButton);
     this.pQualityProfileCmb = pQualityProfileCmb;
     this.pResolutionProfileCmb = pResolutionProfileCmb;
     this.pInteractiveResolutionProfileCmb = pInteractiveResolutionProfileCmb;

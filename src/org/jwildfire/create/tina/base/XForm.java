@@ -36,7 +36,6 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
 
 public final class XForm implements Assignable<XForm>, Serializable {
-  public boolean mirrorPrePostTranslations = false;
   private static final long serialVersionUID = 1L;
   private Layer owner;
   @AnimAware
@@ -187,6 +186,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve zxPostCoeff21Curve = new MotionCurve();
   boolean hasZXPostCoeffs;
   boolean hasZXCoeffs;
+  
+  // if mirrorPrePostTranslations, then calls to set coefficients that modify translation are mirrored between pre- and post-, 
+  // therefore:
+  //     calling set**Coeff2[01] to val sets **Coeff2[01] to val and **PostCoeff2[01] to -val
+  //     calling set**PostCoeff2[01] to val sets **PostCoeff2[01]to val and **Coeff2[01] to -val
+  private boolean mirrorPrePostTranslations = false;
 
   private int index = -1;
 
@@ -501,7 +506,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   
   @Override
   public void assign(XForm pXForm) {
-    mirrorPrePostTranslations = pXForm.mirrorPrePostTranslations;
     weight = pXForm.weight;
     weightCurve.assign(pXForm.weightCurve);
     color = pXForm.color;
@@ -611,6 +615,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     zxPostRotateCurve.assign(pXForm.zxPostRotateCurve);
     zxPostScaleCurve.assign(pXForm.zxPostScaleCurve);
 
+    mirrorPrePostTranslations = pXForm.mirrorPrePostTranslations;
     hasXYPostCoeffs = pXForm.hasXYPostCoeffs;
     hasXYCoeffs = pXForm.hasXYCoeffs;
     hasYZPostCoeffs = pXForm.hasYZPostCoeffs;
@@ -886,7 +891,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyCoeff20;
   }
 
-  // public void setXYCoeff20(double xyCoeff20) {
   public void setXYCoeff20(double val) {
     this.xyCoeff20 = val;
     updateHasXYCoeffs();
@@ -900,7 +904,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyCoeff21;
   }
 
-  // public void setXYCoeff21(double xyCoeff21) {
   public void setXYCoeff21(double val) {
     this.xyCoeff21 = val;
     updateHasXYCoeffs();
@@ -950,7 +953,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyPostCoeff20;
   }
 
-//  public void setXYPostCoeff20(double xyPostCoeff20) {
   public void setXYPostCoeff20(double val) {
     this.xyPostCoeff20 = val;
     updateHasXYPostCoeffs();
@@ -964,7 +966,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return xyPostCoeff21;
   }
 
-//   public void setXYPostCoeff21(double xyPostCoeff21) {
   public void setXYPostCoeff21(double val) {
     this.xyPostCoeff21 = val;
     updateHasXYPostCoeffs();
@@ -1014,7 +1015,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
     return yzCoeff20;
   }
 
-  // public void setYZCoeff20(double yzCoeff20) {
   public void setYZCoeff20(double val) {
     this.yzCoeff20 = val;
     updateHasYZCoeffs();
@@ -1029,7 +1029,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setYZCoeff21(double val) {
-  // public void setYZCoeff21(double yzCoeff21) {
     this.yzCoeff21 = val;
     updateHasYZCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1079,7 +1078,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setYZPostCoeff20(double val) {
-  // public void setYZPostCoeff20(double yzPostCoeff20) {
     this.yzPostCoeff20 = val;
     updateHasYZPostCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1093,7 +1091,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setYZPostCoeff21(double val) {
-  // public void setYZPostCoeff21(double yzPostCoeff21) {
     this.yzPostCoeff21 = val;
     updateHasYZPostCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1143,7 +1140,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setZXCoeff20(double val) {
-  // public void setZXCoeff20(double zxCoeff20) {
     this.zxCoeff20 = val;
     updateHasZXCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1157,7 +1153,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setZXCoeff21(double val) {
-  // public void setZXCoeff21(double zxCoeff21) {
     this.zxCoeff21 = val;
     updateHasZXCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1207,7 +1202,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setZXPostCoeff20(double val) {
-    // public void setZXPostCoeff20(double zxPostCoeff20) {
     this.zxPostCoeff20 = val;
     updateHasZXPostCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1221,7 +1215,6 @@ public final class XForm implements Assignable<XForm>, Serializable {
   }
 
   public void setZXPostCoeff21(double val) {
-  // public void setZXPostCoeff21(double zxPostCoeff21) {
     this.zxPostCoeff21 = val;
     updateHasZXPostCoeffs();
     if (mirrorPrePostTranslations) {
@@ -1538,6 +1531,14 @@ public final class XForm implements Assignable<XForm>, Serializable {
         setZXPostCoeff21(postCoeff21);
         break;
     }
+  }
+  
+  public boolean getMirrorTranslations() {
+    return mirrorPrePostTranslations;
+  }
+  
+  public void setMirrorTranslations(boolean mirror) {
+    mirrorPrePostTranslations = mirror;
   }
 
   public Layer getOwner() {

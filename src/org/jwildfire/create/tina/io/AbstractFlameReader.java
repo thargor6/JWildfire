@@ -905,7 +905,7 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_MIRROR_PRE_POST_TRANSLATIONS)) != null) {
       double val = Double.parseDouble(hs);
-      pXForm.mirrorPrePostTranslations = (val == 1);
+      pXForm.setMirrorTranslations(val == 1);
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));

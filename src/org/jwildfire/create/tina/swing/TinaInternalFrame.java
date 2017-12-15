@@ -7990,7 +7990,7 @@ public class TinaInternalFrame extends JInternalFrame {
     return affineResetTransformButton;
   }
 
-  public boolean defaultMirrorPrePostTranslations = false;
+  private boolean defaultMirrorPrePostTranslations = false;
   private JToggleButton affineMirrorPrePostTranslationsButton;
   private JToggleButton getAffineMirrorPrePostTranslationsButton() {
     if (affineMirrorPrePostTranslationsButton == null) {
@@ -8004,11 +8004,9 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMirrorPrePostTranslationsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMirrorPrePostTranslationsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          // System.out.println("button selected:" + affineMirrorPrePostTranslationsButton.isSelected());
           tinaController.affineMirrorPrePostChanged(affineMirrorPrePostTranslationsButton.isSelected());
         }
       });
-     // System.out.println("created mirror button: " + affineMirrorPrePostTranslationsButton);
     }
     return affineMirrorPrePostTranslationsButton;
   }
