@@ -846,7 +846,7 @@ public class DCTriTileFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_TILING.equalsIgnoreCase(pName))
-        tiling = Tools.FTOI(pValue);
+        tiling = limitValue((int) pValue, 1, 6);
     else if (PARAM_T.equalsIgnoreCase(pName))
         t = Tools.FTOI(pValue);
     else if (PARAM_COL1.equalsIgnoreCase(pName))
