@@ -102,7 +102,7 @@ public class DragonFunc extends VariationFunc {
 	  return size == 0;
 	}
 
-	// Checks if the given index is in range.  
+	// Checks if the given index is in range.
 	private void rangeCheck(int index)
 	{
 	  if (index >= size || index < 0)

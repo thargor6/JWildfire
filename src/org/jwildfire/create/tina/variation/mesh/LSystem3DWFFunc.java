@@ -27,7 +27,7 @@
 * Check The work of Laurens Lapre
 * http://laurenslapre.nl/lapre_004.htm
 * 
-* Also I´m using SimpleMesh.java and AbstractOBJMeshWFFunc.java classes by Andreas Maschke 
+* Also I'm using SimpleMesh.java and AbstractOBJMeshWFFunc.java classes by Andreas Maschke 
 * included in source code of Java WildFire.
 *************************************************************************************************/
 
@@ -372,7 +372,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       return size == 0;
     }
 
-    // Checks if the given index is in range.  
+    // Checks if the given index is in range.
     private void rangeCheck(int index) {
       if (index >= size || index < 0)
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
