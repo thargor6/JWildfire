@@ -2,16 +2,13 @@ package org.jwildfire.create.tina.variation;
 
 import java.io.Serializable;
 import static java.lang.Math.abs;
-import static java.lang.Math.asin;
 import java.math.BigInteger;
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
@@ -51,14 +48,13 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_PNORM_PMOD = "pnorm_pmod";
   public static final String PARAM_PNORM_SMOD = "pnorm_smod";
   
-  public static final String PARAM_DRAW_CIRCLE = "draw_circle";
+  public static final String PARAM_DRAW_CIRCLE = "draw_shape";
   public static final String PARAM_SHAPE_THICKNESS = "shape_thickness";
   public static final String PARAM_GUIDES_ENABLED = "guides_enabled";
   public static final String PARAM_PASSTHROUGH = "passthrough";
   
   private static final String PARAM_DIRECT_COLOR_MEASURE = "color_measure";
   private static final String PARAM_DIRECT_COLOR_GRADIENT = "color_gradient";
-  // private static final String PARAM_DIRECT_COLOR_THRESHOLDING = "color_thresholding";
   private static final String PARAM_COLOR_LOW_THRESH = "color_low_threshold";
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   
@@ -92,26 +88,16 @@ public class InversionFunc extends VariationFunc {
   public static int RHODONEA = 4;
   public static int SUPERSHAPE = 5;
   
-// direct color modes
-public static int DST_DISTANCE_FROM_BOUNDARY = 1;
-public static int RADIAL_DIFFERENCE1 = 10;
-// additional possible color modes, not yet implemented
- // public static int SRC_DISTANCE_FROM_BOUNDARY = 0;
- // public static int SRC_DISTANCE_FROM_CENTER = 2;
- // public static int DST_DISTANCE_FROM_CENTER = 3;
- // public static int SIGNED_SRC_DISTANCE_FROM_BOUNDARY = 4;
- // public static int SIGNED_DST_DISTANCE_FROM_BOUNDARY = 5;
- // public static int SIGNED_SRC_DISTANCE_FROM_CENTER = 6;
- //  public static int SIGNED_DST_DISTANCE_FROM_CENTER = 7;
+  // direct color modes   (0 ==> NONE ==> normal coloring)
+  public static int DST_DISTANCE_FROM_BOUNDARY = 1;
+  public static int SRC_DISTANCE_FROM_BOUNDARY = 2;
+  public static int DST_DISTANCE_FROM_SRC = 3;
+  public static int DST_RADIAL_DIFFERENCE = 4;
   
-  private static final int OFF = 0;
   private static final int NONE = 0;
   private static final int COLORMAP_CLAMP = 1;
   private static final int COLORMAP_WRAP = 2;
-  // color thresholding
-  // private static final int PERCENT = 0;
-  // private static final int VALUE = 1;
-  
+
   ParametricShape shape;
   boolean draw_guides = false;
   double rotation_pi_fraction = 0;
@@ -139,12 +125,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
     
     /** simple shapes will not have more than one intersection along a given ray out from shape center */
     public boolean simpleShape() { return true; }
-
-    public PolarPoint2D getCurvePoint(double t) {
-      PolarPoint2D outpoint = new PolarPoint2D();
-      getCurvePoint(t, outpoint);
-      return outpoint;
-    }
     
     // find intersection nearest to point pIn of line from point pIn to "center" of shape
     //    (where "center" is defined by the shape object, 
@@ -393,8 +373,8 @@ public static int RADIAL_DIFFERENCE1 = 10;
   boolean hide_uninverted = false;
   
   // Color Handling
-  private int direct_color_gradient = OFF;
-  private int direct_color_measure = RADIAL_DIFFERENCE1;
+  private int direct_color_gradient = COLORMAP_CLAMP;
+  private int direct_color_measure = NONE;
   private double color_low_thresh = 0;
   private double color_high_thresh = 1.0;
   
@@ -541,17 +521,26 @@ public static int RADIAL_DIFFERENCE1 = 10;
   }
     
   public void setColor(XYZPoint srcPoint, XYZPoint dstPoint, PolarPoint2D curvePoint, double pAmount) {
-    if (direct_color_measure != NONE && direct_color_gradient != OFF) {
+    if (direct_color_measure != NONE) {
       double val = 0;
       double[] sampled_vals;
       if (direct_color_measure == DST_DISTANCE_FROM_BOUNDARY) {
         double xdiff = dstPoint.x - curvePoint.x;
         double ydiff = dstPoint.y - curvePoint.y;
-        double d = sqrt((xdiff * xdiff) + (ydiff * ydiff));
-        val = d;
+        val = sqrt((xdiff * xdiff) + (ydiff * ydiff));
+      }   
+      else if (direct_color_measure == SRC_DISTANCE_FROM_BOUNDARY) {
+        double xdiff = srcPoint.x - curvePoint.x;
+        double ydiff = srcPoint.y - curvePoint.y;
+        val = sqrt((xdiff * xdiff) + (ydiff * ydiff));
       }
-      else if (direct_color_measure == RADIAL_DIFFERENCE1) {
-        // compare dstPoint to standard circle inversion (ratio will be 1 if shape == CIRCLE && p == 2 && p2 == 2)
+      else if (direct_color_measure == DST_DISTANCE_FROM_SRC) {
+        double xdiff = dstPoint.x - srcPoint.x;
+        double ydiff = dstPoint.y - srcPoint.y;
+        val = sqrt((xdiff * xdiff) + (ydiff * ydiff));
+      } 
+      else if (direct_color_measure == DST_RADIAL_DIFFERENCE) {
+        // compare dstPoint to standard circle inversion (ratio will be 1 if shape == CIRCLE && pnorms == 2)
         // abs(dstPoint.radius/circleInversion.radius) ==>
         double r_shape_inversion = sqrt((dstPoint.x * dstPoint.x) + (dstPoint.y * dstPoint.y));
         
@@ -578,13 +567,7 @@ public static int RADIAL_DIFFERENCE1 = 10;
       if (val < low_value) { baseColor = 0; }
       else if (val >= high_value) { baseColor = 255; }
       else { baseColor = ((val - low_value)/(high_value - low_value)) * 255; }
-      if (direct_color_gradient == COLORMAP_CLAMP) {
-        dstPoint.rgbColor = false;
-        dstPoint.color = baseColor / 255.0;
-        if (dstPoint.color < 0) { dstPoint.color = 0; }
-        if (dstPoint.color > 1.0) { dstPoint.color = 1.0; }
-      }
-      else if (direct_color_gradient == COLORMAP_WRAP) {
+      if (direct_color_gradient == COLORMAP_WRAP) {
         dstPoint.rgbColor = false;
         // if val is outside range, wrap it around (cylce) to keep within range
         if (val < low_value) {
@@ -598,11 +581,14 @@ public static int RADIAL_DIFFERENCE1 = 10;
         if (dstPoint.color < 0) { dstPoint.color = 0; }
         if (dstPoint.color > 1.0) { dstPoint.color = 1.0; }
       }
+      else { // if not COLORMAP_WRAP, then assume COLORMAP_CLAMP
+        dstPoint.rgbColor = false;
+        dstPoint.color = baseColor / 255.0;
+        if (dstPoint.color < 0) { dstPoint.color = 0; }
+        if (dstPoint.color > 1.0) { dstPoint.color = 1.0; }
+      }
     } // END color_mode != normal
-
   }
-  
-
   
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
@@ -626,6 +612,9 @@ public static int RADIAL_DIFFERENCE1 = 10;
     }
     else if (shape_mode == SUPERSHAPE) {
       shape = new SuperShape();
+    }
+    else {  // if shape_mode not recognized, default to Circle
+      shape = new Circle();
     }
     if (ring_scale <= scale) {
       ring_rmin = ring_scale * scale;
