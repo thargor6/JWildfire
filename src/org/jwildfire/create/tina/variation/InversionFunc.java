@@ -48,7 +48,6 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_E = "e";
   public static final String PARAM_F = "f";
   
-  public static final String PARAM_ZMODE = "zmode";
   public static final String PARAM_INVERSION_MODE = "imode";
   public static final String PARAM_HIDE_UNINVERTED = "hide_uninverted";
   public static final String PARAM_RING_SCALE = "ring_scale";
@@ -69,16 +68,13 @@ public class InversionFunc extends VariationFunc {
   private static final String[] paramNames = { 
     PARAM_SCALE, PARAM_ROTATION, 
     PARAM_SHAPE, 
-    PARAM_ZMODE, 
     PARAM_INVERSION_MODE, PARAM_HIDE_UNINVERTED, 
     PARAM_RING_MODE, 
     PARAM_RING_SCALE,
     PARAM_P, PARAM_P2, PARAM_DRAW_CIRCLE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, 
     PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, 
-    // PARAM_DIRECT_COLOR_THRESHOLDING, 
-    PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH, 
-    PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN, 
+    PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH
   };
   
   public static int IGNORE_RING = 0;
@@ -88,8 +84,6 @@ public class InversionFunc extends VariationFunc {
   public static int STANDARD = 0;
   public static int EXTERNAL_INVERSION_ONLY = 1;
   public static int INTERNAL_INVERSION_ONLY = 2;
-  // outer inversion is like external inversion, except 
-  //    leaves unchanged any  "external" regions that are distance < radius (inner hole)
   public static int EXTERNAL_RING_INVERSION_ONLY = 3;
   public static int INTERNAL_RING_INVERSION_ONLY = 4;
   
@@ -99,7 +93,6 @@ public class InversionFunc extends VariationFunc {
   public static int REGULAR_POLYGON = 3;
   public static int RHODONEA = 4;
   public static int SUPERSHAPE = 5;
-//  public static int WELDED_CIRCLES = 6;
   
 // direct color modes
 public static int DST_DISTANCE_FROM_BOUNDARY = 1;
@@ -133,10 +126,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
   
   public boolean getDrawGuides() { return draw_guides; }
   
-  /**
-   *  only using z coordinate for specific modes
-   */
-  
   class PolarPoint2D {
     public double x;
     public double y;
@@ -144,11 +133,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
     // public double t;
   }
 
- /* class DoublePoint3D extends DoublePoint2D {
-    public double z;
-  }
-  */
-  
   // abstract class ParametricShape {
   abstract class ParametricShape {
     public PolarPoint2D ptemp = new PolarPoint2D();
@@ -164,63 +148,24 @@ public static int RADIAL_DIFFERENCE1 = 10;
       return outpoint;
     }
     
-    /*
-    public void getFirstDerivative(double t, PolarPoint2D result) {
-      result.x = Double.NaN;
-      result.y = Double.NaN;
-    }
-    
-    public double getSpeed(double t, PolarPoint2D result) {
-      this.getFirstDerivative(t, result);
-      if (Double.isNaN(result.x) || Double.isNaN(result.y)) {
-        return 0;
-      }
-      double speed = sqrt(result.x*result.x + result.y*result.y);
-      return speed;
-    }
-    */
-    
-    // find intersection nearest to point pIn1 of line (defined by point pIn1 and pIn2) and shape 
-    //  
-    //    shapepoint p to "center" of shape
-    //    (where "centroid" is defined by the shape object, 
-    //       and is meant to usually be the centroid of the shape)
-    /*
-    public double getClosestIntersect(PolarPoint2D pin1, PolarPoint2D pin2, PolarPoint2D pout) {
-      return 0;
-    }
-    */
-    
-    // int callCount = 0;
     // find intersection nearest to point pIn of line from point pIn to "center" of shape
-    //    (where "centroid" is defined by the shape object, 
+    //    (where "center" is defined by the shape object, 
     //       and is meant to usually be the centroid of the object)
-    // public void getClosestRadialIntersect(PolarPoint2D pin, PolarPoint2D pout) {    
     public void getMaxCurvePoint(double tin, PolarPoint2D pout) {
       // if doesn't intersect self, will only be one point of intersection
       if (simpleShape()) {
         getCurvePoint(tin, pout);
         return;
       }
-      // callCount++;
-      // if (callCount % 200000 == 0) {
-      //  callCount = 0;
-      // }
       ptemp.r = 0;
       ptemp.x = 0;
       ptemp.y = 0;
       pout.r = -0.0001;
       pout.x = 0;
       pout.y = 0;
-      // double xin = pin.x;
-      // double yin = pin.y;
-      // double tin =  atan2(yin, xin);  // atan2 range is [-Pi..+Pi]
-      
-      // don't need this -- shape rotation is handled in getCurvePoint() call
-      // double t = tin - shape_rotation_radians;
+
+      // don't need to deal with shape rotation here, as it is handled in getCurvePoint() call
       int theta_count = (int)(getPeriod() / M_2PI);
-      //int theta_count = (int)((getPeriod() / M_PI) + EPSILON);  // adding epsilon to avoid any division accuracy issues
-      // int theta_count = 20;
       
       for (int i=0; i<theta_count; i++) {
         double theta = tin + (i * M_PI);
@@ -230,27 +175,9 @@ public static int RADIAL_DIFFERENCE1 = 10;
           pout.y = ptemp.y;
           pout.r = abs(ptemp.r);
         }
-        // double theta = tin + (i * M_PI);
-        //if (i%2 == 0) { // even ==> multiples of 2pi of tin ==> only consider those with positive radius
-          //getCurvePoint(theta, ptemp);
-          // if ()
-       //        }
-       //        else { // odd ==> 180 degree rotation ==> only consider those with negative radius
-        //}
       }
-      
-      // determine all theta to test based on period and tin
-      //   (and for each theta also want to check t-PI since can have negative radius)
-      
-      // for all t, find rc (curve radius), and determine max rc
-      // getCurvePoint(tin, pout);
-      
-      // convert back from polar (t,rc) to output point of curve intersection (x', y')
-
     }
   }
-  
-  // still need a parameter for shape rotation about (x0, y0) ?
   
   class Circle extends ParametricShape {
 
@@ -369,10 +296,7 @@ public static int RADIAL_DIFFERENCE1 = 10;
   
   class Rhodonea extends ParametricShape {
     double period;
-    // double kn, kd;
     public Rhodonea() {
-      // kn = a;
-      // kd = b;
       calcPeriod();
     }
     
@@ -445,7 +369,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
     
   }
   
-  // public boolean DESIGN_GUIDE_MODE = false;
   double scale = 1;
   double x0 = 0;
   double y0 = 0;
@@ -471,17 +394,13 @@ public static int RADIAL_DIFFERENCE1 = 10;
   boolean guides_enabled = true;
   int inversion_mode = STANDARD;
   boolean hide_uninverted = false;
-  boolean zmode = false;
   
-    // Color Handling
+  // Color Handling
   private int direct_color_gradient = OFF;
   private int direct_color_measure = RADIAL_DIFFERENCE1;
-  // private int direct_color_thesholding = VALUE;
-    //  private double color_scaling = 100;
   private double color_low_thresh = 0;
   private double color_high_thresh = 1.0;
   
-
   PolarPoint2D curve_point = new PolarPoint2D();
   PolarPoint2D circle_inversion_point = new PolarPoint2D();
 
@@ -498,66 +417,35 @@ public static int RADIAL_DIFFERENCE1 = 10;
     double iscale;
     if (draw_guides && guides_enabled) { 
       double rnd = pContext.random();
-        double theta = rnd * shape.getPeriod();
-        if (zmode) {
-          double split = pContext.random() * 3.1;
-          if (split < 1) {
-            pVarTP.x += scale * cos(theta);
-            pVarTP.y += scale * sin(theta);
-           // pVarTP.z = z0;
-           // pVarTP.z += zin;
-          }
-          else if (split < 2) {
-            pVarTP.x += scale * cos(theta);
-            // pVarTP.y = y0;
-            // pVarTP.y += yin;
-            pVarTP.z += scale * sin(theta);
-          }
-          else if (split < 3) {
-            // pVarTP.x = x0;
-            // pVarTP.x += xin;
-            pVarTP.y += scale * sin(theta);
-            pVarTP.z += scale * cos(theta);
-          }
-          else {
-            // pVarTP.x += x0;
-            // pVarTP.x += xin;
-            // pVarTP.y += yin;
-            // pVarTP.z += zin;
-          }
+      double theta = rnd * shape.getPeriod();
+      double split = pContext.random() * 1.1;
+      if (split < 1) {
+        if (ring_mode == IGNORE_RING) {
+          shape.getCurvePoint(theta, curve_point);
+          pVarTP.x += curve_point.x;
+          pVarTP.y += curve_point.y;
         }
         else {
-          double split = pContext.random() * 1.1;
-          if (split < 1) {
-            if (ring_mode == IGNORE_RING) {
-              shape.getCurvePoint(theta, curve_point);
-              pVarTP.x += curve_point.x;
-              pVarTP.y += curve_point.y;
-            }
-            else {
-              if (split < 0.5) {
-                shape.getCurvePoint(theta, curve_point);
-                pVarTP.x += curve_point.x;
-                pVarTP.y += curve_point.y;
-              }
-              else if (split < 0.75) {
-                // draw ring_rmin
-                pVarTP.x += ring_rmin * cos(theta);
-                pVarTP.y += ring_rmin * sin(theta);
-              }
-              else {
-                pVarTP.x += ring_rmax * cos(theta);
-                pVarTP.y += ring_rmax * sin(theta);
-                // draw ring_rmax
-              }
-            }
+          if (split < 0.5) {
+            shape.getCurvePoint(theta, curve_point);
+            pVarTP.x += curve_point.x;
+            pVarTP.y += curve_point.y;
           }
-          else {  // draw point at center of shape
-            // pVarTP.x += x0;
-            // pVarTP.y += y0;
-            // pVarTP.z += z0;
+          else if (split < 0.75) {
+            // draw ring_rmin
+            pVarTP.x += ring_rmin * cos(theta);
+            pVarTP.y += ring_rmin * sin(theta);
+          }
+          else {
+            pVarTP.x += ring_rmax * cos(theta);
+            pVarTP.y += ring_rmax * sin(theta);
+            // draw ring_rmax
           }
         }
+      }
+      else {  
+        // no-op, leave 10% at shape origin
+      }
       return;
     }
     
@@ -587,15 +475,13 @@ public static int RADIAL_DIFFERENCE1 = 10;
     // to do generalized inversion of input point P, 
     // need two other points:
     // O, the origin of inversion
-    // S, the intersection of the line OP and the surface of the shape
+    // S, the intersection of the line OP and the boundary of the shape
     // then output point P' = O + (d1(O,B)^2/d2(O,P)^2) * (P - O)
     // where d1 and d2 are distance metric functions 
     double tin = atan2(yin, xin);
     double rin = sqrt(xin*xin + yin*yin + zin*zin);
     boolean do_inversion;
-    // shape.getCurvePoint(tin, curve_point);
     shape.getMaxCurvePoint(tin, curve_point);
-    // double rcurve = sqrt(curve_point.x * curve_point.x + curve_point.y * curve_point.y);
     double rcurve = curve_point.r;
     double xcurve = curve_point.x;
     double ycurve = curve_point.y;
@@ -611,7 +497,7 @@ public static int RADIAL_DIFFERENCE1 = 10;
       do_inversion = true;
     }
     
-    // if constraining to ring, then fruther restrict to:
+    // if constraining to ring, then further restrict to:
     //   if inside of curve radius, make sure is > ring_min (based on ring scale)
     //   if outside of curve radius, make sure is < ring_max (based on inversion of ring_min)
     if (do_inversion && (ring_mode != IGNORE_RING) && (ring_scale != 1)) {
@@ -684,18 +570,11 @@ public static int RADIAL_DIFFERENCE1 = 10;
       }
       else { return; }  // value not recognized, default back to normal coloring mode
         
-      /* else if (direct_color_measure == META_INDEX && meta_mode != OFF) {
-        val = current_meta_step;
-        sampled_vals = null;
-      }
-        */
       double baseColor = 0;
       double low_value, high_value;
 
-      // else {  // default is by value
       low_value = color_low_thresh;
       high_value = color_high_thresh;
-      // }
       if (low_value > high_value) {
         double temp = low_value;
         low_value = high_value;
@@ -753,40 +632,13 @@ public static int RADIAL_DIFFERENCE1 = 10;
     else if (shape_mode == SUPERSHAPE) {
       shape = new SuperShape();
     }
-    
     if (ring_scale <= scale) {
       ring_rmin = ring_scale * scale;
-      // ring_rmax = ring_rmin * (scale*scale) / (ring_rmin * ring_rmin);
       ring_rmax =  (scale*scale) / ring_rmin;
     }
     else {
       ring_rmax = ring_scale * scale;
-      // ring_rmin = ring_rmax * (scale*scale) / (ring_rmax * ring_rmax);
       ring_rmin = (scale*scale) / ring_rmax;
-    }
-    // System.out.println("ring rmin: " + ring_rmin);
-    // System.out.println("ring rmax: " + ring_rmax);
-    
-    if (shape_mode == CIRCLE && f != 0) {
-      System.out.println("testing");
-      // hacking for calc of intersecting angles, 
-      // f = distance between centers
-      // radius of circle 1 = scale
-      // assume radius of circle 2 = 1
-      double D = f;
-      double P = scale;
-      double Q = 1;
-      // θ = sin-1[ sqrt(2P^2Q^2 + 2P^2D^2 + 2Q^2D^2 - P^44 - Q^4 - D^4)/(2PQ) ]
-      double theta = asin(sqrt(2*P*P*Q*Q + 2*P*P*D*D + 2*Q*Q*D*D - P*P*P*P - Q*Q*Q*Q - D*D*D*D)/(2*P*Q));
-      double tdegrees = Math.toDegrees(theta);
-      double rho = 180 - tdegrees;
-      double submult = M_PI / theta;
-      // and the angle of intersection by the formula
-      // φ = 180° - θ
-      System.out.println("theta = " + theta);
-      System.out.println("degrees = " + tdegrees);
-      System.out.println("rho deg = " + rho);
-      System.out.println("submult = " + submult);
     }
   }
 
@@ -806,15 +658,12 @@ public static int RADIAL_DIFFERENCE1 = 10;
       scale, 
       rotation_pi_fraction, 
       shape_mode, 
-      zmode ? 1 : 0, 
       inversion_mode, hide_uninverted ? 1 : 0, 
       ring_mode, ring_scale, 
       p, p2, draw_shape, shape_thickness, passthrough, guides_enabled ? 1 : 0, 
       a, b, c, d, e, f, 
       direct_color_measure, direct_color_gradient, 
-//      direct_color_thesholding, 
-      color_low_thresh, color_high_thresh, 
-      x0, y0, z0, 
+      color_low_thresh, color_high_thresh
     };
     
   }
@@ -829,9 +678,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
     }
     else if (PARAM_SHAPE.equalsIgnoreCase(pName)) {
       shape_mode = (int)pValue;
-    }
-    else if (PARAM_ZMODE.equalsIgnoreCase(pName)) {
-      zmode = (pValue == 1) ? true : false;
     }
     else if (PARAM_RING_MODE.equalsIgnoreCase(pName)) {
       ring_mode = (int)pValue;
@@ -892,18 +738,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
     }
     else if (PARAM_COLOR_HIGH_THRESH.equalsIgnoreCase(pName)) {
       color_high_thresh = pValue;
-    }
-    // XORIGIN IS DEPRECATED
-    else if (PARAM_XORIGIN.equalsIgnoreCase(pName)) {
-      x0 = pValue;
-    }
-    // YORIGIN IS DEPRECATED
-    else if (PARAM_YORIGIN.equalsIgnoreCase(pName)) {
-      y0 = pValue;
-    }
-    // ZORIGIN IS DEPRECATED
-    else if (PARAM_ZORIGIN.equalsIgnoreCase(pName)) {
-      z0 = pValue;
     }
     else
       throw new IllegalArgumentException(pName);
