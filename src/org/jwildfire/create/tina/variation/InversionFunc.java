@@ -25,12 +25,13 @@ import org.jwildfire.create.tina.base.XYZPoint;
  *     (efffectively replaces pre- and post- transform coefficients 
  *      so don't need to keep them as mirrors of each other)
  *  also includes "draw_circles" param
- *      if 0 > draw_circles < 1, then that fraction of incoming points is used to 
- *      draw circle of inversion rather than doing the actual inversion >
+ *      if 0 < draw_circles < 1, then that fraction of incoming points is used to 
+ *      draw circle of inversion rather than doing the actual inversion
  *  In addition to standard circle inversion, can also be used for p-circle inversion as 
  *      described by Ramirez et al in "Generating Fractal Patterns by Using P-Circle Inversion" (2015)
  */
-public class InversionFunc extends VariationFunc implements Guides {
+public class InversionFunc extends VariationFunc {
+  // public class InversionFunc extends VariationFunc implements Guides {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_XORIGIN = "xorigin";
