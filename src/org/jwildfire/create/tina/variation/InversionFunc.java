@@ -1,5 +1,6 @@
 package org.jwildfire.create.tina.variation;
 
+import java.io.Serializable;
 import static java.lang.Math.abs;
 import static java.lang.Math.asin;
 import java.math.BigInteger;
@@ -126,7 +127,7 @@ public static int RADIAL_DIFFERENCE1 = 10;
   
   public boolean getDrawGuides() { return draw_guides; }
   
-  class PolarPoint2D {
+  class PolarPoint2D implements Serializable {
     public double x;
     public double y;
     public double r;
@@ -134,7 +135,7 @@ public static int RADIAL_DIFFERENCE1 = 10;
   }
 
   // abstract class ParametricShape {
-  abstract class ParametricShape {
+  abstract class ParametricShape implements Serializable {
     public PolarPoint2D ptemp = new PolarPoint2D();
     public abstract void getCurvePoint(double t, PolarPoint2D point);
     public abstract double getPeriod();
@@ -516,15 +517,12 @@ public static int RADIAL_DIFFERENCE1 = 10;
         num_scale = sqr(rcurve);
       }
       else {
-        // num_scale = pow(rcurve, p2);
         num_scale = pow( (pow(abs(xcurve),p2) + pow(abs(ycurve),p2)), p2);
       }
       if (p == 2) {
-        // iscale = (rcurve * rcurve) / (sqr(xin) + sqr(yin));
         denom_scale = sqr(xin) + sqr(yin);
       }
       else {
-        // iscale = (rcurve * rcurve)/ pow( (pow(abs(xin),p) + pow(abs(yin),p)), 2.0/p);
         denom_scale = pow( (pow(abs(xin),p) + pow(abs(yin),p)), 2.0/p);
       }
       iscale = num_scale/denom_scale;
