@@ -21,12 +21,8 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 /**
- * InversionFunc, a variation for inversion geometry transformations
- * Supports standard circle inversion
- * Includes x0, y0, z0 params for specifying origin translationa specific radius parameter
- *     (efffectively replaces pre- and post- transform coefficients 
- *      so don't need to keep them as mirrors of each other)
- *  also includes "draw_circles" param
+ * InversionFunc, a variation for shape inversion geometry transformations
+ *  also includes "draw_circle" param
  *      if 0 < draw_circles < 1, then that fraction of incoming points is used to 
  *      draw circle of inversion rather than doing the actual inversion
  *  In addition to standard circle inversion, can also be used for p-circle inversion as 
@@ -36,10 +32,7 @@ public class InversionFunc extends VariationFunc {
   // public class InversionFunc extends VariationFunc implements Guides {
   private static final long serialVersionUID = 1L;
 
-  public static final String PARAM_XORIGIN = "xorigin";
-  public static final String PARAM_YORIGIN = "yorigin";
-  public static final String PARAM_ZORIGIN = "zorigin";
-  public static final String PARAM_ROTATION = "rotation (pi * n radians)";
+  public static final String PARAM_ROTATION = "rotation";  // radians = pi * rotation
   public static final String PARAM_SCALE= "scale";
   public static final String PARAM_SHAPE = "shape";
   public static final String PARAM_A = "a";
@@ -53,8 +46,11 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_HIDE_UNINVERTED = "hide_uninverted";
   public static final String PARAM_RING_SCALE = "ring_scale";
   public static final String PARAM_RING_MODE = "ring_mode";
-  public static final String PARAM_P= "p";
-  public static final String PARAM_P2 = "p2";
+  public static final String PARAM_PNORM_POINT = "pnorm_point";
+  public static final String PARAM_PNORM_SHAPE = "pnorm_shape";
+  public static final String PARAM_PNORM_PMOD = "pnorm_pmod";
+  public static final String PARAM_PNORM_SMOD = "pnorm_smod";
+  
   public static final String PARAM_DRAW_CIRCLE = "draw_circle";
   public static final String PARAM_SHAPE_THICKNESS = "shape_thickness";
   public static final String PARAM_GUIDES_ENABLED = "guides_enabled";
@@ -72,7 +68,8 @@ public class InversionFunc extends VariationFunc {
     PARAM_INVERSION_MODE, PARAM_HIDE_UNINVERTED, 
     PARAM_RING_MODE, 
     PARAM_RING_SCALE,
-    PARAM_P, PARAM_P2, PARAM_DRAW_CIRCLE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
+    PARAM_PNORM_POINT, PARAM_PNORM_SHAPE, PARAM_PNORM_PMOD, PARAM_PNORM_SMOD,  
+    PARAM_DRAW_CIRCLE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, 
     PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, 
     PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH
@@ -371,9 +368,6 @@ public static int RADIAL_DIFFERENCE1 = 10;
   }
   
   double scale = 1;
-  double x0 = 0;
-  double y0 = 0;
-  double z0 = 0;
   double a = 1;
   double b = 1;
   double c = 0;
@@ -384,8 +378,10 @@ public static int RADIAL_DIFFERENCE1 = 10;
   // if pass_through != 0, then allow (pass_through) fraction of points to pass through unaltered
   double passthrough = 0;
   
-  double p = 2;
-  double p2 = 2;
+  double pnorm_point = 2;
+  double pnorm_shape = 2;
+  double pnorm_pmod = 1;
+  double pnorm_smod = 1;
   double ring_scale = 1;
   int ring_mode = IGNORE_RING;
   double ring_rmin;
@@ -513,17 +509,17 @@ public static int RADIAL_DIFFERENCE1 = 10;
     if (do_inversion) {
       double num_scale = rcurve * rcurve;
       double denom_scale;
-      if (p2 == 2) {
+      if (pnorm_shape == 2 && pnorm_smod == 1) {
         num_scale = sqr(rcurve);
       }
       else {
-        num_scale = pow( (pow(abs(xcurve),p2) + pow(abs(ycurve),p2)), p2);
+        num_scale = pow((pow(abs(xcurve),pnorm_shape) + pow(abs(ycurve),pnorm_shape)), 2.0/(pnorm_shape*pnorm_smod) );
       }
-      if (p == 2) {
+      if (pnorm_point == 2 && pnorm_pmod == 1) {
         denom_scale = sqr(xin) + sqr(yin);
       }
       else {
-        denom_scale = pow( (pow(abs(xin),p) + pow(abs(yin),p)), 2.0/p);
+        denom_scale = pow((pow(abs(xin),pnorm_point) + pow(abs(yin),pnorm_point)), 2.0/(pnorm_point*pnorm_pmod) );
       }
       iscale = num_scale/denom_scale;
       
@@ -606,12 +602,13 @@ public static int RADIAL_DIFFERENCE1 = 10;
 
   }
   
+
+  
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     shape_rotation_radians = M_PI * rotation_pi_fraction;
     scalesqr = scale * scale;
-    
-    // ring_max = ring_max_ratio * r;
+
     if (shape_mode == CIRCLE) {
       shape = new Circle();
     }
@@ -658,7 +655,8 @@ public static int RADIAL_DIFFERENCE1 = 10;
       shape_mode, 
       inversion_mode, hide_uninverted ? 1 : 0, 
       ring_mode, ring_scale, 
-      p, p2, draw_shape, shape_thickness, passthrough, guides_enabled ? 1 : 0, 
+      pnorm_point, pnorm_shape, pnorm_pmod, pnorm_smod,  
+      draw_shape, shape_thickness, passthrough, guides_enabled ? 1 : 0, 
       a, b, c, d, e, f, 
       direct_color_measure, direct_color_gradient, 
       color_low_thresh, color_high_thresh
@@ -683,11 +681,17 @@ public static int RADIAL_DIFFERENCE1 = 10;
     else if (PARAM_RING_SCALE.equalsIgnoreCase(pName)) {
       ring_scale = pValue;
     }
-    else if (PARAM_P.equalsIgnoreCase(pName)) {
-      p = pValue;
+    else if (PARAM_PNORM_POINT.equalsIgnoreCase(pName)) {
+      pnorm_point = pValue;
     }
-    else if (PARAM_P2.equalsIgnoreCase(pName)) {
-      p2 = pValue;
+    else if (PARAM_PNORM_SHAPE.equalsIgnoreCase(pName)) {
+      pnorm_shape = pValue;
+    }
+    else if (PARAM_PNORM_PMOD.equalsIgnoreCase(pName)) {
+      pnorm_pmod = pValue;
+    }
+    else if (PARAM_PNORM_SMOD.equalsIgnoreCase(pName)) {
+      pnorm_smod = pValue;
     }
     else if (PARAM_INVERSION_MODE.equalsIgnoreCase(pName)) {
       inversion_mode = (int)pValue;
