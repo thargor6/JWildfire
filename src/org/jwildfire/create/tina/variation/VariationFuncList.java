@@ -597,6 +597,8 @@ public class VariationFuncList {
     registerVariationFunc(PreStabilizeFunc.class);
     registerVariationFunc(PreSphericalFunc.class);
     registerVariationFunc(PostSphericalFunc.class);
+    
+    registerVariationFunc(InversionFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
