@@ -86,7 +86,8 @@ public class InversionFunc extends VariationFunc {
   public static int HYPERBOLA = 2;
   public static int REGULAR_POLYGON = 3;
   public static int RHODONEA = 4;
-  public static int SUPERSHAPE = 5;
+  public static int SUPERELLIPSE = 5;
+  public static int SUPERSHAPE = 6;
   
   // direct color modes   (0 ==> NONE ==> normal coloring)
   public static int DST_DISTANCE_FROM_BOUNDARY = 1;
@@ -238,6 +239,29 @@ public class InversionFunc extends VariationFunc {
       point.y = r * sin(tin);
     }
   }
+
+  class SuperEllipse extends ParametricShape {
+    @Override
+    public double getPeriod() {
+      return M_2PI;
+    }
+
+    @Override
+    public void getCurvePoint(double tin, PolarPoint2D point) {
+      double t = tin - shape_rotation_radians;
+      // uses params (a,b,c) 
+      double sinAPow = pow(abs(a*sin(t)), c);
+      double cosBPow = pow(abs(b*cos(t)), c);
+      double ctemp = (c == 0) ? 1.0 : c;
+      double r = (a * b) / pow((sinAPow + cosBPow), 1.0/c);
+
+      r *= scale;
+      point.r = r;
+      point.x = r * cos(tin);
+      point.y = r * sin(tin);
+    }
+  }
+  
   
   /**
    * 
@@ -612,6 +636,9 @@ public class InversionFunc extends VariationFunc {
     }
     else if (shape_mode == SUPERSHAPE) {
       shape = new SuperShape();
+    }
+    else if (shape_mode == SUPERELLIPSE) {
+      shape = new SuperEllipse();
     }
     else {  // if shape_mode not recognized, default to Circle
       shape = new Circle();
