@@ -1,7 +1,34 @@
+/*
+  JWildfire - an image and animation processor written in Java 
+  Copyright (C) 1995-2017 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
+  General Public License as published by the Free Software Foundation; either version 2.1 of the 
+  License, or (at your option) any later version.
+ 
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software; 
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+/**
+ * KleinGroup variation by CozyG
+ *  Copyright 2017- Gregg Helt
+ *    (released under same GNU Lesser General Public License as above)
+ * KleinGroup variation is meant to make it easier to create "interesting" Kleinian group limit sets from Mobius transformations
+ *     internally uses two Mobius transformations as generators (plus their inverses)
+ *     Takes the input parameters and uses strategies from "Indra's Pearls" book 
+ *     (https://en.wikipedia.org/wiki/Indra%27s_Pearls_(book)), 
+ *     to create transform groups that have a reasonable chance of being "interesting" 
+ */
+
 package org.jwildfire.create.tina.variation;
 
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -17,17 +44,7 @@ import org.jwildfire.create.tina.base.Layer;
 //     could later convert to using ...mathlib.Complex
 */
 import org.nfunk.jep.type.Complex;
-// import org.jwildfire.base.mathlib.Complex;
 
-/**
- * KleinGroupFunc is meant to make it easier to create "interesting" Kleinian group limit sets 
- *     internally uses two Mobius transformations as generators (plus their inverses)
- *     Takes the input parameters and uses strategies from "Indra's Pearls" book 
- *     (https://en.wikipedia.org/wiki/Indra%27s_Pearls_(book)), 
- *     to create transform groups that have a reasonable chance of being "interesting" 
- * 
- *  Author: Gregg Helt
- */
 public class KleinGroupFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -81,6 +98,7 @@ public class KleinGroupFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+
     // if avoid_reversals is false, 
     // randomly pick one of the four calculated Mobius transformation matrices, a, b, A, B where A = inverse(a), B = inverse(b)
     // 
@@ -115,16 +133,19 @@ public class KleinGroupFunc extends VariationFunc {
     // for the generator matrices 
     //    [0, 1, 2, 3] = [a, b, c, d]  ==> f(z)= (az+b)/(cz+d)
     //     
-    Complex zin = new Complex(pAffineTP.x, pAffineTP.y);
+    double xin = pAffineTP.x;
+    double yin = pAffineTP.y;
+    xin /= pAmount;
+    yin /= pAmount;
+    Complex win = new Complex(xin, yin);
     Complex a = mat[0];
     Complex b = mat[1];
     Complex c = mat[2];
     Complex d = mat[3];
-    Complex zout = zin.mul(a).add(b).div(zin.mul(c).add(d));
+    Complex wout = win.mul(a).add(b).div(win.mul(c).add(d));
     
-    pVarTP.x += pAmount * zout.re();
-    pVarTP.y += pAmount * zout.im();
-    
+    pVarTP.x += pAmount * wout.re();
+    pVarTP.y += pAmount * wout.im();
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
