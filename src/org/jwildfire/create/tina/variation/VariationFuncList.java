@@ -482,7 +482,7 @@ public class VariationFuncList {
     registerVariationFunc(PlaneWFFunc.class);
     registerVariationFunc(CheckerboardWFFunc.class);
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
-
+    
     registerVariationFunc(DLA3DWFFunc.class);
 
     registerVariationFunc(Waves2RadialFunc.class);
@@ -599,6 +599,7 @@ public class VariationFuncList {
     registerVariationFunc(PostSphericalFunc.class);
     
     registerVariationFunc(InversionFunc.class);
+    registerVariationFunc(KleinGroupFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
