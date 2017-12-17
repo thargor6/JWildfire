@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.tanh;
@@ -30,7 +30,7 @@ public class TanCosFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // tancos by Raykoid666, http://raykoid666.deviantart.com/art/plugin-pack-3-100510461?q=gallery%3ARaykoid666%2F11060240&qo=16
-    double d1 = EPSILON + sqr(pAffineTP.x) + sqr(pAffineTP.y);
+    double d1 = SMALL_EPSILON + sqr(pAffineTP.x) + sqr(pAffineTP.y);
     double d2 = pAmount / d1;
     pVarTP.x += d2 * (tanh(d1) * (2.0 * pAffineTP.x));
     pVarTP.y += d2 * (cos(d1) * (2.0 * pAffineTP.y));

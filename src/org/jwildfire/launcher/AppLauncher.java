@@ -79,6 +79,10 @@ public class AppLauncher {
     cmd.add(javaCmd);
     cmd.add(minMemOption);
     cmd.add(maxMemOption);
+
+    if (prefs.getUiScale() > 1.0)
+      cmd.add("-Dsun.java2d.uiScale=" + prefs.getUiScale() + "");
+
     if (isWindows()) {
       boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);
       String libPath = new File(new File(currentDir.getParentFile().getAbsolutePath(), "lib"), (is64bit ? "x64" : "x86")).getAbsolutePath();

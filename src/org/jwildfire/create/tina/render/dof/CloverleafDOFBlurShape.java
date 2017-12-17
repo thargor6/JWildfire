@@ -40,8 +40,8 @@ public class CloverleafDOFBlurShape extends AbstractDOFBlurShape {
     d.assign(pSrc);
     double fade = doFade();
     double dr = Math.abs(camDOF_10 * pZDist * scale * doFade());
-    s.x = (1.0 - 2.0 * Math.random()) * fade;
-    s.y = (1.0 - 2.0 * Math.random()) * fade;
+    s.x = (1.0 - 2.0 * randGen.random()) * fade;
+    s.y = (1.0 - 2.0 * randGen.random()) * fade;
     fnc.transform(flameTransformationContext, xform, s, d, dr);
     rotate(pSrc, d);
     pDest.x = d.x / pZR;

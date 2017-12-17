@@ -40,10 +40,10 @@ public class LauncherPrefsReader {
     return val.length() > 0 ? val.equalsIgnoreCase("true") : pDefaultValue;
   }
 
-  //  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
-  //    String val = pProperties.getProperty(pKey, "").trim();
-  //    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
-  //  }
+  private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
+    String val = pProperties.getProperty(pKey, "").trim();
+    return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
+  }
 
   public void readPrefs(LauncherPrefs pPrefs) throws Exception {
     File file = new File(System.getProperty("user.home"), LauncherPrefs.PREFS_FILE);
@@ -55,6 +55,7 @@ public class LauncherPrefsReader {
         pPrefs.setJavaPath(getProperty(props, LauncherPrefs.KEY_JAVA_PATH, pPrefs.getJavaPath()));
         pPrefs.setMaxMem(getIntProperty(props, LauncherPrefs.KEY_MEMORY_MAX, pPrefs.getMaxMem()));
         pPrefs.setLowPriority(getBooleanProperty(props, LauncherPrefs.KEY_PRIORITY_LOW, pPrefs.isLowPriority()));
+        pPrefs.setUiScale(getDoubleProperty(props, LauncherPrefs.KEY_UI_SCALE, pPrefs.getUiScale()));
       }
       finally {
         inputStream.close();

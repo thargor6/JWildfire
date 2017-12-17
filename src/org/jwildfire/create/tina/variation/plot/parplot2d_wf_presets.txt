@@ -386,3 +386,178 @@ umin = 0.0
 umax= 2.0
 vmin = 0.0
 vmax = 2*pi
+
+
+Parplot equations by Sarah Griffin
+---------------------------------------
+The elliptic cone and ellipsoid came from a highschool math cheatsheet, originally from a book of math tables. The crossbar twist is derived from parplot2d_wf#8. The rest are from my imagination and prayer. 
+
+##36
+Parallelogram 
+============================
+xformula= u*param_a
+yformula= v*param_b
+zformula= u*param_c+v*param_d
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^
+##37
+Sine wave Surface
+==================
+xformula= u*param_a
+yformula= v*param_b
+zformula= sin(v*param_c)* param_d
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^^
+##38
+Elliptic Cone
+================
+xformula= cos(u*param_a)*sin(v*param_b)
+yformula= sin(u*param_c)*sin(v*param_d)
+zformula= sin(v*param_e)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+param_e = 1
+umin= -3.1415927
+umax= 3.1415927
+vmin= -3.1415927
+vmax= 3.1415927
+^^^^^^^^^^^^^^^^^^^^
+##39
+Ellipsoid ( Change (0,0) to create ovoid)
+============================
+xformula= cos(u*param_a)*sin(v*param_b)
+yformula= sin(u*param_c)*sin(v*param_d)
+zformula=cos(v*param_e)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+param_e = 1
+umin= -3.1415927
+umax= 3.1415927
+vmin= -3.1415927
+vmax= 3.1415927
+^^^^^^^^^^^^^^^^^^^^
+##40
+CrossBar Twist 
+====================
+xformula= u*cos(v*param_a)-u*param_b
+yformula= v*cos(u*param_c)-v*param_d
+zformula= u*v*sin(u*param_e)*sin(v*param_f)-u/v
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+param_e = 1
+param_f = 1
+umin= -3.1415927
+umax= 3.1415927
+vmin= -3.1415927
+vmax= 3.1415927
+^^^^^^^^^^^^^^^^^^^^
+##41
+Rippled Ribbon
+==================
+xformula= cos(u*param_a)*sin(u*param_b)-u*param_c
+yformula= sin(u*param_d)*cos(v*param_e)-u*param_f
+zformula= cos(u)*sin(u)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+param_e = 1
+param_f = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^
+##42
+Channel Surface
+==================
+xformula= cos(u*param_a)*sin(u*param_b)-u*param_c
+yformula= (v/param_d)*cos(u*param_e)-v*param_f
+zformula= cos(u)*sin(u)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 3
+param_e = 1
+param_f = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^
+##43
+Wavy Surface
+===================
+xformula= cos(v*param_a)+sin(v*param_b)-u*param_c
+yformula= (v/param_d)*cos(u*param_e)-v*param_f
+zformula= cos(u)-sin(u)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 3
+param_e = 1
+param_f = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^^
+##44
+Rippled Surface
+==================
+xformula= cos(u*param_a)*sin(v*param_b)-u-v
+yformula= sin(v*param_c)*cos(v*param_d)-u*param_e
+zformula= cos(u*param_f)*sin(u*param_f)
+param_a = 1
+param_b = 1
+param_c = 1
+param_d = 1
+param_e = 1
+param_f = 1
+umin = -9.42477796
+umax= 9.42477796
+vmin = -9.42477796
+vmax = 9.42477796
+^^^^^^^^^^^^^^^^^^^^^
+##45
+Furled Surface
+==================
+xformula= cos(u)*sin(u)-v
+yformula= (v/3)*cos(u)-v
+zformula= cos(u)*sin(u)
+umin = -6.2831853
+umax= 6.2831853
+vmin = -6.2831853
+vmax = 6.2831853
+^^^^^^^^^^^^^^^^^^^^
+##46
+Accordion Surface
+==================
+xformula= cos(u)*sin(v)+(u*v)
+yformula= sin(v)*cos(v)*(u+v)
+zformula= cos(u)*sin(u)
+umin = -6.2831853
+umax= 6.2831853
+vmin = -6.2831853
+vmax = 6.2831853
+^^^^^^^^^^^^^^^^^^^^

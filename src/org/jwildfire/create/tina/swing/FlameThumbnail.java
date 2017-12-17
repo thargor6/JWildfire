@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import javax.swing.JCheckBox;
+
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -33,6 +35,7 @@ public class FlameThumbnail {
   private Flame flame;
   private SimpleImage preview;
   private ImagePanel imgPanel;
+  private JCheckBox selectCheckbox;
   private final ThumbnailCacheKey cacheKey;
 
   public FlameThumbnail(Flame pFlame, SimpleImage pPreview, ThumbnailCacheKey pCacheKey) {
@@ -89,6 +92,14 @@ public class FlameThumbnail {
 
   public void setPreview(SimpleImage pPreview) {
     preview = pPreview;
+  }
+
+  public void setSelectCheckbox(JCheckBox checkbox) {
+    selectCheckbox = checkbox;
+  }
+
+  public JCheckBox getSelectCheckbox() {
+    return selectCheckbox;
   }
 
 }

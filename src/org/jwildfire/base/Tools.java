@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -56,16 +56,15 @@ import org.jwildfire.image.Pixel;
 
 public class Tools {
   public static final String APP_TITLE = "JWildfire";
-  public static final String APP_VERSION = "3.01 (07.01.2017)";
+  public static final String APP_VERSION = "V3.21 (30.09.2017)";
 
   public static final boolean SPECIAL_VERSION = false;
 
   public static final int MAX_SPATIAL_OVERSAMPLING = 6;
-  public static final int MAX_COLOR_OVERSAMPLING = 20;
 
   public static final int VPREC = 1024;
   public static final int SPREC = 10;
-  public static final int PLOT_BUFFER_SIZE = 1024;
+  public static final int PLOT_BUFFER_SIZE = 4096;
 
   private static final Pixel toolPixel = new Pixel();
   public static final String FILE_ENCODING = "utf-8";
@@ -85,6 +84,7 @@ public class Tools {
   public static final String FILEEXT_JWFSCRIPT = "jwfscript";
   public static final String FILEEXT_MP3 = "mp3";
   public static final String FILEEXT_OBJ = "obj";
+  public static final String FILEEXT_PLY = "ply";
   public static final String FILEEXT_PNG = "png";
   public static final String FILEEXT_PNS = "pns";
   public static final String FILEEXT_SPL = "spl";
@@ -533,7 +533,7 @@ public class Tools {
     if (p > 0 && p < pName.length() - 1) {
       return pName.substring(p + 1, pName.length());
     }
-    return pName;
+    return "";
   }
 
   public static boolean stringEquals(String a, String b) {

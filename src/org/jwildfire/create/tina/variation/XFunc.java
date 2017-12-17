@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
@@ -177,7 +177,7 @@ public class XFunc extends VariationFunc {
     _star_slope = tan(star_slope);
 
     _super_m = super_m / 4.0;
-    _super_n1 = -1.0 / (super_n1 + EPSILON);
+    _super_n1 = -1.0 / (super_n1 + SMALL_EPSILON);
 
   }
 

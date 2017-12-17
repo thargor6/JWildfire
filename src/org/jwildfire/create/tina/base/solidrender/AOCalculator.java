@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -149,7 +149,7 @@ public class AOCalculator implements Serializable {
       this.srcBuf = srcBuf;
       this.dstBuf = dstBuf;
       this.scale = scale;
-      FilterHolder filter = new FilterHolder(null, kernelType, 1, filterRadius);
+      FilterHolder filter = new FilterHolder(kernelType, 1, filterRadius);
       f = filter.getFilter();
       filterPixSize = f.length;
       fCenter = filterPixSize / 2;

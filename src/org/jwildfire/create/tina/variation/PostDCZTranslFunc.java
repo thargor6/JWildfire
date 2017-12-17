@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -48,13 +48,13 @@ public class PostDCZTranslFunc extends VariationFunc {
     double zf = factor * (pAffineTP.color - _x0) / _x1_m_x0;
     if (clamp != 0)
       zf = zf < 0 ? 0 : zf > 1 ? 1 : zf;
-    pVarTP.x += pAmount * pVarTP.x;
-    pVarTP.y += pAmount * pVarTP.y;
+    pVarTP.x = pAmount * pVarTP.x;
+    pVarTP.y = pAmount * pVarTP.y;
 
     if (overwrite == 0)
-      pVarTP.z += pAmount * pVarTP.z * zf;
+      pVarTP.z = pAmount * pVarTP.z * zf;
     else
-      pVarTP.z += pAmount * zf;
+      pVarTP.z = pAmount * zf;
   }
 
   @Override
@@ -101,7 +101,7 @@ public class PostDCZTranslFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _x0 = x0 < x1 ? x0 : x1;
     _x1 = x0 > x1 ? x0 : x1;
-    _x1_m_x0 = _x1 - _x0 == 0 ? EPSILON : _x1 - _x0;
+    _x1_m_x0 = _x1 - _x0 == 0 ? SMALL_EPSILON : _x1 - _x0;
   }
 
 }

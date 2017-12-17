@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
@@ -72,6 +73,8 @@ public class VariationFuncList {
     aliasMap.put(CircleRandFunc.class, "CircleRand");
     aliasMap.put(CircleTrans1Func.class, "CircleTrans1");
     aliasMap.put(MobiusNFunc.class, "MobiusN");
+    aliasMap.put(Tile_LogFunc.class, "tile_log");
+    aliasMap.put(DCTriTileFunc.class, "FiveFold");
 
     //
     registerVariationFunc(LinearFunc.class);
@@ -469,6 +472,7 @@ public class VariationFuncList {
     registerVariationFunc(PostPointSymmetryWFFunc.class);
     registerVariationFunc(PostAxisSymmetryWFFunc.class);
     registerVariationFunc(MobiusStripFunc.class);
+
     registerVariationFunc(YPlot2DWFFunc.class);
     registerVariationFunc(YPlot3DWFFunc.class);
     registerVariationFunc(ParPlot2DWFFunc.class);
@@ -480,6 +484,123 @@ public class VariationFuncList {
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
     
     registerVariationFunc(KleinGroupFunc.class);
+
+    registerVariationFunc(DLA3DWFFunc.class);
+
+    registerVariationFunc(Waves2RadialFunc.class);
+    registerVariationFunc(CirclesplitFunc.class);
+    registerVariationFunc(LogTile2Func.class);
+    registerVariationFunc(MobiqFunc.class);
+    registerVariationFunc(TileHlpFunc.class);
+    registerVariationFunc(SplipticBSFunc.class);
+    registerVariationFunc(Tile_LogFunc.class);
+    registerVariationFunc(Cos2_BSFunc.class);
+    registerVariationFunc(Cot2_BSFunc.class);
+    registerVariationFunc(Csc2_BSFunc.class);
+    registerVariationFunc(Tan2_BSFunc.class);
+    registerVariationFunc(Sec2_BSFunc.class);
+    registerVariationFunc(Exp2_BSFunc.class);
+    registerVariationFunc(Sin2_BSFunc.class);
+    registerVariationFunc(Csch2_BSFunc.class);
+    registerVariationFunc(Cosh2_BSFunc.class);
+    registerVariationFunc(Sech2_BSFunc.class);
+    registerVariationFunc(Coth2_BSFunc.class);
+    registerVariationFunc(Sinh2_BSFunc.class);
+    registerVariationFunc(Tanh2_BSFunc.class);
+    registerVariationFunc(CosqFunc.class);
+    registerVariationFunc(SinqFunc.class);
+    registerVariationFunc(TanqFunc.class);
+    registerVariationFunc(TanhqFunc.class);
+    registerVariationFunc(CoshqFunc.class);
+    registerVariationFunc(SinhqFunc.class);
+    registerVariationFunc(CotqFunc.class);
+    registerVariationFunc(CothqFunc.class);
+    registerVariationFunc(CscqFunc.class);
+    registerVariationFunc(CschqFunc.class);
+    registerVariationFunc(EstiqFunc.class);
+    registerVariationFunc(SecqFunc.class);
+    registerVariationFunc(SechqFunc.class);
+    registerVariationFunc(LoqFunc.class);
+    registerVariationFunc(Spirograph3DFunc.class);
+    registerVariationFunc(HypershiftFunc.class);
+    registerVariationFunc(DSphericalFunc.class);
+    registerVariationFunc(CircularFunc.class);
+    registerVariationFunc(Circular2Func.class);
+    registerVariationFunc(ErfFunc.class);
+    registerVariationFunc(Erf3DFunc.class);
+    registerVariationFunc(XErfFunc.class);
+    registerVariationFunc(Pressure_WaveFunc.class);
+    registerVariationFunc(AtanFunc.class);
+    registerVariationFunc(HelixFunc.class);
+    registerVariationFunc(HelicoidFunc.class);
+    registerVariationFunc(GammaFunc.class);
+    registerVariationFunc(ShiftFunc.class);
+    registerVariationFunc(ChunkFunc.class);
+    registerVariationFunc(CrobFunc.class);
+    registerVariationFunc(Hole2Func.class);
+    registerVariationFunc(CPow2Func.class);
+    registerVariationFunc(GridoutFunc.class);
+    registerVariationFunc(Gridout2Func.class);
+    registerVariationFunc(BlurLinearFunc.class);
+    registerVariationFunc(SigmoidFunc.class);
+    registerVariationFunc(DCCracklePWFFunc.class);
+    registerVariationFunc(MinkQMFunc.class);
+    registerVariationFunc(MinkowskopeFunc.class);
+    registerVariationFunc(R_CircleblurFunc.class);
+    registerVariationFunc(TruchetAEFunc.class);
+    registerVariationFunc(TruchetFillFunc.class);
+    // registerVariationFunc(SphTiling3Func.class); 
+    registerVariationFunc(SphTiling3V2Func.class);
+    registerVariationFunc(Panorama1Func.class);
+    registerVariationFunc(Panorama2Func.class);
+
+    registerVariationFunc(MaurerRoseFunc.class);
+    registerVariationFunc(MaurerLinesFunc.class);
+    registerVariationFunc(CPow3WFFunc.class);
+    registerVariationFunc(DCCylinderFunc.class);
+    registerVariationFunc(DCCylinder2Func.class);
+    registerVariationFunc(Swirl3Func.class);
+    registerVariationFunc(CardioidFunc.class);
+    registerVariationFunc(ShredradFunc.class);
+    registerVariationFunc(DCTriTileFunc.class);
+    registerVariationFunc(JubiQFunc.class);
+    registerVariationFunc(ComplexFunc.class);
+    registerVariationFunc(QuaternionFunc.class);
+    registerVariationFunc(Crop3DFunc.class);
+    registerVariationFunc(SphereCropFunc.class);
+
+    registerVariationFunc(LsystemFunc.class);
+    registerVariationFunc(LSystem3DWFFunc.class);
+    registerVariationFunc(HamidFunc.class);
+    registerVariationFunc(TreeFunc.class);
+    registerVariationFunc(HilbertFunc.class);
+    registerVariationFunc(BrownianFunc.class);
+
+    registerVariationFunc(DragonFunc.class);
+    registerVariationFunc(GosperIslandFunc.class);
+    registerVariationFunc(HtreeFunc.class);
+    registerVariationFunc(KochFunc.class);
+    registerVariationFunc(RsquaresFunc.class);
+
+    registerVariationFunc(SattractorFunc.class);
+    registerVariationFunc(WallPaperFunc.class);
+    registerVariationFunc(HadamardFunc.class);
+    registerVariationFunc(CrownFunc.class);
+    registerVariationFunc(ApocarpetFunc.class);
+    registerVariationFunc(InvTreeFunc.class);
+    registerVariationFunc(SiercarpetFunc.class);
+    registerVariationFunc(WoggleFunc.class);
+    registerVariationFunc(LaceFunc.class);
+    registerVariationFunc(HarmonographFunc.class);
+    registerVariationFunc(CliffordFunc.class);
+    registerVariationFunc(SvenssonFunc.class);
+    registerVariationFunc(LorenzFunc.class);
+
+    registerVariationFunc(PreStabilizeFunc.class);
+    registerVariationFunc(PreSphericalFunc.class);
+    registerVariationFunc(PostSphericalFunc.class);
+    
+    registerVariationFunc(InversionFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

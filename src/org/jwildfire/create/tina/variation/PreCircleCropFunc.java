@@ -57,8 +57,6 @@ public class PreCircleCropFunc extends VariationFunc {
     pAffineTP.x -= x0;
     pAffineTP.y -= y0;
 
-    pAffineTP.z += vv * pAffineTP.z;
-
     double rad = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double ang = atan2(pAffineTP.y, pAffineTP.x);
     double rdc = cr + (pContext.random() * 0.5 * ca);
@@ -75,16 +73,16 @@ public class PreCircleCropFunc extends VariationFunc {
       pAffineTP.doHide = true;
     }
     else if (cr0 && !esc) {
-      pAffineTP.x += vv * pAffineTP.x + x0;
-      pAffineTP.y += vv * pAffineTP.y + y0;
+      pAffineTP.x = vv * pAffineTP.x + x0;
+      pAffineTP.y = vv * pAffineTP.y + y0;
     }
     else if (!cr0 && esc) {
-      pAffineTP.x += vv * rdc * c + x0;
-      pAffineTP.y += vv * rdc * s + y0;
+      pAffineTP.x = vv * rdc * c + x0;
+      pAffineTP.y = vv * rdc * s + y0;
     }
     else if (!cr0 && !esc) {
-      pAffineTP.x += vv * pAffineTP.x + x0;
-      pAffineTP.y += vv * pAffineTP.y + y0;
+      pAffineTP.x = vv * pAffineTP.x + x0;
+      pAffineTP.y = vv * pAffineTP.y + y0;
     }
   }
 

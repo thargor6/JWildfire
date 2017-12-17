@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
+
 public class NeightboursList {
   private final Map<Integer, List<Integer>> neighbours;
 
@@ -34,6 +36,18 @@ public class NeightboursList {
       addNeighbour(face.v2, face.v3);
       addNeighbour(face.v3, face.v1);
       addNeighbour(face.v3, face.v2);
+    }
+  }
+
+  public NeightboursList(Mesh mesh) {
+    neighbours = new HashMap<>();
+    for (org.jwildfire.create.tina.meshgen.marchingcubes.Face face : mesh.getFaces()) {
+      addNeighbour(face.a, face.b);
+      addNeighbour(face.a, face.c);
+      addNeighbour(face.b, face.a);
+      addNeighbour(face.b, face.c);
+      addNeighbour(face.c, face.a);
+      addNeighbour(face.c, face.b);
     }
   }
 

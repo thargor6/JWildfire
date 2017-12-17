@@ -21,10 +21,12 @@ public class LauncherPrefs {
   static final String KEY_JAVA_PATH = "java.path";
   static final String KEY_MEMORY_MAX = "memory.max";
   static final String KEY_PRIORITY_LOW = "priority.low";
+  static final String KEY_UI_SCALE = "ui.scale";
 
   private String javaPath = null;
   private int maxMem = 1024;
   private boolean lowPriority = true;
+  private double uiScale = 1.0;
 
   public String getJavaPath() {
     return javaPath;
@@ -56,6 +58,14 @@ public class LauncherPrefs {
 
   public void setLowPriority(boolean pLowPriority) {
     lowPriority = pLowPriority;
+  }
+
+  public double getUiScale() {
+    return uiScale;
+  }
+
+  public void setUiScale(double uiScale) {
+    this.uiScale = uiScale;
   }
 
 }

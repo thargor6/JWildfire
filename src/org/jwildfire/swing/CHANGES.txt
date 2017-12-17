@@ -1,3 +1,155 @@
+V3.21 (30.09.2017)
+ - Add setBGTransparency line to scripts converted from flames. When a script creates a new flame, it sets bgTransparency to true by 
+   default, so scripts converted from flames didn't preserve the setting from the flame. Added a setBGTransparency call to do so. By Rick Sidwell
+ - Compatibility for addLinkedXForm. Made addLinkedXForm set the draw mode of the from xform to HIDDEN and the symmetry 
+   of the to xform to 1. This matches the behavior of Apophysis, making it easier to follow tutorials for that program. By Rick Sidwell
+ - New variations  (Thanks to Gregg Helt, dark-beam (Luca), Rick Sidwell and Brad Stefanov for conversions and new variations):
+   - MaurerLines, MaurerRose, Minkowskope, TruchetFill, Panorama2, Panorama1, SphTiling3V2, TruchetAE, R_Circleblur, MinkQM,
+     Sigmoid, BlurLinear, Gridout2, Gridout, Crob, Hole2, Cpow2, Cpow3_wf and DCCracklePWF.
+   - Added Apo Cpow3 and had to rename previous Cpow3 by Gregg Helt too Cpow3_wf
+   - Bugfix on isoplot variation formula 26
+ - Even more work on variations, contributed by Rick Sidwell:
+   - dc_cylinder
+   - dc_cylinder2
+   - swirl3
+   - cardiod
+   - shredrad
+   - improved backwards-compatibility for oscilloscope and oscilloscope2   
+ - experimental "UI scale"-setting in the launcher. Works only since Java9. Scales up the UI, in a consistent manner, by the given factor.
+   (To use Java9: install it from oracle, then in the launcher chose "Add runtime". Navigate to "C:\Program Files\Java\jdk-9\bin" and select "java.exe")
+   (For good results, you should reset the value of "tina.general.font_scale" in the Preferences to 1, if you used a higher value)
+ - fixed the font-size of the edit-plane-buttons   
+
+V3.20 (15.07.2017)
+ - New "POINTCLOUD"-generator inside the Mesh-Generator. Pointclouds basically are meshes with 1-point-polygons. 
+   In contrast to the solid meshes, the "points" of the generated point-clouds may carry also a color and an alpha channel 
+   (which may be used in rendering).
+        
+   3D-Packages like Houdini can render point-clouds in the way that each point is represented by a little sphere 
+   (you usually can adjust the size of those spheres), generating a "solid" shape.
+   You can apply material to it like to any regular mesh. Especially in Houdini, the points keep their individual 
+   (diffuse) color.
+   
+   You can also generate "solid" meshes from point-clouds, for example using the ball-pivoting-algorithm inside
+   MeshLab.   
+   
+   Important Parameters for point-cloud-generation in JWildfire (use "Output type" POINTCLOUD to enable it):
+     CELL-SIZE: the program uses an octree to quantize the space into little small cubes. All samples inside a cube
+                are later condensed into one point of the point-cloud. So, this setting basically affects the 
+                "resolution" of the generated mesh. But beware, please make it only smaller in small steps, 
+                otherwise memory consumption may grow in an "explosive" way   
+     RENDER QUALITY: overall number of samples, increase it only if your mesh has noise/holes in it  
+     OUTPUT FORMAT: you may either use *.ply or *.obj. But beware, this option has also an impact on the generation
+                    of the point-cloud:
+                      PLY-Format: only vertices ("points"), with color and alpha channel (works good for Houdini)
+                      OBJ-Format: vertices and 1-point-polygons, NO color and NO alpha channel (works good for Lightwave Hypervoxels)   
+ 
+ - New Variations - Thanks to dark-beam (Luca) and Brad Stefanov for conversions
+  - Spirograph3D by Rick Sidwell.
+  - Hypershift, Helicoid, Helix by Zy0rg.
+  - Atan by FractalDesire.
+  - Chunk, Erf, Erf3D, Gamma, XErf by zephyrtronium.
+  - Circular, DSpherical, Shift by Tatyana Zabanova.
+  - Circular2 by Tatyana Zabanova variables added by Brad Stefanov.
+  - Pressure_wave by timothy-vincent.
+ - Fixes
+  - Fixed issue reading apo parameters in GlynnSim variations. By Rick Sidwell
+  - Fix bug reading repeated variations in a transform. By Rick Sidwell
+  - Added lgamma to Math.lib for gamma variation to work.
+  - Fixed some performance problem in solid rendering 
+  
+V3.11r2 (05.06.2017)
+ - fixed a problem with calculation of normals in solid rendering
+
+V3.11 (04.06.2017)
+- New Variations 
+  - Cot2_BS,Csc2_BS,Tan2_BS,Sec2_BS,Exp2_BS,Sin2_BS,Csch2_BS,Cosh2_BS,Sech2_BS,Coth2_BS,Sinh2_BS,andTanh2_BS complex variations by cothe with added variables by Brad Stefanov
+  - Cosq,Sinq,Tanq,Tanhq,Coshq,Sinhq,Cotq,Cothq,Cscq,Cschq,Estiq,Secq,Sechq from the Quaternion Apo Plugin Pack by zephyrtronium implemented into JWF by Brad Stefanov
+- Fixes
+  - Fixed bug in TileHlp. by Brad Stefanov
+  - Fixed Log_tile with new variation Tile_log for keeping compatibility ... will keep both variations since they work in different ways. By Brad Stefanov
+  - Fixed bugs in XTrb by Rick Sidwell
+  - Changed getCoeffxy to getXYCoeffxy for variations that use them. By Rick Sidwell
+  - Fixed bugs with the Falloff3 variations. By Rick Sidwell
+  - Fix misc. variation bugs. Most pre and post variations should assign, not add their results. Fixed this in multiple variations to match the original apo plugins. By Rick Sidwell
+- Misc  
+  - rendering/processor-usage is more smooth now, avoids blocking (may slightly decrease render speed, but is more responsive on most systems. 
+    If max render speed is extremely important for you, than keep the old version) - by Andreas Maschke
+  - "subflame_wf" - variation now also supports flame-sequences as input (to animate the subflame) - by Andreas Maschke  
+    
+V3.10 (21.04.2017)
+ - Image-quality:
+   - new "Filtering"-option at the Anti-Aliasing/Filtering-tab to distinguish between the various types of filtering: 
+     GLOBAL_SHARPENING, GLOBAL_SMOOTHING, ADAPTIVE. The "Filter kernel" option is populated accordingly.
+   - new MITCHELL_SMOOTH-filter kernel (derived from MITCHELL), which is now the default  
+   - improved the behaviour of sharpening filters (causing less artifacts)
+   - "Sharpness indicator" and "Low density"-parameters at the "Anti-Aliasing/Filter"-tab (affects only adaptive filtering)
+   - new experimental adaptive MITCHELL_SINEPOW-filter (sharpenung details, smoothing "unsharp" areas as well as areas with low density)        
+   - new "low brightness"-property to show/hide areas with lower density, increasing this value usually leads to more detail, while decreasing 
+     this value may help to hide unwanted border areas
+   - increased default oversampling to 2 in order to increase default quality
+ 
+ - Editing:
+   - reimplemented the preview-cache (all options at the coloring-tab do not need a recalculation do show changes). In general, all properties
+     which do not need a re-render are indicated by a star at the label, e.g. "Brightness*". Is is recommended to do a quickrender before adjusting them,
+     so can apply changes in almsot realtime to a decent image.
+   - improved the quality of the preview in the main editor    
+   - the channel-mixer also works in "realtime-mode" now   
+   - new color-balancing options at the "Coloring"-tab
+
+ - Flame-saving/flame-thumbnail-selection
+   - new SaveAll-button which saves all selected flames into a single file (thanks to Michael Bourne for the suggestion)
+   - new checkbox at each flame-thumbnail to (de)select it
+   - new popup-menus at the flame-thumbnails (press the right mouse-button over a button to display the menu):
+     - remove-button: new popup-menu to remove all or remove selected flames
+     - checkbox (sometimes referred as "select-button": new popoup-menu to toggle selection or deselect all
+     - added confirmation dialog to the thumbnail-delete button
+ 
+ - Background-gradients:
+   - new 2x2 gradient-type for the background of fractals , may also be changed in "realtime mode"
+   - new 2x2+c gradient-type for the background of fractals (which is the new default)
+   
+ - Mesh-Generator: 
+   - optional post-smooth (Taubin-smooth) in the mesh generator  
+   - removed the parameters "Thickness mod" and "Thickness samples" (just fix your model if is has "holes") in the mesh generator 
+   - improved the rotation-behaviour of the mesh-preview in the Mesh-Generator  
+   - improved the heuristics to calculate "depth" when creating a mesh from a voxelstack   
+   - fixed (again) a serious bug in the Mesh-Generator: when rendering image-stacks 
+     each image inside a slice was the same. This causing meshes to be very 
+     "chunky", depending on slice-size. (The original fix was lost due to an unknown reason)
+
+ - Misc
+   - new "Machine"-random-flame-generator
+   - detect flames with invalid (xaos) settings and stop to render them
+   - indicator-mode for adapative filtering (i. e. showing sharp/smooth regions)
+   - fixed some labels which were not scale accordingly the global "tinaFontScale"-property
+   - rearranged some controls at the coloring-tab
+   - new variations, provided by Brad Stefanov ("waves2_radial", "spliptic_bs", "circlesplit", "log_tile2", "mobiq", "tile_hlp")
+   - lots of new presets for the "isosfplot3d_wf"-variation, provided by Frank Baumann and Brad Stefanov
+   - some performance increase on some of the DOF-blur-shapes
+   - increased quality of DOF in 3D-mode, but needs much more time to compute
+   - removed the color-oversampling/jittering-option
+  
+V3.02 (12.03.2017)
+ - new and powerful "dla3d_wf"-variation ("diffusion limited aggregation") which may even utilize 3d-meshes as nodes/junctions
+ - solid-random-flame-generators also make use of the "dla3d_wf"-variation
+ - improved the speed of the "dla_wf"-variation
+ - bugfix in the "mobiusN"-variation
+ - small improvements/bugfixes
+
+V3.01 (06.01.2017)
+ - Fixed a serious bug in the Mesh-Generator: when rendering image-stacks 
+   each image inside a slice was the same. This causing meshes to be very 
+   "chunky", depending on slice-size. 
+   The only workaround was to set slice-size to, i. e. rendering one image 
+   per slice, which causes a major slowdown. 
+ - minor improvement in rendering speed
+ - new "isosfplot3d_wf"-variation for plotting iso-surfaces (may be very slow on old machines)
+ - new "dc_color"-parameter for the "colormap_wf" and "post_colormap_wf"-variations
+   to turn coloring off (in case you want only use the image as heightmap)
+ - new "blend_colormap" -parameter for the "colormap_wf" and "post_colormap_wf"-variations
+   to improve quality
+    
 V3.00 (29.11.2016)
 3D SOLID RENDERING
  - completely new 3d (solid) rendering mode for flame fractals, featuring

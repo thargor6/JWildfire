@@ -43,8 +43,8 @@ public class DCCarpetFunc extends VariationFunc {
     double x0_xor_y0 = (double) (x0 ^ y0);
     double h = -H + (1 - x0_xor_y0) * H;
 
-    pVarTP.x += pAmount * (pXForm.getCoeff00() * x + pXForm.getCoeff10() * y + pXForm.getCoeff20());
-    pVarTP.y += pAmount * (pXForm.getCoeff01() * x + pXForm.getCoeff11() * y + pXForm.getCoeff21());
+    pVarTP.x += pAmount * (pXForm.getXYCoeff00() * x + pXForm.getXYCoeff10() * y + pXForm.getXYCoeff20());
+    pVarTP.y += pAmount * (pXForm.getXYCoeff01() * x + pXForm.getXYCoeff11() * y + pXForm.getXYCoeff21());
     pVarTP.color = fmod(fabs(pVarTP.color * 0.5 * (1 + h) + x0_xor_y0 * (1 - h) * 0.5), 1.0);
   }
 

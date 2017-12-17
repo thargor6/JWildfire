@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -40,7 +40,7 @@ public class Fan2Func extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     double angle;
-    if ((pAffineTP.x < -EPSILON) || (pAffineTP.x > EPSILON) || (pAffineTP.y < -EPSILON) || (pAffineTP.y > EPSILON)) {
+    if ((pAffineTP.x < -SMALL_EPSILON) || (pAffineTP.x > SMALL_EPSILON) || (pAffineTP.y < -SMALL_EPSILON) || (pAffineTP.y > SMALL_EPSILON)) {
       angle = atan2(pAffineTP.x, pAffineTP.y);
     }
     else {
@@ -48,7 +48,7 @@ public class Fan2Func extends VariationFunc {
     }
 
     double dy = y;
-    double dx = M_PI * (x * x) + EPSILON;
+    double dx = M_PI * (x * x) + SMALL_EPSILON;
     double dx2 = dx * 0.5;
 
     double t = angle + dy - (int) ((angle + dy) / dx) * dx;

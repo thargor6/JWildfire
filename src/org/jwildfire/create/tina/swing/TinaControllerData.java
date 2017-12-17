@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,6 +23,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -96,11 +97,31 @@ public class TinaControllerData {
   public JSlider gammaSlider;
   public JWFNumberField vibrancyREd;
   public JSlider vibrancySlider;
+
+  public JWFNumberField lowDensityBrightnessREd;
+  public JSlider lowDensityBrightnessSlider;
+  public JWFNumberField balanceRedREd;
+  public JSlider balanceRedSlider;
+  public JWFNumberField balanceGreenREd;
+  public JSlider balanceGreenSlider;
+  public JWFNumberField balanceBlueREd;
+  public JSlider balanceBlueSlider;
+
   public JWFNumberField saturationREd;
   public JSlider saturationSlider;
   public JWFNumberField filterRadiusREd;
   public JSlider filterRadiusSlider;
   public JComboBox filterKernelCmb;
+  public JWFNumberField tinaFilterSharpnessREd;
+  public JSlider tinaFilterSharpnessSlider;
+  public JWFNumberField tinaFilterLowDensityREd;
+  public JSlider tinaFilterLowDensitySlider;
+
+  public JComboBox tinaFilterTypeCmb;
+  public JLabel tinaFilterKernelCmbLbl;
+  public JLabel tinaFilterRadiusLbl;
+  public JCheckBox tinaFilterIndicatorCBx;
+
   public JWFNumberField gammaThresholdREd;
   public JSlider gammaThresholdSlider;
   public JCheckBox bgTransparencyCBx;
@@ -254,6 +275,7 @@ public class TinaControllerData {
   public JButton editFlameTileButton;
   public JButton snapShotButton;
   public JButton qSaveButton;
+  public JButton saveAllButton;
   public JButton sendToIRButton;
   public JButton bokehButton;
   public JButton movieButton;
@@ -272,6 +294,11 @@ public class TinaControllerData {
   public JButton scriptEditBtn;
   public JTree gradientLibTree;
   public JButton backgroundColorIndicatorBtn;
+  public JButton backgroundColorURIndicatorBtn;
+  public JButton backgroundColorLLIndicatorBtn;
+  public JButton backgroundColorLRIndicatorBtn;
+  public JButton backgroundColorCCIndicatorBtn;
+  public JComboBox backgroundColorTypeCmb;
   public JWFNumberField layerWeightEd;
   public JButton layerAddBtn;
   public JButton layerDuplicateBtn;
@@ -391,9 +418,6 @@ public class TinaControllerData {
   public JPanel filterKernelPreviewRootPnl;
   public JWFNumberField tinaSpatialOversamplingREd;
   public JSlider tinaSpatialOversamplingSlider;
-  public JWFNumberField tinaColorOversamplingREd;
-  public JSlider tinaColorOversamplingSlider;
-  public JCheckBox tinaSampleJitteringCheckBox;
   public JToggleButton filterKernelFlatPreviewBtn;
   public JCheckBox tinaPostNoiseFilterCheckBox;
   public JWFNumberField tinaPostNoiseThresholdField;
@@ -475,5 +499,7 @@ public class TinaControllerData {
   public JWFNumberField postBokehActivationREd;
   public JSlider postBokehActivationSlider;
   public JComboBox postBokehFilterKernelCmb;
+  public JPopupMenu thumbnailSelectPopupMenu;
+  public JPopupMenu thumbnailRemovePopupMenu;
 
 }

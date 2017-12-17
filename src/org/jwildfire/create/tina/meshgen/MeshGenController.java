@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -49,9 +49,11 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.eden.sunflow.ExampleScenes;
 import org.jwildfire.create.eden.sunflow.SunflowSceneBuilder;
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.create.tina.io.FlameReader;
 import org.jwildfire.create.tina.meshgen.filter.PreFilter;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
@@ -59,6 +61,7 @@ import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
 import org.jwildfire.create.tina.meshgen.marchingcubes.MeshPreviewRenderer;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderThread;
+import org.jwildfire.create.tina.meshgen.render.RenderPointCloudThread;
 import org.jwildfire.create.tina.meshgen.render.RenderSlicesThread;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.FlameRenderer;
@@ -81,6 +84,7 @@ import org.jwildfire.io.ImageReader;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImageFileChooser;
 import org.jwildfire.swing.ImagePanel;
+import org.jwildfire.swing.PointCloudOutputFileChooser;
 
 public class MeshGenController {
   private static final double Z_SCALE = 10000.0;
@@ -120,12 +124,13 @@ public class MeshGenController {
   private final JSlider zminSlider;
   private final JWFNumberField zmaxREd;
   private final JSlider zmaxSlider;
+  private final JButton loadSequenceBtn;
+  private final JWFNumberField meshGenCellSizeREd;
   private final JButton topViewRenderBtn;
   private final JButton frontViewRenderBtn;
   private final JButton perspectiveViewRenderBtn;
   private final JButton topViewToEditorBtn;
   private final JButton sequenceFromRendererBtn;
-  private final JButton loadSequenceBtn;
   private final JWFNumberField sequenceWidthREd;
   private final JWFNumberField sequenceHeightREd;
   private final JWFNumberField sequenceSlicesREd;
@@ -150,12 +155,14 @@ public class MeshGenController {
   private final JWFNumberField previewPolygonsREd;
   private final JButton previewRefreshBtn;
   private final JButton previewSunflowExportBtn;
-  private final JWFNumberField thicknessModREd;
-  private final JWFNumberField thicknessSamplesREd;
   private final JComboBox preFilter1Cmb;
   private final JComboBox preFilter2Cmb;
   private final JWFNumberField imageStepREd;
   private final JComboBox outputTypeCmb;
+  public final JCheckBox meshGenTaubinSmoothCbx;
+  public final JWFNumberField meshGenSmoothPassesREd;
+  public final JWFNumberField meshGenSmoothLambdaREd;
+  public final JWFNumberField meshGenSmoothMuREd;
 
   private String currSequencePattern;
   private ImagePanel previewPanel;
@@ -167,7 +174,7 @@ public class MeshGenController {
       JPanel pFrontViewRootPnl, JPanel pPerspectiveViewRootPnl, JTextPane pHintPane, JWFNumberField pCentreXREd,
       JSlider pCentreXSlider, JWFNumberField pCentreYREd, JSlider pCentreYSlider, JWFNumberField pZoomREd,
       JSlider pZoomSlider, JWFNumberField pZMinREd, JSlider pZMinSlider, JWFNumberField pZMaxREd,
-      JSlider pZMaxSlider, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
+      JSlider pZMaxSlider, JWFNumberField pMeshGenCellSizeREd, JButton pTopViewRenderBtn, JButton pFrontViewRenderBtn, JButton pPerspectiveViewRenderBtn,
       JButton pTopViewToEditorBtn, JButton pLoadSequenceBtn, JWFNumberField pSequenceWidthREd, JWFNumberField pSequenceHeightREd,
       JWFNumberField pSequenceSlicesREd, JWFNumberField pSequenceDownSampleREd, JWFNumberField pSequenceFilterRadiusREd,
       JProgressBar pGenerateMeshProgressbar, JButton pGenerateMeshBtn, JButton pSequenceFromRendererBtn,
@@ -176,8 +183,9 @@ public class MeshGenController {
       JWFNumberField pPreviewPositionXREd, JWFNumberField pPreviewPositionYREd,
       JWFNumberField pPreviewSizeREd, JWFNumberField pPreviewScaleZREd, JWFNumberField pPreviewRotateAlphaREd,
       JWFNumberField pPreviewRotateBetaREd, JWFNumberField pPreviewPointsREd, JWFNumberField pPreviewPolygonsREd,
-      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JWFNumberField pThicknessModREd, JWFNumberField pThicknessSamplesREd,
-      JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb, JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb) {
+      JButton pRefreshPreviewBtn, JButton pPreviewSunflowExportBtn, JComboBox pPreFilter1Cmb, JComboBox pPreFilter2Cmb,
+      JWFNumberField pImageStepREd, JComboBox pOutputTypeCmb, JCheckBox pMeshGenTaubinSmoothCbx, JWFNumberField pMeshGenSmoothPassesREd,
+      JWFNumberField pMeshGenSmoothLambdaREd, JWFNumberField pMeshGenSmoothMuREd) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -208,6 +216,7 @@ public class MeshGenController {
     zminSlider = pZMinSlider;
     zmaxREd = pZMaxREd;
     zmaxSlider = pZMaxSlider;
+    meshGenCellSizeREd = pMeshGenCellSizeREd;
     topViewRenderBtn = pTopViewRenderBtn;
     frontViewRenderBtn = pFrontViewRenderBtn;
     perspectiveViewRenderBtn = pPerspectiveViewRenderBtn;
@@ -239,12 +248,14 @@ public class MeshGenController {
     previewPolygonsREd = pPreviewPolygonsREd;
     previewRefreshBtn = pRefreshPreviewBtn;
     previewSunflowExportBtn = pPreviewSunflowExportBtn;
-    thicknessModREd = pThicknessModREd;
-    thicknessSamplesREd = pThicknessSamplesREd;
     preFilter1Cmb = pPreFilter1Cmb;
     preFilter2Cmb = pPreFilter2Cmb;
     imageStepREd = pImageStepREd;
     outputTypeCmb = pOutputTypeCmb;
+    meshGenTaubinSmoothCbx = pMeshGenTaubinSmoothCbx;
+    meshGenSmoothPassesREd = pMeshGenSmoothPassesREd;
+    meshGenSmoothLambdaREd = pMeshGenSmoothLambdaREd;
+    meshGenSmoothMuREd = pMeshGenSmoothMuREd;
 
     initHintsPane();
     sequenceWidthREd.setEditable(false);
@@ -253,6 +264,8 @@ public class MeshGenController {
     previewPointsREd.setEditable(false);
     previewPolygonsREd.setEditable(false);
     setDefaults();
+
+    enableControls();
   }
 
   private void setDefaults() {
@@ -263,8 +276,6 @@ public class MeshGenController {
       renderWidthREd.setValue(512);
       renderHeightREd.setValue(512);
       renderQualityREd.setValue(300);
-      thicknessModREd.setValue(0.0);
-      thicknessSamplesREd.setValue(100.0);
       preFilter1Cmb.setSelectedItem(PreFilterType.NONE);
       preFilter2Cmb.setSelectedItem(PreFilterType.NONE);
 
@@ -281,11 +292,21 @@ public class MeshGenController {
       previewRotateBetaREd.setValue(56.0);
       imageStepREd.setValue(1);
 
+      meshGenTaubinSmoothCbx.setSelected(false);
+      //      meshGenSmoothPassesREd.setValue(12);
+      //      meshGenSmoothLambdaREd.setValue(0.42);
+      //      meshGenSmoothMuREd.setValue(-0.45);
+
+      meshGenSmoothPassesREd.setValue(20);
+      meshGenSmoothLambdaREd.setValue(0.84);
+      meshGenSmoothMuREd.setValue(-0.90);
+
       setZMinValue(0.0);
       setZMaxValue(0.5);
       setCentreXValue(0.0);
       setCentreYValue(0.0);
       setZoomValue(1.0);
+      setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
     }
     finally {
       refreshing = false;
@@ -558,12 +579,14 @@ public class MeshGenController {
       setZoomValue(currBaseFlame.getCamZoom());
       setZMinValue(0.0);
       setZMaxValue(1.0);
+      setMaxOctreeCellSizeValue(RasterPointCloud.DFLT_MAX_OCTREE_CELL_SIZE);
     }
     finally {
       refreshing = false;
     }
     enableControls();
-    refreshAllPreviews(true);
+    zminREd_changed();
+    //    refreshAllPreviews(true);
   }
 
   protected Flame stripFlame(Flame pFlame) {
@@ -580,9 +603,10 @@ public class MeshGenController {
     res.setCamPosY(0.0);
     res.setCamPosZ(0.0);
     res.setStereo3dMode(Stereo3dMode.NONE);
-    res.setBGColorRed(0);
-    res.setBGColorGreen(0);
-    res.setBGColorBlue(0);
+    res.setBgColorType(BGColorType.SINGLE_COLOR);
+    res.setBgColorRed(0);
+    res.setBgColorGreen(0);
+    res.setBgColorBlue(0);
     res.setBGTransparency(false);
     res.setGamma(3.0);
     // hack to force 3d-projection mode to be on
@@ -592,13 +616,14 @@ public class MeshGenController {
 
   protected Flame createBaseFlame(Flame pFlame) {
     Flame res = pFlame.makeCopy();
-
+    /*
     RGBPalette gradient = new RGBPalette();
     for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
       gradient.setColor(i, 225, 225, 225);
     }
-    res.getSolidRenderSettings().setSolidRenderingEnabled(false);
     res.getFirstLayer().setPalette(gradient);
+    */
+    res.getSolidRenderSettings().setSolidRenderingEnabled(false);
     return res;
   }
 
@@ -621,6 +646,10 @@ public class MeshGenController {
   private void setZMaxValue(double pValue) {
     zmaxREd.setValue(pValue);
     zmaxSlider.setValue(Tools.FTOI(Z_SCALE * pValue));
+  }
+
+  private void setMaxOctreeCellSizeValue(double pValue) {
+    meshGenCellSizeREd.setValue(pValue);
   }
 
   private void setCentreXValue(double pValue) {
@@ -788,38 +817,49 @@ public class MeshGenController {
 
   public void enableControls() {
     boolean isRendering = renderSlicesThread != null || generateMeshThread != null;
-    generateBtn.setEnabled(currBaseFlame != null && generateMeshThread == null);
+    boolean hasFlame = currBaseFlame != null;
+    generateBtn.setEnabled(hasFlame && generateMeshThread == null);
     generateMeshBtn.setEnabled(renderSlicesThread == null && sequenceSlicesREd.getIntValue() > 0);
     generateBtn.setText(renderSlicesThread == null ? "Generate" : "Cancel");
     generateMeshBtn.setText(generateMeshThread == null ? "Generate" : "Cancel");
 
-    centreXREd.setEnabled(currBaseFlame != null && !isRendering);
-    centreXSlider.setEnabled(currBaseFlame != null && !isRendering);
-    centreYREd.setEnabled(currBaseFlame != null && !isRendering);
-    centreYSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zoomREd.setEnabled(currBaseFlame != null && !isRendering);
-    zoomSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zminREd.setEnabled(currBaseFlame != null && !isRendering);
-    zminSlider.setEnabled(currBaseFlame != null && !isRendering);
-    zmaxREd.setEnabled(currBaseFlame != null && !isRendering);
-    zmaxSlider.setEnabled(currBaseFlame != null && !isRendering);
-    topViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    frontViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    perspectiveViewRenderBtn.setEnabled(currBaseFlame != null && !isRendering);
-    topViewToEditorBtn.setEnabled(currBaseFlame != null && !isRendering);
+    boolean pointCloudMode = isPointCloudMode();
+
+    centreXREd.setEnabled(hasFlame && !isRendering);
+    centreXSlider.setEnabled(hasFlame && !isRendering);
+    centreYREd.setEnabled(hasFlame && !isRendering);
+    centreYSlider.setEnabled(hasFlame && !isRendering);
+    zoomREd.setEnabled(hasFlame && !isRendering);
+    zoomSlider.setEnabled(hasFlame && !isRendering);
+    zminREd.setEnabled(hasFlame && !isRendering);
+    zminSlider.setEnabled(hasFlame && !isRendering);
+    zmaxREd.setEnabled(hasFlame && !isRendering);
+    zmaxSlider.setEnabled(hasFlame && !isRendering);
+    meshGenCellSizeREd.setEnabled(hasFlame && !isRendering && pointCloudMode);
+
+    topViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    frontViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    perspectiveViewRenderBtn.setEnabled(hasFlame && !isRendering);
+    topViewToEditorBtn.setEnabled(hasFlame && !isRendering);
     fromEditorBtn.setEnabled(!isRendering);
     fromClipboardBtn.setEnabled(!isRendering);
     loadFlameBtn.setEnabled(!isRendering);
-    sliceCountREd.setEnabled(!isRendering);
-    slicesPerRenderREd.setEnabled(!isRendering);
-    renderWidthREd.setEnabled(!isRendering);
-    renderHeightREd.setEnabled(!isRendering);
-    renderQualityREd.setEnabled(!isRendering);
-    thicknessModREd.setEnabled(!isRendering);
-    thicknessSamplesREd.setEnabled(!isRendering);
+    sliceCountREd.setEnabled(hasFlame && !isRendering && !pointCloudMode);
+    slicesPerRenderREd.setEnabled(hasFlame && !isRendering && !pointCloudMode);
+    renderWidthREd.setEnabled(hasFlame && !isRendering);
+    renderHeightREd.setEnabled(hasFlame && !isRendering);
+    renderQualityREd.setEnabled(hasFlame && !isRendering);
+
+    outputTypeCmb.setEnabled(hasFlame && !isRendering);
+
     preFilter1Cmb.setEnabled(!isRendering);
     preFilter2Cmb.setEnabled(!isRendering);
     imageStepREd.setEnabled(!isRendering);
+
+    boolean smoothing = meshGenTaubinSmoothCbx.isSelected();
+    meshGenSmoothPassesREd.setEnabled(smoothing);
+    meshGenSmoothLambdaREd.setEnabled(smoothing);
+    meshGenSmoothMuREd.setEnabled(smoothing);
 
     sequenceFromRendererBtn.setEnabled(lastRenderedSequenceOutFilePattern != null && !isRendering);
     loadSequenceBtn.setEnabled(!isRendering);
@@ -839,6 +879,10 @@ public class MeshGenController {
     previewRotateBetaREd.setEnabled(hashMesh);
     previewRefreshBtn.setEnabled(hashMesh);
     previewSunflowExportBtn.setEnabled(hashMesh);
+  }
+
+  private boolean isPointCloudMode() {
+    return MeshGenRenderOutputType.POINTCLOUD.equals(outputTypeCmb.getSelectedItem());
   }
 
   private MeshGenRenderThread renderSlicesThread = null;
@@ -863,13 +907,27 @@ public class MeshGenController {
     }
     else if (currBaseFlame != null) {
       try {
-        JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-        if (prefs.getOutputImagePath() != null) {
-          try {
-            chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+        JFileChooser chooser;
+        if (isPointCloudMode()) {
+          chooser = new PointCloudOutputFileChooser(Tools.FILEEXT_PLY);
+          if (prefs.getTinaMeshPath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getTinaMeshPath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
           }
-          catch (Exception ex) {
-            ex.printStackTrace();
+        }
+        else {
+          chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
+          if (prefs.getOutputImagePath() != null) {
+            try {
+              chooser.setCurrentDirectory(new File(prefs.getOutputImagePath()));
+            }
+            catch (Exception ex) {
+              ex.printStackTrace();
+            }
           }
         }
         if (chooser.showSaveDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
@@ -903,12 +961,26 @@ public class MeshGenController {
           switch (getOutputType()) {
             case VOXELSTACK: {
               String outfilenamePattern = SequenceFilenameGen.createFilenamePattern(file);
+
+              Flame grayFlame = flame.makeCopy();
+              RGBPalette gradient = new RGBPalette();
+              for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
+                gradient.setColor(i, 225, 225, 225);
+              }
+              grayFlame.getFirstLayer().setPalette(gradient);
+
               renderSlicesThread = new RenderSlicesThread(
-                  prefs, flame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
+                  prefs, grayFlame, outfilenamePattern, finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
                   sliceCountREd.getIntValue(), slicesPerRenderREd.getIntValue(), renderQualityREd.getIntValue(), zminREd.getDoubleValue(),
-                  zmaxREd.getDoubleValue(), thicknessModREd.getDoubleValue(), thicknessSamplesREd.getIntValue());
+                  zmaxREd.getDoubleValue());
 
               lastRenderedSequenceOutFilePattern = outfilenamePattern;
+              break;
+            }
+            case POINTCLOUD: {
+              renderSlicesThread = new RenderPointCloudThread(
+                  prefs, flame, file.getAbsolutePath(), finishEvent, renderSequenceProgressUpdater, renderWidthREd.getIntValue(), renderHeightREd.getIntValue(),
+                  renderQualityREd.getIntValue(), zminREd.getDoubleValue(), zmaxREd.getDoubleValue(), meshGenCellSizeREd.getDoubleValue());
               break;
             }
           }
@@ -1058,7 +1130,8 @@ public class MeshGenController {
 
           generateMeshThread = new GenerateMeshThread(outFile.getAbsolutePath(), finishEvent, generateMeshProgressUpdater,
               getCurrSequencePattern(), sequenceSlicesREd.getIntValue(), imageStepREd.getIntValue(), sequenceThresholdREd.getIntValue(), sequenceFilterRadiusREd.getDoubleValue(),
-              sequenceDownSampleREd.getIntValue(), true, getPreFilterList());
+              sequenceDownSampleREd.getIntValue(), true, getPreFilterList(), meshGenTaubinSmoothCbx.isSelected(), meshGenSmoothPassesREd.getIntValue(),
+              meshGenSmoothLambdaREd.getDoubleValue(), meshGenSmoothMuREd.getDoubleValue());
 
           enableControls();
           new Thread(generateMeshThread).start();
@@ -1259,6 +1332,10 @@ public class MeshGenController {
 
   private MeshGenRenderOutputType getOutputType() {
     return (MeshGenRenderOutputType) outputTypeCmb.getSelectedItem();
+  }
+
+  public void taubinSmoothCbx_clicked() {
+    enableControls();
   }
 
 }

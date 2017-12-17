@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.variation.mesh;
 
 public class Vertex {
-  float x, y, z;
+  public float x, y, z;
 }

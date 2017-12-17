@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -25,7 +25,15 @@ public interface AbstractRaster {
 
   void incCount(int pX, int pY);
 
-  void allocRaster(Flame flame, int pWidth, int pHeight);
+  void allocRaster(Flame flame, int pWidth, int pHeight, int pOversample, double pSampleDensity);
+
+  int getRasterWidth();
+
+  int getRasterHeight();
+
+  int getOversample();
+
+  double getSampleDensity();
 
   void readRasterPoint(int pX, int pY, RasterPoint pDestRasterPoint);
 
@@ -43,6 +51,6 @@ public interface AbstractRaster {
 
   void readZBufferSafe(int pX, int pY, ZBufferSample pDest);
 
-  public LightViewCalculator getLightViewCalculator();
+  LightViewCalculator getLightViewCalculator();
 
 }

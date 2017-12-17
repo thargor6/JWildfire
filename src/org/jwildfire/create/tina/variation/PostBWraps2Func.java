@@ -63,8 +63,8 @@ public class PostBWraps2Func extends VariationFunc {
 
     if (fabs(cellsize) < SMALL_EPSILON) {
       // Linear if cells are too small
-      pVarTP.x += pAmount * Vx;
-      pVarTP.y += pAmount * Vy;
+      pVarTP.x = pAmount * Vx;
+      pVarTP.y = pAmount * Vy;
       return;
     }
 
@@ -76,8 +76,8 @@ public class PostBWraps2Func extends VariationFunc {
 
     if ((Lx * Lx + Ly * Ly) > _r2) {
       // Linear if outside the bubble
-      pVarTP.x += pAmount * Vx;
-      pVarTP.y += pAmount * Vy;
+      pVarTP.x = pAmount * Vx;
+      pVarTP.y = pAmount * Vy;
       return;
     }
 
@@ -101,8 +101,8 @@ public class PostBWraps2Func extends VariationFunc {
     Vy = Cy - s * Lx + c * Ly;
 
     // Finally add values in
-    pVarTP.x += pAmount * Vx;
-    pVarTP.y += pAmount * Vy;
+    pVarTP.x = pAmount * Vx;
+    pVarTP.y = pAmount * Vy;
   }
 
   @Override
@@ -141,7 +141,7 @@ public class PostBWraps2Func extends VariationFunc {
     double radius = 0.5 * (cellsize / (1.0 + space * space));
 
     // g2 is multiplier for radius
-    _g2 = gain * gain + 1.0e-6;
+    _g2 = gain * gain / cellsize + 1.0e-6;
 
     // Start max_bubble as maximum x or y value before applying bubble
     double max_bubble = _g2 * radius;

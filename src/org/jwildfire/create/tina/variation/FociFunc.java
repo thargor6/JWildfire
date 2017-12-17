@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.exp;
 import static org.jwildfire.base.mathlib.MathLib.sin;
@@ -33,7 +33,7 @@ public class FociFunc extends SimpleVariationFunc {
 
     double expx = exp(pAffineTP.x) * 0.5;
     double expnx = 0.25 / expx;
-    if (expx <= EPSILON || expnx <= EPSILON) {
+    if (expx <= SMALL_EPSILON || expnx <= SMALL_EPSILON) {
       return;
     }
     double siny = sin(pAffineTP.y);

@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
@@ -98,13 +98,13 @@ public class PowBlockFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-    _power = denominator * correctn * 1.0 / (fabs(correctd) + EPSILON);
-    if (fabs(_power) <= EPSILON)
-      _power = EPSILON;
+    _power = denominator * correctn * 1.0 / (fabs(correctd) + SMALL_EPSILON);
+    if (fabs(_power) <= SMALL_EPSILON)
+      _power = SMALL_EPSILON;
     _power = (numerator * 0.5) / _power;
     _deneps = denominator;
-    if (fabs(_deneps) <= EPSILON)
-      _deneps = EPSILON;
+    if (fabs(_deneps) <= SMALL_EPSILON)
+      _deneps = SMALL_EPSILON;
     _deneps = 1.0 / _deneps;
   }
 

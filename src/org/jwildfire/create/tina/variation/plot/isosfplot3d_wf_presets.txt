@@ -99,3 +99,350 @@ zmax =  2
 param_a = 4.0
 param_b = 4.0
 
+##9
+Ding-Dong Surface from Frank Baumann 
+formula = x*x + y*y + (param_a - z) * z * z
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = -2.0
+
+##10
+Whitney umbrella from Frank Baumann 
+formula = x*x-y*y*z*param_a
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.0
+
+##11
+Cushion Surface (not??) from Frank Baumann 
+formula = z*z*x*x-z*z*z*z-2*z*x*x+2*z*z*z+x*x-z*z-(x*x-z*z)*(x*x-z*z)-y*y*y*y-2*x*x*y*y-y*y*z*z+2*y*y*z+y*y
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##12
+Eight Surface from Frank Baumann 
+formula = 4*z*z*z*z+param_a*param_a*(x*x+y*y-4*z*z)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.0
+
+##13
+Bath's sextic from Frank Baumann 
+formula = 4*(param_a*x*x-y*y)*(param_a*y*y-z*z)*(param_a*z*z-x*x) -4.236*(x*x+y*y+z*z-1)*(x*x+y*y+z*z-1)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 2.618
+
+##14
+Klein Quartic from Frank Baumann 
+formula = x*x*x*param_a*y+y*y*y*param_b*z+z*z*z*x*param_c
+xmin = -2
+xmax =  2
+ymin = -2
+ymax = 2
+zmin = -2
+zmax =  2
+param_a = 1.0
+param_b = 1.0
+param_c = 1.0
+
+##15
+Piriform Surface from Frank Baumann 
+formula = (x*x*x*x-param_a*x*x*x)+param_a*param_a*(y*y+z*z)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 2.0
+
+##16
+Roman Surface from Frank Baumann 
+formula = x*x*y*y+x*x*z*z+y*y*z*z+2*param_a*x*y*z
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 2.0
+
+##17
+Steiner surface of type 2 from Frank Baumann 
+formula = x*x*y*y-x*x*z*z+y*y*z*z-x*y*z
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##18
+Steiner surface of type 4 from Frank Baumann 
+formula = y*y-2*x*y*y-x*z*z+x*x*y*y+x*x*z*z-z*z*z*z
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##19
+Tanglecube from Frank Baumann 
+formula = x*x*x*x-param_a*x*x+y*y*y*y-param_a*y*y+z*z*z*z-param_a*z*z+param_b
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 5.0
+param_b = 11.8
+
+##20
+Torus from Frank Baumann 
+formula = (param_b-sqrt(x*x+y*y))*(param_b-sqrt(x*x+y*y))+z*z-param_a*param_a
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.0
+param_b = 2.0
+
+##21
+Sine surface from Frank Baumann 
+formula = 4*x*x*y*y*z*z+param_a*param_a*(x-y-z)*(x+y-z)*(x-y+z)*(x+y+z)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.0
+
+##22
+Chmutov Surface 6th order ---- for some reason, it displays inverted... from Frank Baumann 
+formula = 2*(x*x*(3-4*x*x)*(3-4*x*x)-y*y*(3-4*y*y)*(3-4*y*y)+z*z*(3-4*z*z)*(3-4*z*z))-3
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##23
+Chair Surface --- not what it is supposed to look like but interesting... from Frank Baumann 
+formula = (x*x+y*y+z*z-param_a*param_c)*(x*x+y*y+z*z-param_a*param_c)-param_b*((z-param_c)*(z-param_c)-2*x*x)*((z+param_c)*(z+param_c)-2*y*y)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.0
+param_b = 0.9
+param_c = 0.5
+
+##24
+Kummer from Frank Baumann 
+formula = -(((-1 + 3*param_a*param_a)*(1 - sqrt(2)*x - z)*(1 + sqrt(2)*x - z)*(1 - sqrt(2)*y + z)*(1 + sqrt(2)*y + z))/(3 - param_a*param_a)) + (-1*param_a*param_a + x*x + y*y + z*z)*(-1*param_a*param_a + x*x + y*y + z*z)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 1.3
+
+##25
+Bretzel (2 holes) from Frank Baumann 
+formula = (x*x*(param_b-x*x)-y*y)*(x*x*(param_b-x*x)-y*y)+z*z-param_a
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 0.01
+param_b = 2.0
+
+##26
+Bretzel (multiple holes) from Frank Baumann 
+formula = (param_a*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)*(x*x*(1.21-x*x)*(1.21-x*x)*(3.8-x*x*x)*(3.8-x*x*x)*(3.8-x*x*x)-10*y*y)+60*z*z-2)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 0.01
+
+##27
+Pretzel  from Frank Baumann 
+formula = (((x-1)*(x-1)+y*y-1)*((x+1)*(x+1)+y*y-1))*(((x-1)*(x-1)+y*y-1)*((x+1)*(x+1)+y*y-1))+z*z-0.1
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##28
+Scherk from Frank Baumann 
+formula = exp(2*z)*cos(2*y)-cos(2*x)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##29
+Chmutov Surface(4th degree) --- I will add some of the higher degrees that is possible on request from Frank Baumann 
+formula = (8*x*x*x*x-8*x*x-1)+(8*y*y*y*y-8*y*y-1)+(8*z*z*z*z-8*z*z-1)
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+
+##30
+Cool shape 1 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
+formula = pow((param_a*(x-1)*pow(x,2)*(x+1)+2*pow(y,2)),2)+pow((pow(z,2)-0.85),2)*pow((param_b*(y-1)*pow(y,2)*(y+1)+2*pow(z,2)),2)+pow((pow(x,2)-0.85),2)*pow((param_c*(z-1)*pow(z,2)*(z+1)+2*pow(x,2)),2)+pow((pow(y,2)-0.85),2)*param_d
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 3.0
+param_b = 3.0
+param_c = 3.0
+param_d = -0.12
+
+##31
+Cool shape 2 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
+formula = pow((param_a*(x-1)*pow(x,2)*(x+1)+param_b*pow(y,2)),2)*pow((pow(y,2)-param_c),2)+pow((param_a*(y-1)*pow(y,2)*(y+1)+param_b*pow(z,2)),2)*pow((pow(z,2)-param_c),2)+pow((param_a*(z-1)*pow(z,2)*(z+1)+param_b*pow(x,2)),2)*pow((pow(x,2)-param_c),2)-param_d
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+param_a = 2.92
+param_b = 1.7
+param_c = 0.88
+param_d = 0.02
+
+##32
+Cool shape 3 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
+formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))*
+(pow((pow(y,2)+pow(z,2)-param_b*param_b),2)+ (pow((pow(x,2)-1),2)))*
+(pow((pow(z,2)+pow(x,2)-param_c*param_c),2)+ (pow((pow(y,2)-1),2)))-0.001
+xmin = -pi
+xmax =  pi
+ymin = -pi
+ymax = pi
+zmin = -pi
+zmax =  pi
+thickness =0.025 
+param_a = .85
+param_b = .85
+param_c = .85
+
+##33
+Letter A Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula =  pow(4*min (fabs(y+0.8) , (-fabs(x)*cos(pi/10)-y*sin(pi/10)+1) ),2)+pow((2*z),200)+pow((y/3),200)-1
+xmin = -2.6
+xmax =  2.6
+ymin = -3.0
+ymax = 3.0
+zmin = -0.5001
+zmax =  0.5001
+
+##34
+Letter D Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula =  pow(max ( y ,pow(( x*x*x*x+y*y*y*y),0.25)-6 ),2)+pow(z,100)-1
+xmin = -7
+xmax =  7
+ymin = -8
+ymax = 1.01
+zmin = -1
+zmax =  1
+
+##35
+Letter E Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula = pow(4*min( fabs(-(fabs(fabs(y)-1.25)-1.25)) , x+0.25 ),2)+pow((2*z),100)+pow((y/2.9),200)+pow((x/2),200)-1
+xmin = -1
+xmax =  2.0
+ymin = -3
+ymax = 3.0
+zmin = -.501
+zmax =  .501
+
+##36
+Letter F Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula = pow(4*min( fabs(-(fabs(y-1.5)-1)) , x+0.25 ),2)+pow((2*z),100)+pow((y/2.9),200)+pow((x/2),200)-1
+xmin = -1
+xmax =  2.0
+ymin = -3
+ymax = 3.0
+zmin = -.501
+zmax =  .501
+
+
+##37
+Letter I Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula = pow(pow(pow((2*x),100)+(y/3),100)+(2*z),100)-1
+xmin = -0.5001
+xmax =  0.5001
+ymin = -3.0001
+ymax = 3.0001
+zmin = -0.5001
+zmax =  0.5001
+
+##38
+Letter N Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula =  pow(4*max( -(x+2) , min( -( x-2) , x*cos(pi/5)+y*sin(pi/5) )),2)+pow((2*z),100)+pow((y/3),300)-1
+xmin = -2.5001
+xmax =  2.5001
+ymin = -3
+ymax = 3.001
+zmin = -.501
+zmax =  .501
+
+
+##39
+Letter W Brad Stefanov from http://abdelhamid394.blogspot.com/
+formula =  pow(4*(-fabs(fabs(x)-1)*cos(pi/10)+y*sin(pi/10)+1),2)+pow((2*z),200)+pow((y/3),200)-1
+xmin = -3.6
+xmax =  3.6
+ymin = -3.001
+ymax = 3.001
+zmin = -.501
+zmax =  .501
+ 

@@ -28,9 +28,9 @@ public class PreFalloff3Func extends AbstractFalloff3Func {
 
   @Override
   protected void applyVOut(XYZPoint pAffineTP, XYZPoint pVarTP, Double4 pVOut, double pWeight) {
-    pAffineTP.x += pVOut.x * pWeight;
-    pAffineTP.y += pVOut.y * pWeight;
-    pAffineTP.z += pVOut.z * pWeight;
+    pAffineTP.x = pVOut.x * pWeight;
+    pAffineTP.y = pVOut.y * pWeight;
+    pAffineTP.z = pVOut.z * pWeight;
   }
 
   @Override

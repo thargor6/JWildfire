@@ -28,7 +28,6 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
 
-
 public class GradientCreator extends ImageCreator {
 
   @Property(description = "Color of upper left edge")
@@ -43,7 +42,7 @@ public class GradientCreator extends ImageCreator {
   private String gradientFilename = "";
 
   @Override
-  protected void fillImage(SimpleImage res) {
+  public void fillImage(SimpleImage res) {
     if ((gradientFilename == null) || (gradientFilename.length() == 0)) {
       boolean simpleImg = ulColor.equals(urColor) && urColor.equals(llColor)
           && llColor.equals(lrColor) && lrColor.equals(ulColor);

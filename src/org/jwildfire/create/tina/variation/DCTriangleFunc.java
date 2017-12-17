@@ -40,9 +40,9 @@ public class DCTriangleFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* dc_triangle by Xyrus02, http://apophysis-7x.org/extensions */
     // set up triangle
-    double xx = pXForm.getCoeff00(), xy = pXForm.getCoeff10(); // X
-    double yx = pXForm.getCoeff01() * -1, yy = pXForm.getCoeff11() * -1; // Y
-    double ox = pXForm.getCoeff20(), oy = pXForm.getCoeff21(); // O
+    double xx = pXForm.getXYCoeff00(), xy = pXForm.getXYCoeff10(); // X
+    double yx = pXForm.getXYCoeff01() * -1, yy = pXForm.getXYCoeff11() * -1; // Y
+    double ox = pXForm.getXYCoeff20(), oy = pXForm.getXYCoeff21(); // O
     double px = pAffineTP.x - ox, py = pAffineTP.y - oy; // P
 
     // calculate dot products

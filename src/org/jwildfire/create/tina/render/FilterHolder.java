@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -23,53 +23,49 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.render.filter.FilterKernel;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 
-@SuppressWarnings("serial")
 public class FilterHolder implements Serializable {
-  protected final Flame flame;
   protected double filter[][];
   protected int noiseFilterSize;
+  protected int noiseFilterSizeHalve;
   protected final FilterKernel filterKernel;
+  private final FilterKernelType filterKernelType;
   protected final int oversample;
+  private final double intensity;
+  private FilterIndicator filterIndicator = FilterIndicator.GREY;
 
   public FilterHolder(Flame pFlame) {
-    flame = pFlame;
-    oversample = pFlame.getSpatialOversampling();
-    filterKernel = pFlame.getSpatialFilterKernel().createFilterInstance();
-    noiseFilterSize = filterKernel.getFilterSize(pFlame.getSpatialFilterRadius(), oversample);
-    filter = new double[noiseFilterSize][noiseFilterSize];
-    initFilter(pFlame.getSpatialFilterRadius(), noiseFilterSize, filter);
+    this(pFlame.getSpatialFilterKernel(), pFlame.getSpatialOversampling(), pFlame.getSpatialFilterRadius());
   }
 
-  public FilterHolder(Flame pFlame, FilterKernelType pSpatialFilterKernel, int pSpatialOversampling, double pSpatialFilterRadius) {
-    flame = pFlame;
+  public FilterHolder(FilterKernelType pSpatialFilterKernel, int pSpatialOversampling, double pSpatialFilterRadius) {
     oversample = pSpatialOversampling;
-    filterKernel = pSpatialFilterKernel.createFilterInstance();
+    filterKernelType = pSpatialFilterKernel;
+    filterKernel = filterKernelType.createFilterInstance();
     noiseFilterSize = filterKernel.getFilterSize(pSpatialFilterRadius, oversample);
+    noiseFilterSizeHalve = noiseFilterSize / 2 - 1;
+    intensity = pSpatialFilterRadius;
     filter = new double[noiseFilterSize][noiseFilterSize];
     initFilter(pSpatialFilterRadius, noiseFilterSize, filter);
   }
 
   private void initFilter(double pFilterRadius, int pFilterSize, double[][] pFilter) {
     double adjust = filterKernel.getFilterAdjust(pFilterRadius, oversample);
+    double sum = 0.0;
     for (int i = 0; i < pFilterSize; i++) {
       for (int j = 0; j < pFilterSize; j++) {
         double ii = ((2.0 * i + 1.0) / pFilterSize - 1.0) * adjust;
         double jj = ((2.0 * j + 1.0) / pFilterSize - 1.0) * adjust;
-        //  pFilter[i][j] = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
-        pFilter[i][j] = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
+        double f = filterKernel.getFilterCoeff(MathLib.sqrt(ii * ii + jj * jj));
+        //        double f = filterKernel.getFilterCoeff(ii) * filterKernel.getFilterCoeff(jj);
+        sum += f;
+        pFilter[i][j] = f;
       }
     }
     // normalize
     {
-      double t = 0.0;
       for (int i = 0; i < pFilterSize; i++) {
         for (int j = 0; j < pFilterSize; j++) {
-          t += pFilter[i][j];
-        }
-      }
-      for (int i = 0; i < pFilterSize; i++) {
-        for (int j = 0; j < pFilterSize; j++) {
-          pFilter[i][j] = pFilter[i][j] / t * oversample * oversample;
+          pFilter[i][j] = pFilter[i][j] / sum * oversample * oversample;
         }
       }
     }
@@ -81,6 +77,26 @@ public class FilterHolder implements Serializable {
 
   public double[][] getFilter() {
     return filter;
+  }
+
+  public boolean isEmpty() {
+    return noiseFilterSize <= 1;
+  }
+
+  public FilterIndicator getFilterIndicator() {
+    return filterIndicator;
+  }
+
+  public void setFilterIndicator(FilterIndicator filterIndicator) {
+    this.filterIndicator = filterIndicator;
+  }
+
+  public double getIntensity() {
+    return intensity;
+  }
+
+  public FilterKernelType getFilterKernelType() {
+    return filterKernelType;
   }
 
 }

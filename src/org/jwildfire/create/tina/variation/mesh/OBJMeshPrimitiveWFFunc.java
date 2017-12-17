@@ -16,10 +16,7 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import org.jwildfire.base.Tools;
@@ -76,14 +73,14 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
     if (meshName != null && meshName.length() > 0) {
       try {
-        String meshKey = this.getClass().getName() + "_" + getMeshname(meshName);
+        String meshKey = this.getClass().getName() + "_" + OBJMeshUtil.getMeshname(meshName, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
         mesh = (SimpleMesh) RessourceManager.getRessource(meshKey);
         if (mesh == null) {
           String resourceObj = meshName + ".obj";
           InputStream is = this.getClass().getResourceAsStream(resourceObj);
-          File objFile = stream2file(is);
+          File objFile = OBJMeshUtil.obj2file(is);
           try {
-            mesh = loadMeshFromFile(objFile.getAbsolutePath());
+            mesh = OBJMeshUtil.loadAndSmoothMeshFromFile(objFile.getAbsolutePath(), subdiv_smooth_passes, subdiv_level, subdiv_smooth_lambda, subdiv_smooth_mu);
           }
           finally {
             objFile.delete();
@@ -96,22 +93,8 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
       }
     }
     if (mesh == null) {
-      mesh = createDfltMesh();
+      mesh = OBJMeshUtil.createDfltMesh();
     }
-  }
-
-  private File stream2file(InputStream in) throws Exception {
-    final File tmpFile = File.createTempFile(Tools.APP_TITLE, ".obj");
-    tmpFile.deleteOnExit();
-    try (BufferedInputStream bin = new BufferedInputStream(in)) {
-      try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
-        int c;
-        while ((c = bin.read()) != -1) {
-          out.write(c);
-        }
-      }
-    }
-    return tmpFile;
   }
 
   @Override
@@ -129,7 +112,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
-      uvIdxMap.clear();
+      uvColorMapper.clear();
     }
     else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");

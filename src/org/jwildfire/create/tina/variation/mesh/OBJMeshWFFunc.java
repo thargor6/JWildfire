@@ -49,7 +49,7 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
     else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
-      uvIdxMap.clear();
+      uvColorMapper.clear();
     }
     else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
@@ -84,10 +84,10 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
     super.init(pContext, pLayer, pXForm, pAmount);
     if (objFilename != null && objFilename.length() > 0) {
       try {
-        String meshKey = this.getClass().getName() + "_" + getMeshname(objFilename);
+        String meshKey = this.getClass().getName() + "_" + OBJMeshUtil.getMeshname(objFilename, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
         mesh = (SimpleMesh) RessourceManager.getRessource(meshKey);
         if (mesh == null) {
-          mesh = loadMeshFromFile(objFilename);
+          mesh = OBJMeshUtil.loadAndSmoothMeshFromFile(objFilename, subdiv_smooth_passes, subdiv_level, subdiv_smooth_lambda, subdiv_smooth_mu);
           RessourceManager.putRessource(meshKey, mesh);
         }
       }
@@ -96,7 +96,7 @@ public class OBJMeshWFFunc extends AbstractOBJMeshWFFunc {
       }
     }
     if (mesh == null) {
-      mesh = createDfltMesh();
+      mesh = OBJMeshUtil.createDfltMesh();
     }
   }
 

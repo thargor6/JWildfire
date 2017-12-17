@@ -24,8 +24,9 @@ public class MitchellFilterKernel extends FilterKernel {
     return 2.0;
   }
 
-  private final double mitchell_b = (1.0 / 3.0);
-  private final double mitchell_c = (1.0 / 3.0);
+  // b + 2 * c = 1
+  //  private final double mitchell_b = 0.42;
+  //  private final double mitchell_c = 0.29;
 
   @Override
   public double getFilterCoeff(double t) {
@@ -35,19 +36,27 @@ public class MitchellFilterKernel extends FilterKernel {
     if (t < 0)
       t = -t;
     if (t < 1.0) {
-      t = (((12.0 - 9.0 * mitchell_b - 6.0 * mitchell_c) * (t * tt))
-          + ((-18.0 + 12.0 * mitchell_b + 6.0 * mitchell_c) * tt)
-          + (6.0 - 2 * mitchell_b));
+      t = (((12.0 - 9.0 * getMitchell_b() - 6.0 * getMitchell_c()) * (t * tt))
+          + ((-18.0 + 12.0 * getMitchell_b() + 6.0 * getMitchell_c()) * tt)
+          + (6.0 - 2 * getMitchell_b()));
       return (t / 6.0);
     }
     else if (t < 2.0) {
-      t = (((-1.0 * mitchell_b - 6.0 * mitchell_c) * (t * tt))
-          + ((6.0 * mitchell_b + 30.0 * mitchell_c) * tt)
-          + ((-12.0 * mitchell_b - 48.0 * mitchell_c) * t)
-          + (8.0 * mitchell_b + 24 * mitchell_c));
+      t = (((-1.0 * getMitchell_b() - 6.0 * getMitchell_c()) * (t * tt))
+          + ((6.0 * getMitchell_b() + 30.0 * getMitchell_c()) * tt)
+          + ((-12.0 * getMitchell_b() - 48.0 * getMitchell_c()) * t)
+          + (8.0 * getMitchell_b() + 24 * getMitchell_c()));
       return (t / 6.0);
     }
     return (0.0);
+  }
+
+  protected double getMitchell_b() {
+    return (1.0 / 3.0);
+  }
+
+  protected double getMitchell_c() {
+    return (1.0 / 3.0);
   }
 
 }

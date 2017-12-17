@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
@@ -30,7 +30,7 @@ public class Scry3DFunc extends SimpleVariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* scry_3D by Larry Berlin, http://aporev.deviantart.com/art/New-3D-Plugins-136484533?q=gallery%3Aaporev%2F8229210&qo=22 */
-    double inv = 1.0 / (pAmount + EPSILON);
+    double inv = 1.0 / (pAmount + SMALL_EPSILON);
     double t = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(pAffineTP.z);
     double r = 1.0 / (sqrt(t) * (t + inv));
     double Footzee, kikr;

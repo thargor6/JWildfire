@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -27,7 +27,6 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -41,7 +40,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
-import org.jwildfire.create.tina.base.raster.AbstractRaster;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -66,8 +64,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected final ColorProvider colorProvider;
   protected final boolean solidRendering;
 
-  public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen) {
+  public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen, boolean pUsePlotBuffer) {
     super(pRenderThread, pRenderer, pPacket, pLayer, pCtx, pRandGen);
+    plotBuffer = initPlotBuffer(pUsePlotBuffer ? (RenderMode.PRODUCTION.equals(pRenderer.getRenderInfo().getRenderMode()) ? Tools.PLOT_BUFFER_SIZE : Tools.PLOT_BUFFER_SIZE / 2) : 1);
     solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     projector = new DefaultPointProjector();
     if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
@@ -159,7 +158,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     projector.projectPoint(q);
   }
 
-  public void iterateNext(List<RenderSlice> pSlices, double pThicknessMod, int pTicknessSamples) {
+  public void iterateNext(List<RenderSlice> pSlices) {
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
@@ -178,40 +177,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
       applyEmptyFinalTransform();
     }
 
-    if (pThicknessMod > EPSILON && pTicknessSamples > 0) {
-      XYZPoint w = new XYZPoint();
-      w.assign(q);
-      try {
-        for (int i = 0; i < pTicknessSamples; i++) {
-          addNoise(w, q, pThicknessMod);
-          List<AbstractRaster> sliceRasters = collectSliceRasters(q, pSlices);
-          for (AbstractRaster sliceRaster : sliceRasters) {
-            raster = sliceRaster;
-            projector.projectPoint(q);
-          }
-        }
-      }
-      finally {
-        q.assign(w);
-      }
+    if (setupSliceRaster(q, pSlices)) {
+      projector.projectPoint(q);
     }
-    else {
-      if (setupSliceRaster(q, pSlices)) {
-        projector.projectPoint(q);
-      }
-    }
-  }
-
-  private void addNoise(XYZPoint pSrc, XYZPoint pDst, double pRadius) {
-    double angle = randGen.random() * 2 * M_PI;
-    double sina = sin(angle);
-    double cosa = cos(angle);
-    angle = randGen.random() * M_PI;
-    double sinb = sin(angle);
-    double cosb = cos(angle);
-    pDst.x = pSrc.x + pRadius * sinb * cosa;
-    pDst.y = pSrc.y + pRadius * sinb * sina;
-    pDst.z = pSrc.z + pRadius * cosb;
   }
 
   private boolean setupSliceRaster(XYZPoint pPoint, List<RenderSlice> pSlices) {
@@ -224,21 +192,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
       raster = null;
       return false;
     }
-  }
-
-  private List<AbstractRaster> collectSliceRasters(XYZPoint pPoint, List<RenderSlice> pSlices) {
-    List<AbstractRaster> res = new ArrayList<AbstractRaster>();
-    int sliceIdx = -1;
-    while (true) {
-      sliceIdx = getSliceIndex(pPoint, pSlices, sliceIdx + 1);
-      if (sliceIdx >= 0) {
-        res.add(pSlices.get(sliceIdx).getRaster());
-      }
-      else {
-        break;
-      }
-    }
-    return res;
   }
 
   private int getSliceIndex(XYZPoint pPoint, List<RenderSlice> pSlices, int pStartIndex) {
@@ -271,7 +224,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
 
   protected int plotBufferIdx = 0;
 
-  protected PlotSample[] plotBuffer = initPlotBuffer();
+  protected PlotSample[] plotBuffer;
 
   protected int shadowMapPlotBufferIdx[] = initShadowMapPlotBufferIdx();
   protected PlotSample[][] shadowMapPlotBuffer = initShadowMapPlotBuffer();
@@ -468,25 +421,13 @@ public class DefaultRenderIterationState extends RenderIterationState {
     }
   }
 
-  long t0 = System.currentTimeMillis();
-
   protected void applySamplesToRaster() {
     raster.addSamples(plotBuffer, plotBufferIdx);
     plotBufferIdx = 0;
-    long t1 = System.currentTimeMillis();
-    if (t1 - t0 > 100) {
-      try {
-        Thread.sleep(1);
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      t0 = t1;
-    }
   }
 
-  private PlotSample[] initPlotBuffer() {
-    PlotSample[] res = new PlotSample[Tools.PLOT_BUFFER_SIZE];
+  private PlotSample[] initPlotBuffer(int pSize) {
+    PlotSample[] res = new PlotSample[pSize];
     for (int i = 0; i < res.length; i++) {
       res[i] = new PlotSample();
     }

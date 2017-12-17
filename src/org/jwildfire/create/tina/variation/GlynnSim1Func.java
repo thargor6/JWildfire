@@ -144,4 +144,9 @@ public class GlynnSim1Func extends VariationFunc {
     this._absPow = fabs(this.pow);
   }
 
+  @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "GlynnSim1_radius", "GlynnSim1_radius1", "GlynnSim1_Phi1", "GlynnSim1_thickness", "GlynnSim1_pow", "GlynnSim1_contrast" };
+  }
+
 }

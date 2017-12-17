@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.atan2;
 import static org.jwildfire.base.mathlib.MathLib.cos;
@@ -43,7 +43,7 @@ public class JuliaCFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // juliac by David Young, http://sc0t0ma.deviantart.com/
-    double re = 1.0 / (this.re + EPSILON);
+    double re = 1.0 / (this.re + SMALL_EPSILON);
     double im = this.im / 100.0;
     double arg = atan2(pAffineTP.y, pAffineTP.x) + fmod(pContext.random(Integer.MAX_VALUE), this.re) * 2.0 * M_PI;
     double lnmod = dist * 0.5 * log(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);

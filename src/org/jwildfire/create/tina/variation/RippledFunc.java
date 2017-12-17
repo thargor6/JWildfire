@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
 import static org.jwildfire.base.mathlib.MathLib.tanh;
@@ -31,8 +31,8 @@ public class RippledFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // rippled by Raykoid666, http://raykoid666.deviantart.com/art/plugin-pack-3-100510461?q=gallery%3ARaykoid666%2F11060240&qo=16
     double d = sqr(pAffineTP.x) + sqr(pAffineTP.y);
-    pVarTP.x += pAmount / 2 * (tanh(d + EPSILON) * (2.0 * pAffineTP.x));
-    pVarTP.y += pAmount / 2 * (cos(d + EPSILON) * (2.0 * pAffineTP.y));
+    pVarTP.x += pAmount / 2 * (tanh(d + SMALL_EPSILON) * (2.0 * pAffineTP.x));
+    pVarTP.y += pAmount / 2 * (cos(d + SMALL_EPSILON) * (2.0 * pAffineTP.y));
     if (pContext.isPreserveZCoordinate()) {
   pVarTP.z += pAmount * pAffineTP.z;
 }

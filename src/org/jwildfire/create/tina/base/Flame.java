@@ -37,6 +37,7 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
+import org.jwildfire.create.tina.render.filter.FilteringType;
 import org.jwildfire.create.tina.swing.ChannelMixerCurves;
 
 public class Flame implements Assignable<Flame>, Serializable {
@@ -124,21 +125,42 @@ public class Flame implements Assignable<Flame>, Serializable {
   private final MotionCurve camDOFAreaCurve = new MotionCurve();
   private boolean newCamDOF;
   private int spatialOversampling;
-  private int colorOversampling;
-  private boolean sampleJittering;
   private double spatialFilterRadius;
   private FilterKernelType spatialFilterKernel;
+  private FilteringType spatialFilteringType;
+  private boolean spatialFilterIndicator;
+  private double spatialFilterSharpness;
+  private double spatialFilterLowDensity;
   private double sampleDensity;
   private boolean bgTransparency;
   private boolean postNoiseFilter;
   private double postNoiseFilterThreshold;
   private double foregroundOpacity;
+
+  private BGColorType bgColorType = BGColorType.GRADIENT_2X2_C;
   @AnimAware
   private int bgColorRed;
   @AnimAware
   private int bgColorGreen;
   @AnimAware
   private int bgColorBlue;
+
+  private int bgColorULRed;
+  private int bgColorULGreen;
+  private int bgColorULBlue;
+  private int bgColorURRed;
+  private int bgColorURGreen;
+  private int bgColorURBlue;
+  private int bgColorLLRed;
+  private int bgColorLLGreen;
+  private int bgColorLLBlue;
+  private int bgColorLRRed;
+  private int bgColorLRGreen;
+  private int bgColorLRBlue;
+  private int bgColorCCRed;
+  private int bgColorCCGreen;
+  private int bgColorCCBlue;
+
   private double gamma;
   private final MotionCurve gammaCurve = new MotionCurve();
   private double gammaThreshold;
@@ -158,6 +180,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double vibrancy;
   private final MotionCurve vibrancyCurve = new MotionCurve();
+
+  private double lowDensityBrightness;
+  private double balanceRed;
+  private double balanceGreen;
+  private double balanceBlue;
+
   private boolean preserveZ;
   private String resolutionProfile;
   private String qualityProfile;
@@ -281,9 +309,23 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void resetAntialiasingSettings() {
     spatialFilterRadius = Prefs.getPrefs().getTinaDefaultSpatialFilterRadius();
     spatialFilterKernel = Prefs.getPrefs().getTinaDefaultSpatialFilterKernel();
+    spatialFilterSharpness = 4.0;
+    spatialFilterLowDensity = 0.025;
+    if (FilterKernelType.getSharpeningFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.GLOBAL_SHARPENING;
+    }
+    else if (FilterKernelType.getSmoothingFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.GLOBAL_SMOOTHING;
+    }
+    else if (FilterKernelType.getAdapativeFilters().contains(spatialFilterKernel)) {
+      spatialFilteringType = FilteringType.ADAPTIVE;
+    }
+    else {
+      spatialFilteringType = FilteringType.GLOBAL_SMOOTHING;
+      spatialFilterKernel = FilterKernelType.SINEPOW10;
+    }
     spatialOversampling = Prefs.getPrefs().getTinaDefaultSpatialOversampling();
-    colorOversampling = Prefs.getPrefs().getTinaDefaultColorOversampling();
-    sampleJittering = Prefs.getPrefs().isTinaDefaultSampleJittering();
+    spatialFilterIndicator = false;
     postNoiseFilter = Prefs.getPrefs().isTinaDefaultPostNoiseFilter();
     postNoiseFilterThreshold = Prefs.getPrefs().getTinaDefaultPostNoiseFilterThreshold();
     antialiasAmount = Prefs.getPrefs().getTinaDefaultAntialiasingAmount();
@@ -296,10 +338,17 @@ public class Flame implements Assignable<Flame>, Serializable {
     gamma = 4.0;
     gammaThreshold = 0.01;
     vibrancy = 1;
+    bgColorType = BGColorType.GRADIENT_2X2_C;
     bgColorRed = bgColorGreen = bgColorBlue = 0;
+    bgColorULRed = bgColorULGreen = bgColorULBlue = bgColorURRed = bgColorURGreen = bgColorURBlue = bgColorLLRed = bgColorLLGreen = bgColorLLBlue = bgColorLRRed = bgColorLRGreen = bgColorLRBlue = 0;
+    bgColorCCRed = bgColorCCGreen = bgColorCCBlue = 0;
     whiteLevel = Prefs.getPrefs().getTinaDefaultFadeToWhiteLevel();
     saturation = 1.0;
     foregroundOpacity = Prefs.getPrefs().getTinaDefaultForegroundOpacity();
+    lowDensityBrightness = 0.24;
+    balanceRed = 1.0;
+    balanceGreen = 1.0;
+    balanceBlue = 1.0;
   }
 
   public void resetBokehSettings() {
@@ -497,27 +546,27 @@ public class Flame implements Assignable<Flame>, Serializable {
     this.camZoom = camZoom;
   }
 
-  public int getBGColorRed() {
+  public int getBgColorRed() {
     return bgColorRed;
   }
 
-  public void setBGColorRed(int bgColorRed) {
+  public void setBgColorRed(int bgColorRed) {
     this.bgColorRed = bgColorRed;
   }
 
-  public int getBGColorGreen() {
+  public int getBgColorGreen() {
     return bgColorGreen;
   }
 
-  public void setBGColorGreen(int bgColorGreen) {
+  public void setBgColorGreen(int bgColorGreen) {
     this.bgColorGreen = bgColorGreen;
   }
 
-  public int getBGColorBlue() {
+  public int getBgColorBlue() {
     return bgColorBlue;
   }
 
-  public void setBGColorBlue(int bgColorBlue) {
+  public void setBgColorBlue(int bgColorBlue) {
     this.bgColorBlue = bgColorBlue;
   }
 
@@ -670,11 +719,31 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponentCurve.assign(pFlame.camDOFExponentCurve);
     spatialFilterRadius = pFlame.spatialFilterRadius;
     spatialFilterKernel = pFlame.spatialFilterKernel;
+    spatialFilteringType = pFlame.spatialFilteringType;
+    spatialFilterIndicator = pFlame.spatialFilterIndicator;
+    spatialFilterSharpness = pFlame.spatialFilterSharpness;
+    spatialFilterLowDensity = pFlame.spatialFilterLowDensity;
     sampleDensity = pFlame.sampleDensity;
     bgTransparency = pFlame.bgTransparency;
     bgColorRed = pFlame.bgColorRed;
     bgColorGreen = pFlame.bgColorGreen;
     bgColorBlue = pFlame.bgColorBlue;
+    bgColorType = pFlame.bgColorType;
+    bgColorULRed = pFlame.bgColorULRed;
+    bgColorULGreen = pFlame.bgColorULGreen;
+    bgColorULBlue = pFlame.bgColorULBlue;
+    bgColorURRed = pFlame.bgColorURRed;
+    bgColorURGreen = pFlame.bgColorURGreen;
+    bgColorURBlue = pFlame.bgColorURBlue;
+    bgColorLLRed = pFlame.bgColorLLRed;
+    bgColorLLGreen = pFlame.bgColorLLGreen;
+    bgColorLLBlue = pFlame.bgColorLLBlue;
+    bgColorLRRed = pFlame.bgColorLRRed;
+    bgColorLRGreen = pFlame.bgColorLRGreen;
+    bgColorLRBlue = pFlame.bgColorLRBlue;
+    bgColorCCRed = pFlame.bgColorCCRed;
+    bgColorCCGreen = pFlame.bgColorCCGreen;
+    bgColorCCBlue = pFlame.bgColorCCBlue;
     gamma = pFlame.gamma;
     gammaCurve.assign(pFlame.gammaCurve);
     gammaThreshold = pFlame.gammaThreshold;
@@ -691,6 +760,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     contrastCurve.assign(pFlame.contrastCurve);
     vibrancy = pFlame.vibrancy;
     vibrancyCurve.assign(pFlame.vibrancyCurve);
+    lowDensityBrightness = pFlame.lowDensityBrightness;
+    balanceRed = pFlame.balanceRed;
+    balanceGreen = pFlame.balanceGreen;
+    balanceBlue = pFlame.balanceBlue;
     preserveZ = pFlame.preserveZ;
     resolutionProfile = pFlame.resolutionProfile;
     qualityProfile = pFlame.qualityProfile;
@@ -700,8 +773,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     antialiasAmount = pFlame.antialiasAmount;
     antialiasRadius = pFlame.antialiasRadius;
     spatialOversampling = pFlame.spatialOversampling;
-    colorOversampling = pFlame.colorOversampling;
-    sampleJittering = pFlame.sampleJittering;
     postNoiseFilter = pFlame.postNoiseFilter;
     postNoiseFilterThreshold = pFlame.postNoiseFilterThreshold;
     foregroundOpacity = pFlame.foregroundOpacity;
@@ -774,7 +845,6 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
-        (colorOversampling != pFlame.colorOversampling) || (sampleJittering != pFlame.sampleJittering) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
         (fabs(foregroundOpacity - pFlame.foregroundOpacity) > EPSILON) ||
         (fabs(camDOFScale - pFlame.camDOFScale) > EPSILON) || !camDOFScaleCurve.isEqual(pFlame.camDOFScaleCurve) ||
@@ -793,9 +863,26 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(camPosZ - pFlame.camPosZ) > EPSILON) || !camPosZCurve.isEqual(pFlame.camPosZCurve) ||
         (fabs(camZ - pFlame.camZ) > EPSILON) || !camZCurve.isEqual(pFlame.camZCurve) ||
         (newCamDOF != pFlame.newCamDOF) || (fabs(spatialFilterRadius - pFlame.spatialFilterRadius) > EPSILON) ||
-        !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
-        (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) || (bgColorRed != pFlame.bgColorRed) ||
-        (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue) ||
+        (fabs(spatialFilterSharpness - pFlame.spatialFilterSharpness) > EPSILON) || (fabs(spatialFilterLowDensity - pFlame.spatialFilterLowDensity) > EPSILON) ||
+        !spatialFilteringType.equals(pFlame.spatialFilteringType) || !spatialFilterKernel.equals(pFlame.spatialFilterKernel) ||
+        spatialFilterIndicator != pFlame.spatialFilterIndicator ||
+        (fabs(sampleDensity - pFlame.sampleDensity) > EPSILON) || (bgTransparency != pFlame.bgTransparency) ||
+        !bgColorType.equals(pFlame.bgColorType) ||
+        (bgColorType.equals(BGColorType.SINGLE_COLOR) && ((bgColorRed != pFlame.bgColorRed) ||
+            (bgColorGreen != pFlame.bgColorGreen) || (bgColorBlue != pFlame.bgColorBlue)))
+        ||
+        (bgColorType.equals(BGColorType.GRADIENT_2X2) && ((bgColorLLRed != pFlame.bgColorLLRed) || (bgColorLLGreen != pFlame.bgColorLLGreen) || (bgColorLLBlue != pFlame.bgColorLLBlue) ||
+            (bgColorLRRed != pFlame.bgColorLRRed) || (bgColorLRGreen != pFlame.bgColorLRGreen) || (bgColorLRBlue != pFlame.bgColorLRBlue) ||
+            (bgColorULRed != pFlame.bgColorULRed) || (bgColorULGreen != pFlame.bgColorULGreen) || (bgColorULBlue != pFlame.bgColorULBlue) ||
+            (bgColorURRed != pFlame.bgColorURRed) || (bgColorURGreen != pFlame.bgColorURGreen) || (bgColorURBlue != pFlame.bgColorURBlue)))
+        ||
+        (bgColorType.equals(BGColorType.GRADIENT_2X2_C) && ((bgColorLLRed != pFlame.bgColorLLRed) || (bgColorLLGreen != pFlame.bgColorLLGreen) || (bgColorLLBlue != pFlame.bgColorLLBlue) ||
+            (bgColorLRRed != pFlame.bgColorLRRed) || (bgColorLRGreen != pFlame.bgColorLRGreen) || (bgColorLRBlue != pFlame.bgColorLRBlue) ||
+            (bgColorULRed != pFlame.bgColorULRed) || (bgColorULGreen != pFlame.bgColorULGreen) || (bgColorULBlue != pFlame.bgColorULBlue) ||
+            (bgColorURRed != pFlame.bgColorURRed) || (bgColorURGreen != pFlame.bgColorURGreen) || (bgColorURBlue != pFlame.bgColorURBlue) ||
+            (bgColorCCRed != pFlame.bgColorCCRed) || (bgColorCCGreen != pFlame.bgColorCCGreen) || (bgColorCCBlue != pFlame.bgColorCCBlue)))
+        ||
+
         (fabs(gamma - pFlame.gamma) > EPSILON) || !gammaCurve.isEqual(pFlame.gammaCurve) ||
         (fabs(gammaThreshold - pFlame.gammaThreshold) > EPSILON) || !gammaThresholdCurve.isEqual(pFlame.gammaThresholdCurve) ||
         (fabs(pixelsPerUnit - pFlame.pixelsPerUnit) > EPSILON) || !pixelsPerUnitCurve.isEqual(pFlame.pixelsPerUnitCurve) ||
@@ -804,11 +891,15 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(saturation - pFlame.saturation) > EPSILON) || !saturationCurve.isEqual(pFlame.saturationCurve) ||
         (fabs(contrast - pFlame.contrast) > EPSILON) || !contrastCurve.isEqual(pFlame.contrastCurve) ||
         (fabs(vibrancy - pFlame.vibrancy) > EPSILON) || !vibrancyCurve.isEqual(pFlame.vibrancyCurve) ||
+        (fabs(lowDensityBrightness - pFlame.lowDensityBrightness) > EPSILON) || (fabs(balanceRed - pFlame.balanceRed) > EPSILON) ||
+        (fabs(balanceGreen - pFlame.balanceGreen) > EPSILON) || (fabs(balanceBlue - pFlame.balanceBlue) > EPSILON) ||
         (preserveZ != pFlame.preserveZ) ||
         ((resolutionProfile != null && pFlame.resolutionProfile == null) || (resolutionProfile == null && pFlame.resolutionProfile != null) ||
-        (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile))) ||
+            (resolutionProfile != null && pFlame.resolutionProfile != null && !resolutionProfile.equals(pFlame.resolutionProfile)))
+        ||
         ((qualityProfile != null && pFlame.qualityProfile == null) || (qualityProfile == null && pFlame.qualityProfile != null) ||
-        (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile))) ||
+            (qualityProfile != null && pFlame.qualityProfile != null && !qualityProfile.equals(pFlame.qualityProfile)))
+        ||
         !name.equals(pFlame.name) ||
         !bgImageFilename.equals(pFlame.bgImageFilename) ||
         (fabs(antialiasAmount - pFlame.antialiasAmount) > EPSILON) || (fabs(antialiasRadius - pFlame.antialiasRadius) > EPSILON) ||
@@ -1432,33 +1523,9 @@ public class Flame implements Assignable<Flame>, Serializable {
     }
   }
 
-  public int getColorOversampling() {
-    return colorOversampling;
-  }
-
-  public void setColorOversampling(int pColorOversampling) {
-    colorOversampling = pColorOversampling;
-    if (colorOversampling < 1) {
-      colorOversampling = 1;
-    }
-    else if (colorOversampling > Tools.MAX_COLOR_OVERSAMPLING) {
-      colorOversampling = Tools.MAX_COLOR_OVERSAMPLING;
-    }
-  }
-
-  public boolean isSampleJittering() {
-    return sampleJittering;
-  }
-
-  public void setSampleJittering(boolean pSampleJittering) {
-    sampleJittering = pSampleJittering;
-  }
-
   public void applyFastOversamplingSettings() {
     setSpatialFilterRadius(0.0);
     setSpatialOversampling(1);
-    setColorOversampling(1);
-    setSampleJittering(false);
     setPostNoiseFilter(false);
   }
 
@@ -1466,8 +1533,6 @@ public class Flame implements Assignable<Flame>, Serializable {
     Prefs prefs = Prefs.getPrefs();
     setSpatialFilterRadius(prefs.getTinaDefaultSpatialFilterRadius());
     setSpatialOversampling(getSolidRenderSettings().isSolidRenderingEnabled() ? DFLT_SOLID_SPATIAL_OVERSAMPLING : prefs.getTinaDefaultSpatialOversampling());
-    setColorOversampling(prefs.getTinaDefaultColorOversampling());
-    setSampleJittering(prefs.isTinaDefaultSampleJittering());
     setPostNoiseFilter(prefs.isTinaDefaultPostNoiseFilter());
   }
 
@@ -1544,6 +1609,7 @@ public class Flame implements Assignable<Flame>, Serializable {
   public void setDefaultSolidRenderingSettings() {
     setSpatialOversampling(DFLT_SOLID_SPATIAL_OVERSAMPLING);
     setSpatialFilterRadius(0.5);
+    setSpatialFilteringType(FilteringType.GLOBAL_SMOOTHING);
     setSpatialFilterKernel(FilterKernelType.GAUSSIAN);
     setAntialiasAmount(0.0);
     setAntialiasRadius(0.0);
@@ -1555,6 +1621,198 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setZBufferScale(double zBufferScale) {
     this.zBufferScale = zBufferScale;
+  }
+
+  public double getLowDensityBrightness() {
+    return lowDensityBrightness;
+  }
+
+  public void setLowDensityBrightness(double lowDensityBrightness) {
+    this.lowDensityBrightness = lowDensityBrightness;
+  }
+
+  public double getBalanceRed() {
+    return balanceRed;
+  }
+
+  public void setBalanceRed(double balanceRed) {
+    this.balanceRed = balanceRed;
+  }
+
+  public double getBalanceGreen() {
+    return balanceGreen;
+  }
+
+  public void setBalanceGreen(double balanceGreen) {
+    this.balanceGreen = balanceGreen;
+  }
+
+  public double getBalanceBlue() {
+    return balanceBlue;
+  }
+
+  public void setBalanceBlue(double balanceBlue) {
+    this.balanceBlue = balanceBlue;
+  }
+
+  public BGColorType getBgColorType() {
+    return bgColorType;
+  }
+
+  public void setBgColorType(BGColorType bgColorType) {
+    this.bgColorType = bgColorType;
+  }
+
+  public int getBgColorULRed() {
+    return bgColorULRed;
+  }
+
+  public void setBgColorULRed(int bgColorULRed) {
+    this.bgColorULRed = bgColorULRed;
+  }
+
+  public int getBgColorULGreen() {
+    return bgColorULGreen;
+  }
+
+  public void setBgColorULGreen(int bgColorULGreen) {
+    this.bgColorULGreen = bgColorULGreen;
+  }
+
+  public int getBgColorULBlue() {
+    return bgColorULBlue;
+  }
+
+  public void setBgColorULBlue(int bgColorULBlue) {
+    this.bgColorULBlue = bgColorULBlue;
+  }
+
+  public int getBgColorURRed() {
+    return bgColorURRed;
+  }
+
+  public void setBgColorURRed(int bgColorURRed) {
+    this.bgColorURRed = bgColorURRed;
+  }
+
+  public int getBgColorURGreen() {
+    return bgColorURGreen;
+  }
+
+  public void setBgColorURGreen(int bgColorURGreen) {
+    this.bgColorURGreen = bgColorURGreen;
+  }
+
+  public int getBgColorURBlue() {
+    return bgColorURBlue;
+  }
+
+  public void setBgColorURBlue(int bgColorURBlue) {
+    this.bgColorURBlue = bgColorURBlue;
+  }
+
+  public int getBgColorLLRed() {
+    return bgColorLLRed;
+  }
+
+  public void setBgColorLLRed(int bgColorLLRed) {
+    this.bgColorLLRed = bgColorLLRed;
+  }
+
+  public int getBgColorLLGreen() {
+    return bgColorLLGreen;
+  }
+
+  public void setBgColorLLGreen(int bgColorLLGreen) {
+    this.bgColorLLGreen = bgColorLLGreen;
+  }
+
+  public int getBgColorLLBlue() {
+    return bgColorLLBlue;
+  }
+
+  public void setBgColorLLBlue(int bgColorLLBlue) {
+    this.bgColorLLBlue = bgColorLLBlue;
+  }
+
+  public int getBgColorLRRed() {
+    return bgColorLRRed;
+  }
+
+  public void setBgColorLRRed(int bgColorLRRed) {
+    this.bgColorLRRed = bgColorLRRed;
+  }
+
+  public int getBgColorLRGreen() {
+    return bgColorLRGreen;
+  }
+
+  public void setBgColorLRGreen(int bgColorLRGreen) {
+    this.bgColorLRGreen = bgColorLRGreen;
+  }
+
+  public int getBgColorLRBlue() {
+    return bgColorLRBlue;
+  }
+
+  public void setBgColorLRBlue(int bgColorLRBlue) {
+    this.bgColorLRBlue = bgColorLRBlue;
+  }
+
+  public int getBgColorCCRed() {
+    return bgColorCCRed;
+  }
+
+  public void setBgColorCCRed(int bgColorCCRed) {
+    this.bgColorCCRed = bgColorCCRed;
+  }
+
+  public int getBgColorCCGreen() {
+    return bgColorCCGreen;
+  }
+
+  public void setBgColorCCGreen(int bgColorCCGreen) {
+    this.bgColorCCGreen = bgColorCCGreen;
+  }
+
+  public int getBgColorCCBlue() {
+    return bgColorCCBlue;
+  }
+
+  public void setBgColorCCBlue(int bgColorCCBlue) {
+    this.bgColorCCBlue = bgColorCCBlue;
+  }
+
+  public FilteringType getSpatialFilteringType() {
+    return spatialFilteringType;
+  }
+
+  public void setSpatialFilteringType(FilteringType spatialFilteringType) {
+    this.spatialFilteringType = spatialFilteringType;
+  }
+
+  public boolean isSpatialFilterIndicator() {
+    return spatialFilterIndicator;
+  }
+
+  public void setSpatialFilterIndicator(boolean spatialFilterIndicator) {
+    this.spatialFilterIndicator = spatialFilterIndicator;
+  }
+
+  public double getSpatialFilterSharpness() {
+    return spatialFilterSharpness;
+  }
+
+  public void setSpatialFilterSharpness(double spatialFilterSharpness) {
+    this.spatialFilterSharpness = spatialFilterSharpness;
+  }
+
+  public double getSpatialFilterLowDensity() {
+    return spatialFilterLowDensity;
+  }
+
+  public void setSpatialFilterLowDensity(double spatialFilterLowDensity) {
+    this.spatialFilterLowDensity = spatialFilterLowDensity;
   }
 
 }

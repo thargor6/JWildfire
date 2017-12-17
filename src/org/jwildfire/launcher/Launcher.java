@@ -151,6 +151,7 @@ public class Launcher {
   private JCheckBox debugCmb;
   private JButton btnAddJavaRuntime;
   private JCheckBox lowPriorityCBx;
+  private JTextField uiScaleEdit;
 
   private void loadImages() {
     frame.setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
@@ -282,8 +283,24 @@ public class Launcher {
     lowPriorityCBx.setToolTipText("Launch the application with low process-priority (recommended, but currently only works with Windows)");
     lowPriorityCBx.setForeground(SystemColor.menu);
     lowPriorityCBx.setBackground(Color.BLACK);
-    lowPriorityCBx.setBounds(393, 20, 135, 18);
+    lowPriorityCBx.setBounds(404, 35, 135, 18);
     panel_2.add(lowPriorityCBx);
+
+    JLabel label = new JLabel();
+    label.setText("UI scale");
+    label.setPreferredSize(new Dimension(94, 22));
+    label.setForeground(Color.LIGHT_GRAY);
+    label.setFont(new Font("Dialog", Font.BOLD, 10));
+    label.setBounds(389, 5, 49, 22);
+    panel_2.add(label);
+
+    uiScaleEdit = new JTextField();
+    uiScaleEdit.setToolTipText("Scales up the UI, works best with Java9");
+    uiScaleEdit.setText("1");
+    uiScaleEdit.setPreferredSize(new Dimension(56, 22));
+    uiScaleEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+    uiScaleEdit.setBounds(438, 5, 56, 22);
+    panel_2.add(uiScaleEdit);
 
     mainPanel = new JPanel();
     mainPanel.setBackground(Color.BLACK);
@@ -495,6 +512,7 @@ public class Launcher {
     prefs.setJavaPath((String) getJdkCmb().getSelectedItem());
     prefs.setMaxMem(Integer.parseInt(getMaxMemField().getText()));
     prefs.setLowPriority(getLowPriorityCBx().isSelected());
+    prefs.setUiScale(Double.parseDouble(getUiScaleEdit().getText()));
     prefs.saveToFile();
   }
 
@@ -526,6 +544,7 @@ public class Launcher {
       getLowPriorityCBx().setEnabled(false);
       getLowPriorityCBx().setSelected(false);
     }
+    getUiScaleEdit().setText(Tools.doubleToString(prefs.getUiScale()));
   }
 
   public JComboBox getJdkCmb() {
@@ -631,5 +650,9 @@ public class Launcher {
 
   public JCheckBox getLowPriorityCBx() {
     return lowPriorityCBx;
+  }
+
+  public JTextField getUiScaleEdit() {
+    return uiScaleEdit;
   }
 }

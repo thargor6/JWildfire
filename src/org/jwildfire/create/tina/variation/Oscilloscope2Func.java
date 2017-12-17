@@ -100,6 +100,11 @@ public class Oscilloscope2Func extends VariationFunc {
   }
 
   @Override
+  public String[] getParameterAlternativeNames() {
+    return new String[] { "osco2_separation", "osco2_frequencyx", "osco2_frequencyy", "osco2_amplitude", "osco2_perturbation", "osco2_damping" };
+  }
+  
+  @Override
   public String getName() {
     return "oscilloscope2";
   }

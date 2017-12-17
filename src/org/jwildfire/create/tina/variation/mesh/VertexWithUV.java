@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.variation.mesh;
 
 public class VertexWithUV extends Vertex {
-  float u, v;
+  public float u, v;
 }
