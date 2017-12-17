@@ -2748,6 +2748,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void addFinalXForm() {
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.setColorSymmetry(1.0);
     saveUndoPoint();
     getCurrLayer().getFinalXForms().add(xForm);
     gridRefreshing = true;

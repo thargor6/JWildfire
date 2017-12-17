@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.variation;
 
 import java.util.Random;
+
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -29,7 +30,7 @@ public class PreStabilizeFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_P = "p";
   private static final String[] paramNames = { PARAM_N, PARAM_SEED, PARAM_P };
-  
+
   private int n = 4;
   private int seed = (int) (Math.random() * 100000);
   private double p = 0.1;
@@ -39,15 +40,15 @@ public class PreStabilizeFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  // pre_stabilize by Rick Sidwell, works as glitch repellent
-	  
-	  if (start || pContext.random() < p/1000) {
-		  start = false;
-		  int i = pContext.random(n);
-		  pAffineTP.x = x[i];
-		  pAffineTP.y = y[i];
-		  pAffineTP.z = 0;
-	  }	  
+    // pre_stabilize by Rick Sidwell, works as glitch repellent
+
+    if (start || pContext.random() < p / 1000) {
+      start = false;
+      int i = pContext.random(n);
+      pAffineTP.x = x[i];
+      pAffineTP.y = y[i];
+      pAffineTP.z = 0;
+    }
   }
 
   @Override
@@ -79,20 +80,21 @@ public class PreStabilizeFunc extends VariationFunc {
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-	  if (n < 1) n = 1;
-	  
-	  x = new double[n];
-	  y = new double[n];
-	  
-	  rand.setSeed(seed);
-	  
-	  for (int i=0; i<n; i++) {
-		  x[i] = rand.nextDouble() * 2 - 1;
-		  y[i] = rand.nextDouble() * 2 - 1;
-	  }
-	  
-	  start = true;
- 
+    if (n < 1)
+      n = 1;
+
+    x = new double[n];
+    y = new double[n];
+
+    rand.setSeed(seed);
+
+    for (int i = 0; i < n; i++) {
+      x[i] = rand.nextDouble() * 2 - 1;
+      y[i] = rand.nextDouble() * 2 - 1;
+    }
+
+    start = true;
+
   }
 
   @Override
