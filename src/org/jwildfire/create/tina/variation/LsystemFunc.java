@@ -636,8 +636,8 @@ public class LsystemFunc extends VariationFunc {
 
     public void goUp(double step) {
       this.step = step;
-      tx += step * Math.cos(Math.toRadians(tangle));
-      ty += step * Math.sin(Math.toRadians(tangle));
+      tx += step * MathLib.cos(Math.toRadians(tangle));
+      ty += step * MathLib.sin(Math.toRadians(tangle));
 
     }
 
@@ -649,8 +649,8 @@ public class LsystemFunc extends VariationFunc {
 
       this.step = step;
 
-      tx += step * Math.cos(Math.toRadians(tangle));
-      ty += step * Math.sin(Math.toRadians(tangle));
+      tx += step * MathLib.cos(Math.toRadians(tangle));
+      ty += step * MathLib.sin(Math.toRadians(tangle));
 
       xpoints.add(oldx);
       ypoints.add(oldy);
