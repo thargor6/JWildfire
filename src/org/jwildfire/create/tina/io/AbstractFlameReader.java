@@ -892,6 +892,7 @@ public class AbstractFlameReader {
   public static final String ATTR_POSTBLUR_FADE = "post_blur_fade";
   public static final String ATTR_POSTBLUR_FALLOFF = "post_blur_falloff";
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
+  public static final String ATTR_MIRROR_PRE_POST_TRANSLATIONS = "mirror_pre_post_translations";
 
   protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
     XMLAttributes atts = Tools.parseAttributes(pXML);
@@ -901,6 +902,10 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
       pXForm.setWeight(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_MIRROR_PRE_POST_TRANSLATIONS)) != null) {
+      double val = Double.parseDouble(hs);
+      pXForm.setMirrorTranslations(val == 1);
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));

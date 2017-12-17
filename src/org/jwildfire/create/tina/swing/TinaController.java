@@ -492,6 +492,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineScaleEditMotionCurveBtn = parameterObject.affineScaleEditMotionCurveBtn;
     data.affineEditPostTransformSmallButton = parameterObject.pAffineEditPostTransformSmallButton;
     data.affinePreserveZButton = parameterObject.pAffinePreserveZButton;
+    data.affineMirrorPrePostTranslationsButton = parameterObject.pAffineMirrorPrePostTranslationsButton;
     data.affineScaleXButton = parameterObject.pAffineScaleXButton;
     data.affineScaleYButton = parameterObject.pAffineScaleYButton;
 
@@ -2476,6 +2477,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
           data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
         }
+        if (data.affineMirrorPrePostTranslationsButton != null) { 
+          data.affineMirrorPrePostTranslationsButton.setSelected(pXForm.getMirrorTranslations());
+        }
 
         data.xFormColorREd.setText(Tools.doubleToString(pXForm.getColor()));
         data.xFormColorSlider.setValue(Tools.FTOI(pXForm.getColor() * SLIDER_SCALE_COLOR));
@@ -4301,6 +4305,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       saveUndoPoint();
       getCurrFlame().setPreserveZ(data.affinePreserveZButton.isSelected());
       refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  public void affineMirrorPrePostChanged(boolean mirror) {
+    if (this.getCurrXForm() != null) {
+      this.getCurrXForm().setMirrorTranslations(mirror);
     }
   }
 

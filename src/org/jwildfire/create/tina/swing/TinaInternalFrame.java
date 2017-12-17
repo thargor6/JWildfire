@@ -4113,6 +4113,8 @@ public class TinaInternalFrame extends JInternalFrame {
       affinePreserveZButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affinePreserveZButton.setBounds(218, 155, 104, 24);
       tinaAffineTransformationPanel.add(affinePreserveZButton);
+      // tinaAffineTransformationPanel.add(new JToggleButton("whatever"));
+      tinaAffineTransformationPanel.add(this.getAffineMirrorPrePostTranslationsButton(), null);
 
       affineRotateEditMotionCurveBtn = new JButton();
       affineRotateEditMotionCurveBtn.addActionListener(new ActionListener() {
@@ -5463,7 +5465,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformSlowButton(), getRootPanel(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(),
         getPostBlurRadiusREd(), getPostBlurRadiusSlider(), getPostBlurFadeREd(), getPostBlurFadeSlider(), getPostBlurFallOffREd(), getPostBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl,
-        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getQualityProfileCmb(), getResolutionProfileCmb(),
+        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getAffineMirrorPrePostTranslationsButton(), 
+        getQualityProfileCmb(), getResolutionProfileCmb(),
         interactiveRendererFrame.getInteractiveResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
@@ -7986,6 +7989,28 @@ public class TinaInternalFrame extends JInternalFrame {
     }
     return affineResetTransformButton;
   }
+
+  private boolean defaultMirrorPrePostTranslations = false;
+  private JToggleButton affineMirrorPrePostTranslationsButton;
+  private JToggleButton getAffineMirrorPrePostTranslationsButton() {
+    if (affineMirrorPrePostTranslationsButton == null) {
+      affineMirrorPrePostTranslationsButton = new JToggleButton();
+      affineMirrorPrePostTranslationsButton.setSelected(defaultMirrorPrePostTranslations);
+      affineMirrorPrePostTranslationsButton.setPreferredSize(new Dimension(136, 24));
+      affineMirrorPrePostTranslationsButton.setText("Mirror Translations");
+      affineMirrorPrePostTranslationsButton.setLocation(new Point(109, 185));
+      affineMirrorPrePostTranslationsButton.setSize(new Dimension(104, 24));
+      affineMirrorPrePostTranslationsButton.setToolTipText("Mirror pre- and post- translations (post reverses pre)");
+      affineMirrorPrePostTranslationsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineMirrorPrePostTranslationsButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.affineMirrorPrePostChanged(affineMirrorPrePostTranslationsButton.isSelected());
+        }
+      });
+    }
+    return affineMirrorPrePostTranslationsButton;
+  }
+
 
   /**
    * This method initializes nonlinearVar4Panel	
