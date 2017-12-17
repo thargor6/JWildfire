@@ -1,3 +1,32 @@
+/*
+JWildfire - an image and animation processor written in Java
+Copyright (C) 1995-2016 Andreas Maschke
+
+This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+General Public License as published by the Free Software Foundation; either version 2.1 of the
+License, or (at your option) any later version.
+
+This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this software;
+if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+
+/**
+ * Inversion variation by CozyG
+ *    Copyright 2017- Gregg Helt
+ *     (released under same GNU Lesser General Public License as above)
+ * Originally developed to explore several ideas that generalize 2D circle inversion:
+ *    1. different kinds of restricted inversion
+ *    2. shape inversion
+ *    3. alternative p-norms and pseudo-p-norms for distance measurements
+ * For more information on some of the ideas explored in this variation (and additional references), see the paper
+ *     "Inversive Diversions and Diversive Inversions", Gregg Helt, Bridges Conference, 2017:
+ *     http://archive.bridgesmathart.org/2017/bridges2017-467.html
+ */
 package org.jwildfire.create.tina.variation;
 
 import java.io.Serializable;
@@ -17,14 +46,6 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-/**
- * InversionFunc, a variation for shape inversion geometry transformations
- *  also includes "draw_circle" param
- *      if 0 < draw_circles < 1, then that fraction of incoming points is used to 
- *      draw circle of inversion rather than doing the actual inversion
- *  In addition to standard circle inversion, can also be used for p-circle inversion as 
- *      described by Ramirez et al in "Generating Fractal Patterns by Using P-Circle Inversion" (2015)
- */
 public class InversionFunc extends VariationFunc {
   // public class InversionFunc extends VariationFunc implements Guides {
   private static final long serialVersionUID = 1L;
@@ -48,7 +69,7 @@ public class InversionFunc extends VariationFunc {
   public static final String PARAM_PNORM_PMOD = "pnorm_pmod";
   public static final String PARAM_PNORM_SMOD = "pnorm_smod";
   
-  public static final String PARAM_DRAW_CIRCLE = "draw_shape";
+  public static final String PARAM_DRAW_SHAPE = "draw_shape";
   public static final String PARAM_SHAPE_THICKNESS = "shape_thickness";
   public static final String PARAM_GUIDES_ENABLED = "guides_enabled";
   public static final String PARAM_PASSTHROUGH = "passthrough";
@@ -59,16 +80,13 @@ public class InversionFunc extends VariationFunc {
   private static final String PARAM_COLOR_HIGH_THRESH = "color_high_threshold";
   
   private static final String[] paramNames = { 
-    PARAM_SCALE, PARAM_ROTATION, 
-    PARAM_SHAPE, 
+    PARAM_SCALE, PARAM_ROTATION, PARAM_SHAPE, 
     PARAM_INVERSION_MODE, PARAM_HIDE_UNINVERTED, 
-    PARAM_RING_MODE, 
-    PARAM_RING_SCALE,
-    PARAM_PNORM_POINT, PARAM_PNORM_SHAPE, PARAM_PNORM_PMOD, PARAM_PNORM_SMOD,  
-    PARAM_DRAW_CIRCLE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
     PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, 
-    PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, 
-    PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH
+    PARAM_RING_MODE, PARAM_RING_SCALE,
+    PARAM_PNORM_POINT, PARAM_PNORM_SHAPE, PARAM_PNORM_PMOD, PARAM_PNORM_SMOD,  
+    PARAM_DRAW_SHAPE, PARAM_SHAPE_THICKNESS, PARAM_PASSTHROUGH, PARAM_GUIDES_ENABLED, 
+    PARAM_DIRECT_COLOR_MEASURE, PARAM_DIRECT_COLOR_GRADIENT, PARAM_COLOR_LOW_THRESH, PARAM_COLOR_HIGH_THRESH
   };
   
   public static int IGNORE_RING = 0;
@@ -115,10 +133,8 @@ public class InversionFunc extends VariationFunc {
     public double x;
     public double y;
     public double r;
-    // public double t;
   }
 
-  // abstract class ParametricShape {
   abstract class ParametricShape implements Serializable {
     public PolarPoint2D ptemp = new PolarPoint2D();
     public abstract void getCurvePoint(double t, PolarPoint2D point);
@@ -262,10 +278,6 @@ public class InversionFunc extends VariationFunc {
     }
   }
   
-  
-  /**
-   * 
-   */
   class SuperShape extends ParametricShape {
     @Override
     public double getPeriod() {
@@ -469,7 +481,6 @@ public class InversionFunc extends VariationFunc {
       if (rnd < passthrough) {
         pVarTP.x += xin;
         pVarTP.y += yin;
-        pVarTP.z += zin;
         return;
       }
     }
@@ -480,7 +491,7 @@ public class InversionFunc extends VariationFunc {
     // then output point P' = O + (d1(O,B)^2/d2(O,P)^2) * (P - O)
     // where d1 and d2 are distance metric functions 
     double tin = atan2(yin, xin);
-    double rin = sqrt(xin*xin + yin*yin + zin*zin);
+    double rin = sqrt(xin*xin + yin*yin);
     boolean do_inversion;
     shape.getMaxCurvePoint(tin, curve_point);
     double rcurve = curve_point.r;
@@ -529,17 +540,20 @@ public class InversionFunc extends VariationFunc {
       
       double xout = iscale * xin;
       double yout = iscale * yin;
-      double zout = iscale * zin;
       pVarTP.x += pAmount * xout;
       pVarTP.y += pAmount * yout;
-      pVarTP.z += pAmount * zout;
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * zin;
+      }
       pVarTP.doHide = false;
       setColor(srcPoint, dstPoint, curve_point, pAmount);
     }
     else { // if didn't do inversion, check to see if should hide
       pVarTP.x += xin;
       pVarTP.y += yin;
-      pVarTP.z += zin;
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += zin;
+      }
       pVarTP.doHide = hide_uninverted;
     }
   }
@@ -666,16 +680,13 @@ public class InversionFunc extends VariationFunc {
   @Override
   public Object[] getParameterValues() {
     return new Object[] { 
-      scale, 
-      rotation_pi_fraction, 
-      shape_mode, 
+      scale, rotation_pi_fraction, shape_mode, 
       inversion_mode, hide_uninverted ? 1 : 0, 
+      a, b, c, d, e, f, 
       ring_mode, ring_scale, 
       pnorm_point, pnorm_shape, pnorm_pmod, pnorm_smod,  
       draw_shape, shape_thickness, passthrough, guides_enabled ? 1 : 0, 
-      a, b, c, d, e, f, 
-      direct_color_measure, direct_color_gradient, 
-      color_low_thresh, color_high_thresh
+      direct_color_measure, direct_color_gradient, color_low_thresh, color_high_thresh
     };
     
   }
@@ -715,7 +726,7 @@ public class InversionFunc extends VariationFunc {
     else if (PARAM_HIDE_UNINVERTED.equalsIgnoreCase(pName)) {
       hide_uninverted = (pValue == 1) ? true : false;
     }
-    else if (PARAM_DRAW_CIRCLE.equalsIgnoreCase(pName)) {
+    else if (PARAM_DRAW_SHAPE.equalsIgnoreCase(pName)) {
       draw_shape = pValue;
     }
     else if (PARAM_SHAPE_THICKNESS.equalsIgnoreCase(pName)) {
