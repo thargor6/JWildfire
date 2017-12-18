@@ -122,4 +122,14 @@ public class DCCracklePWFFunc extends DCCrackleWFFunc {
         super.setParameter(pName, pValue);
   }
 
+  @Override
+  public boolean dynamicParameterExpansion() { return true; }
+  
+  @Override
+  public boolean dynamicParameterExpansion(String pName) {
+	  // preset doesn't really expand parameters, but it changes them; this will make them refresh
+	  if (PARAM_PRESET.equalsIgnoreCase(pName))  return true;
+	  else return false;
+  }
+
 }
