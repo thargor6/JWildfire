@@ -25,7 +25,7 @@ public class DCCrackleWFFunc extends CrackleFunc {
   private static final String PARAM_COLOR_SCALE = "color_scale";
   private static final String PARAM_COLOR_OFFSET = "color_offset";
 
-  private static final String[] additionalParamNames = { PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET };
+  protected static final String[] additionalParamNames = { PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET };
 
   private double colorScale = 0.5;
   private double colorOffset = 0.0;
