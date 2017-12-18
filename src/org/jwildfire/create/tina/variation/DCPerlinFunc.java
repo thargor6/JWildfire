@@ -83,44 +83,51 @@ public class DCPerlinFunc extends VariationFunc {
     do {
       // Default edge value
       e = 0.0;
+      // When pAmount is 0, use for coloring only, so no shape
+      if (pAmount == 0) {
+    	  Vx = pAffineTP.x;
+    	  Vy = pAffineTP.y;
+      }
+      else {
       // Assign Vx, Vy according to shape
-      switch (shape) {
-        case SHAPE_SQUARE:
-          Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
-          Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
-          r = Vx * Vx > Vy * Vy ? Vx : Vy;
-          if (r > 1.0 - this.edge) {
-            e = 0.5 * (r - 1.0 + this.edge) / this.edge;
-          }
-          break;
+          switch (shape) {
+            case SHAPE_SQUARE:
+              Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
+              Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
+              r = Vx * Vx > Vy * Vy ? Vx : Vy;
+              if (r > 1.0 - this.edge) {
+                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+              }
+              break;
 
-        case SHAPE_DISC:
-          r = pContext.random() + pContext.random();
-          r = (r > 1.0) ? 2.0 - r : r;
-          r *= (1.0 + this.edge);
-          if (r > 1.0 - this.edge) {
-            e = 0.5 * (r - 1.0 + this.edge) / this.edge;
-          }
-          theta = pContext.random() * M_2PI;
-          s = sin(theta);
-          c = cos(theta);
-          Vx = 0.5 * r * s;
-          Vy = 0.5 * r * c;
-          break;
+            case SHAPE_DISC:
+              r = pContext.random() + pContext.random();
+              r = (r > 1.0) ? 2.0 - r : r;
+              r *= (1.0 + this.edge);
+              if (r > 1.0 - this.edge) {
+                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+              }
+              theta = pContext.random() * M_2PI;
+              s = sin(theta);
+              c = cos(theta);
+              Vx = 0.5 * r * s;
+              Vy = 0.5 * r * c;
+              break;
 
-        case SHAPE_BLUR:
-          r = (1.0 + this.edge) * pContext.random();
-          if (r > 1.0 - this.edge) {
-            e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+            case SHAPE_BLUR:
+              r = (1.0 + this.edge) * pContext.random();
+              if (r > 1.0 - this.edge) {
+                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+              }
+              theta = pContext.random() * M_2PI;
+              s = sin(theta);
+              c = cos(theta);
+              Vx = 0.5 * r * s;
+              Vy = 0.5 * r * c;
+              break;
+            default: // nothing to do
+              break;
           }
-          theta = pContext.random() * M_2PI;
-          s = sin(theta);
-          c = cos(theta);
-          Vx = 0.5 * r * s;
-          Vy = 0.5 * r * c;
-          break;
-        default: // nothing to do
-          break;
       }
 
       // Assign V for noise vector position according to map
