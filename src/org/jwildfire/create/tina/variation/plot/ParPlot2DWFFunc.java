@@ -446,4 +446,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
     }
     return res;
   }
+
+  @Override
+  public boolean dynamicParameterExpansion() { return true; }
+  
+  @Override
+  public boolean dynamicParameterExpansion(String pName) {
+	  // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
+	  if (PARAM_PRESET_ID.equalsIgnoreCase(pName))  return true;
+	  else return false;
+  }
+
 }

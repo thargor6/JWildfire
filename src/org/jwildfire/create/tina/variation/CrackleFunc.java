@@ -50,15 +50,15 @@ public class CrackleFunc extends VariationFunc {
   public static final String PARAM_POWER = "power";
   public static final String PARAM_DISTORT = "distort";
   public static final String PARAM_SCALE = "scale";
-  private static final String PARAM_Z = "z";
+  public static final String PARAM_Z = "z";
 
   protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z };
 
-  private double cellsize = 1.0;
-  private double power = 0.2;
-  private double distort = 0.0;
-  private double scale = 1.0;
-  private double z = 0.0;
+  protected double cellsize = 1.0;
+  protected double power = 0.2;
+  protected double distort = 0.0;
+  protected double scale = 1.0;
+  protected double z = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -74,14 +74,21 @@ public class CrackleFunc extends VariationFunc {
     // Scaling factor
     s = cellsize / 2.0;
 
-    // For a blur effect, base everything starting on a circle radius 1.0
-    // (as opposed to reading the values from FTx and FTy)
-    double blurr = (pContext.random() + pContext.random()) / 2.0 + (pContext.random() - 0.5) / 4.0;
+    if (pAmount != 0) {
+        // For a blur effect, base everything starting on a circle radius 1.0
+        // (as opposed to reading the values from FTx and FTy)
+        double blurr = (pContext.random() + pContext.random()) / 2.0 + (pContext.random() - 0.5) / 4.0;
 
-    double theta = 2 * M_PI * pContext.random();
+        double theta = 2 * M_PI * pContext.random();
 
-    U[_x_] = blurr * sin(theta);
-    U[_y_] = blurr * cos(theta);
+        U[_x_] = blurr * sin(theta);
+        U[_y_] = blurr * cos(theta);
+    }
+    else {
+    	// pAmount=0, so color only (DC versions; won't affect normal one); don't blur
+    	U[_x_] = pAffineTP.x;
+    	U[_y_] = pAffineTP.y;
+    }
 
     // Use integer values as Voronoi grid co-ordinates
     XCv = (int) floor(U[_x_] / s);
