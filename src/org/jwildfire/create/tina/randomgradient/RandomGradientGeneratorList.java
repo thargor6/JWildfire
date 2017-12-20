@@ -32,6 +32,7 @@ public class RandomGradientGeneratorList {
     registerRandomGradientGenerator(StripesRandomGradientGenerator.class);
     registerRandomGradientGenerator(MonochromeRandomGradientGenerator.class);
     registerRandomGradientGenerator(SmoothRandomGradientGenerator.class);
+    registerRandomGradientGenerator(BoldRandomGradientGenerator.class);
     registerRandomGradientGenerator(TwoColorsRandomGradientGenerator.class);
     nameList = new ArrayList<String>();
     for (Class<? extends RandomGradientGenerator> funcCls : items) {
