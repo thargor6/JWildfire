@@ -597,7 +597,7 @@ public class TinaInternalFrame extends JInternalFrame {
       addPopup(randomBatchPanel, getThumbnailSelectPopupMenu());
       addPopup(randomBatchPanel, getThumbnailRemovePopupMenu());
       randomBatchPanel.setLayout(new BorderLayout());
-      randomBatchPanel.setPreferredSize(new Dimension(128, 0));
+      randomBatchPanel.setPreferredSize(new Dimension(138, 0));
       randomBatchPanel.setVisible(true);
     }
     return randomBatchPanel;
@@ -8001,7 +8001,7 @@ public class TinaInternalFrame extends JInternalFrame {
       affineMirrorPrePostTranslationsButton.setText("Mirror Translations");
       affineMirrorPrePostTranslationsButton.setLocation(new Point(109, 185));
       affineMirrorPrePostTranslationsButton.setSize(new Dimension(104, 24));
-      affineMirrorPrePostTranslationsButton.setToolTipText("Mirror pre- and post- translations (post reverses pre)");
+      affineMirrorPrePostTranslationsButton.setToolTipText("EXPERIMENTAL: Mirror pre- and post- translations (post reverses pre)");
       affineMirrorPrePostTranslationsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineMirrorPrePostTranslationsButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
