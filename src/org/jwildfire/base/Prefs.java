@@ -148,6 +148,8 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_COLORMAP_RANDGEN_IMAGE_PATH = "tina.random_batch.random_gen.colormap.image_path";
   public static final String KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER = "tina.free_cache_in_batch_renderer";
 
+  public static final String KEY_TINA_EXCLUDED_VARIATIONS = "tina.excluded_variations";
+
   public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.6";
   public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
   public static final String KEY_TINA_MACRO_TOOLBAR_WIDTH = "tina.toolbar.macro.width";
@@ -397,6 +399,7 @@ public class Prefs extends ManagedObject {
   private final List<QualityProfile> qualityProfiles = new ArrayList<QualityProfile>();
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
+  private final List<String> tinaExcludedVariations = new ArrayList<>();
 
   private boolean createTinaDefaultMacroButtons = true;
   private final List<MacroButton> tinaMacroButtons = new ArrayList<MacroButton>();
@@ -817,6 +820,10 @@ public class Prefs extends ManagedObject {
     for (WindowPrefs prefs : pSrc.windowPrefs) {
       windowPrefs.add((WindowPrefs) prefs.makeCopy());
     }
+    tinaExcludedVariations.clear();
+    for (String variation : pSrc.getTinaExcludedVariations()) {
+      tinaExcludedVariations.add(variation);
+    }
 
     createTinaDefaultMacroButtons = pSrc.createTinaDefaultMacroButtons;
     tinaMacroToolbarWidth = pSrc.tinaMacroToolbarWidth;
@@ -963,6 +970,7 @@ public class Prefs extends ManagedObject {
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FLAMES_GPU));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_LIST_OF_CHANGES));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_GPU_RENDERING));
+    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_VARIATIONSSETTINGS));
   }
 
   protected List<WindowPrefs> getWindowPrefs() {
@@ -1632,6 +1640,17 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFACLRenderOptions(String pTinaFACLRenderOptions) {
     tinaFACLRenderOptions = pTinaFACLRenderOptions;
+  }
+
+  public void setTinaExcludedVariations(List<String> pTinaExcludedVariations) {
+    tinaExcludedVariations.clear();
+    if (pTinaExcludedVariations != null) {
+      tinaExcludedVariations.addAll(pTinaExcludedVariations);
+    }
+  }
+
+  public List<String> getTinaExcludedVariations() {
+    return tinaExcludedVariations;
   }
 
 }

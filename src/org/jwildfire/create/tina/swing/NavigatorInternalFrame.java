@@ -89,6 +89,7 @@ public class NavigatorInternalFrame extends JInternalFrame {
     windows.add(new WindowEntry("Batch", "/org/jwildfire/swing/icons/new/images.png", BatchFlameRendererInternalFrame.class));
     windows.add(new WindowEntry("MutaGen", "/org/jwildfire/swing/icons/new/kdissert.png", MutaGenInternalFrame.class));
     windows.add(new WindowEntry("3DMesh", "/org/jwildfire/swing/icons/new/sports-soccer.png", MeshGenInternalFrame.class));
+    windows.add(new WindowEntry("Variations", "/org/jwildfire/swing/icons/new/oscilloscope.png", VariationsSettingsInternalFrame.class));
     if (FACLRenderTools.isFaclRenderAvalailable()) {
       windows.add(new WindowEntry("GPURender", "/org/jwildfire/swing/icons/new/opencl.png", FlamesGPURenderInternalFrame.class));
     }

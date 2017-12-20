@@ -31,6 +31,7 @@ public class TinaNonlinearControlsRow {
   private TinaController tinaController;
   private final int index;
   private final JPanel rootPanel;
+  private final JLabel nonlinearVarLbl;
   private final JComboBox nonlinearVarCmb;
   private final JComboBox nonlinearParamsCmb;
   private final JWFNumberField nonlinearVarREd;
@@ -47,13 +48,14 @@ public class TinaNonlinearControlsRow {
   private int extraPanelSize;
   private boolean noRefresh;
 
-  public TinaNonlinearControlsRow(int pIndex, JPanel pRootPanel, JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
+  public TinaNonlinearControlsRow(int pIndex, JPanel pRootPanel, JLabel pNonlinearVarLbl, JComboBox pNonlinearVarCmb, JComboBox pNonlinearParamsCmb, JWFNumberField pNonlinearVarREd, JWFNumberField pNonlinearParamsREd,
       JButton pNonlinearParamsLeftButton, JToggleButton pNonlinearParamsPreButton, JToggleButton pNonlinearParamsPostButton, JButton pNonlinearParamsUpButton,
       JToggleButton pToggleParamsPnlButton) {
     index = pIndex;
     rootPanel = pRootPanel;
     rootPnlBaseWidth = rootPanel.getPreferredSize().width;
     rootPnlBaseHeight = rootPanel.getPreferredSize().height;
+    nonlinearVarLbl = pNonlinearVarLbl;
     nonlinearVarCmb = pNonlinearVarCmb;
     nonlinearParamsCmb = pNonlinearParamsCmb;
     nonlinearVarREd = pNonlinearVarREd;
@@ -66,14 +68,7 @@ public class TinaNonlinearControlsRow {
   }
 
   public void initControls() {
-    nonlinearVarCmb.removeAllItems();
-    List<String> nameList = new ArrayList<String>();
-    nameList.addAll(VariationFuncList.getNameList());
-    Collections.sort(nameList);
-    nonlinearVarCmb.addItem(null);
-    for (String name : nameList) {
-      nonlinearVarCmb.addItem(name);
-    }
+    initVariationCmb();
     nonlinearVarCmb.setSelectedIndex(-1);
 
     nonlinearParamsCmb.removeAllItems();
@@ -81,6 +76,22 @@ public class TinaNonlinearControlsRow {
 
     nonlinearParamsPreButton.setSelected(false);
     nonlinearParamsPostButton.setSelected(false);
+  }
+
+  public void initVariationCmb() {
+    nonlinearVarCmb.removeAllItems();
+    List<String> nameList = new ArrayList<String>();
+    nameList.addAll(VariationFuncList.getNameList());
+    Collections.sort(nameList);
+
+    List<String> excludedNames = VariationFuncList.getExcludedNameList();
+
+    nonlinearVarCmb.addItem(null);
+    for (String name : nameList) {
+      if (!excludedNames.contains(name)) {
+        nonlinearVarCmb.addItem(name);
+      }
+    }
   }
 
   public JComboBox getNonlinearVarCmb() {
@@ -418,6 +429,10 @@ public class TinaNonlinearControlsRow {
 
   public void setNoRefresh(boolean pNoRefresh) {
     noRefresh = pNoRefresh;
+  }
+
+  public JLabel getNonlinearVarLbl() {
+    return nonlinearVarLbl;
   }
 
 }

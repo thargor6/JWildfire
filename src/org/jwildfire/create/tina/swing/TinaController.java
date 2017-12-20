@@ -36,6 +36,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.font.TextAttribute;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +47,7 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -2477,7 +2479,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           data.affineC20REd.setText(Tools.doubleToString(pXForm.getCoeff20()));
           data.affineC21REd.setText(Tools.doubleToString(pXForm.getCoeff21()));
         }
-        if (data.affineMirrorPrePostTranslationsButton != null) { 
+        if (data.affineMirrorPrePostTranslationsButton != null) {
           data.affineMirrorPrePostTranslationsButton.setSelected(pXForm.getMirrorTranslations());
         }
 
@@ -2610,6 +2612,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
 
       pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
+      if (pRow.getNonlinearVarCmb().getSelectedIndex() < 0) {
+        pRow.getNonlinearVarCmb().addItem(varFunc.getName());
+        pRow.getNonlinearVarCmb().setSelectedItem(varFunc.getName());
+        pRow.getNonlinearVarLbl().getFont().getStyle();
+      }
+
+      if (VariationFuncList.getExcludedNameList().contains(varFunc.getName())) {
+        Font font = pRow.getNonlinearVarLbl().getFont();
+        Map attributes = font.getAttributes();
+        if (!attributes.containsKey(TextAttribute.STRIKETHROUGH)) {
+          attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+          pRow.getNonlinearVarLbl().setFont(new Font(attributes));
+        }
+      }
+      else {
+        Font font = pRow.getNonlinearVarLbl().getFont();
+        Map attributes = font.getAttributes();
+        if (attributes.containsKey(TextAttribute.STRIKETHROUGH)) {
+          attributes.remove(TextAttribute.STRIKETHROUGH);
+          pRow.getNonlinearVarLbl().setFont(new Font(attributes));
+        }
+      }
+
       pRow.getNonlinearVarREd().setText(Tools.doubleToString(pVar.getAmount()));
       pRow.getNonlinearParamsCmb().removeAllItems();
       // ressources
@@ -2685,7 +2710,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       else {
         xForm.getModifiedWeights()[toId] = 0;
-        if (i == toId) xForm.setColorSymmetry(1.0);
+        if (i == toId)
+          xForm.setColorSymmetry(1.0);
       }
     }
     refreshFlameImage(true, false, 1, true, false);
@@ -3109,10 +3135,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
           if (var.getFunc().dynamicParameterExpansion(pPropertyName)) {
-              // if setting the parameter can change the total number of parameters, 
-              //    then refresh parameter UI
-              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
-            }
+            // if setting the parameter can change the total number of parameters, 
+            //    then refresh parameter UI
+            this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+          }
           refreshFlameImage(true, false, 1, true, false);
         }
       }
@@ -6650,6 +6676,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (thumbnail.getSelectCheckbox() != null) {
         thumbnail.getSelectCheckbox().setSelected(false);
       }
+    }
+  }
+
+  public void initNonlinearVariationCmb() {
+    for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
+      row.initVariationCmb();
     }
   }
 

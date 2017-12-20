@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
@@ -36,6 +37,7 @@ public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
+  private static List<String> excludedNameList = null;
   private static List<String> filteredNameList = null;
   private static Map<Class<? extends VariationFunc>, String> aliasMap = new HashMap<Class<? extends VariationFunc>, String>();
   private static final Map<String, String> resolvedAliasMap;
@@ -482,7 +484,7 @@ public class VariationFuncList {
     registerVariationFunc(PlaneWFFunc.class);
     registerVariationFunc(CheckerboardWFFunc.class);
     registerVariationFunc(IsoSFPlot3DWFFunc.class);
-    
+
     registerVariationFunc(DLA3DWFFunc.class);
 
     registerVariationFunc(Waves2RadialFunc.class);
@@ -597,7 +599,7 @@ public class VariationFuncList {
     registerVariationFunc(PreStabilizeFunc.class);
     registerVariationFunc(PreSphericalFunc.class);
     registerVariationFunc(PostSphericalFunc.class);
-    
+
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
 
@@ -655,11 +657,26 @@ public class VariationFuncList {
     }
   }
 
+  private static void refreshExcludedNameList() {
+    excludedNameList = new ArrayList<String>(Prefs.getPrefs().getTinaExcludedVariations());
+  }
+
   public static List<String> getNameList() {
     if (filteredNameList == null) {
       refreshNameList();
     }
     return filteredNameList;
+  }
+
+  public static List<String> getExcludedNameList() {
+    if (excludedNameList == null) {
+      refreshExcludedNameList();
+    }
+    return excludedNameList;
+  }
+
+  public static void invalidateExcludedNameList() {
+    excludedNameList = null;
   }
 
   private static List<String> getUnfilteredNameList() {

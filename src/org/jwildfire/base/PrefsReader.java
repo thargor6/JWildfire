@@ -20,7 +20,9 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -53,6 +55,22 @@ public class PrefsReader {
   private double getDoubleProperty(Properties pProperties, String pKey, double pDefaultValue) {
     String val = pProperties.getProperty(pKey, "").trim();
     return val.length() > 0 ? Tools.stringToDouble(val) : pDefaultValue;
+  }
+
+  private List<String> getListProperty(Properties pProperties, String pKey, List<String> pDefaultValue) {
+    String valStr = pProperties.getProperty(pKey, "").trim();
+    List<String> res = new ArrayList<>();
+    if (!valStr.isEmpty()) {
+      StringTokenizer tokenizer = new StringTokenizer(valStr, ",");
+      while (tokenizer.hasMoreElements()) {
+        res.add(decodeListEntry((String) tokenizer.nextElement()).trim());
+      }
+    }
+    return res;
+  }
+
+  private String decodeListEntry(String entry) {
+    return entry.replace("\\\\", "\\").replace("\\,", ",");
   }
 
   private Color getColorProperty(Properties pProperties, String pKey, Color pDefaultValue) {
@@ -317,7 +335,9 @@ public class PrefsReader {
         }
         //
         pPrefs.setSunflowScenePath(getProperty(props, Prefs.KEY_SUNFLOW_PATH_SCENES, pPrefs.getSunflowScenePath()));
+        pPrefs.setTinaExcludedVariations(getListProperty(props, Prefs.KEY_TINA_EXCLUDED_VARIATIONS, pPrefs.getTinaExcludedVariations()));
         //
+
       }
       finally {
         inputStream.close();

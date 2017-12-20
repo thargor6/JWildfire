@@ -18,6 +18,7 @@ package org.jwildfire.base;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.List;
 
 public class PrefsWriter {
 
@@ -170,6 +171,8 @@ public class PrefsWriter {
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_MACRO + "." + i, macroButton.getMacro());
       addValue(sb, MacroButton.KEY_MACRO_BUTTON_INTERNAL + "." + i, macroButton.isInternal());
     }
+    // excluded variations
+    addValue(sb, Prefs.KEY_TINA_EXCLUDED_VARIATIONS, pPrefs.getTinaExcludedVariations());
     //
     Tools.writeUTF8Textfile(System.getProperty("user.home") + File.separator + Prefs.PREFS_FILE, sb.toString());
   }
@@ -193,4 +196,20 @@ public class PrefsWriter {
   private void addValue(StringBuilder pSB, String pKey, Color pValue) {
     pSB.append(pKey + "=" + "[" + pValue.getRed() + ", " + pValue.getGreen() + ", " + pValue.getBlue() + "]" + "\n");
   }
+
+  private void addValue(StringBuilder pSB, String pKey, List<String> pValues) {
+    StringBuilder valueBuffer = new StringBuilder();
+    for (String entry : pValues) {
+      if (valueBuffer.length() > 0) {
+        valueBuffer.append(", ");
+      }
+      valueBuffer.append(encodeListEntry(entry));
+    }
+    pSB.append(pKey + "=" + valueBuffer.toString() + "\n");
+  }
+
+  private String encodeListEntry(String entry) {
+    return entry.replace("\\", "\\\\").replace(",", "\\,");
+  }
+
 }

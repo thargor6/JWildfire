@@ -5309,40 +5309,40 @@ public class TinaInternalFrame extends JInternalFrame {
       DancingFlamesInternalFrame dancingFlamesFrame, BatchFlameRendererInternalFrame batchFlameRendererFrame,
       MeshGenInternalFrame meshGenFrame, InteractiveRendererInternalFrame interactiveRendererFrame, FlamesGPURenderInternalFrame gpuRendererFrame, HelpInternalFrame helpFrame) {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
-    nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
+    nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), nonlinearVar1Lbl, getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null,
         getNonlinearParams1ToggleParamsPnlButton());
-    nonlinearControlsRows[1] = new TinaNonlinearControlsRow(1, getNonlinearVar2Panel(), getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
+    nonlinearControlsRows[1] = new TinaNonlinearControlsRow(1, getNonlinearVar2Panel(), nonlinearVar2Lbl, getNonlinearVar2Cmb(), getNonlinearParams2Cmb(), getNonlinearVar2REd(),
         getNonlinearParams2REd(), getNonlinearParams2LeftButton(), getNonlinearParams2PreButton(), getNonlinearParams2PostButton(), getNonlinearParams2UpButton(),
         getNonlinearParams2ToggleParamsPnlButton());
-    nonlinearControlsRows[2] = new TinaNonlinearControlsRow(2, getNonlinearVar3Panel(), getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
+    nonlinearControlsRows[2] = new TinaNonlinearControlsRow(2, getNonlinearVar3Panel(), nonlinearVar3Lbl, getNonlinearVar3Cmb(), getNonlinearParams3Cmb(), getNonlinearVar3REd(),
         getNonlinearParams3REd(), getNonlinearParams3LeftButton(), getNonlinearParams3PreButton(), getNonlinearParams3PostButton(), getNonlinearParams3UpButton(),
         getNonlinearParams3ToggleParamsPnlButton());
-    nonlinearControlsRows[3] = new TinaNonlinearControlsRow(3, getNonlinearVar4Panel(), getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
+    nonlinearControlsRows[3] = new TinaNonlinearControlsRow(3, getNonlinearVar4Panel(), nonlinearVar4Lbl, getNonlinearVar4Cmb(), getNonlinearParams4Cmb(), getNonlinearVar4REd(),
         getNonlinearParams4REd(), getNonlinearParams4LeftButton(), getNonlinearParams4PreButton(), getNonlinearParams4PostButton(), getNonlinearParams4UpButton(),
         getNonlinearParams4ToggleParamsPnlButton());
-    nonlinearControlsRows[4] = new TinaNonlinearControlsRow(4, getNonlinearVar5Panel(), getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
+    nonlinearControlsRows[4] = new TinaNonlinearControlsRow(4, getNonlinearVar5Panel(), nonlinearVar5Lbl, getNonlinearVar5Cmb(), getNonlinearParams5Cmb(), getNonlinearVar5REd(),
         getNonlinearParams5REd(), getNonlinearParams5LeftButton(), getNonlinearParams5PreButton(), getNonlinearParams5PostButton(), getNonlinearParams5UpButton(),
         getNonlinearParams5ToggleParamsPnlButton());
-    nonlinearControlsRows[5] = new TinaNonlinearControlsRow(5, getNonlinearVar6Panel(), getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
+    nonlinearControlsRows[5] = new TinaNonlinearControlsRow(5, getNonlinearVar6Panel(), nonlinearVar6Lbl, getNonlinearVar6Cmb(), getNonlinearParams6Cmb(), getNonlinearVar6REd(),
         getNonlinearParams6REd(), getNonlinearParams6LeftButton(), getNonlinearParams6PreButton(), getNonlinearParams6PostButton(), getNonlinearParams6UpButton(),
         getNonlinearParams6ToggleParamsPnlButton());
-    nonlinearControlsRows[6] = new TinaNonlinearControlsRow(6, getNonlinearVar7Panel(), getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
+    nonlinearControlsRows[6] = new TinaNonlinearControlsRow(6, getNonlinearVar7Panel(), nonlinearVar7Lbl, getNonlinearVar7Cmb(), getNonlinearParams7Cmb(), getNonlinearVar7REd(),
         getNonlinearParams7REd(), getNonlinearParams7LeftButton(), getNonlinearParams7PreButton(), getNonlinearParams7PostButton(), getNonlinearParams7UpButton(),
         getNonlinearParams7ToggleParamsPnlButton());
-    nonlinearControlsRows[7] = new TinaNonlinearControlsRow(7, getNonlinearVar8Panel(), getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
+    nonlinearControlsRows[7] = new TinaNonlinearControlsRow(7, getNonlinearVar8Panel(), nonlinearVar8Lbl, getNonlinearVar8Cmb(), getNonlinearParams8Cmb(), getNonlinearVar8REd(),
         getNonlinearParams8REd(), getNonlinearParams8LeftButton(), getNonlinearParams8PreButton(), getNonlinearParams8PostButton(), getNonlinearParams8UpButton(),
         getNonlinearParams8ToggleParamsPnlButton());
-    nonlinearControlsRows[8] = new TinaNonlinearControlsRow(8, getNonlinearVar9Panel(), getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
+    nonlinearControlsRows[8] = new TinaNonlinearControlsRow(8, getNonlinearVar9Panel(), nonlinearVar9Lbl, getNonlinearVar9Cmb(), getNonlinearParams9Cmb(), getNonlinearVar9REd(),
         getNonlinearParams9REd(), getNonlinearParams9LeftButton(), getNonlinearParams9PreButton(), getNonlinearParams9PostButton(), getNonlinearParams9UpButton(),
         getNonlinearParams9ToggleParamsPnlButton());
-    nonlinearControlsRows[9] = new TinaNonlinearControlsRow(9, getNonlinearVar10Panel(), getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
+    nonlinearControlsRows[9] = new TinaNonlinearControlsRow(9, getNonlinearVar10Panel(), nonlinearVar10Lbl, getNonlinearVar10Cmb(), getNonlinearParams10Cmb(), getNonlinearVar10REd(),
         getNonlinearParams10REd(), getNonlinearParams10LeftButton(), getNonlinearParams10PreButton(), getNonlinearParams10PostButton(), getNonlinearParams10UpButton(),
         getNonlinearParams10ToggleParamsPnlButton());
-    nonlinearControlsRows[10] = new TinaNonlinearControlsRow(10, getNonlinearVar11Panel(), getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
+    nonlinearControlsRows[10] = new TinaNonlinearControlsRow(10, getNonlinearVar11Panel(), nonlinearVar11Lbl, getNonlinearVar11Cmb(), getNonlinearParams11Cmb(), getNonlinearVar11REd(),
         getNonlinearParams11REd(), getNonlinearParams11LeftButton(), getNonlinearParams11PreButton(), getNonlinearParams11PostButton(), getNonlinearParams11UpButton(),
         getNonlinearParams11ToggleParamsPnlButton());
-    nonlinearControlsRows[11] = new TinaNonlinearControlsRow(11, getNonlinearVar12Panel(), getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
+    nonlinearControlsRows[11] = new TinaNonlinearControlsRow(11, getNonlinearVar12Panel(), nonlinearVar12Lbl, getNonlinearVar12Cmb(), getNonlinearParams12Cmb(), getNonlinearVar12REd(),
         getNonlinearParams12REd(), getNonlinearParams12LeftButton(), getNonlinearParams12PreButton(), getNonlinearParams12PostButton(), getNonlinearParams12UpButton(),
         getNonlinearParams12ToggleParamsPnlButton());
 
@@ -5465,7 +5465,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getMouseTransformSlowButton(), getRootPanel(), getAffineFlipHorizontalButton(), getAffineFlipVerticalButton(),
         getPostBlurRadiusREd(), getPostBlurRadiusSlider(), getPostBlurFadeREd(), getPostBlurFadeSlider(), getPostBlurFallOffREd(), getPostBlurFallOffSlider(),
         getAffineScaleXButton(), getAffineScaleYButton(), gradientLibraryThumbnailPnl,
-        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getAffineMirrorPrePostTranslationsButton(), 
+        getToggleVariationsButton(), getToggleTransparencyButton(), getAffinePreserveZButton(), getAffineMirrorPrePostTranslationsButton(),
         getQualityProfileCmb(), getResolutionProfileCmb(),
         interactiveRendererFrame.getInteractiveResolutionProfileCmb(), getTinaRenderFlameButton(), getRenderMainButton(), getTinaAppendToMovieButton(),
         getTransformationWeightREd(), getUndoButton(), getRedoButton(),
@@ -7992,6 +7992,7 @@ public class TinaInternalFrame extends JInternalFrame {
 
   private boolean defaultMirrorPrePostTranslations = false;
   private JToggleButton affineMirrorPrePostTranslationsButton;
+
   private JToggleButton getAffineMirrorPrePostTranslationsButton() {
     if (affineMirrorPrePostTranslationsButton == null) {
       affineMirrorPrePostTranslationsButton = new JToggleButton();
@@ -8010,7 +8011,6 @@ public class TinaInternalFrame extends JInternalFrame {
     }
     return affineMirrorPrePostTranslationsButton;
   }
-
 
   /**
    * This method initializes nonlinearVar4Panel	

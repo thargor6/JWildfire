@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2017 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -79,6 +79,7 @@ import org.jwildfire.create.tina.swing.NavigatorInternalFrame;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.create.tina.swing.VariationsSettingsInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.transform.BalancingTransformer;
@@ -100,6 +101,7 @@ public class JWildfire extends JApplet {
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
     mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
+    mainInternalFrames.add(new DefaultInternalFrameHolder<>(VariationsSettingsInternalFrame.class, this, WindowPrefs.WINDOW_VARIATIONSSETTINGS, "Fractal flames: Variations settings"));
     if (FACLRenderTools.isFaclRenderAvalailable()) {
       mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
     }
@@ -225,6 +227,7 @@ public class JWildfire extends JApplet {
       BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
       MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
       InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
+      VariationsSettingsInternalFrame variationsSettingsFrame = getInternalFrame(VariationsSettingsInternalFrame.class);
       // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
       FlamesGPURenderInternalFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getInternalFrame(FlamesGPURenderInternalFrame.class) : new FlamesGPURenderInternalFrame();
       HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
@@ -250,6 +253,7 @@ public class JWildfire extends JApplet {
       easyMovieMakerFrame.setTinaController(tinaController);
       dancingFlamesFrame.setTinaController(tinaController);
       batchFlameRendererFrame.setTinaController(tinaController);
+      variationsSettingsFrame.setTinaController(tinaController);
       meshGenFrame.setTinaController(tinaController);
       interactiveRendererFrame.setTinaController(tinaController);
       gpuRendererFrame.setTinaController(tinaController);
