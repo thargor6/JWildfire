@@ -71,12 +71,12 @@ public class RasterRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(0.5 + Math.random() * 0.65, varFunc);
       }
       // variation 2
-      if (Math.random() < 0.33) {
+      if (Math.random() < 0.20) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.4 + Math.random() * 0.5, varFunc);
       }
       // variation 3
-      if (Math.random() < 0.16) {
+      if (Math.random() < 0.10) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.3 + Math.random() * 0.4, varFunc);
       }
@@ -84,7 +84,9 @@ public class RasterRandomFlameGenerator extends RandomFlameGenerator {
       flame.setEditPlane(EditPlane.XY);
       // random affine transforms (uncomment to play around)
       //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
-      //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+      if (Math.random() < 0.5) {
+        XFormTransformService.rotate(xForm, 360.0 * Math.random(), false);
+      }
       //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
       // random affine post transforms (uncomment to play around)
       XFormTransformService.scale(xForm, 1.15 - Math.random() * 0.65, true, true, true);
@@ -195,12 +197,12 @@ public class RasterRandomFlameGenerator extends RandomFlameGenerator {
         xForm.addVariation(0.4 + Math.random() * 0.65, varFunc);
       }
       // variation 2
-      if (Math.random() < 0.16) {
+      if (Math.random() < 0.10) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.4 + Math.random() * 0.5, varFunc);
       }
       // variation 3
-      if (Math.random() < 0.08) {
+      if (Math.random() < 0.05) {
         VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true);
         xForm.addVariation(0.3 + Math.random() * 0.4, varFunc);
       }
@@ -208,7 +210,9 @@ public class RasterRandomFlameGenerator extends RandomFlameGenerator {
       flame.setEditPlane(EditPlane.XY);
       // random affine transforms (uncomment to play around)
       //   XFormTransformService.scale(xForm, 1.25-Math.random()*0.5, true, true, false);
-      //   XFormTransformService.rotate(xForm, 360.0*Math.random(), false);
+      if (Math.random() < 0.25) {
+        XFormTransformService.rotate(xForm, 360.0 * Math.random(), false);
+      }
       //   XFormTransformService.localTranslate(xForm, 1.0-2.0*Math.random(), 1.0-2.0*Math.random(), false);
       // random affine post transforms (uncomment to play around)
       XFormTransformService.scale(xForm, 1.15 - Math.random() * 0.75, true, true, true);
@@ -227,7 +231,7 @@ public class RasterRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public boolean isUseFilter(RandomFlameGeneratorState pState) {
-    return false;
+    return true;
   }
 
   @Override

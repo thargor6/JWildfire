@@ -360,7 +360,7 @@ param_d = 0.02
 
 ##32
 Cool shape 3 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
-formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))*
+formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))
 (pow((pow(y,2)+pow(z,2)-param_b*param_b),2)+ (pow((pow(x,2)-1),2)))*
 (pow((pow(z,2)+pow(x,2)-param_c*param_c),2)+ (pow((pow(y,2)-1),2)))-0.001
 xmin = -pi

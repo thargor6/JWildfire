@@ -597,7 +597,7 @@ public class TinaInternalFrame extends JInternalFrame {
       addPopup(randomBatchPanel, getThumbnailSelectPopupMenu());
       addPopup(randomBatchPanel, getThumbnailRemovePopupMenu());
       randomBatchPanel.setLayout(new BorderLayout());
-      randomBatchPanel.setPreferredSize(new Dimension(138, 0));
+      randomBatchPanel.setPreferredSize(new Dimension(144, 0));
       randomBatchPanel.setVisible(true);
     }
     return randomBatchPanel;

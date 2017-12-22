@@ -30,7 +30,7 @@ import org.jwildfire.swing.ImagePanel;
 public class FlameThumbnail {
   public static final int IMG_WIDTH = 120;
   public static final int IMG_HEIGHT = 68;
-  public static final int BORDER_SIZE = 6;
+  public static final int BORDER_SIZE = 4;
 
   private Flame flame;
   private SimpleImage preview;

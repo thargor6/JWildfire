@@ -1,3 +1,43 @@
+V3.30 (21.12.2017)
+ - new variations:
+    - dc_triTile, crop3D, spherecrop, loq
+
+    - jubiQ, complex, quaternion 
+
+    - lsystem_js, lsystem3D_js, lorenz_js    
+    - brownian_js, dragon_js, gosperisland_js, hamid_js
+    - hilbert_js, htree_js, koch_js, rsquares_js, tree_js    
+    - sattractor_js, wallpaper_js, hadamard_js, crown_js
+    - apocarpet_js, invtree_js,  siercarpet_js, woggle_js
+    - lace_js, harmonograph_js, clifford_js, svensson_js
+
+    - pre_stabilize to help stabilize glitch flames
+    - pre_spherical, post_spherical
+
+    - klein_group, inversion
+   
+ - new window to (de)active rarely used variations. When you are loading a flame (from disc or from the random generator), 
+   and a deactivated variation is detected, this variation will be enabled for this flame. So, you have not to worry about
+   old flames or flames made by others (using another set of variations).
+   Deactivated variations are indicated by a label having a font in strikethrough style. 
+   You may activate/deactivate variations at any time, in some cases you will have to reload the flame when you do this while 
+   editing.
+
+ - new "Raster"-random-flame-generator
+ - new "Outlines"-random-flame-generator
+
+ - new "Bold"-random-gradient-generator
+ - changed the distribution of random gradient generators inside the "All"-random-gradient-generator (affects random flames)
+ - increased flame-thumbnail-size from 90x68 to 120x68 (16:9)
+ 
+ - Experimental "Mirror Translation" toggle-button to the Affine tab. The toggle applies to all three planes XY, YZ, and ZX. 
+   When toggled on, if viewing pre-affine, changing translation (01 or 02 coefficients) is mirrored by reversing the translation 
+   (setting post-affine to -01 and -02). And vice-versa if viewing post-affine. This mirroring is very handy for some of the new 
+   variations I've added such as Inversion and KleinGroup and for existing variations such as Spherical, which use mathematical 
+   operations that typically in other contexts are composed with a translation T and its inverse T' to move their center from the 
+   origin: G_shifted = T(G(T')). A boolean is added to the transform in the flame so that the mirror toggle state is saved to 
+   and restored from flame files. 
+
 V3.21 (30.09.2017)
  - Add setBGTransparency line to scripts converted from flames. When a script creates a new flame, it sets bgTransparency to true by 
    default, so scripts converted from flames didn't preserve the setting from the flame. Added a setBGTransparency call to do so. By Rick Sidwell
