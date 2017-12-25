@@ -23,6 +23,8 @@ import static org.jwildfire.base.mathlib.MathLib.iabs;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
+
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
@@ -142,7 +144,13 @@ public class JubiQFunc extends VariationFunc {
     cosa = cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;
+    
+    double z = pAffineTP.z / 2;
+    double r2d = sqr(pAffineTP.x) + sqr(pAffineTP.y);
+    double r3d = sqrt(r2d + sqr(z));
+    double r2 = pAmount / (sqrt(r3d) * r3d);
+    
+    pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni + r2 * z;
 
   }
 
