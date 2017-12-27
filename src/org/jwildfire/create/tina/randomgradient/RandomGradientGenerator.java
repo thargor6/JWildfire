@@ -37,7 +37,7 @@ public abstract class RandomGradientGenerator {
       }
     }
     else {
-      double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (pKeyFrames.size() - 1);
+      double idxScl = (double) (RGBPalette.PALETTE_SIZE) / (double) (pKeyFrames.size() - (pFadeColors ? 1 : 0));
       for (int i = 0; i < RGBPalette.PALETTE_SIZE; i++) {
         double x = (double) i / idxScl;
         int lIdx = (int) x;
