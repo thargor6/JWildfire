@@ -599,6 +599,8 @@ public class VariationFuncList {
     registerVariationFunc(PreStabilizeFunc.class);
     registerVariationFunc(PreSphericalFunc.class);
     registerVariationFunc(PostSphericalFunc.class);
+    registerVariationFunc(PrePostMobiusFunc.class);
+    registerVariationFunc(PrePostAffineFunc.class);
 
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
@@ -694,7 +696,8 @@ public class VariationFuncList {
     while (true) {
       int idx = (int) (Math.random() * getNameList().size());
       String name = getNameList().get(idx);
-      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) && !name.equals("iflames_wf")) {
+      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) 
+    		  	&& !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf")) {
         return name;
       }
     }
