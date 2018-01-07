@@ -29,11 +29,24 @@ public abstract class VariationFunc implements Serializable {
 
   }
 
+  /**
+   * Specifies the type of variation:
+   *    0: normal
+   *   -1: pre
+   *    1: post
+   *   -2: prepost, with inverse post
+   *    2: prepost, with inverse pre
+   */
   public int getPriority() {
     return 0;
   }
 
   public abstract void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount);
+
+  // Only used by prepost transforms
+  public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+	  
+  }
 
   public abstract String getName();
 

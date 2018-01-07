@@ -2604,9 +2604,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       VariationFunc varFunc = pVar.getFunc();
 
       pRow.getNonlinearParamsPreButton().setEnabled(true);
-      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0);
+      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0 || pVar.getPriority() == 2);
       pRow.getNonlinearParamsPostButton().setEnabled(true);
-      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0);
+      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0 || pVar.getPriority() == -2);
       if (pRow.getNonlinearParamsUpButton() != null) {
         pRow.getNonlinearParamsUpButton().setEnabled(true);
       }
@@ -6431,11 +6431,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void nonlinearParamsPreButtonClicked(int pIdx) {
-    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+	int fpriority;
+	XForm xForm = getCurrXForm();
+	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+	else fpriority = 0;
+	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
+	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? fpriority : 1);
+	}
+	else {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+	}
   }
 
   public void nonlinearParamsPostButtonClicked(int pIdx) {
-    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+	int fpriority;
+	XForm xForm = getCurrXForm();
+	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+	else fpriority = 0;
+	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
+	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? fpriority : -1);
+	}
+	else {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+	}
   }
 
   public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
@@ -6492,10 +6510,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           final Variation var = xForm.getVariation(pIdx);
           var.setPriority(pPriority);
-          if (pPriority >= 0) {
+          if (pPriority == 0 || pPriority == 1) {
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().setSelected(false);
           }
-          if (pPriority <= 0) {
+          if (pPriority == 0 || pPriority == -1) {
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().setSelected(false);
           }
           refreshFlameImage(true, false, 1, true, false);

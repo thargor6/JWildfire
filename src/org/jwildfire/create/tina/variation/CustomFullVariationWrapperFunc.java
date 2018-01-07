@@ -89,6 +89,13 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   }
 
   @Override
+  public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    if (full_variation != null) {
+      full_variation.invtransform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
+    }
+  }
+
+  @Override
   public String[] getParameterNames() {
     if (full_variation != null) {
       return full_variation.getParameterNames();
