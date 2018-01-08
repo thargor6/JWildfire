@@ -2736,10 +2736,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void duplicateXForm() {
+    int fromId = data.transformationsTable.getSelectedRow();
+    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) return;
+    boolean isFinal = (fromId >= getCurrLayer().getXForms().size());
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    getCurrLayer().getXForms().add(xForm);
+    if (isFinal) {
+    	getCurrLayer().getFinalXForms().add(xForm);
+    }
+    else {
+      getCurrLayer().getXForms().add(xForm);
+      if (fromId >= 0 && fromId < getCurrLayer().getXForms().size()) {
+    	  // copy xaos from values
+    	  int toId = getCurrLayer().getXForms().size() - 1;
+    	  for (int i=0; i < toId; i++) {
+    		XForm xFormi = getCurrLayer().getXForms().get(i);
+    		xFormi.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		if (i == fromId) {
+    		  xForm.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		}
+    	}
+      }
+    }
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2747,7 +2766,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrLayer().getXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() + (isFinal ? getCurrLayer().getFinalXForms().size() : 0) - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
