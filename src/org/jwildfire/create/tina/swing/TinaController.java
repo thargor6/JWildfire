@@ -3123,7 +3123,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearVarREdChanged(pIdx, 0.0);
   }
 
-  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue) {
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean isAdjusting) {
     if (cmbRefreshing) {
       return;
     }
@@ -3134,7 +3134,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
-          if (var.getFunc().dynamicParameterExpansion(pPropertyName)) {
+          if (!isAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters, 
             //    then refresh parameter UI
             this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
