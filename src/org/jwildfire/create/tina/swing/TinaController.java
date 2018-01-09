@@ -2736,10 +2736,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void duplicateXForm() {
+    int fromId = data.transformationsTable.getSelectedRow();
+    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) return;
+    boolean isFinal = (fromId >= getCurrLayer().getXForms().size());
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    getCurrLayer().getXForms().add(xForm);
+    if (isFinal) {
+    	getCurrLayer().getFinalXForms().add(xForm);
+    }
+    else {
+      getCurrLayer().getXForms().add(xForm);
+      if (fromId >= 0 && fromId < getCurrLayer().getXForms().size()) {
+    	  // copy xaos from values
+    	  int toId = getCurrLayer().getXForms().size() - 1;
+    	  for (int i=0; i < toId; i++) {
+    		XForm xFormi = getCurrLayer().getXForms().get(i);
+    		xFormi.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		if (i == fromId) {
+    		  xForm.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		}
+    	}
+      }
+    }
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2747,7 +2766,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrLayer().getXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() + (isFinal ? getCurrLayer().getFinalXForms().size() : 0) - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
@@ -3123,7 +3142,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearVarREdChanged(pIdx, 0.0);
   }
 
-  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue) {
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean isAdjusting) {
     if (cmbRefreshing) {
       return;
     }
@@ -3134,7 +3153,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
-          if (var.getFunc().dynamicParameterExpansion(pPropertyName)) {
+          if (!isAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters, 
             //    then refresh parameter UI
             this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);

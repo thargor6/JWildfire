@@ -9744,7 +9744,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(11);
+          tinaController.nonlinearParamsPreButtonClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11PreButton);

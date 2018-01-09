@@ -209,8 +209,8 @@ public class TinaNonlinearControlsRow {
 
   private void addLabel(String pName, int pOffset) {
     JLabel lbl = new JLabel();
-    lbl.setPreferredSize(new Dimension(50, 22));
     lbl.setText(pName);
+    if (lbl.getPreferredSize().getWidth() > LBL_WIDTH) lbl.setToolTipText(pName);
     lbl.setSize(new Dimension(LBL_WIDTH, 22));
     lbl.setLocation(new Point(LBL_H_OFFSET, LBL_V_OFFSET + pOffset));
     lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -255,7 +255,7 @@ public class TinaNonlinearControlsRow {
               doubleVal = (Double) fieldVal;
             }
           }
-          tinaController.propertyPnlValueChanged(index, pParamName, doubleVal);
+          tinaController.propertyPnlValueChanged(index, pParamName, doubleVal, field.isMouseAdjusting());
           refreshSliderWithoutRefresh(pParamName, doubleVal);
           refreshNonlinearParamsCmbWithoutRefresh(pParamName, doubleVal);
         }
@@ -364,7 +364,7 @@ public class TinaNonlinearControlsRow {
       public void stateChanged(javax.swing.event.ChangeEvent e) {
         if (!isNoRefresh()) {
           double sliderVal = (double) slider.getValue() / (double) SLIDER_SCALE;
-          tinaController.propertyPnlValueChanged(index, pParamName, sliderVal);
+          tinaController.propertyPnlValueChanged(index, pParamName, sliderVal, slider.getValueIsAdjusting());
           refreshNumberFieldWithoutRefresh(pParamName, sliderVal);
           refreshNonlinearParamsCmbWithoutRefresh(pParamName, sliderVal);
         }
