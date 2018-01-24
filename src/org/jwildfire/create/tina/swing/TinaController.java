@@ -2703,8 +2703,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
       XForm xForm = getCurrLayer().getXForms().get(i);
       if (i == fromId) {
-        for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
-          xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
+        XForm toXForm = getCurrLayer().getXForms().get(toId);
+    	for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
+          toXForm.getModifiedWeights()[j] = xForm.getModifiedWeights()[j];
+    	  xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
         xForm.setDrawMode(DrawMode.HIDDEN);
       }
