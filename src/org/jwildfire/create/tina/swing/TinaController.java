@@ -2560,11 +2560,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int idx = 0;
         for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
-            refreshParamControls(row, null, null);
+            refreshParamControls(row, null, null, true);
           }
           else {
             Variation var = pXForm.getVariation(idx);
-            refreshParamControls(row, pXForm, var);
+            refreshParamControls(row, pXForm, var, true);
           }
           idx++;
         }
@@ -2580,7 +2580,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar, boolean pSelectFirst) {
 
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
@@ -2661,30 +2661,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
 
       // preselection
-      if (resCount > 0) {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
-        enableNonlinearControls(pRow, true);
-      }
-      else if (varFunc.getParameterNames().length > 0) {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
-        Object val = varFunc.getParameterValues()[0];
-        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
-        if (val instanceof Double) {
-          pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+      if (pSelectFirst){
+        if (resCount > 0) {
+          pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+          pRow.getNonlinearParamsREd().setText(null);
+          enableNonlinearControls(pRow, true);
         }
-        else if (val instanceof Integer) {
-          pRow.getNonlinearParamsREd().setOnlyIntegers(true);
-          pRow.getNonlinearParamsREd().setText(val.toString());
+        else if (varFunc.getParameterNames().length > 0) {
+          pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+          Object val = varFunc.getParameterValues()[0];
+          pRow.getNonlinearParamsREd().setOnlyIntegers(false);
+          if (val instanceof Double) {
+            pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+          }
+          else if (val instanceof Integer) {
+            pRow.getNonlinearParamsREd().setOnlyIntegers(true);
+            pRow.getNonlinearParamsREd().setText(val.toString());
+          }
+          else {
+            pRow.getNonlinearParamsREd().setText(val.toString());
+          }
+          enableNonlinearControls(pRow, false);
         }
         else {
-          pRow.getNonlinearParamsREd().setText(val.toString());
+          pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
+          pRow.getNonlinearParamsREd().setText(null);
+          pRow.getNonlinearParamsREd().setOnlyIntegers(false);
         }
-        enableNonlinearControls(pRow, false);
-      }
-      else {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
-        pRow.getNonlinearParamsREd().setText(null);
-        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
       }
     }
     pRow.rebuildParamsPnl(pXForm, pVar);
@@ -3127,7 +3130,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           var.setAmount(Tools.stringToDouble(varStr));
           xForm.addVariation(var);
         }
-        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
         refreshXFormUI(xForm);
         refreshFlameImage(true, false, 1, true, false);
 
@@ -3144,7 +3147,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearVarREdChanged(pIdx, 0.0);
   }
 
-  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean isAdjusting) {
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean pIsAdjusting) {
     if (cmbRefreshing) {
       return;
     }
@@ -3155,10 +3158,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
-          if (!isAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
+          if (!pIsAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters, 
             //    then refresh parameter UI
-            this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+            this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
           }
           refreshFlameImage(true, false, 1, true, false);
         }
@@ -3234,7 +3237,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             if (var.getFunc().dynamicParameterExpansion(selected)) {
               // if setting the parameter can change the total number of parameters, 
               //    then refresh parameter UI (and reselect parameter that was changed)
-              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, false);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
             }
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
@@ -3435,7 +3438,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     var.getFunc().setRessource(rName, valByteArray);
                     if (var.getFunc().ressourceCanModifyParams(rName)) {
                       // forcing refresh of params UI in case setting resource changes available params or param values
-                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
                     }
                   }
                   catch (Throwable ex) {
