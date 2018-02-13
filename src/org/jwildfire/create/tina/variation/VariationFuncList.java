@@ -604,6 +604,8 @@ public class VariationFuncList {
 
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
+    registerVariationFunc(DCDModulusFunc.class);
+    registerVariationFunc(DCGnarlyFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

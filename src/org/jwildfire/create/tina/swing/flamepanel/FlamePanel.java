@@ -1051,6 +1051,7 @@ public class FlamePanel extends ImagePanel {
       config.setWithColoredTransforms(pFlamePanel.config.isWithColoredTransforms());
       config.setMouseDragOperation(pFlamePanel.config.getMouseDragOperation());
       config.setEditPostTransform(pFlamePanel.config.isEditPostTransform());
+      config.setProgressivePreview(pFlamePanel.config.isProgressivePreview());
     }
   }
 
