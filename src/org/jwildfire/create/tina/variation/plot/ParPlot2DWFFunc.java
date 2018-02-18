@@ -52,6 +52,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String PARAM_BLEND_COLORMAP = "blend_colormap";
   private static final String PARAM_DISPL_AMOUNT = "displ_amount";
   private static final String PARAM_BLEND_DISPLMAP = "blend_displ_map";
+  private static final String PARAM_SOLID = "solid";
 
   private static final String PARAM_PARAM_A = "param_a";
   private static final String PARAM_PARAM_B = "param_b";
@@ -66,7 +67,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_SOLID, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
 
   private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
@@ -83,6 +84,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private double vmax = 2.0 * Math.PI;
   private int direct_color = 1;
   private int color_mode = CM_UV;
+  private int solid = 1;
 
   private double param_a = 0.0;
   private double param_b = 0.0;
@@ -105,8 +107,14 @@ public class ParPlot2DWFFunc extends VariationFunc {
     if (evaluator == null) {
       return;
     }
-    double randU = pContext.random();
-    double randV = pContext.random();
+    double randU, randV;
+    if (solid == 0) {
+     randU = pAffineTP.x;
+     randV = pAffineTP.y;
+    } else  {
+         randU = pContext.random();
+         randV = pContext.random();
+    }
     double u = _umin + randU * _du;
     double v = _vmin + randV * _dv;
 
@@ -182,7 +190,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), param_a, param_b, param_c, param_d, param_e, param_f };
+    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), solid, param_a, param_b, param_c, param_d, param_e, param_f };
   }
 
   @Override
@@ -224,6 +232,9 @@ public class ParPlot2DWFFunc extends VariationFunc {
     else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
     }
+    else if (PARAM_SOLID.equalsIgnoreCase(pName)) {
+        solid = Tools.FTOI(pValue);
+      }
     else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
       param_a = pValue;
     }
