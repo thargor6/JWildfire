@@ -1229,7 +1229,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
   }
 
-  private EditPlane getEditPlane() {
+  public EditPlane getEditPlane() {
     if (owner == null || owner.getOwner() == null) {
       System.out.println("EditPlane NULL");
       return EditPlane.XY;

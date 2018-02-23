@@ -464,6 +464,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
     data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
     data.transformationsTable = parameterObject.pTransformationsTable;
+    data.affineC00Lbl = parameterObject.pAffineC00Lbl;
+    data.affineC01Lbl = parameterObject.pAffineC01Lbl;
+    data.affineC10Lbl = parameterObject.pAffineC10Lbl;
+    data.affineC11Lbl = parameterObject.pAffineC11Lbl;
+    data.affineC20Lbl = parameterObject.pAffineC20Lbl;
+    data.affineC21Lbl = parameterObject.pAffineC21Lbl;
     data.affineC00REd = parameterObject.pAffineC00REd;
     data.affineC01REd = parameterObject.pAffineC01REd;
     data.affineC10REd = parameterObject.pAffineC10REd;
@@ -2461,8 +2467,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     boolean oldNoRefresh = noRefresh;
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-      refreshEditPlaneToggleButtons(getCurrFlame().getEditPlane());
+      EditPlane curEditPlane = getCurrFlame().getEditPlane();
+      refreshEditPlaneToggleButtons(curEditPlane);
       if (pXForm != null) {
+        switch (curEditPlane) {
+          case XY:
+        	  data.affineC00Lbl.setText("X1");
+        	  data.affineC01Lbl.setText("X2");
+        	  data.affineC10Lbl.setText("Y1");
+        	  data.affineC11Lbl.setText("Y2");
+        	  break;
+          case YZ:
+        	  data.affineC00Lbl.setText("Y1");
+        	  data.affineC01Lbl.setText("Y2");
+        	  data.affineC10Lbl.setText("Z1");
+        	  data.affineC11Lbl.setText("Z2");
+        	  break;
+          default:
+        	  data.affineC00Lbl.setText("X1");
+        	  data.affineC01Lbl.setText("X2");
+        	  data.affineC10Lbl.setText("Z1");
+        	  data.affineC11Lbl.setText("Z2");
+        	  break;
+          } 
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
           data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));

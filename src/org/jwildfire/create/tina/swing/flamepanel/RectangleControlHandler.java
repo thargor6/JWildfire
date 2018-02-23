@@ -62,7 +62,18 @@ public class RectangleControlHandler extends AbstractControlHandler<RectangleCon
       int offset = 16;
       int cx = (rect.viewX[0] + rect.viewX[1] + rect.viewX[2] + rect.viewX[3]) / 4;
       int cy = (rect.viewY[0] + rect.viewY[1] + rect.viewY[2] + rect.viewY[3]) / 4;
-      final String label = "XOY ";
+      String label;
+      switch (pXForm.getEditPlane()) {
+        case XY:
+    	  label = "XOY";
+    	  break;
+        case YZ:
+    	  label = "YOZ";
+    	  break;
+        default:
+    	  label = "XOZ";
+    	  break;
+      }
       if (pIsSelected) {
         for (int i = 0; i < rect.viewX.length; i++) {
           double dx = rect.viewX[i] - cx;
