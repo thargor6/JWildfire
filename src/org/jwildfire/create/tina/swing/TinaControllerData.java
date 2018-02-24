@@ -175,6 +175,12 @@ public class TinaControllerData {
   public JToggleButton affineScaleYButton;
   public JTable transformationsTable;
   public JButton affineResetTransformButton;
+  public JLabel affineC00Lbl;
+  public JLabel affineC01Lbl;
+  public JLabel affineC10Lbl;
+  public JLabel affineC11Lbl;
+  public JLabel affineC20Lbl;
+  public JLabel affineC21Lbl;
   public JWFNumberField affineC00REd;
   public JWFNumberField affineC01REd;
   public JWFNumberField affineC10REd;

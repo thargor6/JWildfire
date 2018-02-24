@@ -62,7 +62,18 @@ public class TriangleControlHandler extends AbstractControlHandler<TriangleContr
       int offset = 16;
       int cx = (triangle.viewX[0] + triangle.viewX[1] + triangle.viewX[2]) / 3;
       int cy = (triangle.viewY[0] + triangle.viewY[1] + triangle.viewY[2]) / 3;
-      final String label = "XOY";
+      String label;
+      switch (pXForm.getEditPlane()) {
+        case XY:
+    	  label = "XOY";
+    	  break;
+        case YZ:
+    	  label = "YOZ";
+    	  break;
+        default:
+    	  label = "XOZ";
+    	  break;
+      }
       if (pIsSelected) {
         for (int i = 0; i < triangle.viewX.length; i++) {
           double dx = triangle.viewX[i] - cx;
