@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
+import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
@@ -608,6 +609,14 @@ public class VariationFuncList {
     registerVariationFunc(DCDModulusFunc.class);
     registerVariationFunc(DCGnarlyFunc.class);
 
+    registerVariationFunc(Strange3DFunc.class);
+    registerVariationFunc(DustPointFunc.class);     
+    registerVariationFunc(IconAttractorFunc.class);
+    registerVariationFunc(ApollonyFunc.class); 
+    registerVariationFunc(ChrysanthemumFunc.class);  
+    registerVariationFunc(SeaShell3DFunc.class);            
+    registerVariationFunc(ThreePointIFSFunc.class);  
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
