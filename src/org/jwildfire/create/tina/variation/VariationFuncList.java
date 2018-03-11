@@ -617,6 +617,8 @@ public class VariationFuncList {
     registerVariationFunc(SeaShell3DFunc.class);            
     registerVariationFunc(ThreePointIFSFunc.class);  
     
+    registerVariationFunc(Knots3DFunc.class);
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
