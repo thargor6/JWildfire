@@ -1,0 +1,413 @@
+Formula presets for the knots3d_wf-variation of JWildfire. 
+
+
+
+Formulas provided by Jesus Sosa
+##0   
+trefoil Knoten B
+xformula=-10.0*cos(t) - 2.*cos(5.0*t) + 15.0*sin(2.0*t)
+yformula = - 15.0*cos(2.0*t) + 10.0*sin(t) - 2.0*sin(5.0*t)
+zformula = 10.0*cos(3.0*t)
+steps=1000
+radius=1.05
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##1   
+// Granny Knoten
+xformula = - 22*cos(t) - 128*sin(t) - 44*cos(3*t) - 78*sin(3*t)
+yformula = - 10*cos(2*t) - 27*sin(2*t) + 38*cos(4*t) + 46*sin(4*t)
+zformula = 70*cos(3*t) - 40*sin(3*t)
+steps=1000
+radius=1.05
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##2  
+//Square Knoten
+xformula = - 22*cos(t) - 128*sin(t) - 44*cos(3*t) - 78*sin(3*t)
+yformula = 11*cos(t) - 43*cos(3*t) + 34*cos(5*t) - 39*sin(5*t)
+zformula = 70*cos(3*t) - 40*sin(3*t) + 8*cos(5*t) - 9*sin(5*t)
+steps=1000
+radius=1.05
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##3 
+// Achterknoten
+xformula= 10*cos(t) + 10*cos(3*t)
+yformula = 6*sin(t) + 10*sin(3*t)
+zformula = 4*sin(3*t) - 10*sin(6*t)
+steps=1000
+radius=1.05
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##4  
+ Torus Knoten (p=5,q=3)
+xformula = (param_a + param_b * cos(param_c * t)) * cos(param_d * t)
+yformula = (param_a + param_b * cos(param_c* t)) * sin(param_d * t)
+zformula = param_b * sin(param_c * t)
+steps=1000
+radius=1.05
+facets=4
+param_a=100.0
+param_b=25.0
+param_c=5.0
+param_d=3.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##5 
+ Torus Knoten (p=15,q=2)
+xformula = (param_a + param_b * cos(param_c * t)) * cos(param_d * t)
+yformula = (param_a + param_b * cos(param_c* t)) * sin(param_d * t)
+zformula = param_b * sin(param_c * t)
+steps=1000
+radius=1.0
+facets=4
+param_a=100.0
+param_b=25.0
+param_c=15.0
+param_d=2.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##6
+  Knoten (3-1)
+xformula = 41*cos(t) - 18*sin(t) - 83*cos(2*t) - 83*sin(2*t) - 11*cos(3*t) + 27*sin(3*t)
+yformula = 6*cos(t) + 27*sin(t) - 113*cos(2*t) + 30*sin(2*t) + 11*cos(3*t) - 27*sin(3*t)
+zformula = 45*sin(t) - 30*cos(2*t) + 113*sin(2*t) - 11*cos(3*t) + 27*sin(3*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##7
+  Knoten (4-1)
+xformula = 32*cos(t) - 51*sin(t) - 104*cos(2*t) - 34*sin(2*t) + 104*cos(3*t) - 91*sin(3*t)
+yformula = 94*cos(t) + 41*sin(t) + 113*cos(2*t) - 68*cos(3*t) - 124*sin(3*t)
+zformula =  16*cos(t) + 73*sin(t) - 211*cos(2*t) - 39*sin(2*t) - 99*cos(3*t) - 21*sin(3*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##8
+  Knoten (5-1)
+xformula = 88*cos(t) + 115*sin(t) - 475*cos(2*t) - 127*sin(2*t) - 87*cos(3*t) + 36*sin(3*t) + 11*cos(4*t) - 19*sin(4*t)
+yformula = 89*cos(t) - 32*sin(t) - 172*cos(2*t) + 294*sin(2*t) + 76*cos(3*t) + 102*sin(3*t) - 61*cos(4*t) + 113*sin(4*t)
+zformula =  44*cos(t) - 69*sin(t) + 34*cos(2*t) + 223*sin(2*t) + 16*cos(3*t)+ 120*sin(3*t) + 42*cos(4*t) - 125*sin(4*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##9
+  Knoten (5-2)
+xformula = - 33*cos(t) + 43*sin(t) + 214*sin(2*t) - 101*cos(3*t) - 47*sin(3*t) + 11*sin(4*t)
+yformula = - 57*cos(t) + 99*sin(t) - 54*cos(2*t) - 159*sin(2*t) - 117*cos(3*t) - 5*sin(3*t) - 31*cos(4*t) - 45*sin(4*t)
+zformula =  34*cos(t) - 21*sin(t) - 100*cos(2*t) - 93*sin(2*t) - 27*cos(3*t) - 16*sin(3*t) + 52*cos(4*t) + 84*sin(4*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##10
+  Knoten (6-1)
+xformula = 12*cos(t) + 20*sin(t) - 163*cos(2*t) + 76*sin(2*t) - 87*cos(3*t) - 15*sin(3*t) - 21*cos(4*t) + 14*sin(4*t) + 24*cos(5*t) - 50*sin(5*t)
+yformula =  29*cos(t) + 78*sin(t) - 180*cos(2*t) + 58*sin(2*t) + 88*cos(3*t) + 72*sin(3*t) - 14*sin(4*t)
+zformula = - 30*cos(t) - 78*sin(t) - 111*cos(2*t) + 37*sin(2*t) - 67*cos(3*t) - 51*sin(3*t) + 31*cos(4*t) + 8*sin(4*t) -11*cos(5*t) + 65*sin(5*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##11
+  Knoten (6-2)
+xformula =  - 6*cos(t) - 21*sin(t) - 195*cos(2*t) + 92*sin(2*t) - 64*cos(3*t) - 23*sin(3*t) - 6*cos(4*t) + 13*sin(4*t) +24*cos(5*t) + 15*sin(5*t) + 41*sin(6*t)
+yformula =- 21*cos(t) - 24*sin(t) - 207*cos(2*t) - 72*sin(2*t) + 112*cos(3*t) - 7*sin(3*t) - 13*cos(4*t) - 40*sin(4*t) -27*cos(5*t) - 3*sin(5*t) - 17*cos(6*t)
+zformula = - 18*cos(t) - 13*sin(t) + 113*cos(2*t) - 107*sin(2*t) + 86*cos(3*t) - 9*sin(3*t) - 26*cos(4*t) - 7*sin(4*t) +24*cos(5*t) + 33*sin(5*t) + 21*cos(6*t) + 31*sin(6*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##12
+  Knoten (6-3)
+xformula =  - 40*cos(t) + 32*sin(t) + 69*cos(2*t) - 12*sin(2*t) + 120*cos(3*t) - 52*sin(3*t) - 56*cos(4*t) + 46*sin(4*t) -17*sin(5*t) + 14*cos(6*t) + 19*sin(6*t)
+yformula = 90*cos(t) + 89*sin(t) - 142*cos(2*t) + 147*sin(2*t) + 74*cos(3*t) + 85*sin(3*t) - 56*sin(4*t) + 23*cos(5*t) +16*cos(6*t) + 7*sin(6*t)
+zformula = 52*cos(t) + 64*sin(t) + 53*cos(2*t) + 35*sin(2*t) + 77*cos(3*t) - 87*sin(3*t) + 101*cos(4*t) - 19*sin(4*t) -5*cos(5*t) + 2*sin(5*t) + 3*cos(6*t) + 9*sin(6*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##13
+  Knoten (7-1)
+xformula = 54*cos(t) - 4*sin(t) - 239*cos(2*t) - 44*sin(2*t) - 45*cos(3*t) - 17*sin(3*t) - 33*cos(4*t) - 27*sin(4*t) +19*cos(5*t) + 19*sin(5*t) - 8*cos(6*t) + 15*sin(6*t)
+yformula = - 16*cos(t) - 43*sin(t) + 11*cos(2*t) + 170*sin(2*t) - 22*cos(3*t) + 41*sin(3*t) + 21*cos(4*t) + 2*cos(5*t) -12*sin(5*t) - 43*cos(6*t) + 26*sin(6*t)
+zformula =  - 55*sin(t) - 78*cos(2*t) + 189*sin(2*t) - 38*cos(3*t) + 41*sin(3*t) + 10*cos(4*t) - 16*sin(4*t) - 38*cos(5*t) +18*sin(5*t) + 22*cos(6*t) - 15*sin(6*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##14
+  Knoten (7-2)
+xformula = 10*cos(t) + 115*sin(t) - 184*cos(2*t) + 10*sin(2*t) + 101*sin(3*t) + 23*cos(4*t) + 55*sin(4*t) -38*cos(5*t) -6*sin(5*t) - 14*cos(6*t) + 8*sin(6*t) + 16*cos(6*t) + 14*sin(6*t)
+yformula = 42*cos(t) - 104*sin(t) - 252*cos(2*t) + 47*sin(2*t) - 21*cos(3*t) - 65*sin(3*t) - 23*cos(4*t) - 23*sin(4*t) +36*cos(5*t) - 10*sin(5*t) - 13*cos(6*t) + 2*sin(6*t) - 18*cos(7*t) - 9*sin(7*t)
+zformula =   30*sin(t) + 20*cos(2*t) + 19*sin(2*t) + 6*cos(3*t) -31*sin(3*t) - 4*cos(4*t) - 24*sin(4*t) - 44*cos(5*t) - 50*sin(5*t)+ 31*cos(6*t) +39*sin(6*t) - 16*cos(7*t) + 23*sin(7*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##15
+  Knoten (7-3)
+xformula = - 14*cos(t) - 19*sin(t) - 53*cos(2*t) - 120*sin(2*t) + 71*cos(3*t) - 50*sin(3*t) - 47*cos(4*t) - 86*sin(4*t) +9*cos(5*t) - 5*sin(5*t) + 12*cos(6*t) + 22*sin(6*t)
+yformula = - 11*cos(t) + 13*sin(t) - 294*cos(2*t) + 112*sin(2*t) + 29*cos(3*t) - 22*sin(3*t) + 4*cos(4*t) + 11*sin(4*t) -6*cos(5*t) - 14*cos(6*t) + 18*sin(6*t)
+zformula =   28*cos(t) + 9*sin(t) - 39*cos(2*t) - 60*sin(2*t) - 60*cos(3*t) + 21*sin(3*t) + 50*cos(4*t) - 11*sin(4*t) +44*cos(5*t) - 63*sin(5*t) + 14*cos(6*t) + 9*sin(6*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##16
+  Knoten (7-4)
+xformula = 32*cos(t) + 10*sin(t) - 12*cos(2*t) + 10*sin(2*t) + 48*cos(3*t) + 75*sin(3*t) - 32*cos(4*t) + 12*sin(4*t) +3*cos(5*t) - 8*sin(5*t) - 2*cos(6*t) - 4*sin(6*t)
+yformula =- 16*cos(t) - 10*sin(t) - 90*cos(2*t) + 129*sin(2*t) - 6*cos(3*t) - 8*sin(3*t) - 19*cos(4*t) - 6*sin(4*t) - 8*cos(5*t)+ 6*sin(5*t) + 4*cos(6*t) + 13*sin(6*t)
+zformula =  -12*cos(t) + sin(t) - 55*cos(2*t) + 32*sin(2*t) - 10*cos(3*t) - 13*sin(3*t) + 2*cos(4*t) + 26*sin(4*t) +17*cos(5*t) + 9*sin(5*t) + 15*cos(6*t) - 21*sin(6*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##17
+  Knoten (7-5)
+xformula =5*cos(t) + 5*sin(t) - 163*cos(2*t) - 80*sin(2*t) - 28*cos(3*t) + 15*sin(3*t) - 20*cos(4*t) + 13*sin(4*t) -11*cos(5*t) - 12*sin(5*t) + 4*cos(6*t) - 19*sin(6*t) + 12*cos(7*t) + 2*sin(7*t)
+yformula =- 31*cos(t) + 6*sin(t) - 113*cos(2*t) + 81*sin(2*t) + 87*cos(3*t) + 4*sin(3*t) + 5*cos(4*t) + 18*sin(4*t) -4*cos(5*t) + 11*sin(5*t) - 17*cos(6*t) + 5*sin(6*t) - 6*cos(7*t) - 13*sin(7*t)
+zformula =  - 11*cos(t) - 3*sin(t) + 21*cos(2*t) + 31*sin(2*t) + 8*cos(3*t) + 2*sin(3*t) + 2*cos(4*t) + 13*sin(4*t) +27*cos(5*t) + 7*sin(5*t) - 8*cos(6*t) - 29*sin(6*t) + 11*cos(7*t) - 8*sin(7*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##18
+  Knoten (7-6)
+xformula = - 17*cos(t) + 80*sin(t) - 70*cos(2*t) - 190*sin(2*t) - 26*cos(3*t) - 145*sin(3*t) - 62*cos(4*t) - 31*sin(4*t) +26*cos(5*t) + 13*sin(5*t) - 2*cos(6*t) + 8*sin(6*t) - 10*cos(7*t) + 9*sin(7*t)
+yformula = 102*cos(t) - 151*sin(t) - 36*cos(2*t) - 25*sin(2*t) + 200*cos(3*t) - 18*sin(3*t) -30*cos(4*t) + 28*sin(4*t) -7*cos(5*t) + 2*sin(5*t) + 13*cos(6*t) - 11*sin(6*t) - 5*cos(7*t) - sin(7*t)
+zformula = 58*cos(t) - 17*sin(t) - 5*cos(2*t) - 27*sin(2*t) + 66*cos(3*t) - 38*sin(3*t) + 28*cos(4*t) - 80*sin(4*t) - 35*cos(5*t)+ 28*sin(5*t) - 26*cos(6*t) - 34*sin(6*t) + 32*cos(7*t) + sin(7*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##19
+  Knoten (7-7)
+xformula = - 5*cos(t) + 8*cos(2*t) + 83*sin(2*t) + 87*cos(3*t) + 100*sin(3*t) - 5*cos(4*t) + 22*sin(4*t) - 10*cos(5*t) +10*sin(5*t) - 2*cos(6*t) - 10*sin(6*t) + 5*cos(7*t) + 6*sin(7*t)
+yformula = 17*cos(t) + 21*sin(t) - 174*cos(2*t) + 13*sin(2*t) - 15*cos(3*t) + 3*sin(3*t) - 9*cos(4*t) + 46*sin(4*t) +16*cos(5*t) - 25*sin(5*t) - 21*cos(6*t) + 7*sin(6*t) - 9*cos(7*t) - 3*sin(7*t)
+zformula = - 28*cos(t) + 9*sin(t) + 110*cos(2*t) + 4*sin(2*t) + 11*cos(3*t) - 6*sin(3*t) - 46*cos(4*t) - 17*sin(4*t) +32*cos(5*t) - 9*sin(5*t) - 12*cos(6*t) - 9*sin(6*t) - 9*cos(7*t) + 18*sin(7*t)
+steps=1000
+radius=1.0
+facets=4
+param_a=0.0
+param_b=0.0
+param_c=0.0
+param_d=0.0
+param_e=0.0
+param_f=0.0
+param_g=0.0
+param_h=0.0
+
+##20
+  Lissajous Knoten Beispiel 2
+xformula =  param_a * cos(param_b*t + param_e)
+yformula =  param_a * cos(param_c*t + param_f)
+zformula =  param_a * cos(param_d*t + param_g)
+steps=1000
+radius=1.0
+facets=4
+param_a=100.0
+param_b=1.0
+param_c=2.0
+param_d=1.0
+param_e=0.0
+param_f=1.5707963
+param_g=1.5707963
+param_h=0.0
+
+##21
+  Lissajous Knoten Beispiel 3
+xformula =  param_a * cos(param_b*t + param_e)
+yformula =  param_a * cos(param_c*t + param_f)
+zformula =  param_a * cos(param_d*t + param_g)
+steps=1000
+radius=1.0
+facets=4
+param_a=100.0
+param_b=1.0
+param_c=5.0
+param_d=3.0
+param_e=0.0
+param_f=1.5707963
+param_g=1.5707963
+param_h=0.0
+
+##22
+  Lissajous Knoten Beispiel 4
+xformula =  param_a * cos(param_b*t + param_e)
+yformula =  param_a * cos(param_c*t + param_f)
+zformula =  param_a * cos(param_d*t + param_g)
+steps=1000
+radius=1.0
+facets=4
+param_a=100.0
+param_b=3.0
+param_c=5.0
+param_d=2.0
+param_e=0.0
+param_f=1.5707963
+param_g=1.5707963
+param_h=0.0
+
+##23
+  Lissajous Knoten Beispiel 5
+xformula =  param_a * cos(param_b*t + param_e)
+yformula =  param_a * cos(param_c*t + param_f)
+zformula =  param_a * cos(param_d*t + param_g)
+steps=1000
+radius=1.0
+facets=4
+param_a=100.0
+param_b=3.0
+param_c=5.0
+param_d=7.0
+param_e=7.0
+param_f=5.0
+param_g=3.0
+param_h=0.0
+
