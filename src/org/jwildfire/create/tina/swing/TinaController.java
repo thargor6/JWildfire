@@ -6210,6 +6210,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (getLastGradient() != null && getCurrLayer() != null) {
       saveUndoPoint();
       getCurrLayer().setPalette(getLastGradient().makeDeepCopy());
+      registerToEditor(getCurrFlame(), getCurrLayer());
       refreshUI();
     }
   }
