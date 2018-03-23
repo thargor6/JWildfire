@@ -618,6 +618,9 @@ public class VariationFuncList {
     registerVariationFunc(ThreePointIFSFunc.class);  
     
     registerVariationFunc(Knots3DFunc.class);
+    registerVariationFunc(RecurrencePlotFunc.class);  
+    registerVariationFunc(MacMillanFunc.class);  
+    
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
