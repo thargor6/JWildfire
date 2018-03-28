@@ -4583,6 +4583,12 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteFadeColorsCBx.setBounds(199, 56, 140, 18);
       tinaPaletteCreatePanel.add(tinaPaletteFadeColorsCBx);
 
+      tinaPaletteUniformWidthCBx = new JCheckBox("Uniform widths");
+      tinaPaletteUniformWidthCBx.setSelected(false);
+      tinaPaletteUniformWidthCBx.setToolTipText("Make all colors the same width");
+      tinaPaletteUniformWidthCBx.setBounds(199, 80, 140, 18);
+      tinaPaletteCreatePanel.add(tinaPaletteUniformWidthCBx);
+
       JLabel lblGradientGenerator = new JLabel();
       lblGradientGenerator.setText("Gradient generator");
       lblGradientGenerator.setPreferredSize(new Dimension(100, 22));
@@ -5433,7 +5439,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
-        getTinaPaletteFadeColorsCBx(), getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
+        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
@@ -10408,6 +10414,7 @@ private JLabel getAffineC21Lbl() {
   private JButton randomizeBtn;
   private JPanel panel_73;
   private JCheckBox tinaPaletteFadeColorsCBx;
+  private JCheckBox tinaPaletteUniformWidthCBx;
   private JPanel panel_74;
   private JPanel panel_75;
   private JPanel panel_76;
@@ -13187,6 +13194,10 @@ private JLabel getAffineC21Lbl() {
 
   public JCheckBox getTinaPaletteFadeColorsCBx() {
     return tinaPaletteFadeColorsCBx;
+  }
+  
+  public JCheckBox getTinaPaletteUniformWidthCBx() {
+	return tinaPaletteUniformWidthCBx;
   }
 
   private JPanel getPanel_74() {

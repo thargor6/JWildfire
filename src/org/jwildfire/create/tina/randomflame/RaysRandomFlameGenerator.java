@@ -46,7 +46,7 @@ public class RaysRandomFlameGenerator extends RandomFlameGenerator {
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
     // create a random gradient
-    layer.setPalette(new TwoColorsRandomGradientGenerator().generatePalette(2, true));
+    layer.setPalette(new TwoColorsRandomGradientGenerator().generatePalette(2, true, true));
 
     // create transform 1
     {

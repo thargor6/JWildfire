@@ -116,6 +116,7 @@ public class TinaControllerParameter {
   public JTextField pPaletteRandomPointsREd;
   public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;
+  public JCheckBox paletteUniformWidthCBx;
   public JPanel pPaletteImgPanel;
   public JPanel pColorChooserPaletteImgPanel;
   public JWFNumberField pPaletteShiftREd;
@@ -952,7 +953,7 @@ public class TinaControllerParameter {
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
-      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx,
+      JButton pBackgroundColorIndicatorBtn, JButton pRandomizeButton, JCheckBox pPaletteFadeColorsCBx, JCheckBox pPaletteUniformWidthCBx,
       JWFNumberField pLayerWeightEd, JButton pLayerAddBtn, JButton pLayerDuplicateBtn, JButton pLayerDeleteBtn,
       JTable pLayersTable, JToggleButton pLayerVisibleBtn, JToggleButton pLayerAppendBtn, JButton pLayerHideOthersBtn,
       JButton pLayerShowAllBtn, JToggleButton pLayerPreviewBtn,
@@ -1006,6 +1007,7 @@ public class TinaControllerParameter {
     this.backgroundColorIndicatorBtn = pBackgroundColorIndicatorBtn;
     this.randomizeButton = pRandomizeButton;
     this.paletteFadeColorsCBx = pPaletteFadeColorsCBx;
+    this.paletteUniformWidthCBx = pPaletteUniformWidthCBx;
     this.layerWeightEd = pLayerWeightEd;
     this.layerAddBtn = pLayerAddBtn;
     this.layerDuplicateBtn = pLayerDuplicateBtn;

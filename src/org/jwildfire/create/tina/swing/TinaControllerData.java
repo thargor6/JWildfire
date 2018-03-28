@@ -136,6 +136,7 @@ public class TinaControllerData {
   public JTextField paletteRandomPointsREd;
   public JComboBox paletteRandomGeneratorCmb;
   public JCheckBox paletteFadeColorsCBx;
+  public JCheckBox paletteUniformWidthCBx;
   public JPanel paletteImgPanel;
   public JPanel colorChooserPaletteImgPanel;
   public ImagePanel palettePanel;

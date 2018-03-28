@@ -34,9 +34,10 @@ public class RandomFlameMutation implements Mutation {
     RandomFlameGenerator randGen = new AllRandomFlameGenerator();
     int palettePoints = 3 + Tools.randomInt(68);
     boolean fadePaletteColors = Math.random() > 0.33;
+    boolean uniformWidth = Math.random() > 0.75;
     int IMG_WIDTH = 80;
     int IMG_HEIGHT = 60;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, Prefs.getPrefs(), randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, Prefs.getPrefs(), randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.NORMAL);
     RandomFlameGeneratorSample sample = sampler.createSample();
     pLayer.assign(sample.getFlame().getFirstLayer());
   }
