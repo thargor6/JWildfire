@@ -83,7 +83,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_RAW_MOTION_DATA = "tina.path.raw_motion_data";
 
-  static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
+  static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality.1";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.8";
@@ -92,7 +92,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_DISABLE_SOLID_RANDGENS = "tina.disable_solid_randgens";
 
-  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
+  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.3";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
@@ -123,12 +123,12 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.3";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
   static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.5";
-  static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
+  static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius.1";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
@@ -303,7 +303,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultSpatialOversampling = 2;
+  private int tinaDefaultSpatialOversampling = 1;
 
   @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
   private boolean tinaDefaultPostNoiseFilter = false;
@@ -468,7 +468,7 @@ public class Prefs extends ManagedObject {
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
-  private double tinaRenderRealtimeQuality = 1.0;
+  private double tinaRenderRealtimeQuality = 0.5;
 
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;

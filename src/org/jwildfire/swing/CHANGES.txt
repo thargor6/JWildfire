@@ -1,6 +1,9 @@
 V3.31 (29.03.2018)
  - changed the default filter to the same that is used by Flamelet which creates nice sharp images,
-   if you do not like it, you may change it in the Preferences 
+   if you do not like it, you may change it in the Preferences
+ - fixed the problem with the Mac-version, which could not be installed on many Macs in previous 
+   versions (because the new APFS was used due to a bug in the build tool) 
+ - optimed some default settings in order to allow faster editing   
  - new variations:
 	- apollony (Jesus Sosa)
 	- chrysanthemum (Jesus Sosa)
