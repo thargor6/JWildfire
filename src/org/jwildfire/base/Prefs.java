@@ -127,7 +127,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
-  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.4";
+  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.5";
   static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
@@ -318,7 +318,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDefaultFilterVisualisationFlat = false;
 
   @Property(description = "Default spatial filter-kernel, used when creating a new flame", category = PropertyCategory.TINA, editorClass = FilterKernelTypeEditor.class)
-  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL_SINEPOW;
+  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL_SMOOTH;
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
   private double tinaDefaultSpatialFilterRadius = 0.75;

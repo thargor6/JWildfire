@@ -1,3 +1,61 @@
+V3.31 (29.03.2018)
+ - changed the default filter to the same that is used by Flamelet which creates nice sharp images,
+   if you do not like it, you may change it in the Preferences 
+ - new variations:
+	- apollony (Jesus Sosa)
+	- chrysanthemum (Jesus Sosa)
+	- dc_dmodulus (Jesus Sosa, Rick Sidwell, and Brad Stefanov)
+	- dc_gnarly (Rick Sidwell, and Brad Stefanov)
+	- dustpoint (Jesus Sosa)
+	- iconattractor (Jesus Sosa)
+	- knots3D_js (Jesus Sosa)	
+	- macmillan_js (Jesus Sosa)
+	- recurrenceplot_js (Jesus Sosa)
+	- seashell3D (Jesus Sosa)
+	- sattractor3d (Jesus Sosa)
+	- threepoint (Jesus Sosa)
+	- prepost_circlize (Rick Sidwell)
+	- prepost_affine (Rick Sidwell)
+	- prepost_mobius (Rick Sidwell)
+		---Prepost variations are executed both before the other variations (along
+		with other pre_ variations) and after the other variations (along with
+		other post_ variations). One of the two will be an inverse function,
+		calling invtransform instead of transform. Prepost variations are
+		identified with priority 2 (calls invtransform for pre and transform for
+		post) or -2 (calls transform for pre and invtransform for post).---
+ - updated variations:	
+	- hamid_js - added more variables
+	- jubiq - made it respect other 3D objects instead of making it flat
+	- siercarpet_js - added preserveZ
+	- parplot2d_wf - added a solid variable by default no new changes. Set to 0 they react more like traditional flames
+	- pre_stabilize - Added a direct color option to pre_stabilize for coloring glitch flames
+ - fixes
+	- Make random gradients without fade colors use the right number of colors.
+	- Bug fixes and enhancements to parameter list
+		1. Pre button for variation 11 didn't work
+		2. Slider for params with dynamic parameter expansion didn't work
+		3. Added tool tip with full name when parameter name is truncated
+	- Fix bugs with duplicate transform
+		1. Final transforms now duplicate as final transforms
+		2. Normal transforms now duplicate From Xaos as well as To Xaos
+	- Fix UGR gradient loading for gradients saved by Ultra Fractal
+		1. Newer version of Ultra Fractal don't use numnodes, so the number of
+		colors it contains is used to determine whether interpolation is needed
+		instead.
+		2. The UGR parameter "smooth=yes" indicates that the curves used to fade
+		the gradient are smoothed, not that the gradient isn't faded. The
+		setColorsSmooth function was changed to reflect this.	
+	- Make the "Add linked transform" button copy xaos
+	- Fixed bug with dynamic parameter expansion
+	- Stereo3d bug fixes
+	- Made labels reflect the current edit plane
+		Specifically, when the edit plane is changed, the affine labels (X1, X2,
+		Y1, Y2) and the labels on the triangles (or rectangles) now change to
+		match the new edit plane. This will make it easier to identify just what
+		the modified values will affect.
+	- Bug fix:gradient reset button breaks range editing
+	- Made random gradient generator use variable widths for the colors
+	
 V3.30 (21.12.2017)
  - new variations:
     - dc_triTile, crop3D, spherecrop, loq
@@ -579,7 +637,7 @@ V2.22 XMAS-EDITION (22.12.2014):
     - Cloverleaf
     - Flower
     - Perlin Noise
-    - SubFlame (use ANY fractal as shape, even SVG-shapes. Save the flame as "_dof_<number>.flame" into your flame folder, where number is a zero padded nummber starting from 1, e.g. "0001", "0002", .... Choose this flame by specifying the "flame"-param of the DOF-Shape)
+    - SubFlame (use ANY fractal as shape, even SVG-shapes. Save the flame as "_dof_ .flame" into your flame folder, where number is a zero padded nummber starting from 1, e.g. "0001", "0002", .... Choose this flame by specifying the "flame"-param of the DOF-Shape)
     - Taurus        
  - new "Bokeh"-random-flame-generator
  - new "Duality"-random-flame-generator
@@ -1511,7 +1569,7 @@ V0.37 (04.02.2012):
  - Fractal flame editor: additonal combobox to choose gradients from the library
  - Fractal flame editor: parser for flam3 palettes, integrated the standard flam3 palettes in the library
  - Fractal flame editor: gradient library panel
- - Fractal flame editor: changes are now only accepted after pressing the <Enter> key (before also the loss of the focus caused a refresh which may cause some strange problems)
+ - Fractal flame editor: changes are now only accepted after pressing the   key (before also the loss of the focus caused a refresh which may cause some strange problems)
 
 V0.36 (22.01.2012):
  - Fractal flame editor: new offset paramters for the subflame_wf variations
