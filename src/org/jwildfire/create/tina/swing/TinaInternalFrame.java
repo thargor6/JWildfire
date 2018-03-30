@@ -4018,67 +4018,19 @@ public class TinaInternalFrame extends JInternalFrame {
    */
   private JPanel getTinaAffineTransformationPanel() {
     if (tinaAffineTransformationPanel == null) {
-      affineC21Lbl = new JLabel();
-      affineC21Lbl.setName("affineC21Lbl");
-      affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC21Lbl.setText("O2");
-      affineC21Lbl.setLocation(new Point(216, 30));
-      affineC21Lbl.setSize(new Dimension(20, 22));
-      affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC21Lbl.setPreferredSize(new Dimension(24, 22));
-      affineC20Lbl = new JLabel();
-      affineC20Lbl.setName("affineC20Lbl");
-      affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC20Lbl.setText("O1");
-      affineC20Lbl.setLocation(new Point(216, 6));
-      affineC20Lbl.setSize(new Dimension(20, 22));
-      affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC20Lbl.setPreferredSize(new Dimension(24, 22));
-      affineC11Lbl = new JLabel();
-      affineC11Lbl.setName("affineC11Lbl");
-      affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC11Lbl.setText("Y2");
-      affineC11Lbl.setLocation(new Point(108, 30));
-      affineC11Lbl.setSize(new Dimension(20, 22));
-      affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC11Lbl.setPreferredSize(new Dimension(24, 22));
-      affineC10Lbl = new JLabel();
-      affineC10Lbl.setName("affineC10Lbl");
-      affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC10Lbl.setText("Y1");
-      affineC10Lbl.setLocation(new Point(108, 6));
-      affineC10Lbl.setSize(new Dimension(20, 22));
-      affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC10Lbl.setPreferredSize(new Dimension(24, 22));
-      affineC01Lbl = new JLabel();
-      affineC01Lbl.setName("affineC01Lbl");
-      affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC01Lbl.setText("X2");
-      affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC01Lbl.setLocation(new Point(0, 30));
-      affineC01Lbl.setSize(new Dimension(20, 22));
-      affineC01Lbl.setPreferredSize(new Dimension(24, 22));
-      affineC00Lbl = new JLabel();
-      affineC00Lbl.setName("affineC00Lbl");
-      affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-      affineC00Lbl.setText("X1");
-      affineC00Lbl.setLocation(new Point(0, 6));
-      affineC00Lbl.setSize(new Dimension(20, 22));
-      affineC00Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      affineC00Lbl.setPreferredSize(new Dimension(24, 22));
       tinaAffineTransformationPanel = new JPanel();
       tinaAffineTransformationPanel.setLayout(null);
       tinaAffineTransformationPanel.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      tinaAffineTransformationPanel.add(affineC00Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC00Lbl(), null);
       tinaAffineTransformationPanel.add(getAffineC00REd(), null);
-      tinaAffineTransformationPanel.add(affineC01Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC01Lbl(), null);
       tinaAffineTransformationPanel.add(getAffineC01REd(), null);
-      tinaAffineTransformationPanel.add(affineC10Lbl, null);
-      tinaAffineTransformationPanel.add(affineC11Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC10Lbl(), null);
+      tinaAffineTransformationPanel.add(getAffineC11Lbl(), null);
       tinaAffineTransformationPanel.add(getAffineC10REd(), null);
       tinaAffineTransformationPanel.add(getAffineC11REd(), null);
-      tinaAffineTransformationPanel.add(affineC20Lbl, null);
-      tinaAffineTransformationPanel.add(affineC21Lbl, null);
+      tinaAffineTransformationPanel.add(getAffineC20Lbl(), null);
+      tinaAffineTransformationPanel.add(getAffineC21Lbl(), null);
       tinaAffineTransformationPanel.add(getAffineC20REd(), null);
       tinaAffineTransformationPanel.add(getAffineC21REd(), null);
       tinaAffineTransformationPanel.add(getAffineRotateLeftButton(), null);
@@ -4630,6 +4582,12 @@ public class TinaInternalFrame extends JInternalFrame {
       tinaPaletteFadeColorsCBx.setToolTipText("Create a gradient were each key-frame-color is faded into the next one");
       tinaPaletteFadeColorsCBx.setBounds(199, 56, 140, 18);
       tinaPaletteCreatePanel.add(tinaPaletteFadeColorsCBx);
+
+      tinaPaletteUniformWidthCBx = new JCheckBox("Uniform widths");
+      tinaPaletteUniformWidthCBx.setSelected(false);
+      tinaPaletteUniformWidthCBx.setToolTipText("Make all colors the same width");
+      tinaPaletteUniformWidthCBx.setBounds(199, 80, 140, 18);
+      tinaPaletteCreatePanel.add(tinaPaletteUniformWidthCBx);
 
       JLabel lblGradientGenerator = new JLabel();
       lblGradientGenerator.setText("Gradient generator");
@@ -5450,7 +5408,8 @@ public class TinaInternalFrame extends JInternalFrame {
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
         getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(),
         getTinaPaletteFrequencyREd(), getTinaPaletteFrequencySlider(), getTinaPaletteBlurREd(), getTinaPaletteBlurSlider(), getTinaPaletteInvertBtn(), getTinaPaletteReverseBtn(),
-        getTinaTransformationsTable(), getAffineC00REd(),
+        getTinaTransformationsTable(), 
+        getAffineC00Lbl(), getAffineC01Lbl(), getAffineC10Lbl(), getAffineC11Lbl(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveHorizAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
         getAffineMoveUpButton(), getAffineMoveLeftButton(), getAffineMoveRightButton(), getAffineMoveDownButton(), getTinaAddTransformationButton(),
@@ -5480,7 +5439,7 @@ public class TinaInternalFrame extends JInternalFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
-        getTinaPaletteFadeColorsCBx(), getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
+        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
@@ -5938,6 +5897,90 @@ public class TinaInternalFrame extends JInternalFrame {
     return tinaAddFinalTransformationButton;
   }
 
+  private JLabel getAffineC00Lbl() {
+    if (affineC00Lbl == null) {
+      affineC00Lbl = new JLabel();
+      affineC00Lbl.setName("affineC00Lbl");
+      affineC00Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC00Lbl.setText("X1");
+      affineC00Lbl.setLocation(new Point(0, 6));
+      affineC00Lbl.setSize(new Dimension(20, 22));
+      affineC00Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC00Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC00Lbl;
+  }
+  
+  private JLabel getAffineC01Lbl() {
+	    if (affineC01Lbl == null) {
+	        affineC01Lbl = new JLabel();
+	        affineC01Lbl.setName("affineC01Lbl");
+	        affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+	        affineC01Lbl.setText("X2");
+	        affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+	        affineC01Lbl.setLocation(new Point(0, 30));
+	        affineC01Lbl.setSize(new Dimension(20, 22));
+	        affineC01Lbl.setPreferredSize(new Dimension(24, 22));
+	    }
+	    return affineC01Lbl;
+	  }
+	  
+  private JLabel getAffineC10Lbl() {
+	    if (affineC10Lbl == null) {
+	        affineC10Lbl = new JLabel();
+	        affineC10Lbl.setName("affineC10Lbl");
+	        affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+	        affineC10Lbl.setText("Y1");
+	        affineC10Lbl.setLocation(new Point(108, 6));
+	        affineC10Lbl.setSize(new Dimension(20, 22));
+	        affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+	        affineC10Lbl.setPreferredSize(new Dimension(24, 22));
+	    }
+	    return affineC10Lbl;
+	  }
+	  
+  private JLabel getAffineC11Lbl() {
+	    if (affineC11Lbl == null) {
+	        affineC11Lbl = new JLabel();
+	        affineC11Lbl.setName("affineC11Lbl");
+	        affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+	        affineC11Lbl.setText("Y2");
+	        affineC11Lbl.setLocation(new Point(108, 30));
+	        affineC11Lbl.setSize(new Dimension(20, 22));
+	        affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+	        affineC11Lbl.setPreferredSize(new Dimension(24, 22));
+	    }
+	    return affineC11Lbl;
+	  }
+	  
+  private JLabel getAffineC20Lbl() {
+	    if (affineC20Lbl == null) {
+	        affineC20Lbl = new JLabel();
+	        affineC20Lbl.setName("affineC20Lbl");
+	        affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+	        affineC20Lbl.setText("O1");
+	        affineC20Lbl.setLocation(new Point(216, 6));
+	        affineC20Lbl.setSize(new Dimension(20, 22));
+	        affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+	        affineC20Lbl.setPreferredSize(new Dimension(24, 22));
+	    }
+	    return affineC20Lbl;
+	  }
+	  
+private JLabel getAffineC21Lbl() {
+	    if (affineC21Lbl == null) {
+	        affineC21Lbl = new JLabel();
+	        affineC21Lbl.setName("affineC21Lbl");
+	        affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+	        affineC21Lbl.setText("O2");
+	        affineC21Lbl.setLocation(new Point(216, 30));
+	        affineC21Lbl.setSize(new Dimension(20, 22));
+	        affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+	        affineC21Lbl.setPreferredSize(new Dimension(24, 22));
+	    }
+	    return affineC21Lbl;
+	  }
+	  
   /**
    * This method initializes affineC00REd	
    * 	
@@ -9744,7 +9787,7 @@ public class TinaInternalFrame extends JInternalFrame {
       nonlinearParams11PreButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/code-block_pre.png")));
       nonlinearParams11PreButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
-          tinaController.nonlinearParamsPreButtonClicked(11);
+          tinaController.nonlinearParamsPreButtonClicked(10);
         }
       });
       nonlinearVar11Panel.add(nonlinearParams11PreButton);
@@ -10371,6 +10414,7 @@ public class TinaInternalFrame extends JInternalFrame {
   private JButton randomizeBtn;
   private JPanel panel_73;
   private JCheckBox tinaPaletteFadeColorsCBx;
+  private JCheckBox tinaPaletteUniformWidthCBx;
   private JPanel panel_74;
   private JPanel panel_75;
   private JPanel panel_76;
@@ -13150,6 +13194,10 @@ public class TinaInternalFrame extends JInternalFrame {
 
   public JCheckBox getTinaPaletteFadeColorsCBx() {
     return tinaPaletteFadeColorsCBx;
+  }
+  
+  public JCheckBox getTinaPaletteUniformWidthCBx() {
+	return tinaPaletteUniformWidthCBx;
   }
 
   private JPanel getPanel_74() {

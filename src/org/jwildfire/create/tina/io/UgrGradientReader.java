@@ -87,8 +87,8 @@ public class UgrGradientReader {
         colors.put(index, color);
       }
     }
-    boolean doInterpolate = pUgr.contains("numnodes=");
-    boolean doFade = pUgr.contains("smooth=yes");
+    boolean doInterpolate = colors.size() < 256;
+    boolean doSmooth = pUgr.contains("smooth=yes");
     final int maxIdx = 399;
     if (doInterpolate) {
       if (colors.get(0) == null) {
@@ -110,6 +110,6 @@ public class UgrGradientReader {
         }
       }
     }
-    pPalette.setColors(colors, doInterpolate, doFade);
+    pPalette.setColors(colors, doInterpolate, doSmooth);
   }
 }

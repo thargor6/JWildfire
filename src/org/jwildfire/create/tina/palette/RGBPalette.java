@@ -635,7 +635,7 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
     }
   }
 
-  private void setColorsSmooth(Map<Integer, RGBColor> pColors, int pSrcSize, boolean pDoFade) {
+  private void setColorsSmooth(Map<Integer, RGBColor> pColors, int pSrcSize, boolean pDoSmooth) {
     int dstSize = PALETTE_SIZE;
 
     for (int i = 0; i < dstSize; i++) {
@@ -670,8 +670,9 @@ public class RGBPalette implements Assignable<RGBPalette>, Serializable {
       }
 
       double srcRange = rColorIdx - lColorIdx + 1;
-      double x = pDoFade ? (coord - lColorIdx) / srcRange : 0.0;
-
+      double x = (coord - lColorIdx) / srcRange;
+      if (pDoSmooth) x = x * x * (3 - 2 * x);
+      
       int r = Tools.roundColor((double) lColor.getRed() + ((double) (rColor.getRed() - lColor.getRed())) * x);
       int g = Tools.roundColor((double) lColor.getGreen() + ((double) (rColor.getGreen() - lColor.getGreen())) * x);
       int b = Tools.roundColor((double) lColor.getBlue() + ((double) (rColor.getBlue() - lColor.getBlue())) * x);

@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2015 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -14,29 +14,24 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.mutagen;
+package org.jwildfire.create.tina.base;
 
-import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.randomgradient.AllRandomGradientGenerator;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import org.jwildfire.create.tina.variation.Variation;
 
-public class RandomGradientMutation implements Mutation {
+public final class PostInvVariationTransformationStep extends AbstractTransformationStep {
+  private static final long serialVersionUID = 1L;
 
-  // for Script-compatibility
-  @Deprecated
-  public void execute(Flame pFlame) {
-    execute(pFlame.getFirstLayer());
+  private final Variation variation;
+
+  public PostInvVariationTransformationStep(XForm pXForm, Variation pVariation) {
+    super(pXForm);
+    variation = pVariation;
   }
 
   @Override
-  public void execute(Layer pLayer) {
-    int keyFrames = 3 + Tools.randomInt(56);
-    boolean fadePaletteColors = Math.random() > 0.33;
-    boolean uniformWidth = Math.random() > 0.75;
-    RGBPalette palette = new AllRandomGradientGenerator().generatePalette(keyFrames, fadePaletteColors, uniformWidth);
-    pLayer.setPalette(palette);
+  public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
+    variation.invtransform(pContext, xform, pAffineT, pVarT);
   }
 
 }

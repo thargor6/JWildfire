@@ -73,6 +73,10 @@ public class Variation implements Assignable<Variation>, Serializable {
     func.transform(pContext, pXForm, pAffineTP, pVarTP, amount);
   }
 
+  public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
+    func.invtransform(pContext, pXForm, pAffineTP, pVarTP, amount);
+  }
+
   @Override
   public String toString() {
     return func.getName() + "(" + amount + ")";

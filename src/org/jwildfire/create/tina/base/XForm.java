@@ -428,8 +428,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
     t.add(new TransformationPreparePreVariationsStep(this));
 
     for (Variation variation : variations) {
-      if (variation.getPriority() < 0) {
-        if (variation.getFunc().getPriority() < 0) {
+      if (variation.getPriority() < 0 || variation.getPriority() == 2) {
+        if (variation.getFunc().getPriority() == 2) {
+        	t.add(new PreInvVariationTransformationStep(this, variation));
+        }
+        else if (variation.getFunc().getPriority() < 0) {
           t.add(new PreVariationTransformationStep(this, variation));
         }
         else {
@@ -452,8 +455,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
 
     for (Variation variation : variations) {
-      if (variation.getPriority() > 0) {
-        if (variation.getFunc().getPriority() > 0) {
+      if (variation.getPriority() > 0 || variation.getPriority() == -2) {
+        if (variation.getFunc().getPriority() == -2) {
+          t.add(new PostInvVariationTransformationStep(this, variation));
+        }
+        else if (variation.getFunc().getPriority() > 0) {
           t.add(new PostVariationTransformationStep(this, variation));
         }
         else {
@@ -1223,7 +1229,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
   }
 
-  private EditPlane getEditPlane() {
+  public EditPlane getEditPlane() {
     if (owner == null || owner.getOwner() == null) {
       System.out.println("EditPlane NULL");
       return EditPlane.XY;

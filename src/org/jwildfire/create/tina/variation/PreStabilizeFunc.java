@@ -29,14 +29,17 @@ public class PreStabilizeFunc extends VariationFunc {
   private static final String PARAM_N = "n";
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_P = "p";
-  private static final String[] paramNames = { PARAM_N, PARAM_SEED, PARAM_P };
+  private static final String PARAM_DC = "dc";
+  private static final String[] paramNames = { PARAM_N, PARAM_SEED, PARAM_P, PARAM_DC };
 
   private int n = 4;
   private int seed = (int) (Math.random() * 100000);
   private double p = 0.1;
+  private int dc = 0;
   private Random rand = new Random();
-  private double[] x, y;
+  private double[] x, y, c;
   private boolean start = true;
+  private double nextColor, colorDelta;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -48,6 +51,7 @@ public class PreStabilizeFunc extends VariationFunc {
       pAffineTP.x = x[i];
       pAffineTP.y = y[i];
       pAffineTP.z = 0;
+      if (dc != 0) pAffineTP.color = c[i];
     }
   }
 
@@ -58,7 +62,7 @@ public class PreStabilizeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, seed, p };
+    return new Object[] { n, seed, p, dc };
   }
 
   @Override
@@ -69,6 +73,8 @@ public class PreStabilizeFunc extends VariationFunc {
       seed = Tools.FTOI(pValue);
     else if (PARAM_P.equalsIgnoreCase(pName))
       p = pValue;
+    else if (PARAM_DC.equalsIgnoreCase(pName))
+      dc = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
   }
@@ -85,12 +91,21 @@ public class PreStabilizeFunc extends VariationFunc {
 
     x = new double[n];
     y = new double[n];
+    c = new double[n];
 
     rand.setSeed(seed);
+    nextColor = 0.5;
+    colorDelta = 1.0;
 
     for (int i = 0; i < n; i++) {
       x[i] = rand.nextDouble() * 2 - 1;
       y[i] = rand.nextDouble() * 2 - 1;
+      c[i] = nextColor;
+      nextColor += colorDelta;
+      if (nextColor >= 1) {
+    	  colorDelta /= 2;
+    	  nextColor = colorDelta / 2;
+      }
     }
 
     start = true;

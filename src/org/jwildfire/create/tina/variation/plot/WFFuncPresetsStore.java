@@ -25,6 +25,8 @@ public class WFFuncPresetsStore {
   private static YPlot2DWFFuncPresets yPlot2DWFFuncPresets;
   private static YPlot3DWFFuncPresets yPlot3DWFFuncPresets;
   private static IsoSFPlot3DWFFuncPresets isoSFPlot3DWFFuncPresets;
+  private static SAttractor3DWFFuncPresets SAttractor3DWFFuncPresets;
+  private static Knots3DWFFuncPresets Knots3DWFFuncPresets;
 
   public static ParPlot2DWFFuncPresets getParPlot2DWFFuncPresets() {
     if (parPlot2DWFFuncPresets == null) {
@@ -53,4 +55,16 @@ public class WFFuncPresetsStore {
     }
     return isoSFPlot3DWFFuncPresets;
   }
+  public static SAttractor3DWFFuncPresets getSAttractor3DWFFuncPresets() {
+	    if (SAttractor3DWFFuncPresets == null) {
+	    	SAttractor3DWFFuncPresets = new SAttractor3DWFFuncPresets();
+	    }
+	    return SAttractor3DWFFuncPresets;
+	  }
+  public static Knots3DWFFuncPresets getKnots3DWFFuncPresets() {
+	    if (Knots3DWFFuncPresets == null) {
+	    	Knots3DWFFuncPresets = new Knots3DWFFuncPresets();
+	    }
+	    return Knots3DWFFuncPresets;
+	  }
 }

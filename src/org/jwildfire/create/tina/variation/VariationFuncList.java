@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
+import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
@@ -599,10 +600,28 @@ public class VariationFuncList {
     registerVariationFunc(PreStabilizeFunc.class);
     registerVariationFunc(PreSphericalFunc.class);
     registerVariationFunc(PostSphericalFunc.class);
+    registerVariationFunc(PrePostMobiusFunc.class);
+    registerVariationFunc(PrePostAffineFunc.class);
+    registerVariationFunc(PrePostCirclizeFunc.class);
 
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
+    registerVariationFunc(DCDModulusFunc.class);
+    registerVariationFunc(DCGnarlyFunc.class);
 
+    registerVariationFunc(Strange3DFunc.class);
+    registerVariationFunc(DustPointFunc.class);     
+    registerVariationFunc(IconAttractorFunc.class);
+    registerVariationFunc(ApollonyFunc.class); 
+    registerVariationFunc(ChrysanthemumFunc.class);  
+    registerVariationFunc(SeaShell3DFunc.class);            
+    registerVariationFunc(ThreePointIFSFunc.class);  
+    
+    registerVariationFunc(Knots3DFunc.class);
+    registerVariationFunc(RecurrencePlotFunc.class);  
+    registerVariationFunc(MacMillanFunc.class);  
+    
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
@@ -694,7 +713,8 @@ public class VariationFuncList {
     while (true) {
       int idx = (int) (Math.random() * getNameList().size());
       String name = getNameList().get(idx);
-      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) && !name.equals("iflames_wf")) {
+      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) 
+    		  	&& !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf")) {
         return name;
       }
     }

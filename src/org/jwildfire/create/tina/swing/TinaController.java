@@ -425,6 +425,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.paletteRandomPointsREd = parameterObject.pPaletteRandomPointsREd;
     data.paletteRandomGeneratorCmb = parameterObject.paletteRandomGeneratorCmb;
     data.paletteFadeColorsCBx = parameterObject.paletteFadeColorsCBx;
+    data.paletteUniformWidthCBx = parameterObject.paletteUniformWidthCBx;
     data.paletteImgPanel = parameterObject.pPaletteImgPanel;
     data.colorChooserPaletteImgPanel = parameterObject.pColorChooserPaletteImgPanel;
     data.paletteShiftREd = parameterObject.pPaletteShiftREd;
@@ -464,6 +465,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.swfAnimatorResolutionProfileCmb = parameterObject.pSWFAnimatorResolutionProfileCmb;
     data.swfAnimatorQualityProfileCmb = parameterObject.swfAnimatorQualityProfileCmb;
     data.transformationsTable = parameterObject.pTransformationsTable;
+    data.affineC00Lbl = parameterObject.pAffineC00Lbl;
+    data.affineC01Lbl = parameterObject.pAffineC01Lbl;
+    data.affineC10Lbl = parameterObject.pAffineC10Lbl;
+    data.affineC11Lbl = parameterObject.pAffineC11Lbl;
+    data.affineC20Lbl = parameterObject.pAffineC20Lbl;
+    data.affineC21Lbl = parameterObject.pAffineC21Lbl;
     data.affineC00REd = parameterObject.pAffineC00REd;
     data.affineC01REd = parameterObject.pAffineC01REd;
     data.affineC10REd = parameterObject.pAffineC10REd;
@@ -1238,7 +1245,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       RandomFlameGenerator randGen = new AllRandomFlameGenerator();
       int palettePoints = 3 + Tools.randomInt(21);
       boolean fadePaletteColors = Math.random() > 0.09;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+      boolean uniformWidth = Math.random() > 0.75;
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
       Flame flame = sampler.createSample().getFlame();
       setCurrFlame(flame);
     }
@@ -1693,7 +1701,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               break;
           }
           refreshPaletteColorsTable();
-          RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+          RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
           saveUndoPoint();
           getCurrLayer().setPalette(palette);
           setLastGradient(palette);
@@ -2147,7 +2155,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
       data.paletteKeyFrames = gradientGen.generateKeyFrames(Integer.parseInt(data.paletteRandomPointsREd.getText()));
       refreshPaletteColorsTable();
-      RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected());
+      RGBPalette palette = RandomGradientGenerator.generatePalette(data.paletteKeyFrames, data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
       saveUndoPoint();
       getCurrLayer().setPalette(palette);
       setLastGradient(palette);
@@ -2461,8 +2469,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     boolean oldNoRefresh = noRefresh;
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
-      refreshEditPlaneToggleButtons(getCurrFlame().getEditPlane());
+      EditPlane curEditPlane = getCurrFlame().getEditPlane();
+      refreshEditPlaneToggleButtons(curEditPlane);
       if (pXForm != null) {
+        switch (curEditPlane) {
+          case XY:
+        	  data.affineC00Lbl.setText("X1");
+        	  data.affineC01Lbl.setText("X2");
+        	  data.affineC10Lbl.setText("Y1");
+        	  data.affineC11Lbl.setText("Y2");
+        	  break;
+          case YZ:
+        	  data.affineC00Lbl.setText("Y1");
+        	  data.affineC01Lbl.setText("Y2");
+        	  data.affineC10Lbl.setText("Z1");
+        	  data.affineC11Lbl.setText("Z2");
+        	  break;
+          default:
+        	  data.affineC00Lbl.setText("X1");
+        	  data.affineC01Lbl.setText("X2");
+        	  data.affineC10Lbl.setText("Z1");
+        	  data.affineC11Lbl.setText("Z2");
+        	  break;
+          } 
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
           data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
@@ -2560,11 +2589,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         int idx = 0;
         for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
           if (pXForm == null || idx >= pXForm.getVariationCount()) {
-            refreshParamControls(row, null, null);
+            refreshParamControls(row, null, null, true);
           }
           else {
             Variation var = pXForm.getVariation(idx);
-            refreshParamControls(row, pXForm, var);
+            refreshParamControls(row, pXForm, var, true);
           }
           idx++;
         }
@@ -2580,7 +2609,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar) {
+  public void refreshParamControls(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar, boolean pSelectFirst) {
 
     if (pXForm == null || pVar == null) {
       pRow.getNonlinearVarCmb().setSelectedIndex(-1);
@@ -2604,9 +2633,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       VariationFunc varFunc = pVar.getFunc();
 
       pRow.getNonlinearParamsPreButton().setEnabled(true);
-      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0);
+      pRow.getNonlinearParamsPreButton().setSelected(pVar.getPriority() < 0 || pVar.getPriority() == 2);
       pRow.getNonlinearParamsPostButton().setEnabled(true);
-      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0);
+      pRow.getNonlinearParamsPostButton().setSelected(pVar.getPriority() > 0 || pVar.getPriority() == -2);
       if (pRow.getNonlinearParamsUpButton() != null) {
         pRow.getNonlinearParamsUpButton().setEnabled(true);
       }
@@ -2661,30 +2690,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
 
       // preselection
-      if (resCount > 0) {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
-        enableNonlinearControls(pRow, true);
-      }
-      else if (varFunc.getParameterNames().length > 0) {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(0);
-        Object val = varFunc.getParameterValues()[0];
-        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
-        if (val instanceof Double) {
-          pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+      if (pSelectFirst){
+        if (resCount > 0) {
+          pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+          pRow.getNonlinearParamsREd().setText(null);
+          enableNonlinearControls(pRow, true);
         }
-        else if (val instanceof Integer) {
-          pRow.getNonlinearParamsREd().setOnlyIntegers(true);
-          pRow.getNonlinearParamsREd().setText(val.toString());
+        else if (varFunc.getParameterNames().length > 0) {
+          pRow.getNonlinearParamsCmb().setSelectedIndex(0);
+          Object val = varFunc.getParameterValues()[0];
+          pRow.getNonlinearParamsREd().setOnlyIntegers(false);
+          if (val instanceof Double) {
+            pRow.getNonlinearParamsREd().setText(Tools.doubleToString((Double) val));
+          }
+          else if (val instanceof Integer) {
+            pRow.getNonlinearParamsREd().setOnlyIntegers(true);
+            pRow.getNonlinearParamsREd().setText(val.toString());
+          }
+          else {
+            pRow.getNonlinearParamsREd().setText(val.toString());
+          }
+          enableNonlinearControls(pRow, false);
         }
         else {
-          pRow.getNonlinearParamsREd().setText(val.toString());
+          pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
+          pRow.getNonlinearParamsREd().setText(null);
+          pRow.getNonlinearParamsREd().setOnlyIntegers(false);
         }
-        enableNonlinearControls(pRow, false);
-      }
-      else {
-        pRow.getNonlinearParamsCmb().setSelectedIndex(-1);
-        pRow.getNonlinearParamsREd().setText(null);
-        pRow.getNonlinearParamsREd().setOnlyIntegers(false);
       }
     }
     pRow.rebuildParamsPnl(pXForm, pVar);
@@ -2703,8 +2735,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
       XForm xForm = getCurrLayer().getXForms().get(i);
       if (i == fromId) {
-        for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
-          xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
+        XForm toXForm = getCurrLayer().getXForms().get(toId);
+    	for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
+          toXForm.getModifiedWeights()[j] = xForm.getModifiedWeights()[j];
+    	  xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
         xForm.setDrawMode(DrawMode.HIDDEN);
       }
@@ -2736,10 +2770,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void duplicateXForm() {
+    int fromId = data.transformationsTable.getSelectedRow();
+    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) return;
+    boolean isFinal = (fromId >= getCurrLayer().getXForms().size());
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
-    getCurrLayer().getXForms().add(xForm);
+    if (isFinal) {
+    	getCurrLayer().getFinalXForms().add(xForm);
+    }
+    else {
+      getCurrLayer().getXForms().add(xForm);
+      if (fromId >= 0 && fromId < getCurrLayer().getXForms().size()) {
+    	  // copy xaos from values
+    	  int toId = getCurrLayer().getXForms().size() - 1;
+    	  for (int i=0; i < toId; i++) {
+    		XForm xFormi = getCurrLayer().getXForms().get(i);
+    		xFormi.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		if (i == fromId) {
+    		  xForm.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+    		}
+    	}
+      }
+    }
     gridRefreshing = true;
     try {
       refreshTransformationsTable();
@@ -2747,7 +2800,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     finally {
       gridRefreshing = false;
     }
-    int row = getCurrLayer().getXForms().size() - 1;
+    int row = getCurrLayer().getXForms().size() + (isFinal ? getCurrLayer().getFinalXForms().size() : 0) - 1;
     data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
@@ -2969,7 +3022,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     for (int i = 0; i < maxCount; i++) {
       int palettePoints = 7 + Tools.randomInt(24);
       boolean fadePaletteColors = Math.random() > 0.06;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, pQuality);
+      boolean uniformWidth = Math.random() > 0.75;
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, uniformWidth, pQuality);
       RandomFlameGeneratorSample sample = sampler.createSample();
       FlameThumbnail thumbnail;
       thumbnail = new FlameThumbnail(sample.getFlame(), null, null);
@@ -3106,7 +3160,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           var.setAmount(Tools.stringToDouble(varStr));
           xForm.addVariation(var);
         }
-        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+        refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
         refreshXFormUI(xForm);
         refreshFlameImage(true, false, 1, true, false);
 
@@ -3123,7 +3177,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     nonlinearVarREdChanged(pIdx, 0.0);
   }
 
-  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue) {
+  public void propertyPnlValueChanged(int pIdx, String pPropertyName, double pPropertyValue, boolean pIsAdjusting) {
     if (cmbRefreshing) {
       return;
     }
@@ -3134,10 +3188,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
           var.getFunc().setParameter(pPropertyName, pPropertyValue);
-          if (var.getFunc().dynamicParameterExpansion(pPropertyName)) {
+          if (!pIsAdjusting && var.getFunc().dynamicParameterExpansion(pPropertyName)) {
             // if setting the parameter can change the total number of parameters, 
             //    then refresh parameter UI
-            this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+            this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
           }
           refreshFlameImage(true, false, 1, true, false);
         }
@@ -3213,7 +3267,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             if (var.getFunc().dynamicParameterExpansion(selected)) {
               // if setting the parameter can change the total number of parameters, 
               //    then refresh parameter UI (and reselect parameter that was changed)
-              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+              this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, false);
               data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsCmb().setSelectedItem(selected);
             }
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsREd().setText(Tools.doubleToString(val));
@@ -3414,7 +3468,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
                     var.getFunc().setRessource(rName, valByteArray);
                     if (var.getFunc().ressourceCanModifyParams(rName)) {
                       // forcing refresh of params UI in case setting resource changes available params or param values
-                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var);
+                      this.refreshParamControls(data.TinaNonlinearControlsRows[pIdx], xForm, var, true);
                     }
                   }
                   catch (Throwable ex) {
@@ -3706,7 +3760,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     flame.setPixelsPerUnit(50);
     flame.setBGTransparency(prefs.isTinaDefaultBGTransparency());
     RandomGradientGenerator gradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem());
-    RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
+    RGBPalette palette = gradientGen.generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
     flame.getFirstLayer().setPalette(palette);
     setLastGradient(palette);
     setCurrFlame(flame);
@@ -5388,7 +5442,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void addLayerBtn_clicked() {
     Flame flame = getCurrFlame();
     Layer layer = new Layer();
-    RGBPalette palette = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem()).generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected());
+    RGBPalette palette = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) data.paletteRandomGeneratorCmb.getSelectedItem()).generatePalette(Integer.parseInt(data.paletteRandomPointsREd.getText()), data.paletteFadeColorsCBx.isSelected(), data.paletteUniformWidthCBx.isSelected());
     layer.setPalette(palette);
     setLastGradient(palette);
     saveUndoPoint();
@@ -6159,6 +6213,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (getLastGradient() != null && getCurrLayer() != null) {
       saveUndoPoint();
       getCurrLayer().setPalette(getLastGradient().makeDeepCopy());
+      registerToEditor(getCurrFlame(), getCurrLayer());
       refreshUI();
     }
   }
@@ -6431,11 +6486,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void nonlinearParamsPreButtonClicked(int pIdx) {
-    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+	int fpriority;
+	XForm xForm = getCurrXForm();
+	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+	else fpriority = 0;
+	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
+	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? fpriority : 1);
+	}
+	else {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
+	}
   }
 
   public void nonlinearParamsPostButtonClicked(int pIdx) {
-    nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+	int fpriority;
+	XForm xForm = getCurrXForm();
+	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+	else fpriority = 0;
+	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
+	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? fpriority : -1);
+	}
+	else {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
+	}
   }
 
   public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
@@ -6492,10 +6565,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (pIdx < xForm.getVariationCount()) {
           final Variation var = xForm.getVariation(pIdx);
           var.setPriority(pPriority);
-          if (pPriority >= 0) {
+          if (pPriority == 0 || pPriority == 1) {
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().setSelected(false);
           }
-          if (pPriority <= 0) {
+          if (pPriority == 0 || pPriority == -1) {
             data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().setSelected(false);
           }
           refreshFlameImage(true, false, 1, true, false);
