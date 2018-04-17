@@ -222,7 +222,7 @@ public abstract class AbstractOBJMeshWFFunc extends VariationFunc {
     colorMapHolder.init();
     uvColorMapper.initFromLayer(pContext, pLayer);
     displacementMapHolder.init();
-    _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
+    _displ_amount = displacementMapHolder.getDispl_amount();
   }
 
 }
