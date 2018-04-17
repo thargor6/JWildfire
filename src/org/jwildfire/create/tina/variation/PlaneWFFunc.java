@@ -114,7 +114,7 @@ public class PlaneWFFunc extends VariationFunc {
       double iv = (v + 0.5) * displacementMapHolder.getDisplacementMapHeight();
       int ix = (int) MathLib.trunc(iu);
       int iy = (int) MathLib.trunc(iv);
-      return displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) / 255.0 * displacementMapHolder.getDispl_amount();
+      return displacementMapHolder.calculateImageDisplacement(ix, iy, iu, iv) * displacementMapHolder.getDispl_amount();
     }
     return 0.0;
   }
