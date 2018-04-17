@@ -620,6 +620,7 @@ public class VariationFuncList {
     registerVariationFunc(Knots3DFunc.class);
     registerVariationFunc(RecurrencePlotFunc.class);  
     registerVariationFunc(MacMillanFunc.class);  
+    registerVariationFunc(Disc3Func.class);  
     
     
     resolvedAliasMap = new HashMap<>();
