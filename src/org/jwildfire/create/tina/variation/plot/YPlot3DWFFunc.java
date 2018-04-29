@@ -306,7 +306,7 @@ public class YPlot3DWFFunc extends VariationFunc {
     colorMapHolder.init();
     uvColors = pLayer.getPalette().createRenderPalette(pContext.getFlameRenderer().getFlame().getWhiteLevel());
     displacementMapHolder.init();
-    _displ_amount = displacementMapHolder.getDispl_amount() / 255.0;
+    _displ_amount = displacementMapHolder.getDispl_amount();
 
     _xmin = xmin;
     _xmax = xmax;

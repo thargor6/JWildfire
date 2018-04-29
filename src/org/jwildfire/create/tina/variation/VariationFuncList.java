@@ -621,10 +621,13 @@ public class VariationFuncList {
     registerVariationFunc(Knots3DFunc.class);
     registerVariationFunc(RecurrencePlotFunc.class);  
     registerVariationFunc(MacMillanFunc.class);  
+
  
     registerVariationFunc(RingSubFlameFunc.class);  
     registerVariationFunc(GlynnS3SubflWFFunc.class);  
     registerVariationFunc(FracTerrain3DFunc.class);  
+
+    registerVariationFunc(Disc3Func.class);  
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

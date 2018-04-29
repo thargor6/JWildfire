@@ -17999,7 +17999,7 @@ private JLabel getAffineC21Lbl() {
           }
         }
       });
-      tinaSolidRenderingLightColorBtn.setToolTipText("Set the background color of your fractal");
+      tinaSolidRenderingLightColorBtn.setToolTipText("Set the color of the light");
       tinaSolidRenderingLightColorBtn.setPreferredSize(new Dimension(190, 24));
       tinaSolidRenderingLightColorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingLightColorBtn.setBackground(Color.BLACK);
@@ -18860,7 +18860,7 @@ private JLabel getAffineC21Lbl() {
   private JButton getTinaSolidRenderingMaterialReflMapBtn() {
     if (tinaSolidRenderingMaterialReflMapBtn == null) {
       tinaSolidRenderingMaterialReflMapBtn = new JButton();
-      tinaSolidRenderingMaterialReflMapBtn.setToolTipText("Set the background color of your fractal");
+      tinaSolidRenderingMaterialReflMapBtn.setToolTipText("The average reflection map color");
       tinaSolidRenderingMaterialReflMapBtn.setPreferredSize(new Dimension(190, 24));
       tinaSolidRenderingMaterialReflMapBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSolidRenderingMaterialReflMapBtn.setBackground(Color.BLACK);
@@ -18911,7 +18911,7 @@ private JLabel getAffineC21Lbl() {
   private JLabel getLblReflectionMap() {
     if (lblReflectionMap == null) {
       lblReflectionMap = new JLabel();
-      lblReflectionMap.setText("Reflection map*");
+      lblReflectionMap.setText("Reflection map");
       lblReflectionMap.setSize(new Dimension(94, 22));
       lblReflectionMap.setPreferredSize(new Dimension(94, 22));
       lblReflectionMap.setLocation(new Point(4, 4));

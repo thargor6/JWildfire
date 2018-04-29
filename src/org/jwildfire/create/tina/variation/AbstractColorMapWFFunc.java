@@ -170,30 +170,30 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           double ivfrac = MathLib.frac(y);
 
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
-          double lur = rgbArray[0];
-          double lug = rgbArray[1];
-          double lub = rgbArray[2];
+          double lur = rgbArray[0] * 255;
+          double lug = rgbArray[1] * 255;
+          double lub = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy);
-          double rur = rgbArray[0];
-          double rug = rgbArray[1];
-          double rub = rgbArray[2];
+          double rur = rgbArray[0] * 255;
+          double rug = rgbArray[1] * 255;
+          double rub = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy + 1);
-          double lbr = rgbArray[0];
-          double lbg = rgbArray[1];
-          double lbb = rgbArray[2];
+          double lbr = rgbArray[0] * 255;
+          double lbg = rgbArray[1] * 255;
+          double lbb = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix + 1, iy + 1);
-          double rbr = rgbArray[0];
-          double rbg = rgbArray[1];
-          double rbb = rgbArray[2];
+          double rbr = rgbArray[0] * 255;
+          double rbg = rgbArray[1] * 255;
+          double rbb = rgbArray[2] * 255;
           r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
         }
         else {
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
-          r = rgbArray[0];
-          g = rgbArray[1];
-          b = rgbArray[2];
+          r = rgbArray[0] * 255;
+          g = rgbArray[1] * 255;
+          b = rgbArray[2] * 255;
         }
         if (dc_color > 0) {
           pVarTP.rgbColor = true;
@@ -385,11 +385,16 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
+      if (imageFilename != null) {
+    	  inlinedImage = null;
+    	  inlinedImageHash = 0;
+      }
       clearCurrColorMap();
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
+      if (inlinedImage != null) imageFilename = null;
       clearCurrColorMap();
     }
     else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {

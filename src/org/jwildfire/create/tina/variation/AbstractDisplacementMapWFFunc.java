@@ -45,14 +45,13 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private static final String PARAM_SCALEY = "scale_y";
   private static final String PARAM_OFFSETX = "offset_x";
   private static final String PARAM_OFFSETY = "offset_y";
-  private static final String PARAM_OFFSETZ = "offset_z";
   private static final String PARAM_TILEX = "tile_x";
   private static final String PARAM_TILEY = "tile_y";
 
   private static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
 
-  private static final String[] paramNames = { PARAM_MODE, PARAM_COLOR_MODE, PARAM_BIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY };
+  private static final String[] paramNames = { PARAM_MODE, PARAM_COLOR_MODE, PARAM_BIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_TILEX, PARAM_TILEY };
   private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
 
   private static final int MODE_ROTATE = 0;
@@ -70,7 +69,6 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private double scaleY = 1.0;
   private double offsetX = 0.0;
   private double offsetY = 0.0;
-  private double offsetZ = 0.0;
   private int tileX = 1;
   private int tileY = 1;
   private String imageFilename = null;
@@ -120,8 +118,8 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
       else {
         ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
         r = rgbArray[0];
-        g = rgbArray[0];
-        b = rgbArray[0];
+        g = rgbArray[1];
+        b = rgbArray[2];
       }
     }
     else {
@@ -172,9 +170,9 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     switch (colorMode) {
       case COLOR_MODE_INHERIT: {
         pVarTP.rgbColor = true;
-        pVarTP.redColor = r;
-        pVarTP.greenColor = g;
-        pVarTP.blueColor = b;
+        pVarTP.redColor = r * 255;
+        pVarTP.greenColor = g * 255;
+        pVarTP.blueColor = b * 255;
         pVarTP.color = getColorIdx(r, g, b);
       }
         break;
@@ -253,7 +251,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { mode, colorMode, bias, scaleX, scaleY, offsetX, offsetY, offsetZ, tileX, tileY };
+    return new Object[] { mode, colorMode, bias, scaleX, scaleY, offsetX, offsetY, tileX, tileY };
   }
 
   @Override
@@ -272,8 +270,6 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
       offsetX = pValue;
     else if (PARAM_OFFSETY.equalsIgnoreCase(pName))
       offsetY = pValue;
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
-      offsetZ = pValue;
     else if (PARAM_TILEX.equalsIgnoreCase(pName))
       tileX = Tools.FTOI(pValue);
     else if (PARAM_TILEY.equalsIgnoreCase(pName))
@@ -338,12 +334,17 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
+      if (imageFilename != null) {
+        inlinedImage = null;
+        inlinedImageHash = 0;
+      }
       colorMap = null;
       colorIdxMap.clear();
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
+      if (inlinedImage != null) imageFilename = null;
       colorMap = null;
       colorIdxMap.clear();
     }

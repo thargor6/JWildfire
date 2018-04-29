@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 
 public class PostMirrorWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,8 +30,11 @@ public class PostMirrorWFFunc extends VariationFunc {
   private static final String PARAM_XSHIFT = "xshift";
   private static final String PARAM_YSHIFT = "yshift";
   private static final String PARAM_ZSHIFT = "zshift";
+  private static final String PARAM_XCOLORSHIFT = "xcolorshift";
+  private static final String PARAM_YCOLORSHIFT = "ycolorshift";
+  private static final String PARAM_ZCOLORSHIFT = "zcolorshift";
 
-  private static final String[] paramNames = { PARAM_XAXIS, PARAM_YAXIS, PARAM_ZAXIS, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_ZSHIFT };
+  private static final String[] paramNames = { PARAM_XAXIS, PARAM_YAXIS, PARAM_ZAXIS, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_ZSHIFT, PARAM_XCOLORSHIFT, PARAM_YCOLORSHIFT, PARAM_ZCOLORSHIFT };
 
   private int xaxis = 1;
   private int yaxis = 0;
@@ -38,20 +42,26 @@ public class PostMirrorWFFunc extends VariationFunc {
   private double xshift = 0.0;
   private double yshift = 0.0;
   private double zshift = 0.0;
+  private double xcolorshift = 0.0;
+  private double ycolorshift = 0.0;
+  private double zcolorshift = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (xaxis > 0 && pContext.random() < 0.5) {
       pVarTP.x = -pVarTP.x - xshift;
+      pVarTP.color = fmod(pVarTP.color + xcolorshift, 1.0);
     }
 
     if (yaxis > 0 && pContext.random() < 0.5) {
       pVarTP.y = -pVarTP.y - yshift;
+      pVarTP.color = fmod(pVarTP.color + ycolorshift, 1.0);   
     }
 
     if (zaxis > 0 && pContext.random() < 0.5) {
       pVarTP.z = -pVarTP.z - zshift;
-    }
+      pVarTP.color = fmod(pVarTP.color + zcolorshift, 1.0);   
+      }
   }
 
   @Override
@@ -61,7 +71,7 @@ public class PostMirrorWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xaxis, yaxis, zaxis, xshift, yshift, zshift };
+    return new Object[] { xaxis, yaxis, zaxis, xshift, yshift, zshift, xcolorshift, ycolorshift, zcolorshift  };
   }
 
   @Override
@@ -78,7 +88,13 @@ public class PostMirrorWFFunc extends VariationFunc {
       yshift = pValue;
     else if (PARAM_ZSHIFT.equalsIgnoreCase(pName))
       zshift = pValue;
-    else
+    else if (PARAM_XCOLORSHIFT.equalsIgnoreCase(pName))
+        xcolorshift = pValue;
+      else if (PARAM_YCOLORSHIFT.equalsIgnoreCase(pName))
+        ycolorshift = pValue;
+      else if (PARAM_ZCOLORSHIFT.equalsIgnoreCase(pName))
+        zcolorshift = pValue;
+      else
       throw new IllegalArgumentException(pName);
   }
 
@@ -93,3 +109,4 @@ public class PostMirrorWFFunc extends VariationFunc {
   }
 
 }
+

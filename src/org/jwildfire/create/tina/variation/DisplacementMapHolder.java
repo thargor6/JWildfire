@@ -111,11 +111,11 @@ public class DisplacementMapHolder implements Serializable {
           int lbg = toolPixel.g;
           toolPixel.setARGBValue(((SimpleImage) displacementMap).getARGBValue(ix1, iy1));
           int rbg = toolPixel.g;
-          return GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
+          return GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac) / 255.0;
         }
         else {
           toolPixel.setARGBValue(((SimpleImage) displacementMap).getARGBValue(ix, iy));
-          return toolPixel.g;
+          return toolPixel.g / 255.0;
         }
       }
       else {
