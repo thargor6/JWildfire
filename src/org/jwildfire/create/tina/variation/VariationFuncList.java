@@ -27,6 +27,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
 import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
+import org.jwildfire.create.tina.variation.mesh.FracTerrain3DFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
@@ -620,8 +621,13 @@ public class VariationFuncList {
     registerVariationFunc(Knots3DFunc.class);
     registerVariationFunc(RecurrencePlotFunc.class);  
     registerVariationFunc(MacMillanFunc.class);  
+
+ 
+    registerVariationFunc(RingSubFlameFunc.class);  
+    registerVariationFunc(GlynnS3SubflWFFunc.class);  
+    registerVariationFunc(FracTerrain3DFunc.class);  
+
     registerVariationFunc(Disc3Func.class);  
-    
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
