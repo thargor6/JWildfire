@@ -628,6 +628,7 @@ public class VariationFuncList {
     registerVariationFunc(FracTerrain3DFunc.class);  
 
     registerVariationFunc(Disc3Func.class);  
+    registerVariationFunc(DCKaleidotileFunc.class);   
     
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
