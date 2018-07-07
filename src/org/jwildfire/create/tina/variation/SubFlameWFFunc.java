@@ -16,6 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+
 import java.io.File;
 import java.util.List;
 
@@ -36,6 +40,8 @@ public class SubFlameWFFunc extends VariationFunc {
   public static final String RESSOURCE_FLAME = "flame";
   public static final String RESSOURCE_FLAME_FILENAME = "flame_filename";
 
+  public static final String PARAM_SCALE = "scale";
+  public static final String PARAM_ANGLE = "angle";
   public static final String PARAM_OFFSETX = "offset_x";
   public static final String PARAM_OFFSETY = "offset_y";
   public static final String PARAM_OFFSETZ = "offset_z";
@@ -44,17 +50,32 @@ public class SubFlameWFFunc extends VariationFunc {
 
   protected static final String PARAM_FLAME_IS_SEQUENCE = "flame_is_sequence";
   protected static final String PARAM_FLAME_SEQUENCE_START = "flame_sequence_start";
+  protected static final String PARAM_FLAME_SEQUENCE_END = "flame_sequence_end";
+  protected static final String PARAM_FLAME_SEQUENCE_REPEAT = "flame_sequence_repeat";
   protected static final String PARAM_FLAME_SEQUENCE_DIGITS = "flame_sequence_digits";
 
-  protected static final String[] paramNames = { PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_COLORSCALE_Z, PARAM_COLOR_MODE, PARAM_FLAME_IS_SEQUENCE, PARAM_FLAME_SEQUENCE_START, PARAM_FLAME_SEQUENCE_DIGITS };
+  protected static final String[] paramNames = { PARAM_SCALE, PARAM_ANGLE, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, 
+		  		PARAM_COLORSCALE_Z, PARAM_COLOR_MODE, PARAM_FLAME_IS_SEQUENCE, 
+		  		PARAM_FLAME_SEQUENCE_START, PARAM_FLAME_SEQUENCE_END, PARAM_FLAME_SEQUENCE_REPEAT, PARAM_FLAME_SEQUENCE_DIGITS };
   protected static final String[] ressourceNames = { RESSOURCE_FLAME, RESSOURCE_FLAME_FILENAME };
 
+  protected double angle=0.0;
+  protected double scale=1.0;  
+  protected double cosa=cos(angle*M_PI/180.0);
+  protected double sina=sin(angle*M_PI/180.0);
   protected double offset_x = 0.0;
   protected double offset_y = 0.0;
   protected double offset_z = 0.0;
   protected double colorscale_z = 0.0;
+  
+  protected final static int SEQ_OFF = 0;
+  protected final static int SEQ_FILES = 1;
+  protected final static int SEQ_CURVE = 2;
+  
   protected int flame_is_sequence = 0;
   protected int flame_sequence_start = 1;
+  protected int flame_sequence_end = 0;
+  protected int flame_sequence_repeat = 1;
   protected int flame_sequence_digits = 4;
 
   protected final static int CM_OFF = -1;
@@ -94,7 +115,8 @@ public class SubFlameWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset_x, offset_y, offset_z, colorscale_z, color_mode, flame_is_sequence, flame_sequence_start, flame_sequence_digits };
+    return new Object[] { scale, angle, offset_x, offset_y, offset_z, colorscale_z, color_mode, 
+    				flame_is_sequence, flame_sequence_start, flame_sequence_end, flame_sequence_repeat, flame_sequence_digits };
   }
 
   @Override
@@ -105,14 +127,25 @@ public class SubFlameWFFunc extends VariationFunc {
       offset_y = pValue;
     else if (PARAM_OFFSETZ.equalsIgnoreCase(pName))
       offset_z = pValue;
+    else if (PARAM_SCALE.equalsIgnoreCase(pName))
+      scale =  pValue;
+    else if (PARAM_ANGLE.equalsIgnoreCase(pName)) { 
+      angle = pValue;
+	  cosa=cos(angle*M_PI/180.0);
+	  sina=sin(angle*M_PI/180.0);
+	}
     else if (PARAM_COLORSCALE_Z.equalsIgnoreCase(pName))
       colorscale_z = pValue;
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
       color_mode = limitIntVal(Tools.FTOI(pValue), CM_OFF, CM_BRIGHTNESS);
     else if (PARAM_FLAME_IS_SEQUENCE.equalsIgnoreCase(pName))
-      flame_is_sequence = Tools.FTOI(pValue);
+      flame_is_sequence = limitIntVal(Tools.FTOI(pValue), SEQ_OFF, SEQ_CURVE);
     else if (PARAM_FLAME_SEQUENCE_START.equalsIgnoreCase(pName))
       flame_sequence_start = Tools.FTOI(pValue);
+    else if (PARAM_FLAME_SEQUENCE_END.equalsIgnoreCase(pName))
+      flame_sequence_end = Tools.FTOI(pValue);
+    else if (PARAM_FLAME_SEQUENCE_REPEAT.equalsIgnoreCase(pName))
+      flame_sequence_repeat = Tools.FTOI(pValue);
     else if (PARAM_FLAME_SEQUENCE_DIGITS.equalsIgnoreCase(pName))
       flame_sequence_digits = Tools.FTOI(pValue);
     else
@@ -153,11 +186,20 @@ public class SubFlameWFFunc extends VariationFunc {
       throw new RuntimeException(ex);
     }
   }
+  
+  int frame;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+	int seq_start = flame_sequence_start < 1 ? 1 : flame_sequence_start;
+	int seq_end = flame_sequence_end <= 0 ? 0 : flame_sequence_end < seq_start ? seq_start : flame_sequence_end;
+	int seq_repeat = flame_sequence_repeat < 1 || flame_sequence_repeat > seq_end ? seq_end : flame_sequence_repeat;
+	int seq_period = seq_end - seq_repeat + 1;
+	frame = pContext.getFrame() + flame_sequence_start - 1;
+	if (seq_end > 0 && frame > seq_end) frame = (frame - seq_repeat) % seq_period + seq_repeat;
+	
 	parseFlame(pContext);
-    int time = flame.getFrame() >= 0 ? flame.getFrame() : 0;
+    int time = flame_is_sequence == SEQ_CURVE ? frame : flame.getFrame() > 0 ? flame.getFrame() : 0;
     flame = AnimationService.evalMotionCurves(flame.makeCopy(), time);
     sfContext = new FlameTransformationContext(pContext.getFlameRenderer(), pContext.getRandGen(), time);
 	sfContext.setPreserveZCoordinate(flame.isPreserveZ());
@@ -225,9 +267,12 @@ public class SubFlameWFFunc extends VariationFunc {
       break;
     }
 
-    q.x += offset_x;
-    q.y += offset_y;
-    q.z += offset_z + colorscale_z * q.color;
+    double x = scale * q.x;
+    double y = scale * q.y;
+    q.x = x * cosa - y * sina + offset_x;
+    q.y = x * sina + y * cosa + offset_y;
+    q.z = scale * q.z + offset_z + colorscale_z * q.color;
+    
   }
   
   protected void setColor(XYZPoint pVarTP) {
@@ -334,8 +379,7 @@ public class SubFlameWFFunc extends VariationFunc {
   }
 
   protected String getCurrFlameFilename(FlameTransformationContext pContext) {
-    if (flame_is_sequence > 0 && flame_filename != null && !flame_filename.isEmpty()) {
-      int frame = pContext.getFrame() - 1 + flame_sequence_start;
+    if (flame_is_sequence == SEQ_FILES && flame_filename != null && !flame_filename.isEmpty()) {
       String baseFilename;
       String fileExt;
       int p = flame_filename.lastIndexOf(".");
