@@ -27,8 +27,18 @@ public final class TransformationPrepareVariationsStep extends AbstractTransform
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    pVarT.doHide = pAffineT.doHide;
+    pVarT.color = pAffineT.color;
     pVarT.material = pAffineT.material;
+    pVarT.receiveOnlyShadows = pAffineT.receiveOnlyShadows;
+    pVarT.modGamma = pAffineT.modGamma;
+    pVarT.modContrast = pAffineT.modContrast;
+    pVarT.modSaturation = pAffineT.modSaturation;
+    pVarT.modHue = pAffineT.modHue;
+    pVarT.rgbColor = pAffineT.rgbColor;
+    pVarT.redColor = pAffineT.redColor;
+    pVarT.greenColor = pAffineT.greenColor;
+    pVarT.blueColor = pAffineT.blueColor;
+    pVarT.doHide = pAffineT.doHide;
   }
 
 }
