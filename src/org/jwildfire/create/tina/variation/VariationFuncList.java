@@ -631,6 +631,7 @@ public class VariationFuncList {
     registerVariationFunc(DCKaleidotileFunc.class);   
     registerVariationFunc(LazySensenFunc.class);
     registerVariationFunc(ProjectiveFunc.class);
+    registerVariationFunc(LoziFunc.class);
 
     registerVariationFunc(WangTilesFunc.class);   
    
