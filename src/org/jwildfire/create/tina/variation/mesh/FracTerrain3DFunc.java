@@ -18,14 +18,14 @@
 /*************************************************************************************************
 * @author Jesus Sosa
 * @date April 13, 2018
-* 
+*
 * Variation: terrain3D
-* 
-* Adapted from Java code found in 
+*
+* Adapted from Java code found in
 * http://www.cs.ukzn.ac.za/~hughm/ds/ls/FractalLandscapes.html
-* 
-* 
-* Also I´m using SimpleMesh.java object by Andreas Maschke 
+*
+*
+* Also I´m using SimpleMesh.java object by Andreas Maschke
 * included in source code of Java WildFire.
 *************************************************************************************************/
 
@@ -54,7 +54,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   private static final String PARAM_N = "Size (N PowersOf 2)";
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_DC = "dc";
-  
+
   public static final String PARAM_SCALEX = "scale_x";
   public static final String PARAM_SCALEY = "scale_y";
   protected static final String PARAM_SCALEZ = "scale_z";
@@ -62,7 +62,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   protected static final String PARAM_OFFSETY = "offset_y";
   protected static final String PARAM_OFFSETZ = "offset_z";
 
-  
+
   protected static final String PARAM_SUBDIV_LEVEL = "subdiv_level";
   protected static final String PARAM_SUBDIV_SMOOTH_PASSES = "subdiv_smooth_passes";
   protected static final String PARAM_SUBDIV_SMOOTH_LAMBDA = "subdiv_smooth_lambda";
@@ -74,8 +74,8 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-     
-		                               
+
+
   private static final String[] paramNames = {PARAM_ROUGHNESS, PARAM_EXAGGERATION, PARAM_N,PARAM_SEED,PARAM_DC, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS };
 
 
@@ -85,9 +85,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   int n=5;
   private int seed = (int) (1000 * Math.random());
   private int dc=1;
-  
-  FractalTerrain fterrain = new FractalTerrain (n, roughness, seed);
-  
+
   static public class FractalTerrain {
 	  private double[][] terrain;
 	  private double min, max;
@@ -95,16 +93,16 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 	  private Random rng;
       int lod;
 
-      
+
 	  SimpleMesh mesh=new SimpleMesh();
-	  
+
 	  public FractalTerrain (int lod, double roughness, double seed) {
 		this.lod=lod;
 //	    this.roughness = roughness;
 	    this.divisions = 1 << lod;
 	    terrain = new double[divisions + 1][divisions + 1];
 //	    rng = new Random ();
-	    
+
         rng = new Random((long) seed);
 	    terrain[0][0] = rnd ();
 	    terrain[0][divisions] = rnd ();
@@ -128,7 +126,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 	        if (terrain[i][j] < min) min = terrain[i][j];
 	        else if (terrain[i][j] > max) max = terrain[i][j];
 	  }
-	  
+
 	  private void diamond (int x, int y, int side, double scale) {
 	    if (side > 1) {
 	      int half = side / 2;
@@ -137,7 +135,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 	      terrain[x + half][y + half] = avg + rnd () * scale;
 	    }
 	  }
-	  
+
 	  private void square (int x, int y, int side, double scale) {
 	    int half = side / 2;
 	    double avg = 0.0, sum = 0.0;
@@ -151,11 +149,11 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 	    { avg += terrain[x + half][y + side]; sum += 1.0; }
 	    terrain[x + half][y + half] = avg / sum + rnd () * scale;
 	  }
-	  
+
 	  private double rnd () {
 	    return 2. * rng.nextDouble () - 1.0;
 	  }
-	  
+
 	  public double getAltitude (double i, double j) {
 	    double alt = terrain[(int) (i * divisions)][(int) (j * divisions)];
 	    return (alt - min) / (max - min);
@@ -170,7 +168,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 	    for (int j = 0; j <= steps; ++ j) {
 	      double x = 1.0 * i / steps, z = 1.0 * j / steps;
 	      double altitude = getAltitude (x, z);
-	      mesh.addVertex(x, altitude * exaggeration, z);  
+	      mesh.addVertex(x - 0.5, altitude * exaggeration, z - 0.5);
 	    }
 	   }
 	   for (int i = 0; i < steps; ++ i) {
@@ -185,17 +183,17 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
 		     mesh.addFace(v1,v2,v3);
 		    }
 		   }
-	   
+
 	  }
-	  
+
 	  public SimpleMesh getMesh()
 	  {
 		  return this.mesh;
 		}
-	  
+
 	}
-  
-  
+
+
   @Override
   public Object[] getParameterValues() {
     return new Object[] {roughness, exaggeration, n ,seed, dc, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows };
@@ -205,7 +203,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   public String[] getParameterNames() {
     return paramNames;
   }
-   
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_ROUGHNESS.equalsIgnoreCase(pName))
@@ -257,7 +255,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
     else
       throw new IllegalArgumentException(pName);
   }
-  
+
   @Override
   public String getName() {
     return "terrain3D";
@@ -267,16 +265,20 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
      mesh=null;
-	 fterrain = new FractalTerrain (n, roughness, seed);
+     FractalTerrain fterrain = new FractalTerrain (n, roughness, seed);
 	 fterrain.setTerrainData(exaggeration);
 	 mesh=fterrain.getMesh();
+     for (int i = 0; i < subdiv_level; i++) {
+        mesh = mesh.interpolate();
+        mesh.taubinSmooth(subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
+     }
   }
-  
-  
+
+
   @Override
-  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) { 
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 	    super.transform(pContext, pXForm, pAffineTP,pVarTP,pAmount);
 	    if(dc==1)
-           pVarTP.color=MathLib.fmod(pVarTP.y,1.0); 
+           pVarTP.color=MathLib.fmod(pVarTP.y,1.0);
  }
 }
