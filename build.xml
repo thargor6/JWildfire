@@ -51,6 +51,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/**/*.html"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/CHANGES.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/GPU_RENDERING.txt"/>
+	  <fileset dir="${src.dir}" includes="org/jwildfire/icons/**/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/*.gif"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.png"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/swing/icons/new/*.gif"/>
@@ -63,6 +64,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/plot/*.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
+	  <fileset dir="${build.dir}" includes="csk/"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
@@ -78,6 +80,7 @@
       <zipfileset src="lib/jsyntaxpane-0.9.5-b29.modified.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
+	  <zipfileset src="lib/j-wildfire-lib.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
       </manifest>			
