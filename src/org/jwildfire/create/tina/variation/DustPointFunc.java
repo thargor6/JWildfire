@@ -34,10 +34,10 @@ public class DustPointFunc extends SimpleVariationFunc {
 
 				double x,y,p,r;
 
-				p=(Math.random()< 0.5) ? 1 : -1;
+				p=(pContext.random()< 0.5) ? 1 : -1;
 				r=Math.sqrt(pAffineTP.x*pAffineTP.x+pAffineTP.y*pAffineTP.y);
 				
-				double w=Math.random();
+				double w=pContext.random();
 				if ( w < 0.50 )
 				{
                     x =  pAffineTP.x/r - 1;
