@@ -4390,7 +4390,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void affineMirrorPrePostChanged(boolean mirror) {
     if (this.getCurrXForm() != null) {
-      this.getCurrXForm().setMirrorTranslations(mirror);
+      this.getCurrXForm().setMirrorTranslations(mirror,data.affineEditPostTransformButton.isSelected());
+      refreshFlameImage(true, false, 1, true, false);
     }
   }
 
