@@ -604,6 +604,7 @@ public class VariationFuncList {
     registerVariationFunc(PrePostMobiusFunc.class);
     registerVariationFunc(PrePostAffineFunc.class);
     registerVariationFunc(PrePostCirclizeFunc.class);
+    registerVariationFunc(PTransformFunc.class);
 
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
