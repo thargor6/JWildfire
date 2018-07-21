@@ -77,7 +77,7 @@
       <zipfileset src="lib/svgSalamander-tiny.jar"/>
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
-      <zipfileset src="lib/jsyntaxpane-0.9.5-b29.modified.jar"/>
+      <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
 	  <zipfileset src="lib/j-wildfire-lib.jar"/>
