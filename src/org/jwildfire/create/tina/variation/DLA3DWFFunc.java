@@ -600,33 +600,17 @@ public class DLA3DWFFunc extends VariationFunc {
 
   private static Map<String, List<DLA3DWFFuncPoint>> cache = new HashMap<>();
 
-  private static AtomicBoolean calculating = new AtomicBoolean(false);
-
   private List<DLA3DWFFuncPoint> getPoints() {
     String key = makeKey();
     List<DLA3DWFFuncPoint> res = cache.get(key);
-    if (res == null && calculating.compareAndSet(false, true)) {
-      try {
-        long t0 = System.currentTimeMillis();
-        res = new DLA3DWFFuncIterator(_max_iter, seed, glue_radius, force_x, force_y, force_z, single_thread > 0).iterate();
-        long t1 = System.currentTimeMillis();
-        System.out.println("DLA3D(" + res.size() + "): " + (t1 - t0) + " ms");
-        cache.put(key, res);
-      }
-      finally {
-        calculating.set(false);
-      }
+    if (res == null ) {
+      System.err.println("CAKLC");
+      long t0 = System.currentTimeMillis();
+      res = new DLA3DWFFuncIterator(_max_iter, seed, glue_radius, force_x, force_y, force_z, single_thread > 0).iterate();
+      long t1 = System.currentTimeMillis();
+      System.out.println("DLA3D(" + res.size() + "): " + (t1 - t0) + " ms");
+      cache.put(key, res);
     }
-    while (calculating.get() || res == null) {
-      try {
-        Thread.sleep(66);
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      res = cache.get(key);
-    }
-
     return res;
   }
 
@@ -643,17 +627,30 @@ public class DLA3DWFFunc extends VariationFunc {
   private List<DLA3DWFFuncPoint> _points;
 
   @Override
+  public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    _max_iter = pContext.isPreview() ? (max_iter < 1000) ? max_iter : 1000 : max_iter;
+    if (_max_iter < 0)
+      _max_iter = 0;
+    _randGen = new MarsagliaRandomGenerator();
+    _randGen.randomize(seed);
+    // points written to cache
+    getPoints();
+  }
+
+  @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _max_iter = pContext.isPreview() ? (max_iter < 1000) ? max_iter : 1000 : max_iter;
     if (_max_iter < 0)
       _max_iter = 0;
     _randGen = new MarsagliaRandomGenerator();
     _randGen.randomize(seed);
+
     nodeColorMapHolder.init();
     nodeUVColorMapper.initFromLayer(pContext, pLayer);
     junctColorMapHolder.init();
     junctUVColorMapper.initFromLayer(pContext, pLayer);
 
+    // from cache
     _points = getPoints();
 
     if (nodeObjFilename != null && nodeObjFilename.length() > 0) {
