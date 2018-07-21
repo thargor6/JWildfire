@@ -631,7 +631,13 @@ public class VariationFuncList {
     registerVariationFunc(DCKaleidotileFunc.class);   
     registerVariationFunc(LazySensenFunc.class);
     registerVariationFunc(ProjectiveFunc.class);
-    
+
+    registerVariationFunc(WangTilesFunc.class);   
+   
+    registerVariationFunc(TapratsFunc.class);    
+    registerVariationFunc(GPatternFunc.class);    
+    registerVariationFunc(NSudokuFunc.class);   
+
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
