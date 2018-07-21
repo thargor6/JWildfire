@@ -145,11 +145,6 @@ public class SphTiling3V2Func extends VariationFunc {
   }
 
   @Override
-  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-     spherical.init(pContext, pLayer, pXForm, pAmount);
-  }
-
-  @Override
   public String getName() {
     return "sphtiling3v2";
   }

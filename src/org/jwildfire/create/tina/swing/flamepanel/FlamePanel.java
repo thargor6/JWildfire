@@ -449,6 +449,7 @@ public class FlamePanel extends ImagePanel {
       try {
         selectedXForm.initTransform();
         for (Variation var : selectedXForm.getVariations()) {
+          var.getFunc().initOnce(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
           var.getFunc().init(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
         }
 
@@ -945,7 +946,7 @@ public class FlamePanel extends ImagePanel {
 
   private FlameTransformationContext getFlameTransformationContext() {
     if (flameTransformationContext == null) {
-      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(prefs, RandomGeneratorType.getDefaultValue()), 1);
+      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(prefs, RandomGeneratorType.getDefaultValue()), 0,1);
       flameTransformationContext.setPreview(getFlameRenderer().isPreview());
     }
     return flameTransformationContext;

@@ -201,7 +201,7 @@ public class SubFlameWFFunc extends VariationFunc {
 	parseFlame(pContext);
     int time = flame_is_sequence == SEQ_CURVE ? frame : flame.getFrame() > 0 ? flame.getFrame() : 0;
     flame = AnimationService.evalMotionCurves(flame.makeCopy(), time);
-    sfContext = new FlameTransformationContext(pContext.getFlameRenderer(), pContext.getRandGen(), time);
+    sfContext = new FlameTransformationContext(pContext.getFlameRenderer(), pContext.getRandGen(), 0, time);
 	sfContext.setPreserveZCoordinate(flame.isPreserveZ());
     prefuseIter(pContext);
   }

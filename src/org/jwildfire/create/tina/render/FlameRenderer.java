@@ -128,7 +128,7 @@ public class FlameRenderer {
     withAlpha = pWithAlpha;
     preview = pPreview;
     randGen = RandomGeneratorFactory.getInstance(prefs, prefs.getTinaRandomNumberGenerator());
-    flameTransformationContext = new FlameTransformationContext(this, randGen, flame.getFrame());
+    flameTransformationContext = new FlameTransformationContext(this, randGen, 0, flame.getFrame());
     flameTransformationContext.setPreserveZCoordinate(pFlame.isPreserveZ());
     flameTransformationContext.setPreview(pPreview);
   }
@@ -499,7 +499,7 @@ public class FlameRenderer {
       if (pRenderInfo.getRestoredRaster() == null) {
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-          renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+          renderFlames.add(createRenderPackets(flame, t, flame.getFrame()));
         }
         forceAbort = false;
         iterate(0, 1, renderFlames, null);
@@ -868,8 +868,9 @@ public class FlameRenderer {
     }
   }
 
-  private List<RenderPacket> createRenderPackets(Flame pFlame, int pFrame) {
+  private List<RenderPacket> createRenderPackets(Flame pFlame, int pThreadId, int pFrame) {
     List<RenderPacket> res = new ArrayList<RenderPacket>();
+    flameTransformationContext.setThreadId(pThreadId);
     {
       double time = pFrame >= 0 ? pFrame : 0;
       Flame newFlame = AnimationService.evalMotionCurves(pFlame.makeCopy(), time);
@@ -920,7 +921,7 @@ public class FlameRenderer {
     initRaster(pRenderInfo, pRenderInfo.getImageWidth(), pRenderInfo.getImageHeight(), flame.getSampleDensity());
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+      renderFlames.add(createRenderPackets(flame, t, flame.getFrame()));
     }
     return startIterate(renderFlames, null, true);
   }
@@ -945,7 +946,7 @@ public class FlameRenderer {
         initRaster(renderInfo, renderInfo.getImageWidth(), renderInfo.getImageHeight(), flame.getSampleDensity());
         List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
         for (int t = 0; t < header.numThreads; t++) {
-          renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+          renderFlames.add(createRenderPackets(flame, t, flame.getFrame()));
         }
         raster = null;
         // read raster
@@ -1046,7 +1047,7 @@ public class FlameRenderer {
 
       List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
       for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-        renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+        renderFlames.add(createRenderPackets(flame, t, flame.getFrame()));
       }
 
       iterate(0, 1, renderFlames, slices);
@@ -1126,7 +1127,7 @@ public class FlameRenderer {
 
     List<List<RenderPacket>> renderFlames = new ArrayList<List<RenderPacket>>();
     for (int t = 0; t < prefs.getTinaRenderThreads(); t++) {
-      renderFlames.add(createRenderPackets(flame, flame.getFrame()));
+      renderFlames.add(createRenderPackets(flame, t, flame.getFrame()));
     }
 
     iterate(0, 1, renderFlames, null);

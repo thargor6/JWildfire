@@ -56,6 +56,7 @@ public class CloverleafDOFBlurShape extends AbstractDOFBlurShape {
     xform = new XForm();
     fnc = new CloverLeafWFFunc();
     fnc.setParameter(CloverLeafWFFunc.PARAM_FILLED, 1.0);
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 

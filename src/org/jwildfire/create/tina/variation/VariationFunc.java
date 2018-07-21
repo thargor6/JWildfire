@@ -25,6 +25,13 @@ import org.jwildfire.create.tina.base.XYZPoint;
 @SuppressWarnings("serial")
 public abstract class VariationFunc implements Serializable {
 
+
+  /** called for the first instance/thread (there is one instance per thread). It is useful to use this method to implement heavy calculations, rather than using init() */
+  public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+
+  }
+
+  /** called for each instance (there is one instance per thread) */
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
 
   }

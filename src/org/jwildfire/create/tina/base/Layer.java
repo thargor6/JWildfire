@@ -103,6 +103,11 @@ public class Layer implements Assignable<Layer>, Serializable {
     {
       for (XForm xForm : this.getXForms()) {
         xForm.initTransform();
+        if(pFlameTransformationContext.getThreadId()==0) {
+          for (Variation var : xForm.getVariations()) {
+            var.getFunc().initOnce(pFlameTransformationContext, this, xForm, var.getAmount());
+          }
+        }
         for (Variation var : xForm.getVariations()) {
           var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
         }
@@ -111,6 +116,11 @@ public class Layer implements Assignable<Layer>, Serializable {
     {
       for (XForm xForm : this.getFinalXForms()) {
         xForm.initTransform();
+        if(pFlameTransformationContext.getThreadId()==0) {
+          for (Variation var : xForm.getVariations()) {
+            var.getFunc().initOnce(pFlameTransformationContext, this, xForm, var.getAmount());
+          }
+        }
         for (Variation var : xForm.getVariations()) {
           var.getFunc().init(pFlameTransformationContext, this, xForm, var.getAmount());
         }

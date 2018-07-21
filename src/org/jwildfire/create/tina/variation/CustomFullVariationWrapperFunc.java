@@ -264,6 +264,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       validate();
     }
     if (full_variation != null) {
+      full_variation.initOnce(pContext, pLayer, pXForm, pAmount);
       full_variation.init(pContext, pLayer, pXForm, pAmount);
     }
   }

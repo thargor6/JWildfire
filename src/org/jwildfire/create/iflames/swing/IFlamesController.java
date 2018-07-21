@@ -582,7 +582,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
       if (displayPreprocessedImageButton.isSelected()) {
         flamePreviewHelper.renderFlameImage(true, true, 1, false);
         ImageParams imageParams = getIFlamesFunc().getImageParams();
-        imageParams.init(new FlameTransformationContext(null, null, 0));
+        imageParams.init(new FlameTransformationContext(null, null, 0,0));
         SimpleImage img = (SimpleImage) RessourceManager.getRessource(imageParams.getCachedPreprocessedImageKey());
         if (img != null) {
           flamePreviewHelper.setImage(img);
