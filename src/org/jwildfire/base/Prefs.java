@@ -116,7 +116,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor";
   static final String KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX = "tina.advanced_code_editor_color_fix";
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size";
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size.2";
 
   static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
@@ -229,7 +229,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDisableSolidFlameRandGens = false;
 
   @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
-  private int tinaAdvancedCodeEditorFontSize = 10;
+  private int tinaAdvancedCodeEditorFontSize = 14;
 
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
@@ -1521,7 +1521,7 @@ public class Prefs extends ManagedObject {
   }
 
   public void setTinaAdvancedCodeEditorFontSize(int font_size) {
-    if (font_size <= 0) {
+    if (font_size <= 8) {
       font_size = 10;
     }
     tinaAdvancedCodeEditorFontSize = font_size;
