@@ -71,7 +71,12 @@ public class Launcher {
     EventQueue.invokeLater(new Runnable() {
       public void run() {
         try {
-          UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+          try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+          }
+          catch(Exception ex) {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+          }
         }
         catch (Throwable ex) {
           try {

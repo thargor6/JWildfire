@@ -180,7 +180,7 @@ public class GradientController {
       String[] ressources = { "flam3-palettes.xml" };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
-      ressources = (String[]) resLst.toArray();
+      ressources = resLst.toArray(new String[]{});
 
       // for the base path inside the jar file
       RGBPaletteReader reader = new Flam3GradientReader();

@@ -18,8 +18,6 @@ package org.jwildfire.launcher;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +46,10 @@ public class AppLauncher {
     String maxMemOption = "-Xmx" + prefs.getMaxMem() + "m";
 
     String classpath = File.separator + "lib" + File.separator + JWFILDFIRE_JAR;
-    URL launcherURL = ((URLClassLoader) this.getClass().getClassLoader()).getURLs()[0];
-    File currentDir = new File(launcherURL.toURI());
+    //URL launcherURL = ((URLClassLoader) this.getClass().getClassLoader()).getURLs()[0];
+    //File currentDir = new File(launcherURL.toURI());
+
+    File currentDir = new File(new File(".").getAbsolutePath());
 
     String javaCmd = java.getAbsolutePath();
     if (javaCmd.indexOf(" ") >= 0) {

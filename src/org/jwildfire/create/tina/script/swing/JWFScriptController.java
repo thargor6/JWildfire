@@ -192,7 +192,7 @@ public class JWFScriptController {
           "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3", "Wedge_Sph_Marble" };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
-      ressources = (String[]) resLst.toArray();
+      ressources = resLst.toArray(new String[] {});
 
       // for the base path inside the jar file
       RGBPaletteReader reader = new Flam3GradientReader();
