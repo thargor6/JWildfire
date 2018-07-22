@@ -33,6 +33,7 @@ public class LoziFunc extends VariationFunc {
 	private double c = 1.0;
 
 
+
 	@Override
 	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
 			// Lozi by TyrantWave
