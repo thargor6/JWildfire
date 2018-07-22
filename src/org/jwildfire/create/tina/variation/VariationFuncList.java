@@ -641,7 +641,7 @@ public class VariationFuncList {
     registerVariationFunc(NSudokuFunc.class);   
     
     registerVariationFunc(AnamorphCylFunc.class);
-    registerVariationFunc(HiperbolicEllipseFunc.class);   
+    registerVariationFunc(HyperbolicEllipseFunc.class);
     registerVariationFunc(SunFlowersFunc.class);
     registerVariationFunc(SunflowerVoroniFunc.class);  
 

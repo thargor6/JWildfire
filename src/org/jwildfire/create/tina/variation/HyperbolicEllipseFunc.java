@@ -10,7 +10,7 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-public class HiperbolicEllipseFunc extends VariationFunc {
+public class HyperbolicEllipseFunc extends VariationFunc {
 		/**
 
 		 */
@@ -72,7 +72,7 @@ public class HiperbolicEllipseFunc extends VariationFunc {
 			  }
 			
 			  public String getName() {
-			    return "hiperbollcelipse";
+			    return "hyperbolicelipse";
 			  }
 
 			  public String[] getParameterNames() {
