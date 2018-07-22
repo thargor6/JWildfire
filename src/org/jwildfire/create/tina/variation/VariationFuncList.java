@@ -633,6 +633,8 @@ public class VariationFuncList {
     registerVariationFunc(LazySensenFunc.class);
     registerVariationFunc(ProjectiveFunc.class);
     registerVariationFunc(LoziFunc.class);
+    registerVariationFunc(Vibration2Func.class);
+    registerVariationFunc(PulseFunc.class);    
     
     registerVariationFunc(WangTilesFunc.class);   
    
