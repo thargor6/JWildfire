@@ -40,6 +40,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
+import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.plot.SAttractor3DFormulaEvaluator;
 import org.jwildfire.create.tina.variation.plot.SAttractor3DWFFuncPreset;
@@ -190,35 +191,27 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     }
     else if (PARAM_STEPS.equalsIgnoreCase(pName))
     {     steps = (int) pValue;
-          recalculate();
     }
     else if (PARAM_RADIUS.equalsIgnoreCase(pName))
     {     radius = pValue;
-          recalculate();
     }
     else if (PARAM_STEPTIME.equalsIgnoreCase(pName))
     {  stepTime = pValue;
-       recalculate();
     }
     else if (PARAM_FACETS.equalsIgnoreCase(pName))
     {  facets= (int) pValue;
-       recalculate();
     }
     else if (PARAM_START_X.equalsIgnoreCase(pName))
     {     startx = pValue;
-          recalculate();
     }
     else if (PARAM_START_Y.equalsIgnoreCase(pName))
     {  starty = pValue;
-       recalculate();
     }
     else if (PARAM_START_Z.equalsIgnoreCase(pName))
     {  startz= pValue;
-       recalculate();
     }
     else if (PARAM_WARMUP.equalsIgnoreCase(pName))
     {  warmup= (int) pValue;
-       recalculate();
     }
     else if (PARAM_A.equalsIgnoreCase(pName))
         param_a = pValue;
@@ -273,68 +266,86 @@ public class Strange3DFunc extends AbstractOBJMeshWFFunc {
     return "sattractor3D";
   }
 
+  private String calculateMeshKey() {
+  	return xformula +"#" + yformula + "#" +zformula + "#" + steps +"#" + radius + "#" + stepTime + "#" + facets + "#" + startx + "#" + starty + "#" + startz + "#" +
+		   warmup + "#" + param_a + "#" + param_b + "#" + param_c + "#" + param_d + "#" + param_e + "#" + param_f + "#" + param_g + "#" + param_h;
+  }
+
+  private SimpleMesh getMesh() {
+  	String key = calculateMeshKey();
+  	SimpleMesh simpleMesh = (SimpleMesh)RessourceManager.getRessource(key);
+  	if(simpleMesh==null) {
+		String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
+				"\r\n" +
+				"  public double evaluateX(double x,double y, double z, double delta_t) {\r\n" +
+				"    double pi = M_PI;\r\n" +
+				"    double param_a = " + param_a + ";\r\n" +
+				"    double param_b = " + param_b + ";\r\n" +
+				"    double param_c = " + param_c + ";\r\n" +
+				"    double param_d = " + param_d + ";\r\n" +
+				"    double param_e = " + param_e + ";\r\n" +
+				"    double param_f = " + param_f + ";\r\n" +
+				"    double param_g = " + param_g + ";\r\n" +
+				"    double param_h = " + param_h + ";\r\n" +
+				"    return  x + (" + (xformula != null && !xformula.isEmpty() ? xformula : "0.0")+ ")*delta_t" + ";\r\n" +
+				"  }\r\n" +
+				"  public double evaluateY(double x,double y,double z, double delta_t) {\r\n" +
+				"    double pi = M_PI;\r\n" +
+				"    double param_a = " + param_a + ";\r\n" +
+				"    double param_b = " + param_b + ";\r\n" +
+				"    double param_c = " + param_c + ";\r\n" +
+				"    double param_d = " + param_d + ";\r\n" +
+				"    double param_e = " + param_e + ";\r\n" +
+				"    double param_f = " + param_f + ";\r\n" +
+				"    double param_g = " + param_g + ";\r\n" +
+				"    double param_h = " + param_h + ";\r\n" +
+				"    return  y + (" + (yformula != null && !yformula.isEmpty() ? yformula : "0.0")+ ")*delta_t" + ";\r\n" +
+				"  }\r\n" +
+				"  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n" +
+				"    double pi = M_PI;\r\n" +
+				"    double param_a = " + param_a + ";\r\n" +
+				"    double param_b = " + param_b + ";\r\n" +
+				"    double param_c = " + param_c + ";\r\n" +
+				"    double param_d = " + param_d + ";\r\n" +
+				"    double param_e = " + param_e + ";\r\n" +
+				"    double param_f = " + param_f + ";\r\n" +
+				"    double param_g = " + param_g + ";\r\n" +
+				"    double param_h = " + param_h + ";\r\n" +
+				"    return  z + ("  + (zformula != null && !zformula.isEmpty() ? zformula : "0.0")+ ")*delta_t" + ";\r\n" +
+				"  }\r\n";
+		try {
+			evaluator = SAttractor3DFormulaEvaluator.compile(code);
+		}
+		catch (Exception e) {
+			evaluator = null;
+			e.printStackTrace();
+			System.out.println(code);
+			throw new IllegalArgumentException(e);
+		}
+		AttractorCurve attractor=new AttractorCurve(steps*1000,evaluator,radius,stepTime,facets,new Vector3(startx,starty,startz),warmup);
+		attractor.build();
+		attractor.getGeometry();
+		simpleMesh=attractor.getMesh();
+		RessourceManager.putRessource(key, simpleMesh);
+	}
+  	return simpleMesh;
+  }
+
+	@Override
+	public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+		super.initOnce(pContext, pLayer, pXForm, pAmount);
+		// store result to cache
+		getMesh();
+	}
+
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
-    String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-	        "\r\n" +
-	        "  public double evaluateX(double x,double y, double z, double delta_t) {\r\n" +
-	        "    double pi = M_PI;\r\n" +
-	        "    double param_a = " + param_a + ";\r\n" +
-	        "    double param_b = " + param_b + ";\r\n" +
-	        "    double param_c = " + param_c + ";\r\n" +
-	        "    double param_d = " + param_d + ";\r\n" +
-	        "    double param_e = " + param_e + ";\r\n" +
-	        "    double param_f = " + param_f + ";\r\n" +
-	        "    double param_g = " + param_g + ";\r\n" +
-	        "    double param_h = " + param_h + ";\r\n" +
-	        "    return  x + (" + (xformula != null && !xformula.isEmpty() ? xformula : "0.0")+ ")*delta_t" + ";\r\n" +
-	        "  }\r\n" +
-	        "  public double evaluateY(double x,double y,double z, double delta_t) {\r\n" +
-	        "    double pi = M_PI;\r\n" +
-	        "    double param_a = " + param_a + ";\r\n" +
-	        "    double param_b = " + param_b + ";\r\n" +
-	        "    double param_c = " + param_c + ";\r\n" +
-	        "    double param_d = " + param_d + ";\r\n" +
-	        "    double param_e = " + param_e + ";\r\n" +
-	        "    double param_f = " + param_f + ";\r\n" +
-	        "    double param_g = " + param_g + ";\r\n" +
-	        "    double param_h = " + param_h + ";\r\n" +
-	        "    return  y + (" + (yformula != null && !yformula.isEmpty() ? yformula : "0.0")+ ")*delta_t" + ";\r\n" +
-	        "  }\r\n" +
-	        "  public double evaluateZ(double x,double y, double z, double delta_t) {\r\n" +
-	        "    double pi = M_PI;\r\n" +
-	        "    double param_a = " + param_a + ";\r\n" +
-	        "    double param_b = " + param_b + ";\r\n" +
-	        "    double param_c = " + param_c + ";\r\n" +
-	        "    double param_d = " + param_d + ";\r\n" +
-	        "    double param_e = " + param_e + ";\r\n" +
-	        "    double param_f = " + param_f + ";\r\n" +
-	        "    double param_g = " + param_g + ";\r\n" +
-	        "    double param_h = " + param_h + ";\r\n" +
-	        "    return  z + ("  + (zformula != null && !zformula.isEmpty() ? zformula : "0.0")+ ")*delta_t" + ";\r\n" +
-	        "  }\r\n";
-	    try {
-	      evaluator = SAttractor3DFormulaEvaluator.compile(code);
-	    }
-	    catch (Exception e) {
-	      evaluator = null;
-	      e.printStackTrace();
-	      System.out.println(code);
-	      throw new IllegalArgumentException(e);
-	    }
-        recalculate();
+    // get from cache
+	  mesh = getMesh();
   }
 
-  public void recalculate()
-  {
-     mesh=null;
-     AttractorCurve attractor=new AttractorCurve(steps*1000,evaluator,radius,stepTime,facets,new Vector3(startx,starty,startz),warmup);
-     attractor.build();
-     attractor.getGeometry();    
-     mesh=attractor.getMesh();
-	}
-  
+
   public Strange3DFunc() {
 	    super();
 	    preset_id = WFFuncPresetsStore.getSAttractor3DWFFuncPresets().getRandomPresetId();
