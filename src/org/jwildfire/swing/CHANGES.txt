@@ -1,3 +1,45 @@
+V3.40 (22.07.2018)
+ - support for Java 10
+ - new variations:
+    - anamorphcyl (Jesus Sosa)
+    - dc_kaleidotile (Brad Stefanov)
+    - disc3 (Brad Stefanov)
+    - glynns3subfl (Jesus Sosa)
+    - gpattern (Jesus Sosa)
+    - hyperbolicellipse (Jesus Sosa)
+    - lazysensen (Brad Stefanov)
+    - lozi (Brad Stefanov)
+    - nsudoku (Jesus Sosa)
+    - projective (Brad Stefanov)
+    - pulse (Brad Stefanov)
+    - pTransform (Rick Sidwell)
+    - ringsubflame (Jesus Sosa)
+    - sunflower (Jesus Sosa)
+    - sunvoroni (Jesus Sosa)
+    - taprats (Jesus Sosa)
+    - terrain3D (Jesus Sosa)
+    - vibration2 (Brad Stefanov)
+    - wangtiles (Jesus Sosa)
+  - updated the jsyntaxpane-library (used for syntax-highlighting while editing text) to version 1.1.5
+  - increased the default font size for the script-editor inside JWildfire
+  - internal optimization/API-changes: extended the API of variations:
+     there is now an initOnce()-Event which is only called once for the
+     first thread (unlike to init() which is called for each thread).
+     This new event should be used for heavy init-operations (like loading and parsing a file).
+  - the following variations use the new API and should behave more smooth (=use less memory and CPU)
+    when initializing for a render:
+     - wangtiles
+     - terrain3D
+     - dla_wf
+     - dla3d_wf
+     - knots3D
+     - sattractor3D
+  - improved the speed of the following variations:
+     - dustpoint
+     - knots3D
+     - sattractor3D
+  - bug fixes for symmetry order and animation control updates
+
 V3.31 (29.03.2018)
  - changed the default filter to the same that is used by Flamelet which creates nice sharp images,
    if you do not like it, you may change it in the Preferences
