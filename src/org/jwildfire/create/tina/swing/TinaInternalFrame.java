@@ -13992,7 +13992,6 @@ private JLabel getAffineC21Lbl() {
       postSymmetryOrderREd.setLinkedLabelControlName("postSymmetryOrderLbl");
       postSymmetryOrderREd.setMinValue(2.0);
       postSymmetryOrderREd.setOnlyIntegers(true);
-      postSymmetryOrderREd.setValueStep(0.05);
       postSymmetryOrderREd.setText("");
       postSymmetryOrderREd.setSize(new Dimension(100, 24));
       postSymmetryOrderREd.setPreferredSize(new Dimension(100, 24));
