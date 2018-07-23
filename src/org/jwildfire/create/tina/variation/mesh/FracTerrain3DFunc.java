@@ -272,7 +272,7 @@ public class FracTerrain3DFunc extends AbstractOBJMeshWFFunc {
             FractalTerrain fterrain = new FractalTerrain(n, roughness, seed);
             fterrain.setTerrainData(exaggeration);
             mesh = fterrain.getMesh();
-            for (int i = 0; i < subdiv_level; i++) {
+            for (int i = 0; i < Math.min(2, subdiv_level); i++) {
                 mesh = mesh.interpolate();
                 mesh.taubinSmooth(subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
             }

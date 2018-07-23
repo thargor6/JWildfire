@@ -571,18 +571,20 @@ public class VariationFuncList {
     registerVariationFunc(Crop3DFunc.class);
     registerVariationFunc(SphereCropFunc.class);
 
-    registerVariationFunc(LsystemFunc.class);
+    // seems to freeze the program from time to time
+    // registerVariationFunc(LsystemFunc.class);
     registerVariationFunc(LSystem3DWFFunc.class);
     registerVariationFunc(HamidFunc.class);
     registerVariationFunc(TreeFunc.class);
-    registerVariationFunc(HilbertFunc.class);
     registerVariationFunc(BrownianFunc.class);
 
-    registerVariationFunc(DragonFunc.class);
-    registerVariationFunc(GosperIslandFunc.class);
-    registerVariationFunc(HtreeFunc.class);
-    registerVariationFunc(KochFunc.class);
-    registerVariationFunc(RsquaresFunc.class);
+    // populates an endless array, causes quickly OutOfMemoryErrors very quickly
+    // registerVariationFunc(DragonFunc.class);
+    // registerVariationFunc(GosperIslandFunc.class);
+    // registerVariationFunc(HtreeFunc.class);
+    // registerVariationFunc(KochFunc.class);
+    // registerVariationFunc(RsquaresFunc.class);
+    // registerVariationFunc(HilbertFunc.class);
 
     registerVariationFunc(SattractorFunc.class);
     registerVariationFunc(WallPaperFunc.class);
@@ -645,7 +647,9 @@ public class VariationFuncList {
     registerVariationFunc(AnamorphCylFunc.class);
     registerVariationFunc(HyperbolicEllipseFunc.class);
     registerVariationFunc(SunFlowersFunc.class);
-    registerVariationFunc(SunflowerVoroniFunc.class);  
+    registerVariationFunc(SunflowerVoroniFunc.class);
+
+    registerVariationFunc(Cylinder2Func.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

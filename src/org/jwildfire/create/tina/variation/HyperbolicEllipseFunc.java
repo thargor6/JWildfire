@@ -72,7 +72,7 @@ public class HyperbolicEllipseFunc extends VariationFunc {
 			  }
 			
 			  public String getName() {
-			    return "hyperbolicelipse";
+			    return "hyperbolicellipse";
 			  }
 
 			  public String[] getParameterNames() {

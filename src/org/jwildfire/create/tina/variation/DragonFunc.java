@@ -48,7 +48,7 @@ public class DragonFunc extends VariationFunc {
   private Turtle turtle;
 
   static class DynamicArray {
-    // The storage for the elements. 
+    // The storage for the elements.
     // The capacity is the length of this array.
     private double[] data;
 
