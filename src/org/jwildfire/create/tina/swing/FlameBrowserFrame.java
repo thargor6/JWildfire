@@ -25,12 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -38,12 +33,12 @@ import javax.swing.event.TreeSelectionListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.JWildfire;
 
-public class FlameBrowserInternalFrame extends JInternalFrame {
+public class FlameBrowserFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
 
-  public FlameBrowserInternalFrame() {
+  public FlameBrowserFrame() {
     super();
     initialize();
   }
@@ -57,13 +52,13 @@ public class FlameBrowserInternalFrame extends JInternalFrame {
     this.setSize(800, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 160, JWildfire.DEFAULT_WINDOW_TOP + 80));
-    this.setClosable(true);
+    //this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
+    //this.setIconifiable(true);
     this.setTitle("Flame browser");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
+    //this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 

@@ -552,7 +552,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
 
   protected void editPartBtn_clicked(FlameMoviePart pPart) {
     parentCtrl.importFlame(pPart.getFlame(), true);
-    parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
+    parentCtrl.getDesktop().showJFrame(MainEditorFrame.class);
   }
 
   protected void replacePartBtn_clicked(FlameMoviePart pPart) {
@@ -1279,7 +1279,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
     Flame flame = getCurrFlame();
     if (flame != null) {
       parentCtrl.importFlame(flame, true);
-      parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      parentCtrl.getDesktop().showJFrame(MainEditorFrame.class);
     }
   }
 

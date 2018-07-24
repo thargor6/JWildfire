@@ -22,24 +22,18 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.SystemColor;
 
-import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.JWildfire;
 
-public class HelpInternalFrame extends JInternalFrame {
+public class HelpFrame extends JFrame {
   private JPanel jContentPane = null;
   private JTabbedPane rootTabbedPane = null;
 
-  public HelpInternalFrame() {
+  public HelpFrame() {
     super();
     initialize();
   }
@@ -53,13 +47,10 @@ public class HelpInternalFrame extends JInternalFrame {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("Hints, Help and About");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(true);
     this.setContentPane(getJContentPane());
   }
 
@@ -91,18 +82,18 @@ public class HelpInternalFrame extends JInternalFrame {
       rootTabbedPane.setEnabled(true);
       // "FFmpeg Video Encoder" "emblem-videos.png"
       JPanel helpPanel = new JPanel();
-      rootTabbedPane.addTab("Hints, Help and About ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
+      rootTabbedPane.addTab("Hints, Help and About ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), helpPanel, null);
       helpPanel.setLayout(new BorderLayout(0, 0));
 
       JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
       helpPanel.add(tabbedPane_1);
 
       JPanel panel_1 = new JPanel();
-      tabbedPane_1.addTab("About JWildfire ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), panel_1, null);
+      tabbedPane_1.addTab("About JWildfire ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-3.png")), panel_1, null);
       panel_1.setLayout(new BorderLayout(0, 0));
       panel_1.add(getScrollPane(), BorderLayout.CENTER);
-      tabbedPane_1.addTab("Tips for Apophysis users ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_103(), null);
-      tabbedPane_1.addTab("3DMesh Generation tips ", new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_105(), null);
+      tabbedPane_1.addTab("Tips for Apophysis users ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/dialog-information-2.png")), getPanel_103(), null);
+      tabbedPane_1.addTab("3DMesh Generation tips ", new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")), getPanel_105(), null);
     }
     return rootTabbedPane;
   }

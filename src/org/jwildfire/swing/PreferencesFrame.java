@@ -6,15 +6,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 
-public class PreferencesInternalFrame extends JInternalFrame {
+public class PreferencesFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private JWildfire desktop = null;// @jve:decl-index=0:
   private MainController mainController = null; //  @jve:decl-index=0:
@@ -28,7 +24,7 @@ public class PreferencesInternalFrame extends JInternalFrame {
   /**
    * This is the xxx default constructor
    */
-  public PreferencesInternalFrame() {
+  public PreferencesFrame() {
     super();
     setResizable(true);
     initialize();

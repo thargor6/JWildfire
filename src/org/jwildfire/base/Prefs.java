@@ -46,8 +46,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
-  static final String KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH = "general.desktop_background_imagepath";
-  static final String KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT = "general.desktop_background_darken_amount";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
@@ -200,12 +198,6 @@ public class Prefs extends ManagedObject {
   @Property(description = "Mesh file drawer", category = PropertyCategory.TINA)
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
-
-  @Property(description = "Background-image for the desktop, a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
-  private String desktopBackgroundImagePath = null;
-
-  @Property(description = "Convenience background-image darken-amount (because a regular usually is too bright), a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
-  private double desktopBackgroundDarkenAmount = 1.0;
 
   @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
   private boolean showTipsAtStartup = true;
@@ -798,8 +790,6 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
-    desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
-    desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
     showTipsAtStartup = pSrc.showTipsAtStartup;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
@@ -947,9 +937,7 @@ public class Prefs extends ManagedObject {
   }
 
   private Prefs() {
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_NAVIGATOR));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA_PREVIEW));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FORMULAEXPLORER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
@@ -1576,22 +1564,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFontScale(double pTinaFontScale) {
     tinaFontScale = pTinaFontScale;
-  }
-
-  public String getDesktopBackgroundImagePath() {
-    return desktopBackgroundImagePath;
-  }
-
-  public void setDesktopBackgroundImagePath(String desktopBackgroundImagePath) {
-    this.desktopBackgroundImagePath = desktopBackgroundImagePath;
-  }
-
-  public double getDesktopBackgroundDarkenAmount() {
-    return desktopBackgroundDarkenAmount;
-  }
-
-  public void setDesktopBackgroundDarkenAmount(double desktopBackgroundDarkenAmount) {
-    this.desktopBackgroundDarkenAmount = desktopBackgroundDarkenAmount;
   }
 
   public boolean isShowTipsAtStartup() {

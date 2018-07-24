@@ -21,6 +21,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -37,7 +39,7 @@ import javax.swing.event.InternalFrameEvent;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.RessourceManager;
 
-public class SystemInfoInternalFrame extends JInternalFrame {
+public class SystemInfoFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private JTextPane textPane;
   private JButton clearCacheButton;
@@ -46,15 +48,16 @@ public class SystemInfoInternalFrame extends JInternalFrame {
    * give components names so we can test them
    * This frame displays system info from the help menu, and should disappear when ok is clicked
    */
-  public SystemInfoInternalFrame() {
-    addInternalFrameListener(new InternalFrameAdapter() {
+  public SystemInfoFrame() {
+
+    addWindowListener(new WindowAdapter() {
       @Override
-      public void internalFrameActivated(InternalFrameEvent e) {
+      public void windowActivated(WindowEvent e) {
         refresh();
       }
     });
+
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    setClosable(true);
     setResizable(true);
     setName("siif");
 

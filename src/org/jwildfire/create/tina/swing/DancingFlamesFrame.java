@@ -29,20 +29,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -57,12 +44,12 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.swing.JWildfire;
 
-public class DancingFlamesInternalFrame extends JInternalFrame {
+public class DancingFlamesFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
 
-  public DancingFlamesInternalFrame() {
+  public DancingFlamesFrame() {
     super();
     initialize();
   }
@@ -76,13 +63,10 @@ public class DancingFlamesInternalFrame extends JInternalFrame {
     this.setSize(1188, 700);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 20, JWildfire.DEFAULT_WINDOW_TOP + 20));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("Dancing flames movies");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 

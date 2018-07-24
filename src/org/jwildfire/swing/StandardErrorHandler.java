@@ -20,26 +20,24 @@ import java.awt.Point;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import org.jwildfire.base.Tools;
 
 
 public class StandardErrorHandler implements ErrorHandler {
-  private final JDesktopPane desktop;
+  private final JFrame rootFrame;
   private final JDialog showErrorDlg;
   private final JTextArea showErrorDlgMessageTextArea;
   private final JTextArea showErrorDlgStacktraceTextArea;
 
-  public StandardErrorHandler(JDesktopPane pDesktop, JDialog pShowErrorDlg,
+  public StandardErrorHandler(JFrame pRootFrame, JDialog pShowErrorDlg,
       JTextArea pShowErrorDlgMessageTextArea,
       JTextArea pShowErrorDlgStacktraceTextArea) {
     showErrorDlg = pShowErrorDlg;
     showErrorDlgMessageTextArea = pShowErrorDlgMessageTextArea;
     showErrorDlgStacktraceTextArea = pShowErrorDlgStacktraceTextArea;
-    desktop = pDesktop;
+    rootFrame = pRootFrame;
   }
 
   @Override
@@ -47,9 +45,9 @@ public class StandardErrorHandler implements ErrorHandler {
     try {
       if (Tools.isDebugMode())
         pThrowable.printStackTrace();
-      Point dPos = desktop.getLocation();
-      int dWidth = desktop.getWidth();
-      int dHeight = desktop.getHeight();
+      Point dPos = rootFrame.getLocation();
+      int dWidth = rootFrame.getWidth();
+      int dHeight = rootFrame.getHeight();
       int wWidth = showErrorDlg.getWidth();
       int wHeight = showErrorDlg.getHeight();
       showErrorDlg.setLocation(dPos.x + (dWidth - wWidth) / 2, dPos.y

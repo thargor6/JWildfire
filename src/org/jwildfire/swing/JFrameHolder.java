@@ -1,24 +1,20 @@
 package org.jwildfire.swing;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.beans.PropertyVetoException;
-
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JInternalFrame;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.WindowPrefs;
 
-public abstract class InternalFrameHolder<T extends JInternalFrame> {
+import javax.swing.*;
+import java.awt.*;
+
+public abstract class JFrameHolder<T extends JFrame> implements FrameHolder {
   protected JCheckBoxMenuItem menuItem = null;
-  protected T internalFrame;
+  protected T frame;
   protected final JWildfire desktop;
   protected final Class<T> frameType;
   protected final String windowPrefsName;
   protected final String menuCaption;
 
-  public InternalFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
+  public JFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
     this.frameType = frameType;
     this.desktop = desktop;
     this.windowPrefsName = windowPrefsName;
@@ -26,40 +22,37 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
   }
 
   protected void menuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    if (internalFrame != null && menuItem != null) {
+    if (frame != null && menuItem != null) {
       if (menuItem.isSelected()) {
-        internalFrame.setVisible(true);
-        try {
-          internalFrame.setSelected(true);
-        }
-        catch (PropertyVetoException ex) {
-          ex.printStackTrace();
-        }
+        frame.setVisible(true);
+        frame.toFront();
       }
       else {
-        internalFrame.setVisible(false);
+        frame.setVisible(false);
       }
     }
   }
 
+  @Override
   public void enableMenu() {
-    if (internalFrame != null && menuItem != null) {
-      menuItem.setSelected(internalFrame.isVisible());
+    if (frame != null && menuItem != null) {
+      menuItem.setSelected(frame.isVisible());
     }
   }
 
+  @Override
   public void saveWindowPrefs() {
-    if (internalFrame != null) {
-      Dimension size = internalFrame.getSize();
-      Point pos = internalFrame.getLocation();
+    if (frame != null) {
+      Dimension size = frame.getSize();
+      Point pos = frame.getLocation();
       WindowPrefs wPrefs = Prefs.getPrefs().getWindowPrefs(windowPrefsName);
-      boolean visible = internalFrame.isVisible() && !internalFrame.isClosed() && !internalFrame.isIcon();
+      boolean visible = frame.isVisible()/* && !frame.isClosed() && !frame.isIcon()*/;
       if (visible) {
         wPrefs.setLeft(pos.x);
         wPrefs.setTop(pos.y);
         wPrefs.setWidth(size.width);
         wPrefs.setHeight(size.height);
-        wPrefs.setMaximized(internalFrame.isMaximum());
+        //wPrefs.setMaximized(frame.isMaximum());
       }
       wPrefs.setVisible(visible);
     }
@@ -69,6 +62,7 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
     return frameType;
   }
 
+  @Override
   public JCheckBoxMenuItem getMenuItem() {
     if (menuItem == null) {
       menuItem = createMenuItem();
@@ -76,11 +70,11 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
     return menuItem;
   }
 
-  public T getInternalFrame() {
-    if (internalFrame == null) {
-      internalFrame = createInternalFrame();
+  public T getFrame() {
+    if (frame == null) {
+      frame = createFrame();
     }
-    return internalFrame;
+    return frame;
   }
 
   protected JCheckBoxMenuItem createMenuItem() {
@@ -96,20 +90,14 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
     return item;
   }
 
-  protected void applyWindowPrefs(JInternalFrame frame) {
+  protected void applyWindowPrefs(JFrame frame) {
     WindowPrefs wPrefs = Prefs.getPrefs().getWindowPrefs(windowPrefsName);
     boolean hasPrefs = wPrefs.getWidth(-1) > 0;
-    if (hasPrefs)
+    if (hasPrefs) {
       frame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-    frame.setSize(wPrefs.getWidth(frame.getSize().width), wPrefs.getHeight(frame.getSize().height));
-    try {
-      frame.setMaximum(wPrefs.isMaximized());
+      frame.setSize(wPrefs.getWidth(frame.getSize().width), wPrefs.getHeight(frame.getSize().height));
     }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    /*    
+    /*
         try {
           frame.setVisible(wPrefs.isVisible());
         }
@@ -119,5 +107,5 @@ public abstract class InternalFrameHolder<T extends JInternalFrame> {
     */
   }
 
-  protected abstract T createInternalFrame();
+  protected abstract T createFrame();
 }

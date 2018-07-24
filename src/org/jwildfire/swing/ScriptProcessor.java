@@ -19,7 +19,7 @@ package org.jwildfire.swing;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import javax.swing.JDesktopPane;
+import javax.swing.*;
 
 import org.jwildfire.create.CreatorsList;
 import org.jwildfire.create.ImageCreator;
@@ -37,15 +37,15 @@ import org.jwildfire.transform.Transformer;
 import org.jwildfire.transform.TransformersList;
 
 public class ScriptProcessor {
-  private final JDesktopPane desktop;
+  private final JFrame rootFrame;
   private final BufferList bufferList = new BufferList();
   private Transformer transformer = null;
   private ImageCreator creator = null;
   private ImageLoader loader = null;
   private boolean addBuffersToDesktop = false;
 
-  public ScriptProcessor(JDesktopPane pDesktop) {
-    desktop = pDesktop;
+  public ScriptProcessor(JFrame pRootFrame) {
+    rootFrame = pRootFrame;
   }
 
   public BufferList getBufferList() {
@@ -75,16 +75,16 @@ public class ScriptProcessor {
       }
     }
     if ("hdr".equalsIgnoreCase(fileExt)) {
-      SimpleHDRImage img = new ImageReader(desktop).loadHDRImage(pFilename);
+      SimpleHDRImage img = new ImageReader(rootFrame).loadHDRImage(pFilename);
       File file = new File(pFilename);
-      Buffer buffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? desktop : null, file.getName(),
+      Buffer buffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? rootFrame : null, file.getName(),
           img);
       return buffer;
     }
     else {
-      SimpleImage img = new ImageReader(desktop).loadImage(pFilename);
+      SimpleImage img = new ImageReader(rootFrame).loadImage(pFilename);
       File file = new File(pFilename);
-      Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null, file.getName(),
+      Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? rootFrame : null, file.getName(),
           img);
       return buffer;
     }
@@ -100,7 +100,7 @@ public class ScriptProcessor {
 
   public Buffer executeCreator(int pWidth, int pHeight, String pOutputName, boolean pRecordAction) {
     SimpleImage img = creator.createImage(pWidth, pHeight);
-    Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null,
+    Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? rootFrame : null,
         creator.getName(), img);
     if ((pOutputName != null) && (pOutputName.length() > 0))
       buffer.setName(pOutputName);
@@ -108,12 +108,12 @@ public class ScriptProcessor {
   }
 
   public void selectLoader(String pName) {
-    loader = LoadersList.getLoaderInstance(desktop, pName);
+    loader = LoadersList.getLoaderInstance(rootFrame, pName);
   }
 
   public Buffer executeLoader(String pOutputName, boolean pRecordAction) {
     SimpleImage img = loader.execute();
-    Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null,
+    Buffer buffer = bufferList.addImageBuffer(addBuffersToDesktop ? rootFrame : null,
         loader.getName(), img);
     if ((pOutputName != null) && (pOutputName.length() > 0))
       buffer.setName(pOutputName);
@@ -178,14 +178,14 @@ public class ScriptProcessor {
     }
     Buffer outBuffer = null;
     if (newImg != null) {
-      outBuffer = bufferList.addImageBuffer(addBuffersToDesktop ? desktop : null,
+      outBuffer = bufferList.addImageBuffer(addBuffersToDesktop ? rootFrame : null,
           transformer.getName(), newImg);
       if ((pOutputName != null) && (pOutputName.length() > 0))
         outBuffer.setName(pOutputName);
     }
     Buffer outHDRBuffer = null;
     if (newHDRImg != null) {
-      outHDRBuffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? desktop : null,
+      outHDRBuffer = bufferList.addHDRImageBuffer(addBuffersToDesktop ? rootFrame : null,
           transformer.getName(), newHDRImg);
       if ((pOutputName != null) && (pOutputName.length() > 0))
         outHDRBuffer.setName(pOutputName);
@@ -198,7 +198,7 @@ public class ScriptProcessor {
       scaleT.setScaleWidth(120);
       SimpleImage scaledImg = newImg.clone();
       scaleT.transformImage(scaledImg);
-      outBuffer3D = bufferList.addMesh3DBuffer(addBuffersToDesktop ? desktop : null, pInputName,
+      outBuffer3D = bufferList.addMesh3DBuffer(addBuffersToDesktop ? rootFrame : null, pInputName,
           transformer.getOutputMesh3D(true), scaledImg);
       if ((pOutput3DName != null) && (pOutput3DName.length() > 0))
         outBuffer3D.setName(pOutput3DName);

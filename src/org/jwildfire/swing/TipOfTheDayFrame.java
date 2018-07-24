@@ -42,16 +42,14 @@ import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
 
-public class TipOfTheDayInternalFrame extends JInternalFrame {
+public class TipOfTheDayFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private JTextPane helpPane = null;
   private JScrollPane scrollPane = null;
   private int prevTipIndex = -1;
 
-  public TipOfTheDayInternalFrame() {
-    setClosable(true);
+  public TipOfTheDayFrame() {
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    setIconifiable(true);
     setResizable(true);
     getContentPane().setBackground(UIManager.getColor("Button.background"));
 

@@ -73,7 +73,7 @@ import org.jwildfire.base.QualityProfile;
 import org.jwildfire.base.ResolutionProfile;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.iflames.swing.JInternalFrameFlameMessageHelper;
+import org.jwildfire.create.iflames.swing.JFrameFlameMessageHelper;
 import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.base.BGColorType;
@@ -196,7 +196,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
 
-  private final TinaInternalFrame tinaFrame;
+  private final MainEditorFrame mainEditorFrame;
   private final String tinaFrameTitle;
   private final JPanel centerPanel;
   private final FlameMessageHelper messageHelper;
@@ -233,8 +233,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public TinaController(TinaControllerParameter parameterObject) {
     desktop = parameterObject.desktop;
-    tinaFrame = parameterObject.pTinaFrame;
-    tinaFrameTitle = tinaFrame.getTitle();
+    mainEditorFrame = parameterObject.pMainEditorFrame;
+    tinaFrameTitle = mainEditorFrame.getTitle();
     errorHandler = parameterObject.pErrorHandler;
     prefs = parameterObject.pPrefs;
     centerPanel = parameterObject.pCenterPanel;
@@ -838,7 +838,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     gradientControls = new GradientControlsDelegate(this, data, rootPanel);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
 
-    messageHelper = new JInternalFrameFlameMessageHelper(tinaFrame);
+    messageHelper = new JFrameFlameMessageHelper(mainEditorFrame);
 
     flamePreviewHelper = new FlamePreviewHelper(errorHandler, centerPanel, data.toggleTransparencyButton,
         data.layerAppendBtn, data.layerPreviewBtn, mainProgressUpdater, this, this,
@@ -4488,7 +4488,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
     if (getCurrFlame() != null) {
       getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
-      desktop.showInternalFrame(EasyMovieMakerInternalFrame.class);
+      desktop.showJFrame(EasyMovieMakerFrame.class);
     }
   }
 
@@ -4926,7 +4926,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void quickMutateButton_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
-      desktop.showInternalFrame(MutaGenInternalFrame.class);
+      desktop.showJFrame(MutaGenFrame.class);
       rootPanel.getParent().invalidate();
       try {
         Graphics g = rootPanel.getParent().getGraphics();
@@ -4946,7 +4946,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (flame != null) {
       if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
         interactiveRendererCtrl.importFlame(flame);
-        desktop.showInternalFrame(InteractiveRendererInternalFrame.class);
+        desktop.showJFrame(InteractiveRendererFrame.class);
       }
     }
   }
@@ -6079,7 +6079,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (macroButton.getImage() != null && macroButton.getImage().length() > 0) {
           try {
             button.setIconTextGap(0);
-            button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
+            button.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
           }
           catch (Exception ex) {
             ex.printStackTrace();
@@ -6127,7 +6127,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         if (macroButton.getImage() != null && macroButton.getImage().length() > 0) {
           try {
             button.setIconTextGap(0);
-            button.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
+            button.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/" + macroButton.getImage())));
           }
           catch (Exception ex) {
             ex.printStackTrace();
@@ -6340,7 +6340,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   @Override
   public JProgressBar getRenderProgressBar() {
-    return tinaFrame.getRenderProgressBar();
+    return mainEditorFrame.getRenderProgressBar();
   }
 
   public void renderFlameButton_actionPerformed(ActionEvent e) {
@@ -6353,7 +6353,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       pScript.run(this);
     }
     else {
-      ScriptParamsForm form = formBuilder.getProduct(tinaFrame, errorHandler);
+      ScriptParamsForm form = formBuilder.getProduct(mainEditorFrame, errorHandler);
       form.showModal(this, pScript);
     }
   }

@@ -28,22 +28,15 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 
-public class LookAndFeelInternalFrame extends JInternalFrame {
+public class LookAndFeelFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private final ErrorHandler errorHandler;
   private final JWildfire desktop;
-  private final JDesktopPane rootPane;
+  private final JFrame rootPane;
 
   private final Prefs prefs;
   private JComboBox mainThemeCmb;
@@ -51,12 +44,15 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
   private boolean noRefresh;
   private JButton applyToApplicationBtn;
 
-  public LookAndFeelInternalFrame(JWildfire pDesktop, JDesktopPane pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
+  public LookAndFeelFrame(JWildfire pDesktop, JFrame pRootPane, ErrorHandler pErrorHandler, Prefs pPrefs) {
     desktop = pDesktop;
     noRefresh = true;
     rootPane = pRootPane;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
+
+    this.setSize(600, 400);
+
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
     JPanel northPanel = new JPanel();
@@ -204,7 +200,8 @@ public class LookAndFeelInternalFrame extends JInternalFrame {
   }
 
   protected void applyThemeToApplication() {
-    rootPane.updateUI();
+
+    //rootPane.updateUI();
     SwingUtilities.updateComponentTreeUI(rootPane);
     Window windows[] = Window.getWindows();
     for (int i = 0; i < windows.length; i++) {

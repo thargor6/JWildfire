@@ -8,28 +8,14 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.jwildfire.create.CreatorsList;
 import org.jwildfire.loader.LoadersList;
 import org.jwildfire.transform.Transformer;
 import org.jwildfire.transform.TransformersList;
 
-public class OperatorsInternalFrame extends JInternalFrame {
+public class OperatorsFrame extends JFrame {
   private MainController mainController = null; // @jve:decl-index=0:
   private JWildfire desktop = null;// @jve:decl-index=0:
   private Object currTransformerPropertyPanel = null; // @jve:decl-index=0:
@@ -109,7 +95,7 @@ public class OperatorsInternalFrame extends JInternalFrame {
   /**
    * This is the xxx default constructor
    */
-  public OperatorsInternalFrame() {
+  public OperatorsFrame() {
     super();
     initialize();
   }
@@ -124,8 +110,6 @@ public class OperatorsInternalFrame extends JInternalFrame {
     this.setBounds(new Rectangle(813, 14, 355, 652));
     this.setTitle("Operators (<F2>/<DblClick> to edit)");
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setClosable(true);
-    this.setIconifiable(true);
     this.setVisible(false);
     this.setResizable(true);
     this.setContentPane(getJContentPane());

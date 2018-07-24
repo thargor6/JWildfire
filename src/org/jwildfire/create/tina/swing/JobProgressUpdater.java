@@ -19,9 +19,9 @@ package org.jwildfire.create.tina.swing;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
 public class JobProgressUpdater implements ProgressUpdater {
-  private final BatchFlameRendererInternalFrame parent;
+  private final BatchFlameRendererFrame parent;
 
-  public JobProgressUpdater(BatchFlameRendererInternalFrame pParent) {
+  public JobProgressUpdater(BatchFlameRendererFrame pParent) {
     parent = pParent;
   }
 

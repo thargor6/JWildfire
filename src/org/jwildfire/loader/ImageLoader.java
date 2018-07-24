@@ -18,14 +18,14 @@ package org.jwildfire.loader;
 
 import java.util.Calendar;
 
-import javax.swing.JDesktopPane;
+import javax.swing.*;
 
 import org.jwildfire.base.ManagedObject;
 import org.jwildfire.image.SimpleImage;
 
 
 public abstract class ImageLoader extends ManagedObject {
-  protected JDesktopPane desktop;
+  protected JFrame rootFrame;
 
   public SimpleImage execute() {
     long t0 = initTime();
@@ -46,12 +46,12 @@ public abstract class ImageLoader extends ManagedObject {
     System.out.println(name + ": " + ((double) (t1 - t0) / 1000.0) + "s");
   }
 
-  protected JDesktopPane getDesktop() {
-    return desktop;
+  protected JFrame getRootFrame() {
+    return rootFrame;
   }
 
-  public void setDesktop(JDesktopPane desktop) {
-    this.desktop = desktop;
+  public void setRootFrame(JFrame pRootFrame) {
+    this.rootFrame = pRootFrame;
   }
 
 }

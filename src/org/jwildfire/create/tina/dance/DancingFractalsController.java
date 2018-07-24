@@ -79,7 +79,7 @@ import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
@@ -699,7 +699,7 @@ public class DancingFractalsController {
     Flame flame = poolFlameHolder.getFlame();
     if (flame != null) {
       parentCtrl.importFlame(flame, true);
-      parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      parentCtrl.getDesktop().showJFrame(MainEditorFrame.class);
     }
   }
 

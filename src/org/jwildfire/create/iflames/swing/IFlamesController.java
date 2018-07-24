@@ -37,21 +37,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
-import javax.swing.JTree;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.ResolutionProfile;
@@ -104,7 +90,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
   private final Prefs prefs;
   private final MainController mainController;
   private final TinaController tinaController;
-  private final JInternalFrame iflamesFrame;
+  private final JFrame iflamesFrame;
   private final ErrorHandler errorHandler;
   private final JPanel centerPanel;
   private final FlamePreviewHelper flamePreviewHelper;
@@ -228,7 +214,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
 
   @SuppressWarnings("unchecked")
   public IFlamesController(MainController pMainController, TinaController pTinaController,
-      ErrorHandler pErrorHandler, JInternalFrame pIflamesFrame, JPanel pCenterPanel,
+      ErrorHandler pErrorHandler, JFrame pIflamesFrame, JPanel pCenterPanel,
       JButton pUndoButton, JButton pRedoButton, JButton pRenderButton, JPanel pImageLibraryPanel,
       JPanel pFlameLibraryPanel, JButton pLoadIFlameButton, JButton pLoadIFlameFromClipboardButton,
       JButton pSaveIFlameToClipboardButton, JButton pSaveIFlameButton, JButton pRefreshIFlameButton,
@@ -379,7 +365,7 @@ public class IFlamesController implements FlameHolder, FlamePanelProvider, Rende
     imageLightnessChangeField = pImageLightnessChangeField;
     baseFlameInstancingCBx = pBaseFlameInstancingCBx;
 
-    messageHelper = new JInternalFrameFlameMessageHelper(iflamesFrame);
+    messageHelper = new JFrameFlameMessageHelper(iflamesFrame);
     mainProgressUpdater = new RenderProgressUpdater(this);
     flamePropertiesTreeService = new FlamePropertiesTreeService();
 

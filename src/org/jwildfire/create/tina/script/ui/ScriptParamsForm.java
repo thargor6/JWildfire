@@ -26,12 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -51,6 +46,23 @@ public class ScriptParamsForm implements ScriptRunnerEnvironment {
   private ScriptRunner scriptRunner;
 
   public ScriptParamsForm(JInternalFrame pParent, ErrorHandler pErrorHandler) {
+    errorHandler = pErrorHandler;
+    Window owner = SwingUtilities.getWindowAncestor(pParent);
+    dialog = new ScriptParamsDialog(owner);
+
+    int dialogWidth = 500;
+    int dialogHeight = 400;
+    dialog.setSize(dialogWidth, dialogHeight);
+    dialog.setLocationRelativeTo(owner);
+
+    dialog.getRunScriptButton().addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        runScript();
+      }
+    });
+  }
+
+  public ScriptParamsForm(JFrame pParent, ErrorHandler pErrorHandler) {
     errorHandler = pErrorHandler;
     Window owner = SwingUtilities.getWindowAncestor(pParent);
     dialog = new ScriptParamsDialog(owner);

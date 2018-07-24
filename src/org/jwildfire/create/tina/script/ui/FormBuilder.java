@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.script.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JInternalFrame;
+import javax.swing.*;
 
 import org.jwildfire.swing.ErrorHandler;
 
@@ -34,6 +34,12 @@ public class FormBuilder {
   }
 
   public ScriptParamsForm getProduct(JInternalFrame pParent, ErrorHandler pErrorHandler) {
+    ScriptParamsForm form = new ScriptParamsForm(pParent, pErrorHandler);
+    buildPart(form);
+    return form;
+  }
+
+  public ScriptParamsForm getProduct(JFrame pParent, ErrorHandler pErrorHandler) {
     ScriptParamsForm form = new ScriptParamsForm(pParent, pErrorHandler);
     buildPart(form);
     return form;

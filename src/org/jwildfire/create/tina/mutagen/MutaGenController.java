@@ -59,8 +59,8 @@ import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.swing.FlameFileChooser;
 import org.jwildfire.create.tina.swing.JWFNumberField;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaInternalFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.swing.ErrorHandler;
 import org.jwildfire.swing.ImagePanel;
@@ -464,7 +464,7 @@ public class MutaGenController {
 
       tinaController.importFlame(morphedFlame, true);
 
-      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      tinaController.getDesktop().showJFrame(MainEditorFrame.class);
       rootPanel.getParent().invalidate();
       try {
         Graphics g = rootPanel.getParent().getGraphics();
