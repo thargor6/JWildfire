@@ -650,6 +650,7 @@ public class VariationFuncList {
     registerVariationFunc(SunflowerVoroniFunc.class);
 
     registerVariationFunc(Cylinder2Func.class);
+    registerVariationFunc(Affine3DFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
