@@ -20,9 +20,12 @@ import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.transform.XFormTransformService;
+import org.jwildfire.create.tina.variation.Affine3DFunc;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
+import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 
-public class LinearRandomFlameGenerator extends RandomFlameGenerator {
+public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {
@@ -30,6 +33,12 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
     Layer layer = flame.getFirstLayer();
     flame.setCentreX(0.0);
     flame.setCentreY(0.0);
+
+    flame.setCamPitch(49.0-100.0*Math.random());
+    flame.setCamYaw(22.0-44.0*Math.random());
+    flame.setCamPerspective(0.06+0.36*Math.random());
+
+
     flame.setPixelsPerUnit(200);
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
@@ -43,35 +52,47 @@ public class LinearRandomFlameGenerator extends RandomFlameGenerator {
 
     for (int i = 0; i < maxXForms; i++) {
       XForm xForm = new XForm();
+      VariationFunc affine3DFunc = xForm.addVariation(Math.random() * 0.5 + 0.5, VariationFuncList.getVariationFuncInstance("affine3D", true)).getFunc();
       layer.getXForms().add(xForm);
       if (contRot) {
         r0 += 45.0 * Math.random() - 9.0 * Math.random();
-        XFormTransformService.rotate(xForm, r0);
+        affine3DFunc.setParameter("rotateZ", r0);
       }
       else {
         if (Math.random() < 0.5) {
-          XFormTransformService.rotate(xForm, 360.0 * Math.random());
+          affine3DFunc.setParameter("rotateZ", 360.0 * Math.random());
         }
         else {
-          XFormTransformService.rotate(xForm, -360.0 * Math.random());
+          affine3DFunc.setParameter("rotateZ", -360.0 * Math.random());
         }
       }
-      XFormTransformService.localTranslate(xForm, (2.0 * Math.random() - 1.0) * tscl, (2.0 * Math.random() - 1.0) * tscl);
+      affine3DFunc.setParameter("rotateX", 18.0 - 36.0 * Math.random());
+      affine3DFunc.setParameter("rotateY", 18.0 - 36.0 * Math.random());
+
+      affine3DFunc.setParameter("translateX", (2.0 * Math.random() - 1.0) * tscl);
+      affine3DFunc.setParameter("translateY", (2.0 * Math.random() - 1.0) * tscl);
+      affine3DFunc.setParameter("translateZ", (2.0 * Math.random() - 1.0) * tscl);
+
       scl *= 0.8 + Math.random() * 0.1;
       tscl *= 0.8 + Math.random() * 0.1;
 
-      XFormTransformService.scale(xForm, scl, true, true);
+      affine3DFunc.setParameter("scaleX", scl);
+      affine3DFunc.setParameter("scaleY", scl);
+      affine3DFunc.setParameter("scaleZ", scl);
 
       xForm.setColor(Math.random());
-      xForm.addVariation(Math.random() * 0.5 + 0.5, new Linear3DFunc());
       xForm.setWeight(scl * Math.random() * 19.9 + 0.1);
+
+      if(Math.random()<0.1) {
+        xForm.addVariation(Math.random() * 0.25 + 0.25, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true) );
+      }
     }
     return flame;
   }
 
   @Override
   public String getName() {
-    return "Linear only";
+    return "Affine3D";
   }
 
   @Override
