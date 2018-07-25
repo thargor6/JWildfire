@@ -157,13 +157,13 @@ public class JWildfire extends JApplet {
       errorHandler = new StandardErrorHandler(getMainFrame(), getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
-      /*
-            WelcomeFrame welcomeInternalFrame = getFrame(WelcomeFrame.class);
+/*
+            WelcomeFrame welcomeInternalFrame = getJFrame(WelcomeFrame.class);
             if (!welcomeInternalFrame.isVisible()) {
               welcomeInternalFrame.setVisible(true);
             }
-            welcomeInternalFrame.moveToFront();
-      */
+            welcomeInternalFrame.toFront();
+*/
 
       TipOfTheDayFrame tipOfTheDayFrame = getJFrame(TipOfTheDayFrame.class);
       if (!tipOfTheDayFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
@@ -200,19 +200,6 @@ public class JWildfire extends JApplet {
 
       MainEditorFrame mainEditorFrame = getJFrame(MainEditorFrame.class);
       tinaController = mainEditorFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
-      try {
-        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
-        if (randGen instanceof AllRandomFlameGenerator) {
-          ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
-        }
-        RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
-        RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
-
-        tinaController.createRandomBatch(2, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
 
       flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
@@ -264,11 +251,31 @@ public class JWildfire extends JApplet {
     }
 
     try {
+      getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+Tools.APP_VERSION+"!");
       getJFrame(MainEditorFrame.class).toFront();
     }
     catch (Exception ex) {
       ex.printStackTrace();
     }
+
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
+          if (randGen instanceof AllRandomFlameGenerator) {
+            ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
+          }
+          RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
+          RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
+
+          tinaController.createRandomBatch(3, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
   }
 
   private BufferedImage backgroundImage;

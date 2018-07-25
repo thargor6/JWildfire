@@ -128,7 +128,12 @@ public class Buffer {
       frame.setContentPane(pnl);
       frame.pack();
 
-      pRootFrame.add(frame, null);
+
+
+      frame.setLocation(30, 20);
+      frame.setSize(panelWidth +  frame.getInsets().left +  frame.getInsets().right, (int)((double)panelWidth * (double)imageHeight / (double)imageWidth+0.5) +  frame.getInsets().top +  frame.getInsets().bottom);
+
+      //pRootFrame.add(frame, null);
       frame.addComponentListener(new ComponentListener() {
         @Override
         public void componentHidden(ComponentEvent arg0) {
