@@ -651,6 +651,7 @@ public class VariationFuncList {
 
     registerVariationFunc(Cylinder2Func.class);
     registerVariationFunc(Affine3DFunc.class);
+    registerVariationFunc(Q_odeFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
