@@ -36,6 +36,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.Stereo3dMode;
+import org.jwildfire.create.tina.base.Stereo3dPreview;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
@@ -196,6 +198,10 @@ public class FlamePanel extends ImagePanel {
 
   public Rectangle getImageBounds() {
     Rectangle bounds = this.getBounds();
+    if (!config.isProgressivePreview() && flameHolder.getFlame() != null && flameHolder.getFlame().getStereo3dMode() != Stereo3dMode.NONE && 
+    		flameHolder.getFlame().getStereo3dPreview() == Stereo3dPreview.SIDE_BY_SIDE_FULL) {
+    	return bounds;   	
+    }
     double aspect = (double) bounds.width / (double) bounds.height;
     int imageWidth, imageHeight;
     if (aspect <= renderAspect) {
@@ -211,6 +217,10 @@ public class FlamePanel extends ImagePanel {
 
   public Rectangle getParentImageBounds() {
     Rectangle bounds = this.getParent().getBounds();
+    if (!config.isProgressivePreview() && flameHolder.getFlame() != null && flameHolder.getFlame().getStereo3dMode() != Stereo3dMode.NONE && 
+    		flameHolder.getFlame().getStereo3dPreview() == Stereo3dPreview.SIDE_BY_SIDE_FULL) {
+    	return bounds;   	
+    }
     double aspect = (double) bounds.width / (double) bounds.height;
     int imageWidth, imageHeight;
     if (aspect <= renderAspect) {
@@ -439,6 +449,7 @@ public class FlamePanel extends ImagePanel {
       try {
         selectedXForm.initTransform();
         for (Variation var : selectedXForm.getVariations()) {
+          var.getFunc().initOnce(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
           var.getFunc().init(getFlameTransformationContext(), layerHolder != null ? layerHolder.getLayer() : null, selectedXForm, var.getAmount());
         }
 
@@ -935,7 +946,7 @@ public class FlamePanel extends ImagePanel {
 
   private FlameTransformationContext getFlameTransformationContext() {
     if (flameTransformationContext == null) {
-      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(prefs, RandomGeneratorType.getDefaultValue()), 1);
+      flameTransformationContext = new FlameTransformationContext(getFlameRenderer(), RandomGeneratorFactory.getInstance(prefs, RandomGeneratorType.getDefaultValue()), 0,1);
       flameTransformationContext.setPreview(getFlameRenderer().isPreview());
     }
     return flameTransformationContext;
@@ -1051,6 +1062,7 @@ public class FlamePanel extends ImagePanel {
       config.setWithColoredTransforms(pFlamePanel.config.isWithColoredTransforms());
       config.setMouseDragOperation(pFlamePanel.config.getMouseDragOperation());
       config.setEditPostTransform(pFlamePanel.config.isEditPostTransform());
+      config.setProgressivePreview(pFlamePanel.config.isProgressivePreview());
     }
   }
 

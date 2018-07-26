@@ -43,7 +43,8 @@ public class LayersRandomFlameGenerator extends RandomFlameGenerator {
     final int IMG_HEIGHT = 90;
     int palettePoints = 3 + Tools.randomInt(17);
     boolean fadePaletteColors = Math.random() > 0.125;
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pState.getPrefs(), randGen, RandomSymmetryGeneratorList.NONE, pState.getGradientGenerator(), palettePoints, fadePaletteColors, RandomBatchQuality.LOW);
+    boolean uniformWidth = Math.random() > 0.75;
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, pState.getPrefs(), randGen, RandomSymmetryGeneratorList.NONE, pState.getGradientGenerator(), palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
     return sampler.createSample().getFlame();
   }
 

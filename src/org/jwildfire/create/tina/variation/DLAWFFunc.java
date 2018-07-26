@@ -158,7 +158,7 @@ public class DLAWFFunc extends VariationFunc {
 
   private short[][] calculate() {
     AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
-
+System.err.println("CALCULATER!!!");
     int centre = buffer_size / 2;
     double pi2 = 2.0 * Math.PI;
     int size2 = buffer_size - 2;
@@ -231,9 +231,18 @@ public class DLAWFFunc extends VariationFunc {
 
   private int _max_iter;
 
+
+  @Override
+  public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
+    _max_iter = pContext.isPreview() ? (max_iter < 6000) ? max_iter : 6000 : max_iter;
+    // causes the points to be written to cache, happens only once
+    getPoints();
+  }
+
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _max_iter = pContext.isPreview() ? (max_iter < 6000) ? max_iter : 6000 : max_iter;
+    // points are read from cache
     _points = getPoints();
   }
 }

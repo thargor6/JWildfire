@@ -54,6 +54,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new JulianDiscRandomFlameGenerator());
     generators.add(new JuliansRandomFlameGenerator());
     generators.add(new LayersRandomFlameGenerator());
+    generators.add(new Affine3DRandomFlameGenerator());
     generators.add(new LinearRandomFlameGenerator());
     generators.add(new MachineRandomFlameGenerator());
     generators.add(new MandelbrotRandomFlameGenerator());
@@ -138,7 +139,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
       }
       List<RGBColor> colors = new ArrayList<RGBColor>();
       colors.add(new RGBColor(255, 255, 255));
-      RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true);
+      RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true, true);
       for (Layer layer : pFlame.getLayers()) {
         layer.setPalette(gradient);
       }
@@ -158,7 +159,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
       }
       List<RGBColor> colors = new ArrayList<RGBColor>();
       colors.add(new RGBColor(0, 0, 0));
-      RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true);
+      RGBPalette gradient = RandomGradientGenerator.generatePalette(colors, true, true);
       for (Layer layer : pFlame.getLayers()) {
         layer.setPalette(gradient);
       }

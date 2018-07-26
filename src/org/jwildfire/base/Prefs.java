@@ -46,8 +46,6 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
-  static final String KEY_GENERAL_DESKTOP_BACKGROUND_IMAGEPATH = "general.desktop_background_imagepath";
-  static final String KEY_GENERAL_DESKTOP_BACKGROUND_DARKEN_AMOUNT = "general.desktop_background_darken_amount";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
@@ -83,7 +81,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_PATH_RAW_MOTION_DATA = "tina.path.raw_motion_data";
 
-  static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality";
+  static final String KEY_TINA_RENDER_REALTIME_QUALITY = "tina.render.realtime.quality.1";
   static final String KEY_TINA_RENDER_PREVIEW_QUALITY = "tina.render.preview.quality";
   static final String KEY_TINA_RENDER_DEFAULT_BG_TRANSPARENCY = "tina.render.default_bg_transparency";
   static final String KEY_TINA_RENDER_DEFAULT_ANTIALIASING_AMOUNT = "tina.render.default_antialiasing_amount.8";
@@ -92,7 +90,7 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_DISABLE_SOLID_RANDGENS = "tina.disable_solid_randgens";
 
-  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.2";
+  static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.3";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
@@ -116,19 +114,19 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_ADVANCED_CODE_EDITOR = "tina.advanced_code_editor";
   static final String KEY_TINA_ADVANCED_CODE_EDITOR_COLOR_FIX = "tina.advanced_code_editor_color_fix";
-  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size";
+  static final String KEY_TINA_ADVANCED_CODE_EDITOR_FONT_SIZE = "tina.advanced_code_editor_font_size.2";
 
   static final String KEY_TINA_EDITOR_GUIDES_LINE_WIDTH = "tina.editor.guides.linewidth";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_CENTER_POINT = "tina.editor.guides.color.center_point";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_RULE_OF_THIRDS = "tina.editor.guides.color.rule_of_thirds";
   static final String KEY_TINA_EDITOR_GUIDES_COLOR_GOLDEN_RATIO = "tina.editor.guides.color.golden_ratio";
 
-  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.3";
+  static final String KEY_TINA_DEFAULT_SPATIAL_OVERSAMPLING = "tina.default.spatial_oversampling.5";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER = "tina.default.post_noise_filter.2";
   static final String KEY_TINA_DEFAULT_POST_NOISE_FILTER_THRESHOLD = "tina.default.post_noise_filter_threshold";
   static final String KEY_TINA_DEFAULT_FOREGROUND_OPACITY = "tina.default.foreground_opacity";
-  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.4";
-  static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius";
+  static final String KEY_TINA_DEFAULT_FILTER_KERNEL = "tina.default.filter_kernel.5";
+  static final String KEY_TINA_DEFAULT_FILTER_RADIUS = "tina.default.filter_radius.1";
   static final String KEY_TINA_DEFAULT_FILTER_VISUALISATION_FLAT = "tina.default.filter_visualisation_flat";
 
   public static final String KEY_TINA_EDITOR_DEFAULT_DOUBLECLICK_ACTION = "tina.editor.default.double_click_action";
@@ -201,12 +199,6 @@ public class Prefs extends ManagedObject {
   private String tinaMeshPath = null;
   private String lastMeshPath = null;
 
-  @Property(description = "Background-image for the desktop, a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
-  private String desktopBackgroundImagePath = null;
-
-  @Property(description = "Convenience background-image darken-amount (because a regular usually is too bright), a change of this property requires a program-restart", category = PropertyCategory.GENERAL)
-  private double desktopBackgroundDarkenAmount = 1.0;
-
   @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
   private boolean showTipsAtStartup = true;
 
@@ -229,7 +221,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDisableSolidFlameRandGens = false;
 
   @Property(description = "Set font size for advanced code editor. Only applies when advanced code editor is toggled on", category = PropertyCategory.TINA)
-  private int tinaAdvancedCodeEditorFontSize = 10;
+  private int tinaAdvancedCodeEditorFontSize = 14;
 
   @Property(description = "Expand the params in the non-linear tab per default. This is only the initial value, you may expand and collapse the params at any time manually", category = PropertyCategory.TINA)
   private boolean tinaDefaultExpandNonlinearParams = false;
@@ -303,7 +295,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorControlsWithShadows = true;
 
   @Property(description = "Default spatial oversampling setting, used when creating a new flame", category = PropertyCategory.TINA)
-  private int tinaDefaultSpatialOversampling = 2;
+  private int tinaDefaultSpatialOversampling = 1;
 
   @Property(description = "Default setting for applying a post-noise-filter to rendered images", category = PropertyCategory.TINA)
   private boolean tinaDefaultPostNoiseFilter = false;
@@ -318,7 +310,7 @@ public class Prefs extends ManagedObject {
   private boolean tinaDefaultFilterVisualisationFlat = false;
 
   @Property(description = "Default spatial filter-kernel, used when creating a new flame", category = PropertyCategory.TINA, editorClass = FilterKernelTypeEditor.class)
-  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL_SINEPOW;
+  private FilterKernelType tinaDefaultSpatialFilterKernel = FilterKernelType.MITCHELL_SMOOTH;
 
   @Property(description = "Default spatial filter-radius, used when creating a new flame (set to 0 in order to turn off spatial filtering)", category = PropertyCategory.TINA)
   private double tinaDefaultSpatialFilterRadius = 0.75;
@@ -468,7 +460,7 @@ public class Prefs extends ManagedObject {
   private RandomGeneratorType tinaRandomNumberGenerator = RandomGeneratorType.getDefaultValue();
 
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
-  private double tinaRenderRealtimeQuality = 1.0;
+  private double tinaRenderRealtimeQuality = 0.5;
 
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
@@ -798,8 +790,6 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderTime = pSrc.tinaEditorProgressivePreviewMaxRenderTime;
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
-    desktopBackgroundImagePath = pSrc.desktopBackgroundImagePath;
-    desktopBackgroundDarkenAmount = pSrc.desktopBackgroundDarkenAmount;
     showTipsAtStartup = pSrc.showTipsAtStartup;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
@@ -947,9 +937,7 @@ public class Prefs extends ManagedObject {
   }
 
   private Prefs() {
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_DESKTOP));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA));
-    windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_NAVIGATOR));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_TINA_PREVIEW));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_FORMULAEXPLORER));
     windowPrefs.add(new WindowPrefs(WindowPrefs.WINDOW_IFLAMES));
@@ -1521,7 +1509,7 @@ public class Prefs extends ManagedObject {
   }
 
   public void setTinaAdvancedCodeEditorFontSize(int font_size) {
-    if (font_size <= 0) {
+    if (font_size <= 8) {
       font_size = 10;
     }
     tinaAdvancedCodeEditorFontSize = font_size;
@@ -1576,22 +1564,6 @@ public class Prefs extends ManagedObject {
 
   public void setTinaFontScale(double pTinaFontScale) {
     tinaFontScale = pTinaFontScale;
-  }
-
-  public String getDesktopBackgroundImagePath() {
-    return desktopBackgroundImagePath;
-  }
-
-  public void setDesktopBackgroundImagePath(String desktopBackgroundImagePath) {
-    this.desktopBackgroundImagePath = desktopBackgroundImagePath;
-  }
-
-  public double getDesktopBackgroundDarkenAmount() {
-    return desktopBackgroundDarkenAmount;
-  }
-
-  public void setDesktopBackgroundDarkenAmount(double desktopBackgroundDarkenAmount) {
-    this.desktopBackgroundDarkenAmount = desktopBackgroundDarkenAmount;
   }
 
   public boolean isShowTipsAtStartup() {

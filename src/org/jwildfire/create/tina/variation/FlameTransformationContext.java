@@ -26,12 +26,14 @@ public class FlameTransformationContext implements Serializable {
   private final AbstractRandomGenerator randGen;
   private final FlameRenderer flameRenderer;
   private final int frame;
+  private int threadId;
   private boolean preview;
   private boolean preserveZCoordinate;
 
-  public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen, int pFrame) {
+  public FlameTransformationContext(FlameRenderer pFlameRenderer, AbstractRandomGenerator pRandGen, int pThreadId, int pFrame) {
     randGen = pRandGen;
     flameRenderer = pFlameRenderer;
+    threadId = pThreadId;
     frame = pFrame;
   }
 
@@ -71,4 +73,11 @@ public class FlameTransformationContext implements Serializable {
     preserveZCoordinate = pPreserveZCoordinate;
   }
 
+  public int getThreadId() {
+    return threadId;
+  }
+
+  public void setThreadId(int threadId) {
+    this.threadId = threadId;
+  }
 }

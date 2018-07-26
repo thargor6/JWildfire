@@ -57,6 +57,7 @@ public class PerlinNoiseDOFBlurShape extends AbstractDOFBlurShape {
       fnc.setParameter(paramName, params.get(paramName));
     }
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 
   private static final List<String> paramNames = new ArrayList<String>(Arrays.asList(new String[] { DCPerlinFunc.PARAM_SHAPE, DCPerlinFunc.PARAM_AMPS, DCPerlinFunc.PARAM_FREQS, DCPerlinFunc.PARAM_CENTRE, DCPerlinFunc.PARAM_RANGE }));

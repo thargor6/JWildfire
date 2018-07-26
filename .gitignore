@@ -79,3 +79,7 @@ FACLRender/FA*
 /bin/
 /build/
 TODO.txt
+
+.idea/*
+out/*
+JWildfire.iml

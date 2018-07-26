@@ -78,8 +78,8 @@ public class PostBumpMapWFFunc extends VariationFunc {
       else {
         ((SimpleHDRImage) bumpMap).getRGBValues(rgbArray, ix, iy);
         double r = rgbArray[0];
-        double g = rgbArray[0];
-        double b = rgbArray[0];
+        double g = rgbArray[1];
+        double b = rgbArray[2];
         intensity = (0.299 * r + 0.588 * g + 0.113 * b);
       }
       dz += scaleZ * intensity;
@@ -120,6 +120,11 @@ public class PostBumpMapWFFunc extends VariationFunc {
       resetZ = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public int getPriority() {
+    return 1;
   }
 
   @Override
@@ -169,11 +174,16 @@ public class PostBumpMapWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
+      if (imageFilename != null) {
+    	  inlinedImage = null;
+    	  inlinedImageHash = 0;
+      }
       bumpMap = null;
     }
     else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
+      if (inlinedImage != null) imageFilename = null;
       bumpMap = null;
     }
     else

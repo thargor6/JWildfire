@@ -122,21 +122,21 @@ public class ColorMapHolder implements Serializable {
           double iufrac = MathLib.frac(iu);
           double ivfrac = MathLib.frac(iv);
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
-          float lur = rgbArray[0];
-          float lug = rgbArray[1];
-          float lub = rgbArray[2];
+          float lur = rgbArray[0] * 255;
+          float lug = rgbArray[1] * 255;
+          float lub = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix1, iy);
-          float rur = rgbArray[0];
-          float rug = rgbArray[1];
-          float rub = rgbArray[2];
+          float rur = rgbArray[0] * 255;
+          float rug = rgbArray[1] * 255;
+          float rub = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy1);
-          float lbr = rgbArray[0];
-          float lbg = rgbArray[1];
-          float lbb = rgbArray[2];
+          float lbr = rgbArray[0] * 255;
+          float lbg = rgbArray[1] * 255;
+          float lbb = rgbArray[2] * 255;
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix1, iy1);
-          float rbr = rgbArray[0];
-          float rbg = rgbArray[1];
-          float rbb = rgbArray[2];
+          float rbr = rgbArray[0] * 255;
+          float rbg = rgbArray[1] * 255;
+          float rbb = rgbArray[2] * 255;
           pVarTP.rgbColor = true;
           pVarTP.redColor = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           pVarTP.greenColor = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
@@ -145,9 +145,9 @@ public class ColorMapHolder implements Serializable {
         else {
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
           pVarTP.rgbColor = true;
-          pVarTP.redColor = rgbArray[0];
-          pVarTP.greenColor = rgbArray[1];
-          pVarTP.blueColor = rgbArray[2];
+          pVarTP.redColor = rgbArray[0] * 255;
+          pVarTP.greenColor = rgbArray[1] * 255;
+          pVarTP.blueColor = rgbArray[2] * 255;
         }
       }
     }

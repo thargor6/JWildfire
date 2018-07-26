@@ -26,6 +26,8 @@ import java.util.Map.Entry;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
+import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
+import org.jwildfire.create.tina.variation.mesh.FracTerrain3DFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
 import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
 import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
@@ -569,18 +571,20 @@ public class VariationFuncList {
     registerVariationFunc(Crop3DFunc.class);
     registerVariationFunc(SphereCropFunc.class);
 
-    registerVariationFunc(LsystemFunc.class);
+    // seems to freeze the program from time to time
+    // registerVariationFunc(LsystemFunc.class);
     registerVariationFunc(LSystem3DWFFunc.class);
     registerVariationFunc(HamidFunc.class);
     registerVariationFunc(TreeFunc.class);
-    registerVariationFunc(HilbertFunc.class);
     registerVariationFunc(BrownianFunc.class);
 
-    registerVariationFunc(DragonFunc.class);
-    registerVariationFunc(GosperIslandFunc.class);
-    registerVariationFunc(HtreeFunc.class);
-    registerVariationFunc(KochFunc.class);
-    registerVariationFunc(RsquaresFunc.class);
+    // populates an endless array, causes quickly OutOfMemoryErrors very quickly
+    // registerVariationFunc(DragonFunc.class);
+    // registerVariationFunc(GosperIslandFunc.class);
+    // registerVariationFunc(HtreeFunc.class);
+    // registerVariationFunc(KochFunc.class);
+    // registerVariationFunc(RsquaresFunc.class);
+    // registerVariationFunc(HilbertFunc.class);
 
     registerVariationFunc(SattractorFunc.class);
     registerVariationFunc(WallPaperFunc.class);
@@ -601,9 +605,52 @@ public class VariationFuncList {
     registerVariationFunc(PostSphericalFunc.class);
     registerVariationFunc(PrePostMobiusFunc.class);
     registerVariationFunc(PrePostAffineFunc.class);
+    registerVariationFunc(PrePostCirclizeFunc.class);
+    registerVariationFunc(PTransformFunc.class);
 
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
+    registerVariationFunc(DCDModulusFunc.class);
+    registerVariationFunc(DCGnarlyFunc.class);
+
+    registerVariationFunc(Strange3DFunc.class);
+    registerVariationFunc(DustPointFunc.class);     
+    registerVariationFunc(IconAttractorFunc.class);
+    registerVariationFunc(ApollonyFunc.class); 
+    registerVariationFunc(ChrysanthemumFunc.class);  
+    registerVariationFunc(SeaShell3DFunc.class);            
+    registerVariationFunc(ThreePointIFSFunc.class);  
+    
+    registerVariationFunc(Knots3DFunc.class);
+    registerVariationFunc(RecurrencePlotFunc.class);  
+    registerVariationFunc(MacMillanFunc.class);  
+
+ 
+    registerVariationFunc(RingSubFlameFunc.class);  
+    registerVariationFunc(GlynnS3SubflWFFunc.class);  
+    registerVariationFunc(FracTerrain3DFunc.class);  
+
+    registerVariationFunc(Disc3Func.class);  
+    registerVariationFunc(DCKaleidotileFunc.class);   
+    registerVariationFunc(LazySensenFunc.class);
+    registerVariationFunc(ProjectiveFunc.class);
+    registerVariationFunc(LoziFunc.class);
+    registerVariationFunc(Vibration2Func.class);
+    registerVariationFunc(PulseFunc.class);    
+    
+    registerVariationFunc(WangTilesFunc.class);   
+   
+    registerVariationFunc(TapratsFunc.class);    
+    registerVariationFunc(GPatternFunc.class);    
+    registerVariationFunc(NSudokuFunc.class);   
+    
+    registerVariationFunc(AnamorphCylFunc.class);
+    registerVariationFunc(HyperbolicEllipseFunc.class);
+    registerVariationFunc(SunFlowersFunc.class);
+    registerVariationFunc(SunflowerVoroniFunc.class);
+
+    registerVariationFunc(Cylinder2Func.class);
+    registerVariationFunc(Affine3DFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

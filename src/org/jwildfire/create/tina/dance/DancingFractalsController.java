@@ -79,7 +79,7 @@ import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.swing.SoundFileChooser;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.image.SimpleImage;
@@ -444,7 +444,8 @@ public class DancingFractalsController {
         RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomGenCmb.getSelectedItem(), true);
         int palettePoints = 3 + Tools.randomInt(68);
         boolean fadePaletteColors = Math.random() > 0.33;
-        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, RandomBatchQuality.NORMAL);
+        boolean uniformSize = Math.random() > 0.75;
+        RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, uniformSize, RandomBatchQuality.NORMAL);
         project.getFlames().add(validateDancingFlame(sampler.createSample().getFlame()));
       }
       refreshProjectFlames();
@@ -698,7 +699,7 @@ public class DancingFractalsController {
     Flame flame = poolFlameHolder.getFlame();
     if (flame != null) {
       parentCtrl.importFlame(flame, true);
-      parentCtrl.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      parentCtrl.getDesktop().showJFrame(MainEditorFrame.class);
     }
   }
 

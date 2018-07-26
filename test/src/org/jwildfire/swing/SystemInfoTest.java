@@ -33,11 +33,11 @@ public class SystemInfoTest
 		
 		for(MouseListener ml:(MouseListener[])(comp.getListeners(MouseListener.class)))
 		{
-			if(ml!=null&&ml.getClass().getName().contains("SystemInfoInternalFrame"))
+			if(ml!=null&&ml.getClass().getName().contains("SystemInfoFrame"))
 				ml.mouseClicked(null);
 		}
 		
-		Assert.assertFalse("Expect SystemInfoInternalFrame to no longer be visible after click event",sif.isVisible());
+		Assert.assertFalse("Expect SystemInfoFrame to no longer be visible after click event",sif.isVisible());
 		byte b[] = new byte[4096*1024];//use 4 more MB
 		sif.refresh();
 		//make sure it is not using same information

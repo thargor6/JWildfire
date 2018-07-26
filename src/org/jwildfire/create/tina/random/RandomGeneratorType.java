@@ -79,6 +79,6 @@ public enum RandomGeneratorType {
   }
 
   public static RandomGeneratorType getDefaultValue() {
-    return ZIGGURAT;
+    return MARSAGLIA;
   }
 }

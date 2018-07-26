@@ -34,7 +34,8 @@ public class RandomGradientMutation implements Mutation {
   public void execute(Layer pLayer) {
     int keyFrames = 3 + Tools.randomInt(56);
     boolean fadePaletteColors = Math.random() > 0.33;
-    RGBPalette palette = new AllRandomGradientGenerator().generatePalette(keyFrames, fadePaletteColors);
+    boolean uniformWidth = Math.random() > 0.75;
+    RGBPalette palette = new AllRandomGradientGenerator().generatePalette(keyFrames, fadePaletteColors, uniformWidth);
     pLayer.setPalette(palette);
   }
 

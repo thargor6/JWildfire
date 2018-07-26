@@ -28,8 +28,6 @@ public class WindowPrefs implements Assignable<WindowPrefs> {
   static final String KEY_MAXIMIZED = "windowPrefs.maximized";
   static final String KEY_VISIBLE = "windowPrefs.visible";
 
-  public static final String WINDOW_DESKTOP = "Desktop";
-  public static final String WINDOW_NAVIGATOR = "NAVIGATOR";
   public static final String WINDOW_TINA = "TINA";
   public static final String WINDOW_MESHGEN = "MESHGEN";
   public static final String WINDOW_MUTAGEN = "MUTAGEN";

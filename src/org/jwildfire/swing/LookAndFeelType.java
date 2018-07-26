@@ -52,7 +52,12 @@ public enum LookAndFeelType {
   NIMBUS("Nimbus") {
     @Override
     public void changeTo() throws Exception {
-      UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+      try {
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+      }
+      catch(Exception ex) {
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+      }
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +63,20 @@ public class ImageReader {
     fileImg = null;
     return new SimpleImage(bImg, width, height);
   }
+
+  public SimpleImage loadImage(URL url) throws Exception {
+    Image fileImg = Toolkit.getDefaultToolkit().createImage(url);
+    MediaTracker tracker = new MediaTracker(owner);
+    tracker.addImage(fileImg, 0);
+    tracker.waitForID(0);
+    int width = fileImg.getWidth(null);
+    int height = fileImg.getHeight(null);
+    BufferedImage bImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics g = bImg.getGraphics();
+    g.drawImage(fileImg, 0, 0, null);
+    return new SimpleImage(bImg, width, height);
+  }
+
 
   private String readNextLine(InputStream is) throws Exception {
     int b, idx = 0;

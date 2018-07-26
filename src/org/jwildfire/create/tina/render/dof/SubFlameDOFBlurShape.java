@@ -75,6 +75,7 @@ public class SubFlameDOFBlurShape extends AbstractDOFBlurShape {
       }
     }
     fnc.setRessource(SubFlameWFFunc.RESSOURCE_FLAME, getFlameXML(Tools.FTOI(params.get(PARAM_FLAME))).getBytes());
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 

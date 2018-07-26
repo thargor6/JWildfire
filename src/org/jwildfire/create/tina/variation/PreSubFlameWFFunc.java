@@ -13,8 +13,12 @@ public class PreSubFlameWFFunc extends SubFlameWFFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    super.transform(pContext, pXForm, pAffineTP, pVarTP, pAmount);
-    pAffineTP.assign(pVarTP);
+	    subflameIter(pContext);
+		pAffineTP.x = q.x;
+		pAffineTP.y = q.y;
+		pAffineTP.z = q.z;
+
+		setColor(pAffineTP);
   }
 
   @Override

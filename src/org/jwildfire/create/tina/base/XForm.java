@@ -1229,7 +1229,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
   }
 
-  private EditPlane getEditPlane() {
+  public EditPlane getEditPlane() {
     if (owner == null || owner.getOwner() == null) {
       System.out.println("EditPlane NULL");
       return EditPlane.XY;
@@ -1545,6 +1545,34 @@ public final class XForm implements Assignable<XForm>, Serializable {
   
   public void setMirrorTranslations(boolean mirror) {
     mirrorPrePostTranslations = mirror;
+  }
+
+  public void setMirrorTranslations(boolean mirror, boolean post) {
+    mirrorPrePostTranslations = mirror;
+    if (mirror) {
+      if (post) {
+		this.xyCoeff20 = -this.xyPostCoeff20;
+		this.xyCoeff21 = -this.xyPostCoeff21;
+		this.updateHasXYCoeffs();
+		this.yzCoeff20 = -this.yzPostCoeff20;
+		this.yzCoeff21 = -this.yzPostCoeff21;
+		this.updateHasYZCoeffs();
+		this.zxCoeff20 = -this.zxPostCoeff20;
+		this.zxCoeff21 = -this.zxPostCoeff21;
+		this.updateHasZXCoeffs();
+      }
+      else {
+		this.xyPostCoeff20 = -this.xyCoeff20;
+		this.xyPostCoeff21 = -this.xyCoeff21;
+		this.updateHasXYPostCoeffs();
+		this.yzPostCoeff20 = -this.yzCoeff20;
+		this.yzPostCoeff21 = -this.yzCoeff21;
+		this.updateHasYZPostCoeffs();
+		this.zxPostCoeff20 = -this.zxCoeff20;
+		this.zxPostCoeff21 = -this.zxCoeff21;
+		this.updateHasZXPostCoeffs();
+      }
+    }
   }
 
   public Layer getOwner() {

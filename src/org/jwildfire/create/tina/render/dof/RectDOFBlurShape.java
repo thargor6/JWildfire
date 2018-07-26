@@ -59,6 +59,7 @@ public class RectDOFBlurShape extends AbstractDOFBlurShape {
     d = new XYZPoint();
     xform = new XForm();
     fnc = new SquareFunc();
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
     width = params.get(PARAM_WIDTH);
   }

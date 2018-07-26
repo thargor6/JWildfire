@@ -69,6 +69,7 @@ public class IFlamesIterator {
       }
     }
     fnc.setRessource(SubFlameWFFunc.RESSOURCE_FLAME, flameXML.getBytes());
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 

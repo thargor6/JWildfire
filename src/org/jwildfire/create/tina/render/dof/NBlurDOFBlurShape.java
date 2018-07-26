@@ -55,6 +55,7 @@ public class NBlurDOFBlurShape extends AbstractDOFBlurShape {
     for (String paramName : getParamNames()) {
       fnc.setParameter(paramName, params.get(paramName));
     }
+    fnc.initOnce(pFlameTransformationContext, new Layer(), xform, 1.0);
     fnc.init(pFlameTransformationContext, new Layer(), xform, 1.0);
   }
 

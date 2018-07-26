@@ -169,7 +169,8 @@ public class AnimationController {
   }
 
   public void refreshUI() {
-    // TODO
+	  keyframesFrameCountField.setValue(tinaController.getCurrFlame().getFrameCount());
+	  adjustFrameControls(tinaController.getCurrFlame().getFrame());
   }
 
   public void registerMotionPropertyControls(MotionCurveEditor pComponent) {
@@ -229,10 +230,12 @@ public class AnimationController {
         }
         long t1 = System.currentTimeMillis();
         finished = true;
+        keyframesFrameField.setValue(keyframesFrameSlider.getValue());
         finishEvent.succeeded((t1 - t0) * 0.001);
       }
       catch (Throwable ex) {
         finished = true;
+        keyframesFrameField.setValue(keyframesFrameSlider.getValue());
         finishEvent.failed(ex);
       }
     }
@@ -268,8 +271,6 @@ public class AnimationController {
       enablePlayPreviewControls();
     }
     else {
-      final int oldFrame = keyframesFrameField.getIntValue();
-
       RenderMainFlameThreadFinishEvent finishEvent = new RenderMainFlameThreadFinishEvent() {
 
         @Override
@@ -281,7 +282,6 @@ public class AnimationController {
           }
           playPreviewThread = null;
           enablePlayPreviewControls();
-          keyframesFrameField.setValue(oldFrame);
           tinaController.refreshFlameImage(true, false, 1, true, false);
         }
 
@@ -290,7 +290,6 @@ public class AnimationController {
           errorHandler.handleError(exception);
           playPreviewThread = null;
           enablePlayPreviewControls();
-          keyframesFrameField.setValue(oldFrame);
           tinaController.refreshFlameImage(true, false, 1, true, false);
         }
       };
