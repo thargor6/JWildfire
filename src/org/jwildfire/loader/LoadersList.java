@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JDesktopPane;
+import javax.swing.*;
 
 
 public class LoadersList {
@@ -45,12 +45,12 @@ public class LoadersList {
     return itemVector;
   }
 
-  public static ImageLoader getLoaderInstance(JDesktopPane pDesktop, String pName) {
+  public static ImageLoader getLoaderInstance(JFrame pRootFrame, String pName) {
     for (Class<? extends ImageLoader> loaderCls : items) {
       if (loaderCls.getSimpleName().equals(pName)) {
         try {
           ImageLoader res = loaderCls.newInstance();
-          res.setDesktop(pDesktop);
+          res.setRootFrame(pRootFrame);
           return res;
         }
         catch (Throwable e) {

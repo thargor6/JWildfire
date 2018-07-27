@@ -21,9 +21,9 @@ import javax.swing.RepaintManager;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 
 public class SWFAnimatorProgressUpdater implements ProgressUpdater {
-  private final EasyMovieMakerInternalFrame parent;
+  private final EasyMovieMakerFrame parent;
 
-  public SWFAnimatorProgressUpdater(EasyMovieMakerInternalFrame pParent) {
+  public SWFAnimatorProgressUpdater(EasyMovieMakerFrame pParent) {
     parent = pParent;
   }
 

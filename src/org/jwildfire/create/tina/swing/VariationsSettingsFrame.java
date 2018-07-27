@@ -28,20 +28,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.swing.JWildfire;
 
-public class VariationsSettingsInternalFrame extends JInternalFrame {
+public class VariationsSettingsFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
@@ -50,7 +44,7 @@ public class VariationsSettingsInternalFrame extends JInternalFrame {
   private List<String> variationNames = null;
   private List<JCheckBox> checkboxes = new ArrayList<>();
 
-  public VariationsSettingsInternalFrame() {
+  public VariationsSettingsFrame() {
     super();
     initialize();
   }
@@ -64,13 +58,10 @@ public class VariationsSettingsInternalFrame extends JInternalFrame {
     this.setSize(298, 620);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(200 + JWildfire.DEFAULT_WINDOW_LEFT, 50 + JWildfire.DEFAULT_WINDOW_TOP));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("Variations settings");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
     refreshVariationsPanel();
   }

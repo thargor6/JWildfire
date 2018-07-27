@@ -26,20 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -47,7 +34,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.JWildfire;
 
-public class BatchFlameRendererInternalFrame extends JInternalFrame {
+public class BatchFlameRendererFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
@@ -65,7 +52,7 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
   private JLabel batchRenderTotalProgressLbl = null;
   private JButton batchRenderStartButton = null;
 
-  public BatchFlameRendererInternalFrame() {
+  public BatchFlameRendererFrame() {
     super();
     initialize();
   }
@@ -79,13 +66,10 @@ public class BatchFlameRendererInternalFrame extends JInternalFrame {
     this.setSize(600, 620);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(200 + JWildfire.DEFAULT_WINDOW_LEFT, 50 + JWildfire.DEFAULT_WINDOW_TOP));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("Batch flame renderer");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 

@@ -43,12 +43,12 @@ import javax.swing.UIManager;
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.SimpleImage;
 
-public class WelcomeInternalFrame extends JInternalFrame {
+public class WelcomeFrame extends JFrame {
   private static final long serialVersionUID = 1L;
 
   private String[] imageFilenames = { "bronze_bubbles.jpg", "smoky_dreams.jpg", "watchers2.jpg", "woven.jpg" };
 
-  public WelcomeInternalFrame() {
+  public WelcomeFrame() {
     getContentPane().setBackground(UIManager.getColor("Button.background"));
 
     JPanel northPanel = new JPanel();
@@ -181,9 +181,7 @@ public class WelcomeInternalFrame extends JInternalFrame {
     getContentPane().add(panel_2, BorderLayout.CENTER);
     setTitle("Welcome to " + Tools.APP_TITLE + " " + Tools.APP_VERSION);
     setBounds(440, 140, 490, 498);
-    setClosable(true);
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    setIconifiable(true);
     setResizable(true);
 
     // Load logo

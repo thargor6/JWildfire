@@ -31,21 +31,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -54,7 +40,7 @@ import javax.swing.event.ChangeListener;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.swing.JWildfire;
 
-public class EasyMovieMakerInternalFrame extends JInternalFrame {
+public class EasyMovieMakerFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
@@ -70,7 +56,7 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
   private JTabbedPane rootTabbedPane = null;
   private JPanel blurShadingPanel = null;
 
-  public EasyMovieMakerInternalFrame() {
+  public EasyMovieMakerFrame() {
     super();
     initialize();
   }
@@ -84,13 +70,10 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
     this.setSize(1220, 600);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP + 80));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("Easy movie maker");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 
@@ -1428,7 +1411,7 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
       swfAnimatorPlayButton.setText("Play");
       swfAnimatorPlayButton.setPreferredSize(new Dimension(82, 28));
       swfAnimatorPlayButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      swfAnimatorPlayButton.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
+      swfAnimatorPlayButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/applications-multimedia.png")));
 
       swfAnimatorFrameToEditorBtn = new JButton();
       panel_84.add(swfAnimatorFrameToEditorBtn);
@@ -2266,7 +2249,7 @@ public class EasyMovieMakerInternalFrame extends JInternalFrame {
       btnRender.setPreferredSize(new Dimension(82, 28));
       btnRender.setMnemonic(KeyEvent.VK_R);
       btnRender.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      btnRender.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      btnRender.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
     }
     return btnRender;
   }

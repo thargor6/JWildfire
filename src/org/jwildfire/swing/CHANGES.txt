@@ -46,7 +46,6 @@ V3.40 (22.07.2018)
       - koch
       - rsquares
       - hilbert
-
   - bug fixes for symmetry order and animation control updates
 
 V3.31 (29.03.2018)

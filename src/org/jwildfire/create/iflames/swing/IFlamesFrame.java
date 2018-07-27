@@ -26,21 +26,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
-import javax.swing.JTree;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -54,7 +40,7 @@ import org.jwildfire.swing.JWildfire;
 import org.jwildfire.swing.MainController;
 import org.jwildfire.swing.StandardErrorHandler;
 
-public class IFlamesInternalFrame extends JInternalFrame {
+public class IFlamesFrame extends JFrame {
   private static final long serialVersionUID = 1L;
   private IFlamesController iflamesController;
   private JPanel jContentPane = null;
@@ -194,7 +180,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private JCheckBox baseFlameInstancingCBx;
   private JButton copyBaseFlameParamsToOthersButton;
 
-  public IFlamesInternalFrame() {
+  public IFlamesFrame() {
     super();
     initialize();
   }
@@ -207,9 +193,7 @@ public class IFlamesInternalFrame extends JInternalFrame {
   private void initialize() {
     this.setSize(1188, 740);
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("IFlames");
     this.setVisible(false);
     this.setResizable(true);

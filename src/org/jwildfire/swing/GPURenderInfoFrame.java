@@ -26,21 +26,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jwildfire.base.Prefs;
 
 @SuppressWarnings("serial")
-public class GPURenderInfoInternalFrame extends JInternalFrame {
+public class GPURenderInfoFrame extends JFrame {
   private JPanel jContentPane = null;
 
-  public GPURenderInfoInternalFrame() {
+  public GPURenderInfoFrame() {
     super();
     initialize();
   }
@@ -54,9 +50,7 @@ public class GPURenderInfoInternalFrame extends JInternalFrame {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("GPU rendering");
     this.setVisible(false);
     this.setResizable(true);

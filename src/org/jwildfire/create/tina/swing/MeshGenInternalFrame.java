@@ -28,18 +28,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -48,7 +37,7 @@ import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.base.raster.RasterPointCloud;
 import org.jwildfire.swing.JWildfire;
 
-public class MeshGenInternalFrame extends JInternalFrame {
+public class MeshGenInternalFrame extends JFrame {
   private TinaController tinaController;
   private static final long serialVersionUID = 1L;
   private JPanel jContentPane = null;
@@ -62,13 +51,10 @@ public class MeshGenInternalFrame extends JInternalFrame {
     this.setSize(1100, 700);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT + 80, JWildfire.DEFAULT_WINDOW_TOP + 20));
-    this.setClosable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    this.setIconifiable(true);
     this.setTitle("3DMesh generation");
     this.setVisible(false);
     this.setResizable(true);
-    this.setMaximizable(false);
     this.setContentPane(getJContentPane());
   }
 
@@ -352,7 +338,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenFrontViewRenderBtn.setPreferredSize(new Dimension(42, 24));
       meshGenFrontViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenFrontViewRenderBtn.setIconTextGap(0);
-      meshGenFrontViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenFrontViewRenderBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenFrontViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenFrontViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_10.add(meshGenFrontViewRenderBtn);
@@ -378,7 +364,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenPerspectiveViewRenderBtn.setPreferredSize(new Dimension(42, 24));
       meshGenPerspectiveViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenPerspectiveViewRenderBtn.setIconTextGap(0);
-      meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenPerspectiveViewRenderBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenPerspectiveViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenPerspectiveViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_11.add(meshGenPerspectiveViewRenderBtn);
@@ -622,7 +608,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       });
       panel_8.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
       meshGenGenerateBtn.setText("Render slices");
-      meshGenGenerateBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      meshGenGenerateBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
       meshGenGenerateBtn.setPreferredSize(new Dimension(132, 46));
       meshGenGenerateBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_8.add(meshGenGenerateBtn);
@@ -1036,7 +1022,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenTopViewRenderBtn.setPreferredSize(new Dimension(42, 24));
       meshGenTopViewRenderBtn.setMnemonic(KeyEvent.VK_R);
       meshGenTopViewRenderBtn.setIconTextGap(0);
-      meshGenTopViewRenderBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
+      meshGenTopViewRenderBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive.png")));
       meshGenTopViewRenderBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenTopViewRenderBtn.setBounds(6, 99, 42, 24);
       panel_96.add(meshGenTopViewRenderBtn);
@@ -1051,7 +1037,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
       meshGenTopViewToEditorBtn.setPreferredSize(new Dimension(42, 24));
       meshGenTopViewToEditorBtn.setMnemonic(KeyEvent.VK_R);
       meshGenTopViewToEditorBtn.setIconTextGap(0);
-      meshGenTopViewToEditorBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")));
+      meshGenTopViewToEditorBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/brick2.png")));
       meshGenTopViewToEditorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
       meshGenTopViewToEditorBtn.setBounds(6, 6, 42, 24);
       panel_96.add(meshGenTopViewToEditorBtn);
@@ -1239,7 +1225,7 @@ public class MeshGenInternalFrame extends JInternalFrame {
         }
       });
       meshGenGenerateMeshBtn.setText("Create Mesh");
-      meshGenGenerateMeshBtn.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
+      meshGenGenerateMeshBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/sports-soccer.png")));
       meshGenGenerateMeshBtn.setPreferredSize(new Dimension(132, 48));
       meshGenGenerateMeshBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       panel_8.add(meshGenGenerateMeshBtn);

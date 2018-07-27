@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JDesktopPane;
+import javax.swing.*;
 
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
@@ -52,25 +52,25 @@ public class BufferList implements Collection<Buffer> {
     return name;
   }
 
-  public Buffer addImageBuffer(JDesktopPane pDesktop, String pName, SimpleImage pSimpleImage) {
-    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName), pSimpleImage);
+  public Buffer addImageBuffer(JFrame pRootFrame, String pName, SimpleImage pSimpleImage) {
+    Buffer buffer = new Buffer(pRootFrame, getUniqueBuffername(pName), pSimpleImage);
     buffers.add(buffer);
     if (syncWithStaticBufferList)
       StaticBufferList.add(buffer);
     return buffer;
   }
 
-  public Buffer addHDRImageBuffer(JDesktopPane pDesktop, String pName, SimpleHDRImage pSimpleHDRImage) {
-    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName), pSimpleHDRImage);
+  public Buffer addHDRImageBuffer(JFrame pRootFramn, String pName, SimpleHDRImage pSimpleHDRImage) {
+    Buffer buffer = new Buffer(pRootFramn, getUniqueBuffername(pName), pSimpleHDRImage);
     buffers.add(buffer);
     if (syncWithStaticBufferList)
       StaticBufferList.add(buffer);
     return buffer;
   }
 
-  public Buffer addMesh3DBuffer(JDesktopPane pDesktop, String pName, Mesh3D pMesh3D,
+  public Buffer addMesh3DBuffer(JFrame pRootFrame, String pName, Mesh3D pMesh3D,
       SimpleImage pPreviewImage) {
-    Buffer buffer = new Buffer(pDesktop, getUniqueBuffername(pName + " (3D)"), pMesh3D,
+    Buffer buffer = new Buffer(pRootFrame, getUniqueBuffername(pName + " (3D)"), pMesh3D,
         pPreviewImage);
     buffers.add(buffer);
     if (syncWithStaticBufferList)

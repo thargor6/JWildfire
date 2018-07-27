@@ -69,7 +69,7 @@ public class ImageSequenceLoader extends ImageLoader {
     fn = new File(this.filename).getParent() + File.separator + baseFn + fn + ext;
     System.out.println(this.frame + ": " + fn);
     try {
-      return new ImageReader(getDesktop()).loadImage(fn);
+      return new ImageReader(getRootFrame()).loadImage(fn);
     }
     catch (Exception ex) {
       throw new RuntimeException(ex);

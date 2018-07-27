@@ -25,18 +25,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
-public class FormulaExplorerInternalFrame extends JInternalFrame {
+public class FormulaExplorerFrame extends JFrame {
   /**
    * 
    */
@@ -84,7 +75,7 @@ public class FormulaExplorerInternalFrame extends JInternalFrame {
   /**
    * This is the xxx default constructor
    */
-  public FormulaExplorerInternalFrame() {
+  public FormulaExplorerFrame() {
     super();
     initialize();
   }
@@ -98,8 +89,6 @@ public class FormulaExplorerInternalFrame extends JInternalFrame {
     this.setSize(596, 605);
     this.setBounds(new Rectangle(650, 36, 596, 605));
     this.setResizable(true);
-    this.setClosable(true);
-    this.setIconifiable(true);
     this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setVisible(false);
     this.setTitle("Formula Explorer");

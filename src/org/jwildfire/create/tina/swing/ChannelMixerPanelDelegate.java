@@ -98,7 +98,7 @@ public abstract class ChannelMixerPanelDelegate {
 
   private JButton createEditCurveButton() {
     JButton res = new JButton();
-    res.setIcon(new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
+    res.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/curve-money2.png")));
     res.setMinimumSize(new Dimension(100, 24));
     res.setMaximumSize(new Dimension(32000, 24));
     res.setText("");

@@ -16,13 +16,7 @@
 */
 package org.jwildfire.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -56,7 +50,7 @@ import javax.swing.WindowConstants;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
-import org.jwildfire.create.iflames.swing.IFlamesInternalFrame;
+import org.jwildfire.create.iflames.swing.IFlamesFrame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
@@ -66,65 +60,52 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
-import org.jwildfire.create.tina.swing.BatchFlameRendererInternalFrame;
-import org.jwildfire.create.tina.swing.DancingFlamesInternalFrame;
-import org.jwildfire.create.tina.swing.EasyMovieMakerInternalFrame;
-import org.jwildfire.create.tina.swing.FlameBrowserInternalFrame;
-import org.jwildfire.create.tina.swing.FlamesGPURenderInternalFrame;
-import org.jwildfire.create.tina.swing.HelpInternalFrame;
-import org.jwildfire.create.tina.swing.InteractiveRendererInternalFrame;
-import org.jwildfire.create.tina.swing.MeshGenInternalFrame;
-import org.jwildfire.create.tina.swing.MutaGenInternalFrame;
-import org.jwildfire.create.tina.swing.NavigatorInternalFrame;
-import org.jwildfire.create.tina.swing.RandomBatchQuality;
-import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaInternalFrame;
-import org.jwildfire.create.tina.swing.VariationsSettingsInternalFrame;
+import org.jwildfire.create.tina.swing.*;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
 import org.jwildfire.transform.BalancingTransformer;
 
 public class JWildfire extends JApplet {
-  private final List<InternalFrameHolder<?>> mainInternalFrames;
-  private final List<InternalFrameHolder<?>> settingsInternalFrames;
-  private final List<InternalFrameHolder<?>> helpInternalFrames;
+  private final List<FrameHolder> mainInternalFrames;
+  private final List<FrameHolder> settingsInternalFrames;
+  private final List<FrameHolder> helpInternalFrames;
 
   public JWildfire() {
     mainInternalFrames = new ArrayList<>();
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(NavigatorInternalFrame.class, this, WindowPrefs.WINDOW_NAVIGATOR, "Navigator"));
 
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(TinaInternalFrame.class, this, WindowPrefs.WINDOW_TINA, "Fractal flames: Editor"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(MutaGenInternalFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(InteractiveRendererInternalFrame.class, this, WindowPrefs.WINDOW_INTERACTIVERENDERER, "Fractal flames: Interactive renderer"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlameBrowserInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(EasyMovieMakerInternalFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(DancingFlamesInternalFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(BatchFlameRendererInternalFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(VariationsSettingsInternalFrame.class, this, WindowPrefs.WINDOW_VARIATIONSSETTINGS, "Fractal flames: Variations settings"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(MainEditorFrame.class, this, WindowPrefs.WINDOW_TINA, "Fractal flames: Editor"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(MutaGenFrame.class, this, WindowPrefs.WINDOW_MUTAGEN, "Fractal flames: MutaGen"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(InteractiveRendererFrame.class, this, WindowPrefs.WINDOW_INTERACTIVERENDERER, "Fractal flames: Interactive renderer"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(FlameBrowserFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Flame browser"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(EasyMovieMakerFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(DancingFlamesFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(BatchFlameRendererFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(VariationsSettingsFrame.class, this, WindowPrefs.WINDOW_VARIATIONSSETTINGS, "Fractal flames: Variations settings"));
     if (FACLRenderTools.isFaclRenderAvalailable()) {
-      mainInternalFrames.add(new DefaultInternalFrameHolder<>(FlamesGPURenderInternalFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
+      mainInternalFrames.add(new DefaultJFrameHolder<>(FlamesGPURenderFrame.class, this, WindowPrefs.WINDOW_FLAMES_GPU, "Fractal flames: GPU render"));
     }
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(HelpInternalFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(IFlamesInternalFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(OperatorsInternalFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
-    mainInternalFrames.add(new DefaultInternalFrameHolder<>(FormulaExplorerInternalFrame.class, this, WindowPrefs.WINDOW_FORMULAEXPLORER, "Formula explorer"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(HelpFrame.class, this, WindowPrefs.WINDOW_HELP, "Fractal flames: Help"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(IFlamesFrame.class, this, WindowPrefs.WINDOW_IFLAMES, "IFlames"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(OperatorsFrame.class, this, WindowPrefs.WINDOW_IMAGEPROCESSING, "Image processing"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(FormulaExplorerFrame.class, this, WindowPrefs.WINDOW_FORMULAEXPLORER, "Formula explorer"));
 
     settingsInternalFrames = new ArrayList<>();
-    settingsInternalFrames.add(new InternalFrameHolder<LookAndFeelInternalFrame>(LookAndFeelInternalFrame.class, this, WindowPrefs.WINDOW_LOOKANDFEEL, "UI Theme (Look and Feel)") {
+    settingsInternalFrames.add(new DefaultJFrameHolder<LookAndFeelFrame>(LookAndFeelFrame.class, this, WindowPrefs.WINDOW_LOOKANDFEEL, "UI Theme (Look and Feel)") {
 
       @Override
-      protected LookAndFeelInternalFrame createInternalFrame() {
-        LookAndFeelInternalFrame frame = new LookAndFeelInternalFrame(JWildfire.this, mainDesktopPane, errorHandler, Prefs.getPrefs());
+      protected LookAndFeelFrame createFrame() {
+        LookAndFeelFrame frame = new LookAndFeelFrame(JWildfire.this, getMainFrame(), errorHandler, Prefs.getPrefs());
 
         applyWindowPrefs(frame);
 
-        frame.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-          public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent e) {
+        frame.addWindowListener(new WindowAdapter() {
+          public void windowDeactivated(WindowEvent e) {
             enableControls();
           }
 
-          public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+          public void windowClosed(WindowEvent e) {
             enableControls();
           }
         });
@@ -133,43 +114,37 @@ public class JWildfire extends JApplet {
       }
 
     });
-    settingsInternalFrames.add(new DefaultInternalFrameHolder<>(PreferencesInternalFrame.class, this, WindowPrefs.WINDOW_PREFERENCES, "Preferences"));
+    settingsInternalFrames.add(new DefaultJFrameHolder<>(PreferencesFrame.class, this, WindowPrefs.WINDOW_PREFERENCES, "Preferences"));
 
     helpInternalFrames = new ArrayList<>();
-    helpInternalFrames.add(new DefaultInternalFrameHolder<>(SystemInfoInternalFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
-    helpInternalFrames.add(new DefaultInternalFrameHolder<>(WelcomeInternalFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
-    helpInternalFrames.add(new DefaultInternalFrameHolder<>(ListOfChangesInternalFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
-    helpInternalFrames.add(new DefaultInternalFrameHolder<>(GPURenderInfoInternalFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
-    helpInternalFrames.add(new DefaultInternalFrameHolder<>(TipOfTheDayInternalFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(SystemInfoFrame.class, this, WindowPrefs.WINDOW_SYSTEMINFO, "System Information"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(WelcomeFrame.class, this, WindowPrefs.WINDOW_WELCOME, "Welcome to " + Tools.APP_TITLE));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(ListOfChangesFrame.class, this, WindowPrefs.WINDOW_LIST_OF_CHANGES, "List of changes"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(GPURenderInfoFrame.class, this, WindowPrefs.WINDOW_GPU_RENDERING, "GPU rendering"));
+    helpInternalFrames.add(new DefaultJFrameHolder<>(TipOfTheDayFrame.class, this, WindowPrefs.WINDOW_TIPOFTHEDAY, "Tip of the day"));
   }
 
   private static final long serialVersionUID = 1L;
   public static final int DEFAULT_WINDOW_LEFT = 120;
   public static final int DEFAULT_WINDOW_TOP = 0;
 
-  private JFrame jFrame = null;
-  private JPanel jContentPane = null;
   private JMenuBar mainJMenuBar = null;
   private JMenu fileMenu = null;
   private JMenu helpMenu = null;
   private JMenu settingsMenu = null;
   private JMenuItem exitMenuItem = null;
   private JMenuItem saveMenuItem = null;
-  private JDesktopPane mainDesktopPane = null;
   private JMenu windowMenu = null;
   private JMenuItem openMenuItem = null;
   private Prefs prefs = null;
 
   private StandardErrorHandler errorHandler = null;
 
-  private JDesktopPane getMainDesktopPane() {
-    if (mainDesktopPane == null) {
-      mainDesktopPane = createMainDesktopPane();
-      for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
-        mainDesktopPane.add(internalFrame.getInternalFrame());
-      }
-      getInternalFrame(NavigatorInternalFrame.class).setDesktop(this);
-      TinaInternalFrame tinaInternalFrame = getInternalFrame(TinaInternalFrame.class);
+  private void initUI() {
+     prefs = Prefs.getPrefs();
+    {
+      MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
+      tinaInternalFrame.setJMenuBar(getMainJMenuBar());
       tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
         public void componentResized(java.awt.event.ComponentEvent e) {
           tinaController.refreshFlameImage(true, false, 1, true, false);
@@ -178,75 +153,53 @@ public class JWildfire extends JApplet {
       if (!tinaInternalFrame.isVisible()) {
         tinaInternalFrame.setVisible(true);
       }
-      for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
-        mainDesktopPane.add(internalFrame.getInternalFrame());
-      }
-      for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
-        mainDesktopPane.add(internalFrame.getInternalFrame());
-      }
 
-      errorHandler = new StandardErrorHandler(mainDesktopPane, getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
+      errorHandler = new StandardErrorHandler(getMainFrame(), getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
           getShowErrorDlgStacktraceTextArea());
 
-      NavigatorInternalFrame navigatorInternalFrame = getInternalFrame(NavigatorInternalFrame.class);
-      if (!navigatorInternalFrame.isVisible()) {
-        navigatorInternalFrame.setVisible(true);
-      }
-      navigatorInternalFrame.moveToFront();
-
-      /*
-            WelcomeInternalFrame welcomeInternalFrame = getInternalFrame(WelcomeInternalFrame.class);
+/*
+            WelcomeFrame welcomeInternalFrame = getJFrame(WelcomeFrame.class);
             if (!welcomeInternalFrame.isVisible()) {
               welcomeInternalFrame.setVisible(true);
             }
-            welcomeInternalFrame.moveToFront();
-      */
+            welcomeInternalFrame.toFront();
+*/
 
-      TipOfTheDayInternalFrame tipOfTheDayInternalFrame = getInternalFrame(TipOfTheDayInternalFrame.class);
-      if (!tipOfTheDayInternalFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
-        tipOfTheDayInternalFrame.setVisible(true);
+      TipOfTheDayFrame tipOfTheDayFrame = getJFrame(TipOfTheDayFrame.class);
+      if (!tipOfTheDayFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
+        tipOfTheDayFrame.setVisible(true);
       }
-      tipOfTheDayInternalFrame.moveToFront();
+      tipOfTheDayFrame.toFront();
       try {
-        getInternalFrame(ListOfChangesInternalFrame.class).initChangesPane();
+        getJFrame(ListOfChangesFrame.class).initChangesPane();
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
       try {
-        getInternalFrame(GPURenderInfoInternalFrame.class).initChangesPane();
+        getJFrame(GPURenderInfoFrame.class).initChangesPane();
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
 
-      MutaGenInternalFrame mutaGenFrame = getInternalFrame(MutaGenInternalFrame.class);
-      FlameBrowserInternalFrame flameBrowserFrame = getInternalFrame(FlameBrowserInternalFrame.class);
-      EasyMovieMakerInternalFrame easyMovieMakerFrame = getInternalFrame(EasyMovieMakerInternalFrame.class);
-      DancingFlamesInternalFrame dancingFlamesFrame = getInternalFrame(DancingFlamesInternalFrame.class);
-      BatchFlameRendererInternalFrame batchFlameRendererFrame = getInternalFrame(BatchFlameRendererInternalFrame.class);
-      MeshGenInternalFrame meshGenFrame = getInternalFrame(MeshGenInternalFrame.class);
-      InteractiveRendererInternalFrame interactiveRendererFrame = getInternalFrame(InteractiveRendererInternalFrame.class);
-      VariationsSettingsInternalFrame variationsSettingsFrame = getInternalFrame(VariationsSettingsInternalFrame.class);
+      getJFrame(LookAndFeelFrame.class);
+      getJFrame(SystemInfoFrame.class);
+
+      MutaGenFrame mutaGenFrame = getJFrame(MutaGenFrame.class);
+      FlameBrowserFrame flameBrowserFrame = getJFrame(FlameBrowserFrame.class);
+      EasyMovieMakerFrame easyMovieMakerFrame = getJFrame(EasyMovieMakerFrame.class);
+      DancingFlamesFrame dancingFlamesFrame = getJFrame(DancingFlamesFrame.class);
+      BatchFlameRendererFrame batchFlameRendererFrame = getJFrame(BatchFlameRendererFrame.class);
+      MeshGenInternalFrame meshGenFrame = getJFrame(MeshGenInternalFrame.class);
+      InteractiveRendererFrame interactiveRendererFrame = getJFrame(InteractiveRendererFrame.class);
+      VariationsSettingsFrame variationsSettingsFrame = getJFrame(VariationsSettingsFrame.class);
       // create some unregistered window even when FACLRender is not available, in order to avoid further null-checks etc.
-      FlamesGPURenderInternalFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getInternalFrame(FlamesGPURenderInternalFrame.class) : new FlamesGPURenderInternalFrame();
-      HelpInternalFrame helpFrame = getInternalFrame(HelpInternalFrame.class);
+      FlamesGPURenderFrame gpuRendererFrame = FACLRenderTools.isFaclRenderAvalailable() ? getJFrame(FlamesGPURenderFrame.class) : new FlamesGPURenderFrame();
+      HelpFrame helpFrame = getJFrame(HelpFrame.class);
 
-      TinaInternalFrame tinaFrame = getInternalFrame(TinaInternalFrame.class);
-      tinaController = tinaFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
-      try {
-        RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
-        if (randGen instanceof AllRandomFlameGenerator) {
-          ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
-        }
-        RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
-        RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
-
-        tinaController.createRandomBatch(2, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
-      }
-      catch (Exception ex) {
-        ex.printStackTrace();
-      }
+      MainEditorFrame mainEditorFrame = getJFrame(MainEditorFrame.class);
+      tinaController = mainEditorFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
 
       flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
@@ -259,7 +212,7 @@ public class JWildfire extends JApplet {
       gpuRendererFrame.setTinaController(tinaController);
       helpFrame.setTinaController(tinaController);
 
-      FormulaExplorerInternalFrame formulaExplorerFrame = getInternalFrame(FormulaExplorerInternalFrame.class);
+      FormulaExplorerFrame formulaExplorerFrame = getJFrame(FormulaExplorerFrame.class);
 
       formulaExplorerController = new FormulaExplorerController(
           (FormulaPanel) formulaExplorerFrame.getFormulaPanel(),
@@ -271,24 +224,24 @@ public class JWildfire extends JApplet {
           formulaExplorerFrame.getFormulaExplorerFormulaXCountREd(),
           formulaExplorerFrame.getFormulaExplorerValuesTextArea());
 
-      OperatorsInternalFrame operatorsFrame = getInternalFrame(OperatorsInternalFrame.class);
+      OperatorsFrame operatorsFrame = getJFrame(OperatorsFrame.class);
       operatorsFrame.setDesktop(this);
 
-      PreferencesInternalFrame preferencesFrame = getInternalFrame(PreferencesInternalFrame.class);
+      PreferencesFrame preferencesFrame = getJFrame(PreferencesFrame.class);
       preferencesFrame.setDesktop(this);
       preferencesFrame.setPrefs(prefs);
       preferencesFrame.setMainController(mainController);
 
-      mainController = new MainController(prefs, errorHandler, mainDesktopPane,
+      mainController = new MainController(prefs, errorHandler, getMainFrame(),
           getWindowMenu(), operatorsFrame.getTransformerInputCmb(), operatorsFrame.getTransformerPresetCmb(), operatorsFrame.getCreatorPresetCmb(),
-          getShowMessageDlg(), getShowMessageDlgTextArea(), null, null, null, null, null, null, null, mainInternalFrames.size());
+          getShowMessageDlg(), getShowMessageDlgTextArea(), null, null, null, null, null, null, mainInternalFrames.size());
 
       /*
       EDENInternalFrame edenFrame = (EDENInternalFrame) getEDENInternalFrame();
       edenFrame.createController(mainController, errorHandler, prefs).newEmptyScene();
       */
-      IFlamesInternalFrame iflamesInternalFrame = getInternalFrame(IFlamesInternalFrame.class);
-      iflamesInternalFrame.createController(mainController, tinaController, errorHandler);
+      IFlamesFrame iflamesFrame = getJFrame(IFlamesFrame.class);
+      iflamesFrame.createController(mainController, tinaController, errorHandler);
 
       tinaController.setMainController(mainController);
 
@@ -298,104 +251,71 @@ public class JWildfire extends JApplet {
     }
 
     try {
-      getInternalFrame(WelcomeInternalFrame.class).setSelected(true);
+      getJFrame(MainEditorFrame.class).setTitle("Welcome to " + Tools.APP_TITLE+" "+Tools.APP_VERSION+"!");
+      getJFrame(MainEditorFrame.class).toFront();
     }
-    catch (PropertyVetoException ex) {
+    catch (Exception ex) {
       ex.printStackTrace();
     }
 
-    return mainDesktopPane;
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
+          if (randGen instanceof AllRandomFlameGenerator) {
+            ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
+          }
+          RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
+          RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
+
+          tinaController.createRandomBatch(3, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
   }
 
   private BufferedImage backgroundImage;
 
-  @SuppressWarnings("serial")
-  private JDesktopPane createMainDesktopPane() {
-    if (prefs.getDesktopBackgroundImagePath() != null && !prefs.getDesktopBackgroundImagePath().isEmpty()) {
-      try {
-        SimpleImage img = new ImageReader(this).loadImage(prefs.getDesktopBackgroundImagePath());
-        if (prefs.getDesktopBackgroundDarkenAmount() > 0.1) {
-          double scale = prefs.getDesktopBackgroundDarkenAmount();
-          {
-            BalancingTransformer bT = new BalancingTransformer();
-            bT.setContrast(Tools.limitValue(Tools.FTOI(-160.0 * scale), -200, 200));
-            bT.setGamma(Tools.limitValue(Tools.FTOI(-180.0 * scale), -200, 200));
-            bT.transformImage(img);
-          }
-          {
-            BalancingTransformer bT = new BalancingTransformer();
-            bT.setBrightness(Tools.limitValue(Tools.FTOI(-20.0 * scale), -200, 200));
-            bT.setContrast(Tools.limitValue(Tools.FTOI(-20.0 * scale), -200, 200));
-            bT.setGamma(Tools.limitValue(Tools.FTOI(-220.0 * scale), -200, 200));
-            bT.transformImage(img);
-          }
-          backgroundImage = img.getBufferedImg();
-        }
-      }
-      catch (Exception ex) {
-        backgroundImage = null;
-        ex.printStackTrace();
-      }
-    }
-
-    if (backgroundImage == null) {
-      try {
-        backgroundImage = ImageIO.read(this.getClass().getResource("/org/jwildfire/swing/backgrounds/wallpaper_pearls2.png"));
-      }
-      catch (Exception ex) {
-        backgroundImage = null;
-        ex.printStackTrace();
-      }
-    }
-    if (backgroundImage != null) {
-      return new JDesktopPane() {
-        @Override
-        protected void paintComponent(Graphics grphcs) {
-          super.paintComponent(grphcs);
-          grphcs.drawImage(backgroundImage, 0, 0, null);
-        }
-
-        @Override
-        public Dimension getPreferredSize() {
-          return new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight());
-        }
-      };
-    }
-    else {
-      return new JDesktopPane();
-    }
-  }
-
   @SuppressWarnings("unchecked")
-  public <T extends JInternalFrame> InternalFrameHolder<T> getInternalFrameHolder(Class<T> frameType) {
-    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
-      if (frameType.equals(internalFrame.getFrameType())) {
-        return (InternalFrameHolder<T>) internalFrame;
+  public <T extends JFrame> JFrameHolder<T> getJFrameHolder(Class<T> frameType) {
+    for (FrameHolder internalFrame : mainInternalFrames) {
+      if(internalFrame instanceof  DefaultJFrameHolder) {
+        if (frameType.equals(((DefaultJFrameHolder)internalFrame).getFrameType())) {
+          return (JFrameHolder<T>) internalFrame;
+        }
       }
     }
-    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
-      if (frameType.equals(internalFrame.getFrameType())) {
-        return (InternalFrameHolder<T>) internalFrame;
+    for (FrameHolder internalFrame : settingsInternalFrames) {
+      if(internalFrame instanceof  DefaultJFrameHolder) {
+        if (frameType.equals(((DefaultJFrameHolder)internalFrame).getFrameType())) {
+          return (JFrameHolder<T>) internalFrame;
+        }
       }
     }
-    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
-      if (frameType.equals(internalFrame.getFrameType())) {
-        return (InternalFrameHolder<T>) internalFrame;
+    for (FrameHolder internalFrame : helpInternalFrames) {
+      if(internalFrame instanceof  DefaultJFrameHolder) {
+        if (frameType.equals(((DefaultJFrameHolder)internalFrame).getFrameType())) {
+          return (JFrameHolder<T>) internalFrame;
+        }
       }
     }
     return null;
   }
 
-  public <T extends JInternalFrame> T getInternalFrame(Class<T> frameType) {
-    InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
-    return frameHolder != null ? frameHolder.getInternalFrame() : null;
+  public <T extends JFrame> T getJFrame(Class<T> frameType) {
+    JFrameHolder<T> frameHolder = getJFrameHolder(frameType);
+    return frameHolder != null ? frameHolder.getFrame() : null;
   }
 
   private JMenu getWindowMenu() {
     if (windowMenu == null) {
       windowMenu = new JMenu();
       windowMenu.setText("Windows");
-      for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+      for (FrameHolder internalFrame : mainInternalFrames) {
         windowMenu.add(internalFrame.getMenuItem());
       }
     }
@@ -484,7 +404,7 @@ public class JWildfire extends JApplet {
    */
   private JDialog getShowMessageDlg() {
     if (showMessageDlg == null) {
-      showMessageDlg = new JDialog(getJFrame());
+      showMessageDlg = new JDialog(getMainFrame());
       showMessageDlg.setSize(new Dimension(355, 205));
       showMessageDlg
           .setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -493,6 +413,11 @@ public class JWildfire extends JApplet {
       showMessageDlg.setContentPane(getShowMessageDlgContentPanel());
     }
     return showMessageDlg;
+  }
+
+
+  private JFrame getMainFrame() {
+    return getJFrame(MainEditorFrame.class);
   }
 
   /**
@@ -555,7 +480,7 @@ public class JWildfire extends JApplet {
    */
   private JDialog getShowErrorDlg() {
     if (showErrorDlg == null) {
-      showErrorDlg = new JDialog(getJFrame());
+      showErrorDlg = new JDialog(getMainFrame());
       showErrorDlg.setSize(new Dimension(429, 247));
       showErrorDlg.setTitle("System error");
       showErrorDlg.setContentPane(getShowErrorDlgContentPane());
@@ -805,10 +730,11 @@ public class JWildfire extends JApplet {
       public void run() {
         setUserLookAndFeel();
         JWildfire application = new JWildfire();
-        application.getJFrame().setVisible(true);
+        application.initUI();
+        application.getMainFrame().setVisible(true);
         application.initApp();
         try {
-          application.getInternalFrame(WelcomeInternalFrame.class).setSelected(true);
+          application.getJFrame(MainEditorFrame.class).toFront();
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -850,48 +776,6 @@ public class JWildfire extends JApplet {
   }
 
   /**
-   * This method initializes jFrame
-   * 
-   * @return javax.swing.JFrame
-   */
-  private JFrame getJFrame() {
-    if (jFrame == null) {
-      prefs = Prefs.getPrefs();
-      jFrame = new JFrame();
-      jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      jFrame.setJMenuBar(getMainJMenuBar());
-      WindowPrefs wPrefs = prefs.getWindowPrefs(WindowPrefs.WINDOW_DESKTOP);
-      jFrame.setLocation(wPrefs.getLeft(), wPrefs.getTop());
-      jFrame.setSize(wPrefs.getWidth(1400), wPrefs.getHeight(800));
-      jFrame.setContentPane(getJContentPane());
-      jFrame.setTitle(Tools.APP_TITLE + " " + Tools.APP_VERSION);
-
-      jFrame.addWindowListener(new WindowAdapter() {
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-          closeApp();
-        }
-      });
-
-    }
-    return jFrame;
-  }
-
-  /**
-   * This method initializes jContentPane
-   * 
-   * @return javax.swing.JPanel
-   */
-  private JPanel getJContentPane() {
-    if (jContentPane == null) {
-      jContentPane = new JPanel();
-      jContentPane.setLayout(new BorderLayout());
-      jContentPane.add(getMainDesktopPane(), BorderLayout.CENTER);
-    }
-    return jContentPane;
-  }
-
   /**
    * This method initializes mainJMenuBar
    * 
@@ -929,7 +813,7 @@ public class JWildfire extends JApplet {
     if (helpMenu == null) {
       helpMenu = new JMenu();
       helpMenu.setText("Help");
-      for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+      for (FrameHolder internalFrame : helpInternalFrames) {
         helpMenu.add(internalFrame.getMenuItem());
       }
     }
@@ -940,8 +824,8 @@ public class JWildfire extends JApplet {
     if (settingsMenu == null) {
       settingsMenu = new JMenu();
       settingsMenu.setText("Settings");
-      for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
-        settingsMenu.add(internalFrame.getMenuItem());
+      for (FrameHolder internalFrame : settingsInternalFrames) {
+          settingsMenu.add(internalFrame.getMenuItem());
       }
     }
     return settingsMenu;
@@ -1036,9 +920,9 @@ public class JWildfire extends JApplet {
   }
 
   private void initApp() {
-    getInternalFrame(PreferencesInternalFrame.class).initApp();
-    getInternalFrame(OperatorsInternalFrame.class).initApp();
-    getInternalFrame(FormulaExplorerInternalFrame.class).initApp();
+    getJFrame(PreferencesFrame.class).initApp();
+    getJFrame(OperatorsFrame.class).initApp();
+    getJFrame(FormulaExplorerFrame.class).initApp();
 
     mainController.refreshWindowMenu();
 
@@ -1077,18 +961,18 @@ public class JWildfire extends JApplet {
   private JMenuItem closeAllMenuItem = null;
 
   void enableControls() {
-    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+    for (FrameHolder internalFrame : mainInternalFrames) {
       internalFrame.enableMenu();
     }
-    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+    for (FrameHolder internalFrame : settingsInternalFrames) {
       internalFrame.enableMenu();
     }
-    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+    for (FrameHolder internalFrame : helpInternalFrames) {
       internalFrame.enableMenu();
     }
     closeAllMenuItem.setEnabled(mainController.getBufferList().size() > 0);
-    getInternalFrame(PreferencesInternalFrame.class).enableControls();
-    getInternalFrame(OperatorsInternalFrame.class).enableControls();
+    getJFrame(PreferencesFrame.class).enableControls();
+    getJFrame(OperatorsFrame.class).enableControls();
   }
 
   private void closeAllMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
@@ -1102,7 +986,7 @@ public class JWildfire extends JApplet {
     if (PromptResult != JOptionPane.YES_OPTION) {
       return;
     }
-
+/*
     {
       Dimension size = jFrame.getSize();
       Point pos = jFrame.getLocation();
@@ -1112,14 +996,14 @@ public class JWildfire extends JApplet {
       wPrefs.setWidth(size.width);
       wPrefs.setHeight(size.height);
     }
-
-    for (InternalFrameHolder<?> internalFrame : mainInternalFrames) {
+*/
+    for (FrameHolder internalFrame : mainInternalFrames) {
       internalFrame.saveWindowPrefs();
     }
-    for (InternalFrameHolder<?> internalFrame : settingsInternalFrames) {
+    for (FrameHolder internalFrame : settingsInternalFrames) {
       internalFrame.saveWindowPrefs();
     }
-    for (InternalFrameHolder<?> internalFrame : helpInternalFrames) {
+    for (FrameHolder internalFrame : helpInternalFrames) {
       internalFrame.saveWindowPrefs();
     }
     try {
@@ -1133,44 +1017,15 @@ public class JWildfire extends JApplet {
     System.exit(0);
   }
 
-  public <T extends JInternalFrame> void toggleInternalFrame(Class<T> frameType) {
+  public <T extends JFrame> void showJFrame(Class<T> frameType) {
     try {
-      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
+      JFrameHolder<T> frameHolder = getJFrameHolder(frameType);
       if (frameHolder != null) {
-        T frame = frameHolder.getInternalFrame();
-        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
-          if (!frame.isVisible() || frame.isClosed()) {
-            frameHolder.getMenuItem().doClick();
-            frame.setVisible(true);
-          }
-          try {
-            frame.setSelected(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
-          }
-          if (frame.isIcon()) {
-            try {
-              frame.setIcon(false);
-            }
-            catch (PropertyVetoException ex) {
-              ex.printStackTrace();
-            }
-          }
+        T frame = frameHolder.getFrame();
+        if (!frame.isVisible()) {
+          frameHolder.getMenuItem().doClick();
         }
-        else {
-          frame.setVisible(false);
-          /*
-                  if (!frame.isIcon()) {
-                    try {
-                      frame.setIcon(true);
-                    }
-                    catch (PropertyVetoException ex) {
-                      ex.printStackTrace();
-                    }
-                  }
-          */
-        }
+        frame.toFront();
       }
     }
     finally {
@@ -1178,37 +1033,4 @@ public class JWildfire extends JApplet {
     }
   }
 
-  public <T extends JInternalFrame> void showInternalFrame(Class<T> frameType) {
-    try {
-      InternalFrameHolder<T> frameHolder = getInternalFrameHolder(frameType);
-      if (frameHolder != null) {
-        T frame = frameHolder.getInternalFrame();
-        if (!frame.isVisible() || frame.isClosed() || frame.isIcon()) {
-          if (!frame.isVisible() || frame.isClosed()) {
-            frameHolder.getMenuItem().doClick();
-          }
-          try {
-            frame.setSelected(true);
-          }
-          catch (PropertyVetoException ex) {
-            ex.printStackTrace();
-          }
-          if (frame.isIcon()) {
-            try {
-              frame.setIcon(false);
-            }
-            catch (PropertyVetoException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        else {
-          frame.toFront();
-        }
-      }
-    }
-    finally {
-      enableControls();
-    }
-  }
 }

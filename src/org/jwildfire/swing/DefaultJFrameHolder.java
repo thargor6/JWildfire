@@ -16,18 +16,20 @@
 */
 package org.jwildfire.swing;
 
-import javax.swing.JInternalFrame;
-
 import org.jwildfire.base.Unchecker;
 
-public class DefaultInternalFrameHolder<T extends JInternalFrame> extends InternalFrameHolder<T> {
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-  public DefaultInternalFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
+public class DefaultJFrameHolder<T extends JFrame> extends JFrameHolder<T> {
+
+  public DefaultJFrameHolder(Class<T> frameType, JWildfire desktop, String windowPrefsName, String menuCaption) {
     super(frameType, desktop, windowPrefsName, menuCaption);
   }
 
   @Override
-  protected T createInternalFrame() {
+  protected T createFrame() {
     T frame = null;
     try {
       frame = frameType.newInstance();
@@ -40,14 +42,14 @@ public class DefaultInternalFrameHolder<T extends JInternalFrame> extends Intern
     applyWindowPrefs(frame);
 
     frame
-        .addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-          public void internalFrameDeactivated(
-              javax.swing.event.InternalFrameEvent e) {
+        .addWindowListener(new WindowAdapter() {
+          public void windowDeactivated(
+              WindowEvent e) {
             desktop.enableControls();
           }
 
-          public void internalFrameClosed(
-              javax.swing.event.InternalFrameEvent e) {
+          public void windowClosed(
+              WindowEvent e) {
             desktop.enableControls();
           }
         });

@@ -21,8 +21,7 @@ import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
+import javax.swing.*;
 
 import org.jwildfire.image.FastHDRTonemapper;
 import org.jwildfire.image.SimpleHDRImage;
@@ -53,10 +52,10 @@ public class Buffer {
   private SimpleImage img;
   private Mesh3D mesh3D;
   private ImagePanel pnl;
-  private JInternalFrame internalFrame;
+  private JFrame frame;
 
-  public JInternalFrame getInternalFrame() {
-    return internalFrame;
+  public JFrame getFrame() {
+    return frame;
   }
 
   private String name;
@@ -72,19 +71,19 @@ public class Buffer {
     return "Frame - " + res;
   }
 
-  public Buffer(JDesktopPane pDesktop, int pFrame, SimpleImage pSimpleImage) {
-    this(pDesktop, getFrameName(pFrame), pSimpleImage);
+  public Buffer(JFrame pRootFrame, int pFrame, SimpleImage pSimpleImage) {
+    this(pRootFrame, getFrameName(pFrame), pSimpleImage);
     bufferType = BufferType.RENDERED_FRAME;
   }
 
-  public Buffer(JDesktopPane pDesktop, String pName, SimpleImage pSimpleImage) {
+  public Buffer(JFrame pRootFrame, String pName, SimpleImage pSimpleImage) {
     img = pSimpleImage;
     bufferType = BufferType.IMAGE;
     name = pName;
-    addImageBuffer(pDesktop);
+    addImageBuffer(pRootFrame);
   }
 
-  private void addImageBuffer(JDesktopPane pDesktop) {
+  private void addImageBuffer(JFrame pRootFrame) {
     final int TRANSFORMERS_WIDTH = 300;
     final int X_BORDER = 5 + 5 + TRANSFORMERS_WIDTH; // left + right border
     final int Y_BORDER = 30 + 5; // top + bottom border
@@ -93,9 +92,9 @@ public class Buffer {
     int imageHeight = img.getImageHeight();
 
     int maxWidth, maxHeight;
-    if (pDesktop != null) {
-      maxWidth = pDesktop.getWidth() - X_BORDER;
-      maxHeight = pDesktop.getHeight() - Y_BORDER;
+    if (pRootFrame != null) {
+      maxWidth = pRootFrame.getWidth() - X_BORDER;
+      maxHeight = pRootFrame.getHeight() - Y_BORDER;
     }
     else {
       maxWidth = imageWidth;
@@ -116,24 +115,26 @@ public class Buffer {
       panelWidth = (int) (scl * (double) imageWidth + 0.5);
     }
 
-    if (pDesktop != null) {
+    if (pRootFrame != null) {
       pnl = new ImagePanel(img, 0, 0, panelWidth);
 
       pnl.setLayout(null);
 
-      internalFrame = new JInternalFrame();
-      internalFrame.setTitle(getTitle(panelWidth));
-      internalFrame.setClosable(true);
-      internalFrame.setMaximizable(true);
-      internalFrame.setIconifiable(true);
-      internalFrame.setResizable(true);
+      frame = new JFrame();
+      frame.setTitle(getTitle(panelWidth));
+      frame.setResizable(true);
 
-      internalFrame.setVisible(true);
-      internalFrame.setContentPane(pnl);
-      internalFrame.pack();
+      frame.setVisible(true);
+      frame.setContentPane(pnl);
+      frame.pack();
 
-      pDesktop.add(internalFrame, null);
-      internalFrame.addComponentListener(new ComponentListener() {
+
+
+      frame.setLocation(30, 20);
+      frame.setSize(panelWidth +  frame.getInsets().left +  frame.getInsets().right, (int)((double)panelWidth * (double)imageHeight / (double)imageWidth+0.5) +  frame.getInsets().top +  frame.getInsets().bottom);
+
+      //pRootFrame.add(frame, null);
+      frame.addComponentListener(new ComponentListener() {
         @Override
         public void componentHidden(ComponentEvent arg0) {
           // empty
@@ -156,7 +157,7 @@ public class Buffer {
           else
             newWidth = windowWidth;
           pnl.setImage(img, 0, 0, newWidth);
-          internalFrame.setTitle(getTitle(newWidth));
+          frame.setTitle(getTitle(newWidth));
         }
 
         @Override
@@ -164,17 +165,17 @@ public class Buffer {
           // empty
         }
       });
-      internalFrame.toFront();
-      pDesktop.repaint();
+      frame.toFront();
+      pRootFrame.repaint();
     }
   }
 
-  public Buffer(JDesktopPane pDesktop, String pName, SimpleHDRImage pSimpleHDRImage) {
+  public Buffer(JFrame pRootFrame, String pName, SimpleHDRImage pSimpleHDRImage) {
     hdrImg = pSimpleHDRImage;
     img = new FastHDRTonemapper().renderImage(pSimpleHDRImage);
     bufferType = BufferType.HDR_IMAGE;
     name = pName;
-    addImageBuffer(pDesktop);
+    addImageBuffer(pRootFrame);
   }
 
   private String getTitle(int pPanelWidth) {
@@ -191,7 +192,7 @@ public class Buffer {
     return (bufferType == BufferType.HDR_IMAGE) ? hdrImg : null;
   }
 
-  public Buffer(JDesktopPane pDesktop, String pName, Mesh3D pMesh3D, SimpleImage pPreviewImage) {
+  public Buffer(JFrame pRootFrame, String pName, Mesh3D pMesh3D, SimpleImage pPreviewImage) {
     img = pPreviewImage;
     mesh3D = pMesh3D;
     int panelWidth = img.getImageWidth();
@@ -201,23 +202,20 @@ public class Buffer {
     bufferType = BufferType.MESH3D;
     name = pName;
 
-    if (pDesktop != null) {
-      internalFrame = new JInternalFrame();
+    if (pRootFrame != null) {
+      frame = new JFrame();
 
-      internalFrame.setTitle(pName + " (" + mesh3D.getPCount() + " points, " + mesh3D.getFCount()
+      frame.setTitle(pName + " (" + mesh3D.getPCount() + " points, " + mesh3D.getFCount()
           + " faces)");
-      internalFrame.setClosable(true);
-      internalFrame.setMaximizable(true);
-      internalFrame.setIconifiable(true);
-      internalFrame.setResizable(true);
+      frame.setResizable(true);
 
-      internalFrame.setVisible(true);
-      internalFrame.setContentPane(pnl);
-      internalFrame.pack();
+      frame.setVisible(true);
+      frame.setContentPane(pnl);
+      frame.pack();
 
-      pDesktop.add(internalFrame, null);
-      internalFrame.toFront();
-      pDesktop.repaint();
+      pRootFrame.add(frame, null);
+      frame.toFront();
+      pRootFrame.repaint();
     }
   }
 
@@ -232,6 +230,6 @@ public class Buffer {
     img.setBufferedImage(null, 0, 0);
     mesh3D = null;
     pnl = null;
-    internalFrame = null;
+    frame = null;
   }
 }

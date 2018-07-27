@@ -17,20 +17,11 @@
 package org.jwildfire.swing;
 
 import java.awt.Point;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
-import javax.swing.JComboBox;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Preset;
@@ -46,7 +37,7 @@ import org.jwildfire.swing.Buffer.BufferType;
 import org.jwildfire.transform.Transformer;
 
 public class MainController {
-  private final JDesktopPane desktop;
+  private final JFrame mainFrame;
   private final JMenu windowMenu;
   private final JComboBox transformerInputCmb;
   private final JComboBox transformerPresetCmb;
@@ -55,8 +46,6 @@ public class MainController {
   private final JTextArea showMessageDlgTextArea;
 
   private final JTextField scriptFrameREd;
-
-  private final RenderController renderController;
 
   private final ActionList actionList = new ActionList();
 
@@ -102,18 +91,18 @@ public class MainController {
 
   public MainController(
       Prefs pPrefs, ErrorHandler pErrorHandler,
-      JDesktopPane pJDesktopPane, JMenu pWindowMenu,
+      JFrame pMainFrame, JMenu pWindowMenu,
       JComboBox pTransformerInputCmb, JComboBox pTransformerPresetCmb,
       JComboBox pCreatorsPresetCmb, JDialog pShowMessageDlg,
       JTextArea pShowMessageDlgTextArea, JTable pActionTable,
       JTextArea pScriptActionTextArea, JSlider pScriptFrameSlider,
       JTextField pScriptFramesREd, JTextField pScriptFrameREd,
       EnvelopeController pEnvelopeController,
-      RenderController pRenderController, int pDesignedWindowCount) {
+      int pDesignedWindowCount) {
     designedWindowCount = pDesignedWindowCount;
     prefs = pPrefs;
     errorHandler = pErrorHandler;
-    desktop = pJDesktopPane;
+    mainFrame = pMainFrame;
     windowMenu = pWindowMenu;
     transformerInputCmb = pTransformerInputCmb;
     transformerPresetCmb = pTransformerPresetCmb;
@@ -121,8 +110,7 @@ public class MainController {
     showMessageDlg = pShowMessageDlg;
     showMessageDlgTextArea = pShowMessageDlgTextArea;
     scriptFrameREd = pScriptFrameREd;
-    renderController = pRenderController;
-    scriptProcessor = new ScriptProcessor(pJDesktopPane);
+    scriptProcessor = new ScriptProcessor(pMainFrame);
     scriptProcessor.getBufferList().setSyncWithStaticBufferList(true);
     scriptProcessor.setAddBuffersToDesktop(true);
   }
@@ -182,7 +170,7 @@ public class MainController {
             buffers.getInBuffer(), buffers.getOutBuffer(), buffers.getOutHDRBuffer(),
             buffers.getOutBuffer3D());
       refreshWindowMenu();
-      desktop.repaint();
+      mainFrame.repaint();
     }
     finally {
       executing = false;
@@ -247,14 +235,14 @@ public class MainController {
   }
 
   private void addEvents(Buffer pBuffer) {
-    JInternalFrame frame = pBuffer.getInternalFrame();
-    frame.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
-      public void internalFrameClosed(
-          javax.swing.event.InternalFrameEvent e) {
-        JInternalFrame frame = (JInternalFrame) e.getSource();
+    JFrame frame = pBuffer.getFrame();
+    frame.addWindowListener(new WindowAdapter() {
+      public void windowClosed(
+          WindowEvent e) {
+        JFrame frame = (JFrame) e.getSource();
         BufferList bufferList = getBufferList();
         for (Buffer buffer : bufferList) {
-          if (frame == buffer.getInternalFrame()) {
+          if (frame == buffer.getFrame()) {
             bufferList.remove(buffer);
             actionList.removeBuffer(buffer, getBufferList());
             buffer.flush();
@@ -269,7 +257,7 @@ public class MainController {
   private Buffer getActiveBuffer() {
     BufferList bufferList = getBufferList();
     for (Buffer buffer : bufferList) {
-      if (buffer.getInternalFrame().isSelected())
+      if (buffer.getFrame().isActive())
         return buffer;
     }
     return null;
@@ -344,8 +332,7 @@ public class MainController {
         if (windowMenu.getItem(i) == menuItem) {
           int idx = i - off;
           Buffer buffer = getBufferList().get(idx);
-          buffer.getInternalFrame().toFront();
-          buffer.getInternalFrame().setSelected(true);
+          buffer.getFrame().toFront();
           break;
         }
       }
@@ -390,9 +377,9 @@ public class MainController {
   }
 
   private void showMessage(String pMessage) {
-    Point dPos = desktop.getRootPane().getLocation();
-    int dWidth = desktop.getWidth();
-    int dHeight = desktop.getHeight();
+    Point dPos = mainFrame.getRootPane().getLocation();
+    int dWidth = mainFrame.getWidth();
+    int dHeight = mainFrame.getHeight();
     int wWidth = showMessageDlg.getWidth();
     int wHeight = showMessageDlg.getHeight();
     showMessageDlg.setLocation(dPos.x + (dWidth - wWidth) / 2, dPos.y
@@ -410,16 +397,8 @@ public class MainController {
     BufferList bufferList = getBufferList();
     while (bufferList.size() > 0) {
       Buffer buffer = bufferList.get(bufferList.size() - 1);
-      JInternalFrame frame = buffer.getInternalFrame();
-      if (frame.isIcon()) {
-        try {
-          frame.setIcon(false);
-        }
-        catch (Throwable e) {
-          e.printStackTrace();
-        }
-      }
-      desktop.remove(frame);
+      JFrame frame = buffer.getFrame();
+      mainFrame.remove(frame);
       bufferList.remove(buffer);
     }
   }
@@ -427,12 +406,12 @@ public class MainController {
   public boolean closeAll() {
     String msg = "Do you really want to close all buffers?";
     String title = msg;
-    if (JOptionPane.showConfirmDialog(desktop, msg, title,
+    if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
         JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
       clearAllBuffers();
       refreshWindowMenu();
       actionList.clear();
-      desktop.repaint();
+      mainFrame.repaint();
       return true;
     }
     else
@@ -443,7 +422,7 @@ public class MainController {
     if (actionList.size() > 0) {
       String msg = "Do you really want to clear the current script?";
       String title = msg;
-      if (JOptionPane.showConfirmDialog(desktop, msg, title,
+      if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
           JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
         actionList.clear();
         return true;
@@ -477,14 +456,14 @@ public class MainController {
     if (actionList.size() > 0) {
       String msg = "Do you really want to clear all buffers and replay the current script?";
       String title = msg;
-      if (JOptionPane.showConfirmDialog(desktop, msg, title,
+      if (JOptionPane.showConfirmDialog(mainFrame, msg, title,
           JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
         clearAllBuffers();
         refreshWindowMenu();
         // dummy image just to call the init-method of transformers
         // (which makes sense if script lack some parameters)
         SimpleImage paramInitImg = null;
-        desktop.repaint();
+        mainFrame.repaint();
         for (Action action : actionList) {
           switch (action.getActionType()) {
             case EXECUTE_CREATOR:
@@ -517,7 +496,7 @@ public class MainController {
             }
               break;
           }
-          desktop.repaint();
+          mainFrame.repaint();
         }
       }
     }
@@ -527,7 +506,7 @@ public class MainController {
     String msg = "Do you really want to clear all buffers and the current script?";
     String title = msg;
     if (((getBufferList().size() == 0) && (actionList.size() == 0))
-        || (JOptionPane.showConfirmDialog(desktop, msg, title,
+        || (JOptionPane.showConfirmDialog(mainFrame, msg, title,
             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)) {
       JFileChooser chooser = getScriptJFileChooser();
       if (prefs.getInputScriptPath() != null) {
@@ -548,7 +527,7 @@ public class MainController {
         }
         finally {
           refreshWindowMenu();
-          desktop.repaint();
+          mainFrame.repaint();
         }
       }
     }
@@ -567,18 +546,6 @@ public class MainController {
   public PropertyPanel createLoaderPropertyPanel() {
     currLoaderPropertyPanel = new PropertyPanel(getLoader());
     return currLoaderPropertyPanel;
-  }
-
-  public void renderFrame() {
-    try {
-      int frame = Integer.parseInt(scriptFrameREd.getText());
-      SimpleImage img = renderController.renderFrame(frame);
-      new Buffer(desktop, frame, img);
-    }
-    catch (Throwable ex) {
-      handleError(ex);
-    }
-
   }
 
   public void applyTransformerPreset(String presetName) {

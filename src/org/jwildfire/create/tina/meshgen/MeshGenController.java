@@ -69,13 +69,8 @@ import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
 import org.jwildfire.create.tina.render.RenderedFlame;
-import org.jwildfire.create.tina.swing.FlameFileChooser;
-import org.jwildfire.create.tina.swing.FlameHolder;
-import org.jwildfire.create.tina.swing.JWFNumberField;
-import org.jwildfire.create.tina.swing.MeshFileChooser;
-import org.jwildfire.create.tina.swing.SunflowSceneFileChooser;
-import org.jwildfire.create.tina.swing.TinaController;
-import org.jwildfire.create.tina.swing.TinaInternalFrame;
+import org.jwildfire.create.tina.swing.*;
+import org.jwildfire.create.tina.swing.MainEditorFrame;
 import org.jwildfire.create.tina.swing.flamepanel.FlamePanel;
 import org.jwildfire.create.tina.variation.InternalSliceRangeIndicatorWFFunc;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
@@ -1005,7 +1000,7 @@ public class MeshGenController {
       currStrippedOrigFlame.setCentreY(centreYREd.getDoubleValue());
       currStrippedOrigFlame.setCamZoom(zoomREd.getDoubleValue());
       tinaController.importFlame(currStrippedOrigFlame, true);
-      tinaController.getDesktop().showInternalFrame(TinaInternalFrame.class);
+      tinaController.getDesktop().showJFrame(MainEditorFrame.class);
     }
   }
 

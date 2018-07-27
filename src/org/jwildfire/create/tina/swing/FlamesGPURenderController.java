@@ -117,7 +117,7 @@ public class FlamesGPURenderController {
     // interactiveResolutionProfileCmb must be already filled here!
     refreshImagePanel();
     statsTextArea = pStatsTextArea;
-    loaderIcon = new ImageIcon(TinaInternalFrame.class.getResource("/org/jwildfire/swing/icons/new/ajax-loader.gif"));
+    loaderIcon = new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/ajax-loader.gif"));
     enableControls();
   }
 
