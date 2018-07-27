@@ -149,6 +149,7 @@ public class Prefs extends ManagedObject {
   public static final String KEY_TINA_FREE_CACHE_IN_BATCH_RENDERER = "tina.free_cache_in_batch_renderer";
 
   public static final String KEY_TINA_EXCLUDED_VARIATIONS = "tina.excluded_variations";
+  public static final String KEY_TINA_LSYSTEM_MAXLENGTH = "tina.lsystem.maxlength";
 
   public static final String KEY_TINA_CREATE_DEFAULT_MACRO_BUTTONS = "tina.create_default_macrobuttons.6";
   public static final String KEY_TINA_VERTICAL_MACRO_BUTTONS = "tina.macro_buttons.vertical";
@@ -400,6 +401,8 @@ public class Prefs extends ManagedObject {
   private final List<ResolutionProfile> resolutionProfiles = new ArrayList<ResolutionProfile>();
   private final List<WindowPrefs> windowPrefs = new ArrayList<WindowPrefs>();
   private final List<String> tinaExcludedVariations = new ArrayList<>();
+  @Property(description = "Maximum size of the generated string for the L-System variation", category = PropertyCategory.TINA)
+  private int tinaLSystemMaxLength = 25000;
 
   private boolean createTinaDefaultMacroButtons = true;
   private final List<MacroButton> tinaMacroButtons = new ArrayList<MacroButton>();
@@ -824,6 +827,7 @@ public class Prefs extends ManagedObject {
     for (String variation : pSrc.getTinaExcludedVariations()) {
       tinaExcludedVariations.add(variation);
     }
+    tinaLSystemMaxLength = pSrc.tinaLSystemMaxLength;
 
     createTinaDefaultMacroButtons = pSrc.createTinaDefaultMacroButtons;
     tinaMacroToolbarWidth = pSrc.tinaMacroToolbarWidth;
@@ -1651,6 +1655,14 @@ public class Prefs extends ManagedObject {
 
   public List<String> getTinaExcludedVariations() {
     return tinaExcludedVariations;
+  }
+  
+  public int getTinaLSystemMaxLength() {
+    return tinaLSystemMaxLength;
+  }
+  
+  public void setTinaLSystemMaxLength(int l) {
+    tinaLSystemMaxLength = l;
   }
 
 }

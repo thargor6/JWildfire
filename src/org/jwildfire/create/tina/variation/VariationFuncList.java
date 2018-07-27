@@ -571,14 +571,12 @@ public class VariationFuncList {
     registerVariationFunc(Crop3DFunc.class);
     registerVariationFunc(SphereCropFunc.class);
 
-    // seems to freeze the program from time to time
-    // registerVariationFunc(LsystemFunc.class);
+    registerVariationFunc(LsystemFunc.class);
     registerVariationFunc(LSystem3DWFFunc.class);
     registerVariationFunc(HamidFunc.class);
     registerVariationFunc(TreeFunc.class);
     registerVariationFunc(BrownianFunc.class);
 
-    // populates an endless array, causes quickly OutOfMemoryErrors very quickly
     registerVariationFunc(DragonFunc.class);
     registerVariationFunc(GosperIslandFunc.class);
     registerVariationFunc(HtreeFunc.class);
