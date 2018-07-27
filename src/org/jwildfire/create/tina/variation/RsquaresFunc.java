@@ -22,6 +22,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
 
 import java.util.Arrays;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 
 /**
@@ -360,7 +361,7 @@ public class RsquaresFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_LEVEL.equalsIgnoreCase(pName)) {
-      level = (int) pValue;
+      level = limitIntVal(Tools.FTOI(pValue), 1, 9);
       rsquares.draw(level, 0.5, 0.5, 1.0);
     }
     else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))

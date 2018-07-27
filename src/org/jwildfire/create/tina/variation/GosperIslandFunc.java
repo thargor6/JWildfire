@@ -27,6 +27,7 @@ package org.jwildfire.create.tina.variation;
  */
 import java.util.Arrays;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -295,7 +296,7 @@ public class GosperIslandFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_LEVEL.equalsIgnoreCase(pName)) {
-      level = (int) pValue;
+      level = limitIntVal(Tools.FTOI(pValue), 1, 10);
       turtle = new Turtle(0.0, 0.0, 0.0);
       GosperIsland(level);
     }
