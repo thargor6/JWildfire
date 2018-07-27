@@ -17,6 +17,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -305,6 +306,7 @@ public class LsystemFunc extends VariationFunc {
   private class Productions {
 
     private Vector<Rule> productions = new Vector<Rule>();
+    private int MaxLength = Prefs.getPrefs().getTinaLSystemMaxLength();
 
     public Productions() {
 
@@ -341,6 +343,7 @@ public class LsystemFunc extends VariationFunc {
           if (altered)
             break;
         }
+        if (mString.numOfSymbols() > MaxLength) break;
       }
       return altered;
     }
@@ -350,6 +353,7 @@ public class LsystemFunc extends VariationFunc {
       for (int i = 0; i < noIters; i++) {
         StringBuilder sExpanded = new StringBuilder();
         apply(axiom);
+        if (axiom.numOfSymbols() > MaxLength) break;
         for (int j = 0; j < axiom.numOfSymbols(); j++) {
           sExpanded.append(axiom.getSymbol(j).getId());
         }

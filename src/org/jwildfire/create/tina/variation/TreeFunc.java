@@ -18,6 +18,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
  */
 import java.util.Arrays;
 
+import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -315,7 +316,7 @@ public class TreeFunc extends VariationFunc {
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_LEVEL.equalsIgnoreCase(pName)) {
-      level = (int) pValue;
+      level = limitIntVal(Tools.FTOI(pValue), 1, 10);
       xpoints.clear();
       ypoints.clear();
       tree(level, 0.0, 0.0, Math.PI / 2.0, 2);
