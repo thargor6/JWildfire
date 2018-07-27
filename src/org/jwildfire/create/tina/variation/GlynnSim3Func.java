@@ -34,6 +34,7 @@ public class GlynnSim3Func extends VariationFunc {
 
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_THICKNESS = "thickness";
+  private static final String PARAM_THICKNESS2 = "thickness2";
   private static final String PARAM_CONTRAST = "contrast";
   private static final String PARAM_POW = "pow";
 
@@ -108,6 +109,8 @@ public class GlynnSim3Func extends VariationFunc {
       radius = pValue;
     else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
       thickness = pValue;
+    else if (PARAM_THICKNESS2.equalsIgnoreCase(pName))
+    { }  // ignore deprecated parameter
     else if (PARAM_CONTRAST.equalsIgnoreCase(pName))
       contrast = limitVal(pValue, 0.0, 1.0);
     else if (PARAM_POW.equalsIgnoreCase(pName))
