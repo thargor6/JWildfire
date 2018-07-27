@@ -126,7 +126,7 @@ public class AllRandomFlameGenerator extends RandomFlameGenerator {
 
   @Override
   public String getName() {
-    return "All";
+    return "(All)";
   }
 
   public boolean isUseSimpleGenerators() {

@@ -48,6 +48,7 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
     double tscl = 2.0;
 
     boolean contRot = Math.random() < 0.5;
+    boolean withShear = Math.random() < 0.5;
     double r0 = 0;
 
     for (int i = 0; i < maxXForms; i++) {
@@ -73,6 +74,27 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
       affine3DFunc.setParameter("translateY", (2.0 * Math.random() - 1.0) * tscl);
       affine3DFunc.setParameter("translateZ", (2.0 * Math.random() - 1.0) * tscl);
 
+      if(withShear) {
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearXY", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearXZ", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearYX", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearYZ", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearZX", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+        if(Math.random()>0.5) {
+          affine3DFunc.setParameter("shearZY", (2.0 * Math.random() - 1.0) * tscl * 0.1);
+        }
+      }
+
       scl *= 0.8 + Math.random() * 0.1;
       tscl *= 0.8 + Math.random() * 0.1;
 
@@ -83,7 +105,7 @@ public class Affine3DRandomFlameGenerator extends RandomFlameGenerator {
       xForm.setColor(Math.random());
       xForm.setWeight(scl * Math.random() * 19.9 + 0.1);
 
-      if(Math.random()<0.1) {
+      if(Math.random()<0.2) {
         xForm.addVariation(Math.random() * 0.25 + 0.25, VariationFuncList.getVariationFuncInstance(VariationFuncList.getRandomVariationname(), true) );
       }
     }

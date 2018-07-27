@@ -34,7 +34,7 @@ public class AllRandomSymmetryGenerator implements RandomSymmetryGenerator {
 
   @Override
   public String getName() {
-    return "All";
+    return "(All)";
   }
 
   @Override

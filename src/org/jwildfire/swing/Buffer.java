@@ -20,6 +20,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -123,6 +125,8 @@ public class Buffer {
       frame = new JFrame();
       frame.setTitle(getTitle(panelWidth));
       frame.setResizable(true);
+
+      frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
       frame.setVisible(true);
       frame.setContentPane(pnl);

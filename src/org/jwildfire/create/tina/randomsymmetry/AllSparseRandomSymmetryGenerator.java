@@ -22,7 +22,7 @@ public class AllSparseRandomSymmetryGenerator extends AllRandomSymmetryGenerator
 
   @Override
   public String getName() {
-    return "All (sparse)";
+    return "(All, sparse)";
   }
 
   @Override

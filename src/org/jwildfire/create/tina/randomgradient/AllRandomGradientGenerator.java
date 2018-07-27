@@ -47,7 +47,7 @@ public class AllRandomGradientGenerator extends RandomGradientGenerator {
 
   @Override
   public String getName() {
-    return "All";
+    return "(All)";
   }
 
   @Override

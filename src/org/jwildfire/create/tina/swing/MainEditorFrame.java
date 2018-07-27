@@ -490,7 +490,7 @@ public class MainEditorFrame extends JFrame {
     this.setSize(1188, 740);
     this.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     this.setLocation(new Point(JWildfire.DEFAULT_WINDOW_LEFT, JWildfire.DEFAULT_WINDOW_TOP));
-    this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.setTitle("Fractal flames");
     this.setVisible(false);
     this.setResizable(true);
