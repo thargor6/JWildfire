@@ -119,6 +119,9 @@ public class FlameRenderer {
   }
 
   public FlameRenderer(Flame pFlame, Prefs pPrefs, boolean pWithAlpha, boolean pPreview) {
+    if(pFlame.getMotionBlurLength()>0) {
+      pFlame.setLowDensityBrightness(0.0);
+    }
     flame = pFlame;
     if (flame.getSolidRenderSettings().isSolidRenderingEnabled()) {
       flame.setAntialiasAmount(0.0);

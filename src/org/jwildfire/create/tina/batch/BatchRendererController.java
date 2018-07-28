@@ -427,8 +427,8 @@ public class BatchRendererController implements JobRenderThreadController {
 
   private FlamePanel getBatchPreviewFlamePanel() {
     if (batchPreviewFlamePanel == null) {
-      int width = data.batchPreviewRootPanel.getWidth();
-      int height = data.batchPreviewRootPanel.getHeight();
+      int width = Math.max(data.batchPreviewRootPanel.getWidth(), 32);
+      int height = Math.max(data.batchPreviewRootPanel.getHeight(), 32);
       SimpleImage img = new SimpleImage(width, height);
       img.fillBackground(0, 0, 0);
       batchPreviewFlamePanel = new FlamePanel(prefs, img, 0, 0, data.batchPreviewRootPanel.getWidth(), getBatchRenderPreviewFlameHolder(), null);

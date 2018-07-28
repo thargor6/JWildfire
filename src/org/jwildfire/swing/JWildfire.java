@@ -25,6 +25,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -126,7 +128,6 @@ public class JWildfire extends JApplet {
   private JMenu helpMenu = null;
   private JMenu settingsMenu = null;
   private JMenuItem exitMenuItem = null;
-  private JMenuItem saveMenuItem = null;
   private JMenu windowMenu = null;
   private JMenuItem openImageMenuItem = null;
   private JMenuItem openFlameMenuItem = null;
@@ -138,6 +139,13 @@ public class JWildfire extends JApplet {
      prefs = Prefs.getPrefs();
     {
       MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
+      tinaInternalFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+      tinaInternalFrame.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          closeApp();
+        }
+      });
       tinaInternalFrame.setJMenuBar(getMainJMenuBar());
 
       errorHandler = new StandardErrorHandler(getMainFrame(), getShowErrorDlg(), getShowErrorDlgMessageTextArea(),
@@ -260,13 +268,13 @@ public class JWildfire extends JApplet {
           MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
           tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent e) {
-              tinaController.refreshFlameImage(true, false, 1, true, false);
+              triggerRefreshFlameImage();
+              //tinaController.refreshFlameImage(true, false, 1, true, false);
             }
           });
           if (!tinaInternalFrame.isVisible()) {
             tinaInternalFrame.setVisible(true);
           }
-
 
         }
         catch (Exception ex) {
@@ -275,6 +283,52 @@ public class JWildfire extends JApplet {
       }
     });
   }
+
+
+  class RefreshFlameImageThread implements Runnable {
+    private AtomicBoolean cancelSignalled = new AtomicBoolean();
+    private boolean done;
+
+    @Override
+    public void run() {
+      done = false;
+      try {
+        cancelSignalled.set(false);
+        for (int i = 0; i < 40 && !cancelSignalled.get(); i++) {
+          try {
+            TimeUnit.MILLISECONDS.sleep(5);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        if (!cancelSignalled.get()) {
+          tinaController.fastRefreshFlameImage(true, false, 1);
+        }
+      }
+      finally {
+        done = true;
+      }
+    }
+
+    public boolean isDone() {
+      return done;
+    }
+
+    public void signalCancel() {
+      cancelSignalled.set(true);
+    }
+  }
+
+  private RefreshFlameImageThread resizeRefreshFlameImageThread = null;
+
+  void triggerRefreshFlameImage() {
+    if(resizeRefreshFlameImageThread!=null) {
+      resizeRefreshFlameImageThread.signalCancel();
+    }
+    resizeRefreshFlameImageThread = new RefreshFlameImageThread();
+    new Thread(resizeRefreshFlameImageThread).start();
+  }
+
 
   private BufferedImage backgroundImage;
 
@@ -841,21 +895,6 @@ public class JWildfire extends JApplet {
     return exitMenuItem;
   }
 
-  private JMenuItem getSaveMenuItem() {
-    if (saveMenuItem == null) {
-      saveMenuItem = new JMenuItem();
-      saveMenuItem.setText("Save...");
-      saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-          Event.CTRL_MASK, true));
-      saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-          saveMenuItem_actionPerformed(e);
-        }
-      });
-    }
-    return saveMenuItem;
-  }
-
   private MainController mainController = null;
   private FormulaExplorerController formulaExplorerController = null;
   private TinaController tinaController = null;
@@ -943,16 +982,6 @@ public class JWildfire extends JApplet {
     enableControls();
   }
 
-  private void saveMenuItem_actionPerformed(java.awt.event.ActionEvent e) {
-    try {
-      mainController.saveImage();
-    }
-    catch (Throwable ex) {
-      mainController.handleError(ex);
-    }
-    enableControls();
-  }
-
   private void showMessageCloseButton_actionPerformed(
       java.awt.event.ActionEvent e) {
     mainController.closeShowMessageDlg();
@@ -1035,5 +1064,9 @@ public class JWildfire extends JApplet {
   public void removeImageBuffer(JFrame frame) {
     mainController.refreshWindowMenu();
     enableControls();
+  }
+
+  public void saveImageBuffer(JFrame frame) {
+    mainController.saveImageBuffer(frame);
   }
 }

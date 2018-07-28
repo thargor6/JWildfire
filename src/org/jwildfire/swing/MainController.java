@@ -254,17 +254,7 @@ public class MainController {
     });
   }
 
-  private Buffer getActiveBuffer() {
-    BufferList bufferList = getBufferList();
-    for (Buffer buffer : bufferList) {
-      if (buffer.getFrame().isActive())
-        return buffer;
-    }
-    return null;
-  }
-
-  public void saveImage() throws Exception {
-    Buffer buffer = getActiveBuffer();
+  public void saveImage(Buffer buffer) throws Exception {
     if (buffer != null) {
       JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
       if (prefs.getOutputImagePath() != null) {
@@ -598,6 +588,21 @@ public class MainController {
     }
     if (selItem != null) {
       creatorsPresetCmb.setSelectedItem(selItem);
+    }
+  }
+
+  public void saveImageBuffer(JFrame frame) {
+    BufferList bufferList = getBufferList();
+    for (Buffer buffer : bufferList) {
+      if (buffer.getFrame() == frame) {
+        try {
+          saveImage(buffer);
+        }
+        catch(Exception ex) {
+          errorHandler.handleError(ex);
+        }
+        break;
+      }
     }
   }
 }

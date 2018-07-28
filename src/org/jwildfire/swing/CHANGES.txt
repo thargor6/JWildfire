@@ -1,6 +1,7 @@
 V3.50 (28.07.2018)
- - removed the desktop and the Navigator-window in order to simplify the user-interface
- - faster app-startup, there are now 3 random flames generated at start
+ - removed the desktop and the Navigator-window in order to simplify and speed-up the user-interface
+ - faster app-startup, there are now 3 random flames generated at start (and it is still faster than before)
+ - improved the resize-behaviour/speed of the main-editor-window
  - support for Java 10 (Please note, that JWildfire still works with Java 8 and Java 8 ist still supported by Oracle.
    But, Java 10 is also supported now, and when you want to use the UI-scaling-feature, you will need Java 10.)
  - many new variations:
@@ -25,7 +26,7 @@ V3.50 (28.07.2018)
     - terrain3D (Jesus Sosa)
     - vibration2 (Brad Stefanov)
     - wangtiles (Jesus Sosa)
-  - new "Affine3D"-random-flame-generator
+  - new "Affine3D"-random-flame-generator (also taken from Flamelet)
   - updated the jsyntaxpane-library (used for syntax-highlighting while editing text) to version 1.1.5
   - increased the default font size for the script-editor inside JWildfire
   - internal optimization/API-changes: extended the API of variations:
@@ -55,7 +56,9 @@ V3.50 (28.07.2018)
       - lsystem_js
       - rsquares_js
       - tree_js
+  - new property tinaLSystemMaxLength in the prefs to specify maximum size of the generated string for the L-System variation (lsystem_js)
   - bug fixes for symmetry order and animation control updates
+  - fixed a bug regarding rendering motion-blur
 
 V3.31 (29.03.2018)
  - changed the default filter to the same that is used by Flamelet which creates nice sharp images,

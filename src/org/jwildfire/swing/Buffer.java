@@ -16,12 +16,8 @@
 */
 package org.jwildfire.swing;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -31,6 +27,11 @@ import org.jwildfire.image.SimpleImage;
 import org.jwildfire.transform.Mesh3D;
 
 public class Buffer {
+  private JMenuItem saveMenuItem = null;
+  private JMenuItem exitMenuItem = null;
+  private JMenuBar mainJMenuBar = null;
+  private JMenu fileMenu = null;
+
   private BufferType bufferType;
 
   public BufferType getBufferType() {
@@ -123,6 +124,9 @@ public class Buffer {
       pnl.setLayout(null);
 
       frame = new JFrame();
+
+      frame.setJMenuBar(getMainJMenuBar());
+
       frame.setTitle(getTitle(panelWidth));
       frame.setResizable(true);
 
@@ -236,4 +240,53 @@ public class Buffer {
     pnl = null;
     frame = null;
   }
+
+  private JMenuBar getMainJMenuBar() {
+    if (mainJMenuBar == null) {
+      mainJMenuBar = new JMenuBar();
+      mainJMenuBar.add(getFileMenu());
+    }
+    return mainJMenuBar;
+  }
+
+  private JMenu getFileMenu() {
+    if (fileMenu == null) {
+      fileMenu = new JMenu();
+      fileMenu.setText("File");
+      fileMenu.add(getSaveMenuItem());
+      fileMenu.add(getExitMenuItem());
+    }
+    return fileMenu;
+  }
+
+  private JMenuItem getExitMenuItem() {
+    if (exitMenuItem == null) {
+      exitMenuItem = new JMenuItem();
+      exitMenuItem.setText("Close");
+      exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
+              Event.CTRL_MASK, true));
+      exitMenuItem.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        }
+      });
+    }
+    return exitMenuItem;
+  }
+
+  private JMenuItem getSaveMenuItem() {
+    if (saveMenuItem == null) {
+      saveMenuItem = new JMenuItem();
+      saveMenuItem.setText("Save image...");
+      saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+              Event.CTRL_MASK, true));
+      saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          JWildfire.getInstance().saveImageBuffer(frame);
+        }
+      });
+    }
+    return saveMenuItem;
+  }
+
 }

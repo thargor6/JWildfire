@@ -158,7 +158,6 @@ public class DLAWFFunc extends VariationFunc {
 
   private short[][] calculate() {
     AbstractRandomGenerator randGen = new MarsagliaRandomGenerator();
-System.err.println("CALCULATER!!!");
     int centre = buffer_size / 2;
     double pi2 = 2.0 * Math.PI;
     int size2 = buffer_size - 2;
