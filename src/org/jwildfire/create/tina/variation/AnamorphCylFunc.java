@@ -12,14 +12,18 @@ import org.jwildfire.create.tina.base.XYZPoint;
 
 public class AnamorphCylFunc extends VariationFunc {
 		/**
-		 * Catenoid Minimal Surface
+		 * 
 		 * @author Jesus Sosa
 		 * @date July 11, 2018
-		 * based on a work of:
-		 * http://paulbourke.net/geometry/catenoid/
-		 *  parameters
-		 *  C: 
-		 */
+		 *anamorphcyl transformation
+                 * x1=a*(y+b)*cos(c*x)
+                 * y1=a*(y+b)*sin(c*x)
+                 * Parameters
+                 * a: scaling Factor of the anamorphic image
+                 * b: Affect displacement of anamorphic image out to a finite radius
+                 * c: Constant to spread the range of x values in the original image
+                 *   over an angle in the anamorphic image. 
+		 **/
 
 	static public class XY
 	{
