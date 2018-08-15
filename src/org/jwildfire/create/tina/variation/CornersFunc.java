@@ -27,38 +27,40 @@ public class CornersFunc extends VariationFunc {
   private static final String PARAM_YWIDTH = "y";
   private static final String PARAM_MULTX = "mult x";
   private static final String PARAM_MULTY = "mult y";
-  private static final String PARAM_POWER = "power";
+  private static final String PARAM_X_POWER = "x power";
+  private static final String PARAM_Y_POWER = "y power";
+  private static final String PARAM_XY_POWER = "xy power add";
   private static final String PARAM_LOGMODE = "log mode (0/1)";
-  private static final String PARAM_LOGMULT = "log mult";
+  private static final String PARAM_LOG_BASE = "log base";
   
-  private static final String[] paramNames = { PARAM_XWIDTH, PARAM_YWIDTH, PARAM_MULTX, PARAM_MULTY, PARAM_POWER, PARAM_LOGMODE, PARAM_LOGMULT };
+  private static final String[] paramNames = { PARAM_XWIDTH, PARAM_YWIDTH, PARAM_MULTX, PARAM_MULTY, PARAM_X_POWER, PARAM_Y_POWER, PARAM_XY_POWER, PARAM_LOGMODE, PARAM_LOG_BASE };
   private double xwidth = 1.0;
   private double ywidth = 1.0;
   private double multx = 1.0;
   private double multy = 1.0;
-  private double power = 0.75;
+  private double xpower = 0.75;
+  private double ypower = 0.75;
+  private double xypower = 0;
   private double logmode = 0;
-  private double logmult = 1;
+  private double log_base = 2.71828;
   private double ex = 0;
   private double ey = 0;
   
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // corners by Whittaker Courtney 8-8-2018
+   // corners by Whittaker Courtney 8-14-2018
       
-      double x = pAffineTP.x;
-      double y = pAffineTP.y;
       double xs = pAffineTP.x * pAffineTP.x;
       double ys = pAffineTP.y * pAffineTP.y;
       
   //log mode    
     if (logmode == 0){
-    ex = pow(xs, power) * multx;
-    ey = pow(ys, power) * multy;
+    ex = pow(xs, xpower + xypower) * multx;
+    ey = pow(ys, ypower + xypower) * multy;
   }
     else{
-    ex = pow(log((xs * logmult) +3), multx +2)-1.33;
-    ey = pow(log((ys * logmult) +3), multy +2)-1.33;
+    ex = pow(log((xs * multx) +3) / log(log_base), xpower + 2.25 + xypower)-1.33;
+    ey = pow(log((ys * multy) +3) / log(log_base), ypower + 2.25 + xypower)-1.33;
     }
 
           
@@ -88,7 +90,7 @@ public class CornersFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xwidth, ywidth, multx, multy, power, logmode, logmult };
+    return new Object[] { xwidth, ywidth, multx, multy, xpower, ypower, xypower, logmode, log_base };
   }
 
   @Override
@@ -101,12 +103,16 @@ public class CornersFunc extends VariationFunc {
       multx = pValue;
     else if (PARAM_MULTY.equalsIgnoreCase(pName))
       multy = pValue;
-    else if (PARAM_POWER.equalsIgnoreCase(pName))
-      power = pValue;
+    else if (PARAM_X_POWER.equalsIgnoreCase(pName))
+      xpower = pValue;
+    else if (PARAM_Y_POWER.equalsIgnoreCase(pName))
+      ypower = pValue;
+    else if (PARAM_XY_POWER.equalsIgnoreCase(pName))
+      xypower = pValue;
     else if (PARAM_LOGMODE.equalsIgnoreCase(pName))
       logmode = pValue;
-    else if (PARAM_LOGMULT.equalsIgnoreCase(pName))
-      logmult = pValue;
+    else if (PARAM_LOG_BASE.equalsIgnoreCase(pName))
+      log_base = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
