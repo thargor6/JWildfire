@@ -60,6 +60,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String PARAM_PARAM_D = "param_d";
   private static final String PARAM_PARAM_E = "param_e";
   private static final String PARAM_PARAM_F = "param_f";
+  private static final String PARAM_PARAM_G = "param_g";
+  private static final String PARAM_PARAM_H = "param_h";
+  private static final String PARAM_PARAM_I = "param_i";
+  private static final String PARAM_PARAM_J = "param_j";
+  private static final String PARAM_PARAM_K = "param_k";
+  private static final String PARAM_PARAM_L = "param_l";
+  private static final String PARAM_PARAM_M = "param_m";
+  private static final String PARAM_PARAM_N = "param_n";
+  private static final String PARAM_PARAM_O = "param_o";
+  private static final String PARAM_PARAM_P = "param_p";
+  private static final String PARAM_PARAM_Q = "param_q";
+  private static final String PARAM_PARAM_R = "param_r";
 
   private static final String RESSOURCE_XFORMULA = "xformula";
   private static final String RESSOURCE_YFORMULA = "yformula";
@@ -67,7 +79,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_SOLID, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
+  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_SOLID, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F, PARAM_PARAM_G, PARAM_PARAM_H, PARAM_PARAM_I, PARAM_PARAM_J, PARAM_PARAM_K, PARAM_PARAM_L, PARAM_PARAM_M, PARAM_PARAM_N, PARAM_PARAM_O, PARAM_PARAM_P, PARAM_PARAM_Q, PARAM_PARAM_R };
 
   private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
 
@@ -92,7 +104,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private double param_d = 0.0;
   private double param_e = 0.0;
   private double param_f = 0.0;
-
+  private double param_g = 0.0;
+  private double param_h = 0.0;
+  private double param_i = 0.0;
+  private double param_j = 0.0;
+  private double param_k = 0.0;
+  private double param_l = 0.0;
+  private double param_m = 0.0;
+  private double param_n = 0.0;
+  private double param_o = 0.0;
+  private double param_p = 0.0;
+  private double param_q = 0.0;
+  private double param_r = 0.0;
   private String xformula;
   private String yformula;
   private String zformula;
@@ -190,7 +213,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), solid, param_a, param_b, param_c, param_d, param_e, param_f };
+    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), solid, param_a, param_b, param_c, param_d, param_e, param_f, param_g, param_h, param_i, param_j, param_k, param_l, param_m, param_n, param_o, param_p, param_q, param_r };
   }
 
   @Override
@@ -253,6 +276,42 @@ public class ParPlot2DWFFunc extends VariationFunc {
     else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
       param_f = pValue;
     }
+    else if (PARAM_PARAM_G.equalsIgnoreCase(pName)) {
+        param_g = pValue;
+      }
+      else if (PARAM_PARAM_H.equalsIgnoreCase(pName)) {
+        param_h = pValue;
+      }
+      else if (PARAM_PARAM_I.equalsIgnoreCase(pName)) {
+        param_i = pValue;
+      }
+      else if (PARAM_PARAM_J.equalsIgnoreCase(pName)) {
+        param_j = pValue;
+      }
+      else if (PARAM_PARAM_K.equalsIgnoreCase(pName)) {
+        param_k = pValue;
+      }
+      else if (PARAM_PARAM_L.equalsIgnoreCase(pName)) {
+        param_l = pValue;
+      }
+  	else if (PARAM_PARAM_M.equalsIgnoreCase(pName)) {
+        param_m = pValue;
+      }
+      else if (PARAM_PARAM_N.equalsIgnoreCase(pName)) {
+        param_n = pValue;
+      }
+      else if (PARAM_PARAM_O.equalsIgnoreCase(pName)) {
+        param_o = pValue;
+      }
+      else if (PARAM_PARAM_P.equalsIgnoreCase(pName)) {
+        param_p = pValue;
+      }
+      else if (PARAM_PARAM_Q.equalsIgnoreCase(pName)) {
+        param_q = pValue;
+      }
+      else if (PARAM_PARAM_R.equalsIgnoreCase(pName)) {
+        param_r = pValue;
+      }
     else
       throw new IllegalArgumentException(pName);
   }
@@ -359,6 +418,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
         "    double param_d = " + param_d + ";\r\n" +
         "    double param_e = " + param_e + ";\r\n" +
         "    double param_f = " + param_f + ";\r\n" +
+        "    double param_g = " + param_g + ";\r\n" +
+        "    double param_h = " + param_h + ";\r\n" +
+        "    double param_i = " + param_i + ";\r\n" +
+        "    double param_j = " + param_j + ";\r\n" +
+        "    double param_k = " + param_k + ";\r\n" +
+        "    double param_l = " + param_l + ";\r\n" +
+        "    double param_m = " + param_m + ";\r\n" +
+        "    double param_n = " + param_n + ";\r\n" +
+        "    double param_o = " + param_o + ";\r\n" +
+        "    double param_p = " + param_p + ";\r\n" +
+        "    double param_q = " + param_q + ";\r\n" +
+        "    double param_r = " + param_r + ";\r\n" +
         "    return " + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ";\r\n" +
         "  }\r\n" +
         "  public double evaluateY(double u,double v) {\r\n" +
@@ -369,6 +440,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
         "    double param_d = " + param_d + ";\r\n" +
         "    double param_e = " + param_e + ";\r\n" +
         "    double param_f = " + param_f + ";\r\n" +
+        "    double param_g = " + param_g + ";\r\n" +
+        "    double param_h = " + param_h + ";\r\n" +
+        "    double param_i = " + param_i + ";\r\n" +
+        "    double param_j = " + param_j + ";\r\n" +
+        "    double param_k = " + param_k + ";\r\n" +
+        "    double param_l = " + param_l + ";\r\n" +
+        "    double param_m = " + param_m + ";\r\n" +
+        "    double param_n = " + param_n + ";\r\n" +
+        "    double param_o = " + param_o + ";\r\n" +
+        "    double param_p = " + param_p + ";\r\n" +
+        "    double param_q = " + param_q + ";\r\n" +
+        "    double param_r = " + param_r + ";\r\n" +
         "    return " + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ";\r\n" +
         "  }\r\n" +
         "  public double evaluateZ(double u,double v) {\r\n" +
@@ -379,6 +462,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
         "    double param_d = " + param_d + ";\r\n" +
         "    double param_e = " + param_e + ";\r\n" +
         "    double param_f = " + param_f + ";\r\n" +
+        "    double param_g = " + param_g + ";\r\n" +
+        "    double param_h = " + param_h + ";\r\n" +
+        "    double param_i = " + param_i + ";\r\n" +
+        "    double param_j = " + param_j + ";\r\n" +
+        "    double param_k = " + param_k + ";\r\n" +
+        "    double param_l = " + param_l + ";\r\n" +
+        "    double param_m = " + param_m + ";\r\n" +
+        "    double param_n = " + param_n + ";\r\n" +
+        "    double param_o = " + param_o + ";\r\n" +
+        "    double param_p = " + param_p + ";\r\n" +
+        "    double param_q = " + param_q + ";\r\n" +
+        "    double param_r = " + param_r + ";\r\n" +
         "    return " + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ";\r\n" +
         "  }\r\n";
     try {
@@ -424,6 +519,18 @@ public class ParPlot2DWFFunc extends VariationFunc {
     param_d = preset.getParam_d();
     param_e = preset.getParam_e();
     param_f = preset.getParam_f();
+    param_g = preset.getParam_g();
+    param_h = preset.getParam_h();
+    param_i = preset.getParam_i();
+    param_j = preset.getParam_j();
+    param_k = preset.getParam_k();
+    param_l = preset.getParam_l();
+    param_m = preset.getParam_m();
+    param_n = preset.getParam_n();
+    param_o = preset.getParam_o();
+    param_p = preset.getParam_p();
+    param_q = preset.getParam_q();
+    param_r = preset.getParam_r();
   }
 
   private RenderColor[] uvColors;
