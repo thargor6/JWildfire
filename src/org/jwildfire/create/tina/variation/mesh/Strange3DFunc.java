@@ -25,7 +25,7 @@
 * https://syntopia.github.io/StrangeAttractors/
 * 
 * 
-* Also I´m using SimpleMesh.java and  WFFuncPresetsStore.java classes by Andreas Maschke 
+* Also IÂ´m using SimpleMesh.java and  WFFuncPresetsStore.java classes by Andreas Maschke 
 * included in source code of Java WildFire.
 *************************************************************************************************/
 

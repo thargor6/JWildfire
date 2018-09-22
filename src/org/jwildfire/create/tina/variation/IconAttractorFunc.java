@@ -5,7 +5,7 @@ package org.jwildfire.create.tina.variation;
  * Symetric Icon Attractors
  * @author Jesus Sosa
  * @date January 11 , 2018
- * Attractors came from the book  ìSymmetry in Chaosî by Michael Field and Martin Golubitsky
+ * Attractors came from the book  ‚ÄúSymmetry in Chaos‚Äù by Michael Field and Martin Golubitsky
  * Reference:
  * https://softologyblog.wordpress.com/2017/03/04/2d-strange-attractors/
  */

@@ -358,6 +358,7 @@ public class TinaControllerParameter {
   public JTextArea scriptDescriptionTextArea;
   public JTextArea scriptTextArea;
   public JButton rescanScriptsBtn;
+  public JButton importScriptBtn;
   public JButton newScriptBtn;
   public JButton newScriptFromFlameBtn;
   public JButton deleteScriptBtn;
@@ -949,7 +950,7 @@ public class TinaControllerParameter {
 
   public void setParams2(JButton pEditTransformCaptionButton, JButton pEditFlameTileButton, JButton pSnapShotButton, JButton pQSaveButton, JButton pSendToIRButton,
       JButton pMovieButton, JToggleButton pTransformSlowButton, JToggleButton pTransparencyButton, JToggleButton pMouseTransformRotateTrianglesButton, JToggleButton pMouseTransformScaleTrianglesButton, JTree pScriptTree,
-      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn,
+      JTextArea pScriptDescriptionTextArea, JTextArea pScriptTextArea, JButton pRescanScriptsBtn, JButton pImportScriptBtn,
       JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
       JToggleButton pMouseTransformEditGradientButton, JTree pGradientLibTree, JButton pGradientLibraryRescanBtn,
       JButton pGradientLibraryNewFolderBtn, JButton pGradientLibraryRenameFolderBtn, JList pGradientsList,
@@ -992,6 +993,7 @@ public class TinaControllerParameter {
     this.scriptDescriptionTextArea = pScriptDescriptionTextArea;
     this.scriptTextArea = pScriptTextArea;
     this.rescanScriptsBtn = pRescanScriptsBtn;
+    this.importScriptBtn = pImportScriptBtn;
     this.newScriptBtn = pNewScriptBtn;
     this.newScriptFromFlameBtn = pNewScriptFromFlameBtn;
     this.deleteScriptBtn = pDeleteScriptBtn;

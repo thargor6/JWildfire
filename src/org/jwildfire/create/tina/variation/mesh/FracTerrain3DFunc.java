@@ -25,7 +25,7 @@
  * http://www.cs.ukzn.ac.za/~hughm/ds/ls/FractalLandscapes.html
  *
  *
- * Also I´m using SimpleMesh.java object by Andreas Maschke
+ * Also IÂ´m using SimpleMesh.java object by Andreas Maschke
  * included in source code of Java WildFire.
  *************************************************************************************************/
 

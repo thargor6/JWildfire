@@ -4,7 +4,7 @@ package org.jwildfire.create.tina.variation;
  * recurrenceplot variation
  * @author Jesus Sosa
  * @date March 19, 2018
- * based on a work of Jürgen Meier
+ * based on a work of JÃ¼rgen Meier
  * http://www.3d-meier.de/tut19/Seite0.html
  */
 
@@ -108,7 +108,7 @@ public class RecurrencePlotFunc extends VariationFunc {
      double Summe=0;
      for (j=1;j<=k;j++)
          {
-          // Sägezahn
+          // SÃ¤gezahn
              Summe=Summe + sin(i*j*b*2*M_PI/(N))/j;
          }
      Summe=Summe*(-2*a/M_PI);

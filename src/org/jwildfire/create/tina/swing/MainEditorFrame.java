@@ -5406,6 +5406,7 @@ public class MainEditorFrame extends JFrame {
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
         getMouseTransformScaleTrianglesButton(), getScriptTree(), getScriptDescriptionTextArea(), getScriptTextArea(), getRescanScriptsBtn(),
+        getImportScriptBtn(),
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
@@ -10343,6 +10344,7 @@ private JLabel getAffineC21Lbl() {
   private JScrollPane scrollPane_5;
   private JTextArea scriptDescriptionTextArea;
   private JButton rescanScriptsBtn;
+  private JButton importScriptBtn;
   private JButton deleteScriptBtn;
   private JButton scriptRenameBtn;
   private JButton scriptRunBtn;
@@ -11002,20 +11004,20 @@ private JLabel getAffineC21Lbl() {
       panel_1.add(panel_2, BorderLayout.EAST);
       panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 1));
 
-      rescanScriptsBtn = new JButton();
-      rescanScriptsBtn.setMinimumSize(new Dimension(116, 12));
-      rescanScriptsBtn.setMaximumSize(new Dimension(116, 12));
-      rescanScriptsBtn.addActionListener(new ActionListener() {
+      importScriptBtn = new JButton();
+      importScriptBtn.setMinimumSize(new Dimension(116, 12));
+      importScriptBtn.setMaximumSize(new Dimension(116, 12));
+      importScriptBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          tinaController.getJwfScriptController().rescanBtn_clicked();
+          tinaController.getJwfScriptController().importSchriptBtn_clicked();
         }
       });
-      panel_2.add(rescanScriptsBtn);
-      rescanScriptsBtn.setToolTipText("Rescan script-folder");
-      rescanScriptsBtn.setText("Rescan");
-      rescanScriptsBtn.setPreferredSize(new Dimension(116, 24));
-      rescanScriptsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      panel_2.add(importScriptBtn);
+      importScriptBtn.setToolTipText("Import external script (*.zip-archive)");
+      importScriptBtn.setText("Import Script");
+      importScriptBtn.setPreferredSize(new Dimension(116, 24));
+      importScriptBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      importScriptBtn.setBounds(new Rectangle(9, 280, 125, 24));
 
       JPanel panel_8 = new JPanel();
       panel_8.setPreferredSize(new Dimension(116, 4));
@@ -11070,6 +11072,23 @@ private JLabel getAffineC21Lbl() {
         }
       });
       panel_2.add(getScriptAddButtonBtn());
+
+      rescanScriptsBtn = new JButton();
+      rescanScriptsBtn.setMinimumSize(new Dimension(58, 12));
+      rescanScriptsBtn.setMaximumSize(new Dimension(58, 12));
+      rescanScriptsBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getJwfScriptController().rescanBtn_clicked();
+        }
+      });
+      panel_2.add(rescanScriptsBtn);
+      rescanScriptsBtn.setToolTipText("Rescan script-folder");
+      rescanScriptsBtn.setText("Scan");
+      rescanScriptsBtn.setPreferredSize(new Dimension(58, 24));
+      rescanScriptsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
+
+
       panel_2.add(getPanel_108());
       scriptRunBtn.setToolTipText("Run script");
       scriptRunBtn.setText("Run");
@@ -12590,6 +12609,10 @@ private JLabel getAffineC21Lbl() {
 
   public JButton getRescanScriptsBtn() {
     return rescanScriptsBtn;
+  }
+
+  public JButton getImportScriptBtn() {
+    return importScriptBtn;
   }
 
   public JButton getDeleteScriptBtn() {
@@ -16354,10 +16377,12 @@ private JLabel getAffineC21Lbl() {
         }
       });
       scriptAddButtonBtn.setToolTipText("Add this script to the macro-toolbar");
-      scriptAddButtonBtn.setText("Add macro button");
-      scriptAddButtonBtn.setPreferredSize(new Dimension(116, 24));
+      scriptAddButtonBtn.setText("Btn");
+      scriptAddButtonBtn.setPreferredSize(new Dimension(58, 24));
       scriptAddButtonBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       scriptAddButtonBtn.setBounds(new Rectangle(9, 280, 125, 24));
+      scriptAddButtonBtn.setMinimumSize(new Dimension(58, 12));
+      scriptAddButtonBtn.setMaximumSize(new Dimension(58, 12));
     }
     return scriptAddButtonBtn;
   }

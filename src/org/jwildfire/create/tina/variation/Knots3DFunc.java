@@ -29,7 +29,7 @@ public class Knots3DFunc extends AbstractOBJMeshWFFunc {
      *
      * @author Jesus Sosa
      * @date January 22, 2018
-     * based on a work of Jürgen Meier
+     * based on a work of JÃ¼rgen Meier
      * http://www.3d-meier.de/tut8/Seite0.html
      * Knot thickness from the book Interactive 3D Computer Graphics
      * by Leendert Ammeraal
