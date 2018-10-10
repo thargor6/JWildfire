@@ -663,6 +663,9 @@ public class VariationFuncList {
     registerVariationFunc(JacAsnFunc.class); 
     registerVariationFunc(ColorDomainFunc.class); 
     
+    registerVariationFunc(InvSquircularFunc.class);
+    registerVariationFunc(SquircularFunc.class);
+    
     
 
     resolvedAliasMap = new HashMap<>();
