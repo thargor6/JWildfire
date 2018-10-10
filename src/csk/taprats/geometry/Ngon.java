@@ -5,6 +5,8 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.cos;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 
+import java.awt.Color;
+
 public class Ngon extends Primitive
 {
 
@@ -17,11 +19,12 @@ public class Ngon extends Primitive
 	private double fill;
 	
 	private double color=0;
+	private Color rgbColor=new Color(0,0,0,100);
 
-	public Ngon( int sides, double scale,double angle, Point p1, double color, double fill )
+	public Ngon( int sides, double scale,double angle, Point point, double color, double fill )
 	{
 		super(4);
-		this.pos = p1;
+		this.pos = point;
 		this.color=color;
 		this.scale=scale;
 		this.sides=sides;
@@ -31,6 +34,20 @@ public class Ngon extends Primitive
 		rsina=sin(angle*M_PI/180.0); 
 	}
 
+	
+	public Ngon( int sides, double scale,double angle, Point p1, Color rgbColor, double fill )
+	{
+		super(4);
+		this.pos = p1;
+		this.rgbColor=rgbColor;
+		this.scale=scale;
+		this.sides=sides;
+		this.angle=angle;
+		this.fill=fill;
+		rcosa=cos(angle*M_PI/180.0);
+		rsina=sin(angle*M_PI/180.0); 
+	}
+	
 	public Ngon( int sides,Point p1, double scale)
 	{
 		super(3);
@@ -57,6 +74,11 @@ public class Ngon extends Primitive
 	public final double getColor()
 	{
 		return this.color;
+	}
+	
+	public final Color getRGBColor()
+	{
+		return this.rgbColor;
 	}
 	
 	public final double getCosa()

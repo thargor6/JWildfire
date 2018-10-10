@@ -20,6 +20,7 @@ package org.jwildfire.create.tina.variation.plot;
 
 import static org.jwildfire.base.mathlib.MathLib.FALSE;
 import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
 import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.TRUE;
@@ -29,6 +30,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 import static org.jwildfire.base.mathlib.MathLib.floor;
 import static org.jwildfire.base.mathlib.MathLib.pow;
 import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import static org.jwildfire.base.mathlib.MathLib.tan;
 
@@ -68,6 +70,7 @@ import csk.taprats.ui1.RenderPlain;
 import csk.taprats.ui1.RenderOutline;
 import csk.taprats.ui1.RenderStyle;
 import csk.taprats.ui1.RenderVecView;
+import odk.lang.DoubleWrapper;
 
 public class DrawFunc extends VariationFunc {
 
@@ -86,6 +89,24 @@ public class DrawFunc extends VariationFunc {
 
   private int rand(FlameTransformationContext pContext) {
     return pContext.random(RAND_MAX);
+  }
+  
+  private DoubleWrapper sina = new DoubleWrapper();
+  private DoubleWrapper cosa = new DoubleWrapper();
+
+
+  public Point plotBlur(FlameTransformationContext pContext, double x1, double y1, double pAmount) {
+	double xout=x1,yout=y1;
+    double r = pContext.random() * (M_PI + M_PI);
+    sinAndCos(r, sina, cosa);
+    double r2 = pAmount * pContext.random();
+    xout += r2 * cosa.value;
+    yout += r2 * sina.value;
+ 
+    Point value = new Point();
+    value.setX( xout);
+    value.setY( yout);
+    return value;
   }
   
   public Point plotLine(FlameTransformationContext pContext, double x1, double y1, double x2, double y2) {
@@ -302,6 +323,12 @@ line_thickness = 0.5 / 100;
     
      primitive=getPrimitive(pContext);
 
+     if(primitive.gettype()==1)
+     {
+    	 Point point=(Point)primitive;
+    	 out=plotBlur(pContext,point.getX(),point.getY(),pAmount);
+         color=point.getColor();
+     }    
      if(primitive.gettype()==2)
      {
     	 Line line=(Line)primitive;
