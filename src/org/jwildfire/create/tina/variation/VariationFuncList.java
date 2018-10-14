@@ -656,6 +656,10 @@ public class VariationFuncList {
     registerVariationFunc(CscSquaredFunc.class);  
     registerVariationFunc(Atan2_SpiralsFunc.class);  
     registerVariationFunc(IntersectionFunc.class);      
+    
+    registerVariationFunc(ArcsinhFunc.class);
+    registerVariationFunc(Arcsech2Func.class);
+    registerVariationFunc(ArctanhFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
