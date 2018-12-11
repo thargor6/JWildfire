@@ -68,7 +68,7 @@ import org.jwildfire.transform.ScaleTransformer;
 
 public class FlameRenderer {
   // constants
-  private final static int MAX_FILTER_WIDTH = 25;
+  public final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
   protected int imageWidth;
   protected int imageHeight;
@@ -573,7 +573,9 @@ public class FlameRenderer {
         RenderZBufferThread thread = new RenderZBufferThread(flame, logDensityFilter, startRow, endRow, pGreyImage, zScale);
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t = new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -598,7 +600,9 @@ public class FlameRenderer {
         RenderHDRImageThread thread = new RenderHDRImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pHDRImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t= new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -626,7 +630,9 @@ public class FlameRenderer {
         RenderImageThread thread = new RenderImageThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage, dofBuffer != null ? new PostDOFCalculator(dofBuffer, flame) : null);
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t =  new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -654,7 +660,9 @@ public class FlameRenderer {
         PostFilterImageThread thread = new PostFilterImageThread(startRow, endRow, input, pImage, flame.getPostNoiseFilterThreshold());
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t = new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -679,7 +687,9 @@ public class FlameRenderer {
         RenderImageSimpleScaledThread thread = new RenderImageSimpleScaledThread(flame, logDensityFilter, gammaCorrectionFilter, renderScale, startRow, endRow, pImage, newImg);
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t = new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -697,7 +707,9 @@ public class FlameRenderer {
         RenderImageSimpleThread thread = new RenderImageSimpleThread(flame, logDensityFilter, gammaCorrectionFilter, startRow, endRow, pImage);
         threads.add(thread);
         if (threadCount > 1) {
-          new Thread(thread).start();
+          Thread t = new Thread(thread);
+          t.setPriority(Thread.MIN_PRIORITY);
+          t.start();
         }
         else {
           thread.run();
@@ -728,7 +740,9 @@ public class FlameRenderer {
     for (int i = 0; i < nThreads; i++) {
       AbstractRenderThread t = createFlameRenderThread(i, nThreads, pPackets.get(i), nSamples / (long) nThreads, pSlices);
       runningThreads.add(t);
-      new Thread(t).start();
+      Thread te = new Thread(t);
+      te.setPriority(Thread.MIN_PRIORITY);
+      te.start();
     }
     boolean done = false;
     while (!done) {
@@ -769,6 +783,7 @@ public class FlameRenderer {
       renderThreads.add(t);
       if (pStartThreads) {
         Thread executingThread = new Thread(t);
+        executingThread.setPriority(Thread.MIN_PRIORITY);
         executingThreads.add(executingThread);
         executingThread.start();
       }
@@ -867,7 +882,9 @@ public class FlameRenderer {
     for (int i = 0; i < pThreads.size(); i++) {
       AbstractRenderThread t = pThreads.get(i);
       t.setResumeState(pState[i]);
-      new Thread(t).start();
+      Thread te = new Thread(t);
+      te.setPriority(Thread.MIN_PRIORITY);
+      te.start();
     }
   }
 
@@ -911,12 +928,13 @@ public class FlameRenderer {
         case INTERPOLATED_IMAGES:
         case SIDE_BY_SIDE:
         case ANAGLYPH:
-          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
+          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
         default: // nothing to do
           break;
       }
     }
-    return new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext);
+    FlameRendererView view = new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
+    return view;
   }
 
   public RenderThreads startRenderFlame(RenderInfo pRenderInfo) {
