@@ -103,6 +103,7 @@ import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
+import org.jwildfire.create.tina.quilt.QuiltRendererController;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
@@ -113,11 +114,7 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
-import org.jwildfire.create.tina.render.FlameRenderer;
-import org.jwildfire.create.tina.render.ProgressUpdater;
-import org.jwildfire.create.tina.render.RenderInfo;
-import org.jwildfire.create.tina.render.RenderMode;
-import org.jwildfire.create.tina.render.RenderedFlame;
+import org.jwildfire.create.tina.render.*;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
@@ -182,6 +179,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private MutaGenController mutaGenController;
   private MeshGenController meshGenController;
   private BatchRendererController batchRendererController;
+  private QuiltRendererController quiltRendererController;
   private TinaInteractiveRendererController interactiveRendererCtrl;
   private FlamesGPURenderController gpuRendererCtrl;
   private TinaSWFAnimatorController swfAnimatorCtrl;
@@ -289,6 +287,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
         parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn);
+
+
+    data.quiltRendererOpenFlameButton = parameterObject.quiltRendererOpenFlameButton;
+    data.quiltRendererImportFlameFromEditorButton = parameterObject.quiltRendererImportFlameFromEditorButton;
+    data.quiltRendererImportFlameFromClipboardButton = parameterObject.quiltRendererImportFlameFromClipboardButton;
+    data.quiltRendererQualityEdit = parameterObject.quiltRendererQualityEdit;
+    data.quiltRendererSegmentationLevelEdit = parameterObject.quiltRendererSegmentationLevelEdit;
+    data.quiltRendererRenderWidthEdit = parameterObject.quiltRendererRenderWidthEdit;
+    data.quiltRendererRenderHeightEdit = parameterObject.quiltRendererRenderHeightEdit;
+    data.quiltRendererSegmentWidthEdit = parameterObject.quiltRendererSegmentWidthEdit;
+    data.quiltRendererSegmentHeightEdit = parameterObject.quiltRendererSegmentHeightEdit;
+    data.quiltRendererOutputFilenameEdit = parameterObject.quiltRendererOutputFilenameEdit;
+    data.quiltRendererSegmentProgressBar = parameterObject.quiltRendererSegmentProgressBar;
+    data.quiltRendererTotalProgressBar = parameterObject.quiltRendererTotalProgressBar;
+    data.quiltRendererRenderButton = parameterObject.quiltRendererRenderButton;
+    data.quiltRendererPreviewRootPanel = parameterObject.quiltRendererPreviewRootPanel;
+
+    quiltRendererController = new QuiltRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data);
 
     meshGenController = new MeshGenController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel,
         parameterObject.meshGenFromEditorBtn, parameterObject.meshGenFromClipboardBtn, parameterObject.meshGenLoadFlameBtn,
@@ -2406,6 +2422,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     channelMixerControls.enableControls();
     enableUndoControls();
     getBatchRendererController().enableJobRenderControls();
+    getQuiltRendererController().enableControls();
     getAnimationController().enableControls();
     getLeapMotionMainEditorController().enableControls();
     getJwfScriptController().enableControls();
@@ -4250,6 +4267,15 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  public void resetColorsBtn_clicked() {
+    Flame flame = getCurrFlame();
+    if (flame != null) {
+      saveUndoPoint();
+      getCurrLayer().resetColors();
+      transformationChanged(true);
+    }
+  }
+
   public void randomizeColorSpeedBtn_clicked() {
     Flame flame = getCurrFlame();
     if (flame != null) {
@@ -5902,6 +5928,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public BatchRendererController getBatchRendererController() {
     return batchRendererController;
+  }
+
+  public QuiltRendererController getQuiltRendererController() {
+    return quiltRendererController;
   }
 
   public MainController getMainController() {

@@ -90,6 +90,14 @@ public class Layer implements Assignable<Layer>, Serializable {
     }
   }
 
+  public void resetColors() {
+    for (int i = 0; i < getXForms().size(); i++) {
+      XForm xForm = getXForms().get(i);
+      xForm.setColor(0.0);
+      xForm.setColorSymmetry(0.0);
+    }
+  }
+
   public void randomizeColorSpeed() {
     for (int i = 0; i < getXForms().size(); i++) {
       XForm xForm = getXForms().get(i);

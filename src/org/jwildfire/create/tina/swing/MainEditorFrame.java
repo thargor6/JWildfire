@@ -62,6 +62,7 @@ import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
+import org.jwildfire.create.tina.quilt.QuiltFlameRendererFrame;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
@@ -473,6 +474,7 @@ public class MainEditorFrame extends JFrame {
   private JToggleButton affineScaleXButton = null;
   private JToggleButton affineScaleYButton = null;
   private JButton randomizeColorsButton = null;
+  private JButton resetColorsButton = null;
   private JPanel gradientLibraryPanel = null;
   private JPanel gradientLibraryCenterPanel = null;
 
@@ -4426,6 +4428,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteSubSouthPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
       tinaPaletteSubSouthPanel.setLayout(null);
       tinaPaletteSubSouthPanel.add(getRandomizeColorsButton());
+      tinaPaletteSubSouthPanel.add(getResetColorsButton());
       tinaPaletteSubSouthPanel.add(getDistributeColorsButton());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftSlider());
       tinaPaletteSubSouthPanel.add(getTinaPaletteShiftREd());
@@ -4447,7 +4450,7 @@ public class MainEditorFrame extends JFrame {
       randomizeColorSpeedButton.setText("Rnd spd");
       randomizeColorSpeedButton.setPreferredSize(new Dimension(190, 24));
       randomizeColorSpeedButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      randomizeColorSpeedButton.setBounds(111, 58, 79, 24);
+      randomizeColorSpeedButton.setBounds(83, 58, 79, 24);
       tinaPaletteSubSouthPanel.add(randomizeColorSpeedButton);
 
       JButton randomizeColorShiftButton = new JButton();
@@ -5234,7 +5237,7 @@ public class MainEditorFrame extends JFrame {
 
   public TinaController createController(JWildfire pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenFrame mutaGenFrame,
                                          FlameBrowserFrame flameBrowserFrame, EasyMovieMakerFrame easyMovieMakerFrame,
-                                         DancingFlamesFrame dancingFlamesFrame, BatchFlameRendererFrame batchFlameRendererFrame,
+                                         DancingFlamesFrame dancingFlamesFrame, BatchFlameRendererFrame batchFlameRendererFrame, QuiltFlameRendererFrame quiltFlameRendererFrame,
                                          MeshGenInternalFrame meshGenFrame, InteractiveRendererFrame interactiveRendererFrame, FlamesGPURenderFrame gpuRendererFrame, HelpFrame helpFrame) {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), nonlinearVar1Lbl, getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
@@ -5336,6 +5339,13 @@ public class MainEditorFrame extends JFrame {
         batchFlameRendererFrame.getBatchQualityProfileCmb(), batchFlameRendererFrame.getBatchResolutionProfileCmb(),
         batchFlameRendererFrame.getBatchRenderOverrideCBx(), batchFlameRendererFrame.getBatchRenderShowImageBtn(),
         batchFlameRendererFrame.getEnableOpenClBtn());
+
+    params.setQuiltFlameRendererParams(quiltFlameRendererFrame.getOpenFlameButton(), quiltFlameRendererFrame.getImportFlameFromEditorButton(),
+            quiltFlameRendererFrame.getImportFlameFromClipboardButton(),
+            quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getSegmentationLevelEdit(), quiltFlameRendererFrame.getRenderWidthEdit(),
+            quiltFlameRendererFrame.getRenderHeightEdit(), quiltFlameRendererFrame.getSegmentWidthEdit(), quiltFlameRendererFrame.getSegmentHeightEdit(),
+            quiltFlameRendererFrame.getOutputFilenameEdit(), quiltFlameRendererFrame.getSegmentProgressBar(), quiltFlameRendererFrame.getTotalProgressBar(),
+            quiltFlameRendererFrame.getRenderButton(), quiltFlameRendererFrame.getPreviewRootPanel());
 
     params.setMeshGenParams(meshGenFrame.getMeshGenFromEditorBtn(), meshGenFrame.getMeshGenFromClipboardBtn(), meshGenFrame.getMeshGenLoadFlameBtn(),
         meshGenFrame.getMeshGenSliceCountREd(), meshGenFrame.getMeshGenSlicesPerRenderREd(), meshGenFrame.getMeshGenRenderWidthREd(),
@@ -11218,6 +11228,23 @@ private JLabel getAffineC21Lbl() {
       });
     }
     return randomizeColorsButton;
+  }
+
+  private JButton getResetColorsButton() {
+    if (resetColorsButton == null) {
+      resetColorsButton = new JButton();
+      resetColorsButton.setToolTipText("Set all color-values and color-speed-values to zero");
+      resetColorsButton.setBounds(166, 58, 79, 24);
+      resetColorsButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      resetColorsButton.setText("Reset clr");
+      resetColorsButton.setPreferredSize(new Dimension(190, 24));
+      resetColorsButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.resetColorsBtn_clicked();
+        }
+      });
+    }
+    return resetColorsButton;
   }
 
   /**

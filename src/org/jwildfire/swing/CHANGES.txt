@@ -1,3 +1,6 @@
+V3.60 (12.12.2018)
+ - new "reset clr"-button the "Gradient"-tab to reset all color-values and color-speed-values to 0
+
 V3.50 (28.07.2018)
  - removed the desktop and the Navigator-window in order to simplify and speed-up the user-interface
  - faster app-startup, there are now 3 random flames generated at start (and it is still faster than before)
