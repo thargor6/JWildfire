@@ -31,6 +31,8 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
   private int imageWidth;
   private int imageHeight;
   private RenderMode renderMode = RenderMode.PRODUCTION;
+  private double segmentRenderingCamXModifier = 0.0;
+  private double segmentRenderingCamYModifier = 0.0;
 
   protected RenderInfo() {
 
@@ -141,4 +143,19 @@ public class RenderInfo implements Assignable<RenderInfo>, Serializable {
     this.restoredRaster = restoredRaster;
   }
 
+  public double getSegmentRenderingCamXModifier() {
+    return segmentRenderingCamXModifier;
+  }
+
+  public void setSegmentRenderingCamXModifier(double segmentRenderingCamXModifier) {
+    this.segmentRenderingCamXModifier = segmentRenderingCamXModifier;
+  }
+
+  public double getSegmentRenderingCamYModifier() {
+    return segmentRenderingCamYModifier;
+  }
+
+  public void setSegmentRenderingCamYModifier(double segmentRenderingCamYModifier) {
+    this.segmentRenderingCamYModifier = segmentRenderingCamYModifier;
+  }
 }

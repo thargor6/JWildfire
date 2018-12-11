@@ -64,8 +64,10 @@ public class FlameRendererView {
   protected final Stereo3dEye eye;
   private double area, fade, areaMinusFade;
   private LightViewCalculator lightViewCalculator;
+  private double segmentRenderingCamXModifier = 0.0;
+  private double segmentRenderingCamYModifier = 0.0;
 
-  public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
+  public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
     flame = pFlame;
     randGen = pRandGen;
     borderWidth = pBorderWidth;
@@ -76,6 +78,10 @@ public class FlameRendererView {
     rasterHeight = pRasterHeight;
     eye = pEye;
     flameTransformationContext = pFlameTransformationContext;
+    if(renderInfo!=null) {
+      segmentRenderingCamXModifier = renderInfo.getSegmentRenderingCamXModifier();
+      segmentRenderingCamYModifier = renderInfo.getSegmentRenderingCamYModifier();
+    }
     init3D();
     initView();
     dofBlurShape = pFlame.getCamDOFShape().getDOFBlurShape();
@@ -163,6 +169,9 @@ public class FlameRendererView {
       rcX = -camX0;
       rcY = -camY0;
     }
+
+    rcX += segmentRenderingCamXModifier;
+    rcY += segmentRenderingCamYModifier;
   }
 
   public boolean project(XYZPoint pPoint, XYZProjectedPoint pProjectedPoint) {

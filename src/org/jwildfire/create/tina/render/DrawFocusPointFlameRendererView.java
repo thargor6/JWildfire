@@ -27,8 +27,8 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public class DrawFocusPointFlameRendererView extends FlameRendererView {
 
-  public DrawFocusPointFlameRendererView(Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext) {
-    super(Stereo3dEye.UNSPECIFIED, pFlame, pRandGen, pBorderWidth, pMaxBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight, pFlameTransformationContext);
+  public DrawFocusPointFlameRendererView(Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
+    super(Stereo3dEye.UNSPECIFIED, pFlame, pRandGen, pBorderWidth, pMaxBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight, pFlameTransformationContext, renderInfo);
   }
 
   @Override

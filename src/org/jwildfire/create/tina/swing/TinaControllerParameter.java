@@ -512,6 +512,21 @@ public class TinaControllerParameter {
   public JWFNumberField meshGenSmoothLambdaREd;
   public JWFNumberField meshGenSmoothMuREd;
 
+  public JButton quiltRendererOpenFlameButton;
+  public JButton quiltRendererImportFlameFromEditorButton;
+  public JButton quiltRendererImportFlameFromClipboardButton;
+  public JWFNumberField quiltRendererQualityEdit;
+  public JWFNumberField quiltRendererSegmentationLevelEdit;
+  public JWFNumberField quiltRendererRenderWidthEdit;
+  public JWFNumberField quiltRendererRenderHeightEdit;
+  public JWFNumberField quiltRendererSegmentWidthEdit;
+  public JWFNumberField quiltRendererSegmentHeightEdit;
+  public JTextField quiltRendererOutputFilenameEdit;
+  public JProgressBar quiltRendererSegmentProgressBar;
+  public JProgressBar quiltRendererTotalProgressBar;
+  public JButton quiltRendererRenderButton;
+  public JPanel quiltRendererPreviewRootPanel;
+
   public JButton channelMixerResetBtn;
   public JComboBox channelMixerModeCmb;
   public JPanel channelMixerRRRootPanel;
@@ -1427,6 +1442,28 @@ public class TinaControllerParameter {
     batchRenderOverrideCBx = pBatchRenderOverrideCBx;
     batchRenderShowImageBtn = pBatchRenderShowImageBtn;
     enableOpenClBtn = pEnableOpenClBtn;
+  }
+
+  public void setQuiltFlameRendererParams(JButton quiltRendererOpenFlameButton, JButton quiltRendererImportFlameFromEditorButton,
+        JButton quiltRendererImportFlameFromClipboardButton,
+        JWFNumberField quiltRendererQualityEdit, JWFNumberField quiltRendererSegmentationLevelEdit, JWFNumberField quiltRendererRenderWidthEdit,
+        JWFNumberField quiltRendererRenderHeightEdit, JWFNumberField quiltRendererSegmentWidthEdit, JWFNumberField quiltRendererSegmentHeightEdit,
+        JTextField quiltRendererOutputFilenameEdit, JProgressBar quiltRendererSegmentProgressBar, JProgressBar quiltRendererTotalProgressBar,
+        JButton quiltRendererRenderButton, JPanel quiltRendererPreviewRootPanel) {
+    this.quiltRendererOpenFlameButton = quiltRendererOpenFlameButton;
+    this.quiltRendererImportFlameFromEditorButton = quiltRendererImportFlameFromEditorButton;
+    this.quiltRendererImportFlameFromClipboardButton = quiltRendererImportFlameFromClipboardButton;
+    this.quiltRendererQualityEdit = quiltRendererQualityEdit;
+    this.quiltRendererSegmentationLevelEdit = quiltRendererSegmentationLevelEdit;
+    this.quiltRendererRenderWidthEdit = quiltRendererRenderWidthEdit;
+    this.quiltRendererRenderHeightEdit = quiltRendererRenderHeightEdit;
+    this.quiltRendererSegmentWidthEdit = quiltRendererSegmentWidthEdit;
+    this.quiltRendererSegmentHeightEdit = quiltRendererSegmentHeightEdit;
+    this.quiltRendererOutputFilenameEdit = quiltRendererOutputFilenameEdit;
+    this.quiltRendererSegmentProgressBar = quiltRendererSegmentProgressBar;
+    this.quiltRendererTotalProgressBar = quiltRendererTotalProgressBar;
+    this.quiltRendererRenderButton = quiltRendererRenderButton;
+    this.quiltRendererPreviewRootPanel = quiltRendererPreviewRootPanel;
   }
 
   public void setMeshGenParams(JButton pMeshGenFromEditorBtn, JButton pMeshGenFromClipboardBtn, JButton pMeshGenLoadFlameBtn,

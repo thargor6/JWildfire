@@ -35,6 +35,7 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 
+import csk.taprats.geometry.Rect;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.swing.ImagePanel;
 
@@ -510,4 +511,18 @@ public class TinaControllerData {
   public JPopupMenu thumbnailSelectPopupMenu;
   public JPopupMenu thumbnailRemovePopupMenu;
 
+  public JButton quiltRendererOpenFlameButton;
+  public JButton quiltRendererImportFlameFromEditorButton;
+  public JButton quiltRendererImportFlameFromClipboardButton;
+  public JWFNumberField quiltRendererQualityEdit;
+  public JWFNumberField quiltRendererSegmentationLevelEdit;
+  public JWFNumberField quiltRendererRenderWidthEdit;
+  public JWFNumberField quiltRendererRenderHeightEdit;
+  public JWFNumberField quiltRendererSegmentWidthEdit;
+  public JWFNumberField quiltRendererSegmentHeightEdit;
+  public JTextField quiltRendererOutputFilenameEdit;
+  public JProgressBar quiltRendererSegmentProgressBar;
+  public JProgressBar quiltRendererTotalProgressBar;
+  public JButton quiltRendererRenderButton;
+  public JPanel quiltRendererPreviewRootPanel;
 }

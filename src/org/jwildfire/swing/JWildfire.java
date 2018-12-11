@@ -50,6 +50,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.base.WindowPrefs;
 import org.jwildfire.create.iflames.swing.IFlamesFrame;
 import org.jwildfire.create.tina.faclrender.FACLRenderTools;
+import org.jwildfire.create.tina.quilt.QuiltFlameRendererFrame;
 import org.jwildfire.create.tina.random.RandomGeneratorFactory;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
@@ -76,6 +77,7 @@ public class JWildfire extends JApplet {
     mainInternalFrames.add(new DefaultJFrameHolder<>(EasyMovieMakerFrame.class, this, WindowPrefs.WINDOW_FLAMEBROWSER, "Fractal flames: Easy movie maker"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(DancingFlamesFrame.class, this, WindowPrefs.WINDOW_DANCINGFLAMES, "Fractal flames: Dancing flames"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(BatchFlameRendererFrame.class, this, WindowPrefs.WINDOW_BATCHFLAMERENDERER, "Fractal flames: Batch renderer"));
+    mainInternalFrames.add(new DefaultJFrameHolder<>(QuiltFlameRendererFrame.class, this, WindowPrefs.WINDOW_QUILTFLAMERENDERER, "Fractal flames: Quilt renderer"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(MeshGenInternalFrame.class, this, WindowPrefs.WINDOW_MESHGEN, "Fractal flames: Mesh generator"));
     mainInternalFrames.add(new DefaultJFrameHolder<>(VariationsSettingsFrame.class, this, WindowPrefs.WINDOW_VARIATIONSSETTINGS, "Fractal flames: Variations settings"));
     if (FACLRenderTools.isFaclRenderAvalailable()) {
@@ -185,6 +187,7 @@ public class JWildfire extends JApplet {
       EasyMovieMakerFrame easyMovieMakerFrame = getJFrame(EasyMovieMakerFrame.class);
       DancingFlamesFrame dancingFlamesFrame = getJFrame(DancingFlamesFrame.class);
       BatchFlameRendererFrame batchFlameRendererFrame = getJFrame(BatchFlameRendererFrame.class);
+      QuiltFlameRendererFrame quiltFlameRendererFrame = getJFrame(QuiltFlameRendererFrame.class);
       MeshGenInternalFrame meshGenFrame = getJFrame(MeshGenInternalFrame.class);
       InteractiveRendererFrame interactiveRendererFrame = getJFrame(InteractiveRendererFrame.class);
       VariationsSettingsFrame variationsSettingsFrame = getJFrame(VariationsSettingsFrame.class);
@@ -193,13 +196,14 @@ public class JWildfire extends JApplet {
       HelpFrame helpFrame = getJFrame(HelpFrame.class);
 
       MainEditorFrame mainEditorFrame = getJFrame(MainEditorFrame.class);
-      tinaController = mainEditorFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
+      tinaController = mainEditorFrame.createController(this, errorHandler, prefs, mutaGenFrame, flameBrowserFrame, easyMovieMakerFrame, dancingFlamesFrame, batchFlameRendererFrame, quiltFlameRendererFrame, meshGenFrame, interactiveRendererFrame, gpuRendererFrame, helpFrame);
 
       flameBrowserFrame.setTinaController(tinaController);
       mutaGenFrame.setTinaController(tinaController);
       easyMovieMakerFrame.setTinaController(tinaController);
       dancingFlamesFrame.setTinaController(tinaController);
       batchFlameRendererFrame.setTinaController(tinaController);
+      quiltFlameRendererFrame.setTinaController(tinaController);
       variationsSettingsFrame.setTinaController(tinaController);
       meshGenFrame.setTinaController(tinaController);
       interactiveRendererFrame.setTinaController(tinaController);

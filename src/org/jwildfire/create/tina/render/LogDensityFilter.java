@@ -57,6 +57,7 @@ public class LogDensityFilter {
   private final double filterRadiusA;
   private final double sharpness;
   private final double lowDensity;
+  private final int borderWidth;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {
     flame = pFlame;
@@ -66,6 +67,10 @@ public class LogDensityFilter {
     filterRadiusA = flame.getSpatialFilterRadius() + 0.25;
     sharpness = flame.getSpatialFilterSharpness();
     lowDensity = flame.getSpatialFilterLowDensity();
+
+    int lBorderWidth = (primaryFilter.getNoiseFilterSize() - flame.getSpatialOversampling()) / 2;
+    int lMaxBorderWidth = (FlameRenderer.MAX_FILTER_WIDTH - oversample) / 2;
+    borderWidth = (lBorderWidth+lMaxBorderWidth)/2;
 
     smoothingFilter = LogDensityFilterKernelProvider.getFilter(FilterKernelType.GAUSSIAN, flame.getSpatialOversampling(), 0.75);
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
@@ -162,11 +167,11 @@ public class LogDensityFilter {
   }
 
   private void getZSample(ZBufferSample pDest, int pX, int pY) {
-    raster.readZBufferSafe(pX, pY, pDest);
+    raster.readZBufferSafe(pX+borderWidth, pY+borderWidth, pDest);
   }
 
   private void getSample(LogDensityPoint pFilteredPnt, int pX, int pY) {
-    raster.readRasterPointSafe(pX, pY, pFilteredPnt.rp);
+    raster.readRasterPointSafe(pX+borderWidth, pY+borderWidth, pFilteredPnt.rp);
   }
 
   public double calcDensity(long pSampleCount, long pRasterSize) {
