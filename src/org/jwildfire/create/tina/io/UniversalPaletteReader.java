@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.io;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
@@ -23,7 +24,42 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class UniversalPaletteReader {
 
-  public List<RGBPalette> readPalettes(String pFilename) {
+  public List<RGBPalette> readPalettes(String filename) {
+    String extension = getFilenameExtension(filename);
+    if (Tools.FILEEXT_XML.equalsIgnoreCase(extension)) {
+      return new Flam3GradientReader().readPalettes(filename);
+    }
+    else if (Tools.FILEEXT_MAP.equalsIgnoreCase(extension)) {
+      return new MapGradientReader().readPalettes(filename);
+    }
+    else if (Tools.FILEEXT_UGR.equalsIgnoreCase(extension) || Tools.FILEEXT_GRADIENT.equalsIgnoreCase(extension)) {
+      return new UgrGradientReader().readPalettes(filename);
+    }
+    else if (Tools.FILEEXT_PNG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPEG.equalsIgnoreCase(extension)) {
+      return new ImgPaletteReader().readPalettes(filename);
+    }
+    else {
+      return null;
+    }
+  }
+
+  public List<RGBPalette> readPalettesFromStream(InputStream inputStream, String filename) {
+    String extension = getFilenameExtension(filename);
+    if (Tools.FILEEXT_XML.equalsIgnoreCase(extension)) {
+      return new Flam3GradientReader().readPalettesFromStream(inputStream, filename);
+    }
+    else if (Tools.FILEEXT_MAP.equalsIgnoreCase(extension)) {
+      return new MapGradientReader().readPalettesFromStream(inputStream, filename);
+    }
+    else if (Tools.FILEEXT_UGR.equalsIgnoreCase(extension) || Tools.FILEEXT_GRADIENT.equalsIgnoreCase(extension)) {
+      return new UgrGradientReader().readPalettesFromStream(inputStream, filename);
+    }
+    else {
+      return null;
+    }
+  }
+
+  private String getFilenameExtension(String pFilename) {
     String extension = "";
     {
       int i = pFilename.lastIndexOf('.');
@@ -31,21 +67,6 @@ public class UniversalPaletteReader {
         extension = pFilename.substring(i + 1);
       }
     }
-    if (Tools.FILEEXT_XML.equalsIgnoreCase(extension)) {
-      return new Flam3GradientReader().readPalettes(pFilename);
-    }
-    else if (Tools.FILEEXT_MAP.equalsIgnoreCase(extension)) {
-      return new MapGradientReader().readPalettes(pFilename);
-    }
-    else if (Tools.FILEEXT_UGR.equalsIgnoreCase(extension) || Tools.FILEEXT_GRADIENT.equalsIgnoreCase(extension)) {
-      return new UgrGradientReader().readPalettes(pFilename);
-    }
-    else if (Tools.FILEEXT_PNG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPG.equalsIgnoreCase(extension) || Tools.FILEEXT_JPEG.equalsIgnoreCase(extension)) {
-      return new ImgPaletteReader().readPalettes(pFilename);
-    }
-    else {
-      return null;
-    }
+    return extension;
   }
-
 }

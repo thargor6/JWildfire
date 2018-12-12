@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.io;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +30,23 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 
 public class MapGradientReader {
 
-  public List<RGBPalette> readPalettes(String pFilename) {
+  public List<RGBPalette> readPalettes(String filename) {
     try {
-      String mapData = new String(Tools.readFile(pFilename));
-      return readPaletteFromMapData(mapData, pFilename);
+      String mapData = new String(Tools.readFile(filename));
+      return readPaletteFromMapData(mapData, filename);
     }
     catch (Exception ex) {
-      throw new RuntimeException(pFilename, ex);
+      throw new RuntimeException(filename, ex);
+    }
+  }
+
+  public List<RGBPalette> readPalettesFromStream(InputStream inputStream, String filename) {
+    try {
+      String mapData = new String(Tools.getBytesFromInputStream(inputStream));
+      return readPaletteFromMapData(mapData, filename);
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(filename, ex);
     }
   }
 
@@ -70,4 +81,5 @@ public class MapGradientReader {
     gradient.setColors(colors, false, false);
     return res;
   }
+
 }

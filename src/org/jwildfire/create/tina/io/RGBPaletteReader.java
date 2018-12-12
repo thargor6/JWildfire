@@ -22,6 +22,6 @@ import java.util.List;
 import org.jwildfire.create.tina.palette.RGBPalette;
 
 public interface RGBPaletteReader {
-
-  public List<RGBPalette> readPalettes(InputStream pInputStream);
+  List<RGBPalette> readPalettes(InputStream pInputStream);
+  List<RGBPalette> readPalettesFromStream(InputStream inputStream, String filename);
 }

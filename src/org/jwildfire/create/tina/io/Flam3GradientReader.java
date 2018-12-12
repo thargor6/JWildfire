@@ -53,6 +53,17 @@ public class Flam3GradientReader implements RGBPaletteReader {
     }
   }
 
+  @Override
+  public List<RGBPalette> readPalettesFromStream(InputStream inputStream, String filename) {
+    try {
+      String flamesXML = new String(Tools.getBytesFromInputStream(inputStream), "UTF-8");
+      return readPalettesFromXML(flamesXML);
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
   public List<RGBPalette> readPalettes(String pFilename) {
     try {
       String flamesXML = Tools.readUTF8Textfile(pFilename);

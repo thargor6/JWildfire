@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.io;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,16 @@ public class UgrGradientReader {
     }
     catch (Exception ex) {
       throw new RuntimeException(pFilename, ex);
+    }
+  }
+
+  public List<RGBPalette> readPalettesFromStream(InputStream inputStream, String filename) {
+    try {
+      String gradientUgr = new String(Tools.getBytesFromInputStream(inputStream), "UTF-8");
+      return readPalettesFromUgr(gradientUgr);
+    }
+    catch (Exception ex) {
+      throw new RuntimeException(filename, ex);
     }
   }
 
@@ -112,4 +123,5 @@ public class UgrGradientReader {
     }
     pPalette.setColors(colors, doInterpolate, doSmooth);
   }
+
 }
