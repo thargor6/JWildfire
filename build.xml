@@ -69,6 +69,9 @@
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
       <fileset dir="${build.dir}" includes="megamu/"/>
+	  <fileset dir="${build.dir}" includes="js/mandala/"/>
+	  <fileset dir="${build.dir}" includes="js/colordomain/"/>
+	  <fileset dir="${build.dir}" includes="hehl/"/>
       <zipfileset src="lib/quickhull3d.1.4.jar"/>		
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
