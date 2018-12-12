@@ -38,7 +38,7 @@ package csk.taprats.geometry;
  * in long calculations.
  */
 
-public class Point
+public class Point extends Primitive
 	implements Cloneable
 {
 	public static final double TOLERANCE = 1.0E-7;
@@ -58,6 +58,7 @@ public class Point
 
 	public Point( double x, double y )
 	{
+		super(1);
 		this.x = x;
 		this.y = y;
 	}
@@ -69,6 +70,7 @@ public class Point
 	
 	public Point(double x,double y,double color)
 	{
+		super(1);
 		this.x=x;
 		this.y=y;
 		this.color=color;

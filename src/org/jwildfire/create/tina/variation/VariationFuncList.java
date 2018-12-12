@@ -651,6 +651,22 @@ public class VariationFuncList {
     registerVariationFunc(Affine3DFunc.class);
     registerVariationFunc(Q_odeFunc.class);
     
+
+    registerVariationFunc(CurliecueFunc.class);
+    registerVariationFunc(CurliecueFunc2.class);
+    registerVariationFunc(SZubietaFunc.class); 
+    registerVariationFunc(StarFractalFunc.class);
+    registerVariationFunc(TrianTruchetFunc.class);
+    registerVariationFunc(ArcTruchetFunc.class);
+    registerVariationFunc(SwirlWFFunc.class);
+    registerVariationFunc(MandalaFunc.class);
+    registerVariationFunc(MandalaTestFunc.class);
+    registerVariationFunc(JacAsnFunc.class); 
+    registerVariationFunc(ColorDomainFunc.class); 
+    
+    registerVariationFunc(InvSquircularFunc.class);
+    registerVariationFunc(SquircularFunc.class);
+    
     registerVariationFunc(PyramidFunc.class);
     registerVariationFunc(CornersFunc.class);  
     registerVariationFunc(CscSquaredFunc.class);  
@@ -660,6 +676,7 @@ public class VariationFuncList {
     registerVariationFunc(ArcsinhFunc.class);
     registerVariationFunc(Arcsech2Func.class);
     registerVariationFunc(ArctanhFunc.class);
+
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
