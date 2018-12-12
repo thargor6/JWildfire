@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -1002,7 +1003,7 @@ public class JWFScriptController {
     }
   }
 
-  public void importSchriptBtn_clicked() {
+  public void importSchriptsBtn_clicked() {
     try {
 
       JFileChooser fileChooser = new JFileChooser();
@@ -1035,41 +1036,72 @@ public class JWFScriptController {
           throw new Exception("Could not unzip file \"" + filename + "\"");
         }
 
-        String scriptExtension = ".jwfscript";
-        String scriptName = null;
+
+        final String scriptExtension = ".jwfscript";
+        final String gradientExtension = ".ugr";
+        int scriptCount=0;
+        List<String> importedScripts=new ArrayList<>();
         for (String entryName : content.keySet()) {
-          if (entryName.endsWith(scriptExtension)) {
-            scriptName = entryName.substring(0, entryName.length() - scriptExtension.length());
-            break;
+          String extension;
+          if(entryName.endsWith(scriptExtension)) {
+            extension = scriptExtension;
+          }
+          else if(entryName.endsWith(gradientExtension)) {
+            extension = gradientExtension;
+          }
+          else {
+            extension = null;
+          }
+          if (extension!=null) {
+            String rawScriptName = entryName.substring(0, entryName.length() -(extension.length()));
+            String scriptName = rawScriptName;
+            if(scriptName.contains("\\")) {
+              scriptName = scriptName.substring(scriptName.lastIndexOf("\\")+1, scriptName.length());
+            }
+            if(scriptName.contains("/")) {
+              scriptName = scriptName.substring(scriptName.lastIndexOf("/")+1, scriptName.length());
+            }
+            scriptCount++;
+
+            String baseDrawer = prefs.getTinaJWFScriptPath();
+            if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
+              throw new Exception("Invalid script-drawer. Please enter a valid script-path in the Preferences-Window (property \"tinaJWFScriptPath\")");
+            }
+            File destinationFile = new File(baseDrawer, scriptName + extension);
+            if (!destinationFile.exists() || JOptionPane.showConfirmDialog(null,
+                    "The destination-file \""+scriptName+extension+"\"already exists. Do you want to overwrite it?",
+                    "Warning",
+                    JOptionPane.YES_NO_OPTION) == 0) {
+              Tools.writeFile(destinationFile.getAbsolutePath(), content.get(rawScriptName + extension));
+              String descExtension = ".txt";
+              byte description[] = content.get(rawScriptName + descExtension);
+              if (description != null) {
+                Tools.writeFile(new File(baseDrawer, scriptName + descExtension).getAbsolutePath(), content.get(rawScriptName + descExtension));
+              }
+              importedScripts.add(scriptName);
+            }
           }
         }
 
-        if (scriptName == null) {
+        if (scriptCount==0) {
           throw new Exception("File \"" + filename + "\" does not contain a script-file with \"*" + scriptExtension + "\"-extension");
         }
-
-
-        String baseDrawer = prefs.getTinaJWFScriptPath();
-        if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
-          throw new Exception("Invalid script-drawer. Please enter a valid script-path in the Prefenences-Window (property \"tinaJWFScriptPath\")");
-        }
-
-
-        File destinationFile = new File(baseDrawer, scriptName + scriptExtension);
-        if (!destinationFile.exists() || JOptionPane.showConfirmDialog(null,
-                "The destination-file already exists. Do you want to overwrite it?",
-                "Warning",
-                JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
-          Tools.writeFile(destinationFile.getAbsolutePath(), content.get(scriptName + scriptExtension));
-          String descExtension = ".txt";
-          byte description[] = content.get(scriptName + descExtension);
-          if (description != null) {
-            Tools.writeFile(new File(baseDrawer, scriptName + descExtension).getAbsolutePath(), content.get(scriptName + descExtension));
-          }
+        if(!importedScripts.isEmpty()) {
           initScriptLibrary();
-
-          JOptionPane.showMessageDialog(rootPanel, "Script \"" + scriptName + "\" was imported successfully");
+          String msg;
+          if(importedScripts.size()==1) {
+            msg = "The script \"" + importedScripts.get(0) + "\" was imported successfully";
+          }
+          else {
+            String scriptsNames = importedScripts.stream().collect(Collectors.joining("\", \""));
+            if(scriptsNames.length()>64) {
+              scriptsNames = scriptsNames.substring(0, 64)+ "...";
+            }
+            msg = importedScripts.size()+ " scripts \"" + scriptsNames + "\" where imported successfully";
+          }
+          JOptionPane.showMessageDialog(rootPanel, msg);
         }
+
       }
     } catch (Exception ex) {
       errorHandler.handleError(ex);
