@@ -188,7 +188,9 @@ public class JWFScriptController {
               "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
               "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
               "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
+
               "UG-", "UG-Ran", "UG-Ran2", "UG-Ran2sym", "UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
+
               "HB  0 Final 2 Galaxies", "HB 0 2 Galaxy Final Test", "HB 0 Final 2 Galaxies-cloudier", "HB 0 Final 2 Galaxiesv2",
               "HB 0 Final 2 Gassv2", "HB 0 Single  Galaxy", "HB 1 planetoid", "HB 2  Gas Clouds", "HB 2  Gas CloudsRan",
               "HB 2 Galaxies Gas Broad", "HB 2 Galaxies Gas Cluster", "HB 2 Galaxies Gas DoubleBroad", "HB 2 Galaxies Positive",
@@ -196,6 +198,12 @@ public class JWFScriptController {
               "HB 2 planetoid smooth", "HB 2 planetoids cloudy", "HB 2 planetoids", "HB 2moons-craters", "HB Galaxy 2 Gas Clouds",
               "HB Galaxy1", "HB Galaxy1a", "HB Galaxy2moontest", "HB Moon Generator", "HB Moon Surface Generator", "  HB Moon Zoom Generator II",
               "HB Planet Generator", "HB Single Galaxy",
+
+              "SX 00 I am Ace  in space", "SX 00 I am Ace  in space2", "SX 00 I am Ace  in space3", "SX 00 I am Julia in space pitch",
+              "SX 00 I am Julia in space", "SX 00 I am Julia", "SX 00 I am RanJulia in space", "SX 00 I am RanJulia",
+              "SX 0 I am Lovely", "SX 1 I am Peaceful", "SX 1 I am PeacefulRC", "SX 2 I make you think", "SX 3 I need printing",
+              "SX 4 I need love", "SX 5 I need patience", "SX 6 I need Tweaks", "SX 7 I make you wonder", "SX hole2Split",
+              "SX jispostz", "SX LoonieSplit", "SX octagon2Split", "SX rings2Split", "SX squarize2Split", "SX tancos2Split",
 
               "Wedge_Sph_Marble"};
       List<String> resLst = Arrays.asList(ressources);
