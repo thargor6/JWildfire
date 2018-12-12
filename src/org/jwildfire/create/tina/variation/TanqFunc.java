@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import odk.lang.FastMath;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -28,7 +29,7 @@ public class TanqFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Tanq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(pAffineTP.x);
     double sysz = sqr(pAffineTP.y) + sqr(pAffineTP.z);
     double ni = pAmount / (sqr(pAffineTP.x) + sysz);

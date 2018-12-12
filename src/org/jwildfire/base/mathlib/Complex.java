@@ -1,5 +1,7 @@
 package org.jwildfire.base.mathlib;
 
+import odk.lang.FastMath;
+
 // Complex class by dark-beam
 /*
   *** Basic & Constructors ***
@@ -350,7 +352,7 @@ public class Complex {
   // Trascendent functions (slower than others)
 
   public double Radius() {
-    return Math.hypot(re, im);
+    return FastMath.hypot(re, im);
   }
 
   public double Arg() {

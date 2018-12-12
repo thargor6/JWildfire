@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import odk.lang.FastMath;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -31,7 +32,7 @@ public class GammaFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // "gamma" variation created by zephyrtronium implemented into JWildfire by darkbeam
 
-    pVarTP.x += lgamma(Math.hypot(pAffineTP.y, pAffineTP.x)) * pAmount;
+    pVarTP.x += lgamma(FastMath.hypot(pAffineTP.y, pAffineTP.x)) * pAmount;
     pVarTP.y += atan2(pAffineTP.y, pAffineTP.x) * pAmount;
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;

@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import odk.lang.FastMath;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -28,7 +29,7 @@ public class CscqFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cscq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(pAffineTP.x);
     double c = cos(pAffineTP.x);
     double sh = sinh(abs_v);

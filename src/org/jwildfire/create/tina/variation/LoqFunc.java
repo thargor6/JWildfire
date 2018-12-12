@@ -16,6 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
+import odk.lang.FastMath;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -41,7 +42,7 @@ public class LoqFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Loq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double abs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
     double C = pAmount * atan2(abs_v, pAffineTP.x) / abs_v;
     pVarTP.x += log(sqr(pAffineTP.x) + sqr(abs_v)) * denom;
     pVarTP.y += C * pAffineTP.y;

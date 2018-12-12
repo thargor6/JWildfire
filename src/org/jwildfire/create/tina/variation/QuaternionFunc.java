@@ -16,6 +16,7 @@
  */
 package org.jwildfire.create.tina.variation;
 
+import odk.lang.FastMath;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -281,7 +282,7 @@ public class QuaternionFunc extends VariationFunc {
     double x = 0.0, y = 0.0, z = 0.0;
 
     if (cosqpow != 0) {
-      double cosqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * cosqz1;
+      double cosqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * cosqz1;
       double cosqs = sin(pAffineTP.x * cosqx1);
       double cosqc = cos(pAffineTP.x * cosqx2);
       double cosqsh = sinh(cosqabs_v * cosqy1);
@@ -293,7 +294,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (coshqpow != 0) {
-      double coshqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * coshqz1;
+      double coshqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * coshqz1;
       double coshqs = sin(coshqabs_v * coshqy1);
       double coshqc = cos(coshqabs_v * coshqy2);
       double coshqsh = sinh(pAffineTP.x * coshqx1);
@@ -304,7 +305,7 @@ public class QuaternionFunc extends VariationFunc {
       z += coshqpow * coshqC * pAffineTP.z;
     }
     if (cotqpow != 0) {
-      double cotqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * cotqz1;
+      double cotqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * cotqz1;
       double cotqs = sin(pAffineTP.x * cotqx1);
       double cotqc = cos(pAffineTP.x * cotqx2);
       double cotqsh = sinh(cotqabs_v * cotqy1);
@@ -327,7 +328,7 @@ public class QuaternionFunc extends VariationFunc {
 
     }
     if (cothqpow != 0) {
-      double cothqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * cothqz1;
+      double cothqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * cothqz1;
       double cothqs = sin(cothqabs_v * cothqy1);
       double cothqc = cos(cothqabs_v * cothqy2);
       double cothqsh = sinh(pAffineTP.x * cothqx1);
@@ -350,7 +351,7 @@ public class QuaternionFunc extends VariationFunc {
               * cothqctcv) * cothqni;
     }
     if (cscqpow != 0) {
-      double cscqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * cscqz1;
+      double cscqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * cscqz1;
       double cscqs = sin(pAffineTP.x * cscqx1);
       double cscqc = cos(pAffineTP.x * cscqx2);
       double cscqsh = sinh(cscqabs_v * cscqy1);
@@ -364,7 +365,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (cschqpow != 0) {
-      double cschqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * cschqz1;
+      double cschqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * cschqz1;
       double cschqs = sin(cschqabs_v * cschqy1);
       double cschqc = cos(cschqabs_v * cschqy2);
       double cschqsh = sinh(pAffineTP.x * cschqx1);
@@ -378,7 +379,7 @@ public class QuaternionFunc extends VariationFunc {
     }
     if (estiqpow != 0) {
       double estiqe = exp(pAffineTP.x * estiqx1);
-      double estiqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * estiqz1;
+      double estiqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * estiqz1;
       double estiqs = sin(estiqabs_v * estiqy1);
       double estiqc = cos(estiqabs_v * estiqy2);
       double estiqa = estiqe * estiqs / estiqabs_v * estiqz2;
@@ -389,7 +390,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (logqpow != 0) {
-      double logqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+      double logqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z);
       double logqC = pAmount * atan2(logqabs_v, pAffineTP.x) / logqabs_v;
       x += logqpow * log(sqr(pAffineTP.x) + sqr(logqabs_v)) * denom;
       y += logqpow * logqC * pAffineTP.y;
@@ -397,7 +398,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (secqpow != 0) {
-      double secqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * secqz1;
+      double secqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * secqz1;
       double secqs = sin(-pAffineTP.x * secqx1);
       double secqc = cos(-pAffineTP.x * secqx2);
       double secqsh = sinh(secqabs_v * secqy1);
@@ -411,7 +412,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (sechqpow != 0) {
-      double sechqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * sechqz1;
+      double sechqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * sechqz1;
       double sechqs = sin(sechqabs_v * sechqy1);
       double sechqc = cos(sechqabs_v * sechqy2);
       double sechqsh = sinh(pAffineTP.x * sechqx1);
@@ -425,7 +426,7 @@ public class QuaternionFunc extends VariationFunc {
     }
 
     if (tanqpow != 0) {
-      double tanqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * tanqz1;
+      double tanqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * tanqz1;
       double tanqs = sin(pAffineTP.x * tanqx1);
       double tanqc = cos(pAffineTP.x * tanqx2);
       double tanqsh = sinh(tanqabs_v * tanqy1);
@@ -447,7 +448,7 @@ public class QuaternionFunc extends VariationFunc {
               * tanqctcv) * tanqni;
     }
     if (tanhqpow != 0) {
-      double tanhqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * tanhqz1;
+      double tanhqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * tanhqz1;
       double tanhqs = sin(tanhqabs_v * tanhqy1);
       double tanhqc = cos(tanhqabs_v * tanhqy2);
       double tanhqsh = sinh(pAffineTP.x * tanhqx1);
@@ -470,7 +471,7 @@ public class QuaternionFunc extends VariationFunc {
               * tanhqctcv) * tanhqni;
     }
     if (sinqpow != 0) {
-      double sinqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * sinqz1;
+      double sinqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * sinqz1;
       double sinqs = sin(pAffineTP.x * sinqx1);
       double sinqc = cos(pAffineTP.x * sinqx2);
       double sinqsh = sinh(sinqabs_v * sinqy1);
@@ -481,7 +482,7 @@ public class QuaternionFunc extends VariationFunc {
       z += sinqpow * sinqC * pAffineTP.z;
     }
     if (sinhqpow != 0) {
-      double sinhqabs_v = Math.hypot(pAffineTP.y, pAffineTP.z) * sinhqz1;
+      double sinhqabs_v = FastMath.hypot(pAffineTP.y, pAffineTP.z) * sinhqz1;
       double sinhqs = sin(sinhqabs_v * sinhqy1);
       double sinhqc = cos(sinhqabs_v * sinhqy2);
       double sinhqsh = sinh(pAffineTP.x * sinhqx1);
