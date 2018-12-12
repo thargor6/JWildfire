@@ -576,14 +576,12 @@ public class VariationFuncList {
     registerVariationFunc(HamidFunc.class);
     registerVariationFunc(TreeFunc.class);
     registerVariationFunc(BrownianFunc.class);
-
     registerVariationFunc(DragonFunc.class);
     registerVariationFunc(GosperIslandFunc.class);
     registerVariationFunc(HtreeFunc.class);
     registerVariationFunc(KochFunc.class);
     registerVariationFunc(RsquaresFunc.class);
     registerVariationFunc(HilbertFunc.class);
-
     registerVariationFunc(SattractorFunc.class);
     registerVariationFunc(WallPaperFunc.class);
     registerVariationFunc(HadamardFunc.class);
@@ -597,7 +595,6 @@ public class VariationFuncList {
     registerVariationFunc(CliffordFunc.class);
     registerVariationFunc(SvenssonFunc.class);
     registerVariationFunc(LorenzFunc.class);
-
     registerVariationFunc(PreStabilizeFunc.class);
     registerVariationFunc(PreSphericalFunc.class);
     registerVariationFunc(PostSphericalFunc.class);
@@ -605,58 +602,46 @@ public class VariationFuncList {
     registerVariationFunc(PrePostAffineFunc.class);
     registerVariationFunc(PrePostCirclizeFunc.class);
     registerVariationFunc(PTransformFunc.class);
-
     registerVariationFunc(InversionFunc.class);
     registerVariationFunc(KleinGroupFunc.class);
     registerVariationFunc(DCDModulusFunc.class);
     registerVariationFunc(DCGnarlyFunc.class);
-
     registerVariationFunc(Strange3DFunc.class);
     registerVariationFunc(DustPointFunc.class);     
     registerVariationFunc(IconAttractorFunc.class);
     registerVariationFunc(ApollonyFunc.class); 
     registerVariationFunc(ChrysanthemumFunc.class);  
     registerVariationFunc(SeaShell3DFunc.class);            
-    registerVariationFunc(ThreePointIFSFunc.class);  
-    
+    registerVariationFunc(ThreePointIFSFunc.class);
     registerVariationFunc(Knots3DFunc.class);
     registerVariationFunc(RecurrencePlotFunc.class);  
     registerVariationFunc(MacMillanFunc.class);  
-
- 
-    registerVariationFunc(RingSubFlameFunc.class);  
+    registerVariationFunc(RingSubFlameFunc.class);
     registerVariationFunc(GlynnS3SubflWFFunc.class);  
-    registerVariationFunc(FracTerrain3DFunc.class);  
-
+    registerVariationFunc(FracTerrain3DFunc.class);
     registerVariationFunc(Disc3Func.class);  
     registerVariationFunc(DCKaleidotileFunc.class);   
     registerVariationFunc(LazySensenFunc.class);
     registerVariationFunc(ProjectiveFunc.class);
     registerVariationFunc(LoziFunc.class);
     registerVariationFunc(Vibration2Func.class);
-    registerVariationFunc(PulseFunc.class);    
-    
-    registerVariationFunc(WangTilesFunc.class);   
-   
+    registerVariationFunc(PulseFunc.class);
+    registerVariationFunc(WangTilesFunc.class);
     registerVariationFunc(TapratsFunc.class);    
     registerVariationFunc(GPatternFunc.class);    
-    registerVariationFunc(NSudokuFunc.class);   
-    
+    registerVariationFunc(NSudokuFunc.class);
     registerVariationFunc(AnamorphCylFunc.class);
     registerVariationFunc(HyperbolicEllipseFunc.class);
     registerVariationFunc(SunFlowersFunc.class);
     registerVariationFunc(SunflowerVoroniFunc.class);
-
     registerVariationFunc(Cylinder2Func.class);
     registerVariationFunc(Affine3DFunc.class);
     registerVariationFunc(Q_odeFunc.class);
-    
     registerVariationFunc(PyramidFunc.class);
     registerVariationFunc(CornersFunc.class);  
     registerVariationFunc(CscSquaredFunc.class);  
     registerVariationFunc(Atan2_SpiralsFunc.class);  
     registerVariationFunc(IntersectionFunc.class);
-
     registerVariationFunc(InvpolarFunc.class);
     registerVariationFunc(StripfitFunc.class);
     registerVariationFunc(Hypershift2Func.class);
@@ -665,8 +650,6 @@ public class VariationFuncList {
     registerVariationFunc(ArcsinhFunc.class);
     registerVariationFunc(Arcsech2Func.class);
     registerVariationFunc(ArctanhFunc.class);
-
-
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
