@@ -35,7 +35,34 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -1279,6 +1306,24 @@ public class MainEditorFrame extends JFrame {
       });
       panel_3.add(leapMotionClearButton);
       panel_1.add(getPanel_111(), BorderLayout.CENTER);
+
+      JPanel panel_1_1 = new JPanel();
+      tinaSouthTabbedPane.addTab("Misc", null, panel_1_1, null);
+      panel_1_1.setLayout(null);
+
+      randomizeBtn = new JButton();
+      randomizeBtn.setBounds(6, 6, 213, 24);
+      panel_1_1.add(randomizeBtn);
+      randomizeBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.randomizeBtn_clicked();
+        }
+      });
+      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
+      randomizeBtn.setText("Randomize all");
+      randomizeBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      randomizeBtn.setSelected(false);
+      randomizeBtn.setPreferredSize(new Dimension(42, 24));
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -3264,25 +3309,7 @@ public class MainEditorFrame extends JFrame {
       });
       tinaEastTabbedPane.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaEastTabbedPane.addTab("Transformations", null, getTinaTransformationsPanel(), null);
-      tinaEastTabbedPane.addTab("Scripts", null, getScriptPanel(), null);
-
-      JPanel panel_1 = new JPanel();
-      tinaEastTabbedPane.addTab("Misc", null, panel_1, null);
-      panel_1.setLayout(null);
-
-      randomizeBtn = new JButton();
-      randomizeBtn.setBounds(6, 6, 213, 24);
-      panel_1.add(randomizeBtn);
-      randomizeBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.randomizeBtn_clicked();
-        }
-      });
-      randomizeBtn.setToolTipText("Randomize random parameters of the current flame");
-      randomizeBtn.setText("Randomize all");
-      randomizeBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
-      randomizeBtn.setSelected(false);
-      randomizeBtn.setPreferredSize(new Dimension(42, 24));
+      tinaEastTabbedPane.addTab("Scripts and Custom-Buttons", null, getScriptPanel(), null);
     }
     return tinaEastTabbedPane;
   }
@@ -5236,9 +5263,9 @@ public class MainEditorFrame extends JFrame {
   }
 
   public TinaController createController(JWildfire pDesktop, StandardErrorHandler pErrorHandler, Prefs pPrefs, MutaGenFrame mutaGenFrame,
-                                         FlameBrowserFrame flameBrowserFrame, EasyMovieMakerFrame easyMovieMakerFrame,
-                                         DancingFlamesFrame dancingFlamesFrame, BatchFlameRendererFrame batchFlameRendererFrame, QuiltFlameRendererFrame quiltFlameRendererFrame,
-                                         MeshGenInternalFrame meshGenFrame, InteractiveRendererFrame interactiveRendererFrame, FlamesGPURenderFrame gpuRendererFrame, HelpFrame helpFrame) {
+      FlameBrowserFrame flameBrowserFrame, EasyMovieMakerFrame easyMovieMakerFrame,
+      DancingFlamesFrame dancingFlamesFrame, BatchFlameRendererFrame batchFlameRendererFrame, QuiltFlameRendererFrame quiltFlameRendererFrame,
+      MeshGenInternalFrame meshGenFrame, InteractiveRendererFrame interactiveRendererFrame, FlamesGPURenderFrame gpuRendererFrame, HelpFrame helpFrame) {
     nonlinearControlsRows = new TinaNonlinearControlsRow[12];
     nonlinearControlsRows[0] = new TinaNonlinearControlsRow(0, getNonlinearVar1Panel(), nonlinearVar1Lbl, getNonlinearVar1Cmb(), getNonlinearParams1Cmb(), getNonlinearVar1REd(),
         getNonlinearParams1REd(), getNonlinearParams1LeftButton(), getNonlinearParams1PreButton(), getNonlinearParams1PostButton(), null,
@@ -5341,11 +5368,11 @@ public class MainEditorFrame extends JFrame {
         batchFlameRendererFrame.getEnableOpenClBtn());
 
     params.setQuiltFlameRendererParams(quiltFlameRendererFrame.getOpenFlameButton(), quiltFlameRendererFrame.getImportFlameFromEditorButton(),
-            quiltFlameRendererFrame.getImportFlameFromClipboardButton(),
-            quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getSegmentationLevelEdit(), quiltFlameRendererFrame.getRenderWidthEdit(),
-            quiltFlameRendererFrame.getRenderHeightEdit(), quiltFlameRendererFrame.getSegmentWidthEdit(), quiltFlameRendererFrame.getSegmentHeightEdit(),
-            quiltFlameRendererFrame.getOutputFilenameEdit(), quiltFlameRendererFrame.getSegmentProgressBar(), quiltFlameRendererFrame.getTotalProgressBar(),
-            quiltFlameRendererFrame.getRenderButton(), quiltFlameRendererFrame.getPreviewRootPanel());
+        quiltFlameRendererFrame.getImportFlameFromClipboardButton(),
+        quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getSegmentationLevelEdit(), quiltFlameRendererFrame.getRenderWidthEdit(),
+        quiltFlameRendererFrame.getRenderHeightEdit(), quiltFlameRendererFrame.getSegmentWidthEdit(), quiltFlameRendererFrame.getSegmentHeightEdit(),
+        quiltFlameRendererFrame.getOutputFilenameEdit(), quiltFlameRendererFrame.getSegmentProgressBar(), quiltFlameRendererFrame.getTotalProgressBar(),
+        quiltFlameRendererFrame.getRenderButton(), quiltFlameRendererFrame.getPreviewRootPanel());
 
     params.setMeshGenParams(meshGenFrame.getMeshGenFromEditorBtn(), meshGenFrame.getMeshGenFromClipboardBtn(), meshGenFrame.getMeshGenLoadFlameBtn(),
         meshGenFrame.getMeshGenSliceCountREd(), meshGenFrame.getMeshGenSlicesPerRenderREd(), meshGenFrame.getMeshGenRenderWidthREd(),
@@ -5388,7 +5415,7 @@ public class MainEditorFrame extends JFrame {
         getTinaPaletteContrastREd(), getTinaPaletteContrastSlider(), getTinaPaletteGammaREd(), getTinaPaletteGammaSlider(), getTinaPaletteBrightnessREd(),
         getTinaPaletteBrightnessSlider(), getTinaPaletteSwapRGBREd(), getTinaPaletteSwapRGBSlider(),
         getTinaPaletteFrequencyREd(), getTinaPaletteFrequencySlider(), getTinaPaletteBlurREd(), getTinaPaletteBlurSlider(), getTinaPaletteInvertBtn(), getTinaPaletteReverseBtn(),
-        getTinaTransformationsTable(), 
+        getTinaTransformationsTable(),
         getAffineC00Lbl(), getAffineC01Lbl(), getAffineC10Lbl(), getAffineC11Lbl(), getAffineC00REd(),
         getAffineC01REd(), getAffineC10REd(), getAffineC11REd(), getAffineC20REd(), getAffineC21REd(), getAffineRotateAmountREd(), getAffineScaleAmountREd(),
         getAffineMoveHorizAmountREd(), getAffineRotateLeftButton(), getAffineRotateRightButton(), getAffineEnlargeButton(), getAffineShrinkButton(),
@@ -5891,77 +5918,77 @@ public class MainEditorFrame extends JFrame {
     }
     return affineC00Lbl;
   }
-  
+
   private JLabel getAffineC01Lbl() {
-	    if (affineC01Lbl == null) {
-	        affineC01Lbl = new JLabel();
-	        affineC01Lbl.setName("affineC01Lbl");
-	        affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-	        affineC01Lbl.setText("X2");
-	        affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-	        affineC01Lbl.setLocation(new Point(0, 30));
-	        affineC01Lbl.setSize(new Dimension(20, 22));
-	        affineC01Lbl.setPreferredSize(new Dimension(24, 22));
-	    }
-	    return affineC01Lbl;
-	  }
-	  
+    if (affineC01Lbl == null) {
+      affineC01Lbl = new JLabel();
+      affineC01Lbl.setName("affineC01Lbl");
+      affineC01Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC01Lbl.setText("X2");
+      affineC01Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC01Lbl.setLocation(new Point(0, 30));
+      affineC01Lbl.setSize(new Dimension(20, 22));
+      affineC01Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC01Lbl;
+  }
+
   private JLabel getAffineC10Lbl() {
-	    if (affineC10Lbl == null) {
-	        affineC10Lbl = new JLabel();
-	        affineC10Lbl.setName("affineC10Lbl");
-	        affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-	        affineC10Lbl.setText("Y1");
-	        affineC10Lbl.setLocation(new Point(108, 6));
-	        affineC10Lbl.setSize(new Dimension(20, 22));
-	        affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-	        affineC10Lbl.setPreferredSize(new Dimension(24, 22));
-	    }
-	    return affineC10Lbl;
-	  }
-	  
+    if (affineC10Lbl == null) {
+      affineC10Lbl = new JLabel();
+      affineC10Lbl.setName("affineC10Lbl");
+      affineC10Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC10Lbl.setText("Y1");
+      affineC10Lbl.setLocation(new Point(108, 6));
+      affineC10Lbl.setSize(new Dimension(20, 22));
+      affineC10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC10Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC10Lbl;
+  }
+
   private JLabel getAffineC11Lbl() {
-	    if (affineC11Lbl == null) {
-	        affineC11Lbl = new JLabel();
-	        affineC11Lbl.setName("affineC11Lbl");
-	        affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-	        affineC11Lbl.setText("Y2");
-	        affineC11Lbl.setLocation(new Point(108, 30));
-	        affineC11Lbl.setSize(new Dimension(20, 22));
-	        affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-	        affineC11Lbl.setPreferredSize(new Dimension(24, 22));
-	    }
-	    return affineC11Lbl;
-	  }
-	  
+    if (affineC11Lbl == null) {
+      affineC11Lbl = new JLabel();
+      affineC11Lbl.setName("affineC11Lbl");
+      affineC11Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC11Lbl.setText("Y2");
+      affineC11Lbl.setLocation(new Point(108, 30));
+      affineC11Lbl.setSize(new Dimension(20, 22));
+      affineC11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC11Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC11Lbl;
+  }
+
   private JLabel getAffineC20Lbl() {
-	    if (affineC20Lbl == null) {
-	        affineC20Lbl = new JLabel();
-	        affineC20Lbl.setName("affineC20Lbl");
-	        affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-	        affineC20Lbl.setText("O1");
-	        affineC20Lbl.setLocation(new Point(216, 6));
-	        affineC20Lbl.setSize(new Dimension(20, 22));
-	        affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-	        affineC20Lbl.setPreferredSize(new Dimension(24, 22));
-	    }
-	    return affineC20Lbl;
-	  }
-	  
-private JLabel getAffineC21Lbl() {
-	    if (affineC21Lbl == null) {
-	        affineC21Lbl = new JLabel();
-	        affineC21Lbl.setName("affineC21Lbl");
-	        affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
-	        affineC21Lbl.setText("O2");
-	        affineC21Lbl.setLocation(new Point(216, 30));
-	        affineC21Lbl.setSize(new Dimension(20, 22));
-	        affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-	        affineC21Lbl.setPreferredSize(new Dimension(24, 22));
-	    }
-	    return affineC21Lbl;
-	  }
-	  
+    if (affineC20Lbl == null) {
+      affineC20Lbl = new JLabel();
+      affineC20Lbl.setName("affineC20Lbl");
+      affineC20Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC20Lbl.setText("O1");
+      affineC20Lbl.setLocation(new Point(216, 6));
+      affineC20Lbl.setSize(new Dimension(20, 22));
+      affineC20Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC20Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC20Lbl;
+  }
+
+  private JLabel getAffineC21Lbl() {
+    if (affineC21Lbl == null) {
+      affineC21Lbl = new JLabel();
+      affineC21Lbl.setName("affineC21Lbl");
+      affineC21Lbl.setHorizontalAlignment(SwingConstants.RIGHT);
+      affineC21Lbl.setText("O2");
+      affineC21Lbl.setLocation(new Point(216, 30));
+      affineC21Lbl.setSize(new Dimension(20, 22));
+      affineC21Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      affineC21Lbl.setPreferredSize(new Dimension(24, 22));
+    }
+    return affineC21Lbl;
+  }
+
   /**
    * This method initializes affineC00REd	
    * 	
@@ -11098,9 +11125,8 @@ private JLabel getAffineC21Lbl() {
       rescanScriptsBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       rescanScriptsBtn.setBounds(new Rectangle(9, 280, 125, 24));
 
-
       panel_2.add(getPanel_108());
-      scriptRunBtn.setToolTipText("Run script");
+      scriptRunBtn.setToolTipText("Run script (double-click at script does the same)");
       scriptRunBtn.setText("Run");
       scriptRunBtn.setPreferredSize(new Dimension(116, 24));
       scriptRunBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -11118,6 +11144,13 @@ private JLabel getAffineC21Lbl() {
         public void valueChanged(TreeSelectionEvent e) {
           if (tinaController != null) {
             tinaController.getJwfScriptController().scriptPropertiesTree_changed(e);
+          }
+        }
+      });
+      scriptTree.addMouseListener(new MouseAdapter() {
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.getJwfScriptController().scriptRunBtn_clicked();
           }
         }
       });
@@ -13215,9 +13248,9 @@ private JLabel getAffineC21Lbl() {
   public JCheckBox getTinaPaletteFadeColorsCBx() {
     return tinaPaletteFadeColorsCBx;
   }
-  
+
   public JCheckBox getTinaPaletteUniformWidthCBx() {
-	return tinaPaletteUniformWidthCBx;
+    return tinaPaletteUniformWidthCBx;
   }
 
   private JPanel getPanel_74() {
