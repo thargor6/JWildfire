@@ -19,19 +19,18 @@ package org.jwildfire.create.tina.script.swing;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -57,6 +56,7 @@ import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.swing.ErrorHandler;
 
 public class JWFScriptController {
+  private String prevScriptDrawer;
   private final TinaController tinaController;
   private final ErrorHandler errorHandler;
   private final Prefs prefs;
@@ -1015,5 +1015,107 @@ public class JWFScriptController {
       }
     }
   }
+
+  public void importSchriptBtn_clicked() {
+    try {
+
+      JFileChooser fileChooser = new JFileChooser();
+      try {
+        if (prevScriptDrawer != null && prevScriptDrawer.length() > 0) {
+          fileChooser.setCurrentDirectory(new File(prevScriptDrawer));
+        }
+      }
+      catch(Exception ex) {
+
+      }
+
+      fileChooser.setFileFilter(new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+          return file.isDirectory() || file.getName().toLowerCase().endsWith(".zip");
+        }
+
+        @Override
+        public String getDescription() {
+          return "*.zip";
+        }
+      });
+      if (fileChooser.showOpenDialog(rootPanel) == JFileChooser.APPROVE_OPTION) {
+        prevScriptDrawer = fileChooser.getSelectedFile().getParent();
+
+        String filename = fileChooser.getSelectedFile().getAbsolutePath();
+        Map<String, byte[]> content = unzipArchive(filename);
+
+        if(content.isEmpty()) {
+          throw new Exception("Could not unzip file \"" + filename + "\"");
+        }
+
+        String scriptExtension =  ".jwfscript";
+        String scriptName = null;
+        for(String entryName: content.keySet()) {
+          if(entryName.endsWith(scriptExtension)) {
+            scriptName = entryName.substring(0, entryName.length() - scriptExtension.length());
+            break;
+          }
+        }
+
+        if(scriptName==null) {
+          throw new Exception("File \"" + filename + "\" does not contain a script-file with \"*" +scriptExtension+"\"-extension");
+        }
+
+
+        String baseDrawer = prefs.getTinaJWFScriptPath();
+        if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
+          throw new Exception("Invalid script-drawer. Please enter a valid script-path in the Prefenences-Window (property \"tinaJWFScriptPath\")");
+        }
+
+
+        File destinationFile = new File(baseDrawer, scriptName+scriptExtension);
+        if(!destinationFile.exists() ||  JOptionPane.showConfirmDialog(null,
+                  "The destination-file already exists. Do you want to overwrite it?",
+                  "Warning",
+                  JOptionPane.YES_NO_CANCEL_OPTION)==0) {
+          Tools.writeFile(destinationFile.getAbsolutePath(), content.get(scriptName+scriptExtension));
+          String descExtension = ".txt";
+          byte description[] = content.get(scriptName+descExtension);
+          if(description!=null) {
+            Tools.writeFile(new File(baseDrawer, scriptName+descExtension).getAbsolutePath() , content.get(scriptName+descExtension) );
+          }
+          initScriptLibrary();
+
+          JOptionPane.showMessageDialog(rootPanel, "Script \"" +scriptName +"\" was imported successfully");
+        }
+      }
+    }
+    catch(Exception ex) {
+      errorHandler.handleError(ex);
+    }
+  }
+
+  private Map<String,byte[]> unzipArchive(String filename) throws Exception {
+    Map<String,byte[]> content = new HashMap<>();
+    ZipInputStream zis = new ZipInputStream(new FileInputStream(filename));
+    try {
+      byte[] buffer = new byte[1024];
+      ZipEntry ze = zis.getNextEntry();
+      while (ze != null) {
+        String entryName = ze.getName();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int len;
+        while ((len = zis.read(buffer)) > 0) {
+          bos.write(buffer, 0, len);
+        }
+        bos.close();
+        content.put(entryName, bos.toByteArray());
+        ze = zis.getNextEntry();
+      }
+    }
+    finally {
+      zis.closeEntry();
+      zis.close();
+    }
+    return content;
+  }
+
 
 }

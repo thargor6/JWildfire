@@ -85,7 +85,6 @@
       <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
-	  <zipfileset src="lib/j-wildfire-lib.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
       </manifest>			
