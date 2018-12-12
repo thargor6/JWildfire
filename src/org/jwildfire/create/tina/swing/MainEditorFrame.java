@@ -7894,6 +7894,7 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 3));
       centerWestPanel.add(getSendFlameToIRButton());
       centerWestPanel.add(getTinaAppendToMovieButton());
+      centerWestPanel.add(getOpenFlameBrowserButton());
       centerWestPanel.add(getLabel_5());
       centerWestPanel.add(getUndoButton());
       centerWestPanel.add(getRedoButton());
@@ -10312,6 +10313,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox resolutionProfileCmb;
   private ButtonGroup swfAnimatorFlamesButtonGroup;
   private JButton tinaAppendToMovieButton;
+  private JButton tinaFlameBrowserButton;
   private JWFNumberField transformationWeightREd;
   private JWFNumberField relWeightREd;
   private JToggleButton mouseTransformEditPointsButton;
@@ -10769,6 +10771,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel lblHintAmbientShadows;
   private JComboBox tinaSolidRenderingMaterialReflectionMappingCmb;
   private JButton sendFlameToIRButton;
+  private JButton openFlameBrowserButton;
   private JWFNumberField tinaSolidRenderingShadowIntensityREd;
   private JSlider tinaSolidRenderingShadowIntensitySlider;
   private JComboBox tinaSolidRenderingShadowmapSizeCmb;
@@ -11372,7 +11375,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.appendToMovieButton_actionPerformed(e);
         }
       });
-      tinaAppendToMovieButton.setToolTipText("Append to movie");
+      tinaAppendToMovieButton.setToolTipText("Open the Easy Movie Maker");
       tinaAppendToMovieButton.setText("Movie");
       tinaAppendToMovieButton.setPreferredSize(new Dimension(72, 24));
       tinaAppendToMovieButton.setMnemonic(KeyEvent.VK_M);
@@ -19894,7 +19897,7 @@ public class MainEditorFrame extends JFrame {
   private JButton getSendFlameToIRButton() {
     if (sendFlameToIRButton == null) {
       sendFlameToIRButton = new JButton();
-      sendFlameToIRButton.setToolTipText("Send the current flame to the Interactive Renderer");
+      sendFlameToIRButton.setToolTipText("Open the Interactive Renderer");
       sendFlameToIRButton.setText("IR");
       sendFlameToIRButton.setPreferredSize(new Dimension(72, 24));
       sendFlameToIRButton.setMnemonic(KeyEvent.VK_I);
@@ -19907,6 +19910,24 @@ public class MainEditorFrame extends JFrame {
       });
     }
     return sendFlameToIRButton;
+  }
+
+  private JButton getOpenFlameBrowserButton() {
+    if (openFlameBrowserButton == null) {
+      openFlameBrowserButton = new JButton();
+      openFlameBrowserButton.setToolTipText("Open the Flame Browser");
+      openFlameBrowserButton.setText("Browse");
+      openFlameBrowserButton.setPreferredSize(new Dimension(72, 24));
+      openFlameBrowserButton.setMnemonic(KeyEvent.VK_I);
+      openFlameBrowserButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      openFlameBrowserButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/emblem-photos.png")));
+      openFlameBrowserButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.openFlameBrowserButton_clicked();
+        }
+      });
+    }
+    return openFlameBrowserButton;
   }
 
   public JWFNumberField getTinaSolidRenderingShadowIntensityREd() {

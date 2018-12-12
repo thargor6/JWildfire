@@ -114,7 +114,11 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
-import org.jwildfire.create.tina.render.*;
+import org.jwildfire.create.tina.render.FlameRenderer;
+import org.jwildfire.create.tina.render.ProgressUpdater;
+import org.jwildfire.create.tina.render.RenderInfo;
+import org.jwildfire.create.tina.render.RenderMode;
+import org.jwildfire.create.tina.render.RenderedFlame;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisation3dRenderer;
 import org.jwildfire.create.tina.render.filter.FilterKernelVisualisationFlatRenderer;
@@ -287,7 +291,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     batchRendererController = new BatchRendererController(this, parameterObject.pErrorHandler, prefs, parameterObject.pRootPanel, data,
         parameterObject.pJobProgressUpdater, parameterObject.batchRenderOverrideCBx, parameterObject.batchRenderShowImageBtn, parameterObject.enableOpenClBtn);
-
 
     data.quiltRendererOpenFlameButton = parameterObject.quiltRendererOpenFlameButton;
     data.quiltRendererImportFlameFromEditorButton = parameterObject.quiltRendererImportFlameFromEditorButton;
@@ -2401,10 +2404,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       data.saveAllButton.setEnabled(hasSelFlames);
     }
-    data.sendToIRButton.setEnabled(enabled);
+    data.sendToIRButton.setEnabled(true);
+    data.movieButton.setEnabled(true);
     data.bokehButton.setEnabled(enabled);
     data.solidRenderingToggleBtn.setEnabled(enabled);
-    data.movieButton.setEnabled(enabled);
     data.transformSlowButton.setEnabled(enabled);
     data.transparencyButton.setEnabled(enabled);
     data.randomizeButton.setEnabled(enabled);
@@ -2491,24 +2494,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (pXForm != null) {
         switch (curEditPlane) {
           case XY:
-        	  data.affineC00Lbl.setText("X1");
-        	  data.affineC01Lbl.setText("X2");
-        	  data.affineC10Lbl.setText("Y1");
-        	  data.affineC11Lbl.setText("Y2");
-        	  break;
+            data.affineC00Lbl.setText("X1");
+            data.affineC01Lbl.setText("X2");
+            data.affineC10Lbl.setText("Y1");
+            data.affineC11Lbl.setText("Y2");
+            break;
           case YZ:
-        	  data.affineC00Lbl.setText("Y1");
-        	  data.affineC01Lbl.setText("Y2");
-        	  data.affineC10Lbl.setText("Z1");
-        	  data.affineC11Lbl.setText("Z2");
-        	  break;
+            data.affineC00Lbl.setText("Y1");
+            data.affineC01Lbl.setText("Y2");
+            data.affineC10Lbl.setText("Z1");
+            data.affineC11Lbl.setText("Z2");
+            break;
           default:
-        	  data.affineC00Lbl.setText("X1");
-        	  data.affineC01Lbl.setText("X2");
-        	  data.affineC10Lbl.setText("Z1");
-        	  data.affineC11Lbl.setText("Z2");
-        	  break;
-          } 
+            data.affineC00Lbl.setText("X1");
+            data.affineC01Lbl.setText("X2");
+            data.affineC10Lbl.setText("Z1");
+            data.affineC11Lbl.setText("Z2");
+            break;
+        }
         if (data.affineEditPostTransformButton.isSelected()) {
           data.affineC00REd.setText(Tools.doubleToString(pXForm.getPostCoeff00()));
           data.affineC01REd.setText(Tools.doubleToString(pXForm.getPostCoeff01()));
@@ -2707,7 +2710,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
 
       // preselection
-      if (pSelectFirst){
+      if (pSelectFirst) {
         if (resCount > 0) {
           pRow.getNonlinearParamsCmb().setSelectedIndex(0);
           pRow.getNonlinearParamsREd().setText(null);
@@ -2753,9 +2756,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrLayer().getXForms().get(i);
       if (i == fromId) {
         XForm toXForm = getCurrLayer().getXForms().get(toId);
-    	for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
+        for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
           toXForm.getModifiedWeights()[j] = xForm.getModifiedWeights()[j];
-    	  xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
+          xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
         xForm.setDrawMode(DrawMode.HIDDEN);
       }
@@ -2788,26 +2791,27 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void duplicateXForm() {
     int fromId = data.transformationsTable.getSelectedRow();
-    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size()) return;
+    if (fromId < 0 || fromId >= getCurrLayer().getXForms().size() + getCurrLayer().getFinalXForms().size())
+      return;
     boolean isFinal = (fromId >= getCurrLayer().getXForms().size());
     XForm xForm = new XForm();
     xForm.assign(getCurrXForm());
     saveUndoPoint();
     if (isFinal) {
-    	getCurrLayer().getFinalXForms().add(xForm);
+      getCurrLayer().getFinalXForms().add(xForm);
     }
     else {
       getCurrLayer().getXForms().add(xForm);
       if (fromId >= 0 && fromId < getCurrLayer().getXForms().size()) {
-    	  // copy xaos from values
-    	  int toId = getCurrLayer().getXForms().size() - 1;
-    	  for (int i=0; i < toId; i++) {
-    		XForm xFormi = getCurrLayer().getXForms().get(i);
-    		xFormi.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
-    		if (i == fromId) {
-    		  xForm.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
-    		}
-    	}
+        // copy xaos from values
+        int toId = getCurrLayer().getXForms().size() - 1;
+        for (int i = 0; i < toId; i++) {
+          XForm xFormi = getCurrLayer().getXForms().get(i);
+          xFormi.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+          if (i == fromId) {
+            xForm.getModifiedWeights()[toId] = xFormi.getModifiedWeights()[fromId];
+          }
+        }
       }
     }
     gridRefreshing = true;
@@ -4416,7 +4420,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void affineMirrorPrePostChanged(boolean mirror) {
     if (this.getCurrXForm() != null) {
-      this.getCurrXForm().setMirrorTranslations(mirror,data.affineEditPostTransformButton.isSelected());
+      this.getCurrXForm().setMirrorTranslations(mirror, data.affineEditPostTransformButton.isSelected());
       refreshFlameImage(true, false, 1, true, false);
     }
   }
@@ -4507,14 +4511,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       }
       catch (Throwable ex) {
         errorHandler.handleError(ex);
+
       }
     }
   }
 
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
+    desktop.showJFrame(EasyMovieMakerFrame.class);
     if (getCurrFlame() != null) {
-      getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
-      desktop.showJFrame(EasyMovieMakerFrame.class);
+      if(getSwfAnimatorCtrl().getFlame()==null) {
+        getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
+      }
     }
   }
 
@@ -4968,13 +4975,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void sendFlameToIRButton_clicked() {
-    Flame flame = getCurrFlame();
-    if (flame != null) {
-      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
-        interactiveRendererCtrl.importFlame(flame);
+//    Flame flame = getCurrFlame();
+//    if (flame != null) {
+//      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
+//        interactiveRendererCtrl.importFlame(flame);
         desktop.showJFrame(InteractiveRendererFrame.class);
-      }
-    }
+//      }
+//    }
+  }
+
+  public void openFlameBrowserButton_clicked() {
+    desktop.showJFrame(FlameBrowserFrame.class);
   }
 
   public MutaGenController getMutaGenController() {
@@ -6517,29 +6528,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void nonlinearParamsPreButtonClicked(int pIdx) {
-	int fpriority;
-	XForm xForm = getCurrXForm();
-	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
-	else fpriority = 0;
-	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
-	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? fpriority : 1);
-	}
-	else {
+    int fpriority;
+    XForm xForm = getCurrXForm();
+    if (xForm != null && pIdx < xForm.getVariationCount())
+      fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+    else
+      fpriority = 0;
+    if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected()) {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? fpriority : 1);
+    }
+    else {
       nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected() ? -1 : 0);
-	}
+    }
   }
 
   public void nonlinearParamsPostButtonClicked(int pIdx) {
-	int fpriority;
-	XForm xForm = getCurrXForm();
-	if (xForm != null && pIdx < xForm.getVariationCount()) fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
-	else fpriority = 0;
-	if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
-	  nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? fpriority : -1);
-	}
-	else {
+    int fpriority;
+    XForm xForm = getCurrXForm();
+    if (xForm != null && pIdx < xForm.getVariationCount())
+      fpriority = xForm.getVariation(pIdx).getFunc().getPriority();
+    else
+      fpriority = 0;
+    if ((fpriority == 2 || fpriority == -2) && data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPreButton().isSelected()) {
+      nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? fpriority : -1);
+    }
+    else {
       nonlinearParamsPriorityChanged(pIdx, data.TinaNonlinearControlsRows[pIdx].getNonlinearParamsPostButton().isSelected() ? 1 : 0);
-	}
+    }
   }
 
   public void nonlinearParamsToggleParamsPnlClicked(int pIdx) {
