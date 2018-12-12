@@ -177,7 +177,7 @@ public class JWFScriptController {
 
   private void initScriptLibrary() {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("Script library", true);
-    // Internal flames
+    // Internal scripts
     {
       String[] ressources = {
           "Custom_Variation_Loader_GH",
@@ -189,7 +189,10 @@ public class JWFScriptController {
           "Crackle_Styles_Chooser_Rev01_by_MH",
           "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
           "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
-          "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3", "Wedge_Sph_Marble" };
+          "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
+           "UG-","UG-Ran","UG-Ran2","UG-Ran2sym","UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
+
+              "Wedge_Sph_Marble" };
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
       ressources = resLst.toArray(new String[] {});
