@@ -372,13 +372,13 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   private void addFlameToFlamePanel(final FlameMoviePart pPart) {
-    final int PANEL_HEIGHT = 240;
+    final int PANEL_HEIGHT = 212;
     final int LABEL_WIDTH = 96;
     final int FIELD_WIDTH = 66;
     final int FIELD_HEIGHT = 24;
     final int LABEL_HEIGHT = 24;
     final int BUTTON_WIDTH = 48;
-    final int BORDER_SIZE = 8;
+    final int BORDER_SIZE = 4;
     int imageHeight = PANEL_HEIGHT - (4 * FIELD_HEIGHT + 5 * BORDER_SIZE);
     ResolutionProfile resProfile = getResolutionProfile();
     int imageWidth = (int) (imageHeight * resProfile.getAspect() + 0.5);
