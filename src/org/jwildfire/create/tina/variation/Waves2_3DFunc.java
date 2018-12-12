@@ -16,17 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class Waves2_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_FREQ = "freq";
   private static final String PARAM_SCALE = "scale";
-  private static final String[] paramNames = { PARAM_FREQ, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_FREQ, PARAM_SCALE};
 
   private double freq = 2.0;
   private double scale = 1.0;
@@ -48,7 +48,7 @@ public class Waves2_3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { freq, scale };
+    return new Object[]{freq, scale};
   }
 
   @Override

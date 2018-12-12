@@ -16,16 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CircularFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_CIRCULAR_ANGLE = "angle";
   private static final String PARAM_CIRCULAR_SEED = "seed";
-  private static final String[] paramNames = { PARAM_CIRCULAR_ANGLE, PARAM_CIRCULAR_SEED };
+  private static final String[] paramNames = {PARAM_CIRCULAR_ANGLE, PARAM_CIRCULAR_SEED};
   private double angle = 90.0;
   private double seed = 0.0;
 
@@ -36,16 +36,12 @@ public class CircularFunc extends VariationFunc {
     double c_a = angle * M_PI / 180;
     double aux = (sin(pAffineTP.x * 12.9898 + pAffineTP.y * 78.233 + seed) * 43758.5453);
     aux = aux - (int) aux;
-    double rnd = (2 * (Math.random() + aux) - 2.0)  * c_a;
+    double rnd = (2 * (Math.random() + aux) - 2.0) * c_a;
     double rad = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
     double ang = atan2(pAffineTP.y, pAffineTP.x);
-    double by = sin(ang+rnd);
-    double bx = cos(ang+rnd);
+    double by = sin(ang + rnd);
+    double bx = cos(ang + rnd);
 
-
-
-   
-  
 
     pVarTP.x += pAmount * (bx * rad);
     pVarTP.y += pAmount * (by * rad);
@@ -61,12 +57,14 @@ public class CircularFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle, seed };
+    return new Object[]{angle, seed};
   }
+
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "angle, seed" };
+    return new String[]{"angle, seed"};
   }
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_CIRCULAR_ANGLE.equalsIgnoreCase(pName))

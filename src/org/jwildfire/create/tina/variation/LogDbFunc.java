@@ -32,13 +32,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.log;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LogDbFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +44,7 @@ public class LogDbFunc extends VariationFunc {
   private static final String PARAM_BASE = "base";
   private static final String PARAM_FIX_PERIOD = "fix_period";
 
-  private static final String[] paramNames = { PARAM_BASE, PARAM_FIX_PERIOD };
+  private static final String[] paramNames = {PARAM_BASE, PARAM_FIX_PERIOD};
 
   private double base = 1.0;
   private double fix_period = 1.0;
@@ -67,8 +65,8 @@ public class LogDbFunc extends VariationFunc {
     pVarTP.x += _denom * log(pAffineTP.getPrecalcSumsq());
     pVarTP.y += pAmount * (pAffineTP.getPrecalcAtanYX() + fix_atan_period);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -78,7 +76,7 @@ public class LogDbFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { base, fix_period };
+    return new Object[]{base, fix_period};
   }
 
   @Override

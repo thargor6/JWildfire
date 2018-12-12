@@ -33,8 +33,8 @@ public class CustomWFFunc extends VariationFunc {
 
   private static final String RESSOURCE_CODE = "code";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G };
-  private static final String[] ressourceNames = { RESSOURCE_CODE };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G};
+  private static final String[] ressourceNames = {RESSOURCE_CODE};
 
   private double a = 0.0;
   private double b = 0.0;
@@ -45,53 +45,53 @@ public class CustomWFFunc extends VariationFunc {
   private double g = 0.0;
 
   private String code = "import org.jwildfire.create.tina.base.XForm;\r\n" +
-      "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
-      "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
-      "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-      "\r\n" +
-      "  public void init(FlameTransformationContext pContext, XForm pXForm) {\r\n" +
-      "\r\n" +
-      "  }\r\n" +
-      "\r\n" +
-      "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\r\n" +
-      "    // Some examples:\r\n" +
-      "    // \"hemisphere\" variation\r\n" +
-      "    //   double r = pAmount / sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);\r\n" +
-      "    //   pVarTP.x += pAffineTP.x * r;\r\n" +
-      "    //   pVarTP.y += pAffineTP.y * r;\r\n" +
-      "    //   pVarTP.z += r;\r\n" +
-      "    // ----------------------------------\r\n" +
-      "    // change the color dynamically\r\n" +
-      "    //   if(pAffineTP.x<0) {\r\n" +
-      "    //     pVarTP.color = 0;\r\n" +
-      "    //   }\r\n" +
-      "    //   else {\r\n" +
-      "    //     pVarTP.color = 0.75;\r\n" +
-      "    //   }\r\n" +
-      "    // ----------------------------------\r\n" +
-      "    // \"rose_wf\" variation\r\n" +
-      "    //   final double amp=0.5;\r\n" +
-      "    //   final double waves=4;\r\n" +
-      "    //   double a0 = pAffineTP.getPrecalcAtan(pContext);\r\n" +
-      "    //   double r0 = pAffineTP.getPrecalcSqrt(pContext);\r\n" +
-      "    //\r\n" +
-      "    //   double r = amp * cos(waves * a0);\r\n" +
-      "    //\r\n" +
-      "    //   double nx = sin(a0) * r;\r\n" +
-      "    //   double ny = cos(a0) * r;\r\n" +
-      "    //   pVarTP.x += pAmount * nx;\r\n" +
-      "    //   pVarTP.y += pAmount * ny;\r\n" +
-      "    // ----------------------------------\r\n" +
-      "    // \"bubble\" variation\r\n" +
-      "       double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);\r\n" +
-      "       double t = pAmount / r;\r\n" +
-      "       pVarTP.x += t * pAffineTP.x;\r\n" +
-      "       pVarTP.y += t * pAffineTP.y;\r\n" +
-      "       pVarTP.z += pAmount * (2.0 / r - 1.0);\r\n" +
-      "    // ----------------------------------\r\n" +
-      "    // ...\r\n" +
-      "  }\r\n" +
-      "";
+          "import org.jwildfire.create.tina.variation.FlameTransformationContext;\r\n" +
+          "import org.jwildfire.create.tina.base.XYZPoint;\r\n" +
+          "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
+          "\r\n" +
+          "  public void init(FlameTransformationContext pContext, XForm pXForm) {\r\n" +
+          "\r\n" +
+          "  }\r\n" +
+          "\r\n" +
+          "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\r\n" +
+          "    // Some examples:\r\n" +
+          "    // \"hemisphere\" variation\r\n" +
+          "    //   double r = pAmount / sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1);\r\n" +
+          "    //   pVarTP.x += pAffineTP.x * r;\r\n" +
+          "    //   pVarTP.y += pAffineTP.y * r;\r\n" +
+          "    //   pVarTP.z += r;\r\n" +
+          "    // ----------------------------------\r\n" +
+          "    // change the color dynamically\r\n" +
+          "    //   if(pAffineTP.x<0) {\r\n" +
+          "    //     pVarTP.color = 0;\r\n" +
+          "    //   }\r\n" +
+          "    //   else {\r\n" +
+          "    //     pVarTP.color = 0.75;\r\n" +
+          "    //   }\r\n" +
+          "    // ----------------------------------\r\n" +
+          "    // \"rose_wf\" variation\r\n" +
+          "    //   final double amp=0.5;\r\n" +
+          "    //   final double waves=4;\r\n" +
+          "    //   double a0 = pAffineTP.getPrecalcAtan(pContext);\r\n" +
+          "    //   double r0 = pAffineTP.getPrecalcSqrt(pContext);\r\n" +
+          "    //\r\n" +
+          "    //   double r = amp * cos(waves * a0);\r\n" +
+          "    //\r\n" +
+          "    //   double nx = sin(a0) * r;\r\n" +
+          "    //   double ny = cos(a0) * r;\r\n" +
+          "    //   pVarTP.x += pAmount * nx;\r\n" +
+          "    //   pVarTP.y += pAmount * ny;\r\n" +
+          "    // ----------------------------------\r\n" +
+          "    // \"bubble\" variation\r\n" +
+          "       double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);\r\n" +
+          "       double t = pAmount / r;\r\n" +
+          "       pVarTP.x += t * pAffineTP.x;\r\n" +
+          "       pVarTP.y += t * pAffineTP.y;\r\n" +
+          "       pVarTP.z += pAmount * (2.0 / r - 1.0);\r\n" +
+          "    // ----------------------------------\r\n" +
+          "    // ...\r\n" +
+          "  }\r\n" +
+          "";
   private CustomWFFuncRunner customFuncRunner = null;
 
   @Override
@@ -108,7 +108,7 @@ public class CustomWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d, e, f, g };
+    return new Object[]{a, b, c, d, e, f, g};
   }
 
   @Override
@@ -138,15 +138,14 @@ public class CustomWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (code != null ? code.getBytes() : null) };
+    return new byte[][]{(code != null ? code.getBytes() : null)};
   }
 
   @Override
   public RessourceType getRessourceType(String pName) {
     if (pName.equals(RESSOURCE_CODE)) {
       return RessourceType.JAVA_CODE;
-    }
-    else {
+    } else {
       return super.getRessourceType(pName);
     }
   }
@@ -155,8 +154,7 @@ public class CustomWFFunc extends VariationFunc {
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_CODE.equalsIgnoreCase(pName)) {
       code = pValue != null ? new String(pValue) : "";
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -185,8 +183,7 @@ public class CustomWFFunc extends VariationFunc {
   private void compile() {
     try {
       customFuncRunner = CustomWFFuncRunner.compile(code);
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       System.out.println("##############################################################");
       System.out.println(ex.getMessage());
       System.out.println("##############################################################");
@@ -201,8 +198,7 @@ public class CustomWFFunc extends VariationFunc {
       if (code != null) {
         CustomWFFuncRunner.compile(code);
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       throw new RuntimeException(ex);
     }
   }

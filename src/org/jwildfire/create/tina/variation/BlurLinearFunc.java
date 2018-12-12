@@ -14,21 +14,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import org.jwildfire.create.tina.base.Layer;
-
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BlurLinearFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_LENGTH = "length";
   private static final String PARAM_ANGLE = "angle";
-  private static final String[] paramNames = { PARAM_LENGTH, PARAM_ANGLE };
+  private static final String[] paramNames = {PARAM_LENGTH, PARAM_ANGLE};
 
   private double length = 1.0;
   private double angle = 0.5;
@@ -41,8 +39,8 @@ public class BlurLinearFunc extends VariationFunc {
 
     double r = length * Math.random();
 
-    pVarTP.x += pAmount * (pAffineTP.x + r*c);
-    pVarTP.y += pAmount * (pAffineTP.y + r*s);
+    pVarTP.x += pAmount * (pAffineTP.x + r * c);
+    pVarTP.y += pAmount * (pAffineTP.y + r * s);
 
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
@@ -56,7 +54,7 @@ public class BlurLinearFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { length, angle };
+    return new Object[]{length, angle};
   }
 
   @Override

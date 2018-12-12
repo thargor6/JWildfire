@@ -16,18 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.Tools.FTOI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.Tools.FTOI;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class XTrbFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +32,7 @@ public class XTrbFunc extends VariationFunc {
   private static final String PARAM_DIST = "dist";
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_RADIUS, PARAM_WIDTH, PARAM_DIST, PARAM_A, PARAM_B };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_RADIUS, PARAM_WIDTH, PARAM_DIST, PARAM_A, PARAM_B};
 
   private int power = 2;
   private double radius = 1.0;
@@ -72,8 +66,7 @@ public class XTrbFunc extends VariationFunc {
       Hex(pContext, OffsetAl, OffsetBe, OffsetGa, to);
       Alpha = to.Al1;
       Beta = to.Be1;
-    }
-    else {
+    } else {
       OffsetAl = S2a - OffsetAl;
       OffsetBe = S2b - OffsetBe;
       OffsetGa = -OffsetGa;
@@ -98,8 +91,8 @@ public class XTrbFunc extends VariationFunc {
     pVarTP.x += pAmount * X;
     pVarTP.y += pAmount * Y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -110,7 +103,7 @@ public class XTrbFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, radius, width, dist, a, b };
+    return new Object[]{power, radius, width, dist, a, b};
   }
 
   @Override
@@ -233,9 +226,7 @@ public class XTrbFunc extends VariationFunc {
         if (R >= width3) {
           De1 = width * Be;
           Ga1 = width * Ga;
-        }
-        else
-        {
+        } else {
           Ga1 = width1 * Ga + width2 * Hc * Ga / Be;
           De1 = width1 * Be + width2 * S2ab * (3 - Ga / Be);
 
@@ -243,34 +234,23 @@ public class XTrbFunc extends VariationFunc {
         res.Al1 = S2a - ba * De1 - ca * Ga1;
         res.Be1 = De1;
 
-      }
-      else
-      {
-        if (Ga < Al)
-        {
-          if (R >= width3)
-          {
+      } else {
+        if (Ga < Al) {
+          if (R >= width3) {
             Ga1 = width * Ga;
             De1 = width * Be;
-          }
-          else
-          {
+          } else {
             De1 = width1 * Be + width2 * Hb * Be / Ga;
             Ga1 = width1 * Ga + width2 * S2ac * (3 - Be / Ga);
 
           }
           res.Al1 = S2a - ba * De1 - ca * Ga1;
           res.Be1 = De1;
-        }
-        else
-        {
-          if (R >= width3)
-          {
+        } else {
+          if (R >= width3) {
             res.Al1 = width * Al;
             res.Be1 = width * Be;
-          }
-          else
-          {
+          } else {
             res.Be1 = width1 * Be + width2 * Hb * Be / Al;
             res.Al1 = width1 * Al + width2 * S2ac * (3 - Be / Al);
 
@@ -278,19 +258,13 @@ public class XTrbFunc extends VariationFunc {
 
         }
       }
-    }
-    else
-    {
-      if (Ga < Al)
-      {
-        if (R >= width3)
-        {
+    } else {
+      if (Ga < Al) {
+        if (R >= width3) {
           De1 = width * Al;
           Ga1 = width * Ga;
 
-        }
-        else
-        {
+        } else {
           Ga1 = width1 * Ga + width2 * Hc * Ga / Al;
           De1 = width1 * Al + width2 * S2ab * (3 - Ga / Al);
 
@@ -298,18 +272,12 @@ public class XTrbFunc extends VariationFunc {
         res.Be1 = S2b - ab * De1 - cb * Ga1;
         res.Al1 = De1;
 
-      }
-      else
-      {
-        if (Ga < Be)
-        {
-          if (R >= width3)
-          {
+      } else {
+        if (Ga < Be) {
+          if (R >= width3) {
             Ga1 = width * Ga;
             De1 = width * Al;
-          }
-          else
-          {
+          } else {
             De1 = width1 * Al + width2 * Ha * Al / Ga;
             Ga1 = width1 * Ga + width2 * S2bc * (3 - Al / Ga);
 
@@ -317,16 +285,11 @@ public class XTrbFunc extends VariationFunc {
           res.Be1 = S2b - ab * De1 - cb * Ga1;
           res.Al1 = De1;
 
-        }
-        else
-        {
-          if (R >= width3)
-          {
+        } else {
+          if (R >= width3) {
             res.Be1 = width * Be;
             res.Al1 = width * Al;
-          }
-          else
-          {
+          } else {
             res.Al1 = width1 * Al + width2 * Ha * Al / Be;
             res.Be1 = width1 * Be + width2 * S2bc * (3 - Al / Be);
           }

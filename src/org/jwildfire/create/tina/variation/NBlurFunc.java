@@ -16,26 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.FALSE;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.TRUE;
-import static org.jwildfire.base.mathlib.MathLib.atan;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
-import java.io.Serializable;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.Serializable;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class NBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -50,7 +38,7 @@ public class NBlurFunc extends VariationFunc {
   private static final String PARAM_EXACTCALC = "exactCalc";
   private static final String PARAM_HIGHLIGHTEDGES = "highlightEdges";
 
-  private static final String[] paramNames = { PARAM_NUMEDGES, PARAM_NUMSTRIPES, PARAM_RATIOSTRIPES, PARAM_RATIOHOLE, PARAM_CIRCUMCIRCLE, PARAM_ADJUSTTOLINEAR, PARAM_EQUALBLUR, PARAM_EXACTCALC, PARAM_HIGHLIGHTEDGES };
+  private static final String[] paramNames = {PARAM_NUMEDGES, PARAM_NUMSTRIPES, PARAM_RATIOSTRIPES, PARAM_RATIOHOLE, PARAM_CIRCUMCIRCLE, PARAM_ADJUSTTOLINEAR, PARAM_EQUALBLUR, PARAM_EXACTCALC, PARAM_HIGHLIGHTEDGES};
 
   private int numEdges = 3;
   private int numStripes = 0;
@@ -70,9 +58,7 @@ public class NBlurFunc extends VariationFunc {
     if (this.adjustToLinear == TRUE) {
       if ((this.numEdges) % 4 == 0) {
         pAmount /= sqrt(2.0 - 2.0 * cos(this._midAngle * ((double) this.numEdges / 2.0 - 1.0))) / 2.0;
-      }
-      else
-      {
+      } else {
         pAmount /= sqrt(2.0 - 2.0 * cos(this._midAngle * floor(((double) this.numEdges / 2.0)))) / 2.0;
       }
     }
@@ -80,13 +66,11 @@ public class NBlurFunc extends VariationFunc {
     randXY(pContext, _randXYData);
 
     //********Exact calculation slower - interpolated calculation faster********
-    if ((this.exactCalc == TRUE) && (this.circumCircle == FALSE))
-    {
+    if ((this.exactCalc == TRUE) && (this.circumCircle == FALSE)) {
       while ((_randXYData.lenXY < _randXYData.lenInnerEdges) || (_randXYData.lenXY > _randXYData.lenOuterEdges))
         randXY(pContext, _randXYData);
     }
-    if ((this.exactCalc == TRUE) && (this.circumCircle == TRUE))
-    {
+    if ((this.exactCalc == TRUE) && (this.circumCircle == TRUE)) {
       while (_randXYData.lenXY < _randXYData.lenInnerEdges)
         randXY(pContext, _randXYData);
     }
@@ -104,8 +88,8 @@ public class NBlurFunc extends VariationFunc {
     pVarTP.y += pAmount * y;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -126,8 +110,7 @@ public class NBlurFunc extends VariationFunc {
     int count;
     if (this.exactCalc == TRUE) {
       angXY = pContext.random() * M_2PI;
-    }
-    else {
+    } else {
       angXY = (atan(this._arc_tan1 * (pContext.random() - 0.5)) / this._arc_tan2 + 0.5 + (double) (rand(pContext) % this.numEdges)) * this._midAngle;
     }
     x = sin(angXY);
@@ -162,8 +145,7 @@ public class NBlurFunc extends VariationFunc {
             y = cos(angMem);
             angTmp += this._angStripes;
             count++;
-          }
-          else {
+          } else {
             angXY = angXY - this._angStart;
             angMem = angMem - this._angStart;
             x = sin(angMem);
@@ -178,8 +160,7 @@ public class NBlurFunc extends VariationFunc {
             angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-          }
-          else {
+          } else {
             angMem = angMem - angXY + angTmp - (angTmp - angXY) / this._angStart * this.ratioStripes * this._angStart;
             angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
@@ -219,9 +200,7 @@ public class NBlurFunc extends VariationFunc {
             }
           }
         }
-      }
-      else
-      {
+      } else {
         //********Change ratio and ratioComplement******** 
         ratioTmp = this.ratioStripes;
         this.ratioStripes = this._nb_ratioComplement;
@@ -238,8 +217,7 @@ public class NBlurFunc extends VariationFunc {
             y = cos(angMem);
             angTmp += this._angStripes;
             count++;
-          }
-          else {
+          } else {
             angXY = angXY - this._angStart;
             angMem = angMem - this._angStart;
             x = sin(angMem);
@@ -254,8 +232,7 @@ public class NBlurFunc extends VariationFunc {
             angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
             y = cos(angMem);
-          }
-          else {
+          } else {
             angMem = angMem - angXY + angTmp - (angTmp - angXY) / this._angStart * this.ratioStripes * this._angStart;
             angXY = angTmp + (angXY - angTmp) / this._angStart * this.ratioStripes * this._angStart;
             x = sin(angMem);
@@ -320,15 +297,13 @@ public class NBlurFunc extends VariationFunc {
         ranTmp = sqrt(pContext.random());
       else
         ranTmp = pContext.random();
-    }
-    else {
+    } else {
       if (this.circumCircle == TRUE) {
         if (this.equalBlur == TRUE)
           ranTmp = sqrt(pContext.random());
         else
           ranTmp = pContext.random();
-      }
-      else {
+      } else {
         if (this.equalBlur == TRUE)
           ranTmp = sqrt(pContext.random()) * lenOuterEdges;
         else
@@ -344,9 +319,7 @@ public class NBlurFunc extends VariationFunc {
             ranTmp = lenInnerEdges + sqrt(pContext.random()) * (1.0 - lenInnerEdges + SMALL_EPSILON);
           else
             ranTmp = lenInnerEdges + pContext.random() * (1.0 - lenInnerEdges + SMALL_EPSILON);
-        }
-        else
-        {
+        } else {
           if (this.equalBlur == TRUE)
             ranTmp = lenInnerEdges + sqrt(pContext.random()) * (lenOuterEdges - lenInnerEdges);
           else
@@ -380,12 +353,12 @@ public class NBlurFunc extends VariationFunc {
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "nb_numEdges", "nb_numStripes", "nb_ratioStripes", "nb_ratioHole", "nb_circumCircle", "nb_adjustToLinear", "nb_equalBlur", "nb_exactCalc", "nb_highlightEdges" };
+    return new String[]{"nb_numEdges", "nb_numStripes", "nb_ratioStripes", "nb_ratioHole", "nb_circumCircle", "nb_adjustToLinear", "nb_equalBlur", "nb_exactCalc", "nb_highlightEdges"};
   }
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { numEdges, numStripes, ratioStripes, ratioHole, circumCircle, adjustToLinear, equalBlur, exactCalc, highlightEdges };
+    return new Object[]{numEdges, numStripes, ratioStripes, ratioHole, circumCircle, adjustToLinear, equalBlur, exactCalc, highlightEdges};
   }
 
   @Override
@@ -437,14 +410,10 @@ public class NBlurFunc extends VariationFunc {
       if (this.numStripes < 0) {
         this._negStripes = TRUE;
         this.numStripes *= -1;
-      }
-      else
-      {
+      } else {
         this._negStripes = FALSE;
       }
-    }
-    else
-    {
+    } else {
       this._hasStripes = FALSE;
       this._negStripes = FALSE;
     }
@@ -472,8 +441,7 @@ public class NBlurFunc extends VariationFunc {
       this.highlightEdges = 0.1;
 
     //*********Prepare circumCircle-calculation*********
-    if (this.circumCircle == TRUE)
-    {
+    if (this.circumCircle == TRUE) {
       this.exactCalc = FALSE;
       this.highlightEdges = 0.1;
     }
@@ -482,13 +450,10 @@ public class NBlurFunc extends VariationFunc {
     this._speedCalc1 = this._nb_ratioComplement * this._angStart;
     this._speedCalc2 = this.ratioStripes * this._angStart;
     this._maxStripes = 2 * this.numStripes;
-    if (this._negStripes == FALSE)
-    {
+    if (this._negStripes == FALSE) {
       this._arc_tan1 = (13.0 / pow(this.numEdges, 1.3)) * this.highlightEdges;
       this._arc_tan2 = (2.0 * atan(this._arc_tan1 / (-2.0)));
-    }
-    else
-    {
+    } else {
       this._arc_tan1 = (7.5 / pow(this.numEdges, 1.3)) * this.highlightEdges;
       this._arc_tan2 = (2.0 * atan(this._arc_tan1 / (-2.0)));
     }

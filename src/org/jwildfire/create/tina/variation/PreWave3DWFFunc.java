@@ -16,18 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PreWave3DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -40,7 +34,7 @@ public class PreWave3DWFFunc extends VariationFunc {
   private static final String PARAM_CENTRE_Y = "centre_y";
   private static final String PARAM_CENTRE_Z = "centre_z";
 
-  private static final String[] paramNames = { PARAM_AXIS, PARAM_WAVELEN, PARAM_PHASE, PARAM_DAMPING, PARAM_CENTRE_X, PARAM_CENTRE_Y, PARAM_CENTRE_Z };
+  private static final String[] paramNames = {PARAM_AXIS, PARAM_WAVELEN, PARAM_PHASE, PARAM_DAMPING, PARAM_CENTRE_X, PARAM_CENTRE_Y, PARAM_CENTRE_Z};
 
   private static final int AXIS_XY = 0;
   private static final int AXIS_YZ = 1;
@@ -109,7 +103,7 @@ public class PreWave3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { axis, wavelen, phase, damping, centre_x, centre_y, centre_z };
+    return new Object[]{axis, wavelen, phase, damping, centre_x, centre_y, centre_z};
   }
 
   @Override

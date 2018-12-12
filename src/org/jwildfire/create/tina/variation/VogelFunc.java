@@ -1,19 +1,17 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
 import odk.lang.DoubleWrapper;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class VogelFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_N = "n";
   private static final String PARAM_SCALE = "scale";
-  private static final String[] paramNames = { PARAM_N, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_N, PARAM_SCALE};
 
   private final double M_PHI = 1.61803398874989484820;
   private final double M_2PI_PHI2 = M_2PI / (M_PHI * M_PHI);
@@ -36,18 +34,16 @@ public class VogelFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, scale };
+    return new Object[]{n, scale};
   }
 
   @Override
   public void setParameter(final String pName, final double pValue) {
     if (PARAM_N.equalsIgnoreCase(pName)) {
       n = limitIntVal(Tools.FTOI(pValue), 1, Integer.MAX_VALUE);
-    }
-    else if (PARAM_SCALE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SCALE.equalsIgnoreCase(pName)) {
       scale = pValue;
-    }
-    else {
+    } else {
       throw new IllegalArgumentException(pName);
     }
   }
@@ -62,7 +58,7 @@ public class VogelFunc extends VariationFunc {
     pVarTP.x += r * (cosa.value + (scale * pAffineTP.x));
     pVarTP.y += r * (sina.value + (scale * pAffineTP.y));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 }

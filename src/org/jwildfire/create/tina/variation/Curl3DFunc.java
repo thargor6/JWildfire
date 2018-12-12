@@ -26,7 +26,7 @@ public class Curl3DFunc extends VariationFunc {
   private static final String PARAM_CX = "cx";
   private static final String PARAM_CY = "cy";
   private static final String PARAM_CZ = "cz";
-  private static final String[] paramNames = { PARAM_CX, PARAM_CY, PARAM_CZ };
+  private static final String[] paramNames = {PARAM_CX, PARAM_CY, PARAM_CZ};
 
   private double cx = 0;
   private double cy = 0.05;
@@ -53,7 +53,7 @@ public class Curl3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cx, cy, cz };
+    return new Object[]{cx, cy, cz};
   }
 
   @Override

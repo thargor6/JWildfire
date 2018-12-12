@@ -14,19 +14,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.rint;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.rint;
+
 public class Gridout2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D};
 
   private double a = 1.0;
   private double b = 1.0;
@@ -35,72 +35,52 @@ public class Gridout2Func extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // authors Michael Faber, Joel Faber 2007-2008. Implemented by DarkBeam 2017 variables added by Brad Stefanov
-   double x = rint(pAffineTP.x)*c;
-   double y = rint(pAffineTP.y)*d;
+    // authors Michael Faber, Joel Faber 2007-2008. Implemented by DarkBeam 2017 variables added by Brad Stefanov
+    double x = rint(pAffineTP.x) * c;
+    double y = rint(pAffineTP.y) * d;
 
-   if (y <= 0.0)
-   {
-      if (x > 0.0)
-      {
-         if (-y >= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x + a);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y + b);
-         }
+    if (y <= 0.0) {
+      if (x > 0.0) {
+        if (-y >= x) {
+          pVarTP.x += pAmount * (pAffineTP.x + a);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y + b);
+        }
+      } else {
+        if (y <= x) {
+          pVarTP.x += pAmount * (pAffineTP.x + a);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y - b);
+        }
       }
-      else
-      {
-         if (y <= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x + a);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y - b);
-         }
+    } else {
+      if (x > 0.0) {
+        if (y >= x) {
+          pVarTP.x += pAmount * (pAffineTP.x - a);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y + b);
+        }
+      } else {
+        if (y > -x) {
+          pVarTP.x += pAmount * (pAffineTP.x - a);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y - b);
+        }
       }
-   }
-   else
-   {
-      if (x > 0.0)
-      {
-         if (y >= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x - a);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y + b);
-         }
-      }
-      else
-      {
-         if (y > -x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x - a);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y - b);
-         }
-      }
-   }
+    }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
   }
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -108,7 +88,7 @@ public class Gridout2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d };
+    return new Object[]{a, b, c, d};
   }
 
   @Override
@@ -123,8 +103,9 @@ public class Gridout2Func extends VariationFunc {
       d = pValue;
     else
       throw new IllegalArgumentException(pName);
-  
+
   }
+
   @Override
   public String getName() {
     return "gridout2";

@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Nicolaus Anderson
@@ -35,7 +33,7 @@ public class SphereNjaFunc extends VariationFunc {
   private static final String PARAM_SHIFT_Z = "shift_z";
   private static final String PARAM_STRETCH = "stretch";
 
-  private static final String[] paramNames = { PARAM_CIRCLE_A, PARAM_CIRCLE_B, PARAM_SHIFT_X, PARAM_SHIFT_Y, PARAM_SHIFT_Z, PARAM_STRETCH };
+  private static final String[] paramNames = {PARAM_CIRCLE_A, PARAM_CIRCLE_B, PARAM_SHIFT_X, PARAM_SHIFT_Y, PARAM_SHIFT_Z, PARAM_STRETCH};
 
   private double circle_a = 1.0;
   private double circle_b = 1.0;
@@ -103,7 +101,7 @@ public class SphereNjaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { circle_a, circle_b, shift_x, shift_y, shift_z, stretch };
+    return new Object[]{circle_a, circle_b, shift_x, shift_y, shift_z, stretch};
   }
 
   @Override

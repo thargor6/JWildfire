@@ -16,9 +16,6 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.util.List;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -34,6 +31,9 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleImage;
+
+import java.util.List;
+import java.util.Map;
 
 public class IFlamesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -195,8 +195,7 @@ public class IFlamesFunc extends VariationFunc {
       int idx;
       if (randGen.random() < 0.5) {
         idx = randGen.random(flameList.size());
-      }
-      else {
+      } else {
         idx = flameIdx++;
         if (flameIdx >= flameList.size()) {
           flameIdx = 0;
@@ -214,8 +213,7 @@ public class IFlamesFunc extends VariationFunc {
           pVarTP.redColor = baseFlame.getPreviewColorR() * imageParams.getIFlame_brightness() * baseFlame.getBrightness();
           pVarTP.greenColor = baseFlame.getPreviewColorG() * imageParams.getIFlame_brightness() * baseFlame.getBrightness();
           pVarTP.blueColor = baseFlame.getPreviewColorB() * imageParams.getIFlame_brightness() * baseFlame.getBrightness();
-        }
-        else {
+        } else {
           XYZPoint src = new XYZPoint();
           XYZPoint dst = new XYZPoint();
           baseFlame.getIterator().iterate(src, dst, baseFlame.getSize(), particle.getRotation().getX(), particle.getRotation().getY(), particle.getRotation().getZ());
@@ -228,12 +226,10 @@ public class IFlamesFunc extends VariationFunc {
           pVarTP.greenColor = baseFlame.getG() * imageParams.getIFlame_brightness() * baseFlame.getBrightness();
           pVarTP.blueColor = baseFlame.getB() * imageParams.getIFlame_brightness() * baseFlame.getBrightness();
         }
-      }
-      else {
+      } else {
         addImage(pVarTP, randGen);
       }
-    }
-    else {
+    } else {
       addImage(pVarTP, randGen);
     }
   }

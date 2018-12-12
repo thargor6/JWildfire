@@ -16,8 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.Serializable;
-
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -25,6 +23,8 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class ColorMapHolder implements Serializable {
@@ -56,16 +56,14 @@ public class ColorMapHolder implements Serializable {
     if (colormap_filename != null && colormap_filename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(colormap_filename);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (colorMap != null) {
       colorMapWidth = colorMap.getImageWidth();
       colorMapHeight = colorMap.getImageHeight();
-    }
-    else {
+    } else {
       colorMapWidth = colorMapHeight = 0;
     }
   }
@@ -102,16 +100,14 @@ public class ColorMapHolder implements Serializable {
           pVarTP.redColor = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           pVarTP.greenColor = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           pVarTP.blueColor = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
-        }
-        else {
+        } else {
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(ix, iy));
           pVarTP.rgbColor = true;
           pVarTP.redColor = toolPixel.r;
           pVarTP.greenColor = toolPixel.g;
           pVarTP.blueColor = toolPixel.b;
         }
-      }
-      else {
+      } else {
         if (blend_colormap > 0) {
           int ix1 = ix + 1;
           if (ix1 >= colorMapWidth)
@@ -141,8 +137,7 @@ public class ColorMapHolder implements Serializable {
           pVarTP.redColor = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           pVarTP.greenColor = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           pVarTP.blueColor = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
-        }
-        else {
+        } else {
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
           pVarTP.rgbColor = true;
           pVarTP.redColor = rgbArray[0] * 255;
@@ -150,8 +145,7 @@ public class ColorMapHolder implements Serializable {
           pVarTP.blueColor = rgbArray[2] * 255;
         }
       }
-    }
-    else {
+    } else {
       pVarTP.rgbColor = true;
       pVarTP.redColor = 0;
       pVarTP.greenColor = 0;

@@ -16,16 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Hypertile2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class Hypertile2Func extends VariationFunc {
   private static final String PARAM_P = "p";
   private static final String PARAM_Q = "q";
 
-  private static final String[] paramNames = { PARAM_P, PARAM_Q };
+  private static final String[] paramNames = {PARAM_P, PARAM_Q};
 
   private int p = 3;
   private int q = 7;
@@ -60,8 +56,8 @@ public class Hypertile2Func extends VariationFunc {
     pVarTP.y += vr * (y * cosa - x * sina);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -71,7 +67,7 @@ public class Hypertile2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { p, q };
+    return new Object[]{p, q};
   }
 
   @Override
@@ -96,7 +92,7 @@ public class Hypertile2Func extends VariationFunc {
     this.pa = 2.0 * M_PI / this.p;
 
     double r2 = 1.0 - (cos(2.0 * M_PI / this.p) - 1.0) /
-        (cos(2.0 * M_PI / this.p) + cos(2.0 * M_PI / this.q));
+            (cos(2.0 * M_PI / this.p) + cos(2.0 * M_PI / this.q));
     if (r2 > 0)
       this.r = 1.0 / sqrt(r2);
     else

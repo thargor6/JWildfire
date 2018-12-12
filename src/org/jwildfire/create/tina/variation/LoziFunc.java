@@ -16,70 +16,68 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 public class LoziFunc extends VariationFunc {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_A = "a";
-	private static final String PARAM_B = "b";
-	private static final String PARAM_C = "c";
+  private static final String PARAM_A = "a";
+  private static final String PARAM_B = "b";
+  private static final String PARAM_C = "c";
 
-	private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C };
-	private double a = 0.5;
-	private double b = 1.0;
-	private double c = 1.0;
-
-
-
-	@Override
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
-			// Lozi by TyrantWave
-			// https://www.deviantart.com/tyrantwave/art/Henon-and-Lozi-Apo-Plugins-125039554
-			double pAmount) {
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C};
+  private double a = 0.5;
+  private double b = 1.0;
+  private double c = 1.0;
 
 
-
-		pVarTP.x += (c - (a * fabs(pAffineTP.x)) + pAffineTP.y) * pAmount;
-		pVarTP.y += b * pAffineTP.x * pAmount;
-
-		if (pContext.isPreserveZCoordinate()) {
-			pVarTP.z += pAmount * pAffineTP.z;
-		}
-
-	}
-
-	@Override
-	public String[] getParameterNames() {
-		return paramNames;
-	}
-
-	@Override
-	public Object[] getParameterValues() {
-		return new Object[] { a, b, c };
-	}
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
+                        // Lozi by TyrantWave
+                        // https://www.deviantart.com/tyrantwave/art/Henon-and-Lozi-Apo-Plugins-125039554
+                        double pAmount) {
 
 
+    pVarTP.x += (c - (a * fabs(pAffineTP.x)) + pAffineTP.y) * pAmount;
+    pVarTP.y += b * pAffineTP.x * pAmount;
 
-	@Override
-	public void setParameter(String pName, double pValue) {
-		if (PARAM_A.equalsIgnoreCase(pName)) {
-			a = pValue;
-		} else if (PARAM_B.equalsIgnoreCase(pName)) {
-			b = pValue;
-		} else if (PARAM_C.equalsIgnoreCase(pName)) {
-			c = pValue;
-		} else {
-			System.out.println("pName not recognized: " + pName);
-			throw new IllegalArgumentException(pName);
-		}
-	}
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
-	@Override
-	public String getName() {
-		return "lozi";
-	}
+  }
+
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
+
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[]{a, b, c};
+  }
+
+
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_A.equalsIgnoreCase(pName)) {
+      a = pValue;
+    } else if (PARAM_B.equalsIgnoreCase(pName)) {
+      b = pValue;
+    } else if (PARAM_C.equalsIgnoreCase(pName)) {
+      c = pValue;
+    } else {
+      System.out.println("pName not recognized: " + pName);
+      throw new IllegalArgumentException(pName);
+    }
+  }
+
+  @Override
+  public String getName() {
+    return "lozi";
+  }
 
 }

@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class WhorlFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class WhorlFunc extends VariationFunc {
   private static final String PARAM_INSIDE = "inside";
   private static final String PARAM_OUTSIDE = "outside";
 
-  private static final String[] paramNames = { PARAM_INSIDE, PARAM_OUTSIDE };
+  private static final String[] paramNames = {PARAM_INSIDE, PARAM_OUTSIDE};
 
   private double inside = 0.10;
   private double outside = 0.20;
@@ -49,8 +49,8 @@ public class WhorlFunc extends VariationFunc {
     pVarTP.x += pAmount * r * ca;
     pVarTP.y += pAmount * r * sa;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -60,7 +60,7 @@ public class WhorlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { inside, outside };
+    return new Object[]{inside, outside};
   }
 
   @Override

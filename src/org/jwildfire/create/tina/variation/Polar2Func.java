@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.log;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.log;
 
 public class Polar2Func extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,8 +32,8 @@ public class Polar2Func extends SimpleVariationFunc {
     pVarTP.x += p2v * pAffineTP.getPrecalcAtan();
     pVarTP.y += p2v / 2.0 * log(pAffineTP.getPrecalcSumsq());
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

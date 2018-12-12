@@ -25,7 +25,7 @@ public class Bent2Func extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
 
   private double x = 1.0;
   private double y = 1.0;
@@ -42,8 +42,8 @@ public class Bent2Func extends VariationFunc {
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -53,7 +53,7 @@ public class Bent2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[]{x, y};
   }
 
   @Override

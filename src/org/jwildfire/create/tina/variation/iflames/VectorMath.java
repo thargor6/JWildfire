@@ -35,8 +35,7 @@ public class VectorMath {
     float r = len(pVector);
     if (r > MathLib.EPSILON) {
       return inverseMultiply(r, pVector);
-    }
-    else {
+    } else {
       return pVector;
     }
   }
@@ -65,8 +64,7 @@ public class VectorMath {
 
     if (len(c1) > len(c2)) {
       return c1;
-    }
-    else {
+    } else {
       return c2;
     }
   }

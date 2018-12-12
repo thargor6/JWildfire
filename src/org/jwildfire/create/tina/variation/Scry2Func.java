@@ -16,18 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Scry2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +29,7 @@ public class Scry2Func extends VariationFunc {
   private static final String PARAM_SIDES = "sides";
   private static final String PARAM_STAR = "star";
   private static final String PARAM_CIRCLE = "circle";
-  private static final String[] paramNames = { PARAM_SIDES, PARAM_STAR, PARAM_CIRCLE };
+  private static final String[] paramNames = {PARAM_SIDES, PARAM_STAR, PARAM_CIRCLE};
 
   private int sides = 4;
   private double star = 0.0;
@@ -65,8 +59,7 @@ public class Scry2Func extends VariationFunc {
     r1 = r2;
     if (i > 1) {
       r2 = sqr(r2); // we want it squared, for the pretty effect
-    }
-    else {
+    } else {
       r2 = fabs(r2) * r2; // 2-faces effect JUST FOR i=1
     }
     // scry effect:
@@ -78,8 +71,8 @@ public class Scry2Func extends VariationFunc {
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -89,7 +82,7 @@ public class Scry2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { sides, star, circle };
+    return new Object[]{sides, star, circle};
   }
 
   @Override

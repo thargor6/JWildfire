@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Waves2RadialFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +30,7 @@ public class Waves2RadialFunc extends VariationFunc {
   private static final String PARAM_W2R_FREQY = "w2r_freqy";
   private static final String PARAM_W2R_NULL = "w2r_null";
   private static final String PARAM_W2R_DISTANCE = "w2r_distance";
-  private static final String[] paramNames = { PARAM_W2R_SCALEX, PARAM_W2R_SCALEY, PARAM_W2R_FREQX, PARAM_W2R_FREQY, PARAM_W2R_NULL, PARAM_W2R_DISTANCE };
+  private static final String[] paramNames = {PARAM_W2R_SCALEX, PARAM_W2R_SCALEY, PARAM_W2R_FREQX, PARAM_W2R_FREQY, PARAM_W2R_NULL, PARAM_W2R_DISTANCE};
 
   private double w2r_scalex = 0.1;
   private double w2r_scaley = 0.1;
@@ -65,7 +63,7 @@ public class Waves2RadialFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { w2r_scalex, w2r_scaley, w2r_freqx, w2r_freqy, w2r_null, w2r_distance };
+    return new Object[]{w2r_scalex, w2r_scaley, w2r_freqx, w2r_freqy, w2r_null, w2r_distance};
   }
 
   @Override

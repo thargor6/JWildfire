@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation.plot;
 
-import java.io.StringReader;
-
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
+
+import java.io.StringReader;
 
 public class YPlot2DFormulaEvaluator {
 

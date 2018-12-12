@@ -1,21 +1,22 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
-import java.util.Random;
-
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import java.util.Random;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+
 public class HarmonographFunc extends VariationFunc {
   /**
-  * Harmonograph
-  * @author Jesus Sosa
-  * @date December 8, 2017
-  * based on this Article:
+   * Harmonograph
+   *
+   * @author Jesus Sosa
+   * @date December 8, 2017
+   * based on this Article:
    * http://www.instructables.com/id/Harmonographs-a-Subtle-Artform/
    */
   private static final long serialVersionUID = 1L;
@@ -42,10 +43,10 @@ public class HarmonographFunc extends VariationFunc {
   private static final String PARAM_ROT_PHAS_Y = "p4";
   private static final String PARAM_ROT_DAMP_Y = "d4";
 
-  private static final String[] paramNames = { PARAM_SEED, PARAM_TIME, PARAM_AMPL_X, PARAM_FREQ_X, PARAM_PHAS_X, PARAM_DAMP_X,
-      PARAM_AMPL_Y, PARAM_FREQ_Y, PARAM_PHAS_Y, PARAM_DAMP_Y,
-      PARAM_ROT_AMPL_X, PARAM_ROT_FREQ_X, PARAM_ROT_PHAS_X, PARAM_ROT_DAMP_X,
-      PARAM_ROT_AMPL_Y, PARAM_ROT_FREQ_Y, PARAM_ROT_PHAS_Y, PARAM_ROT_DAMP_Y };
+  private static final String[] paramNames = {PARAM_SEED, PARAM_TIME, PARAM_AMPL_X, PARAM_FREQ_X, PARAM_PHAS_X, PARAM_DAMP_X,
+          PARAM_AMPL_Y, PARAM_FREQ_Y, PARAM_PHAS_Y, PARAM_DAMP_Y,
+          PARAM_ROT_AMPL_X, PARAM_ROT_FREQ_X, PARAM_ROT_PHAS_X, PARAM_ROT_DAMP_X,
+          PARAM_ROT_AMPL_Y, PARAM_ROT_FREQ_Y, PARAM_ROT_PHAS_Y, PARAM_ROT_DAMP_Y};
 
   private Random rand = new Random();
   private int seed = 1234;
@@ -133,7 +134,7 @@ public class HarmonographFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { seed, time, a1, f1, p1, d1, a2, f2, p2, d2, a3, f3, p3, d3, a4, f4, p4, d4 };
+    return new Object[]{seed, time, a1, f1, p1, d1, a2, f2, p2, d2, a3, f3, p3, d3, a4, f4, p4, d4};
   }
 
   @Override
@@ -142,8 +143,7 @@ public class HarmonographFunc extends VariationFunc {
       seed = (int) pValue;
       rand.setSeed(seed);
       calcParams();
-    }
-    else if (PARAM_TIME.equalsIgnoreCase(pName))
+    } else if (PARAM_TIME.equalsIgnoreCase(pName))
       time = (int) pValue;
     else if (PARAM_AMPL_X.equalsIgnoreCase(pName))
       a1 = (int) pValue;

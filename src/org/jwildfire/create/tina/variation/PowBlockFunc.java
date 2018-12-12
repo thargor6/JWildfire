@@ -16,17 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PowBlockFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,7 +31,7 @@ public class PowBlockFunc extends VariationFunc {
   private static final String PARAM_CORRECTN = "correctn";
   private static final String PARAM_CORRECTD = "correctd";
 
-  private static final String[] paramNames = { PARAM_NUMERATOR, PARAM_DENOMINATOR, PARAM_ROOT, PARAM_CORRECTN, PARAM_CORRECTD };
+  private static final String[] paramNames = {PARAM_NUMERATOR, PARAM_DENOMINATOR, PARAM_ROOT, PARAM_CORRECTN, PARAM_CORRECTD};
 
   private double numerator = 2.0 + Math.random() * 5.0;
   private double denominator = 1.0 + Math.random() * 3.0;
@@ -52,13 +46,13 @@ public class PowBlockFunc extends VariationFunc {
     double r2 = pow(pAffineTP.getPrecalcSumsq(), _power) * pAmount;
 
     double ran = ((theta) * _deneps + (root
-        * M_2PI * floor(pContext.random() * denominator) * _deneps)) * numerator;
+            * M_2PI * floor(pContext.random() * denominator) * _deneps)) * numerator;
 
     pVarTP.x += r2 * cos(ran);
     pVarTP.y += r2 * sin(ran);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -69,7 +63,7 @@ public class PowBlockFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { numerator, denominator, root, correctn, correctd };
+    return new Object[]{numerator, denominator, root, correctn, correctd};
   }
 
   @Override

@@ -16,12 +16,12 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
+import org.jwildfire.base.Tools;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jwildfire.base.Tools;
 
 public class IFlamesAnimatorMotionStore {
   private final Map<Float, StoreEntry> store = new HashMap<Float, StoreEntry>();

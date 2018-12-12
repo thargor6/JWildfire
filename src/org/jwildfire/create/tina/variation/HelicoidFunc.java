@@ -16,16 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class HelicoidFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_FREQUENCY = "frequency";
 
-  private static final String[] paramNames = { PARAM_FREQUENCY };
+  private static final String[] paramNames = {PARAM_FREQUENCY};
 
   private double frequency = 1.0;
 
@@ -33,14 +33,14 @@ public class HelicoidFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* helicoid by zy0rg, http://zy0rg.deviantart.com/art/Helix-Helicoid-687956099 converted by Brad Stefanov */
-	  double range = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
-	  double s= sin(pAffineTP.z*M_2PI * frequency + atan2(pAffineTP.y, pAffineTP.x));
-	  double c= cos(pAffineTP.z*M_2PI * frequency + atan2(pAffineTP.y, pAffineTP.x));
-	
-	  
-	    pVarTP.x += pAmount* c * range;
-	    pVarTP.y += pAmount* s * range;
-	    pVarTP.z += pAmount* pAffineTP.z;
+    double range = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
+    double s = sin(pAffineTP.z * M_2PI * frequency + atan2(pAffineTP.y, pAffineTP.x));
+    double c = cos(pAffineTP.z * M_2PI * frequency + atan2(pAffineTP.y, pAffineTP.x));
+
+
+    pVarTP.x += pAmount * c * range;
+    pVarTP.y += pAmount * s * range;
+    pVarTP.z += pAmount * pAffineTP.z;
   }
 
   @Override
@@ -50,13 +50,13 @@ public class HelicoidFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { frequency };
+    return new Object[]{frequency};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_FREQUENCY.equalsIgnoreCase(pName))
-    	frequency = pValue;
+      frequency = pValue;
 
     else
       throw new IllegalArgumentException(pName);

@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class FlipCircleFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,8 +33,8 @@ public class FlipCircleFunc extends SimpleVariationFunc {
       pVarTP.y -= pAmount * pAffineTP.y;
     pVarTP.x += pAmount * pAffineTP.x;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

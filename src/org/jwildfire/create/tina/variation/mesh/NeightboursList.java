@@ -16,13 +16,9 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jwildfire.create.tina.meshgen.marchingcubes.Mesh;
+
+import java.util.*;
 
 public class NeightboursList {
   private final Map<Integer, List<Integer>> neighbours;
@@ -58,8 +54,7 @@ public class NeightboursList {
       nList = new ArrayList<>();
       neighbours.put(fromVertex, nList);
       nList.add(toVertexObj);
-    }
-    else {
+    } else {
       if (nList.indexOf(toVertexObj) < 0) {
         nList.add(toVertexObj);
       }

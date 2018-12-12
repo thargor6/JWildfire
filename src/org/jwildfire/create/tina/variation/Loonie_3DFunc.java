@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Loonie_3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -48,8 +46,7 @@ public class Loonie_3DFunc extends SimpleVariationFunc {
       pVarTP.x += r * pAffineTP.x;
       pVarTP.y += r * pAffineTP.y;
       pVarTP.z += r * efTez * 0.5;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
       pVarTP.z += pAmount * efTez * 0.5;

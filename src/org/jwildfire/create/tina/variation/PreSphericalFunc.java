@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
 public class PreSphericalFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;

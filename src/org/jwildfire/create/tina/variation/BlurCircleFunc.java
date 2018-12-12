@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import odk.lang.DoubleWrapper;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class BlurCircleFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -45,17 +45,14 @@ public class BlurCircleFunc extends SimpleVariationFunc {
     if (absx >= absy) {
       if (x >= absy) {
         perimeter = absx + y;
-      }
-      else {
+      } else {
         perimeter = 5.0 * absx - y;
       }
       side = absx;
-    }
-    else {
+    } else {
       if (y >= absx) {
         perimeter = 3.0 * absy - x;
-      }
-      else {
+      } else {
         perimeter = 7.0 * absy + x;
       }
       side = absy;
@@ -67,8 +64,8 @@ public class BlurCircleFunc extends SimpleVariationFunc {
     pVarTP.y += r * sina.value;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 

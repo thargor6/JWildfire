@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LayeredSpiralFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_RADIUS = "radius";
 
-  private static final String[] paramNames = { PARAM_RADIUS };
+  private static final String[] paramNames = {PARAM_RADIUS};
 
   private double radius = 1.0;
 
@@ -42,8 +39,8 @@ public class LayeredSpiralFunc extends VariationFunc {
     pVarTP.y += pAmount * a * sin(t);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -54,7 +51,7 @@ public class LayeredSpiralFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius };
+    return new Object[]{radius};
   }
 
   @Override

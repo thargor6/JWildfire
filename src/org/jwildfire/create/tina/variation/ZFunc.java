@@ -16,23 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ZFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -50,7 +39,7 @@ public class ZFunc extends VariationFunc {
   private static final String PARAM_SUPER_N2 = "super_n2";
   private static final String PARAM_SUPER_N3 = "super_n3";
 
-  private static final String[] paramNames = { PARAM_HYPERGON, PARAM_HYPERGON_N, PARAM_HYPERGON_R, PARAM_STAR, PARAM_STAR_N, PARAM_STAR_SLOPE, PARAM_LITUUS, PARAM_LITUUS_A, PARAM_SUPER, PARAM_SUPER_M, PARAM_SUPER_N1, PARAM_SUPER_N2, PARAM_SUPER_N3 };
+  private static final String[] paramNames = {PARAM_HYPERGON, PARAM_HYPERGON_N, PARAM_HYPERGON_R, PARAM_STAR, PARAM_STAR_N, PARAM_STAR_SLOPE, PARAM_LITUUS, PARAM_LITUUS_A, PARAM_SUPER, PARAM_SUPER_M, PARAM_SUPER_N1, PARAM_SUPER_N2, PARAM_SUPER_N3};
 
   private double hypergon = Math.random();
   private int hypergon_n = 4;
@@ -75,30 +64,23 @@ public class ZFunc extends VariationFunc {
     double total = 0.0;
     double temp1, temp2;
 
-    if (this.hypergon != 0.0)
-    {
+    if (this.hypergon != 0.0) {
       temp1 = fmod(fabs(a), M_2PI / this._hypergon_n) - M_PI / this._hypergon_n;
       temp2 = sqr(tan(temp1)) + 1.0;
-      if (temp2 >= sqr(this._hypergon_d))
-      {
+      if (temp2 >= sqr(this._hypergon_d)) {
         total += this.hypergon;
-      }
-      else
-      {
+      } else {
         total += this.hypergon * (this._hypergon_d - sqrt(sqr(this._hypergon_d) - temp2)) / sqrt(temp2);
       }
     }
-    if (this.star != 0.0)
-    {
+    if (this.star != 0.0) {
       temp1 = tan(fabs(fmod(fabs(a), M_2PI / this._star_n) - M_PI / this._star_n));
       total += this.star * sqrt(sqr(this._star_slope) * (1.0 + sqr(temp1)) / sqr(temp1 + this._star_slope));
     }
-    if (this.lituus != 0.0)
-    {
+    if (this.lituus != 0.0) {
       total += this.lituus * pow(a / M_PI + 1.0, this._lituus_a);
     }
-    if (this._super != 0.0)
-    {
+    if (this._super != 0.0) {
       double ang = a * this._super_m;
       s = sin(ang);
       c = cos(ang);
@@ -124,7 +106,7 @@ public class ZFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { hypergon, hypergon_n, hypergon_r, star, star_n, star_slope, lituus, lituus_a, _super, super_m, super_n1, super_n2, super_n3 };
+    return new Object[]{hypergon, hypergon_n, hypergon_r, star, star_n, star_slope, lituus, lituus_a, _super, super_m, super_n1, super_n2, super_n3};
   }
 
   @Override

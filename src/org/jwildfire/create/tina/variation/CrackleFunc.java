@@ -23,23 +23,13 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.variation.NoiseTools.simplexNoise3D;
-import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
-import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
-import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
-import static org.jwildfire.create.tina.variation.VoronoiTools._z_;
-import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
-import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.create.tina.variation.NoiseTools.simplexNoise3D;
+import static org.jwildfire.create.tina.variation.VoronoiTools.*;
 
 public class CrackleFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -52,7 +42,7 @@ public class CrackleFunc extends VariationFunc {
   public static final String PARAM_SCALE = "scale";
   public static final String PARAM_Z = "z";
 
-  protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z };
+  protected static final String[] paramNames = {PARAM_CELLSIZE, PARAM_POWER, PARAM_DISTORT, PARAM_SCALE, PARAM_Z};
 
   protected double cellsize = 1.0;
   protected double power = 0.2;
@@ -75,19 +65,18 @@ public class CrackleFunc extends VariationFunc {
     s = cellsize / 2.0;
 
     if (pAmount != 0) {
-        // For a blur effect, base everything starting on a circle radius 1.0
-        // (as opposed to reading the values from FTx and FTy)
-        double blurr = (pContext.random() + pContext.random()) / 2.0 + (pContext.random() - 0.5) / 4.0;
+      // For a blur effect, base everything starting on a circle radius 1.0
+      // (as opposed to reading the values from FTx and FTy)
+      double blurr = (pContext.random() + pContext.random()) / 2.0 + (pContext.random() - 0.5) / 4.0;
 
-        double theta = 2 * M_PI * pContext.random();
+      double theta = 2 * M_PI * pContext.random();
 
-        U[_x_] = blurr * sin(theta);
-        U[_y_] = blurr * cos(theta);
-    }
-    else {
-    	// pAmount=0, so color only (DC versions; won't affect normal one); don't blur
-    	U[_x_] = pAffineTP.x;
-    	U[_y_] = pAffineTP.y;
+      U[_x_] = blurr * sin(theta);
+      U[_y_] = blurr * cos(theta);
+    } else {
+      // pAmount=0, so color only (DC versions; won't affect normal one); don't blur
+      U[_x_] = pAffineTP.x;
+      U[_y_] = pAffineTP.y;
     }
 
     // Use integer values as Voronoi grid co-ordinates
@@ -106,9 +95,9 @@ public class CrackleFunc extends VariationFunc {
 
     int q = closest(P, 9, U);
 
-    int offset[][] = new int[][] { { -1, -1 }, { -1, 0 }, { -1, 1 },
-        { 0, -1 }, { 0, 0 }, { 0, 1 },
-        { 1, -1 }, { 1, 0 }, { 1, 1 } };
+    int offset[][] = new int[][]{{-1, -1}, {-1, 0}, {-1, 1},
+            {0, -1}, {0, 0}, {0, 1},
+            {1, -1}, {1, 0}, {1, 1}};
 
     // Remake list starting from chosen square, ensure it is completely surrounded (total 9 points)
 
@@ -161,7 +150,7 @@ public class CrackleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cellsize, power, distort, scale, z };
+    return new Object[]{cellsize, power, distort, scale, z};
   }
 
   @Override
@@ -221,8 +210,7 @@ public class CrackleFunc extends VariationFunc {
     if (fabs(x) <= CACHE_NUM && fabs(y) <= CACHE_NUM) {
       V[_x_] = Cache[x + CACHE_NUM][y + CACHE_NUM][_x_];
       V[_y_] = Cache[x + CACHE_NUM][y + CACHE_NUM][_y_];
-    }
-    else {
+    } else {
       position(x, y, z, s, d, V);
     }
   }

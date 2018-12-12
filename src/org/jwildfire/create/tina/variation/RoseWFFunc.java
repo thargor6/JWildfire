@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class RoseWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class RoseWFFunc extends VariationFunc {
   private static final String PARAM_AMP = "amp";
   private static final String PARAM_WAVES = "waves";
   private static final String PARAM_FILLED = "filled";
-  private static final String[] paramNames = { PARAM_AMP, PARAM_WAVES, PARAM_FILLED };
+  private static final String[] paramNames = {PARAM_AMP, PARAM_WAVES, PARAM_FILLED};
 
   private double amp = 0.5;
   private int waves = 4;
@@ -52,8 +52,8 @@ public class RoseWFFunc extends VariationFunc {
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -63,7 +63,7 @@ public class RoseWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { amp, waves, filled };
+    return new Object[]{amp, waves, filled};
   }
 
   @Override

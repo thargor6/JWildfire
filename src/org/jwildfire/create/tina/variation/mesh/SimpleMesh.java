@@ -16,14 +16,14 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.base.mathlib.VecMathLib.VectorD;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 
 public class SimpleMesh {
   private List<Vertex> vertices = new ArrayList<>();
@@ -254,8 +254,7 @@ public class SimpleMesh {
         nv4 = newMesh.addVertex(v4.x, v4.y, v4.z, v4.u, v4.v);
         nv5 = newMesh.addVertex(v5.x, v5.y, v5.z, v5.u, v5.v);
         nv6 = newMesh.addVertex(v6.x, v6.y, v6.z, v6.u, v6.v);
-      }
-      else {
+      } else {
         Vertex v4 = intersect(v1, v2);
         Vertex v5 = intersect(v2, v3);
         Vertex v6 = intersect(v3, v1);

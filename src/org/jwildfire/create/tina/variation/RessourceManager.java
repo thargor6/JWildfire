@@ -16,19 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JLabel;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.image.WFImage;
 import org.jwildfire.io.ImageReader;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class RessourceManager {
   private static final Map<String, WFImage> imageMapByName = new HashMap<String, WFImage>();
@@ -59,8 +54,7 @@ public class RessourceManager {
       }
       if ("hdr".equalsIgnoreCase(fileExt)) {
         res = new ImageReader(new JLabel()).loadHDRImage(pFilename);
-      }
-      else {
+      } else {
         res = new ImageReader(new JLabel()).loadImage(pFilename);
       }
       imageMapByName.put(pFilename, res);
@@ -85,8 +79,7 @@ public class RessourceManager {
   private static String getHashKey(byte[] pImageData) {
     if (pImageData != null && pImageData.length > 0) {
       return pImageData.toString() + "_" + pImageData.length + "_" + pImageData[0] + "_" + pImageData[pImageData.length / 2] + "_" + pImageData[pImageData.length - 1];
-    }
-    else {
+    } else {
       return "0";
     }
   }
@@ -112,8 +105,7 @@ public class RessourceManager {
 
       if ("hdr".equalsIgnoreCase(fileExt)) {
         res = new ImageReader(new JLabel()).loadHDRImage(f.getAbsolutePath());
-      }
-      else {
+      } else {
         res = new ImageReader(new JLabel()).loadImage(f.getAbsolutePath());
       }
       imageMapByHash.put(key, res);
@@ -124,11 +116,9 @@ public class RessourceManager {
   public static String guessImageExtension(byte[] pImageData) {
     if (pImageData.length > 6 && new String(pImageData, 0, 6).equals("#?RGBE")) {
       return "hdr";
-    }
-    else if (pImageData.length > 5 && new String(pImageData, 1, 3).equals("PNG")) {
+    } else if (pImageData.length > 5 && new String(pImageData, 1, 3).equals("PNG")) {
       return "png";
-    }
-    else {
+    } else {
       return "jpg";
     }
   }

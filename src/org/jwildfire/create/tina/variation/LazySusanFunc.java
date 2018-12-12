@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LazySusanFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +30,7 @@ public class LazySusanFunc extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
 
-  private static final String[] paramNames = { PARAM_SPACE, PARAM_TWIST, PARAM_SPIN, PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_SPACE, PARAM_TWIST, PARAM_SPIN, PARAM_X, PARAM_Y};
 
   private double space = 0.40;
   private double twist = 0.20;
@@ -57,16 +54,15 @@ public class LazySusanFunc extends VariationFunc {
 
       pVarTP.x += rr * cosa + x;
       pVarTP.y += rr * sina - y;
-    }
-    else {
+    } else {
       rr = pAmount * (1.0 + space / rr);
 
       pVarTP.x += rr * xx + x;
       pVarTP.y += rr * yy - y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -77,7 +73,7 @@ public class LazySusanFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { space, twist, spin, x, y };
+    return new Object[]{space, twist, spin, x, y};
   }
 
   @Override

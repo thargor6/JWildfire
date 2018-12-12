@@ -1,17 +1,16 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class SattractorFunc extends VariationFunc {
 
   /**
-   * Hennon IFS 
+   * Hennon IFS
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -22,7 +21,7 @@ public class SattractorFunc extends VariationFunc {
 
   private static final String PARAM_M = "m";
 
-  private static final String[] paramNames = { PARAM_M };
+  private static final String[] paramNames = {PARAM_M};
 
   double[] a = new double[13];
   double[] b = new double[13];
@@ -47,8 +46,7 @@ public class SattractorFunc extends VariationFunc {
     if (pContext.random() < 0.5) {
       x = pAffineTP.x / 2.0 + a[l];
       y = pAffineTP.y / 2.0 + b[l];
-    }
-    else {
+    } else {
       x = pAffineTP.x * a[l] + pAffineTP.y * b[l] + pAffineTP.x * pAffineTP.x * b[l];
       y = pAffineTP.y * a[l] - pAffineTP.x * b[l] + pAffineTP.x * pAffineTP.x * a[l];
     }
@@ -73,7 +71,7 @@ public class SattractorFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { m };
+    return new Object[]{m};
   }
 
   public void setParameter(String pName, double pValue) {
@@ -90,8 +88,7 @@ public class SattractorFunc extends VariationFunc {
         //			    	  System.out.println("i , a[i] ,b[i] " + i + " , " + a[i] +" , "+ b[i]);
       }
 
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class ScramblyFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class ScramblyFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_BYROWS = "byrows";
   private static final String PARAM_CELLSIZE = "cellsize";
-  private static final String[] paramNames = { PARAM_L, PARAM_SEED, PARAM_BYROWS, PARAM_CELLSIZE };
+  private static final String[] paramNames = {PARAM_L, PARAM_SEED, PARAM_BYROWS, PARAM_CELLSIZE};
 
   private int l = 3;
   private int seed = 51;
@@ -56,8 +56,7 @@ public class ScramblyFunc extends VariationFunc {
     if (_current_l <= 0 || Ix < 0 || Ix >= _current_l || Iy < 0 || Iy >= _current_l) {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       Vx -= Ix;
       Vy -= Iy;
       // randomizing int parts:
@@ -78,8 +77,8 @@ public class ScramblyFunc extends VariationFunc {
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -89,7 +88,7 @@ public class ScramblyFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { l, seed, byrows, cellsize };
+    return new Object[]{l, seed, byrows, cellsize};
   }
 
   @Override
@@ -142,16 +141,14 @@ public class ScramblyFunc extends VariationFunc {
       for (j = 0; j < LL2; j++) {
         _mx_rd[j] = (seed + j + 1) % LL2; // shifts the matrix (interesting effect)
       }
-    }
-    else {
+    } else {
       for (j = 0; j < LL2; j++) {
         _mx_rd[j] = j;
       }
 
       if (byrows == 0) {
         mx_randflip(0, LL2, seed, _mx_rd); // scrambles the whole matrix
-      }
-      else {
+      } else {
         for (j = 0; j < LL; j++) {
           mx_randflip(LL * j, LL * (1 + j), seed + j, _mx_rd); // scrambles row by row
         }
@@ -167,17 +164,16 @@ public class ScramblyFunc extends VariationFunc {
     int i, j, prn, ridx;
     prn = 1;
 
-    for (j = idxmin;; j++) { // 1 means that I used a custom cycle break rule.
+    for (j = idxmin; ; j++) { // 1 means that I used a custom cycle break rule.
       prn = prn * 1103515245 + 12345; // jwildfire source code :D
       prn = prn & 0xFFFF0000 |
-          ((prn << 8) & 0xFF00) | ((prn >> 8) & 0x00FF); // flippy bytes
+              ((prn << 8) & 0xFF00) | ((prn >> 8) & 0x00FF); // flippy bytes
       prn = (prn & 4) != 0 ? prn - seed : prn ^ seed;
       prn = (prn < 0) ? -prn : prn; // neg are troubleful
       ridx = 1 + j;
       if (idxmax > ridx) {
         ridx += prn % (idxmax - ridx);
-      }
-      else {
+      } else {
         //printf("STOP> %i %i %i\n",ridx, idxmin , idxmax);
         break;
       }
@@ -193,11 +189,9 @@ public class ScramblyFunc extends VariationFunc {
   private int SGN(int x) {
     if (x < 0) {
       return -1;
-    }
-    else if (x > 0) {
+    } else if (x > 0) {
       return 1;
-    }
-    else {
+    } else {
       return 0;
     }
   }

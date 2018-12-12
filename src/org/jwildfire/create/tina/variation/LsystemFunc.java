@@ -1,27 +1,17 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.*;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LsystemFunc extends VariationFunc {
 
@@ -38,24 +28,24 @@ public class LsystemFunc extends VariationFunc {
 
   private static final String RESSOURCE_GRAMMAR = "grammar";
 
-  private static final String[] paramNames = { PARAM_ITERS, PARAM_STEP, PARAM_ANGLE, PARAM_PRESETID, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS };
-  private static final String[] ressourceNames = { RESSOURCE_GRAMMAR };
+  private static final String[] paramNames = {PARAM_ITERS, PARAM_STEP, PARAM_ANGLE, PARAM_PRESETID, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS};
+  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
 
   String string = new String(
-      "; Small set of Commands for the Lsystem_js variation en JWF \n" +
-          "; F, or d : Draw segment forward (Step) size \n" +
-          "; G, or m : move forward, without drawing (Step) Size \n" +
-          "; + : rotate the turtle 90 Degress counterclockwise \n" +
-          "; - : rotate the turtle 90 Degress clockwise \n" +
-          "; | : rotate the turtle 180 Degress \n" +
-          "; ! : Switch the rotatation angle commands '+' clockwise, '-' = counterclockwise \n" +
-          "; [ : push the Turtle state on stack \n" +
-          "; ] : pop the Turtle Stack from Stack \n" +
-          "ADH155 { ; Anthony Hanmer 2000\n" +
-          "Angle 45 ; Cesaro variation\n" +
-          "Axiom f\n" +
-          "f=f++++++++++f--------------------f++++++++++f\n" +
-          "}\n");
+          "; Small set of Commands for the Lsystem_js variation en JWF \n" +
+                  "; F, or d : Draw segment forward (Step) size \n" +
+                  "; G, or m : move forward, without drawing (Step) Size \n" +
+                  "; + : rotate the turtle 90 Degress counterclockwise \n" +
+                  "; - : rotate the turtle 90 Degress clockwise \n" +
+                  "; | : rotate the turtle 180 Degress \n" +
+                  "; ! : Switch the rotatation angle commands '+' clockwise, '-' = counterclockwise \n" +
+                  "; [ : push the Turtle state on stack \n" +
+                  "; ] : pop the Turtle Stack from Stack \n" +
+                  "ADH155 { ; Anthony Hanmer 2000\n" +
+                  "Angle 45 ; Cesaro variation\n" +
+                  "Axiom f\n" +
+                  "f=f++++++++++f--------------------f++++++++++f\n" +
+                  "}\n");
 
   /*    "SnowFlake2 { ; Adrian Mariano from The Fractal Geometry of Nature by Mandelbrot\n" +
     "angle 12\n" +
@@ -232,11 +222,11 @@ public class LsystemFunc extends VariationFunc {
     private ParameterModifier modify;
 
     public Rule(Symbol predecessor,
-        SymbolString successor,
-        ConditionEvaluator conditionEval,
-        ParameterModifier parameterModify,
-        SymbolString leftContext,
-        SymbolString rightContext) {
+                SymbolString successor,
+                ConditionEvaluator conditionEval,
+                ParameterModifier parameterModify,
+                SymbolString leftContext,
+                SymbolString rightContext) {
       predRef = new Symbol(predecessor);
       succRef = new SymbolString(successor);
       lContextRef = leftContext == null ? new SymbolString() : new SymbolString(leftContext);
@@ -462,8 +452,7 @@ public class LsystemFunc extends VariationFunc {
                 String axiom = (String) st.nextElement();
                 axioma = build_axiom(axiom);
                 //			   System.out.println("AXIOM " + axiom);
-              }
-              else {
+              } else {
                 int idxequal = line.indexOf("=");
                 String lhs = line.substring(0, idxequal);
                 lhs = lhs.replaceAll("\\s", "");
@@ -474,8 +463,7 @@ public class LsystemFunc extends VariationFunc {
                 //				   System.out.println("P " + lhs + "=" + rhs);
               }
             }
-          }
-          else // Procesa linea de parametro ANGLE
+          } else // Procesa linea de parametro ANGLE
           {
             st = new StringTokenizer(line);
             while (st.hasMoreElements()) {
@@ -487,8 +475,7 @@ public class LsystemFunc extends VariationFunc {
                 Value = Double.parseDouble(token);
                 //				System.out.println("ANGLE " + "= " + Value);
                 setAngle(360.0 / Value);
-              }
-              else //lineas en blanco
+              } else //lineas en blanco
                 continue;
             }
           }
@@ -687,10 +674,14 @@ public class LsystemFunc extends VariationFunc {
 
   private class Render {
 
-    /** The stack of turtles. */
+    /**
+     * The stack of turtles.
+     */
     Stack<Turtle> turtleStack = new Stack<Turtle>();
 
-    /** The current turtle. */
+    /**
+     * The current turtle.
+     */
     public Turtle currentTurtle;
     String theString;
     double render_angle;
@@ -727,7 +718,8 @@ public class LsystemFunc extends VariationFunc {
 
     /**
      * This handles pushing on the turtle stack.
-     * @throws CloneNotSupportedException 
+     *
+     * @throws CloneNotSupportedException
      */
     private void PushTurtle() throws CloneNotSupportedException {
       turtleStack.push((Turtle) (currentTurtle.clone()));
@@ -735,7 +727,8 @@ public class LsystemFunc extends VariationFunc {
 
     /**
      * This handles popping the turtle stack.
-     * @throws CloneNotSupportedException 
+     *
+     * @throws CloneNotSupportedException
      */
     private void PopTurtle() throws CloneNotSupportedException {
       Turtle lt = (Turtle) turtleStack.pop();
@@ -917,8 +910,7 @@ public class LsystemFunc extends VariationFunc {
       double rangle = (pContext.random() * M_2PI);
       xoffset = roffset * cos(rangle);
       yoffset = roffset * sin(rangle);
-    }
-    else {
+    } else {
       xoffset = 0;
       yoffset = 0;
     }
@@ -983,11 +975,9 @@ public class LsystemFunc extends VariationFunc {
       //    System.out.println("Grammar " + str);
 
       expanded = ls.processFile(string, Iters);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
-    }
-    finally {
+    } finally {
 
     }
     file_angle = ls.getAngle();
@@ -1004,11 +994,9 @@ public class LsystemFunc extends VariationFunc {
 
       canvas.render();
 
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
-    }
-    finally {
+    } finally {
 
     }
 
@@ -1059,8 +1047,7 @@ public class LsystemFunc extends VariationFunc {
         result.append(line + "\n");
       }
       inputStream.close();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     String fileContent = result.toString();
@@ -1092,7 +1079,7 @@ public class LsystemFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { Iters, step, angle, presetId, show_lines_param, line_thickness_param, show_points_param, point_thickness_param };
+    return new Object[]{Iters, step, angle, presetId, show_lines_param, line_thickness_param, show_points_param, point_thickness_param};
   }
 
   @Override
@@ -1105,8 +1092,7 @@ public class LsystemFunc extends VariationFunc {
       angle = pValue;
     else if (PARAM_PRESETID.equalsIgnoreCase(pName)) {
       presetId = (int) pValue;
-    }
-    else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
+    } else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness = pValue;
     else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = (int) pValue;
@@ -1127,15 +1113,14 @@ public class LsystemFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (string != null ? string.getBytes() : null) };
+    return new byte[][]{(string != null ? string.getBytes() : null)};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       string = pValue != null ? new String(pValue) : "";
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -1143,8 +1128,7 @@ public class LsystemFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

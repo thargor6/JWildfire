@@ -16,16 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class WedgeJuliaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +29,7 @@ public class WedgeJuliaFunc extends VariationFunc {
   private static final String PARAM_COUNT = "count";
   private static final String PARAM_ANGLE = "angle";
 
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST, PARAM_COUNT, PARAM_ANGLE };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST, PARAM_COUNT, PARAM_ANGLE};
 
   private double power = 7.00;
   private double dist = 0.20;
@@ -61,8 +55,8 @@ public class WedgeJuliaFunc extends VariationFunc {
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -72,7 +66,7 @@ public class WedgeJuliaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist, count, angle };
+    return new Object[]{power, dist, count, angle};
   }
 
   @Override

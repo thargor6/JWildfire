@@ -16,13 +16,13 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 public class IFlamesAnimator implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -43,22 +43,21 @@ public class IFlamesAnimator implements Serializable {
 
   private Vector getForce(float pLocalTime) {
     return new Vector(evalProperty((float) motionParams.getForceX0(), MotionParams.PARAM_FORCE_X0, pLocalTime),
-        evalProperty((float) motionParams.getForceY0(), MotionParams.PARAM_FORCE_Y0, pLocalTime),
-        evalProperty((float) motionParams.getForceZ0(), MotionParams.PARAM_FORCE_Z0, pLocalTime));
+            evalProperty((float) motionParams.getForceY0(), MotionParams.PARAM_FORCE_Y0, pLocalTime),
+            evalProperty((float) motionParams.getForceZ0(), MotionParams.PARAM_FORCE_Z0, pLocalTime));
   }
 
   private Vector getForceCentre(float pLocalTime) {
     return new Vector(evalProperty((float) motionParams.getForceCentreX(), MotionParams.PARAM_FORCE_CENTRE_X, pLocalTime),
-        evalProperty((float) motionParams.getForceCentreY(), MotionParams.PARAM_FORCE_CENTRE_Y, pLocalTime),
-        evalProperty((float) motionParams.getForceCentreZ(), MotionParams.PARAM_FORCE_CENTRE_Z, pLocalTime));
+            evalProperty((float) motionParams.getForceCentreY(), MotionParams.PARAM_FORCE_CENTRE_Y, pLocalTime),
+            evalProperty((float) motionParams.getForceCentreZ(), MotionParams.PARAM_FORCE_CENTRE_Z, pLocalTime));
   }
 
   private float evalProperty(float pStaticValue, String pPropertyname, float pLocalTime) {
     MotionCurve curve = motionCurves != null ? motionCurves.get(pPropertyname) : null;
     if (curve != null && curve.isEnabled()) {
       return (float) AnimationService.evalCurve(localTimeToFrame(pLocalTime), curve);
-    }
-    else {
+    } else {
       return pStaticValue;
     }
   }
@@ -81,8 +80,7 @@ public class IFlamesAnimator implements Serializable {
         computeNextTimeStep(t, dt);
         t += dt;
       }
-    }
-    else {
+    } else {
       for (Particle particle : particles) {
         particle.reset();
       }

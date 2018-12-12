@@ -16,18 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class WaveBlurWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -39,7 +32,7 @@ public class WaveBlurWFFunc extends VariationFunc {
   public static final String PARAM_DIRECT_COLOR = "direct_color";
   public static final String PARAM_COLOR_SCALE = "color_scale";
   public static final String PARAM_COLOR_OFFSET = "color_offset";
-  private static final String[] paramNames = { PARAM_COUNT, PARAM_PHASE, PARAM_AMPLITUDE_Z, PARAM_DAMPING_Z, PARAM_DIRECT_COLOR, PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET };
+  private static final String[] paramNames = {PARAM_COUNT, PARAM_PHASE, PARAM_AMPLITUDE_Z, PARAM_DAMPING_Z, PARAM_DIRECT_COLOR, PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET};
 
   private int count = 5;
   private double amplitude_z = 0.5;
@@ -56,8 +49,7 @@ public class WaveBlurWFFunc extends VariationFunc {
     double r;
     if (pContext.random() < 0.5) {
       r = acos(rnd) - (pContext.random(count) + 1) * M_PI + phase;
-    }
-    else {
+    } else {
       r = acos(-rnd) - (pContext.random(count) + 1) * M_PI + phase;
     }
     r *= pAmount / (count * M_PI);
@@ -86,7 +78,7 @@ public class WaveBlurWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { count, phase, amplitude_z, damping_z, direct_color, color_scale, color_offset };
+    return new Object[]{count, phase, amplitude_z, damping_z, direct_color, color_scale, color_offset};
   }
 
   @Override
@@ -96,29 +88,22 @@ public class WaveBlurWFFunc extends VariationFunc {
       if (count < 1) {
         count = 1;
       }
-    }
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    }
-    else if (PARAM_AMPLITUDE_Z.equalsIgnoreCase(pName)) {
+    } else if (PARAM_AMPLITUDE_Z.equalsIgnoreCase(pName)) {
       amplitude_z = pValue;
-    }
-    else if (PARAM_PHASE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PHASE.equalsIgnoreCase(pName)) {
       phase = pValue;
-    }
-    else if (PARAM_DAMPING_Z.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DAMPING_Z.equalsIgnoreCase(pName)) {
       damping_z = pValue;
       if (damping_z < 0.0) {
         damping_z = 0.0;
       }
-    }
-    else if (PARAM_COLOR_SCALE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_SCALE.equalsIgnoreCase(pName)) {
       color_scale = pValue;
-    }
-    else if (PARAM_COLOR_OFFSET.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_OFFSET.equalsIgnoreCase(pName)) {
       color_offset = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

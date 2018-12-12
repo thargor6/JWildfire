@@ -16,15 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SquirrelFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +27,7 @@ public class SquirrelFunc extends VariationFunc {
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B };
+  private static final String[] paramNames = {PARAM_A, PARAM_B};
 
   private double a = 1.0;
   private double b = 1.0;
@@ -46,8 +41,8 @@ public class SquirrelFunc extends VariationFunc {
     pVarTP.y = sin(sqrt(u)) * tan(pAffineTP.y) * pAmount;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -57,7 +52,7 @@ public class SquirrelFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b };
+    return new Object[]{a, b};
   }
 
   @Override

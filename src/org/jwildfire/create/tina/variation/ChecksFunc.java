@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 
 public class ChecksFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class ChecksFunc extends VariationFunc {
   private static final String PARAM_SIZE = "size";
   private static final String PARAM_RND = "rnd";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_SIZE, PARAM_RND };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_SIZE, PARAM_RND};
 
   private double x = 5.0;
   private double y = 5.0;
@@ -51,8 +51,7 @@ public class ChecksFunc extends VariationFunc {
       // -X- The -VAR(checks_#) stuff caused the error!
       dx = _ncx + rnx;
       dy = _ncy;
-    }
-    else {
+    } else {
       dx = this.x;
       dy = this.y + rny;
     }
@@ -62,8 +61,8 @@ public class ChecksFunc extends VariationFunc {
     // -X- and as a little goodie, I pass through FTz so that
     //     neat lil variation does not kill 3Dness in hack & 7X
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -73,7 +72,7 @@ public class ChecksFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, size, rnd };
+    return new Object[]{x, y, size, rnd};
   }
 
   @Override

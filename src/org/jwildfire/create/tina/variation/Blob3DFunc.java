@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Blob3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +27,7 @@ public class Blob3DFunc extends VariationFunc {
   private static final String PARAM_LOW = "low";
   private static final String PARAM_HIGH = "high";
   private static final String PARAM_WAVES = "waves";
-  private static final String[] paramNames = { PARAM_LOW, PARAM_HIGH, PARAM_WAVES };
+  private static final String[] paramNames = {PARAM_LOW, PARAM_HIGH, PARAM_WAVES};
 
   private double low = 0.3;
   private double high = 1.2;
@@ -57,7 +54,7 @@ public class Blob3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { low, high, waves };
+    return new Object[]{low, high, waves};
   }
 
   @Override

@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PRose3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -50,7 +42,7 @@ public class PRose3DFunc extends VariationFunc {
   private static final String PARAM_F = "f";
   private static final String PARAM_WIGSC = "wigsc";
   private static final String PARAM_OFFSET = "offset";
-  private static final String[] paramNames = { PARAM_L, PARAM_K, PARAM_C, PARAM_Z1, PARAM_Z2, PARAM_REF_SC, PARAM_OPT, PARAM_OPT_SC, PARAM_OPT3, PARAM_TRANSP, PARAM_DIST, PARAM_WAGSC, PARAM_CRVSC, PARAM_F, PARAM_WIGSC, PARAM_OFFSET };
+  private static final String[] paramNames = {PARAM_L, PARAM_K, PARAM_C, PARAM_Z1, PARAM_Z2, PARAM_REF_SC, PARAM_OPT, PARAM_OPT_SC, PARAM_OPT3, PARAM_TRANSP, PARAM_DIST, PARAM_WAGSC, PARAM_CRVSC, PARAM_F, PARAM_WIGSC, PARAM_OFFSET};
 
   private double l = 1.0;
   private double k = 3.0 + (Math.random() < 0.5 ? Math.random() * 10.0 : Tools.randomInt(15));
@@ -93,8 +85,7 @@ public class PRose3DFunc extends VariationFunc {
     double curve2 = sqr(rad / length);
     double curve3 = (rad - length * 0.5) / length;
     double curve4 = sqr(sqr(rad / length));
-    if (smooth12 > 2.0)
-    {
+    if (smooth12 > 2.0) {
       smooth12 = 2.0;
     }
     double antiOpt1 = 2.0 - smooth12;
@@ -105,35 +96,27 @@ public class PRose3DFunc extends VariationFunc {
     this._optDir = Math.copySign(1.0, this.opt);
     this._petalsSign = Math.copySign(1.0, this.k);
 
-    if (this.opt3 < 0.0)
-    {
+    if (this.opt3 < 0.0) {
       this._optDir = -1.0;
     }
-    if (smooth3 > 1.0)
-    {
+    if (smooth3 > 1.0) {
       smooth3 = 1.0;
     }
-    if (length == 0.0)
-    {
+    if (length == 0.0) {
       length = 0.000001;
     }
 
-    if (fabs(numPetals) < 0.0001)
-    {
+    if (fabs(numPetals) < 0.0001) {
       numPetals = 0.0001 * this._petalsSign; // need a non-zero minimum
     }
 
-    if (pContext.getRandGen().random() < 0.5)
-    {
+    if (pContext.getRandGen().random() < 0.5) {
       posNeg = -1;
     }
 
-    if (this._cycle == 0.0)
-    {
+    if (this._cycle == 0.0) {
       pang = th / this._cycle + EPSILON; // point's angle location relative to which petal it belongs to
-    }
-    else
-    {
+    } else {
       pang = th / this._cycle; // point's angle location relative to which petal it belongs to
     }
 
@@ -141,13 +124,10 @@ public class PRose3DFunc extends VariationFunc {
     wig = pang * frequency * 0.5 + this.offset * this._cycle;
 
     //  Develop means to structure Z 
-    if (this._optDir < 0.0)
-    {
+    if (this._optDir < 0.0) {
       wag = sin(curve1 * M_PI * opScale) + wagScale * 0.4 * rad + curveScale * 0.5 * (sin(curve2 * M_PI)); //  length anchored
       wag3 = sin(curve4 * M_PI * opScale) + wagScale * sqr(rad) * 0.4 + curveScale * 0.5 * (cos(curve3 * M_PI)); //  length anchored
-    }
-    else
-    {
+    } else {
       wag = sin(curve1 * M_PI * opScale) + wagScale * 0.4 * rad + curveScale * 0.5 * (cos(curve3 * M_PI)); //  two curveScale methods
       wag3 = sin(curve4 * M_PI * opScale) + wagScale * sqr(rad) * 0.4 + curveScale * 0.5 * (sin(curve2 * M_PI)); //  length anchored
     }
@@ -161,24 +141,16 @@ public class PRose3DFunc extends VariationFunc {
       Allow option 3 to replace either of the first two
     */
 
-    if (smooth12 <= 1.0)
-    {
+    if (smooth12 <= 1.0) {
       wag12 = wag;
-    }
-    else if (smooth12 <= 2.0 && smooth12 > 1.0)
-    {
+    } else if (smooth12 <= 2.0 && smooth12 > 1.0) {
       wag12 = wag2 * (1.0 - antiOpt1) + wag * antiOpt1;
-    }
-    else if (smooth12 > 2.0)
-    {
+    } else if (smooth12 > 2.0) {
       wag12 = wag2;
     }
-    if (smooth3 == 0.0)
-    {
+    if (smooth3 == 0.0) {
       waggle = wag12;
-    }
-    else if (smooth3 > 0.0)
-    {
+    } else if (smooth3 > 0.0) {
       waggle = wag12 * (1.0 - smooth3) + wag3 * smooth3;
     }
 
@@ -186,8 +158,7 @@ public class PRose3DFunc extends VariationFunc {
     //pVarTP.x += pAmount*0.5*(length*cos(numPetals*th+constant))*cth; 
     //pVarTP.y += pAmount*0.5*(length*cos(numPetals*th+constant))*sth; 
 
-    if (this._optDir > 0.0)
-    {
+    if (this._optDir > 0.0) {
       ghost = 0.0;
     }
 
@@ -199,15 +170,12 @@ public class PRose3DFunc extends VariationFunc {
         pVarTP.y += pAmount * 0.5 * this.refSc * (length * cos(numPetals * th + constant)) * sth;
         pVarTP.z += pAmount * -0.5 * ((scaleZ2 * waggle + sqr(rad * 0.5) * sin(wig) * wigScale) + (this.dist)); // adjustable height
 
-      }
-      else
-      {
+      } else {
         pVarTP.x += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * cth;
         pVarTP.y += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * sth;
         pVarTP.z += pAmount * 0.5 * ((scaleZ1 * waggle + sqr(rad * 0.5) * sin(wig) * wigScale) + (this.dist));
       }
-    }
-    else // this is the option when optDir > 0.0
+    } else // this is the option when optDir > 0.0
     {
       pVarTP.x += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * cth;
       pVarTP.y += pAmount * 0.5 * (length * cos(numPetals * th + constant)) * sth;
@@ -222,7 +190,7 @@ public class PRose3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { l, k, c, z1, z2, refSc, opt, optSc, opt3, transp, dist, wagsc, crvsc, f, wigsc, offset };
+    return new Object[]{l, k, c, z1, z2, refSc, opt, optSc, opt3, transp, dist, wagsc, crvsc, f, wigsc, offset};
   }
 
   @Override
@@ -273,12 +241,9 @@ public class PRose3DFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     // divide in pre-calc, multiply in calc, 
-    if (k == 0.0)
-    {
+    if (k == 0.0) {
       _cycle = M_2PI / (k + 0.000001); // describes the segment of a full circle used for each petal
-    }
-    else
-    {
+    } else {
       _cycle = M_2PI / (k); // describes the segment of a full circle used for each petal
     }
     _optDir = 0.0;

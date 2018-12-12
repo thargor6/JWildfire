@@ -8,6 +8,7 @@ public class ApocarpetFunc extends SimpleVariationFunc {
 
   /**
    * Roger Bagula Function
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:

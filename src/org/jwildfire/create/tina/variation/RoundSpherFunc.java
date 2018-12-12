@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class RoundSpherFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,8 +34,8 @@ public class RoundSpherFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (pAmount / d * pAffineTP.x / e);
     pVarTP.y += pAmount * (pAmount / d * pAffineTP.y / e);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

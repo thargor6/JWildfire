@@ -1,12 +1,5 @@
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.palette.RenderColor;
@@ -18,6 +11,9 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class ImageParams implements Params, Serializable {
   private static final long serialVersionUID = 1L;
@@ -178,35 +174,28 @@ public class ImageParams implements Params, Serializable {
     if (PARAM_STRUCTURE_THRESHOLD.equalsIgnoreCase(pName)) {
       structure_threshold = VariationFunc.limitVal(pValue, 0.0, 0.99999);
       return true;
-    }
-    else if (PARAM_STRUCTURE_DENSITY.equalsIgnoreCase(pName)) {
+    } else if (PARAM_STRUCTURE_DENSITY.equalsIgnoreCase(pName)) {
       structure_density = VariationFunc.limitVal(pValue, 0.0, 1.0);
       return true;
-    }
-    else if (PARAM_IFLAME_DENSITY.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IFLAME_DENSITY.equalsIgnoreCase(pName)) {
       iflame_density = VariationFunc.limitVal(pValue, 0.0, 1.0);
       return true;
-    }
-    else if (PARAM_IFLAME_BRIGHTNESS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IFLAME_BRIGHTNESS.equalsIgnoreCase(pName)) {
       iflame_brightness = pValue;
       return true;
-    }
-    else if (PARAM_IMAGE_BRIGHTNESS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IMAGE_BRIGHTNESS.equalsIgnoreCase(pName)) {
       image_brightness = pValue;
       return true;
-    }
-    else if (PARAM_SHAPE_DISTRIBUTION.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SHAPE_DISTRIBUTION.equalsIgnoreCase(pName)) {
       shape_distribution = ShapeDistribution.valueOf(Tools.FTOI(pValue));
       if (shape_distribution == null) {
         shape_distribution = ShapeDistribution.HUE;
       }
       return true;
-    }
-    else if (PARAM_ERODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_ERODE.equalsIgnoreCase(pName)) {
       erode = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_ERODE_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_ERODE_SIZE.equalsIgnoreCase(pName)) {
       erodeSize = Tools.FTOI(pValue);
       if (erodeSize < 3) {
         erodeSize = 3;
@@ -218,88 +207,67 @@ public class ImageParams implements Params, Serializable {
         erodeSize = 9;
       }
       return true;
-    }
-    else if (PARAM_CONV_NORTH.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CONV_NORTH.equalsIgnoreCase(pName)) {
       conv_north = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_CONV_EAST.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CONV_EAST.equalsIgnoreCase(pName)) {
       conv_east = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_CONV_SOUTH.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CONV_SOUTH.equalsIgnoreCase(pName)) {
       conv_south = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_CONV_WEST.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CONV_WEST.equalsIgnoreCase(pName)) {
       conv_west = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_SCALEX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SCALEX.equalsIgnoreCase(pName)) {
       scaleX = pValue;
       return true;
-    }
-    else if (PARAM_SCALEY.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SCALEY.equalsIgnoreCase(pName)) {
       scaleY = pValue;
       return true;
-    }
-    else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SCALEZ.equalsIgnoreCase(pName)) {
       scaleZ = pValue;
       return true;
-    }
-    else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OFFSETX.equalsIgnoreCase(pName)) {
       offsetX = pValue;
       return true;
-    }
-    else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OFFSETY.equalsIgnoreCase(pName)) {
       offsetY = pValue;
       return true;
-    }
-    else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OFFSETZ.equalsIgnoreCase(pName)) {
       offsetZ = pValue;
       return true;
-    }
-    else if (PARAM_MAX_IMG_WIDTH.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MAX_IMG_WIDTH.equalsIgnoreCase(pName)) {
       maxImgWidth = VariationFunc.limitIntVal(Tools.FTOI(pValue), 16, 64000);
       return true;
-    }
-    else if (PARAM_ID.equalsIgnoreCase(pName)) {
+    } else if (PARAM_ID.equalsIgnoreCase(pName)) {
       id = Tools.FTOI(pValue);
       return true;
-    }
-    else if (PARAM_RENDER_ID.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RENDER_ID.equalsIgnoreCase(pName)) {
       renderId = Tools.FTOI(pValue);
       return true;
-    }
-    else if (PARAM_SEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SEED.equalsIgnoreCase(pName)) {
       seed = Tools.FTOI(pValue);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_RED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_RED.equalsIgnoreCase(pName)) {
       color_change_red = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_GREEN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_GREEN.equalsIgnoreCase(pName)) {
       color_change_green = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_BLUE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_BLUE.equalsIgnoreCase(pName)) {
       color_change_blue = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_HUE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_HUE.equalsIgnoreCase(pName)) {
       color_change_hue = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_SATURATION.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_SATURATION.equalsIgnoreCase(pName)) {
       color_change_saturation = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else if (PARAM_COLOR_CHG_LIGHTNESS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_CHG_LIGHTNESS.equalsIgnoreCase(pName)) {
       color_change_lightness = VariationFunc.limitVal(pValue, -1.0, 1.0);
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -311,15 +279,13 @@ public class ImageParams implements Params, Serializable {
       colorMap = null;
       colorIdxMap.clear();
       return true;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       colorMap = null;
       colorIdxMap.clear();
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -328,11 +294,9 @@ public class ImageParams implements Params, Serializable {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILE;
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -348,9 +312,9 @@ public class ImageParams implements Params, Serializable {
   @Override
   public String completeImageKey(String key) {
     return key + "#" + id + "#" + Tools.doubleToString(structure_threshold) + "#" + Tools.doubleToString(structure_density) + "#"
-        + erode + "#" + erodeSize + "#" + conv_north + "#" + conv_east + "#" + conv_south + "#" + conv_west + "#"
-        + maxImgWidth + "#" + shape_distribution + "#" + colorMap.hashCode() + "#" + seed + "#" + color_change_red + "#"
-        + color_change_green + "#" + color_change_blue + "#" + color_change_hue + "#" + color_change_saturation + "#" + color_change_lightness;
+            + erode + "#" + erodeSize + "#" + conv_north + "#" + conv_east + "#" + conv_south + "#" + conv_west + "#"
+            + maxImgWidth + "#" + shape_distribution + "#" + colorMap.hashCode() + "#" + seed + "#" + color_change_red + "#"
+            + color_change_green + "#" + color_change_blue + "#" + color_change_hue + "#" + color_change_saturation + "#" + color_change_lightness;
   }
 
   @Override
@@ -403,17 +367,14 @@ public class ImageParams implements Params, Serializable {
       try {
         colorMap = RessourceManager.getImage(inlinedImageHash, inlinedImage);
         cachedPreprocessedImageKey = CACHE_KEY_PREFIX_PREPROCESSED_IMAGE + "#" + inlinedImageHash;
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
-    }
-    else if (imageFilename != null && imageFilename.length() > 0) {
+    } else if (imageFilename != null && imageFilename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(imageFilename);
         cachedPreprocessedImageKey = CACHE_KEY_PREFIX_PREPROCESSED_IMAGE + "#" + imageFilename;
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }

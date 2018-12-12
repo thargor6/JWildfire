@@ -16,16 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Hypertile3D1Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class Hypertile3D1Func extends VariationFunc {
   private static final String PARAM_P = "p";
   private static final String PARAM_Q = "q";
 
-  private static final String[] paramNames = { PARAM_P, PARAM_Q };
+  private static final String[] paramNames = {PARAM_P, PARAM_Q};
 
   private int p = 3;
   private int q = 7;
@@ -68,7 +64,7 @@ public class Hypertile3D1Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { p, q };
+    return new Object[]{p, q};
   }
 
   @Override

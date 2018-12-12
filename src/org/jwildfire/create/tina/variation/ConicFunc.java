@@ -25,7 +25,7 @@ public class ConicFunc extends VariationFunc {
   private static final String PARAM_ECCENTRICITY = "eccentricity";
   private static final String PARAM_HOLES = "holes";
 
-  private static final String[] paramNames = { PARAM_ECCENTRICITY, PARAM_HOLES };
+  private static final String[] paramNames = {PARAM_ECCENTRICITY, PARAM_HOLES};
 
   private double eccentricity = 1.0;
   private double holes = 0.0;
@@ -38,8 +38,8 @@ public class ConicFunc extends VariationFunc {
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -50,7 +50,7 @@ public class ConicFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { eccentricity, holes };
+    return new Object[]{eccentricity, holes};
   }
 
   @Override

@@ -58,7 +58,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           offset[ka] = kz - ka + 1;
           j = ka + 1;
           while ((form[j] != '+') && (form[j] != '-') && (form[j] != '*') && (form[j] != 0x2f)
-              && (form[j] != '^'))
+                  && (form[j] != '^'))
             j += offset[j];
           operator = form[j];
           for (k = j; k < kz - 1; k++)
@@ -119,11 +119,9 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
         if (form[i] == '.') {
           pnt = 0.1;
           i++;
-        }
-        else if (pnt == 0.0) {
+        } else if (pnt == 0.0) {
           k = k * 10.0 + (form[i++] - '0');
-        }
-        else {
+        } else {
           k = k + pnt * (form[i++] - '0');
           pnt *= 0.1;
         }
@@ -167,28 +165,28 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           hy = pop();
           sx = pop();
           sy = pop();
-          {
-            double xa = hx * sx - hy * sy;
-            double ya = hx * sy + sx * hy;
-            sx = xa;
-            sx = ya;
-          }
-          push(sx, sy);
-          break;
+        {
+          double xa = hx * sx - hy * sy;
+          double ya = hx * sy + sx * hy;
+          sx = xa;
+          sx = ya;
+        }
+        push(sx, sy);
+        break;
         case '/':
           hx = pop();
           hy = pop();
           sx = pop();
           sy = pop();
-          {
-            double da = hx * hx + hy * hy;
-            double xa = (sx * hx + sy * hy) / da;
-            double ya = (sy * hx - sx * hy) / da;
-            sx = xa;
-            sx = ya;
-          }
-          push(sx, sy);
-          break;
+        {
+          double da = hx * hx + hy * hy;
+          double xa = (sx * hx + sy * hy) / da;
+          double ya = (sy * hx - sx * hy) / da;
+          sx = xa;
+          sx = ya;
+        }
+        push(sx, sy);
+        break;
         case '^':
           k = pop();
           hy = pop();
@@ -198,12 +196,10 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
             if (k == 2.0) {
               hx = sx * sx - sy * sy;
               hy = 2.0 * sx * sy;
-            }
-            else if (k == 3.0) {
+            } else if (k == 3.0) {
               hx = sx * sx * sx - 3.0 * sx * sy * sy;
               hy = 3.0 * sx * sx * sy - sy * sy * sy;
-            }
-            else {
+            } else {
               hx = sx * sx * sx * sx + sy * sy * sy * sy - 6.0 * sx * sx * sy * sy;
               hy = 4.0 * sx * sy * (sx * sx - sy * sy);
               for (j = 4; j < k; j++) {
@@ -214,8 +210,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
               }
             }
             push(hx, hy);
-          }
-          else {
+          } else {
             {
               final double PID2 = 0.5 * Math.PI;
               double v;

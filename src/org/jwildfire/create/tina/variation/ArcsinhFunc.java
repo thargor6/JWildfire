@@ -15,31 +15,31 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.Complex;
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
+
 
 public class ArcsinhFunc extends SimpleVariationFunc {
-	  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	  @Override
-	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	   // author Tatyana Zabanova 2017. Implemented by DarkBeam 2018
-	       Complex z = new Complex(pAffineTP.x, pAffineTP.y);
-	       z.AsinH();
-	       z.Scale(pAmount * M_2_PI);
-	       pVarTP.x += z.re;
-	       pVarTP.y += z.im;
-		if (pContext.isPreserveZCoordinate()) {
-			pVarTP.z += pAmount * pAffineTP.z;
-		}
-	  }
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // author Tatyana Zabanova 2017. Implemented by DarkBeam 2018
+    Complex z = new Complex(pAffineTP.x, pAffineTP.y);
+    z.AsinH();
+    z.Scale(pAmount * M_2_PI);
+    pVarTP.x += z.re;
+    pVarTP.y += z.im;
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
 
-	  @Override
-	  public String getName() {
-	    return "arcsinh";
-	  }
+  @Override
+  public String getName() {
+    return "arcsinh";
+  }
 
-	}
+}

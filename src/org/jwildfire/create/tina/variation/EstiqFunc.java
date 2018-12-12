@@ -16,22 +16,20 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EstiqFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	/* Estiq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
+    /* Estiq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
     double e = exp(pAffineTP.x);
-	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);    
+    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
     double s = sin(abs_v);
     double c = cos(abs_v);
     double a = e * s / abs_v;

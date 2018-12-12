@@ -14,11 +14,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.atan2;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class Panorama1Func extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -26,12 +26,12 @@ public class Panorama1Func extends SimpleVariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // author Tatyana Zabanova 2017. Implemented by DarkBeam 2017
+    // author Tatyana Zabanova 2017. Implemented by DarkBeam 2017
     double aux = 1.0 / sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + 1.0);
     double x1 = pAffineTP.x * aux;
     double y1 = pAffineTP.y * aux;
     aux = sqrt(x1 * x1 + y1 * y1);
-    pVarTP.x += pAmount * (atan2(x1,y1)) * M_1_PI;
+    pVarTP.x += pAmount * (atan2(x1, y1)) * M_1_PI;
     pVarTP.y += pAmount * (aux - 0.5);
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;

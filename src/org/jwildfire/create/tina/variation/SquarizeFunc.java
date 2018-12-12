@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SquarizeFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,35 +34,26 @@ public class SquarizeFunc extends SimpleVariationFunc {
       a += M_2PI;
     double p = 4.0 * s * a * M_1_PI;
 
-    if (p <= 1.0 * s)
-    {
+    if (p <= 1.0 * s) {
       pVarTP.x += pAmount * s;
       pVarTP.y += pAmount * p;
-    }
-    else if (p <= 3.0 * s)
-    {
+    } else if (p <= 3.0 * s) {
       pVarTP.x += pAmount * (2.0 * s - p);
       pVarTP.y += pAmount * (s);
-    }
-    else if (p <= 5.0 * s)
-    {
+    } else if (p <= 5.0 * s) {
       pVarTP.x -= pAmount * (s);
       pVarTP.y += pAmount * (4.0 * s - p);
-    }
-    else if (p <= 7.0 * s)
-    {
+    } else if (p <= 7.0 * s) {
       pVarTP.x -= pAmount * (6.0 * s - p);
       pVarTP.y -= pAmount * (s);
-    }
-    else
-    {
+    } else {
       pVarTP.x += pAmount * (s);
       pVarTP.y -= pAmount * (8.0 * s - p);
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

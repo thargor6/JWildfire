@@ -16,24 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_E;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.asin;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public abstract class AbstractFalloff3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -56,7 +44,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
 
   private static final String PARAM_ALPHA = "alpha";
 
-  private static final String[] paramNames = { PARAM_BLUR_TYPE, PARAM_BLUR_SHAPE, PARAM_BLUR_STRENGTH, PARAM_MIN_DISTANCE, PARAM_INVERT_DISTANCE, PARAM_MUL_X, PARAM_MUL_Y, PARAM_MUL_Z, PARAM_MUL_C, PARAM_CENTER_X, PARAM_CENTER_Y, PARAM_CENTER_Z, PARAM_ALPHA };
+  private static final String[] paramNames = {PARAM_BLUR_TYPE, PARAM_BLUR_SHAPE, PARAM_BLUR_STRENGTH, PARAM_MIN_DISTANCE, PARAM_INVERT_DISTANCE, PARAM_MUL_X, PARAM_MUL_Y, PARAM_MUL_Z, PARAM_MUL_C, PARAM_CENTER_X, PARAM_CENTER_Y, PARAM_CENTER_Z, PARAM_ALPHA};
 
   //adjustment coefficient
   private static final double SCATTER_ADJUST = 0.04;
@@ -94,7 +82,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
     double weight = pAmount;
     double d_0 = min_distance;
 
-    Double4 random = new Double4(pContext.random()-0.5, pContext.random()-0.5, pContext.random()-0.5, pContext.random()-0.5);
+    Double4 random = new Double4(pContext.random() - 0.5, pContext.random() - 0.5, pContext.random() - 0.5, pContext.random() - 0.5);
 
     double radius;
     switch (blur_shape) {
@@ -142,7 +130,7 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { blur_type, blur_shape, blur_strength, min_distance, invert_distance, mul_x, mul_y, mul_z, mul_c, center_x, center_y, center_z, alpha };
+    return new Object[]{blur_type, blur_shape, blur_strength, min_distance, invert_distance, mul_x, mul_y, mul_z, mul_c, center_x, center_y, center_z, alpha};
   }
 
   @Override
@@ -155,13 +143,11 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
       blur_strength = pValue;
       if (blur_strength < 1.0e-6)
         blur_strength = 1.0e-6;
-    }
-    else if (PARAM_MIN_DISTANCE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MIN_DISTANCE.equalsIgnoreCase(pName)) {
       min_distance = pValue;
       if (min_distance < 0.0)
         min_distance = 0.0;
-    }
-    else if (PARAM_MUL_X.equalsIgnoreCase(pName))
+    } else if (PARAM_MUL_X.equalsIgnoreCase(pName))
       mul_x = limitVal(pValue, 0.0, 1.0);
     else if (PARAM_MUL_Y.equalsIgnoreCase(pName))
       mul_y = limitVal(pValue, 0.0, 1.0);
@@ -259,10 +245,10 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
     double phi_c = cos(phi);
 
     return new Double4(
-        v_in.x + mul.x * rad * sigma_c * phi_c,
-        v_in.y + mul.y * rad * sigma_c * phi_s,
-        v_in.z + mul.z * rad * sigma_s,
-        v_in.c + mul.c * dist * random.c);
+            v_in.x + mul.x * rad * sigma_c * phi_c,
+            v_in.y + mul.y * rad * sigma_c * phi_s,
+            v_in.z + mul.z * rad * sigma_s,
+            v_in.c + mul.c * dist * random.c);
   }
 
   private Double4 bt_radial(Double4 v_in, Double4 mul, Double4 random, double dist) {
@@ -284,26 +270,26 @@ public abstract class AbstractFalloff3Func extends VariationFunc {
     double phi_c = cos(phi);
 
     return new Double4(
-        r * sigma_c * phi_c,
-        r * sigma_c * phi_s,
-        r * sigma_s,
-        v_in.c + mul.c * random.c * dist);
+            r * sigma_c * phi_c,
+            r * sigma_c * phi_s,
+            r * sigma_s,
+            v_in.c + mul.c * random.c * dist);
   }
 
   private Double4 bt_log(Double4 v_in, Double4 mul, Double4 random, double dist) {
     double coeff = r_max <= EPSILON ? dist : dist + alpha * (log_map(dist) - dist);
     return new Double4(
-        v_in.x + log_map(mul.x) * log_scale(random.x) * coeff,
-        v_in.y + log_map(mul.y) * log_scale(random.y) * coeff,
-        v_in.z + log_map(mul.z) * log_scale(random.z) * coeff,
-        v_in.c + log_map(mul.c) * log_scale(random.c) * coeff);
+            v_in.x + log_map(mul.x) * log_scale(random.x) * coeff,
+            v_in.y + log_map(mul.y) * log_scale(random.y) * coeff,
+            v_in.z + log_map(mul.z) * log_scale(random.z) * coeff,
+            v_in.c + log_map(mul.c) * log_scale(random.c) * coeff);
   }
 
   private double bs_circle(Double4 v_in, Double3 center) {
     double distance = sqrt(
-        sqr(v_in.x - center.x) +
-            sqr(v_in.y - center.y) +
-            sqr(v_in.z - center.z));
+            sqr(v_in.x - center.x) +
+                    sqr(v_in.y - center.y) +
+                    sqr(v_in.z - center.z));
     return distance;
   }
 

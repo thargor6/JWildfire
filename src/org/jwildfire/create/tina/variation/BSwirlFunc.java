@@ -16,17 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BSwirlFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +27,7 @@ public class BSwirlFunc extends VariationFunc {
   private static final String PARAM_IN = "in";
   private static final String PARAM_OUT = "out";
 
-  private static final String[] paramNames = { PARAM_IN, PARAM_OUT };
+  private static final String[] paramNames = {PARAM_IN, PARAM_OUT};
 
   private double in = 0.0;
   private double out = 0.0;
@@ -64,8 +57,8 @@ public class BSwirlFunc extends VariationFunc {
     pVarTP.y += pAmount * sins / temp;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -75,7 +68,7 @@ public class BSwirlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { in, out };
+    return new Object[]{in, out};
   }
 
   @Override

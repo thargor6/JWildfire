@@ -16,22 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SplipticBSFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
   private double x = 0.05;
   private double y = 0.05;
 
@@ -51,8 +47,7 @@ public class SplipticBSFunc extends VariationFunc {
 
     if (pAffineTP.x >= 0) {
       pVarTP.x += _v * atan2(a, b) + x;
-    }
-    else {
+    } else {
       pVarTP.x += _v * atan2(a, b) - x;
     }
     //    if (pAffineTP.y > 0)
@@ -72,7 +67,7 @@ public class SplipticBSFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[]{x, y};
   }
 
   @Override

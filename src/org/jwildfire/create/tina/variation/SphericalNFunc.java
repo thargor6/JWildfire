@@ -16,18 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SphericalNFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,8 +27,8 @@ public class SphericalNFunc extends VariationFunc {
   public static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
 
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST };
-  private static final String[] paramAltNames = { "SphericalN_Power", "SphericalN_Dist" };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST};
+  private static final String[] paramAltNames = {"SphericalN_Power", "SphericalN_Dist"};
 
   private double power = 3.0;
   private double dist = 1.0;
@@ -56,8 +48,8 @@ public class SphericalNFunc extends VariationFunc {
       pVarTP.y += pAmount * sina / R;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -72,7 +64,7 @@ public class SphericalNFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist };
+    return new Object[]{power, dist};
   }
 
   @Override

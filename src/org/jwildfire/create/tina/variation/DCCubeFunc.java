@@ -33,7 +33,7 @@ public class DCCubeFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
 
-  private static final String[] paramNames = { PARAM_C1, PARAM_C2, PARAM_C3, PARAM_C4, PARAM_C5, PARAM_C6, PARAM_X, PARAM_Y, PARAM_Z };
+  private static final String[] paramNames = {PARAM_C1, PARAM_C2, PARAM_C3, PARAM_C4, PARAM_C5, PARAM_C6, PARAM_X, PARAM_Y, PARAM_Z};
 
   private double c1 = 0.1;
   private double c2 = 0.2;
@@ -96,7 +96,7 @@ public class DCCubeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { c1, c2, c3, c4, c5, c6, x, y, z };
+    return new Object[]{c1, c2, c3, c4, c5, c6, x, y, z};
   }
 
   @Override

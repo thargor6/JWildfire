@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PostAxisSymmetryWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +41,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
   private static final String PARAM_X2colorshift = "x2colorshift";
   private static final String PARAM_Y2colorshift = "y2colorshift";
   private static final String PARAM_Z2colorshift = "z2colorshift";
-  private static final String[] paramNames = { PARAM_AXIS, PARAM_CENTRE_X, PARAM_CENTRE_Y, PARAM_CENTRE_Z, PARAM_ROTATION, PARAM_X1colorshift, PARAM_Y1colorshift, PARAM_Z1colorshift, PARAM_X2colorshift, PARAM_Y2colorshift, PARAM_Z2colorshift };
+  private static final String[] paramNames = {PARAM_AXIS, PARAM_CENTRE_X, PARAM_CENTRE_Y, PARAM_CENTRE_Z, PARAM_ROTATION, PARAM_X1colorshift, PARAM_Y1colorshift, PARAM_Z1colorshift, PARAM_X2colorshift, PARAM_Y2colorshift, PARAM_Z2colorshift};
 
   private int axis = AXIS_X;
   private double centre_x = 0.25;
@@ -78,8 +73,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
           pVarTP.x = ax;
           pVarTP.y = ay;
           pVarTP.color = fmod(pVarTP.color + x1colorshift, 1.0);
-        }
-        else {
+        } else {
           double bx = centre_x - dx - _halve_dist;
           double by = pVarTP.y;
           if (_doRotate) {
@@ -90,9 +84,10 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
           }
           pVarTP.x = bx;
           pVarTP.y = by;
-          pVarTP.color = fmod(pVarTP.color + x2colorshift, 1.0);        }
+          pVarTP.color = fmod(pVarTP.color + x2colorshift, 1.0);
+        }
       }
-        break;
+      break;
       case AXIS_Y: {
         double dx, dy;
         dy = pVarTP.y - centre_y;
@@ -107,9 +102,8 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
           }
           pVarTP.x = ax;
           pVarTP.y = ay;
-          pVarTP.color = fmod(pVarTP.color + y1colorshift, 1.0);  
-        }
-        else {
+          pVarTP.color = fmod(pVarTP.color + y1colorshift, 1.0);
+        } else {
           double bx = pVarTP.x;
           double by = centre_y - dy - _halve_dist;
           if (_doRotate) {
@@ -117,13 +111,13 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
             dy = by - centre_y;
             bx = centre_x + dx * _cosa - dy * _sina;
             by = centre_y + dy * _cosa + dx * _sina;
-            pVarTP.color = fmod(pVarTP.color + y2colorshift, 1.0);  
+            pVarTP.color = fmod(pVarTP.color + y2colorshift, 1.0);
           }
           pVarTP.x = bx;
           pVarTP.y = by;
         }
       }
-        break;
+      break;
       case AXIS_Z:
       default: {
         double dx, dz;
@@ -139,9 +133,8 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
           }
           pVarTP.x = ax;
           pVarTP.z = az;
-          pVarTP.color = fmod(pVarTP.color + z1colorshift, 1.0); 
-        }
-        else {
+          pVarTP.color = fmod(pVarTP.color + z1colorshift, 1.0);
+        } else {
           double bx = pVarTP.x;
           double bz = centre_z - dz - _halve_dist;
           if (_doRotate) {
@@ -152,10 +145,10 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
           }
           pVarTP.x = bx;
           pVarTP.z = bz;
-          pVarTP.color = fmod(pVarTP.color + z2colorshift, 1.0); 
+          pVarTP.color = fmod(pVarTP.color + z2colorshift, 1.0);
         }
       }
-        break;
+      break;
     }
 
   }
@@ -167,7 +160,7 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { axis, centre_x, centre_y, centre_z, rotation, x1colorshift, y1colorshift, z1colorshift, x2colorshift, y2colorshift, z2colorshift };
+    return new Object[]{axis, centre_x, centre_y, centre_z, rotation, x1colorshift, y1colorshift, z1colorshift, x2colorshift, y2colorshift, z2colorshift};
   }
 
   @Override
@@ -183,17 +176,17 @@ public class PostAxisSymmetryWFFunc extends VariationFunc {
     else if (PARAM_AXIS.equalsIgnoreCase(pName))
       axis = limitIntVal(Tools.FTOI(pValue), AXIS_X, AXIS_Z);
     else if (PARAM_X1colorshift.equalsIgnoreCase(pName))
-        x1colorshift = pValue;
-      else if (PARAM_Y1colorshift.equalsIgnoreCase(pName))
-        y1colorshift = pValue;
-      else if (PARAM_Z1colorshift.equalsIgnoreCase(pName))
-        z1colorshift = pValue;
-      else if (PARAM_X2colorshift.equalsIgnoreCase(pName))
-          x2colorshift = pValue;
-        else if (PARAM_Y2colorshift.equalsIgnoreCase(pName))
-          y2colorshift = pValue;
-        else if (PARAM_Z2colorshift.equalsIgnoreCase(pName))
-          z2colorshift = pValue;
+      x1colorshift = pValue;
+    else if (PARAM_Y1colorshift.equalsIgnoreCase(pName))
+      y1colorshift = pValue;
+    else if (PARAM_Z1colorshift.equalsIgnoreCase(pName))
+      z1colorshift = pValue;
+    else if (PARAM_X2colorshift.equalsIgnoreCase(pName))
+      x2colorshift = pValue;
+    else if (PARAM_Y2colorshift.equalsIgnoreCase(pName))
+      y2colorshift = pValue;
+    else if (PARAM_Z2colorshift.equalsIgnoreCase(pName))
+      z2colorshift = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

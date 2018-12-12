@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class SpirographFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class SpirographFunc extends VariationFunc {
   private static final String PARAM_C1 = "c1";
   private static final String PARAM_C2 = "c2";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_D, PARAM_TMIN, PARAM_TMAX, PARAM_YMIN, PARAM_YMAX, PARAM_C1, PARAM_C2 };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_D, PARAM_TMIN, PARAM_TMAX, PARAM_YMIN, PARAM_YMAX, PARAM_C1, PARAM_C2};
 
   private double a = 3.0;
   private double b = 2.0;
@@ -55,8 +55,8 @@ public class SpirographFunc extends VariationFunc {
     pVarTP.x += pAmount * (x1 + d * cos(t) + y);
     pVarTP.y += pAmount * (y1 + d * sin(t) + y);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -66,7 +66,7 @@ public class SpirographFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, d, tmin, tmax, ymin, ymax, c1, c2 };
+    return new Object[]{a, b, d, tmin, tmax, ymin, ymax, c1, c2};
   }
 
   @Override

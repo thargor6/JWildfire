@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class DinisSurfaceWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
-  private static final String[] paramNames = { PARAM_A, PARAM_B };
+  private static final String[] paramNames = {PARAM_A, PARAM_B};
 
   private double a = 0.8;
   private double b = 0.2;
@@ -52,7 +49,7 @@ public class DinisSurfaceWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b };
+    return new Object[]{a, b};
   }
 
   @Override

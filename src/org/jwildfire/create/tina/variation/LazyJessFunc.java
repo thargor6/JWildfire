@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_SQRT2;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LazyJessFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +30,7 @@ public class LazyJessFunc extends VariationFunc {
   private static final String PARAM_SPIN = "spin";
   private static final String PARAM_SPACE = "space";
   private static final String PARAM_CORNER = "corner";
-  private static final String[] paramNames = { PARAM_N, PARAM_SPIN, PARAM_SPACE, PARAM_CORNER };
+  private static final String[] paramNames = {PARAM_N, PARAM_SPIN, PARAM_SPACE, PARAM_CORNER};
 
   private int n = 4;
   private double spin = M_PI;
@@ -66,8 +58,7 @@ public class LazyJessFunc extends VariationFunc {
         if (fabs(x) < pAmount) {
           pVarTP.x += x;
           pVarTP.y += y;
-        }
-        else {// If it is now part of a corner that falls outside the designated area...      
+        } else {// If it is now part of a corner that falls outside the designated area...
           // ...then flip and rotate into place.
           theta = atan2(y, x) - spin + corner_rotation;
           sina = sin(theta);
@@ -75,14 +66,12 @@ public class LazyJessFunc extends VariationFunc {
           pVarTP.x += pAmount * modulus * cosa;
           pVarTP.y -= pAmount * modulus * sina;
         }
-      }
-      else {
+      } else {
         modulus = 1.0 + space / modulus;
         pVarTP.x += pAmount * modulus * x;
         pVarTP.y += pAmount * modulus * y;
       }
-    }
-    else {
+    } else {
       // Calculate the distance r from origin to the edge of the polygon at the angle of the input point.
       theta = atan2(y, x) + M_2PI;
       double theta_diff = fmod(theta + half_slice, pie_slice);
@@ -104,8 +93,7 @@ public class LazyJessFunc extends VariationFunc {
         if (modulus < r) {
           pVarTP.x += x;
           pVarTP.y += y;
-        }
-        else {
+        } else {
           // Again, flipping and rotating corners that fall outside the designated area.
           theta = atan2(y, x) - spin + corner_rotation + M_2PI;
           sina = sin(theta);
@@ -113,8 +101,7 @@ public class LazyJessFunc extends VariationFunc {
           pVarTP.x += pAmount * modulus * cosa;
           pVarTP.y -= pAmount * modulus * sina;
         }
-      }
-      else {
+      } else {
         modulus = 1.0 + space / modulus;
         pVarTP.x += pAmount * modulus * x;
         pVarTP.y += pAmount * modulus * y;
@@ -122,8 +109,8 @@ public class LazyJessFunc extends VariationFunc {
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -134,7 +121,7 @@ public class LazyJessFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, spin, space, corner };
+    return new Object[]{n, spin, space, corner};
   }
 
   @Override

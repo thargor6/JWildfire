@@ -16,14 +16,14 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class UVColorMapper {
   private RenderColor[] uvColors;

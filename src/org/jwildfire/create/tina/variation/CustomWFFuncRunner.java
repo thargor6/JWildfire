@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.StringReader;
-
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.StringReader;
 
 public class CustomWFFuncRunner {
   public static CustomWFFuncRunner compile(String pScript) throws Exception {

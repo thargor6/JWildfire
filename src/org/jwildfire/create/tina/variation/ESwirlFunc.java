@@ -16,16 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.acosh;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ESwirlFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +27,7 @@ public class ESwirlFunc extends VariationFunc {
   private static final String PARAM_IN = "in";
   private static final String PARAM_OUT = "out";
 
-  private static final String[] paramNames = { PARAM_IN, PARAM_OUT };
+  private static final String[] paramNames = {PARAM_IN, PARAM_OUT};
 
   private double in = 1.2;
   private double out = 0.2;
@@ -76,8 +70,8 @@ public class ESwirlFunc extends VariationFunc {
     pVarTP.x += pAmount * coshmu * cosnu;
     pVarTP.y += pAmount * sinhmu * sinnu;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -87,7 +81,7 @@ public class ESwirlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { in, out };
+    return new Object[]{in, out};
   }
 
   @Override

@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PrimitivesWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +30,7 @@ public class PrimitivesWFFunc extends VariationFunc {
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_FILLED = "filled";
-  private static final String[] paramNames = { PARAM_SHAPE, PARAM_A, PARAM_B, PARAM_C, PARAM_FILLED };
+  private static final String[] paramNames = {PARAM_SHAPE, PARAM_A, PARAM_B, PARAM_C, PARAM_FILLED};
 
   private static final int SHAPE_DISC = 0;
   private static final int SHAPE_SPHERE = 1;
@@ -83,15 +80,13 @@ public class PrimitivesWFFunc extends VariationFunc {
     if (filled == 1 && pContext.random() < 0.5) {
       dx = size * (pContext.random() - 0.5);
       dy = size * (pContext.random() - 0.5);
-    }
-    else {
+    } else {
       switch (pContext.random(2)) {
         case 0:
           boolean left = pContext.random() < 0.5;
           if (filled == 0 || pContext.random() < 0.05) {
             dx = size * (left ? -0.5 : 0.5);
-          }
-          else {
+          } else {
             dx = size * (pContext.random() - 0.5);
           }
           dy = size * (pContext.random() - 0.5);
@@ -101,8 +96,7 @@ public class PrimitivesWFFunc extends VariationFunc {
           dx = size * (pContext.random() - 0.5);
           if (filled == 0 || pContext.random() < 0.05) {
             dy = size * (top ? -0.5 : 0.5);
-          }
-          else {
+          } else {
             dy = size * (pContext.random() - 0.5);
           }
           break;
@@ -114,8 +108,8 @@ public class PrimitivesWFFunc extends VariationFunc {
     pVarTP.y += dy;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   private boolean insideUnitTriangle(double pX, double pY) {
@@ -155,8 +149,8 @@ public class PrimitivesWFFunc extends VariationFunc {
     pVarTP.x += pContext.random() < 0.5 ? dx : -dx;
     pVarTP.y += -dy;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   private void createCube(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -168,8 +162,7 @@ public class PrimitivesWFFunc extends VariationFunc {
         boolean left = pContext.random() < 0.5;
         if (filled == 0 || pContext.random() < 0.05) {
           dx = size * (left ? -0.5 : 0.5);
-        }
-        else {
+        } else {
           dx = size * (pContext.random() - 0.5);
         }
         dy = size * (pContext.random() - 0.5);
@@ -180,8 +173,7 @@ public class PrimitivesWFFunc extends VariationFunc {
         dx = size * (pContext.random() - 0.5);
         if (filled == 0 || pContext.random() < 0.05) {
           dy = size * (top ? -0.5 : 0.5);
-        }
-        else {
+        } else {
           dy = size * (pContext.random() - 0.5);
         }
         dz = size * (pContext.random() - 0.5);
@@ -192,8 +184,7 @@ public class PrimitivesWFFunc extends VariationFunc {
         dy = size * (pContext.random() - 0.5);
         if (filled == 0 || pContext.random() < 0.05) {
           dz = size * (front ? -0.5 : 0.5);
-        }
-        else {
+        } else {
           dz = size * (pContext.random() - 0.5);
         }
         break;
@@ -220,7 +211,7 @@ public class PrimitivesWFFunc extends VariationFunc {
         break;
       default:
         double tx = 0.0,
-        ty = 0.0;
+                ty = 0.0;
         while (true) {
           tx = pContext.random();
           ty = pContext.random();
@@ -286,8 +277,8 @@ public class PrimitivesWFFunc extends VariationFunc {
     pVarTP.x += radius * cosa;
     pVarTP.y += radius * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   private void createTorus(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -311,7 +302,7 @@ public class PrimitivesWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shape, a, b, c, filled };
+    return new Object[]{shape, a, b, c, filled};
   }
 
   @Override

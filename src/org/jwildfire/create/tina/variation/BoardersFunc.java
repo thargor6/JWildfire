@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.rint;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.rint;
 
 public class BoardersFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,36 +37,32 @@ public class BoardersFunc extends SimpleVariationFunc {
     if (pContext.random() >= 0.75) {
       pVarTP.x += pAmount * (offsetX * 0.5 + roundX);
       pVarTP.y += pAmount * (offsetY * 0.5 + roundY);
-    }
-    else {
+    } else {
 
       if (fabs(offsetX) >= fabs(offsetY)) {
 
         if (offsetX >= 0.0) {
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX + 0.25);
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY + 0.25 * offsetY / offsetX);
-        }
-        else {
+        } else {
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX - 0.25);
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY - 0.25 * offsetY / offsetX);
         }
 
-      }
-      else {
+      } else {
 
         if (offsetY >= 0.0) {
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY + 0.25);
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX + offsetX / offsetY * 0.25);
-        }
-        else {
+        } else {
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY - 0.25);
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX - offsetX / offsetY * 0.25);
         }
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

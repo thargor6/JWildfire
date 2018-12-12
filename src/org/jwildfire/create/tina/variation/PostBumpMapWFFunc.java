@@ -39,8 +39,8 @@ public class PostBumpMapWFFunc extends VariationFunc {
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
   private static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_RESETZ };
-  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_RESETZ};
+  private static final String[] ressourceNames = {RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE};
 
   private double scaleX = 1.0;
   private double scaleY = 1.0;
@@ -74,8 +74,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
         double g = toolPixel.g;
         double b = toolPixel.b;
         intensity = (0.299 * r + 0.588 * g + 0.113 * b) / 255.0;
-      }
-      else {
+      } else {
         ((SimpleHDRImage) bumpMap).getRGBValues(rgbArray, ix, iy);
         double r = rgbArray[0];
         double g = rgbArray[1];
@@ -85,8 +84,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
       dz += scaleZ * intensity;
       if (resetZ != 0) {
         pVarTP.z = dz;
-      }
-      else {
+      } else {
         pVarTP.z += dz;
       }
     }
@@ -99,7 +97,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, resetZ };
+    return new Object[]{scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, resetZ};
   }
 
   @Override
@@ -140,16 +138,13 @@ public class PostBumpMapWFFunc extends VariationFunc {
     if (inlinedImage != null) {
       try {
         bumpMap = RessourceManager.getImage(inlinedImageHash, inlinedImage);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
-    }
-    else if (imageFilename != null && imageFilename.length() > 0) {
+    } else if (imageFilename != null && imageFilename.length() > 0) {
       try {
         bumpMap = RessourceManager.getImage(imageFilename);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -167,7 +162,7 @@ public class PostBumpMapWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage };
+    return new byte[][]{(imageFilename != null ? imageFilename.getBytes() : null), inlinedImage};
   }
 
   @Override
@@ -175,18 +170,16 @@ public class PostBumpMapWFFunc extends VariationFunc {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
       if (imageFilename != null) {
-    	  inlinedImage = null;
-    	  inlinedImageHash = 0;
+        inlinedImage = null;
+        inlinedImageHash = 0;
       }
       bumpMap = null;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       if (inlinedImage != null) imageFilename = null;
       bumpMap = null;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -194,11 +187,9 @@ public class PostBumpMapWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILE;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

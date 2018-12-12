@@ -50,8 +50,7 @@ public class FractPearlsWFFunc extends AbstractFractWFFunc {
     if (PARAM_XSEED.equalsIgnoreCase(pName)) {
       xseed = pValue;
       return true;
-    }
-    else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
       yseed = pValue;
       return true;
     }

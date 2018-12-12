@@ -16,15 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Hexnix3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class Hexnix3DFunc extends VariationFunc {
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_ZLIFT = "zlift";
   private static final String PARAM_3SIDE = "3side";
-  private static final String[] paramNames = { PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT, PARAM_3SIDE };
+  private static final String[] paramNames = {PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT, PARAM_3SIDE};
 
   private double majp = 1.0; // establishes 1 or 2 planes, and if 2, the distance between them
   private double scale = 0.25; // scales the effect of X and Y
@@ -69,8 +65,7 @@ public class Hexnix3DFunc extends VariationFunc {
 
     if (fabs(pAmount) <= 0.5) {
       smooth = pAmount * 2.0;
-    }
-    else {
+    } else {
       smooth = 1.0;
     }
     double boost = 0.0; //  Boost is the separation distance between the two planes
@@ -90,12 +85,10 @@ public class Hexnix3DFunc extends VariationFunc {
     if (abmajp <= 1.0) {
       majplane = 0; // 0= 1 plate active  1= transition to two plates active  2= defines two plates
       boost = 0.0;
-    }
-    else if (abmajp > 1.0 && abmajp < 2.0) {
+    } else if (abmajp > 1.0 && abmajp < 2.0) {
       majplane = 1;
       boost = 0.0;
-    }
-    else {
+    } else {
       majplane = 2;
       boost = (abmajp - 2.0) * 0.5; // distance above and below XY plane
     }
@@ -103,12 +96,10 @@ public class Hexnix3DFunc extends VariationFunc {
     //      Creating Z factors relative to the planes 
     if (majplane == 0) {
       pVarTP.z += smooth * pAffineTP.z * scale * this.zlift; // single plate instructions
-    }
-    else if (majplane == 1 && this.majp < 0.0) {// Transition for reversing plates  because  majp is negative value    
+    } else if (majplane == 1 && this.majp < 0.0) {// Transition for reversing plates  because  majp is negative value
       if (this.majp < -1.0 && this.majp >= -2.0) {
         gentleZ = (abmajp - 1.0); //  Set transition smoothing values  0.00001 to 1.0    
-      }
-      else {
+      } else {
         gentleZ = 1.0; // full effect explicit default value
       }
       // Begin reverse transition - starts with pVarTP.z==pVarTP.z proceeds by gradual negative
@@ -119,12 +110,10 @@ public class Hexnix3DFunc extends VariationFunc {
     if (majplane == 2 && this.majp < 0.0) {// Begin the splitting operation, animation transition is done
       if (posNeg > 0) {//  The splitting operation positive side
         pVarTP.z += (smooth * (pAffineTP.z * scale * this.zlift + boost));
-      }
-      else {//  The splitting operation negative side
+      } else {//  The splitting operation negative side
         pVarTP.z = (pVarTP.z - (2.0 * smooth * pVarTP.z)) + (smooth * posNeg * (pAffineTP.z * scale * this.zlift + boost));
       }
-    }
-    else {//  majp > 0.0       The splitting operation
+    } else {//  majp > 0.0       The splitting operation
       pVarTP.z += smooth * (pAffineTP.z * scale * this.zlift + (posNeg * boost));
     }
 
@@ -140,8 +129,7 @@ public class Hexnix3DFunc extends VariationFunc {
       pVarTP.y = pVarTP.y * (1.0 - smooth) + smRotyTP + smRotyFT + smooth * lrmaj * _seg60y[loc60];
 
       this._fcycle += 1;
-    }
-    else { // Occasion to build on 120 degree segments   
+    } else { // Occasion to build on 120 degree segments
       loc120 = (int) trunc(pContext.random() * 3.0); // random nodes selection
       //loc120 = this.bcycle;  // sequential nodes selection - seems to create artifacts that are progressively displaced
       smRotxTP = (smooth * scale * pVarTP.x * _seg120x[loc120]) - (smooth * scale * pVarTP.y * _seg120y[loc120]);
@@ -168,7 +156,7 @@ public class Hexnix3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { majp, scale, zlift, _3side };
+    return new Object[]{majp, scale, zlift, _3side};
   }
 
   @Override

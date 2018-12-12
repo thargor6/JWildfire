@@ -17,15 +17,15 @@
 
 package org.jwildfire.create.tina.variation;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractFractWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -115,8 +115,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
       if (bailout()) {
         maxIter = currIter;
         return maxIter > buddhabrot_min_iter;
-      }
-      else {
+      } else {
         return false;
       }
     }
@@ -190,8 +189,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
           pVarTP.doHide = true;
           return;
         }
-      }
-      else {
+      } else {
         break;
       }
     }
@@ -206,8 +204,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
         double prevZ = scale * pAmount * (scalez / 10 * MathLib.log10(1.0 + (double) (iterCount - 1) / (double) max_iter) + offsetz);
         z = (prevZ - z) * pContext.random() + z;
       }
-    }
-    else {
+    } else {
       z = scale * pAmount * (scalez / 10 * ((double) iterCount / (double) max_iter) + offsetz);
       if (z_fill > MathLib.EPSILON && pContext.random() < z_fill) {
         double prevZ = scale * pAmount * (scalez / 10 * ((double) (iterCount - 1) / (double) max_iter) + offsetz);

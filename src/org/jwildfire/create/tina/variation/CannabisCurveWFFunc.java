@@ -16,19 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CannabisCurveWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_FILLED = "filled";
-  private static final String[] paramNames = { PARAM_FILLED };
+  private static final String[] paramNames = {PARAM_FILLED};
 
   private int filled = 1;
 
@@ -51,8 +49,8 @@ public class CannabisCurveWFFunc extends VariationFunc {
     pVarTP.y += pAmount * ny;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -63,7 +61,7 @@ public class CannabisCurveWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { filled };
+    return new Object[]{filled};
   }
 
   @Override

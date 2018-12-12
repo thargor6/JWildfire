@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class TaurusFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class TaurusFunc extends VariationFunc {
   public static final String PARAM_N = "n";
   public static final String PARAM_INV = "inv";
   public static final String PARAM_SOR = "sor";
-  private static final String[] paramNames = { PARAM_R, PARAM_N, PARAM_INV, PARAM_SOR };
+  private static final String[] paramNames = {PARAM_R, PARAM_N, PARAM_INV, PARAM_SOR};
 
   private double r = 3.0;
   private double n = 5.0;
@@ -56,7 +56,7 @@ public class TaurusFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, n, inv, sor };
+    return new Object[]{r, n, inv, sor};
   }
 
   @Override

@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SuperShapeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +31,7 @@ public class SuperShapeFunc extends VariationFunc {
   private static final String PARAM_N3 = "n3";
   private static final String PARAM_HOLES = "holes";
 
-  private static final String[] paramNames = { PARAM_RND, PARAM_M, PARAM_N1, PARAM_N2, PARAM_N3, PARAM_HOLES };
+  private static final String[] paramNames = {PARAM_RND, PARAM_M, PARAM_N1, PARAM_N2, PARAM_N3, PARAM_HOLES};
 
   private double rnd = 3.0;
   private double m = 1.0;
@@ -63,13 +59,13 @@ public class SuperShapeFunc extends VariationFunc {
     double myrnd = rnd;
 
     double r = pAmount * ((myrnd * pContext.random() + (1.0 - myrnd) * pAffineTP.getPrecalcSqrt()) - holes)
-        * pow(t1 + t2, pneg1_n1) / pAffineTP.getPrecalcSqrt();
+            * pow(t1 + t2, pneg1_n1) / pAffineTP.getPrecalcSqrt();
 
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -79,7 +75,7 @@ public class SuperShapeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rnd, m, n1, n2, n3, holes };
+    return new Object[]{rnd, m, n1, n2, n3, holes};
   }
 
   @Override

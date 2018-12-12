@@ -27,7 +27,7 @@ public class SplitsFunc extends VariationFunc {
   private static final String PARAM_USH = "ushear";
   private static final String PARAM_DSH = "dshear";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_LSH, PARAM_RSH, PARAM_USH, PARAM_DSH  };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_LSH, PARAM_RSH, PARAM_USH, PARAM_DSH};
 
   private double x = 0.40;
   private double y = 0.60;
@@ -42,8 +42,7 @@ public class SplitsFunc extends VariationFunc {
     if (pAffineTP.x >= 0) {
       pVarTP.x += pAmount * (pAffineTP.x + x);
       pVarTP.y += pAmount * (rshear);
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * (pAffineTP.x - x);
       pVarTP.y -= pAmount * (lshear);
     }
@@ -51,14 +50,13 @@ public class SplitsFunc extends VariationFunc {
     if (pAffineTP.y >= 0) {
       pVarTP.y += pAmount * (pAffineTP.y + y);
       pVarTP.x += pAmount * (ushear);
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * (pAffineTP.y - y);
       pVarTP.x -= pAmount * (dshear);
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -68,7 +66,7 @@ public class SplitsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, lshear, rshear, ushear, dshear };
+    return new Object[]{x, y, lshear, rshear, ushear, dshear};
   }
 
   @Override

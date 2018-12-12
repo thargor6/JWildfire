@@ -17,11 +17,11 @@
 
 package org.jwildfire.create.tina.variation;
 
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+
+import java.util.List;
 
 public class FractMandelbrotWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;

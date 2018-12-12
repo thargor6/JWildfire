@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sign;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CurlSpFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,7 +31,7 @@ public class CurlSpFunc extends VariationFunc {
   private static final String PARAM_SX = "sx";
   private static final String PARAM_SY = "sy";
   private static final String PARAM_DC = "dc";
-  private static final String[] paramNames = { PARAM_POW, PARAM_C1, PARAM_C2, PARAM_SX, PARAM_SY, PARAM_DC };
+  private static final String[] paramNames = {PARAM_POW, PARAM_C1, PARAM_C2, PARAM_SX, PARAM_SY, PARAM_DC};
 
   private double pow = 1.0;
   private double c1 = -0.01;
@@ -74,7 +69,7 @@ public class CurlSpFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { pow, c1, c2, sx, sy, dc };
+    return new Object[]{pow, c1, c2, sx, sy, dc};
   }
 
   @Override

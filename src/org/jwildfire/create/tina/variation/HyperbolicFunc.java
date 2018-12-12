@@ -28,8 +28,8 @@ public class HyperbolicFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * pAffineTP.getPrecalcSinA() / r;
     pVarTP.y += pAmount * pAffineTP.getPrecalcCosA() * r;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

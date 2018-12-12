@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class FisheyeFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -31,8 +31,8 @@ public class FisheyeFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * r * pAffineTP.getPrecalcCosA();
     pVarTP.y += pAmount * r * pAffineTP.getPrecalcSinA();
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

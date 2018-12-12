@@ -16,21 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Cubic_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_XPAND = "xpand";
   private static final String PARAM_STYLE = "style";
-  private static final String[] paramNames = { PARAM_XPAND, PARAM_STYLE };
+  private static final String[] paramNames = {PARAM_XPAND, PARAM_STYLE};
 
   private double xpand = 0.25;
   private double style = 0.0;
@@ -47,39 +42,31 @@ public class Cubic_3DFunc extends VariationFunc {
 
     if (fabs(this.xpand) <= 1.0) {
       fill = this.xpand * 0.5; // values up to 0.5
-    }
-    else {
+    } else {
       fill = sqrt(this.xpand) * 0.5; // values above 0.5
     }
 
     if (fabs(pAmount) <= 0.5) {
       smooth = pAmount * 2.0; // Causes full effect above pAmount=0.5
-    }
-    else {
+    } else {
       smooth = 1.0;
     }
 
     if (fabs(this.style) <= 1.0) {
       smoothStyle = this.style;
-    }
-    else {
+    } else {
       if (this.style > 1.0) {
         smoothStyle = 1.0 + (this.style - 1.0) * 0.25;
-      }
-      else
-      {
+      } else {
         smoothStyle = (this.style + 1.0) * 0.25 - 1.0;
       }
     }
 
     exnze = 1.0 - (smoothStyle * (1.0 - (cos(atan2(pAffineTP.x, pAffineTP.z)))));
     wynze = 1.0 - (smoothStyle * (1.0 - (sin(atan2(pAffineTP.y, pAffineTP.z)))));
-    if (smoothStyle > 1.0)
-    {
+    if (smoothStyle > 1.0) {
       znxy = 1.0 - (smoothStyle * (1.0 - ((exnze + wynze) / 2.0 * smoothStyle)));
-    }
-    else
-    {
+    } else {
       znxy = 1.0 - (smoothStyle * (1.0 - ((exnze + wynze) / 2.0)));
     }
 
@@ -133,7 +120,7 @@ public class Cubic_3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xpand, style };
+    return new Object[]{xpand, style};
   }
 
   @Override

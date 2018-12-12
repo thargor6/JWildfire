@@ -27,8 +27,8 @@ public class BilinearFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * pAffineTP.y;
     pVarTP.y += pAmount * pAffineTP.x;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

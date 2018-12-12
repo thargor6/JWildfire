@@ -16,13 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.max;
-import static org.jwildfire.base.mathlib.MathLib.min;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.max;
+import static org.jwildfire.base.mathlib.MathLib.min;
 
 public class Crop3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ public class Crop3DFunc extends VariationFunc {
   private static final String PARAM_SCATTER_AREA = "scatter_area";
   private static final String PARAM_ZERO = "zero";
 
-  private static final String[] paramNames = { PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_FLOOR, PARAM_CEILING, PARAM_SCATTER_AREA, PARAM_ZERO };
+  private static final String[] paramNames = {PARAM_LEFT, PARAM_RIGHT, PARAM_TOP, PARAM_BOTTOM, PARAM_FLOOR, PARAM_CEILING, PARAM_SCATTER_AREA, PARAM_ZERO};
 
   private double left = -1.0;
   private double top = -1.0;
@@ -57,8 +57,7 @@ public class Crop3DFunc extends VariationFunc {
       pVarTP.x = pVarTP.y = pVarTP.z = 0;
       pVarTP.doHide = true;
       return;
-    }
-    else {
+    } else {
       pVarTP.doHide = false;
       if (x < xmin)
         x = xmin + pContext.random() * w;
@@ -85,7 +84,7 @@ public class Crop3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { left, right, top, bottom, floor, ceiling, scatter_area, zero };
+    return new Object[]{left, right, top, bottom, floor, ceiling, scatter_area, zero};
   }
 
   @Override

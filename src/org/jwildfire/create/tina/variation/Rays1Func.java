@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Rays1Func extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,8 +33,8 @@ public class Rays1Func extends SimpleVariationFunc {
     pVarTP.x = pAmount * u * t / pAffineTP.x;
     pVarTP.y = pAmount * u * t / pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 

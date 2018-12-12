@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 
 public class DCCarpetFunc extends VariationFunc {
 
@@ -29,7 +29,7 @@ public class DCCarpetFunc extends VariationFunc {
 
   private static final String PARAM_ORIGIN = "origin";
 
-  private static final String[] paramNames = { PARAM_ORIGIN };
+  private static final String[] paramNames = {PARAM_ORIGIN};
 
   private double origin = 1.0;
 
@@ -55,7 +55,7 @@ public class DCCarpetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { origin };
+    return new Object[]{origin};
   }
 
   @Override

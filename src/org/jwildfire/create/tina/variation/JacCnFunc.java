@@ -16,24 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tanh;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JacCnFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_K = "k";
 
-  private static final String[] paramNames = { PARAM_K };
+  private static final String[] paramNames = {PARAM_K};
 
   private double k = 0.5;
 
@@ -53,8 +46,8 @@ public class JacCnFunc extends VariationFunc {
     pVarTP.x += Denom * NumX;
     pVarTP.y += Denom * NumY;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -64,7 +57,7 @@ public class JacCnFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { k };
+    return new Object[]{k};
   }
 
   @Override
@@ -164,8 +157,7 @@ public class JacCnFunc extends VariationFunc {
         res.cn = a;
         res.sn = (res.sn) / d;
       }
-    }
-    else {
+    } else {
       res.cn = 1.0 / cosh(u);
       res.dn = res.cn;
       (res.sn) = tanh(u);

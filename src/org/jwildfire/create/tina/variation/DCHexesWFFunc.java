@@ -31,7 +31,7 @@ public class DCHexesWFFunc extends HexesFunc {
   private static final String PARAM_COLOR_SCALE = "color_scale";
   private static final String PARAM_COLOR_OFFSET = "color_offset";
 
-  private static final String[] additionalParamNames = { PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET };
+  private static final String[] additionalParamNames = {PARAM_COLOR_SCALE, PARAM_COLOR_OFFSET};
 
   private double colorScale = 0.5;
   private double colorOffset = 0.0;
@@ -52,7 +52,7 @@ public class DCHexesWFFunc extends HexesFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return joinArrays(super.getParameterValues(), new Object[] { colorScale, colorOffset });
+    return joinArrays(super.getParameterValues(), new Object[]{colorScale, colorOffset});
   }
 
   @Override

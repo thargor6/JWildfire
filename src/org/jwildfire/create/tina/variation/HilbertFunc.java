@@ -16,20 +16,21 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 
 import java.util.Arrays;
 
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Jesus Sosa
  * @date October 17, 2017
- * Adapted Algorithm from 
- *   http://introcs.cs.princeton.edu/java/32class/Hilbert.java.html
+ * Adapted Algorithm from
+ * http://introcs.cs.princeton.edu/java/32class/Hilbert.java.html
  * Hilbert Curve Variation params:
  * Level:  1,2,3,4,5
  * Show_lines: 0=hide,1=show
@@ -37,10 +38,6 @@ import org.jwildfire.base.mathlib.MathLib;
  * show_points: 0=hide,1=show
  * point_thickness_param: 1..200
  */
-
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HilbertFunc extends VariationFunc {
 
@@ -54,8 +51,8 @@ public class HilbertFunc extends VariationFunc {
   private static final String PARAM_POINT_THICKNESS = "point_thickness";
 
   private static final String[] paramNames = {
-      PARAM_LEVEL, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS,
-      PARAM_POINT_THICKNESS };
+          PARAM_LEVEL, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS,
+          PARAM_POINT_THICKNESS};
 
   private int level = 2;
 
@@ -328,8 +325,7 @@ public class HilbertFunc extends VariationFunc {
       double rangle = (pContext.random() * M_2PI);
       xoffset = roffset * cos(rangle);
       yoffset = roffset * sin(rangle);
-    }
-    else {
+    } else {
       xoffset = 0;
       yoffset = 0;
     }
@@ -380,7 +376,7 @@ public class HilbertFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { level, show_lines_param, line_thickness_param, show_points_param, point_thickness_param };
+    return new Object[]{level, show_lines_param, line_thickness_param, show_points_param, point_thickness_param};
   }
 
   @Override
@@ -389,8 +385,7 @@ public class HilbertFunc extends VariationFunc {
       level = limitIntVal(Tools.FTOI(pValue), 1, 10);
       hilbert = new Hilbert();
       hilbert.draw_hilbert(level);
-    }
-    else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
+    } else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = (int) pValue;
     else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness_param = pValue;

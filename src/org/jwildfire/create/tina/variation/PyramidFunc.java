@@ -17,29 +17,34 @@
 package org.jwildfire.create.tina.variation;
 
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+
 public class PyramidFunc extends SimpleVariationFunc {
-	  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	  @Override
-	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	    // pyramid by Zueuk (transcribed into jwf by Dark)
-	    double x = pAffineTP.x; x=x*x*x;
-	    double y = pAffineTP.y; y=y*y*y;
-	    double z = pAffineTP.z; z=fabs(z*z*z);
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // pyramid by Zueuk (transcribed into jwf by Dark)
+    double x = pAffineTP.x;
+    x = x * x * x;
+    double y = pAffineTP.y;
+    y = y * y * y;
+    double z = pAffineTP.z;
+    z = fabs(z * z * z);
 
-	    double r = pAmount / (fabs(x) + fabs(y) + z + 0.000000001);
+    double r = pAmount / (fabs(x) + fabs(y) + z + 0.000000001);
 
-	    pVarTP.x += x * r;
-	    pVarTP.y += y * r;
-	    pVarTP.z += z * r;
-	  }
+    pVarTP.x += x * r;
+    pVarTP.y += y * r;
+    pVarTP.z += z * r;
+  }
 
-	  @Override
-	  public String getName() {
-	    return "pyramid";
-	  }
+  @Override
+  public String getName() {
+    return "pyramid";
+  }
 
-	}
+}

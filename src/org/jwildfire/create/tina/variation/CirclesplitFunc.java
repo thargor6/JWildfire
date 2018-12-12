@@ -16,20 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CirclesplitFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
   private static final String PARAM_CS_RADIUS = "cs_radius";
   private static final String PARAM_CS_SPLIT = "cs_split";
-  private static final String[] paramNames = { PARAM_CS_RADIUS, PARAM_CS_SPLIT };
+  private static final String[] paramNames = {PARAM_CS_RADIUS, PARAM_CS_SPLIT};
   private double cs_radius = 1.0;
   private double cs_split = 0.5;
 
@@ -48,8 +44,7 @@ public class CirclesplitFunc extends VariationFunc {
     if (r < cs_radius - cs_split) {
       x1 = x0;
       y1 = y0;
-    }
-    else {
+    } else {
       double a = atan2(y0, x0);
       double len = r + cs_split;
       x1 = cos(a) * len;
@@ -70,7 +65,7 @@ public class CirclesplitFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cs_radius, cs_split };
+    return new Object[]{cs_radius, cs_split};
   }
 
   @Override

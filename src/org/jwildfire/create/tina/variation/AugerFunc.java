@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class AugerFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class AugerFunc extends VariationFunc {
   private static final String PARAM_SYM = "sym";
   private static final String PARAM_SCALE = "scale";
 
-  private static final String[] paramNames = { PARAM_FREQ, PARAM_WEIGHT, PARAM_SYM, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_FREQ, PARAM_WEIGHT, PARAM_SYM, PARAM_SCALE};
 
   private double freq = 1.00;
   private double weight = 0.5;
@@ -48,8 +48,8 @@ public class AugerFunc extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + sym * (dx - pAffineTP.x));
     pVarTP.y += pAmount * dy;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -59,7 +59,7 @@ public class AugerFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { freq, weight, sym, scale };
+    return new Object[]{freq, weight, sym, scale};
   }
 
   @Override

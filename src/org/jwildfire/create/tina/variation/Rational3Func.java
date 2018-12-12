@@ -21,18 +21,18 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
 /**
-   Ported to JWildfire variation by CozyG
-      from Apophysis7x rational3 plugin by xyrus02 at:
-         http://sourceforge.net/p/apophysis7x/svn/HEAD/tree/trunk/Plugin/rational3.c
-   
-   Explanation from rational3 plugin:
-      Rational3 allows you to customize a rational function
-      involving the complex variable z. It can be represented
-      as the function...
-          az^3 + bz^2 + cz + d
-         ----------------------  division line
-          ez^3 + fz^2 + gz + h
-  */
+ * Ported to JWildfire variation by CozyG
+ * from Apophysis7x rational3 plugin by xyrus02 at:
+ * http://sourceforge.net/p/apophysis7x/svn/HEAD/tree/trunk/Plugin/rational3.c
+ * <p>
+ * Explanation from rational3 plugin:
+ * Rational3 allows you to customize a rational function
+ * involving the complex variable z. It can be represented
+ * as the function...
+ * az^3 + bz^2 + cz + d
+ * ----------------------  division line
+ * ez^3 + fz^2 + gz + h
+ */
 public class Rational3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class Rational3Func extends VariationFunc {
   private static final String PARAM_F = "f";
   private static final String PARAM_G = "g";
   private static final String PARAM_H = "h";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G, PARAM_H };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_G, PARAM_H};
   private double a = 0.5;
   private double b = 0.0;
   private double c = 0.0;
@@ -78,8 +78,8 @@ public class Rational3Func extends VariationFunc {
     pVarTP.y += pAmount * (ti * br - tr * bi) * r3den;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -90,36 +90,28 @@ public class Rational3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d, e, f, g, h };
+    return new Object[]{a, b, c, d, e, f, g, h};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A.equalsIgnoreCase(pName)) {
       a = pValue;
-    }
-    else if (PARAM_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_B.equalsIgnoreCase(pName)) {
       b = pValue;
-    }
-    else if (PARAM_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_C.equalsIgnoreCase(pName)) {
       c = pValue;
-    }
-    else if (PARAM_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_D.equalsIgnoreCase(pName)) {
       d = pValue;
-    }
-    else if (PARAM_E.equalsIgnoreCase(pName)) {
+    } else if (PARAM_E.equalsIgnoreCase(pName)) {
       e = pValue;
-    }
-    else if (PARAM_F.equalsIgnoreCase(pName)) {
+    } else if (PARAM_F.equalsIgnoreCase(pName)) {
       f = pValue;
-    }
-    else if (PARAM_G.equalsIgnoreCase(pName)) {
+    } else if (PARAM_G.equalsIgnoreCase(pName)) {
       g = pValue;
-    }
-    else if (PARAM_H.equalsIgnoreCase(pName)) {
+    } else if (PARAM_H.equalsIgnoreCase(pName)) {
       h = pValue;
-    }
-    else {
+    } else {
       System.out.println("pName not recognized: " + pName);
       throw new IllegalArgumentException(pName);
     }

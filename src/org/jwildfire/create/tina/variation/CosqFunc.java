@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CosqFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +28,8 @@ public class CosqFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Cosq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);
-	double s = sin(pAffineTP.x);
+    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double s = sin(pAffineTP.x);
     double c = cos(pAffineTP.x);
     double sh = sinh(abs_v);
     double ch = cosh(abs_v);

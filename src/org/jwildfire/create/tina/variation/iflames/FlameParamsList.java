@@ -16,10 +16,6 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Flame;
@@ -30,6 +26,10 @@ import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.VariationFunc;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FlameParamsList extends ArrayList<FlameParams> implements Params {
   private static final long serialVersionUID = 1L;
@@ -87,7 +87,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
   private static final String PARAM_BRIGHTNESS_CHANGE = "brightness_change";
   private static final String PARAM_INSTANCING = "instancing";
 
-  private static RGBColor[] previewColors = new RGBColor[] { new RGBColor(255, 128, 31), new RGBColor(255, 0, 0), new RGBColor(0, 255, 0), new RGBColor(0, 255, 255), new RGBColor(255, 180, 32) };
+  private static RGBColor[] previewColors = new RGBColor[]{new RGBColor(255, 128, 31), new RGBColor(255, 0, 0), new RGBColor(0, 255, 0), new RGBColor(0, 255, 255), new RGBColor(255, 180, 32)};
 
   public static FlameParamsList createFlameParams(int pCount) {
     FlameParamsList res = new FlameParamsList();
@@ -295,184 +295,139 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
       if ((PARAM_FLAME_SIZE + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSize(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SIZE_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SIZE_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSizeVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_ALPHA + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_ALPHA + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateAlpha(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_ALPHA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_ALPHA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateAlphaVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_ALPHA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_ALPHA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateAlphaSpeed(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_ALPHA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_ALPHA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateAlphaSpeedVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_BETA + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_BETA + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateBeta(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_BETA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_BETA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateBetaVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_BETA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_BETA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateBetaSpeed(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_BETA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_BETA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateBetaSpeedVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_GAMMA + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_GAMMA + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateGamma(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_GAMMA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_GAMMA_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateGammaVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_GAMMA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_GAMMA_SPEED + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateGammaSpeed(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_ROTATE_GAMMA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_ROTATE_GAMMA_SPEED_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRotateGammaSpeedVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_X + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_X + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedX(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_RADIAL_ACCEL + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_RADIAL_ACCEL + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRadialAcceleration(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_RADIAL_ACCEL_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_RADIAL_ACCEL_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setRadialAccelerationVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_TANGENTIAL_ACCEL + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_TANGENTIAL_ACCEL + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setTangentialAcceleration(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_TANGENTIAL_ACCEL_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_TANGENTIAL_ACCEL_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setTangentialAccelerationVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_X_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_X_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedXVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_Y + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_Y + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedY(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_Y_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_Y_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedYVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_Z + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_Z + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedZ(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_SPEED_Z_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_SPEED_Z_VAR + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setSpeedZVar(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_CENTRE_X + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_CENTRE_X + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setCentreX(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_CENTRE_Y + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_CENTRE_Y + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setCentreY(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_WEIGHT + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_WEIGHT + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setWeight(VariationFunc.limitVal(pValue, 0.0, 100.0));
         return true;
-      }
-      else if ((PARAM_FLAME_MINVAL + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_MINVAL + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setMinVal(VariationFunc.limitVal(pValue, 0.0, 100.0));
         return true;
-      }
-      else if ((PARAM_FLAME_MAXVAL + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_MAXVAL + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setMaxVal(VariationFunc.limitVal(pValue, 0.0, 100.0));
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM1_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM1_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam1Min(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM1_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM1_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam1Max(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM2_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM2_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam2Min(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM2_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM2_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam2Max(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM3_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM3_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam3Min(pValue);
         return true;
-      }
-      else if ((PARAM_FLAME_PARAM3_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_FLAME_PARAM3_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam3Max(pValue);
         return true;
-      }
-      else if ((PARAM_PREVIEW_R + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_PREVIEW_R + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setPreviewR(VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 255));
         return true;
-      }
-      else if ((PARAM_PREVIEW_G + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_PREVIEW_G + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setPreviewG(VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 255));
         return true;
-      }
-      else if ((PARAM_PREVIEW_B + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_PREVIEW_B + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setPreviewB(VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 255));
         return true;
-      }
-      else if ((PARAM_GRID_X_OFFSET + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_GRID_X_OFFSET + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setGridXOffset(Tools.FTOI(pValue));
         return true;
-      }
-      else if ((PARAM_GRID_Y_OFFSET + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_GRID_Y_OFFSET + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setGridYOffset(Tools.FTOI(pValue));
         return true;
-      }
-      else if ((PARAM_GRID_X_SIZE + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_GRID_X_SIZE + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setGridXSize(Tools.FTOI(pValue));
         return true;
-      }
-      else if ((PARAM_GRID_Y_SIZE + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_GRID_Y_SIZE + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setGridYSize(Tools.FTOI(pValue));
         return true;
-      }
-      else if ((PARAM_BRIGHTNESS_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_BRIGHTNESS_MIN + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setBrightnessMin(pValue);
         return true;
-      }
-      else if ((PARAM_BRIGHTNESS_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_BRIGHTNESS_MAX + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setBrightnessMax(pValue);
         return true;
-      }
-      else if ((PARAM_BRIGHTNESS_CHANGE + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_BRIGHTNESS_CHANGE + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setBrightnessChange(pValue);
         return true;
-      }
-      else if ((PARAM_INSTANCING + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((PARAM_INSTANCING + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setInstancing(Tools.FTOI(pValue) == 1);
         return true;
       }
@@ -488,17 +443,14 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
         if (flameXML.length() > 0) {
           parseFlame(flameXML);
           get(i - 1).setFlameXML(flameXML);
-        }
-        else {
+        } else {
           get(i - 1).setFlameXML(null);
         }
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM1 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM1 + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam1(pValue != null ? new String(pValue) : "");
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM1_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM1_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         String filename = pValue != null ? new String(pValue) : "";
         SimpleImage map = null;
         if (filename.length() > 0) {
@@ -508,19 +460,16 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
               throw new Exception("Invalid param map");
             }
             map = (SimpleImage) img;
-          }
-          catch (Exception ex) {
+          } catch (Exception ex) {
             ex.printStackTrace();
           }
         }
         get(i - 1).setFlameParamMap1Filename(map != null ? filename : null);
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM2 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM2 + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam2(pValue != null ? new String(pValue) : "");
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM2_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM2_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         String filename = pValue != null ? new String(pValue) : "";
         SimpleImage map = null;
         if (filename.length() > 0) {
@@ -530,19 +479,16 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
               throw new Exception("Invalid param map");
             }
             map = (SimpleImage) img;
-          }
-          catch (Exception ex) {
+          } catch (Exception ex) {
             ex.printStackTrace();
           }
         }
         get(i - 1).setFlameParamMap2Filename(map != null ? filename : null);
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM3 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM3 + flameIndexStr).equalsIgnoreCase(pName)) {
         get(i - 1).setFlameParam3(pValue != null ? new String(pValue) : "");
         return true;
-      }
-      else if ((RESSOURCE_FLAME_PARAM3_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM3_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         String filename = pValue != null ? new String(pValue) : "";
         SimpleImage map = null;
         if (filename.length() > 0) {
@@ -552,8 +498,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
               throw new Exception("Invalid param map");
             }
             map = (SimpleImage) img;
-          }
-          catch (Exception ex) {
+          } catch (Exception ex) {
             ex.printStackTrace();
           }
         }
@@ -570,8 +515,7 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
       if (flames.size() == 0) {
         throw new Exception("Flame is empty");
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       System.out.println("##############################################################");
       System.out.println(pFlameXML);
       System.out.println("##############################################################");
@@ -585,23 +529,17 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
       String flameIndexStr = getFlameIndexStr(i);
       if ((RESSOURCE_FLAME + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.BYTEARRAY;
-      }
-      else if ((RESSOURCE_FLAME_PARAM1 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM1 + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.BYTEARRAY;
-      }
-      else if ((RESSOURCE_FLAME_PARAM1_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM1_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.IMAGE_FILENAME;
-      }
-      else if ((RESSOURCE_FLAME_PARAM2 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM2 + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.BYTEARRAY;
-      }
-      else if ((RESSOURCE_FLAME_PARAM2_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM2_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.IMAGE_FILENAME;
-      }
-      else if ((RESSOURCE_FLAME_PARAM3 + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM3 + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.BYTEARRAY;
-      }
-      else if ((RESSOURCE_FLAME_PARAM3_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
+      } else if ((RESSOURCE_FLAME_PARAM3_MAP + flameIndexStr).equalsIgnoreCase(pName)) {
         return RessourceType.IMAGE_FILENAME;
       }
     }
@@ -629,23 +567,23 @@ public class FlameParamsList extends ArrayList<FlameParams> implements Params {
     for (int i = 0; i < size(); i++) {
       FlameParams params = get(i);
       pKey += "#" + (params.getFlameXML() != null ? params.getFlameXML().hashCode() : "null") + "#"
-          + Tools.doubleToString(params.getWeight()) + "#" + Tools.doubleToString(params.getMinVal()) + "#"
-          + Tools.doubleToString(params.getMaxVal()) + "#" + Tools.doubleToString(params.getSize()) + "#"
-          + Tools.doubleToString(params.getSizeVar()) + "#" + Tools.doubleToString(params.getRotateAlpha()) + "#"
-          + Tools.doubleToString(params.getRotateAlphaVar()) + "#" + Tools.doubleToString(params.getRotateBeta()) + "#"
-          + Tools.doubleToString(params.getRotateBetaVar()) + "#" + Tools.doubleToString(params.getRotateGamma()) + "#"
-          + Tools.doubleToString(params.getRotateGammaVar()) + "#"
-          + params.getFlameParam1() + "#" + params.getFlameParamMap1Filename() + "#"
-          + Tools.doubleToString(params.getFlameParam1Min()) + "#" + Tools.doubleToString(params.getFlameParam1Max()) + "#"
-          + params.getFlameParam2() + "#" + params.getFlameParamMap2Filename() + "#"
-          + Tools.doubleToString(params.getFlameParam2Min()) + "#" + Tools.doubleToString(params.getFlameParam2Max()) + "#"
-          + params.getFlameParam3() + "#" + params.getFlameParamMap3Filename() + "#"
-          + Tools.doubleToString(params.getFlameParam3Min()) + "#" + Tools.doubleToString(params.getFlameParam3Max())
-          + params.getRotateAlphaSpeed() + "#" + params.getRotateAlphaSpeedVar() + "#" + params.getRotateBetaSpeed() + "#"
-          + params.getRotateBetaSpeedVar() + "#" + params.getRotateGammaSpeed() + "#" + params.getRotateGammaSpeedVar() + "#" + params.getSpeedX() + "#"
-          + params.getSpeedXVar() + "#" + params.getSpeedY() + "#" + params.getSpeedYVar() + "#" + params.getSpeedZ() + "#" + params.getSpeedZVar() + "#"
-          + params.getRadialAcceleration() + "#" + params.getRadialAccelerationVar() + "#" + params.getTangentialAcceleration() + "#" + params.getTangentialAccelerationVar() + "#"
-          + params.getBrightnessMin() + "#" + params.getBrightnessMax() + "#" + params.getBrightnessChange() + "#" + (params.isInstancing() ? 1 : 0);
+              + Tools.doubleToString(params.getWeight()) + "#" + Tools.doubleToString(params.getMinVal()) + "#"
+              + Tools.doubleToString(params.getMaxVal()) + "#" + Tools.doubleToString(params.getSize()) + "#"
+              + Tools.doubleToString(params.getSizeVar()) + "#" + Tools.doubleToString(params.getRotateAlpha()) + "#"
+              + Tools.doubleToString(params.getRotateAlphaVar()) + "#" + Tools.doubleToString(params.getRotateBeta()) + "#"
+              + Tools.doubleToString(params.getRotateBetaVar()) + "#" + Tools.doubleToString(params.getRotateGamma()) + "#"
+              + Tools.doubleToString(params.getRotateGammaVar()) + "#"
+              + params.getFlameParam1() + "#" + params.getFlameParamMap1Filename() + "#"
+              + Tools.doubleToString(params.getFlameParam1Min()) + "#" + Tools.doubleToString(params.getFlameParam1Max()) + "#"
+              + params.getFlameParam2() + "#" + params.getFlameParamMap2Filename() + "#"
+              + Tools.doubleToString(params.getFlameParam2Min()) + "#" + Tools.doubleToString(params.getFlameParam2Max()) + "#"
+              + params.getFlameParam3() + "#" + params.getFlameParamMap3Filename() + "#"
+              + Tools.doubleToString(params.getFlameParam3Min()) + "#" + Tools.doubleToString(params.getFlameParam3Max())
+              + params.getRotateAlphaSpeed() + "#" + params.getRotateAlphaSpeedVar() + "#" + params.getRotateBetaSpeed() + "#"
+              + params.getRotateBetaSpeedVar() + "#" + params.getRotateGammaSpeed() + "#" + params.getRotateGammaSpeedVar() + "#" + params.getSpeedX() + "#"
+              + params.getSpeedXVar() + "#" + params.getSpeedY() + "#" + params.getSpeedYVar() + "#" + params.getSpeedZ() + "#" + params.getSpeedZVar() + "#"
+              + params.getRadialAcceleration() + "#" + params.getRadialAccelerationVar() + "#" + params.getTangentialAcceleration() + "#" + params.getTangentialAccelerationVar() + "#"
+              + params.getBrightnessMin() + "#" + params.getBrightnessMax() + "#" + params.getBrightnessChange() + "#" + (params.isInstancing() ? 1 : 0);
 
     }
     return pKey;

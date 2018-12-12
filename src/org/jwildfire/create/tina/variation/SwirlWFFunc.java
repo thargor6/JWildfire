@@ -16,10 +16,6 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
@@ -28,27 +24,26 @@ public class SwirlWFFunc extends VariationFunc {
 
   private static final String PARAM_N = "n";
   private static final String PARAM_RADIUS = "r";
-  
-  private static final String[] paramNames = { PARAM_N };
-  
+
+  private static final String[] paramNames = {PARAM_N};
+
   private double N = 0;
 
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  
-		double rad = pAffineTP.getPrecalcSqrt();
-		double ang = pAffineTP.getPrecalcAtanYX();   // + log(rad)*shift;
 
- 
-        
-     //   double ang = pContext.random()*360.0;
-     //   double rad=  -1.0 + pContext.random()*2.0;
-        
-        pVarTP.x += pAmount * (rad*Math.cos(ang));
-        pVarTP.y += pAmount * (rad*Math.sin(ang));
-        pVarTP.z += pAmount * (Math.sin(6.0*Math.cos(rad)-N*ang));
-        pVarTP.color = Math.abs(Math.sin(6.0*Math.cos(rad)-N*ang));
+    double rad = pAffineTP.getPrecalcSqrt();
+    double ang = pAffineTP.getPrecalcAtanYX();   // + log(rad)*shift;
+
+
+    //   double ang = pContext.random()*360.0;
+    //   double rad=  -1.0 + pContext.random()*2.0;
+
+    pVarTP.x += pAmount * (rad * Math.cos(ang));
+    pVarTP.y += pAmount * (rad * Math.sin(ang));
+    pVarTP.z += pAmount * (Math.sin(6.0 * Math.cos(rad) - N * ang));
+    pVarTP.color = Math.abs(Math.sin(6.0 * Math.cos(rad) - N * ang));
 
   }
 
@@ -59,7 +54,7 @@ public class SwirlWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { N };
+    return new Object[]{N};
   }
 
   @Override
@@ -69,7 +64,7 @@ public class SwirlWFFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
-  
+
   @Override
   public String getName() {
     return "swirl3D_wf";

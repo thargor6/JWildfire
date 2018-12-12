@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class OctagonFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +27,7 @@ public class OctagonFunc extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
   private double x = 0.0;
   private double y = 0.0;
@@ -43,26 +41,24 @@ public class OctagonFunc extends VariationFunc {
       pVarTP.x += pAffineTP.x * r;
       pVarTP.y += pAffineTP.y * r;
       pVarTP.z += pAffineTP.z * r;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
     double t = pAmount / ((sqrt(pAffineTP.x * pAffineTP.x) + sqrt(pAffineTP.z) + sqrt(pAffineTP.y * pAffineTP.y) + sqrt(pAffineTP.z)) + SMALL_EPSILON);
     if (r >= 0) {
       pVarTP.x += pAffineTP.x * t;
       pVarTP.y += pAffineTP.y * t;
       pVarTP.z += pAffineTP.z * t;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
 
     }
     if (pAffineTP.x >= 0.0)
@@ -88,7 +84,7 @@ public class OctagonFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z };
+    return new Object[]{x, y, z};
   }
 
   @Override

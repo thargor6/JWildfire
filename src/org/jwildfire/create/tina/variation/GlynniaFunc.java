@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class GlynniaFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -40,8 +40,7 @@ public class GlynniaFunc extends SimpleVariationFunc {
         }
         pVarTP.x += _vvar2 * d;
         pVarTP.y -= _vvar2 / d * pAffineTP.y; //+= _vvar2 / d * pAffineTP.y;
-      }
-      else {
+      } else {
         d = r + pAffineTP.x;
         double dx = sqrt(r * (sqr(pAffineTP.y) + sqr(d)));
         if (dx == 0) {
@@ -51,8 +50,7 @@ public class GlynniaFunc extends SimpleVariationFunc {
         pVarTP.x += r * d;
         pVarTP.y += r * pAffineTP.y; //-= r * pAffineTP.y; 
       }
-    }
-    else {
+    } else {
       if (pContext.random() > 0.5) {
         d = sqrt(r + pAffineTP.x);
         if (d == 0) {
@@ -60,8 +58,7 @@ public class GlynniaFunc extends SimpleVariationFunc {
         }
         pVarTP.x -= _vvar2 * d;
         pVarTP.y -= _vvar2 / d * pAffineTP.y;
-      }
-      else {
+      } else {
         d = r + pAffineTP.x;
         double dx = sqrt(r * (sqr(pAffineTP.y) + sqr(d)));
         if (dx == 0) {
@@ -73,8 +70,8 @@ public class GlynniaFunc extends SimpleVariationFunc {
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

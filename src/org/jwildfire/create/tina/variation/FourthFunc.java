@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class FourthFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +30,7 @@ public class FourthFunc extends VariationFunc {
   private static final String PARAM_TWIST = "twist";
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
-  private static final String[] paramNames = { PARAM_SPIN, PARAM_SPACE, PARAM_TWIST, PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_SPIN, PARAM_SPACE, PARAM_TWIST, PARAM_X, PARAM_Y};
 
   private double spin = M_PI;
   private double space = 0.0;
@@ -55,25 +50,19 @@ public class FourthFunc extends VariationFunc {
       double c = cos(a);
       pVarTP.x += pAmount * r * c;
       pVarTP.y += pAmount * r * s;
-    }
-    else if (pAffineTP.x > 0.0 && pAffineTP.y < 0.0) //kuadran I: loonie
+    } else if (pAffineTP.x > 0.0 && pAffineTP.y < 0.0) //kuadran I: loonie
     {
       double r2 = sqr(pAffineTP.x) + sqr(pAffineTP.y);
 
-      if (r2 < this.sqrvvar)
-      {
+      if (r2 < this.sqrvvar) {
         double r = pAmount * sqrt(this.sqrvvar / r2 - 1.0);
         pVarTP.x += r * pAffineTP.x;
         pVarTP.y += r * pAffineTP.y;
-      }
-      else
-      {
+      } else {
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
-    }
-
-    else if (pAffineTP.x < 0.0 && pAffineTP.y > 0.0) // kuadran III: susan
+    } else if (pAffineTP.x < 0.0 && pAffineTP.y > 0.0) // kuadran III: susan
     {
       double r;
       double sina, cosa;
@@ -89,23 +78,20 @@ public class FourthFunc extends VariationFunc {
         r = pAmount * r;
         pVarTP.x += r * cosa + this.x;
         pVarTP.y += r * sina - this.y;
-      }
-      else
-      {
+      } else {
         r = pAmount * (1.0 + this.space / r);
         pVarTP.x += r * x + this.x;
         pVarTP.y += r * y - this.y;
       }
-    }
-    else //kuadran II: Linear
+    } else //kuadran II: Linear
     {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -116,7 +102,7 @@ public class FourthFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { spin, space, twist, x, y };
+    return new Object[]{spin, space, twist, x, y};
   }
 
   @Override

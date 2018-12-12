@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class Waves2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class Waves2Func extends VariationFunc {
   private static final String PARAM_SCALEY = "scaley";
   private static final String PARAM_FREQX = "freqx";
   private static final String PARAM_FREQY = "freqy";
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY};
 
   private double scalex = 0.25;
   private double scaley = 0.5;
@@ -42,8 +42,8 @@ public class Waves2Func extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + scalex * sin(pAffineTP.y * freqx));
     pVarTP.y += pAmount * (pAffineTP.y + scaley * sin(pAffineTP.x * freqy));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -53,7 +53,7 @@ public class Waves2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scalex, scaley, freqx, freqy };
+    return new Object[]{scalex, scaley, freqx, freqy};
   }
 
   @Override

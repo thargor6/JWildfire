@@ -16,20 +16,20 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class SquishFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
 
-  private static final String[] paramNames = { PARAM_POWER };
+  private static final String[] paramNames = {PARAM_POWER};
 
   private int power = 2;
 
@@ -46,17 +46,14 @@ public class SquishFunc extends VariationFunc {
 
       if (pAffineTP.x > 0.0) {
         p = pAffineTP.y;
-      }
-      else {
+      } else {
         p = 4.0 * s - pAffineTP.y;
       }
-    }
-    else {
+    } else {
       s = y;
       if (pAffineTP.y > 0.0) {
         p = 2.0 * s - pAffineTP.x;
-      }
-      else {
+      } else {
         p = 6.0 * s + pAffineTP.x;
       }
     }
@@ -66,26 +63,22 @@ public class SquishFunc extends VariationFunc {
     if (p <= 1.0 * s) {
       pVarTP.x += pAmount * s;
       pVarTP.y += pAmount * p;
-    }
-    else if (p <= 3.0 * s) {
+    } else if (p <= 3.0 * s) {
       pVarTP.x += pAmount * (2.0 * s - p);
       pVarTP.y += pAmount * (s);
-    }
-    else if (p <= 5.0 * s) {
+    } else if (p <= 5.0 * s) {
       pVarTP.x -= pAmount * (s);
       pVarTP.y += pAmount * (4.0 * s - p);
-    }
-    else if (p <= 7.0 * s) {
+    } else if (p <= 7.0 * s) {
       pVarTP.x -= pAmount * (6.0 * s - p);
       pVarTP.y -= pAmount * (s);
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * (s);
       pVarTP.y -= pAmount * (8.0 * s - p);
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -95,7 +88,7 @@ public class SquishFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power };
+    return new Object[]{power};
   }
 
   @Override

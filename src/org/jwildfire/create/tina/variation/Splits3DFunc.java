@@ -26,7 +26,7 @@ public class Splits3DFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
   private double x = 0.1;
   private double y = 0.3;
@@ -37,22 +37,19 @@ public class Splits3DFunc extends VariationFunc {
     /* splits3D by TyrantWave, http://tyrantwave.deviantart.com/art/Splits3D-Plugin-107262795 */
     if (pAffineTP.x >= 0) {
       pVarTP.x += pAmount * (pAffineTP.x + x);
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * (pAffineTP.x - x);
     }
 
     if (pAffineTP.y >= 0) {
       pVarTP.y += pAmount * (pAffineTP.y + y);
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * (pAffineTP.y - y);
     }
 
     if (pAffineTP.z >= 0) {
       pVarTP.z += pAmount * (pAffineTP.z + z);
-    }
-    else {
+    } else {
       pVarTP.z += pAmount * (pAffineTP.z - z);
     }
   }
@@ -64,7 +61,7 @@ public class Splits3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z };
+    return new Object[]{x, y, z};
   }
 
   @Override

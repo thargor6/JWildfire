@@ -27,11 +27,9 @@ public class VariationPriorityComparator implements Comparator<Variation> {
     int p2 = o2.getFunc().getPriority();
     if (p1 > p2) {
       return 1;
-    }
-    else if (p1 < p2) {
+    } else if (p1 < p2) {
       return -1;
-    }
-    else {
+    } else {
       return 0;
     }
   }

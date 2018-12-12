@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class DCPerlinFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -45,7 +40,7 @@ public class DCPerlinFunc extends VariationFunc {
   private static final String PARAM_Z = "z";
   private static final String PARAM_SELECT_BAILOUT = "select_bailout";
 
-  private static final String[] paramNames = { PARAM_SHAPE, PARAM_MAP, PARAM_SELECT_CENTRE, PARAM_SELECT_RANGE, PARAM_CENTRE, PARAM_RANGE, PARAM_EDGE, PARAM_SCALE, PARAM_OCTAVES, PARAM_AMPS, PARAM_FREQS, PARAM_Z, PARAM_SELECT_BAILOUT };
+  private static final String[] paramNames = {PARAM_SHAPE, PARAM_MAP, PARAM_SELECT_CENTRE, PARAM_SELECT_RANGE, PARAM_CENTRE, PARAM_RANGE, PARAM_EDGE, PARAM_SCALE, PARAM_OCTAVES, PARAM_AMPS, PARAM_FREQS, PARAM_Z, PARAM_SELECT_BAILOUT};
 
   private int shape = 0;
   private int map = 0;
@@ -85,49 +80,48 @@ public class DCPerlinFunc extends VariationFunc {
       e = 0.0;
       // When pAmount is 0, use for coloring only, so no shape
       if (pAmount == 0) {
-    	  Vx = pAffineTP.x;
-    	  Vy = pAffineTP.y;
-      }
-      else {
-      // Assign Vx, Vy according to shape
-          switch (shape) {
-            case SHAPE_SQUARE:
-              Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
-              Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
-              r = Vx * Vx > Vy * Vy ? Vx : Vy;
-              if (r > 1.0 - this.edge) {
-                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
-              }
-              break;
+        Vx = pAffineTP.x;
+        Vy = pAffineTP.y;
+      } else {
+        // Assign Vx, Vy according to shape
+        switch (shape) {
+          case SHAPE_SQUARE:
+            Vx = (1.0 + this.edge) * (pContext.random() - 0.5);
+            Vy = (1.0 + this.edge) * (pContext.random() - 0.5);
+            r = Vx * Vx > Vy * Vy ? Vx : Vy;
+            if (r > 1.0 - this.edge) {
+              e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+            }
+            break;
 
-            case SHAPE_DISC:
-              r = pContext.random() + pContext.random();
-              r = (r > 1.0) ? 2.0 - r : r;
-              r *= (1.0 + this.edge);
-              if (r > 1.0 - this.edge) {
-                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
-              }
-              theta = pContext.random() * M_2PI;
-              s = sin(theta);
-              c = cos(theta);
-              Vx = 0.5 * r * s;
-              Vy = 0.5 * r * c;
-              break;
+          case SHAPE_DISC:
+            r = pContext.random() + pContext.random();
+            r = (r > 1.0) ? 2.0 - r : r;
+            r *= (1.0 + this.edge);
+            if (r > 1.0 - this.edge) {
+              e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+            }
+            theta = pContext.random() * M_2PI;
+            s = sin(theta);
+            c = cos(theta);
+            Vx = 0.5 * r * s;
+            Vy = 0.5 * r * c;
+            break;
 
-            case SHAPE_BLUR:
-              r = (1.0 + this.edge) * pContext.random();
-              if (r > 1.0 - this.edge) {
-                e = 0.5 * (r - 1.0 + this.edge) / this.edge;
-              }
-              theta = pContext.random() * M_2PI;
-              s = sin(theta);
-              c = cos(theta);
-              Vx = 0.5 * r * s;
-              Vy = 0.5 * r * c;
-              break;
-            default: // nothing to do
-              break;
-          }
+          case SHAPE_BLUR:
+            r = (1.0 + this.edge) * pContext.random();
+            if (r > 1.0 - this.edge) {
+              e = 0.5 * (r - 1.0 + this.edge) / this.edge;
+            }
+            theta = pContext.random() * M_2PI;
+            s = sin(theta);
+            c = cos(theta);
+            Vx = 0.5 * r * s;
+            Vy = 0.5 * r * c;
+            break;
+          default: // nothing to do
+            break;
+        }
       }
 
       // Assign V for noise vector position according to map
@@ -163,8 +157,7 @@ public class DCPerlinFunc extends VariationFunc {
           r = 0.25 - (Vx * Vx + Vy * Vy);
           if (r < 0.0) {
             r = sqrt(-r);
-          }
-          else {
+          } else {
             r = sqrt(r);
           }
           V[0] = this.scale * Vx;
@@ -176,8 +169,7 @@ public class DCPerlinFunc extends VariationFunc {
           r = 0.25 - (Vx * Vx + Vy * Vy);
           if (r < 0.0) {
             r = sqrt(-r);
-          }
-          else {
+          } else {
             r = sqrt(r);
           }
           V[0] = this.scale * Vx;
@@ -190,8 +182,7 @@ public class DCPerlinFunc extends VariationFunc {
       // Add edge effects
       if (p > 0.0) {
         e = p * (1.0 + e * e * 20.0) + 2.0 * e;
-      }
-      else {
+      } else {
         e = p * (1.0 + e * e * 20.0) - 2.0 * e;
       }
     }
@@ -201,8 +192,8 @@ public class DCPerlinFunc extends VariationFunc {
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
     // Calculate and add direct colour   
     Col = this.centre + this.range * p;
@@ -216,7 +207,7 @@ public class DCPerlinFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shape, map, select_centre, select_range, centre, range, edge, scale, octaves, amps, freqs, z, select_bailout };
+    return new Object[]{shape, map, select_centre, select_range, centre, range, edge, scale, octaves, amps, freqs, z, select_bailout};
   }
 
   @Override

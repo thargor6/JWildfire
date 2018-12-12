@@ -16,16 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.acosh;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EMotionFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +27,7 @@ public class EMotionFunc extends VariationFunc {
   private static final String PARAM_MOVE = "move";
   private static final String PARAM_ROTATE = "rotate";
 
-  private static final String[] paramNames = { PARAM_MOVE, PARAM_ROTATE };
+  private static final String[] paramNames = {PARAM_MOVE, PARAM_ROTATE};
 
   private double move = 0.0;
   private double rotate = 0.0;
@@ -70,8 +64,7 @@ public class EMotionFunc extends VariationFunc {
 
     if (nu < 0.0) {
       mu += move;
-    }
-    else {
+    } else {
       mu -= move;
     }
     if (mu <= 0.0) {
@@ -86,8 +79,8 @@ public class EMotionFunc extends VariationFunc {
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -97,7 +90,7 @@ public class EMotionFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { move, rotate };
+    return new Object[]{move, rotate};
   }
 
   @Override

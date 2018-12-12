@@ -16,19 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.tanh;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class FunnelFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_EFFECT = "effect";
-  private static final String[] paramNames = { PARAM_EFFECT };
+  private static final String[] paramNames = {PARAM_EFFECT};
 
   private int effect = 8;
 
@@ -38,8 +36,8 @@ public class FunnelFunc extends VariationFunc {
     pVarTP.x += pAmount * tanh(pAffineTP.x) * (1.0 / cos(pAffineTP.x) + effect * M_PI);
     pVarTP.y += pAmount * tanh(pAffineTP.y) * (1.0 / cos(pAffineTP.y) + effect * M_PI);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -49,7 +47,7 @@ public class FunnelFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { effect };
+    return new Object[]{effect};
   }
 
   @Override

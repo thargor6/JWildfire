@@ -30,8 +30,7 @@ public class BubbleWFFunc extends SimpleVariationFunc {
     pVarTP.y += t * pAffineTP.y;
     if (pContext.random() < 0.5) {
       pVarTP.z -= pAmount * (2 / r - 1);
-    }
-    else {
+    } else {
       pVarTP.z += pAmount * (2 / r - 1);
     }
   }

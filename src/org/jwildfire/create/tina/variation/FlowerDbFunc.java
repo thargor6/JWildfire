@@ -1,20 +1,17 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 /*
- *  Original author dark-beam 
-*       (see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=18&t=1444&p=3032)
+ *  Original author dark-beam
+ *       (see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=18&t=1444&p=3032)
  *  suggested/requested as full variation by Don Town
  *  transcribed, extended, and turned into full variation by CozyG
- *  
+ *
  *  WARNING: assumes centered on (0,0,0), can disapear if move too far off in pre-transforms etc.
  */
 public class FlowerDbFunc extends VariationFunc {
@@ -28,7 +25,7 @@ public class FlowerDbFunc extends VariationFunc {
   private static final String PARAM_PETAL_FOLD_STRENGTH = "petal_fold_strength";
   private static final String PARAM_PETAL_FOLD_RADIUS = "petal_fold_radius";
 
-  private static final String[] paramNames = { PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD, PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH, PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS };
+  private static final String[] paramNames = {PARAM_PETALS, PARAM_PETAL_SPLIT, PARAM_PETAL_SPREAD, PARAM_STEM_THICKNESS, PARAM_STEM_LENGTH, PARAM_PETAL_FOLD_STRENGTH, PARAM_PETAL_FOLD_RADIUS};
 
   // non-integer petals is possible, changes relative size of petals
   private double petals = 6;
@@ -74,7 +71,7 @@ public class FlowerDbFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { petals, petal_split, petal_spread, stem_thickness, stem_length, petal_fold_strength, petal_fold_radius };
+    return new Object[]{petals, petal_split, petal_spread, stem_thickness, stem_length, petal_fold_strength, petal_fold_radius};
   }
 
   @Override

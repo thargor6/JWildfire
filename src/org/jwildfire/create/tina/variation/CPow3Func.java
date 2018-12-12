@@ -16,19 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.round;
-
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CPow3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,49 +30,49 @@ public class CPow3Func extends VariationFunc {
   private static final String PARAM_DIVISOR = "divisor";
   private static final String PARAM_SPREAD = "spread";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_D, PARAM_DIVISOR, PARAM_SPREAD };
+  private static final String[] paramNames = {PARAM_R, PARAM_D, PARAM_DIVISOR, PARAM_SPREAD};
 
   private double p_r = 1.0;
   private double p_d = 1.0;
   private double divisor = 1;
   private double spread = 1;
-  
-  double ang,p_a, c, half_c, d, half_d, coeff, full_spread;
+
+  double ang, p_a, c, half_c, d, half_d, coeff, full_spread;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-	  ang = 2.0 * M_PI / divisor;
-	  p_a = atan2((p_d < 0? -log(-p_d): log(p_d)) * p_r,2*M_PI);
-	  c = cos(p_a)*p_r * cos (p_a)/ divisor;
-	  d = cos(p_a)*p_r * sin (p_a)/ divisor;
-	  half_c = c / 2.0;
-	  half_d = d / 2.0;
-	  coeff = d == 0 ? 0 : -0.095 * spread /d;
+    ang = 2.0 * M_PI / divisor;
+    p_a = atan2((p_d < 0 ? -log(-p_d) : log(p_d)) * p_r, 2 * M_PI);
+    c = cos(p_a) * p_r * cos(p_a) / divisor;
+    d = cos(p_a) * p_r * sin(p_a) / divisor;
+    half_c = c / 2.0;
+    half_d = d / 2.0;
+    coeff = d == 0 ? 0 : -0.095 * spread / d;
 
   }
-	  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* cpow3 by Peter Sdobnov (Zueuk) translated by Brad Stefanov and Rick Sidwell  */
-    
-		double a = pAffineTP.getPrecalcAtanYX();
 
-	    if (a < 0) a += 2*M_PI;
+    double a = pAffineTP.getPrecalcAtanYX();
 
-;
-	    if (cos(a / 2) < pContext.random() * 2.0 - 1.0)
-	    	a -= 2*M_PI;
-    	
-	a += ( (pContext.random() < 0.5)? 2*M_PI : -2*M_PI) * round (log(pContext.random()) * coeff);
-    
+    if (a < 0) a += 2 * M_PI;
+
+    ;
+    if (cos(a / 2) < pContext.random() * 2.0 - 1.0)
+      a -= 2 * M_PI;
+
+    a += ((pContext.random() < 0.5) ? 2 * M_PI : -2 * M_PI) * round(log(pContext.random()) * coeff);
+
     double lnr2 = log(pAffineTP.getPrecalcSumsq());  // logarithm * 2
-    
+
     double r = pAmount * exp(half_c * lnr2 - d * a);
     double th = c * a + half_d * lnr2 + ang * floor(divisor * pContext.random());
-    
+
     pVarTP.x += r * cos(th);
     pVarTP.y += r * sin(th);
-    
+
     if (pContext.isPreserveZCoordinate()) pVarTP.z += pAmount * pAffineTP.z;
 
   }
@@ -92,7 +84,7 @@ public class CPow3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { p_r, p_d, divisor, spread };
+    return new Object[]{p_r, p_d, divisor, spread};
   }
 
   @Override
@@ -104,14 +96,14 @@ public class CPow3Func extends VariationFunc {
     else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
       divisor = (pValue == 0) ? 1 : pValue;
     else if (PARAM_SPREAD.equalsIgnoreCase(pName))
-      spread = pValue ;
+      spread = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "cpow_r", "cpow_d", "cpow_divisor", "cpow_spread" };
+    return new String[]{"cpow_r", "cpow_d", "cpow_divisor", "cpow_spread"};
   }
 
   @Override

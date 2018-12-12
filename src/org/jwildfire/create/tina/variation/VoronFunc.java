@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class VoronFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class VoronFunc extends VariationFunc {
   private static final String PARAM_NUM = "num";
   private static final String PARAM_XSEED = "xseed";
   private static final String PARAM_YSEED = "yseed";
-  private static final String[] paramNames = { PARAM_K, PARAM_STEP, PARAM_NUM, PARAM_XSEED, PARAM_YSEED };
+  private static final String[] paramNames = {PARAM_K, PARAM_STEP, PARAM_NUM, PARAM_XSEED, PARAM_YSEED};
 
   private double k = 0.99;
   private double step = 0.25;
@@ -73,8 +73,8 @@ public class VoronFunc extends VariationFunc {
     pVarTP.y += pAmount * (k * (pAffineTP.y - Y0) + Y0);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -84,12 +84,12 @@ public class VoronFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { k, step, num, xseed, yseed };
+    return new Object[]{k, step, num, xseed, yseed};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "Voron_K", "Voron_Step", "Voron_Num", "Voron_XSeed", "Voron_YSeed" };
+    return new String[]{"Voron_K", "Voron_Step", "Voron_Num", "Voron_XSeed", "Voron_YSeed"};
   }
 
   @Override
@@ -104,13 +104,11 @@ public class VoronFunc extends VariationFunc {
       xseed = Tools.FTOI(pValue);
       if (xseed < 1)
         xseed = 1;
-    }
-    else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
       yseed = Tools.FTOI(pValue);
       if (yseed < 1)
         yseed = 1;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

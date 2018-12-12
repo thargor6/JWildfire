@@ -16,9 +16,9 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.io.Serializable;
-
 import org.jwildfire.base.mathlib.MathLib;
+
+import java.io.Serializable;
 
 public class BaseFlame implements Serializable {
   private static final long serialVersionUID = 1L;

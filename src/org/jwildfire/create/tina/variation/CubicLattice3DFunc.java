@@ -16,23 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CubicLattice3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_XPAND = "xpand";
   private static final String PARAM_STYLE = "style";
-  private static final String[] paramNames = { PARAM_XPAND, PARAM_STYLE };
+  private static final String[] paramNames = {PARAM_XPAND, PARAM_STYLE};
 
   private double xpand = 0.2;
   private double style = 1.0;
@@ -43,16 +38,14 @@ public class CubicLattice3DFunc extends VariationFunc {
     double fill, exnze, wynze, znxy;
     if (fabs(this.xpand) <= 1.0) {
       fill = this.xpand * 0.5; // values up to 0.5
-    }
-    else {
+    } else {
       fill = sqrt(this.xpand) * 0.5; // values above 0.5
     }
     if (_iStyle == 2) {
       exnze = cos(atan2(pAffineTP.x, pAffineTP.z));
       wynze = sin(atan2(pAffineTP.y, pAffineTP.z));
       znxy = (exnze + wynze) / 2.0;
-    }
-    else {
+    } else {
       exnze = 1.0;
       wynze = 1.0;
       znxy = 1.0;
@@ -66,38 +59,31 @@ public class CubicLattice3DFunc extends VariationFunc {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
-    }
-    else if (useNode == 1) {
+    } else if (useNode == 1) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
-    }
-    else if (useNode == 2) {
+    } else if (useNode == 2) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
-    }
-    else if (useNode == 3) {
+    } else if (useNode == 3) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze + lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
-    }
-    else if (useNode == 4) {
+    } else if (useNode == 4) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
-    }
-    else if (useNode == 5) {
+    } else if (useNode == 5) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy + lattd;
-    }
-    else if (useNode == 6) {
+    } else if (useNode == 6) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze + lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
-    }
-    else if (useNode == 7) {
+    } else if (useNode == 7) {
       pVarTP.x = (pVarTP.x + pAffineTP.x) * fill * exnze - lattd;
       pVarTP.y = (pVarTP.y + pAffineTP.y) * fill * wynze - lattd;
       pVarTP.z = (pVarTP.z + pAffineTP.z) * fill * znxy - lattd;
@@ -111,7 +97,7 @@ public class CubicLattice3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xpand, style };
+    return new Object[]{xpand, style};
   }
 
   @Override
@@ -135,8 +121,7 @@ public class CubicLattice3DFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (fabs(this.style) >= 2.0) {
       _iStyle = 2;
-    }
-    else {
+    } else {
       _iStyle = 1;
     }
   }

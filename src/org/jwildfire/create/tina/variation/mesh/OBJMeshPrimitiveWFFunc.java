@@ -16,9 +16,6 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import java.io.File;
-import java.io.InputStream;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -26,22 +23,25 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.create.tina.variation.RessourceType;
 
+import java.io.File;
+import java.io.InputStream;
+
 public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_PRIMITIVE = "primitive";
 
-  private static final String[] paramNames = { PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS };
+  private static final String[] paramNames = {PARAM_PRIMITIVE, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
 
   private int primitive = 0;
 
   public static final int LOWPOLY_SHAPE_COUNT = 14;
 
-  private String primitives[] = { "ball", "capsule", "cone", "diamond", "torus", "box", "gear15", "icosahedron", "tetrahedron",
-      "octahedron", "dodecahedron", "wedge", "icosidodecahedron", "cubeoctahedron", "gears6a", "gears6s", "gears8a", "gears8s",
-      "gears12a", "gears12s", "gears16a", "gears16s", "gears24a", "gears24s", "mandelbulb", "drop" };
+  private String primitives[] = {"ball", "capsule", "cone", "diamond", "torus", "box", "gear15", "icosahedron", "tetrahedron",
+          "octahedron", "dodecahedron", "wedge", "icosidodecahedron", "cubeoctahedron", "gears6a", "gears6s", "gears8a", "gears8s",
+          "gears12a", "gears12s", "gears16a", "gears16s", "gears24a", "gears24s", "mandelbulb", "drop"};
 
-  private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
+  private static final String[] ressourceNames = {RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
 
   @Override
   public String[] getParameterNames() {
@@ -50,7 +50,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows };
+    return new Object[]{primitive, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
   }
 
   @Override
@@ -81,14 +81,12 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
           File objFile = OBJMeshUtil.obj2file(is);
           try {
             mesh = OBJMeshUtil.loadAndSmoothMeshFromFile(objFile.getAbsolutePath(), subdiv_smooth_passes, subdiv_level, subdiv_smooth_lambda, subdiv_smooth_mu);
-          }
-          finally {
+          } finally {
             objFile.delete();
           }
           RessourceManager.putRessource(meshKey, mesh);
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -104,7 +102,7 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
+    return new byte[][]{(colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
   }
 
   @Override
@@ -113,12 +111,10 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
       uvColorMapper.clear();
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -126,11 +122,9 @@ public class OBJMeshPrimitiveWFFunc extends AbstractOBJMeshWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

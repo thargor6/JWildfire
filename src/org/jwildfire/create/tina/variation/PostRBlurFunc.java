@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class PostRBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class PostRBlurFunc extends VariationFunc {
   private static final String PARAM_OFFSET = "offset";
   private static final String PARAM_CENTER_X = "center_x";
   private static final String PARAM_CENTER_Y = "center_y";
-  private static final String[] paramNames = { PARAM_STRENGTH, PARAM_OFFSET, PARAM_CENTER_X, PARAM_CENTER_Y };
+  private static final String[] paramNames = {PARAM_STRENGTH, PARAM_OFFSET, PARAM_CENTER_X, PARAM_CENTER_Y};
 
   private double strength = 1.0;
   private double offset = 1.0;
@@ -54,7 +54,7 @@ public class PostRBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { strength, offset, center_x, center_y };
+    return new Object[]{strength, offset, center_x, center_y};
   }
 
   @Override

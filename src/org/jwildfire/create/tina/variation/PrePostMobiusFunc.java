@@ -31,7 +31,7 @@ public class PrePostMobiusFunc extends VariationFunc {
   private static final String PARAM_IM_C = "im_c";
   private static final String PARAM_IM_D = "im_d";
 
-  private static final String[] paramNames = { PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D };
+  private static final String[] paramNames = {PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D};
 
   private double re_a = 1;
   private double re_b = 0;
@@ -45,8 +45,8 @@ public class PrePostMobiusFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // post version of mobius
-	if (pAmount == 0) return;
-	
+    if (pAmount == 0) return;
+
     double re_u = re_a * pVarTP.x - im_a * pVarTP.y + re_b;
     double im_u = re_a * pVarTP.y + im_a * pVarTP.x + im_b;
     double re_v = re_c * pVarTP.x - im_c * pVarTP.y + re_d;
@@ -66,8 +66,8 @@ public class PrePostMobiusFunc extends VariationFunc {
   @Override
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // pre version of mobius, inverted
-	if (pAmount == 0) return;
-	
+    if (pAmount == 0) return;
+
     double re_u = re_d * pAffineTP.x - im_d * pAffineTP.y - re_b;
     double im_u = re_d * pAffineTP.y + im_d * pAffineTP.x - im_b;
     double re_v = -re_c * pAffineTP.x + im_c * pAffineTP.y + re_a;
@@ -83,6 +83,7 @@ public class PrePostMobiusFunc extends VariationFunc {
     pAffineTP.y = rad_v * (im_u * re_v - re_u * im_v);
 
   }
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -90,12 +91,12 @@ public class PrePostMobiusFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { re_a, re_b, re_c, re_d, im_a, im_b, im_c, im_d };
+    return new Object[]{re_a, re_b, re_c, re_d, im_a, im_b, im_c, im_d};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "Re_A", "Re_B", "Re_C", "Re_D", "Im_A", "Im_B", "Im_C", "Im_D" };
+    return new String[]{"Re_A", "Re_B", "Re_C", "Re_D", "Im_A", "Im_B", "Im_C", "Im_D"};
   }
 
   @Override

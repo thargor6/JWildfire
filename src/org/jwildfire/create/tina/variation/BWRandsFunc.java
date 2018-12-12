@@ -16,22 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BWRandsFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -49,7 +39,7 @@ public class BWRandsFunc extends VariationFunc {
   private static final String PARAM_MIN_PETALS = "minpetals";
   private static final String PARAM_MAX_PETALS = "maxpetals";
 
-  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST, PARAM_SEED, PARAM_RROT, PARAM_RMIN, PARAM_LOONIE_CHANCE, PARAM_PETALS_CHANCE, PARAM_MIN_PETALS, PARAM_MAX_PETALS };
+  private static final String[] paramNames = {PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST, PARAM_SEED, PARAM_RROT, PARAM_RMIN, PARAM_LOONIE_CHANCE, PARAM_PETALS_CHANCE, PARAM_MIN_PETALS, PARAM_MAX_PETALS};
 
   private double cellsize = 1.0;
   private double space = 0.0;
@@ -86,8 +76,8 @@ public class BWRandsFunc extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
       return;
     }
 
@@ -147,8 +137,8 @@ public class BWRandsFunc extends VariationFunc {
       pVarTP.x += pAmount * Vx;
       pVarTP.y += pAmount * Vy;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
       return;
     }
 
@@ -160,9 +150,7 @@ public class BWRandsFunc extends VariationFunc {
       Lx *= r;
       Ly *= r;
       Vv2 = 1.0; // recycled var
-    }
-    else if (PetalsChance > 0.0)
-    {
+    } else if (PetalsChance > 0.0) {
       // We're in the petals!
       flwr = NPetals / M_2PI * (M_PI + atan2(Ly, Lx));
       flwr = flwr - (int) (flwr);
@@ -172,14 +160,11 @@ public class BWRandsFunc extends VariationFunc {
       // We need a little chaos game to fill the empty space outside the flower.
       PetalsChance = pContext.random();
 
-      if (PetalsChance < .5 * (flwr + .5))
-      {
+      if (PetalsChance < .5 * (flwr + .5)) {
         // petals
         Lx *= (1.0 - r) * (flwr * 1.1); // 1.1 remove the ugly border
         Ly *= (1.0 - r) * (flwr * 1.1); // 1.1 remove the ugly border
-      }
-      else
-      {
+      } else {
         Vv2 = sqrt(Vv2); // dist to circle border
         // filling the rest of the circle
         Lx *= (Vv2 - r * (1.0 - flwr)) / (r + SMALL_EPSILON);
@@ -187,9 +172,7 @@ public class BWRandsFunc extends VariationFunc {
       }
 
       Vv2 = 1.0; // recycled var
-    }
-    else
-    {
+    } else {
       // We're in the bubble!
       // Bubble distortion on local co-ordinates:
       Lx *= _g2;
@@ -213,8 +196,8 @@ public class BWRandsFunc extends VariationFunc {
     pVarTP.x += pAmount * Vx;
     pVarTP.y += pAmount * Vy;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -224,7 +207,7 @@ public class BWRandsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cellsize, space, gain, inner_twist, outer_twist, seed, rrot, rmin, loonie_chance, petals_chance, minpetals, maxpetals };
+    return new Object[]{cellsize, space, gain, inner_twist, outer_twist, seed, rrot, rmin, loonie_chance, petals_chance, minpetals, maxpetals};
   }
 
   @Override
@@ -275,9 +258,7 @@ public class BWRandsFunc extends VariationFunc {
     if (max_bubble > 2.0) {
       // Values greater than 2.0 "recurve" round the back of the bubble
       max_bubble = 1.0;
-    }
-    else
-    {
+    } else {
       // Expand smaller bubble to fill the space
       max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
     }

@@ -21,7 +21,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 
 public class ChunkFunc extends VariationFunc {
@@ -35,7 +35,7 @@ public class ChunkFunc extends VariationFunc {
   private static final String PARAM_F = "f";
   private static final String PARAM_MODE = "mode";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F,PARAM_MODE };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_MODE};
   private double a = 1.0;
   private double b = 0.0;
   private double c = 1.0;
@@ -47,43 +47,39 @@ public class ChunkFunc extends VariationFunc {
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  /* chunk by zephyrtronium https://zephyrtronium.deviantart.com/art/Chunk-Apophysis-Plugin-Pack-182375397 converted by Brad Stefanov */
-	  double aa = pAmount * a;
-	  double bb = pAmount * b;
-	  double cc = pAmount * c;	  
-	  double dd = pAmount * d;
-	  double ee = pAmount * e;	  
-	  double ff = pAmount * f;	  
-	  
-	  
-	  
-	  
-	  double r = aa  * sqr(pAffineTP.x) + bb * pAffineTP.x * pAffineTP.y + cc * sqr(pAffineTP.y) + dd * pAffineTP.x + ee * pAffineTP.y + ff;
-      switch (mode) {
+    /* chunk by zephyrtronium https://zephyrtronium.deviantart.com/art/Chunk-Apophysis-Plugin-Pack-182375397 converted by Brad Stefanov */
+    double aa = pAmount * a;
+    double bb = pAmount * b;
+    double cc = pAmount * c;
+    double dd = pAmount * d;
+    double ee = pAmount * e;
+    double ff = pAmount * f;
+
+
+    double r = aa * sqr(pAffineTP.x) + bb * pAffineTP.x * pAffineTP.y + cc * sqr(pAffineTP.y) + dd * pAffineTP.x + ee * pAffineTP.y + ff;
+    switch (mode) {
       case 0:
-    	  if (r <= 0)
-          {
-    		  pVarTP.x += pAffineTP.x;
-    		  pVarTP.y += pAffineTP.y;
-    		    if (pContext.isPreserveZCoordinate()) {
-    		      pVarTP.z += pAmount * pAffineTP.z;
-    		    }}
-          break;
+        if (r <= 0) {
+          pVarTP.x += pAffineTP.x;
+          pVarTP.y += pAffineTP.y;
+          if (pContext.isPreserveZCoordinate()) {
+            pVarTP.z += pAmount * pAffineTP.z;
+          }
+        }
+        break;
       case 1:
-          if (r > 0)
-          {   pVarTP.x += pAffineTP.x;
-    		  pVarTP.y += pAffineTP.y;
-    		 if (pContext.isPreserveZCoordinate()) {
-    		  pVarTP.z += pAmount * pAffineTP.z;
+        if (r > 0) {
+          pVarTP.x += pAffineTP.x;
+          pVarTP.y += pAffineTP.y;
+          if (pContext.isPreserveZCoordinate()) {
+            pVarTP.z += pAmount * pAffineTP.z;
           }
           break;
-          
 
 
+        }
+    }
 
-
-          }}
-      
 
   }
 
@@ -94,31 +90,25 @@ public class ChunkFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d, e, f, mode };
+    return new Object[]{a, b, c, d, e, f, mode};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_A.equalsIgnoreCase(pName)) {
       a = pValue;
-    }
-    else if (PARAM_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_B.equalsIgnoreCase(pName)) {
       b = pValue;
-    }
-    else if (PARAM_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_C.equalsIgnoreCase(pName)) {
       c = pValue;
-    }
-    else if (PARAM_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_D.equalsIgnoreCase(pName)) {
       d = pValue;
-    }
-    else if (PARAM_E.equalsIgnoreCase(pName)) {
+    } else if (PARAM_E.equalsIgnoreCase(pName)) {
       e = pValue;
-    }
-    else if (PARAM_F.equalsIgnoreCase(pName)) {
+    } else if (PARAM_F.equalsIgnoreCase(pName)) {
       f = pValue;
-    }
-    else if (PARAM_MODE.equalsIgnoreCase(pName))
-        mode = limitIntVal(Tools.FTOI(pValue),0,1);
+    } else if (PARAM_MODE.equalsIgnoreCase(pName))
+      mode = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else {
       System.out.println("pName not recognized: " + pName);
       throw new IllegalArgumentException(pName);

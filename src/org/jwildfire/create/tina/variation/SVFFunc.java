@@ -16,17 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class SVFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_N = "n";
-  private static final String[] paramNames = { PARAM_N };
+  private static final String[] paramNames = {PARAM_N};
 
   private double n = 2.0;
 
@@ -50,7 +50,7 @@ public class SVFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n };
+    return new Object[]{n};
   }
 
   @Override

@@ -14,14 +14,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class MinkowskopeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +29,7 @@ public class MinkowskopeFunc extends VariationFunc {
   private static final String PARAM_PTB = "perturbation";
   private static final String PARAM_DAMPING = "damping";
 
-  private static final String[] paramNames = { PARAM_SEPARATION, PARAM_FREQUENCYX, PARAM_FREQUENCYY, PARAM_AMPLITUDE, PARAM_PTB, PARAM_DAMPING };
+  private static final String[] paramNames = {PARAM_SEPARATION, PARAM_FREQUENCYX, PARAM_FREQUENCYY, PARAM_AMPLITUDE, PARAM_PTB, PARAM_DAMPING};
 
   private double separation = 0.5d;
   private double frequencyx = -2.d;
@@ -49,64 +46,64 @@ public class MinkowskopeFunc extends VariationFunc {
     double pt = perturbation * minkosine(_tpf2 * pAffineTP.y);
     if (_noDamping) {
       t = amplitude * (minkocosine(_tpf * pAffineTP.x + pt)) + separation;
-    }
-    else {
+    } else {
       t = amplitude * exp(-fabs(pAffineTP.x) * damping) * (minkocosine(_tpf * pAffineTP.x + pt)) + separation;
     }
 
     if (fabs(pAffineTP.y) <= t) {
       pVarTP.x -= pAmount * pAffineTP.x;
       pVarTP.y -= pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
-}
 
-private double minkosine(double x) {
+  private double minkosine(double x) {
     double lp = fabs(x) % 4.d;
     double p = fabs(x) % 2.d;
     double mink = 0;
-    if (p>1.d) p = 2.d-p; // sawtooth wave
+    if (p > 1.d) p = 2.d - p; // sawtooth wave
     if (_altWave)
-        mink = minkowski(p) - p; // cool looking (uses a different waveform)
+      mink = minkowski(p) - p; // cool looking (uses a different waveform)
     else
-        mink = minkowski(p); // normal :P
-    if ((lp<2.d) ^ (x > 0)) return mink; // lol!!! xor
+      mink = minkowski(p); // normal :P
+    if ((lp < 2.d) ^ (x > 0)) return mink; // lol!!! xor
     else return -mink;
-}
+  }
 
-private double minkocosine(double x) {
-    return minkosine(x-1.d);
-}
+  private double minkocosine(double x) {
+    return minkosine(x - 1.d);
+  }
 
-/* Minkowski's question mark function from Wikipedia, adapted
-DO NOT! call it directly it is ... weird, use minkosine or minkocosine thanks!
- */
-private double minkowski(double x) {
+  /* Minkowski's question mark function from Wikipedia, adapted
+  DO NOT! call it directly it is ... weird, use minkosine or minkocosine thanks!
+   */
+  private double minkowski(double x) {
     /* double p=(long)x;
     if (p>x) p = p - 1.; */
     double p = 0.d; // d'oh
-    double q=1.d, r=p+1., s=1.d, m=0.d, n=0.d;
-    double d=1.d, y=p;
+    double q = 1.d, r = p + 1., s = 1.d, m = 0.d, n = 0.d;
+    double d = 1.d, y = p;
     for (int it = 0; it < 20; it++) // precision 1e-6
     {
-            d=d*0.5d; //if (d<1e-10) break;
-            m=p+r;
-            n=q+s;
-            if (x<(m/n)) {
-                r=m; s=n;
-                }
-            else {
-                y+=d; p=m; q=n;
-                }
+      d = d * 0.5d; //if (d<1e-10) break;
+      m = p + r;
+      n = q + s;
+      if (x < (m / n)) {
+        r = m;
+        s = n;
+      } else {
+        y += d;
+        p = m;
+        q = n;
+      }
     }
-    return y+d;
-}
+    return y + d;
+  }
 
 
   @Override
@@ -116,7 +113,7 @@ private double minkowski(double x) {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { separation, frequencyx, frequencyy, amplitude, perturbation, damping };
+    return new Object[]{separation, frequencyx, frequencyy, amplitude, perturbation, damping};
   }
 
   @Override
@@ -146,7 +143,7 @@ private double minkowski(double x) {
   private double _tpf2;
   private boolean _noDamping;
   private boolean _altWave;
-  
+
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _tpf = 0.5d * frequencyx;
@@ -154,10 +151,10 @@ private double minkowski(double x) {
     _noDamping = fabs(damping) <= EPSILON;
     _altWave = frequencyx <= 0.0d;
   }
-  
+
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "mskope_separation", "mskope_frequencyx", "mskope_frequencyy", "mskope_amplitude", "mskope_perturbation", "mskope_damping" };
+    return new String[]{"mskope_separation", "mskope_frequencyx", "mskope_frequencyy", "mskope_amplitude", "mskope_perturbation", "mskope_damping"};
   }
 
 }

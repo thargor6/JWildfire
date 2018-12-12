@@ -16,66 +16,68 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
 import static org.jwildfire.base.mathlib.MathLib.fmod;
 
 public class StripfitFunc extends VariationFunc {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DX = "dx";
+  private static final String PARAM_DX = "dx";
 
-	private static final String[] paramNames = { PARAM_DX };
+  private static final String[] paramNames = {PARAM_DX};
 
-	private double dx = 1.00;
+  private double dx = 1.00;
 
-	@Override
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
-			double pAmount) {
-		/* stripfit by dark-beam
-		 * https://www.deviantart.com/dark-beam/art/Stripfit-764742549 
-		 * converted for JWF by dark_beam and Brad Stefanov		 */
-		double fity;
-		double dxp = -0.5 * dx;
-		if (pAmount != 0.) {
-			pVarTP.x += pAmount * pAffineTP.x;
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP,
+                        double pAmount) {
+    /* stripfit by dark-beam
+     * https://www.deviantart.com/dark-beam/art/Stripfit-764742549
+     * converted for JWF by dark_beam and Brad Stefanov		 */
+    double fity;
+    double dxp = -0.5 * dx;
+    if (pAmount != 0.) {
+      pVarTP.x += pAmount * pAffineTP.x;
 
-		if (pAffineTP.y > 1.) {
-			fity = fmod(pAffineTP.y + 1., 2.);
-			pVarTP.y += pAmount * (-1. + fity);
-			pVarTP.x += (pAffineTP.y - fity + 1) * dxp;
-		} else if (pAffineTP.y < -1.) {
-			fity = fmod(1. - pAffineTP.y, 2.);
-			pVarTP.y += pAmount * (1. - fity);
-			pVarTP.x += (pAffineTP.y + fity - 1) * dxp;
-		} else {
-			pVarTP.y += pAmount * pAffineTP.y;
-		}
+      if (pAffineTP.y > 1.) {
+        fity = fmod(pAffineTP.y + 1., 2.);
+        pVarTP.y += pAmount * (-1. + fity);
+        pVarTP.x += (pAffineTP.y - fity + 1) * dxp;
+      } else if (pAffineTP.y < -1.) {
+        fity = fmod(1. - pAffineTP.y, 2.);
+        pVarTP.y += pAmount * (1. - fity);
+        pVarTP.x += (pAffineTP.y + fity - 1) * dxp;
+      } else {
+        pVarTP.y += pAmount * pAffineTP.y;
+      }
 
-		if (pContext.isPreserveZCoordinate()) {
-			pVarTP.z += pAmount * pAffineTP.z;
-		}}
-	}
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
+    }
+  }
 
-	@Override
-	public String[] getParameterNames() {
-		return paramNames;
-	}
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
 
-	@Override
-	public Object[] getParameterValues() {
-		return new Object[] { dx };
-	}
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[]{dx};
+  }
 
-	@Override
-	public void setParameter(String pName, double pValue) {
-		if (PARAM_DX.equalsIgnoreCase(pName))
-			dx = pValue;
-		else
-			throw new IllegalArgumentException(pName);
-	}
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_DX.equalsIgnoreCase(pName))
+      dx = pValue;
+    else
+      throw new IllegalArgumentException(pName);
+  }
 
-	@Override
-	public String getName() {
-		return "stripfit";
-	}
+  @Override
+  public String getName() {
+    return "stripfit";
+  }
 
 }

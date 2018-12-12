@@ -16,14 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.Tools.limitValue;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.Tools.limitValue;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class DCBubbleFunc extends VariationFunc {
 
@@ -34,7 +32,7 @@ public class DCBubbleFunc extends VariationFunc {
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_INVERT = "invert";
 
-  private static final String[] paramNames = { PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE, PARAM_INVERT };
+  private static final String[] paramNames = {PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE, PARAM_INVERT};
 
   private double centerx = 0.0;
   private double centery = 0.0;
@@ -45,11 +43,11 @@ public class DCBubbleFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* corrected version of dc_bubble by Xyrus02, http://apophysis-7x.org/extensions */
 
-	double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
-	double t = pAmount / r;
-	pVarTP.x += t * pAffineTP.x;
-	pVarTP.y += t * pAffineTP.y;
-	pVarTP.z += pAmount * (2.0 / (invert == 1 ? t : r) - 1.0);
+    double r = ((pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y) / 4.0 + 1.0);
+    double t = pAmount / r;
+    pVarTP.x += t * pAffineTP.x;
+    pVarTP.y += t * pAffineTP.y;
+    pVarTP.z += pAmount * (2.0 / (invert == 1 ? t : r) - 1.0);
 
     pVarTP.color = fmod(fabs(bdcs * (sqr(pVarTP.x + centerx) + sqr(pVarTP.y + centery))), 1.0);
   }
@@ -61,7 +59,7 @@ public class DCBubbleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { centerx, centery, scale, invert };
+    return new Object[]{centerx, centery, scale, invert};
   }
 
   @Override

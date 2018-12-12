@@ -16,17 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class CellFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIZE = "size";
 
-  private static final String[] paramNames = { PARAM_SIZE };
+  private static final String[] paramNames = {PARAM_SIZE};
 
   private double size = 0.60;
 
@@ -49,18 +49,15 @@ public class CellFunc extends VariationFunc {
       if (x >= 0) {
         y *= 2;
         x *= 2;
-      }
-      else {
+      } else {
         y *= 2;
         x = -(2 * x + 1);
       }
-    }
-    else {
+    } else {
       if (x >= 0) {
         y = -(2 * y + 1);
         x *= 2;
-      }
-      else {
+      } else {
         y = -(2 * y + 1);
         x = -(2 * x + 1);
       }
@@ -70,8 +67,8 @@ public class CellFunc extends VariationFunc {
     pVarTP.y -= pAmount * (dy + y * size);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -82,7 +79,7 @@ public class CellFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { size };
+    return new Object[]{size};
   }
 
   @Override

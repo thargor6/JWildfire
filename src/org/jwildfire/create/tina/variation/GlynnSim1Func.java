@@ -16,19 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.io.Serializable;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.Serializable;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class GlynnSim1Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -40,7 +34,7 @@ public class GlynnSim1Func extends VariationFunc {
   private static final String PARAM_POW = "pow";
   private static final String PARAM_CONTRAST = "contrast";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_RADIUS1, PARAM_PHI1, PARAM_THICKNESS, PARAM_POW, PARAM_CONTRAST };
+  private static final String[] paramNames = {PARAM_RADIUS, PARAM_RADIUS1, PARAM_PHI1, PARAM_THICKNESS, PARAM_POW, PARAM_CONTRAST};
 
   private double radius = 1.0;
   private double radius1 = 0.1;
@@ -72,13 +66,11 @@ public class GlynnSim1Func extends VariationFunc {
       circle(pContext, toolPoint);
       pVarTP.x += pAmount * toolPoint.x;
       pVarTP.y += pAmount * toolPoint.y;
-    }
-    else {
+    } else {
       if (pContext.random() > this.contrast * pow(Alpha, this._absPow)) {
         toolPoint.x = pAffineTP.x;
         toolPoint.y = pAffineTP.y;
-      }
-      else {
+      } else {
         toolPoint.x = Alpha * Alpha * pAffineTP.x;
         toolPoint.y = Alpha * Alpha * pAffineTP.y;
       }
@@ -87,15 +79,14 @@ public class GlynnSim1Func extends VariationFunc {
         circle(pContext, toolPoint);
         pVarTP.x += pAmount * toolPoint.x;
         pVarTP.y += pAmount * toolPoint.y;
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * toolPoint.x;
         pVarTP.y += pAmount * toolPoint.y;
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -105,7 +96,7 @@ public class GlynnSim1Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, radius1, phi1, thickness, pow, contrast };
+    return new Object[]{radius, radius1, phi1, thickness, pow, contrast};
   }
 
   @Override
@@ -146,7 +137,7 @@ public class GlynnSim1Func extends VariationFunc {
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "GlynnSim1_radius", "GlynnSim1_radius1", "GlynnSim1_Phi1", "GlynnSim1_thickness", "GlynnSim1_pow", "GlynnSim1_contrast" };
+    return new String[]{"GlynnSim1_radius", "GlynnSim1_radius1", "GlynnSim1_Phi1", "GlynnSim1_thickness", "GlynnSim1_pow", "GlynnSim1_contrast"};
   }
 
 }

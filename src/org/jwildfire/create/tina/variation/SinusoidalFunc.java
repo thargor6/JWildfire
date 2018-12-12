@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class SinusoidalFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,8 +29,8 @@ public class SinusoidalFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * sin(pAffineTP.x);
     pVarTP.y += pAmount * sin(pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

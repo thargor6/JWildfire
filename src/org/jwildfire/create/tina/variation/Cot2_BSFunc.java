@@ -16,31 +16,29 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class Cot2_BSFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_X1 = "x1";
   private static final String PARAM_X2 = "x2";
   private static final String PARAM_Y1 = "y1";
   private static final String PARAM_Y2 = "y2";
-  private static final String[] paramNames = { PARAM_X1, PARAM_X2, PARAM_Y1,PARAM_Y2 };
+  private static final String[] paramNames = {PARAM_X1, PARAM_X2, PARAM_Y1, PARAM_Y2};
   private double x1 = 2.0;
   private double x2 = 2.0;
   private double y1 = 2.0;
   private double y2 = 2.0;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* complex vars by cothe */
     /* exp log sin cos tan sec csc cot sinh cosh tanh sech csch coth */
-	/* Variables added by Brad Stefanov */		  
+    /* Variables added by Brad Stefanov */
     //Cotangent COT
     double cotsin = sin(x1 * pAffineTP.x);
     double cotcos = cos(x2 * pAffineTP.x);
@@ -51,18 +49,19 @@ public class Cot2_BSFunc extends VariationFunc {
     pVarTP.y += pAmount * cotden * -1 * cotsinh;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
-   @Override
+
+  @Override
   public String[] getParameterNames() {
     return paramNames;
   }
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x1, x2, y1, y2 };
+    return new Object[]{x1, x2, y1, y2};
   }
 
   @Override

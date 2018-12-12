@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class WavesFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class WavesFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + pXForm.getXYCoeff10() * sin(pAffineTP.y / (pXForm.getXYCoeff20() * pXForm.getXYCoeff20() + SMALL_EPSILON)));
     pVarTP.y += pAmount * (pAffineTP.y + pXForm.getXYCoeff11() * sin(pAffineTP.x / (pXForm.getXYCoeff21() * pXForm.getXYCoeff21() + SMALL_EPSILON)));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

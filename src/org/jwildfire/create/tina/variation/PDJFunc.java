@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class PDJFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class PDJFunc extends VariationFunc {
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D};
 
   private double a = 1;
   private double b = 2;
@@ -42,8 +42,8 @@ public class PDJFunc extends VariationFunc {
     pVarTP.y += pAmount * (sin(c * pAffineTP.x) - cos(d * pAffineTP.y));
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -54,7 +54,7 @@ public class PDJFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d };
+    return new Object[]{a, b, c, d};
   }
 
   @Override

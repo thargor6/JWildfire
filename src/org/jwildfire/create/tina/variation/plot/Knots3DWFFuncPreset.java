@@ -17,41 +17,39 @@
 package org.jwildfire.create.tina.variation.plot;
 
 
-
 public class Knots3DWFFuncPreset extends WFFuncPreset {
   private final String xformula;
   private final String yformula;
   private final String zformula;
 
   private final double steps;
-  private final double radius,facets;
-  
-  private final double param_a,param_b,param_c,param_d;
-  private final double param_e,param_f,param_g,param_h;  
-  
-  public Knots3DWFFuncPreset(int id, String xformula, String yformula, String zformula,double steps, double radius, double facets,
-		                          double param_a,double param_b,double param_c,double param_d,double param_e,double param_f,double param_g,double param_h)
-  {
+  private final double radius, facets;
+
+  private final double param_a, param_b, param_c, param_d;
+  private final double param_e, param_f, param_g, param_h;
+
+  public Knots3DWFFuncPreset(int id, String xformula, String yformula, String zformula, double steps, double radius, double facets,
+                             double param_a, double param_b, double param_c, double param_d, double param_e, double param_f, double param_g, double param_h) {
     super(id);
     this.xformula = xformula;
     this.yformula = yformula;
     this.zformula = zformula;
-    
-    
-    this.steps=steps;
-    this.radius=radius;
-    this.facets=facets;
-    
-    this.param_a=param_a;
-    this.param_b=param_b;    
-    this.param_c=param_c;
-    this.param_d=param_d;
-    this.param_e=param_e;
-    this.param_f=param_f;    
-    this.param_g=param_g;
-    this.param_h=param_h;
 
- }
+
+    this.steps = steps;
+    this.radius = radius;
+    this.facets = facets;
+
+    this.param_a = param_a;
+    this.param_b = param_b;
+    this.param_c = param_c;
+    this.param_d = param_d;
+    this.param_e = param_e;
+    this.param_f = param_f;
+    this.param_g = param_g;
+    this.param_h = param_h;
+
+  }
 
   public String getXformula() {
     return xformula;
@@ -66,15 +64,16 @@ public class Knots3DWFFuncPreset extends WFFuncPreset {
   }
 
   public double getSteps() {
-	    return steps;
-	  }
+    return steps;
+  }
 
   public double getRadius() {
-	    return radius;
-	  }
+    return radius;
+  }
+
   public double getFacets() {
-	    return facets;
-	  }
+    return facets;
+  }
 
   public double getParam_a() {
     return param_a;

@@ -17,17 +17,17 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class PlaneWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,9 +46,9 @@ public class PlaneWFFunc extends VariationFunc {
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_CALC_COLORIDX, PARAM_RECEIVE_ONLY_SHADOWS };
+  private static final String[] paramNames = {PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_CALC_COLORIDX, PARAM_RECEIVE_ONLY_SHADOWS};
 
-  private static final String[] ressourceNames = { RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
+  private static final String[] ressourceNames = {RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
 
   private static final int AXIS_XY = 0;
   private static final int AXIS_YZ = 1;
@@ -138,7 +138,7 @@ public class PlaneWFFunc extends VariationFunc {
             pVarTP.color = getUVColorIdx(Tools.FTOI(pVarTP.redColor), Tools.FTOI(pVarTP.greenColor), Tools.FTOI(pVarTP.blueColor));
           }
         }
-          break;
+        break;
         case CM_U:
         default:
           pVarTP.color = u + 0.5;
@@ -161,42 +161,32 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), calc_color_idx, receive_only_shadows };
+    return new Object[]{position, size, axis, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), calc_color_idx, receive_only_shadows};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POSITION.equalsIgnoreCase(pName)) {
       position = pValue;
-    }
-    else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
       size = pValue;
-    }
-    else if (PARAM_AXIS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_AXIS.equalsIgnoreCase(pName)) {
       axis = limitIntVal(Tools.FTOI(pValue), AXIS_XY, AXIS_ZX);
-    }
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    }
-    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = limitIntVal(Tools.FTOI(pValue), CM_COLORMAP, CM_UV);
-    }
-    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
-    }
-    else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
-    }
-    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_amount(pValue);
-    }
-    else if (PARAM_CALC_COLORIDX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CALC_COLORIDX.equalsIgnoreCase(pName)) {
       calc_color_idx = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    }
-    else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RECEIVE_ONLY_SHADOWS.equalsIgnoreCase(pName)) {
       receive_only_shadows = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -212,18 +202,16 @@ public class PlaneWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
+    return new byte[][]{(colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -231,11 +219,9 @@ public class PlaneWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

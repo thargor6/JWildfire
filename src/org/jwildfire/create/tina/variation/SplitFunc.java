@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.cos;
 
 public class SplitFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class SplitFunc extends VariationFunc {
   private static final String PARAM_XSIZE = "xsize";
   private static final String PARAM_YSIZE = "ysize";
 
-  private static final String[] paramNames = { PARAM_XSIZE, PARAM_YSIZE };
+  private static final String[] paramNames = {PARAM_XSIZE, PARAM_YSIZE};
 
   private double xSize = 0.40;
   private double ySize = 0.60;
@@ -38,20 +38,18 @@ public class SplitFunc extends VariationFunc {
     /* Split from apo plugins pack */
     if (cos(pAffineTP.x * xSize * M_PI) >= 0) {
       pVarTP.y += pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.y -= pAmount * pAffineTP.y;
     }
 
     if (cos(pAffineTP.y * ySize * M_PI) >= 0) {
       pVarTP.x += pAmount * pAffineTP.x;
-    }
-    else {
+    } else {
       pVarTP.x -= pAmount * pAffineTP.x;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -61,7 +59,7 @@ public class SplitFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xSize, ySize };
+    return new Object[]{xSize, ySize};
   }
 
   @Override

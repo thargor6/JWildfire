@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.exp;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.exp;
 
 public class CurveFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class CurveFunc extends VariationFunc {
   private static final String PARAM_XLENGTH = "xlength";
   private static final String PARAM_YLENGTH = "ylength";
 
-  private static final String[] paramNames = { PARAM_XAMP, PARAM_YAMP, PARAM_XLENGTH, PARAM_YLENGTH };
+  private static final String[] paramNames = {PARAM_XAMP, PARAM_YAMP, PARAM_XLENGTH, PARAM_YLENGTH};
 
   private double xAmp = 0.25;
   private double yAmp = 0.5;
@@ -43,8 +43,8 @@ public class CurveFunc extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + xAmp * exp(-pAffineTP.y * pAffineTP.y / _pc_xlen));
     pVarTP.y += pAmount * (pAffineTP.y + yAmp * exp(-pAffineTP.x * pAffineTP.x / _pc_ylen));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -54,7 +54,7 @@ public class CurveFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xAmp, yAmp, xLength, yLength };
+    return new Object[]{xAmp, yAmp, xLength, yLength};
   }
 
   @Override

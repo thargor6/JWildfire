@@ -16,13 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Disc2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +28,7 @@ public class Disc2Func extends VariationFunc {
   private static final String PARAM_ROT = "rot";
   private static final String PARAM_TWIST = "twist";
 
-  private static final String[] paramNames = { PARAM_ROT, PARAM_TWIST };
+  private static final String[] paramNames = {PARAM_ROT, PARAM_TWIST};
 
   private double rot = 2.0;
   private double twist = 0.50;
@@ -51,8 +49,8 @@ public class Disc2Func extends VariationFunc {
     pVarTP.y += (cosr + sinadd) * r;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -63,7 +61,7 @@ public class Disc2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rot, twist };
+    return new Object[]{rot, twist};
   }
 
   @Override

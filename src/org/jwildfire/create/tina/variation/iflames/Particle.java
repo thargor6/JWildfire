@@ -19,7 +19,7 @@ public class Particle implements Serializable {
   }
 
   private Particle(DynamicProperties pMotionProperties, float pLife, Vector pPosition, Vector pSpeed, Vector pRotation, Vector pRotationSpeed,
-      float pRadialAcceleration, float pTangentialAcceleration) {
+                   float pRadialAcceleration, float pTangentialAcceleration) {
     motionProperties = pMotionProperties;
     life = pLife;
     position = pPosition.makeCopy();
@@ -32,7 +32,7 @@ public class Particle implements Serializable {
 
   public Particle makeCopy() {
     return new Particle(motionProperties, life, position, speed, rotation, rotationSpeed,
-        radialAcceleration, tangentialAcceleration);
+            radialAcceleration, tangentialAcceleration);
   }
 
   public void reset() {

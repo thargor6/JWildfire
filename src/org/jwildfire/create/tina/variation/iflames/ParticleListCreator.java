@@ -1,11 +1,11 @@
 package org.jwildfire.create.tina.variation.iflames;
 
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class ParticleListCreator {
   private final List<BaseFlame> pixelLst;

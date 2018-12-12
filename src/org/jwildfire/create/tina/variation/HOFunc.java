@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class HOFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +27,7 @@ public class HOFunc extends VariationFunc {
   private static final String PARAM_XPOW = "xpow";
   private static final String PARAM_YPOW = "ypow";
   private static final String PARAM_ZPOW = "zpow";
-  private static final String[] paramNames = { PARAM_XPOW, PARAM_YPOW, PARAM_ZPOW };
+  private static final String[] paramNames = {PARAM_XPOW, PARAM_YPOW, PARAM_ZPOW};
 
   private double xpow = 3.0;
   private double ypow = 3.0;
@@ -75,7 +72,7 @@ public class HOFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xpow, ypow, zpow };
+    return new Object[]{xpow, ypow, zpow};
   }
 
   @Override

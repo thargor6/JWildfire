@@ -17,50 +17,52 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.*;
+
+import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.round;
 
 public class Tile_LogFunc extends VariationFunc {
-	  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	  private static final String PARAM_tile_log_spread= "spread";
+  private static final String PARAM_tile_log_spread = "spread";
 
 
-	  private static final String[] paramNames = { PARAM_tile_log_spread };
+  private static final String[] paramNames = {PARAM_tile_log_spread};
 
-	  private double spread= 1.0;
+  private double spread = 1.0;
 
-	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	         // tile_log by Zy0rg implemented into JWildfire by Brad Stefanov
-	    double x = -spread;
-	    if (pContext.random() < 0.5)
-	      x = spread;
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // tile_log by Zy0rg implemented into JWildfire by Brad Stefanov
+    double x = -spread;
+    if (pContext.random() < 0.5)
+      x = spread;
 
-	  pVarTP.x += pAmount * (pAffineTP.x + round(x * log(pContext.random()) ));
-	    pVarTP.y += pAmount * pAffineTP.y; 
-	       pVarTP.z += pAmount * pAffineTP.z;
-	  }
+    pVarTP.x += pAmount * (pAffineTP.x + round(x * log(pContext.random())));
+    pVarTP.y += pAmount * pAffineTP.y;
+    pVarTP.z += pAmount * pAffineTP.z;
+  }
 
-	  
-	  @Override
-	  public String[] getParameterNames() {
-	    return paramNames;
-	  }
 
-	  @Override
-	  public Object[] getParameterValues() {
-	    return new Object[] { spread };
-	  }
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
 
-	  @Override
-	  public void setParameter(String pName, double pValue) {
-	    if (PARAM_tile_log_spread.equalsIgnoreCase(pName))
-	      spread= pValue;
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[]{spread};
+  }
 
-	    else
-	      throw new IllegalArgumentException(pName);
-	  }
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_tile_log_spread.equalsIgnoreCase(pName))
+      spread = pValue;
+
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
   @Override
   public String getName() {
     return "tile_log";

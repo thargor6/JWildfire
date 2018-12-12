@@ -17,11 +17,11 @@
 
 package org.jwildfire.create.tina.variation;
 
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+
+import java.util.List;
 
 public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
   private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
   private static final String PARAM_YSEED = "yseed";
   private static final String RESSOURCE_FORMULA = "formula";
 
-  private static final String[] ressourceNames = { RESSOURCE_FORMULA };
+  private static final String[] ressourceNames = {RESSOURCE_FORMULA};
 
   private int power;
   private double xseed;
@@ -64,12 +64,10 @@ public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
       if (power < 2)
         power = 2;
       return true;
-    }
-    else if (PARAM_XSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_XSEED.equalsIgnoreCase(pName)) {
       xseed = pValue;
       return true;
-    }
-    else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
       yseed = pValue;
       return true;
     }
@@ -127,15 +125,14 @@ public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (formula != null ? formula.getBytes() : null) };
+    return new byte[][]{(formula != null ? formula.getBytes() : null)};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       formula = pValue != null ? new String(pValue) : "";
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -143,8 +140,7 @@ public class FractFormulaJuliaWFFunc extends AbstractFractFormulaWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

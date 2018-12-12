@@ -16,19 +16,6 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.Tools.FTOI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -39,6 +26,13 @@ import org.jwildfire.transform.TextTransformer.FontStyle;
 import org.jwildfire.transform.TextTransformer.HAlignment;
 import org.jwildfire.transform.TextTransformer.Mode;
 import org.jwildfire.transform.TextTransformer.VAlignment;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jwildfire.base.Tools.FTOI;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TextWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -54,8 +48,8 @@ public class TextWFFunc extends VariationFunc {
   private static final String RESSOURCE_TEXT = "text";
   private static final String RESSOURCE_FONT_NAME = "font_name";
 
-  private static final String[] paramNames = { PARAM_FONT_SIZE, PARAM_ANTIALIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_BASELINE };
-  private static final String[] ressourceNames = { RESSOURCE_TEXT, RESSOURCE_FONT_NAME };
+  private static final String[] paramNames = {PARAM_FONT_SIZE, PARAM_ANTIALIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_BASELINE};
+  private static final String[] ressourceNames = {RESSOURCE_TEXT, RESSOURCE_FONT_NAME};
 
   private int font_size = 320;
   private double antialias = 0.5;
@@ -74,7 +68,7 @@ public class TextWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { font_size, antialias, scale_x, scale_y, offset_x, offset_y, baseline };
+    return new Object[]{font_size, antialias, scale_x, scale_y, offset_x, offset_y, baseline};
   }
 
   @Override
@@ -176,7 +170,7 @@ public class TextWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (text != null ? text.getBytes() : null), (font_name != null ? font_name.getBytes() : null) };
+    return new byte[][]{(text != null ? text.getBytes() : null), (font_name != null ? font_name.getBytes() : null)};
   }
 
   @Override
@@ -184,12 +178,10 @@ public class TextWFFunc extends VariationFunc {
     if (RESSOURCE_TEXT.equalsIgnoreCase(pName)) {
       text = pValue != null ? new String(pValue) : "";
       _points = null;
-    }
-    else if (RESSOURCE_FONT_NAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_FONT_NAME.equalsIgnoreCase(pName)) {
       font_name = pValue != null ? new String(pValue) : "";
       _points = null;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -197,11 +189,9 @@ public class TextWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_TEXT.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else if (RESSOURCE_FONT_NAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_FONT_NAME.equalsIgnoreCase(pName)) {
       return RessourceType.FONT_NAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -221,8 +211,7 @@ public class TextWFFunc extends VariationFunc {
       }
       pVarTP.x += (rawX * scale_x + offset_x) * DFLT_SCALE;
       pVarTP.y += (rawY * scale_y + offset_y) * DFLT_SCALE;
-    }
-    else {
+    } else {
       pVarTP.x += pContext.random();
       pVarTP.y += pContext.random();
       pVarTP.rgbColor = true;

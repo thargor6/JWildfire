@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.tan;
 
 public class Popcorn2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class Popcorn2Func extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String PARAM_C = "c";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_C };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_C};
 
   private double x = 1.0;
   private double y = 0.5;
@@ -40,8 +40,8 @@ public class Popcorn2Func extends VariationFunc {
     pVarTP.x += pAmount * (pAffineTP.x + x * sin(tan(pAffineTP.y * c)));
     pVarTP.y += pAmount * (pAffineTP.y + y * sin(tan(pAffineTP.x * c)));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -51,7 +51,7 @@ public class Popcorn2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, c };
+    return new Object[]{x, y, c};
   }
 
   @Override

@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Ennepers2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +27,7 @@ public class Ennepers2Func extends VariationFunc {
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C};
 
   private double a = 1.0;
   private double b = 0.3333;
@@ -55,7 +53,7 @@ public class Ennepers2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c };
+    return new Object[]{a, b, c};
   }
 
   @Override

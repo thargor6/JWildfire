@@ -17,10 +17,10 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.*;
 
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 
 public class Pressure_WaveFunc extends VariationFunc {
@@ -28,24 +28,24 @@ public class Pressure_WaveFunc extends VariationFunc {
   private static final String PARAM_pressure_wave_x_freq = "x_freq";
   private static final String PARAM_pressure_wave_y_freq = "y_freq";
 
-  private static final String[] paramNames = { PARAM_pressure_wave_x_freq, PARAM_pressure_wave_y_freq };
+  private static final String[] paramNames = {PARAM_pressure_wave_x_freq, PARAM_pressure_wave_y_freq};
 
-  private double x_freq= 1.0;
-  private double y_freq= 1.0;
-  private double pwx= 1.0;
-  private double pwy= 1.0;
-  private double ipwx= 1.0;
-  private double ipwy= 1.0;
+  private double x_freq = 1.0;
+  private double y_freq = 1.0;
+  private double pwx = 1.0;
+  private double pwy = 1.0;
+  private double ipwx = 1.0;
+  private double ipwy = 1.0;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-         // pressure_wave by timothy-vincent (2010) implemented into JWildfire by DarkBeam
-         // multiplications and stuff moved into setParameter for speedup plus avoid 1./0.
+    // pressure_wave by timothy-vincent (2010) implemented into JWildfire by DarkBeam
+    // multiplications and stuff moved into setParameter for speedup plus avoid 1./0.
 
- pVarTP.x += pAmount*(pAffineTP.x + (ipwx*sin(pwx*pAffineTP.x)));
- pVarTP.y += pAmount*(pAffineTP.y + (ipwy*sin(pwy*pAffineTP.y)));
-  if (pContext.isPreserveZCoordinate()) {
-     pVarTP.z += pAmount * pAffineTP.z;
-   }   
+    pVarTP.x += pAmount * (pAffineTP.x + (ipwx * sin(pwx * pAffineTP.x)));
+    pVarTP.y += pAmount * (pAffineTP.y + (ipwy * sin(pwy * pAffineTP.y)));
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
 
@@ -56,28 +56,35 @@ public class Pressure_WaveFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x_freq, y_freq };
+    return new Object[]{x_freq, y_freq};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
-  if (PARAM_pressure_wave_x_freq.equalsIgnoreCase(pName)) {
-  x_freq= pValue;
-  if (x_freq == 0.0 ) { pwx=1.0; ipwx = pwx; } else {
-  pwx= pValue*M_2PI;
-  ipwx= 1.0/pwx;
+    if (PARAM_pressure_wave_x_freq.equalsIgnoreCase(pName)) {
+      x_freq = pValue;
+      if (x_freq == 0.0) {
+        pwx = 1.0;
+        ipwx = pwx;
+      } else {
+        pwx = pValue * M_2PI;
+        ipwx = 1.0 / pwx;
+      }
+    } else if (PARAM_pressure_wave_y_freq.equalsIgnoreCase(pName)) {
+      y_freq = pValue;
+      if (y_freq == 0.0) {
+        pwy = 1.0;
+        ipwy = pwy;
+      } else {
+        pwy = pValue * M_2PI;
+        ipwy = 1.0 / pwy;
+      }
+    }
   }
+
+  @Override
+  public String getName() {
+    return "pressure_wave";
   }
-  
-  else if (PARAM_pressure_wave_y_freq.equalsIgnoreCase(pName)){
-  y_freq= pValue;
-  if (y_freq == 0.0 ) { pwy=1.0; ipwy = pwy; } else {
-    pwy= pValue*M_2PI;
-    ipwy= 1.0/pwy;
-  }}}
-@Override
-public String getName() {
- return "pressure_wave";
-}
 
 }

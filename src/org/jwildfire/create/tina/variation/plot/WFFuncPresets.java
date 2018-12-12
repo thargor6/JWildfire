@@ -1,11 +1,11 @@
 package org.jwildfire.create.tina.variation.plot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathparser.JEPWrapper;
 import org.nfunk.jep.Node;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class WFFuncPresets<T extends WFFuncPreset> {
   private Map<Integer, T> presets;
@@ -58,14 +58,12 @@ public abstract class WFFuncPresets<T extends WFFuncPreset> {
             maxId = preset.getId();
           }
           res.put(preset.getId(), preset);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
 
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
     return res;

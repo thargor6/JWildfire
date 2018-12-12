@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class ParabolaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class ParabolaFunc extends VariationFunc {
   private static final String PARAM_WIDTH = "width";
   private static final String PARAM_HEIGHT = "height";
 
-  private static final String[] paramNames = { PARAM_WIDTH, PARAM_HEIGHT };
+  private static final String[] paramNames = {PARAM_WIDTH, PARAM_HEIGHT};
 
   private double width = 1.0;
   private double height = 0.5;
@@ -42,8 +42,8 @@ public class ParabolaFunc extends VariationFunc {
     pVarTP.x += height * pAmount * sr * sr * pContext.random();
     pVarTP.y += width * pAmount * cr * pContext.random();
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -54,7 +54,7 @@ public class ParabolaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { width, height };
+    return new Object[]{width, height};
   }
 
   @Override

@@ -16,27 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.round;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JuliaScopeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST};
 
   private int power = genRandomPower();
   private double dist = 1;
@@ -59,8 +51,7 @@ public class JuliaScopeFunc extends VariationFunc {
     double a;
     if (pContext.random(2) == 0) {
       a = atan2(pAffineTP.y, pAffineTP.x) / 2.0;
-    }
-    else {
+    } else {
       a = M_PI - atan2(pAffineTP.y, pAffineTP.x) / 2.0;
     }
     double sina = sin(a);
@@ -70,8 +61,8 @@ public class JuliaScopeFunc extends VariationFunc {
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y + r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   public void transformPowerMinus2(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -86,16 +77,16 @@ public class JuliaScopeFunc extends VariationFunc {
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y - r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   public void transformPower1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     pVarTP.x = pVarTP.x + pAmount * pAffineTP.x;
     pVarTP.y = pVarTP.y + pAmount * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   public void transformPowerMinus1(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -103,8 +94,8 @@ public class JuliaScopeFunc extends VariationFunc {
     pVarTP.x = pVarTP.x + r * pAffineTP.x;
     pVarTP.y = pVarTP.y + r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   public void transformFunction(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
@@ -121,8 +112,8 @@ public class JuliaScopeFunc extends VariationFunc {
     pVarTP.x = pVarTP.x + r * cosa;
     pVarTP.y = pVarTP.y + r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -132,7 +123,7 @@ public class JuliaScopeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist };
+    return new Object[]{power, dist};
   }
 
   @Override

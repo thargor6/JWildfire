@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Hexaplay3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -39,7 +36,7 @@ public class Hexaplay3DFunc extends VariationFunc {
   private static final String PARAM_MAJP = "majp";
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_ZLIFT = "zlift";
-  private static final String[] paramNames = { PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT };
+  private static final String[] paramNames = {PARAM_MAJP, PARAM_SCALE, PARAM_ZLIFT};
 
   private double majp = 1.0; // establishes 1 or 2 planes, and if 2, the distance between them
   private double scale = 0.25; // scales the effect of X and Y
@@ -73,8 +70,7 @@ public class Hexaplay3DFunc extends VariationFunc {
     double abmajp = fabs(this.majp);
     if (abmajp <= 1.0) {
       majplane = 1; // Want either 1 or 2
-    }
-    else {
+    } else {
       majplane = 2;
       boost = (abmajp - 1.0) * 0.5; // distance above and below XY plane
     }
@@ -82,8 +78,7 @@ public class Hexaplay3DFunc extends VariationFunc {
     //      Creating Z factors relative to the planes
     if (majplane == 2) {
       pVarTP.z += pAffineTP.z * 0.5 * this.zlift + (posNeg * boost);
-    }
-    else {
+    } else {
       pVarTP.z += pAffineTP.z * 0.5 * this.zlift;
     }
 
@@ -94,8 +89,7 @@ public class Hexaplay3DFunc extends VariationFunc {
       pVarTP.x = ((pVarTP.x + pAffineTP.x) * scale) + (lrmaj * _seg60x[loc60]);
       pVarTP.y = ((pVarTP.y + pAffineTP.y) * scale) + (lrmaj * _seg60y[loc60]);
       this._fcycle += 1;
-    }
-    else {// Occasion to build on 120 degree segments
+    } else {// Occasion to build on 120 degree segments
 
       //loc120 = trunc(pContext.random()*3.0);  // random nodes selection
       loc120 = this._bcycle; // sequential nodes selection
@@ -112,7 +106,7 @@ public class Hexaplay3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { majp, scale, zlift };
+    return new Object[]{majp, scale, zlift};
   }
 
   @Override

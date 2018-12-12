@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 import odk.lang.DoubleWrapper;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class BlurFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,8 +37,8 @@ public class BlurFunc extends SimpleVariationFunc {
     pVarTP.x += r2 * cosa.value;
     pVarTP.y += r2 * sina.value;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

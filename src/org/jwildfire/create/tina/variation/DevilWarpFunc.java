@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 public class DevilWarpFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class DevilWarpFunc extends VariationFunc {
   private static final String PARAM_WARP = "warp";
   private static final String PARAM_RMIN = "rmin";
   private static final String PARAM_RMAX = "rmax";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_EFFECT, PARAM_WARP, PARAM_RMIN, PARAM_RMAX };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_EFFECT, PARAM_WARP, PARAM_RMIN, PARAM_RMAX};
   private double a = 2.0;
   private double b = 1.0;
   private double effect = 1.0;
@@ -53,8 +53,8 @@ public class DevilWarpFunc extends VariationFunc {
     pVarTP.x += xx * (1 + r);
     pVarTP.y += yy * (1 + r);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -64,7 +64,7 @@ public class DevilWarpFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, effect, warp, rmin, rmax };
+    return new Object[]{a, b, effect, warp, rmin, rmax};
   }
 
   @Override

@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class NgonFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class NgonFunc extends VariationFunc {
   private static final String PARAM_POWER = "power";
   private static final String PARAM_SIDES = "sides";
 
-  private static final String[] paramNames = { PARAM_CIRCLE, PARAM_CORNERS, PARAM_POWER, PARAM_SIDES };
+  private static final String[] paramNames = {PARAM_CIRCLE, PARAM_CORNERS, PARAM_POWER, PARAM_SIDES};
 
   private double circle = 1;
   private double corners = 2;
@@ -71,7 +67,7 @@ public class NgonFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { circle, corners, power, sides };
+    return new Object[]{circle, corners, power, sides};
   }
 
   @Override

@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class Bubble2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class Bubble2Func extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
   private double x = 1.0;
   private double y = 1.0;
@@ -55,7 +55,7 @@ public class Bubble2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z };
+    return new Object[]{x, y, z};
   }
 
   @Override

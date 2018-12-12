@@ -17,14 +17,6 @@
 
 package org.jwildfire.create.tina.variation.plot;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -36,6 +28,12 @@ import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -63,9 +61,9 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final String RESSOURCE_FORMULA = "formula";
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_THICKNESS, PARAM_MAX_ITER, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
+  private static final String[] paramNames = {PARAM_PRESET_ID, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_ZMIN, PARAM_ZMAX, PARAM_THICKNESS, PARAM_MAX_ITER, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F};
 
-  private static final String[] ressourceNames = { RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME };
+  private static final String[] ressourceNames = {RESSOURCE_FORMULA, RESSOURCE_COLORMAP_FILENAME};
 
   private static final int CM_COLORMAP_X = 0;
   private static final int CM_COLORMAP_Y = 1;
@@ -113,7 +111,7 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, xmin, xmax, ymin, ymax, zmin, zmax, thickness, max_iter, direct_color, color_mode, colorMapHolder.getBlend_colormap(), param_a, param_b, param_c, param_d, param_e, param_f };
+    return new Object[]{preset_id, xmin, xmax, ymin, ymax, zmin, zmax, thickness, max_iter, direct_color, color_mode, colorMapHolder.getBlend_colormap(), param_a, param_b, param_c, param_d, param_e, param_f};
   }
 
   @Override
@@ -123,71 +121,53 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
       if (preset_id >= 0) {
         refreshFormulaFromPreset(preset_id);
       }
-    }
-    else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
       xmin = pValue;
       validatePresetId();
-    }
-    else if (PARAM_XMAX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_XMAX.equalsIgnoreCase(pName)) {
       xmax = pValue;
       validatePresetId();
-    }
-    else if (PARAM_YMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YMIN.equalsIgnoreCase(pName)) {
       ymin = pValue;
       validatePresetId();
-    }
-    else if (PARAM_YMAX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YMAX.equalsIgnoreCase(pName)) {
       ymax = pValue;
       validatePresetId();
-    }
-    else if (PARAM_ZMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_ZMIN.equalsIgnoreCase(pName)) {
       zmin = pValue;
       validatePresetId();
-    }
-    else if (PARAM_ZMAX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_ZMAX.equalsIgnoreCase(pName)) {
       zmax = pValue;
       validatePresetId();
-    }
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
-    }
-    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = Tools.FTOI(pValue);
-    }
-    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
-    }
-    else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
       param_a = pValue;
-    }
-    else if (PARAM_PARAM_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_B.equalsIgnoreCase(pName)) {
       param_b = pValue;
-    }
-    else if (PARAM_PARAM_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_C.equalsIgnoreCase(pName)) {
       param_c = pValue;
-    }
-    else if (PARAM_PARAM_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_D.equalsIgnoreCase(pName)) {
       param_d = pValue;
-    }
-    else if (PARAM_PARAM_E.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_E.equalsIgnoreCase(pName)) {
       param_e = pValue;
-    }
-    else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
       param_f = pValue;
-    }
-    else if (PARAM_MAX_ITER.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MAX_ITER.equalsIgnoreCase(pName)) {
       max_iter = Tools.FTOI(pValue);
       if (max_iter < 1) {
         max_iter = 1;
       }
-    }
-    else if (PARAM_THICKNESS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_THICKNESS.equalsIgnoreCase(pName)) {
       thickness = pValue;
       if (thickness < EPSILON) {
         thickness = EPSILON;
       }
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -203,7 +183,7 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null) };
+    return new byte[][]{(formula != null ? formula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null)};
   }
 
   @Override
@@ -211,13 +191,11 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       formula = pValue != null ? new String(pValue) : "";
       validatePresetId();
-    }
-    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
       uvIdxMap.clear();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -225,11 +203,9 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -271,21 +247,20 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     _dz = _zmax - _zmin;
 
     String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-        "\r\n" +
-        "  public double evaluate(double x,double y,double z) {\r\n" +
-        "    double pi = M_PI;\r\n" +
-        "    double param_a = " + param_a + ";\r\n" +
-        "    double param_b = " + param_b + ";\r\n" +
-        "    double param_c = " + param_c + ";\r\n" +
-        "    double param_d = " + param_d + ";\r\n" +
-        "    double param_e = " + param_e + ";\r\n" +
-        "    double param_f = " + param_f + ";\r\n" +
-        "    return " + (formula != null && !formula.isEmpty() ? formula : "0.0") + ";\r\n" +
-        "  }\r\n";
+            "\r\n" +
+            "  public double evaluate(double x,double y,double z) {\r\n" +
+            "    double pi = M_PI;\r\n" +
+            "    double param_a = " + param_a + ";\r\n" +
+            "    double param_b = " + param_b + ";\r\n" +
+            "    double param_c = " + param_c + ";\r\n" +
+            "    double param_d = " + param_d + ";\r\n" +
+            "    double param_e = " + param_e + ";\r\n" +
+            "    double param_f = " + param_f + ";\r\n" +
+            "    return " + (formula != null && !formula.isEmpty() ? formula : "0.0") + ";\r\n" +
+            "  }\r\n";
     try {
       evaluator = IsoSFPlot3DFormulaEvaluator.compile(code);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       evaluator = null;
       e.printStackTrace();
       System.out.println(code);
@@ -303,9 +278,9 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
     if (preset_id >= 0) {
       IsoSFPlot3DWFFuncPreset preset = WFFuncPresetsStore.getIsoSFPlot3DWFFuncPresets().getPreset(preset_id);
       if (!preset.getFormula().equals(formula) ||
-          (fabs(xmin - preset.getXmin()) > EPSILON) || (fabs(xmax - preset.getXmax()) > EPSILON) ||
-          (fabs(ymin - preset.getYmin()) > EPSILON) || (fabs(ymax - preset.getYmax()) > EPSILON) ||
-          (fabs(zmin - preset.getZmin()) > EPSILON) || (fabs(zmax - preset.getZmax()) > EPSILON)) {
+              (fabs(xmin - preset.getXmin()) > EPSILON) || (fabs(xmax - preset.getXmax()) > EPSILON) ||
+              (fabs(ymin - preset.getYmin()) > EPSILON) || (fabs(ymax - preset.getYmax()) > EPSILON) ||
+              (fabs(zmin - preset.getZmin()) > EPSILON) || (fabs(zmax - preset.getZmax()) > EPSILON)) {
         preset_id = -1;
       }
     }
@@ -454,13 +429,15 @@ public class IsoSFPlot3DWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   @Override
-  public boolean dynamicParameterExpansion() { return true; }
-  
+  public boolean dynamicParameterExpansion() {
+    return true;
+  }
+
   @Override
   public boolean dynamicParameterExpansion(String pName) {
-	  // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
-	  if (PARAM_PRESET_ID.equalsIgnoreCase(pName))  return true;
-	  else return false;
+    // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
+    if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) return true;
+    else return false;
   }
 
 }

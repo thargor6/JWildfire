@@ -17,14 +17,6 @@
 
 package org.jwildfire.create.tina.variation.plot;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -33,11 +25,12 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.palette.RenderColor;
-import org.jwildfire.create.tina.variation.ColorMapHolder;
-import org.jwildfire.create.tina.variation.DisplacementMapHolder;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.RessourceType;
-import org.jwildfire.create.tina.variation.VariationFunc;
+import org.jwildfire.create.tina.variation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ParPlot2DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -67,9 +60,9 @@ public class ParPlot2DWFFunc extends VariationFunc {
   private static final String RESSOURCE_COLORMAP_FILENAME = "colormap_filename";
   private static final String RESSOURCE_DISPL_MAP_FILENAME = "displ_map_filename";
 
-  private static final String[] paramNames = { PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_SOLID, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F };
+  private static final String[] paramNames = {PARAM_PRESET_ID, PARAM_UMIN, PARAM_UMAX, PARAM_VMIN, PARAM_VMAX, PARAM_DIRECT_COLOR, PARAM_COLOR_MODE, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_SOLID, PARAM_PARAM_A, PARAM_PARAM_B, PARAM_PARAM_C, PARAM_PARAM_D, PARAM_PARAM_E, PARAM_PARAM_F};
 
-  private static final String[] ressourceNames = { RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME };
+  private static final String[] ressourceNames = {RESSOURCE_XFORMULA, RESSOURCE_YFORMULA, RESSOURCE_ZFORMULA, RESSOURCE_COLORMAP_FILENAME, RESSOURCE_DISPL_MAP_FILENAME};
 
   private static final int CM_COLORMAP = 0;
   private static final int CM_U = 1;
@@ -109,11 +102,11 @@ public class ParPlot2DWFFunc extends VariationFunc {
     }
     double randU, randV;
     if (solid == 0) {
-     randU = pAffineTP.x;
-     randV = pAffineTP.y;
-    } else  {
-         randU = pContext.random();
-         randV = pContext.random();
+      randU = pAffineTP.x;
+      randV = pAffineTP.y;
+    } else {
+      randU = pContext.random();
+      randV = pContext.random();
     }
     double u = _umin + randU * _du;
     double v = _vmin + randV * _dv;
@@ -190,7 +183,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), solid, param_a, param_b, param_c, param_d, param_e, param_f };
+    return new Object[]{preset_id, umin, umax, vmin, vmax, direct_color, color_mode, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), solid, param_a, param_b, param_c, param_d, param_e, param_f};
   }
 
   @Override
@@ -200,60 +193,43 @@ public class ParPlot2DWFFunc extends VariationFunc {
       if (preset_id >= 0) {
         refreshFormulaFromPreset(preset_id);
       }
-    }
-    else if (PARAM_UMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_UMIN.equalsIgnoreCase(pName)) {
       umin = pValue;
       validatePresetId();
-    }
-    else if (PARAM_UMAX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_UMAX.equalsIgnoreCase(pName)) {
       umax = pValue;
       validatePresetId();
-    }
-    else if (PARAM_VMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_VMIN.equalsIgnoreCase(pName)) {
       vmin = pValue;
       validatePresetId();
-    }
-    else if (PARAM_VMAX.equalsIgnoreCase(pName)) {
+    } else if (PARAM_VMAX.equalsIgnoreCase(pName)) {
       vmax = pValue;
       validatePresetId();
-    }
-    else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName)) {
       direct_color = Tools.FTOI(pValue);
-    }
-    else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName)) {
       color_mode = Tools.FTOI(pValue);
-    }
-    else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BLEND_COLORMAP.equalsIgnoreCase(pName)) {
       colorMapHolder.setBlend_colormap(limitIntVal(Tools.FTOI(pValue), 0, 1));
-    }
-    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_amount(pValue);
-    }
-    else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BLEND_DISPLMAP.equalsIgnoreCase(pName)) {
       displacementMapHolder.setBlend_displ_map(limitIntVal(Tools.FTOI(pValue), 0, 1));
-    }
-    else if (PARAM_SOLID.equalsIgnoreCase(pName)) {
-        solid = Tools.FTOI(pValue);
-      }
-    else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SOLID.equalsIgnoreCase(pName)) {
+      solid = Tools.FTOI(pValue);
+    } else if (PARAM_PARAM_A.equalsIgnoreCase(pName)) {
       param_a = pValue;
-    }
-    else if (PARAM_PARAM_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_B.equalsIgnoreCase(pName)) {
       param_b = pValue;
-    }
-    else if (PARAM_PARAM_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_C.equalsIgnoreCase(pName)) {
       param_c = pValue;
-    }
-    else if (PARAM_PARAM_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_D.equalsIgnoreCase(pName)) {
       param_d = pValue;
-    }
-    else if (PARAM_PARAM_E.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_E.equalsIgnoreCase(pName)) {
       param_e = pValue;
-    }
-    else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PARAM_F.equalsIgnoreCase(pName)) {
       param_f = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -269,7 +245,7 @@ public class ParPlot2DWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null) };
+    return new byte[][]{(xformula != null ? xformula.getBytes() : null), (yformula != null ? yformula.getBytes() : null), (zformula != null ? zformula.getBytes() : null), (colorMapHolder.getColormap_filename() != null ? colorMapHolder.getColormap_filename().getBytes() : null), (displacementMapHolder.getDispl_map_filename() != null ? displacementMapHolder.getDispl_map_filename().getBytes() : null)};
   }
 
   @Override
@@ -277,25 +253,20 @@ public class ParPlot2DWFFunc extends VariationFunc {
     if (RESSOURCE_XFORMULA.equalsIgnoreCase(pName)) {
       xformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
-    }
-    else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
       yformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
-    }
-    else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       zformula = pValue != null ? new String(pValue) : "";
       validatePresetId();
-    }
-    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       colorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       colorMapHolder.clear();
       uvIdxMap.clear();
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       displacementMapHolder.setDispl_map_filename(pValue != null ? new String(pValue) : "");
       displacementMapHolder.clear();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -303,20 +274,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_XFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_YFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_ZFORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_DISPL_MAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -350,41 +316,40 @@ public class ParPlot2DWFFunc extends VariationFunc {
     _dv = _vmax - _vmin;
 
     String code = "import static org.jwildfire.base.mathlib.MathLib.*;\r\n" +
-        "\r\n" +
-        "  public double evaluateX(double u,double v) {\r\n" +
-        "    double pi = M_PI;\r\n" +
-        "    double param_a = " + param_a + ";\r\n" +
-        "    double param_b = " + param_b + ";\r\n" +
-        "    double param_c = " + param_c + ";\r\n" +
-        "    double param_d = " + param_d + ";\r\n" +
-        "    double param_e = " + param_e + ";\r\n" +
-        "    double param_f = " + param_f + ";\r\n" +
-        "    return " + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ";\r\n" +
-        "  }\r\n" +
-        "  public double evaluateY(double u,double v) {\r\n" +
-        "    double pi = M_PI;\r\n" +
-        "    double param_a = " + param_a + ";\r\n" +
-        "    double param_b = " + param_b + ";\r\n" +
-        "    double param_c = " + param_c + ";\r\n" +
-        "    double param_d = " + param_d + ";\r\n" +
-        "    double param_e = " + param_e + ";\r\n" +
-        "    double param_f = " + param_f + ";\r\n" +
-        "    return " + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ";\r\n" +
-        "  }\r\n" +
-        "  public double evaluateZ(double u,double v) {\r\n" +
-        "    double pi = M_PI;\r\n" +
-        "    double param_a = " + param_a + ";\r\n" +
-        "    double param_b = " + param_b + ";\r\n" +
-        "    double param_c = " + param_c + ";\r\n" +
-        "    double param_d = " + param_d + ";\r\n" +
-        "    double param_e = " + param_e + ";\r\n" +
-        "    double param_f = " + param_f + ";\r\n" +
-        "    return " + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ";\r\n" +
-        "  }\r\n";
+            "\r\n" +
+            "  public double evaluateX(double u,double v) {\r\n" +
+            "    double pi = M_PI;\r\n" +
+            "    double param_a = " + param_a + ";\r\n" +
+            "    double param_b = " + param_b + ";\r\n" +
+            "    double param_c = " + param_c + ";\r\n" +
+            "    double param_d = " + param_d + ";\r\n" +
+            "    double param_e = " + param_e + ";\r\n" +
+            "    double param_f = " + param_f + ";\r\n" +
+            "    return " + (xformula != null && !xformula.isEmpty() ? xformula : "0.0") + ";\r\n" +
+            "  }\r\n" +
+            "  public double evaluateY(double u,double v) {\r\n" +
+            "    double pi = M_PI;\r\n" +
+            "    double param_a = " + param_a + ";\r\n" +
+            "    double param_b = " + param_b + ";\r\n" +
+            "    double param_c = " + param_c + ";\r\n" +
+            "    double param_d = " + param_d + ";\r\n" +
+            "    double param_e = " + param_e + ";\r\n" +
+            "    double param_f = " + param_f + ";\r\n" +
+            "    return " + (yformula != null && !yformula.isEmpty() ? yformula : "0.0") + ";\r\n" +
+            "  }\r\n" +
+            "  public double evaluateZ(double u,double v) {\r\n" +
+            "    double pi = M_PI;\r\n" +
+            "    double param_a = " + param_a + ";\r\n" +
+            "    double param_b = " + param_b + ";\r\n" +
+            "    double param_c = " + param_c + ";\r\n" +
+            "    double param_d = " + param_d + ";\r\n" +
+            "    double param_e = " + param_e + ";\r\n" +
+            "    double param_f = " + param_f + ";\r\n" +
+            "    return " + (zformula != null && !zformula.isEmpty() ? zformula : "0.0") + ";\r\n" +
+            "  }\r\n";
     try {
       evaluator = ParPlot2DFormulaEvaluator.compile(code);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       evaluator = null;
       e.printStackTrace();
       System.out.println(code);
@@ -402,8 +367,8 @@ public class ParPlot2DWFFunc extends VariationFunc {
     if (preset_id >= 0) {
       ParPlot2DWFFuncPreset preset = WFFuncPresetsStore.getParPlot2DWFFuncPresets().getPreset(preset_id);
       if (!preset.getXformula().equals(xformula) || !preset.getYformula().equals(yformula) || !preset.getZformula().equals(zformula) ||
-          (fabs(umin - preset.getUmin()) > EPSILON) || (fabs(umax - preset.getUmax()) > EPSILON) ||
-          (fabs(vmin - preset.getVmin()) > EPSILON) || (fabs(vmax - preset.getVmax()) > EPSILON)) {
+              (fabs(umin - preset.getUmin()) > EPSILON) || (fabs(umax - preset.getUmax()) > EPSILON) ||
+              (fabs(vmin - preset.getVmin()) > EPSILON) || (fabs(vmax - preset.getVmax()) > EPSILON)) {
         preset_id = -1;
       }
     }
@@ -459,13 +424,15 @@ public class ParPlot2DWFFunc extends VariationFunc {
   }
 
   @Override
-  public boolean dynamicParameterExpansion() { return true; }
-  
+  public boolean dynamicParameterExpansion() {
+    return true;
+  }
+
   @Override
   public boolean dynamicParameterExpansion(String pName) {
-	  // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
-	  if (PARAM_PRESET_ID.equalsIgnoreCase(pName))  return true;
-	  else return false;
+    // preset_id doesn't really expand parameters, but it changes them; this will make them refresh
+    if (PARAM_PRESET_ID.equalsIgnoreCase(pName)) return true;
+    else return false;
   }
 
 }

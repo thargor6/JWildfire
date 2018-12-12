@@ -16,13 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 
 public class DCTriangleFunc extends VariationFunc {
 
@@ -31,7 +31,7 @@ public class DCTriangleFunc extends VariationFunc {
   private static final String PARAM_SCATTER_AREA = "scatter_area";
   private static final String PARAM_ZERO_EDGES = "zero_edges";
 
-  private static final String[] paramNames = { PARAM_SCATTER_AREA, PARAM_ZERO_EDGES };
+  private static final String[] paramNames = {PARAM_SCATTER_AREA, PARAM_ZERO_EDGES};
 
   private double scatter_area = 0.0;
   private int zero_edges = 0;
@@ -68,8 +68,7 @@ public class DCTriangleFunc extends VariationFunc {
       if (u > v) {
         u = u > 1 ? 1 : u;
         v = 1 - u;
-      }
-      else {
+      } else {
         v = v > 1 ? 1 : v;
         u = 1 - v;
       }
@@ -98,8 +97,7 @@ public class DCTriangleFunc extends VariationFunc {
         if (u > v) {
           u = u > 1 ? 1 : u;
           v = 1 - u;
-        }
-        else {
+        } else {
           v = v > 1 ? 1 : v;
           u = 1 - v;
         }
@@ -109,8 +107,8 @@ public class DCTriangleFunc extends VariationFunc {
     pVarTP.x += pAmount * (ox + u * xx + v * yx);
     pVarTP.y += pAmount * (oy + u * xy + v * yy);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
     pVarTP.color = fmod(fabs(u + v), 1.0);
   }
 
@@ -121,7 +119,7 @@ public class DCTriangleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scatter_area, zero_edges };
+    return new Object[]{scatter_area, zero_edges};
   }
 
   @Override

@@ -16,34 +16,22 @@
 */
 
 /*************************************************************************************************
-* @author Jesus Sosa
-* @date November 22, 2017
-* 
-* Variation: lsystem3d_js
-* 
-* Based on work of Laurens Lepre, who let me access 
-* the Ansi "C" source code of his LParser program. 
-* 
-* Check The work of Laurens Lapre
-* http://laurenslapre.nl/lapre_004.htm
-* 
-* Also I'm using SimpleMesh.java and AbstractOBJMeshWFFunc.java classes by Andreas Maschke 
-* included in source code of Java WildFire.
-*************************************************************************************************/
+ * @author Jesus Sosa
+ * @date November 22, 2017
+ *
+ * Variation: lsystem3d_js
+ *
+ * Based on work of Laurens Lepre, who let me access
+ * the Ansi "C" source code of his LParser program.
+ *
+ * Check The work of Laurens Lapre
+ * http://laurenslapre.nl/lapre_004.htm
+ *
+ * Also I'm using SimpleMesh.java and AbstractOBJMeshWFFunc.java classes by Andreas Maschke
+ * included in source code of Java WildFire.
+ *************************************************************************************************/
 
 package org.jwildfire.create.tina.variation.mesh;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
@@ -51,6 +39,14 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceType;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   private static final long serialVersionUID = 1L;
@@ -76,17 +72,17 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   protected static final String PARAM_RECEIVE_ONLY_SHADOWS = "receive_only_shadows";
 
-  private static final String[] paramNames = { PARAM_PRESETID, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS };
+  private static final String[] paramNames = {PARAM_PRESETID, PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_SUBDIV_LEVEL, PARAM_SUBDIV_SMOOTH_PASSES, PARAM_SUBDIV_SMOOTH_LAMBDA, PARAM_SUBDIV_SMOOTH_MU, PARAM_BLEND_COLORMAP, PARAM_DISPL_AMOUNT, PARAM_BLEND_DISPLMAP, PARAM_RECEIVE_ONLY_SHADOWS};
 
   private String grammar = null;
 
   int presetId = (int) (Math.random() * 21.0 + 1.0);
 
-  private static final String[] ressourceNames = { RESSOURCE_GRAMMAR };
+  private static final String[] ressourceNames = {RESSOURCE_GRAMMAR};
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { presetId, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows };
+    return new Object[]{presetId, scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, subdiv_level, subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu, colorMapHolder.getBlend_colormap(), displacementMapHolder.getDispl_amount(), displacementMapHolder.getBlend_displ_map(), receive_only_shadows};
   }
 
   @Override
@@ -102,15 +98,13 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       if (presetId > 0) {
         try {
           Strgrammar = getGrammarId();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
         setRessource(RESSOURCE_GRAMMAR, Strgrammar.getBytes(Charset.forName("UTF-8")));
       }
-    }
-    else if (PARAM_SCALEX.equalsIgnoreCase(pName))
+    } else if (PARAM_SCALEX.equalsIgnoreCase(pName))
       scaleX = pValue;
     else if (PARAM_SCALEY.equalsIgnoreCase(pName))
       scaleY = pValue;
@@ -149,7 +143,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (grammar != null ? grammar.getBytes() : null) };
+    return new byte[][]{(grammar != null ? grammar.getBytes() : null)};
   }
 
   @Override
@@ -163,8 +157,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         ls.L_draw();
         mesh = ls.getMesh();
       }
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -172,8 +165,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_GRAMMAR.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -193,8 +185,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         result.append(line + "\n");
       }
       inputStream.close();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     String fileContent = result.toString();
@@ -303,15 +294,15 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
   /* Settings stack used for solving [] references */
   static public class s_rec {
     public float[] pos = new float[3]; /* Position in 3space of turtle
-                                               * origin */
+     * origin */
     public float[] fow = new float[3]; // Forward direction
 
     public float[] lef = new float[3]; // Left direction
     public float[] upp = new float[3]; // Up direction
     public float[] last = new float[3]; /* Last position used for
-                                               * connecting cylinders */
+     * connecting cylinders */
     public float[][] last_v = new float[9][3]; /* Last vertices of object used for
-                                               * connecting cylinders */
+     * connecting cylinders */
     public double dis; // Value of F distance
     public double ang; // Value of basic angle
     public double thick; // Value of thickness
@@ -436,7 +427,8 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public double closed = 1.0;
     public boolean poly_limit = false;
     public boolean switch_yz = false;
-    public boolean closed_form = false;;
+    public boolean closed_form = false;
+    ;
     public boolean trace = false;
     public boolean nowait = false;
 
@@ -446,7 +438,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public short[] size = new short[rule_n];
 
     public s_rec[] stack = new s_rec[max_stack];
-    public float[] trope = new float[] { 0.0F, 0.0F, 0.0F };
+    public float[] trope = new float[]{0.0F, 0.0F, 0.0F};
     public s_rec org = new s_rec();
     public s_rec save = new s_rec();
     public float[] C1 = new float[3];
@@ -455,12 +447,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     public ArrayList<p_rec> pstack = new ArrayList<p_rec>();
     public double dis = one, dis2 = half, tr = 0.2;
     public int obj = 0;
-    public float[] sky = new float[] { 0.0F, 0.0F, 1.0F };
+    public float[] sky = new float[]{0.0F, 0.0F, 1.0F};
     public float[][] last_v = new float[9][3];
 
     public int poly_count = 0;
     public int scount = 0;
-    public float[] last = new float[] { 0.0F, 0.0F, 0.0F };
+    public float[] last = new float[]{0.0F, 0.0F, 0.0F};
     public float[][] ver = new float[max_p_object][3];
     public int pscount = 0;
 
@@ -662,39 +654,29 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
           if (keyword.equals("recursion")) { // Use keyword to determine action
             lev = Integer.parseInt(command);
-          }
-          else if (keyword.equals("mutation")) {
+          } else if (keyword.equals("mutation")) {
             muts = (short) Integer.parseInt(command);
-          }
-          else if (keyword.equals("angle")) {
+          } else if (keyword.equals("angle")) {
             ang = Float.parseFloat(command);
-          }
-          else if (keyword.equals("thickness")) {
+          } else if (keyword.equals("thickness")) {
             thick = Float.parseFloat(command);
-          }
-          else if (keyword.equals("min_thickness")) {
+          } else if (keyword.equals("min_thickness")) {
             min_thick = Float.parseFloat(command);
-          }
-          else if (keyword.equals("switch_yz")) {
+          } else if (keyword.equals("switch_yz")) {
             tt = (short) Integer.parseInt(command);
             switch_yz = (tt == 1);
-          }
-          else if (keyword.equals("trace")) {
+          } else if (keyword.equals("trace")) {
             tt = (short) Integer.parseInt(command);
             trace = (tt == 1);
-          }
-          else if (keyword.equals("poly_limit")) {
+          } else if (keyword.equals("poly_limit")) {
             pcount_limit = Integer.parseInt(command);
             poly_limit = true;
-          }
-          else if (keyword.equals("no_wait")) {
+          } else if (keyword.equals("no_wait")) {
             tt = (short) Integer.parseInt(command);
             nowait = (tt == 1);
-          }
-          else if (keyword.equals("shape")) {
+          } else if (keyword.equals("shape")) {
             closed = Float.parseFloat(command);
-          }
-          else if (keyword.equals("color")) {
+          } else if (keyword.equals("color")) {
             StringTokenizer st2 = new StringTokenizer(command, " ");
             String sNumber = (String) st2.nextElement();
             tt = Integer.parseInt(sNumber);
@@ -707,32 +689,27 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             color_store[tt][_x] = (float) red / (float) 255;
             color_store[tt][_y] = (float) green / (float) 255;
             color_store[tt][_z] = (float) blue / 255;
-          }
-          else if (keyword.equals("axiom")) {
+          } else if (keyword.equals("axiom")) {
             String tmp = Remove_spaces(command);
             object_s = new String(strTok(tmp, "\r\n\t#"));
-          }
-          else if (keyword.equals("rule")) {
+          } else if (keyword.equals("rule")) {
             String tmp = Remove_spaces(command);
             r_1 = strTok(tmp, "=");
             r_2 = strTok(null, "\r\n\t#");
             rule.add(r_1 + "=" + r_2);
             num++;
-          }
-          else {
+          } else {
             error = 2;
             return error;
             //  					User_error("Unknown keyword " + keyword);
           }
         }
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         e.printStackTrace();
       }
       try {
         br.close();
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         e.printStackTrace();
       }
 
@@ -755,8 +732,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       if (closed == 1.0) {
         System.out.println("Attached cylinders");
         closed_form = true;
-      }
-      else {
+      } else {
         System.out.println("Blocks");
         closed_form = false;
       }
@@ -926,8 +902,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             l = lev;
             incomplete = true;
             break;
-          }
-          else {
+          } else {
 
             String cInrule = rule.get(i).substring(2);
             ot = ot + cInrule;
@@ -984,12 +959,12 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     }
 
     public double Get_value(int j) { /* Read a (xx) value from a
-                                      * production string at location j
-                                      * and make it into a real */
+     * production string at location j
+     * and make it into a real */
       double r = zero;
       StringBuffer bValue = new StringBuffer("");
 
-      for (;;) {
+      for (; ; ) {
         if (object_s.charAt(j + 2) == ')')
           break;
         bValue.append(object_s.charAt(j + 2));
@@ -1041,12 +1016,10 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       C3[_z] = n33 + ((float) 1.0 - n33) * cosa;
     }
 
-    public void Define_block(float[] p1, float[] p2, float[] up, int c)
-
-    {
+    public void Define_block(float[] p1, float[] p2, float[] up, int c) {
       /* Insert basic block. Here we
-                                                   * build a cube shape directly on
-                                                   * the input vectors. */
+       * build a cube shape directly on
+       * the input vectors. */
       float[] dis = new float[3];
       float[] d1 = new float[3];
       float[] d2 = new float[3];
@@ -1215,17 +1188,15 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
 
     }
 
-    public void Define_closed(float[] p1, float[] p2, float[] up, int c)
-
-    {
+    public void Define_closed(float[] p1, float[] p2, float[] up, int c) {
       /* Insert connected cylinder shape.
-                                                   * The lastxxx vars are used to
-                                                   * store the previous top of the
-                                                   * cylinder for connecting a next
-                                                   * one. Since the vars are stacked
-                                                   * for [] we can connect correctly
-                                                   * according to current nesting
-                                                   * level. */
+       * The lastxxx vars are used to
+       * store the previous top of the
+       * cylinder for connecting a next
+       * one. Since the vars are stacked
+       * for [] we can connect correctly
+       * according to current nesting
+       * level. */
       float[] dis = new float[3];
       float[] d1 = new float[3];
       float[] d2 = new float[3];
@@ -1507,9 +1478,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
     }
     */
 
-    public void Save_object(int vertices, int polygons, int color)
-
-    {
+    public void Save_object(int vertices, int polygons, int color) {
       /* Save an object from store to disc */
       int t;
 
@@ -1534,8 +1503,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           int v3 = nvert[poly_store[t][2] - 1];
           mesh.addFace(v1, v2, v3);
           //                   faces.add(new face(vert_count+ poly_store[t][0],vert_count+ poly_store[t][1],vert_count+ poly_store[t][2]));
-        }
-        else {
+        } else {
           int v1 = nvert[poly_store[t][0] - 1];
           int v2 = nvert[poly_store[t][1] - 1];
           int v3 = nvert[poly_store[t][2] - 1];
@@ -1549,9 +1517,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
       vert_count += vertices;
     }
 
-    public void L_draw()
-
-    {
+    public void L_draw() {
       // Process a production string and generate form 
       float[] pos = new float[3];
       float[] end = new float[3];
@@ -1691,8 +1657,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '~':
             if (next == '(') {
               r = ((double) 0.017453) * Get_value(i);
-            }
-            else {
+            } else {
               r = (double) 6.0;
             }
             a = (Math.random() * r * (double) 2.0) - r;
@@ -1989,8 +1954,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '!':
             if (next == '(') {
               thick *= Get_value(i);
-            }
-            else {
+            } else {
               thick *= (double) 0.7;
             }
             break;
@@ -1998,8 +1962,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case '?':
             if (next == '(') {
               thick *= Get_value(i);
-            }
-            else {
+            } else {
               thick /= (double) 0.7;
             }
             break;
@@ -2007,8 +1970,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case ':':
             if (next == '(') {
               ang *= Get_value(i);
-            }
-            else {
+            } else {
               ang *= (double) 0.9;
             }
             break;
@@ -2016,8 +1978,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case ';':
             if (next == '(') {
               ang *= Get_value(i);
-            }
-            else {
+            } else {
               ang /= (double) 0.9;
             }
             break;
@@ -2027,8 +1988,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               r = Get_value(i);
               dis *= r;
               dis2 *= r;
-            }
-            else {
+            } else {
               dis *= (double) 0.9;
               dis2 *= (double) 0.9;
             }
@@ -2039,8 +1999,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
               r = Get_value(i);
               dis *= r;
               dis2 *= r;
-            }
-            else {
+            } else {
               dis /= (double) 0.9;
               dis2 /= (double) 0.9;
             }
@@ -2054,8 +2013,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             Vector_plus_fac(pos, fow, dis2, end);
             if (closed_form) {
               Define_closed(pos, end, upp, col);
-            }
-            else {
+            } else {
               Define_block(pos, end, upp, col);
             }
             vector_copy(end, pos);
@@ -2070,8 +2028,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
             Vector_plus_fac(pos, fow, dis, end);
             if (closed_form) {
               Define_closed(pos, end, upp, col);
-            }
-            else {
+            } else {
               Define_block(pos, end, upp, col);
             }
             vector_copy(end, pos);
@@ -2239,8 +2196,7 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
           case 'c':
             if (next == '(') {
               col = (int) Get_value(i);
-            }
-            else {
+            } else {
               col++;
             }
             break;

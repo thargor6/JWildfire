@@ -16,20 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TargetSpFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +29,7 @@ public class TargetSpFunc extends VariationFunc {
   private static final String PARAM_NUMSP = "n_of_sp";
   private static final String PARAM_SIZE = "size";
   private static final String PARAM_TIGHTNESS = "tightness";
-  private static final String[] paramNames = { PARAM_EVEN, PARAM_NUMSP, PARAM_SIZE, PARAM_TIGHTNESS };
+  private static final String[] paramNames = {PARAM_EVEN, PARAM_NUMSP, PARAM_SIZE, PARAM_TIGHTNESS};
 
   private double twist = 0.0;
   private int n_of_sp = 1;
@@ -68,8 +59,8 @@ public class TargetSpFunc extends VariationFunc {
     pVarTP.x += r * c;
     pVarTP.y += r * s;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -79,7 +70,7 @@ public class TargetSpFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { twist, n_of_sp, size, tightness };
+    return new Object[]{twist, n_of_sp, size, tightness};
   }
 
   @Override

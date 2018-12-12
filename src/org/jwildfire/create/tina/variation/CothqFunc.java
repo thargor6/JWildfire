@@ -16,30 +16,26 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CothqFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  /* Cothq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
+    /* Cothq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-	  
-	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);
-	double s = sin(abs_v);
-	double c = cos(abs_v);
+
+    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double s = sin(abs_v);
+    double c = cos(abs_v);
     double sh = sinh(pAffineTP.x);
     double ch = cosh(pAffineTP.x);
-	double sysz = sqr(pAffineTP.y) + sqr(pAffineTP.z);
-	double ni = pAmount / (sqr(pAffineTP.x) + sysz);
+    double sysz = sqr(pAffineTP.y) + sqr(pAffineTP.z);
+    double ni = pAmount / (sqr(pAffineTP.x) + sysz);
     double C = ch * s / abs_v;
     double B = sh * s / abs_v;
     double stcv = sh * c;
@@ -49,7 +45,6 @@ public class CothqFunc extends SimpleVariationFunc {
     pVarTP.x += (stcv * ctcv + C * B * sysz) * ni;
     pVarTP.y += (nstcv * B * pAffineTP.y + C * pAffineTP.y * ctcv) * ni;
     pVarTP.z += (nstcv * B * pAffineTP.z + C * pAffineTP.z * ctcv) * ni;
-
 
 
   }

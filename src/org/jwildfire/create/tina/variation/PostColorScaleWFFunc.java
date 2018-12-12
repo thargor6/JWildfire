@@ -28,7 +28,7 @@ public class PostColorScaleWFFunc extends VariationFunc {
   private static final String PARAM_OFFSETZ = "offset_z";
   private static final String PARAM_RESETZ = "reset_z";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETZ, PARAM_RESETZ};
 
   private double scale_x = 0.0;
   private double scale_y = 0.0;
@@ -43,8 +43,7 @@ public class PostColorScaleWFFunc extends VariationFunc {
     double dz = pVarTP.color * scale_z * pAmount + offset_z;
     if (reset_z > 0) {
       pVarTP.z = dz;
-    }
-    else {
+    } else {
       pVarTP.z += dz;
     }
   }
@@ -56,7 +55,7 @@ public class PostColorScaleWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale_x, scale_y, scale_z, offset_z, reset_z };
+    return new Object[]{scale_x, scale_y, scale_z, offset_z, reset_z};
   }
 
   @Override

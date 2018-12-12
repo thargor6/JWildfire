@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 public class LinearTFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class LinearTFunc extends VariationFunc {
   private static final String PARAM_POWX = "powX";
   private static final String PARAM_POWY = "powY";
 
-  private static final String[] paramNames = { PARAM_POWX, PARAM_POWY };
+  private static final String[] paramNames = {PARAM_POWX, PARAM_POWY};
 
   private double powX = 1.2;
   private double powY = 1.2;
@@ -46,8 +46,8 @@ public class LinearTFunc extends VariationFunc {
     pVarTP.x += sgn(pAffineTP.x) * pow(fabs(pAffineTP.x), this.powX) * pAmount;
     pVarTP.y += sgn(pAffineTP.y) * pow(fabs(pAffineTP.y), this.powY) * pAmount;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -57,12 +57,12 @@ public class LinearTFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { powX, powY };
+    return new Object[]{powX, powY};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "lT_powX", "lT_powY" };
+    return new String[]{"lT_powX", "lT_powY"};
   }
 
   @Override

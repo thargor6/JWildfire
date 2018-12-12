@@ -24,7 +24,7 @@ public class Knots3DWFFuncPresets extends WFFuncPresets<Knots3DWFFuncPreset> {
 
   @Override
   protected Knots3DWFFuncPreset createDefaultPreset() {
-    return new Knots3DWFFuncPreset(-1, "x", "y","z",1000.0,1.0,4.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0);
+    return new Knots3DWFFuncPreset(-1, "x", "y", "z", 1000.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
   }
 
   @Override
@@ -33,23 +33,23 @@ public class Knots3DWFFuncPresets extends WFFuncPresets<Knots3DWFFuncPreset> {
     String xformula = parseFormula(preset, "xformula");
     String yformula = parseFormula(preset, "yformula");
     String zformula = parseFormula(preset, "zformula");
-    
+
 
     double steps = parseParam(preset, "steps");
     double radius = parseParam(preset, "radius");
     double facets = parseParam(preset, "facets");
-    
-    double param_a=parseParam(preset,"param_a");
-    double param_b=parseParam(preset,"param_b");    
-    double param_c=parseParam(preset,"param_c");
-    double param_d=parseParam(preset,"param_d");
-    double param_e=parseParam(preset,"param_e");
-    double param_f=parseParam(preset,"param_f");    
-    double param_g=parseParam(preset,"param_g");
-    double param_h=parseParam(preset,"param_h");
-    
-    return new Knots3DWFFuncPreset(id, xformula, yformula,zformula,steps,radius,facets,
-    		param_a,param_b,param_c,param_d,param_e,param_f,param_g,param_h);
+
+    double param_a = parseParam(preset, "param_a");
+    double param_b = parseParam(preset, "param_b");
+    double param_c = parseParam(preset, "param_c");
+    double param_d = parseParam(preset, "param_d");
+    double param_e = parseParam(preset, "param_e");
+    double param_f = parseParam(preset, "param_f");
+    double param_g = parseParam(preset, "param_g");
+    double param_h = parseParam(preset, "param_h");
+
+    return new Knots3DWFFuncPreset(id, xformula, yformula, zformula, steps, radius, facets,
+            param_a, param_b, param_c, param_d, param_e, param_f, param_g, param_h);
   }
 
 }

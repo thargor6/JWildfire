@@ -17,9 +17,9 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.*;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class MobiqFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class MobiqFunc extends VariationFunc {
   private static final String PARAM_AT = "qat";
   private static final String PARAM_AX = "qax";
   private static final String PARAM_AY = "qay";
-  private static final String PARAM_AZ = "qaz";  
+  private static final String PARAM_AZ = "qaz";
   private static final String PARAM_BT = "qbt";
   private static final String PARAM_BX = "qbx";
   private static final String PARAM_BY = "qby";
@@ -39,9 +39,9 @@ public class MobiqFunc extends VariationFunc {
   private static final String PARAM_DT = "qdt";
   private static final String PARAM_DX = "qdx";
   private static final String PARAM_DY = "qdy";
-  private static final String PARAM_DZ = "qdz";  
+  private static final String PARAM_DZ = "qdz";
 
-  private static final String[] paramNames = { PARAM_AT, PARAM_AX, PARAM_AY, PARAM_AZ, PARAM_BT, PARAM_BX, PARAM_BY, PARAM_BZ, PARAM_CT, PARAM_CX, PARAM_CY, PARAM_CZ, PARAM_DT, PARAM_DX, PARAM_DY, PARAM_DZ};
+  private static final String[] paramNames = {PARAM_AT, PARAM_AX, PARAM_AY, PARAM_AZ, PARAM_BT, PARAM_BX, PARAM_BY, PARAM_BZ, PARAM_CT, PARAM_CX, PARAM_CY, PARAM_CZ, PARAM_DT, PARAM_DX, PARAM_DY, PARAM_DZ};
 
   private double qat = 1.0;
   private double qax = 0.0;
@@ -74,28 +74,28 @@ public class MobiqFunc extends VariationFunc {
     names in my head to be rather difficult and confusing, so I decided to
     use these macros instead.
 */
-	
-	double t1 = qat;
-	double t2 = pAffineTP.x;
-	double t3 = qbt ;
-	double t4 = qct;
-	double t5 = qdt;
-	double x1 = qax;
-	double x2 = pAffineTP.y;
-	double x3 = qbx; 
-	double x4 = qcx;
-	double x5 = qdx;
-	double y1 = qay;
-	double y2 = pAffineTP.z;
-	double y3 = qby; 
-	double y4 = qcy;
-	double y5 = qdy;	
-	double z1 = qaz;
+
+    double t1 = qat;
+    double t2 = pAffineTP.x;
+    double t3 = qbt;
+    double t4 = qct;
+    double t5 = qdt;
+    double x1 = qax;
+    double x2 = pAffineTP.y;
+    double x3 = qbx;
+    double x4 = qcx;
+    double x5 = qdx;
+    double y1 = qay;
+    double y2 = pAffineTP.z;
+    double y3 = qby;
+    double y4 = qcy;
+    double y5 = qdy;
+    double z1 = qaz;
     /* z2 is 0 and simplified out (there is no fourth generated coordinate). */
-	double z3 = qbz; 
-	double z4 = qcz;
-	double z5 = qdz;	
-	
+    double z3 = qbz;
+    double z4 = qcz;
+    double z5 = qdz;
+
     double nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;
     double nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;
     double ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;
@@ -107,10 +107,9 @@ public class MobiqFunc extends VariationFunc {
     double ni = pAmount / (sqr(dt) + sqr(dx) + sqr(dy) + sqr(dz));
 
 
-
     pVarTP.x += (nt * dt + nx * dx + ny * dy + nz * dz) * ni;
     pVarTP.y += (nx * dt - nt * dx - ny * dz + nz * dy) * ni;
-	pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;
+    pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni;
 
 
   }
@@ -122,9 +121,8 @@ public class MobiqFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { qat, qax, qay, qaz, qbt, qbx, qby, qbz, qct, qcx, qcy, qcz, qdt, qdx, qdy, qdz};
+    return new Object[]{qat, qax, qay, qaz, qbt, qbx, qby, qbz, qct, qcx, qcy, qcz, qdt, qdx, qdy, qdz};
   }
-
 
 
   @Override
@@ -137,7 +135,7 @@ public class MobiqFunc extends VariationFunc {
       qay = pValue;
     else if (PARAM_AZ.equalsIgnoreCase(pName))
       qaz = pValue;
-     else if (PARAM_BT.equalsIgnoreCase(pName))
+    else if (PARAM_BT.equalsIgnoreCase(pName))
       qbt = pValue;
     else if (PARAM_BX.equalsIgnoreCase(pName))
       qbx = pValue;
@@ -160,7 +158,7 @@ public class MobiqFunc extends VariationFunc {
     else if (PARAM_DY.equalsIgnoreCase(pName))
       qdy = pValue;
     else if (PARAM_DZ.equalsIgnoreCase(pName))
-      qdz = pValue;  
+      qdz = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

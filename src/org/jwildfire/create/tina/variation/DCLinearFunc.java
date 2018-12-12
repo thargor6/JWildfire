@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class DCLinearFunc extends VariationFunc {
 
@@ -33,7 +30,7 @@ public class DCLinearFunc extends VariationFunc {
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_SCALE = "scale";
 
-  private static final String[] paramNames = { PARAM_OFFSET, PARAM_ANGLE, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_OFFSET, PARAM_ANGLE, PARAM_SCALE};
 
   private double offset = 0.0;
   private double angle = 0.3;
@@ -45,8 +42,8 @@ public class DCLinearFunc extends VariationFunc {
     pVarTP.x += pAmount * pAffineTP.x;
     pVarTP.y += pAmount * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
     double s = sin(angle);
     double c = cos(angle);
     pVarTP.color = fmod(fabs(0.5 * (ldcs * ((c * pVarTP.x + s * pVarTP.y + offset)) + 1.0)), 1.0);
@@ -59,7 +56,7 @@ public class DCLinearFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset, angle, scale };
+    return new Object[]{offset, angle, scale};
   }
 
   @Override

@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JubiQFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -45,7 +37,7 @@ public class JubiQFunc extends VariationFunc {
   private static final String PARAM_AT = "qat";
   private static final String PARAM_AX = "qax";
   private static final String PARAM_AY = "qay";
-  private static final String PARAM_AZ = "qaz";  
+  private static final String PARAM_AZ = "qaz";
   private static final String PARAM_BT = "qbt";
   private static final String PARAM_BX = "qbx";
   private static final String PARAM_BY = "qby";
@@ -57,8 +49,8 @@ public class JubiQFunc extends VariationFunc {
   private static final String PARAM_DT = "qdt";
   private static final String PARAM_DX = "qdx";
   private static final String PARAM_DY = "qdy";
-  private static final String PARAM_DZ = "qdz";  
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F,PARAM_AT, PARAM_AX, PARAM_AY, PARAM_AZ, PARAM_BT, PARAM_BX, PARAM_BY, PARAM_BZ, PARAM_CT, PARAM_CX, PARAM_CY, PARAM_CZ, PARAM_DT, PARAM_DX, PARAM_DY, PARAM_DZ };
+  private static final String PARAM_DZ = "qdz";
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F, PARAM_AT, PARAM_AX, PARAM_AY, PARAM_AZ, PARAM_BT, PARAM_BX, PARAM_BY, PARAM_BZ, PARAM_CT, PARAM_CX, PARAM_CY, PARAM_CZ, PARAM_DT, PARAM_DX, PARAM_DY, PARAM_DZ};
 
   private int power = genRandomPower();
   private double dist = 1.0;
@@ -86,55 +78,47 @@ public class JubiQFunc extends VariationFunc {
   private double qdz = 0.0;
 
 
-
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
      /* A mix of julian2 by Xyrus02, http://xyrus02.deviantart.com/art/JuliaN2-Plugin-for-Apophysis-136717838 
      and Mobiq by zephyrtronium https://zephyrtronium.deviantart.com/art/Mobiq-Apophysis-Plugin-170449212 by Brad Stefanov*/
-     
-     
-     
 
-     
-     double t1 = qat;
-      double t2 = pAffineTP.x;
-      double t3 = qbt ;
-      double t4 = qct;
-      double t5 = qdt;
-      double x1 = qax;
-      double x2 = pAffineTP.y;
-      double x3 = qbx; 
-      double x4 = qcx;
-      double x5 = qdx;
-      double y1 = qay;
-      double y2 = pAffineTP.z;
-      double y3 = qby; 
-      double y4 = qcy;
-      double y5 = qdy;   
-      double z1 = qaz;
-       /* z2 is 0 and simplified out (there is no fourth generated coordinate). */
-      double z3 = qbz; 
-      double z4 = qcz;
-      double z5 = qdz;   
-      
-       double nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;
-       double nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;
-       double ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;
-       double nz = z1 * t2 + x1 * y2 - y1 * x2 + z3;
-       double dt = t4 * t2 - x4 * x2 - y4 * y2 + t5;
-       double dx = t4 * x2 + x4 * t2 - z4 * y2 + x5;
-       double dy = t4 * y2 + y4 * t2 + z4 * x2 + y5;
-       double dz = z4 * t2 + x4 * y2 - y4 * x2 + z5;
-       double ni = pAmount / (sqr(dt) + sqr(dx) + sqr(dy) + sqr(dz));
-     
-     
-     
-     
-     
-     
+
+    double t1 = qat;
+    double t2 = pAffineTP.x;
+    double t3 = qbt;
+    double t4 = qct;
+    double t5 = qdt;
+    double x1 = qax;
+    double x2 = pAffineTP.y;
+    double x3 = qbx;
+    double x4 = qcx;
+    double x5 = qdx;
+    double y1 = qay;
+    double y2 = pAffineTP.z;
+    double y3 = qby;
+    double y4 = qcy;
+    double y5 = qdy;
+    double z1 = qaz;
+    /* z2 is 0 and simplified out (there is no fourth generated coordinate). */
+    double z3 = qbz;
+    double z4 = qcz;
+    double z5 = qdz;
+
+    double nt = t1 * t2 - x1 * x2 - y1 * y2 + t3;
+    double nx = t1 * x2 + x1 * t2 - z1 * y2 + x3;
+    double ny = t1 * y2 + y1 * t2 + z1 * x2 + y3;
+    double nz = z1 * t2 + x1 * y2 - y1 * x2 + z3;
+    double dt = t4 * t2 - x4 * x2 - y4 * y2 + t5;
+    double dx = t4 * x2 + x4 * t2 - z4 * y2 + x5;
+    double dy = t4 * y2 + y4 * t2 + z4 * x2 + y5;
+    double dz = z4 * t2 + x4 * y2 - y4 * x2 + z5;
+    double ni = pAmount / (sqr(dt) + sqr(dx) + sqr(dy) + sqr(dz));
+
+
     if (power == 0)
       return;
-    double x = a * pAffineTP.x + b * pAffineTP.y + (nt * dt + nx * dx + ny * dy + nz * dz) * ni + e ;
+    double x = a * pAffineTP.x + b * pAffineTP.y + (nt * dt + nx * dx + ny * dy + nz * dz) * ni + e;
     double y = c * pAffineTP.x + d * pAffineTP.y + (nx * dt - nt * dx - ny * dz + nz * dy) * ni + f;
     double sina = 0.0, cosa = 0.0;
     double angle = (atan2(y, x) + M_2PI * (pContext.random(Integer.MAX_VALUE) % _absN)) / power;
@@ -144,12 +128,12 @@ public class JubiQFunc extends VariationFunc {
     cosa = cos(angle);
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
-    
+
     double z = pAffineTP.z / 2;
     double r2d = sqr(pAffineTP.x) + sqr(pAffineTP.y);
     double r3d = sqrt(r2d + sqr(z));
     double r2 = pAmount / (sqrt(r3d) * r3d);
-    
+
     pVarTP.z += (ny * dt - nt * dy - nz * dx + nx * dz) * ni + r2 * z;
 
   }
@@ -161,7 +145,7 @@ public class JubiQFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist, a, b, c, d, e, f, qat, qax, qay, qaz, qbt, qbx, qby, qbz, qct, qcx, qcy, qcz, qdt, qdx, qdy, qdz };
+    return new Object[]{power, dist, a, b, c, d, e, f, qat, qax, qay, qaz, qbt, qbx, qby, qbz, qct, qcx, qcy, qcz, qdt, qdx, qdy, qdz};
   }
 
   @Override
@@ -183,38 +167,38 @@ public class JubiQFunc extends VariationFunc {
     else if (PARAM_F.equalsIgnoreCase(pName))
       f = pValue;
     else if (PARAM_AT.equalsIgnoreCase(pName))
-        qat = pValue;
-      else if (PARAM_AX.equalsIgnoreCase(pName))
-        qax = pValue;
-      else if (PARAM_AY.equalsIgnoreCase(pName))
-        qay = pValue;
-      else if (PARAM_AZ.equalsIgnoreCase(pName))
-        qaz = pValue;
-       else if (PARAM_BT.equalsIgnoreCase(pName))
-        qbt = pValue;
-      else if (PARAM_BX.equalsIgnoreCase(pName))
-        qbx = pValue;
-      else if (PARAM_BY.equalsIgnoreCase(pName))
-        qby = pValue;
-      else if (PARAM_BZ.equalsIgnoreCase(pName))
-        qbz = pValue;
-      else if (PARAM_CT.equalsIgnoreCase(pName))
-        qct = pValue;
-      else if (PARAM_CX.equalsIgnoreCase(pName))
-        qcx = pValue;
-      else if (PARAM_CY.equalsIgnoreCase(pName))
-        qcy = pValue;
-      else if (PARAM_CZ.equalsIgnoreCase(pName))
-        qcz = pValue;
-      else if (PARAM_DT.equalsIgnoreCase(pName))
-        qdt = pValue;
-      else if (PARAM_DX.equalsIgnoreCase(pName))
-        qdx = pValue;
-      else if (PARAM_DY.equalsIgnoreCase(pName))
-        qdy = pValue;
-      else if (PARAM_DZ.equalsIgnoreCase(pName))
-        qdz = pValue;  
-      
+      qat = pValue;
+    else if (PARAM_AX.equalsIgnoreCase(pName))
+      qax = pValue;
+    else if (PARAM_AY.equalsIgnoreCase(pName))
+      qay = pValue;
+    else if (PARAM_AZ.equalsIgnoreCase(pName))
+      qaz = pValue;
+    else if (PARAM_BT.equalsIgnoreCase(pName))
+      qbt = pValue;
+    else if (PARAM_BX.equalsIgnoreCase(pName))
+      qbx = pValue;
+    else if (PARAM_BY.equalsIgnoreCase(pName))
+      qby = pValue;
+    else if (PARAM_BZ.equalsIgnoreCase(pName))
+      qbz = pValue;
+    else if (PARAM_CT.equalsIgnoreCase(pName))
+      qct = pValue;
+    else if (PARAM_CX.equalsIgnoreCase(pName))
+      qcx = pValue;
+    else if (PARAM_CY.equalsIgnoreCase(pName))
+      qcy = pValue;
+    else if (PARAM_CZ.equalsIgnoreCase(pName))
+      qcz = pValue;
+    else if (PARAM_DT.equalsIgnoreCase(pName))
+      qdt = pValue;
+    else if (PARAM_DX.equalsIgnoreCase(pName))
+      qdx = pValue;
+    else if (PARAM_DY.equalsIgnoreCase(pName))
+      qdy = pValue;
+    else if (PARAM_DZ.equalsIgnoreCase(pName))
+      qdz = pValue;
+
     else
       throw new IllegalArgumentException(pName);
   }

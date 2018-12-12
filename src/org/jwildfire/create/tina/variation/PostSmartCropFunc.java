@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PostSmartCropFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -44,7 +36,7 @@ public class PostSmartCropFunc extends VariationFunc {
   private static final String PARAM_OFFSET = "offset";
   private static final String PARAM_CROPMODE = "cropmode";
   private static final String PARAM_STATIC = "static";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_RADIUS, PARAM_ROUNDSTR, PARAM_ROUNDWIDTH, PARAM_DISTORTION, PARAM_EDGE, PARAM_SCATTER, PARAM_OFFSET, PARAM_CROPMODE, PARAM_STATIC };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_RADIUS, PARAM_ROUNDSTR, PARAM_ROUNDWIDTH, PARAM_DISTORTION, PARAM_EDGE, PARAM_SCATTER, PARAM_OFFSET, PARAM_CROPMODE, PARAM_STATIC};
 
   private double power = 4.0;
   private double radius = 1.0;
@@ -65,8 +57,7 @@ public class PostSmartCropFunc extends VariationFunc {
       xi = pVarTP.x;
       yi = pVarTP.y;
       zi = pVarTP.z;
-    }
-    else {
+    } else {
       xi = pAffineTP.x;
       yi = pAffineTP.y;
       zi = pAffineTP.z;
@@ -108,8 +99,7 @@ public class PostSmartCropFunc extends VariationFunc {
         pVarTP.z += pAmount * zi;
         return;
       }
-    }
-    else {
+    } else {
       double coeff;
       if (distortion == 0.0)
         coeff = 1;
@@ -185,7 +175,7 @@ public class PostSmartCropFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, radius, roundstr, roundwidth, distortion, edge, scatter, offset, cropmode, _static };
+    return new Object[]{power, radius, roundstr, roundwidth, distortion, edge, scatter, offset, cropmode, _static};
   }
 
   @Override
@@ -231,8 +221,7 @@ public class PostSmartCropFunc extends VariationFunc {
     if (post_scrop_workpower < 2) {
       post_scrop_workpower = post_scrop_workpower * M_PI;
       post_scrop_radial = true;
-    }
-    else {
+    } else {
       post_scrop_radial = false;
       post_scrop_alpha = M_2PI / post_scrop_workpower;
       post_scrop_roundcoeff = roundstr / sin(post_scrop_alpha / 2.0) / post_scrop_workpower * 2.0;
@@ -242,7 +231,7 @@ public class PostSmartCropFunc extends VariationFunc {
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "post_scrop_power", "post_scrop_radius", "post_scrop_roundstr", "post_scrop_roundwidth", "post_scrop_distortion", "post_scrop_edge", "post_scrop_scatter", "post_scrop_offset", "post_scrop_cropmode", "post_scrop_static" };
+    return new String[]{"post_scrop_power", "post_scrop_radius", "post_scrop_roundstr", "post_scrop_roundwidth", "post_scrop_distortion", "post_scrop_edge", "post_scrop_scatter", "post_scrop_offset", "post_scrop_cropmode", "post_scrop_static"};
   }
 
   @Override

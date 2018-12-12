@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation.mesh;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import org.jwildfire.base.Tools;
-
 import com.owens.oobjloader.builder.Build;
 import com.owens.oobjloader.parser.Parse;
+import org.jwildfire.base.Tools;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class OBJMeshUtil {
   public static SimpleMesh createDfltMesh() {
@@ -50,7 +45,8 @@ public class OBJMeshUtil {
 
   public static SimpleMesh loadAndSmoothMeshFromFile(String pFilename, int subdiv_smooth_passes, int subdiv_level, double subdiv_smooth_lambda, double subdiv_smooth_mu) throws Exception {
     Build builder = new Build();
-    /*    Parse obj =*/new Parse(builder, pFilename);
+    /*    Parse obj =*/
+    new Parse(builder, pFilename);
 
     SimpleMesh mesh = new SimpleMesh();
     for (com.owens.oobjloader.builder.Face face : builder.faces) {
@@ -65,15 +61,13 @@ public class OBJMeshUtil {
           v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z, f1.t.u, f1.t.v);
           v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
           v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
-        }
-        else {
+        } else {
           v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
           v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
           v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
         }
         mesh.addFace(v0, v1, v2);
-      }
-      else if (vertices.size() == 4) {
+      } else if (vertices.size() == 4) {
         com.owens.oobjloader.builder.FaceVertex f1 = vertices.get(0);
         com.owens.oobjloader.builder.FaceVertex f2 = vertices.get(1);
         com.owens.oobjloader.builder.FaceVertex f3 = vertices.get(2);
@@ -84,8 +78,7 @@ public class OBJMeshUtil {
           v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z, f2.t.u, f2.t.v);
           v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z, f3.t.u, f3.t.v);
           v3 = mesh.addVertex(f4.v.x, f4.v.y, f4.v.z, f4.t.u, f4.t.v);
-        }
-        else {
+        } else {
           v0 = mesh.addVertex(f1.v.x, f1.v.y, f1.v.z);
           v1 = mesh.addVertex(f2.v.x, f2.v.y, f2.v.z);
           v2 = mesh.addVertex(f3.v.x, f3.v.y, f3.v.z);
@@ -100,8 +93,7 @@ public class OBJMeshUtil {
         mesh = mesh.interpolate();
         mesh.taubinSmooth(subdiv_smooth_passes, subdiv_smooth_lambda, subdiv_smooth_mu);
       }
-    }
-    else {
+    } else {
       mesh.distributeFaces();
     }
     return mesh;

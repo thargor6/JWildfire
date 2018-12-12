@@ -1,22 +1,22 @@
-
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 
 import java.util.Arrays;
 import java.util.Random;
 
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Jesus Sosa
  * @date October 17, 2017
  * https://introcs.cs.princeton.edu/java/23recursion/BrownianIsland.java.html
  * brownian_js
- * 
+ * <p>
  * Variation params:
  * Level:  1,2,3,4,5
  * variation: length of path
@@ -25,10 +25,6 @@ import org.jwildfire.base.mathlib.MathLib;
  * show_points 0: hiden points 1=show points
  * point_thickness
  */
-
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
 
 public class BrownianFunc extends VariationFunc {
 
@@ -42,9 +38,9 @@ public class BrownianFunc extends VariationFunc {
   private static final String PARAM_SHOW_POINTS = "show_points";
   private static final String PARAM_POINT_THICKNESS = "point_thickness";
 
-  private static final String[] paramNames = { PARAM_LEVEL, PARAM_VARIATION, PARAM_SEED,
-      PARAM_LINE_THICKNESS, PARAM_SHOW_LINES, PARAM_SHOW_POINTS,
-      PARAM_POINT_THICKNESS };
+  private static final String[] paramNames = {PARAM_LEVEL, PARAM_VARIATION, PARAM_SEED,
+          PARAM_LINE_THICKNESS, PARAM_SHOW_LINES, PARAM_SHOW_POINTS,
+          PARAM_POINT_THICKNESS};
 
   //  private  DynamicArray2D xyPoints = new DynamicArray2D(1000); 
 
@@ -241,8 +237,7 @@ public class BrownianFunc extends VariationFunc {
         p2.x = p.x;
         p2.y = p.y;
         return true;
-      }
-      else
+      } else
         return false;
     }
 
@@ -253,6 +248,7 @@ public class BrownianFunc extends VariationFunc {
 
     // Random random=new Random(System.currentTimeMillis());
     // Random random=new Random((long) seed_param);
+
     /**
      * Returns a random real number uniformly in [0, 1).
      *
@@ -265,9 +261,9 @@ public class BrownianFunc extends VariationFunc {
 
     /**
      * Returns a random real number uniformly in [a, b).
-     * 
-     * @param  a the left endpoint
-     * @param  b the right endpoint
+     *
+     * @param a the left endpoint
+     * @param b the right endpoint
      * @return a random real number uniformly in [a, b)
      * @throws IllegalArgumentException unless {@code a < b}
      */
@@ -296,11 +292,11 @@ public class BrownianFunc extends VariationFunc {
     /**
      * Returns a random real number from a Gaussian distribution with mean &mu;
      * and standard deviation &sigma;.
-     * 
-     * @param  mu the mean
-     * @param  sigma the standard deviation
+     *
+     * @param mu    the mean
+     * @param sigma the standard deviation
      * @return a real number distributed according to the Gaussian distribution
-     *         with mean {@code mu} and standard deviation {@code sigma}
+     * with mean {@code mu} and standard deviation {@code sigma}
      */
     public double gaussian(double mu, double sigma) {
       return mu + sigma * gaussian();
@@ -393,8 +389,7 @@ public class BrownianFunc extends VariationFunc {
       double rangle = (pContext.random() * M_2PI);
       xoffset = roffset * cos(rangle);
       yoffset = roffset * sin(rangle);
-    }
-    else {
+    } else {
       xoffset = 0;
       yoffset = 0;
     }
@@ -439,7 +434,7 @@ public class BrownianFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { level, variation, seed_param, line_thickness_param, show_lines_param, show_points_param, point_thickness_param };
+    return new Object[]{level, variation, seed_param, line_thickness_param, show_lines_param, show_points_param, point_thickness_param};
   }
 
   @Override
@@ -451,8 +446,7 @@ public class BrownianFunc extends VariationFunc {
       canvas.setLevel(level);
       canvas.setVariation(variation);
       canvas.draw();
-    }
-    else if (PARAM_VARIATION.equalsIgnoreCase(pName))
+    } else if (PARAM_VARIATION.equalsIgnoreCase(pName))
       variation = pValue;
     else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness_param = pValue;
@@ -463,9 +457,7 @@ public class BrownianFunc extends VariationFunc {
       canvas.setLevel(level);
       canvas.setVariation(variation);
       canvas.draw();
-    }
-
-    else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
+    } else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = pValue;
     else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
       show_points_param = pValue;

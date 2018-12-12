@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class SwirlFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,8 +33,8 @@ public class SwirlFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount * (c1 * pAffineTP.x - c2 * pAffineTP.y);
     pVarTP.y += pAmount * (c2 * pAffineTP.x + c1 * pAffineTP.y);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

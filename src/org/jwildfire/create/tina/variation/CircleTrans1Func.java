@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CircleTrans1Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +30,7 @@ public class CircleTrans1Func extends VariationFunc {
   private static final String PARAM_X = "X";
   private static final String PARAM_Y = "Y";
   private static final String PARAM_SEED = "Seed";
-  private static final String[] paramNames = { PARAM_SC, PARAM_DENS, PARAM_X, PARAM_Y, PARAM_SEED };
+  private static final String[] paramNames = {PARAM_SC, PARAM_DENS, PARAM_X, PARAM_Y, PARAM_SEED};
 
   private double Sc = 1.0;
   private double Dens = 0.5;
@@ -109,8 +104,8 @@ public class CircleTrans1Func extends VariationFunc {
     pVarTP.x += pAmount * Uxy.x;
     pVarTP.y += pAmount * Uxy.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -120,7 +115,7 @@ public class CircleTrans1Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { Sc, Dens, X, Y, Seed };
+    return new Object[]{Sc, Dens, X, Y, Seed};
   }
 
   @Override

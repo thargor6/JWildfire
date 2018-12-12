@@ -23,7 +23,7 @@ public class ExtrudeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ROOT_FACE = "root_face";
-  private static final String[] paramNames = { PARAM_ROOT_FACE };
+  private static final String[] paramNames = {PARAM_ROOT_FACE};
 
   private double root_face = 0.5;
 
@@ -36,8 +36,7 @@ public class ExtrudeFunc extends VariationFunc {
     /* extrude by Xyrus02, http://xyrus-02.deviantart.com/art/Extrude-Plugin-for-Apophysis-172778628 */
     if ((((rand(pContext) ^ (rand(pContext) << 15)) & 0xfffffff) / (double) 0xfffffff) < root_face) {
       pVarTP.z = (pAmount < 0 ? 0 : pAmount);
-    }
-    else {
+    } else {
       pVarTP.z = pAmount * (((rand(pContext) ^ (rand(pContext) << 15)) & 0xfffffff) / (double) 0xfffffff);
     }
   }
@@ -49,7 +48,7 @@ public class ExtrudeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { root_face };
+    return new Object[]{root_face};
   }
 
   @Override

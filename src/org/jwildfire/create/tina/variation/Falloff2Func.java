@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.asin;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.frac;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Falloff2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +38,7 @@ public class Falloff2Func extends VariationFunc {
   private static final String PARAM_INVERT = "invert";
   private static final String PARAM_TYPE = "type";
 
-  private static final String[] paramNames = { PARAM_SCATTER, PARAM_MINDIST, PARAM_MUL_X, PARAM_MUL_Y, PARAM_MUL_Z, PARAM_MUL_C, PARAM_X0, PARAM_Y0, PARAM_Z0, PARAM_INVERT, PARAM_TYPE };
+  private static final String[] paramNames = {PARAM_SCATTER, PARAM_MINDIST, PARAM_MUL_X, PARAM_MUL_Y, PARAM_MUL_Z, PARAM_MUL_C, PARAM_X0, PARAM_Y0, PARAM_Z0, PARAM_INVERT, PARAM_TYPE};
 
   private double scatter = 1.0;
   private double mindist = 0.5;
@@ -152,7 +144,7 @@ public class Falloff2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scatter, mindist, mul_x, mul_y, mul_z, mul_c, x0, y0, z0, invert, type };
+    return new Object[]{scatter, mindist, mul_x, mul_y, mul_z, mul_c, x0, y0, z0, invert, type};
   }
 
   @Override
@@ -161,13 +153,11 @@ public class Falloff2Func extends VariationFunc {
       scatter = pValue;
       if (scatter < 1.0e-6)
         scatter = 1.0e-6;
-    }
-    else if (PARAM_MINDIST.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MINDIST.equalsIgnoreCase(pName)) {
       mindist = pValue;
       if (mindist < 0.0)
         mindist = 0.0;
-    }
-    else if (PARAM_MUL_X.equalsIgnoreCase(pName))
+    } else if (PARAM_MUL_X.equalsIgnoreCase(pName))
       mul_x = limitVal(pValue, 0.0, 1.0);
     else if (PARAM_MUL_Y.equalsIgnoreCase(pName))
       mul_y = limitVal(pValue, 0.0, 1.0);

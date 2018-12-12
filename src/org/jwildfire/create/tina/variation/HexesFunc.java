@@ -23,20 +23,13 @@
 
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.create.tina.variation.VoronoiTools.VORONOI_MAXPOINTS;
-import static org.jwildfire.create.tina.variation.VoronoiTools._x_;
-import static org.jwildfire.create.tina.variation.VoronoiTools._y_;
-import static org.jwildfire.create.tina.variation.VoronoiTools.closest;
-import static org.jwildfire.create.tina.variation.VoronoiTools.voronoi;
-
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
+import static org.jwildfire.create.tina.variation.VoronoiTools.*;
 
 public class HexesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +39,7 @@ public class HexesFunc extends VariationFunc {
   private static final String PARAM_ROTATE = "rotate";
   private static final String PARAM_SCALE = "scale";
 
-  protected static final String[] paramNames = { PARAM_CELLSIZE, PARAM_POWER, PARAM_ROTATE, PARAM_SCALE };
+  protected static final String[] paramNames = {PARAM_CELLSIZE, PARAM_POWER, PARAM_ROTATE, PARAM_SCALE};
 
   private double cellsize = 1.0;
   private double power = 1.0;
@@ -85,7 +78,7 @@ public class HexesFunc extends VariationFunc {
   private static final double d_cart = 1.7320508075688772935 / 2.0;
   //Now:  Yo = ( c_cart * Xh + d_cart * Yh ) * l;
 
-  private static final int cell_choice[][] = new int[][] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
+  private static final int cell_choice[][] = new int[][]{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 0}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
   //centre gives centre co-ordinates either from cache,
   //or calculated from scratch if needed
@@ -183,12 +176,10 @@ public class HexesFunc extends VariationFunc {
 
     if (L < 0.5) {
       R = trgL / L1;
-    }
-    else {
+    } else {
       if (L > 0.8) {
         R = trgL / L2;
-      }
-      else {
+      } else {
         R = ((trgL / L1) * (0.8 - L) + (trgL / L2) * (L - 0.5)) / 0.3;
       }
     }
@@ -216,7 +207,7 @@ public class HexesFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cellsize, power, rotate, scale };
+    return new Object[]{cellsize, power, rotate, scale};
   }
 
   @Override

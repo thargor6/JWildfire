@@ -16,22 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class AsteriaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ALPHA = "alpha";
-  private static final String[] paramNames = { PARAM_ALPHA };
+  private static final String[] paramNames = {PARAM_ALPHA};
 
   private double alpha = 0.0;
 
@@ -56,10 +51,9 @@ public class AsteriaFunc extends VariationFunc {
       pVarTP.x += x0;
       pVarTP.y += y0;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
-    }
-    else { // asteria
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
+    } else { // asteria
       xx = x0 * cosa - y0 * sina;
       yy = x0 * sina + y0 * cosa;
       double nx = xx / sqrt(1. - yy * yy) * (1. - sqrt(1. - sqr(-fabs(yy) + 1.)));
@@ -68,8 +62,8 @@ public class AsteriaFunc extends VariationFunc {
       pVarTP.x += xx;
       pVarTP.y += yy;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
   }
 
@@ -80,7 +74,7 @@ public class AsteriaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { alpha };
+    return new Object[]{alpha};
   }
 
   @Override

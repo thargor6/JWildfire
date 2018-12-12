@@ -16,18 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JuliaN2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -40,7 +34,7 @@ public class JuliaN2Func extends VariationFunc {
   private static final String PARAM_D = "d";
   private static final String PARAM_E = "e";
   private static final String PARAM_F = "f";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E, PARAM_F};
 
   private int power = genRandomPower();
   private double dist = 1.0;
@@ -67,8 +61,8 @@ public class JuliaN2Func extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -78,7 +72,7 @@ public class JuliaN2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist, a, b, c, d, e, f };
+    return new Object[]{power, dist, a, b, c, d, e, f};
   }
 
   @Override

@@ -17,22 +17,16 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 /**
-* @author Branden Brown, a.k.a. zephyrtronium, transcribed by Nic Anderson, chronologicaldot
-* @date July 19, 2014 (transcribe)
-*/
+ * @author Branden Brown, a.k.a. zephyrtronium, transcribed by Nic Anderson, chronologicaldot
+ * @date July 19, 2014 (transcribe)
+ */
 public class PostHeatFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -46,7 +40,7 @@ public class PostHeatFunc extends VariationFunc {
   private static final String PARAM_R_PHASE = "r_phase";
   private static final String PARAM_R_AMPLITUDE = "r_amp";
 
-  private static final String[] paramNames = { PARAM_THETA_PERIOD, PARAM_THETA_PHASE, PARAM_THETA_AMPLITUDE, PARAM_PHI_PERIOD, PARAM_PHI_PHASE, PARAM_PHI_AMPLITUDE, PARAM_R_PERIOD, PARAM_R_PHASE, PARAM_R_AMPLITUDE };
+  private static final String[] paramNames = {PARAM_THETA_PERIOD, PARAM_THETA_PHASE, PARAM_THETA_AMPLITUDE, PARAM_PHI_PERIOD, PARAM_PHI_PHASE, PARAM_PHI_AMPLITUDE, PARAM_R_PERIOD, PARAM_R_PHASE, PARAM_R_AMPLITUDE};
 
   double theta_period = 0.0;
   double theta_phase = 0.0;
@@ -94,8 +88,7 @@ public class PostHeatFunc extends VariationFunc {
 
     if (r != 0) {
       acosp = pVarTP.z / r;
-    }
-    else {
+    } else {
       acosp = 0; //pVarTP.z >= 0? 10000 : -10000;
     }
 
@@ -120,42 +113,33 @@ public class PostHeatFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] {
-        theta_period, theta_phase, theta_amp,
-        phi_period, phi_phase, phi_amp,
-        r_period, r_phase, r_amp };
+    return new Object[]{
+            theta_period, theta_phase, theta_amp,
+            phi_period, phi_phase, phi_amp,
+            r_period, r_phase, r_amp};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_THETA_PERIOD)) {
       theta_period = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_THETA_PHASE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_THETA_PHASE)) {
       theta_phase = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_THETA_AMPLITUDE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_THETA_AMPLITUDE)) {
       theta_amp = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_PHI_PERIOD)) {
+    } else if (pName.equalsIgnoreCase(PARAM_PHI_PERIOD)) {
       phi_period = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_PHI_PHASE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_PHI_PHASE)) {
       phi_phase = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_PHI_AMPLITUDE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_PHI_AMPLITUDE)) {
       phi_amp = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_R_PERIOD)) {
+    } else if (pName.equalsIgnoreCase(PARAM_R_PERIOD)) {
       r_period = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_R_PHASE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_R_PHASE)) {
       r_phase = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_R_AMPLITUDE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_R_AMPLITUDE)) {
       r_amp = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

@@ -16,17 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JuliaCFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +27,7 @@ public class JuliaCFunc extends VariationFunc {
   private static final String PARAM_RE = "re";
   private static final String PARAM_IM = "im";
   private static final String PARAM_DIST = "dist";
-  private static final String[] paramNames = { PARAM_RE, PARAM_IM, PARAM_DIST };
+  private static final String[] paramNames = {PARAM_RE, PARAM_IM, PARAM_DIST};
 
   private double re = genRandomPower();
   private double im = 0.0;
@@ -56,8 +49,8 @@ public class JuliaCFunc extends VariationFunc {
     pVarTP.y += pAmount * mod2 * s;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -68,15 +61,14 @@ public class JuliaCFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { re, im, dist };
+    return new Object[]{re, im, dist};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_RE.equalsIgnoreCase(pName)) {
       re = pValue;
-    }
-    else if (PARAM_IM.equalsIgnoreCase(pName))
+    } else if (PARAM_IM.equalsIgnoreCase(pName))
       im = pValue;
     else if (PARAM_DIST.equalsIgnoreCase(pName))
       dist = pValue;
@@ -96,7 +88,7 @@ public class JuliaCFunc extends VariationFunc {
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "juliac_re", "juliac_im", "juliac_dist" };
+    return new String[]{"juliac_re", "juliac_im", "juliac_dist"};
   }
 
 }

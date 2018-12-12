@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EscherFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_BETA = "beta";
 
-  private static final String[] paramNames = { PARAM_BETA };
+  private static final String[] paramNames = {PARAM_BETA};
 
   private double beta = 0.30;
 
@@ -55,8 +52,8 @@ public class EscherFunc extends VariationFunc {
     pVarTP.x += m * cn;
     pVarTP.y += m * sn;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -66,7 +63,7 @@ public class EscherFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { beta };
+    return new Object[]{beta};
   }
 
   @Override

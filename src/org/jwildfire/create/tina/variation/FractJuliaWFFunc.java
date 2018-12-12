@@ -17,11 +17,11 @@
 
 package org.jwildfire.create.tina.variation;
 
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+
+import java.util.List;
 
 public class FractJuliaWFFunc extends AbstractFractWFFunc {
   private static final long serialVersionUID = 1L;
@@ -59,12 +59,10 @@ public class FractJuliaWFFunc extends AbstractFractWFFunc {
       if (power < 2)
         power = 2;
       return true;
-    }
-    else if (PARAM_XSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_XSEED.equalsIgnoreCase(pName)) {
       xseed = pValue;
       return true;
-    }
-    else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YSEED.equalsIgnoreCase(pName)) {
       yseed = pValue;
       return true;
     }

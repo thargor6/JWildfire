@@ -16,20 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TargetFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,7 +28,7 @@ public class TargetFunc extends VariationFunc {
   private static final String PARAM_EVEN = "even";
   private static final String PARAM_ODD = "odd";
   private static final String PARAM_SIZE = "size";
-  private static final String[] paramNames = { PARAM_EVEN, PARAM_ODD, PARAM_SIZE };
+  private static final String[] paramNames = {PARAM_EVEN, PARAM_ODD, PARAM_SIZE};
 
   private double even = -M_PI + Math.random() + M_2PI;
   private double odd = -M_PI + Math.random() + M_2PI;
@@ -66,8 +57,8 @@ public class TargetFunc extends VariationFunc {
     pVarTP.y += r * s;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -78,7 +69,7 @@ public class TargetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { even, odd, size };
+    return new Object[]{even, odd, size};
   }
 
   @Override

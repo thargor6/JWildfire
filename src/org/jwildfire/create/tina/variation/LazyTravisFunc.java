@@ -16,13 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LazyTravisFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +28,7 @@ public class LazyTravisFunc extends VariationFunc {
   private static final String PARAM_SPIN_IN = "spin_in";
   private static final String PARAM_SPIN_OUT = "spin_out";
   private static final String PARAM_SPACE = "space";
-  private static final String[] paramNames = { PARAM_SPIN_IN, PARAM_SPIN_OUT, PARAM_SPACE };
+  private static final String[] paramNames = {PARAM_SPIN_IN, PARAM_SPIN_OUT, PARAM_SPACE};
 
   private double spin_in = 1.0;
   private double spin_out = 0.5;
@@ -50,17 +48,14 @@ public class LazyTravisFunc extends VariationFunc {
         s = x;
         if (pAffineTP.x > 0.0) {
           p = s + pAffineTP.y + s * _spin_out;
-        }
-        else {
+        } else {
           p = 5.0 * s - pAffineTP.y + s * _spin_out;
         }
-      }
-      else {
+      } else {
         s = y;
         if (pAffineTP.y > 0.0) {
           p = 3.0 * s - pAffineTP.x + s * _spin_out;
-        }
-        else {
+        } else {
           p = 7.0 * s + pAffineTP.x + s * _spin_out;
         }
       }
@@ -71,19 +66,16 @@ public class LazyTravisFunc extends VariationFunc {
         x2 = s + space;
         y2 = -(1.0 * s - p);
         y2 = y2 + y2 / s * space;
-      }
-      else if (p <= 4.0 * s) {
+      } else if (p <= 4.0 * s) {
 
         y2 = s + space;
         x2 = (3.0 * s - p);
         x2 = x2 + x2 / s * space;
-      }
-      else if (p <= 6.0 * s) {
+      } else if (p <= 6.0 * s) {
         x2 = -(s + space);
         y2 = (5.0 * s - p);
         y2 = y2 + y2 / s * space;
-      }
-      else {
+      } else {
         y2 = -(s + space);
         x2 = -(7.0 * s - p);
         x2 = x2 + x2 / s * space;
@@ -91,23 +83,19 @@ public class LazyTravisFunc extends VariationFunc {
 
       pVarTP.x += pAmount * x2;
       pVarTP.y += pAmount * y2;
-    }
-    else {
+    } else {
       if (x > y) {
         s = x;
         if (pAffineTP.x > 0.0) {
           p = s + pAffineTP.y + s * _spin_in;
-        }
-        else {
+        } else {
           p = 5.0 * s - pAffineTP.y + s * _spin_in;
         }
-      }
-      else {
+      } else {
         s = y;
         if (pAffineTP.y > 0.0) {
           p = 3.0 * s - pAffineTP.x + s * _spin_in;
-        }
-        else {
+        } else {
           p = 7.0 * s + pAffineTP.x + s * _spin_in;
         }
       }
@@ -117,23 +105,20 @@ public class LazyTravisFunc extends VariationFunc {
       if (p <= 2.0 * s) {
         pVarTP.x += pAmount * s;
         pVarTP.y -= pAmount * (s - p);
-      }
-      else if (p <= 4.0 * s) {
+      } else if (p <= 4.0 * s) {
         pVarTP.x += pAmount * (3.0 * s - p);
         pVarTP.y += pAmount * s;
-      }
-      else if (p <= 6.0 * s) {
+      } else if (p <= 6.0 * s) {
         pVarTP.x -= pAmount * s;
         pVarTP.y += pAmount * (5.0 * s - p);
-      }
-      else {
+      } else {
         pVarTP.x -= pAmount * (7.0 * s - p);
         pVarTP.y -= pAmount * s;
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -143,7 +128,7 @@ public class LazyTravisFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { spin_in, spin_out, space };
+    return new Object[]{spin_in, spin_out, space};
   }
 
   @Override

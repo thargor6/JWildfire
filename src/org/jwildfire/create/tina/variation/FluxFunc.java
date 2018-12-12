@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class FluxFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SPREAD = "spread";
 
-  private static final String[] paramNames = { PARAM_SPREAD };
+  private static final String[] paramNames = {PARAM_SPREAD};
 
   private double spread = 0.30;
 
@@ -45,8 +42,8 @@ public class FluxFunc extends VariationFunc {
     pVarTP.y += avgr * sin(avga);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -57,7 +54,7 @@ public class FluxFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { spread };
+    return new Object[]{spread};
   }
 
   @Override

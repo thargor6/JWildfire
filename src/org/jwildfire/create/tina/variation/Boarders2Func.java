@@ -16,13 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.rint;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Boarders2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +28,7 @@ public class Boarders2Func extends VariationFunc {
   private static final String PARAM_C = "c";
   private static final String PARAM_LEFT = "left";
   private static final String PARAM_RIGHT = "right";
-  private static final String[] paramNames = { PARAM_C, PARAM_LEFT, PARAM_RIGHT };
+  private static final String[] paramNames = {PARAM_C, PARAM_LEFT, PARAM_RIGHT};
 
   private double c = 0.4;
   private double left = 0.65;
@@ -46,32 +44,28 @@ public class Boarders2Func extends VariationFunc {
     if (pContext.random() >= _cr) {
       pVarTP.x += pAmount * (offsetX * _c + roundX);
       pVarTP.y += pAmount * (offsetY * _c + roundY);
-    }
-    else {
+    } else {
       if (fabs(offsetX) >= fabs(offsetY)) {
         if (offsetX >= 0.0) {
           pVarTP.x += pAmount * (offsetX * _c + roundX + _cl);
           pVarTP.y += pAmount * (offsetY * _c + roundY + _cl * offsetY / offsetX);
-        }
-        else {
+        } else {
           pVarTP.x += pAmount * (offsetX * _c + roundX - _cl);
           pVarTP.y += pAmount * (offsetY * _c + roundY - _cl * offsetY / offsetX);
         }
-      }
-      else {
+      } else {
         if (offsetY >= 0.0) {
           pVarTP.y += pAmount * (offsetY * _c + roundY + _cl);
           pVarTP.x += pAmount * (offsetX * _c + roundX + offsetX / offsetY * _cl);
-        }
-        else {
+        } else {
           pVarTP.y += pAmount * (offsetY * _c + roundY - _cl);
           pVarTP.x += pAmount * (offsetX * _c + roundX - offsetX / offsetY * _cl);
         }
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -81,7 +75,7 @@ public class Boarders2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { c, left, right };
+    return new Object[]{c, left, right};
   }
 
   @Override

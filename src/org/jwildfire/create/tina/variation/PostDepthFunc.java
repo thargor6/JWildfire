@@ -16,18 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.log;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PostDepthFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
-  private static final String[] paramNames = { PARAM_POWER };
+  private static final String[] paramNames = {PARAM_POWER};
 
   private double power = 1.0;
 
@@ -50,7 +48,7 @@ public class PostDepthFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power };
+    return new Object[]{power};
   }
 
   @Override

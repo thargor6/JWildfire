@@ -16,22 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Fan2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
 
   private double x = 0.5;
   private double y = 1.2;
@@ -42,8 +37,7 @@ public class Fan2Func extends VariationFunc {
     double angle;
     if ((pAffineTP.x < -SMALL_EPSILON) || (pAffineTP.x > SMALL_EPSILON) || (pAffineTP.y < -SMALL_EPSILON) || (pAffineTP.y > SMALL_EPSILON)) {
       angle = atan2(pAffineTP.x, pAffineTP.y);
-    }
-    else {
+    } else {
       angle = 0.0;
     }
 
@@ -55,16 +49,15 @@ public class Fan2Func extends VariationFunc {
     double a;
     if (t > dx2) {
       a = angle - dx2;
-    }
-    else {
+    } else {
       a = angle + dx2;
     }
 
     pVarTP.x += pAmount * r * sin(a);
     pVarTP.y += pAmount * r * cos(a);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -74,7 +67,7 @@ public class Fan2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[]{x, y};
   }
 
   @Override

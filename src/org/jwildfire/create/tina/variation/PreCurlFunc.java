@@ -25,7 +25,7 @@ public class PreCurlFunc extends VariationFunc {
 
   private static final String PARAM_C1 = "c1";
   private static final String PARAM_C2 = "c2";
-  private static final String[] paramNames = { PARAM_C1, PARAM_C2 };
+  private static final String[] paramNames = {PARAM_C1, PARAM_C2};
 
   private double c1 = 0;
   private double c2 = 0;
@@ -52,7 +52,7 @@ public class PreCurlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { c1, c2 };
+    return new Object[]{c1, c2};
   }
 
   @Override

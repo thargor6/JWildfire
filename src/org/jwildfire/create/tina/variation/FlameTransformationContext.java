@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.Serializable;
-
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
+
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class FlameTransformationContext implements Serializable {

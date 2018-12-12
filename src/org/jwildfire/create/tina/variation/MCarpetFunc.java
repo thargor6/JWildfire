@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class MCarpetFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class MCarpetFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_TWIST = "twist";
   private static final String PARAM_TILT = "tilt";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_TWIST, PARAM_TILT };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_TWIST, PARAM_TILT};
 
   private double x = 1.0;
   private double y = 1.0;
@@ -45,8 +45,8 @@ public class MCarpetFunc extends VariationFunc {
     pVarTP.x += (1.0 - (this.twist * sqr(pAffineTP.x)) + pAffineTP.y) * pAmount;
     pVarTP.y += this.tilt * pAffineTP.x * pAmount;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -56,7 +56,7 @@ public class MCarpetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, twist, tilt };
+    return new Object[]{x, y, twist, tilt};
   }
 
   @Override

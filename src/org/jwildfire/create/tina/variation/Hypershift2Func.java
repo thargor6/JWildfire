@@ -16,12 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Hypershift2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,42 +29,42 @@ public class Hypershift2Func extends VariationFunc {
   private static final String PARAM_Q = "q";
 
 
-  private static final String[] paramNames = { PARAM_P, PARAM_Q};
+  private static final String[] paramNames = {PARAM_P, PARAM_Q};
 
-  private int   p = 3;
-  private int   q = 7;
+  private int p = 3;
+  private int q = 7;
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 
     // "Hypershift2" variation created by tatasz implemented into JWildfire by Brad Stefanov https://www.deviantart.com/tatasz/art/Hyperstuff-721510796
-	    double pq = M_PI/q;
-	    double pp = M_PI/p;
-	    double spq = sin(pq);
-	    double spp = sin(pp);
-	    double shift = sin(M_PI * 0.5 - pq - pp);
-	    shift = shift / sqrt(1 - sqr(spq)-sqr(spp));
-	    double scale2 = (1/sqrt(sqr(sin(M_PI/2+pp))/sqr(spq)-1.0));
-	    scale2 = scale2 * (sin(M_PI/2+pp)/spq-1.0);
-	    double scale = 1 - shift * shift;
-	    
-	    double FX = pAffineTP.x * scale2;
-	    double FY = pAffineTP.y * scale2;
+    double pq = M_PI / q;
+    double pp = M_PI / p;
+    double spq = sin(pq);
+    double spp = sin(pp);
+    double shift = sin(M_PI * 0.5 - pq - pp);
+    shift = shift / sqrt(1 - sqr(spq) - sqr(spp));
+    double scale2 = (1 / sqrt(sqr(sin(M_PI / 2 + pp)) / sqr(spq) - 1.0));
+    scale2 = scale2 * (sin(M_PI / 2 + pp) / spq - 1.0);
+    double scale = 1 - shift * shift;
 
-	    double rad = 1 / (FX * FX + FY * FY);
-	    double x = rad * FX + shift;
-	    double y = rad * FY;
-	    rad = pAmount * scale / (x * x + y * y);
-	    double angle = ((pContext.random(Integer.MAX_VALUE) % p) * 2.0 + 1.0) * M_PI / p;
-	    double X = rad * x + shift;
-	    double Y = rad * y;
-	    double cosa = cos(angle);
-	    double sina = sin(angle);
-	    pVarTP.x = cosa * X - sina * Y;
-	    pVarTP.y = sina * X + cosa * Y;
-	    pVarTP.z = pAffineTP.z * rad;
+    double FX = pAffineTP.x * scale2;
+    double FY = pAffineTP.y * scale2;
+
+    double rad = 1 / (FX * FX + FY * FY);
+    double x = rad * FX + shift;
+    double y = rad * FY;
+    rad = pAmount * scale / (x * x + y * y);
+    double angle = ((pContext.random(Integer.MAX_VALUE) % p) * 2.0 + 1.0) * M_PI / p;
+    double X = rad * x + shift;
+    double Y = rad * y;
+    double cosa = cos(angle);
+    double sina = sin(angle);
+    pVarTP.x = cosa * X - sina * Y;
+    pVarTP.y = sina * X + cosa * Y;
+    pVarTP.z = pAffineTP.z * rad;
   }
 
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -73,7 +72,7 @@ public class Hypershift2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { p, q };
+    return new Object[]{p, q};
   }
 
   @Override

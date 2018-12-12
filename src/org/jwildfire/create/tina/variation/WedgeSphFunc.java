@@ -16,15 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class WedgeSphFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +29,7 @@ public class WedgeSphFunc extends VariationFunc {
   private static final String PARAM_COUNT = "count";
   private static final String PARAM_SWIRL = "swirl";
 
-  private static final String[] paramNames = { PARAM_ANGLE, PARAM_HOLE, PARAM_COUNT, PARAM_SWIRL };
+  private static final String[] paramNames = {PARAM_ANGLE, PARAM_HOLE, PARAM_COUNT, PARAM_SWIRL};
 
   private double angle = 0.20;
   private double hole = 0.20;
@@ -60,8 +55,8 @@ public class WedgeSphFunc extends VariationFunc {
     pVarTP.x += r * ca;
     pVarTP.y += r * sa;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -71,7 +66,7 @@ public class WedgeSphFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle, hole, count, swirl };
+    return new Object[]{angle, hole, count, swirl};
   }
 
   @Override

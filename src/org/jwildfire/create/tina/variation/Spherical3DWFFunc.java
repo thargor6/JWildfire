@@ -16,15 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Spherical3DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +29,7 @@ public class Spherical3DWFFunc extends VariationFunc {
   public static final String PARAM_INVERT = "invert";
   private static final String PARAM_EXPONENT = "exponent";
 
-  private static final String[] paramNames = { PARAM_INVERT, PARAM_EXPONENT };
+  private static final String[] paramNames = {PARAM_INVERT, PARAM_EXPONENT};
 
   private int invert = 0;
   private double exponent = 2.0;
@@ -42,16 +39,14 @@ public class Spherical3DWFFunc extends VariationFunc {
     double r;
     if (_regularForm) {
       r = pAmount / (pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + SMALL_EPSILON);
-    }
-    else {
+    } else {
       r = pAmount / pow(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y + pAffineTP.z * pAffineTP.z + SMALL_EPSILON, exponent / 2.0);
     }
     if (invert == 0) {
       pVarTP.x += pAffineTP.x * r;
       pVarTP.y += pAffineTP.y * r;
       pVarTP.z += pAffineTP.z * r;
-    }
-    else /*if (invert == 1)*/{
+    } else /*if (invert == 1)*/ {
       pVarTP.x -= pAffineTP.x * r;
       pVarTP.y -= pAffineTP.y * r;
       pVarTP.z -= pAffineTP.z * r;
@@ -70,7 +65,7 @@ public class Spherical3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { invert, exponent };
+    return new Object[]{invert, exponent};
   }
 
   @Override

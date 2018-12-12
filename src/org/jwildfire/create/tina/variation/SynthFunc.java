@@ -16,19 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.asin;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SynthFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -74,7 +66,7 @@ public class SynthFunc extends VariationFunc {
   private static final String PARAM_F_PHS = "f_phs";
   private static final String PARAM_F_LAYER = "f_layer";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_MODE, PARAM_POWER, PARAM_MIX, PARAM_SMOOTH, PARAM_B, PARAM_B_TYPE, PARAM_B_SKEW, PARAM_B_FRQ, PARAM_B_PHS, PARAM_B_LAYER, PARAM_C, PARAM_C_TYPE, PARAM_C_SKEW, PARAM_C_FRQ, PARAM_C_PHS, PARAM_C_LAYER, PARAM_D, PARAM_D_TYPE, PARAM_D_SKEW, PARAM_D_FRQ, PARAM_D_PHS, PARAM_D_LAYER, PARAM_E, PARAM_E_TYPE, PARAM_E_SKEW, PARAM_E_FRQ, PARAM_E_PHS, PARAM_E_LAYER, PARAM_F, PARAM_F_TYPE, PARAM_F_SKEW, PARAM_F_FRQ, PARAM_F_PHS, PARAM_F_LAYER };
+  private static final String[] paramNames = {PARAM_A, PARAM_MODE, PARAM_POWER, PARAM_MIX, PARAM_SMOOTH, PARAM_B, PARAM_B_TYPE, PARAM_B_SKEW, PARAM_B_FRQ, PARAM_B_PHS, PARAM_B_LAYER, PARAM_C, PARAM_C_TYPE, PARAM_C_SKEW, PARAM_C_FRQ, PARAM_C_PHS, PARAM_C_LAYER, PARAM_D, PARAM_D_TYPE, PARAM_D_SKEW, PARAM_D_FRQ, PARAM_D_PHS, PARAM_D_LAYER, PARAM_E, PARAM_E_TYPE, PARAM_E_SKEW, PARAM_E_FRQ, PARAM_E_PHS, PARAM_E_LAYER, PARAM_F, PARAM_F_TYPE, PARAM_F_SKEW, PARAM_F_FRQ, PARAM_F_PHS, PARAM_F_LAYER};
 
   private double a = 1.0;
   private int mode = 3;
@@ -567,12 +559,12 @@ public class SynthFunc extends VariationFunc {
         pVarTP.y += pAmount * radius * c;
         break;
       default: // nothing to do
-          break;
+        break;
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -582,7 +574,7 @@ public class SynthFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, mode, power, mix, smooth, b, b_type, b_skew, b_frq, b_phs, b_layer, c, c_type, c_skew, c_frq, c_phs, c_layer, d, d_type, d_skew, d_frq, d_phs, d_layer, e, e_type, e_skew, e_frq, e_phs, e_layer, f, f_type, f_skew, f_frq, f_phs, f_layer };
+    return new Object[]{a, mode, power, mix, smooth, b, b_type, b_skew, b_frq, b_phs, b_layer, c, c_type, c_skew, c_frq, c_phs, c_layer, d, d_type, d_skew, d_frq, d_phs, d_layer, e, e_type, e_skew, e_frq, e_phs, e_layer, f, f_type, f_skew, f_frq, f_phs, f_layer};
   }
 
   @Override
@@ -766,8 +758,7 @@ public class SynthFunc extends VariationFunc {
         if (y > z) {
           // y is 0.5 if equals z, up to 1.0
           y = 0.5 + 0.5 * (y - z) / (1.0 - z + EPS);
-        }
-        else {
+        } else {
           // y is 0.5 if equals z, down to 0.0
           y = 0.5 - 0.5 * (z - y) / (z + EPS);
         }
@@ -842,8 +833,7 @@ public class SynthFunc extends VariationFunc {
         if (y > z) {
           // y is 0.5 if equals z, up to 1.0
           y = 0.5 + 0.5 * (y - z) / (1.0 - z + EPS);
-        }
-        else {
+        } else {
           // y is 0.5 if equals z, down to 0.0
           y = 0.5 - 0.5 * (z - y) / (z + EPS);
         }
@@ -918,8 +908,7 @@ public class SynthFunc extends VariationFunc {
         if (y > z) {
           // y is 0.5 if equals z, up to 1.0
           y = 0.5 + 0.5 * (y - z) / (1.0 - z + EPS);
-        }
-        else {
+        } else {
           // y is 0.5 if equals z, down to 0.0
           y = 0.5 - 0.5 * (z - y) / (z + EPS);
         }
@@ -994,8 +983,7 @@ public class SynthFunc extends VariationFunc {
         if (y > z) {
           // y is 0.5 if equals z, up to 1.0
           y = 0.5 + 0.5 * (y - z) / (1.0 - z + EPS);
-        }
-        else {
+        } else {
           // y is 0.5 if equals z, down to 0.0
           y = 0.5 - 0.5 * (z - y) / (z + EPS);
         }
@@ -1070,8 +1058,7 @@ public class SynthFunc extends VariationFunc {
         if (y > z) {
           // y is 0.5 if equals z, up to 1.0
           y = 0.5 + 0.5 * (y - z) / (1.0 - z + EPS);
-        }
-        else {
+        } else {
           // y is 0.5 if equals z, down to 0.0
           y = 0.5 - 0.5 * (z - y) / (z + EPS);
         }
@@ -1159,8 +1146,7 @@ public class SynthFunc extends VariationFunc {
 
     // iM is "inverse m" used in a few places below
     double iM = 1e10;
-    if (m > 1.0e-10)
-    {
+    if (m > 1.0e-10) {
       iM = 1.0 / m;
     }
 
@@ -1169,20 +1155,17 @@ public class SynthFunc extends VariationFunc {
     // "Non Curved"
     // Covers x >= L, or always true if m == 1.0
     // y = x  i.e. not distorted
-    if ((x > L) || (m == 1.0))
-    {
+    if ((x > L) || (m == 1.0)) {
       return a * x;
     }
 
-    if ((m < 1.0) && (x <= 1.0))
-    {
+    if ((m < 1.0) && (x <= 1.0)) {
       // Bezier Curve #1
       // Covers 0 <= $m <= 1.0, 0 <= $x <= 1.0
       // Control points are (0,0), (m,m) and (1,m)
 
       t = x; // Special case when m == 0.5
-      if ((m - 0.5) * (m - 0.5) > 1e-10)
-      {
+      if ((m - 0.5) * (m - 0.5) > 1e-10) {
         t = (-1.0 * m + sqrt(m * m + (1.0 - 2.0 * m) * x)) / (1.0 - 2.0 * m);
       }
 
@@ -1195,8 +1178,7 @@ public class SynthFunc extends VariationFunc {
       // Control points are (0,0), (iM,iM) and (1,m)
 
       t = x; // Special case when m == 2
-      if ((m - 2.0) * (m - 2.0) > 1e-10)
-      {
+      if ((m - 2.0) * (m - 2.0) > 1e-10) {
         t = (-1.0 * iM + sqrt(iM * iM + (1.0 - 2.0 * iM) * x)) / (1 - 2 * iM);
       }
       return a * (x + (m - 1.0) * t * t);

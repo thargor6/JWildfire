@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class CircleLinearFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class CircleLinearFunc extends VariationFunc {
   private static final String PARAM_X = "X";
   private static final String PARAM_Y = "Y";
   private static final String PARAM_SEED = "Seed";
-  private static final String[] paramNames = { PARAM_SC, PARAM_K, PARAM_DENS1, PARAM_DENS2, PARAM_REVERSE, PARAM_X, PARAM_Y, PARAM_SEED };
+  private static final String[] paramNames = {PARAM_SC, PARAM_K, PARAM_DENS1, PARAM_DENS2, PARAM_REVERSE, PARAM_X, PARAM_Y, PARAM_SEED};
 
   private double Sc = 1.0;
   private double K = 0.5;
@@ -72,19 +72,16 @@ public class CircleLinearFunc extends VariationFunc {
         if (Z1 < this.Dens1 * this.Dens2) {
           X = this.K * X;
           Y = this.K * Y;
-        }
-        else {
+        } else {
           Z = V / U * (1 - this.K) + this.K;
           X = Z * X;
           Y = Z * Y;
         }
-      }
-      else {
+      } else {
         if (Z1 > this.Dens1 * this.Dens2) {
           X = this.K * X;
           Y = this.K * Y;
-        }
-        else {
+        } else {
           Z = V / U * (1 - this.K) + this.K;
           X = Z * X;
           Y = Z * Y;
@@ -96,8 +93,8 @@ public class CircleLinearFunc extends VariationFunc {
     pVarTP.y += pAmount * (Y + (N * 2 + 1) * this.Sc);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -108,7 +105,7 @@ public class CircleLinearFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { Sc, K, Dens1, Dens2, Reverse, X, Y, Seed };
+    return new Object[]{Sc, K, Dens1, Dens2, Reverse, X, Y, Seed};
   }
 
   @Override

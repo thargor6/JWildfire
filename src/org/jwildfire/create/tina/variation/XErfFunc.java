@@ -16,29 +16,27 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 
 public class XErfFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
 
-
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-      // "xerf" variation created by zephyrtronium implemented into JWildfire by darkbeam
+    // "xerf" variation created by zephyrtronium implemented into JWildfire by darkbeam
 
     double r2 = sqr(sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(pAffineTP.z))); // sqr sqrt??? whatever
-    if (r2 <=SMALL_EPSILON) r2 = SMALL_EPSILON; // no overflow fix by Dark
+    if (r2 <= SMALL_EPSILON) r2 = SMALL_EPSILON; // no overflow fix by Dark
 
-    pVarTP.x += ( (fabs(pAffineTP.x) >= 2.0) ? (pAffineTP.x / r2 ): erf(pAffineTP.x)) * pAmount;
-    pVarTP.y += ( (fabs(pAffineTP.y) >= 2.0) ? (pAffineTP.y / r2 ): erf(pAffineTP.y)) * pAmount;
-    pVarTP.z += ( (fabs(pAffineTP.z) >= 2.0) ? (pAffineTP.z / r2 ): erf(pAffineTP.z)) * pAmount;
+    pVarTP.x += ((fabs(pAffineTP.x) >= 2.0) ? (pAffineTP.x / r2) : erf(pAffineTP.x)) * pAmount;
+    pVarTP.y += ((fabs(pAffineTP.y) >= 2.0) ? (pAffineTP.y / r2) : erf(pAffineTP.y)) * pAmount;
+    pVarTP.z += ((fabs(pAffineTP.z) >= 2.0) ? (pAffineTP.z / r2) : erf(pAffineTP.z)) * pAmount;
   }
-
 
 
   @Override

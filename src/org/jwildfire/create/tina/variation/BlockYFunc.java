@@ -16,15 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BlockYFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +28,7 @@ public class BlockYFunc extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
   private static final String PARAM_MP = "mp";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_MP };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_MP};
 
   private double x = 1.0;
   private double y = 1.0;
@@ -57,8 +53,8 @@ public class BlockYFunc extends VariationFunc {
     b = sqrt_safe(1.0 - sqr(a));
     pVarTP.y += this.v * atan2(a, b) * r * this.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   private double sqrt_safe(double x) {
@@ -74,7 +70,7 @@ public class BlockYFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, mp };
+    return new Object[]{x, y, mp};
   }
 
   @Override

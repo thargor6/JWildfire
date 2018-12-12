@@ -20,11 +20,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Affine3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,9 +42,9 @@ public class Affine3DFunc extends VariationFunc {
   private static final String PARAM_SHEAR_ZY = "shearZY";
 
 
-  private static final String[] paramNames = { PARAM_TRANSLATE_X, PARAM_TRANSLATE_Y, PARAM_TRANSLATE_Z, PARAM_SCALE_X,
+  private static final String[] paramNames = {PARAM_TRANSLATE_X, PARAM_TRANSLATE_Y, PARAM_TRANSLATE_Z, PARAM_SCALE_X,
           PARAM_SCALE_Y, PARAM_SCALE_Z, PARAM_ROTATE_X, PARAM_ROTATE_Y, PARAM_ROTATE_Z, PARAM_SHEAR_XY, PARAM_SHEAR_XZ,
-          PARAM_SHEAR_YX, PARAM_SHEAR_YZ, PARAM_SHEAR_ZX, PARAM_SHEAR_ZY };
+          PARAM_SHEAR_YX, PARAM_SHEAR_YZ, PARAM_SHEAR_ZX, PARAM_SHEAR_ZY};
 
   private double translateX;
   private double translateY;
@@ -72,15 +68,14 @@ public class Affine3DFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // based on "affine3D" of Framelet
-    if(_hasShear) {
-        pVarTP.x += pAmount * (_cosZ*(_cosY*(shearXY*scaleY*pAffineTP.y+shearXZ*scaleZ*pAffineTP.z+scaleX*pAffineTP.x)+_sinY*(_sinX*(shearYX*scaleX*pAffineTP.x+shearYZ*scaleZ*pAffineTP.z+scaleY*pAffineTP.y)+_cosX*(shearZX*scaleX*pAffineTP.x+shearZY*scaleY*pAffineTP.y+scaleZ*pAffineTP.z)))-_sinZ*(_cosX*(shearYX*scaleX*pAffineTP.x+shearYZ*scaleZ*pAffineTP.z+scaleY*pAffineTP.y)-_sinX*(shearZX*scaleX*pAffineTP.x+shearZY*scaleY*pAffineTP.y+scaleZ*pAffineTP.z))+translateX);
-        pVarTP.y += pAmount * (_sinZ*(_cosY*(shearXY*scaleY*pAffineTP.y+shearXZ*scaleZ*pAffineTP.z+scaleX*pAffineTP.x)+_sinY*(_sinX*(shearYX*scaleX*pAffineTP.x+shearYZ*scaleZ*pAffineTP.z+scaleY*pAffineTP.y)+_cosX*(shearZX*scaleX*pAffineTP.x+shearZY*scaleY*pAffineTP.y+scaleZ*pAffineTP.z)))+_cosZ*(_cosX*(shearYX*scaleX*pAffineTP.x+shearYZ*scaleZ*pAffineTP.z+scaleY*pAffineTP.y)-_sinX*(shearZX*scaleX*pAffineTP.x+shearZY*scaleY*pAffineTP.y+scaleZ*pAffineTP.z))+translateY);
-        pVarTP.z += pAmount * (-_sinY*(shearXY*scaleY*pAffineTP.y+shearXZ*scaleZ*pAffineTP.z+scaleX*pAffineTP.x)+_cosY*(_sinX*(shearYX*scaleX*pAffineTP.x+shearYZ*scaleZ*pAffineTP.z+scaleY*pAffineTP.y)+_cosX*(shearZX*scaleX*pAffineTP.x+shearZY*scaleY*pAffineTP.y+scaleZ*pAffineTP.z))+translateZ);
-    }
-    else {
-        pVarTP.x += pAmount * (_cosZ*(_cosY*scaleX*pAffineTP.x+_sinY*(_cosX*scaleZ*pAffineTP.z+_sinX*scaleY*pAffineTP.y))-_sinZ*(_cosX*scaleY*pAffineTP.y-_sinX*scaleZ*pAffineTP.z)+translateX);
-        pVarTP.y += pAmount * (_sinZ*(_cosY*scaleX*pAffineTP.x+_sinY*(_cosX*scaleZ*pAffineTP.z+_sinX*scaleY*pAffineTP.y))+_cosZ*(_cosX*scaleY*pAffineTP.y-_sinX*scaleZ*pAffineTP.z)+translateY);
-        pVarTP.z += pAmount * (-_sinY*scaleX*pAffineTP.x+_cosY*(_cosX*scaleZ*pAffineTP.z+_sinX*scaleY*pAffineTP.y)+translateZ);
+    if (_hasShear) {
+      pVarTP.x += pAmount * (_cosZ * (_cosY * (shearXY * scaleY * pAffineTP.y + shearXZ * scaleZ * pAffineTP.z + scaleX * pAffineTP.x) + _sinY * (_sinX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) + _cosX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z))) - _sinZ * (_cosX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) - _sinX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z)) + translateX);
+      pVarTP.y += pAmount * (_sinZ * (_cosY * (shearXY * scaleY * pAffineTP.y + shearXZ * scaleZ * pAffineTP.z + scaleX * pAffineTP.x) + _sinY * (_sinX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) + _cosX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z))) + _cosZ * (_cosX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) - _sinX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z)) + translateY);
+      pVarTP.z += pAmount * (-_sinY * (shearXY * scaleY * pAffineTP.y + shearXZ * scaleZ * pAffineTP.z + scaleX * pAffineTP.x) + _cosY * (_sinX * (shearYX * scaleX * pAffineTP.x + shearYZ * scaleZ * pAffineTP.z + scaleY * pAffineTP.y) + _cosX * (shearZX * scaleX * pAffineTP.x + shearZY * scaleY * pAffineTP.y + scaleZ * pAffineTP.z)) + translateZ);
+    } else {
+      pVarTP.x += pAmount * (_cosZ * (_cosY * scaleX * pAffineTP.x + _sinY * (_cosX * scaleZ * pAffineTP.z + _sinX * scaleY * pAffineTP.y)) - _sinZ * (_cosX * scaleY * pAffineTP.y - _sinX * scaleZ * pAffineTP.z) + translateX);
+      pVarTP.y += pAmount * (_sinZ * (_cosY * scaleX * pAffineTP.x + _sinY * (_cosX * scaleZ * pAffineTP.z + _sinX * scaleY * pAffineTP.y)) + _cosZ * (_cosX * scaleY * pAffineTP.y - _sinX * scaleZ * pAffineTP.z) + translateY);
+      pVarTP.z += pAmount * (-_sinY * scaleX * pAffineTP.x + _cosY * (_cosX * scaleZ * pAffineTP.z + _sinX * scaleY * pAffineTP.y) + translateZ);
     }
   }
 
@@ -91,8 +86,8 @@ public class Affine3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { translateX, translateY, translateZ, scaleX, scaleY, scaleZ, rotateX, rotateY, rotateZ, shearXY,
-            shearXZ, shearYX, shearYZ, shearZX, shearZY };
+    return new Object[]{translateX, translateY, translateZ, scaleX, scaleY, scaleZ, rotateX, rotateY, rotateZ, shearXY,
+            shearXZ, shearYX, shearYZ, shearZX, shearZY};
   }
 
   @Override
@@ -139,13 +134,13 @@ public class Affine3DFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     super.init(pContext, pLayer, pXForm, pAmount);
-    double xa =  rotateX * M_PI / 180.0;
+    double xa = rotateX * M_PI / 180.0;
     _sinX = sin(xa);
     _cosX = cos(xa);
-    double ya =  rotateY * M_PI / 180.0;
+    double ya = rotateY * M_PI / 180.0;
     _sinY = sin(ya);
     _cosY = cos(ya);
-    double za =  rotateZ * M_PI / 180.0;
+    double za = rotateZ * M_PI / 180.0;
     _sinZ = sin(za);
     _cosZ = cos(za);
     _hasShear = fabs(shearXY) > EPSILON || fabs(shearXZ) > EPSILON || fabs(shearYX) > EPSILON ||

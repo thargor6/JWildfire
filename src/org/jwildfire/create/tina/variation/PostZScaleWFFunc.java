@@ -26,7 +26,7 @@ public class PostZScaleWFFunc extends VariationFunc {
 
   private static final String PARAM_ZTRANSLATE = "ztranslate";
 
-  private static final String[] paramNames = { PARAM_ZTRANSLATE };
+  private static final String[] paramNames = {PARAM_ZTRANSLATE};
 
   private double ztranslate = 0.0;
 
@@ -47,7 +47,7 @@ public class PostZScaleWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { ztranslate };
+    return new Object[]{ztranslate};
   }
 
   @Override

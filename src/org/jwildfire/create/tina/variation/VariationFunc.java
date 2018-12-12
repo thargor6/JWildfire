@@ -16,33 +16,37 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.Serializable;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public abstract class VariationFunc implements Serializable {
 
 
-  /** called for the first instance/thread (there is one instance per thread). It is useful to use this method to implement heavy calculations, rather than using init() */
+  /**
+   * called for the first instance/thread (there is one instance per thread). It is useful to use this method to implement heavy calculations, rather than using init()
+   */
   public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
 
   }
 
-  /** called for each instance (there is one instance per thread) */
+  /**
+   * called for each instance (there is one instance per thread)
+   */
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
 
   }
 
   /**
    * Specifies the type of variation:
-   *    0: normal
-   *   -1: pre
-   *    1: post
-   *   -2: prepost, with inverse post
-   *    2: prepost, with inverse pre
+   * 0: normal
+   * -1: pre
+   * 1: post
+   * -2: prepost, with inverse post
+   * 2: prepost, with inverse pre
    */
   public int getPriority() {
     return 0;
@@ -52,7 +56,7 @@ public abstract class VariationFunc implements Serializable {
 
   // Only used by prepost transforms
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  
+
   }
 
   public abstract String getName();
@@ -120,11 +124,9 @@ public abstract class VariationFunc implements Serializable {
   public static double limitVal(double pValue, double pMin, double pMax) {
     if (pValue < pMin) {
       return pMin;
-    }
-    else if (pValue > pMax) {
+    } else if (pValue > pMax) {
       return pMax;
-    }
-    else {
+    } else {
       return pValue;
     }
   }
@@ -132,11 +134,9 @@ public abstract class VariationFunc implements Serializable {
   public static int limitIntVal(int pValue, int pMin, int pMax) {
     if (pValue < pMin) {
       return pMin;
-    }
-    else if (pValue > pMax) {
+    } else if (pValue > pMax) {
       return pMax;
-    }
-    else {
+    } else {
       return pValue;
     }
   }
@@ -167,9 +167,8 @@ public abstract class VariationFunc implements Serializable {
       for (int i = 0; i < paramNames.length; i++) {
         Object val = this.getParameterValues()[i];
         if (val instanceof Number) {
-          varCopy.setParameter(paramNames[i], ((Number)val).doubleValue());
-        }
-        else {
+          varCopy.setParameter(paramNames[i], ((Number) val).doubleValue());
+        } else {
           throw new IllegalStateException();
         }
       }
@@ -184,30 +183,42 @@ public abstract class VariationFunc implements Serializable {
     }
     return varCopy;
   }
-  
-  /** 
-   * if resourceCanModifyParams is true, it means that variation function
-   *   can dynamically add (or remove) parameters, depending on values of resource resourceName
-   *  in other words, calls to setRessource(resourceName, ...)) 
-   *       can change what is returned by getParameterNames() and getParameterValues()
-   */
-  public boolean ressourceCanModifyParams(String resourceName) { return false; }
-  
-  /** should return true if at least one resource can trigger parameter addition/removal */
-  public boolean ressourceCanModifyParams()  { return false; }  
-  
+
   /**
-   * if dynamicParameterExpansion is true, it means that variation function 
-   *   can dynamically add (or remove) parameters, depending on values of parameter paramName
-   *       in other words, calls to setParameter(paramName, ...)) 
-   *       can change what is returned by getParameterNames() and getParameterValues()
-   * current implementation to handle this assumes only one level depth of parameter expansion 
-   *       that is, if change to parameter paramName can cause a parameter B to be dynamically added/removed
-   *       then changes to parameter B cannot in turn cause additional parameters to be added/removed
+   * if resourceCanModifyParams is true, it means that variation function
+   * can dynamically add (or remove) parameters, depending on values of resource resourceName
+   * in other words, calls to setRessource(resourceName, ...))
+   * can change what is returned by getParameterNames() and getParameterValues()
    */
-  public boolean dynamicParameterExpansion(String paramName) { return false; }
-  
-  /** should return true if at least one parameter can trigger parameter addition/removal */
-  public boolean dynamicParameterExpansion() { return false; }
-  
+  public boolean ressourceCanModifyParams(String resourceName) {
+    return false;
+  }
+
+  /**
+   * should return true if at least one resource can trigger parameter addition/removal
+   */
+  public boolean ressourceCanModifyParams() {
+    return false;
+  }
+
+  /**
+   * if dynamicParameterExpansion is true, it means that variation function
+   * can dynamically add (or remove) parameters, depending on values of parameter paramName
+   * in other words, calls to setParameter(paramName, ...))
+   * can change what is returned by getParameterNames() and getParameterValues()
+   * current implementation to handle this assumes only one level depth of parameter expansion
+   * that is, if change to parameter paramName can cause a parameter B to be dynamically added/removed
+   * then changes to parameter B cannot in turn cause additional parameters to be added/removed
+   */
+  public boolean dynamicParameterExpansion(String paramName) {
+    return false;
+  }
+
+  /**
+   * should return true if at least one parameter can trigger parameter addition/removal
+   */
+  public boolean dynamicParameterExpansion() {
+    return false;
+  }
+
 }

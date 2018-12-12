@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class RoundSpher3DFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,14 +33,12 @@ public class RoundSpher3DFunc extends SimpleVariationFunc {
     double tempTZ, tempPZ;
     if (inZ == 0.0) {
       tempTZ = cos(f);
-    }
-    else {
+    } else {
       tempTZ = pAffineTP.z;
     }
     if (otherZ == 0.0) {
       tempPZ = cos(f);
-    }
-    else {
+    } else {
       tempPZ = pVarTP.z;
     }
     double d = sqr(pAffineTP.x) + sqr(pAffineTP.y) + sqr(tempTZ);

@@ -18,19 +18,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author eralex61, transcribed by chronologicaldot, fixed by thargor6
@@ -49,7 +41,7 @@ public class MobiusNFunc extends VariationFunc {
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIST = "dist";
 
-  private static final String[] params = { PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D, PARAM_POWER, PARAM_DIST };
+  private static final String[] params = {PARAM_RE_A, PARAM_RE_B, PARAM_RE_C, PARAM_RE_D, PARAM_IM_A, PARAM_IM_B, PARAM_IM_C, PARAM_IM_D, PARAM_POWER, PARAM_DIST};
 
   private double realA = 1.0, realB = 0.0, realC = 0.0, realD = 1.0, imagA = 0.0, imagB = 0.0, imagC = 0.0, imagD = 0.0, power = 1.0, dist = 1.0;
 
@@ -108,47 +100,37 @@ public class MobiusNFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { realA, realB, realC, realD, imagA, imagB, imagC, imagD, power, dist };
+    return new Object[]{realA, realB, realC, realD, imagA, imagB, imagC, imagD, power, dist};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "MobiusNRe_A", "MobiusNRe_B", "MobiusNRe_C", "MobiusNRe_D", "MobiusNIm_A", "MobiusNIm_B", "MobiusNIm_C", "MobiusNIm_D", "MobiusN_Power", "MobiusN_Dist" };
+    return new String[]{"MobiusNRe_A", "MobiusNRe_B", "MobiusNRe_C", "MobiusNRe_D", "MobiusNIm_A", "MobiusNIm_B", "MobiusNIm_C", "MobiusNIm_D", "MobiusN_Power", "MobiusN_Dist"};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_RE_A.equalsIgnoreCase(pName)) {
       realA = pValue;
-    }
-    else if (PARAM_RE_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RE_B.equalsIgnoreCase(pName)) {
       realB = pValue;
-    }
-    else if (PARAM_RE_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RE_C.equalsIgnoreCase(pName)) {
       realC = pValue;
-    }
-    else if (PARAM_RE_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RE_D.equalsIgnoreCase(pName)) {
       realD = pValue;
-    }
-    else if (PARAM_IM_A.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IM_A.equalsIgnoreCase(pName)) {
       imagA = pValue;
-    }
-    else if (PARAM_IM_B.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IM_B.equalsIgnoreCase(pName)) {
       imagB = pValue;
-    }
-    else if (PARAM_IM_C.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IM_C.equalsIgnoreCase(pName)) {
       imagC = pValue;
-    }
-    else if (PARAM_IM_D.equalsIgnoreCase(pName)) {
+    } else if (PARAM_IM_D.equalsIgnoreCase(pName)) {
       imagD = pValue;
-    }
-    else if (PARAM_POWER.equalsIgnoreCase(pName)) {
+    } else if (PARAM_POWER.equalsIgnoreCase(pName)) {
       power = pValue;
-    }
-    else if (PARAM_DIST.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DIST.equalsIgnoreCase(pName)) {
       dist = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

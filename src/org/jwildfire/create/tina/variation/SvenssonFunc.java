@@ -1,15 +1,16 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class SvenssonFunc extends VariationFunc {
 
   /**
    * Jhonny Svensson Attractor
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -23,7 +24,7 @@ public class SvenssonFunc extends VariationFunc {
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D};
 
   double a = 1.4;
   double b = 1.56;
@@ -56,23 +57,19 @@ public class SvenssonFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d };
+    return new Object[]{a, b, c, d};
   }
 
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_A)) {
       a = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_B)) {
+    } else if (pName.equalsIgnoreCase(PARAM_B)) {
       b = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_C)) {
+    } else if (pName.equalsIgnoreCase(PARAM_C)) {
       c = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_D)) {
+    } else if (pName.equalsIgnoreCase(PARAM_D)) {
       d = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

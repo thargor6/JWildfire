@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class HeartWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class HeartWFFunc extends VariationFunc {
   private static final String PARAM_SHIFTT = "shift_t";
   private static final String PARAM_SCALE_T_LEFT = "scale_r_left";
   private static final String PARAM_SCALE_T_RIGHT = "scale_r_right";
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALET, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALET, PARAM_SHIFTT, PARAM_SCALE_T_LEFT, PARAM_SCALE_T_RIGHT};
 
   private double scale_x = 1.0;
   private double scale_t = 1.0;
@@ -54,8 +50,7 @@ public class HeartWFFunc extends VariationFunc {
         t = T_MAX;
       }
       nx = -0.001 * (-t * t + 40 * t + 1200) * sin(M_PI * t / 180.0) * r;
-    }
-    else {
+    } else {
       t = a / M_PI * T_MAX * scale_r_right - shift_t;
       if (t > T_MAX) {
         t = T_MAX;
@@ -67,8 +62,8 @@ public class HeartWFFunc extends VariationFunc {
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -78,7 +73,7 @@ public class HeartWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale_x, scale_t, shift_t, scale_r_left, scale_r_right };
+    return new Object[]{scale_x, scale_t, shift_t, scale_r_left, scale_r_right};
   }
 
   @Override

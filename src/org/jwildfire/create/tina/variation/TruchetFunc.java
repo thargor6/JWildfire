@@ -20,20 +20,12 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.round;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TruchetFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +38,7 @@ public class TruchetFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
 
-  private static final String[] paramNames = { PARAM_EXTENDED, PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = {PARAM_EXTENDED, PARAM_EXPONENT, PARAM_ARC_WIDTH, PARAM_ROTATION, PARAM_SIZE, PARAM_SEED, PARAM_DIRECT_COLOR};
 
   private int extended = 0;
   private double exponent = 2.0;
@@ -90,26 +82,22 @@ public class TruchetFunc extends VariationFunc {
     r = x - intx;
     if (r < 0.0) {
       x = 1.0 + r;
-    }
-    else {
+    } else {
       x = r;
     }
 
     r = y - inty;
     if (r < 0.0) {
       y = 1.0 + r;
-    }
-    else {
+    } else {
       y = r;
     }
     //CALCULATE THE TILE TYPE
     if (seed == 0.0) {
       tiletype = 0.0;
-    }
-    else if (seed == 1.0) {
+    } else if (seed == 1.0) {
       tiletype = 1.0;
-    }
-    else {
+    } else {
       if (extended == 0) {
         double xrand = round(pAffineTP.x);
         double yrand = round(pAffineTP.y);
@@ -118,8 +106,7 @@ public class TruchetFunc extends VariationFunc {
         niter = xrand + yrand + xrand * yrand;
         randint = (niter + seed) * seed2 / 2.0;
         randint = fmod((randint * multiplier + offset), modbase);
-      }
-      else {
+      } else {
         seed = floor(seed);
         int xrand = (int) round(pAffineTP.x);
         int yrand = (int) round(pAffineTP.y);
@@ -140,18 +127,15 @@ public class TruchetFunc extends VariationFunc {
       if (tiletype < 1.0) {
         r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
         r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
-      }
-      else {
+      } else {
         r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
         r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
       }
-    }
-    else {
+    } else {
       if (tiletype == 1.0) { //Slow drawmode 
         r0 = pow((pow(fabs(x), n) + pow(fabs(y), n)), onen);
         r1 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y - 1.0), n)), onen);
-      }
-      else {
+      } else {
         r0 = pow((pow(fabs(x - 1.0), n) + pow(fabs(y), n)), onen);
         r1 = pow((pow(fabs(x), n) + pow(fabs(y - 1.0), n)), onen);
       }
@@ -186,7 +170,7 @@ public class TruchetFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { extended, exponent, arc_width, rotation, size, seed, direct_color };
+    return new Object[]{extended, exponent, arc_width, rotation, size, seed, direct_color};
   }
 
   @Override
@@ -218,26 +202,22 @@ public class TruchetFunc extends VariationFunc {
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     if (extended < 0) {
       extended = 0;
-    }
-    else if (extended > 1) {
+    } else if (extended > 1) {
       extended = 1;
     }
     if (exponent < 0.001) {
       exponent = 0.001;
-    }
-    else if (exponent > 2.0) {
+    } else if (exponent > 2.0) {
       exponent = 2.0;
     }
     if (arc_width < 0.001) {
       arc_width = 0.001;
-    }
-    else if (arc_width > 1.0) {
+    } else if (arc_width > 1.0) {
       arc_width = 1.0;
     }
     if (size < 0.001) {
       size = 0.001;
-    }
-    else if (size > 10.0) {
+    } else if (size > 10.0) {
       size = 10.0;
     }
   }

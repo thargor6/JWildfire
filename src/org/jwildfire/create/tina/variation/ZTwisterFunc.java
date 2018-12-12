@@ -16,19 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ZTwisterFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_TWIST = "twist";
   private static final String PARAM_BASE = "base";
-  private static final String[] paramNames = { PARAM_TWIST, PARAM_BASE };
+  private static final String[] paramNames = {PARAM_TWIST, PARAM_BASE};
 
   private double twist = 4.2;
   private double base = Math.E;
@@ -48,8 +46,8 @@ public class ZTwisterFunc extends VariationFunc {
     pVarTP.x += pAmount * nx;
     pVarTP.y += pAmount * ny;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -59,7 +57,7 @@ public class ZTwisterFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { twist, base };
+    return new Object[]{twist, base};
   }
 
   @Override

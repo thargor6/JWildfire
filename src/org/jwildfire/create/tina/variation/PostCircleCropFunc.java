@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.max;
-import static org.jwildfire.base.mathlib.MathLib.min;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PostCircleCropFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,7 +32,7 @@ public class PostCircleCropFunc extends VariationFunc {
   private static final String PARAM_SCATTER_AREA = "scatter_area";
   private static final String PARAM_ZERO = "zero";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_X, PARAM_Y, PARAM_SCATTER_AREA, PARAM_ZERO };
+  private static final String[] paramNames = {PARAM_RADIUS, PARAM_X, PARAM_Y, PARAM_SCATTER_AREA, PARAM_ZERO};
 
   private double radius = 1.0;
   private double x = 0.0;
@@ -71,16 +66,13 @@ public class PostCircleCropFunc extends VariationFunc {
     if (cr0 && esc) {
       pVarTP.x = pVarTP.y = 0;
       pVarTP.doHide = true;
-    }
-    else if (cr0 && !esc) {
+    } else if (cr0 && !esc) {
       pVarTP.x = vv * pVarTP.x + x0;
       pVarTP.y = vv * pVarTP.y + y0;
-    }
-    else if (!cr0 && esc) {
+    } else if (!cr0 && esc) {
       pVarTP.x = vv * rdc * c + x0;
       pVarTP.y = vv * rdc * s + y0;
-    }
-    else if (!cr0 && !esc) {
+    } else if (!cr0 && !esc) {
       pVarTP.x = vv * pVarTP.x + x0;
       pVarTP.y = vv * pVarTP.y + y0;
     }
@@ -93,7 +85,7 @@ public class PostCircleCropFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, x, y, scatter_area, zero };
+    return new Object[]{radius, x, y, scatter_area, zero};
   }
 
   @Override

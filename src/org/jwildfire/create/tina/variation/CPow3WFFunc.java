@@ -25,15 +25,11 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CPow3WFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -46,7 +42,7 @@ public class CPow3WFFunc extends VariationFunc {
   private static final String PARAM_SPREAD2 = "spread2";
   private static final String PARAM_OFFSET2 = "offset2";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_A, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2 };
+  private static final String[] paramNames = {PARAM_R, PARAM_A, PARAM_DIVISOR, PARAM_SPREAD, PARAM_DISCRETE_SPREAD, PARAM_SPREAD2, PARAM_OFFSET2};
 
   // Parameters
   private double r = 1.0;
@@ -104,8 +100,8 @@ public class CPow3WFFunc extends VariationFunc {
     pVarTP.y += ri * sin(ang2);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -116,7 +112,7 @@ public class CPow3WFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, a, divisor, spread, discrete_spread, spread2, offset2 };
+    return new Object[]{r, a, divisor, spread, discrete_spread, spread2, offset2};
   }
 
   @Override
@@ -129,17 +125,13 @@ public class CPow3WFFunc extends VariationFunc {
       divisor = pValue;
     else if (PARAM_SPREAD.equalsIgnoreCase(pName)) {
       spread = pValue;
-    }
-    else if (PARAM_DISCRETE_SPREAD.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DISCRETE_SPREAD.equalsIgnoreCase(pName)) {
       discrete_spread = pValue;
-    }
-    else if (PARAM_SPREAD2.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SPREAD2.equalsIgnoreCase(pName)) {
       spread2 = pValue;
-    }
-    else if (PARAM_OFFSET2.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OFFSET2.equalsIgnoreCase(pName)) {
       offset2 = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

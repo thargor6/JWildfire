@@ -17,23 +17,19 @@
 
 package org.jwildfire.create.tina.variation;
 
+import org.jwildfire.base.Prefs;
+import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.*;
+import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
+import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.jwildfire.base.Prefs;
-import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
-import org.jwildfire.create.tina.variation.mesh.LSystem3DWFFunc;
-import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
-import org.jwildfire.create.tina.variation.mesh.FracTerrain3DFunc;
-import org.jwildfire.create.tina.variation.mesh.OBJMeshPrimitiveWFFunc;
-import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
-import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
-import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
-import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
-import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
@@ -612,45 +608,43 @@ public class VariationFuncList {
     registerVariationFunc(DCGnarlyFunc.class);
 
     registerVariationFunc(Strange3DFunc.class);
-    registerVariationFunc(DustPointFunc.class);     
+    registerVariationFunc(DustPointFunc.class);
     registerVariationFunc(IconAttractorFunc.class);
-    registerVariationFunc(ApollonyFunc.class); 
-    registerVariationFunc(ChrysanthemumFunc.class);  
-    registerVariationFunc(SeaShell3DFunc.class);            
-    registerVariationFunc(ThreePointIFSFunc.class);  
-    
+    registerVariationFunc(ApollonyFunc.class);
+    registerVariationFunc(ChrysanthemumFunc.class);
+    registerVariationFunc(SeaShell3DFunc.class);
+    registerVariationFunc(ThreePointIFSFunc.class);
+
     registerVariationFunc(Knots3DFunc.class);
-    registerVariationFunc(RecurrencePlotFunc.class);  
-    registerVariationFunc(MacMillanFunc.class);  
+    registerVariationFunc(RecurrencePlotFunc.class);
+    registerVariationFunc(MacMillanFunc.class);
 
- 
-    registerVariationFunc(RingSubFlameFunc.class);  
-    registerVariationFunc(GlynnS3SubflWFFunc.class);  
-    registerVariationFunc(FracTerrain3DFunc.class);  
 
-    registerVariationFunc(Disc3Func.class);  
-    registerVariationFunc(DCKaleidotileFunc.class);   
+    registerVariationFunc(RingSubFlameFunc.class);
+    registerVariationFunc(GlynnS3SubflWFFunc.class);
+    registerVariationFunc(FracTerrain3DFunc.class);
+
+    registerVariationFunc(Disc3Func.class);
+    registerVariationFunc(DCKaleidotileFunc.class);
     registerVariationFunc(LazySensenFunc.class);
     registerVariationFunc(ProjectiveFunc.class);
     registerVariationFunc(LoziFunc.class);
     registerVariationFunc(Vibration2Func.class);
-    registerVariationFunc(PulseFunc.class);    
-    
-    registerVariationFunc(WangTilesFunc.class);   
-   
-    registerVariationFunc(TapratsFunc.class);    
-    registerVariationFunc(GPatternFunc.class);    
-    registerVariationFunc(NSudokuFunc.class);   
-    
+    registerVariationFunc(PulseFunc.class);
+
+    registerVariationFunc(WangTilesFunc.class);
+
+    registerVariationFunc(TapratsFunc.class);
+    registerVariationFunc(GPatternFunc.class);
+    registerVariationFunc(NSudokuFunc.class);
+
     registerVariationFunc(AnamorphCylFunc.class);
     registerVariationFunc(HyperbolicEllipseFunc.class);
     registerVariationFunc(SunFlowersFunc.class);
     registerVariationFunc(SunflowerVoroniFunc.class);
-
     registerVariationFunc(Cylinder2Func.class);
     registerVariationFunc(Affine3DFunc.class);
     registerVariationFunc(Q_odeFunc.class);
-
 
     registerVariationFunc(CurliecueFunc.class);
     registerVariationFunc(CurliecueFunc2.class);
@@ -660,17 +654,16 @@ public class VariationFuncList {
     registerVariationFunc(ArcTruchetFunc.class);
     registerVariationFunc(SwirlWFFunc.class);
     registerVariationFunc(MandalaFunc.class);
-    registerVariationFunc(MandalaTestFunc.class);
+    registerVariationFunc(Mandala2Func.class);
     registerVariationFunc(JacAsnFunc.class);
     registerVariationFunc(ColorDomainFunc.class);
 
     registerVariationFunc(InvSquircularFunc.class);
     registerVariationFunc(SquircularFunc.class);
-
     registerVariationFunc(PyramidFunc.class);
-    registerVariationFunc(CornersFunc.class);  
-    registerVariationFunc(CscSquaredFunc.class);  
-    registerVariationFunc(Atan2_SpiralsFunc.class);  
+    registerVariationFunc(CornersFunc.class);
+    registerVariationFunc(CscSquaredFunc.class);
+    registerVariationFunc(Atan2_SpiralsFunc.class);
     registerVariationFunc(IntersectionFunc.class);
     registerVariationFunc(InvpolarFunc.class);
     registerVariationFunc(StripfitFunc.class);
@@ -692,29 +685,25 @@ public class VariationFuncList {
   }
 
   private static void registerVariationFunc(
-      Class<? extends VariationFunc> pVariationFunc) {
+          Class<? extends VariationFunc> pVariationFunc) {
     items.add(pVariationFunc);
     unfilteredNameList = null;
   }
 
   private static String getVariationName(
-      Class<? extends VariationFunc> pFuncCls, boolean pFatal) {
+          Class<? extends VariationFunc> pFuncCls, boolean pFatal) {
     try {
       return pFuncCls.newInstance().getName();
-    }
-    catch (InstantiationException ex) {
+    } catch (InstantiationException ex) {
       if (pFatal) {
         throw new RuntimeException(ex);
-      }
-      else {
+      } else {
         ex.printStackTrace();
       }
-    }
-    catch (IllegalAccessException ex) {
+    } catch (IllegalAccessException ex) {
       if (pFatal) {
         throw new RuntimeException(ex);
-      }
-      else {
+      } else {
         ex.printStackTrace();
       }
     }
@@ -772,8 +761,8 @@ public class VariationFuncList {
     while (true) {
       int idx = (int) (Math.random() * getNameList().size());
       String name = getNameList().get(idx);
-      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0) 
-    		  	&& !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf")) {
+      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
+              && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf")) {
         return name;
       }
     }
@@ -784,15 +773,14 @@ public class VariationFuncList {
   }
 
   public static VariationFunc getVariationFuncInstance(String pName,
-      boolean pFatal) {
+                                                       boolean pFatal) {
     int idx = getUnfilteredNameList().indexOf(pName);
     if (idx >= 0) {
       Class<? extends VariationFunc> funcCls = items.get(idx);
       try {
         VariationFunc func = funcCls.newInstance();
         return func;
-      }
-      catch (Throwable e) {
+      } catch (Throwable e) {
         e.printStackTrace();
       }
     }

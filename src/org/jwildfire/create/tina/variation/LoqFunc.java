@@ -16,36 +16,36 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LoqFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_BASE = "base";
-  
-  private static final String[] paramNames = { PARAM_BASE };
-  
+
+  private static final String[] paramNames = {PARAM_BASE};
+
   private double base = M_E;
   private double denom;
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-	  denom = 0.5 * pAmount / log(base);
+    denom = 0.5 * pAmount / log(base);
   }
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Loq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);
+    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
     double C = pAmount * atan2(abs_v, pAffineTP.x) / abs_v;
     pVarTP.x += log(sqr(pAffineTP.x) + sqr(abs_v)) * denom;
     pVarTP.y += C * pAffineTP.y;
-    pVarTP.z += C * pAffineTP.z; 
+    pVarTP.z += C * pAffineTP.z;
   }
 
   @Override
@@ -55,7 +55,7 @@ public class LoqFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { base };
+    return new Object[]{base};
   }
 
   @Override
@@ -63,8 +63,8 @@ public class LoqFunc extends VariationFunc {
     if (PARAM_BASE.equalsIgnoreCase(pName))
       base = pValue;
     else
-        throw new IllegalArgumentException(pName);
-    }
+      throw new IllegalArgumentException(pName);
+  }
 
   @Override
   public String getName() {

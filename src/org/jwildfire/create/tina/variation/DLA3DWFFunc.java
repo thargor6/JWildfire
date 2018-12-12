@@ -16,14 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import odk.lang.DoubleWrapper;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -34,15 +27,15 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
-import org.jwildfire.create.tina.variation.mesh.Face;
-import org.jwildfire.create.tina.variation.mesh.OBJMeshUtil;
-import org.jwildfire.create.tina.variation.mesh.SimpleMesh;
+import org.jwildfire.create.tina.variation.mesh.*;
 import org.jwildfire.create.tina.variation.mesh.SimpleMesh.BoundingBox;
-import org.jwildfire.create.tina.variation.mesh.UVColorMapper;
-import org.jwildfire.create.tina.variation.mesh.Vertex;
-import org.jwildfire.create.tina.variation.mesh.VertexWithUV;
 
-import odk.lang.DoubleWrapper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class DLA3DWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -80,13 +73,13 @@ public class DLA3DWFFunc extends VariationFunc {
   private static final String RESSOURCE_JUNCT_OBJ_FILENAME = "junct_obj_filename";
   private static final String RESSOURCE_JUNCT_COLORMAP_FILENAME = "junct_colormap_filename";
 
-  private static final String[] paramNames = { PARAM_MAX_ITER, PARAM_SEED, PARAM_INNER_BLUR_RADIUS, PARAM_OUTER_BLUR_RADIUS, PARAM_JUNCTION_SCALE,
-      PARAM_DC_COLOR, PARAM_GLUE_RADIUS, PARAM_FORCE_X, PARAM_FORCE_Y, PARAM_FORCE_Z, PARAM_DISPLAY_NODES,
-      PARAM_DISPLAY_JUNCTIONS, PARAM_SINGLE_THREAD,
-      PARAM_NODE_SDIV_LEVEL, PARAM_NODE_SDIV_SMOOTH_PASSES, PARAM_NODE_SDIV_SMOOTH_LAMBDA, PARAM_NODE_SDIV_SMOOTH_MU, PARAM_NODE_BLEND_COLORMAP, PARAM_NODE_MESH_SCALE,
-      PARAM_JUNCT_SDIV_LEVEL, PARAM_JUNCT_SDIV_SMOOTH_PASSES, PARAM_JUNCT_SDIV_SMOOTH_LAMBDA, PARAM_JUNCT_SDIV_SMOOTH_MU, PARAM_JUNCT_BLEND_COLORMAP, PARAM_JUNCT_MESH_SCALE };
+  private static final String[] paramNames = {PARAM_MAX_ITER, PARAM_SEED, PARAM_INNER_BLUR_RADIUS, PARAM_OUTER_BLUR_RADIUS, PARAM_JUNCTION_SCALE,
+          PARAM_DC_COLOR, PARAM_GLUE_RADIUS, PARAM_FORCE_X, PARAM_FORCE_Y, PARAM_FORCE_Z, PARAM_DISPLAY_NODES,
+          PARAM_DISPLAY_JUNCTIONS, PARAM_SINGLE_THREAD,
+          PARAM_NODE_SDIV_LEVEL, PARAM_NODE_SDIV_SMOOTH_PASSES, PARAM_NODE_SDIV_SMOOTH_LAMBDA, PARAM_NODE_SDIV_SMOOTH_MU, PARAM_NODE_BLEND_COLORMAP, PARAM_NODE_MESH_SCALE,
+          PARAM_JUNCT_SDIV_LEVEL, PARAM_JUNCT_SDIV_SMOOTH_PASSES, PARAM_JUNCT_SDIV_SMOOTH_LAMBDA, PARAM_JUNCT_SDIV_SMOOTH_MU, PARAM_JUNCT_BLEND_COLORMAP, PARAM_JUNCT_MESH_SCALE};
 
-  private static final String[] ressourceNames = { RESSOURCE_NODE_OBJ_FILENAME, RESSOURCE_NODE_COLORMAP_FILENAME, RESSOURCE_JUNCT_OBJ_FILENAME, RESSOURCE_JUNCT_COLORMAP_FILENAME };
+  private static final String[] ressourceNames = {RESSOURCE_NODE_OBJ_FILENAME, RESSOURCE_NODE_COLORMAP_FILENAME, RESSOURCE_JUNCT_OBJ_FILENAME, RESSOURCE_JUNCT_COLORMAP_FILENAME};
 
   private int max_iter = 320;
   private int seed = (int) (Math.random() * 10000);
@@ -140,8 +133,7 @@ public class DLA3DWFFunc extends VariationFunc {
     if (point.parent == null) {
       if (display_nodes > 0 && doBlur)
         sample = displayCentreNode(point);
-    }
-    else {
+    } else {
       if (doBlur) {
         double minRadius, maxRadius;
         {
@@ -158,19 +150,15 @@ public class DLA3DWFFunc extends VariationFunc {
           double shape = _randGen.random();
           if (shape < 0.333) {
             sample = displayOuterNode(point, minRadius);
-          }
-          else {
+          } else {
             sample = displayJunction(point, minRadius, maxRadius, rnd);
           }
-        }
-        else if (display_junctions > 0) {
+        } else if (display_junctions > 0) {
           sample = displayJunction(point, minRadius, maxRadius, rnd);
-        }
-        else if (display_nodes > 0) {
+        } else if (display_nodes > 0) {
           sample = displayOuterNode(point, maxRadius);
         }
-      }
-      else {
+      } else {
         sample = displayUnblurredPart(point, rnd);
       }
     }
@@ -183,8 +171,7 @@ public class DLA3DWFFunc extends VariationFunc {
       if (dc_color > 0) {
         pVarTP.color = Math.max(0.0, Math.min(1.0, sample.color));
       }
-    }
-    else {
+    } else {
       pVarTP.doHide = true;
     }
   }
@@ -223,8 +210,7 @@ public class DLA3DWFFunc extends VariationFunc {
         }
       }
 
-    }
-    else {
+    } else {
       sample = getRawSampleFromJunctMesh(radius, defaultColor, point.rotation);
       sample.x += point.x + (point.parent.x - point.x) * 0.5;
       sample.y += point.y + (point.parent.y - point.y) * 0.5;
@@ -247,8 +233,7 @@ public class DLA3DWFFunc extends VariationFunc {
       sample.y = point.y + radius * sinTheta.value * sinPhi.value;
       sample.z = point.z + radius * cosTheta.value;
       sample.color = 0.0;
-    }
-    else {
+    } else {
       sample = getRawSampleFromNodeMesh(radius, 0.0, null);
       sample.x += point.x;
       sample.y += point.y;
@@ -270,8 +255,7 @@ public class DLA3DWFFunc extends VariationFunc {
       sample.y = point.y + radius * sinTheta.value * sinPhi.value;
       sample.z = point.z + radius * cosTheta.value;
       sample.color = point.relDepth;
-    }
-    else {
+    } else {
       sample = getRawSampleFromNodeMesh(radius, point.relDepth, point.rotation);
       sample.x += point.x;
       sample.y += point.y;
@@ -318,8 +302,7 @@ public class DLA3DWFFunc extends VariationFunc {
         nodeColorMapHolder.applyImageColor(colorHolder, ix, iy, iu, iv);
         sample.color = nodeUVColorMapper.getUVColorIdx(Tools.FTOI(colorHolder.redColor), Tools.FTOI(colorHolder.greenColor), Tools.FTOI(colorHolder.blueColor));
       }
-    }
-    else {
+    } else {
       Vertex p1 = nodeTransform(rawP1, node_mesh_scale, scale, nodeMesh.getBoundingBox(), rotation);
       Vertex p2 = nodeTransform(rawP2, node_mesh_scale, scale, nodeMesh.getBoundingBox(), rotation);
       Vertex p3 = nodeTransform(rawP3, node_mesh_scale, scale, nodeMesh.getBoundingBox(), rotation);
@@ -381,8 +364,7 @@ public class DLA3DWFFunc extends VariationFunc {
         junctColorMapHolder.applyImageColor(colorHolder, ix, iy, iu, iv);
         sample.color = junctUVColorMapper.getUVColorIdx(Tools.FTOI(colorHolder.redColor), Tools.FTOI(colorHolder.greenColor), Tools.FTOI(colorHolder.blueColor));
       }
-    }
-    else {
+    } else {
       Vertex p1 = nodeTransform(rawP1, junct_mesh_scale, scale, junctMesh.getBoundingBox(), rotation);
       Vertex p2 = nodeTransform(rawP2, junct_mesh_scale, scale, junctMesh.getBoundingBox(), rotation);
       Vertex p3 = nodeTransform(rawP3, junct_mesh_scale, scale, junctMesh.getBoundingBox(), rotation);
@@ -415,8 +397,7 @@ public class DLA3DWFFunc extends VariationFunc {
       px = r.x;
       py = r.y;
       pz = r.z;
-    }
-    else {
+    } else {
       px = p.x;
       py = p.y;
       pz = p.z;
@@ -436,8 +417,7 @@ public class DLA3DWFFunc extends VariationFunc {
       px = r.x;
       py = r.y;
       pz = r.z;
-    }
-    else {
+    } else {
       px = p.x;
       py = p.y;
       pz = p.z;
@@ -467,10 +447,10 @@ public class DLA3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { max_iter, seed, inner_blur_radius, outer_blur_radius, junction_scale, dc_color, glue_radius, force_x, force_y,
-        force_z, display_nodes, display_junctions, single_thread,
-        node_sdiv_level, node_sdiv_smooth_passes, node_sdiv_smooth_lambda, node_sdiv_smooth_mu, nodeColorMapHolder.getBlend_colormap(), node_mesh_scale,
-        junct_sdiv_level, junct_sdiv_smooth_passes, junct_sdiv_smooth_lambda, junct_sdiv_smooth_mu, junctColorMapHolder.getBlend_colormap(), junct_mesh_scale };
+    return new Object[]{max_iter, seed, inner_blur_radius, outer_blur_radius, junction_scale, dc_color, glue_radius, force_x, force_y,
+            force_z, display_nodes, display_junctions, single_thread,
+            node_sdiv_level, node_sdiv_smooth_passes, node_sdiv_smooth_lambda, node_sdiv_smooth_mu, nodeColorMapHolder.getBlend_colormap(), node_mesh_scale,
+            junct_sdiv_level, junct_sdiv_smooth_passes, junct_sdiv_smooth_lambda, junct_sdiv_smooth_mu, junctColorMapHolder.getBlend_colormap(), junct_mesh_scale};
   }
 
   @Override
@@ -480,31 +460,27 @@ public class DLA3DWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (nodeObjFilename != null ? nodeObjFilename.getBytes() : null),
-        (nodeColorMapHolder.getColormap_filename() != null ? nodeColorMapHolder.getColormap_filename().getBytes() : null),
-        (junctObjFilename != null ? junctObjFilename.getBytes() : null),
-        (junctColorMapHolder.getColormap_filename() != null ? junctColorMapHolder.getColormap_filename().getBytes() : null) };
+    return new byte[][]{(nodeObjFilename != null ? nodeObjFilename.getBytes() : null),
+            (nodeColorMapHolder.getColormap_filename() != null ? nodeColorMapHolder.getColormap_filename().getBytes() : null),
+            (junctObjFilename != null ? junctObjFilename.getBytes() : null),
+            (junctColorMapHolder.getColormap_filename() != null ? junctColorMapHolder.getColormap_filename().getBytes() : null)};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_NODE_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       nodeObjFilename = pValue != null ? new String(pValue) : "";
-    }
-    else if (RESSOURCE_NODE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_NODE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       nodeColorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       nodeColorMapHolder.clear();
       nodeUVColorMapper.clear();
-    }
-    else if (RESSOURCE_JUNCT_OBJ_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_JUNCT_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       junctObjFilename = pValue != null ? new String(pValue) : "";
-    }
-    else if (RESSOURCE_JUNCT_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_JUNCT_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       junctColorMapHolder.setColormap_filename(pValue != null ? new String(pValue) : "");
       junctColorMapHolder.clear();
       junctUVColorMapper.clear();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -512,17 +488,13 @@ public class DLA3DWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_NODE_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.OBJ_MESH;
-    }
-    else if (RESSOURCE_NODE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_NODE_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_JUNCT_OBJ_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_JUNCT_OBJ_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.OBJ_MESH;
-    }
-    else if (RESSOURCE_JUNCT_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_JUNCT_COLORMAP_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -545,8 +517,7 @@ public class DLA3DWFFunc extends VariationFunc {
       if (glue_radius < 0.1) {
         glue_radius = 0.1;
       }
-    }
-    else if (PARAM_FORCE_X.equalsIgnoreCase(pName))
+    } else if (PARAM_FORCE_X.equalsIgnoreCase(pName))
       force_x = pValue;
     else if (PARAM_FORCE_Y.equalsIgnoreCase(pName))
       force_y = pValue;
@@ -603,7 +574,7 @@ public class DLA3DWFFunc extends VariationFunc {
   private List<DLA3DWFFuncPoint> getPoints() {
     String key = makeKey();
     List<DLA3DWFFuncPoint> res = cache.get(key);
-    if (res == null ) {
+    if (res == null) {
       long t0 = System.currentTimeMillis();
       res = new DLA3DWFFuncIterator(_max_iter, seed, glue_radius, force_x, force_y, force_z, single_thread > 0).iterate();
       long t1 = System.currentTimeMillis();
@@ -660,8 +631,7 @@ public class DLA3DWFFunc extends VariationFunc {
           nodeMesh = OBJMeshUtil.loadAndSmoothMeshFromFile(nodeObjFilename, node_sdiv_smooth_passes, node_sdiv_level, node_sdiv_smooth_lambda, node_sdiv_smooth_mu);
           RessourceManager.putRessource(meshKey, nodeMesh);
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -674,8 +644,7 @@ public class DLA3DWFFunc extends VariationFunc {
           junctMesh = OBJMeshUtil.loadAndSmoothMeshFromFile(junctObjFilename, junct_sdiv_smooth_passes, junct_sdiv_level, junct_sdiv_smooth_lambda, junct_sdiv_smooth_mu);
           RessourceManager.putRessource(meshKey, junctMesh);
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }

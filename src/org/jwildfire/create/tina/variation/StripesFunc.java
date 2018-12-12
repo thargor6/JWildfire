@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class StripesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class StripesFunc extends VariationFunc {
   private static final String PARAM_SPACE = "space";
   private static final String PARAM_WARP = "warp";
 
-  private static final String[] paramNames = { PARAM_SPACE, PARAM_WARP };
+  private static final String[] paramNames = {PARAM_SPACE, PARAM_WARP};
 
   private double space = 0.20;
   private double warp = 0.60;
@@ -41,8 +41,8 @@ public class StripesFunc extends VariationFunc {
     pVarTP.x += pAmount * (offsetx * (1.0 - space) + roundx);
     pVarTP.y += pAmount * (pAffineTP.y + offsetx * offsetx * warp);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -52,7 +52,7 @@ public class StripesFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { space, warp };
+    return new Object[]{space, warp};
   }
 
   @Override

@@ -16,18 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.exp;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class OnionFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_CENTRE_X = "centre_x";
   private static final String PARAM_CENTRE_Y = "centre_y";
-  private static final String[] paramNames = { PARAM_CENTRE_X, PARAM_CENTRE_Y };
+  private static final String[] paramNames = {PARAM_CENTRE_X, PARAM_CENTRE_Y};
 
   private double centre_x = 0.0;
   private double centre_y = 0.0;
@@ -41,8 +41,7 @@ public class OnionFunc extends VariationFunc {
     double x0 = pAffineTP.x;
     double y0 = pAffineTP.y;
 
-    if (r0 == 0.0)
-    {
+    if (r0 == 0.0) {
       r0 = 1.0;
     }
 
@@ -67,8 +66,7 @@ public class OnionFunc extends VariationFunc {
       z1 -= sqrt((r0 * r0) - d0); // use bottom of circle
       x1 = x0;
       y1 = y0;
-    }
-    else if (2 * r0 - dr > r0 / 1.41421356) // dist > r0 / sqrt(2), the intersection point
+    } else if (2 * r0 - dr > r0 / 1.41421356) // dist > r0 / sqrt(2), the intersection point
     {
       // curl inwards along circle while not at circle-exponential meeting point
 
@@ -80,8 +78,7 @@ public class OnionFunc extends VariationFunc {
       // NOTE: r0 - (dr - r0) == 2*r0 - dr , i.e. the radius minus how much the actual distance is beyond the radius
       //z1 = sqrt( (r0 * r0) - ((2*r0 - dr) * (2*r0 - dr)) ); // use top of circle
 
-    }
-    else {
+    } else {
       // exponential curve mirrored over z-axis with origin shifted to r / sqrt(2)
       // recall we invert the direction of travel
       // NOTE: The intersection point occurs at r0 / sqrt(2) for the circle and 1 for the exponential curve, so shift the exponential curve
@@ -108,7 +105,7 @@ public class OnionFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { centre_x, centre_y };
+    return new Object[]{centre_x, centre_y};
   }
 
   @Override

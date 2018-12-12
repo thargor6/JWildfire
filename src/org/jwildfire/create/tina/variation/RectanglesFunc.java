@@ -16,19 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class RectanglesFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
 
   private double x, y;
 
@@ -36,19 +34,17 @@ public class RectanglesFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     if (fabs(x) < EPSILON) {
       pVarTP.x += pAmount * pAffineTP.x;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * ((2 * floor(pAffineTP.x / x) + 1) * x - pAffineTP.x);
     }
     if (fabs(y) < EPSILON) {
       pVarTP.y += pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * ((2 * floor(pAffineTP.y / y) + 1) * y - pAffineTP.y);
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -58,7 +54,7 @@ public class RectanglesFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[]{x, y};
   }
 
   @Override

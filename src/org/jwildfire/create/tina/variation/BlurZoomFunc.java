@@ -25,7 +25,7 @@ public class BlurZoomFunc extends VariationFunc {
   private static final String PARAM_LENGTH = "length";
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
-  private static final String[] paramNames = { PARAM_LENGTH, PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_LENGTH, PARAM_X, PARAM_Y};
 
   private double length = 0.0;
   private double x = 0.0;
@@ -39,8 +39,8 @@ public class BlurZoomFunc extends VariationFunc {
     pVarTP.x += pAmount * ((pAffineTP.x - this.x) * z + this.x);
     pVarTP.y += pAmount * ((pAffineTP.y - this.y) * z - this.y);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -50,7 +50,7 @@ public class BlurZoomFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { length, x, y };
+    return new Object[]{length, x, y};
   }
 
   @Override

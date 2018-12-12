@@ -28,7 +28,7 @@ public class PreRectWFFunc extends VariationFunc {
   private static final String PARAM_Y0 = "y0";
   private static final String PARAM_Y1 = "y1";
 
-  private static final String[] paramNames = { PARAM_X0, PARAM_X1, PARAM_Y0, PARAM_Y1 };
+  private static final String[] paramNames = {PARAM_X0, PARAM_X1, PARAM_Y0, PARAM_Y1};
 
   private double x0 = -0.5;
   private double x1 = 0.5;
@@ -48,7 +48,7 @@ public class PreRectWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x0, x1, y0, y1 };
+    return new Object[]{x0, x1, y0, y1};
   }
 
   @Override

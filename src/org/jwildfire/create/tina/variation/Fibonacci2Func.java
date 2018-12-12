@@ -16,22 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Fibonacci2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SC = "sc";
   private static final String PARAM_SC2 = "sc2";
-  private static final String[] paramNames = { PARAM_SC, PARAM_SC2 };
+  private static final String[] paramNames = {PARAM_SC, PARAM_SC2};
 
   private double sc = 1.0;
   private double sc2 = 1.0;
@@ -68,8 +64,8 @@ public class Fibonacci2Func extends VariationFunc {
     pVarTP.x += pAmount * (eradius1 * cnum1 - eradius2 * cnum2) * ffive;
     pVarTP.y += pAmount * (eradius1 * snum1 - eradius2 * snum2) * ffive;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -79,7 +75,7 @@ public class Fibonacci2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { sc, sc2 };
+    return new Object[]{sc, sc2};
   }
 
   @Override

@@ -16,18 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.floor;
 
 public class BlurPixelizeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SIZE = "size";
   private static final String PARAM_SCALE = "scale";
-  private static final String[] paramNames = { PARAM_SIZE, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_SIZE, PARAM_SCALE};
 
   private double size = 0.1;
   private double scale = 1.0;
@@ -41,8 +41,8 @@ public class BlurPixelizeFunc extends VariationFunc {
     pVarTP.x += _v * (x + (this.scale) * (pContext.random() - 0.5) + 0.5);
     pVarTP.y += _v * (y + (this.scale) * (pContext.random() - 0.5) + 0.5);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -52,7 +52,7 @@ public class BlurPixelizeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { size, scale };
+    return new Object[]{size, scale};
   }
 
   @Override

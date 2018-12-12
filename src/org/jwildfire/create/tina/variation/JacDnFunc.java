@@ -16,20 +16,20 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.create.tina.variation.JacCnFunc.Jacobi_elliptic;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.variation.JacCnFunc.Jacobi_elliptic_result;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.create.tina.variation.JacCnFunc.Jacobi_elliptic;
 
 public class JacDnFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_K = "k";
 
-  private static final String[] paramNames = { PARAM_K };
+  private static final String[] paramNames = {PARAM_K};
 
   private double k = 0.5;
 
@@ -49,8 +49,8 @@ public class JacDnFunc extends VariationFunc {
     pVarTP.x += Denom * NumX;
     pVarTP.y += Denom * NumY;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -60,7 +60,7 @@ public class JacDnFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { k };
+    return new Object[]{k};
   }
 
   @Override

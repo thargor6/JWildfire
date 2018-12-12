@@ -24,7 +24,7 @@ public class SAttractor3DWFFuncPresets extends WFFuncPresets<SAttractor3DWFFuncP
 
   @Override
   protected SAttractor3DWFFuncPreset createDefaultPreset() {
-    return new SAttractor3DWFFuncPreset(-1, "x", "y","z",1.0,1.0,1.0,5,0.1,0.02,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0);
+    return new SAttractor3DWFFuncPreset(-1, "x", "y", "z", 1.0, 1.0, 1.0, 5, 0.1, 0.02, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
   }
 
   @Override
@@ -33,7 +33,7 @@ public class SAttractor3DWFFuncPresets extends WFFuncPresets<SAttractor3DWFFuncP
     String xformula = parseFormula(preset, "xformula");
     String yformula = parseFormula(preset, "yformula");
     String zformula = parseFormula(preset, "zformula");
-    
+
     double startx = parseParam(preset, "startx");
     double starty = parseParam(preset, "starty");
     double startz = parseParam(preset, "startz");
@@ -41,18 +41,18 @@ public class SAttractor3DWFFuncPresets extends WFFuncPresets<SAttractor3DWFFuncP
     double steps = parseParam(preset, "steps");
     double radius = parseParam(preset, "radius");
     double steptime = parseParam(preset, "steptime");
-    
-    double param_a=parseParam(preset,"param_a");
-    double param_b=parseParam(preset,"param_b");    
-    double param_c=parseParam(preset,"param_c");
-    double param_d=parseParam(preset,"param_d");
-    double param_e=parseParam(preset,"param_e");
-    double param_f=parseParam(preset,"param_f");    
-    double param_g=parseParam(preset,"param_g");
-    double param_h=parseParam(preset,"param_h");
-    
-    return new SAttractor3DWFFuncPreset(id, xformula, yformula,zformula,startx,starty,startz,steps,radius,steptime,
-    		param_a,param_b,param_c,param_d,param_e,param_f,param_g,param_h);
+
+    double param_a = parseParam(preset, "param_a");
+    double param_b = parseParam(preset, "param_b");
+    double param_c = parseParam(preset, "param_c");
+    double param_d = parseParam(preset, "param_d");
+    double param_e = parseParam(preset, "param_e");
+    double param_f = parseParam(preset, "param_f");
+    double param_g = parseParam(preset, "param_g");
+    double param_h = parseParam(preset, "param_h");
+
+    return new SAttractor3DWFFuncPreset(id, xformula, yformula, zformula, startx, starty, startz, steps, radius, steptime,
+            param_a, param_b, param_c, param_d, param_e, param_f, param_g, param_h);
   }
 
 }

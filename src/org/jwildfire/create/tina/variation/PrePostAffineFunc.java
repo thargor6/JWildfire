@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PrePostAffineFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +35,7 @@ public class PrePostAffineFunc extends VariationFunc {
   private static final String PARAM_MOVE_Y = "move_y";
   private static final String PARAM_MOVE_Z = "move_z";
 
-  private static final String[] paramNames = { PARAM_SCALE_X, PARAM_SCALE_Y, PARAM_SCALE_Z, PARAM_YAW, PARAM_PITCH, PARAM_ROLL, PARAM_MOVE_X, PARAM_MOVE_Y, PARAM_MOVE_Z };
+  private static final String[] paramNames = {PARAM_SCALE_X, PARAM_SCALE_Y, PARAM_SCALE_Z, PARAM_YAW, PARAM_PITCH, PARAM_ROLL, PARAM_MOVE_X, PARAM_MOVE_Y, PARAM_MOVE_Z};
 
   private double scale_x = 1;
   private double scale_y = 1;
@@ -49,74 +46,74 @@ public class PrePostAffineFunc extends VariationFunc {
   private double move_x = 0;
   private double move_y = 0;
   private double move_z = 0;
-  
+
   private double coefxx, coefxy, coefxz, coefyx, coefyy, coefyz, coefzx, coefzy, coefzz;
   private double icoefxx, icoefxy, icoefxz, icoefyx, icoefyy, icoefyz, icoefzx, icoefzy, icoefzz;
-  
+
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-	// pre-calculate coefficients for transform
-	  double d2r = M_PI / 180;
-	  double sinyaw = sin(yaw * d2r), cosyaw = cos(yaw * d2r);
-	  double sinpitch = sin(pitch * d2r), cospitch = cos(pitch * d2r);
-	  double sinroll = sin(roll * d2r), cosroll = cos(roll * d2r);
-	  
-	  coefxx = cosyaw*cosroll - sinyaw*sinpitch*sinroll;
-	  coefxy = -sinyaw*cosroll - cosyaw*sinpitch*sinroll;
-	  coefxz = -cospitch*sinroll;
-	  
-	  coefyx = sinyaw*cospitch;
-	  coefyy = cosyaw*cospitch;
-	  coefyz = -sinpitch;
-	  
-	  coefzx = cosyaw*sinroll + sinyaw*sinpitch*cosroll;
-	  coefzy = cosyaw*sinpitch*cosroll - sinyaw*sinroll;
-	  coefzz = cospitch*cosroll;
-	  
-	  icoefxx = cosyaw*cosroll - sinyaw*sinpitch*sinroll;
-	  icoefxy = sinyaw*cospitch;
-	  icoefxz = cosyaw*sinroll + sinyaw*sinpitch*cosroll;
-	  
-	  icoefyx = -sinyaw*cosroll-cosyaw*sinpitch*sinroll;
-	  icoefyy = cosyaw*cospitch;
-	  icoefyz = cosyaw*sinpitch*cosroll - sinyaw*sinroll;
-	  
-	  icoefzx = -cospitch*sinroll;
-	  icoefzy = -sinpitch;
-	  icoefzz = cospitch*cosroll;
+    // pre-calculate coefficients for transform
+    double d2r = M_PI / 180;
+    double sinyaw = sin(yaw * d2r), cosyaw = cos(yaw * d2r);
+    double sinpitch = sin(pitch * d2r), cospitch = cos(pitch * d2r);
+    double sinroll = sin(roll * d2r), cosroll = cos(roll * d2r);
+
+    coefxx = cosyaw * cosroll - sinyaw * sinpitch * sinroll;
+    coefxy = -sinyaw * cosroll - cosyaw * sinpitch * sinroll;
+    coefxz = -cospitch * sinroll;
+
+    coefyx = sinyaw * cospitch;
+    coefyy = cosyaw * cospitch;
+    coefyz = -sinpitch;
+
+    coefzx = cosyaw * sinroll + sinyaw * sinpitch * cosroll;
+    coefzy = cosyaw * sinpitch * cosroll - sinyaw * sinroll;
+    coefzz = cospitch * cosroll;
+
+    icoefxx = cosyaw * cosroll - sinyaw * sinpitch * sinroll;
+    icoefxy = sinyaw * cospitch;
+    icoefxz = cosyaw * sinroll + sinyaw * sinpitch * cosroll;
+
+    icoefyx = -sinyaw * cosroll - cosyaw * sinpitch * sinroll;
+    icoefyy = cosyaw * cospitch;
+    icoefyz = cosyaw * sinpitch * cosroll - sinyaw * sinroll;
+
+    icoefzx = -cospitch * sinroll;
+    icoefzy = -sinpitch;
+    icoefzz = cospitch * cosroll;
   }
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // post affine, pVarTP -> pVarTP
-	  if (pAmount == 0) return;
-	  
-	  double x = pAmount * scale_x * pVarTP.x;
-	  double y = pAmount * scale_y * pVarTP.y;
-	  double z = pAmount * scale_z * pVarTP.z;
-	  
-	  pVarTP.x = coefxx*x + coefxy*y + coefxz*z + move_x;
-	  pVarTP.y = coefyx*x + coefyy*y + coefyz*z + move_y;
-	  pVarTP.z = coefzx*x + coefzy*y + coefzz*z + move_z;
+    if (pAmount == 0) return;
+
+    double x = pAmount * scale_x * pVarTP.x;
+    double y = pAmount * scale_y * pVarTP.y;
+    double z = pAmount * scale_z * pVarTP.z;
+
+    pVarTP.x = coefxx * x + coefxy * y + coefxz * z + move_x;
+    pVarTP.y = coefyx * x + coefyy * y + coefyz * z + move_y;
+    pVarTP.z = coefzx * x + coefzy * y + coefzz * z + move_z;
 
   }
 
   @Override
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // pre affine, inverted, pAffineTP -> pAffineTP
-	  if (pAmount == 0) return;
-	  
-	  double x = pAffineTP.x - move_x;
-	  double y = pAffineTP.y - move_y;
-	  double z = pAffineTP.z - move_z;
-		  
-	  pAffineTP.x = (icoefxx*x + icoefxy*y + icoefxz*z) / (pAmount * scale_x);
-	  pAffineTP.y = (icoefyx*x + icoefyy*y + icoefyz*z) / (pAmount * scale_y);
-	  pAffineTP.z = (icoefzx*x + icoefzy*y + icoefzz*z) / (pAmount * scale_z);
-	  	  
+    if (pAmount == 0) return;
+
+    double x = pAffineTP.x - move_x;
+    double y = pAffineTP.y - move_y;
+    double z = pAffineTP.z - move_z;
+
+    pAffineTP.x = (icoefxx * x + icoefxy * y + icoefxz * z) / (pAmount * scale_x);
+    pAffineTP.y = (icoefyx * x + icoefyy * y + icoefyz * z) / (pAmount * scale_y);
+    pAffineTP.z = (icoefzx * x + icoefzy * y + icoefzz * z) / (pAmount * scale_z);
+
   }
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -124,7 +121,7 @@ public class PrePostAffineFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale_x, scale_y, scale_z, yaw, pitch, roll, move_x, move_y, move_z };
+    return new Object[]{scale_x, scale_y, scale_z, yaw, pitch, roll, move_x, move_y, move_z};
   }
 
   @Override

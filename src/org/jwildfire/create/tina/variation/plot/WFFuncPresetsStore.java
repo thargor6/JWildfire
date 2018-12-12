@@ -55,16 +55,18 @@ public class WFFuncPresetsStore {
     }
     return isoSFPlot3DWFFuncPresets;
   }
+
   public static SAttractor3DWFFuncPresets getSAttractor3DWFFuncPresets() {
-	    if (SAttractor3DWFFuncPresets == null) {
-	    	SAttractor3DWFFuncPresets = new SAttractor3DWFFuncPresets();
-	    }
-	    return SAttractor3DWFFuncPresets;
-	  }
+    if (SAttractor3DWFFuncPresets == null) {
+      SAttractor3DWFFuncPresets = new SAttractor3DWFFuncPresets();
+    }
+    return SAttractor3DWFFuncPresets;
+  }
+
   public static Knots3DWFFuncPresets getKnots3DWFFuncPresets() {
-	    if (Knots3DWFFuncPresets == null) {
-	    	Knots3DWFFuncPresets = new Knots3DWFFuncPresets();
-	    }
-	    return Knots3DWFFuncPresets;
-	  }
+    if (Knots3DWFFuncPresets == null) {
+      Knots3DWFFuncPresets = new Knots3DWFFuncPresets();
+    }
+    return Knots3DWFFuncPresets;
+  }
 }

@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PieFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +27,7 @@ public class PieFunc extends VariationFunc {
   private static final String PARAM_SLICES = "slices";
   private static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_THICKNESS = "thickness";
-  private static final String[] paramNames = { PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS };
+  private static final String[] paramNames = {PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS};
 
   private double slices = 6.0;
   private double rotation = 0.0;
@@ -45,8 +43,8 @@ public class PieFunc extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -56,7 +54,7 @@ public class PieFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { slices, rotation, thickness };
+    return new Object[]{slices, rotation, thickness};
   }
 
   @Override

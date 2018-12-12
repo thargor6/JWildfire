@@ -16,28 +16,27 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 */
 package org.jwildfire.create.tina.variation.plot;
 
-import java.io.StringReader;
-
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
 
+import java.io.StringReader;
 
-public class Knots3DFormulaEvaluator
-{
 
-	public static Knots3DFormulaEvaluator compile(String pScript) throws Exception {
-		  return (Knots3DFormulaEvaluator) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), Knots3DFormulaEvaluator.class, (ClassLoader) null);
-		}
-	
-	  public double evaluateX( int t) {
-		    return t;
-		  }
+public class Knots3DFormulaEvaluator {
 
-		  public double evaluateY( int t) {
-		    return t;
-		  }
+  public static Knots3DFormulaEvaluator compile(String pScript) throws Exception {
+    return (Knots3DFormulaEvaluator) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), Knots3DFormulaEvaluator.class, (ClassLoader) null);
+  }
 
-		  public double evaluateZ( int t) {
-		    return t;
-		  }
+  public double evaluateX(int t) {
+    return t;
+  }
+
+  public double evaluateY(int t) {
+    return t;
+  }
+
+  public double evaluateZ(int t) {
+    return t;
+  }
 }

@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class BarycentroidFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class BarycentroidFunc extends VariationFunc {
   private static final String PARAM_B = "b";
   private static final String PARAM_C = "c";
   private static final String PARAM_D = "d";
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D};
 
   private double a = 1.0;
   private double b = 0.0;
@@ -75,8 +75,8 @@ public class BarycentroidFunc extends VariationFunc {
     pVarTP.x += pAmount * um;
     pVarTP.y += pAmount * vm;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   private double sgn(double v) {
@@ -90,7 +90,7 @@ public class BarycentroidFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, d };
+    return new Object[]{a, b, c, d};
   }
 
   @Override

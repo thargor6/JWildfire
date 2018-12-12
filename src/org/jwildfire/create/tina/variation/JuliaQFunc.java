@@ -16,24 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class JuliaQFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_POWER = "power";
   private static final String PARAM_DIVISOR = "divisor";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIVISOR };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIVISOR};
 
   private int power = genRandomPower();
   private int divisor = 2;
@@ -48,8 +43,8 @@ public class JuliaQFunc extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -59,15 +54,14 @@ public class JuliaQFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, divisor };
+    return new Object[]{power, divisor};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POWER.equalsIgnoreCase(pName)) {
       power = Tools.FTOI(pValue);
-    }
-    else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
+    } else if (PARAM_DIVISOR.equalsIgnoreCase(pName))
       divisor = Tools.FTOI(pValue);
     else
       throw new IllegalArgumentException(pName);

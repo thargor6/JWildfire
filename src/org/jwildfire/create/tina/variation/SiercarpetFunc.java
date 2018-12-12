@@ -1,17 +1,16 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class SiercarpetFunc extends VariationFunc {
 
   /**
-   * Cross Carpet by Bagula 
+   * Cross Carpet by Bagula
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -22,7 +21,7 @@ public class SiercarpetFunc extends VariationFunc {
 
   private static final String PARAM_M = "m";
 
-  private static final String[] paramNames = { PARAM_M };
+  private static final String[] paramNames = {PARAM_M};
 
   double[] a = new double[25];
   double[] b = new double[25];
@@ -55,11 +54,10 @@ public class SiercarpetFunc extends VariationFunc {
 
     pVarTP.x += x * pAmount;
     pVarTP.y += y * pAmount;
-    
-				if (pContext.isPreserveZCoordinate()) 
-				{
-					  pVarTP.z += pAmount * pAffineTP.z;
-				}    
+
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
     //			    pVarTP.color = fmod(fabs( (sqr(pVarTP.x) + sqr(pVarTP.y ))), 1.0);
   }
@@ -73,7 +71,7 @@ public class SiercarpetFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { m };
+    return new Object[]{m};
   }
 
   public void setParameter(String pName, double pValue) {
@@ -83,8 +81,7 @@ public class SiercarpetFunc extends VariationFunc {
         m = 3;
       if (m > 12)
         m = 12;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

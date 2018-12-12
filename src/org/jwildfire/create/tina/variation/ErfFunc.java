@@ -16,27 +16,26 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.erf;
 
-public  class ErfFunc extends SimpleVariationFunc {
+
+public class ErfFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-      // "erf" variation created by zephyrtronium implemented into JWildfire by darkbeam
+    // "erf" variation created by zephyrtronium implemented into JWildfire by darkbeam
 
     pVarTP.x += erf(pAffineTP.x) * pAmount;
     pVarTP.y += erf(pAffineTP.y) * pAmount;
-if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
-
 
 
   @Override

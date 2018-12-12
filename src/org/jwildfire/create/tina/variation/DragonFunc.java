@@ -25,13 +25,14 @@ package org.jwildfire.create.tina.variation;
  * Level: 1,2,3,4,5
  * Line_thickness : 1..200
  */
-import java.util.Arrays;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.util.Arrays;
 
 public class DragonFunc extends VariationFunc {
 
@@ -41,7 +42,7 @@ public class DragonFunc extends VariationFunc {
   private static final String PARAM_LINE_THICKNESS = "line_thickness";
 
   private static final String[] paramNames = {
-      PARAM_LEVEL, PARAM_LINE_THICKNESS };
+          PARAM_LEVEL, PARAM_LINE_THICKNESS};
 
   private int level = 2;
   private double line_thickness_param = 0.5;
@@ -187,8 +188,7 @@ public class DragonFunc extends VariationFunc {
   public void nogard(int n) {
     if (n == 0) {
       turtle.goForward(1.0);
-    }
-    else {
+    } else {
       dragon(n - 1);
       turtle.turnLeft(-90);
       nogard(n - 1);
@@ -199,9 +199,7 @@ public class DragonFunc extends VariationFunc {
   public void dragon(int n) {
     if (n == 0) {
       turtle.goForward(1.0);
-    }
-
-    else {
+    } else {
       dragon(n - 1);
       turtle.turnLeft(90);
       nogard(n - 1);
@@ -300,7 +298,7 @@ public class DragonFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { level, line_thickness_param };
+    return new Object[]{level, line_thickness_param};
   }
 
   @Override
@@ -309,8 +307,7 @@ public class DragonFunc extends VariationFunc {
       level = limitIntVal(Tools.FTOI(pValue), 1, 21);
       turtle = new Turtle(0.0, 0.0, 0.0);
       Dragon(level);
-    }
-    else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
+    } else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness_param = pValue;
     else
       throw new IllegalArgumentException(pName);

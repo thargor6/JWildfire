@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CirclizeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_HOLE = "hole";
 
-  private static final String[] paramNames = { PARAM_HOLE };
+  private static final String[] paramNames = {PARAM_HOLE};
 
   private double hole = 0.40;
 
@@ -43,17 +40,14 @@ public class CirclizeFunc extends VariationFunc {
     if (absx >= absy) {
       if (pAffineTP.x >= absy) {
         perimeter = absx + pAffineTP.y;
-      }
-      else {
+      } else {
         perimeter = 5.0 * absx - pAffineTP.y;
       }
       side = absx;
-    }
-    else {
+    } else {
       if (pAffineTP.y >= absx) {
         perimeter = 3.0 * absy - pAffineTP.x;
-      }
-      else {
+      } else {
         perimeter = 7.0 * absy + pAffineTP.x;
       }
       side = absy;
@@ -68,8 +62,8 @@ public class CirclizeFunc extends VariationFunc {
     pVarTP.x += r * cosa;
     pVarTP.y += r * sina;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -80,7 +74,7 @@ public class CirclizeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { hole };
+    return new Object[]{hole};
   }
 
   @Override

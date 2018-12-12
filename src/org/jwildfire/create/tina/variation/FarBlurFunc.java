@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class FarBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +32,7 @@ public class FarBlurFunc extends VariationFunc {
   private static final String PARAM_Y_ORIGIN = "y_origin";
   private static final String PARAM_Z_ORIGIN = "z_origin";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z, PARAM_X_ORIGIN, PARAM_Y_ORIGIN, PARAM_Z_ORIGIN };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z, PARAM_X_ORIGIN, PARAM_Y_ORIGIN, PARAM_Z_ORIGIN};
 
   private double x = 1.0;
   private double y = 1.0;
@@ -48,9 +45,9 @@ public class FarBlurFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* farblur by zephyrtronium, http://zephyrtronium.deviantart.com/art/Farblur-Apophysis-Plugin-170718419?q=gallery%3Afractal-resources%2F24660058&qo=10 */
     double r = pAmount * (sqr(pVarTP.x - x_origin) +
-        sqr(pVarTP.y - y_origin) +
-        sqr(pVarTP.z - z_origin)) *
-        (this._r[0] + this._r[1] + this._r[2] + this._r[3] - 2.0);
+            sqr(pVarTP.y - y_origin) +
+            sqr(pVarTP.z - z_origin)) *
+            (this._r[0] + this._r[1] + this._r[2] + this._r[3] - 2.0);
     this._r[_n] = pContext.random();
     _n = (_n + 1) & 3;
     double u = pContext.random() * M_2PI;
@@ -72,7 +69,7 @@ public class FarBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z, x_origin, y_origin, z_origin };
+    return new Object[]{x, y, z, x_origin, y_origin, z_origin};
   }
 
   @Override

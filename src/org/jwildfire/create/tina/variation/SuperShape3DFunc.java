@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.Tools.FTOI;
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.Tools.FTOI;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SuperShape3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -47,7 +42,7 @@ public class SuperShape3DFunc extends VariationFunc {
   private static final String PARAM_N3_2 = "n3_2";
   private static final String PARAM_SPIRAL = "spiral";
   private static final String PARAM_TOROIDMAP = "toroidmap";
-  private static final String[] paramNames = { PARAM_RHO, PARAM_PHI, PARAM_M1, PARAM_M2, PARAM_A1, PARAM_A2, PARAM_B1, PARAM_B2, PARAM_N1_1, PARAM_N1_2, PARAM_N2_1, PARAM_N2_2, PARAM_N3_1, PARAM_N3_2, PARAM_SPIRAL, PARAM_TOROIDMAP };
+  private static final String[] paramNames = {PARAM_RHO, PARAM_PHI, PARAM_M1, PARAM_M2, PARAM_A1, PARAM_A2, PARAM_B1, PARAM_B2, PARAM_N1_1, PARAM_N1_2, PARAM_N2_1, PARAM_N2_2, PARAM_N3_1, PARAM_N3_2, PARAM_SPIRAL, PARAM_TOROIDMAP};
 
   private double rho = 9.9;
   private double phi = 2.5;
@@ -101,8 +96,7 @@ public class SuperShape3DFunc extends VariationFunc {
       pVarTP.x += pAmount * cosr * (r1 + r2 * cosp);
       pVarTP.y += pAmount * sinr * (r1 + r2 * cosp);
       pVarTP.z += pAmount * r2 * sinp;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * r1 * cosr * r2 * cosp;
       pVarTP.y += pAmount * r1 * sinr * r2 * cosp;
       pVarTP.z += pAmount * r2 * sinp;
@@ -116,7 +110,7 @@ public class SuperShape3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rho, phi, m1, m2, a1, a2, b1, b2, n1_1, n1_2, n2_1, n2_2, n3_1, n3_2, spiral, toroidmap };
+    return new Object[]{rho, phi, m1, m2, a1, a2, b1, b2, n1_1, n1_2, n2_1, n2_2, n3_1, n3_2, spiral, toroidmap};
   }
 
   @Override
@@ -155,12 +149,10 @@ public class SuperShape3DFunc extends VariationFunc {
       toroidmap = FTOI(pValue);
       if (toroidmap < 0) {
         toroidmap = 0;
-      }
-      else if (toroidmap > 1) {
+      } else if (toroidmap > 1) {
         toroidmap = 1;
       }
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

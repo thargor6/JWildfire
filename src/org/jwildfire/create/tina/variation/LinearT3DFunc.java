@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fabs;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 public class LinearT3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,14 +29,13 @@ public class LinearT3DFunc extends VariationFunc {
   private static final String PARAM_POWY = "powY";
   private static final String PARAM_POWZ = "powZ";
 
-  private static final String[] paramNames = { PARAM_POWX, PARAM_POWY, PARAM_POWZ };
+  private static final String[] paramNames = {PARAM_POWX, PARAM_POWY, PARAM_POWZ};
 
   private double powX = 1.2;
   private double powY = 1.2;
   private double powZ = 1.2;
 
-  private double sgn(double arg)
-  {
+  private double sgn(double arg) {
     if (arg > 0)
       return 1.0;
     else
@@ -58,12 +57,12 @@ public class LinearT3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { powX, powY, powZ };
+    return new Object[]{powX, powY, powZ};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "lT_powX", "lT_powY", "lT_powZ" };
+    return new String[]{"lT_powX", "lT_powY", "lT_powZ"};
   }
 
   @Override

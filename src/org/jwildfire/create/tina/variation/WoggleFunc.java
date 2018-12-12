@@ -1,17 +1,16 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class WoggleFunc extends VariationFunc {
 
   /**
-   * Woogle 
+   * Woogle
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -23,7 +22,7 @@ public class WoggleFunc extends VariationFunc {
   private static final String PARAM_M = "m";
 
   int m = 2;
-  private static final String[] paramNames = { PARAM_M };
+  private static final String[] paramNames = {PARAM_M};
 
   double[] a = new double[25];
   double[] b = new double[25];
@@ -41,8 +40,7 @@ public class WoggleFunc extends VariationFunc {
     if (c % 2 == 0) {
       x = -pAffineTP.x / r + ra * pAffineTP.y / r + a[c];
       y = -ra * pAffineTP.x / r - pAffineTP.y / r + b[c];
-    }
-    else {
+    } else {
       x = pAffineTP.x / r + ra * pAffineTP.y / r + a[c];
       y = -ra * pAffineTP.x / r + pAffineTP.y / r + b[c];
     }
@@ -65,7 +63,7 @@ public class WoggleFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { m };
+    return new Object[]{m};
   }
 
   public void setParameter(String pName, double pValue) {
@@ -80,8 +78,7 @@ public class WoggleFunc extends VariationFunc {
         a[i] = cos(2 * M_PI * (double) i / (double) m);
         b[i] = sin(2 * M_PI * (double) i / (double) m);
       }
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

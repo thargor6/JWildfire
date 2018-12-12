@@ -1,8 +1,14 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.util.Arrays;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Jesus Sosa
@@ -14,15 +20,8 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
  * Line_thickness : 1..200
  * bend_angle: 0..180
  * branch_angle: 0..90
- * branch_ratio: 0..1 
+ * branch_ratio: 0..1
  */
-import java.util.Arrays;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
 
 public class TreeFunc extends VariationFunc {
 
@@ -40,8 +39,8 @@ public class TreeFunc extends VariationFunc {
   private static final String PARAM_BRANCH_ANGLE = "branch_angle";
   private static final String PARAM_BRANCH_RATIO = "branch_ratio";
   private static final String[] paramNames = {
-      PARAM_LEVEL, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS,
-      PARAM_BEND_ANGLE, PARAM_BRANCH_ANGLE, PARAM_BRANCH_RATIO, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS };
+          PARAM_LEVEL, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS,
+          PARAM_BEND_ANGLE, PARAM_BRANCH_ANGLE, PARAM_BRANCH_RATIO, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS};
 
   private int nl = 0;
   private int level = 2;
@@ -254,8 +253,7 @@ public class TreeFunc extends VariationFunc {
       double rangle = (pContext.random() * M_2PI);
       xoffset = roffset * cos(rangle);
       yoffset = roffset * sin(rangle);
-    }
-    else {
+    } else {
       xoffset = 0;
       yoffset = 0;
     }
@@ -289,8 +287,7 @@ public class TreeFunc extends VariationFunc {
 
     if (rnd < line_threshold) {
       out = plotLine(pContext, x1, y1, x2, y2);
-    }
-    else if (rnd <= point_threshold) {
+    } else if (rnd <= point_threshold) {
       out = plotPoint(pContext, x1, y1);
     }
     pVarTP.x += pAmount * out.x;
@@ -310,7 +307,7 @@ public class TreeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { level, show_lines_param, line_thickness_param, bend_angle, branch_angle, branch_ratio, show_points_param, point_thickness_param };
+    return new Object[]{level, show_lines_param, line_thickness_param, bend_angle, branch_angle, branch_ratio, show_points_param, point_thickness_param};
   }
 
   @Override
@@ -320,9 +317,7 @@ public class TreeFunc extends VariationFunc {
       xpoints.clear();
       ypoints.clear();
       tree(level, 0.0, 0.0, Math.PI / 2.0, 2);
-    }
-
-    else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
+    } else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = (int) pValue;
     else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness_param = pValue;
@@ -331,23 +326,17 @@ public class TreeFunc extends VariationFunc {
       xpoints.clear();
       ypoints.clear();
       tree(level, 0.0, 0.0, Math.PI / 2.0, 2);
-    }
-
-    else if (PARAM_BRANCH_ANGLE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BRANCH_ANGLE.equalsIgnoreCase(pName)) {
       branch_angle = pValue;
       xpoints.clear();
       ypoints.clear();
       tree(level, 0.0, 0.0, Math.PI / 2.0, 2);
-    }
-
-    else if (PARAM_BRANCH_RATIO.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BRANCH_RATIO.equalsIgnoreCase(pName)) {
       branch_ratio = pValue;
       xpoints.clear();
       ypoints.clear();
       tree(level, 0.0, 0.0, Math.PI / 2.0, 2);
-    }
-
-    else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
+    } else if (PARAM_SHOW_POINTS.equalsIgnoreCase(pName))
       show_points_param = (int) pValue;
     else if (PARAM_POINT_THICKNESS.equalsIgnoreCase(pName))
       point_thickness_param = pValue;

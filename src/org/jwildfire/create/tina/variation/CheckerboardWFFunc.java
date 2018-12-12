@@ -36,7 +36,7 @@ public class CheckerboardWFFunc extends VariationFunc {
   private static final String PARAM_CHECKER_SIZE = "checker_size";
   private static final String PARAM_WITH_SIDES = "with_sides";
 
-  private static final String[] paramNames = { PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_CHECKER_SIZE, PARAM_DISPL_AMOUNT, PARAM_CHECKER_COLOR1, PARAM_CHECKER_COLOR2, PARAM_SIDE_COLOR, PARAM_WITH_SIDES };
+  private static final String[] paramNames = {PARAM_POSITION, PARAM_SIZE, PARAM_AXIS, PARAM_CHECKER_SIZE, PARAM_DISPL_AMOUNT, PARAM_CHECKER_COLOR1, PARAM_CHECKER_COLOR2, PARAM_SIDE_COLOR, PARAM_WITH_SIDES};
 
   private static final int AXIS_XY = 0;
   private static final int AXIS_YZ = 1;
@@ -60,21 +60,18 @@ public class CheckerboardWFFunc extends VariationFunc {
       y = pContext.random();
       z = getDisplacement(x, y);
       pVarTP.color = getColor(x, y);
-    }
-    else {
+    } else {
       if (_max_checks > 0 && pContext.random() < _side_prob) {
         pVarTP.color = side_color;
         if (pContext.random() < 0.5) {
           x = pContext.random(_max_checks + 1) * checker_size;
           y = pContext.random();
-        }
-        else {
+        } else {
           x = pContext.random();
           y = pContext.random(_max_checks + 1) * checker_size;
         }
         z = displ_amount * pContext.random();
-      }
-      else {
+      } else {
         x = pContext.random();
         y = pContext.random();
         z = getDisplacement(x, y);
@@ -126,39 +123,30 @@ public class CheckerboardWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { position, size, axis, checker_size, displ_amount, checker_color1, checker_color2, side_color, with_sides };
+    return new Object[]{position, size, axis, checker_size, displ_amount, checker_color1, checker_color2, side_color, with_sides};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_POSITION.equalsIgnoreCase(pName)) {
       position = pValue;
-    }
-    else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
       size = pValue;
-    }
-    else if (PARAM_AXIS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_AXIS.equalsIgnoreCase(pName)) {
       axis = limitIntVal(Tools.FTOI(pValue), AXIS_XY, AXIS_ZX);
-    }
-    else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DISPL_AMOUNT.equalsIgnoreCase(pName)) {
       displ_amount = pValue;
-    }
-    else if (PARAM_CHECKER_COLOR1.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CHECKER_COLOR1.equalsIgnoreCase(pName)) {
       checker_color1 = limitVal(pValue, 0.0, 1.0);
-    }
-    else if (PARAM_CHECKER_COLOR2.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CHECKER_COLOR2.equalsIgnoreCase(pName)) {
       checker_color2 = limitVal(pValue, 0.0, 1.0);
-    }
-    else if (PARAM_SIDE_COLOR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SIDE_COLOR.equalsIgnoreCase(pName)) {
       side_color = limitVal(pValue, 0.0, 1.0);
-    }
-    else if (PARAM_CHECKER_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_CHECKER_SIZE.equalsIgnoreCase(pName)) {
       checker_size = pValue;
-    }
-    else if (PARAM_WITH_SIDES.equalsIgnoreCase(pName)) {
+    } else if (PARAM_WITH_SIDES.equalsIgnoreCase(pName)) {
       with_sides = limitIntVal(Tools.FTOI(pValue), 0, 1);
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

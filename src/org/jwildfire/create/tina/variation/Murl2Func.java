@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Murl2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -41,7 +37,7 @@ public class Murl2Func extends VariationFunc {
   private static final String PARAM_C = "c";
   public static final String PARAM_POWER = "power";
 
-  private static final String[] paramNames = { PARAM_C, PARAM_POWER };
+  private static final String[] paramNames = {PARAM_C, PARAM_POWER};
 
   private double c = 0.1;
   private int power = 3;
@@ -55,12 +51,10 @@ public class Murl2Func extends VariationFunc {
       _invp = 1.0 / (double) power;
       if (c == -1) {
         _vp = 0;
-      }
-      else {
+      } else {
         _vp = pAmount * pow(c + 1, 2.0 / ((double) power));
       }
-    }
-    else {
+    } else {
       _invp = 100000000000.0;
       _vp = pAmount * pow(c + 1, 4 /*Normally infinity, but we let this be a special case*/);
     }
@@ -84,8 +78,8 @@ public class Murl2Func extends VariationFunc {
     pVarTP.x += _rl * (pAffineTP.x * _re + pAffineTP.y * _im);
     pVarTP.y += _rl * (pAffineTP.y * _re - pAffineTP.x * _im);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -100,7 +94,7 @@ public class Murl2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { c, power };
+    return new Object[]{c, power};
   }
 
   @Override

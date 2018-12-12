@@ -15,48 +15,47 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.Complex;
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
 
 
 public class Arcsech2Func extends SimpleVariationFunc {
-	  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	  @Override
-	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	   // author Tatyana Zabanova 2017. Implemented by DarkBeam 2018
-	       Complex z = new Complex(pAffineTP.x, pAffineTP.y);
-	       z.Recip();
-	       Complex z2 = new Complex(z);
-	       z2.Dec(); // z-1
-	       z2.Sqrt(); // Sqrt(z-1)
-	       Complex z3 = new Complex(z);
-	       z3.Inc(); // z+1
-	       z3.Sqrt(); // Sqrt(z+1)
-	       z3.Mul(z2);
-	       z.Add(z3); // z + Sqrt(z-1)*Sqrt(z+1)
-	       z.Log();
-	       z.Scale(pAmount * 2.0 * M_1_PI);
-	       
-	       pVarTP.y += z.im;
-	       if (z.im < 0) {
-	            pVarTP.x += z.re;
-	            pVarTP.y += 1.0; 
-	       } else {
-	            pVarTP.x -= z.re;
-	            pVarTP.y -= 1.0;
-	       }
-		if (pContext.isPreserveZCoordinate()) {
-			pVarTP.z += pAmount * pAffineTP.z;
-		}
-	  }
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // author Tatyana Zabanova 2017. Implemented by DarkBeam 2018
+    Complex z = new Complex(pAffineTP.x, pAffineTP.y);
+    z.Recip();
+    Complex z2 = new Complex(z);
+    z2.Dec(); // z-1
+    z2.Sqrt(); // Sqrt(z-1)
+    Complex z3 = new Complex(z);
+    z3.Inc(); // z+1
+    z3.Sqrt(); // Sqrt(z+1)
+    z3.Mul(z2);
+    z.Add(z3); // z + Sqrt(z-1)*Sqrt(z+1)
+    z.Log();
+    z.Scale(pAmount * 2.0 * M_1_PI);
 
-	  @Override
-	  public String getName() {
-	    return "arcsech2";
-	  }
+    pVarTP.y += z.im;
+    if (z.im < 0) {
+      pVarTP.x += z.re;
+      pVarTP.y += 1.0;
+    } else {
+      pVarTP.x -= z.re;
+      pVarTP.y -= 1.0;
+    }
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
 
-	}
+  @Override
+  public String getName() {
+    return "arcsech2";
+  }
+
+}

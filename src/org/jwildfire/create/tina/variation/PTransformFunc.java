@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PTransformFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +31,7 @@ public class PTransformFunc extends VariationFunc {
   private static final String PARAM_SPLIT = "split";
   private static final String PARAM_LOG = "use_log";
 
-  private static final String[] paramNames = { PARAM_ROTATE, PARAM_POWER, PARAM_MOVE, PARAM_SPLIT, PARAM_LOG };
+  private static final String[] paramNames = {PARAM_ROTATE, PARAM_POWER, PARAM_MOVE, PARAM_SPLIT, PARAM_LOG};
 
   private double rotate = 0.0;
   private int power = 1;
@@ -45,7 +42,7 @@ public class PTransformFunc extends VariationFunc {
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double rho, theta;
-    
+
     rho = (log != 0) ? log(pAffineTP.getPrecalcSqrt()) / power + move : pAffineTP.getPrecalcSqrt() / power + move;
     theta = pAffineTP.getPrecalcAtanYX() + rotate;
 
@@ -53,12 +50,12 @@ public class PTransformFunc extends VariationFunc {
       rho += split;
     else
       rho -= split;
-    
+
     if (log != 0) rho = exp(rho);
-    
+
     pVarTP.x += pAmount * rho * cos(theta);
     pVarTP.y += pAmount * rho * sin(theta);
-    
+
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -71,7 +68,7 @@ public class PTransformFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rotate, power, move, split, log };
+    return new Object[]{rotate, power, move, split, log};
   }
 
   @Override

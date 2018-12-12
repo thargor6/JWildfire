@@ -16,18 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-
 import org.jwildfire.base.Tools;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PrePostCirclizeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,59 +30,57 @@ public class PrePostCirclizeFunc extends VariationFunc {
   private static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_REVERSE = "reverse";
 
-  private static final String[] paramNames = { PARAM_N, PARAM_ROTATION, PARAM_REVERSE };
+  private static final String[] paramNames = {PARAM_N, PARAM_ROTATION, PARAM_REVERSE};
 
   private int n = 4;
   private double rotation = 45;
   private double rot_rad = M_PI_4;
   private int reverse = 0;
-  
+
   private double pi_n, cospi_n;
-  
+
   private void circlize(XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  double theta = pAffineTP.getPrecalcAtanYX();
-	  double r = pAffineTP.getPrecalcSqrt();
-	  double factor = cospi_n / cos((theta - rot_rad) - pi_n * (2 * floor((n * (theta - rot_rad)) / M_2PI) + 1));
-	  
-	  pVarTP.x = lerp(r, r / factor, pAmount) * cos(theta);
-	  pVarTP.y = lerp(r, r / factor, pAmount) * sin(theta);	  
+    double theta = pAffineTP.getPrecalcAtanYX();
+    double r = pAffineTP.getPrecalcSqrt();
+    double factor = cospi_n / cos((theta - rot_rad) - pi_n * (2 * floor((n * (theta - rot_rad)) / M_2PI) + 1));
+
+    pVarTP.x = lerp(r, r / factor, pAmount) * cos(theta);
+    pVarTP.y = lerp(r, r / factor, pAmount) * sin(theta);
   }
 
   private void uncirclize(XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  double theta = pAffineTP.getPrecalcAtanYX();
-	  double r = pAffineTP.getPrecalcSqrt();
-	  double factor = cospi_n / cos((theta - rot_rad) - pi_n * (2 * floor((n * (theta - rot_rad)) / M_2PI) + 1));
-	  
-	  pVarTP.x = lerp(r, r * factor, pAmount) * cos(theta);
-	  pVarTP.y = lerp(r, r * factor, pAmount) * sin(theta);	  
+    double theta = pAffineTP.getPrecalcAtanYX();
+    double r = pAffineTP.getPrecalcSqrt();
+    double factor = cospi_n / cos((theta - rot_rad) - pi_n * (2 * floor((n * (theta - rot_rad)) / M_2PI) + 1));
+
+    pVarTP.x = lerp(r, r * factor, pAmount) * cos(theta);
+    pVarTP.y = lerp(r, r * factor, pAmount) * sin(theta);
   }
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-	  pi_n = M_PI / n;
-	  cospi_n = cos(pi_n);
+    pi_n = M_PI / n;
+    cospi_n = cos(pi_n);
   }
- 
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  if (reverse == 0) {
-		  uncirclize(pVarTP, pVarTP, pAmount);
-	  }
-	  else {
-		  circlize(pVarTP, pVarTP, pAmount);
-	  }
+    if (reverse == 0) {
+      uncirclize(pVarTP, pVarTP, pAmount);
+    } else {
+      circlize(pVarTP, pVarTP, pAmount);
+    }
   }
 
   @Override
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  if (reverse == 0) {
-		  circlize(pAffineTP, pAffineTP, pAmount);
-	  }
-	  else {
-		  uncirclize(pAffineTP, pAffineTP, pAmount);
-	  }
+    if (reverse == 0) {
+      circlize(pAffineTP, pAffineTP, pAmount);
+    } else {
+      uncirclize(pAffineTP, pAffineTP, pAmount);
+    }
   }
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -96,7 +88,7 @@ public class PrePostCirclizeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, rotation, reverse };
+    return new Object[]{n, rotation, reverse};
   }
 
   @Override
@@ -106,8 +98,7 @@ public class PrePostCirclizeFunc extends VariationFunc {
     else if (PARAM_ROTATION.equalsIgnoreCase(pName)) {
       rotation = pValue;
       rot_rad = rotation * M_PI / 180;
-    }
-    else if (PARAM_REVERSE.equalsIgnoreCase(pName))
+    } else if (PARAM_REVERSE.equalsIgnoreCase(pName))
       reverse = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else
       throw new IllegalArgumentException(pName);
@@ -122,9 +113,9 @@ public class PrePostCirclizeFunc extends VariationFunc {
   public int getPriority() {
     return 2;
   }
-  
+
   private double lerp(double v0, double v1, double t) {
-	  return (1-t) * v0 + t * v1;
+    return (1 - t) * v0 + t * v1;
   }
 
 }

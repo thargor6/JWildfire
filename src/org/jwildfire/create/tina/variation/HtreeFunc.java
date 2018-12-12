@@ -16,9 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.util.Arrays;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Jesus Sosa
@@ -32,15 +38,7 @@ import static org.jwildfire.base.mathlib.MathLib.sin;
  * Line_thickness : 1..200
  * show_points: 0=hide,1=show
  * point_thickness_param: 1..200
-
  */
-import java.util.Arrays;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
 
 public class HtreeFunc extends VariationFunc {
 
@@ -54,7 +52,7 @@ public class HtreeFunc extends VariationFunc {
   private static final String PARAM_POINT_THICKNESS = "point_thickness";
 
   private static final String[] paramNames = {
-      PARAM_LEVEL, PARAM_SIZE, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS };
+          PARAM_LEVEL, PARAM_SIZE, PARAM_SHOW_LINES, PARAM_LINE_THICKNESS, PARAM_SHOW_POINTS, PARAM_POINT_THICKNESS};
 
   private int nl = 0;
   private int level = 2;
@@ -286,8 +284,7 @@ public class HtreeFunc extends VariationFunc {
       double rangle = (pContext.random() * M_2PI);
       xoffset = roffset * cos(rangle);
       yoffset = roffset * sin(rangle);
-    }
-    else {
+    } else {
       xoffset = 0;
       yoffset = 0;
     }
@@ -337,7 +334,7 @@ public class HtreeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { level, size, show_lines_param, line_thickness_param, show_points_param, point_thickness_param };
+    return new Object[]{level, size, show_lines_param, line_thickness_param, show_points_param, point_thickness_param};
   }
 
   @Override
@@ -348,15 +345,13 @@ public class HtreeFunc extends VariationFunc {
       xpoints.clear();
       ypoints.clear();
       draw(level, 0.0, 0.0, size);
-    }
-    else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SIZE.equalsIgnoreCase(pName)) {
       size = pValue;
       nl = 0;
       xpoints.clear();
       ypoints.clear();
       draw(level, 0.0, 0.0, size);
-    }
-    else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
+    } else if (PARAM_SHOW_LINES.equalsIgnoreCase(pName))
       show_lines_param = (int) pValue;
     else if (PARAM_LINE_THICKNESS.equalsIgnoreCase(pName))
       line_thickness_param = pValue;

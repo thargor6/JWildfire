@@ -16,14 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import odk.lang.DoubleWrapper;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
@@ -32,7 +25,13 @@ import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 
-import odk.lang.DoubleWrapper;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class DLAWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -42,7 +41,7 @@ public class DLAWFFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_JITTER = "jitter";
-  private static final String[] paramNames = { PARAM_BUFFER_SIZE, PARAM_MAX_ITER, PARAM_SEED, PARAM_SCALE, PARAM_JITTER };
+  private static final String[] paramNames = {PARAM_BUFFER_SIZE, PARAM_MAX_ITER, PARAM_SEED, PARAM_SCALE, PARAM_JITTER};
 
   private int buffer_size = 800;
   private int max_iter = 6000;
@@ -67,7 +66,7 @@ public class DLAWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { buffer_size, max_iter, seed, scale, jitter };
+    return new Object[]{buffer_size, max_iter, seed, scale, jitter};
   }
 
   @Override
@@ -124,8 +123,7 @@ public class DLAWFFunc extends VariationFunc {
           // This way the growth may be animated by just increasig the max_iter param. 
           if (jitterRadius > MathLib.EPSILON) {
             aRnd = randGen.random();
-          }
-          else {
+          } else {
             aRnd = 0.0;
           }
           if (points[i][j] != 0) {
@@ -151,8 +149,7 @@ public class DLAWFFunc extends VariationFunc {
   private Point getRandomPoint() {
     if (_points.size() > 0) {
       return _points.get((int) (Math.random() * _points.size()));
-    }
-    else
+    } else
       return ZERO;
   }
 
@@ -194,8 +191,7 @@ public class DLAWFFunc extends VariationFunc {
         if ((ci < 1) || (ci > size2) || (cj < 1) || (cj > size2)) {
           qt = 1;
           i--;
-        }
-        else {
+        } else {
           int sum = q[ci - 1][cj] + q[ci + 1][cj] + q[ci][cj - 1] + q[ci][cj + 1];
           if (sum != 0) {
             q[ci][cj] = qt = 1;
@@ -209,8 +205,7 @@ public class DLAWFFunc extends VariationFunc {
               r1 = r3;
               r2 = 2.1 * r1;
             }
-          }
-          else {
+          } else {
             double r3 = (double) (ci - centre);
             double r4 = (double) (cj - centre);
             r3 *= r3;

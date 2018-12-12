@@ -16,22 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BubbleT3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -42,7 +32,7 @@ public class BubbleT3DFunc extends VariationFunc {
   private static final String PARAM_EXPONENT_Z = "exponent_z";
   private static final String PARAM_SYMMETRY_Z = "symmetry_z";
   private static final String PARAM_MODUS_BLUR = "modus_blur";
-  private static final String[] paramNames = { PARAM_NUMBER_OF_STRIPES, PARAM_RATIO_OF_STRIPES, PARAM_ANGLE_OF_HOLE, PARAM_EXPONENT_Z, PARAM_SYMMETRY_Z, PARAM_MODUS_BLUR };
+  private static final String[] paramNames = {PARAM_NUMBER_OF_STRIPES, PARAM_RATIO_OF_STRIPES, PARAM_ANGLE_OF_HOLE, PARAM_EXPONENT_Z, PARAM_SYMMETRY_Z, PARAM_MODUS_BLUR};
 
   private int number_of_stripes = 0;
   private double ratio_of_stripes = 1.0;
@@ -64,32 +54,22 @@ public class BubbleT3DFunc extends VariationFunc {
     if (angXY < 0)
       angXY += M_2PI;
 
-    if (number_of_stripes != 0)
-    {
-      while (angXY > angStrip2)
-      {
+    if (number_of_stripes != 0) {
+      while (angXY > angStrip2) {
         angXY -= angStrip2;
       }
-      if (invStripes == FALSE)
-      {
-        if (angXY > angStrip1)
-        {
-          if (modus_blur == FALSE)
-          {
+      if (invStripes == FALSE) {
+        if (angXY > angStrip1) {
+          if (modus_blur == FALSE) {
             x = 0.0;
             y = 0.0;
-          }
-          else
-          {
-            if (ratio_of_stripes == 1)
-            {
+          } else {
+            if (ratio_of_stripes == 1) {
               xTmp = c * x - s * y;
               yTmp = s * x + c * y;
               x = xTmp;
               y = yTmp;
-            }
-            else
-            {
+            } else {
               angRot = (angXY - angStrip1) / (angStrip2 - angStrip1);
               angRot = angXY - angRot * angStrip1;
               s = sin(angRot);
@@ -102,27 +82,18 @@ public class BubbleT3DFunc extends VariationFunc {
           }
 
         }
-      }
-      else
-      {
-        if (angXY < angStrip1)
-        {
-          if (modus_blur == FALSE)
-          {
+      } else {
+        if (angXY < angStrip1) {
+          if (modus_blur == FALSE) {
             x = 0.0;
             y = 0.0;
-          }
-          else
-          {
-            if (ratio_of_stripes == 1)
-            {
+          } else {
+            if (ratio_of_stripes == 1) {
               xTmp = c * x - s * y;
               yTmp = s * x + c * y;
               x = xTmp;
               y = yTmp;
-            }
-            else
-            {
+            } else {
               angRot = (angXY - angStrip1) / (angStrip1);
               angRot = angXY - angRot * (angStrip2 - angStrip1);
               s = sin(angRot);
@@ -140,35 +111,26 @@ public class BubbleT3DFunc extends VariationFunc {
     //calculation of holes
     x = x / rad;
     y = y / rad;
-    if ((x != 0) || (y != 0))
-    {
+    if ((x != 0) || (y != 0)) {
       z = 2 / pow(rad, exponent_z) - 1;
       if (exponent_z <= 2)
         angZ = M_PI - acos((z / (x * x + y * y + z * z)));
       else
         angZ = M_PI - atan2(sqr(x * x + y * y), z);
-    }
-    else
-    {
+    } else {
       z = 0.0;
       angZ = 0.0;
     }
 
     // no symmetry to z-axis
-    if (symmetry_z == FALSE)
-    {
-      if (invHole == FALSE)
-      {
-        if (angZ > angle_of_hole)
-        {
-          if ((modus_blur == FALSE) || (exponent_z != 1.0))
-          {
+    if (symmetry_z == FALSE) {
+      if (invHole == FALSE) {
+        if (angZ > angle_of_hole) {
+          if ((modus_blur == FALSE) || (exponent_z != 1.0)) {
             x = 0.0;
             y = 0.0;
             z = 0.0;
-          }
-          else
-          {
+          } else {
             angTmp = (M_PI - angZ) / angHoleComp * angle_of_hole - M_PI_2;
             angZ -= M_PI_2;
             fac = cos(angTmp) / cos(angZ);
@@ -177,19 +139,13 @@ public class BubbleT3DFunc extends VariationFunc {
             z = z * (sin(angTmp) / sin(angZ));
           }
         }
-      }
-      else
-      {
-        if (angZ < angle_of_hole)
-        {
-          if ((modus_blur == FALSE) || (exponent_z != 1.0))
-          {
+      } else {
+        if (angZ < angle_of_hole) {
+          if ((modus_blur == FALSE) || (exponent_z != 1.0)) {
             x = 0.0;
             y = 0.0;
             z = 0.0;
-          }
-          else
-          {
+          } else {
             angTmp = M_PI - angZ / angHoleComp * angle_of_hole - M_PI_2;
             angZ -= M_PI_2;
             fac = cos(angTmp) / cos(angZ);
@@ -201,24 +157,16 @@ public class BubbleT3DFunc extends VariationFunc {
       }
     }
     // symmetry to z-axis
-    else
-    {
-      if ((angZ > angle_of_hole) || (angZ < (M_PI - angle_of_hole)))
-      {
-        if ((modus_blur == FALSE) || (exponent_z != 1.0))
-        {
+    else {
+      if ((angZ > angle_of_hole) || (angZ < (M_PI - angle_of_hole))) {
+        if ((modus_blur == FALSE) || (exponent_z != 1.0)) {
           x = 0.0;
           y = 0.0;
           z = 0.0;
-        }
-        else
-        {
-          if (angZ > angle_of_hole)
-          {
+        } else {
+          if (angZ > angle_of_hole) {
             angTmp = (M_PI - angZ) / angHoleComp * (M_PI - 2 * angHoleComp) + angHoleComp - M_PI_2;
-          }
-          else
-          {
+          } else {
             angTmp = M_PI_2 - (angZ / angHoleComp * (M_PI - 2 * angHoleComp) + angHoleComp);
           }
           angZ -= M_PI_2;
@@ -242,12 +190,12 @@ public class BubbleT3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { number_of_stripes, ratio_of_stripes, angle_of_hole, exponent_z, symmetry_z, modus_blur };
+    return new Object[]{number_of_stripes, ratio_of_stripes, angle_of_hole, exponent_z, symmetry_z, modus_blur};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "number_of_stripes", "ratio_of_stripes", "angle_of_hole", "exponentZ", "_symmetryZ", "_modusBlur" };
+    return new String[]{"number_of_stripes", "ratio_of_stripes", "angle_of_hole", "exponentZ", "_symmetryZ", "_modusBlur"};
   }
 
   @Override
@@ -256,8 +204,7 @@ public class BubbleT3DFunc extends VariationFunc {
       number_of_stripes = Tools.FTOI(pValue);
       if (number_of_stripes < 0)
         number_of_stripes = 0;
-    }
-    else if (PARAM_RATIO_OF_STRIPES.equalsIgnoreCase(pName))
+    } else if (PARAM_RATIO_OF_STRIPES.equalsIgnoreCase(pName))
       ratio_of_stripes = limitVal(pValue, 0.0, 2.0);
     else if (PARAM_ANGLE_OF_HOLE.equalsIgnoreCase(pName))
       angle_of_hole = pValue;
@@ -290,13 +237,10 @@ public class BubbleT3DFunc extends VariationFunc {
     if (number_of_stripes < 0) {
       number_of_stripes = iabs(number_of_stripes);
       invStripes = TRUE;
-    }
-    else
-    {
+    } else {
       invStripes = FALSE;
     }
-    if (number_of_stripes != 0)
-    {
+    if (number_of_stripes != 0) {
       angStrip = M_PI / (double) number_of_stripes;
       angStrip2 = 2 * angStrip;
       s = sin(angStrip);
@@ -309,22 +253,18 @@ public class BubbleT3DFunc extends VariationFunc {
     }
 
     // calculation of constants of holes
-    if (symmetry_z == TRUE)
-    {
+    if (symmetry_z == TRUE) {
       if (angle_of_hole < 0.0)
         angle_of_hole = fabs(angle_of_hole);
       if (angle_of_hole > 179.9)
         angle_of_hole = 179.9;
     }
 
-    if (angle_of_hole < 0)
-    {
+    if (angle_of_hole < 0) {
       angle_of_hole = fabs(angle_of_hole);
       invHole = TRUE;
       angle_of_hole = (angle_of_hole / 360 * M_2PI) / 2;
-    }
-    else
-    {
+    } else {
       invHole = FALSE;
       angle_of_hole = M_PI - (angle_of_hole / 360 * M_2PI) / 2;
     }

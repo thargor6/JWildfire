@@ -16,21 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.iabs;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class NPolarFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +29,7 @@ public class NPolarFunc extends VariationFunc {
   private static final String PARAM_PARITY = "parity";
   private static final String PARAM_N = "n";
 
-  private static final String[] paramNames = { PARAM_PARITY, PARAM_N };
+  private static final String[] paramNames = {PARAM_PARITY, PARAM_N};
 
   private int parity = 0;
   private int n = 1;
@@ -58,8 +49,8 @@ public class NPolarFunc extends VariationFunc {
     pVarTP.x += x;
     pVarTP.y += y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -69,7 +60,7 @@ public class NPolarFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { parity, n };
+    return new Object[]{parity, n};
   }
 
   @Override

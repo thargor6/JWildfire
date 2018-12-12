@@ -6,7 +6,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class HadamardFunc extends SimpleVariationFunc {
 
   /**
-   * Hadamard IFS 
+   * Hadamard IFS
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -24,12 +25,10 @@ public class HadamardFunc extends SimpleVariationFunc {
     if (pContext.random() < 0.333) {
       x = pAffineTP.x / 2.0;
       y = pAffineTP.y / 2.0;
-    }
-    else if (pContext.random() < 0.666) {
+    } else if (pContext.random() < 0.666) {
       x = pAffineTP.y / 2.0;
       y = -pAffineTP.x / 2.0 - 0.5;
-    }
-    else {
+    } else {
       x = -pAffineTP.y / 2.0 - 0.5;
       y = pAffineTP.x / 2.0;
     }

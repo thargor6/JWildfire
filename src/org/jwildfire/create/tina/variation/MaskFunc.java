@@ -16,19 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * port of Mask Apophysis plugin
  * original Apophysis plugin by Raykoid666
  * ported to JWildfire variation by CozyG (and enhanced with several user-adjustable parameters)
- *   [used chronologicaldot's JWildfire variation BSplitFunc.java as initial template]
+ * [used chronologicaldot's JWildfire variation BSplitFunc.java as initial template]
  */
 public class MaskFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +35,7 @@ public class MaskFunc extends VariationFunc {
   private static final String PARAM_USHIFT = "ushift";
   private static final String PARAM_XSCALE = "xscale";
   private static final String PARAM_YSCALE = "yscale";
-  private static final String[] paramNames = { PARAM_XSHIFT, PARAM_YSHIFT, PARAM_USHIFT, PARAM_XSCALE, PARAM_YSCALE };
+  private static final String[] paramNames = {PARAM_XSHIFT, PARAM_YSHIFT, PARAM_USHIFT, PARAM_XSCALE, PARAM_YSCALE};
 
   double xshift = 0.0;
   double yshift = 0.0;
@@ -52,16 +49,15 @@ public class MaskFunc extends VariationFunc {
     // Prevent divide by zero error
     if (sumsq == 0) {
       pVarTP.doHide = true;
-    }
-    else {
+    } else {
       double xfactor = xscale * pAffineTP.x + xshift;
       double yfactor = yscale * pAffineTP.y + yshift;
       pVarTP.x = (pAmount / sumsq) * sin(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
       pVarTP.y += (pAmount / sumsq) * cos(xfactor) * (cosh(yfactor) + ushift) * sqr(sin(xfactor));
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -76,27 +72,22 @@ public class MaskFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xshift, yshift, ushift, xscale, yscale };
+    return new Object[]{xshift, yshift, ushift, xscale, yscale};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_XSHIFT)) {
       xshift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
+    } else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
       yshift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_USHIFT)) {
+    } else if (pName.equalsIgnoreCase(PARAM_USHIFT)) {
       ushift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_XSCALE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_XSCALE)) {
       xscale = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_YSCALE)) {
+    } else if (pName.equalsIgnoreCase(PARAM_YSCALE)) {
       yscale = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

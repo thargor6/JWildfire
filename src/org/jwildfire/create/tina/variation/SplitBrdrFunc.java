@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.rint;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SplitBrdrFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +28,7 @@ public class SplitBrdrFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_PX = "px";
   private static final String PARAM_PY = "py";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_PX, PARAM_PY };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_PX, PARAM_PY};
 
   private double x = 0.25;
   private double y = 0.25;
@@ -54,35 +52,23 @@ public class SplitBrdrFunc extends VariationFunc {
     offsetX = pAffineTP.x - roundX;
     offsetY = pAffineTP.y - roundY;
 
-    if (Math.random() >= 0.75)
-    {
+    if (Math.random() >= 0.75) {
       pVarTP.x += pAmount * (offsetX * 0.5 + roundX);
       pVarTP.y += pAmount * (offsetY * 0.5 + roundY);
-    }
-    else
-    {
-      if (fabs(offsetX) >= fabs(offsetY))
-      {
-        if (offsetX >= 0.0)
-        {
+    } else {
+      if (fabs(offsetX) >= fabs(offsetY)) {
+        if (offsetX >= 0.0) {
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX + this.x);
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY + this.y * offsetY / offsetX);
-        }
-        else
-        {
+        } else {
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX - this.y);
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY - this.y * offsetY / offsetX);
         }
-      }
-      else
-      {
-        if (offsetY >= 0.0)
-        {
+      } else {
+        if (offsetY >= 0.0) {
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY + this.y);
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX + offsetX / offsetY * this.y);
-        }
-        else
-        {
+        } else {
           pVarTP.y += pAmount * (offsetY * 0.5 + roundY - this.y);
           pVarTP.x += pAmount * (offsetX * 0.5 + roundX - offsetX / offsetY * this.x);
         }
@@ -91,8 +77,8 @@ public class SplitBrdrFunc extends VariationFunc {
     pVarTP.x += pAffineTP.x * this.px;
     pVarTP.y += pAffineTP.y * this.py;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -102,7 +88,7 @@ public class SplitBrdrFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, px, py };
+    return new Object[]{x, y, px, py};
   }
 
   @Override

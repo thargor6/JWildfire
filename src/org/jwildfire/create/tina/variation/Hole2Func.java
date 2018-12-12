@@ -16,119 +16,119 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class Hole2Func extends VariationFunc {
-   private static final long serialVersionUID = 1L;
-   private static final String PARAM_A = "a";
-   private static final String PARAM_B = "b";
-   private static final String PARAM_C = "c";
-   private static final String PARAM_D = "d";
-   public static final String PARAM_INSIDE = "inside";
-   public static final String PARAM_SHAPE = "shape";
-   private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_INSIDE, PARAM_SHAPE };
+  private static final long serialVersionUID = 1L;
+  private static final String PARAM_A = "a";
+  private static final String PARAM_B = "b";
+  private static final String PARAM_C = "c";
+  private static final String PARAM_D = "d";
+  public static final String PARAM_INSIDE = "inside";
+  public static final String PARAM_SHAPE = "shape";
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_INSIDE, PARAM_SHAPE};
 
-   private double a = 1.0;
-   private double b = 2.0;
-   private double c = 1.0;
-   private double d = 1.0;
+  private double a = 1.0;
+  private double b = 2.0;
+  private double c = 1.0;
+  private double d = 1.0;
 
-   private int inside = 0;
-   private int shape = 0;
+  private int inside = 0;
+  private int shape = 0;
 
-   @Override
-   public void transform(FlameTransformationContext pContext, XForm pXForm,
-         XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-      // Hole3 by Michael Faber, Brad Stefanov, and Rick Sidwell
-	   
-	  double rhosq = pAffineTP.getPrecalcSumsq();
-      double theta = pAffineTP.getPrecalcAtanYX() * d;
-      double delta = pow(theta / M_PI + 1.0, a) * c;
-      double r1 = 1;
-      
+  @Override
+  public void transform(FlameTransformationContext pContext, XForm pXForm,
+                        XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+    // Hole3 by Michael Faber, Brad Stefanov, and Rick Sidwell
 
-      switch (shape) {
+    double rhosq = pAffineTP.getPrecalcSumsq();
+    double theta = pAffineTP.getPrecalcAtanYX() * d;
+    double delta = pow(theta / M_PI + 1.0, a) * c;
+    double r1 = 1;
+
+
+    switch (shape) {
       case 0: // hole
-          r1 = sqrt(rhosq) + delta;
-          break;
+        r1 = sqrt(rhosq) + delta;
+        break;
       case 1:// hole1
-          r1 = sqrt(rhosq + delta);
-          break;
+        r1 = sqrt(rhosq + delta);
+        break;
       case 2:// double hole
-          r1 = sqrt(rhosq + sin(b * theta) + delta);
-          break;
+        r1 = sqrt(rhosq + sin(b * theta) + delta);
+        break;
       case 3:// heart
-          r1 = sqrt(rhosq + sin(theta) + delta);
-          break;
+        r1 = sqrt(rhosq + sin(theta) + delta);
+        break;
       case 4:// heart2
-          r1 = sqrt(rhosq + sqr(theta) - delta + 1);
-          break;
+        r1 = sqrt(rhosq + sqr(theta) - delta + 1);
+        break;
       case 5:
-          r1 = sqrt(rhosq + fabs(tan(theta)) + delta);
-          break;
+        r1 = sqrt(rhosq + fabs(tan(theta)) + delta);
+        break;
       case 6:
-    	  r1 = sqrt(rhosq * (1 + sin(b * theta)) + delta);
-    	  break;
+        r1 = sqrt(rhosq * (1 + sin(b * theta)) + delta);
+        break;
       case 7:
-    	  r1 = sqrt(rhosq + fabs(sin(0.5 * b * theta)) + delta);
-    	  break;
+        r1 = sqrt(rhosq + fabs(sin(0.5 * b * theta)) + delta);
+        break;
       case 8:
-    	  r1 = sqrt(rhosq + sin(M_PI * sin(b * theta)) + delta);
-    	  break;
+        r1 = sqrt(rhosq + sin(M_PI * sin(b * theta)) + delta);
+        break;
       case 9:
-    	  r1 = sqrt(rhosq + (sin(b * theta) + sin(2 * b * theta + M_PI_2)) / 2 + delta);
-    	  break;
-      }
- 
-      if (inside != 0)
-    	  r1 = pAmount / r1;
-      else
-    	  r1 = pAmount * r1;
-      
-      pVarTP.x += r1 * cos(theta);
-      pVarTP.y += r1 * sin(theta);
-      if (pContext.isPreserveZCoordinate()) {
-          pVarTP.z += pAmount * pAffineTP.z;
-      }
-   }
+        r1 = sqrt(rhosq + (sin(b * theta) + sin(2 * b * theta + M_PI_2)) / 2 + delta);
+        break;
+    }
 
-   @Override
-   public String[] getParameterNames() {
-      return paramNames;
-   }
+    if (inside != 0)
+      r1 = pAmount / r1;
+    else
+      r1 = pAmount * r1;
 
-   @Override
-   public Object[] getParameterValues() {
-      return new Object[] { a, b, c, d, inside, shape };
-   }
+    pVarTP.x += r1 * cos(theta);
+    pVarTP.y += r1 * sin(theta);
+    if (pContext.isPreserveZCoordinate()) {
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
 
-   @Override
-   public void setParameter(String pName, double pValue) {
-      if (PARAM_A.equalsIgnoreCase(pName))
-         a = pValue;
-      else if (PARAM_B.equalsIgnoreCase(pName))
-         b = pValue;
-      else if (PARAM_C.equalsIgnoreCase(pName))
-         c = pValue;
-      else if (PARAM_D.equalsIgnoreCase(pName))
-         d = pValue;
-      else if (PARAM_INSIDE.equalsIgnoreCase(pName))
-         inside = limitIntVal(Tools.FTOI(pValue), 0, 1);
+  @Override
+  public String[] getParameterNames() {
+    return paramNames;
+  }
 
-      else if (PARAM_SHAPE.equalsIgnoreCase(pName))
-         shape = limitIntVal(Tools.FTOI(pValue), 0, 9);
+  @Override
+  public Object[] getParameterValues() {
+    return new Object[]{a, b, c, d, inside, shape};
+  }
 
-      else
-         throw new IllegalArgumentException(pName);
-   }
+  @Override
+  public void setParameter(String pName, double pValue) {
+    if (PARAM_A.equalsIgnoreCase(pName))
+      a = pValue;
+    else if (PARAM_B.equalsIgnoreCase(pName))
+      b = pValue;
+    else if (PARAM_C.equalsIgnoreCase(pName))
+      c = pValue;
+    else if (PARAM_D.equalsIgnoreCase(pName))
+      d = pValue;
+    else if (PARAM_INSIDE.equalsIgnoreCase(pName))
+      inside = limitIntVal(Tools.FTOI(pValue), 0, 1);
 
-   @Override
-   public String getName() {
-      return "hole2";
-   }
+    else if (PARAM_SHAPE.equalsIgnoreCase(pName))
+      shape = limitIntVal(Tools.FTOI(pValue), 0, 9);
+
+    else
+      throw new IllegalArgumentException(pName);
+  }
+
+  @Override
+  public String getName() {
+    return "hole2";
+  }
 
 }

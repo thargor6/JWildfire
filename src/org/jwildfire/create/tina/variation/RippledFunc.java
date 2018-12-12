@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.tanh;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class RippledFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,8 +31,8 @@ public class RippledFunc extends SimpleVariationFunc {
     pVarTP.x += pAmount / 2 * (tanh(d + SMALL_EPSILON) * (2.0 * pAffineTP.x));
     pVarTP.y += pAmount / 2 * (cos(d + SMALL_EPSILON) * (2.0 * pAffineTP.y));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

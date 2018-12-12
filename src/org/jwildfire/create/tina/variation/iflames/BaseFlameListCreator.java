@@ -16,12 +16,6 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
@@ -40,6 +34,8 @@ import org.jwildfire.transform.ConvolveTransformer.KernelType;
 import org.jwildfire.transform.ErodeTransformer;
 import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
+
+import java.util.*;
 
 public class BaseFlameListCreator {
   private final FlameParamsList flameParams;
@@ -116,8 +112,7 @@ public class BaseFlameListCreator {
       preprocessImage(structureMap);
       RessourceManager.putRessource(imageParams.getCachedPreprocessedImageKey(), structureMap);
       System.out.println("CALCED STRUCTURE MAP");
-    }
-    else {
+    } else {
       System.out.println("STRUCTUREMAP FROM CACHE");
     }
     List<SimpleImage> paramMaps1 = createParamMapList(structureMap, 0);
@@ -157,8 +152,7 @@ public class BaseFlameListCreator {
           }
         }
       }
-    }
-    else {
+    } else {
       for (int i = 0; i < structureMap.getImageHeight(); i++) {
         for (int j = 0; j < structureMap.getImageWidth(); j++) {
           toolPixel.setARGBValue(structureMap.getARGBValue(j, i));
@@ -213,8 +207,7 @@ public class BaseFlameListCreator {
       DynamicProperties motionProperties = calculateMotionProperties(imageParams.getScaleColorMap() * j, imageParams.getScaleColorMap() * i, pInt, params);
       BaseFlame p = new BaseFlame(pInt, 0, 0, 0, 1.0, imageParams, params, IFlamesIterator.BLANK, motionProperties);
       res.add(p);
-    }
-    else {
+    } else {
       FlameColor flameColor = createFlameColor(imageParams, toolPixel);
 
       // System.out.println("(" + toolPixel.r + " " + toolPixel.g + " " + toolPixel.b + ") -> (" + flameColor.r + " " + flameColor.g + " " + flameColor.b + ")");
@@ -222,8 +215,7 @@ public class BaseFlameListCreator {
       double flameBrightness;
       if (params.getBrightnessChange() > MathLib.EPSILON && (randGen.random() < params.getBrightnessChange() || (params.getBrightnessChange() - MathLib.EPSILON) >= 1.0) && params.getBrightnessMin() < params.getBrightnessMax()) {
         flameBrightness = params.getBrightnessMin() + randGen.random() * (params.getBrightnessMax() - params.getBrightnessMin());
-      }
-      else {
+      } else {
         flameBrightness = params.getBrightnessMin();
       }
 
@@ -239,8 +231,7 @@ public class BaseFlameListCreator {
           iteratorCount++;
           instances.put(params, iterator);
         }
-      }
-      else {
+      } else {
         if (param1 != null || param2 != null || param3 != null) {
           List<String> paramNames = new ArrayList<String>();
           List<Double> paramValues = new ArrayList<Double>();
@@ -251,8 +242,7 @@ public class BaseFlameListCreator {
               toolPixel.setARGBValue(paramMap1.getARGBValueIgnoreBounds(j, i));
               double paramInt = calcIntensity(toolPixel.r, toolPixel.g, toolPixel.b);
               value = params.getFlameParam1Min() + (paramInt / COLORSCL) * (params.getFlameParam1Max() - params.getFlameParam1Min());
-            }
-            else {
+            } else {
               value = params.getFlameParam1Min() + randGen.random() * (params.getFlameParam1Max() - params.getFlameParam1Min());
             }
             paramNames.add(params.getFlameParam1());
@@ -265,8 +255,7 @@ public class BaseFlameListCreator {
               toolPixel.setARGBValue(paramMap2.getARGBValueIgnoreBounds(j, i));
               double paramInt = calcIntensity(toolPixel.r, toolPixel.g, toolPixel.b);
               value = params.getFlameParam2Min() + (paramInt / COLORSCL) * (params.getFlameParam2Max() - params.getFlameParam2Min());
-            }
-            else {
+            } else {
               value = params.getFlameParam2Min() + randGen.random() * (params.getFlameParam2Max() - params.getFlameParam2Min());
             }
             paramNames.add(params.getFlameParam2());
@@ -279,8 +268,7 @@ public class BaseFlameListCreator {
               toolPixel.setARGBValue(paramMap3.getARGBValueIgnoreBounds(j, i));
               double paramInt = calcIntensity(toolPixel.r, toolPixel.g, toolPixel.b);
               value = params.getFlameParam3Min() + (paramInt / COLORSCL) * (params.getFlameParam3Max() - params.getFlameParam3Min());
-            }
-            else {
+            } else {
               value = params.getFlameParam3Min() + randGen.random() * (params.getFlameParam3Max() - params.getFlameParam3Min());
             }
             paramNames.add(params.getFlameParam3());
@@ -288,8 +276,7 @@ public class BaseFlameListCreator {
           }
           iterator = new IFlamesIterator(pContext, params, paramNames, paramValues);
           iteratorCount++;
-        }
-        else{
+        } else {
           iterator = new IFlamesIterator(pContext, params, null, null);
           iteratorCount++;
         }
@@ -311,8 +298,7 @@ public class BaseFlameListCreator {
       r += pParams.getColorChangeRed();
       if (r < 0.0) {
         r = 0.0;
-      }
-      else if (r > 1.0) {
+      } else if (r > 1.0) {
         r = 1.0;
       }
     }
@@ -320,8 +306,7 @@ public class BaseFlameListCreator {
       g += pParams.getColorChangeGreen();
       if (g < 0.0) {
         g = 0.0;
-      }
-      else if (g > 1.0) {
+      } else if (g > 1.0) {
         g = 1.0;
       }
     }
@@ -329,8 +314,7 @@ public class BaseFlameListCreator {
       b += pParams.getColorChangeBlue();
       if (b < 0.0) {
         b = 0.0;
-      }
-      else if (b > 1.0) {
+      } else if (b > 1.0) {
         b = 1.0;
       }
     }
@@ -353,8 +337,7 @@ public class BaseFlameListCreator {
         statistics.setStructureMapWidth(imageParams.getMaxImgWidth());
         double aspect = (double) pColorMap.getImageHeight() / (double) pColorMap.getImageWidth();
         statistics.setStructureMapHeight(Tools.FTOI(imageParams.getMaxImgWidth() * aspect));
-      }
-      else {
+      } else {
         statistics.setStructureMapWidth(pColorMap.getImageWidth());
         statistics.setStructureMapHeight(pColorMap.getImageHeight());
       }
@@ -382,8 +365,7 @@ public class BaseFlameListCreator {
       if (convCount > 1) {
         statistics.addAction(ActionType.CONV_MERGE);
       }
-    }
-    else {
+    } else {
       statistics.setStructureMapWidth(structureMap.getImageWidth());
       statistics.setStructureMapHeight(structureMap.getImageHeight());
     }
@@ -528,8 +510,7 @@ public class BaseFlameListCreator {
     if (convImages.size() == 1) {
       SimpleImage convImage = convImages.get(0);
       tImage.setBufferedImage(convImage.getBufferedImg(), convImage.getImageWidth(), convImage.getImageHeight());
-    }
-    else if (convImages.size() > 1) {
+    } else if (convImages.size() > 1) {
       long t0 = System.currentTimeMillis();
 
       for (int i = 0; i < tImage.getImageHeight(); i++) {
@@ -623,8 +604,7 @@ public class BaseFlameListCreator {
             paramMap = map;
           }
         }
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
       res.add(paramMap);

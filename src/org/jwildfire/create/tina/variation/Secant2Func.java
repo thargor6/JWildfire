@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
 
 public class Secant2Func extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,13 +36,12 @@ public class Secant2Func extends SimpleVariationFunc {
     pVarTP.x += pAmount * pAffineTP.x;
     if (cr < 0) {
       pVarTP.y += pAmount * (icr + 1);
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * (icr - 1);
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

@@ -16,14 +16,6 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Layer;
@@ -34,6 +26,11 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -51,8 +48,8 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   private static final String RESSOURCE_INLINED_IMAGE = "inlined_image";
   private static final String RESSOURCE_IMAGE_FILENAME = "image_filename";
 
-  private static final String[] paramNames = { PARAM_MODE, PARAM_COLOR_MODE, PARAM_BIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_TILEX, PARAM_TILEY };
-  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE };
+  private static final String[] paramNames = {PARAM_MODE, PARAM_COLOR_MODE, PARAM_BIAS, PARAM_SCALEX, PARAM_SCALEY, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_TILEX, PARAM_TILEY};
+  private static final String[] ressourceNames = {RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE};
 
   private static final int MODE_ROTATE = 0;
   private static final int MODE_TRANSLATE = 1;
@@ -89,8 +86,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
       if (ix < 0) {
         int nx = ix / imgWidth - 1;
         ix -= nx * imgWidth;
-      }
-      else if (ix >= imgWidth) {
+      } else if (ix >= imgWidth) {
         int nx = ix / imgWidth;
         ix -= nx * imgWidth;
       }
@@ -99,8 +95,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
       if (iy < 0) {
         int ny = iy / imgHeight - 1;
         iy -= ny * imgHeight;
-      }
-      else if (iy >= imgHeight) {
+      } else if (iy >= imgHeight) {
         int ny = iy / imgHeight;
         iy -= ny * imgHeight;
       }
@@ -110,19 +105,17 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     if (ix >= 0 && ix < imgWidth && iy >= 0 && iy < imgHeight) {
       if (colorMap instanceof SimpleImage) {
         toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-            ix, iy));
+                ix, iy));
         r = (double) toolPixel.r / 255.0;
         g = (double) toolPixel.g / 255.0;
         b = (double) toolPixel.b / 255.0;
-      }
-      else {
+      } else {
         ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
         r = rgbArray[0];
         g = rgbArray[1];
         b = rgbArray[2];
       }
-    }
-    else {
+    } else {
       return;
     }
 
@@ -133,7 +126,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
         pVarTP.x += amountX;
         pVarTP.y += amountY;
       }
-        break;
+      break;
       case MODE_SCALE: {
         double intensity = calcIntensity(r, g, b) - bias;
         if (intensity > 0.0) {
@@ -142,7 +135,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
           pVarTP.y *= scl;
         }
       }
-        break;
+      break;
       case MODE_SCISSOR: {
         double amountX = (r - 0.5) * pAmount;
         double amountY = (g - 0.5) * pAmount;
@@ -151,7 +144,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
         pVarTP.x = newx;
         pVarTP.y = newy;
       }
-        break;
+      break;
       case MODE_ROTATE:
       default: {
         double intensity = calcIntensity(r, g, b) - bias;
@@ -175,7 +168,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
         pVarTP.blueColor = b * 255;
         pVarTP.color = getColorIdx(r, g, b);
       }
-        break;
+      break;
       default: // nothing to do
         break;
     }
@@ -251,7 +244,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { mode, colorMode, bias, scaleX, scaleY, offsetX, offsetY, tileX, tileY };
+    return new Object[]{mode, colorMode, bias, scaleX, scaleY, offsetX, offsetY, tileX, tileY};
   }
 
   @Override
@@ -290,16 +283,13 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
     if (inlinedImage != null) {
       try {
         colorMap = RessourceManager.getImage(inlinedImageHash, inlinedImage);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
-    }
-    else if (imageFilename != null && imageFilename.length() > 0) {
+    } else if (imageFilename != null && imageFilename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(imageFilename);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -327,7 +317,7 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage };
+    return new byte[][]{(imageFilename != null ? imageFilename.getBytes() : null), inlinedImage};
   }
 
   @Override
@@ -340,15 +330,13 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
       }
       colorMap = null;
       colorIdxMap.clear();
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       if (inlinedImage != null) imageFilename = null;
       colorMap = null;
       colorIdxMap.clear();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -356,11 +344,9 @@ public abstract class AbstractDisplacementMapWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILE;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

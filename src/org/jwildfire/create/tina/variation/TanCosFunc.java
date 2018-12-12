@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.tanh;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TanCosFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,8 +32,8 @@ public class TanCosFunc extends SimpleVariationFunc {
     pVarTP.x += d2 * (tanh(d1) * (2.0 * pAffineTP.x));
     pVarTP.y += d2 * (cos(d1) * (2.0 * pAffineTP.y));
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 

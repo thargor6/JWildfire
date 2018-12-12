@@ -16,14 +16,12 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CscSquaredFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_CSC_DIV = "csc div";
   private static final String PARAM_COS_DIV = "cos div";
   private static final String PARAM_TAN_DIV = "tan div";
@@ -31,38 +29,38 @@ public class CscSquaredFunc extends VariationFunc {
   private static final String PARAM_PI_MULT = "pi mult";
   private static final String PARAM_CSC_ADD = "csc add";
   private static final String PARAM_SCALEY = "scale y";
-  
-  private static final String[] paramNames = { PARAM_CSC_DIV, PARAM_COS_DIV, PARAM_TAN_DIV, PARAM_CSC_POW, PARAM_PI_MULT, PARAM_CSC_ADD, PARAM_SCALEY };
+
+  private static final String[] paramNames = {PARAM_CSC_DIV, PARAM_COS_DIV, PARAM_TAN_DIV, PARAM_CSC_POW, PARAM_PI_MULT, PARAM_CSC_ADD, PARAM_SCALEY};
   private double csc_div = 1.0;
   private double cos_div = 1.0;
   private double tan_div = 1.0;
   private double csc_pow = 0.5;
   private double pi_mult = 0.5;
-  private double csc_add = 0.25; 
-  private double scaley = 1; 
-  
+  private double csc_add = 0.25;
+  private double scaley = 1;
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-  // csc_squared by Whittaker Courtney 8-7-2018
-  
-  // x,y variables
-    double x = pAffineTP.x;
-    double y = pAffineTP.y;        
-       
-  // final formulas
-  // csc = 1 / cos(x) / tan(x);
+    // csc_squared by Whittaker Courtney 8-7-2018
 
-    double csc = csc_div / cos(x / cos_div) / tan(x / tan_div);   
+    // x,y variables
+    double x = pAffineTP.x;
+    double y = pAffineTP.y;
+
+    // final formulas
+    // csc = 1 / cos(x) / tan(x);
+
+    double csc = csc_div / cos(x / cos_div) / tan(x / tan_div);
     double fx = pow(csc * csc + (M_PI * pi_mult), csc_pow) + csc_add;
-       
- pVarTP.x += pAmount * x * fx;
- pVarTP.y += pAmount * y * fx * scaley; 
- 
+
+    pVarTP.x += pAmount * x * fx;
+    pVarTP.y += pAmount * y * fx * scaley;
+
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -70,7 +68,7 @@ public class CscSquaredFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { csc_div, cos_div, tan_div, csc_pow, pi_mult, csc_add, scaley };
+    return new Object[]{csc_div, cos_div, tan_div, csc_pow, pi_mult, csc_add, scaley};
   }
 
   @Override
@@ -92,7 +90,7 @@ public class CscSquaredFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
- 
+
 
   @Override
   public String getName() {

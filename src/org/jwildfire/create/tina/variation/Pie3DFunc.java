@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Pie3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +27,7 @@ public class Pie3DFunc extends VariationFunc {
   private static final String PARAM_SLICES = "slices";
   private static final String PARAM_ROTATION = "rotation";
   private static final String PARAM_THICKNESS = "thickness";
-  private static final String[] paramNames = { PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS };
+  private static final String[] paramNames = {PARAM_SLICES, PARAM_ROTATION, PARAM_THICKNESS};
 
   private double slices = 7;
   private double rotation = 0.0;
@@ -54,7 +52,7 @@ public class Pie3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { slices, rotation, thickness };
+    return new Object[]{slices, rotation, thickness};
   }
 
   @Override

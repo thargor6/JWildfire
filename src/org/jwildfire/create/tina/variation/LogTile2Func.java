@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.round;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.round;
 
 public class LogTile2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class LogTile2Func extends VariationFunc {
   private static final String PARAM_Y = "spready";
   private static final String PARAM_Z = "spreadz";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z};
 
   private double x = 2.0;
   private double y = 2.0;
@@ -58,7 +58,7 @@ public class LogTile2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z };
+    return new Object[]{x, y, z};
   }
 
   @Override

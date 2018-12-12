@@ -16,19 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
+import org.jwildfire.base.mathlib.MathLib;
+import org.jwildfire.create.tina.base.Layer;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Grid3DWFFunc extends VariationFunc {
 
@@ -50,7 +47,7 @@ public class Grid3DWFFunc extends VariationFunc {
   private static final String PARAM_C5 = "c5";
   private static final String PARAM_C6 = "c6";
 
-  private static final String[] paramNames = { PARAM_SIZE, PARAM_SIZE_SPREAD, PARAM_SPACING, PARAM_ALPHA, PARAM_ALPHA_SPREAD, PARAM_BETA, PARAM_BETA_SPREAD, PARAM_GAMMA, PARAM_GAMMA_SPREAD, PARAM_C1, PARAM_C2, PARAM_C3, PARAM_C4, PARAM_C5, PARAM_C6 };
+  private static final String[] paramNames = {PARAM_SIZE, PARAM_SIZE_SPREAD, PARAM_SPACING, PARAM_ALPHA, PARAM_ALPHA_SPREAD, PARAM_BETA, PARAM_BETA_SPREAD, PARAM_GAMMA, PARAM_GAMMA_SPREAD, PARAM_C1, PARAM_C2, PARAM_C3, PARAM_C4, PARAM_C5, PARAM_C6};
 
   private double size = 0.1;
   private double size_spread = 0.0;
@@ -138,7 +135,7 @@ public class Grid3DWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { size, size_spread, spacing, alpha, alpha_spread, beta, beta_spread, gamma, gamma_spread, c1, c2, c3, c4, c5, c6 };
+    return new Object[]{size, size_spread, spacing, alpha, alpha_spread, beta, beta_spread, gamma, gamma_spread, c1, c2, c3, c4, c5, c6};
   }
 
   @Override
@@ -212,8 +209,7 @@ public class Grid3DWFFunc extends VariationFunc {
         double spread = -sizeSpreadRnd.nextDouble() * size_spread + size_spread;
         map.put(key, spread);
         return spread;
-      }
-      else {
+      } else {
         return storedValue.doubleValue();
       }
     }
@@ -230,8 +226,7 @@ public class Grid3DWFFunc extends VariationFunc {
         double spread = -alphaSpreadRnd.nextDouble() * alpha_spread + alpha_spread;
         map.put(key, spread);
         return spread;
-      }
-      else {
+      } else {
         return storedValue.doubleValue();
       }
     }
@@ -248,8 +243,7 @@ public class Grid3DWFFunc extends VariationFunc {
         double spread = -betaSpreadRnd.nextDouble() * beta_spread + beta_spread;
         map.put(key, spread);
         return spread;
-      }
-      else {
+      } else {
         return storedValue.doubleValue();
       }
     }
@@ -266,8 +260,7 @@ public class Grid3DWFFunc extends VariationFunc {
         double spread = -gammaSpreadRnd.nextDouble() * gamma_spread + gamma_spread;
         map.put(key, spread);
         return spread;
-      }
-      else {
+      } else {
         return storedValue.doubleValue();
       }
     }

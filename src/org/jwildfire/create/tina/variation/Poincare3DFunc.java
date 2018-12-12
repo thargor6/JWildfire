@@ -16,14 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Poincare3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +29,7 @@ public class Poincare3DFunc extends VariationFunc {
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_A, PARAM_B };
+  private static final String[] paramNames = {PARAM_R, PARAM_A, PARAM_B};
 
   private double r = 0;
   private double a = 0;
@@ -59,7 +56,7 @@ public class Poincare3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, a, b };
+    return new Object[]{r, a, b};
   }
 
   @Override

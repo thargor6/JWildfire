@@ -16,16 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.max;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class GDOffsFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -39,7 +35,7 @@ public class GDOffsFunc extends VariationFunc {
   private static final String PARAM_GAMMA = "gamma";
   private static final String PARAM_SQUARE = "square";
 
-  private static final String[] paramNames = { PARAM_DELTA_X, PARAM_DELTA_Y, PARAM_AREA_X, PARAM_AREA_Y, PARAM_CENTER_X, PARAM_CENTER_Y, PARAM_GAMMA, PARAM_SQUARE };
+  private static final String[] paramNames = {PARAM_DELTA_X, PARAM_DELTA_Y, PARAM_AREA_X, PARAM_AREA_Y, PARAM_CENTER_X, PARAM_CENTER_Y, PARAM_GAMMA, PARAM_SQUARE};
 
   private double delta_x = 0.0;
   private double delta_y = 0.0;
@@ -60,8 +56,7 @@ public class GDOffsFunc extends VariationFunc {
     if (gdos != 0) {
       out_x = flip(flip(in_x, fosc(in_x, 4), osc_x), fosc(fclp(gdob * in_x), 4), osc_x);
       out_y = flip(flip(in_y, fosc(in_y, 4), osc_x), fosc(fclp(gdob * in_y), 4), osc_x);
-    }
-    else {
+    } else {
       out_x = flip(flip(in_x, fosc(in_x, 4), osc_x), fosc(fclp(gdob * in_x), 4), osc_x);
       out_y = flip(flip(in_y, fosc(in_y, 4), osc_y), fosc(fclp(gdob * in_y), 4), osc_y);
     }
@@ -69,8 +64,8 @@ public class GDOffsFunc extends VariationFunc {
     pVarTP.x += pAmount * out_x;
     pVarTP.y += pAmount * out_y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -80,7 +75,7 @@ public class GDOffsFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { delta_x, delta_y, area_x, area_y, center_x, center_y, gamma, square };
+    return new Object[]{delta_x, delta_y, area_x, area_y, center_x, center_y, gamma, square};
   }
 
   @Override

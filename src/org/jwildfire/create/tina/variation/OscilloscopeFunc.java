@@ -16,15 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class OscilloscopeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +30,7 @@ public class OscilloscopeFunc extends VariationFunc {
   private static final String PARAM_AMPLITUDE = "amplitude";
   private static final String PARAM_DAMPING = "damping";
 
-  private static final String[] paramNames = { PARAM_SEPARATION, PARAM_FREQUENCY, PARAM_AMPLITUDE, PARAM_DAMPING };
+  private static final String[] paramNames = {PARAM_SEPARATION, PARAM_FREQUENCY, PARAM_AMPLITUDE, PARAM_DAMPING};
 
   private double separation = 1.00;
   private double frequency = M_PI;
@@ -47,22 +43,20 @@ public class OscilloscopeFunc extends VariationFunc {
     double t;
     if (_noDamping) {
       t = amplitude * cos(_tpf * pAffineTP.x) + separation;
-    }
-    else {
+    } else {
       t = amplitude * exp(-fabs(pAffineTP.x) * damping) * cos(_tpf * pAffineTP.x) + separation;
     }
 
     if (fabs(pAffineTP.y) <= t) {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y -= pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -73,7 +67,7 @@ public class OscilloscopeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { separation, frequency, amplitude, damping };
+    return new Object[]{separation, frequency, amplitude, damping};
   }
 
   @Override
@@ -92,9 +86,9 @@ public class OscilloscopeFunc extends VariationFunc {
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "oscope_separation", "oscope_frequency", "oscope_amplitude", "oscope_damping" };
+    return new String[]{"oscope_separation", "oscope_frequency", "oscope_amplitude", "oscope_damping"};
   }
-  
+
   @Override
   public String getName() {
     return "oscilloscope";

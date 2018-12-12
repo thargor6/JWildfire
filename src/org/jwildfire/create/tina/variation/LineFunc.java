@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Nic Anderson, chronologicaldot
@@ -33,7 +30,7 @@ public class LineFunc extends VariationFunc {
 
   private static final String PARAM_ANGLE_DELTA = "delta";
   private static final String PARAM_ANGLE_PHI = "phi";
-  private static final String[] paramNames = { PARAM_ANGLE_DELTA, PARAM_ANGLE_PHI };
+  private static final String[] paramNames = {PARAM_ANGLE_DELTA, PARAM_ANGLE_PHI};
 
   double delta = 0.0;
   double phi = 0.0;
@@ -72,18 +69,16 @@ public class LineFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { delta, phi };
+    return new Object[]{delta, phi};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_ANGLE_DELTA)) {
       delta = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_ANGLE_PHI)) {
+    } else if (pName.equalsIgnoreCase(PARAM_ANGLE_PHI)) {
       phi = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class KaleidoscopeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class KaleidoscopeFunc extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
 
-  private static final String[] paramNames = { PARAM_PULL, PARAM_ROTATE, PARAM_LINE_UP, PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_PULL, PARAM_ROTATE, PARAM_LINE_UP, PARAM_X, PARAM_Y};
 
   private double pull = 0.0;
   private double rotate = 1.0;
@@ -47,13 +47,12 @@ public class KaleidoscopeFunc extends VariationFunc {
     // the if function splits the plugin in two.
     if (pAffineTP.y > 0) {
       pVarTP.y += ((_w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) + _q + _e) + _t;
-    }
-    else {
+    } else {
       pVarTP.y += (_w * pAffineTP.y) * cos(45.0) + pAffineTP.x * sin(45.0) - _q - _e;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -63,7 +62,7 @@ public class KaleidoscopeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { pull, rotate, line_up, x, y };
+    return new Object[]{pull, rotate, line_up, x, y};
   }
 
   @Override

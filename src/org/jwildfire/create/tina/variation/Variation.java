@@ -16,19 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
+import org.jwildfire.create.tina.animate.AnimAware;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.XYZPoint;
+import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.edit.Assignable;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jwildfire.create.tina.animate.AnimAware;
-import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.XYZPoint;
-import org.jwildfire.create.tina.base.motion.MotionCurve;
-import org.jwildfire.create.tina.edit.Assignable;
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class Variation implements Assignable<Variation>, Serializable {
   private static final long serialVersionUID = 1L;
@@ -110,9 +110,9 @@ public class Variation implements Assignable<Variation>, Serializable {
   @Override
   public boolean isEqual(Variation pSrc) {
     if (fabs(amount - pSrc.amount) > EPSILON || (priority != pSrc.priority) ||
-        !amountCurve.isEqual(pSrc.amountCurve) ||
-        ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
-        (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
+            !amountCurve.isEqual(pSrc.amountCurve) ||
+            ((func != null && pSrc.func == null) || (func == null && pSrc.func != null) ||
+                    (func != null && pSrc.func != null && !func.getName().equals(pSrc.func.getName())))) {
       return false;
     }
     // curves
@@ -145,8 +145,7 @@ public class Variation implements Assignable<Variation>, Serializable {
           Object s = srcVals[i];
           if ((o != null && s == null) || (o == null && s != null)) {
             return false;
-          }
-          else if (o != null && s != null) {
+          } else if (o != null && s != null) {
             if (o instanceof Integer) {
               if (!(s instanceof Integer)) {
                 return false;
@@ -154,16 +153,14 @@ public class Variation implements Assignable<Variation>, Serializable {
               if (((Integer) o).intValue() != ((Integer) s).intValue()) {
                 return false;
               }
-            }
-            else if (o instanceof Double) {
+            } else if (o instanceof Double) {
               if (!(s instanceof Double)) {
                 return false;
               }
               if (fabs(((Double) o).doubleValue() - ((Double) s).doubleValue()) > EPSILON) {
                 return false;
               }
-            }
-            else {
+            } else {
               throw new IllegalStateException();
             }
           }

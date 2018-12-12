@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class LissajousFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class LissajousFunc extends VariationFunc {
   private static final String PARAM_D = "d";
   private static final String PARAM_E = "e";
 
-  private static final String[] paramNames = { PARAM_TMIN, PARAM_TMAX, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E };
+  private static final String[] paramNames = {PARAM_TMIN, PARAM_TMAX, PARAM_A, PARAM_B, PARAM_C, PARAM_D, PARAM_E};
 
   private double tmin = -M_PI;
   private double tmax = M_PI;
@@ -55,8 +55,8 @@ public class LissajousFunc extends VariationFunc {
     pVarTP.y += pAmount * (y1 + c * t + e * y);
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -67,7 +67,7 @@ public class LissajousFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { tmin, tmax, a, b, c, d, e };
+    return new Object[]{tmin, tmax, a, b, c, d, e};
   }
 
   @Override

@@ -16,14 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
-/*  
- *  STwinFunc: JWildfire variation, 
+import static org.jwildfire.base.mathlib.MathLib.M_2PI;
+import static org.jwildfire.base.mathlib.MathLib.sin;
+
+/*
+ *  STwinFunc: JWildfire variation,
  *  JWildfire variation, ported from "stwin" Apophysis7X plugin, plus added extra user-configurable parameters
  *  original Apophysis7X plugin author xyrus02 ?
  *  ported to JWildfire varation by CozyG
@@ -35,7 +35,7 @@ public class STwinFunc extends VariationFunc {
   private static final String PARAM_OFFSET_XY = "offset_xy";
   private static final String PARAM_OFFSET_X2 = "offset_x2";
   private static final String PARAM_OFFSET_Y2 = "offset_y2";
-  private static final String[] paramNames = { PARAM_DISTORT, PARAM_OFFSET_XY, PARAM_OFFSET_X2, PARAM_OFFSET_Y2 };
+  private static final String[] paramNames = {PARAM_DISTORT, PARAM_OFFSET_XY, PARAM_OFFSET_X2, PARAM_OFFSET_Y2};
 
   private double distort = 1.0;
   private double offset_xy = 0.0;
@@ -64,8 +64,8 @@ public class STwinFunc extends VariationFunc {
     pVarTP.x += (pAmount * pAffineTP.x) + result;
     pVarTP.y += (pAmount * pAffineTP.y) + result;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -75,7 +75,7 @@ public class STwinFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { distort, offset_xy, offset_x2, offset_y2 };
+    return new Object[]{distort, offset_xy, offset_x2, offset_y2};
   }
 
   @Override

@@ -16,14 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EpispiralFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -31,7 +27,7 @@ public class EpispiralFunc extends VariationFunc {
   private static final String PARAM_N = "n";
   private static final String PARAM_THICKNESS = "thickness";
   private static final String PARAM_HOLES = "holes";
-  private static final String[] paramNames = { PARAM_N, PARAM_THICKNESS, PARAM_HOLES };
+  private static final String[] paramNames = {PARAM_N, PARAM_THICKNESS, PARAM_HOLES};
 
   private double n = 6.0;
   private double thickness = 0.0;
@@ -48,8 +44,7 @@ public class EpispiralFunc extends VariationFunc {
         return;
       }
       t += (pContext.random() * thickness) * (1.0 / d);
-    }
-    else {
+    } else {
       double d = cos(n * theta);
       if (d == 0) {
         return;
@@ -59,8 +54,8 @@ public class EpispiralFunc extends VariationFunc {
     pVarTP.x += pAmount * t * cos(theta);
     pVarTP.y += pAmount * t * sin(theta);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -70,7 +65,7 @@ public class EpispiralFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, thickness, holes };
+    return new Object[]{n, thickness, holes};
   }
 
   @Override

@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
 public class PreDCZTranslFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class PreDCZTranslFunc extends VariationFunc {
   private static final String PARAM_OVERWRITE = "overwrite";
   private static final String PARAM_CLAMP = "clamp";
 
-  private static final String[] paramNames = { PARAM_X0, PARAM_X1, PARAM_FACTOR, PARAM_OVERWRITE, PARAM_CLAMP };
+  private static final String[] paramNames = {PARAM_X0, PARAM_X1, PARAM_FACTOR, PARAM_OVERWRITE, PARAM_CLAMP};
 
   private double x0 = 0.0;
   private double x1 = 1.0;
@@ -62,7 +62,7 @@ public class PreDCZTranslFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x0, x1, factor, overwrite, clamp };
+    return new Object[]{x0, x1, factor, overwrite, clamp};
   }
 
   @Override

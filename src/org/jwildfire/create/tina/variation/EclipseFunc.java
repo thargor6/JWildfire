@@ -16,25 +16,23 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EclipseFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
 
-  private static final String[] paramNames = { PARAM_SHIFT };
+  private static final String[] paramNames = {PARAM_SHIFT};
 
   private double shift = 0.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm,
-      XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
+                        XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /*
      * eclipse by Michael Faber,
      * http://michaelfaber.deviantart.com/art/Eclipse-268362046
@@ -42,29 +40,26 @@ public class EclipseFunc extends VariationFunc {
 
     if (fabs(pAffineTP.y) <= pAmount) {
       double c_2 = sqrt(sqr(pAmount)
-          - sqr(pAffineTP.y));
+              - sqr(pAffineTP.y));
 
       if (fabs(pAffineTP.x) <= c_2) {
         double x = pAffineTP.x + this.shift * pAmount;
         if (fabs(x) >= c_2) {
           pVarTP.x -= pAmount * pAffineTP.x;
-        }
-        else {
+        } else {
           pVarTP.x += pAmount * x;
         }
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * pAffineTP.x;
       }
       pVarTP.y += pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -74,7 +69,7 @@ public class EclipseFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shift };
+    return new Object[]{shift};
   }
 
   @Override

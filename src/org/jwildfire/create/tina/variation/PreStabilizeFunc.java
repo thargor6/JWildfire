@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.util.Random;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.util.Random;
 
 public class PreStabilizeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class PreStabilizeFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_P = "p";
   private static final String PARAM_DC = "dc";
-  private static final String[] paramNames = { PARAM_N, PARAM_SEED, PARAM_P, PARAM_DC };
+  private static final String[] paramNames = {PARAM_N, PARAM_SEED, PARAM_P, PARAM_DC};
 
   private int n = 4;
   private int seed = (int) (Math.random() * 100000);
@@ -62,7 +62,7 @@ public class PreStabilizeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, seed, p, dc };
+    return new Object[]{n, seed, p, dc};
   }
 
   @Override
@@ -103,8 +103,8 @@ public class PreStabilizeFunc extends VariationFunc {
       c[i] = nextColor;
       nextColor += colorDelta;
       if (nextColor >= 1) {
-    	  colorDelta /= 2;
-    	  nextColor = colorDelta / 2;
+        colorDelta /= 2;
+        nextColor = colorDelta / 2;
       }
     }
 

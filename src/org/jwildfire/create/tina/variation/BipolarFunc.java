@@ -16,21 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BipolarFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SHIFT = "shift";
-  private static final String[] paramNames = { PARAM_SHIFT };
+  private static final String[] paramNames = {PARAM_SHIFT};
 
   private double shift = 0.0;
 
@@ -46,8 +41,7 @@ public class BipolarFunc extends VariationFunc {
 
     if (y > M_PI_2) {
       y = -M_PI_2 + fmod(y + M_PI_2, M_PI);
-    }
-    else if (y < -M_PI_2) {
+    } else if (y < -M_PI_2) {
       y = M_PI_2 - fmod(M_PI_2 - y, M_PI);
     }
 
@@ -59,8 +53,8 @@ public class BipolarFunc extends VariationFunc {
     pVarTP.x += pAmount * 0.25 * M_2_PI * log((t + x2) / (t - x2));
     pVarTP.y += pAmount * M_2_PI * y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -70,7 +64,7 @@ public class BipolarFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shift };
+    return new Object[]{shift};
   }
 
   @Override

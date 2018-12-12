@@ -16,16 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class RippleFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -39,7 +35,7 @@ public class RippleFunc extends VariationFunc {
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_FIXED_DIST_CALC = "fixed_dist_calc";
 
-  private static final String[] paramNames = { PARAM_FREQUENCY, PARAM_VELOCITY, PARAM_AMPLITUDE, PARAM_CENTERX, PARAM_CENTERY, PARAM_PHASE, PARAM_SCALE, PARAM_FIXED_DIST_CALC };
+  private static final String[] paramNames = {PARAM_FREQUENCY, PARAM_VELOCITY, PARAM_AMPLITUDE, PARAM_CENTERX, PARAM_CENTERY, PARAM_PHASE, PARAM_SCALE, PARAM_FIXED_DIST_CALC};
 
   private double frequency = 2.0;
   private double velocity = 1.0;
@@ -81,8 +77,8 @@ public class RippleFunc extends VariationFunc {
     pVarTP.y = pAmount * (lerp(v1, v2, _p)) * _is;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -92,7 +88,7 @@ public class RippleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { frequency, velocity, amplitude, centerx, centery, phase, scale, fixed_dist_calc };
+    return new Object[]{frequency, velocity, amplitude, centerx, centery, phase, scale, fixed_dist_calc};
   }
 
   @Override

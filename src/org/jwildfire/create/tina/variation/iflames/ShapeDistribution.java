@@ -18,7 +18,6 @@ package org.jwildfire.create.tina.variation.iflames;
 
 public enum ShapeDistribution {
   RANDOM {
-
     @Override
     public int getId() {
       return 0;
@@ -31,21 +30,18 @@ public enum ShapeDistribution {
     }
   },
   LUMINOSITY {
-
     @Override
     public int getId() {
       return 2;
     }
   },
   BRIGHTNESS {
-
     @Override
     public int getId() {
       return 3;
     }
   },
   GRID {
-
     @Override
     public int getId() {
       return 4;

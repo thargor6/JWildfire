@@ -16,14 +16,14 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.io.Serializable;
-
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class DisplacementMapHolder implements Serializable {
@@ -65,16 +65,14 @@ public class DisplacementMapHolder implements Serializable {
     if (displ_map_filename != null && displ_map_filename.length() > 0) {
       try {
         displacementMap = RessourceManager.getImage(displ_map_filename);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
     if (displacementMap != null) {
       displacementMapWidth = displacementMap.getImageWidth();
       displacementMapHeight = displacementMap.getImageHeight();
-    }
-    else {
+    } else {
       displacementMapWidth = displacementMapHeight = 0;
     }
   }
@@ -112,13 +110,11 @@ public class DisplacementMapHolder implements Serializable {
           toolPixel.setARGBValue(((SimpleImage) displacementMap).getARGBValue(ix1, iy1));
           int rbg = toolPixel.g;
           return GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac) / 255.0;
-        }
-        else {
+        } else {
           toolPixel.setARGBValue(((SimpleImage) displacementMap).getARGBValue(ix, iy));
           return toolPixel.g / 255.0;
         }
-      }
-      else {
+      } else {
         if (blend_displ_map > 0) {
           int ix1 = ix + 1;
           if (ix1 >= displacementMapWidth)
@@ -137,8 +133,7 @@ public class DisplacementMapHolder implements Serializable {
           ((SimpleHDRImage) displacementMap).getRGBValues(rgbArray, ix1, iy1);
           float rbg = rgbArray[1];
           return GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
-        }
-        else {
+        } else {
           ((SimpleHDRImage) displacementMap).getRGBValues(rgbArray, ix, iy);
           return rgbArray[1];
         }

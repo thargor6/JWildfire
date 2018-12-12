@@ -16,28 +16,27 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor
 */
 package org.jwildfire.create.tina.variation.plot;
 
-import java.io.StringReader;
-
 import org.codehaus.janino.ClassBodyEvaluator;
 import org.codehaus.janino.Scanner;
 
+import java.io.StringReader;
 
-public class SAttractor3DFormulaEvaluator
-{
 
-	public static SAttractor3DFormulaEvaluator compile(String pScript) throws Exception {
-		  return (SAttractor3DFormulaEvaluator) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), SAttractor3DFormulaEvaluator.class, (ClassLoader) null);
-		}
-	
-	  public double evaluateX(double x, double y, double z, double delta_t) {
-		    return x + x*delta_t;
-		  }
+public class SAttractor3DFormulaEvaluator {
 
-		  public double evaluateY(double x, double y, double z, double delta_t) {
-		    return y + y*delta_t;
-		  }
+  public static SAttractor3DFormulaEvaluator compile(String pScript) throws Exception {
+    return (SAttractor3DFormulaEvaluator) ClassBodyEvaluator.createFastClassBodyEvaluator(new Scanner(null, new StringReader(pScript)), SAttractor3DFormulaEvaluator.class, (ClassLoader) null);
+  }
 
-		  public double evaluateZ(double x, double y,double z, double delta_t) {
-		    return z + z*delta_t;
-		  }
+  public double evaluateX(double x, double y, double z, double delta_t) {
+    return x + x * delta_t;
+  }
+
+  public double evaluateY(double x, double y, double z, double delta_t) {
+    return y + y * delta_t;
+  }
+
+  public double evaluateZ(double x, double y, double z, double delta_t) {
+    return z + z * delta_t;
+  }
 }

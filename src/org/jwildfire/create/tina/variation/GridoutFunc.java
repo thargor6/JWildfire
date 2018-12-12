@@ -14,78 +14,57 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.rint;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.rint;
 
 public class GridoutFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // authors Michael Faber, Joel Faber 2007-2008. Implemented by DarkBeam 2017
-   double x = rint(pAffineTP.x);
-   double y = rint(pAffineTP.y);
+    // authors Michael Faber, Joel Faber 2007-2008. Implemented by DarkBeam 2017
+    double x = rint(pAffineTP.x);
+    double y = rint(pAffineTP.y);
 
-   if (y <= 0.0)
-   {
-      if (x > 0.0)
-      {
-         if (-y >= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x + 1.0);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y + 1.0);
-         }
+    if (y <= 0.0) {
+      if (x > 0.0) {
+        if (-y >= x) {
+          pVarTP.x += pAmount * (pAffineTP.x + 1.0);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y + 1.0);
+        }
+      } else {
+        if (y <= x) {
+          pVarTP.x += pAmount * (pAffineTP.x + 1.0);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y - 1.0);
+        }
       }
-      else
-      {
-         if (y <= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x + 1.0);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y - 1.0);
-         }
+    } else {
+      if (x > 0.0) {
+        if (y >= x) {
+          pVarTP.x += pAmount * (pAffineTP.x - 1.0);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y + 1.0);
+        }
+      } else {
+        if (y > -x) {
+          pVarTP.x += pAmount * (pAffineTP.x - 1.0);
+          pVarTP.y += pAmount * pAffineTP.y;
+        } else {
+          pVarTP.x += pAmount * pAffineTP.x;
+          pVarTP.y += pAmount * (pAffineTP.y - 1.0);
+        }
       }
-   }
-   else
-   {
-      if (x > 0.0)
-      {
-         if (y >= x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x - 1.0);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y + 1.0);
-         }
-      }
-      else
-      {
-         if (y > -x)
-         {
-            pVarTP.x += pAmount * (pAffineTP.x - 1.0);
-            pVarTP.y += pAmount * pAffineTP.y;
-         }
-         else
-         {
-            pVarTP.x += pAmount * pAffineTP.x;
-            pVarTP.y += pAmount * (pAffineTP.y - 1.0);
-         }
-      }
-   }
+    }
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }

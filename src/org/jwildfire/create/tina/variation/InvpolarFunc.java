@@ -14,24 +14,22 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class InvpolarFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-    double ny = 1+pAffineTP.y;
+    double ny = 1 + pAffineTP.y;
     pVarTP.x += pAmount * ny * (sin(pAffineTP.x * M_PI));
     pVarTP.y += pAmount * ny * (cos(pAffineTP.x * M_PI));
     if (pContext.isPreserveZCoordinate()) {
-  	pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

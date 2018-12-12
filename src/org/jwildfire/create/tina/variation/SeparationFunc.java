@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class SeparationFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class SeparationFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_YINSIDE = "yinside";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_XINSIDE, PARAM_Y, PARAM_YINSIDE };
+  private static final String[] paramNames = {PARAM_X, PARAM_XINSIDE, PARAM_Y, PARAM_YINSIDE};
 
   private double x = 0.5;
   private double xinside = 0.05;
@@ -44,20 +44,18 @@ public class SeparationFunc extends VariationFunc {
 
     if (pAffineTP.x > 0.0) {
       pVarTP.x += pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) - pAffineTP.x * xinside);
-    }
-    else {
+    } else {
       pVarTP.x -= pAmount * (sqrt(pAffineTP.x * pAffineTP.x + sx2) + pAffineTP.x * xinside);
     }
 
     if (pAffineTP.y > 0.0) {
       pVarTP.y += pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) - pAffineTP.y * yinside);
-    }
-    else {
+    } else {
       pVarTP.y -= pAmount * (sqrt(pAffineTP.y * pAffineTP.y + sy2) + pAffineTP.y * yinside);
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -67,7 +65,7 @@ public class SeparationFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, xinside, y, yinside };
+    return new Object[]{x, xinside, y, yinside};
   }
 
   @Override

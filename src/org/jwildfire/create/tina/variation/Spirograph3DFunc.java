@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
-
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Spirograph3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +33,7 @@ public class Spirograph3DFunc extends VariationFunc {
   private static final String PARAM_MODE = "mode";
   private static final String PARAM_DIRECT_COLOR = "direct_color";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_TMIN, PARAM_TMAX, PARAM_WIDTH, PARAM_MODE, PARAM_DIRECT_COLOR };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_TMIN, PARAM_TMAX, PARAM_WIDTH, PARAM_MODE, PARAM_DIRECT_COLOR};
 
   private double a = 1.0;
   private double b = -0.3;
@@ -53,34 +48,34 @@ public class Spirograph3DFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     double t = (tmax - tmin) * pContext.random() + tmin;
     double w1, w2, w3;
-    switch(mode) {
-    case 0:
-    	w1 = w2 = w3 = width * pContext.random() - width/2;
-    	break;
-    case 1:
-    	w1 = width * pContext.random() - width/2;
-    	w2 = w1 * sin(36*t + M_2PI/3);
-    	w3 = w1 * sin(36*t + 2*M_2PI/3);
-    	w1 = w1 * sin(36*t);
-    	break;
-    case 2:
-    	w1 = width * pContext.random() - width/2;
-    	w2 = width * pContext.random() - width/2;
-    	w3 = width * pContext.random() - width/2;
-    	break;
-    case 3:
-    	w1 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2)/2;
-    	w2 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2)/2;
-    	w3 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2)/2;
-    	break;
-    case 4:
-    	w1 = (pContext.random()<0.5) ? width : -width;
-    	w2 = w3 = 0;
-    	break;
-    default:
-    	w1 = w2 = w3 = 0;
+    switch (mode) {
+      case 0:
+        w1 = w2 = w3 = width * pContext.random() - width / 2;
+        break;
+      case 1:
+        w1 = width * pContext.random() - width / 2;
+        w2 = w1 * sin(36 * t + M_2PI / 3);
+        w3 = w1 * sin(36 * t + 2 * M_2PI / 3);
+        w1 = w1 * sin(36 * t);
+        break;
+      case 2:
+        w1 = width * pContext.random() - width / 2;
+        w2 = width * pContext.random() - width / 2;
+        w3 = width * pContext.random() - width / 2;
+        break;
+      case 3:
+        w1 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2) / 2;
+        w2 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2) / 2;
+        w3 = width * (pContext.random() + pContext.random() + pContext.random() + pContext.random() - 2) / 2;
+        break;
+      case 4:
+        w1 = (pContext.random() < 0.5) ? width : -width;
+        w2 = w3 = 0;
+        break;
+      default:
+        w1 = w2 = w3 = 0;
     }
-    
+
     double x1 = (a + b) * cos(t) - c * cos((a + b) / b * t);
     double y1 = (a + b) * sin(t) - c * sin((a + b) / b * t);
     double z1 = c * sin((a + b) / b * t);
@@ -88,7 +83,7 @@ public class Spirograph3DFunc extends VariationFunc {
     pVarTP.y += pAmount * (y1 + w2);
     pVarTP.z += pAmount * (z1 + w3);
     if (direct_color != 0) {
-    	pVarTP.color = fmod(t/M_2PI,1);
+      pVarTP.color = fmod(t / M_2PI, 1);
     }
   }
 
@@ -99,7 +94,7 @@ public class Spirograph3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, tmin, tmax, width, mode, direct_color };
+    return new Object[]{a, b, c, tmin, tmax, width, mode, direct_color};
   }
 
   @Override
@@ -117,7 +112,7 @@ public class Spirograph3DFunc extends VariationFunc {
     else if (PARAM_WIDTH.equalsIgnoreCase(pName))
       width = pValue;
     else if (PARAM_MODE.equalsIgnoreCase(pName))
-      mode = limitIntVal(Tools.FTOI(pValue),0,4);
+      mode = limitIntVal(Tools.FTOI(pValue), 0, 4);
     else if (PARAM_DIRECT_COLOR.equalsIgnoreCase(pName))
       direct_color = limitIntVal(Tools.FTOI(pValue), 0, 1);
     else

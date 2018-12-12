@@ -16,13 +16,6 @@
  */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -35,6 +28,11 @@ import org.jwildfire.image.Pixel;
 import org.jwildfire.image.SimpleHDRImage;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public abstract class AbstractColorMapWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -59,8 +57,8 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public static final String RESSOURCE_IMAGE_SRC = "image_src";
   public static final String RESSOURCE_IMAGE_DESC_SRC = "image_desc_src";
 
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_DC_COLOR, PARAM_BLEND_COLORMAP, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS };
-  private static final String[] ressourceNames = { RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_SCALEZ, PARAM_OFFSETX, PARAM_OFFSETY, PARAM_OFFSETZ, PARAM_TILEX, PARAM_TILEY, PARAM_RESETZ, PARAM_DC_COLOR, PARAM_BLEND_COLORMAP, PARAM_IS_SEQUENCE, PARAM_SEQUENCE_START, PARAM_SEQUENCE_DIGITS};
+  private static final String[] ressourceNames = {RESSOURCE_IMAGE_FILENAME, RESSOURCE_INLINED_IMAGE, RESSOURCE_IMAGE_DESC_SRC, RESSOURCE_IMAGE_SRC};
 
   private double scaleX = 1.0;
   private double scaleY = 1.0;
@@ -94,8 +92,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     if (blend_colormap > 0) {
       ix = (int) MathLib.trunc(x);
       iy = (int) MathLib.trunc(y);
-    }
-    else {
+    } else {
       ix = Tools.FTOI(x);
       iy = Tools.FTOI(y);
     }
@@ -103,8 +100,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       if (ix < 0) {
         int nx = ix / imgWidth - 1;
         ix -= nx * imgWidth;
-      }
-      else if (ix >= imgWidth) {
+      } else if (ix >= imgWidth) {
         int nx = ix / imgWidth;
         ix -= nx * imgWidth;
       }
@@ -113,8 +109,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       if (iy < 0) {
         int ny = iy / imgHeight - 1;
         iy -= ny * imgHeight;
-      }
-      else if (iy >= imgHeight) {
+      } else if (iy >= imgHeight) {
         int ny = iy / imgHeight;
         iy -= ny * imgHeight;
       }
@@ -127,32 +122,31 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           double iufrac = MathLib.frac(x);
           double ivfrac = MathLib.frac(y);
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-              ix, iy));
+                  ix, iy));
           int lur = toolPixel.r;
           int lug = toolPixel.g;
           int lub = toolPixel.b;
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-              ix + 1, iy));
+                  ix + 1, iy));
           int rur = toolPixel.r;
           int rug = toolPixel.g;
           int rub = toolPixel.b;
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-              ix, iy + 1));
+                  ix, iy + 1));
           int lbr = toolPixel.r;
           int lbg = toolPixel.g;
           int lbb = toolPixel.b;
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-              ix + 1, iy + 1));
+                  ix + 1, iy + 1));
           int rbr = toolPixel.r;
           int rbg = toolPixel.g;
           int rbb = toolPixel.b;
           r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
-        }
-        else {
+        } else {
           toolPixel.setARGBValue(((SimpleImage) colorMap).getARGBValue(
-              ix, iy));
+                  ix, iy));
           r = toolPixel.r;
           g = toolPixel.g;
           b = toolPixel.b;
@@ -163,8 +157,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           pVarTP.greenColor = g;
           pVarTP.blueColor = b;
         }
-      }
-      else {
+      } else {
         if (blend_colormap > 0) {
           double iufrac = MathLib.frac(x);
           double ivfrac = MathLib.frac(y);
@@ -188,8 +181,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           r = GfxMathLib.blerp(lur, rur, lbr, rbr, iufrac, ivfrac);
           g = GfxMathLib.blerp(lug, rug, lbg, rbg, iufrac, ivfrac);
           b = GfxMathLib.blerp(lub, rub, lbb, rbb, iufrac, ivfrac);
-        }
-        else {
+        } else {
           ((SimpleHDRImage) colorMap).getRGBValues(rgbArray, ix, iy);
           r = rgbArray[0] * 255;
           g = rgbArray[1] * 255;
@@ -202,8 +194,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
           pVarTP.blueColor = b;
         }
       }
-    }
-    else {
+    } else {
       r = g = b = 0.0;
       if (dc_color > 0) {
         pVarTP.rgbColor = true;
@@ -219,8 +210,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     }
     if (resetZ != 0) {
       pVarTP.z = dz;
-    }
-    else {
+    } else {
       pVarTP.z += dz;
     }
     if (dc_color > 0) {
@@ -235,7 +225,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, dc_color, blend_colormap, is_sequence, sequence_start, sequence_digits };
+    return new Object[]{scaleX, scaleY, scaleZ, offsetX, offsetY, offsetZ, tileX, tileY, resetZ, dc_color, blend_colormap, is_sequence, sequence_start, sequence_digits};
   }
 
   @Override
@@ -265,16 +255,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     else if (PARAM_IS_SEQUENCE.equalsIgnoreCase(pName)) {
       is_sequence = Tools.FTOI(pValue);
       clearCurrColorMap();
-    }
-    else if (PARAM_SEQUENCE_START.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SEQUENCE_START.equalsIgnoreCase(pName)) {
       sequence_start = Tools.FTOI(pValue);
       clearCurrColorMap();
-    }
-    else if (PARAM_SEQUENCE_DIGITS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_SEQUENCE_DIGITS.equalsIgnoreCase(pName)) {
       sequence_digits = Tools.FTOI(pValue);
       clearCurrColorMap();
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -318,16 +305,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     if (inlinedImage != null) {
       try {
         colorMap = RessourceManager.getImage(inlinedImageHash, inlinedImage);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
-    }
-    else if (imageFilename != null && imageFilename.length() > 0) {
+    } else if (imageFilename != null && imageFilename.length() > 0) {
       try {
         colorMap = RessourceManager.getImage(getCurrImageFilename(pContext));
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -355,8 +339,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
       }
       return baseFilename + number + fileExt;
 
-    }
-    else {
+    } else {
       return imageFilename;
     }
   }
@@ -378,7 +361,7 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (imageFilename != null ? imageFilename.getBytes() : null), inlinedImage, (imageDescSrc != null ? imageDescSrc.getBytes() : null), (imageSrc != null ? imageSrc.getBytes() : null) };
+    return new byte[][]{(imageFilename != null ? imageFilename.getBytes() : null), inlinedImage, (imageDescSrc != null ? imageDescSrc.getBytes() : null), (imageSrc != null ? imageSrc.getBytes() : null)};
   }
 
   @Override
@@ -386,24 +369,20 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       imageFilename = pValue != null ? new String(pValue) : "";
       if (imageFilename != null) {
-    	  inlinedImage = null;
-    	  inlinedImageHash = 0;
+        inlinedImage = null;
+        inlinedImageHash = 0;
       }
       clearCurrColorMap();
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       inlinedImage = pValue;
       inlinedImageHash = RessourceManager.calcHashCode(inlinedImage);
       if (inlinedImage != null) imageFilename = null;
       clearCurrColorMap();
-    }
-    else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
       imageDescSrc = pValue != null ? new String(pValue) : "";
-    }
-    else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
       imageSrc = pValue != null ? new String(pValue) : "";
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -416,17 +395,13 @@ public abstract class AbstractColorMapWFFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_IMAGE_FILENAME.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILENAME;
-    }
-    else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_INLINED_IMAGE.equalsIgnoreCase(pName)) {
       return RessourceType.IMAGE_FILE;
-    }
-    else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_IMAGE_DESC_SRC.equalsIgnoreCase(pName)) {
       return RessourceType.HREF;
-    }
-    else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
+    } else if (RESSOURCE_IMAGE_SRC.equalsIgnoreCase(pName)) {
       return RessourceType.HREF;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

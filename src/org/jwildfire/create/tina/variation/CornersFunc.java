@@ -16,13 +16,14 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.pow;
+
 import static org.jwildfire.base.mathlib.MathLib.log;
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 
 public class CornersFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_XWIDTH = "x";
   private static final String PARAM_YWIDTH = "y";
   private static final String PARAM_MULTX = "mult x";
@@ -32,8 +33,8 @@ public class CornersFunc extends VariationFunc {
   private static final String PARAM_XY_POWER = "xy power add";
   private static final String PARAM_LOGMODE = "log mode (0/1)";
   private static final String PARAM_LOG_BASE = "log base";
-  
-  private static final String[] paramNames = { PARAM_XWIDTH, PARAM_YWIDTH, PARAM_MULTX, PARAM_MULTY, PARAM_X_POWER, PARAM_Y_POWER, PARAM_XY_POWER, PARAM_LOGMODE, PARAM_LOG_BASE };
+
+  private static final String[] paramNames = {PARAM_XWIDTH, PARAM_YWIDTH, PARAM_MULTX, PARAM_MULTY, PARAM_X_POWER, PARAM_Y_POWER, PARAM_XY_POWER, PARAM_LOGMODE, PARAM_LOG_BASE};
   private double xwidth = 1.0;
   private double ywidth = 1.0;
   private double multx = 1.0;
@@ -45,44 +46,41 @@ public class CornersFunc extends VariationFunc {
   private double log_base = 2.71828;
   private double ex = 0;
   private double ey = 0;
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // corners by Whittaker Courtney 8-14-2018
-      
-      double xs = pAffineTP.x * pAffineTP.x;
-      double ys = pAffineTP.y * pAffineTP.y;
-      
-  //log mode    
-    if (logmode == 0){
-    ex = pow(xs, xpower + xypower) * multx;
-    ey = pow(ys, ypower + xypower) * multy;
-  }
-    else{
-    ex = pow(log((xs * multx) +3) / log(log_base), xpower + 2.25 + xypower)-1.33;
-    ey = pow(log((ys * multy) +3) / log(log_base), ypower + 2.25 + xypower)-1.33;
+    // corners by Whittaker Courtney 8-14-2018
+
+    double xs = pAffineTP.x * pAffineTP.x;
+    double ys = pAffineTP.y * pAffineTP.y;
+
+    //log mode
+    if (logmode == 0) {
+      ex = pow(xs, xpower + xypower) * multx;
+      ey = pow(ys, ypower + xypower) * multy;
+    } else {
+      ex = pow(log((xs * multx) + 3) / log(log_base), xpower + 2.25 + xypower) - 1.33;
+      ey = pow(log((ys * multy) + 3) / log(log_base), ypower + 2.25 + xypower) - 1.33;
     }
 
-          
+
     if (pAffineTP.x > 0) {
       pVarTP.x += pAmount * ex + xwidth;
-    }
-    else {
-      pVarTP.x += pAmount * -ex - xwidth;                  
+    } else {
+      pVarTP.x += pAmount * -ex - xwidth;
     }
 
     if (pAffineTP.y > 0) {
       pVarTP.y += pAmount * ey + ywidth;
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * -ey - ywidth;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
-  
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -90,7 +88,7 @@ public class CornersFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xwidth, ywidth, multx, multy, xpower, ypower, xypower, logmode, log_base };
+    return new Object[]{xwidth, ywidth, multx, multy, xpower, ypower, xypower, logmode, log_base};
   }
 
   @Override
@@ -116,7 +114,7 @@ public class CornersFunc extends VariationFunc {
     else
       throw new IllegalArgumentException(pName);
   }
- 
+
 
   @Override
   public String getName() {

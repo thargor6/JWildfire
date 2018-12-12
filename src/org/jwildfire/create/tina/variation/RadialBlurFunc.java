@@ -16,15 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class RadialBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +29,7 @@ public class RadialBlurFunc extends VariationFunc {
   private int gauss_N;
 
   private static final String PARAM_ANGLE = "angle";
-  private static final String[] paramNames = { PARAM_ANGLE };
+  private static final String[] paramNames = {PARAM_ANGLE};
 
   private double angle = 0.5;
 
@@ -54,8 +50,8 @@ public class RadialBlurFunc extends VariationFunc {
     pVarTP.x += ra * cosa + rz * pAffineTP.x;
     pVarTP.y += ra * sina + rz * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -65,7 +61,7 @@ public class RadialBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle };
+    return new Object[]{angle};
   }
 
   @Override

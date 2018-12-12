@@ -16,20 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI_4;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class XHeartFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_RATIO = "ratio";
-  private static final String[] paramNames = { PARAM_ANGLE, PARAM_RATIO };
+  private static final String[] paramNames = {PARAM_ANGLE, PARAM_RATIO};
 
   private double angle = 0.0;
   private double ratio = 0.0;
@@ -49,14 +47,13 @@ public class XHeartFunc extends VariationFunc {
     if (x > 0) {
       pVarTP.x += pAmount * x;
       pVarTP.y += pAmount * y;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * x;
       pVarTP.y += -pAmount * y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -67,7 +64,7 @@ public class XHeartFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle, ratio };
+    return new Object[]{angle, ratio};
   }
 
   @Override

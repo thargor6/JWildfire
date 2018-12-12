@@ -16,18 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ExBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +31,7 @@ public class ExBlurFunc extends VariationFunc {
   private static final String PARAM_YORIGIN = "y_origin";
   private static final String PARAM_ZORIGIN = "z_origin";
 
-  private static final String[] paramNames = { PARAM_DIST, PARAM_R, PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN };
+  private static final String[] paramNames = {PARAM_DIST, PARAM_R, PARAM_XORIGIN, PARAM_YORIGIN, PARAM_ZORIGIN};
 
   private double dist = 0.50;
   private double r = 0.00;
@@ -60,7 +53,7 @@ public class ExBlurFunc extends VariationFunc {
     oz = pAffineTP.z - z_origin;
     n = sqr(ox) + sqr(oy) + sqr(oz);
     rr = pAmount * pow(n, dist) *
-        (_r[0] + _r[1] + _r[2] + _r[3] - 2.0);
+            (_r[0] + _r[1] + _r[2] + _r[3] - 2.0);
     theta = atan2(oy, ox);
     phi = acos(oz / sqrt(n));
     su = sin(theta);
@@ -90,7 +83,7 @@ public class ExBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { dist, r, x_origin, y_origin, z_origin };
+    return new Object[]{dist, r, x_origin, y_origin, z_origin};
   }
 
   @Override

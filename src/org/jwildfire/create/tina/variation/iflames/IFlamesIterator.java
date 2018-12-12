@@ -16,11 +16,6 @@
  */
 package org.jwildfire.create.tina.variation.iflames;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-
-import java.util.List;
-
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Flame;
@@ -34,6 +29,11 @@ import org.jwildfire.create.tina.io.FlameWriter;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.VariationFunc;
+
+import java.util.List;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class IFlamesIterator {
   private final XYZPoint affine, var, ifsPoint;
@@ -63,8 +63,7 @@ public class IFlamesIterator {
           AnimationModelService.setFlameProperty(flame, path, pParamValues.get(i));
         }
         flameXML = new FlameWriter().getFlameXML(flame);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         ex.printStackTrace();
       }
     }
@@ -105,8 +104,7 @@ public class IFlamesIterator {
       ifsPoint.x = rx * dr + centreX;
       ifsPoint.y = ry * dr + centreY;
       ifsPoint.z = var.z;
-    }
-    else {
+    } else {
       double sina = MathLib.sin(pAngleAlpha);
       double cosa = MathLib.cos(pAngleAlpha);
       double sinb = MathLib.sin(pAngleBeta);

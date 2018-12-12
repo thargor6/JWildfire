@@ -16,15 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BWraps7Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +31,7 @@ public class BWraps7Func extends VariationFunc {
   private static final String PARAM_INNER_TWIST = "inner_twist";
   private static final String PARAM_OUTER_TWIST = "outer_twist";
 
-  private static final String[] paramNames = { PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST };
+  private static final String[] paramNames = {PARAM_CELLSIZE, PARAM_SPACE, PARAM_GAIN, PARAM_INNER_TWIST, PARAM_OUTER_TWIST};
 
   private double cellsize = 1.0;
   private double space = 0.0;
@@ -65,8 +61,8 @@ public class BWraps7Func extends VariationFunc {
       pVarTP.y += pAmount * Vy;
 
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
 
       return;
     }
@@ -83,8 +79,8 @@ public class BWraps7Func extends VariationFunc {
       pVarTP.y += pAmount * Vy;
 
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
 
       return;
     }
@@ -113,8 +109,8 @@ public class BWraps7Func extends VariationFunc {
     pVarTP.y += pAmount * Vy;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -125,7 +121,7 @@ public class BWraps7Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { cellsize, space, gain, inner_twist, outer_twist };
+    return new Object[]{cellsize, space, gain, inner_twist, outer_twist};
   }
 
   @Override
@@ -162,8 +158,7 @@ public class BWraps7Func extends VariationFunc {
     if (max_bubble > 2.0) {
       // Values greater than 2.0 "recurve" round the back of the bubble
       max_bubble = 1.0;
-    }
-    else {
+    } else {
       // Expand smaller bubble to fill the space
       max_bubble *= 1.0 / ((max_bubble * max_bubble) / 4.0 + 1.0);
     }

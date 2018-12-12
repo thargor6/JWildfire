@@ -16,21 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PreDisc3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_PI = "pi";
-  private static final String[] paramNames = { PARAM_PI };
+  private static final String[] paramNames = {PARAM_PI};
 
   private double pi = M_PI;
 
@@ -54,7 +49,7 @@ public class PreDisc3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { pi };
+    return new Object[]{pi};
   }
 
   @Override

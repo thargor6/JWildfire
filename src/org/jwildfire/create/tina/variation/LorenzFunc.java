@@ -1,12 +1,10 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LorenzFunc extends VariationFunc {
 
@@ -20,7 +18,7 @@ public class LorenzFunc extends VariationFunc {
   private static final String PARAM_CENTERY = "centery";
   private static final String PARAM_SCALE = "scale";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B, PARAM_C, PARAM_H, PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_A, PARAM_B, PARAM_C, PARAM_H, PARAM_CENTERX, PARAM_CENTERY, PARAM_SCALE};
 
   double a = 10.0;
   double b = 28.0;
@@ -65,23 +63,19 @@ public class LorenzFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { a, b, c, h, centerx, centery, scale };
+    return new Object[]{a, b, c, h, centerx, centery, scale};
   }
 
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_A)) {
       a = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_B)) {
+    } else if (pName.equalsIgnoreCase(PARAM_B)) {
       b = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_C)) {
+    } else if (pName.equalsIgnoreCase(PARAM_C)) {
       c = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_H)) {
+    } else if (pName.equalsIgnoreCase(PARAM_H)) {
       h = pValue;
-    }
-    else if (PARAM_CENTERX.equalsIgnoreCase(pName))
+    } else if (PARAM_CENTERX.equalsIgnoreCase(pName))
       centerx = pValue;
     else if (PARAM_CENTERY.equalsIgnoreCase(pName))
       centery = pValue;

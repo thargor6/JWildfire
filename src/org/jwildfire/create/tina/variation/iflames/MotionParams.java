@@ -1,13 +1,13 @@
 package org.jwildfire.create.tina.variation.iflames;
 
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.variation.RessourceType;
+import org.jwildfire.create.tina.variation.VariationFunc;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.variation.RessourceType;
-import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class MotionParams implements Params, Serializable {
   private static final long serialVersionUID = 1L;
@@ -89,59 +89,46 @@ public class MotionParams implements Params, Serializable {
     if (PARAM_TIME.equalsIgnoreCase(pName)) {
       time = pValue;
       return true;
-    }
-    else if (PARAM_PREVIEW.equalsIgnoreCase(pName)) {
+    } else if (PARAM_PREVIEW.equalsIgnoreCase(pName)) {
       preview = VariationFunc.limitIntVal(Tools.FTOI(pValue), 0, 1);
       return true;
-    }
-    else if (PARAM_LIFE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_LIFE.equalsIgnoreCase(pName)) {
       life = pValue;
       return true;
-    }
-    else if (PARAM_LIFE_VAR.equalsIgnoreCase(pName)) {
+    } else if (PARAM_LIFE_VAR.equalsIgnoreCase(pName)) {
       lifeVar = pValue;
       if (lifeVar < 0.0) {
         lifeVar = 0.0;
       }
       return true;
-    }
-    else if (PARAM_FORCE_X0.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_X0.equalsIgnoreCase(pName)) {
       forceX0 = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_Y0.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_Y0.equalsIgnoreCase(pName)) {
       forceY0 = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_Z0.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_Z0.equalsIgnoreCase(pName)) {
       forceZ0 = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_CENTRE_X.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_CENTRE_X.equalsIgnoreCase(pName)) {
       forceCentreX = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_CENTRE_Y.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_CENTRE_Y.equalsIgnoreCase(pName)) {
       forceCentreY = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_CENTRE_Z.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_CENTRE_Z.equalsIgnoreCase(pName)) {
       forceCentreZ = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_WAVELEN_X.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_WAVELEN_X.equalsIgnoreCase(pName)) {
       forceWavelenX = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_WAVELEN_Y.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_WAVELEN_Y.equalsIgnoreCase(pName)) {
       forceWavelenY = pValue;
       return true;
-    }
-    else if (PARAM_FORCE_WAVELEN_Z.equalsIgnoreCase(pName)) {
+    } else if (PARAM_FORCE_WAVELEN_Z.equalsIgnoreCase(pName)) {
       forceWavelenZ = pValue;
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -170,9 +157,9 @@ public class MotionParams implements Params, Serializable {
   @Override
   public String completeParticleKey(String pKey) {
     return completeImageKey(pKey) + "#" + Tools.doubleToString(forceX0) + "#" + Tools.doubleToString(forceY0)
-        + "#" + Tools.doubleToString(forceZ0) + "#" + Tools.doubleToString(forceCentreX) + "#" + Tools.doubleToString(forceCentreY)
-        + "#" + Tools.doubleToString(forceCentreZ) + "#" + Tools.doubleToString(forceWavelenX) + "#" + Tools.doubleToString(forceWavelenY)
-        + "#" + Tools.doubleToString(forceWavelenZ);
+            + "#" + Tools.doubleToString(forceZ0) + "#" + Tools.doubleToString(forceCentreX) + "#" + Tools.doubleToString(forceCentreY)
+            + "#" + Tools.doubleToString(forceCentreZ) + "#" + Tools.doubleToString(forceWavelenX) + "#" + Tools.doubleToString(forceWavelenY)
+            + "#" + Tools.doubleToString(forceWavelenZ);
   }
 
   public double getTime() {

@@ -16,18 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class BModFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +27,7 @@ public class BModFunc extends VariationFunc {
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_DISTANCE = "distance";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_DISTANCE };
+  private static final String[] paramNames = {PARAM_RADIUS, PARAM_DISTANCE};
 
   private double radius = 1.0;
   private double distance = 0.0;
@@ -51,8 +43,7 @@ public class BModFunc extends VariationFunc {
     tau = 0.5 * (log(sqr(pAffineTP.x + 1.0) + sqr(pAffineTP.y)) - log(sqr(pAffineTP.x - 1.0) + sqr(pAffineTP.y)));
     sigma = M_PI - atan2(pAffineTP.y, pAffineTP.x + 1.0) - atan2(pAffineTP.y, 1.0 - pAffineTP.x);
 
-    if (tau < radius && -tau < radius)
-    {
+    if (tau < radius && -tau < radius) {
       tau = fmod(tau + radius + distance * radius, 2.0 * radius) - radius;
     }
 
@@ -67,8 +58,8 @@ public class BModFunc extends VariationFunc {
     pVarTP.x += pAmount * sinht / temp;
     pVarTP.y += pAmount * sins / temp;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -78,7 +69,7 @@ public class BModFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, distance };
+    return new Object[]{radius, distance};
   }
 
   @Override

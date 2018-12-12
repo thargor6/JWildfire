@@ -16,12 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import odk.lang.DoubleWrapper;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathlib.VecMathLib.Matrix3D;
@@ -29,7 +24,11 @@ import org.jwildfire.base.mathlib.VecMathLib.VectorD;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
 
-import odk.lang.DoubleWrapper;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jwildfire.base.mathlib.MathLib.M_PI;
+import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class DLA3DWFFuncIterator {
   private DoubleWrapper sinPhi = new DoubleWrapper();
@@ -96,8 +95,7 @@ public class DLA3DWFFuncIterator {
               isDone = false;
               try {
                 Thread.sleep(1);
-              }
-              catch (InterruptedException e) {
+              } catch (InterruptedException e) {
                 e.printStackTrace();
               }
               break;
@@ -113,8 +111,7 @@ public class DLA3DWFFuncIterator {
             }
           }
         }
-      }
-      else {
+      } else {
         DLA3DWFFuncPoint nextPoint = nextWalk(ci, cj, ck, res);
         if (nextPoint != null) {
           res.add(nextPoint);
@@ -183,8 +180,7 @@ public class DLA3DWFFuncIterator {
       done = false;
       try {
         res = nextWalk(ci0, cj0, ck0, points);
-      }
-      finally {
+      } finally {
         done = true;
       }
     }
@@ -258,8 +254,7 @@ public class DLA3DWFFuncIterator {
           outerRadius = 2.1 * innerRadius;
         }
         return point;
-      }
-      else if (radius > outerRadius) {
+      } else if (radius > outerRadius) {
         ci = ci0;
         cj = cj0;
         ck = ck0;

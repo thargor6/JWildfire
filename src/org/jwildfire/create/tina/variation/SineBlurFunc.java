@@ -16,22 +16,16 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SineBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   public static final String PARAM_POWER = "power";
-  private static final String[] paramNames = { PARAM_POWER };
+  private static final String[] paramNames = {PARAM_POWER};
 
   private double power = 1.0;
 
@@ -48,8 +42,8 @@ public class SineBlurFunc extends VariationFunc {
     pVarTP.x += r * c;
     pVarTP.y += r * s;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -59,7 +53,7 @@ public class SineBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power };
+    return new Object[]{power};
   }
 
   @Override

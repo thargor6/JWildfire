@@ -16,20 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PerspectiveFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_ANGLE = "angle";
   private static final String PARAM_DIST = "dist";
-  private static final String[] paramNames = { PARAM_ANGLE, PARAM_DIST };
+  private static final String[] paramNames = {PARAM_ANGLE, PARAM_DIST};
 
   private double angle = 0.62;
   private double dist = 2.2;
@@ -47,8 +45,8 @@ public class PerspectiveFunc extends VariationFunc {
     pVarTP.x += pAmount * this.dist * pAffineTP.x * t;
     pVarTP.y += pAmount * this.vfcos * pAffineTP.y * t;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -58,7 +56,7 @@ public class PerspectiveFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle, dist };
+    return new Object[]{angle, dist};
   }
 
   @Override

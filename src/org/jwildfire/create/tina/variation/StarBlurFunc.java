@@ -16,20 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI_2;
-import static org.jwildfire.base.mathlib.MathLib.asin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.trunc;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class StarBlurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -37,7 +29,7 @@ public class StarBlurFunc extends VariationFunc {
   public static final String PARAM_POWER = "power";
   public static final String PARAM_RANGE = "range";
 
-  private static final String[] paramNames = { PARAM_POWER, PARAM_RANGE };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_RANGE};
 
   private int power = 5;
   private double range = 0.40162283177245455973959534526548;
@@ -63,8 +55,8 @@ public class StarBlurFunc extends VariationFunc {
     pVarTP.x += pAmount * z * c;
     pVarTP.y += pAmount * z * s;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -74,7 +66,7 @@ public class StarBlurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, range };
+    return new Object[]{power, range};
   }
 
   @Override

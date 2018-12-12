@@ -6,7 +6,8 @@ import org.jwildfire.create.tina.base.XYZPoint;
 public class InvTreeFunc extends SimpleVariationFunc {
 
   /**
-   * Inverse Tree IFS 
+   * Inverse Tree IFS
+   *
    * @author Jesus Sosa
    * @date November 4, 2017
    * based on a work of:
@@ -24,12 +25,10 @@ public class InvTreeFunc extends SimpleVariationFunc {
     if (pContext.random() < 0.333) {
       x = pAffineTP.x / 2.0;
       y = pAffineTP.y / 2.0;
-    }
-    else if (pContext.random() < 0.666) {
+    } else if (pContext.random() < 0.666) {
       x = 1.0 / (pAffineTP.x + 1);
       y = pAffineTP.y / (pAffineTP.y + 1.0);
-    }
-    else {
+    } else {
       x = pAffineTP.x / (pAffineTP.x + 1);
       y = 1.0 / (pAffineTP.y + 1.0);
     }

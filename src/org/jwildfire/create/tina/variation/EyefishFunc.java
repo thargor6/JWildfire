@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class EyefishFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class EyefishFunc extends SimpleVariationFunc {
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

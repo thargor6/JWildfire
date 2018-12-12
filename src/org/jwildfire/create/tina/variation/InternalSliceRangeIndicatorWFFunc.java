@@ -16,15 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class InternalSliceRangeIndicatorWFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -40,7 +38,7 @@ public class InternalSliceRangeIndicatorWFFunc extends VariationFunc {
   private static final String PARAM_DC_BLUE_2 = "dc_blue_2";
   private static final String PARAM_RANDOM_FILL = "random_fill";
 
-  private static final String[] paramNames = { PARAM_THICKNESS, PARAM_POSITION_1, PARAM_DC_RED_1, PARAM_DC_GREEN_1, PARAM_DC_BLUE_1, PARAM_POSITION_2, PARAM_DC_RED_2, PARAM_DC_GREEN_2, PARAM_DC_BLUE_2, PARAM_RANDOM_FILL };
+  private static final String[] paramNames = {PARAM_THICKNESS, PARAM_POSITION_1, PARAM_DC_RED_1, PARAM_DC_GREEN_1, PARAM_DC_BLUE_1, PARAM_POSITION_2, PARAM_DC_RED_2, PARAM_DC_GREEN_2, PARAM_DC_BLUE_2, PARAM_RANDOM_FILL};
 
   private double thickness = 0.01;
   private double position_1 = 0.0;
@@ -112,7 +110,7 @@ public class InternalSliceRangeIndicatorWFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { thickness, position_1, dc_red_1, dc_green_1, dc_blue_1, position_2, dc_red_2, dc_green_2, dc_blue_2, random_fill };
+    return new Object[]{thickness, position_1, dc_red_1, dc_green_1, dc_blue_1, position_2, dc_red_2, dc_green_2, dc_blue_2, random_fill};
   }
 
   @Override

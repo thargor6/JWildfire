@@ -14,57 +14,61 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class SigmoidFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_SHIFTX = "shiftx";
   private static final String PARAM_SHIFTY = "shifty";
-  private static final String[] paramNames = { PARAM_SHIFTX, PARAM_SHIFTY };
+  private static final String[] paramNames = {PARAM_SHIFTX, PARAM_SHIFTY};
 
   private double shiftx = 1.0;
   private double shifty = 1.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-   // author Xyrus. Implemented by Brad Stefanov
-	  double ax = 1.0; 
-	  double ay = 1.0;
-	  double sx = shiftx; 
-	  double sy = shifty;
-	    if (sx < 1 && sx > -1) {
-	       if (sx == 0) {
-	          sx = SMALL_EPSILON; ax = 1.0;
-	       } else {
-	         ax = (sx < 0 ? -1 : 1);
-	         sx = 1 / sx;
-	       }
-	    }
-	    if (sy < 1 && sy > -1) {
-	       if (sy == 0) {
-	          sy = SMALL_EPSILON; ay = 1.0;
-	       } else {
-	         ay = (sy < 0 ? -1 : 1);
-	         sy = 1 / sy;
-	       }
-	    }
-	    
-	    sx *= -5;
-	    sy *= -5;
-	   
-	   double vv = fabs(pAmount);
+    // author Xyrus. Implemented by Brad Stefanov
+    double ax = 1.0;
+    double ay = 1.0;
+    double sx = shiftx;
+    double sy = shifty;
+    if (sx < 1 && sx > -1) {
+      if (sx == 0) {
+        sx = SMALL_EPSILON;
+        ax = 1.0;
+      } else {
+        ax = (sx < 0 ? -1 : 1);
+        sx = 1 / sx;
+      }
+    }
+    if (sy < 1 && sy > -1) {
+      if (sy == 0) {
+        sy = SMALL_EPSILON;
+        ay = 1.0;
+      } else {
+        ay = (sy < 0 ? -1 : 1);
+        sy = 1 / sy;
+      }
+    }
 
-  double c0 = ax / (1.0 + exp(sx *  pAffineTP.x ));
-  double c1 = ay / (1.0 + exp(sy *  pAffineTP.y));
-  double x = (2 * (c0 - 0.5));
-  double y = (2 * (c1 - 0.5));
-  
-  pVarTP.x += vv * x;
-  pVarTP.y += vv * y;
-}
+    sx *= -5;
+    sy *= -5;
+
+    double vv = fabs(pAmount);
+
+    double c0 = ax / (1.0 + exp(sx * pAffineTP.x));
+    double c1 = ay / (1.0 + exp(sy * pAffineTP.y));
+    double x = (2 * (c0 - 0.5));
+    double y = (2 * (c1 - 0.5));
+
+    pVarTP.x += vv * x;
+    pVarTP.y += vv * y;
+  }
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -72,20 +76,18 @@ public class SigmoidFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shiftx, shifty };
+    return new Object[]{shiftx, shifty};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SHIFTX.equalsIgnoreCase(pName))
-    	shiftx =  pValue;
+      shiftx = pValue;
     else if (PARAM_SHIFTY.equalsIgnoreCase(pName))
-    	shifty = pValue;
+      shifty = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
-
-
 
 
   @Override

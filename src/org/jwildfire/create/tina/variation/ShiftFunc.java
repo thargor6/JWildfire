@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class ShiftFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class ShiftFunc extends VariationFunc {
   private static final String PARAM_SHIFT_X = "shift_x";
   private static final String PARAM_SHIFT_Y = "shift_y";
   private static final String PARAM_ANGLE = "angle";
-  private static final String[] paramNames = { PARAM_SHIFT_X, PARAM_SHIFT_Y, PARAM_ANGLE };
+  private static final String[] paramNames = {PARAM_SHIFT_X, PARAM_SHIFT_Y, PARAM_ANGLE};
   private double shift_x = 0.0;
   private double shift_y = 0.0;
   private double angle = 0.0;
@@ -42,11 +42,8 @@ public class ShiftFunc extends VariationFunc {
     double cs = cos(ang);
 
 
-   
-  
-
-    pVarTP.x += pAmount * (pAffineTP.x+ cs *shift_x - sn * shift_y);
-    pVarTP.y += pAmount * (pAffineTP.y- cs *shift_y - sn * shift_x);
+    pVarTP.x += pAmount * (pAffineTP.x + cs * shift_x - sn * shift_y);
+    pVarTP.y += pAmount * (pAffineTP.y - cs * shift_y - sn * shift_x);
     if (pContext.isPreserveZCoordinate()) {
       pVarTP.z += pAmount * pAffineTP.z;
     }
@@ -59,20 +56,22 @@ public class ShiftFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shift_x, shift_y,angle };
+    return new Object[]{shift_x, shift_y, angle};
   }
+
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "shift_x", "shift_y", "shift_angle" };
+    return new String[]{"shift_x", "shift_y", "shift_angle"};
   }
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_SHIFT_X.equalsIgnoreCase(pName))
-    	shift_x = pValue;
+      shift_x = pValue;
     else if (PARAM_SHIFT_Y.equalsIgnoreCase(pName))
-    	shift_y = pValue;
+      shift_y = pValue;
     else if (PARAM_ANGLE.equalsIgnoreCase(pName))
-    	angle = pValue;    
+      angle = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

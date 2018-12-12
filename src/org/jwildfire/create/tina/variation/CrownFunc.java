@@ -1,34 +1,30 @@
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.base.mathlib.Complex;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class CrownFunc extends VariationFunc {
 
   /**
-  * Roger Bagula Function
-  * @author Jesus Sosa
-  * @date November 4, 2017
-  * based on a work of:
-  * http://paulbourke.net/fractals/crown/
-  */
+   * Roger Bagula Function
+   *
+   * @author Jesus Sosa
+   * @date November 4, 2017
+   * based on a work of:
+   * http://paulbourke.net/fractals/crown/
+   */
 
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_A = "a";
   private static final String PARAM_B = "b";
 
-  private static final String[] paramNames = { PARAM_A, PARAM_B };
+  private static final String[] paramNames = {PARAM_A, PARAM_B};
 
   double a = 5, b = Math.log(2) / Math.log(3);
 
@@ -71,19 +67,17 @@ public class CrownFunc extends VariationFunc {
   }
 
   public Object[] getParameterValues() {
-    return new Object[] { a, b };
+    return new Object[]{a, b};
   }
 
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_A)) {
       a = pValue;
 
-    }
-    else if (pName.equalsIgnoreCase(PARAM_B)) {
+    } else if (pName.equalsIgnoreCase(PARAM_B)) {
       b = pValue;
 
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

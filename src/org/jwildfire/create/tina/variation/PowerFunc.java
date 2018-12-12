@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.pow;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.pow;
 
 public class PowerFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class PowerFunc extends SimpleVariationFunc {
     pVarTP.x += r * pAffineTP.getPrecalcCosA();
     pVarTP.y += r * pAffineTP.getPrecalcSinA();
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 

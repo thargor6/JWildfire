@@ -16,17 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sin;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class SintrangeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_W = "w";
-  private static final String[] paramNames = { PARAM_W };
+  private static final String[] paramNames = {PARAM_W};
 
   private double w = 1.0;
 
@@ -37,8 +37,8 @@ public class SintrangeFunc extends VariationFunc {
     pVarTP.x = pAmount * (sin(pAffineTP.x)) * (pAffineTP.x * pAffineTP.x + w - v);
     pVarTP.y = pAmount * (sin(pAffineTP.y)) * (pAffineTP.y * pAffineTP.y + w - v);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -48,7 +48,7 @@ public class SintrangeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { w };
+    return new Object[]{w};
   }
 
   @Override

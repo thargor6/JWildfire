@@ -16,12 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
+import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
 public class Glynnia3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -31,18 +31,18 @@ public class Glynnia3Func extends VariationFunc {
   private static final String PARAM_RTHRESH = "rthresh";
   private static final String PARAM_YTHRESH = "ythresh";
 
-  private static final String[] paramNames = { PARAM_RSCALE, PARAM_DSCALE, PARAM_RTHRESH, PARAM_YTHRESH };
+  private static final String[] paramNames = {PARAM_RSCALE, PARAM_DSCALE, PARAM_RTHRESH, PARAM_YTHRESH};
 
   private double rscale = 1.0;
   private double dscale = 1.0;
   private double rthresh = 0.0;
   private double ythresh = 0.0;
 
-  /** 
+  /**
    * glynnia Apophysis plugin by Michael Faber: http://michaelfaber.deviantart.com/art/The-Lost-Variations-258913970
    * glynnia2 Apophysis plugin by Maulana Randa: http://www.deviantart.com/art/Glynnia2-190716081
    * glynnia3 JWildfire variation by CozyG: ported from glynnia2 plugin and adding extra parameters
-  */
+   */
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 
@@ -57,8 +57,7 @@ public class Glynnia3Func extends VariationFunc {
         }
         pVarTP.x += _vvar2 * d;
         pVarTP.y -= _vvar2 / d * pAffineTP.y;
-      }
-      else {
+      } else {
         d = dscale * (r + pAffineTP.x);
         double dx = sqrt(r * (sqr(pAffineTP.y) + sqr(d)));
         if (dx == 0) {
@@ -68,8 +67,7 @@ public class Glynnia3Func extends VariationFunc {
         pVarTP.x += r * d;
         pVarTP.y += r * pAffineTP.y;
       }
-    }
-    else {
+    } else {
       if (pContext.random() > 0.5) {
         d = dscale * sqrt(r + pAffineTP.x);
         if (d == 0) {
@@ -77,8 +75,7 @@ public class Glynnia3Func extends VariationFunc {
         }
         pVarTP.x -= _vvar2 * d;
         pVarTP.y -= _vvar2 / d * pAffineTP.y;
-      }
-      else {
+      } else {
         d = dscale * (r + pAffineTP.x);
         double dx = sqrt(r * (sqr(pAffineTP.y) + sqr(d)));
         if (dx == 0) {
@@ -90,8 +87,8 @@ public class Glynnia3Func extends VariationFunc {
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -101,24 +98,20 @@ public class Glynnia3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { rscale, dscale, rthresh, ythresh };
+    return new Object[]{rscale, dscale, rthresh, ythresh};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_RSCALE.equalsIgnoreCase(pName)) {
       rscale = pValue;
-    }
-    else if (PARAM_DSCALE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_DSCALE.equalsIgnoreCase(pName)) {
       dscale = pValue;
-    }
-    else if (PARAM_RTHRESH.equalsIgnoreCase(pName)) {
+    } else if (PARAM_RTHRESH.equalsIgnoreCase(pName)) {
       rthresh = pValue;
-    }
-    else if (PARAM_YTHRESH.equalsIgnoreCase(pName)) {
+    } else if (PARAM_YTHRESH.equalsIgnoreCase(pName)) {
       ythresh = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

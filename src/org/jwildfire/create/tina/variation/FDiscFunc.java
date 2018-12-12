@@ -16,19 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * ported from fdisc plugin for Apophysis7X, author unknown (couldn't find author name for plugin)
  * ported to JWildfire variation by CozyG
- *    and enhanced with user-adjustable parameters
+ * and enhanced with user-adjustable parameters
  */
 public class FDiscFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -42,7 +38,7 @@ public class FDiscFunc extends VariationFunc {
   private static final String PARAM_TERM3 = "term3";
   private static final String PARAM_TERM4 = "term4";
 
-  private static final String[] paramNames = { PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4 };
+  private static final String[] paramNames = {PARAM_ASHIFT, PARAM_RSHIFT, PARAM_XSHIFT, PARAM_YSHIFT, PARAM_TERM1, PARAM_TERM2, PARAM_TERM3, PARAM_TERM4};
 
   private double ashift = 1.0;
   private double rshift = 1.0;
@@ -78,8 +74,8 @@ public class FDiscFunc extends VariationFunc {
     // pVarTP.y += pAffineTP.y * pAmount * r * yfactor;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -94,36 +90,28 @@ public class FDiscFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { ashift, rshift, xshift, yshift, term1, term2, term3, term4 };
+    return new Object[]{ashift, rshift, xshift, yshift, term1, term2, term3, term4};
   }
 
   @Override
   public void setParameter(String pName, double pValue) {
     if (pName.equalsIgnoreCase(PARAM_ASHIFT)) {
       ashift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_RSHIFT)) {
+    } else if (pName.equalsIgnoreCase(PARAM_RSHIFT)) {
       rshift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_XSHIFT)) {
+    } else if (pName.equalsIgnoreCase(PARAM_XSHIFT)) {
       xshift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
+    } else if (pName.equalsIgnoreCase(PARAM_YSHIFT)) {
       yshift = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_TERM1)) {
+    } else if (pName.equalsIgnoreCase(PARAM_TERM1)) {
       term1 = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_TERM2)) {
+    } else if (pName.equalsIgnoreCase(PARAM_TERM2)) {
       term2 = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_TERM3)) {
+    } else if (pName.equalsIgnoreCase(PARAM_TERM3)) {
       term3 = pValue;
-    }
-    else if (pName.equalsIgnoreCase(PARAM_TERM4)) {
+    } else if (pName.equalsIgnoreCase(PARAM_TERM4)) {
       term4 = pValue;
-    }
-    else {
+    } else {
       throw new IllegalArgumentException(pName);
     }
   }

@@ -16,17 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-import static org.jwildfire.base.mathlib.MathLib.tanh;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Waves2BFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -42,7 +36,7 @@ public class Waves2BFunc extends VariationFunc {
   private static final String PARAM_UNITY = "unity";
   private static final String PARAM_JACOK = "jacok";
 
-  private static final String[] paramNames = { PARAM_FREQX, PARAM_FREQY, PARAM_PWX, PARAM_PWY, PARAM_SCALEX, PARAM_SCALEINFX, PARAM_SCALEY, PARAM_SCALEINFY, PARAM_UNITY, PARAM_JACOK };
+  private static final String[] paramNames = {PARAM_FREQX, PARAM_FREQY, PARAM_PWX, PARAM_PWY, PARAM_SCALEX, PARAM_SCALEINFX, PARAM_SCALEY, PARAM_SCALEINFY, PARAM_UNITY, PARAM_JACOK};
 
   private double freqx = 2.0;
   private double freqy = 2.0;
@@ -71,11 +65,9 @@ public class Waves2BFunc extends VariationFunc {
     if (pwx >= 0 && pwx < 1e-4) { // jacobi sn
       JCB_sn = Jacobi_elliptic(pAffineTP.y * freqx, jacok);
       pVarTP.x += pAmount * (pAffineTP.x + CsX * JCB_sn);
-    }
-    else if (pwx < 0 && pwx > -1e-4) { // bessel j1 
+    } else if (pwx < 0 && pwx > -1e-4) { // bessel j1
       pVarTP.x += pAmount * (pAffineTP.x + CsX * cern.jet.math.Bessel.j1(pAffineTP.y * freqx));
-    }
-    else { // NORMAL!             
+    } else { // NORMAL!
       pVarTP.x += pAmount * (pAffineTP.x + CsX * sin(sgn(pAffineTP.y) * pow(fabs(pAffineTP.y) + 1e-10, pwx) * freqx));
     }
 
@@ -83,16 +75,14 @@ public class Waves2BFunc extends VariationFunc {
     if (pwy >= 0 && pwy < 1e-4) { // jacobi sn
       JCB_sn = Jacobi_elliptic(pAffineTP.x * freqy, jacok);
       pVarTP.y += pAmount * (pAffineTP.y + CsY * JCB_sn);
-    }
-    else if (pwy < 0 && pwy > -1e-4) { // bessel j1 
+    } else if (pwy < 0 && pwy > -1e-4) { // bessel j1
       pVarTP.y += pAmount * (pAffineTP.y + CsY * cern.jet.math.Bessel.j1(pAffineTP.x * freqy));
-    }
-    else { // NORMAL!             
+    } else { // NORMAL!
       pVarTP.y += pAmount * (pAffineTP.y + CsY * sin(sgn(pAffineTP.x) * pow(fabs(pAffineTP.x) + 1e-10, pwy) * freqy));
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -102,7 +92,7 @@ public class Waves2BFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { freqx, freqy, pwx, pwy, scalex, scaleinfx, scaley, scaleinfy, unity, jacok };
+    return new Object[]{freqx, freqy, pwx, pwy, scalex, scaleinfx, scaley, scaleinfy, unity, jacok};
   }
 
   @Override
@@ -231,8 +221,7 @@ public class Waves2BFunc extends VariationFunc {
         cn = a;
         sn = sn / d;
       }
-    }
-    else {
+    } else {
       // cn = 1.0/cosh(u);
       // dn = cn;
       sn = tanh(u);

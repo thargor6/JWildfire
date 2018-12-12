@@ -19,15 +19,15 @@
 //  Jed Kelsey, 20 June 2007
 package org.jwildfire.create.tina.variation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.random.MarsagliaRandomGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MandelbrotFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public class MandelbrotFunc extends VariationFunc {
   private static final String PARAM_SEED = "seed";
   private static final String PARAM_RND_Z_RANGE = "rnd_z_range";
 
-  private static final String[] paramNames = { PARAM_ITER, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_INVERT, PARAM_SKIN, PARAM_CX, PARAM_CY, PARAM_MAX_POINTS, PARAM_SEED, PARAM_RND_Z_RANGE };
+  private static final String[] paramNames = {PARAM_ITER, PARAM_XMIN, PARAM_XMAX, PARAM_YMIN, PARAM_YMAX, PARAM_INVERT, PARAM_SKIN, PARAM_CX, PARAM_CY, PARAM_MAX_POINTS, PARAM_SEED, PARAM_RND_Z_RANGE};
 
   private int iter = 100;
   private double xmin = -1.6;
@@ -78,13 +78,12 @@ public class MandelbrotFunc extends VariationFunc {
     boolean inverted = randGen.random() < this.invert;
     if (inverted) {
       currIter = 0;
-    }
-    else {
+    } else {
       currIter = iter;
     }
     while ((inverted && (currIter < iter)) ||
-        ((!inverted) && ((currIter >= iter) ||
-        ((skin < 1) && (currIter < 0.1 * iter * (1 - skin)))))) {
+            ((!inverted) && ((currIter >= iter) ||
+                    ((skin < 1) && (currIter < 0.1 * iter * (1 - skin)))))) {
       if ((_x0 == 0) && (_y0 == 0)) {
         // Choose a point at random
         if (max_points > 0) {
@@ -95,8 +94,7 @@ public class MandelbrotFunc extends VariationFunc {
             if (_pIdx >= max_points) {
               _pIdx = 0;
             }
-          }
-          else {
+          } else {
             _x0 = (xmax - xmin) * randGen.random() + xmin;
             _y0 = (ymax - ymin) * randGen.random() + ymin;
             _z0 = randGen.random() * rnd_z_range;
@@ -104,14 +102,12 @@ public class MandelbrotFunc extends VariationFunc {
             yP.add(_y0);
             zP.add(_z0);
           }
-        }
-        else {
+        } else {
           _x0 = (xmax - xmin) * randGen.random() + xmin;
           _y0 = (ymax - ymin) * randGen.random() + ymin;
           _z0 = randGen.random() * rnd_z_range;
         }
-      }
-      else {
+      } else {
         // Choose a point close to previous point
         _x0 = (skin + 0.001) * (randGen.random() - 0.5) + _x0;
         _y0 = (skin + 0.001) * (randGen.random() - 0.5) + _y0;
@@ -146,7 +142,7 @@ public class MandelbrotFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { iter, xmin, xmax, ymin, ymax, invert, skin, cx, cy, max_points, seed, rnd_z_range };
+    return new Object[]{iter, xmin, xmax, ymin, ymax, invert, skin, cx, cy, max_points, seed, rnd_z_range};
   }
 
   @Override
@@ -174,8 +170,7 @@ public class MandelbrotFunc extends VariationFunc {
       if (max_points > 0 && max_points < 100) {
         max_points = 100;
       }
-    }
-    else if (PARAM_SEED.equalsIgnoreCase(pName))
+    } else if (PARAM_SEED.equalsIgnoreCase(pName))
       seed = Tools.FTOI(pValue);
     else if (PARAM_RND_Z_RANGE.equalsIgnoreCase(pName))
       rnd_z_range = pValue;

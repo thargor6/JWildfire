@@ -16,15 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CPowFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -33,7 +28,7 @@ public class CPowFunc extends VariationFunc {
   private static final String PARAM_I = "i";
   private static final String PARAM_POWER = "power";
 
-  private static final String[] paramNames = { PARAM_R, PARAM_I, PARAM_POWER };
+  private static final String[] paramNames = {PARAM_R, PARAM_I, PARAM_POWER};
 
   private double r = 1.0;
   private double i = 0.1;
@@ -56,8 +51,8 @@ public class CPowFunc extends VariationFunc {
     pVarTP.x += m * ca;
     pVarTP.y += m * sa;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -68,7 +63,7 @@ public class CPowFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r, i, power };
+    return new Object[]{r, i, power};
   }
 
   @Override

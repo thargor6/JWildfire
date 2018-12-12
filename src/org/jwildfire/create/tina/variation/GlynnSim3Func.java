@@ -15,19 +15,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.io.Serializable;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.io.Serializable;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class GlynnSim3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -38,7 +32,7 @@ public class GlynnSim3Func extends VariationFunc {
   private static final String PARAM_CONTRAST = "contrast";
   private static final String PARAM_POW = "pow";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_THICKNESS, PARAM_CONTRAST, PARAM_POW };
+  private static final String[] paramNames = {PARAM_RADIUS, PARAM_THICKNESS, PARAM_CONTRAST, PARAM_POW};
 
   private double radius = 1.0;
   private double thickness = 0.1;
@@ -59,8 +53,7 @@ public class GlynnSim3Func extends VariationFunc {
     double r;
     if (pContext.random() < this._gamma) {
       r = this._radius1;
-    }
-    else {
+    } else {
       r = this._radius2;
     }
     p.x = r * cosPhi;
@@ -76,21 +69,19 @@ public class GlynnSim3Func extends VariationFunc {
       circle2(pContext, toolPoint);
       pVarTP.x += pAmount * toolPoint.x;
       pVarTP.y += pAmount * toolPoint.y;
-    }
-    else {
+    } else {
       if (pContext.random() > this.contrast * pow(alpha, this._absPow)) {
 
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * alpha * alpha * pAffineTP.x;
         pVarTP.y += pAmount * alpha * alpha * pAffineTP.y;
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -100,7 +91,7 @@ public class GlynnSim3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, thickness, contrast, pow };
+    return new Object[]{radius, thickness, contrast, pow};
   }
 
   @Override
@@ -109,8 +100,8 @@ public class GlynnSim3Func extends VariationFunc {
       radius = pValue;
     else if (PARAM_THICKNESS.equalsIgnoreCase(pName))
       thickness = pValue;
-    else if (PARAM_THICKNESS2.equalsIgnoreCase(pName))
-    { }  // ignore deprecated parameter
+    else if (PARAM_THICKNESS2.equalsIgnoreCase(pName)) {
+    }  // ignore deprecated parameter
     else if (PARAM_CONTRAST.equalsIgnoreCase(pName))
       contrast = limitVal(pValue, 0.0, 1.0);
     else if (PARAM_POW.equalsIgnoreCase(pName))

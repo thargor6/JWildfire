@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class PhoenixJuliaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +29,7 @@ public class PhoenixJuliaFunc extends VariationFunc {
   private static final String PARAM_DIST = "dist";
   private static final String PARAM_X_DISTORT = "x_distort";
   private static final String PARAM_Y_DISTORT = "y_distort";
-  private static final String[] paramNames = { PARAM_POWER, PARAM_DIST, PARAM_X_DISTORT, PARAM_Y_DISTORT };
+  private static final String[] paramNames = {PARAM_POWER, PARAM_DIST, PARAM_X_DISTORT, PARAM_Y_DISTORT};
 
   private double power = genRandomPower();
   private double dist = 1.0;
@@ -56,8 +51,8 @@ public class PhoenixJuliaFunc extends VariationFunc {
     pVarTP.y += r * sina;
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -68,12 +63,12 @@ public class PhoenixJuliaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, dist, x_distort, y_distort };
+    return new Object[]{power, dist, x_distort, y_distort};
   }
 
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "phoenix_power", "phoenix_dist", "x_distort", "y_distort" };
+    return new String[]{"phoenix_power", "phoenix_dist", "x_distort", "y_distort"};
   }
 
   @Override

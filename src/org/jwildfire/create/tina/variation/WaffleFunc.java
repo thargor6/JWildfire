@@ -16,13 +16,13 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
+import static org.jwildfire.base.mathlib.MathLib.sin;
 
 public class WaffleFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class WaffleFunc extends VariationFunc {
   private static final String PARAM_YTHICKNESS = "ythickness";
   private static final String PARAM_ROTATION = "rotation";
 
-  private static final String[] paramNames = { PARAM_SLICES, PARAM_XTHICKNESS, PARAM_YTHICKNESS, PARAM_ROTATION };
+  private static final String[] paramNames = {PARAM_SLICES, PARAM_XTHICKNESS, PARAM_YTHICKNESS, PARAM_ROTATION};
 
   private int slices = 6;
   private double xthickness = 0.5;
@@ -70,8 +70,8 @@ public class WaffleFunc extends VariationFunc {
     pVarTP.x += (vcosr * a + vsinr * r); // note that post-transforms make this redundant!
     pVarTP.y += (-vsinr * a + vcosr * r);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -81,7 +81,7 @@ public class WaffleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { slices, xthickness, ythickness, rotation };
+    return new Object[]{slices, xthickness, ythickness, rotation};
   }
 
   @Override

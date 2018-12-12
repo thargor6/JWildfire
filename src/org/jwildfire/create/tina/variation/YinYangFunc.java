@@ -16,15 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class YinYangFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +32,7 @@ public class YinYangFunc extends VariationFunc {
   private static final String PARAM_DUAL_T = "dual_t";
   private static final String PARAM_OUTSIDE = "outside";
 
-  private static final String[] paramNames = { PARAM_RADIUS, PARAM_ANG1, PARAM_ANG2, PARAM_DUAL_T, PARAM_OUTSIDE };
+  private static final String[] paramNames = {PARAM_RADIUS, PARAM_ANG1, PARAM_ANG2, PARAM_DUAL_T, PARAM_OUTSIDE};
   private double radius = 0.5;
   private double ang1 = 0.0;
   private double ang2 = 0.0;
@@ -74,24 +71,21 @@ public class YinYangFunc extends VariationFunc {
         double k1 = alfa * (RR) + beta * 1;
         pVarTP.x += pAmount * (t1 * k1 + dx) * inv;
         pVarTP.y += pAmount * sqrt(1 - t1 * t1) * k1 * inv;
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * (xx * (1 - RR) + RR) * inv;
         pVarTP.y += pAmount * (yy * (1 - RR)) * inv;
       }
-    }
-    else if (outside == 1) {
+    } else if (outside == 1) {
       pVarTP.x += pAmount * pAffineTP.x;
       pVarTP.y += pAmount * pAffineTP.y;
-    }
-    else {
+    } else {
       pVarTP.x += 0.0; // out!
       pVarTP.y += 0.0; // out!
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -102,7 +96,7 @@ public class YinYangFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { radius, ang1, ang2, dual_t, outside };
+    return new Object[]{radius, ang1, ang2, dual_t, outside};
   }
 
   @Override

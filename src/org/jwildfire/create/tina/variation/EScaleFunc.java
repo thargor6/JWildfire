@@ -16,19 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.acos;
-import static org.jwildfire.base.mathlib.MathLib.acosh;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class EScaleFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -36,7 +27,7 @@ public class EScaleFunc extends VariationFunc {
   private static final String PARAM_SCALE = "scale";
   private static final String PARAM_ANGLE = "angle";
 
-  private static final String[] paramNames = { PARAM_SCALE, PARAM_ANGLE };
+  private static final String[] paramNames = {PARAM_SCALE, PARAM_ANGLE};
 
   private double scale = 1.0;
   private double angle = 0.0;
@@ -85,8 +76,8 @@ public class EScaleFunc extends VariationFunc {
     pVarTP.x += pAmount * coshmu * cos(nu);
     pVarTP.y += pAmount * sinhmu * sin(nu);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -96,7 +87,7 @@ public class EScaleFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale, angle };
+    return new Object[]{scale, angle};
   }
 
   @Override

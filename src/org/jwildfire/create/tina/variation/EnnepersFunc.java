@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class EnnepersFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class EnnepersFunc extends SimpleVariationFunc {
     pVarTP.x = pAmount * (pAffineTP.x - ((sqr(pAffineTP.x) * pAffineTP.x) / 3.0)) + pAffineTP.x * sqr(pAffineTP.y);
     pVarTP.y = pAmount * (pAffineTP.y - ((sqr(pAffineTP.y) * pAffineTP.y) / 3.0)) + pAffineTP.y * sqr(pAffineTP.x);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

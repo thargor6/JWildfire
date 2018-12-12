@@ -16,12 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.cosh;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sinh;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class SinhqFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,9 +28,9 @@ public class SinhqFunc extends SimpleVariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* Sinhq by zephyrtronium http://zephyrtronium.deviantart.com/art/Quaternion-Apo-Plugin-Pack-165451482 */
 
-	double abs_v = Math.hypot (pAffineTP.y,pAffineTP.z);
-	double s = sin(abs_v);
-	double c = cos(abs_v);
+    double abs_v = Math.hypot(pAffineTP.y, pAffineTP.z);
+    double s = sin(abs_v);
+    double c = cos(abs_v);
     double sh = sinh(pAffineTP.x);
     double ch = cosh(pAffineTP.x);
     double C = pAmount * ch * s / abs_v;

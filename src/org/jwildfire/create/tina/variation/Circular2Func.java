@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Circular2Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class Circular2Func extends VariationFunc {
   private static final String PARAM_CIRCULAR_SEED = "seed";
   private static final String PARAM_CIRCULAR_X = "xx";
   private static final String PARAM_CIRCULAR_Y = "yy";
-  private static final String[] paramNames = { PARAM_CIRCULAR_ANGLE, PARAM_CIRCULAR_SEED,PARAM_CIRCULAR_X,PARAM_CIRCULAR_Y };
+  private static final String[] paramNames = {PARAM_CIRCULAR_ANGLE, PARAM_CIRCULAR_SEED, PARAM_CIRCULAR_X, PARAM_CIRCULAR_Y};
   private double angle = 90.0;
   private double seed = 0.0;
   private double xx = 12.9898;
@@ -40,16 +40,12 @@ public class Circular2Func extends VariationFunc {
     double c_a = angle * M_PI / 180;
     double aux = (sin(pAffineTP.x * xx + pAffineTP.y * yy + seed) * 43758.5453);
     aux = aux - (int) aux;
-    double rnd = (2 * (Math.random() + aux) - 2.0)  * c_a;
+    double rnd = (2 * (Math.random() + aux) - 2.0) * c_a;
     double rad = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
     double ang = atan2(pAffineTP.y, pAffineTP.x);
-    double by = sin(ang+rnd);
-    double bx = cos(ang+rnd);
+    double by = sin(ang + rnd);
+    double bx = cos(ang + rnd);
 
-
-
-   
-  
 
     pVarTP.x += pAmount * (bx * rad);
     pVarTP.y += pAmount * (by * rad);
@@ -65,25 +61,27 @@ public class Circular2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { angle, seed,xx, yy };
+    return new Object[]{angle, seed, xx, yy};
   }
+
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "angle, seed" };
+    return new String[]{"angle, seed"};
   }
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_CIRCULAR_ANGLE.equalsIgnoreCase(pName))
       angle = pValue;
     else if (PARAM_CIRCULAR_SEED.equalsIgnoreCase(pName))
       seed = pValue;
-    
-	else if (PARAM_CIRCULAR_X.equalsIgnoreCase(pName))
+
+    else if (PARAM_CIRCULAR_X.equalsIgnoreCase(pName))
       xx = pValue;
 
-   	else if (PARAM_CIRCULAR_Y.equalsIgnoreCase(pName))
- 	      yy = pValue;
-    	    else    	
+    else if (PARAM_CIRCULAR_Y.equalsIgnoreCase(pName))
+      yy = pValue;
+    else
       throw new IllegalArgumentException(pName);
   }
 

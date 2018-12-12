@@ -19,14 +19,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 /**
  * @author Nicolaus Anderson
@@ -43,7 +39,7 @@ public class Onion2Func extends VariationFunc {
   private static final String PN_TOP_CROP = "top_crop";
   private static final String PN_STRETCH = "stretch";
 
-  private static final String[] paramNames = { PN_MEETING_PT, PN_CIRCLE_A, PN_CIRCLE_B, PN_SHIFT_X, PN_SHIFT_Y, PN_SHIFT_Z, PN_TOP_CROP, PN_STRETCH };
+  private static final String[] paramNames = {PN_MEETING_PT, PN_CIRCLE_A, PN_CIRCLE_B, PN_SHIFT_X, PN_SHIFT_Y, PN_SHIFT_Z, PN_TOP_CROP, PN_STRETCH};
 
   private double meeting_pt = 0.5;
   private double circle_a = 1.0;
@@ -116,19 +112,17 @@ public class Onion2Func extends VariationFunc {
       r = cos(t);
       if (tan(meeting_pt) != 0.0) {
         z = exp(cos(meeting_pt) - r) / tan(meeting_pt)
-            + sin(meeting_pt)
-            - 1 / tan(meeting_pt);
+                + sin(meeting_pt)
+                - 1 / tan(meeting_pt);
 
         if (z > top_crop && top_crop > 0) { /* FIX ADDED. top_crop could start at -1 for cropping below middle. */
           z = top_crop;
           r = 0;
         }
-      }
-      else {
+      } else {
         z = top_crop;
       }
-    }
-    else {
+    } else {
       // circular curve
       r = cos(t);
       z = sin(t);
@@ -176,15 +170,15 @@ public class Onion2Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] {
-        meeting_pt,
-        circle_a,
-        circle_b,
-        shift_x,
-        shift_y,
-        shift_z,
-        top_crop,
-        stretch
+    return new Object[]{
+            meeting_pt,
+            circle_a,
+            circle_b,
+            shift_x,
+            shift_y,
+            shift_z,
+            top_crop,
+            stretch
     };
   }
 
@@ -193,30 +187,22 @@ public class Onion2Func extends VariationFunc {
 
     if (PN_MEETING_PT.equalsIgnoreCase(pName)) {
       meeting_pt = pValue;
-    }
-    else if (PN_CIRCLE_A.equalsIgnoreCase(pName)) {
+    } else if (PN_CIRCLE_A.equalsIgnoreCase(pName)) {
       circle_a = pValue;
-    }
-    else if (PN_CIRCLE_B.equalsIgnoreCase(pName)) {
+    } else if (PN_CIRCLE_B.equalsIgnoreCase(pName)) {
       circle_b = pValue;
-    }
-    else if (PN_SHIFT_X.equalsIgnoreCase(pName)) {
+    } else if (PN_SHIFT_X.equalsIgnoreCase(pName)) {
       shift_x = pValue;
-    }
-    else if (PN_SHIFT_Y.equalsIgnoreCase(pName)) {
+    } else if (PN_SHIFT_Y.equalsIgnoreCase(pName)) {
       shift_y = pValue;
-    }
-    else if (PN_SHIFT_Z.equalsIgnoreCase(pName)) {
+    } else if (PN_SHIFT_Z.equalsIgnoreCase(pName)) {
       shift_z = pValue;
-    }
-    else if (PN_TOP_CROP.equalsIgnoreCase(pName)) {
+    } else if (PN_TOP_CROP.equalsIgnoreCase(pName)) {
       top_crop = pValue;
-    }
-    else if (PN_STRETCH.equalsIgnoreCase(pName)) {
+    } else if (PN_STRETCH.equalsIgnoreCase(pName)) {
       if (pValue > 0.0)
         stretch = pValue;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 }

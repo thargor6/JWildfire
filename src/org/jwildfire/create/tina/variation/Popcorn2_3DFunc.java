@@ -16,13 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.tan;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Popcorn2_3DFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -31,7 +28,7 @@ public class Popcorn2_3DFunc extends VariationFunc {
   private static final String PARAM_Y = "y";
   private static final String PARAM_Z = "z";
   private static final String PARAM_C = "c";
-  private static final String[] paramNames = { PARAM_X, PARAM_Y, PARAM_Z, PARAM_C };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y, PARAM_Z, PARAM_C};
 
   private double x = 0.1;
   private double y = 0.1;
@@ -47,20 +44,17 @@ public class Popcorn2_3DFunc extends VariationFunc {
 
     if (fabs(pAmount) <= 1.0) {
       tmpVV = fabs(pAmount) * pAmount; //sqr(pAmount) value retaining sign
-    }
-    else {
+    } else {
       tmpVV = pAmount;
     }
     if (otherZ == 0.0) {
       tempPZ = tmpVV * sin(tan(this.c)) * atan2(pAffineTP.y, pAffineTP.x);
-    }
-    else {
+    } else {
       tempPZ = pVarTP.z;
     }
     if (inZ == 0.0) {
       tempTZ = tmpVV * sin(tan(this.c)) * atan2(pAffineTP.y, pAffineTP.x);
-    }
-    else {
+    } else {
       tempTZ = pAffineTP.z;
     }
 
@@ -82,7 +76,7 @@ public class Popcorn2_3DFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y, z, c };
+    return new Object[]{x, y, z, c};
   }
 
   @Override

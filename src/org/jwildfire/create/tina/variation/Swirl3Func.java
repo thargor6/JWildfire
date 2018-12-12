@@ -16,30 +16,28 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.log;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 public class Swirl3Func extends VariationFunc {
   private static final long serialVersionUID = 1L;
-  
+
   private static final String PARAM_SHIFT = "shift";
-  
-  private static final String[] paramNames = { PARAM_SHIFT };
-  
+
+  private static final String[] paramNames = {PARAM_SHIFT};
+
   private double shift = 0.5;
-  
+
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-	  
-	double rad = pAffineTP.getPrecalcSqrt();
-	double ang = pAffineTP.getPrecalcAtanYX() + log(rad)*shift;
-	double s = sin(ang);
-	double c = cos(ang);
-	
+
+    double rad = pAffineTP.getPrecalcSqrt();
+    double ang = pAffineTP.getPrecalcAtanYX() + log(rad) * shift;
+    double s = sin(ang);
+    double c = cos(ang);
+
     pVarTP.x += pAmount * rad * c;
     pVarTP.y += pAmount * rad * s;
 
@@ -54,7 +52,7 @@ public class Swirl3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { shift };
+    return new Object[]{shift};
   }
 
   @Override

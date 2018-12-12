@@ -16,16 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class TradeFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,7 +29,7 @@ public class TradeFunc extends VariationFunc {
   private static final String PARAM_D1 = "d1";
   private static final String PARAM_R2 = "r2";
   private static final String PARAM_D2 = "d2";
-  private static final String[] paramNames = { PARAM_R1, PARAM_D1, PARAM_R2, PARAM_D2 };
+  private static final String[] paramNames = {PARAM_R1, PARAM_D1, PARAM_R2, PARAM_D2};
 
   private double r1 = 1.0;
   private double d1 = 1.0;
@@ -53,13 +48,11 @@ public class TradeFunc extends VariationFunc {
         double c = cos(a);
         pVarTP.x += pAmount * (r * c - this._c2);
         pVarTP.y += pAmount * r * s;
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
-    }
-    else {
+    } else {
       double r = sqrt(sqr(-this._c2 - pAffineTP.x) + sqr(pAffineTP.y));
 
       if (r <= this.r2) {
@@ -69,8 +62,7 @@ public class TradeFunc extends VariationFunc {
         double c = cos(a);
         pVarTP.x += pAmount * (r * c + this._c1);
         pVarTP.y += pAmount * r * s;
-      }
-      else {
+      } else {
         pVarTP.x += pAmount * pAffineTP.x;
         pVarTP.y += pAmount * pAffineTP.y;
       }
@@ -87,7 +79,7 @@ public class TradeFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { r1, d1, r2, d2 };
+    return new Object[]{r1, d1, r2, d2};
   }
 
   @Override

@@ -16,22 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class OrthoFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_IN = "in";
   private static final String PARAM_OUT = "out";
-  private static final String[] paramNames = { PARAM_IN, PARAM_OUT };
+  private static final String[] paramNames = {PARAM_IN, PARAM_OUT};
 
   private double in = 0.0;
   private double out = 0.0;
@@ -60,8 +55,7 @@ public class OrthoFunc extends VariationFunc {
 
         pVarTP.x += pAmount * (xo - c * ro);
         pVarTP.y += pAmount * s * ro;
-      }
-      else {
+      } else {
         xo = -(r + 1.0) / (2.0 * pAffineTP.x);
         ro = sqrt(sqr(-pAffineTP.x - xo) + sqr(pAffineTP.y));
         theta = atan2(1.0, ro);
@@ -72,8 +66,7 @@ public class OrthoFunc extends VariationFunc {
         pVarTP.x -= pAmount * (xo - c * ro);
         pVarTP.y += pAmount * s * ro;
       }
-    }
-    else {
+    } else {
       r = 1.0 / sqrt(r);
       ta = atan2(pAffineTP.y, pAffineTP.x);
       ts = sin(ta);
@@ -82,8 +75,7 @@ public class OrthoFunc extends VariationFunc {
       x = r * tc;
       y = r * ts;
 
-      if (x >= 0.0)
-      {
+      if (x >= 0.0) {
         xo = (sqr(x) + sqr(y) + 1.0) / (2.0 * x);
         ro = sqrt(sqr(x - xo) + sqr(y));
         theta = atan2(1.0, ro);
@@ -101,9 +93,7 @@ public class OrthoFunc extends VariationFunc {
 
         pVarTP.x += pAmount * r * tc;
         pVarTP.y += pAmount * r * ts;
-      }
-      else
-      {
+      } else {
         xo = -(sqr(x) + sqr(y) + 1.0) / (2.0 * x);
         ro = sqrt(sqr(-x - xo) + sqr(y));
         theta = atan2(1.0, ro);
@@ -125,8 +115,8 @@ public class OrthoFunc extends VariationFunc {
     }
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
 
   }
 
@@ -137,7 +127,7 @@ public class OrthoFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { in, out };
+    return new Object[]{in, out};
   }
 
   @Override

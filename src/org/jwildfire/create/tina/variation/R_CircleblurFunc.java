@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.*;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class R_CircleblurFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class R_CircleblurFunc extends VariationFunc {
   private static final String PARAM_DIST = "dist";
   private static final String PARAM_MIN = "min";
   private static final String PARAM_MAX = "max";
-  private static final String[] paramNames = { PARAM_N, PARAM_SEED,PARAM_DIST, PARAM_MIN,PARAM_MAX };
+  private static final String[] paramNames = {PARAM_N, PARAM_SEED, PARAM_DIST, PARAM_MIN, PARAM_MAX};
   private double n = 1.0;
   private double seed = 0.0;
   private double dist = 0.5;
@@ -39,13 +39,13 @@ public class R_CircleblurFunc extends VariationFunc {
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     // "r_circleblur" variation created by Tatyana Zabanova http://tatasz.deviantart.com/art/R-Circular-plugin-697158578 implemented into JWildfire by Brad Stefanov
 
-   //truncate to circle
-	 double rcn = fabs(n);
+    //truncate to circle
+    double rcn = fabs(n);
     double angle = atan2(pAffineTP.y, pAffineTP.x);
     double rad = sqrt(sqr(pAffineTP.x) + sqr(pAffineTP.y));
     rad = fmod(rad, rcn);
-    double by = sin(angle+rad);
-    double bx = cos(angle+rad);
+    double by = sin(angle + rad);
+    double bx = cos(angle + rad);
 
     //make circles
     by = round(by * rad);
@@ -64,14 +64,13 @@ public class R_CircleblurFunc extends VariationFunc {
     bx = bx + rad2 * cos(angle2) + a2 * dist;
 
 
-
     pVarTP.x += pAmount * (bx);
     pVarTP.y += pAmount * (by);
     if (pContext.isPreserveZCoordinate()) {
-     pVarTP.z += pAmount * pAffineTP.z;
-     }
-}
- 
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
+  }
+
   @Override
   public String[] getParameterNames() {
     return paramNames;
@@ -79,12 +78,14 @@ public class R_CircleblurFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { n, seed, dist,min,max  };
+    return new Object[]{n, seed, dist, min, max};
   }
+
   @Override
   public String[] getParameterAlternativeNames() {
-    return new String[] { "angle, seed, dist,min,max " };
+    return new String[]{"angle, seed, dist,min,max "};
   }
+
   @Override
   public void setParameter(String pName, double pValue) {
     if (PARAM_N.equalsIgnoreCase(pName))
@@ -92,11 +93,11 @@ public class R_CircleblurFunc extends VariationFunc {
     else if (PARAM_SEED.equalsIgnoreCase(pName))
       seed = pValue;
     else if (PARAM_DIST.equalsIgnoreCase(pName))
-        dist = pValue;
+      dist = pValue;
     else if (PARAM_MIN.equalsIgnoreCase(pName))
-        min = pValue;
+      min = pValue;
     else if (PARAM_MAX.equalsIgnoreCase(pName))
-        max = pValue;    
+      max = pValue;
     else
       throw new IllegalArgumentException(pName);
   }

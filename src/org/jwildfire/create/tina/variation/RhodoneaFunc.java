@@ -16,63 +16,57 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
-import java.math.BigInteger;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import java.math.BigInteger;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 /**
-  Rhodonea curves (also known as rose curves)
-  Implemented by CozyG, March 2015
-  For references, see http://en.wikipedia.org/wiki/Rose_%28mathematics%29
-  There are other JWildfire variations (RoseWF, PRose3D), and an Apophysis rose plugin (http://fardareismai.deviantart.com/art/Apophysis-Plugin-Rose-246324281)
-     that implement the class of rose curves where k is an integer and cycles = 1, 
-     but Rhodonea implements a fuller range of possibilities (at least within the 2D plane)
-
-   From reference literature:
-   Rhodonea curves were studied and named by the Italian mathematician Guido Grandi between the year 1723 and 1728
-   These curves can all be expressed by a polar equation of the form
-        r = cos(k * theta)   
-
-   or, alternatively, as a pair of Cartesian parametric equations of the form
-        x = cos(kt)cos(t)
-        y = cos(kt)sin(t)
-
-    If k is an integer, the curve will be rose-shaped with:
-         2k petals if k is even, and
-         k petals if k is odd.
-
-    When k is even, the entire graph of the rose will be traced out exactly once when the value of θ changes from 0 to 2π. 
-    When k is odd, this will happen on the interval between 0 and π. 
-    (More generally, this will happen on any interval of length 2π for k even, and π for k odd.)
-
-    If k is a half-integer (e.g. 1/2, 3/2, 5/2), the curve will be rose-shaped with 4k petals.
-
-    If k can be expressed as n±1/6, where n is a nonzero integer, the curve will be rose-shaped with 12k petals.
-
-    If k can be expressed as n/3, where n is an integer not divisible by 3, 
-       the curve will be rose-shaped with n petals if n is odd and 2n petals if n is even.
-
-    If k is rational, then the curve is closed and has finite length. 
-    If k is irrational, then it is not closed and has infinite length. 
-    Furthermore, the graph of the rose in this case forms a dense set 
-    (i.e., it comes arbitrarily close to every point in the unit disk).
-
-    Adding an offset parameter c, so the polar equation becomes
-       r = cos(k * theta) + c
-    In the case where the parameter k is an odd integer, the two overlapping halves of the curve separate as the offset changes from zero.
-
-*/
+ * Rhodonea curves (also known as rose curves)
+ * Implemented by CozyG, March 2015
+ * For references, see http://en.wikipedia.org/wiki/Rose_%28mathematics%29
+ * There are other JWildfire variations (RoseWF, PRose3D), and an Apophysis rose plugin (http://fardareismai.deviantart.com/art/Apophysis-Plugin-Rose-246324281)
+ * that implement the class of rose curves where k is an integer and cycles = 1,
+ * but Rhodonea implements a fuller range of possibilities (at least within the 2D plane)
+ * <p>
+ * From reference literature:
+ * Rhodonea curves were studied and named by the Italian mathematician Guido Grandi between the year 1723 and 1728
+ * These curves can all be expressed by a polar equation of the form
+ * r = cos(k * theta)
+ * <p>
+ * or, alternatively, as a pair of Cartesian parametric equations of the form
+ * x = cos(kt)cos(t)
+ * y = cos(kt)sin(t)
+ * <p>
+ * If k is an integer, the curve will be rose-shaped with:
+ * 2k petals if k is even, and
+ * k petals if k is odd.
+ * <p>
+ * When k is even, the entire graph of the rose will be traced out exactly once when the value of θ changes from 0 to 2π.
+ * When k is odd, this will happen on the interval between 0 and π.
+ * (More generally, this will happen on any interval of length 2π for k even, and π for k odd.)
+ * <p>
+ * If k is a half-integer (e.g. 1/2, 3/2, 5/2), the curve will be rose-shaped with 4k petals.
+ * <p>
+ * If k can be expressed as n±1/6, where n is a nonzero integer, the curve will be rose-shaped with 12k petals.
+ * <p>
+ * If k can be expressed as n/3, where n is an integer not divisible by 3,
+ * the curve will be rose-shaped with n petals if n is odd and 2n petals if n is even.
+ * <p>
+ * If k is rational, then the curve is closed and has finite length.
+ * If k is irrational, then it is not closed and has infinite length.
+ * Furthermore, the graph of the rose in this case forms a dense set
+ * (i.e., it comes arbitrarily close to every point in the unit disk).
+ * <p>
+ * Adding an offset parameter c, so the polar equation becomes
+ * r = cos(k * theta) + c
+ * In the case where the parameter k is an odd integer, the two overlapping halves of the curve separate as the offset changes from zero.
+ */
 public class RhodoneaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -94,7 +88,7 @@ public class RhodoneaFunc extends VariationFunc {
   private static final String PARAM_METACYCLES = "metacycles"; // only in effect when cycles = 0 (automatic cycle calculations in effect)
   private static final String PARAM_METACYCLE_EXPANSION = "metacycle_expansion";
 
-  private static final String[] paramNames = { PARAM_KNUMER, PARAM_KDENOM, PARAM_INNER_MODE, PARAM_OUTER_MODE, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD_RATIO, PARAM_OUTER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_FILL, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION };
+  private static final String[] paramNames = {PARAM_KNUMER, PARAM_KDENOM, PARAM_INNER_MODE, PARAM_OUTER_MODE, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD_RATIO, PARAM_OUTER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_FILL, PARAM_RADIAL_OFFSET, PARAM_CYCLES, PARAM_CYCLE_OFFSET, PARAM_METACYCLES, PARAM_METACYCLE_EXPANSION};
 
   private double knumer = 3; // numerator of k in rose curve equations,   k = kn/kd
   private double kdenom = 4; // denominator of k in rose curve equations, k = kn/kd
@@ -132,8 +126,7 @@ public class RhodoneaFunc extends VariationFunc {
     if ((k % 1) == 0) { // k is integer 
       if ((k % 2) == 0) { // k is even integer, will have 2k petals
         cycles_to_close = 1; // (2PI)
-      }
-      else { // k is odd integer, will have k petals (or sometimes 2k with offset)
+      } else { // k is odd integer, will have k petals (or sometimes 2k with offset)
         if (radial_offset != 0 || inner_spread != 0 || outer_spread != 0 || fill != 0) {
           cycles_to_close = 1;
         } // if adding an offset or spread, need a full cycle
@@ -141,8 +134,7 @@ public class RhodoneaFunc extends VariationFunc {
           cycles_to_close = 0.5;
         } // (1PI)
       }
-    }
-    else if ((kn % 1 == 0) && (kd % 1 == 0)) {
+    } else if ((kn % 1 == 0) && (kd % 1 == 0)) {
       // if kn and kd are integers,
       //   determine if kn and kd are relatively prime (their greatest common denominator is 1)
       //   using builtin gcd() function for BigIntegers in Java
@@ -162,8 +154,7 @@ public class RhodoneaFunc extends VariationFunc {
       //    If k=kn/kd is a rational number, then the curve closes at a polar angle of theta = PI * kd if (kn * kd) is odd, and 2 * PI * kd if (kn * kd) is even
       if ((kn % 2 == 0) || (kd % 2 == 0)) {
         cycles_to_close = kd; // 2 * PI * kd
-      }
-      else {
+      } else {
         cycles_to_close = kd / 2; // PI * kd
       }
     }
@@ -219,8 +210,7 @@ public class RhodoneaFunc extends VariationFunc {
       // use auto-calculation of cycles (2*PI*radians) to close the curve, 
       //     and metacycles for how many closed curves to cycle through
       cycles = cycles_to_close * metacycles;
-    }
-    else {
+    } else {
       // manually set number of cycles (cycles are specified in 2*PI*radians)
       cycles = cycles_param;
     }
@@ -313,8 +303,7 @@ public class RhodoneaFunc extends VariationFunc {
           pVarTP.y += adjustedAmount * y;
           break;
       }
-    }
-    else { // incoming point lies on or inside current petal of rose curve
+    } else { // incoming point lies on or inside current petal of rose curve
       switch (inner_mode) {
         case 0: // no spread, all points map to rose curve
           pVarTP.x += adjustedAmount * x;
@@ -397,16 +386,13 @@ public class RhodoneaFunc extends VariationFunc {
         if (side == 1) {
           sx = unit;
           sy = varpos;
-        }
-        else if (side == 2) {
+        } else if (side == 2) {
           sx = varpos;
           sy = unit;
-        }
-        else if (side == 3) {
+        } else if (side == 3) {
           sx = -1 * unit;
           sy = varpos;
-        }
-        else if (side == 4) {
+        } else if (side == 4) {
           sx = varpos;
           sy = -1 * unit;
         }
@@ -415,8 +401,8 @@ public class RhodoneaFunc extends VariationFunc {
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -426,10 +412,10 @@ public class RhodoneaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { knumer, kdenom,
-        inner_mode, outer_mode, inner_spread, outer_spread, inner_spread_ratio, outer_spread_ratio, spread_split,
-        fill, radial_offset,
-        cycles_param, cycle_offset, metacycles, metacycle_expansion };
+    return new Object[]{knumer, kdenom,
+            inner_mode, outer_mode, inner_spread, outer_spread, inner_spread_ratio, outer_spread_ratio, spread_split,
+            fill, radial_offset,
+            cycles_param, cycle_offset, metacycles, metacycle_expansion};
   }
 
   @Override
@@ -445,14 +431,12 @@ public class RhodoneaFunc extends VariationFunc {
       if (inner_mode > 6 || inner_mode < 0) {
         inner_mode = 0;
       }
-    }
-    else if (PARAM_OUTER_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OUTER_MODE.equalsIgnoreCase(pName)) {
       outer_mode = (int) floor(pValue);
       if (outer_mode > 6 || outer_mode < 0) {
         outer_mode = 0;
       }
-    }
-    else if (PARAM_INNER_SPREAD.equalsIgnoreCase(pName))
+    } else if (PARAM_INNER_SPREAD.equalsIgnoreCase(pName))
       inner_spread = pValue;
     else if (PARAM_OUTER_SPREAD.equalsIgnoreCase(pName))
       outer_spread = pValue;

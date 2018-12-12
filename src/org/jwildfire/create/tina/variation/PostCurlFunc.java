@@ -16,19 +16,19 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.sqr;
 
 public class PostCurlFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_C1 = "c1";
   private static final String PARAM_C2 = "c2";
-  private static final String[] paramNames = { PARAM_C1, PARAM_C2 };
+  private static final String[] paramNames = {PARAM_C1, PARAM_C2};
 
   private double c1 = 0;
   private double c2 = 0;
@@ -53,7 +53,7 @@ public class PostCurlFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { c1, c2 };
+    return new Object[]{c1, c2};
   }
 
   @Override

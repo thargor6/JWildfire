@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.cos;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.cos;
 
 public class FlowerFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class FlowerFunc extends VariationFunc {
   public static final String PARAM_HOLES = "holes";
   public static final String PARAM_PETALS = "petals";
 
-  private static final String[] paramNames = { PARAM_HOLES, PARAM_PETALS };
+  private static final String[] paramNames = {PARAM_HOLES, PARAM_PETALS};
 
   private double holes = 0.40;
   private double petals = 7.0;
@@ -44,8 +44,8 @@ public class FlowerFunc extends VariationFunc {
     pVarTP.x += r * pAffineTP.x;
     pVarTP.y += r * pAffineTP.y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -55,7 +55,7 @@ public class FlowerFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { holes, petals };
+    return new Object[]{holes, petals};
   }
 
   @Override

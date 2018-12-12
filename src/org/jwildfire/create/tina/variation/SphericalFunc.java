@@ -16,10 +16,10 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.SMALL_EPSILON;
 
 public class SphericalFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -30,8 +30,8 @@ public class SphericalFunc extends SimpleVariationFunc {
     pVarTP.x += pAffineTP.x * r;
     pVarTP.y += pAffineTP.y * r;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override

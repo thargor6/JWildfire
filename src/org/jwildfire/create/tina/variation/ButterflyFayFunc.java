@@ -16,25 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static java.lang.Math.abs;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.floor;
-import static org.jwildfire.base.mathlib.MathLib.pow;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 
+import static java.lang.Math.abs;
+import static org.jwildfire.base.mathlib.MathLib.*;
+
 /**
-  Butterfly2, a variation based on the Butterfly curve, discovered ~1988 by Temple H. Fay
-  Implemented by CozyG, March 2015
-  For references, see http://en.wikipedia.org/wiki/Butterfly_curve_%28transcendental%29
-*/
+ * Butterfly2, a variation based on the Butterfly curve, discovered ~1988 by Temple H. Fay
+ * Implemented by CozyG, March 2015
+ * For references, see http://en.wikipedia.org/wiki/Butterfly_curve_%28transcendental%29
+ */
 public class ButterflyFayFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
@@ -56,7 +49,7 @@ public class ButterflyFayFunc extends VariationFunc {
   //     to close curve, or a somewhat arbitrary number if cannot 
   private static final String PARAM_CYCLES = "cycles";
 
-  private static final String[] paramNames = { PARAM_OFFSET, PARAM_UNIFIED_INNER_OUTER, PARAM_OUTER_MODE, PARAM_INNER_MODE, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_CYCLES, PARAM_FILL };
+  private static final String[] paramNames = {PARAM_OFFSET, PARAM_UNIFIED_INNER_OUTER, PARAM_OUTER_MODE, PARAM_INNER_MODE, PARAM_OUTER_SPREAD, PARAM_INNER_SPREAD, PARAM_OUTER_SPREAD_RATIO, PARAM_INNER_SPREAD_RATIO, PARAM_SPREAD_SPLIT, PARAM_CYCLES, PARAM_FILL};
 
   private double cycles = 0; // number of cycles (2*PI radians, circle circumference), if set to 0 then number of cycles is calculated automatically
   private double offset = 0; // offset c from equations
@@ -91,8 +84,7 @@ public class ButterflyFayFunc extends VariationFunc {
     //      I have observationally determined is at exactly 2(PI)^3 radians, which is same as (PI)^2 cycles
     if (cycles == 0) {
       number_of_cycles = cycles_to_close;
-    }
-    else {
+    } else {
       number_of_cycles = cycles;
     }
   }
@@ -169,8 +161,7 @@ public class ButterflyFayFunc extends VariationFunc {
           pVarTP.y += pAmount * y;
           break;
       }
-    }
-    else { // incoming point lies "inside" or "on" curve
+    } else { // incoming point lies "inside" or "on" curve
       switch (inner_mode) {
         case 0: // no spread
           pVarTP.x += pAmount * x;
@@ -223,8 +214,8 @@ public class ButterflyFayFunc extends VariationFunc {
       }
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -234,7 +225,7 @@ public class ButterflyFayFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { offset, unified_inner_outer, outer_mode, inner_mode, outer_spread, inner_spread, outer_spread_ratio, inner_spread_ratio, spread_split, cycles, fill };
+    return new Object[]{offset, unified_inner_outer, outer_mode, inner_mode, outer_spread, inner_spread, outer_spread_ratio, inner_spread_ratio, spread_split, cycles, fill};
   }
 
   @Override
@@ -243,20 +234,17 @@ public class ButterflyFayFunc extends VariationFunc {
       offset = pValue;
     else if (PARAM_UNIFIED_INNER_OUTER.equalsIgnoreCase(pName)) {
       unified_inner_outer = (pValue == 0 ? 0 : 1);
-    }
-    else if (PARAM_OUTER_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_OUTER_MODE.equalsIgnoreCase(pName)) {
       outer_mode = (int) floor(pValue);
       if (outer_mode > 5 || outer_mode < 0) {
         outer_mode = 0;
       }
-    }
-    else if (PARAM_INNER_MODE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_INNER_MODE.equalsIgnoreCase(pName)) {
       inner_mode = (int) floor(pValue);
       if (inner_mode > 5 || inner_mode < 0) {
         inner_mode = 0;
       }
-    }
-    else if (PARAM_OUTER_SPREAD.equalsIgnoreCase(pName))
+    } else if (PARAM_OUTER_SPREAD.equalsIgnoreCase(pName))
       outer_spread = pValue;
     else if (PARAM_INNER_SPREAD.equalsIgnoreCase(pName))
       inner_spread = pValue;

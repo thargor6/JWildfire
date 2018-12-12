@@ -16,20 +16,18 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.log;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class LogApoFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_base = "base";
 
-  private static final String[] paramNames = { PARAM_base };
+  private static final String[] paramNames = {PARAM_base};
 
   private double base = 2.71828182845905;
 
@@ -38,8 +36,8 @@ public class LogApoFunc extends VariationFunc {
     pVarTP.x += pAmount * log(sqr(pAffineTP.x) + sqr(pAffineTP.y)) * _denom;
     pVarTP.y += pAmount * atan2(pAffineTP.y, pAffineTP.x);
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -49,7 +47,7 @@ public class LogApoFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { base };
+    return new Object[]{base};
   }
 
   @Override

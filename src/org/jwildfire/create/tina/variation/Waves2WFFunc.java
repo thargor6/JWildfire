@@ -16,17 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.exp;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Waves2WFFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -39,7 +34,7 @@ public class Waves2WFFunc extends VariationFunc {
   private static final String PARAM_USECOSY = "use_cos_y";
   private static final String PARAM_DAMPX = "dampx";
   private static final String PARAM_DAMPY = "dampy";
-  private static final String[] paramNames = { PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_USECOSX, PARAM_USECOSY, PARAM_DAMPX, PARAM_DAMPY };
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_USECOSX, PARAM_USECOSY, PARAM_DAMPX, PARAM_DAMPY};
 
   private double scalex = 0.25;
   private double scaley = 0.5;
@@ -55,14 +50,12 @@ public class Waves2WFFunc extends VariationFunc {
     /* Modified version of waves2 from Joel F */
     if (use_cos_x == 1) {
       pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * cos(pAffineTP.y * freqx)) * _dampingX;
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * (pAffineTP.x + _dampingX * scalex * sin(pAffineTP.y * freqx)) * _dampingX;
     }
     if (use_cos_y == 1) {
       pVarTP.y += pAmount * (pAffineTP.y + _dampingY * scaley * cos(pAffineTP.x * freqy)) * _dampingY;
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * (pAffineTP.y + _dampingY * scaley * sin(pAffineTP.x * freqy)) * _dampingY;
     }
     if (pContext.isPreserveZCoordinate()) {
@@ -77,7 +70,7 @@ public class Waves2WFFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scalex, scaley, freqx, freqy, use_cos_x, use_cos_y, dampx, dampy };
+    return new Object[]{scalex, scaley, freqx, freqy, use_cos_x, use_cos_y, dampx, dampy};
   }
 
   @Override

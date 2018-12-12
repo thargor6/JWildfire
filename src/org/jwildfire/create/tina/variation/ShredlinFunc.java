@@ -27,7 +27,7 @@ public class ShredlinFunc extends VariationFunc {
   private static final String PARAM_Y_DISTANCE = "ydistance";
   private static final String PARAM_Y_WIDTH = "ywidth";
 
-  private static final String[] paramNames = { PARAM_X_DISTANCE, PARAM_X_WIDTH, PARAM_Y_DISTANCE, PARAM_Y_WIDTH };
+  private static final String[] paramNames = {PARAM_X_DISTANCE, PARAM_X_WIDTH, PARAM_Y_DISTANCE, PARAM_Y_WIDTH};
 
   private double xdistance = 1.0;
   private double xwidth = 0.5;
@@ -52,8 +52,8 @@ public class ShredlinFunc extends VariationFunc {
     pVarTP.y = vv * syd * ((yrng - (int) yrng) * syw + (int) yrng + (0.5 - ypos) * (1 - syw));
 
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -63,7 +63,7 @@ public class ShredlinFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { xdistance, xwidth, ydistance, ywidth };
+    return new Object[]{xdistance, xwidth, ydistance, ywidth};
   }
 
   @Override

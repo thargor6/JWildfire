@@ -16,20 +16,17 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class CircusFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
 
   private static final String PARAM_SCALE = "scale";
-  private static final String[] paramNames = { PARAM_SCALE };
+  private static final String[] paramNames = {PARAM_SCALE};
 
   private double scale = 1.0;
 
@@ -49,8 +46,8 @@ public class CircusFunc extends VariationFunc {
     pVarTP.x += pAmount * r * c;
     pVarTP.y += pAmount * r * s;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -60,7 +57,7 @@ public class CircusFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { scale };
+    return new Object[]{scale};
   }
 
   @Override

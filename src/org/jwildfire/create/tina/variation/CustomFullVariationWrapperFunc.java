@@ -16,22 +16,15 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import java.lang.reflect.Field;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.codehaus.janino.SimpleCompiler;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -43,29 +36,29 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   private static Pattern classDecl = Pattern.compile(classDeclRegex);
 
   private static String default_code =
-      "package org.jwildfire.create.tina.variation;\n" +
-          "import org.jwildfire.create.tina.base.XForm;\n" +
-          "import org.jwildfire.create.tina.base.XYZPoint;\n" +
-          "\n" +
-          "public class DynamicCompiledLinear3DFunc extends SimpleVariationFunc {\n" +
-          "  private static final long serialVersionUID = 1L;\n" +
-          "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\n" +
-          "    pVarTP.x += pAmount * pAffineTP.x;\n" +
-          "    pVarTP.y += pAmount * pAffineTP.y;\n" +
-          "    if (pContext.isPreserveZCoordinate()) {\n" +
-          "      pVarTP.z += pAmount * pAffineTP.z;\n" +
-          "    }\n" +
-          "  }\n" +
-          "\n" +
-          "  public String getName() {\n" +
-          "    return \"linear3D_dynamic\";\n" +
-          "  }\n" +
-          "}\n";
+          "package org.jwildfire.create.tina.variation;\n" +
+                  "import org.jwildfire.create.tina.base.XForm;\n" +
+                  "import org.jwildfire.create.tina.base.XYZPoint;\n" +
+                  "\n" +
+                  "public class DynamicCompiledLinear3DFunc extends SimpleVariationFunc {\n" +
+                  "  private static final long serialVersionUID = 1L;\n" +
+                  "  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {\n" +
+                  "    pVarTP.x += pAmount * pAffineTP.x;\n" +
+                  "    pVarTP.y += pAmount * pAffineTP.y;\n" +
+                  "    if (pContext.isPreserveZCoordinate()) {\n" +
+                  "      pVarTP.z += pAmount * pAffineTP.z;\n" +
+                  "    }\n" +
+                  "  }\n" +
+                  "\n" +
+                  "  public String getName() {\n" +
+                  "    return \"linear3D_dynamic\";\n" +
+                  "  }\n" +
+                  "}\n";
 
   private String code = default_code;
   private String filtered_code = code;
   private VariationFunc full_variation = null;
-  private String[] ressourceNames = { RESSOURCE_CODE };
+  private String[] ressourceNames = {RESSOURCE_CODE};
 
   static {
     builtin_variations = new HashMap<String, Class>();
@@ -99,8 +92,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public String[] getParameterNames() {
     if (full_variation != null) {
       return full_variation.getParameterNames();
-    }
-    else {
+    } else {
       return new String[0];
     }
   }
@@ -109,8 +101,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public Object[] getParameterValues() {
     if (full_variation != null) {
       return full_variation.getParameterValues();
-    }
-    else {
+    } else {
       return new Object[0];
     }
   }
@@ -118,8 +109,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public int getParameterIndex(String pName) {
     if (full_variation != null) {
       return full_variation.getParameterIndex(pName);
-    }
-    else {
+    } else {
       return -1;
     }
   }
@@ -128,8 +118,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public void setParameter(String pName, double pValue) {
     if (full_variation != null) {
       full_variation.setParameter(pName, pValue);
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -143,9 +132,8 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public byte[][] getRessourceValues() {
     byte[] codeval = (code != null ? code.getBytes() : null);
     if (ressourceNames.length == 1) { // only one resource, the RESSOURCE_CODE, so no resources for inner full_variation
-      return new byte[][] { codeval };
-    }
-    else {
+      return new byte[][]{codeval};
+    } else {
       byte[][] inner_resvals = full_variation.getRessourceValues();
       byte[][] all_vals = new byte[inner_resvals.length + 1][]; // ressourceNames.length should be = inner_resvals.length + 1
       all_vals[0] = codeval;
@@ -163,17 +151,16 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public RessourceType getRessourceType(String pName) {
     if (pName.equals(RESSOURCE_CODE)) {
       return RessourceType.JAVA_CODE;
-    }
-    else {
+    } else {
       return full_variation.getRessourceType(pName);
     }
   }
 
-  /* 
-  *  setting resource
-  *  if setting RESSOURCE_CODE, then filter out Java annotation lines (since Janino compiler throws error on these)
-  *  otherwise pass through to wrapped VariationFunc
-  */
+  /*
+   *  setting resource
+   *  if setting RESSOURCE_CODE, then filter out Java annotation lines (since Janino compiler throws error on these)
+   *  otherwise pass through to wrapped VariationFunc
+   */
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (DEBUG) {
@@ -187,8 +174,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         filtered_code = "";
         full_variation = null;
         return;
-      }
-      else {
+      } else {
         String new_code = new String(pValue);
         if (new_code.equals(code)) {
           if (DEBUG) {
@@ -232,8 +218,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
             }
             bufcode.append(modline);
             bufcode.append("\n");
-          }
-          else {
+          } else {
             bufcode.append(line);
             bufcode.append("\n");
           }
@@ -241,11 +226,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         filtered_code = bufcode.toString();
         validate(); // compiles
       }
-    }
-    else if (full_variation != null) {
+    } else if (full_variation != null) {
       full_variation.setRessource(pName, pValue);
-    }
-    else {
+    } else {
       throw new IllegalArgumentException(pName);
     }
   }
@@ -278,20 +261,19 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       if (code != null) {
         this.compile();
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       throw new RuntimeException(ex);
     }
   }
 
-  /* 
-  * compile "code" String,
-  * then take first class in compiled code that is a subclass of VariationFunc, 
-  * create a new instance of this VariationFunc, and assign it to full_variation 
-  *
-  * Still need to figure out a way to trigger TinaController.refreshParamCmb(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar)
-  *    in order to update TinaNonlinearControlsRow to reflect changed param names and values when code  changes
-  */
+  /*
+   * compile "code" String,
+   * then take first class in compiled code that is a subclass of VariationFunc,
+   * create a new instance of this VariationFunc, and assign it to full_variation
+   *
+   * Still need to figure out a way to trigger TinaController.refreshParamCmb(TinaNonlinearControlsRow pRow, XForm pXForm, Variation pVar)
+   *    in order to update TinaNonlinearControlsRow to reflect changed param names and values when code  changes
+   */
   public void compile() {
     if (DEBUG) {
       System.out.println("called compile()");
@@ -317,11 +299,9 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
       Iterator classIter = null;
       if (classesLoaded instanceof AbstractMap) {
         classIter = ((AbstractMap) classesLoaded).keySet().iterator();
-      }
-      else if (classesLoaded instanceof AbstractCollection) {
+      } else if (classesLoaded instanceof AbstractCollection) {
         classIter = ((AbstractCollection) classesLoaded).iterator();
-      }
-      else {
+      } else {
         throw new IllegalArgumentException("unknown class " + String.valueOf(classesLoaded));
       }
       // construct full_variation as instance of first Class from classloader that is a subclass of VariationFunc
@@ -330,29 +310,22 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         String varClassName = null;
         if (val instanceof String) {
           varClassName = (String) val;
-        }
-        else if (val instanceof Class) {
+        } else if (val instanceof Class) {
           varClassName = ((Class) val).getName();
-        }
-        else if (val instanceof Map.Entry) {
+        } else if (val instanceof Map.Entry) {
           Map.Entry me = (Map.Entry) val;
           if (me.getKey() instanceof String) {
             varClassName = (String) me.getKey();
-          }
-          else if (me.getValue() instanceof String) {
+          } else if (me.getValue() instanceof String) {
             varClassName = (String) me.getValue();
-          }
-          else if (me.getKey() instanceof Class) {
+          } else if (me.getKey() instanceof Class) {
             varClassName = ((Class) me.getKey()).getName();
-          }
-          else if (me.getValue() instanceof Class) {
+          } else if (me.getValue() instanceof Class) {
             varClassName = ((Class) me.getValue()).getName();
-          }
-          else {
+          } else {
             varClassName = me.getValue().toString();
           }
-        }
-        else {
+        } else {
           varClassName = val.toString();
         }
         varClass = Class.forName(varClassName, true, cloader);
@@ -370,8 +343,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
           if (inner_resource_names == null) {
             ressourceNames = new String[1];
             ressourceNames[0] = RESSOURCE_CODE;
-          }
-          else {
+          } else {
             ressourceNames = new String[inner_resource_names.length + 1];
             ressourceNames[0] = RESSOURCE_CODE;
             for (int k = 0; k < inner_resource_names.length; k++) {
@@ -405,24 +377,21 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
                 if (DEBUG) {
                   System.out.println("param: " + prev_param + ", value: " + (Number) full_variation.getParameter(prev_param));
                 }
-              }
-              else {
+              } else {
                 if (DEBUG) {
                   System.out.println("prev_val not a number: " + prev_val + ", " + prev_val.getClass().getName());
                 }
               }
             }
           }
-        }
-        else {
+        } else {
           if (DEBUG) {
             System.out.println("variations not compatible: " + full_variation.getClass().getName() + ", " + prev_variation.getClass().getName());
           }
         }
         // should also copy shared resources??
       }
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       System.out.println("##############################################################");
       System.out.println(ex.getMessage());
       ex.printStackTrace();
@@ -456,12 +425,10 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
         if (val != null && copyVal != null) {
           if (val instanceof Number) {
             varCopy.setParameter(paramName, ((Number) val).doubleValue());
-          }
-          else {
+          } else {
             throw new IllegalStateException();
           }
-        }
-        else {
+        } else {
           if (DEBUG) {
             System.out.println("Copying, got a null for param " + paramName + ", prev = " + val + ", new = " + copyVal);
           }
@@ -474,8 +441,7 @@ public class CustomFullVariationWrapperFunc extends VariationFunc {
   public boolean ressourceCanModifyParams(String resourceName) {
     if (resourceName.equalsIgnoreCase(RESSOURCE_CODE)) {
       return true;
-    }
-    else {
+    } else {
       return full_variation.ressourceCanModifyParams(resourceName);
     }
   }

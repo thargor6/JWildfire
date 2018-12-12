@@ -16,19 +16,12 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.M_1_PI;
-import static org.jwildfire.base.mathlib.MathLib.M_2PI;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.sqr;
-import static org.jwildfire.base.mathlib.MathLib.sqrt;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 // Rosoni JWildfire variation by DarkBeam, July 2014
 // (for more details, see JWildfire forum post: http://jwildfire.org/forum/viewtopic.php?f=23&t=1449)
@@ -48,7 +41,7 @@ public class RosoniFunc extends VariationFunc {
   private static final String PARAM_RADIUS = "radius";
   private static final String PARAM_DX = "dx";
   private static final String PARAM_DY = "dy";
-  private static final String[] paramNames = { PARAM_MAXITER, PARAM_SWEETITER, PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY };
+  private static final String[] paramNames = {PARAM_MAXITER, PARAM_SWEETITER, PARAM_ALTSHAPES, PARAM_CUTOFF, PARAM_RADIUS, PARAM_DX, PARAM_DY};
 
   private int maxiter = 25;
   private int sweetiter = 3;
@@ -71,8 +64,8 @@ public class RosoniFunc extends VariationFunc {
       pVarTP.x += pAmount * x;
       pVarTP.y += pAmount * y;
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
       return;
     }
 
@@ -86,8 +79,7 @@ public class RosoniFunc extends VariationFunc {
         r2 = sqr(xrt - dx) + sqr(yrt - dy) - sqr(radius); // circle
         if (radius < 0.0)
           r2 = Math.max(fabs(xrt - dx), fabs(y - dy)) + radius; // square
-      }
-      else {
+      } else {
         r2 = ((xrt - dx) < 0.0) ? -(xrt - dx) : ((sqr(yrt - dy)) - sqr(xrt - dx) * (sqr(radius) - sqr(xrt - dx))); // lemniscate
         if (radius < 0.0)
           r2 = fabs(atan2(y - dy, xrt - dx)) * M_1_PI + radius; // angle
@@ -110,22 +102,20 @@ public class RosoniFunc extends VariationFunc {
         else
           pVarTP.x += pAmount * sweetx;
         pVarTP.y -= pAmount * sweety;
-      }
-      else
-      {
+      } else {
         pVarTP.x += pAmount * sweetx;
         pVarTP.y += pAmount * sweety;
       }
       if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
       return;
     }
     pVarTP.x += pAmount * x;
     pVarTP.y += pAmount * y;
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -135,7 +125,7 @@ public class RosoniFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { maxiter, sweetiter, altshapes, cutoff, radius, dx, dy };
+    return new Object[]{maxiter, sweetiter, altshapes, cutoff, radius, dx, dy};
   }
 
   @Override

@@ -17,11 +17,11 @@
 
 package org.jwildfire.create.tina.variation;
 
-import java.util.List;
-
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
+
+import java.util.List;
 
 public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   private static final String PARAM_POWER = "power";
   private static final String RESSOURCE_FORMULA = "formula";
 
-  private static final String[] ressourceNames = { RESSOURCE_FORMULA };
+  private static final String[] ressourceNames = {RESSOURCE_FORMULA};
 
   private int power;
   private String formula = "((z^n)+c)";
@@ -109,15 +109,14 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
 
   @Override
   public byte[][] getRessourceValues() {
-    return new byte[][] { (formula != null ? formula.getBytes() : null) };
+    return new byte[][]{(formula != null ? formula.getBytes() : null)};
   }
 
   @Override
   public void setRessource(String pName, byte[] pValue) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       formula = pValue != null ? new String(pValue) : "";
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 
@@ -125,8 +124,7 @@ public class FractFormulaMandWFFunc extends AbstractFractFormulaWFFunc {
   public RessourceType getRessourceType(String pName) {
     if (RESSOURCE_FORMULA.equalsIgnoreCase(pName)) {
       return RessourceType.BYTEARRAY;
-    }
-    else
+    } else
       throw new IllegalArgumentException(pName);
   }
 

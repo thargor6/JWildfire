@@ -16,11 +16,11 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import static org.jwildfire.base.mathlib.MathLib.fmod;
-
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.fmod;
 
 public class ModulusFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class ModulusFunc extends VariationFunc {
   private static final String PARAM_X = "x";
   private static final String PARAM_Y = "y";
 
-  private static final String[] paramNames = { PARAM_X, PARAM_Y };
+  private static final String[] paramNames = {PARAM_X, PARAM_Y};
 
   private double x = 0.20;
   private double y = 0.50;
@@ -38,26 +38,22 @@ public class ModulusFunc extends VariationFunc {
     /* Modulus in the Apophysis Plugin Pack */
     if (pAffineTP.x > x) {
       pVarTP.x += pAmount * (-x + fmod(pAffineTP.x + x, _xr));
-    }
-    else if (pAffineTP.x < -x) {
+    } else if (pAffineTP.x < -x) {
       pVarTP.x += pAmount * (x - fmod(x - pAffineTP.x, _xr));
-    }
-    else {
+    } else {
       pVarTP.x += pAmount * pAffineTP.x;
     }
 
     if (pAffineTP.y > y) {
       pVarTP.y += pAmount * (-y + fmod(pAffineTP.y + y, _yr));
-    }
-    else if (pAffineTP.y < -y) {
+    } else if (pAffineTP.y < -y) {
       pVarTP.y += pAmount * (y - fmod(y - pAffineTP.y, _yr));
-    }
-    else {
+    } else {
       pVarTP.y += pAmount * pAffineTP.y;
     }
     if (pContext.isPreserveZCoordinate()) {
-  pVarTP.z += pAmount * pAffineTP.z;
-}
+      pVarTP.z += pAmount * pAffineTP.z;
+    }
   }
 
   @Override
@@ -67,7 +63,7 @@ public class ModulusFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { x, y };
+    return new Object[]{x, y};
   }
 
   @Override
