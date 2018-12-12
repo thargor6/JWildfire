@@ -58,9 +58,11 @@ import org.jwildfire.create.tina.variation.JuliaScopeFunc;
  // currFlame.getXForms().clear();
   currFlame.getFinalXForms().clear();
 
-
+/*
        String str = javax.swing.JOptionPane.showInputDialog(null, "Please Enter Susan Weight", "Super Susan", 1);
        sw = Double.parseDouble(str);   // Converts above str value into a number
+*/
+ sw = 0.15 + Math.random() * 10.0;
 
   // First transform (T1)
   {

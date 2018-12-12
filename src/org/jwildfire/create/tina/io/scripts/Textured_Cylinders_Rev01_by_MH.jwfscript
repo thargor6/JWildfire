@@ -36,7 +36,7 @@ public void run(ScriptRunnerEnvironment pEnv) throws Exception {
     xForm.setColorSymmetry(0.9 + (Math.random() * 0.1));
 
     double code = 1;
-
+/*
   do
   {
   String str = javax.swing.JOptionPane.showInputDialog(null, "Symmetrical:" + + "\r\n" + "1 = Yes, 2 = No,", "Please Enter Code", 1);
@@ -44,6 +44,8 @@ public void run(ScriptRunnerEnvironment pEnv) throws Exception {
        else code = 0;                                                            // and makes sure str is not an alphabetic 
                                                                                   // character (which would cause an error)
   } while ((code != 1) && (code != 2));
+*/
+   code = Math.random() > 0.5 ? 1 : 2;
 
     double x = 0.9 + (Math.random() * 0.1);
 

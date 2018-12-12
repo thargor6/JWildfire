@@ -54,7 +54,7 @@ import org.jwildfire.create.tina.variation.JuliaScopeFunc;
   if(currFlame==null) {
     throw new Exception("Please select a flame at first");
   }
-
+/*
   do 
   {
        String str = javax.swing.JOptionPane.showInputDialog(null, "Please Enter 0 for Overwrite, 1 for New Flame", "Enter Value", 1);
@@ -62,7 +62,7 @@ import org.jwildfire.create.tina.variation.JuliaScopeFunc;
        else param = 3;                                                            // and makes sure str is not an alphabetic 
                                                                                   // character (which would cause an error)
   } while ((param != 0) && (param != 1));
-
+*/
   if (param == 1) {
   currFlame.getXForms().clear();
   currFlame.getFinalXForms().clear();

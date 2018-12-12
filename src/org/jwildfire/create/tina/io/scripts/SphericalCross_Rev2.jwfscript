@@ -59,7 +59,7 @@ import org.jwildfire.create.tina.variation.SphericalFunc;
 
   // Determines the mutual weight of Transform 1 and 2.
   double var_weight = 1 - 0.2 * Math.random();
-
+/*
   // Higher value: increase deformation - Lower value: decrease deformation
   do 
   {
@@ -67,17 +67,22 @@ import org.jwildfire.create.tina.variation.SphericalFunc;
     rot_coinc_fac = Double.parseDouble(str);   // Converts above str value into a number
    
   } while ((rot_coinc_fac < 0) || (rot_coinc_fac > 180));
+*/
+  rot_coinc_fac = Math.random() * 180.0;
 
 // Higher value: increase deformation - Lower value: decrease deformation
+/*
   do 
   {
     String str = javax.swing.JOptionPane.showInputDialog(null, "Linear coincidence factor [0,...,10]:", "SphericalCross", 1);
     lin_coinc_fac = Double.parseDouble(str);   // Converts above str value into a number
    
   } while ((lin_coinc_fac < 0) || (lin_coinc_fac > 10));
-
+  */
+  lin_coinc_fac = Math.random() * 10.0;
 
   // Asks Visibility of Transform 1
+  /*
   do 
   {
     String str = javax.swing.JOptionPane.showInputDialog(null, "Transform 1 visible (no = 1  -  yes = 2)?", "SphericalCross", 1);
@@ -85,12 +90,15 @@ import org.jwildfire.create.tina.variation.SphericalFunc;
     else vis_transform1 = 3;                                                            // and makes sure str is not an alphabetic 
                                                                                         // character (which would cause an error)
   } while ((vis_transform1 != 1) && (vis_transform1 != 2));
-  
+  */
+  vis_transform1 = Math.random() > 0.5 ? 1 : 2;
+
   if (vis_transform1 == 1) vis_transform1 = 0;
   if (vis_transform1 == 2) vis_transform1 = 1;
 
 
   // Asks Blur-Transform
+  /*
   do 
   {
     String str = javax.swing.JOptionPane.showInputDialog(null, "Optional blur-transform (Creates additional blur effect: no = 1  -  yes = 2)?", "SphericalCross", 1);
@@ -98,7 +106,9 @@ import org.jwildfire.create.tina.variation.SphericalFunc;
     else blur_transform = 3;                                                            // and makes sure str is not an alphabetic 
                                                                                         // character (which would cause an error)
   } while ((blur_transform != 1) && (blur_transform != 2));
-  
+  */
+  blur_transform = Math.random() > 0.5 ? 1 : 2;
+
   if (blur_transform == 1) blur_transform = 0;
   if (blur_transform == 2) blur_transform = 1;
     
