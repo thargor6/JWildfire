@@ -16,26 +16,6 @@
 */
 package org.jwildfire.create.tina.script.swing;
 
-import static org.jwildfire.base.mathlib.MathLib.EPSILON;
-import static org.jwildfire.base.mathlib.MathLib.fabs;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-
 import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
@@ -54,6 +34,24 @@ import org.jwildfire.create.tina.swing.TinaController;
 import org.jwildfire.create.tina.swing.TinaControllerData;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.swing.ErrorHandler;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static org.jwildfire.base.mathlib.MathLib.EPSILON;
+import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class JWFScriptController {
   private String prevScriptDrawer;
@@ -78,8 +76,8 @@ public class JWFScriptController {
   private DefaultMutableTreeNode userScriptsRootNode;
 
   public JWFScriptController(TinaController pTinaController, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pRootPanel, TinaControllerData pData, JTree pScriptTree, JTextArea pScriptDescriptionTextArea,
-      JTextArea pScriptTextArea, JButton pRescanScriptsBtn, JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
-      JButton pAddMacroButtonBtn, JButton pEditScriptBtn) {
+                             JTextArea pScriptTextArea, JButton pRescanScriptsBtn, JButton pNewScriptBtn, JButton pNewScriptFromFlameBtn, JButton pDeleteScriptBtn, JButton pScriptRenameBtn, JButton pScriptDuplicateBtn, JButton pScriptRunBtn,
+                             JButton pAddMacroButtonBtn, JButton pEditScriptBtn) {
     tinaController = pTinaController;
     errorHandler = pErrorHandler;
     prefs = pPrefs;
@@ -180,22 +178,29 @@ public class JWFScriptController {
     // Internal scripts
     {
       String[] ressources = {
-          "Custom_Variation_Loader_GH",
-          "LoonieSplits DT",
-          "Buckballs by DT",
-          "M&M Flower DT",
-          "Add Random Final FX by MH and MO",
-          "Textured_Cylinders_Rev01_by_MH",
-          "Crackle_Styles_Chooser_Rev01_by_MH",
-          "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
-          "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
-          "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
-           "UG-","UG-Ran","UG-Ran2","UG-Ran2sym","UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
+              "Custom_Variation_Loader_GH",
+              "LoonieSplits DT",
+              "Buckballs by DT",
+              "M&M Flower DT",
+              "Add Random Final FX by MH and MO",
+              "Textured_Cylinders_Rev01_by_MH",
+              "Crackle_Styles_Chooser_Rev01_by_MH",
+              "Escher Flux", "Mobius Dragon", "Soft Julian", "Wrap into Bubble", "Wrap into Heart", "Wrap into SubFlame",
+              "HypertilePoincare_Rev2", "Bwraps-bubble-Julian2", "Bwraps and bubbles", "Oily_Juliascope_Rev1", "Oily_Rev3",
+              "Plastic", "SphericalCross_Rev2", "SuperSusan_Rev1", "TomsSpiralSpiral_Rev3",
+              "UG-", "UG-Ran", "UG-Ran2", "UG-Ran2sym", "UG-Ran2symPersp", "UG-Ran2symPerspYax", "UG-RanRan", "UG-RanRanRan", "UG-Sym", "UG-Sym2",
+              "HB  0 Final 2 Galaxies", "HB 0 2 Galaxy Final Test", "HB 0 Final 2 Galaxies-cloudier", "HB 0 Final 2 Galaxiesv2",
+              "HB 0 Final 2 Gassv2", "HB 0 Single  Galaxy", "HB 1 planetoid", "HB 2  Gas Clouds", "HB 2  Gas CloudsRan",
+              "HB 2 Galaxies Gas Broad", "HB 2 Galaxies Gas Cluster", "HB 2 Galaxies Gas DoubleBroad", "HB 2 Galaxies Positive",
+              "HB 2 Galaxy Spirals Test", "HB 2 Moon Singularity", "HB 2 Moons Crater Test C", "HB 2 Moons Test Circ",
+              "HB 2 planetoid smooth", "HB 2 planetoids cloudy", "HB 2 planetoids", "HB 2moons-craters", "HB Galaxy 2 Gas Clouds",
+              "HB Galaxy1", "HB Galaxy1a", "HB Galaxy2moontest", "HB Moon Generator", "HB Moon Surface Generator", "  HB Moon Zoom Generator II",
+              "HB Planet Generator", "HB Single Galaxy",
 
-              "Wedge_Sph_Marble" };
+              "Wedge_Sph_Marble"};
       List<String> resLst = Arrays.asList(ressources);
       Collections.sort(resLst);
-      ressources = resLst.toArray(new String[] {});
+      ressources = resLst.toArray(new String[]{});
 
       // for the base path inside the jar file
       RGBPaletteReader reader = new Flam3GradientReader();
@@ -214,8 +219,7 @@ public class JWFScriptController {
             }
             defaultFolderNode.add(node);
           }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
         }
       }
@@ -226,8 +230,7 @@ public class JWFScriptController {
       String baseDrawer = prefs.getTinaJWFScriptPath();
       if (baseDrawer == null || baseDrawer.equals("") || baseDrawer.equals(".") || baseDrawer.equals("/") || baseDrawer.equals("\\")) {
         root.add(new InvalidScriptFolderNode());
-      }
-      else {
+      } else {
         DefaultMutableTreeNode parentNode = userScriptsRootNode = new JWFScriptFolderNode("Your scripts", baseDrawer, true);
         root.add(parentNode);
         scanUserScripts(baseDrawer, parentNode);
@@ -250,8 +253,7 @@ public class JWFScriptController {
           }
 
         });
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         // ex.printStackTrace();
       }
       for (File f : list) {
@@ -259,8 +261,7 @@ public class JWFScriptController {
           DefaultMutableTreeNode newParentNode = new JWFScriptFolderNode(f.getName(), f.getAbsolutePath(), true);
           pParentNode.add(newParentNode);
           scanUserScripts(f.getAbsolutePath(), newParentNode);
-        }
-        else {
+        } else {
           String filename = f.getAbsolutePath();
           String lcFilename = filename.toLowerCase();
           if (lcFilename.length() != filename.length()) {
@@ -287,12 +288,10 @@ public class JWFScriptController {
         scriptTextArea.setCaretPosition(0);
         scriptDescriptionTextArea.setText(scriptNode.getDescription());
         scriptDescriptionTextArea.setCaretPosition(0);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         errorHandler.handleError(ex);
       }
-    }
-    else {
+    } else {
       scriptTextArea.setText("");
       scriptDescriptionTextArea.setText("");
     }
@@ -309,14 +308,12 @@ public class JWFScriptController {
       if (selNode != null) {
         if (selNode instanceof JWFScriptUserNode) {
           scriptPath = ((JWFScriptUserNode) selNode).getFilename();
-        }
-        else if (selNode instanceof JWFScriptInternalNode) {
+        } else if (selNode instanceof JWFScriptInternalNode) {
           scriptPath = ((JWFScriptInternalNode) selNode).getResFilename();
         }
       }
       tinaController.runScript(scriptPath, scriptTextArea.getText());
-    }
-    catch (Throwable ex) {
+    } catch (Throwable ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -331,8 +328,7 @@ public class JWFScriptController {
           DefaultMutableTreeNode parentForNewNode;
           if (selNode instanceof JWFScriptFolderNode) {
             parentForNewNode = selNode;
-          }
-          else {
+          } else {
             parentForNewNode = (DefaultMutableTreeNode) selNode.getParent();
           }
           String scriptFilename;
@@ -341,18 +337,15 @@ public class JWFScriptController {
             String basePath = getBaseScriptPath();
             scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
             descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
-          }
-          else if (selNode instanceof JWFScriptUserNode) {
+          } else if (selNode instanceof JWFScriptUserNode) {
             JWFScriptUserNode userNode = (JWFScriptUserNode) selNode;
             scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
             descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
-          }
-          else if (selNode instanceof JWFScriptFolderNode && ((JWFScriptFolderNode) selNode).isUserDir()) {
+          } else if (selNode instanceof JWFScriptFolderNode && ((JWFScriptFolderNode) selNode).isUserDir()) {
             JWFScriptFolderNode folderNode = (JWFScriptFolderNode) selNode;
             scriptFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
             descFilename = folderNode.getDirectory() + File.separator + newName + "." + Tools.FILEEXT_TXT;
-          }
-          else {
+          } else {
             throw new Exception("Unknown node type <" + selNode.getClass() + ">");
           }
 
@@ -379,8 +372,7 @@ public class JWFScriptController {
           scriptTree.updateUI();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -571,8 +563,7 @@ public class JWFScriptController {
     pSB.append("      XForm xForm = new XForm();\n");
     if (pFinalXForm) {
       pSB.append("      layer.getFinalXForms().add(xForm);\n");
-    }
-    else {
+    } else {
       pSB.append("      layer.getXForms().add(xForm);\n");
     }
     pSB.append("      xForm.setWeight(" + Tools.doubleToString(pXForm.getWeight()) + ");\n");
@@ -597,8 +588,7 @@ public class JWFScriptController {
       pSB.append("      xForm.setPostCoeff20(" + Tools.doubleToString(pXForm.getPostCoeff20()) + ");\n");
       pSB.append("      xForm.setPostCoeff21(" + Tools.doubleToString(pXForm.getPostCoeff21()) + ");\n");
       pSB.append("\n");
-    }
-    else {
+    } else {
       pSB.append("      xForm.setXYCoeff00(" + Tools.doubleToString(pXForm.getXYCoeff00()) + "); // a\n");
       pSB.append("      xForm.setXYCoeff10(" + Tools.doubleToString(pXForm.getXYCoeff10()) + "); // b\n");
       pSB.append("      xForm.setXYCoeff20(" + Tools.doubleToString(pXForm.getXYCoeff20()) + "); // e\n");
@@ -684,12 +674,10 @@ public class JWFScriptController {
       if (pVariation.getPriority() != pVariation.getFunc().getPriority()) {
         pSB.append("      Variation variation = xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
         pSB.append("      variation.setPriority(" + pVariation.getPriority() + ");\n");
-      }
-      else {
+      } else {
         pSB.append("      xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true));\n");
       }
-    }
-    else {
+    } else {
       pSB.append("      {\n");
       pSB.append("        VariationFunc varFunc=VariationFuncList.getVariationFuncInstance(\"" + pVariation.getFunc().getName() + "\", true);\n");
       for (int i = 0; i < pVariation.getFunc().getParameterNames().length; i++) {
@@ -697,16 +685,14 @@ public class JWFScriptController {
         Object pValue = pVariation.getFunc().getParameterValues()[i];
         if (pValue instanceof Double) {
           pSB.append("        varFunc.setParameter(\"" + pName + "\", " + Tools.doubleToString((Double) pValue) + ");\n");
-        }
-        else {
+        } else {
           pSB.append("        varFunc.setParameter(\"" + pName + "\", " + pValue + ");\n");
         }
       }
       if (pVariation.getPriority() != pVariation.getFunc().getPriority()) {
         pSB.append("        Variation variation = xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
         pSB.append("        variation.setPriority(" + pVariation.getPriority() + ");\n");
-      }
-      else {
+      } else {
         pSB.append("        xForm.addVariation(" + Tools.doubleToString(pVariation.getAmount()) + ", varFunc);\n");
       }
       pSB.append("      }\n");
@@ -741,15 +727,13 @@ public class JWFScriptController {
             scriptFilename = basePath + newName + "." + Tools.FILEEXT_JWFSCRIPT;
             descFilename = basePath + newName + "." + Tools.FILEEXT_TXT;
             parent = this.userScriptsRootNode;
-          }
-          else if (selNode instanceof JWFScriptUserNode) {
+          } else if (selNode instanceof JWFScriptUserNode) {
             JWFScriptUserNode userNode = (JWFScriptUserNode) selNode;
             parent = (DefaultMutableTreeNode) selNode.getParent();
             scriptFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_JWFSCRIPT;
             descFilename = new File(userNode.getFilename()).getParentFile().getAbsolutePath() + File.separator + newName + "." + Tools.FILEEXT_TXT;
             parent = (DefaultMutableTreeNode) selNode.getParent();
-          }
-          else {
+          } else {
             throw new Exception("Unknown node type <" + selNode.getClass() + ">");
           }
           if (new File(scriptFilename).exists()) {
@@ -769,8 +753,7 @@ public class JWFScriptController {
           scriptTree.updateUI();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -808,8 +791,7 @@ public class JWFScriptController {
           scriptTree.repaint();
         }
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -825,13 +807,11 @@ public class JWFScriptController {
           scriptFilename = ((JWFScriptInternalNode) selNode).getResFilename();
           caption = ((JWFScriptInternalNode) selNode).getCaption();
           internal = true;
-        }
-        else if (selNode instanceof JWFScriptUserNode) {
+        } else if (selNode instanceof JWFScriptUserNode) {
           scriptFilename = ((JWFScriptUserNode) selNode).getFilename();
           caption = ((JWFScriptUserNode) selNode).getCaption();
           internal = false;
-        }
-        else {
+        } else {
           throw new Exception("Unknown node type <" + selNode.getClass() + ">");
         }
         String hint = caption;
@@ -851,8 +831,7 @@ public class JWFScriptController {
         enableMacroButtonsControls();
         tinaController.refreshMacroButtonsPanel();
       }
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
@@ -961,24 +940,21 @@ public class JWFScriptController {
             valStr = "";
           }
           switch (column) {
-            case COL_CAPTION:
-            {
+            case COL_CAPTION: {
               if (!valStr.equals(button.getCaption())) {
                 button.setCaption(valStr);
                 tinaController.refreshMacroButtonsPanel();
               }
               break;
             }
-            case COL_HINT:
-            {
+            case COL_HINT: {
               if (!valStr.equals(button.getHint())) {
                 button.setHint(valStr);
                 tinaController.refreshMacroButtonsPanel();
               }
               break;
             }
-            case COL_MACRO:
-            {
+            case COL_MACRO: {
               if (!valStr.equals(button.getMacro())) {
                 button.setMacro(valStr);
                 tinaController.refreshMacroButtonsPanel();
@@ -1012,8 +988,7 @@ public class JWFScriptController {
         ScriptEditDialog dlg = new ScriptEditDialog(tinaController, SwingUtilities.getWindowAncestor(rootPanel), errorHandler);
         dlg.setScriptNode(scriptNode);
         dlg.setVisible(true);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         errorHandler.handleError(ex);
       }
     }
@@ -1027,8 +1002,7 @@ public class JWFScriptController {
         if (prevScriptDrawer != null && prevScriptDrawer.length() > 0) {
           fileChooser.setCurrentDirectory(new File(prevScriptDrawer));
         }
-      }
-      catch(Exception ex) {
+      } catch (Exception ex) {
 
       }
 
@@ -1049,21 +1023,21 @@ public class JWFScriptController {
         String filename = fileChooser.getSelectedFile().getAbsolutePath();
         Map<String, byte[]> content = unzipArchive(filename);
 
-        if(content.isEmpty()) {
+        if (content.isEmpty()) {
           throw new Exception("Could not unzip file \"" + filename + "\"");
         }
 
-        String scriptExtension =  ".jwfscript";
+        String scriptExtension = ".jwfscript";
         String scriptName = null;
-        for(String entryName: content.keySet()) {
-          if(entryName.endsWith(scriptExtension)) {
+        for (String entryName : content.keySet()) {
+          if (entryName.endsWith(scriptExtension)) {
             scriptName = entryName.substring(0, entryName.length() - scriptExtension.length());
             break;
           }
         }
 
-        if(scriptName==null) {
-          throw new Exception("File \"" + filename + "\" does not contain a script-file with \"*" +scriptExtension+"\"-extension");
+        if (scriptName == null) {
+          throw new Exception("File \"" + filename + "\" does not contain a script-file with \"*" + scriptExtension + "\"-extension");
         }
 
 
@@ -1073,30 +1047,29 @@ public class JWFScriptController {
         }
 
 
-        File destinationFile = new File(baseDrawer, scriptName+scriptExtension);
-        if(!destinationFile.exists() ||  JOptionPane.showConfirmDialog(null,
-                  "The destination-file already exists. Do you want to overwrite it?",
-                  "Warning",
-                  JOptionPane.YES_NO_CANCEL_OPTION)==0) {
-          Tools.writeFile(destinationFile.getAbsolutePath(), content.get(scriptName+scriptExtension));
+        File destinationFile = new File(baseDrawer, scriptName + scriptExtension);
+        if (!destinationFile.exists() || JOptionPane.showConfirmDialog(null,
+                "The destination-file already exists. Do you want to overwrite it?",
+                "Warning",
+                JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+          Tools.writeFile(destinationFile.getAbsolutePath(), content.get(scriptName + scriptExtension));
           String descExtension = ".txt";
-          byte description[] = content.get(scriptName+descExtension);
-          if(description!=null) {
-            Tools.writeFile(new File(baseDrawer, scriptName+descExtension).getAbsolutePath() , content.get(scriptName+descExtension) );
+          byte description[] = content.get(scriptName + descExtension);
+          if (description != null) {
+            Tools.writeFile(new File(baseDrawer, scriptName + descExtension).getAbsolutePath(), content.get(scriptName + descExtension));
           }
           initScriptLibrary();
 
-          JOptionPane.showMessageDialog(rootPanel, "Script \"" +scriptName +"\" was imported successfully");
+          JOptionPane.showMessageDialog(rootPanel, "Script \"" + scriptName + "\" was imported successfully");
         }
       }
-    }
-    catch(Exception ex) {
+    } catch (Exception ex) {
       errorHandler.handleError(ex);
     }
   }
 
-  private Map<String,byte[]> unzipArchive(String filename) throws Exception {
-    Map<String,byte[]> content = new HashMap<>();
+  private Map<String, byte[]> unzipArchive(String filename) throws Exception {
+    Map<String, byte[]> content = new HashMap<>();
     ZipInputStream zis = new ZipInputStream(new FileInputStream(filename));
     try {
       byte[] buffer = new byte[1024];
@@ -1112,8 +1085,7 @@ public class JWFScriptController {
         content.put(entryName, bos.toByteArray());
         ze = zis.getNextEntry();
       }
-    }
-    finally {
+    } finally {
       zis.closeEntry();
       zis.close();
     }
