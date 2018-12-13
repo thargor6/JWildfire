@@ -78,6 +78,10 @@ public class SolidLabyrinthRandomFlameGenerator extends SolidRandomFlameGenerato
     flame.setCamZoom(0.75 + Math.random() * 0.5);
 
     randomizeSolidRenderingSettings(flame);
+    if(Math.random()<0.333) {
+      // in many cases those flames look very well in non-solid-mode
+      flame.getSolidRenderSettings().setSolidRenderingEnabled(false);
+    }
 
     layer.getFinalXForms().clear();
     layer.getXForms().clear();
@@ -130,8 +134,8 @@ public class SolidLabyrinthRandomFlameGenerator extends SolidRandomFlameGenerato
         xForm.setPostCoeff20(0);
         xForm.setPostCoeff21(0);
 
-        if (Math.random() < 0.15) {
-          if (Math.random() < 0.85) {
+        if (Math.random() < 0.5) {
+          if (Math.random() < 0.45) {
             VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("dc_crackle_wf", true);
             varFunc.setParameter("cellsize", 0.15 + Math.random() * 0.5);
             varFunc.setParameter("power", 0.2 + Math.random() * 1.2);
@@ -141,6 +145,12 @@ public class SolidLabyrinthRandomFlameGenerator extends SolidRandomFlameGenerato
             varFunc.setParameter("color_scale", 0.5);
             varFunc.setParameter("color_offset", 0);
             xForm.addVariation(1.0 + Math.random() * 2.0, varFunc);
+          }
+          else if (Math.random() < 0.45) {
+            {
+              VariationFunc varFunc = VariationFuncList.getVariationFuncInstance("metaballs3d_wf", true);
+              xForm.addVariation(0.15+Math.random()*0.75, varFunc);
+            }
           }
           else {
             {

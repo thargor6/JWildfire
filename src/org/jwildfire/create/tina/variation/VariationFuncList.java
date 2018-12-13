@@ -20,10 +20,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.*;
-import org.jwildfire.create.tina.variation.plot.IsoSFPlot3DWFFunc;
-import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
-import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
-import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
+import org.jwildfire.create.tina.variation.plot.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -673,6 +670,8 @@ public class VariationFuncList {
     registerVariationFunc(ArcsinhFunc.class);
     registerVariationFunc(Arcsech2Func.class);
     registerVariationFunc(ArctanhFunc.class);
+
+    registerVariationFunc(Metaballs3DWFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
