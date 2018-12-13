@@ -676,6 +676,8 @@ public class VariationFuncList {
     registerVariationFunc(AcoshFunc.class);
 
     registerVariationFunc(Metaballs3DWFFunc.class);
+    registerVariationFunc(PointGridWFFunc.class);
+    registerVariationFunc(PointGrid3DWFFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
