@@ -670,6 +670,10 @@ public class VariationFuncList {
     registerVariationFunc(ArcsinhFunc.class);
     registerVariationFunc(Arcsech2Func.class);
     registerVariationFunc(ArctanhFunc.class);
+    registerVariationFunc(Inverted_JuliaFunc.class);
+    registerVariationFunc(AcosechFunc.class);
+    registerVariationFunc(AcothFunc.class);
+    registerVariationFunc(AcoshFunc.class);
 
     registerVariationFunc(Metaballs3DWFFunc.class);
 
