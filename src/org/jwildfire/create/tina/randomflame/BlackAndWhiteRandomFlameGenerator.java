@@ -55,6 +55,7 @@ public class BlackAndWhiteRandomFlameGenerator extends RandomFlameGenerator {
     generators.add(new JuliansRandomFlameGenerator());
     generators.add(new LayersRandomFlameGenerator());
     generators.add(new Affine3DRandomFlameGenerator());
+    generators.add(new JulianRingsRandomFlameGenerator());
     generators.add(new LinearRandomFlameGenerator());
     generators.add(new MachineRandomFlameGenerator());
     generators.add(new MandelbrotRandomFlameGenerator());
