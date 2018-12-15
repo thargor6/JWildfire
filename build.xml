@@ -69,8 +69,7 @@
       <fileset dir="${build.dir}" includes="odk/"/>
       <fileset dir="${build.dir}" includes="net/goui/"/>
       <fileset dir="${build.dir}" includes="megamu/"/>
-	  <fileset dir="${build.dir}" includes="js/mandala/"/>
-	  <fileset dir="${build.dir}" includes="js/colordomain/"/>
+	  <fileset dir="${build.dir}" includes="js/"/>
 	  <fileset dir="${build.dir}" includes="hehl/"/>
       <zipfileset src="lib/quickhull3d.1.4.jar"/>		
       <zipfileset src="lib/jep-2.4.1.jar"/>
@@ -85,6 +84,7 @@
       <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
+	  <zipfileset src="lib/j-wildfire-lib.jar"/>
       <manifest>
         <attribute name="Main-Class" value="org.jwildfire.swing.JWildfire"/>
       </manifest>			
