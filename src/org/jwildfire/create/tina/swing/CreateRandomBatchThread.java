@@ -61,8 +61,9 @@ public class CreateRandomBatchThread implements Runnable{
           imgList.add(img);
         }
         mainProgressUpdater.updateProgress(i + 1);
+        int scrollPos = parentController.getScrollThumbnailsPosition();
         parentController.updateThumbnails();
-        parentController.scrollThumbnailsToBottom();
+        parentController.scrollThumbnailsToPosition(scrollPos);
       }
     }
     finally {

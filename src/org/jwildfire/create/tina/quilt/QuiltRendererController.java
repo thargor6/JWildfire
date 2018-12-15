@@ -54,19 +54,44 @@ public class QuiltRendererController implements FlameHolder {
 
     data.quiltRendererRenderWidthEdit.setValue(7680);
     data.quiltRendererRenderHeightEdit.setValue(4320);
-    data.quiltRendererSegmentationLevelEdit.setValue(3);
+    data.quiltRendererXSegmentationLevelEdit.setValue(3);
+    data.quiltRendererYSegmentationLevelEdit.setValue(2);
     data.quiltRendererQualityEdit.setValue(1000);
     recalcSizes();
     enableControls();
   }
 
   public void recalcSizes() {
-    data.quiltRendererSegmentWidthEdit.setValue(data.quiltRendererRenderWidthEdit.getIntValue()/data.quiltRendererSegmentationLevelEdit.getIntValue());
-    data.quiltRendererSegmentHeightEdit.setValue(data.quiltRendererRenderHeightEdit.getIntValue()/data.quiltRendererSegmentationLevelEdit.getIntValue());
+    data.quiltRendererSegmentWidthEdit.setValue(data.quiltRendererRenderWidthEdit.getIntValue()/data.quiltRendererXSegmentationLevelEdit.getIntValue());
+    data.quiltRendererSegmentHeightEdit.setValue(data.quiltRendererRenderHeightEdit.getIntValue()/data.quiltRendererYSegmentationLevelEdit.getIntValue());
     refreshPreviewImage();
   }
 
   private QuiltRenderThread currRenderThread;
+
+  public void setSize4K() {
+    data.quiltRendererRenderWidthEdit.setText(String.valueOf(3840));
+    data.quiltRendererRenderHeightEdit.setText(String.valueOf(2160));
+    recalcSizes();
+  }
+
+  public void setSize8K() {
+    data.quiltRendererRenderWidthEdit.setText(String.valueOf(7680));
+    data.quiltRendererRenderHeightEdit.setText(String.valueOf(4320));
+    recalcSizes();
+  }
+
+  public void setSize32K() {
+    data.quiltRendererRenderWidthEdit.setText(String.valueOf(30720));
+    data.quiltRendererRenderHeightEdit.setText(String.valueOf(17280));
+    recalcSizes();
+  }
+
+  public void setSize16K() {
+    data.quiltRendererRenderWidthEdit.setText(String.valueOf(15360));
+    data.quiltRendererRenderHeightEdit.setText(String.valueOf(8640));
+    recalcSizes();
+  }
 
   public class ProgressUpdater implements org.jwildfire.create.tina.render.ProgressUpdater {
     private final JProgressBar progressBar;
@@ -130,8 +155,8 @@ public class QuiltRendererController implements FlameHolder {
           int destWidth = controller.data.quiltRendererRenderWidthEdit.getIntValue();
           int destHeight = controller.data.quiltRendererRenderHeightEdit.getIntValue();
           double quality = controller.data.quiltRendererQualityEdit.getDoubleValue();
-          int xSegmentationLevel = controller.data.quiltRendererSegmentationLevelEdit.getIntValue();
-          int ySegmentationLevel = controller.data.quiltRendererSegmentationLevelEdit.getIntValue();
+          int xSegmentationLevel = controller.data.quiltRendererXSegmentationLevelEdit.getIntValue();
+          int ySegmentationLevel = controller.data.quiltRendererYSegmentationLevelEdit.getIntValue();
           int qualityLevel = (int)(quality+0.5); // only used for the filename
           String outputFilename = controller.data.quiltRendererOutputFilenameEdit.getText();
 
@@ -241,11 +266,16 @@ public class QuiltRendererController implements FlameHolder {
     data.quiltRendererRenderWidthEdit.setEnabled(!isRendering);
     data.quiltRendererRenderHeightEdit.setEnabled(!isRendering);
     data.quiltRendererQualityEdit.setEnabled(!isRendering);
-    data.quiltRendererSegmentationLevelEdit.setEnabled(!isRendering);
+    data.quiltRendererXSegmentationLevelEdit.setEnabled(!isRendering);
+    data.quiltRendererYSegmentationLevelEdit.setEnabled(!isRendering);
     data.quiltRendererOutputFilenameEdit.setEnabled(!isRendering);
     data.quiltRendererOpenFlameButton.setEnabled(!isRendering);
     data.quiltRendererImportFlameFromClipboardButton.setEnabled(!isRendering);
     data.quiltRendererImportFlameFromEditorButton.setEnabled(!isRendering);
+    data.quiltRenderer4KButton.setEnabled(!isRendering);
+    data.quiltRenderer8KButton.setEnabled(!isRendering);
+    data.quiltRenderer16KButton.setEnabled(!isRendering);
+    data.quiltRenderer32Button.setEnabled(!isRendering);
     data.quiltRendererRenderButton.setEnabled(true);
   }
 
@@ -358,7 +388,7 @@ public class QuiltRendererController implements FlameHolder {
     Rectangle bounds = imgPanel.getImageBounds();
     int width = bounds.width;
     int height = bounds.height;
-    Flame flame = getFlame();
+    Flame flame = (getFlame()!=null ? getFlame().makeCopy(): null);
     if (flame!=null && width >= 16 && height >= 16) {
       RenderInfo info = new RenderInfo(width, height, RenderMode.PREVIEW);
       if (flame != null) {
@@ -369,7 +399,8 @@ public class QuiltRendererController implements FlameHolder {
         flame.setHeight(info.getImageHeight());
 
         FlameRenderer renderer = new FlameRenderer(flame, prefs, data.toggleTransparencyButton.isSelected(), false);
-        flame.setSampleDensity(prefs.getTinaRenderRealtimeQuality());
+        flame.setSampleDensity(Math.min(prefs.getTinaRenderRealtimeQuality(), 5.0));
+
         flame.setSpatialFilterRadius(0.0);
         RenderedFlame res = renderer.renderFlame(info);
 
@@ -387,8 +418,8 @@ public class QuiltRendererController implements FlameHolder {
 
   private void addSegmentBorders(SimpleImage image) {
     RectangleTransformer rect = new RectangleTransformer();
-    int xSegmentationLevel = data.quiltRendererSegmentationLevelEdit.getIntValue();
-    int ySegmentationLevel = data.quiltRendererSegmentationLevelEdit.getIntValue();
+    int xSegmentationLevel = data.quiltRendererXSegmentationLevelEdit.getIntValue();
+    int ySegmentationLevel = data.quiltRendererYSegmentationLevelEdit.getIntValue();
     String filename = data.quiltRendererOutputFilenameEdit.getText();
     int destWidth = data.quiltRendererRenderWidthEdit.getIntValue();
     int destHeight = data.quiltRendererRenderHeightEdit.getIntValue();

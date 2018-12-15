@@ -123,7 +123,7 @@ public class QuiltFlameRendererFrame extends JFrame {
       importFlameFromEditorButton.setPreferredSize(new Dimension(125, 24));
       importFlameFromEditorButton.setMinimumSize(new Dimension(159, 24));
       importFlameFromEditorButton.setMaximumSize(new Dimension(159, 24));
-      importFlameFromEditorButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      importFlameFromEditorButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       importFlameFromEditorButton.setAlignmentX(0.5f);
       importFlameFromEditorButton.setBounds(0, 47, 159, 24);
       panel_2.add(importFlameFromEditorButton);
@@ -132,23 +132,23 @@ public class QuiltFlameRendererFrame extends JFrame {
       lblRenderSize.setText("Render size");
       lblRenderSize.setPreferredSize(new Dimension(110, 22));
       lblRenderSize.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblRenderSize.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblRenderSize.setBounds(376, 0, 110, 22);
+      lblRenderSize.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblRenderSize.setBounds(383, 0, 78, 22);
       panel_2.add(lblRenderSize);
 
       JLabel lblX = new JLabel();
       lblX.setText("x");
       lblX.setPreferredSize(new Dimension(110, 22));
       lblX.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblX.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblX.setBounds(595, 1, 18, 22);
+      lblX.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblX.setBounds(562, 1, 12, 22);
       panel_2.add(lblX);
 
       JLabel lblSegmentationLevel = new JLabel();
       lblSegmentationLevel.setText("Segmentation level");
       lblSegmentationLevel.setPreferredSize(new Dimension(110, 22));
       lblSegmentationLevel.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblSegmentationLevel.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblSegmentationLevel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSegmentationLevel.setBounds(171, 24, 110, 22);
       panel_2.add(lblSegmentationLevel);
 
@@ -156,8 +156,8 @@ public class QuiltFlameRendererFrame extends JFrame {
       lblSegmentSize.setText("Segment size");
       lblSegmentSize.setPreferredSize(new Dimension(110, 22));
       lblSegmentSize.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblSegmentSize.setFont(new Font("Dialog", Font.BOLD, 10));
-      lblSegmentSize.setBounds(376, 24, 110, 22);
+      lblSegmentSize.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblSegmentSize.setBounds(383, 24, 78, 22);
       panel_2.add(lblSegmentSize);
 
       outputFilenameEdit = new JTextField();
@@ -170,33 +170,33 @@ public class QuiltFlameRendererFrame extends JFrame {
         }
       });
       outputFilenameEdit.setPreferredSize(new Dimension(56, 22));
-      outputFilenameEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
-      outputFilenameEdit.setBounds(286, 48, 438, 22);
+      outputFilenameEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      outputFilenameEdit.setBounds(286, 48, 498, 22);
       panel_2.add(outputFilenameEdit);
 
       JLabel lblOutputFilename = new JLabel();
       lblOutputFilename.setText("Output filename");
       lblOutputFilename.setPreferredSize(new Dimension(110, 22));
       lblOutputFilename.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblOutputFilename.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblOutputFilename.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblOutputFilename.setBounds(171, 48, 110, 22);
       panel_2.add(lblOutputFilename);
 
-      segmentationLevelEdit = new JWFNumberField();
-      segmentationLevelEdit.setValueStep(1.0);
-      segmentationLevelEdit.setText("");
-      segmentationLevelEdit.setSize(new Dimension(100, 24));
-      segmentationLevelEdit.setPreferredSize(new Dimension(100, 24));
-      segmentationLevelEdit.setOnlyIntegers(true);
-      segmentationLevelEdit.setLocation(new Point(584, 2));
-      segmentationLevelEdit.setHasMinValue(true);
-      segmentationLevelEdit.setMinValue(2.0);
-      segmentationLevelEdit.setHasMaxValue(true);
-      segmentationLevelEdit.setMaxValue(4096.0);
-      segmentationLevelEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
-      segmentationLevelEdit.setEditable(true);
-      segmentationLevelEdit.setBounds(286, 24, 78, 24);
-      segmentationLevelEdit.addChangeListener(new ChangeListener() {
+      xSegmentationLevelEdit = new JWFNumberField();
+      xSegmentationLevelEdit.setValueStep(1.0);
+      xSegmentationLevelEdit.setText("");
+      xSegmentationLevelEdit.setSize(new Dimension(100, 24));
+      xSegmentationLevelEdit.setPreferredSize(new Dimension(100, 24));
+      xSegmentationLevelEdit.setOnlyIntegers(true);
+      xSegmentationLevelEdit.setLocation(new Point(584, 2));
+      xSegmentationLevelEdit.setHasMinValue(true);
+      xSegmentationLevelEdit.setMinValue(1.0);
+      xSegmentationLevelEdit.setHasMaxValue(true);
+      xSegmentationLevelEdit.setMaxValue(4096.0);
+      xSegmentationLevelEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      xSegmentationLevelEdit.setEditable(true);
+      xSegmentationLevelEdit.setBounds(286, 24, 49, 24);
+      xSegmentationLevelEdit.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getQuiltRendererController() != null) {
             tinaController.getQuiltRendererController().recalcSizes();
@@ -204,7 +204,7 @@ public class QuiltFlameRendererFrame extends JFrame {
         }
       });
 
-      panel_2.add(segmentationLevelEdit);
+      panel_2.add(xSegmentationLevelEdit);
 
       renderWidthEdit = new JWFNumberField();
       renderWidthEdit.setValueStep(1.0);
@@ -214,9 +214,9 @@ public class QuiltFlameRendererFrame extends JFrame {
       renderWidthEdit.setOnlyIntegers(true);
       renderWidthEdit.setLocation(new Point(584, 2));
       renderWidthEdit.setHasMinValue(true);
-      renderWidthEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+      renderWidthEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       renderWidthEdit.setEditable(true);
-      renderWidthEdit.setBounds(491, 0, 99, 24);
+      renderWidthEdit.setBounds(463, 0, 99, 24);
       renderWidthEdit.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getQuiltRendererController() != null) {
@@ -234,9 +234,9 @@ public class QuiltFlameRendererFrame extends JFrame {
       renderHeightEdit.setOnlyIntegers(true);
       renderHeightEdit.setLocation(new Point(584, 2));
       renderHeightEdit.setHasMinValue(true);
-      renderHeightEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+      renderHeightEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       renderHeightEdit.setEditable(true);
-      renderHeightEdit.setBounds(625, 0, 99, 24);
+      renderHeightEdit.setBounds(586, 0, 99, 24);
       renderHeightEdit.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getQuiltRendererController() != null) {
@@ -254,17 +254,17 @@ public class QuiltFlameRendererFrame extends JFrame {
       segmentWidthEdit.setOnlyIntegers(true);
       segmentWidthEdit.setLocation(new Point(584, 2));
       segmentWidthEdit.setHasMinValue(true);
-      segmentWidthEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+      segmentWidthEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       segmentWidthEdit.setEditable(true);
-      segmentWidthEdit.setBounds(491, 24, 99, 24);
+      segmentWidthEdit.setBounds(463, 24, 99, 24);
       panel_2.add(segmentWidthEdit);
 
       JLabel label = new JLabel();
       label.setText("x");
       label.setPreferredSize(new Dimension(110, 22));
       label.setHorizontalAlignment(SwingConstants.RIGHT);
-      label.setFont(new Font("Dialog", Font.BOLD, 10));
-      label.setBounds(595, 25, 18, 22);
+      label.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      label.setBounds(562, 25, 12, 22);
       panel_2.add(label);
 
       segmentHeightEdit = new JWFNumberField();
@@ -275,9 +275,9 @@ public class QuiltFlameRendererFrame extends JFrame {
       segmentHeightEdit.setOnlyIntegers(true);
       segmentHeightEdit.setLocation(new Point(584, 2));
       segmentHeightEdit.setHasMinValue(true);
-      segmentHeightEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+      segmentHeightEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       segmentHeightEdit.setEditable(true);
-      segmentHeightEdit.setBounds(625, 24, 99, 24);
+      segmentHeightEdit.setBounds(586, 24, 99, 24);
       panel_2.add(segmentHeightEdit);
 
       qualityEdit = new JWFNumberField();
@@ -288,9 +288,9 @@ public class QuiltFlameRendererFrame extends JFrame {
       qualityEdit.setOnlyIntegers(true);
       qualityEdit.setLocation(new Point(584, 2));
       qualityEdit.setHasMinValue(true);
-      qualityEdit.setFont(new Font("Dialog", Font.PLAIN, 10));
+      qualityEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       qualityEdit.setEditable(true);
-      qualityEdit.setBounds(286, 0, 78, 24);
+      qualityEdit.setBounds(286, 0, 99, 24);
       qualityEdit.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getQuiltRendererController() != null) {
@@ -305,7 +305,7 @@ public class QuiltFlameRendererFrame extends JFrame {
       lblRenderQuality.setText("Render quality");
       lblRenderQuality.setPreferredSize(new Dimension(110, 22));
       lblRenderQuality.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblRenderQuality.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblRenderQuality.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblRenderQuality.setBounds(171, 0, 110, 22);
       panel_2.add(lblRenderQuality);
 
@@ -315,7 +315,7 @@ public class QuiltFlameRendererFrame extends JFrame {
       importFlameFromClipboardButton.setPreferredSize(new Dimension(125, 24));
       importFlameFromClipboardButton.setMinimumSize(new Dimension(100, 24));
       importFlameFromClipboardButton.setMaximumSize(new Dimension(32000, 24));
-      importFlameFromClipboardButton.setFont(new Font("Dialog", Font.BOLD, 10));
+      importFlameFromClipboardButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       importFlameFromClipboardButton.setBounds(0, 24, 159, 24);
       importFlameFromClipboardButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
@@ -324,6 +324,90 @@ public class QuiltFlameRendererFrame extends JFrame {
       });
 
       panel_2.add(importFlameFromClipboardButton);
+
+      ySegmentationLevelEdit = new JWFNumberField();
+      ySegmentationLevelEdit.setValueStep(1.0);
+      ySegmentationLevelEdit.setText("");
+      ySegmentationLevelEdit.setSize(new Dimension(100, 24));
+      ySegmentationLevelEdit.setPreferredSize(new Dimension(100, 24));
+      ySegmentationLevelEdit.setOnlyIntegers(true);
+      ySegmentationLevelEdit.setMinValue(1.0);
+      ySegmentationLevelEdit.setMaxValue(4096.0);
+      ySegmentationLevelEdit.setLocation(new Point(584, 2));
+      ySegmentationLevelEdit.setHasMinValue(true);
+      ySegmentationLevelEdit.setHasMaxValue(true);
+      ySegmentationLevelEdit.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      ySegmentationLevelEdit.setEditable(true);
+      ySegmentationLevelEdit.setBounds(336, 24, 49, 24);
+      ySegmentationLevelEdit.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null && tinaController.getQuiltRendererController() != null) {
+            tinaController.getQuiltRendererController().recalcSizes();
+          }
+        }
+      });
+      panel_2.add(ySegmentationLevelEdit);
+
+      resolution16KButton = new JButton();
+      resolution16KButton.setToolTipText("Set the resolution to 16K");
+      resolution16KButton.setText("16K");
+      resolution16KButton.setPreferredSize(new Dimension(159, 52));
+      resolution16KButton.setMinimumSize(new Dimension(159, 52));
+      resolution16KButton.setMaximumSize(new Dimension(159, 59));
+      resolution16KButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      resolution16KButton.setBounds(689, 23, 48, 24);
+      resolution16KButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getQuiltRendererController().setSize16K();
+        }
+      });
+      panel_2.add(resolution16KButton);
+
+      resolution32KButton = new JButton();
+      resolution32KButton.setToolTipText("Set the resolution to 32K");
+      resolution32KButton.setText("32K");
+      resolution32KButton.setPreferredSize(new Dimension(159, 52));
+      resolution32KButton.setMinimumSize(new Dimension(159, 52));
+      resolution32KButton.setMaximumSize(new Dimension(159, 59));
+      resolution32KButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      resolution32KButton.setBounds(736, 22, 48, 24);
+      resolution32KButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getQuiltRendererController().setSize32K();
+        }
+      });
+      panel_2.add(resolution32KButton);
+
+      resolution4KButton = new JButton();
+      resolution4KButton.setToolTipText("Set the resolution to 4K");
+      resolution4KButton.setText("4K");
+      resolution4KButton.setPreferredSize(new Dimension(159, 52));
+      resolution4KButton.setMinimumSize(new Dimension(159, 52));
+      resolution4KButton.setMaximumSize(new Dimension(159, 59));
+      resolution4KButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      resolution4KButton.setBounds(689, 0, 48, 24);
+      resolution4KButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getQuiltRendererController().setSize4K();
+        }
+      });
+
+      panel_2.add(resolution4KButton);
+
+      resolution8KButton = new JButton();
+      resolution8KButton.setToolTipText("Set the resolution to 8K");
+      resolution8KButton.setText("8K");
+      resolution8KButton.setPreferredSize(new Dimension(159, 52));
+      resolution8KButton.setMinimumSize(new Dimension(159, 52));
+      resolution8KButton.setMaximumSize(new Dimension(159, 59));
+      resolution8KButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      resolution8KButton.setBounds(736, 0, 48, 24);
+      resolution8KButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.getQuiltRendererController().setSize8K();
+        }
+      });
+      panel_2.add(resolution8KButton);
 
       JPanel panel_3 = new JPanel();
       panel_3.setPreferredSize(new Dimension(10, 100));
@@ -347,10 +431,15 @@ public class QuiltFlameRendererFrame extends JFrame {
   private JWFNumberField qualityEdit;
   private JWFNumberField renderWidthEdit;
   private JWFNumberField renderHeightEdit;
-  private JWFNumberField segmentationLevelEdit;
+  private JWFNumberField xSegmentationLevelEdit;
   private JWFNumberField segmentWidthEdit;
   private JWFNumberField segmentHeightEdit;
   private JButton importFlameFromClipboardButton;
+  private JWFNumberField ySegmentationLevelEdit;
+  private JButton resolution16KButton;
+  private JButton resolution32KButton;
+  private JButton resolution4KButton;
+  private JButton resolution8KButton;
 
   public JButton getOpenFlameButton() {
     if (openFlameButton == null) {
@@ -494,8 +583,8 @@ public class QuiltFlameRendererFrame extends JFrame {
     return renderHeightEdit;
   }
 
-  public JWFNumberField getSegmentationLevelEdit() {
-    return segmentationLevelEdit;
+  public JWFNumberField getXSegmentationLevelEdit() {
+    return xSegmentationLevelEdit;
   }
 
   public JWFNumberField getSegmentWidthEdit() {
@@ -512,5 +601,25 @@ public class QuiltFlameRendererFrame extends JFrame {
 
   public JButton getImportFlameFromClipboardButton() {
     return importFlameFromClipboardButton;
+  }
+
+  public JWFNumberField getYSegmentationLevelEdit() {
+    return ySegmentationLevelEdit;
+  }
+
+  public JButton getResolution16KButton() {
+    return resolution16KButton;
+  }
+
+  public JButton getResolution32KButton() {
+    return resolution32KButton;
+  }
+
+  public JButton getResolution4KButton() {
+    return resolution4KButton;
+  }
+
+  public JButton getResolution8KButton() {
+    return resolution8KButton;
   }
 }

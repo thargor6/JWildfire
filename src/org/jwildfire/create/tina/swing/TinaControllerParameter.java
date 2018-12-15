@@ -516,7 +516,12 @@ public class TinaControllerParameter {
   public JButton quiltRendererImportFlameFromEditorButton;
   public JButton quiltRendererImportFlameFromClipboardButton;
   public JWFNumberField quiltRendererQualityEdit;
-  public JWFNumberField quiltRendererSegmentationLevelEdit;
+  public JWFNumberField quiltRendererXSegmentationLevelEdit;
+  public JWFNumberField quiltRendererYSegmentationLevelEdit;
+  public JButton quiltRenderer4KButton;
+  public JButton quiltRenderer8KButton;
+  public JButton quiltRenderer16KButton;
+  public JButton quiltRenderer32Button;
   public JWFNumberField quiltRendererRenderWidthEdit;
   public JWFNumberField quiltRendererRenderHeightEdit;
   public JWFNumberField quiltRendererSegmentWidthEdit;
@@ -1451,7 +1456,9 @@ public class TinaControllerParameter {
 
   public void setQuiltFlameRendererParams(JButton quiltRendererOpenFlameButton, JButton quiltRendererImportFlameFromEditorButton,
         JButton quiltRendererImportFlameFromClipboardButton,
-        JWFNumberField quiltRendererQualityEdit, JWFNumberField quiltRendererSegmentationLevelEdit, JWFNumberField quiltRendererRenderWidthEdit,
+        JWFNumberField quiltRendererQualityEdit, JWFNumberField quiltRendererXSegmentationLevelEdit, JWFNumberField quiltRendererYSegmentationLevelEdit,
+        JButton quiltRenderer4KButton, JButton quiltRenderer8KButton, JButton quiltRenderer16KButton, JButton quiltRenderer32Button,
+        JWFNumberField quiltRendererRenderWidthEdit,
         JWFNumberField quiltRendererRenderHeightEdit, JWFNumberField quiltRendererSegmentWidthEdit, JWFNumberField quiltRendererSegmentHeightEdit,
         JTextField quiltRendererOutputFilenameEdit, JProgressBar quiltRendererSegmentProgressBar, JProgressBar quiltRendererTotalProgressBar,
         JButton quiltRendererRenderButton, JPanel quiltRendererPreviewRootPanel) {
@@ -1459,7 +1466,12 @@ public class TinaControllerParameter {
     this.quiltRendererImportFlameFromEditorButton = quiltRendererImportFlameFromEditorButton;
     this.quiltRendererImportFlameFromClipboardButton = quiltRendererImportFlameFromClipboardButton;
     this.quiltRendererQualityEdit = quiltRendererQualityEdit;
-    this.quiltRendererSegmentationLevelEdit = quiltRendererSegmentationLevelEdit;
+    this.quiltRendererXSegmentationLevelEdit = quiltRendererXSegmentationLevelEdit;
+    this.quiltRendererYSegmentationLevelEdit = quiltRendererYSegmentationLevelEdit;
+    this.quiltRenderer4KButton = quiltRenderer4KButton;
+    this.quiltRenderer8KButton = quiltRenderer8KButton;
+    this.quiltRenderer16KButton = quiltRenderer16KButton;
+    this.quiltRenderer32Button = quiltRenderer32Button;
     this.quiltRendererRenderWidthEdit = quiltRendererRenderWidthEdit;
     this.quiltRendererRenderHeightEdit = quiltRendererRenderHeightEdit;
     this.quiltRendererSegmentWidthEdit = quiltRendererSegmentWidthEdit;

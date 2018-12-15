@@ -94,10 +94,7 @@ import org.jwildfire.create.tina.palette.RGBPaletteRenderer;
 import org.jwildfire.create.tina.quilt.QuiltRendererController;
 import org.jwildfire.create.tina.randomflame.AllRandomFlameGenerator;
 import org.jwildfire.create.tina.randomflame.RandomFlameGenerator;
-import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorList;
-import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSample;
 import org.jwildfire.create.tina.randomflame.RandomFlameGeneratorSampler;
-import org.jwildfire.create.tina.randomflame.WikimediaCommonsRandomFlameGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
@@ -285,7 +282,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.quiltRendererImportFlameFromEditorButton = parameterObject.quiltRendererImportFlameFromEditorButton;
     data.quiltRendererImportFlameFromClipboardButton = parameterObject.quiltRendererImportFlameFromClipboardButton;
     data.quiltRendererQualityEdit = parameterObject.quiltRendererQualityEdit;
-    data.quiltRendererSegmentationLevelEdit = parameterObject.quiltRendererSegmentationLevelEdit;
+    data.quiltRendererXSegmentationLevelEdit = parameterObject.quiltRendererXSegmentationLevelEdit;
+    data.quiltRendererYSegmentationLevelEdit = parameterObject.quiltRendererYSegmentationLevelEdit;
+    data.quiltRenderer4KButton = parameterObject.quiltRenderer4KButton;
+    data.quiltRenderer8KButton = parameterObject.quiltRenderer8KButton;
+    data.quiltRenderer16KButton = parameterObject.quiltRenderer16KButton;
+    data.quiltRenderer32Button = parameterObject.quiltRenderer32Button;
+
     data.quiltRendererRenderWidthEdit = parameterObject.quiltRendererRenderWidthEdit;
     data.quiltRendererRenderHeightEdit = parameterObject.quiltRendererRenderHeightEdit;
     data.quiltRendererSegmentWidthEdit = parameterObject.quiltRendererSegmentWidthEdit;
@@ -3033,6 +3036,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     data.randomBatchPanel.add(data.randomBatchScrollPane, BorderLayout.CENTER);
     data.randomBatchPanel.validate();
+  }
+
+  public int getScrollThumbnailsPosition() {
+    JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
+    return vertical.getValue();
+  }
+
+  public void scrollThumbnailsToPosition(int scrollPos) {
+    JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
+    vertical.setValue( scrollPos );
   }
 
   public void scrollThumbnailsToBottom() {

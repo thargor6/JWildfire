@@ -517,11 +517,16 @@ public class TinaControllerData {
   public JButton quiltRendererImportFlameFromEditorButton;
   public JButton quiltRendererImportFlameFromClipboardButton;
   public JWFNumberField quiltRendererQualityEdit;
-  public JWFNumberField quiltRendererSegmentationLevelEdit;
+  public JWFNumberField quiltRendererXSegmentationLevelEdit;
+  public JWFNumberField quiltRendererYSegmentationLevelEdit;
   public JWFNumberField quiltRendererRenderWidthEdit;
   public JWFNumberField quiltRendererRenderHeightEdit;
   public JWFNumberField quiltRendererSegmentWidthEdit;
   public JWFNumberField quiltRendererSegmentHeightEdit;
+  public JButton quiltRenderer4KButton;
+  public JButton quiltRenderer8KButton;
+  public JButton quiltRenderer16KButton;
+  public JButton quiltRenderer32Button;
   public JTextField quiltRendererOutputFilenameEdit;
   public JProgressBar quiltRendererSegmentProgressBar;
   public JProgressBar quiltRendererTotalProgressBar;

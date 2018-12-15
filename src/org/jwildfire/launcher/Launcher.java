@@ -336,7 +336,7 @@ public class Launcher {
     lblMemoryToUse.setFont(new Font("Dialog", Font.BOLD, 10));
 
     btnAddJavaRuntime = new JButton("Add Java runtime...");
-    btnAddJavaRuntime.setToolTipText("Manually add the path of a Java runtime which is installed on this system andwas not detected by the launcher");
+    btnAddJavaRuntime.setToolTipText("Manually add the path of a Java runtime which is installed on this system and was not detected by the launcher");
     btnAddJavaRuntime.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         manualAddRuntime();

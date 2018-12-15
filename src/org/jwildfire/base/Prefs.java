@@ -104,9 +104,9 @@ public class Prefs extends ManagedObject {
 
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_COLOR = "tina.editor.controls.with_color.3";
   static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW = "tina.editor.progressive_preview";
-  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time.2";
-  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality";
-  static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_TIME = "tina.editor.progressive_preview.max_render_time.3";
+  static final String KEY_TINA_EDITOR_PROGRESSIVE_PREVIEW_MAX_RENDER_QUALITY = "tina.editor.progressive_preview.max_render_quality.2";
+  static final String KEY_TINA_EDITOR_CONTROLS_WITH_ANTIALIASING = "tina.editor.controls.with_antialising.2";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_SHADOWS = "tina.editor.controls.with_shadows";
   static final String KEY_TINA_EDITOR_CONTROLS_WITH_NUMBERS = "tina.editor.controls.with_numbers";
   static final String KEY_TINA_EDITOR_CONTROLS_STYLE = "tina.editor.controls.style";
@@ -278,16 +278,16 @@ public class Prefs extends ManagedObject {
   private boolean tinaEditorProgressivePreview = true;
 
   @Property(description = "Maximum render-time for the progressive preview-display", category = PropertyCategory.TINA)
-  private double tinaEditorProgressivePreviewMaxRenderTime = 25.0;
+  private double tinaEditorProgressivePreviewMaxRenderTime = 5.0;
 
   @Property(description = "Font-scale for the flame-fractal-editor (experimental, to apply changes a restart of the program is required)", category = PropertyCategory.TINA)
   private double tinaFontScale = 1.0;
 
   @Property(description = "Maximum render-quality for the progressive preview-display", category = PropertyCategory.TINA)
-  private double tinaEditorProgressivePreviewMaxRenderQuality = 200.0;
+  private double tinaEditorProgressivePreviewMaxRenderQuality = 100.0;
 
   @Property(description = "Turn on antialiasing for drawing lines and triangle-symbols in the editor", category = PropertyCategory.TINA)
-  private boolean tinaEditorControlsWithAntialiasing = true;
+  private boolean tinaEditorControlsWithAntialiasing = false;
 
   @Property(description = "Display transform-numbers inside of the triangle-symbols in the editor", category = PropertyCategory.TINA)
   private boolean tinaEditorControlsWithNumbers = true;

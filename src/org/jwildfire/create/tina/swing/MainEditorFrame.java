@@ -5369,7 +5369,9 @@ public class MainEditorFrame extends JFrame {
 
     params.setQuiltFlameRendererParams(quiltFlameRendererFrame.getOpenFlameButton(), quiltFlameRendererFrame.getImportFlameFromEditorButton(),
         quiltFlameRendererFrame.getImportFlameFromClipboardButton(),
-        quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getSegmentationLevelEdit(), quiltFlameRendererFrame.getRenderWidthEdit(),
+        quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getXSegmentationLevelEdit(), quiltFlameRendererFrame.getYSegmentationLevelEdit(),
+            quiltFlameRendererFrame.getResolution4KButton(),quiltFlameRendererFrame.getResolution8KButton(),quiltFlameRendererFrame.getResolution16KButton(),
+            quiltFlameRendererFrame.getResolution32KButton(), quiltFlameRendererFrame.getRenderWidthEdit(),
         quiltFlameRendererFrame.getRenderHeightEdit(), quiltFlameRendererFrame.getSegmentWidthEdit(), quiltFlameRendererFrame.getSegmentHeightEdit(),
         quiltFlameRendererFrame.getOutputFilenameEdit(), quiltFlameRendererFrame.getSegmentProgressBar(), quiltFlameRendererFrame.getTotalProgressBar(),
         quiltFlameRendererFrame.getRenderButton(), quiltFlameRendererFrame.getPreviewRootPanel());

@@ -63,6 +63,7 @@ public class QuiltFlameRenderer {
             totalProgressUpdater.updateProgress(y * ySegmentationLevel + x + 1);
           }
         }
+        totalProgressUpdater.updateProgress(xSegmentationLevel * ySegmentationLevel);
         if (!cancelSignalled) {
           mergeSegments(destWidth, destHeight, xSegmentationLevel, ySegmentationLevel, qualityLevel, filename);
         }
