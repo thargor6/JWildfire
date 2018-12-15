@@ -595,7 +595,7 @@ public class FlamePreviewHelper implements IterationObserver {
 
   private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
   private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
-  private final static int MAX_UPDATE_INC_INTERVAL = 100;
+  private final static int MAX_UPDATE_INC_INTERVAL = 100*2;
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
     private int nextImageUpdate;
@@ -676,7 +676,7 @@ public class FlamePreviewHelper implements IterationObserver {
               nextImageUpdate = lastImageUpdateInterval;
             }
             else {
-              Thread.sleep(1);
+              Thread.sleep(3);
             }
           }
           catch (Throwable e) {

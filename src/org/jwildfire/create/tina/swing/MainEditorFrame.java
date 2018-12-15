@@ -394,7 +394,6 @@ public class MainEditorFrame extends JFrame {
   private JPanel centerNorthPanel = null;
   private JPanel centerWestPanel = null;
   private JPanel centerCenterPanel = null;
-  private JTextArea centerDescLabel = null;
   private JComboBox randomStyleCmb = null;
   private JLabel randomStyleLbl = null;
   private JToggleButton affineEditPostTransformButton = null;
@@ -7931,11 +7930,6 @@ public class MainEditorFrame extends JFrame {
       centerCenterPanel = new JPanel();
       centerCenterPanel.setLayout(new BorderLayout());
       centerCenterPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-      centerDescLabel = new JTextArea();
-      centerDescLabel.setEditable(false);
-      centerCenterPanel.add(centerDescLabel, BorderLayout.NORTH);
-      centerDescLabel.setText("\r\nWelcome to JWildfire!\r\n\r\nTo get started just double-click (or right-click) on a thumbnail at the left to load it into main editor.\r\n\r\nHappy fractalin'!\r\n\r\nVisit the official forum at http://jwildfire.org/forum/");
-      centerDescLabel.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       centerCenterPanel.add(getGradientEditorFncPnl(), BorderLayout.SOUTH);
       centerCenterPanel.add(getMainPrevievPnl(), BorderLayout.CENTER);
     }

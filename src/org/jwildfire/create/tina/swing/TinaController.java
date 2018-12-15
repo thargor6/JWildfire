@@ -188,7 +188,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final JPanel centerPanel;
   private final FlameMessageHelper messageHelper;
   private final FlamePreviewHelper flamePreviewHelper;
-  private boolean firstFlamePanel = true;
   private FlamePanel flamePanel;
   private FlamePanel prevFlamePanel;
 
@@ -1199,15 +1198,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       });
 
       flamePanel.setSelectedXForm(getCurrXForm());
-      if (firstFlamePanel) {
-        try {
-          centerPanel.getParent().remove(0);
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-        firstFlamePanel = false;
-      }
       centerPanel.add(flamePanel, BorderLayout.CENTER);
       centerPanel.getParent().validate();
       centerPanel.repaint();
