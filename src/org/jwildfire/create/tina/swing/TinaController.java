@@ -50,19 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -222,6 +210,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private Flame _currFlame, _currRandomizeFlame;
   private boolean noRefresh;
   private final ProgressUpdater mainProgressUpdater;
+  private final ProgressUpdater randomBatchProgressUpdater;
   public TinaControllerData data = new TinaControllerData();
   private VariationControlsDelegate[] variationControlsDelegates;
   private RGBPalette _lastGradient;
@@ -648,9 +637,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.toggleTransparencyButton = parameterObject.pToggleTransparencyButton;
     data.randomizeButton = parameterObject.randomizeButton;
     mainProgressUpdater = new RenderProgressUpdater(this);
+    randomBatchProgressUpdater = new RenderProgressUpdater(new RenderProgressBarHolder() {
+      @Override
+      public JProgressBar getRenderProgressBar() {
+        return parameterObject.randomBatchProgressBar;
+      }
+    });
     data.affineResetTransformButton = parameterObject.pAffineResetTransformButton;
     data.createPaletteColorsTable = parameterObject.pCreatePaletteColorsTable;
-
+    data.randomBatchButton = parameterObject.randomBatchButton;
+    data.randomBatchProgressBar = parameterObject.randomBatchProgressBar;
     data.postBlurRadiusREd = parameterObject.postBlurRadiusREd;
     data.postBlurRadiusSlider = parameterObject.postBlurRadiusSlider;
     data.postBlurFadeREd = parameterObject.postBlurFadeREd;
@@ -1408,6 +1404,16 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     refreshBGColorLLIndicator();
     refreshBGColorLRIndicator();
     refreshBGColorCCIndicator();
+  }
+
+  public void notifyRandGenFinished() {
+    createRandomBatchThread = null;
+    refreshRandomBatchButton();
+    enableControls();
+    if(loadFirstRandomFlame) {
+      importFromRandomBatch(0);
+      scrollThumbnailsToTop();
+    }
   }
 
   public static class TransformationsTableCellRenderer extends DefaultTableCellRenderer {
@@ -2387,7 +2393,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private void enableControls() {
+  protected void enableControls() {
     boolean enabled = getCurrFlame() != null;
     data.editTransformCaptionButton.setEnabled(enabled);
     data.editFlameTileButton.setEnabled(enabled);
@@ -3029,58 +3035,55 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchPanel.validate();
   }
 
-  public boolean createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
+  public void scrollThumbnailsToBottom() {
+    JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
+    vertical.setValue( vertical.getMaximum());
+  }
+
+  public void scrollThumbnailsToTop() {
+    JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
+    vertical.setValue( vertical.getMinimum());
+  }
+
+  private CreateRandomBatchThread createRandomBatchThread;
+  private boolean loadFirstRandomFlame;
+
+  public void createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
+    if(createRandomBatchThread!=null) {
+      stopRandomBatchThread();
+      return;
+    }
     stopPreviewRendering();
-    if (!confirmNewRandomBatch(randGen.getName()))
-      return false;
     if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.CLEAR) {
       randomBatch.clear();
+      updateThumbnails();
     }
     int imgCount = prefs.getTinaRandomBatchSize();
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
-    mainProgressUpdater.initProgress(maxCount);
-    for (int i = 0; i < maxCount; i++) {
-      int palettePoints = 7 + Tools.randomInt(24);
-      boolean fadePaletteColors = Math.random() > 0.06;
-      boolean uniformWidth = Math.random() > 0.75;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(FlameThumbnail.IMG_WIDTH / 2, FlameThumbnail.IMG_HEIGHT / 2, prefs, randGen, randSymmGen, randGradientGen, palettePoints, fadePaletteColors, uniformWidth, pQuality);
-      RandomFlameGeneratorSample sample = sampler.createSample();
-      FlameThumbnail thumbnail;
-      thumbnail = new FlameThumbnail(sample.getFlame(), null, null);
-      SimpleImage img = thumbnail.getPreview(3 * prefs.getTinaRenderPreviewQuality() / 4);
-      if (prefs.getTinaRandomBatchRefreshType() == RandomBatchRefreshType.INSERT) {
-        randomBatch.add(0, thumbnail);
-        imgList.add(0, img);
-      }
-      else {
-        randomBatch.add(thumbnail);
-        imgList.add(img);
-      }
-      mainProgressUpdater.updateProgress(i + 1);
-    }
-    updateThumbnails();
-    enableControls();
-    return true;
+    loadFirstRandomFlame = true;
+    createRandomBatchThread = new CreateRandomBatchThread(this,randomBatchProgressUpdater, maxCount, imgList, randomBatch, randGen, randSymmGen, randGradientGen, pQuality);
+    refreshRandomBatchButton();
+    new Thread(createRandomBatchThread).start();
   }
 
-  private static boolean commonsWarningDisplayed = false;
+  private void refreshRandomBatchButton() {
+    data.randomBatchButton.setText(createRandomBatchThread!=null ? "Cancel" : "Random batch");
+  }
 
-  private boolean confirmNewRandomBatch(String pGeneratorname) {
-    Class<?> cls = RandomFlameGeneratorList.getGeneratorClassByName(pGeneratorname);
-    if (WikimediaCommonsRandomFlameGenerator.class.equals(cls)) {
-      if (!commonsWarningDisplayed && !prefs.isTinaDisableWikimediaCommonsWarning()) {
-        HTMLInfoDialog dlg = new HTMLInfoDialog(SwingUtilities.getWindowAncestor(centerPanel), "Warning", "WikimediaCommonsRandomFlameGenerator.html");
-        dlg.setModal(true);
-        dlg.setVisible(true);
-        boolean confirmed = dlg.isConfirmed();
-        if (confirmed) {
-          commonsWarningDisplayed = true;
+  private void stopRandomBatchThread() {
+    if(createRandomBatchThread!=null) {
+      try {
+        createRandomBatchThread.signalCancel();
+        while(createRandomBatchThread!=null && !createRandomBatchThread.isDone()) {
+          Thread.sleep(1);
         }
-        return confirmed;
       }
+      catch(Exception ex) {
+        ex.printStackTrace();
+      }
+      createRandomBatchThread=null;
     }
-    return true;
   }
 
   private void addRemoveButton(ImagePanel pImgPanel, final int pIdx) {
@@ -3130,6 +3133,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void importFromRandomBatch(int pIdx) {
     if (pIdx >= 0 && pIdx < randomBatch.size()) {
+      loadFirstRandomFlame = false;
       setCurrFlame(randomBatch.get(pIdx).getFlame(), false);
       undoManager.initUndoStack(getCurrFlame());
       {

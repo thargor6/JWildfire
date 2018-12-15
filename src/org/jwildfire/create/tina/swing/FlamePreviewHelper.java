@@ -494,7 +494,7 @@ public class FlamePreviewHelper implements IterationObserver {
     try {
       for (Thread thread : threads.getExecutingThreads()) {
         try {
-          thread.setPriority(Thread.NORM_PRIORITY);
+          thread.setPriority(Thread.MIN_PRIORITY);
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -502,7 +502,7 @@ public class FlamePreviewHelper implements IterationObserver {
       }
 
       if (updateDisplayExecuteThread != null) {
-        updateDisplayExecuteThread.setPriority(Thread.MAX_PRIORITY);
+        updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
       }
     }
     catch (Exception ex) {
@@ -570,13 +570,11 @@ public class FlamePreviewHelper implements IterationObserver {
     displayUpdater = new BufferedInteractiveRendererDisplayUpdater(pImgPanel, image, true);
     displayUpdater.initRender(prefs.getTinaRenderThreads());
     threads = renderer.startRenderFlame(info);
-    for (Thread thread : threads.getExecutingThreads()) {
-      thread.setPriority(Thread.MIN_PRIORITY);
-    }
+
 
     updateDisplayThread = new UpdateDisplayThread(flame, image);
     updateDisplayExecuteThread = new Thread(updateDisplayThread);
-    updateDisplayExecuteThread.setPriority(Thread.MIN_PRIORITY);
+    updateDisplayExecuteThread.setPriority(Thread.NORM_PRIORITY);
     updateDisplayExecuteThread.start();
   }
 

@@ -572,7 +572,7 @@ public class MainEditorFrame extends JFrame {
       tinaNorthPanel = new JPanel();
       tinaNorthPanel.setPreferredSize(new Dimension(0, 66));
       tinaNorthPanel.setLayout(new BoxLayout(tinaNorthPanel, BoxLayout.X_AXIS));
-      tinaNorthPanel.add(getRandomBatchButton());
+      tinaNorthPanel.add(getPanel_12());
       tinaNorthPanel.add(getPanel_7());
       tinaNorthPanel.add(getNewFlameButton());
       tinaNorthPanel.add(getPanel_6());
@@ -5438,7 +5438,7 @@ public class MainEditorFrame extends JFrame {
         getXFormAntialiasAmountREd(), getXFormAntialiasAmountSlider(), getXFormAntialiasRadiusREd(), getXFormAntialiasRadiusSlider(),
         getTinaZBufferScaleREd(), getTinaZBufferScaleSlider(), getTinaFilterTypeCmb(), getTinaFilterKernelCmbLbl(), getTinaFilterRadiusLbl(),
         getTinaFilterIndicatorCBx(), getThumbnailSelectPopupMenu(), getThumbnailRemovePopupMenu(), getTinaFilterSharpnessREd(),
-        getTinaFilterSharpnessSlider(), getTinaFilterLowDensityREd(), getTinaFilterLowDensitySlider());
+        getTinaFilterSharpnessSlider(), getTinaFilterLowDensityREd(), getTinaFilterLowDensitySlider(), getRandomBatchButton(), getRandomBatchProgressBar());
 
     params.setParams2(getEditTransformCaptionBtn(), getEditFlameTitleBtn(), getSnapShotButton(), getBtnQsave(), getSendFlameToIRButton(),
         getTinaAppendToMovieButton(), getMouseTransformSlowButton(), getToggleTransparencyButton(), getMouseTransformRotateTrianglesButton(),
@@ -6507,9 +6507,7 @@ public class MainEditorFrame extends JFrame {
           RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
           RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance((String) randomSymmetryCmb.getSelectedItem(), true);
           RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) randomGradientCmb.getSelectedItem(), true);
-          if (tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, RandomBatchQuality.NORMAL)) {
-            tinaController.importFromRandomBatch(0);
-          }
+          tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, RandomBatchQuality.NORMAL);
         }
       });
     }
@@ -8009,11 +8007,13 @@ public class MainEditorFrame extends JFrame {
   public JProgressBar getRenderProgressBar() {
     if (renderProgressBar == null) {
       renderProgressBar = new JProgressBar();
+      renderProgressBar.setStringPainted(true);
+      renderProgressBar.setFocusable(false);
+      renderProgressBar.setDoubleBuffered(true);
       renderProgressBar.setValue(0);
-      renderProgressBar.setSize(new Dimension(175, 14));
+      renderProgressBar.setSize(new Dimension(175, 19));
       renderProgressBar.setLocation(new Point(273, 9));
       renderProgressBar.setPreferredSize(new Dimension(169, 14));
-      renderProgressBar.setStringPainted(true);
     }
     return renderProgressBar;
   }
@@ -10838,6 +10838,8 @@ public class MainEditorFrame extends JFrame {
   private JSlider tinaFilterSharpnessSlider;
   private JSlider tinaFilterLowDensitySlider;
   private JWFNumberField tinaFilterLowDensityREd;
+  private JPanel panel_12;
+  private JProgressBar randomBatchProgressBar;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -20458,5 +20460,33 @@ public class MainEditorFrame extends JFrame {
 
   public JWFNumberField getTinaFilterLowDensityREd() {
     return tinaFilterLowDensityREd;
+  }
+
+  private JPanel getPanel_12() {
+    if (panel_12 == null) {
+      panel_12 = new JPanel();
+      panel_12.setLayout(new BoxLayout(panel_12, BoxLayout.X_AXIS));
+      panel_12.add(getRandomBatchButton());
+      panel_12.add(getRandomBatchProgressBar());
+    }
+    return panel_12;
+  }
+
+  private JProgressBar getRandomBatchProgressBar() {
+    if (randomBatchProgressBar == null) {
+      randomBatchProgressBar = new JProgressBar();
+      randomBatchProgressBar.setMaximumSize(new Dimension(19, 32767));
+      randomBatchProgressBar.setMinimumSize(new Dimension(19, 32767));
+      randomBatchProgressBar.setOrientation(SwingConstants.VERTICAL);
+      randomBatchProgressBar.setFocusable(false);
+      randomBatchProgressBar.setDoubleBuffered(true);
+      randomBatchProgressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+      randomBatchProgressBar.setValue(0);
+      randomBatchProgressBar.setStringPainted(true);
+      randomBatchProgressBar.setSize(new Dimension(19, 175));
+      randomBatchProgressBar.setPreferredSize(new Dimension(19, 169));
+      randomBatchProgressBar.setLocation(new Point(273, 9));
+    }
+    return randomBatchProgressBar;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

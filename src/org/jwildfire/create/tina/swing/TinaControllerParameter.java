@@ -710,6 +710,8 @@ public class TinaControllerParameter {
   public JComboBox postBokehFilterKernelCmb;
   public JPopupMenu thumbnailSelectPopupMenu;
   public JPopupMenu thumbnailRemovePopupMenu;
+  public JButton randomBatchButton;
+  public JProgressBar randomBatchProgressBar;
 
   public void setParams1(JWildfire pDesktop, MainEditorFrame pMainEditorFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
                          JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -724,7 +726,8 @@ public class TinaControllerParameter {
                          JToggleButton pAffineScaleXButton, JToggleButton pAffineScaleYButton, JPanel pGradientLibraryPanel, JToggleButton pToggleVariationsButton, JToggleButton pToggleTransparencyButton, JToggleButton pAffinePreserveZButton, JToggleButton pAffineMirrorPrePostTranslationsButton, JComboBox pQualityProfileCmb, JComboBox pResolutionProfileCmb, JComboBox pInteractiveResolutionProfileCmb, JButton pRenderFlameButton, JButton pRenderMainButton, JButton pAppendToMovieButton, JWFNumberField pTransformationWeightREd, JButton pUndoButton, JButton pRedoButton, JWFNumberField pXFormAntialiasAmountREd, JSlider pXFormAntialiasAmountSlider, JWFNumberField pXFormAntialiasRadiusREd, JSlider pXFormAntialiasRadiusSlider,
                          JWFNumberField tinaZBufferScaleREd, JSlider tinaZBufferScaleSlider, JComboBox tinaFilterTypeCmb, JLabel tinaFilterKernelCmbLbl, JLabel tinaFilterRadiusLbl, JCheckBox tinaFilterIndicatorCBx,
                          JPopupMenu thumbnailSelectPopupMenu, JPopupMenu thumbnailRemovePopupMenu, JWFNumberField tinaFilterSharpnessREd, JSlider tinaFilterSharpnessSlider,
-                         JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider) {
+                         JWFNumberField tinaFilterLowDensityREd, JSlider tinaFilterLowDensitySlider, JButton randomBatchButton, JProgressBar randomBatchProgressBar
+  ) {
 
     this.desktop = pDesktop;
     this.pMainEditorFrame = pMainEditorFrame;
@@ -897,6 +900,8 @@ public class TinaControllerParameter {
     this.tinaFilterSharpnessSlider = tinaFilterSharpnessSlider;
     this.tinaFilterLowDensityREd = tinaFilterLowDensityREd;
     this.tinaFilterLowDensitySlider = tinaFilterLowDensitySlider;
+    this.randomBatchButton = randomBatchButton;
+    this.randomBatchProgressBar = randomBatchProgressBar;
   }
 
   public void setFlameBrowserParams(JTree pFlameBrowserTree, JPanel pFlameBrowersImagesPnl,

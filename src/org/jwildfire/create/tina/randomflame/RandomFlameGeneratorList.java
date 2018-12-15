@@ -79,7 +79,6 @@ public class RandomFlameGeneratorList {
     registerRandomFlameGenerator(TileBallRandomFlameGenerator.class);
     registerRandomFlameGenerator(ColorMapRandomFlameGenerator.class);
     registerRandomFlameGenerator(XenomorphRandomFlameGenerator.class);
-    //    registerRandomFlameGenerator(WikimediaCommonsRandomFlameGenerator.class);
     Collections.sort(items, new Comparator<Class<? extends RandomFlameGenerator>>() {
 
       @Override

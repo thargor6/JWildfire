@@ -221,6 +221,8 @@ public class TinaControllerData {
   public JPanel gradientLibraryPanel;
   public JPanel randomBatchPanel;
   public JScrollPane randomBatchScrollPane;
+  public JButton randomBatchButton;
+  public JProgressBar randomBatchProgressBar;
   public TinaNonlinearControlsRow[] TinaNonlinearControlsRows;
   public VariationControlsDelegate[] variationControlsDelegates;
   public JWFNumberField xFormColorREd;
