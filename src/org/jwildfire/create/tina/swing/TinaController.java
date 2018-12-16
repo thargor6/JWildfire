@@ -3027,12 +3027,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            new Thread(new Runnable() {
-              @Override
-              public void run() {
-                importFromRandomBatch(idx);
-              }
-            }).start();
+            importFromRandomBatch(idx);
           }
         }
       });
@@ -3043,6 +3038,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     data.randomBatchScrollPane.getVerticalScrollBar().setUnitIncrement(16);
     data.randomBatchPanel.add(data.randomBatchScrollPane, BorderLayout.CENTER);
+    data.randomBatchPanel.invalidate();
     data.randomBatchPanel.validate();
   }
 

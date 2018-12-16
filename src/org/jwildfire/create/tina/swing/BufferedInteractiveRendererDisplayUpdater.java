@@ -16,11 +16,12 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.jwildfire.create.tina.render.AbstractRenderThread;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageWriter;
 
 public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRendererDisplayUpdater {
   private long sampleCount;
@@ -66,7 +67,18 @@ public class BufferedInteractiveRendererDisplayUpdater implements InteractiveRen
       if (pProcessor != null) {
         pProcessor.postProcessImage(image);
       }
-      imageRootPanel.repaint();
+      SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            imageRootPanel.repaint();
+          }
+          catch(Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      });
+
     }
   }
 

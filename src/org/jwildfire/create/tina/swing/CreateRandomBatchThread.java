@@ -10,6 +10,7 @@ import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.image.SimpleImage;
 
+import javax.swing.*;
 import java.util.List;
 
 public class CreateRandomBatchThread implements Runnable{
@@ -60,15 +61,38 @@ public class CreateRandomBatchThread implements Runnable{
           randomBatch.add(thumbnail);
           imgList.add(img);
         }
-        mainProgressUpdater.updateProgress(i + 1);
-        int scrollPos = parentController.getScrollThumbnailsPosition();
-        parentController.updateThumbnails();
-        parentController.scrollThumbnailsToPosition(scrollPos);
+        final int currProgress = i + 1;
+        SwingUtilities.invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              mainProgressUpdater.updateProgress(currProgress);
+              int scrollPos = parentController.getScrollThumbnailsPosition();
+              parentController.updateThumbnails();
+              parentController.scrollThumbnailsToPosition(scrollPos);
+            }
+            catch(Exception ex) {
+              ex.printStackTrace();;
+            }
+          }
+        });
+
       }
     }
     finally {
       done = true;
-      parentController.notifyRandGenFinished();
+      SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            parentController.notifyRandGenFinished();
+          }
+          catch(Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+      });
+
     }
   }
 

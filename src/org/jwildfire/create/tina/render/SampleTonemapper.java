@@ -52,7 +52,7 @@ public class SampleTonemapper {
   }
 
   public int tonemapSample(int pX, int pY) {
-    logDensityFilter.transformPointSimple(logDensityPnt, pX, pY);
+    logDensityFilter.transformPointSimple(logDensityPnt, pX-logDensityFilter.getBorderWidth(), pY-logDensityFilter.getBorderWidth());
     gammaCorrectionFilter.transformPoint(logDensityPnt, rbgPoint, pX, pY);
     toolPixel.r = rbgPoint.red;
     toolPixel.g = rbgPoint.green;

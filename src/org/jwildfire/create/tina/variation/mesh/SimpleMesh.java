@@ -162,7 +162,7 @@ public class SimpleMesh {
   }
 
   public void distributeFaces() {
-    System.out.println("VERTICES: " + vertices.size());
+    //System.out.println("VERTICES: " + vertices.size());
 
     List<Double> areaLst = new ArrayList<>();
     double areaMin = Double.MAX_VALUE, areaMax = 0.0;

@@ -373,28 +373,29 @@ public class Mandala2Func extends VariationFunc {
     y = intrandom_range(0, height);
 
     Point p = new Point(x, y);
-    col = colors[step_counts[x][y]];
+    if(step_counts!=null) {
+      col = colors[step_counts[x][y]];
 
-    if (inrange(1, colorid, 3)) {
-      pVarTP.rgbColor = true;
-      ;
-      pVarTP.redColor = col.getRed();
-      ;
-      pVarTP.greenColor = col.getGreen();
-      pVarTP.blueColor = col.getBlue();
-    } else {
-      float[] hsbValues = new float[3];
-      hsbValues = Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), hsbValues);
-      color = (double) hsbValues[0];
-      pVarTP.color = color;
+      if (inrange(1, colorid, 3)) {
+        pVarTP.rgbColor = true;
+        ;
+        pVarTP.redColor = col.getRed();
+        ;
+        pVarTP.greenColor = col.getGreen();
+        pVarTP.blueColor = col.getBlue();
+      } else {
+        float[] hsbValues = new float[3];
+        hsbValues = Color.RGBtoHSB(col.getRed(), col.getGreen(), col.getBlue(), hsbValues);
+        color = (double) hsbValues[0];
+        pVarTP.color = color;
+      }
+      pVarTP.x += pAmount * ((double) (p.getX()) / width - 0.5);
+      pVarTP.y += pAmount * ((double) (p.getY()) / width - 0.5);
+
+      if (pContext.isPreserveZCoordinate()) {
+        pVarTP.z += pAmount * pAffineTP.z;
+      }
     }
-    pVarTP.x += pAmount * ((double) (p.getX()) / width - 0.5);
-    pVarTP.y += pAmount * ((double) (p.getY()) / width - 0.5);
-
-    if (pContext.isPreserveZCoordinate()) {
-      pVarTP.z += pAmount * pAffineTP.z;
-    }
-
   }
 
   public String getName() {

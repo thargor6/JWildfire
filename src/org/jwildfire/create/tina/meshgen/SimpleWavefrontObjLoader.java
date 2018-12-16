@@ -78,12 +78,13 @@ public class SimpleWavefrontObjLoader {
         }
       }
 
+      /*
       long t1 = System.currentTimeMillis();
       System.out.println("LOAD MESH: " + (t1 - t0) / 1000.0 + "s");
       System.out.println("  VERTICES: " + vertices.size());
       System.out.println("  NORMALS: " + vertexNormals.size());
       System.out.println("  FACES: " + faces.size());
-
+      */
       return new Mesh(vertices, vertexNormals.size() == vertices.size() && vertexNormals.size() > 0 ? vertexNormals : null, faces);
     }
     catch (Exception ex) {

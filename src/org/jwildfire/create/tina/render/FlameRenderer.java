@@ -152,6 +152,7 @@ public class FlameRenderer {
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
     maxBorderWidth = (MAX_FILTER_WIDTH - oversample) / 2;
     borderWidth = (logDensityFilter.getNoiseFilterSize() - oversample) / 2;
+
     rasterWidth = oversample * imageWidth + 2 * maxBorderWidth;
     rasterHeight = oversample * imageHeight + 2 * maxBorderWidth;
     gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha, rasterWidth, rasterHeight);

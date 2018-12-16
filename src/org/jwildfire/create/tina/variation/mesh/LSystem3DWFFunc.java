@@ -713,32 +713,37 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         e.printStackTrace();
       }
 
-      // Echo input 
-      System.out.println("L-system file      : " + inputname);
-      System.out.println("Recursion depth    : " + lev);
-      System.out.println("Mutations          : " + muts);
-      System.out.println("Basic angle        : " + ang + " degrees");
-      System.out.println("Starting thickness : " + thick + "  of length");
-      System.out.println("Minimum thickness  : " + min_thick + " of length");
+      // Echo input
+      if(trace) {
+        System.out.println("L-system file      : " + inputname);
+        System.out.println("Recursion depth    : " + lev);
+        System.out.println("Mutations          : " + muts);
+        System.out.println("Basic angle        : " + ang + " degrees");
+        System.out.println("Starting thickness : " + thick + "  of length");
+        System.out.println("Minimum thickness  : " + min_thick + " of length");
 
-      if (switch_yz) {
-        System.out.println("Switching y and z");
-      }
-      if (poly_limit) {
-        System.out.println("Limiting lsystem to: " + pcount_limit + " polygons");
-      }
+        if (switch_yz) {
+          System.out.println("Switching y and z");
+        }
+        if (poly_limit) {
+          System.out.println("Limiting lsystem to: " + pcount_limit + " polygons");
+        }
 
-      System.out.println("Shape style        : ");
+        System.out.println("Shape style        : ");
+      }
       if (closed == 1.0) {
-        System.out.println("Attached cylinders");
+        if(trace) {
+          System.out.println("Attached cylinders");
+        }
         closed_form = true;
       } else {
-        System.out.println("Blocks");
+        if(trace) {
+          System.out.println("Blocks");
+        }
         closed_form = false;
       }
-      System.out.println("Axiom              : " + object_s);
-
-      // Add default rules 
+        System.out.println("Axiom              : " + object_s);
+      // Add default rules
 
       rule.add("+=+");
       num++;
@@ -839,7 +844,9 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         if (rule.get(i).charAt(0) == '+') {
           break;
         }
-        System.out.println("Rule " + (i + 1) + " = " + rule.get(i));
+        if(trace) {
+          System.out.println("Rule " + (i + 1) + " = " + rule.get(i));
+        }
       }
 
       // Set values ready 
@@ -914,7 +921,9 @@ public class LSystem3DWFFunc extends AbstractOBJMeshWFFunc {
         object_s = new String(ot); // Copy the temp string to object_s and repeat cycle 
       }
       ;
-      System.out.println("Size of string     : " + object_s.length() + " chars " + (incomplete ? "(incomplete)" : ""));
+      if(trace) {
+        System.out.println("Size of string     : " + object_s.length() + " chars " + (incomplete ? "(incomplete)" : ""));
+      }
       return object_s;
     }
 

@@ -26,7 +26,7 @@ public class ThumbnailCacheKey {
     return getCacheKey(pThumbnailWidth) + "#" + pThumbnailWidth;
   }
 
-  public String getCacheKey(int pThumbnailWidth, int pThumbnailHeight, int pQuality) {
+  public String getCacheKey(int pThumbnailWidth, int pThumbnailHeight, double pQuality) {
     return getCacheKey(pThumbnailWidth, pThumbnailHeight) + "#" + pQuality;
   }
 }

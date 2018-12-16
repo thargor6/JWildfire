@@ -57,6 +57,11 @@ public class LogDensityFilter {
   private final double filterRadiusA;
   private final double sharpness;
   private final double lowDensity;
+
+  public int getBorderWidth() {
+    return borderWidth;
+  }
+
   private final int borderWidth;
 
   public LogDensityFilter(Flame pFlame, AbstractRandomGenerator pRandGen) {

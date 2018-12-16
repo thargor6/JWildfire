@@ -279,7 +279,6 @@ public class JWildfire extends JApplet {
           if (!tinaInternalFrame.isVisible()) {
             tinaInternalFrame.setVisible(true);
           }
-
         }
         catch (Exception ex) {
           ex.printStackTrace();

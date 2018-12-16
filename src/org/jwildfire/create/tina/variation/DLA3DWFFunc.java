@@ -575,10 +575,10 @@ public class DLA3DWFFunc extends VariationFunc {
     String key = makeKey();
     List<DLA3DWFFuncPoint> res = cache.get(key);
     if (res == null) {
-      long t0 = System.currentTimeMillis();
+      //long t0 = System.currentTimeMillis();
       res = new DLA3DWFFuncIterator(_max_iter, seed, glue_radius, force_x, force_y, force_z, single_thread > 0).iterate();
-      long t1 = System.currentTimeMillis();
-      System.out.println("DLA3D(" + res.size() + "): " + (t1 - t0) + " ms");
+      //long t1 = System.currentTimeMillis();
+      //System.out.println("DLA3D(" + res.size() + "): " + (t1 - t0) + " ms");
       cache.put(key, res);
     }
     return res;

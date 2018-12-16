@@ -587,6 +587,10 @@ public class FlamePanel extends ImagePanel {
             // Move
             if (pLeftButton && !pRightButton) {
               if (fineMovement) {
+                dx *= 0.05;
+                dy *= 0.05;
+              }
+              else {
                 dx *= 0.25;
                 dy *= 0.25;
               }
@@ -604,7 +608,11 @@ public class FlamePanel extends ImagePanel {
             // rotate
             else if (pRightButton) {
               if (fineMovement) {
-                dx *= 0.1;
+                dx *= 0.05;
+              }
+              else {
+                dx *= 0.5;
+                dy *= 0.5;
               }
               XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
               return true;
@@ -612,8 +620,12 @@ public class FlamePanel extends ImagePanel {
             // zoom
             else if (pMiddleButton && !pLeftButton && !pRightButton) {
               if (fineMovement) {
-                dx *= 0.1;
-                dy *= 0.1;
+                dx *= 0.05;
+                dy *= 0.05;
+              }
+              else {
+                dx *= 0.25;
+                dy *= 0.25;
               }
               TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
               double v1x = triangle.x[0] - triangle.x[1];
@@ -651,7 +663,10 @@ public class FlamePanel extends ImagePanel {
               return false;
             }
             if (fineMovement) {
-              dx *= 0.1;
+              dx *= 0.05;
+            }
+            else {
+              dx *= 0.5;
             }
             XFormTransformService.rotate(selectedXForm, dx * 30, config.isEditPostTransform());
             return true;
@@ -661,8 +676,12 @@ public class FlamePanel extends ImagePanel {
               return false;
             }
             if (fineMovement) {
-              dx *= 0.1;
-              dy *= 0.1;
+              dx *= 0.05;
+              dy *= 0.05;
+            }
+            else {
+              dx *= 0.25;
+              dy *= 0.25;
             }
             TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
             double v1x = triangle.x[0] - triangle.x[1];
@@ -699,6 +718,10 @@ public class FlamePanel extends ImagePanel {
               return false;
             }
             if (fineMovement) {
+              dx *= 0.05;
+              dy *= 0.05;
+            }
+            else {
               dx *= 0.25;
               dy *= 0.25;
             }
@@ -970,7 +993,10 @@ public class FlamePanel extends ImagePanel {
         Flame flame = flameHolder.getFlame();
         double dx = pRotateAmount * 3.0;
         if (fineMovement) {
-          dx *= 0.1;
+          dx *= 0.05;
+        }
+        else {
+          dx *= 0.25;
         }
         flame.setPixelsPerUnit(flame.getPixelsPerUnit() - dx);
         return true;
@@ -978,7 +1004,10 @@ public class FlamePanel extends ImagePanel {
       if (config.getMouseDragOperation() == MouseDragOperation.TRIANGLE_VIEW && flameHolder != null && flameHolder.getFlame() != null) {
         double dx = pRotateAmount * 0.3;
         if (fineMovement) {
-          dx *= 0.1;
+          dx *= 0.05;
+        }
+        else {
+          dx *= 0.25;
         }
         viewSizeIncrease -= dx;
         return true;
@@ -987,8 +1016,12 @@ public class FlamePanel extends ImagePanel {
         double dx = MathLib.fabs(pRotateAmount * 0.1);
         double dy = dx;
         if (fineMovement) {
-          dx *= 0.1;
-          dy *= 0.1;
+          dx *= 0.05;
+          dy *= 0.05;
+        }
+        else {
+          dx *= 0.25;
+          dy *= 0.25;
         }
         TriangleControlShape triangle = new TriangleControlShape(config, selectedXForm);
         double v1x = triangle.x[0] - triangle.x[1];
@@ -1023,7 +1056,10 @@ public class FlamePanel extends ImagePanel {
       else if (config.getMouseDragOperation() == MouseDragOperation.FOCUS && flameHolder != null && flameHolder.getFlame() != null) {
         double dz = -pRotateAmount * 0.1;
         if (fineMovement) {
-          dz *= 0.1;
+          dz *= 0.05;
+        }
+        else {
+          dz *= 0.25;
         }
         Flame flame = flameHolder.getFlame();
         flame.setFocusZ(flame.getFocusZ() + dz);

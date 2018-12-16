@@ -141,7 +141,7 @@ public class FlamePreviewHelper implements IterationObserver {
       }
     }
 
-    if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null) {
+    if (pQuickRender && !cfg.isNoControls() && randomBatchHolder != null && !pMouseDown) {
       refreshThumbnail();
     }
 
@@ -593,9 +593,9 @@ public class FlamePreviewHelper implements IterationObserver {
     }
   }
 
-  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 5;
-  private final static int IMAGE_UPDATE_INC_INTERVAL = 5;
-  private final static int MAX_UPDATE_INC_INTERVAL = 100*2;
+  private final static int INITIAL_IMAGE_UPDATE_INTERVAL = 1;
+  private final static int IMAGE_UPDATE_INC_INTERVAL = 1;
+  private final static int MAX_UPDATE_INC_INTERVAL = 100;
 
   private class UpdateDisplayThread implements Runnable, InteractiveRendererImagePostProcessor {
     private int nextImageUpdate;
@@ -663,7 +663,7 @@ public class FlamePreviewHelper implements IterationObserver {
                 replaceImageFlag = true;
               }
               currQuality = threads.getRenderThreads().get(0).getTonemapper().calcDensity(displayUpdater.getSampleCount());
-              if (currQuality > 0.25) {
+              if (currQuality > 0.025) {
                 if (currQuality < 0.5)
                   currQuality *= 10;
                 else if (currQuality < 1.0)

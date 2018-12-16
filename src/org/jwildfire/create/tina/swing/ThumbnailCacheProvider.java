@@ -25,7 +25,7 @@ public class ThumbnailCacheProvider {
     return tryReadImage(pWidth, pHeight, file);
   }
 
-  public static SimpleImage getThumbnail(ThumbnailCacheKey pCacheKey, int pWidth, int pHeight, int pQuality) {
+  public static SimpleImage getThumbnail(ThumbnailCacheKey pCacheKey, int pWidth, int pHeight, double pQuality) {
     File file = new File(rootDrawer, pCacheKey.getCacheKey(pWidth, pHeight, pQuality) + "." + Tools.FILEEXT_PNG);
     return tryReadImage(pWidth, pHeight, file);
   }
@@ -70,7 +70,7 @@ public class ThumbnailCacheProvider {
     tryWriteImage(pThumbnail, file);
   }
 
-  public static void storeThumbnail(ThumbnailCacheKey pCacheKey, int pWidth, int pHeight, int pQuality, SimpleImage pThumbnail) {
+  public static void storeThumbnail(ThumbnailCacheKey pCacheKey, int pWidth, int pHeight, double pQuality, SimpleImage pThumbnail) {
     File file = new File(rootDrawer, pCacheKey.getCacheKey(pWidth, pHeight, pQuality) + "." + Tools.FILEEXT_PNG);
     tryWriteImage(pThumbnail, file);
   }

@@ -44,7 +44,7 @@ public class FlameThumbnail {
     preview = pPreview;
   }
 
-  private void generatePreview(int pQuality) {
+  private void generatePreview(double pQuality) {
     if (cacheKey != null) {
       preview = ThumbnailCacheProvider.getThumbnail(cacheKey, IMG_WIDTH, IMG_HEIGHT, pQuality);
       if (preview != null) {
@@ -71,7 +71,7 @@ public class FlameThumbnail {
     }
   }
 
-  public SimpleImage getPreview(int pQuality) {
+  public SimpleImage getPreview(double pQuality) {
     if (preview == null) {
       generatePreview(pQuality);
     }
