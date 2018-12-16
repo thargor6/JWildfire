@@ -1,7 +1,3 @@
-// Decompiled by DJ v3.7.7.81 Copyright 2004 Atanas Neshkov  Date: 9/23/2018 10:56:18 AM
-// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
-// Decompiler options: packimports(3) 
-// Source File Name:   Complex.java
 
 package js.colordomain;
 
@@ -330,7 +326,7 @@ public class Complex
     }
   
 	//JS added norm complex (ref  http://www.cplusplus.com/reference/complex/norm/)  
-	  public double norm (Complex z) {
+	  public static double norm (Complex z) {
 		  double u=z.re();
 		  double v=z.im();
 		  return (u*u + v*v);
