@@ -17,8 +17,6 @@
 
 package org.jwildfire.create.tina.variation.plot;
 
-import java.util.*;
-
 import odk.lang.DoubleWrapper;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
@@ -32,6 +30,10 @@ import org.jwildfire.create.tina.variation.ColorMapHolder;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.mesh.AbstractOBJMeshWFFunc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.jwildfire.base.mathlib.MathLib.*;
@@ -93,7 +95,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   private double mb_min_radius = 0.2;
   private double mb_max_radius = 0.56;
   private double mb_negative = 0.1;
-  private int mb_seed = (int)(Math.random() * 1234567);
+  private int mb_seed = (int) (Math.random() * 1234567);
   private double border_size = 0.42;
 
   private ColorMapHolder colorMapHolder = new ColorMapHolder();
@@ -112,29 +114,21 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   public void setParameter(String pName, double pValue) {
     if (PARAM_MB_MODE.equalsIgnoreCase(pName)) {
       mb_mode = limitIntVal(Tools.FTOI(pValue), MB_MODE_RANDOM_UNIFORM, MB_MODE_RANDOM_RADIAL);
-    }
-    else if (PARAM_MB_COUNT.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_COUNT.equalsIgnoreCase(pName)) {
       mb_count = Tools.FTOI(pValue);
-    }
-    else if (PARAM_MB_SEED.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_SEED.equalsIgnoreCase(pName)) {
       mb_seed = Tools.FTOI(pValue);
-    }
-    else if (PARAM_MB_MIN_RADIUS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_MIN_RADIUS.equalsIgnoreCase(pName)) {
       mb_min_radius = pValue;
-    }
-    else if (PARAM_MB_MAX_RADIUS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_MAX_RADIUS.equalsIgnoreCase(pName)) {
       mb_max_radius = pValue;
-    }
-    else if (PARAM_MB_NEGATIVE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_NEGATIVE.equalsIgnoreCase(pName)) {
       mb_negative = pValue;
-    }
-    else if (PARAM_MB_SHARPNESS.equalsIgnoreCase(pName)) {
+    } else if (PARAM_MB_SHARPNESS.equalsIgnoreCase(pName)) {
       mb_sharpness = pValue;
-    }
-    else if (PARAM_BORDER_SIZE.equalsIgnoreCase(pName)) {
+    } else if (PARAM_BORDER_SIZE.equalsIgnoreCase(pName)) {
       border_size = pValue;
-    }
-    else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
+    } else if (PARAM_XMIN.equalsIgnoreCase(pName)) {
       xmin = pValue;
     } else if (PARAM_XMAX.equalsIgnoreCase(pName)) {
       xmax = pValue;
@@ -205,7 +199,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
 
       MarsagliaRandomGenerator randGen = new MarsagliaRandomGenerator();
       randGen.randomize(mb_seed);
-      for(int i=0;i<mb_count;i++) {
+      for (int i = 0; i < mb_count; i++) {
         double r, x, y, z;
         switch (mb_mode) {
           case MB_MODE_RANDOM_Y_AXIS: {
@@ -214,10 +208,10 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
             y = __ymax - __dy * falloff(randGen.random());
             z = __zmin + __dz * randGen.random();
           }
-            break;
+          break;
           case MB_MODE_RANDOM_RADIAL: {
             r = rmin + dr * falloff(randGen.random());
-            double radius = falloff(randGen.random()) * Math.min(Math.min(__dx, _dy), __dz)*0.85;
+            double radius = falloff(randGen.random()) * Math.min(Math.min(__dx, _dy), __dz) * 0.85;
             double alpha = randGen.random() * 2.0 * M_PI;
             sinAndCos(alpha, sina, cosa);
             double beta = randGen.random() * M_PI;
@@ -226,7 +220,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
             y = __ymin + __dy * 0.5 + radius * sinb.value * sina.value;
             z = __zmin + __dz * 0.5 + radius * cosb.value;
           }
-            break;
+          break;
           case MB_MODE_RANDOM_UNIFORM:
           default: {
             r = rmin + dr * randGen.random();
@@ -234,20 +228,20 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
             y = __ymin + __dy * randGen.random();
             z = __zmin + __dz * randGen.random();
           }
-            break;
+          break;
         }
 
-        if(randGen.random()<mb_negative) {
-          r = 0.0- r;
+        if (randGen.random() < mb_negative) {
+          r = 0.0 - r;
         }
-        m.add(new Metaball(x, y, z , r));
+        m.add(new Metaball(x, y, z, r));
       }
     }
     this.metaballs = m.toArray(new Metaball[]{});
   }
 
   private double falloff(double x) {
-    return 1.0/(x+0.63)-0.60;
+    return 1.0 / (x + 0.63) - 0.60;
   }
 
   private void updateBoundingBoxSettings() {
@@ -279,7 +273,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
     _dz = _zmax - _zmin;
   }
 
-    private RenderColor[] uvColors;
+  private RenderColor[] uvColors;
   protected Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
 
   private double getUVColorIdx(int pR, int pG, int pB) {
@@ -404,16 +398,15 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   }
 
   private double evaluate(double x, double y, double z) {
-    double f=0;
-    for(Metaball metaball:metaballs) {
+    double f = 0;
+    for (Metaball metaball : metaballs) {
       double dx = x - metaball.x;
       double dy = y - metaball.y;
       double dz = z - metaball.z;
       double r0 = metaball.influence;
-      if(r0<0) {
+      if (r0 < 0) {
         f -= r0 * r0 / (dx * dx + dy * dy + dz * dz);
-      }
-      else {
+      } else {
         f += r0 * r0 / (dx * dx + dy * dy + dz * dz);
       }
     }
@@ -424,7 +417,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
 
 
   private class Metaball {
-    private double x,y,z;
+    private double x, y, z;
     private double influence;
 
     public Metaball(double x, double y, double z, double influence) {

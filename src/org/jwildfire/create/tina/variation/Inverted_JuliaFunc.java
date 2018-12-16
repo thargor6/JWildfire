@@ -16,11 +16,8 @@ package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
-import static org.jwildfire.base.mathlib.MathLib.sin;
-import static org.jwildfire.base.mathlib.MathLib.cos;
-import static org.jwildfire.base.mathlib.MathLib.atan2;
-import static org.jwildfire.base.mathlib.MathLib.M_PI;
-import static org.jwildfire.base.mathlib.MathLib.pow;
+
+import static org.jwildfire.base.mathlib.MathLib.*;
 
 public class Inverted_JuliaFunc extends VariationFunc {
   private static final long serialVersionUID = 1L;
@@ -35,7 +32,7 @@ public class Inverted_JuliaFunc extends VariationFunc {
   private static final String PARAM_CENTER = "center";
   private static final String PARAM_X2Y2_ADD = "x2y2 add";
 
-  private static final String[] paramNames = { PARAM_POWER, PARAM_Y2_MULT, PARAM_A2X_MULT, PARAM_A2Y_MULT, PARAM_A2Y_ADD, PARAM_COS_MULT, PARAM_Y_MULT, PARAM_CENTER, PARAM_X2Y2_ADD};
+  private static final String[] paramNames = {PARAM_POWER, PARAM_Y2_MULT, PARAM_A2X_MULT, PARAM_A2Y_MULT, PARAM_A2Y_ADD, PARAM_COS_MULT, PARAM_Y_MULT, PARAM_CENTER, PARAM_X2Y2_ADD};
   private double power = 0.25;
   private double y2_mult = 1;
   private double a2x_mult = 1;
@@ -75,7 +72,7 @@ public class Inverted_JuliaFunc extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[] { power, y2_mult, a2x_mult, a2y_mult, a2y_add, cos_mult, y_mult, center, x2y2_add};
+    return new Object[]{power, y2_mult, a2x_mult, a2y_mult, a2y_add, cos_mult, y_mult, center, x2y2_add};
   }
 
   @Override

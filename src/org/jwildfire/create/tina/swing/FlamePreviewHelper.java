@@ -676,7 +676,7 @@ public class FlamePreviewHelper implements IterationObserver {
               nextImageUpdate = lastImageUpdateInterval;
             }
             else {
-              Thread.sleep(3);
+              Thread.sleep(1);
             }
           }
           catch (Throwable e) {

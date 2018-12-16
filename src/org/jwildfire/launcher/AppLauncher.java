@@ -80,8 +80,8 @@ public class AppLauncher {
     cmd.add(minMemOption);
     cmd.add(maxMemOption);
 
-    if (prefs.getUiScale() > 1.0)
-      cmd.add("-Dsun.java2d.uiScale=" + prefs.getUiScale() + "");
+    //if (prefs.getUiScale() > 1.0)
+    cmd.add("-Dsun.java2d.uiScale=" + prefs.getUiScale() + "");
 
     if (isWindows()) {
       boolean is64bit = (System.getenv("ProgramFiles(x86)") != null);

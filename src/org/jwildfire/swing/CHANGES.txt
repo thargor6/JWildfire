@@ -1,5 +1,110 @@
-V3.60 (12.12.2018)
+V4.00 (16.12.2018)
+ - new "Quilt Renderer"-module to render flames in nearly unlimited size. This works by splitting the whole image into tiles.
+   You may freely specify how the tiles are generited, e.g. splitting the image in 3x2 tiles or 8 vertical stripes.
+   Each of the rendered tiles is a valid image. So, even JWildfire would finally fail to assemble the tiles into one
+   final image (due to memory restrictions), you could perform this step using external image-processing-software,
+   which is more optimized to handle large images. But images with a size upto 32K (30720x17280) where tested
+   without any problems so far. You can cancel/resume the rendering-process at tile-level.
+   Please note: Due to the nature of the flame-fractal-algorithm, the rendering of each tile may take as long as you
+   would render the whole image at once. So, this method is not efficient, but effective.
+   A 16K render on a modern computer can take about 12 hours, but you will usually get an awesome result with endless details.
+ - new button to easily import-scripts at the "Scripts and Custom-Buttoms"-tab. This function accepts all *.zip-files containing at least one
+   script file (with the extension *.jwfscript). Associated text-files (descriptions) and any *.ugr-gradients are imported as well.
+   Any other files are ignored. If the *.zip-file contains sub-folders, only the scripts inside the folders are extracted, but not
+   the folder-structure itself. The function warns before overwriting files.
+ - the flame-thumbnails on the left may now be properly scrolled using the mousewheel
+ - selecting (double- or right-clicking) a frame from the thumbnail-bar now works much more reliable
+ - many new variations:
+    - metaballs3d_wf (somewhat slow, but can generate very nice organic shapes)
+    - pointgrid_wf (flat random grid of points)
+    - pointgrid3d_wf (3d-array of points)
+    - invpolar (Brad Stefanov)
+    - stripfit (Dark Beam, Brad Stefanov)
+    - hypershift2 (Tatasz, Brad Stefanov)
+    - hypercrop (Tatasz, Brad Stefanov)
+    - truchet2 (Tatasz, Brad Stefanov, Jesus Sosa)
+    - arcsinh (Tatasz, Brad Stefanov, DarkBeam)
+    - arcsech2 (Tatasz, Brad Stefanov, DarkBeam)
+    - arctanh (Tatasz, Brad Stefanov, DarkBeam)
+    - invsquircular (DarkBeam, Jesus Sosa)
+    - squircular (DarkBeam, Jesus Sosa)
+    - pyramid (Dark Beam, Brad Stefanov)
+    - corners (Whittaker Courtney)
+    - csc_squared (Whittaker Courtney)
+    - atan2_spirals (Whittaker Courtney)
+    - inverted_julia (Whittaker Courtney,  Brad Stefanov)
+    - acosech (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
+    - acoth (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
+    - acosh (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
+    - intersection (Brad Stefanov)
+    - curliecue (Jesus Sosa)
+    - curliecue2 (Jesus Sosa)
+    - szubieta (Jesus Sosa)
+    - starfractal (Jesus Sosa)
+    - triantruchet (Jesus Sosa)
+    - arctruchet (Jesus Sosa)
+    - swirl3D_wf (Jesus Sosa)
+    - mandala (Jesus Sosa)
+    - mandala2 (Jesus Sosa)
+    - jac_asn (Jesus Sosa)
+    - colordomain (Jesus Sosa)
+    - ducks (Jesus Sosa)
+    - bipolar2 (Brad Stefanov)
+    - elliptic2 (Brad Stefanov)
+ - new GLSL-family of variations by Jesus Sosa:
+   After implementing a set of java functions that simulate almost the bunch of functions used in GLSL code for fragment shaders,
+   I start to develop a set of JWF variations using the implemented functions, so I have translated fragment shaders (GLSL code)
+   to java, using examples found in shadertoy.com and glslsandbox.com sites.
+    - glsl_mandala
+    - glsl_apollonian
+    - glsl_fractaldots
+    - glsl_circuits
+    - glsl_mandelbox2D
+    - glsl_hoshi
+    - glsl_kaleidocomplex
+    - glsl_starsfield
+    - glsl_kaleidoscopic
+    - glsl_randomoctree
+    - glsl_acrilic
+    - glsl_circlesblue
+    - glsl_kaliset
+    - glsl_kaliset2
+    - glsl_grid3D
+    - glsl_hyperbolictile
+    - glsl_squares
+    - glsl_code (to try out own stuff)
+ - updated variations:
+    - splits (new shear-parameters, Dark Beam, Brad Stefanov)
+ - many awesome scripts, provided my Michael Bourne:
+    - "UmmaGumma"-scripts (see new scripts starting with "UG-" in "Built-In-scripts"-category)
+    - "Hubble"-scripts (see new scripts starting with "HB-" in "Built-In-scripts"-category)
+    - "Samhain Splits"-scripts (see new scripts starting with "SX-" in "Built-In-scripts"-category)
+ - removed the dialog-options from the following built-in scripts, so they can executed in a more quick and simple
+   manner (required paramerers are chosen randomly,  instead of asking the user):
+    - "Oily_Juliascope_Rev1"
+    - "Oily_Rev3"
+    - "Plastic"
+    - "HypertilePoincare_Rev2"
+    - "SphericalCross_Rev2"
+    - "SuperSusan_Rev1"
+    - "Textured_Cylinders_Rev01_by_MH"
+    - "TomsSpiralSpiral_Rev3"
+ - scripts can also be executed by simply double-clicking at them
+ - new "JulianRings"-random-flame-generator
+ - Main-Editor: there are now new three buttons at the left to easily open Interactive Renderer, Movie-Maker or Flame-Browser
+   (the two buttons "Send to IR" and "Send to MovieMaker" are replaced by them)
  - new "reset clr"-button the "Gradient"-tab to reset all color-values and color-speed-values to 0
+ - render-priority in the ui should now be set to low
+ - bug-fix regarding rendering with enabled post-symmetry (Rick Sidwell):
+     When Post symmetry is enabled, the result of clicking Render was dimmer
+     than using Interactive Render, especially with large Symmetry order
+     values. This change makes Render Fractal and Interactive Render produce
+     the same results when Post symmetry is enabled.
+ - bug fix EasyMovieMaker:
+     when using multiple flames to morph between the slider at the bottom covered the edit, replace, remove buttons
+ - internal scripts may provide their own gradients now
+ - Moved the "Misc"-tab to the bottom, the "Script"-tab was renamed into "Scripts and Custom-Buttoms" to give it more attention
+ - Improved the "Solid Labyrinth"-random-flame-generator
 
 V3.50 (28.07.2018)
  - removed the desktop and the Navigator-window in order to simplify and speed-up the user-interface

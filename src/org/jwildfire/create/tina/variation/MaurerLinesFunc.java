@@ -113,7 +113,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final String PARAM_RANDOMIZE = "randomize";
 
   /**
-   *   CURVE MODES
+   * CURVE MODES
    */
   private static final int CIRCLE = 0;
   private static final int POLYGON = 1;
@@ -219,7 +219,7 @@ public class MaurerLinesFunc extends VariationFunc {
 
   /**
    * TANGENT SUBMODES
-   *    currently only applies to CUBIC_HERMITE_SPLINE and CUBIC_HERMITE_HAPPY_ACCIDENT* modes
+   * currently only applies to CUBIC_HERMITE_SPLINE and CUBIC_HERMITE_HAPPY_ACCIDENT* modes
    */
   private static final int TANGENT = 1;      // velocity ==> f'(t)
   private static final int UNIT_TANGENT = 2; // normalized velocity ==> f'(t) / |f'(t)|   
@@ -235,7 +235,7 @@ public class MaurerLinesFunc extends VariationFunc {
   private static final int XY_SCALE_TANGENT = 12;
 
   /**
-   *  COSET MODES
+   * COSET MODES
    */
   private static final int NO_COSETS = 0;
   private static final int CLASSIC_COSETS = 1;  // cosets as implemented in original Maurer rose paper -- 
@@ -744,7 +744,7 @@ public class MaurerLinesFunc extends VariationFunc {
 
 
   /**
-   *  only using z coordinate for specific modes
+   * only using z coordinate for specific modes
    */
 
   class DoublePoint2D implements Serializable {

@@ -61,7 +61,7 @@ public class PointGrid3DWFFunc extends VariationFunc {
     double x = xmin + _dx * xIdx;
     double y = ymin + _dy * yIdx;
     double z = zmin + _dz * zIdx;
-    if(distortion>0) {
+    if (distortion > 0) {
       long xseed = (seed + 1563) * xIdx + zIdx;
       _shapeRandGen.randomize(xseed);
       double distx = (0.5 - _shapeRandGen.random()) * distortion;
@@ -129,9 +129,9 @@ public class PointGrid3DWFFunc extends VariationFunc {
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
     _shapeRandGen = new MarsagliaRandomGenerator();
-    _dx = (xmax - xmin) / (double)xcount;
-    _dy = (ymax - ymin) / (double)ycount;
-    _dz = (zmax - zmin) / (double)zcount;
+    _dx = (xmax - xmin) / (double) xcount;
+    _dy = (ymax - ymin) / (double) ycount;
+    _dz = (zmax - zmin) / (double) zcount;
   }
 
 }

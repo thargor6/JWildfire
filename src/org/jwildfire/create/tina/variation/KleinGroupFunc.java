@@ -291,13 +291,13 @@ public class KleinGroupFunc extends VariationFunc {
   }
 
   /**
-   * based on modified Maskit parameterization discussed in Jos Leys' article 
-   *     "A fast algorithm for limit sets of Kleinian groups with the Maskit parametrisation", 
-   *     section 4.1
-   *  replaces b(z) = z + 2
-   *      with b(z) = z + k
-   *   where k = 2*cos(PI/n) and n is integer
-   *   here we also allow imaginary component for k, to be set by b_im
+   * based on modified Maskit parameterization discussed in Jos Leys' article
+   * "A fast algorithm for limit sets of Kleinian groups with the Maskit parametrisation",
+   * section 4.1
+   * replaces b(z) = z + 2
+   * with b(z) = z + k
+   * where k = 2*cos(PI/n) and n is integer
+   * here we also allow imaginary component for k, to be set by b_im
    */
   public Complex[][] calcMaskitLeysModifiedGenerators() {
     Complex mu = new Complex(a_re, a_im);
@@ -312,7 +312,7 @@ public class KleinGroupFunc extends VariationFunc {
 
   /**
    * using "Grandma's special parabolic commutator groups" recipe
-   *   from the book "Indra's Pearls: the Vision of Felix Klein"
+   * from the book "Indra's Pearls: the Vision of Felix Klein"
    */
   public Complex[][] calcGrandmaGenerators() {
     Complex traceA = new Complex(a_re, a_im);

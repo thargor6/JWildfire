@@ -15,10 +15,10 @@
 package org.jwildfire.create.tina.variation;
 
 import org.jwildfire.base.mathlib.Complex;
-import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
-
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
+
+import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
 public class AcosechFunc extends SimpleVariationFunc {
   private static final long serialVersionUID = 1L;
@@ -34,11 +34,10 @@ public class AcosechFunc extends SimpleVariationFunc {
     z.Flip();
     z.Scale(pAmount * M_2_PI);
 
-    if (pContext.random() < 0.5){
+    if (pContext.random() < 0.5) {
       pVarTP.y += z.im;
       pVarTP.x += z.re;
-    }
-    else{
+    } else {
       pVarTP.y += -z.im;
       pVarTP.x += -z.re;
     }

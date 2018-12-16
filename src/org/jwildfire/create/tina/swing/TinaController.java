@@ -50,7 +50,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -218,7 +231,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final JPanel nonlinearParamsPanel;
   private final int nonlinearParamsPanelBaseWidth, nonlinearParamsPanelBaseHeight;
 
-  public TinaController(TinaControllerParameter parameterObject) {
+  public TinaController(final TinaControllerParameter parameterObject) {
     desktop = parameterObject.desktop;
     mainEditorFrame = parameterObject.pMainEditorFrame;
     tinaFrameTitle = mainEditorFrame.getTitle();
@@ -1403,7 +1416,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     createRandomBatchThread = null;
     refreshRandomBatchButton();
     enableControls();
-    if(loadFirstRandomFlame) {
+    if (loadFirstRandomFlame) {
       importFromRandomBatch(0);
       scrollThumbnailsToTop();
     }
@@ -3014,7 +3027,12 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       imgPanel.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent e) {
           if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-            importFromRandomBatch(idx);
+            new Thread(new Runnable() {
+              @Override
+              public void run() {
+                importFromRandomBatch(idx);
+              }
+            }).start();
           }
         }
       });
@@ -3023,7 +3041,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.randomBatchScrollPane = new JScrollPane(batchPanel);
     data.randomBatchScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     data.randomBatchScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
+    data.randomBatchScrollPane.getVerticalScrollBar().setUnitIncrement(16);
     data.randomBatchPanel.add(data.randomBatchScrollPane, BorderLayout.CENTER);
     data.randomBatchPanel.validate();
   }
@@ -3035,24 +3053,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void scrollThumbnailsToPosition(int scrollPos) {
     JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
-    vertical.setValue( scrollPos );
+    vertical.setValue(scrollPos);
   }
 
   public void scrollThumbnailsToBottom() {
     JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
-    vertical.setValue( vertical.getMaximum());
+    vertical.setValue(vertical.getMaximum());
   }
 
   public void scrollThumbnailsToTop() {
     JScrollBar vertical = data.randomBatchScrollPane.getVerticalScrollBar();
-    vertical.setValue( vertical.getMinimum());
+    vertical.setValue(vertical.getMinimum());
   }
 
   private CreateRandomBatchThread createRandomBatchThread;
   private boolean loadFirstRandomFlame;
 
   public void createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
-    if(createRandomBatchThread!=null) {
+    if (createRandomBatchThread != null) {
       stopRandomBatchThread();
       return;
     }
@@ -3065,27 +3083,27 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     loadFirstRandomFlame = true;
-    createRandomBatchThread = new CreateRandomBatchThread(this,randomBatchProgressUpdater, maxCount, imgList, randomBatch, randGen, randSymmGen, randGradientGen, pQuality);
+    createRandomBatchThread = new CreateRandomBatchThread(this, randomBatchProgressUpdater, maxCount, imgList, randomBatch, randGen, randSymmGen, randGradientGen, pQuality);
     refreshRandomBatchButton();
     new Thread(createRandomBatchThread).start();
   }
 
   private void refreshRandomBatchButton() {
-    data.randomBatchButton.setText(createRandomBatchThread!=null ? "Cancel" : "Random batch");
+    data.randomBatchButton.setText(createRandomBatchThread != null ? "Cancel" : "Random batch");
   }
 
   private void stopRandomBatchThread() {
-    if(createRandomBatchThread!=null) {
+    if (createRandomBatchThread != null) {
       try {
         createRandomBatchThread.signalCancel();
-        while(createRandomBatchThread!=null && !createRandomBatchThread.isDone()) {
+        while (createRandomBatchThread != null && !createRandomBatchThread.isDone()) {
           Thread.sleep(1);
         }
       }
-      catch(Exception ex) {
+      catch (Exception ex) {
         ex.printStackTrace();
       }
-      createRandomBatchThread=null;
+      createRandomBatchThread = null;
     }
   }
 
@@ -4526,7 +4544,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   public void appendToMovieButton_actionPerformed(ActionEvent e) {
     desktop.showJFrame(EasyMovieMakerFrame.class);
     if (getCurrFlame() != null) {
-      if(getSwfAnimatorCtrl().getFlame()==null) {
+      if (getSwfAnimatorCtrl().getFlame() == null) {
         getSwfAnimatorCtrl().importFlameFromEditor(getCurrFlame().makeCopy());
       }
     }
@@ -4982,13 +5000,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   public void sendFlameToIRButton_clicked() {
-//    Flame flame = getCurrFlame();
-//    if (flame != null) {
-//      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
-//        interactiveRendererCtrl.importFlame(flame);
-        desktop.showJFrame(InteractiveRendererFrame.class);
-//      }
-//    }
+    //    Flame flame = getCurrFlame();
+    //    if (flame != null) {
+    //      if (!interactiveRendererCtrl.isRendering() || StandardDialogs.confirm(flamePanel, "The Interactive Renderer is already rendering. Do you really want to abort the current render?")) {
+    //        interactiveRendererCtrl.importFlame(flame);
+    desktop.showJFrame(InteractiveRendererFrame.class);
+    //      }
+    //    }
   }
 
   public void openFlameBrowserButton_clicked() {

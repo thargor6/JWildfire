@@ -137,7 +137,9 @@ public class InversionFunc extends VariationFunc {
 
     public abstract double getPeriod();
 
-    /** simple shapes will not have more than one intersection along a given ray out from shape center */
+    /**
+     * simple shapes will not have more than one intersection along a given ray out from shape center
+     */
     public boolean simpleShape() {
       return true;
     }
@@ -192,8 +194,7 @@ public class InversionFunc extends VariationFunc {
   }
 
   /**
-   *  uses parameter a as number of sides for polygon
-   *
+   * uses parameter a as number of sides for polygon
    */
   class RegularPolygon extends ParametricShape {
 

@@ -674,13 +674,16 @@ public class VariationFuncList {
     registerVariationFunc(AcosechFunc.class);
     registerVariationFunc(AcothFunc.class);
     registerVariationFunc(AcoshFunc.class);
+    registerVariationFunc(DucksFunc.class);
+    registerVariationFunc(Bipolar2Func.class);
+    registerVariationFunc(Elliptic2Func.class);
 
     registerVariationFunc(Metaballs3DWFFunc.class);
     registerVariationFunc(PointGridWFFunc.class);
     registerVariationFunc(PointGrid3DWFFunc.class);
-    
-    registerVariationFunc(GLSLMandalaFunc.class); 
-    registerVariationFunc(GLSLApollonianFunc.class); 
+
+    registerVariationFunc(GLSLMandalaFunc.class);
+    registerVariationFunc(GLSLApollonianFunc.class);
     registerVariationFunc(GLSLFractalDotsFunc.class);
     registerVariationFunc(GLSLCircuitsFunc.class);
     registerVariationFunc(GLSLMandelBox2DFunc.class);
@@ -694,11 +697,10 @@ public class VariationFuncList {
     registerVariationFunc(GLSLKaliSetFunc.class);
     registerVariationFunc(GLSLKaliSet2Func.class);
     registerVariationFunc(GLSLGrid3DFunc.class);
-    registerVariationFunc(GLSLHyperbolicFunc.class);   
-    registerVariationFunc(DucksFunc.class);   
-    registerVariationFunc(GLSLBaseFunc.class); 
-    registerVariationFunc(GLSLSquaresFunc.class);  
-    
+    registerVariationFunc(GLSLHyperbolicFunc.class);
+    registerVariationFunc(GLSLBaseFunc.class);
+    registerVariationFunc(GLSLSquaresFunc.class);
+
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
