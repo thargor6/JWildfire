@@ -1,4 +1,8 @@
-V4.00 (16.12.2018)
+V4.00 (17.12.2018)
+ - dramatically improved the smootheness of the real-time-editing: while dragging the mouse, the view is constantly updated,
+   reflecting the change of the fractal. When you only see black editing-area, then often the fractal is changing too rapidly,
+   just move slowlier to see the shape evolving, or wait a moment, while still having the left mouse-button pressed
+   - reduded the change-rate when editing affine controls
  - new "Quilt Renderer"-module to render flames in nearly unlimited size. This works by splitting the whole image into tiles.
    You may freely specify how the tiles are generited, e.g. splitting the image in 3x2 tiles or 8 vertical stripes.
    Each of the rendered tiles is a valid image. So, even JWildfire would finally fail to assemble the tiles into one
@@ -23,9 +27,9 @@ V4.00 (16.12.2018)
     - hypershift2 (Tatasz, Brad Stefanov)
     - hypercrop (Tatasz, Brad Stefanov)
     - truchet2 (Tatasz, Brad Stefanov, Jesus Sosa)
-    - arcsinh (Tatasz, Brad Stefanov, DarkBeam)
-    - arcsech2 (Tatasz, Brad Stefanov, DarkBeam)
-    - arctanh (Tatasz, Brad Stefanov, DarkBeam)
+    - arcsinh (Tatasz, DarkBeam)
+    - arcsech2 (Tatasz, DarkBeam)
+    - arctanh (Tatasz, DarkBeam)
     - invsquircular (DarkBeam, Jesus Sosa)
     - squircular (DarkBeam, Jesus Sosa)
     - pyramid (Dark Beam, Brad Stefanov)
@@ -33,9 +37,9 @@ V4.00 (16.12.2018)
     - csc_squared (Whittaker Courtney)
     - atan2_spirals (Whittaker Courtney)
     - inverted_julia (Whittaker Courtney,  Brad Stefanov)
-    - acosech (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
-    - acoth (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
-    - acosh (Whittaker Courtney, Tatasz, DarkBeam, Brad Stefanov)
+    - acosech (Whittaker Courtney, Tatasz, DarkBeam)
+    - acoth (Whittaker Courtney, Tatasz, DarkBeam)
+    - acosh (Whittaker Courtney, Tatasz, DarkBeam)
     - intersection (Brad Stefanov)
     - curliecue (Jesus Sosa)
     - curliecue2 (Jesus Sosa)
@@ -105,6 +109,7 @@ V4.00 (16.12.2018)
  - internal scripts may provide their own gradients now
  - Moved the "Misc"-tab to the bottom, the "Script"-tab was renamed into "Scripts and Custom-Buttoms" to give it more attention
  - Improved the "Solid Labyrinth"-random-flame-generator
+ - contributed two new images to the Launcher
 
 V3.50 (28.07.2018)
  - removed the desktop and the Navigator-window in order to simplify and speed-up the user-interface
