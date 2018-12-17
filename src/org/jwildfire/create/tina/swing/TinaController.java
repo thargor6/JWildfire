@@ -3086,6 +3086,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private void refreshRandomBatchButton() {
     data.randomBatchButton.setText(createRandomBatchThread != null ? "Cancel" : "Random batch");
+    data.randomBatchButton.invalidate();
+    data.randomBatchButton.validate();
   }
 
   private void stopRandomBatchThread() {
