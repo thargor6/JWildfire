@@ -72,11 +72,7 @@ public class LogDensityFilter {
     filterRadiusA = flame.getSpatialFilterRadius() + 0.25;
     sharpness = flame.getSpatialFilterSharpness();
     lowDensity = flame.getSpatialFilterLowDensity();
-
-    int lBorderWidth = (primaryFilter.getNoiseFilterSize() - flame.getSpatialOversampling()) / 2;
-    int lMaxBorderWidth = (FlameRenderer.MAX_FILTER_WIDTH - oversample) / 2;
-    borderWidth = (lBorderWidth+lMaxBorderWidth)/2;
-
+    borderWidth = Math.max(primaryFilter.getNoiseFilterSize() - flame.getSpatialOversampling(), 0)/2;
     smoothingFilter = LogDensityFilterKernelProvider.getFilter(FilterKernelType.GAUSSIAN, flame.getSpatialOversampling(), 0.75);
     colorFunc = pFlame.getChannelMixerMode().getColorFunc(pFlame, pRandGen);
     solidRendering = pFlame.getSolidRenderSettings().isSolidRenderingEnabled();

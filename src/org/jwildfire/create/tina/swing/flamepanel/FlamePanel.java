@@ -590,10 +590,6 @@ public class FlamePanel extends ImagePanel {
                 dx *= 0.05;
                 dy *= 0.05;
               }
-              else {
-                dx *= 0.25;
-                dy *= 0.25;
-              }
               // move
               if (config.isEditPostTransform()) {
                 selectedXForm.setPostCoeff20(selectedXForm.getPostCoeff20() + dx);
@@ -720,10 +716,6 @@ public class FlamePanel extends ImagePanel {
             if (fineMovement) {
               dx *= 0.05;
               dy *= 0.05;
-            }
-            else {
-              dx *= 0.25;
-              dy *= 0.25;
             }
             switch (config.getSelectedPoint()) {
               case 0:

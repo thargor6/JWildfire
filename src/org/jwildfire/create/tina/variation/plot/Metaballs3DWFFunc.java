@@ -94,7 +94,7 @@ public class Metaballs3DWFFunc extends AbstractOBJMeshWFFunc {
   private int mb_count = 64;
   private double mb_min_radius = 0.35;
   private double mb_max_radius = 0.75;
-  private double mb_negative = 0.1;
+  private double mb_negative = 0.3;
   private int mb_seed = (int) (Math.random() * 1234567);
   private double border_size = 0.42;
 

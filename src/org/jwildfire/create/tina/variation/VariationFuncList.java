@@ -701,6 +701,13 @@ public class VariationFuncList {
     registerVariationFunc(GLSLBaseFunc.class);
     registerVariationFunc(GLSLSquaresFunc.class);
 
+    registerVariationFunc(Tile_Reverse_Func.class);
+    registerVariationFunc(Sqrt_AcothFunc.class);
+    registerVariationFunc(Sqrt_AcoshFunc.class);
+    registerVariationFunc(Sqrt_AsechFunc.class);
+    registerVariationFunc(Sqrt_AtanhFunc.class);
+    registerVariationFunc(Sqrt_AsinhFunc.class);
+    registerVariationFunc(Sqrt_AcosechFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

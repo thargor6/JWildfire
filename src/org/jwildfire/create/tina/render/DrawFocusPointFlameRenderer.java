@@ -27,7 +27,7 @@ public class DrawFocusPointFlameRenderer extends FlameRenderer {
 
   @Override
   protected FlameRendererView createView(Flame initialFlame) {
-    return new DrawFocusPointFlameRendererView(initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, null);
+    return new DrawFocusPointFlameRendererView(initialFlame, randGen, borderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, null);
   }
 
 }

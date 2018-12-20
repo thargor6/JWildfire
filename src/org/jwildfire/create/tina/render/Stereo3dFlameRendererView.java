@@ -14,8 +14,8 @@ public class Stereo3dFlameRendererView extends FlameRendererView {
   private XYZPoint eyeOff;
   private double sinEye, cosEye, focalOffset;
 
-  public Stereo3dFlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
-    super(pEye, pFlame, pRandGen, pBorderWidth, pMaxBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight, pFlameTransformationContext, renderInfo);
+  public Stereo3dFlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
+    super(pEye, pFlame, pRandGen, pBorderWidth, pImageWidth, pImageHeight, pRasterWidth, pRasterHeight, pFlameTransformationContext, renderInfo);
   }
 
   @Override

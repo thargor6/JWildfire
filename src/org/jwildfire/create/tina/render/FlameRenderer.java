@@ -67,8 +67,6 @@ import org.jwildfire.transform.ScaleAspect;
 import org.jwildfire.transform.ScaleTransformer;
 
 public class FlameRenderer {
-  // constants
-  public final static int MAX_FILTER_WIDTH = 25;
   // init in initRaster
   protected int imageWidth;
   protected int imageHeight;
@@ -76,7 +74,6 @@ public class FlameRenderer {
   int rasterHeight;
   private int rasterSize;
   protected int borderWidth;
-  protected int maxBorderWidth;
   private boolean withAlpha;
   LogDensityFilter logDensityFilter;
   GammaCorrectionFilter gammaCorrectionFilter;
@@ -150,11 +147,14 @@ public class FlameRenderer {
     imageHeight = pImageHeight;
     oversample = flame.getSpatialOversampling();
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
-    maxBorderWidth = (MAX_FILTER_WIDTH - oversample) / 2;
-    borderWidth = (logDensityFilter.getNoiseFilterSize() - oversample) / 2;
+    borderWidth =  Math.max((logDensityFilter.getNoiseFilterSize() - oversample),0) / 2;
 
-    rasterWidth = oversample * imageWidth + 2 * maxBorderWidth;
-    rasterHeight = oversample * imageHeight + 2 * maxBorderWidth;
+    // XXXX
+    System.err.println(" BORDERWIDTH: "+borderWidth);
+
+    rasterWidth = oversample * imageWidth + 2 * borderWidth;
+    rasterHeight = oversample * imageHeight + 2 * borderWidth;
+    System.err.println("RASTER: "+rasterWidth);
     gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha, rasterWidth, rasterHeight);
     rasterSize = rasterWidth * rasterHeight;
   }
@@ -162,12 +162,14 @@ public class FlameRenderer {
   private void initRaster(RenderInfo pRenderInfo, int pImageWidth, int pImageHeight, double pSampleDensity) {
     initRasterSizes(pImageWidth, pImageHeight);
     if (pRenderInfo.getRestoredRaster() != null) {
+      /*
       if (rasterWidth != pRenderInfo.getRestoredRaster().getRasterWidth()) {
         throw new RuntimeException("Raster width does not match (" + rasterWidth + " != " + pRenderInfo.getRestoredRaster().getRasterWidth() + ")");
       }
       if (rasterHeight != pRenderInfo.getRestoredRaster().getRasterHeight()) {
         throw new RuntimeException("Raster height does not match (" + rasterHeight + " != " + pRenderInfo.getRestoredRaster().getRasterHeight() + ")");
       }
+      */
       raster = pRenderInfo.getRestoredRaster();
     }
     else {
@@ -187,6 +189,9 @@ public class FlameRenderer {
     catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+
+    // XXXX
+    System.err.println("ALLOCRASTER " + rasterWidth +" "+rasterHeight);
     raster.allocRaster(flame, rasterWidth, rasterHeight, pOversample, pSampleDensity);
     return raster;
   }
@@ -929,12 +934,12 @@ public class FlameRenderer {
         case INTERPOLATED_IMAGES:
         case SIDE_BY_SIDE:
         case ANAGLYPH:
-          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
+          return new Stereo3dFlameRendererView(eye, initialFlame, randGen, borderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
         default: // nothing to do
           break;
       }
     }
-    FlameRendererView view = new FlameRendererView(eye, initialFlame, randGen, borderWidth, maxBorderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
+    FlameRendererView view = new FlameRendererView(eye, initialFlame, randGen, borderWidth, imageWidth, imageHeight, rasterWidth, rasterHeight, flameTransformationContext, renderInfo);
     return view;
   }
 

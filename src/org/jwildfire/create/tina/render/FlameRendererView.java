@@ -54,7 +54,6 @@ public class FlameRendererView {
   protected boolean doProject3D = false;
   private final AbstractRandomGenerator randGen;
   private final int borderWidth;
-  private final int maxBorderWidth;
   private final int imageWidth;
   private final int imageHeight;
   private final int rasterWidth;
@@ -67,11 +66,10 @@ public class FlameRendererView {
   private double segmentRenderingCamXModifier = 0.0;
   private double segmentRenderingCamYModifier = 0.0;
 
-  public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pMaxBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
+  public FlameRendererView(Stereo3dEye pEye, Flame pFlame, AbstractRandomGenerator pRandGen, int pBorderWidth, int pImageWidth, int pImageHeight, int pRasterWidth, int pRasterHeight, FlameTransformationContext pFlameTransformationContext, RenderInfo renderInfo) {
     flame = pFlame;
     randGen = pRandGen;
     borderWidth = pBorderWidth;
-    maxBorderWidth = pMaxBorderWidth;
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     rasterWidth = pRasterWidth;
@@ -133,29 +131,18 @@ public class FlameRendererView {
     double corner_x = flame.getCentreX() - (double) imageWidth / pixelsPerUnit / 2.0;
     double corner_y = flame.getCentreY() - (double) imageHeight / pixelsPerUnit / 2.0;
     int oversample = flame.getSpatialOversampling();
-    double t0 = borderWidth / (oversample * pixelsPerUnit);
-    double t1 = borderWidth / (oversample * pixelsPerUnit);
-    double t2 = (2 * maxBorderWidth - borderWidth) / (oversample * pixelsPerUnit);
-    double t3 = (2 * maxBorderWidth - borderWidth) / (oversample * pixelsPerUnit);
+    double border_size = (double)borderWidth / (double)(pixelsPerUnit);
 
-    camX0 = corner_x - t0;
-    camY0 = corner_y - t1;
-    camX1 = corner_x + (double) imageWidth / pixelsPerUnit + t2;
-    camY1 = corner_y + (double) imageHeight / pixelsPerUnit + t3;
+    camX0 = corner_x - border_size;
+    camY0 = corner_y - border_size;
+    camX1 = corner_x + (double) imageWidth / pixelsPerUnit + border_size;
+    camY1 = corner_y + (double) imageHeight / pixelsPerUnit + border_size;
 
     camW = camX1 - camX0;
-    double Xsize, Ysize;
-    if (fabs(camW) > 0.01)
-      Xsize = 1.0 / camW;
-    else
-      Xsize = 1.0;
     camH = camY1 - camY0;
-    if (fabs(camH) > 0.01)
-      Ysize = 1.0 / camH;
-    else
-      Ysize = 1;
-    bws = (rasterWidth - 0.5) * Xsize;
-    bhs = (rasterHeight - 0.5) * Ysize;
+
+    bws = rasterWidth/camW;
+    bhs = rasterHeight/camH;
 
     if (!doProject3D) {
       cosa = cos(-M_PI * (flame.getCamRoll()) / 180.0);
