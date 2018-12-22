@@ -708,6 +708,7 @@ public class VariationFuncList {
     registerVariationFunc(Sqrt_AtanhFunc.class);
     registerVariationFunc(Sqrt_AsinhFunc.class);
     registerVariationFunc(Sqrt_AcosechFunc.class);
+    registerVariationFunc(HolesqFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {

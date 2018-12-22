@@ -1,3 +1,18 @@
+V4.00 revision 2 (20.12.2018)
+  - fixed a bug regarding calculating the offset in tone-mapping (causing the final image shifted under certain circumstances)
+  - fixed a bug regarding mouse-sync while dragging triangles or control-points with mouse
+  - minor improvement of the smoothness of the realtime-display
+  - minor optimization to the renderer
+  - minor fix regarding caching of render-buffer
+  - new variations by Whittaker Courtney:
+    - tile_reverse
+    - sqrt_acoth
+    - sqrt_acosh
+    - sqrt_asech
+    - sqrt_atanh
+    - sqrt_asinh
+    - sqrt_acosech
+
 V4.00 (17.12.2018)
  - dramatically improved the smootheness of the real-time-editing: while dragging the mouse, the view is constantly updated,
    reflecting the change of the fractal. When you only see black editing-area, then often the fractal is changing too rapidly,
