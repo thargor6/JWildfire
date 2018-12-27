@@ -149,12 +149,9 @@ public class FlameRenderer {
     logDensityFilter = new LogDensityFilter(flameForInit, randGen);
     borderWidth =  Math.max((logDensityFilter.getNoiseFilterSize() - oversample),0) / 2;
 
-    // XXXX
-    System.err.println(" BORDERWIDTH: "+borderWidth);
-
     rasterWidth = oversample * imageWidth + 2 * borderWidth;
     rasterHeight = oversample * imageHeight + 2 * borderWidth;
-    System.err.println("RASTER: "+rasterWidth);
+
     gammaCorrectionFilter = new GammaCorrectionFilter(flameForInit, withAlpha, rasterWidth, rasterHeight);
     rasterSize = rasterWidth * rasterHeight;
   }
@@ -190,8 +187,6 @@ public class FlameRenderer {
       throw new RuntimeException(e);
     }
 
-    // XXXX
-    System.err.println("ALLOCRASTER " + rasterWidth +" "+rasterHeight);
     raster.allocRaster(flame, rasterWidth, rasterHeight, pOversample, pSampleDensity);
     return raster;
   }
