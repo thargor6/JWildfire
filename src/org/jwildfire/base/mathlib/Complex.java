@@ -150,7 +150,7 @@ public class Complex {
     return re * re + im * im;
   }
 
-  private double Mag2eps() { // imprecise for small magnitudes
+  public double Mag2eps() { // imprecise for small magnitudes
     return re * re + im * im + 1e-20;
   }
 
