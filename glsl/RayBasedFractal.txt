@@ -1,0 +1,130 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+
+out vec4 out_Color;
+
+#define t iTime
+const int NUM_ITER = 5;
+const int NUM_ITER_FBM = 5;
+
+//const int NUM_ITER = 6;
+//const int NUM_ITER_FBM = 3;
+
+void doFractal( inout vec3 r, in int iter);
+void finalOutput( inout vec4 c, in vec3 c1, in vec3 c2, in float vin, in vec3 r);
+
+float hash(float n){
+    return fract(sin(n) * 4121.15393);
+}
+
+float noise( in vec3 x ){
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+
+    f = f*f*(3.0-2.0*f);
+
+    float n = p.x + p.y*157.0 + 113.0*p.z;
+
+    return mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
+                   mix( hash(n+157.0), hash(n+158.0),f.x),f.y),
+               mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                   mix( hash(n+270.0), hash(n+271.0),f.x),f.y),f.z);
+}
+//Fbm function
+float fbm(vec3 n) {
+    float total = 0.0, amplitude = 1.0;
+    //n.x+=iTime;
+    for (int i = 0; i < NUM_ITER_FBM; i++) {
+        total += noise(n) * amplitude;
+        n += n;
+        amplitude *= 0.5;
+    }
+    return total;
+}
+mat2 r2(float a){
+    float s = sin(a);
+    float c = cos(a);
+    return mat2(s, -c, c, s);
+}
+
+
+void main( void )
+{
+	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+    uv = uv * 2.0 - 1.0;
+    float vinette = 1.-pow(length(uv*uv*uv*uv)*1.01,10.);
+   
+    vec4 outFinal = vec4(0.0);
+    
+    uv.x *= iResolution.x / iResolution.y;
+    
+    vec3 r = normalize(vec3(uv, 1.0 - dot(uv, uv)*.5));
+    r.xy *= r2(-t*.25);
+    r.yz *= r2(t*.5);
+    r.zx *= r2(t*.75);
+
+ 	doFractal(r, NUM_ITER);
+    
+    vec3 c1 = vec3(noise(r*7.),
+                   sin(fbm(r*.6)), 
+                   cos(noise(r*8.)));
+    
+    //r+=abs(.1*t+r*2.23);
+    
+    vec3 c2 = vec3(cos(fbm(r*8.+noise(r*5.5))), 
+                   cos(fbm(7.*r)), 
+                   cos(r*6. - noise(5.*r)));
+    
+    finalOutput(outFinal, c1, c2, vinette, r);
+    out_Color=outFinal;
+}
+
+void finalOutput( inout vec4 c, in vec3 c1, in vec3 c2, in float vin, in vec3 r){
+    vec3 gammaVal = vec3(1.0/1.5);
+    c =vec4(pow(mix( c2, c1, (noise(2.*r))), gammaVal) ,1.0)*vin;
+    gammaVal = vec3(2.5/1.0);
+    c = pow(sqrt(c), vec4(gammaVal, 1.0));
+}
+    
+//The Fractal
+void doFractal( inout vec3 rayIN, in int iter ){
+    for(int i = 0; i<NUM_ITER; i++){
+        
+        rayIN.xz*=r2(t*.16);
+        
+        rayIN = abs(rayIN) / dot(rayIN,rayIN);
+        rayIN.x = abs(rayIN.x+cos(t*.2)*.75);
+        rayIN.x = abs(rayIN.x-.8);
+        
+        rayIN.xy = abs(r2(-t*.1)*rayIN.xy);
+        rayIN.y = abs(rayIN.y-.5);
+        rayIN.y = abs(rayIN.y+.03+sin(t)*.25);
+        
+        rayIN.zy = abs(r2(-t*.25)*rayIN.zy);
+        rayIN.z = abs(rayIN.z-.5);
+        rayIN.z = abs(rayIN.z+.03+sin(-t)*.15);
+		
+        /*
+        rayIN.xz*=r2(t*.16);
+        
+        rayIN = abs(rayIN) / dot(rayIN,rayIN);
+        rayIN.x = abs(rayIN.x+cos(t*.2)*.75);
+        rayIN.x = abs(rayIN.x-.8);
+        
+        rayIN.xy = abs(r2(-t*.1)*rayIN.xy);
+        rayIN.y = abs(rayIN.y-.5);
+        rayIN.y = abs(rayIN.y+.03+sin(t)*.25);
+        
+        rayIN.zy = abs(r2(t*.25)*rayIN.zy);
+        rayIN.z = abs(rayIN.z-.5);
+        rayIN.z = abs(rayIN.z+.03+sin(-t)*.15);
+		*/
+    }   
+    rayIN = abs(rayIN) / float(NUM_ITER);
+}

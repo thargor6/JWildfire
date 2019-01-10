@@ -1,0 +1,58 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+
+out vec4 fragColor;
+
+/* -- originally --
+ * inspired by http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
+ * a slight(?) different 
+ * public domain
+ */
+
+// this version keeps the circle inversion at r=1,
+// but the affine transform is variable:
+// user controls the rotate and zoom,
+// translate automatically cycles through a range of values.
+
+#define N 100
+#define PI2 6.2831853070
+
+void main( void ) {
+	// map frag coord and mouse to model coord
+	vec2 v = (gl_FragCoord.xy - iResolution.xy / 2.) * 20.0 / min(iResolution.y,iResolution.x);
+	// transform parameters
+	float angle = PI2*iMouse.x;
+	float C = cos(angle);
+	float S = sin(angle);
+	vec2 shift = vec2( 0.0, 2.0+2.*sin(0.03*iTime) );
+	float zoom = 2. + 5.*iMouse.y;
+	float rad2 = 1.;
+	
+	float rsum = 0.0;
+	for ( int i = 0; i < N; i++ ){
+		// circle inversion transform
+		float rr = v.x*v.x + v.y*v.y;
+		if ( rr > rad2 ){
+			rr = rad2/rr;
+			v.x = v.x * rr;
+			v.y = v.y * rr;
+		}
+		rsum = max(rsum, rr);
+
+		
+		// affine transform: rotate, scale, and translate
+		v = vec2( C*v.x-S*v.y, S*v.x+C*v.y ) * zoom + shift;
+	}
+	
+	float col = rsum*rsum * (500.0 / float(N) / rad2);
+
+
+	fragColor = vec4( cos(col*1.8), cos(col*1.9), cos(col*2.2), 1.0 );
+
+}

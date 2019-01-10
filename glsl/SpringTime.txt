@@ -1,0 +1,29 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+
+out vec4 f;
+
+// yeah, spring is due
+//
+// For-fun entry for the 2 Tweets Challenge
+// (c) stefan berke
+// 
+// credits to Kali for the magic formula
+// can not stop using it...
+//
+void main( void )
+{
+	float t = iTime/11.;
+    vec2 uv = (.2 + .05 * sin(t*1.1)) * gl_FragCoord.xy/ iResolution.y + .2 * vec2(2.2+1.*sin(t), .4+.4*cos(t*.9));
+    
+    for (int i=0; i<11; ++i)
+        uv = abs(uv) / dot(uv,uv) - vec2(.81-.1*uv.y);
+    
+	f = vec4(uv*uv, uv.y-uv.x, 1.);
+}

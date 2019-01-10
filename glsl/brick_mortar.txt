@@ -1,0 +1,139 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+uniform vec4 iChannel0;
+
+out vec4 fragColor;
+
+
+
+#define PI 3.14159265359
+
+  
+
+//Anti-aliased coordinate system grid
+
+float coordinateGrid(vec2 coords) {
+
+  //These colors are unused and irrelevant in current implementation.
+
+  vec3 axesColor = vec3(0.0, 0.0, 1.0);
+
+  float axesThickness = 0.015;
+
+
+
+  vec3 gridColor = vec3(0.5);
+
+  float gridThickness = 0.008;
+
+
+
+  float retrn = 0.0; //
+
+
+
+  //Draw grid lines
+
+  const float tickWidth = 0.1;
+
+  for(float i=-2.0; i<2.0; i+=tickWidth) {
+
+      // "i" is the line coordinate.
+
+      retrn += 1.0 - smoothstep(0.0, gridThickness, abs(coords.x - i));
+
+      retrn += 1.0 - smoothstep(0.0, gridThickness, abs(coords.y - i));
+
+    }
+
+
+
+  //Draw the axes
+
+  retrn += 1.0 - smoothstep(0.001, axesThickness, abs(coords.x));
+
+  retrn += 1.0 - smoothstep(0.001, axesThickness, abs(coords.y));
+
+
+
+  return retrn;
+
+}
+
+
+
+vec3 ring(vec2 coords, vec2 center, float radius, float thickness, vec3 bgColor) {
+
+	float calculatedRadius = length(coords - center);
+
+	float innerRadius = radius - thickness;
+
+	float blur = 0.005;
+
+	vec3 ringColor = vec3(176.0, 255.0, 74.0)/255.0;
+
+
+
+	float pctOuterCircle = 1.0 - smoothstep(radius - blur, radius + blur, calculatedRadius);
+
+	vec3 outerCirclePaint = mix(bgColor, ringColor, pctOuterCircle);
+
+	
+
+	float pctInnerCircle = 1.0 - smoothstep(innerRadius - blur, innerRadius + blur, calculatedRadius);
+
+	vec3 innerCirclePaint = mix(outerCirclePaint, bgColor, pctInnerCircle);
+
+
+
+	return innerCirclePaint;
+
+}
+
+
+
+void main(void) {
+
+
+
+  vec2 defaultCoords = vec2(gl_FragCoord.xy/iResolution.xy);
+
+  vec2 viewportCenterCoords = 2.0 * vec2(gl_FragCoord.xy - iResolution.xy/2.0) / iResolution.y;
+
+    
+
+  vec3 bgColor = vec3(0.0, 0.246, 0.765);
+
+  vec3 gridColor = vec3(0.0, 0.634, 0.876);
+
+  vec3 pixel = mix(bgColor, gridColor, coordinateGrid(viewportCenterCoords));
+
+
+
+  // --------------------------------------
+
+  // ------------- Start ------------------
+
+  
+
+	pixel = ring(viewportCenterCoords, vec2(0.0,0.0), 0.5, 0.1, pixel);
+
+  
+
+  // -------------  End  ------------------
+
+  // --------------------------------------
+
+  
+
+  
+
+  gl_FragColor = vec4(pixel, 1.0);
+
+}
