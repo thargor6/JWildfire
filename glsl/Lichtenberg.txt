@@ -1,0 +1,142 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+uniform sampler2D iChannel0;
+
+out vec4 out_Color;
+
+#define R iResolution
+
+int IHash(int a){
+	a = (a ^ 61) ^ (a >> 16);
+	a = a + (a << 3);
+	a = a ^ (a >> 4);
+	a = a * 0x27d4eb2d;
+	a = a ^ (a >> 15);
+	return a;
+}
+
+float Hash(int a){
+	a = (a ^ 61) ^ (a >> 16);
+	a = a + (a << 3);
+	a = a ^ (a >> 4);
+	a = a * 0x27d4eb2d;
+	a = a ^ (a >> 15);
+	return float(a) / float(0x7FFFFFFF);
+}
+vec4 rand4(int seed){
+    return vec4(Hash(seed^0x348593),
+                Hash(seed^0x8593D5),
+                Hash(seed^0x625384),
+                Hash(seed^0x253625));
+}
+vec3 rand3(int seed){
+    return vec3(Hash(seed^0x348593),
+                Hash(seed^0x8593D5),
+                Hash(seed^0x625384));
+}
+vec2 rand2(int seed){
+    return vec2(Hash(seed^0x348593),
+                Hash(seed^0x8593D5));
+}
+
+
+vec2 randn(vec2 randuniform){
+    vec2 r = randuniform;
+    r.x = sqrt(-2.*log(1e-9+abs(r.x)));
+    r.y *= 6.28318;
+    r = r.x*vec2(cos(r.y),sin(r.y));
+    return r;
+}
+vec2 randc(vec3 randuniform){
+    float t = 6.28318*randuniform.x;
+	float u = randuniform.y+randuniform.z;
+	float r = u>1.?2.-u:u;
+	return vec2(r*cos(t), r*sin(t));
+}
+float lineDist(vec2 a, vec2 b,vec2 uv){
+    return length(uv-(a+normalize(b-a)*min(length(b-a),max(0.,dot(normalize(b-a),(uv-a))))));
+}
+/*fc dc 96 d4 8a 96 92 e9 a0 46 d5 6e 13 cd 20 61 
+b4 95 af a9 73 ec 81 59 58 78 5b 6d ff d2 df 70 
+6a 46 ce 5e 85 49 6f 21 6f 66 cd 8c 96 86 0a 71 
+62 02 60 33 9d 99 ba ff 52 a5 c8 f6 
+db 33 c8 93 40 4b 5d a8 d7 da ef 8c 59 90 7b d8 
+e9 d8 c0 5b    */
+
+void main( void )
+{
+    vec2 uv = (gl_FragCoord.xy*2.-R.xy)/R.y;
+	float ds = 1e4;
+    for (int q = 0; q < 1; q++){
+        float f = iTime+0x1F55FAAF*(q+1);
+        int seed = 3;//+f/100;
+
+        vec2 a = vec2(0,-1);
+        vec2 b = vec2(0,-.7)+.4*randn(rand2(seed^0x8593F4D5))/8.;
+        
+        //vec2 a = vec2(0);
+        //vec2 b = .05*normalize(randc(rand3(seed)));//+vec2(0,float(f%100)/400.);
+		vec2 c,d,e;
+        for(int k=0; k<30;k++){
+            int v = (200/(k+1));
+            //seed += f/v;
+            float l = length(b-a);
+
+
+            c = (a+b)/2.+l*randn(rand2(seed^0x8593F4D5))/8.;
+            d = b*1.9-a*.9+l*randn(rand2(seed^0x93D35DE5))/4.;
+            e = b*1.9-a*.9+l*randn(rand2(seed^0xa8d7daef))/4.;
+
+            //d.y += float(iTime%v)/float(v)*l/10.;
+            //c.y += float(iTime%v)/float(v)*l/10.;
+			vec4 j = 1.+.5*rand4(seed^IHash((iTime*0x5da8d7da)^q));
+            float d0 = lineDist(a,c,uv)*j.x;
+            float d1 = lineDist(c,b,uv)*j.y;
+            float d2 = lineDist(b,d,uv)*j.z;
+            float d3 = lineDist(b,e,uv)*j.w;
+            if(d0<min(d1,min(d2,d3))){
+                b=c;
+                seed = IHash(seed^0x7d964ba9);
+            } else if(d1<min(d2,d3)){
+                a=c;
+                seed = IHash(seed^0xb7798235);
+            } else if(d2<d3){
+                a=b;
+                b=d;
+                seed = IHash(seed^0x5b2a74f5);
+            } else {
+                a=b;
+                b=e;
+                seed = IHash(seed^0xca306058);
+                
+            }
+
+            /*float r = Hash(seed);
+
+            if(r<.3){
+
+            } else if (r<.66) {
+
+            } else {
+
+            }*/
+        }
+        	/*ds = min(ds,lineDist(a,c,uv));
+        	ds = min(ds,lineDist(c,b,uv));
+        	ds = min(ds,lineDist(b,d,uv));
+        	ds = min(ds,lineDist(b,e,uv));*/
+        ds = min(ds,lineDist(a,b,uv));
+
+
+
+    }
+    
+    out_Color = max(out_Color,vec4(max(0.,1.-ds*R.y/2.)));
+//    out_Color +=texture(iChannel0, gl_FragCoord.xy/R.xy);
+}

@@ -1,0 +1,70 @@
+#version 150
+
+in vec3 out_colour;
+in vec2 pass_textureCoordinates;
+
+uniform vec2 iResolution;
+uniform float iTime;
+uniform vec4 iMouse;
+uniform int iFrame;
+uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
+uniform sampler2D iChannel2;
+uniform sampler2D iChannel3;
+uniform sampler2D iChannel4;
+
+
+out vec4 fragColor;
+
+
+void main(void )
+{
+
+
+
+	vec2 vUv = (2.* gl_FragCoord.xy / iResolution.xy -1.0 ); // + iMouse / 4.0;
+	vUv.x *= iResolution.x/iResolution.y;
+
+    float feed =  0.083;
+    float kill =  0.073;
+    vec2 brush = vec2(0.5,0.5);
+    
+//float feed = vUv.y * 0.083;
+//float kill = vUv.x * 0.073;
+ 
+            
+            vec2 texel = vec2(1.0/iResolution.x, 1.0/iResolution.y);
+            float step_x = 2.0/iResolution.x;
+            float step_y = 2.0/iResolution.y;
+            
+             if(brush.x < -5.0)
+             {
+                    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                    return;
+             }
+                
+
+                
+                vec2 uv = texture2D(iChannel0, vUv).rg;
+                vec2 uv0 = texture2D(iChannel0, vUv+vec2(-step_x, 0.0)).rg;
+                vec2 uv1 = texture2D(iChannel0, vUv+vec2(step_x, 0.0)).rg;
+                vec2 uv2 = texture2D(iChannel0, vUv+vec2(0.0, -step_y)).rg;
+                vec2 uv3 = texture2D(iChannel0, vUv+vec2(0.0, step_y)).rg;
+                
+                vec2 lapl = (uv0 + uv1 + uv2 + uv3 - 4.0*uv);//10485.76;
+                float du = /*0.00002*/0.2097*lapl.r - uv.r*uv.g*uv.g + feed*(1.0 - uv.r);
+                float dv = /*0.00001*/0.105*lapl.g + uv.r*uv.g*uv.g - (feed+kill)*uv.g;
+                vec2 dst = uv + iTime*vec2(du, dv);
+                
+                if(brush.x > 0.0)
+                {
+                    vec2 diff = (vUv - brush)/texel;
+                    float dist = dot(diff, diff);
+                    if(dist < 5.0)
+                        dst.g = 0.9;
+                }
+                
+                fragColor = vec4(dst.r, dst.g, 0.0, 1.0);
+
+
+}	
