@@ -45,9 +45,11 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
     }
     len = i;
 
-    while (offset[0] < len) {
+    boolean ok = true;
+    while (offset[0] < len && ok) {
       i = 0;
       ka = kz = -1;
+      ok = false;
       while (i < len) {
         if (form[i] == '(')
           ka = i;
@@ -56,6 +58,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           form[ka] = ' ';
           form[kz] = ' ';
           offset[ka] = kz - ka + 1;
+          ok = true;
           j = ka + 1;
           while ((form[j] != '+') && (form[j] != '-') && (form[j] != '*') && (form[j] != 0x2f)
                   && (form[j] != '^'))
@@ -169,7 +172,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           double xa = hx * sx - hy * sy;
           double ya = hx * sy + sx * hy;
           sx = xa;
-          sx = ya;
+          sy = ya;
         }
         push(sx, sy);
         break;
@@ -183,7 +186,7 @@ public abstract class AbstractFractFormulaWFFunc extends AbstractFractWFFunc {
           double xa = (sx * hx + sy * hy) / da;
           double ya = (sy * hx - sx * hy) / da;
           sx = xa;
-          sx = ya;
+          sy = ya;
         }
         push(sx, sy);
         break;
