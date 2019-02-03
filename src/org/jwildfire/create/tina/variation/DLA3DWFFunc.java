@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
@@ -590,10 +590,10 @@ public class DLA3DWFFunc extends VariationFunc {
 
   private int _max_iter;
   private AbstractRandomGenerator _randGen;
-  private DoubleWrapper sinPhi = new DoubleWrapper();
-  private DoubleWrapper cosPhi = new DoubleWrapper();
-  private DoubleWrapper sinTheta = new DoubleWrapper();
-  private DoubleWrapper cosTheta = new DoubleWrapper();
+  private DoubleWrapperWF sinPhi = new DoubleWrapperWF();
+  private DoubleWrapperWF cosPhi = new DoubleWrapperWF();
+  private DoubleWrapperWF sinTheta = new DoubleWrapperWF();
+  private DoubleWrapperWF cosTheta = new DoubleWrapperWF();
   private List<DLA3DWFFuncPoint> _points;
 
   @Override

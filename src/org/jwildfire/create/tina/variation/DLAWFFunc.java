@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
@@ -102,8 +102,8 @@ public class DLAWFFunc extends VariationFunc {
 
   private static Map<String, List<Point>> cache = new HashMap<String, List<Point>>();
 
-  private DoubleWrapper sina = new DoubleWrapper();
-  private DoubleWrapper cosa = new DoubleWrapper();
+  private DoubleWrapperWF sina = new DoubleWrapperWF();
+  private DoubleWrapperWF cosa = new DoubleWrapperWF();
   private List<Point> _points;
 
   private List<Point> getPoints() {

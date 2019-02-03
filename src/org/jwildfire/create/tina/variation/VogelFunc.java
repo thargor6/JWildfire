@@ -1,6 +1,6 @@
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -16,8 +16,8 @@ public class VogelFunc extends VariationFunc {
   private final double M_PHI = 1.61803398874989484820;
   private final double M_2PI_PHI2 = M_2PI / (M_PHI * M_PHI);
 
-  private final DoubleWrapper sina = new DoubleWrapper();
-  private final DoubleWrapper cosa = new DoubleWrapper();
+  private final DoubleWrapperWF sina = new DoubleWrapperWF();
+  private final DoubleWrapperWF cosa = new DoubleWrapperWF();
 
   private int n = 20;
   private double scale = 1.;

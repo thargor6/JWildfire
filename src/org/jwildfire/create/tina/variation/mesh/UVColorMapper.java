@@ -22,10 +22,12 @@ import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
 
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-public class UVColorMapper {
+public class UVColorMapper implements Serializable {
+  private static final long serialVersionUID = 1L;
   private RenderColor[] uvColors;
   private Map<RenderColor, Double> uvIdxMap = new HashMap<RenderColor, Double>();
 
