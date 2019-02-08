@@ -160,13 +160,22 @@ public class JWildfire extends JApplet {
             }
             welcomeInternalFrame.toFront();
 */
+      try {
+        getJFrame(WelcomeFrame.class);
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
 
+/*
       TipOfTheDayFrame tipOfTheDayFrame = getJFrame(TipOfTheDayFrame.class);
       if (!tipOfTheDayFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
         tipOfTheDayFrame.setVisible(true);
       }
       tipOfTheDayFrame.toFront();
-      try {
+*/
+      
+     try {
         getJFrame(ListOfChangesFrame.class).initChangesPane();
       }
       catch (Exception ex) {
@@ -283,6 +292,13 @@ public class JWildfire extends JApplet {
         catch (Exception ex) {
           ex.printStackTrace();
         }
+        
+        TipOfTheDayFrame tipOfTheDayFrame = getJFrame(TipOfTheDayFrame.class);
+        if (!tipOfTheDayFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
+          tipOfTheDayFrame.setVisible(true);
+        }
+        tipOfTheDayFrame.toFront();
+
       }
     });
   }

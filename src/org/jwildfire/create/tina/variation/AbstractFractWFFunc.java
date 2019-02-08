@@ -63,6 +63,7 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
   protected double offsety = 0.0;
   protected double offsetz = 0.0;
   protected int max_clip_iter = 3;
+  protected int bb_max_clip_iter = 250;
   protected int buddhabrot_mode = 0;
   protected int buddhabrot_min_iter = 7;
   protected double z_fill = 0.0;
@@ -141,13 +142,17 @@ public abstract class AbstractFractWFFunc extends VariationFunc {
 
   public void transformBuddhabrot(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     Iterator iterator = getIterator();
-    double x0, y0;
+    double x0=0, y0 = 0;
     if (chooseNewPoint) {
-      while (true) {
+      for (int i = 0; i < bb_max_clip_iter; i++) {
         x0 = (xmax - xmin) * pContext.random() + xmin;
         y0 = (ymax - ymin) * pContext.random() + ymin;
         if (iterator.preBuddhaIterate(x0, y0, max_iter)) {
           break;
+        }
+        if (i == bb_max_clip_iter - 1) {
+          pVarTP.doHide = true;
+          return;
         }
       }
       chooseNewPoint = false;

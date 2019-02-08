@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.variation.plot;
 
 
 import csk.taprats.geometry.*;
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -54,8 +54,8 @@ public class DrawFunc extends VariationFunc {
     return pContext.random(RAND_MAX);
   }
 
-  private DoubleWrapper sina = new DoubleWrapper();
-  private DoubleWrapper cosa = new DoubleWrapper();
+  private DoubleWrapperWF sina = new DoubleWrapperWF();
+  private DoubleWrapperWF cosa = new DoubleWrapperWF();
 
 
   public Point plotBlur(FlameTransformationContext pContext, double x1, double y1, double pAmount) {

@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -135,7 +135,7 @@ public class Julia3DFunc extends VariationFunc {
   }
 
   private double absPower, cPower;
-  private DoubleWrapper sina = new DoubleWrapper(), cosa = new DoubleWrapper();
+  private DoubleWrapperWF sina = new DoubleWrapperWF(), cosa = new DoubleWrapperWF();
 
   @Override
   public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {

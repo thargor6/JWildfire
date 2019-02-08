@@ -88,7 +88,7 @@ public class ImagePanel extends JPanel {
   }
 
   public int getImageHeight() {
-    return simpleImage != null ? simpleImage.getImageWidth() : 0;
+    return simpleImage != null ? simpleImage.getImageHeight() : 0;
   }
 
   public SimpleImage getImage() {

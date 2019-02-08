@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
@@ -30,10 +30,10 @@ public class Blur3DFunc extends SimpleVariationFunc {
   private double gauss_rnd[] = new double[4];
   private int gauss_N;
 
-  private DoubleWrapper sina = new DoubleWrapper();
-  private DoubleWrapper cosa = new DoubleWrapper();
-  private DoubleWrapper sinb = new DoubleWrapper();
-  private DoubleWrapper cosb = new DoubleWrapper();
+  private DoubleWrapperWF sina = new DoubleWrapperWF();
+  private DoubleWrapperWF cosa = new DoubleWrapperWF();
+  private DoubleWrapperWF sinb = new DoubleWrapperWF();
+  private DoubleWrapperWF cosb = new DoubleWrapperWF();
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {

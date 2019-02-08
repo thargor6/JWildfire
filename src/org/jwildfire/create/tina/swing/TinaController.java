@@ -2846,6 +2846,14 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
     else {
       getCurrLayer().getXForms().remove(getCurrXForm());
+      // adjust xaos
+      for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
+        XForm xFormi = getCurrLayer().getXForms().get(i);
+        for (int j = row; j < getCurrLayer().getXForms().size(); j++) {
+          xFormi.getModifiedWeights()[j] = xFormi.getModifiedWeights()[j+1];
+        }
+        xFormi.getModifiedWeights()[getCurrLayer().getXForms().size()] = 1;
+      }
     }
     gridRefreshing = true;
     try {

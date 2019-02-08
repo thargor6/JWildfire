@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.variation;
 
-import odk.lang.DoubleWrapper;
+import org.jwildfire.base.mathlib.DoubleWrapperWF;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.base.mathlib.VecMathLib.Matrix3D;
@@ -31,10 +31,10 @@ import static org.jwildfire.base.mathlib.MathLib.M_PI;
 import static org.jwildfire.base.mathlib.MathLib.sinAndCos;
 
 public class DLA3DWFFuncIterator {
-  private DoubleWrapper sinPhi = new DoubleWrapper();
-  private DoubleWrapper cosPhi = new DoubleWrapper();
-  private DoubleWrapper sinTheta = new DoubleWrapper();
-  private DoubleWrapper cosTheta = new DoubleWrapper();
+  private DoubleWrapperWF sinPhi = new DoubleWrapperWF();
+  private DoubleWrapperWF cosPhi = new DoubleWrapperWF();
+  private DoubleWrapperWF sinTheta = new DoubleWrapperWF();
+  private DoubleWrapperWF cosTheta = new DoubleWrapperWF();
 
   private final int thread_count;
   private double innerRadius;
