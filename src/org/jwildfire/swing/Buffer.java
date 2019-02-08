@@ -133,13 +133,18 @@ public class Buffer {
       frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
       frame.setVisible(true);
-      frame.setContentPane(pnl);
+      frame.add(pnl);
       frame.pack();
 
 
 
       frame.setLocation(30, 20);
-      frame.setSize(panelWidth +  frame.getInsets().left +  frame.getInsets().right, (int)((double)panelWidth * (double)imageHeight / (double)imageWidth+0.5) +  frame.getInsets().top +  frame.getInsets().bottom);
+      
+      final int ALT_HINSET = 5 + 5;  // left + right insets to use if actual ones not set
+      final int ALT_VINSET = 25 + 5;  // top + bottom insets to use if actual ones not set
+      final int hInsets = (frame.getInsets().left == 0) ? ALT_HINSET : frame.getInsets().left +  frame.getInsets().right;
+      final int vInsets = ((frame.getInsets().top == 0) ? ALT_VINSET : frame.getInsets().top +  frame.getInsets().bottom) + getMainJMenuBar().getHeight();
+      frame.setSize(panelWidth + hInsets, (int)((double)panelWidth * (double)imageHeight / (double)imageWidth+0.5) +  vInsets);
 
       //pRootFrame.add(frame, null);
       frame.addComponentListener(new ComponentListener() {
@@ -158,7 +163,7 @@ public class Buffer {
           Component c = (Component) evt.getSource();
           Dimension newSize = c.getSize();
           int imgWidth = img.getImageWidth();
-          int windowWidth = newSize.width;
+          int windowWidth = newSize.width - hInsets;
           int newWidth;
           if (Math.abs(windowWidth - imgWidth) < imgWidth * 0.03)
             newWidth = imgWidth;
