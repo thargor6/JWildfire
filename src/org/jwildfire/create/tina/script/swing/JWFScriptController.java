@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.script.swing;
 import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -406,6 +407,7 @@ public class JWFScriptController {
     sb.append("import org.jwildfire.create.tina.script.ScriptRunnerEnvironment;\n");
     sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
     sb.append("import org.jwildfire.create.tina.base.Layer;\n");
+    sb.append("import org.jwildfire.create.tina.base.DrawMode;\n");
     sb.append("import org.jwildfire.create.tina.variation.Variation;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFunc;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFuncList;\n");
@@ -429,6 +431,10 @@ public class JWFScriptController {
     sb.append("  flame.setPixelsPerUnit(" + Tools.doubleToString(pFlame.getPixelsPerUnit()) + ");\n");
     sb.append("  flame.setCamZoom(" + Tools.doubleToString(pFlame.getCamZoom()) + ");\n");
     sb.append("  flame.setBGTransparency(" + pFlame.isBGTransparency() + ");\n");
+    sb.append("  // Uncomment setBrightness or setGamma if essential for the flame\n");
+    sb.append("  // flame.setBrightness(" + pFlame.getBrightness() + ");\n");
+    sb.append("  // flame.setGamma(" + pFlame.getGamma() + ");\n");
+    sb.append("  flame.setPreserveZ(" + pFlame.isPreserveZ() + ");\n");
     switch (pFlame.getPostSymmetryType()) {
       case POINT:
         sb.append("  flame.setPostSymmetryType(org.jwildfire.create.tina.base.PostSymmetryType." + pFlame.getPostSymmetryType().toString() + ");\n");
@@ -578,6 +584,18 @@ public class JWFScriptController {
     pSB.append("      xForm.setWeight(" + Tools.doubleToString(pXForm.getWeight()) + ");\n");
     pSB.append("      xForm.setColor(" + Tools.doubleToString(pXForm.getColor()) + ");\n");
     pSB.append("      xForm.setColorSymmetry(" + Tools.doubleToString(pXForm.getColorSymmetry()) + ");\n");
+    switch (pXForm.getDrawMode()) {
+    case NORMAL:
+      pSB.append("      xForm.setDrawMode(DrawMode.NORMAL);\n");
+      break;
+    case HIDDEN:
+      pSB.append("      xForm.setDrawMode(DrawMode.HIDDEN);\n");
+      break;
+    case OPAQUE:
+      pSB.append("      xForm.setDrawMode(DrawMode.OPAQUE);\n");
+      pSB.append("      xForm.setOpacity(" + Tools.doubleToString(pXForm.getOpacity()) + ");\n");
+      break;
+    }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
     pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");
     pSB.append("\n");
