@@ -423,6 +423,8 @@ public class JWFScriptController {
     sb.append("  flame.getLayers().clear(); // get rid of the default layer because we create all layers by ourselves\n");
     sb.append("  // set the flame main attributes\n");
     sb.append("  flame.setCamRoll(" + Tools.doubleToString(pFlame.getCamRoll()) + ");\n");
+    sb.append("  flame.setCentreX(" + Tools.doubleToString(pFlame.getCentreX()) + ");\n");
+    sb.append("  flame.setCentreY(" + Tools.doubleToString(pFlame.getCentreY()) + ");\n");
     sb.append("  flame.setCamPitch(" + Tools.doubleToString(pFlame.getCamPitch()) + ");\n");
     sb.append("  flame.setCamYaw(" + Tools.doubleToString(pFlame.getCamYaw()) + ");\n");
     sb.append("  flame.setCamPerspective(" + Tools.doubleToString(pFlame.getCamPerspective()) + ");\n");
