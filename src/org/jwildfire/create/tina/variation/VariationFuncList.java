@@ -712,6 +712,10 @@ public class VariationFuncList {
     registerVariationFunc(SpligonFunc.class);
     registerVariationFunc(HenonFunc.class);
     registerVariationFunc(PlusRecipFunc.class);
+    registerVariationFunc(TQMirrorFunc.class);
+		registerVariationFunc(DCCarpet3DFunc.class);
+		registerVariationFunc(ConeFunc.class);
+		registerVariationFunc(Gridout3DFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
