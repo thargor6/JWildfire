@@ -17,6 +17,12 @@ public class vec2
     	this.y=Y;
     }
     
+    public vec2(vec2 v)
+    {
+    	this.x=v.x;
+    	this.y=v.y;
+    }
+    
     public vec2 plus(double b)
     {
     	vec2 vret=new vec2(0.0);
@@ -26,6 +32,22 @@ public class vec2
     }
     
     public vec2 plus(vec2 b)
+    {
+    	vec2 vret=new vec2(0.0);
+    	vret.x=x+b.x;
+    	vret.y=y+b.y;
+    	return vret;
+    }
+    
+    public vec2 add(double b)
+    {
+    	vec2 vret=new vec2(0.0);
+    	vret.x=x+b;
+    	vret.y=y+b;
+    	return vret;
+    }
+    
+    public vec2 add(vec2 b)
     {
     	vec2 vret=new vec2(0.0);
     	vret.x=x+b.x;

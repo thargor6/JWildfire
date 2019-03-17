@@ -44,6 +44,14 @@ public  class vec3
 		copyColor(v.x,v.y,val);
 	}
 	
+	public vec3 plus( double d) {
+		return new vec3( x + d, y + d, z + d );
+	}
+	
+	public vec3 plus( vec3 vec) {
+		return new vec3( x + vec.x, y + vec.y, z + vec.z );
+	}
+	
 	public vec3 add( double d) {
 		return new vec3( x + d, y + d, z + d );
 	}

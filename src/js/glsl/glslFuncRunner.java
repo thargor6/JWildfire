@@ -354,57 +354,75 @@ public class glslFuncRunner {
 		tval = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
 		return tval * tval * (3.0 - 2.0 * tval);
 	}
-
+	
 	public   vec2 smoothstep(double e0,double  e1, vec2 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec2 vret=new vec2(0.0);
-		vret.x =	x.x<e0?0.0:(x.x>=e1)?1.0:0.0;
-		vret.y =	x.y<e0?0.0:(x.y>=e1)?1.0:0.0;
+/*		vret.x =	x.x<e0?0.0:(x.x>=e1)?1.0:0.0;
+		vret.y =	x.y<e0?0.0:(x.y>=e1)?1.0:0.0;*/
+		vret.x=smoothstep(e0,e1,x.x);
+		vret.y=smoothstep(e0,e1,x.y);
 		return vret;
 	}
 	
 	public   vec2 smoothstep(vec2 e0,vec2 e1, vec2 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec2 vret=new vec2(0.0);
-		vret.x =	x.x<e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
-		vret.y =	x.y<e0.y?0.0:(x.y>=e1.y)?1.0:0.0;
+/*		vret.x =	x.x<e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
+		vret.y =	x.y<e0.y?0.0:(x.y>=e1.y)?1.0:0.0;*/
+		vret.x =smoothstep(e0.x,e1.x,x.x);
+		vret.y =smoothstep(e0.y,e1.y,x.y);
 		return vret;
 	}
 	public   vec3 smoothstep(double e0,double  e1, vec3 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec3 vret=new vec3(0.0);
-		vret.x =	x.x<=e0?0.0:(x.x>=e1)?1.0:0.0;
+/*		vret.x =	x.x<=e0?0.0:(x.x>=e1)?1.0:0.0;
 		vret.y =	x.y<=e0?0.0:(x.y>=e1)?1.0:0.0;
-		vret.z =	x.z<=e0?0.0:(x.z>=e1)?1.0:0.0;
+		vret.z =	x.z<=e0?0.0:(x.z>=e1)?1.0:0.0;*/
+		vret.x=smoothstep(e0,e1,x.x);
+		vret.y=smoothstep(e0,e1,x.y);
+		vret.z=smoothstep(e0,e1,x.z);
 		return vret;
 	}
 	
 	public   vec3 smoothstep(vec3 e0,vec3 e1, vec3 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec3 vret=new vec3(0.0);
-		vret.x =	x.x<=e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
+/*		vret.x =	x.x<=e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
 		vret.y =	x.y<=e0.y?0.0:(x.y>=e1.y)?1.0:0.0;
-		vret.z =	x.z<=e0.z?0.0:(x.z>=e1.z)?1.0:0.0;
+		vret.z =	x.z<=e0.z?0.0:(x.z>=e1.z)?1.0:0.0;*/
+		vret.x=smoothstep(e0.x,e1.x,x.x);
+		vret.y=smoothstep(e0.y,e1.y,x.y);
+		vret.z=smoothstep(e0.z,e1.z,x.z);
 		return vret;
 	}
 
 	public   vec4 smoothstep(double e0,double e1, vec4 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec4 vret=new vec4(0.0);
-		vret.x =	x.x<=e0?0.0:(x.x>=e1)?1.0:0.0;
+/*		vret.x =	x.x<=e0?0.0:(x.x>=e1)?1.0:0.0;
 		vret.y =	x.y<=e0?0.0:(x.y>=e1)?1.0:0.0;
 		vret.z =	x.z<=e0?0.0:(x.z>=e1)?1.0:0.0;
-		vret.z =	x.w<=e0?0.0:(x.w>=e1)?1.0:0.0;
+		vret.w =	x.w<=e0?0.0:(x.w>=e1)?1.0:0.0;*/
+		vret.x=smoothstep(e0,e1,x.x);
+		vret.y=smoothstep(e0,e1,x.y);
+		vret.z=smoothstep(e0,e1,x.z);
+		vret.w=smoothstep(e0,e1,x.w);
 		return vret;
 	}
 	
 	public   vec4 smoothstep(vec4 e0,vec4 e1, vec4 x) // v2 smoothstep(v2 e0,v2 e1,v2 x)   x<e0?0.0:1.0
 	{
 		vec4 vret=new vec4(0.0);
-		vret.x =	x.x<=e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
+/*		vret.x =	x.x<=e0.x?0.0:(x.x>=e1.x)?1.0:0.0;
 		vret.y =	x.y<=e0.y?0.0:(x.y>=e1.y)?1.0:0.0;
 		vret.z =	x.z<=e0.z?0.0:(x.z>=e1.z)?1.0:0.0;
-		vret.z =	x.w<=e0.w?0.0:(x.w>=e1.w)?1.0:0.0;
+		vret.w =	x.w<=e0.w?0.0:(x.w>=e1.w)?1.0:0.0;*/
+		vret.x=smoothstep(e0.x,e1.x,x.x);
+		vret.y=smoothstep(e0.y,e1.y,x.y);
+		vret.z=smoothstep(e0.z,e1.z,x.z);
+		vret.w=smoothstep(e0.w,e1.w,x.w);
 		return vret;
 	}
 
@@ -803,6 +821,33 @@ public class glslFuncRunner {
 		return vret;
 	}
 	
+	public    vec2 min(vec2 x, double y)
+	{
+		vec2 vret=new vec2(0.0);
+		vret.x=(y<x.x)?y:x.x;
+		vret.y=(y<x.y)?y:x.y;
+		return vret;
+	}
+	
+	public    vec3 min(vec3 x, double y)
+	{
+		vec3 vret=new vec3(0.0);
+		vret.x=(y<x.x)?y:x.x;
+		vret.y=(y<x.y)?y:x.y;
+		vret.z=(y<x.z)?y:x.z;
+		return vret;
+	}
+
+	public    vec4 min(vec4 x, double y)
+	{
+		vec4 vret=new vec4(0.0);
+		vret.x=(y<x.x)?y:x.x;
+		vret.y=(y<x.y)?y:x.y;
+		vret.z=(y<x.z)?y:x.z;
+		vret.w=(y<x.w)?y:x.w;
+		return vret;
+	}
+	
 	public   double  max(double x,double y)
 	{
 		return (x<y)?y:x;
@@ -832,6 +877,33 @@ public class glslFuncRunner {
 		vret.y=(x.y<y.y)?y.y:x.y;
 		vret.z=(x.z<y.z)?y.z:x.z;
 		vret.w=(x.w<y.w)?y.w:x.w;
+		return vret;
+	}
+
+	public    vec2 max(vec2 x,double y)
+	{
+		vec2 vret=new vec2(0.0);
+		vret.x=(x.x<y)?y:x.x;
+		vret.y=(x.y<y)?y:x.y;
+		return vret;
+	}
+	
+	public    vec3 max(vec3 x,double y)
+	{
+		vec3 vret=new vec3(0.0);
+		vret.x=(x.x<y)?y:x.x;
+		vret.y=(x.y<y)?y:x.y;
+		vret.z=(x.z<y)?y:x.z;
+		return vret;
+	}
+	
+	public    vec4 max(vec4 x,double y)
+	{
+		vec4 vret=new vec4(0.0);
+		vret.x=(x.x<y)?y:x.x;
+		vret.y=(x.y<y)?y:x.y;
+		vret.z=(x.z<y)?y:x.z;
+		vret.w=(x.w<y)?y:x.w;
 		return vret;
 	}
 
@@ -1133,7 +1205,7 @@ public class glslFuncRunner {
 		return new vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 	}
 
-	//  Function from IÃ±igo Quiles
+	//  Function from Iñigo Quiles
 	//  https://www.shadertoy.com/view/MsS3Wc
 	public   vec3 hsb2rgb( vec3 c )
 	{
@@ -1253,6 +1325,214 @@ public vec3 app (vec3 v, double k, mat3 m)
 			 v= abs(m1.times(v).division(dot(v,v)).multiply(0.5).minus(0.5)).multiply(2.0).minus(1.0); 
 	    }return v;
 	}
+
+/*double cosh(double val) {
+	  double tmp = Math.exp(val);
+	  return (tmp + 1.0 / tmp) / 2.0;
+	}
+	 
+	double tanh(double val) {
+	  double tmp = Math.exp(val);
+	  return (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+	}
+	 
+	double sinh(double val) {
+	  double tmp = Math.exp(val);
+	  return (tmp - 1.0 / tmp) / 2.0;
+	}
+
+	vec2 cosh(vec2 val) {
+	  vec2 tmp = exp(val);
+	  return(tmp + 1.0 / tmp) / 2.0;
+	}
+	 
+	vec2 tanh(vec2 val) {
+	  vec2 tmp = Math.exp(val);
+	  return (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+	}
+	 
+	vec2 sinh(vec2 val) {
+	  vec2 tmp = exp(val);
+	  return (tmp - 1.0 / tmp) / 2.0;
+	}
+
+	vec2 c_one() { return new vec2(1., 0.); }
+	vec2 c_i() { return new vec2(0., 1.); }
+
+	double arg(vec2 c) {
+	  return atan(c.y, c.x);
+	}
+
+	vec2 c_conj(vec2 c) {
+	  return new vec2(c.x, -c.y);
+	}
+
+	vec2 c_from_polar(double r, double theta) {
+	  return new vec2(r * cos(theta), r * sin(theta));
+	}
+
+	vec2 c_to_polar(vec2 c) {
+	  return new vec2(length(c), atan(c.y, c.x));
+	}
+
+	/// Computes `e^(c)`, where `e` is the base of the natural logarithm.
+	vec2 c_exp(vec2 c) {
+	  return c_from_polar(Math.exp(c.x), c.y);
+	}
+
+
+	/// Raises a doubleing point number to the complex power `c`.
+	vec2 c_exp(double base, vec2 c) {
+	  return c_from_polar(pow(base, c.x), c.y * Math.log(base));
+	}
+
+	/// Computes the principal value of natural logarithm of `c`.
+	vec2 c_ln(vec2 c) {
+	  vec2 polar = c_to_polar(c);
+	  return new vec2(Math.log(polar.x), polar.y);
+	}
+
+	/// Returns the logarithm of `c` with respect to an arbitrary base.
+	vec2 c_log(vec2 c, double base) {
+	  vec2 polar = c_to_polar(c);
+	  return new vec2(log(polar.r), polar.y).division(Math.log(base));
+	}
+
+	vec2 c_sqrt(vec2 c) {
+	  vec2 p = c_to_polar(c);
+	  return c_from_polar(sqrt(p.x), p.y/2.);
+	}
+
+	/// Raises `c` to a doubleing point power `e`.
+	vec2 c_pow(vec2 c, double e) {
+	  vec2 p = c_to_polar(c);
+	  return c_from_polar(pow(p.x, e), p.y*e);
+	}
+
+	/// Raises `c` to a complex power `e`.
+	vec2 c_pow(vec2 c, vec2 e) {
+	  vec2 polar = c_to_polar(c);
+	  return c_from_polar(
+	     pow(polar.x, e.x) * Math.exp(-e.y * polar.y),
+	     e.x * polar.y + e.y * Math.log(polar.x)
+	  );
+	}
+
+	vec2 c_mul(vec2 self, vec2 other) {
+	    return new vec2(self.x * other.x - self.y * other.y, 
+	                self.x * other.y + self.y * other.x);
+	}
+
+	vec2 c_div(vec2 self, vec2 other) {
+	    double norm = length(other);
+	    return new vec2(self.x * other.x + self.y * other.y,
+	                self.y * other.x - self.x * other.y).division((norm * norm));
+	}
+
+	vec2 c_sin(vec2 c) {
+	  return new vec2(sin(c.x) * cosh(c.y), cos(c.x) * sinh(c.y));
+	}
+
+	vec2 c_cos(vec2 c) {
+	  // formula: cos(a + bi) = cos(a)cosh(b) - i*sin(a)sinh(b)
+	  return new vec2(cos(c.x) * cosh(c.y), -sin(c.x) * sinh(c.y));
+	}
+
+	vec2 c_tan(vec2 c) {
+	  vec2 c2 = c.multiply(2.0);
+	  return new vec2(sin(c2.x), sinh(c2.y)).division((cos(c2.x) + cosh(c2.y)));
+	}
+
+	vec2 c_atan(vec2 c) {
+	  // formula: arctan(z) = (ln(1+iz) - ln(1-iz))/(2i)
+	  vec2 i = c_i();
+	  vec2 one = c_one();
+	  vec2 two = one.plus( one);
+	  if (c == i) {
+	    return new vec2(0., 1./0.0);
+	  } else if (c == -i) {
+	    return new vec2(0., -1./0.0);
+	  }
+
+	  return c_div(
+	    c_ln(one.plus( c_mul(i, c)).minus( c_ln(one.minus( c_mul(i, c))).c_mul(two, i)))));
+	}
+
+	vec2 c_asin(vec2 c) {
+	 // formula: arcsin(z) = -i ln(sqrt(1-z^2) + iz)
+	  vec2 i = c_i(); vec2 one = c_one();
+	  return c_mul(-i, c_ln(
+	    c_sqrt(c_one() - c_mul(c, c)) + c_mul(i, c)
+	  ));
+	}
+
+	vec2 c_acos(vec2 c) {
+	  // formula: arccos(z) = -i ln(i sqrt(1-z^2) + z)
+	  vec2 i = c_i();
+
+	  return c_mul(-i, c_ln(
+	    c_mul(i, c_sqrt(c_one() - c_mul(c, c))) + c
+	  ));
+	}
+
+	vec2 c_sinh(vec2 c) {
+	  return vec2(sinh(c.x) * cos(c.y), cosh(c.x) * sin(c.y));
+	}
+
+	vec2 c_cosh(vec2 c) {
+	  return vec2(cosh(c.x) * cos(c.y), sinh(c.x) * sin(c.y));
+	}
+
+	vec2 c_tanh(vec2 c) {
+	  vec2 c2 = 2. * c;
+	  return vec2(sinh(c2.x), sin(c2.y))/(cosh(c2.x) + cos(c2.y));
+	}
+
+	vec2 c_asinh(vec2 c) {
+	  // formula: arcsinh(z) = ln(z + sqrt(1+z^2))
+	  vec2 one = c_one();
+	  return c_ln(c + c_sqrt(one + c_mul(c, c)));
+	}
+
+	vec2 c_acosh(vec2 c) {
+	  // formula: arccosh(z) = 2 ln(sqrt((z+1)/2) + sqrt((z-1)/2))
+	  vec2 one = c_one();
+	  vec2 two = one + one;
+	  return c_mul(two,
+	      c_ln(
+	        c_sqrt(c_div((c + one), two)) + c_sqrt(c_div((c - one), two))
+	      ));
+	}
+
+	vec2 c_atanh(vec2 c) {
+	  // formula: arctanh(z) = (ln(1+z) - ln(1-z))/2
+	  vec2 one = c_one();
+	  vec2 two = one.plus( one);
+	  if (c == one) {
+	      return vec2(1./0., vec2(0.));
+	  } else if (c == -one) {
+	      return vec2(-1./0., vec2(0.));
+	  }
+	  return c_div(c_ln(one.plus(c) - c_ln(one.minus(c), two);
+	}
+
+	// Attempts to identify the gaussian integer whose product with `modulus`
+	// is closest to `c`
+	vec2 c_rem(vec2 c, vec2 modulus) {
+	  vec2 c0 = c_div(c, modulus);
+	  // This is the gaussian integer corresponding to the true ratio
+	  // rounded towards zero.
+	  vec2 c1 = new vec2(c0.x - mod(c0.x, 1.), c0.y - mod(c0.y, 1.));
+	  return c.minus( c_mul(modulus, c1));
+	}
+
+	vec2 c_inv(vec2 c) {
+	  double norm = length(c);
+		return new vec2(c.x, -c.y).division( (norm * norm));
+	}*/
+
+
+
 
 /*	public vec3 getRGBColor0(int i,int j)
 	{
@@ -1415,5 +1695,281 @@ public vec3 app (vec3 v, double k, mat3 m)
 	 return colo;
 	}*/
 
+
+ public double exp(double x)
+{
+	return  Math.exp(x);
+}
+
+ public vec2 exp(vec2 x)
+{
+
+	double xr= Math.exp(x.x);
+	double yr= Math.exp(x.y);
+	return new vec2(xr,yr);
+}
+
+ public   vec3 exp(vec3 x)
+{
+	double xr= Math.exp(x.x);
+	double yr= Math.exp(x.y);
+	double zr= Math.exp(x.z);
+	return new vec3(xr,yr,zr);
+}
+
+ public   vec4 exp(vec4 x)
+{
+	double xr= Math.exp(x.x);
+	double yr= Math.exp(x.y);
+	double zr= Math.exp(x.z);
+	double wr= Math.exp(x.w);
+	return new vec4(xr,yr,zr,wr);
+}
+
+ public double cosh(double val) {
+	  double tmp = Math.exp(val);
+	  return (tmp + 1.0 / tmp) / 2.0;
+	}
+	 
+ public 	double tanh(double val) {
+	  double tmp = exp(val);
+	  return (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+	}
+	 
+ public 	double sinh(double val) {
+	  double tmp = Math.exp(val);
+	  return (tmp - 1.0 / tmp) / 2.0;
+	}
+
+ public 	vec2 cosh(vec2 val) {
+	  vec2 ep = exp(val);
+
+	  vec2 tmp= c_add(ep , c_div(c_one(),ep));
+	  return  new vec2 ( tmp.x/ 2.0, tmp.y/2.0);
+	}
+	 
+ public 	vec2 tanh(vec2 val) {
+	  vec2 ep = exp(val);
+	  vec2 tmp1 = c_sub(ep, c_div(c_one(),ep ));
+	  vec2 tmp2 = c_add(ep, c_div(c_one(),ep ));
+	  return c_div(tmp1,tmp2);
+	}
+	 
+ public  	vec2 sinh(vec2 val) {
+	  vec2 ep = exp(val);
+	  vec2 tmp1 = c_sub(ep, c_div(c_one(),ep ));
+	  return new vec2(tmp1.x/ 2.0, tmp1.y/2.0);
+	}
+
+ public 	vec2 c_one()
+ { 
+		 return new vec2(1., 0.); 
+ }
+	
+ public 	vec2 c_i()
+	{ 
+		return new vec2(0., 1.); 
+	}
+
+ public 	vec2 c_ni()
+	{ 
+		return new vec2(0., -1.); 
+	}
+	
+ public 	double arg(vec2 c)
+	{
+	  return atan2(c.y, c.x);
+	}
+
+ public 	vec2 c_conj(vec2 c)
+{
+	  return new vec2(c.x, -c.y);
+	}
+
+ public  	vec2 c_from_polar(double r, double theta) 
+	{
+	  return new vec2(r * cos(theta), r * sin(theta));
+	}
+
+ public 	vec2 c_to_polar(vec2 c) 
+	{
+	  return new vec2(length(c), atan2(c.y, c.x));
+	}
+
+	/// Computes `e^(c)`, where `e` is the base of the natural logarithm.
+ public  	vec2 c_exp(vec2 c) 
+	{
+	  return c_from_polar(Math.exp(c.x), c.y);
+	}
+
+
+	/// Raises a doubleing point number to the complex power `c`.
+ public vec2 c_exp(double base, vec2 c) 
+	{
+	  return c_from_polar(pow(base, c.x), c.y * Math.log(base));
+	}
+
+	/// Computes the principal value of natural logarithm of `c`.
+ public vec2 c_ln(vec2 c) {
+	  vec2 polar = c_to_polar(c);
+	  return new vec2(Math.log(polar.x), polar.y);
+	}
+
+	/// Returns the logarithm of `c` with respect to an arbitrary base.
+ public vec2 c_log(vec2 c, double base) {
+	  vec2 polar = c_to_polar(c);
+	  return new vec2(Math.log(polar.x)/Math.log(base), polar.y/Math.log(base));
+	}
+
+ public vec2 c_sqrt(vec2 c) {
+	  vec2 p = c_to_polar(c);
+	  return c_from_polar(sqrt(p.x), p.y/2.);
+	}
+
+	/// Raises `c` to a doubleing point power `e`.
+ public vec2 c_pow(vec2 c, double e) {
+	  vec2 p = c_to_polar(c);
+	  return c_from_polar(pow(p.x, e), p.y*e);
+	}
+
+	/// Raises `c` to a complex power `e`.
+ public vec2 c_pow(vec2 c, vec2 e) {
+	  vec2 polar = c_to_polar(c);
+	  return c_from_polar(
+	     pow(polar.x, e.x) * exp(-e.y * polar.y),
+	     e.x * polar.y + e.y * Math.log(polar.x)
+	  );
+	}
+
+ public vec2 c_add(vec2 a, vec2 b) {
+		   
+		   return new vec2(a.x+b.x,a.y+b.y);
+
+		}
+	   
+ public vec2 c_sub(vec2 a,vec2 b) {
+
+		   return new vec2(a.x-b.x,a.y-b.y);
+    }
+	
+ public vec2 c_mul(vec2 self, vec2 other) {
+	    return new vec2(self.x * other.x - self.y * other.y, 
+	                self.x * other.y + self.y * other.x);
+	}
+
+ public vec2 c_div(vec2 self, vec2 other) {
+	    double norm = length(other);
+	    return new vec2( (self.x * other.x + self.y * other.y)/(norm * norm),
+	                     (self.y * other.x - self.x * other.y)/(norm * norm) );
+	}
+
+ public vec2 c_sin(vec2 c) {
+	  return new vec2(sin(c.x) * cosh(c.y), cos(c.x) * sinh(c.y));
+	}
+
+ public vec2 c_cos(vec2 c) {
+	  // formula: cos(a + bi) = cos(a)cosh(b) - i*sin(a)sinh(b)
+	  return new vec2(cos(c.x) * cosh(c.y), -sin(c.x) * sinh(c.y));
+	}
+
+ public vec2 c_tan(vec2 c) {
+	  vec2 c2 = c.multiply(2.0);
+	  return new vec2(sin(c2.x), sinh(c2.y)).division((cos(c2.x) + cosh(c2.y)));
+	}
+
+	
+ public boolean c_eq(vec2 a, vec2 b)
+	{
+	  return (a.x==b.x && a.y==b.y);	
+	}
+	
+ public vec2 c_atan(vec2 c) {
+	  // formula: arctan(z) = (ln(1+iz) - ln(1-iz))/(2i)
+	  vec2 i = c_i();
+	  vec2 ni= c_ni();
+	  
+	  vec2 one = c_one();
+	  vec2 two = one.plus( one);
+	  if (c_eq(c,i))
+	    return new vec2(0., 1./0.0);
+	  else if (c_eq(c,ni)) 
+	    return new vec2(0., -1./0.0);
+
+	  return c_div( c_sub( c_ln (c_add( one, c_mul(i,c))), c_ln(c_sub( one, c_mul(i,c)))), c_mul(two,i));
+	    
+	}
+
+ public vec2 c_asin(vec2 c) {
+	 // formula: arcsin(z) = -i ln(sqrt(1-z^2) + iz)
+	  vec2 i = c_i();
+	  vec2 ni = c_ni();
+	  vec2 one = c_one();
+	  return c_mul(ni, c_ln(  c_add( c_sqrt(c_sub( c_one() , c_mul(c, c))) ,  c_mul(i, c)) ));
+	}
+
+ public vec2 c_acos(vec2 c) {
+	  // formula: arccos(z) = -i ln(i sqrt(1-z^2) + z)
+	  vec2 i = c_i();
+	  vec2 ni = c_ni();
+
+	  return c_mul(ni, c_ln(  c_add( c_mul(i, c_sqrt( c_sub(c_one() , c_mul(c, c)))) , c)  ));
+	}
+
+ public vec2 c_sinh(vec2 c) {
+	  return new vec2(sinh(c.x) * cos(c.y), cosh(c.x) * sin(c.y));
+	}
+
+ public vec2 c_cosh(vec2 c) {
+	  return new vec2(cosh(c.x) * cos(c.y), sinh(c.x) * sin(c.y));
+	}
+
+ public vec2 c_tanh(vec2 c) {
+	  vec2 c2 = new vec2(2. * c.x, 2.*c.y);
+	  return new vec2( sinh(c2.x)/(cosh(c2.x) + cos(c2.y)) , sin(c2.y)/(cosh(c2.x) + cos(c2.y)));
+	}
+
+ public vec2 c_asinh(vec2 c) {
+	  // formula: arcsinh(z) = ln(z + sqrt(1+z^2))
+	  vec2 one = c_one();
+	  return c_ln(c_add( c , c_sqrt(  c_add( one , c_mul(c, c))    )));
+	}
+
+ public vec2 c_acosh(vec2 c) {
+	  // formula: arccosh(z) = 2 ln(sqrt((z+1)/2) + sqrt((z-1)/2))
+	  vec2 one = c_one();
+	  vec2 two = c_add(one, one);
+	  return c_mul(two, c_ln( c_add(c_sqrt(c_div(( c_add(c , one)), two)) , c_sqrt(c_div((c_sub(c , one)), two)) )));
+	}
+
+ public vec2 c_atanh(vec2 c) {
+	  // formula: arctanh(z) = (ln(1+z) - ln(1-z))/2
+	  vec2 one = c_one();
+	  vec2 m_one=new vec2(-one.x,-one.y);
+	  vec2 two = one.plus( one);
+	  if (c_eq(c, one) )
+	  {
+	      return new vec2(1./0., 0.);
+	  }
+	  else if (c_eq(c,m_one))
+	  {
+	      return new vec2(-1./0., 0.);
+	  }
+	  return c_div( c_sub( c_ln( c_add(one, c)) , c_ln(c_sub( one ,c))), two);
+	}
+
+	// Attempts to identify the gaussian integer whose product with `modulus`
+	// is closest to `c`
+ public vec2 c_rem(vec2 c, vec2 modulus) {
+	  vec2 c0 = c_div(c, modulus);
+	  // This is the gaussian integer corresponding to the true ratio
+	  // rounded towards zero.
+	  vec2 c1 = new vec2(c0.x - mod(c0.x, 1.), c0.y - mod(c0.y, 1.));
+	  return c.minus( c_mul(modulus, c1));
+	}
+
+ public vec2 c_inv(vec2 c) {
+	  double norm = length(c);
+		return new vec2( c.x/(norm * norm), -c.y/(norm * norm));
+	}
 	
 }
