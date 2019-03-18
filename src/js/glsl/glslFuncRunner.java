@@ -1205,7 +1205,7 @@ public class glslFuncRunner {
 		return new vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 	}
 
-	//  Function from Iñigo Quiles
+	//  Function from Inigo Quiles
 	//  https://www.shadertoy.com/view/MsS3Wc
 	public   vec3 hsb2rgb( vec3 c )
 	{

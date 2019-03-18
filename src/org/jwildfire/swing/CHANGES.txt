@@ -1,3 +1,60 @@
+V4.10 release candidate 1 (19.03.2019)
+ - new variations (no particular order):
+    by Jesus Sosa
+    -dc_acrilic
+    -dc_apollonian
+    -dc_circlesblue
+    -dc_circuits
+    -dc_ducks
+    -dc_escher
+    -dc_fractaldots
+    -dc_grid3D
+    -dc_hexagons
+    -dc_hoshi
+    -dc_hyperbolictile
+    -dc_kaleidocomplex
+    -dc_kaleidoscopic
+    -dc_kaliset
+    -dc_kaliset2
+    -dc_layers
+    -dc_mandala
+    -dc_mandbrot
+    -dc_mandelbox2D
+    -dc_menger
+    -dc_randomoctree
+    -dc_rotations
+    -dc_squares
+    -dc_starsfield
+    -dc_tesla
+    -dc_tree
+    -dc_truchet
+    -dc_turbulence
+    -dc_voronoise
+    -glynnlissa
+    -glynnsphiro
+    -glynnSShape
+    by Whittaker Courtney
+    - pre_recip
+    by Brad Stefanov
+    - gridout3D
+    - cone
+    - dc_carpet3D
+    - tqmirror
+    by DarkBeam
+    - holesq
+    - spligon
+    - plusrecip
+    by TyrantWave
+    - henon
+  - various fixes by Rick Sidwell:
+    - Fract variation bug fixes
+    - Bug fix: adjust xaos when deleting xforms
+    - Fix NotSerializableException when saving render state
+    - Fix Help frame anomalies
+    - Fix bugs in Open Image
+    - Script from flame: add draw mode and preserve z
+    - Script from flame: add centreX and centreY
+
 V4.00 revision 2 (20.12.2018)
   - fixed a bug regarding calculating the offset in tone-mapping (causing the final image shifted under certain circumstances)
   - fixed a bug regarding mouse-sync while dragging triangles or control-points with mouse

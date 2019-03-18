@@ -110,7 +110,7 @@ public class DC_KaleidoscopicFunc  extends DC_BaseFunc {
 		     uv=smallKoleidoscope(uv);
 		 // uv=koleidoscope(uv);  // does the same as smallKoleidoscope(uv)
 		    
-		  // Fractal Colors by Robert Schütze (trirop): http://glslsandbox.com/e#29611
+		  // Fractal Colors by Robert Schuetze (trirop): http://glslsandbox.com/e#29611
 		  vec3 p = new vec3 (uv, zoom);
 		  for (int i = 0; i < 44; i++)
 		  {
