@@ -713,45 +713,45 @@ public class VariationFuncList {
     registerVariationFunc(HenonFunc.class);
     registerVariationFunc(PlusRecipFunc.class);
     registerVariationFunc(TQMirrorFunc.class);
-		registerVariationFunc(DCCarpet3DFunc.class);
-		registerVariationFunc(ConeFunc.class);
-		registerVariationFunc(Gridout3DFunc.class);
-		
-		  registerVariationFunc(DC_MandelBox2DFunc.class);
-		    
-		    registerVariationFunc(DC_MandalaFunc.class);
-		    registerVariationFunc(DC_ApollonianFunc.class);
-		    registerVariationFunc(DC_FractalDotsFunc.class);
-		    registerVariationFunc(DC_CircuitsFunc.class);
-		    registerVariationFunc(DC_HoshiFunc.class);  
-		    registerVariationFunc(DC_KaleidoComplexFunc.class);
-		    registerVariationFunc(DC_StarsFieldFunc.class);
-		    registerVariationFunc(DC_KaleidoscopicFunc.class);
-		    registerVariationFunc(DC_RandomOctreeFunc.class);
-		    registerVariationFunc(DC_AcrilicFunc.class);
-		    registerVariationFunc(DC_CirclesBlueFunc.class);
-		    registerVariationFunc(DC_KaliSetFunc.class);
-		    registerVariationFunc(DC_KaliSet2Func.class);
-		    registerVariationFunc(DC_Grid3DFunc.class);
-		    registerVariationFunc(DC_HyperbolicFunc.class);
-		    registerVariationFunc(DC_SquaresFunc.class);
+    registerVariationFunc(DCCarpet3DFunc.class);
+    registerVariationFunc(ConeFunc.class);
+    registerVariationFunc(Gridout3DFunc.class);
+	  
+    registerVariationFunc(DC_MandelBox2DFunc.class);
+    registerVariationFunc(DC_MandalaFunc.class);
+    registerVariationFunc(DC_ApollonianFunc.class);
+    registerVariationFunc(DC_FractalDotsFunc.class);
+    registerVariationFunc(DC_CircuitsFunc.class);
+    registerVariationFunc(DC_HoshiFunc.class);  
+    registerVariationFunc(DC_KaleidoComplexFunc.class);
+    registerVariationFunc(DC_StarsFieldFunc.class);
+    registerVariationFunc(DC_KaleidoscopicFunc.class);
+    registerVariationFunc(DC_RandomOctreeFunc.class);
+    registerVariationFunc(DC_AcrilicFunc.class);
+    registerVariationFunc(DC_CirclesBlueFunc.class);
+    registerVariationFunc(DC_KaliSetFunc.class);
+    registerVariationFunc(DC_KaliSet2Func.class);
+    registerVariationFunc(DC_Grid3DFunc.class);
+    registerVariationFunc(DC_HyperbolicFunc.class);
+    registerVariationFunc(DC_SquaresFunc.class);
+    registerVariationFunc(DC_MandBrotFunc.class); 
+    registerVariationFunc(DC_DucksFunc.class);
+    registerVariationFunc(DC_LayersFunc.class);  
+    registerVariationFunc(DC_TreeFunc.class); 
+    registerVariationFunc(DC_TeslaFunc.class);
+    registerVariationFunc(DC_RotationsFunc.class); 
+    registerVariationFunc(DC_EscherFunc.class); 
+    registerVariationFunc(DC_HexagonsFunc.class);
+    registerVariationFunc(DC_TurbulenceFunc.class);
+    registerVariationFunc(DC_MengerFunc.class);    
+    registerVariationFunc(DC_TruchetFunc.class); 
+    registerVariationFunc(DC_VoronoiseFunc.class);
 
-		    registerVariationFunc(DC_MandBrotFunc.class); 
-		    registerVariationFunc(DC_DucksFunc.class);
-		    registerVariationFunc(DC_LayersFunc.class);  
-		    registerVariationFunc(DC_TreeFunc.class); 
-		    registerVariationFunc(DC_TeslaFunc.class);
-		    registerVariationFunc(DC_RotationsFunc.class); 
-		    registerVariationFunc(DC_EscherFunc.class); 
-		    registerVariationFunc(DC_HexagonsFunc.class);
-		    registerVariationFunc(DC_TurbulenceFunc.class);
-		    registerVariationFunc(DC_MengerFunc.class);    
-		    registerVariationFunc(DC_TruchetFunc.class); 
-		    registerVariationFunc(DC_VoronoiseFunc.class);
-
-		    registerVariationFunc(GlynnLissaFunc.class);
-		    registerVariationFunc(GlynnSpiroGraf3DFunc.class);
-		    registerVariationFunc(GlynnSuperShapeFunc.class);
+    registerVariationFunc(GlynnLissaFunc.class);
+    registerVariationFunc(GlynnSpiroGraf3DFunc.class);
+    registerVariationFunc(GlynnSuperShapeFunc.class);
+	  
+    registerVariationFunc(PreRecipFunc.class);	  
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
