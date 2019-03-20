@@ -25,17 +25,24 @@ public  class DC_BaseFunc  extends VariationFunc {
 	 */
 
 	private static final String PARAM_DC = "ColorOnly";
-	private static final String PARAM_GRADIENT = "Gradient"; 
+	private static final String PARAM_GRADIENT = "Gradient";
+	
+	private static final String PARAM_SCALE_Z = "z_scale"; 
+	private static final String PARAM_OFFSET_Z = "z_offset"; 
+	private static final String PARAM_RESET_Z = "reset_z"; 
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] paramNames = { PARAM_DC,PARAM_GRADIENT};
+	protected static final String[] paramNames = { PARAM_DC,PARAM_GRADIENT,PARAM_SCALE_Z,PARAM_OFFSET_Z,PARAM_RESET_Z};
 
     
 	
 	int colorOnly=0;
 	int gradient=0;
-
+	
+    double scale_z=0.0;
+    double offset_z=0.0;
+    int reset_z=1;
 	
 	@Override
 	public void initOnce(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
@@ -79,6 +86,17 @@ public  class DC_BaseFunc  extends VariationFunc {
     return dist_3d_sqd;
 }
 	
+	
+	public double greyscale(int r,int g,int b)
+	{
+		int lum,red,green,blue;
+	  red = (int)(r * 0.299);         
+			  green = (int)(g * 0.587);         
+			  blue = (int)(b * 0.114);    
+			  lum = red + green + blue;    
+			  return (double)lum/255;
+	}
+	
  	public vec3 getRGBColor(double xp,double yp)
  	{
        
@@ -108,7 +126,10 @@ public  class DC_BaseFunc  extends VariationFunc {
 		}
         
         color=getRGBColor(uV.x,uV.y);
-        tcolor=dbl2int(color); 
+        tcolor=dbl2int(color);
+        
+        //z by color (normalized)
+        double z=greyscale(tcolor[0],tcolor[1],tcolor[2]);
         
         if(gradient==0)
         {
@@ -119,7 +140,7 @@ public  class DC_BaseFunc  extends VariationFunc {
     	  pVarTP.blueColor =tcolor[2];
     		
         }
-        else
+        else if(gradient==1)
         {
 
             	Layer layer=pXForm.getOwner();
@@ -132,10 +153,22 @@ public  class DC_BaseFunc  extends VariationFunc {
           	  pVarTP.blueColor =col.getBlue();
 
         }
+        else 
+        {
+        	pVarTP.color=z;
+        }
 
         pVarTP.x+= pAmount*(uV.x);
         pVarTP.y+= pAmount*(uV.y);
-
+        
+        
+	    double dz = z * scale_z + offset_z;
+	    if (reset_z == 1) {
+	      pVarTP.z = dz;
+	    }
+	    else {
+	      pVarTP.z += dz;
+	    }
 	}
    
  	public int[] dbl2int(vec3 theColor)
@@ -149,7 +182,7 @@ public  class DC_BaseFunc  extends VariationFunc {
   	}
 
 	public String getName() {
-		return "dc_";
+		return "dc_base";
 	}
 
 	public String[] getParameterNames() {
@@ -157,17 +190,26 @@ public  class DC_BaseFunc  extends VariationFunc {
 	}
 
 
-	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,gradient};
+	public Object[] getParameterValues() { 
+		return new Object[] { colorOnly,gradient,scale_z,offset_z,reset_z};
 	}
 
 	public void setParameter(String pName, double pValue) {
 
 		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 100 , 10000000);
+			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
+			gradient = (int)Tools.limitValue(pValue, 0 , 2);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_SCALE_Z)) {
+			scale_z =pValue;
+		}
+		else if (pName.equalsIgnoreCase(PARAM_OFFSET_Z)) {
+			offset_z =pValue;
+		}
+		else if (pName.equalsIgnoreCase(PARAM_RESET_Z)) {
+			reset_z  =(int)Tools.limitValue(pValue, 0 , 1);
 		}
 		else
 			throw new IllegalArgumentException(pName);

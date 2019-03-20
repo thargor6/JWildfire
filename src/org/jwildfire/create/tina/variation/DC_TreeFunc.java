@@ -29,7 +29,7 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC= "ColorOnly";
+
 
 	private static final String PARAM_LEVELS = "levels";
 	private static final String PARAM_THICKNESS = "thicknes";
@@ -39,11 +39,6 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
 
-	private static final String PARAM_GRADIENT = "Gradient"; 
-
-
-	
-	int colorOnly=0;
 
 
 	int levels=20;
@@ -53,14 +48,13 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 	private int seed = 10000;
 	double time=0.0;
 	double zoom=4.0;
-	int gradient=0;
 
 	Random randomize=new Random(seed);
 	
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
 	
-	private static final String[] paramNames = { PARAM_DC,PARAM_LEVELS ,PARAM_THICKNESS,PARAM_STYLE,PARAM_SHIFT,PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_LEVELS ,PARAM_THICKNESS,PARAM_STYLE,PARAM_SHIFT,PARAM_SEED,PARAM_TIME,PARAM_ZOOM};
 
 	
 	public vec2 po (vec2 v) {
@@ -81,8 +75,6 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 	    vec2 t1=(b.minus(a)).multiply(r);
 	    
 	    return (1.+0.5*r)*G.length( t0.minus(t1));
-
-
 	}
 	
 	public vec3 getRGBColor(double xt,double yt)
@@ -113,50 +105,6 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 		 	col=col.division(18.);
 		    return col;
 	}
- 	
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
-
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
-		}
-		else
-		{
-			uV.x=pContext.random()-0.5;
-			uV.y=pContext.random()-0.5;
-		}
-
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
-
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
-
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
-	}
 	
 
 	public String getName() {
@@ -164,21 +112,15 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
-
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,levels,thickness,style,shift,seed,time,zoom, gradient};
+		return joinArrays(new Object[] { levels,thickness,style,shift,seed,time,zoom},super.getParameterValues());
 	}
 
-
-	
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (pName.equalsIgnoreCase(PARAM_LEVELS)) {
+		if (pName.equalsIgnoreCase(PARAM_LEVELS)) {
 			
 			levels = (int)Tools.limitValue(pValue, 1 , 25);
 		}
@@ -211,11 +153,8 @@ public class DC_TreeFunc  extends DC_BaseFunc {
 			
 			zoom = pValue;
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

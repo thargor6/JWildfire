@@ -29,7 +29,7 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC = "ColorOnly";
+
 	private static final String PARAM_SEED = "Seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
@@ -43,11 +43,8 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 	private static final String PARAM_FR = "Red Fac.";
 	private static final String PARAM_FG = "Green Fac.";
 	private static final String PARAM_FB = "Blue Fac.";
-	private static final String PARAM_GRADIENT = "Gradient"; 
 
-	
 
-	private int colorOnly = 0;
 	private int seed = 10000;
 	double time=0.0;
 	double zoom=0.7;
@@ -59,7 +56,7 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 	double p5=75;
 	double p6=75;
     double FR=1.0,FG=1.0,FB=1.0;
-	int gradient=0;
+
 	
 	  
 	Random randomize=new Random(seed);
@@ -68,8 +65,8 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
 
-	private static final String[] paramNames = { PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_STEPS,PARAM_P1,PARAM_P2,PARAM_P3,PARAM_P4,PARAM_P5,PARAM_P6,
-			PARAM_FR,PARAM_FG,PARAM_FB,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_STEPS,PARAM_P1,PARAM_P2,PARAM_P3,PARAM_P4,PARAM_P5,PARAM_P6,
+			PARAM_FR,PARAM_FG,PARAM_FB};
 
 
 	  public double sq(double x) {
@@ -98,7 +95,7 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 	    col=new vec3( G.cos(col.x*FR), G.cos(col.y*FG), G.cos(col.z*FB));
 		return col;	
 	}
- 	
+	
 	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
 	{
 
@@ -120,7 +117,10 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 		}
         
         color=getRGBColor(uV.x,uV.y);
-        tcolor=dbl2int(color); 
+        tcolor=dbl2int(color);
+        
+        //z by color (normalized)
+        double z=greyscale(tcolor[0],tcolor[1],tcolor[2]);
         
         if(gradient==0)
         {
@@ -131,7 +131,7 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
     	  pVarTP.blueColor =tcolor[2];
     		
         }
-        else
+        else if(gradient==1)
         {
 
             	Layer layer=pXForm.getOwner();
@@ -144,30 +144,40 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
           	  pVarTP.blueColor =col.getBlue();
 
         }
+        else 
+        {
+        	pVarTP.color=z;
+        }
 
         pVarTP.x+= pAmount*(uV.x);
         pVarTP.y+= pAmount*(uV.y);
-
+        
+        
+	    double dz = z * scale_z + offset_z;
+	    if (reset_z == 1) {
+	      pVarTP.z = dz;
+	    }
+	    else {
+	      pVarTP.z += dz;
+	    }
 	}
 
 	public String getName() {
 		return "dc_acrilic";
 	}
 
-	public String[] getParameterNames() {
-		return paramNames;
-	}
-
-
+	@Override
+	  public String[] getParameterNames() {
+		    return joinArrays(additionalParamNames, paramNames);
+		  }
+	
+	  @Override 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,seed, time,zoom,steps,p1,p2,p3,p4,p5,p6,FR,FG,FB, gradient};
+		return joinArrays(new Object[] { seed, time,zoom,steps,p1,p2,p3,p4,p5,p6,FR,FG,FB},super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
+ if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
 	       randomize=new Random(seed);
 	          long current_time = System.currentTimeMillis();
@@ -211,11 +221,8 @@ public class DC_AcrilicFunc  extends DC_BaseFunc {
 		else if (pName.equalsIgnoreCase(PARAM_FB)) {
 			FB =Tools.limitValue(pValue, 0.0 , 5.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else
-			throw new IllegalArgumentException(pName);
+	    else
+	        super.setParameter(pName, pValue);
 	}
 
 	@Override
