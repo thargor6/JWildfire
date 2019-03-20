@@ -35,24 +35,23 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 	private static final long serialVersionUID = 1L;
 
 	public static final String PARAM_SHAPE = "shape";
-	private static final String PARAM_DC = "ColorOnly";
+
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
-	private static final String PARAM_GRADIENT = "Gradient"; 
 
 
 	  private final static int SHAPE_SQUARE = 0;
 	  private final static int SHAPE_DISC = 1;
 	
-	int colorOnly=0;
+
 
 
 	private int shape = 0;
 	private int seed = 10000;
 	double time=0.0;
 	double zoom=4.0;
-	int gradient=0;
+
 	
 	double centre=0.0;
 	double range=0.333;
@@ -62,7 +61,7 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
 	
-	private static final String[] paramNames = { PARAM_SHAPE,PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_SHAPE,PARAM_SEED,PARAM_TIME,PARAM_ZOOM};
 
 
 	public double hex(vec2 p) 
@@ -122,6 +121,9 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 		 
 		 color=getRGBColor(uV.x,uV.y);
 			tcolor=dbl2int(color); 
+	        //z by color (normalized)
+	        double z=greyscale(tcolor[0],tcolor[1],tcolor[2]);
+	        
         if(gradient==0)
         {   	
     	  pVarTP.rgbColor  =true;;
@@ -130,12 +132,8 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
     	  pVarTP.blueColor =tcolor[2];
     		
         }
-        else
+        else if(gradient==1)
         {
-/*        	pVarTP.color=color.r*color.g;
-        //	pVarTP.color=color.r*color.g*color.b;
-            double Col = this.centre + this.range *(color.r+color.g+color.b);
-            pVarTP.color = Col - floor(Col);*/
 			Layer layer=pXForm.getOwner();
 			RGBPalette palette=layer.getPalette();      	  
 			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
@@ -145,66 +143,35 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 			pVarTP.greenColor=col.getGreen();
 			pVarTP.blueColor =col.getBlue();
         }
+        else 
+        {
+        	pVarTP.color=z;
+        }
 	    pVarTP.x+= pAmount*(uV.x);
 		pVarTP.y+= pAmount*(uV.y);
+		
+	    double dz = z * scale_z + offset_z;
+	    if (reset_z == 1) {
+	      pVarTP.z = dz;
+	    }
+	    else {
+	      pVarTP.z += dz;
+	    }
 
 	}
 	
-	/*public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
-
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
-		}
-		else
-		{
-			uV.x=2.*pContext.random()-1.0;
-			uV.y=2.*pContext.random()-1.0;
-		}
-
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
-
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
-
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
-	}*/
 	
 	public String getName() {
 		return "dc_hexagons";
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { shape,colorOnly,seed,time,zoom, gradient};
+		return joinArrays(new Object[] { shape,seed,time,zoom},super.getParameterValues());
 	}
 
 
@@ -212,9 +179,6 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 	public void setParameter(String pName, double pValue) {
 		if (pName.equalsIgnoreCase(PARAM_SHAPE)) {
 			shape = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
 		}
 		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
@@ -233,11 +197,8 @@ public class DC_HexagonsFunc  extends DC_BaseFunc {
 			
 			zoom = pValue;
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

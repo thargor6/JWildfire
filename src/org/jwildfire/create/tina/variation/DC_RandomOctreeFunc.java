@@ -31,7 +31,7 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC = "ColorOnly";
+
 	private static final String PARAM_SEED = "Seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_STEPS = "Steps";
@@ -40,11 +40,7 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 	private static final String PARAM_DRAWGRID = "Grid";
 	private static final String PARAM_BORDERS = "Borders";
 	private static final String PARAM_BLACKBORDERS = "Black Borders";
-	private static final String PARAM_GRADIENT = "Gradient"; 
 
-	
-
-	int colorOnly=0;
 
 	private int seed = 10000;
 	double time=0.0;
@@ -54,7 +50,7 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 	int grid=0;
 	int borders=1;
 	int blackborders=1;
-	int gradient=0;
+
 	
 	  vec3 HASHSCALE3 = new vec3(.1031, .1030, .0973);
 	  double emptycells = 0.5;
@@ -67,7 +63,7 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 	 	long elapsed_time=0;
 	
 
-	private static final String[] paramNames = { PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_STEPS,PARAM_RLR,PARAM_RUD,PARAM_DRAWGRID,PARAM_BORDERS,PARAM_BLACKBORDERS,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_STEPS,PARAM_RLR,PARAM_RUD,PARAM_DRAWGRID,PARAM_BORDERS,PARAM_BLACKBORDERS};
 
 
 	
@@ -352,112 +348,22 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 		color = G.sqrt(color);
 		return color;	
 	}
- 	
-/*	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-        vec3 color=new vec3(0.0); 
-		 vec2 uV=new vec2(0.),p=new vec2(0.);
 
-	     if(colorOnly==1)
-		 {
-			 uV.x=pAffineTP.x;
-			 uV.y=pAffineTP.y;
-		 }
-		 else
-		 {
-	   			 uV.x=2.0*pContext.random()-1.0;
-				 uV.y=2.0*pContext.random()-1.0;
-		}
-        
-        color=getRGBColor(uV.x,uV.y);
-       
-        if(gradient==0)
-        {
-       	  int[] tcolor=new int[3];    	
-           tcolor=dbl2int(color);  
-     	
-    	  pVarTP.rgbColor  =true;;
-    	  pVarTP.redColor  =tcolor[0];
-    	  pVarTP.greenColor=tcolor[1];
-    	  pVarTP.blueColor =tcolor[2];
-    		
-        }
-        else
-        {
-        	double s=(color.x+color.y+color.z);
-        	double red=color.x/s;
-
-        	pVarTP.color=Math.sin(red);
-
-        }
-
-        pVarTP.x+= pAmount*(uV.x);
-        pVarTP.y+= pAmount*(uV.y);
-
-	}*/
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
-
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
-		}
-		else
-		{
-			uV.x=pContext.random()-0.5;
-			uV.y=pContext.random()-0.5;
-		}
-
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
-
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
-
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
-	}
 
 	public String getName() {
 		return "dc_randomoctree";
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
 
-
-
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,seed, time,steps,mouseX,mouseY,grid,borders,blackborders, gradient};
+		return joinArrays(new Object[] { seed, time,steps,mouseX,mouseY,grid,borders,blackborders},super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
+		 if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
 	       randomize=new Random(seed);
 	          long current_time = System.currentTimeMillis();
@@ -486,11 +392,8 @@ public class DC_RandomOctreeFunc  extends DC_BaseFunc {
 		else if (pName.equalsIgnoreCase(PARAM_BLACKBORDERS)) {
 			blackborders=(int) Tools.limitValue(pValue, 0 , 1);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

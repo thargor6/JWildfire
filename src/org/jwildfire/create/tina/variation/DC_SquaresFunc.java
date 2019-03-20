@@ -31,7 +31,7 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC = "ColorOnly";
+
 	private static final String PARAM_SEED = "Seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_N = "N";
@@ -41,10 +41,10 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 	private static final String PARAM_FG = "Green Fac.";
 	private static final String PARAM_FB = "Blue Fac.";
 
-	private static final String PARAM_GRADIENT = "Gradient"; 
 
 
-	int colorOnly=0;
+
+
 
 	private int seed = 5000;
 	double time=85.5;
@@ -53,7 +53,7 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 
 
     double FR=1.8,FG=1.9,FB=2.2;
-	int gradient=0;
+
 
 	  
 		Random randomize=new Random(seed);
@@ -64,7 +64,7 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 
 
 
-	private static final String[] paramNames = { PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_N,PARAM_DIR, PARAM_FR,PARAM_FG,PARAM_FB,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_N,PARAM_DIR, PARAM_FR,PARAM_FG,PARAM_FB};
 
 
 
@@ -111,50 +111,7 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 		return new vec3( G.cos(color.x*FR), G.cos(color.y*FG), G.cos(color.z*FB));
 	}
 
- 	
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
-
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
-		}
-		else
-		{
-			uV.x=pContext.random()-0.5;
-			uV.y=pContext.random()-0.5;
-		}
-
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
-
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
-
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
-	}
+ 
 	
 
 	public String getName() {
@@ -162,18 +119,15 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,seed, time,N,dir,FR,FG,FB,gradient};
+		return joinArrays(new Object[] { seed, time,N,dir,FR,FG,FB},super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
+		 if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int)pValue;
 	       randomize=new Random(seed);
 	          long current_time = System.currentTimeMillis();
@@ -199,11 +153,8 @@ public class DC_SquaresFunc  extends DC_BaseFunc {
 		else if (pName.equalsIgnoreCase(PARAM_FB)) {
 			FB =Tools.limitValue(pValue, 0.0 , 5.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

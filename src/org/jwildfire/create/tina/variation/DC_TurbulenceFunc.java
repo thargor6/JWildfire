@@ -29,16 +29,11 @@ public class DC_TurbulenceFunc  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC = "ColorOnly";
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_LEVEL = "Level";
 
-
-
-	
-	int colorOnly=0;
 
 	private int seed = 10000;
     double time=0.0;
@@ -53,7 +48,7 @@ public class DC_TurbulenceFunc  extends DC_BaseFunc {
  	long elapsed_time=0;
 	
 	
-	private static final String[] paramNames = { PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_LEVEL};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_LEVEL};
 
 	   
 	  
@@ -80,70 +75,24 @@ public class DC_TurbulenceFunc  extends DC_BaseFunc {
 		return new vec3(c*c*c*c);
 	}
 
-	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
-	{
-
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
-
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
-		}
-		else
-		{
-			uV.x=2.0*pContext.random()-1.0;
-			uV.y=2.0*pContext.random()-1.0;
-		}
-
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
-
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
-
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
-	}
 
 	public String getName() {
 		return "dc_turbulence";
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,seed,time,zoom,level};
+		return joinArrays(new Object[] { seed,time,zoom,level},super.getParameterValues());
 	}
 
 
 	
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
+		if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
 	       randomize=new Random(seed);
 	          long current_time = System.currentTimeMillis();
@@ -161,7 +110,7 @@ public class DC_TurbulenceFunc  extends DC_BaseFunc {
 			level = (int)Tools.limitValue(pValue, 1 , 5);
 		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

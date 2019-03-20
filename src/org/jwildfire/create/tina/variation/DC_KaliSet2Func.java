@@ -30,7 +30,7 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PARAM_DC = "ColorOnly";
+
 	private static final String PARAM_SEED = "Seed";
 	private static final String PARAM_TIME = "time";
 	private static final String PARAM_ZOOM = "zoom";
@@ -42,10 +42,10 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 	private static final String PARAM_FG = "Green Fac.";
 	private static final String PARAM_FB = "Blue Fac.";
 
-	private static final String PARAM_GRADIENT = "Gradient"; 
 
 
-	int colorOnly=0;
+
+
 
 	private int seed = 5000;
 	double time=85.5;
@@ -54,7 +54,7 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 	double rad2=1.0;
     double shiftx=-0.356,shifty=0.686;
     double FR=1.8,FG=1.9,FB=2.2;
-	int gradient=0;
+
 
 	Random randomize=new Random(seed);
 	
@@ -64,7 +64,7 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 
 
 
-	private static final String[] paramNames = { PARAM_DC,PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_N,PARAM_R2,PARAM_SHIFT_X,PARAM_SHIFT_Y,PARAM_FR,PARAM_FG,PARAM_FB,PARAM_GRADIENT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_ZOOM,PARAM_N,PARAM_R2,PARAM_SHIFT_X,PARAM_SHIFT_Y,PARAM_FR,PARAM_FG,PARAM_FB};
 
 	
 	public vec3 getRGBColor(double xp,double yp)
@@ -114,45 +114,67 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 	public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) 
 	{
 
-		vec3 color=new vec3(0.0); 
-		vec2 uV=new vec2(0.),p=new vec2(0.);
-		int[] tcolor=new int[3];  
+        vec3 color=new vec3(0.0); 
+		 vec2 uV=new vec2(0.),p=new vec2(0.);
+	       int[] tcolor=new int[3];  
 
-		if(colorOnly==1)
-		{
-			uV.x=pAffineTP.x;
-			uV.y=pAffineTP.y;
+
+		 
+	     if(colorOnly==1)
+		 {
+			 uV.x=pAffineTP.x;
+			 uV.y=pAffineTP.y;
+		 }
+		 else
+		 {
+	   			 uV.x=2.0*pContext.random()-1.0;
+				 uV.y=2.0*pContext.random()-1.0;
 		}
-		else
-		{
-			uV.x=2.*pContext.random()-1.0;
-			uV.y=2.*pContext.random()-1.0;
-		}
+        
+        color=getRGBColor(uV.x,uV.y);
+        tcolor=dbl2int(color);
+        
+        //z by color (normalized)
+        double z=greyscale(tcolor[0],tcolor[1],tcolor[2]);
+        
+        if(gradient==0)
+        {
+  	  	
+    	  pVarTP.rgbColor  =true;;
+    	  pVarTP.redColor  =tcolor[0];
+    	  pVarTP.greenColor=tcolor[1];
+    	  pVarTP.blueColor =tcolor[2];
+    		
+        }
+        else if(gradient==1)
+        {
 
-		color=getRGBColor(uV.x,uV.y);
-		tcolor=dbl2int(color); 
+            	Layer layer=pXForm.getOwner();
+            	RGBPalette palette=layer.getPalette();      	  
+          	    RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
+          	    
+          	  pVarTP.rgbColor  =true;;
+          	  pVarTP.redColor  =col.getRed();
+          	  pVarTP.greenColor=col.getGreen();
+          	  pVarTP.blueColor =col.getBlue();
 
-		if(gradient==0)
-		{
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =tcolor[0];
-			pVarTP.greenColor=tcolor[1];
-			pVarTP.blueColor =tcolor[2];
-		}
-		else
-		{
-			Layer layer=pXForm.getOwner();
-			RGBPalette palette=layer.getPalette();      	  
-			RGBColor col=findKey(palette,tcolor[0],tcolor[1],tcolor[2]);
+        }
+        else 
+        {
+        	pVarTP.color=z;
+        }
 
-			pVarTP.rgbColor  =true;;
-			pVarTP.redColor  =col.getRed();
-			pVarTP.greenColor=col.getGreen();
-			pVarTP.blueColor =col.getBlue();
-		}
-
-		pVarTP.x+= pAmount*(uV.x);
-		pVarTP.y+= pAmount*(uV.y);
+        pVarTP.x+= pAmount*(uV.x);
+        pVarTP.y+= pAmount*(uV.y);
+        
+        
+	    double dz = z * scale_z + offset_z;
+	    if (reset_z == 1) {
+	      pVarTP.z = dz;
+	    }
+	    else {
+	      pVarTP.z += dz;
+	    }
 	}
 	
 
@@ -161,18 +183,15 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 	}
 
 	public String[] getParameterNames() {
-		return paramNames;
+		return joinArrays(additionalParamNames, paramNames);
 	}
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { colorOnly,seed, time,zoom,N,rad2,shiftx,shifty,FR,FG,FB,gradient};
+		return joinArrays(new Object[] { seed, time,zoom,N,rad2,shiftx,shifty,FR,FG,FB},super.getParameterValues());
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_DC)) {
-			colorOnly = (int)Tools.limitValue(pValue, 0 , 1);
-		}
-		else if (PARAM_SEED.equalsIgnoreCase(pName)) 
+		 if (PARAM_SEED.equalsIgnoreCase(pName)) 
 		{	   seed =  (int) pValue;
 	       randomize=new Random(seed);
 	          long current_time = System.currentTimeMillis();
@@ -207,11 +226,8 @@ public class DC_KaliSet2Func  extends DC_BaseFunc {
 		else if (pName.equalsIgnoreCase(PARAM_FB)) {
 			FB =Tools.limitValue(pValue, 0.0 , 5.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_GRADIENT)) {
-			gradient = (int)Tools.limitValue(pValue, 0 , 1);
-		}
 		else
-			throw new IllegalArgumentException(pName);
+			super.setParameter(pName, pValue);
 	}
 
 	@Override

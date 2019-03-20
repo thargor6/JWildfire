@@ -1205,7 +1205,7 @@ public class glslFuncRunner {
 		return new vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 	}
 
-	//  Function from Inigo Quiles
+	//  Function from Iñigo Quiles
 	//  https://www.shadertoy.com/view/MsS3Wc
 	public   vec3 hsb2rgb( vec3 c )
 	{
@@ -1287,6 +1287,19 @@ public class glslFuncRunner {
 	    double cx = Math.cos(rot), sy = Math.sin(rot);
 	    return 0.0 + 0.5 * Math.cos((cx * coord.x + sy * coord.y) * k + s);
 	}
+	
+	public vec3 getRGBColor(double xp,double yp)
+	{
+		vec2 st=new vec2(xp,yp);
+		vec3 color=new vec3(0.0);
+
+		st.x=st.x*2.0-1.0;
+		st.y=st.y*2.0-1.0;
+
+		vec2 c = st.multiply(new vec2(1.0,1.0).multiply(2).minus(new vec2(0.5,0.0)));
+		color = fractal(c);        
+		return color;
+	}	
 	
 	public vec3 getRGBColor(int i,int j)
 	{
