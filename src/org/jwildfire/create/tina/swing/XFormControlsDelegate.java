@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.XForm;
@@ -147,10 +148,11 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
       // rows.getNonlinearParamsLeftButton().setEnabled(enabled);
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
-    data.xFormColorREd.setEnabled(enabled);
-    data.xFormColorSlider.setEnabled(enabled);
-    data.xFormSymmetryREd.setEnabled(enabled);
-    data.xFormSymmetrySlider.setEnabled(enabled);
+    boolean colorEnabled = enabled && xForm.getColorType() == ColorType.DIFFUSION;
+    data.xFormColorREd.setEnabled(colorEnabled);
+    data.xFormColorSlider.setEnabled(colorEnabled);
+    data.xFormSymmetryREd.setEnabled(colorEnabled);
+    data.xFormSymmetrySlider.setEnabled(colorEnabled);
     data.xFormMaterialREd.setEnabled(enabled);
     data.xFormMaterialSlider.setEnabled(enabled);
     data.xFormMaterialSpeedREd.setEnabled(enabled);
@@ -174,6 +176,7 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormOpacityREd.setEnabled(enabled && xForm.getDrawMode() == DrawMode.OPAQUE);
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);
+    data.xFormColorTypeCmb.setEnabled(enabled);
 
     data.relWeightsTable.setEnabled(enabled);
     enableRelWeightsControls();

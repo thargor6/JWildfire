@@ -283,6 +283,7 @@ public class FlameMorphService {
 
     res.setOpacity(morphValue(pXForm1.getOpacity(), pXForm2.getOpacity(), pFScl));
     res.setDrawMode(pFScl >= 0.5 ? pXForm2.getDrawMode() : pXForm1.getDrawMode());
+    res.setColorType(pFScl >= 0.5 ? pXForm2.getColorType() : pXForm1.getColorType());
     for (int i = 0; i < pXForm1.getModifiedWeights().length; i++) {
       res.getModifiedWeights()[i] = morphValue(pXForm1.getModifiedWeights()[i], pXForm2.getModifiedWeights()[i], pFScl);
     }

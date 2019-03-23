@@ -71,18 +71,10 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
 
   @Override
   protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
-    if (p.rgbColor) {
-      plotRed = p.redColor;
-      plotGreen = p.greenColor;
-      plotBlue = p.blueColor;
-    }
-    else {
-      RenderColor color = colorProvider.getColor(p, q);
-      plotRed = color.red;
-      plotGreen = color.green;
-      plotBlue = color.blue;
-    }
-    transformPlotColor(p);
+    plotRed = origin.redColor;
+    plotGreen = origin.greenColor;
+    plotBlue = origin.blueColor;
+    transformPlotColor(origin);
 
     if (ctx.random() > blurFade) {
       for (int k = screenY - blurRadius, yk = 0; k <= screenY + blurRadius; k++, yk++) {

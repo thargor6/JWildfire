@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.PostSymmetryType;
@@ -856,6 +857,7 @@ public class AbstractFlameReader {
   }
 
   public static final String ATTR_WEIGHT = "weight";
+  public static final String ATTR_COLOR_TYPE = "color_type";
   public static final String ATTR_COLOR = "color";
   public static final String ATTR_OPACITY = "opacity";
   public static final String ATTR_XY_COEFS = "coefs";
@@ -910,6 +912,14 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_MIRROR_PRE_POST_TRANSLATIONS)) != null) {
       double val = Double.parseDouble(hs);
       pXForm.setMirrorTranslations(val == 1);
+    }
+    if ((hs = atts.get(ATTR_COLOR_TYPE)) != null) {
+      try {
+        pXForm.setColorType(ColorType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
