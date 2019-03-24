@@ -746,7 +746,8 @@ public class VariationFuncList {
     registerVariationFunc(DC_MengerFunc.class);    
     registerVariationFunc(DC_TruchetFunc.class); 
     registerVariationFunc(DC_VoronoiseFunc.class);
-
+    registerVariationFunc(DC_CodeFunc.class);
+    
     registerVariationFunc(GlynnLissaFunc.class);
     registerVariationFunc(GlynnSpiroGraf3DFunc.class);
     registerVariationFunc(GlynnSuperShapeFunc.class);

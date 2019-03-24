@@ -163,7 +163,7 @@ public class GlynnSpiroGraf3DFunc extends VariationFunc {
 		  double xi,yi;
 		  if(r<Math.abs(radius))
 		  {			  
-		  if(width>=0)
+		  if(radius1>=0)
 			  {
 		       p = spirograph3D(t, a, b, c);
 			   pVarTP.x += pAmount * ((p.x*scale+width*y)*radius1+_x1);
@@ -264,7 +264,7 @@ public class GlynnSpiroGraf3DFunc extends VariationFunc {
 
   @Override
   public String getName() {
-    return "glynnsphiro";
+    return "glynnspiro";
   }
 
 }
