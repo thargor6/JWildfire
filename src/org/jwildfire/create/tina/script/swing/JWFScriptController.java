@@ -602,9 +602,7 @@ public class JWFScriptController {
     }
     switch (pXForm.getColorType()) {
     case NONE:
-      if (!pFinalXForm) {
-        pSB.append("      xForm.setColorType(ColorType.NONE);\n");
-      }
+      pSB.append("      xForm.setColorType(ColorType.NONE);\n");
       break;
     case DIFFUSION:
       if (pFinalXForm) {

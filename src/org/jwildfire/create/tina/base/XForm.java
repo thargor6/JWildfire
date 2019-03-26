@@ -203,7 +203,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve opacityCurve = new MotionCurve();
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
-  private ColorType colorType = ColorType.DIFFUSION;
+  private ColorType colorType = ColorType.UNSET;
   private String name = "";
 
   private final MotionCurve xyRotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
@@ -332,7 +332,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
-    if (colorType == ColorType.NONE) {
+    if (colorType != ColorType.DIFFUSION) {
       c1 = 1;
       c2 = 0;
     }

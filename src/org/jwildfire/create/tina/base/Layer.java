@@ -124,6 +124,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     int n = getXForms().size();
     {
       for (XForm xForm : this.getXForms()) {
+        if (xForm.getColorType() == ColorType.UNSET) xForm.setColorType(ColorType.DIFFUSION);
         xForm.initTransform();
         if(pFlameTransformationContext.getThreadId()==0) {
           for (Variation var : xForm.getVariations()) {
@@ -137,6 +138,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     }
     {
       for (XForm xForm : this.getFinalXForms()) {
+        if (xForm.getColorType() == ColorType.UNSET) xForm.setColorType(ColorType.NONE);
         xForm.initTransform();
         if(pFlameTransformationContext.getThreadId()==0) {
           for (Variation var : xForm.getVariations()) {

@@ -1486,6 +1486,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
           XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) : getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size());
+          if (xForm.getColorType() == ColorType.UNSET) {
+            xForm.setColorType(rowIndex < getCurrLayer().getXForms().size() ? ColorType.DIFFUSION : ColorType.NONE);
+          }
           switch (columnIndex) {
             case COL_TRANSFORM:
               return rowIndex < getCurrLayer().getXForms().size() ? "Transf" + String.valueOf(rowIndex + 1) : "Final" + String.valueOf(rowIndex - getCurrLayer().getXForms().size() + 1);
@@ -2791,6 +2794,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
+    xForm.setColorType(ColorType.DIFFUSION);
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;

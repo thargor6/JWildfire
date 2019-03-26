@@ -73,7 +73,7 @@ public class AbstractFlameWriter {
   protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, pXForm.getColorType().toString()));
+    if (pXForm.getColorType() != ColorType.UNSET) attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, pXForm.getColorType().toString()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, pXForm.getMirrorTranslations() ? 1 : 0));
