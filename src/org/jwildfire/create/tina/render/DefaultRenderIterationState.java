@@ -220,7 +220,7 @@ public class DefaultRenderIterationState extends RenderIterationState {
     plotBlue = origin.blueColor;
 
     if (!solidRendering)
-      transformPlotColor(origin);
+      transformPlotColor(p);
     double finalRed = plotRed * intensity;
     double finalGreen = plotGreen * intensity;
     double finalBlue = plotBlue * intensity;
