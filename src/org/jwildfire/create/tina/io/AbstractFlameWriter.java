@@ -54,6 +54,7 @@ import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dMode;
@@ -72,6 +73,7 @@ public class AbstractFlameWriter {
   protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
+    if (pXForm.getColorType() != ColorType.UNSET) attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, pXForm.getColorType().toString()));
     attrList.add(pXB.createAttr("color", pXForm.getColor()));
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, pXForm.getMirrorTranslations() ? 1 : 0));

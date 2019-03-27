@@ -18,6 +18,9 @@ package org.jwildfire.create.tina.base;
 
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.create.GradientCreator;
+import org.jwildfire.create.tina.variation.RessourceManager;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.List;
 import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 
@@ -54,6 +58,8 @@ public class Layer implements Assignable<Layer>, Serializable {
   private double gradientMapLocalColorAdd = 0.8;
   private double gradientMapLocalColorScale = 0.2;
   private boolean smoothGradient = false;
+  private RenderColor[] colorMap = null;
+  private SimpleImage gradientMap = null;
 
   public List<XForm> getXForms() {
     return xForms;
@@ -71,6 +77,14 @@ public class Layer implements Assignable<Layer>, Serializable {
     if (pPalette == null || pPalette.getSize() != RGBPalette.PALETTE_SIZE)
       throw new IllegalArgumentException(pPalette != null ? pPalette.toString() + " " + pPalette.getSize() : "NULL");
     palette = pPalette;
+    colorMap = null;
+  }
+  
+  public RenderColor[] getColorMap() {
+    if (colorMap == null) {
+      colorMap = palette.createRenderPalette(owner.getWhiteLevel());
+    }
+    return colorMap;
   }
 
   public void distributeColors() {
@@ -110,6 +124,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     int n = getXForms().size();
     {
       for (XForm xForm : this.getXForms()) {
+        if (xForm.getColorType() == ColorType.UNSET) xForm.setColorType(ColorType.DIFFUSION);
         xForm.initTransform();
         if(pFlameTransformationContext.getThreadId()==0) {
           for (Variation var : xForm.getVariations()) {
@@ -123,6 +138,7 @@ public class Layer implements Assignable<Layer>, Serializable {
     }
     {
       for (XForm xForm : this.getFinalXForms()) {
+        if (xForm.getColorType() == ColorType.UNSET) xForm.setColorType(ColorType.NONE);
         xForm.initTransform();
         if(pFlameTransformationContext.getThreadId()==0) {
           for (Variation var : xForm.getVariations()) {
@@ -254,6 +270,7 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   public void setGradientMapFilename(String gradientMapFilename) {
     this.gradientMapFilename = gradientMapFilename != null ? gradientMapFilename : "";
+    this.gradientMap = null;
   }
 
   public void setOwner(Flame pOwner) {
@@ -318,6 +335,27 @@ public class Layer implements Assignable<Layer>, Serializable {
 
   public void setGradientMapLocalColorScale(double pGradientMapLocalColorScale) {
     gradientMapLocalColorScale = pGradientMapLocalColorScale;
+  }
+  
+  public boolean isGradientMap() {
+    return this.gradientMapFilename != null && this.gradientMapFilename.length() > 0;
+  }
+  
+  private SimpleImage createDfltImage() {
+    GradientCreator creator = new GradientCreator();
+    return creator.createImage(256, 256);
+  }
+  public SimpleImage getGradientMap() {
+    if (gradientMap == null && isGradientMap()) {
+      try {
+        gradientMap = (SimpleImage) RessourceManager.getImage(this.gradientMapFilename);
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+        gradientMap = createDfltImage();
+      }
+    }
+    return gradientMap;
   }
 
 }

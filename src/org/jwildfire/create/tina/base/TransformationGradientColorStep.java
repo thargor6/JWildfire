@@ -16,29 +16,37 @@
 */
 package org.jwildfire.create.tina.base;
 
+import org.jwildfire.create.tina.palette.RenderColor;
+import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public final class TransformationInitStep extends AbstractTransformationStep {
+public final class TransformationGradientColorStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
 
-  public TransformationInitStep(XForm pXForm) {
+  public TransformationGradientColorStep(XForm pXForm) {
     super(pXForm);
   }
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
-    pAffineT.clear();
-    pAffineT.doHide = pSrcPoint.doHide;
-    pAffineT.receiveOnlyShadows = false;
-    pAffineT.color = pSrcPoint.color * xform.c1 + xform.c2;
-    pAffineT.rgbColor = false;  // used to detect variations that use true color
-    pAffineT.redColor = pSrcPoint.redColor;
-    pAffineT.greenColor = pSrcPoint.greenColor;
-    pAffineT.blueColor = pSrcPoint.blueColor;
-    pAffineT.material = pSrcPoint.material * xform.material1 + xform.material2;
-    pAffineT.modGamma = pSrcPoint.modGamma * xform.modGamma1 + xform.modGamma2;
-    pAffineT.modContrast = pSrcPoint.modContrast * xform.modContrast1 + xform.modContrast2;
-    pAffineT.modSaturation = pSrcPoint.modSaturation * xform.modSaturation1 + xform.modSaturation2;
-    pAffineT.modHue = pSrcPoint.modHue * xform.modHue1 + xform.modHue2;
+    
+    if (pDstPoint.rgbColor) {  
+      return;
+    }
+    
+    RenderColor[] colorMap = xform.getOwner().getColorMap();
+    double paletteIdxScl = colorMap.length - 2;
+    int colorIdx = (int) (pDstPoint.color * paletteIdxScl + 0.5);
+    if (colorIdx < 0)
+      colorIdx = 0;
+    else if (colorIdx >= RGBPalette.PALETTE_SIZE)
+      colorIdx = RGBPalette.PALETTE_SIZE - 1;
+    
+    RenderColor color = colorMap[colorIdx];
+    pDstPoint.redColor = color.red;
+    pDstPoint.greenColor = color.green;
+    pDstPoint.blueColor = color.blue;
+
   }
+
 }

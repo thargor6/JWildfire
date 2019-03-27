@@ -79,6 +79,7 @@ import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
@@ -381,7 +382,9 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField xFormOpacityREd = null;
   private JSlider xFormOpacitySlider = null;
   private JLabel xFormDrawModeLbl = null;
+  private JLabel xFormColorTypeLbl = null;
   private JComboBox xFormDrawModeCmb = null;
+  private JComboBox xFormColorTypeCmb = null;
   private JPanel relWeightsEastPanel = null;
   private JButton relWeightsZeroButton = null;
   private JButton relWeightsOneButton = null;
@@ -4166,14 +4169,21 @@ public class MainEditorFrame extends JFrame {
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
       xFormDrawModeLbl.setSize(new Dimension(119, 22));
-      xFormDrawModeLbl.setLocation(new Point(6, 75));
+      xFormDrawModeLbl.setLocation(new Point(6, 101));
       xFormDrawModeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      xFormColorTypeLbl = new JLabel();
+      xFormColorTypeLbl.setToolTipText("");
+      xFormColorTypeLbl.setPreferredSize(new Dimension(64, 22));
+      xFormColorTypeLbl.setText("Color Type");
+      xFormColorTypeLbl.setSize(new Dimension(119, 22));
+      xFormColorTypeLbl.setLocation(new Point(6, 10));
+      xFormColorTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormOpacityLbl = new JLabel();
       xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
       xFormOpacityLbl.setSize(new Dimension(49, 22));
-      xFormOpacityLbl.setLocation(new Point(6, 101));
+      xFormOpacityLbl.setLocation(new Point(6, 127));
       xFormOpacityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setName("xFormSymmetryLbl");
@@ -4181,14 +4191,14 @@ public class MainEditorFrame extends JFrame {
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
       xFormSymmetryLbl.setText("Speed");
       xFormSymmetryLbl.setSize(new Dimension(49, 22));
-      xFormSymmetryLbl.setLocation(new Point(6, 47));
+      xFormSymmetryLbl.setLocation(new Point(6, 73));
       xFormSymmetryLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorLbl = new JLabel();
       xFormColorLbl.setName("xFormColorLbl");
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
       xFormColorLbl.setSize(new Dimension(49, 22));
-      xFormColorLbl.setLocation(new Point(6, 21));
+      xFormColorLbl.setLocation(new Point(6, 47));
       xFormColorLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaTransformationColorPanel = new JPanel();
       tinaTransformationColorPanel.setLayout(null);
@@ -4203,9 +4213,11 @@ public class MainEditorFrame extends JFrame {
       tinaTransformationColorPanel.add(getXFormOpacitySlider(), null);
       tinaTransformationColorPanel.add(xFormDrawModeLbl, null);
       tinaTransformationColorPanel.add(getXFormDrawModeCmb(), null);
+      tinaTransformationColorPanel.add(xFormColorTypeLbl, null);
+      tinaTransformationColorPanel.add(getXFormColorTypeCmb(), null);
 
       tinaColorChooserPaletteImgPanel = new JPanel();
-      tinaColorChooserPaletteImgPanel.setBounds(125, 10, 195, 10);
+      tinaColorChooserPaletteImgPanel.setBounds(125, 36, 195, 10);
       tinaTransformationColorPanel.add(tinaColorChooserPaletteImgPanel);
       tinaColorChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
 
@@ -4214,9 +4226,9 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialLbl.setSize(new Dimension(49, 22));
       xFormMaterialLbl.setPreferredSize(new Dimension(64, 22));
       xFormMaterialLbl.setName("xFormMaterialLbl");
-      xFormMaterialLbl.setLocation(new Point(6, 21));
+      xFormMaterialLbl.setLocation(new Point(6, 172));
       xFormMaterialLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialLbl.setBounds(6, 146, 49, 22);
+//      xFormMaterialLbl.setBounds(6, 146, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialLbl);
 
       xFormMaterialREd = new JWFNumberField();
@@ -4225,13 +4237,13 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialREd.setSize(new Dimension(70, 24));
       xFormMaterialREd.setPreferredSize(new Dimension(70, 24));
       xFormMaterialREd.setMotionPropertyName("material");
-      xFormMaterialREd.setLocation(new Point(55, 21));
+      xFormMaterialREd.setLocation(new Point(55, 172));
       xFormMaterialREd.setLinkedMotionControlName("xFormMaterialSlider");
       xFormMaterialREd.setLinkedLabelControlName("xFormMaterialLbl");
       xFormMaterialREd.setHasMinValue(true);
       xFormMaterialREd.setHasMaxValue(false);
       xFormMaterialREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormMaterialREd.setBounds(55, 146, 70, 24);
+//      xFormMaterialREd.setBounds(55, 146, 70, 24);
       xFormMaterialREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getXFormControls().editMotionCurve(e);
@@ -4258,9 +4270,9 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSlider.setName("xFormMaterialSlider");
       xFormMaterialSlider.setMinimum(0);
       xFormMaterialSlider.setMaximum(300);
-      xFormMaterialSlider.setLocation(new Point(125, 21));
+      xFormMaterialSlider.setLocation(new Point(125, 172));
       xFormMaterialSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSlider.setBounds(125, 146, 195, 22);
+//      xFormMaterialSlider.setBounds(125, 146, 195, 22);
       xFormMaterialSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -4275,7 +4287,7 @@ public class MainEditorFrame extends JFrame {
       tinaTransformationColorPanel.add(xFormMaterialSlider);
 
       tinaMaterialChooserPaletteImgPanel = new JPanel();
-      tinaMaterialChooserPaletteImgPanel.setBounds(125, 135, 195, 10);
+      tinaMaterialChooserPaletteImgPanel.setBounds(125, 161, 195, 10);
       tinaTransformationColorPanel.add(tinaMaterialChooserPaletteImgPanel);
       tinaMaterialChooserPaletteImgPanel.setLayout(new BorderLayout(0, 0));
 
@@ -4285,9 +4297,9 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedLbl.setSize(new Dimension(49, 22));
       xFormMaterialSpeedLbl.setPreferredSize(new Dimension(64, 22));
       xFormMaterialSpeedLbl.setName("xFormMaterialSpeedLbl");
-      xFormMaterialSpeedLbl.setLocation(new Point(6, 47));
+      xFormMaterialSpeedLbl.setLocation(new Point(6, 198));
       xFormMaterialSpeedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
+//      xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialSpeedLbl);
 
       xFormMaterialSpeedREd = new JWFNumberField();
@@ -4298,13 +4310,13 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedREd.setMotionPropertyName("materialSpeed");
       xFormMaterialSpeedREd.setMinValue(-1.0);
       xFormMaterialSpeedREd.setMaxValue(1.0);
-      xFormMaterialSpeedREd.setLocation(new Point(55, 47));
+      xFormMaterialSpeedREd.setLocation(new Point(55, 198));
       xFormMaterialSpeedREd.setLinkedMotionControlName("xFormMaterialSpeedSlider");
       xFormMaterialSpeedREd.setLinkedLabelControlName("xFormMaterialSpeedLbl");
       xFormMaterialSpeedREd.setHasMinValue(true);
       xFormMaterialSpeedREd.setHasMaxValue(true);
       xFormMaterialSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
+//      xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
       xFormMaterialSpeedREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getXFormControls().editMotionCurve(e);
@@ -4332,9 +4344,9 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedSlider.setName("xFormMaterialSpeedSlider");
       xFormMaterialSpeedSlider.setMinimum(-100);
       xFormMaterialSpeedSlider.setMaximum(100);
-      xFormMaterialSpeedSlider.setLocation(new Point(125, 47));
+      xFormMaterialSpeedSlider.setLocation(new Point(125, 198));
       xFormMaterialSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
+//      xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
       xFormMaterialSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -5424,7 +5436,7 @@ public class MainEditorFrame extends JFrame {
         getTinaAddLinkedTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
-        getXFormOpacitySlider(), getXFormDrawModeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
+        getXFormOpacitySlider(), getXFormDrawModeCmb(), getXFormColorTypeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveTrianglesButton(),
         getMouseTransformEditFocusPointButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
@@ -5575,6 +5587,10 @@ public class MainEditorFrame extends JFrame {
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
       getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
+      
+      getXFormColorTypeCmb().removeAllItems();
+      getXFormColorTypeCmb().addItem(ColorType.NONE);
+      getXFormColorTypeCmb().addItem(ColorType.DIFFUSION);
 
       getTinaSolidRenderingMaterialDiffuseResponseCmb().removeAllItems();
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA);
@@ -7237,7 +7253,7 @@ public class MainEditorFrame extends JFrame {
       xFormColorREd.setPreferredSize(new Dimension(70, 24));
       xFormColorREd.setText("");
       xFormColorREd.setSize(new Dimension(70, 24));
-      xFormColorREd.setLocation(new Point(55, 21));
+      xFormColorREd.setLocation(new Point(55, 47));
       xFormColorREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormColorREd;
@@ -7257,7 +7273,7 @@ public class MainEditorFrame extends JFrame {
       xFormColorSlider.setMinimum(0);
       xFormColorSlider.setValue(0);
       xFormColorSlider.setSize(new Dimension(195, 22));
-      xFormColorSlider.setLocation(new Point(125, 21));
+      xFormColorSlider.setLocation(new Point(125, 47));
       xFormColorSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorSlider.addMouseListener(new MouseAdapter() {
         @Override
@@ -7310,7 +7326,7 @@ public class MainEditorFrame extends JFrame {
       xFormSymmetryREd.setPreferredSize(new Dimension(55, 24));
       xFormSymmetryREd.setText("");
       xFormSymmetryREd.setSize(new Dimension(70, 24));
-      xFormSymmetryREd.setLocation(new Point(55, 47));
+      xFormSymmetryREd.setLocation(new Point(55, 73));
       xFormSymmetryREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormSymmetryREd;
@@ -7329,7 +7345,7 @@ public class MainEditorFrame extends JFrame {
       xFormSymmetrySlider.setMaximum(100);
       xFormSymmetrySlider.setMinimum(-100);
       xFormSymmetrySlider.setValue(0);
-      xFormSymmetrySlider.setLocation(new Point(125, 47));
+      xFormSymmetrySlider.setLocation(new Point(125, 73));
       xFormSymmetrySlider.setSize(new Dimension(195, 22));
       xFormSymmetrySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetrySlider.addMouseListener(new MouseAdapter() {
@@ -7382,7 +7398,7 @@ public class MainEditorFrame extends JFrame {
       xFormOpacityREd.setPreferredSize(new Dimension(55, 24));
       xFormOpacityREd.setText("");
       xFormOpacityREd.setSize(new Dimension(70, 24));
-      xFormOpacityREd.setLocation(new Point(55, 101));
+      xFormOpacityREd.setLocation(new Point(55, 127));
       xFormOpacityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
     }
     return xFormOpacityREd;
@@ -7408,7 +7424,7 @@ public class MainEditorFrame extends JFrame {
       xFormOpacitySlider.setMinimum(0);
       xFormOpacitySlider.setValue(0);
       xFormOpacitySlider.setSize(new Dimension(195, 22));
-      xFormOpacitySlider.setLocation(new Point(125, 101));
+      xFormOpacitySlider.setLocation(new Point(125, 127));
       xFormOpacitySlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormOpacitySlider.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -7429,7 +7445,7 @@ public class MainEditorFrame extends JFrame {
       xFormDrawModeCmb = new JComboBox();
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
-      xFormDrawModeCmb.setLocation(new Point(122, 77));
+      xFormDrawModeCmb.setLocation(new Point(122, 103));
       xFormDrawModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -7439,6 +7455,28 @@ public class MainEditorFrame extends JFrame {
       });
     }
     return xFormDrawModeCmb;
+  }
+
+  /**
+   * This method initializes xFormColorTypeCmb   
+   *    
+   * @return javax.swing.JComboBox  
+   */
+  private JComboBox getXFormColorTypeCmb() {
+    if (xFormColorTypeCmb == null) {
+      xFormColorTypeCmb = new JComboBox();
+      xFormColorTypeCmb.setPreferredSize(new Dimension(120, 22));
+      xFormColorTypeCmb.setSize(new Dimension(120, 22));
+      xFormColorTypeCmb.setLocation(new Point(122, 10));
+      xFormColorTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      xFormColorTypeCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          tinaController.saveUndoPoint();
+          tinaController.xFormColorTypeCmb_changed();
+        }
+      });
+    }
+    return xFormColorTypeCmb;
   }
 
   /**

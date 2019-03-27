@@ -26,13 +26,10 @@ import static org.jwildfire.base.mathlib.MathLib.log;
 import static org.jwildfire.base.mathlib.MathLib.sin;
 import static org.jwildfire.base.mathlib.MathLib.sqrt;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.GradientCreator;
 import org.jwildfire.create.tina.base.Constants;
 import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.Flame;
@@ -41,14 +38,9 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.XYZProjectedPoint;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
-import org.jwildfire.create.tina.palette.RGBPalette;
-import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.random.AbstractRandomGenerator;
 import org.jwildfire.create.tina.render.GammaCorrectionFilter.HSLRGBConverter;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.RessourceManager;
-import org.jwildfire.image.Pixel;
-import org.jwildfire.image.SimpleImage;
 
 public class DefaultRenderIterationState extends RenderIterationState {
 
@@ -61,7 +53,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected XForm xf;
   protected final XYZProjectedPoint prj;
   protected PointProjector projector;
-  protected final ColorProvider colorProvider;
   protected final boolean solidRendering;
 
   public DefaultRenderIterationState(AbstractRenderThread pRenderThread, FlameRenderer pRenderer, RenderPacket pPacket, Layer pLayer, FlameTransformationContext pCtx, AbstractRandomGenerator pRandGen, boolean pUsePlotBuffer) {
@@ -69,12 +60,6 @@ public class DefaultRenderIterationState extends RenderIterationState {
     plotBuffer = initPlotBuffer(pUsePlotBuffer ? (RenderMode.PRODUCTION.equals(pRenderer.getRenderInfo().getRenderMode()) ? Tools.PLOT_BUFFER_SIZE : Tools.PLOT_BUFFER_SIZE / 2) : 1);
     solidRendering = flame.getSolidRenderSettings().isSolidRenderingEnabled();
     projector = new DefaultPointProjector();
-    if (pLayer.getGradientMapFilename() != null && pLayer.getGradientMapFilename().length() > 0) {
-      colorProvider = new GradientMapColorProvider(pLayer.getGradientMapFilename());
-    }
-    else {
-      colorProvider = pLayer.isSmoothGradient() ? new SmoothColorProvider() : new DefaultColorProvider();
-    }
 
     boolean withLightmaps = ShadowType.areShadowsEnabled(flame.getSolidRenderSettings().getShadowType());
     prj = new XYZProjectedPoint(withLightmaps ? flame.getSolidRenderSettings().getLights().size() : 0);
@@ -229,152 +214,11 @@ public class DefaultRenderIterationState extends RenderIterationState {
   protected int shadowMapPlotBufferIdx[] = initShadowMapPlotBufferIdx();
   protected PlotSample[][] shadowMapPlotBuffer = initShadowMapPlotBuffer();
 
-  interface ColorProvider extends Serializable {
-    RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint);
-  }
-
-  private class DefaultColorProvider implements ColorProvider {
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
-      int colorIdx = (int) (pTPoint.color * paletteIdxScl + 0.5);
-      if (colorIdx < 0)
-        colorIdx = 0;
-      else if (colorIdx >= RGBPalette.PALETTE_SIZE)
-        colorIdx = RGBPalette.PALETTE_SIZE - 1;
-      return colorMap[colorIdx];
-    }
-
-  }
-
-  private class SmoothColorProvider implements ColorProvider {
-    private static final long serialVersionUID = 1L;
-
-    private final RenderColor rc = new RenderColor();
-
-    @Override
-    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
-      double colorIdx = pTPoint.color * paletteIdxScl;
-      int lIdx = (int) colorIdx;
-      double lR, lG, lB;
-      if (lIdx >= 0 && lIdx < RGBPalette.PALETTE_SIZE) {
-        lR = colorMap[lIdx].red;
-        lG = colorMap[lIdx].green;
-        lB = colorMap[lIdx].blue;
-      }
-      else {
-        lR = lG = lB = 0.0;
-      }
-
-      double rR, rG, rB;
-      int rIdx = lIdx + 1;
-      if (rIdx >= 0 && rIdx < RGBPalette.PALETTE_SIZE) {
-        rR = colorMap[rIdx].red;
-        rG = colorMap[rIdx].green;
-        rB = colorMap[rIdx].blue;
-      }
-      else {
-        rR = rG = rB = 0.0;
-      }
-
-      double t = MathLib.frac(colorIdx);
-      rc.red = GfxMathLib.lerp(lR, rR, t);
-      rc.green = GfxMathLib.lerp(lG, rG, t);
-      rc.blue = GfxMathLib.lerp(lB, rB, t);
-      return rc;
-    }
-  }
-
-  private class GradientMapColorProvider implements ColorProvider {
-    private static final long serialVersionUID = 1L;
-    private final SimpleImage map;
-
-    private SimpleImage createDfltImage() {
-      GradientCreator creator = new GradientCreator();
-      return creator.createImage(256, 256);
-    }
-
-    private final Pixel toolPixel = new Pixel();
-    private final RenderColor rc = new RenderColor();
-
-    public GradientMapColorProvider(String pGradientMap) {
-      SimpleImage image;
-      try {
-        image = (SimpleImage) RessourceManager.getImage(pGradientMap);
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-        image = createDfltImage();
-      }
-      map = image;
-    }
-
-    @Override
-    public RenderColor getColor(XYZPoint pTPoint, XYZPoint pFPoint) {
-      double localColorAdd = layer.getGradientMapLocalColorAdd();
-      double localColorMultiply = layer.getGradientMapLocalColorScale();
-
-      double x = (pFPoint.x * (1.0 - localColorMultiply) + pFPoint.x * localColorMultiply * pFPoint.color + localColorAdd * pFPoint.color) * layer.getGradientMapHorizScale() + layer.getGradientMapHorizOffset();
-      double y = (pFPoint.y * (1.0 - localColorMultiply) + pFPoint.y * localColorMultiply * pFPoint.color + localColorAdd * pFPoint.color) * layer.getGradientMapVertScale() + layer.getGradientMapVertOffset();
-
-      double width = map.getImageWidth() - 2;
-      double height = map.getImageHeight() - 2;
-      double fx = MathLib.fabs(x);
-      double imageX = MathLib.fmod(fx * width, width);
-      if (((int) fx) % 2 != 0) {
-        imageX = width - imageX;
-      }
-      double fy = MathLib.fabs(y);
-      double imageY = MathLib.fmod(fy * height, height);
-      if (((int) fy) % 2 != 0) {
-        imageY = height - imageY;
-      }
-
-      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds((int) imageX, (int) imageY));
-      int luR = toolPixel.r;
-      int luG = toolPixel.g;
-      int luB = toolPixel.b;
-
-      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds(((int) imageX) + 1, (int) imageY));
-      int ruR = toolPixel.r;
-      int ruG = toolPixel.g;
-      int ruB = toolPixel.b;
-      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds((int) imageX, ((int) imageY) + 1));
-      int lbR = toolPixel.r;
-      int lbG = toolPixel.g;
-      int lbB = toolPixel.b;
-      toolPixel.setARGBValue(map.getARGBValueIgnoreBounds(((int) imageX) + 1, ((int) imageY) + 1));
-      int rbR = toolPixel.r;
-      int rbG = toolPixel.g;
-      int rbB = toolPixel.b;
-
-      double localX = MathLib.frac(imageX);
-      double localY = MathLib.frac(imageY);
-      rc.red = GfxMathLib.blerp(luR, ruR, lbR, rbR, localX, localY);
-      rc.green = GfxMathLib.blerp(luG, ruG, lbG, rbG, localX, localY);
-      rc.blue = GfxMathLib.blerp(luB, ruB, lbB, rbB, localX, localY);
-      return rc;
-    }
-  }
-
   protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
-    if (p.rgbColor) {
-      plotRed = p.redColor;
-      plotGreen = p.greenColor;
-      plotBlue = p.blueColor;
-    }
-    else if (q.rgbColor) {
-      plotRed = q.redColor;
-      plotGreen = q.greenColor;
-      plotBlue = q.blueColor;
-    }
-    else {
-      RenderColor color = colorProvider.getColor(p, q);
-      plotRed = color.red;
-      plotGreen = color.green;
-      plotBlue = color.blue;
-    }
+    plotRed = origin.redColor;
+    plotGreen = origin.greenColor;
+    plotBlue = origin.blueColor;
+
     if (!solidRendering)
       transformPlotColor(p);
     double finalRed = plotRed * intensity;

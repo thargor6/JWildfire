@@ -203,6 +203,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve opacityCurve = new MotionCurve();
   private final XForm[] nextAppliedXFormTable = new XForm[Constants.NEXT_APPLIED_XFORM_TABLE_SIZE];
   private DrawMode drawMode = DrawMode.NORMAL;
+  private ColorType colorType = ColorType.UNSET;
   private String name = "";
 
   private final MotionCurve xyRotateCurve = new MotionCurve(RotateMotionValueChangeHandler.INSTANCE);
@@ -331,6 +332,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
+    if (colorType != ColorType.DIFFUSION) {
+      c1 = 1;
+      c2 = 0;
+    }
 
     material1 = (1 + materialSpeed) * 0.5;
     material2 = material * (1 - materialSpeed) * 0.5;
@@ -478,6 +483,18 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationPostAffineStep(this));
     }
+    
+    if (colorType == ColorType.DIFFUSION) {
+      if (owner.isGradientMap()) {
+        t.add(new TransformationGradientMapColorStep(this));
+      }
+      else if (owner.isSmoothGradient()) {
+        t.add(new TransformationSmoothGradientColorStep(this));
+      }
+      else {
+        t.add(new TransformationGradientColorStep(this));
+      }
+    }
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
@@ -508,6 +525,14 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
+  }
+  
+  public ColorType getColorType() {
+    return colorType;
+  }
+
+  public void setColorType(ColorType colorType) {
+    this.colorType = colorType;
   }
   
   @Override
@@ -638,6 +663,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     opacity = pXForm.opacity;
     opacityCurve.assign(pXForm.opacityCurve);
     drawMode = pXForm.drawMode;
+    colorType = pXForm.colorType;
     name = pXForm.name;
   }
 
@@ -709,6 +735,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
         (fabs(opacity - pSrc.opacity) > EPSILON) || !opacityCurve.isEqual(pSrc.opacityCurve) ||
         ((drawMode != null && pSrc.drawMode == null) || (drawMode == null && pSrc.drawMode != null) ||
         (drawMode != null && pSrc.drawMode != null && !drawMode.equals(pSrc.drawMode))) ||
+        ((colorType != null && pSrc.colorType == null) || (colorType == null && pSrc.colorType != null) ||
+        (colorType != null && pSrc.colorType != null && !colorType.equals(pSrc.colorType))) ||
         !name.equals(pSrc.name) ||
         (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size())) {
       return false;

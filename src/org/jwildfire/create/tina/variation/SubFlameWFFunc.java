@@ -196,6 +196,10 @@ public class SubFlameWFFunc extends VariationFunc {
   protected void prefuseIter(FlameTransformationContext pContext) {
     if (flame != null) {
       Layer layer = flame.getFirstLayer();
+      // a compatibility quirk: default for subflame final xforms is DIFFUSION
+      for (XForm xForm: layer.getFinalXForms()) {
+        if (xForm.getColorType() == ColorType.UNSET) xForm.setColorType(ColorType.DIFFUSION);
+      }
       layer.refreshModWeightTables(pContext);
       xf = layer.getXForms().get(0);
       p = new XYZPoint();
@@ -276,16 +280,16 @@ public class SubFlameWFFunc extends VariationFunc {
             pVarTP.color = q.color;
             break;
           case CM_RED:
-            pVarTP.color = pVarTP.redColor / 255.0;
+            pVarTP.color = q.redColor / 255.0;
             break;
           case CM_GREEN:
-            pVarTP.color = pVarTP.greenColor / 255.0;
+            pVarTP.color = q.greenColor / 255.0;
             break;
           case CM_BLUE:
-            pVarTP.color = pVarTP.blueColor / 255.0;
+            pVarTP.color = q.blueColor / 255.0;
             break;
           case CM_BRIGHTNESS:
-            pVarTP.color = (0.2990 * pVarTP.redColor + 0.5880 * pVarTP.greenColor + 0.1130 * pVarTP.blueColor) / 255.0;
+            pVarTP.color = (0.2990 * q.redColor + 0.5880 * q.greenColor + 0.1130 * q.blueColor) / 255.0;
             break;
         }
       }

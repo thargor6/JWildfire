@@ -79,6 +79,7 @@ import org.jwildfire.create.tina.AnimationController;
 import org.jwildfire.create.tina.GradientController;
 import org.jwildfire.create.tina.base.BGColorType;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
@@ -569,6 +570,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormOpacityREd = parameterObject.pXFormOpacityREd;
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
+    data.xFormColorTypeCmb = parameterObject.pXFormColorTypeCmb;
 
     data.xFormAntialiasAmountREd = parameterObject.pXFormAntialiasAmountREd;
     data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
@@ -1484,6 +1486,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       public Object getValueAt(int rowIndex, int columnIndex) {
         if (getCurrFlame() != null) {
           XForm xForm = rowIndex < getCurrLayer().getXForms().size() ? getCurrLayer().getXForms().get(rowIndex) : getCurrLayer().getFinalXForms().get(rowIndex - getCurrLayer().getXForms().size());
+          if (xForm.getColorType() == ColorType.UNSET) {
+            xForm.setColorType(rowIndex < getCurrLayer().getXForms().size() ? ColorType.DIFFUSION : ColorType.NONE);
+          }
           switch (columnIndex) {
             case COL_TRANSFORM:
               return rowIndex < getCurrLayer().getXForms().size() ? "Transf" + String.valueOf(rowIndex + 1) : "Final" + String.valueOf(rowIndex - getCurrLayer().getXForms().size() + 1);
@@ -2577,6 +2582,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormOpacityREd.setText(Tools.doubleToString(pXForm.getOpacity()));
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
+        data.xFormColorTypeCmb.setSelectedItem(pXForm.getColorType());
 
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
       }
@@ -2615,6 +2621,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormOpacitySlider.setValue(0);
         data.transformationWeightREd.setText(null);
         data.xFormDrawModeCmb.setSelectedIndex(-1);
+        data.xFormColorTypeCmb.setSelectedIndex(-1);
       }
 
       {
@@ -2787,6 +2794,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
+    xForm.setColorType(ColorType.DIFFUSION);
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
     gridRefreshing = true;
@@ -2869,6 +2877,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setColorSymmetry(1.0);
+    xForm.setColorType(ColorType.NONE);
     saveUndoPoint();
     getCurrLayer().getFinalXForms().add(xForm);
     gridRefreshing = true;
@@ -3647,6 +3656,17 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       XForm xForm = getCurrXForm();
       if (xForm != null && data.xFormDrawModeCmb.getSelectedItem() != null) {
         xForm.setDrawMode((DrawMode) data.xFormDrawModeCmb.getSelectedItem());
+        refreshFlameImage(true, false, 1, true, false);
+        xFormControls.enableControls(xForm);
+      }
+    }
+  }
+
+  public void xFormColorTypeCmb_changed() {
+    if (!cmbRefreshing) {
+      XForm xForm = getCurrXForm();
+      if (xForm != null && data.xFormColorTypeCmb.getSelectedItem() != null) {
+        xForm.setColorType((ColorType) data.xFormColorTypeCmb.getSelectedItem());
         refreshFlameImage(true, false, 1, true, false);
         xFormControls.enableControls(xForm);
       }

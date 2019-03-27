@@ -20,6 +20,7 @@ import org.jwildfire.base.MacroButton;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.DrawMode;
+import org.jwildfire.create.tina.base.ColorType;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
@@ -408,6 +409,7 @@ public class JWFScriptController {
     sb.append("import org.jwildfire.create.tina.transform.XFormTransformService;\n");
     sb.append("import org.jwildfire.create.tina.base.Layer;\n");
     sb.append("import org.jwildfire.create.tina.base.DrawMode;\n");
+    sb.append("import org.jwildfire.create.tina.base.ColorType;\n");
     sb.append("import org.jwildfire.create.tina.variation.Variation;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFunc;\n");
     sb.append("import org.jwildfire.create.tina.variation.VariationFuncList;\n");
@@ -596,6 +598,16 @@ public class JWFScriptController {
     case OPAQUE:
       pSB.append("      xForm.setDrawMode(DrawMode.OPAQUE);\n");
       pSB.append("      xForm.setOpacity(" + Tools.doubleToString(pXForm.getOpacity()) + ");\n");
+      break;
+    }
+    switch (pXForm.getColorType()) {
+    case NONE:
+      pSB.append("      xForm.setColorType(ColorType.NONE);\n");
+      break;
+    case DIFFUSION:
+      if (pFinalXForm) {
+        pSB.append("      xForm.setColorType(ColorType.DIFFUSION);\n");
+      }
       break;
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
