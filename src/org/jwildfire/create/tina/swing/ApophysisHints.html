@@ -1,28 +1,48 @@
 <html>
 <body>
-<hr>Tips for Apophysis users<br>
+<h1>Tips for Apophysis users</h1>
 
 <b>Translating Apo-tutorials from Apo to JWildfire  </b><br>
 You will be able to adopt nearly any Apo-tutorial to JWildfire. There are some rare exceptions, e. g. missing/different variations ("Plugins").
 Here is a list with common questions/answers when trying to adopting an Apo-tutorial:
 <ul>
-<li>To add a linked transform use "L"-button right of the "Add"-transform-button
-<li>When you use Xaos, you can use only the "From"-view in JWildfire, there is currently no "To"-view. 
-But please note that this "To"-view is actually not needed, you can completely control and understand Xaos by just using 
-the "From"-view, the "To"-view is just a shortcut to do some thing with a fewer clicks. The "From"-view is the view on the Xaos-tab.
+<li>To add a linked transform use "L"-button right of the "Add"-transform-button.
+<li>To allow a final transform to modify colors for the flame, change its Color Type to DIFFUSION. (By default, JWildfire ignores color
+settings on final transforms.)
+<li>Some older tutorials reference "Color Symmetry"; this is called "Color Speed" in JWildfire (and in the latest Apophysis versions).
+<li>Apophysis and JWildfire both have a control named "Zoom", but they work differently. In Apophysis, Zoom uses a logarithmic scale and
+maintains image quality. In JWildfire, Zoom is linear, so a different value is needed from what is specified in an Apo tutorial.
 </ul>
 
 <b>Exchanging Parameters (using the clipboard) </b><br>
 JWildfire also supports exchanging parameters by using the clipboard, and the best thing about this is: it also "understands" most of the Apo-parameters.  
-But, you cant use the keyboard-shortcuts you know from Apo. Instead use the buttons "To Clipboard" (store params of the current flame into the clipboard, &lt; Ctrl &gt; + C in Apo)
-and "From Clipboard" (try to import the current content of the Clipboard as flame, &lt; Ctrl ;gt; + V in Apo) 
+But, you can't use the keyboard-shortcuts you know from Apo. Instead use the buttons "To Clipboard" (store params of the current flame into the clipboard, &lt; Ctrl &gt; + C in Apo)
+and "From Clipboard" (try to import the current content of the Clipboard as flame, &lt; Ctrl &gt; + V in Apo)
+<br><br> 
 
 <b>Sliders and Number Fields :</b><br>
 Note that most numeric fields in JWildfire allow to modify values by dragging the mouse (similar to using a slider). 
 Just the enter the field with the mouse, hold the left button and drag the mouse left or right to decrease/increase numeric values.  
 <br><br>
+
+<b>Modifying triangles using the mouse:</b><br>
+Modifying the transform triangles using the mouse is quite different in JWildfire. It is done in the main preview window rather than a
+separate editor window. First, select the triangle to edit in the Transformations tab, then select one of the buttons to the right of the 
+preview image to control what effect dragging the mouse has:
+<ul>
+<li><b>Top button:</b> Move, rotate, or resize the image (left mouse button to move, right mouse button to rotate, and scroll wheel to resize)
+<li><b>2nd button:</b> Move the selected triangle with the left mouse button (no need to drag the triangle itself; point anywhere in the
+preview window and drag).
+<li><b>3rd button:</b> Rotate the selected triangle (drag left for clockwise, right for counter-clockwise; don't try to drag the triangle
+edge in a circular motion like in Apo).
+<li><b>4th button:</b> Scale the selected triangle (drag left to shrink, right to expand; don't try to drag the triangle edge like in Apo).
+<li><b>5th button:</b> Free edit the selected triangle (click the point to edit, X, Y, or O, then drag anywhere in the window to move just
+that point of the triangle)
+<li><b>6th button:</b> Edit the controls view (left mouse button to move the triangles (like right mouse button in Apo), scroll to resize 
+the controls (just like Apo)). These only affect the view of the triangles; they don't modify the flame.
+</ul>
  
-<b>Navigating triangles using cursor keys:</b><br>
+<b>Modifying triangles using cursor keys:</b><br>
 If the preview area is active and you have selected a triangle you may modify this triangle using 
 the cursor keys (Because the cursor keys have also other functions (e. g. navigating in tables) you have to focus the preview 
 are with the mouse at first): 
