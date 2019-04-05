@@ -819,7 +819,7 @@ public class TinaSWFAnimatorController implements SWFAnimationRenderThreadContro
   }
 
   public void refreshFlameImage(boolean pQuickRender) {
-    if (!noRefresh) {
+    if (!noRefresh && currMovie.getFrameCount() > 0) {
       FlamePanel imgPanel = getFlamePanel();
       Rectangle bounds = imgPanel.getImageBounds();
       int width = bounds.width;
