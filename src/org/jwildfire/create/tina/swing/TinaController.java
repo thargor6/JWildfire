@@ -2767,26 +2767,38 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     if (row < 0 || row >= getCurrLayer().getXForms().size()) {
       return;
     }
+    XForm xForm = new XForm();
+    xForm.addVariation(1.0, new Linear3DFunc());
+    xForm.setWeight(0.5);
+    xForm.setColorType(ColorType.DIFFUSION);
+    xForm.setDrawMode(DrawMode.HIDDEN);
+    xForm.setColorSymmetry(1.0);
     saveUndoPoint();
-    addXForm();
+    getCurrLayer().getXForms().add(xForm);
     int fromId = row;
     int toId = getCurrLayer().getXForms().size() - 1;
     for (int i = 0; i < getCurrLayer().getXForms().size(); i++) {
-      XForm xForm = getCurrLayer().getXForms().get(i);
+      xForm = getCurrLayer().getXForms().get(i);
       if (i == fromId) {
         XForm toXForm = getCurrLayer().getXForms().get(toId);
         for (int j = 0; j < getCurrLayer().getXForms().size(); j++) {
           toXForm.getModifiedWeights()[j] = xForm.getModifiedWeights()[j];
           xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
-        xForm.setDrawMode(DrawMode.HIDDEN);
       }
       else {
         xForm.getModifiedWeights()[toId] = 0;
-        if (i == toId)
-          xForm.setColorSymmetry(1.0);
       }
     }
+    gridRefreshing = true;
+    try {
+      refreshTransformationsTable();
+    }
+    finally {
+      gridRefreshing = false;
+    }
+    row = getCurrLayer().getXForms().size() - 1;
+    data.transformationsTable.getSelectionModel().setSelectionInterval(row, row);
     refreshFlameImage(true, false, 1, true, false);
   }
 
