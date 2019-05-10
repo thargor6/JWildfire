@@ -341,7 +341,10 @@ public class PrefsReader {
         inputStream.close();
       }
     }
-    setupDefaultProfiles(pPrefs);
+    else {
+      setupDefaultProfiles(pPrefs);
+      setupDefaultTinaMacroButtons(pPrefs);
+    }
   }
 
   private void addMacroButton(Prefs prefs, String caption, String hint, String script) {
