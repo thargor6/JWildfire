@@ -65,13 +65,13 @@ public class RectangleControlHandler extends AbstractControlHandler<RectangleCon
       String label;
       switch (pXForm.getEditPlane()) {
         case XY:
-    	  label = "XOY";
+    	  label = "XOY ";
     	  break;
         case YZ:
-    	  label = "YOZ";
+    	  label = "YOZ ";
     	  break;
         default:
-    	  label = "XOZ";
+    	  label = "XOZ ";
     	  break;
       }
       if (pIsSelected) {

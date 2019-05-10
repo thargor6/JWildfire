@@ -76,6 +76,7 @@ public class RessourceDialog extends JDialog {
   private JScrollPane editrScrollPane = null;
   private JEditorPane editorTextArea = null;
   private boolean confirmed = false;
+  private ContentType contentType = ContentType.TEXT;
   private final Prefs prefs;
   private final ErrorHandler errorHandler;
   private final List<RessourceValidation> validations = new ArrayList<RessourceValidation>();
@@ -156,7 +157,10 @@ public class RessourceDialog extends JDialog {
       JFileChooser chooser = new JFileChooser();
       if (prefs.getInputFlamePath() != null) {
         try {
-          chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()).getParentFile());
+          if (contentType == ContentType.JAVA)
+            chooser.setCurrentDirectory(new File(prefs.getTinaCustomVariationsPath()));
+          else
+            chooser.setCurrentDirectory(new File(prefs.getInputFlamePath()).getParentFile());
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -322,6 +326,7 @@ public class RessourceDialog extends JDialog {
     }
     editorTextArea.setText(pRessourceValue);
     editorTextArea.setCaretPosition(0);
+    contentType = pContentType;
   }
 
   public void setRessourceName(String pRessourceName) {

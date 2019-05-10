@@ -241,7 +241,7 @@ public class Prefs extends ManagedObject {
   @Property(description = "Folder for user-scripts for the flame-editor", category = PropertyCategory.TINA)
   private String tinaJWFScriptPath = null;
 
-  @Property(description = "Folder for custom-variations (currently only used by the custom-variation-loader-script by CozyG)", category = PropertyCategory.TINA)
+  @Property(description = "Folder for custom-variations", category = PropertyCategory.TINA)
   private String tinaCustomVariationsPath = null;
 
   @Property(description = "Drawer for raw motion data", category = PropertyCategory.TINA)

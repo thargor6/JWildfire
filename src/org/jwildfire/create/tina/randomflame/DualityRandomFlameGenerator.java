@@ -201,7 +201,8 @@ public class DualityRandomFlameGenerator extends RandomFlameGenerator {
   private String getRandomVariationName() {
     while (true) {
       String name = VariationFuncList.getRandomVariationname();
-      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_")) {
+      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_") 
+          && !name.startsWith("prepost_") && !name.equals("flatten")) {
         return name;
       }
     }
