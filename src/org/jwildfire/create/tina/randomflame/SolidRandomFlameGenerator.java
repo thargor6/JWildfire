@@ -39,7 +39,8 @@ public abstract class SolidRandomFlameGenerator extends RandomFlameGenerator {
   private String getRandomVariationName() {
     while (true) {
       String name = VariationFuncList.getRandomVariationname();
-      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_") && !name.contains("plot") && !name.contains("mesh") && !name.contains("blur")) {
+      if (!name.startsWith("fract") && !name.startsWith("inflate") && !name.startsWith("pre_") && !name.startsWith("post_") 
+          && !name.startsWith("prepost_") && !name.equals("flatten")) {
         return name;
       }
     }

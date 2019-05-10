@@ -29,7 +29,8 @@ public class JulianDiscRandomFlameGenerator extends RandomFlameGenerator {
   private String getNonBlurRandomFunc() {
     while (true) {
       String res = ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL[Tools.randomInt(ExperimentalSimpleRandomFlameGenerator.FNCLST_EXPERIMENTAL.length)];
-      if (res.indexOf("blur") < 0 && res.indexOf("pre_") < 0 && res.indexOf("post_") < 0 && res.indexOf("inflate") < 0) {
+      if (res.indexOf("blur") < 0 && res.indexOf("pre_") < 0 && res.indexOf("post_") < 0 && res.indexOf("prepost_") < 0 
+          && !res.equals("flatten") && res.indexOf("inflate") < 0) {
         return res;
       }
     }
