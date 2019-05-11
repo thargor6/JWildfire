@@ -740,7 +740,6 @@ public class VariationFuncList {
     registerVariationFunc(DC_TreeFunc.class); 
     registerVariationFunc(DC_TeslaFunc.class);
     registerVariationFunc(DC_RotationsFunc.class); 
-    registerVariationFunc(DC_EscherFunc.class); 
     registerVariationFunc(DC_HexagonsFunc.class);
     registerVariationFunc(DC_TurbulenceFunc.class);
     registerVariationFunc(DC_MengerFunc.class);    
