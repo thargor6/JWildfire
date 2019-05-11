@@ -47,15 +47,15 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
   private List<PCPoint> generatedPoints;
 
   public static class PCRawPoint {
-    double x, y, z;
-    double r, g, b;
+    float x, y, z;
+    float r, g, b;
     int count;
   }
 
   public static class PCPoint {
-    double x, y, z;
-    double r, g, b;
-    double intensity;
+    float x, y, z;
+    float r, g, b;
+    float intensity;
   }
 
   public RasterPointCloud(double pZmin, double pZmax, double pMaxOctreeCellSize) {
@@ -93,12 +93,12 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
 
       if (sample.originalZ >= zmin && sample.originalZ <= zmax) {
         PCRawPoint p = new PCRawPoint();
-        p.x = sample.originalX;
-        p.y = sample.originalY;
-        p.z = sample.originalZ;
-        p.r = sample.r;
-        p.g = sample.g;
-        p.b = sample.b;
+        p.x = (float) sample.originalX;
+        p.y = (float) sample.originalY;
+        p.z = (float) sample.originalZ;
+        p.r = (float) sample.r;
+        p.g = (float) sample.g;
+        p.b = (float) sample.b;
         p.count = 1;
 
         synchronized (octree) {
@@ -158,13 +158,13 @@ public class RasterPointCloud implements AbstractRaster, Serializable {
           }
           PCRawPoint cumPoint = (PCRawPoint) pNode.getValues().iterator().next().getValue();
           PCPoint avgPoint = new PCPoint();
-          avgPoint.x = cumPoint.x / (double) cumPoint.count;
-          avgPoint.y = cumPoint.y / (double) cumPoint.count;
-          avgPoint.z = cumPoint.z / (double) cumPoint.count;
-          avgPoint.r = cumPoint.r / (double) cumPoint.count;
-          avgPoint.g = cumPoint.g / (double) cumPoint.count;
-          avgPoint.b = cumPoint.b / (double) cumPoint.count;
-          avgPoint.intensity = logScaleCalculator.calcLogScale(cumPoint.count) * cumPoint.count * flame.getWhiteLevel();
+          avgPoint.x = (float) (cumPoint.x / (double) cumPoint.count);
+          avgPoint.y = (float) (cumPoint.y / (double) cumPoint.count);
+          avgPoint.z = (float) (cumPoint.z / (double) cumPoint.count);
+          avgPoint.r = (float) (cumPoint.r / (double) cumPoint.count);
+          avgPoint.g = (float) (cumPoint.g / (double) cumPoint.count);
+          avgPoint.b = (float) (cumPoint.b / (double) cumPoint.count);
+          avgPoint.intensity = (float) (logScaleCalculator.calcLogScale(cumPoint.count) * cumPoint.count * flame.getWhiteLevel());
           res.add(avgPoint);
         }
       }
