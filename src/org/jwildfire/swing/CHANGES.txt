@@ -1,3 +1,29 @@
+V4.10 (TBD)
+ - New variation: dc_code by Jesus Sosa
+ - Enhancements to dc_ variations by Jesus Sosa
+ - Removed dc_escher variation (copyright issue)
+ - Tips for Apophysis users (in Fractal flames: Help window) updated
+ - Preference tinaCustomVariationsPath is now used for custom_wf and custom_wf_full
+
+ - New Color Type feature
+   There are now two coloring types, selectable per transform on the Color tab:
+     NONE (the default for final transforms) does not change the color; this is the way final transforms have traditionally 
+     worked in JWildfire
+     DIFFUSION (the default for normal transforms) uses the Color and Speed settings with the gradient; this is the standard 
+     method for coloring flames.
+   Changing the Color Type for final transforms to DIFFUSION allows final transforms to adjust the colors, as it does in other 
+   flame programs.
+   Changing the Color Type for normal transforms to NONE allows them to manipulate true color (rgbColor) variations without 
+   sucking the color away.
+
+ - various fixes by Rick Sidwell
+   - Save Fg opacity in flame file
+   - Subflame fixes to prevent hanging JWildfire
+   - Stop spurious message when changing quality profiles
+   - Show correct color speed when adding linked transform
+   - Add default macro buttons when no preferences file is found
+   - Fix bug with RECTANGLE control shapes
+
 V4.10 release candidate 1 (19.03.2019)
  - new variations (no particular order):
     by Jesus Sosa
