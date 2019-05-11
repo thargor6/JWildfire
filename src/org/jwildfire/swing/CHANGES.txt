@@ -1,7 +1,6 @@
-V4.10 (TBD)
+V4.10 (11.05.2018)
  - New variation: dc_code by Jesus Sosa
  - Enhancements to dc_ variations by Jesus Sosa
- - Removed dc_escher variation (copyright issue)
  - Tips for Apophysis users (in Fractal flames: Help window) updated
  - Preference tinaCustomVariationsPath is now used for custom_wf and custom_wf_full
 
@@ -24,7 +23,10 @@ V4.10 (TBD)
    - Add default macro buttons when no preferences file is found
    - Fix bug with RECTANGLE control shapes
 
-V4.10 release candidate 1 (19.03.2019)
+ - reduced the precision of PointCloud-export in order to use less memory
+
+ - new "Phoenix"-random-flame-generator
+
  - new variations (no particular order):
     by Jesus Sosa
     -dc_acrilic
@@ -32,7 +34,6 @@ V4.10 release candidate 1 (19.03.2019)
     -dc_circlesblue
     -dc_circuits
     -dc_ducks
-    -dc_escher
     -dc_fractaldots
     -dc_grid3D
     -dc_hexagons
@@ -80,6 +81,7 @@ V4.10 release candidate 1 (19.03.2019)
     - Fix bugs in Open Image
     - Script from flame: add draw mode and preserve z
     - Script from flame: add centreX and centreY
+ - removed dc_escher variation (copyright issue) which was introduced with 4.10 RC1
 
 V4.00 revision 2 (20.12.2018)
   - fixed a bug regarding calculating the offset in tone-mapping (causing the final image shifted under certain circumstances)
