@@ -82,6 +82,9 @@ public class UgrGradientReader {
       String token = tokenizer.nextToken();
       String nextToken;
       if (token.startsWith("title=")) {
+        while (token.charAt(token.length() - 1) != '"' && tokenizer.hasMoreTokens()) {
+          token = token + "_" + tokenizer.nextToken();
+        }
         StringTokenizer lineTokenizer = new StringTokenizer(token, "\"");
         if (lineTokenizer.hasMoreElements()) {
           lineTokenizer.nextElement();
