@@ -2771,7 +2771,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
     xForm.setColorType(ColorType.DIFFUSION);
-    xForm.setDrawMode(DrawMode.HIDDEN);
     xForm.setColorSymmetry(1.0);
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
@@ -2785,6 +2784,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
           toXForm.getModifiedWeights()[j] = xForm.getModifiedWeights()[j];
           xForm.getModifiedWeights()[j] = (j == toId) ? 1 : 0;
         }
+        xForm.setDrawMode(DrawMode.HIDDEN);
       }
       else {
         xForm.getModifiedWeights()[toId] = 0;
