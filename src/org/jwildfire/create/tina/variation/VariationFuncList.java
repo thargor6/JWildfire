@@ -751,7 +751,22 @@ public class VariationFuncList {
     registerVariationFunc(GlynnSpiroGraf3DFunc.class);
     registerVariationFunc(GlynnSuperShapeFunc.class);
 	  
-    registerVariationFunc(PreRecipFunc.class);	  
+    registerVariationFunc(PreRecipFunc.class);	 
+    
+    
+    registerVariationFunc(DC_TrianTessFunc.class);
+    registerVariationFunc(DC_PoincareDiscFunc.class);
+    registerVariationFunc(DC_WorleyFunc.class);
+    registerVariationFunc(DC_GlyphoFunc.class);
+    registerVariationFunc(DC_FingerPrintFunc.class);
+    registerVariationFunc(DC_PentaTilesFunc.class);
+    registerVariationFunc(DC_QuadtreeFunc.class);  
+    registerVariationFunc(DC_SunFlowerFunc.class);
+    registerVariationFunc(DC_GaborNoiseFunc.class);
+    registerVariationFunc(DC_CairoTilesFunc.class);   
+    registerVariationFunc(DC_MoebiusLogFunc.class);
+    registerVariationFunc(DC_InversionFunc.class);
+    
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
