@@ -23,10 +23,16 @@ import org.jwildfire.create.tina.transform.XFormTransformService;
 import org.jwildfire.create.tina.variation.Linear3DFunc;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ExperimentalSimpleRandomFlameGenerator extends
     RandomFlameGenerator {
 
-  public static final String FNCLST_EXPERIMENTAL[] = { "blur3D", "bubble",
+  public static final String FNCLST_EXPERIMENTAL[];
+
+  private static final String FNCLST_EXPERIMENTAL_INTERNAL[] = { "blur3D", "bubble",
       "escher", "rays", "epispiral_wf", "curl3D", "diamond", "juliaq", "julia3Dq", "post_juliaq", "post_julia3Dq",
       "cloverleaf_wf", "disc", "sech", "loonie", "exp", "cosh", "split", "waves2_3D",
       "wedge_sph", "circlize", "heart_wf", "bwraps7", "colorscale_wf", "gdoffs", "taurus", "dc_crackle_wf",
@@ -51,6 +57,16 @@ public class ExperimentalSimpleRandomFlameGenerator extends
       "elliptic", "waves", "swirl", "glynnSim1", "eclipse", "bwraps7", "layered_spiral",
       "heart_wf", "colorscale_wf", "boarders", "secant2", "waffle", "lissajous", "hypertile",
       "circus", "lazyTravis", "ovoid3d", "circleblur", "sineblur", "starblur" };
+
+  static {
+    List<String> validVariations = new ArrayList<>();
+    for(String variationName: FNCLST_EXPERIMENTAL_INTERNAL) {
+      if(VariationFuncList.isValidRandomVariation(variationName)) {
+        validVariations.add(variationName);
+      }
+    }
+    FNCLST_EXPERIMENTAL = validVariations.toArray(new String[validVariations.size()]);
+  }
 
   @Override
   public Flame prepareFlame(RandomFlameGeneratorState pState) {

@@ -22,10 +22,11 @@ import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
 import org.jwildfire.create.tina.variation.mesh.*;
 import org.jwildfire.create.tina.variation.plot.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class VariationFuncList {
@@ -38,6 +39,7 @@ public class VariationFuncList {
   private static final Map<String, String> resolvedAliasMap;
 
   static {
+    initializeCostsMap();
     // define alias for renamed variations to allow loading of old flame
     // files
     aliasMap.put(KaleidoscopeFunc.class, "kaleidoscope");
@@ -751,7 +753,9 @@ public class VariationFuncList {
     registerVariationFunc(GlynnSpiroGraf3DFunc.class);
     registerVariationFunc(GlynnSuperShapeFunc.class);
 	  
-    registerVariationFunc(PreRecipFunc.class);	  
+    registerVariationFunc(PreRecipFunc.class);
+
+    registerVariationFunc(JuliaScope3DbFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
@@ -761,6 +765,36 @@ public class VariationFuncList {
       }
     }
 
+  }
+
+  private static Map<String, Double> variationCosts;
+
+  private static void initializeCostsMap() {
+    variationCosts = new HashMap<>();
+    try {
+      InputStream inputStream =  VariationFuncList.class.getResourceAsStream("variation_costs.txt");
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        try {
+          StringTokenizer tokenizer = new StringTokenizer(line, ":", false);
+          String variationName = tokenizer.nextToken().trim();
+          Double cost = Double.parseDouble(tokenizer.nextToken().trim());
+          variationCosts.put(variationName, cost);
+        }
+        catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+      inputStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static double getVariationCost(String variationName) {
+    Double cost = Optional.of(variationCosts.get(variationName)).orElse(-1.0);
+    return cost > 0.0 ? cost : Double.MAX_VALUE;
   }
 
   private static void registerVariationFunc(
@@ -840,11 +874,26 @@ public class VariationFuncList {
     while (true) {
       int idx = (int) (Math.random() * getNameList().size());
       String name = getNameList().get(idx);
-      if (!(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
-              && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten")) {
+      if (isValidRandomVariation(name)) {
         return name;
       }
     }
+  }
+
+  public static List<String> getRandomVariationnames() {
+    List<String> res = new ArrayList<>();
+    for(String name:getNameList()) {
+      if (isValidRandomVariation(name)) {
+        res.add(name);
+      }
+    }
+    return res;
+  }
+
+  public static boolean isValidRandomVariation(String name) {
+    return getVariationCost(name) < 0.25 &&
+           !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
+           && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten");
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {

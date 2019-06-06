@@ -40,6 +40,21 @@ public class RandomParamMutation implements Mutation {
   static {
     BLACKLIST = new ArrayList<String>();
     BLACKLIST.add("truchet");
+    BLACKLIST.add("mandelbrot");
+    BLACKLIST.add("fract_formula_julia_wf");
+    BLACKLIST.add("fract_formula_mand_wf");
+    BLACKLIST.add("dc_perlin");
+    BLACKLIST.add("crob");
+    BLACKLIST.add("tree_js");
+    BLACKLIST.add("brownian_js");
+    BLACKLIST.add("dragon_js");
+    BLACKLIST.add("maurer_lines");
+    BLACKLIST.add("htree_js");
+    BLACKLIST.add("gosperisland_js");
+    BLACKLIST.add("rsquares_js");
+    BLACKLIST.add("hilbert_js");
+    BLACKLIST.add("koch_js");
+    BLACKLIST.add("bubbleT3D");
   }
 
   public void setRandomFlameProperty(Layer pLayer, double pAmount) {
