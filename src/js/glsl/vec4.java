@@ -59,6 +59,14 @@ public class vec4
 		copyColor(v1.x,v1.y,v1.z,v);
 	}
 
+	public vec4 plus( double d) {
+		return new vec4( x + d, y + d, z + d , w + d);
+	}
+	
+	public vec4 plus( vec4 vec) {
+		return new vec4( x + vec.x, y + vec.y, z + vec.z, w+vec.w );
+	}
+	
 	public vec4 add( double d) {
 		return new vec4( x + d, y + d, z + d , w + d);
 	}
