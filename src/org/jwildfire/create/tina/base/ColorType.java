@@ -17,5 +17,5 @@
 package org.jwildfire.create.tina.base;
 
 public enum ColorType {
-  UNSET, NONE, DIFFUSION
+  UNSET, NONE, DIFFUSION, TARGET, TARGETG
 }
