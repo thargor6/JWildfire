@@ -30,8 +30,27 @@ public class RenderColor {
     this.green = green;
     this.blue = blue;
   }
-
-  @Override
+  
+  public RenderColor(double pWhiteLevel, int red, int green, int blue) {
+    this.setColor(pWhiteLevel, red, green, blue);
+  }
+  
+  public RenderColor(double pWhiteLevel, RGBColor color) {
+    this.setColor(pWhiteLevel, color.getRed(), color.getGreen(), color.getBlue());
+  }
+  
+  public void setColor(double pWhiteLevel, int red, int green, int blue) {
+    double DFLT_WHITE_LEVEL = 200.0;
+    this.red = red * DFLT_WHITE_LEVEL / 256.0;
+    this.green = green * DFLT_WHITE_LEVEL / 256.0;
+    this.blue = blue * DFLT_WHITE_LEVEL / 256.0;
+  }
+  
+  public void setColor(double pWhiteLevel, RGBColor color) {
+    this.setColor(pWhiteLevel, color.getRed(), color.getGreen(), color.getBlue());
+  }
+  
+ @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;

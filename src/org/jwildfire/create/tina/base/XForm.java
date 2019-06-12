@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.base;
 import static org.jwildfire.base.mathlib.MathLib.EPSILON;
 import static org.jwildfire.base.mathlib.MathLib.fabs;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ import org.jwildfire.create.tina.base.motion.PostScaleMotionValueChangeHandler;
 import org.jwildfire.create.tina.base.motion.RotateMotionValueChangeHandler;
 import org.jwildfire.create.tina.base.motion.ScaleMotionValueChangeHandler;
 import org.jwildfire.create.tina.edit.Assignable;
+import org.jwildfire.create.tina.palette.RGBColor;
+import org.jwildfire.create.tina.palette.RGBPalette;
+import org.jwildfire.create.tina.palette.RenderColor;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFunc;
@@ -47,6 +51,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   @AnimAware
   private double colorSymmetry;
   private final MotionCurve colorSymmetryCurve = new MotionCurve();
+  private RGBColor targetColor = new RGBColor(0, 0, 0);
   @AnimAware
   private double material;
   private final MotionCurve materialCurve = new MotionCurve();
@@ -324,6 +329,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   double modSaturation2;
   double modHue1;
   double modHue2;
+  RenderColor targetRenderColor;
 
   public void initTransform() {
     // precalculate those variables to simplify the expression: 
@@ -332,11 +338,24 @@ public final class XForm implements Assignable<XForm>, Serializable {
     //   pDstPoint.color = pSrcPoint.color * c1 + c2;
     c1 = (1 + colorSymmetry) * 0.5;
     c2 = color * (1 - colorSymmetry) * 0.5;
-    if (colorType != ColorType.DIFFUSION) {
+    if (colorType != ColorType.DIFFUSION && colorType != ColorType.TARGETG) {
       c1 = 1;
       c2 = 0;
     }
-
+    if (colorType == ColorType.TARGET) {
+      targetRenderColor = new RenderColor(owner.getOwner().getWhiteLevel(), targetColor);
+    }
+    if (colorType == ColorType.TARGETG) {
+      RenderColor[] colorMap = owner.getColorMap();
+      double paletteIdxScl = colorMap.length - 2;
+      int colorIdx = (int) (color * paletteIdxScl + 0.5);
+      if (colorIdx < 0)
+        colorIdx = 0;
+      else if (colorIdx >= RGBPalette.PALETTE_SIZE)
+        colorIdx = RGBPalette.PALETTE_SIZE - 1;
+      
+      targetRenderColor = colorMap[colorIdx];
+    }
     material1 = (1 + materialSpeed) * 0.5;
     material2 = material * (1 - materialSpeed) * 0.5;
 
@@ -495,6 +514,10 @@ public final class XForm implements Assignable<XForm>, Serializable {
         t.add(new TransformationGradientColorStep(this));
       }
     }
+    else if (colorType == ColorType.TARGET || colorType == ColorType.TARGETG) {
+      t.add(new TransformationTargetColorStep(this));
+    }
+
   }
 
   public void transformPoint(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
@@ -535,12 +558,31 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.colorType = colorType;
   }
   
-  @Override
+  public RGBColor getTargetColor() {
+    return targetColor;
+  }
+  
+  public void setTargetColor(RGBColor c) {
+    targetColor = c;
+  }
+  
+  public void setTargetColor(int r, int g, int b) {
+    targetColor.setRed(r);
+    targetColor.setGreen(g);
+    targetColor.setBlue(b);
+  }
+  
+  public void setTargetColor(Color c) {
+    targetColor.setColor(c);
+  }
+
+ @Override
   public void assign(XForm pXForm) {
     weight = pXForm.weight;
     weightCurve.assign(pXForm.weightCurve);
     color = pXForm.color;
     colorCurve.assign(pXForm.colorCurve);
+    targetColor.assign(pXForm.targetColor);
     colorSymmetry = pXForm.colorSymmetry;
     colorSymmetryCurve.assign(pXForm.colorSymmetryCurve);
     material = pXForm.material;
@@ -678,6 +720,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   public boolean isEqual(XForm pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
         (fabs(color - pSrc.color) > EPSILON) || !colorCurve.isEqual(pSrc.colorCurve) ||
+        (! targetColor.equals(pSrc.targetColor)) ||
         (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
         (fabs(material - pSrc.material) > EPSILON) || !materialCurve.isEqual(pSrc.materialCurve) ||
         (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSymmetryCurve.isEqual(pSrc.materialSymmetryCurve) ||

@@ -249,6 +249,7 @@ public class TinaControllerData {
   public JSlider xFormOpacitySlider;
   public JComboBox xFormDrawModeCmb;
   public JComboBox xFormColorTypeCmb;
+  public JButton xFormTargetColorBtn;
   public JWFNumberField xFormAntialiasAmountREd;
   public JSlider xFormAntialiasAmountSlider;
   public JWFNumberField xFormAntialiasRadiusREd;

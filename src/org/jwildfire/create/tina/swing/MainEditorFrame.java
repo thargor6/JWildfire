@@ -385,6 +385,7 @@ public class MainEditorFrame extends JFrame {
   private JLabel xFormColorTypeLbl = null;
   private JComboBox xFormDrawModeCmb = null;
   private JComboBox xFormColorTypeCmb = null;
+  private JButton xFormTargetColorBtn = null;
   private JPanel relWeightsEastPanel = null;
   private JButton relWeightsZeroButton = null;
   private JButton relWeightsOneButton = null;
@@ -4205,6 +4206,7 @@ public class MainEditorFrame extends JFrame {
       tinaTransformationColorPanel.add(xFormColorLbl, null);
       tinaTransformationColorPanel.add(getXFormColorREd(), null);
       tinaTransformationColorPanel.add(getXFormColorSlider(), null);
+      tinaTransformationColorPanel.add(getXFormTargetColorBtn(), null);
       tinaTransformationColorPanel.add(xFormSymmetryLbl, null);
       tinaTransformationColorPanel.add(getXFormSymmetryREd(), null);
       tinaTransformationColorPanel.add(getXFormSymmetrySlider(), null);
@@ -5436,7 +5438,7 @@ public class MainEditorFrame extends JFrame {
         getTinaAddLinkedTransformationButton(),
         getTinaDuplicateTransformationButton(), getTinaDeleteTransformationButton(), getTinaAddFinalTransformationButton(), getRandomBatchPanel(),
         nonlinearControlsRows, getXFormColorREd(), getXFormColorSlider(), getXFormSymmetryREd(), getXFormSymmetrySlider(), getXFormOpacityREd(),
-        getXFormOpacitySlider(), getXFormDrawModeCmb(), getXFormColorTypeCmb(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
+        getXFormOpacitySlider(), getXFormDrawModeCmb(), getXFormColorTypeCmb(), getXFormTargetColorBtn(), getRelWeightsTable(), getRelWeightsZeroButton(), getRelWeightsOneButton(), getRelWeightREd(),
         getMouseTransformMoveTrianglesButton(),
         getMouseTransformEditFocusPointButton(), getMouseTransformShearButton(), getMouseTransformViewButton(),
         getAffineEditPostTransformButton(), getAffineEditPostTransformSmallButton(),
@@ -5591,6 +5593,8 @@ public class MainEditorFrame extends JFrame {
       getXFormColorTypeCmb().removeAllItems();
       getXFormColorTypeCmb().addItem(ColorType.NONE);
       getXFormColorTypeCmb().addItem(ColorType.DIFFUSION);
+      getXFormColorTypeCmb().addItem(ColorType.TARGET);
+      getXFormColorTypeCmb().addItem(ColorType.TARGETG);
 
       getTinaSolidRenderingMaterialDiffuseResponseCmb().removeAllItems();
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA);
@@ -7477,6 +7481,25 @@ public class MainEditorFrame extends JFrame {
       });
     }
     return xFormColorTypeCmb;
+  }
+  
+  private JButton getXFormTargetColorBtn() {
+    if (xFormTargetColorBtn == null) {
+      xFormTargetColorBtn = new JButton();
+      xFormTargetColorBtn.setToolTipText("Set target color for transform");
+      xFormTargetColorBtn.setPreferredSize(new Dimension(150, 24));
+      xFormTargetColorBtn.setSize(new Dimension(150, 24));
+      xFormTargetColorBtn.setLocation(new Point(55, 47));
+      xFormTargetColorBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      xFormTargetColorBtn.setBackground(Color.BLACK);
+      xFormTargetColorBtn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+          tinaController.saveUndoPoint();
+          tinaController.xFormTargetColorBtn_clicked();
+        }
+      });
+    }
+    return xFormTargetColorBtn;
   }
 
   /**

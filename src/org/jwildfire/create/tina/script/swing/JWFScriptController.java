@@ -30,6 +30,7 @@ import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
+import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.swing.ScriptEditDialog;
 import org.jwildfire.create.tina.swing.StandardDialogs;
 import org.jwildfire.create.tina.swing.TinaController;
@@ -602,12 +603,21 @@ public class JWFScriptController {
     }
     switch (pXForm.getColorType()) {
     case NONE:
-      pSB.append("      xForm.setColorType(ColorType.NONE);\n");
+      if (!pFinalXForm)
+        pSB.append("      xForm.setColorType(ColorType.NONE);\n");
       break;
     case DIFFUSION:
       if (pFinalXForm) {
         pSB.append("      xForm.setColorType(ColorType.DIFFUSION);\n");
       }
+      break;
+    case TARGET:
+      pSB.append("      xForm.setColorType(ColorType.TARGET);\n");
+      RGBColor tc = pXForm.getTargetColor();
+      pSB.append("      xForm.setTargetColor(" + Tools.intToString(tc.getRed()) + "," + Tools.intToString(tc.getGreen()) + "," + Tools.intToString(tc.getBlue()) +");\n");
+      break;
+    case TARGETG:
+      pSB.append("      xForm.setColorType(ColorType.TARGETG);\n");
       break;
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
