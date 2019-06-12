@@ -63,6 +63,7 @@ import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.variation.Variation;
@@ -74,7 +75,13 @@ public class AbstractFlameWriter {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
     attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
     if (pXForm.getColorType() != ColorType.UNSET) attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, pXForm.getColorType().toString()));
-    attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    if (pXForm.getColorType() == ColorType.TARGET) {
+      RGBColor targetColor = pXForm.getTargetColor();
+      attrList.add(pXB.createAttr("targetcolor", (double) targetColor.getRed() / 255.0 + " " + (double) targetColor.getGreen() / 255.0 + " " + (double) targetColor.getBlue() / 255.0));
+    }
+    else {
+      attrList.add(pXB.createAttr("color", pXForm.getColor()));
+    }
     attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, pXForm.getMirrorTranslations() ? 1 : 0));
     attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL, pXForm.getMaterial()));

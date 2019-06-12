@@ -17,6 +17,7 @@
 package org.jwildfire.create.tina.palette;
 
 import java.io.Serializable;
+import java.awt.Color;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.base.mathlib.MathLib;
@@ -60,7 +61,18 @@ public class RGBColor implements Assignable<RGBColor>, Serializable /*, Comparab
   public void setBlue(int blue) {
     this.blue = blue;
   }
-
+  
+  public Color getColor() {
+    Color color = new Color(red, green, blue);
+    return color;
+  }
+  
+  public void setColor(Color color) {
+    this.red = color.getRed();
+    this.green = color.getGreen();
+    this.blue = color.getBlue();
+  }
+  
   @Override
   public RGBColor makeCopy() {
     RGBColor res = new RGBColor();

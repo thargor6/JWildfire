@@ -42,6 +42,7 @@ import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
@@ -859,6 +860,7 @@ public class AbstractFlameReader {
   public static final String ATTR_WEIGHT = "weight";
   public static final String ATTR_COLOR_TYPE = "color_type";
   public static final String ATTR_COLOR = "color";
+  public static final String ATTR_TARGETCOLOR = "targetcolor";
   public static final String ATTR_OPACITY = "opacity";
   public static final String ATTR_XY_COEFS = "coefs";
   public static final String ATTR_XY_POST = "post";
@@ -923,6 +925,14 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
       pXForm.setColor(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_TARGETCOLOR)) != null) {
+      String s[] = hs.split(" ");
+      int r, g, b;
+      r = Tools.roundColor(255.0 * Double.parseDouble(s[0]));
+      g = Tools.roundColor(255.0 * Double.parseDouble(s[1]));
+      b = Tools.roundColor(255.0 * Double.parseDouble(s[2]));
+      pXForm.setTargetColor(new RGBColor(r, g, b));
     }
     if ((hs = atts.get(ATTR_MATERIAL)) != null) {
       pXForm.setMaterial(Double.parseDouble(hs));

@@ -573,6 +573,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.xFormOpacitySlider = parameterObject.pXFormOpacitySlider;
     data.xFormDrawModeCmb = parameterObject.pXFormDrawModeCmb;
     data.xFormColorTypeCmb = parameterObject.pXFormColorTypeCmb;
+    data.xFormTargetColorBtn = parameterObject.pXFormTargetColorBtn;
 
     data.xFormAntialiasAmountREd = parameterObject.pXFormAntialiasAmountREd;
     data.xFormAntialiasAmountSlider = parameterObject.pXFormAntialiasAmountSlider;
@@ -2612,6 +2613,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormOpacitySlider.setValue(Tools.FTOI(pXForm.getOpacity() * SLIDER_SCALE_COLOR));
         data.xFormDrawModeCmb.setSelectedItem(pXForm.getDrawMode());
         data.xFormColorTypeCmb.setSelectedItem(pXForm.getColorType());
+        data.xFormTargetColorBtn.setBackground(pXForm.getTargetColor().getColor());
 
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
 
@@ -2695,6 +2697,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.weightMapParam07Lbl.setVisible(false);
         data.weightMapParam08REd.setVisible(false);
         data.weightMapParam08Lbl.setVisible(false);
+
+        data.xFormTargetColorBtn.setBackground(Color.BLACK);
       }
 
       {
@@ -3756,6 +3760,26 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         xFormControls.enableControls(xForm);
       }
     }
+  }
+  
+  public void xFormTargetColorBtn_clicked() {
+    if (!cmbRefreshing) {
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+      XForm xForm = getCurrXForm();
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, xForm.getTargetColor().getColor());
+      if (selectedColor != null) {
+        xForm.setTargetColor(selectedColor);       
+        refreshTargetColorBtn();
+        refreshFlameImage(true, false, 1, true, false);
+        xFormControls.enableControls(xForm);
+      }
+    }
+  }
+  
+  public void refreshTargetColorBtn() {
+    XForm xForm = getCurrXForm();
+    data.xFormTargetColorBtn.setBackground(xForm.getTargetColor().getColor());
   }
 
   public void xFormColorREd_changed() {
