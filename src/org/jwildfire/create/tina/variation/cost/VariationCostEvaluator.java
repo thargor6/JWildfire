@@ -100,7 +100,7 @@ public class VariationCostEvaluator {
     {
       Flame flame = createFlame();
       FlameRenderer renderer = new FlameRenderer(flame, Prefs.getPrefs(), false, false);
-      ctx = new FlameTransformationContext(renderer, randGen, 0, 0, 0.0, 0.0);
+      ctx = new FlameTransformationContext(renderer, randGen, 0, 0);
     }
 
     Mutation rndParamMutation = new RandomParamMutation();
