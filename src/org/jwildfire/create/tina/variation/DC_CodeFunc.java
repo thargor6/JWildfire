@@ -21,10 +21,10 @@ import js.glsl.mat4;
 public class DC_CodeFunc  extends DC_BaseFunc {
 
 	/*
-	 * Variation : glsl
+	 * Variation : dc_code
 	 * 
 	 * Autor: Jesus Sosa
-	 * Date: October 31, 2018
+	 * Date: may 22, 2019
 	 * Reference 
 	 */
 	
@@ -246,6 +246,7 @@ public static class randomizeCode
 	{
 
            compile();
+        	   
 	}
 	
 	public String AddParams()
@@ -369,11 +370,14 @@ public static class randomizeCode
 
 	public void setParameter(String pName, double pValue) {
 		if (pName.equalsIgnoreCase(PARAM_RANDOMIZE)) {
-			seed = (int)Tools.limitValue(pValue, 1000 , 10000000);
-			randomizeCode rc=new randomizeCode((long)seed);
+			seed = (int)Tools.limitValue(pValue, 0 , 10000000);
+			if(seed>0)
+			{
+			   randomizeCode rc=new randomizeCode((long)seed);
 			  //  System.out.println(rc.generateRandom(stepX,stepY));
 				code_func=rc.generateRandom(stepX,stepY);
 				setRessource(RESSOURCE_CODE,code_func.getBytes());
+			}
 		}
 		else if (pName.equalsIgnoreCase(PARAM_PANX)) {
 
