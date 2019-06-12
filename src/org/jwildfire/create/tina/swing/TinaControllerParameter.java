@@ -719,6 +719,30 @@ public class TinaControllerParameter {
   public JButton randomBatchButton;
   public JProgressBar randomBatchProgressBar;
 
+  public JComboBox weightMapTypeCmb;
+  public JComboBox weightMapInputCmb;
+  public JWFNumberField weightMapColorIntensityREd;
+  public JWFNumberField weightMapVariationIntensityREd;
+  public JLabel weightMapColorMapFilenameLbl;
+  public JButton weightMapColorMapFilenameBtn;
+  public JLabel weightMapColorMapFilenameInfoLbl;
+  public JWFNumberField weightMapParam01REd;
+  public JLabel weightMapParam01Lbl;
+  public JWFNumberField weightMapParam02REd;
+  public JLabel weightMapParam02Lbl;
+  public JWFNumberField weightMapParam03REd;
+  public JLabel weightMapParam03Lbl;
+  public JWFNumberField weightMapParam04REd;
+  public JLabel weightMapParam04Lbl;
+  public JWFNumberField weightMapParam05REd;
+  public JLabel weightMapParam05Lbl;
+  public JWFNumberField weightMapParam06REd;
+  public JLabel weightMapParam06Lbl;
+  public JWFNumberField weightMapParam07REd;
+  public JLabel weightMapParam07Lbl;
+  public JWFNumberField weightMapParam08REd;
+  public JLabel weightMapParam08Lbl;
+
   public void setParams1(JWildfire pDesktop, MainEditorFrame pMainEditorFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
                          JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
                          JWFNumberField pGammaThresholdREd, JSlider pGammaThresholdSlider, JCheckBox pBGTransparencyCBx, JTextField pPaletteRandomPointsREd, JPanel pPaletteImgPanel, JPanel pColorChooserPaletteImgPanel, JWFNumberField pPaletteShiftREd, JSlider pPaletteShiftSlider, JWFNumberField pPaletteRedREd, JSlider pPaletteRedSlider, JWFNumberField pPaletteGreenREd, JSlider pPaletteGreenSlider, JWFNumberField pPaletteBlueREd, JSlider pPaletteBlueSlider, JWFNumberField pPaletteHueREd, JSlider pPaletteHueSlider,
@@ -1380,6 +1404,37 @@ public class TinaControllerParameter {
     this.backgroundColorLRIndicatorBtn = backgroundColorLRIndicatorBtn;
     this.backgroundColorTypeCmb = backgroundColorTypeCmb;
     this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
+  }
+
+  public void setParams4(JComboBox weightMapTypeCmb, JComboBox weightMapInputCmb, JWFNumberField weightMapColorIntensityREd, JWFNumberField weightMapVariationIntensityREd,
+    JLabel weightMapColorMapFilenameLbl, JButton weightMapColorMapFilenameBtn, JLabel weightMapColorMapFilenameInfoLbl, JWFNumberField weightMapParam01REd, JLabel weightMapParam01Lbl,
+    JWFNumberField weightMapParam02REd, JLabel weightMapParam02Lbl, JWFNumberField weightMapParam03REd, JLabel weightMapParam03Lbl,
+    JWFNumberField weightMapParam04REd, JLabel weightMapParam04Lbl, JWFNumberField weightMapParam05REd,JLabel weightMapParam05Lbl,
+    JWFNumberField weightMapParam06REd, JLabel weightMapParam06Lbl, JWFNumberField weightMapParam07REd, JLabel weightMapParam07Lbl,
+    JWFNumberField weightMapParam08REd, JLabel weightMapParam08Lbl) {
+      this.weightMapTypeCmb = weightMapTypeCmb;
+      this.weightMapInputCmb = weightMapInputCmb;
+      this.weightMapColorIntensityREd = weightMapColorIntensityREd;
+      this.weightMapVariationIntensityREd = weightMapVariationIntensityREd;
+      this.weightMapColorMapFilenameLbl = weightMapColorMapFilenameLbl;
+      this.weightMapColorMapFilenameBtn = weightMapColorMapFilenameBtn;
+      this.weightMapColorMapFilenameInfoLbl = weightMapColorMapFilenameInfoLbl;
+      this.weightMapParam01REd = weightMapParam01REd;
+      this.weightMapParam01Lbl = weightMapParam01Lbl;
+      this.weightMapParam02REd = weightMapParam02REd;
+      this.weightMapParam02Lbl = weightMapParam02Lbl;
+      this.weightMapParam03REd = weightMapParam03REd;
+      this.weightMapParam03Lbl = weightMapParam03Lbl;
+      this.weightMapParam04REd = weightMapParam04REd;
+      this.weightMapParam04Lbl = weightMapParam04Lbl;
+      this.weightMapParam05REd = weightMapParam05REd;
+      this.weightMapParam05Lbl = weightMapParam05Lbl;
+      this.weightMapParam06REd = weightMapParam06REd;
+      this.weightMapParam06Lbl = weightMapParam06Lbl;
+      this.weightMapParam07REd = weightMapParam07REd;
+      this.weightMapParam07Lbl = weightMapParam07Lbl;
+      this.weightMapParam08REd = weightMapParam08REd;
+      this.weightMapParam08Lbl = weightMapParam08Lbl;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

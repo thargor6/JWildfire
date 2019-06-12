@@ -533,4 +533,29 @@ public class TinaControllerData {
   public JProgressBar quiltRendererTotalProgressBar;
   public JButton quiltRendererRenderButton;
   public JPanel quiltRendererPreviewRootPanel;
+
+  public JComboBox weightMapTypeCmb;
+  public JComboBox weightMapInputCmb;
+  public JWFNumberField weightMapColorIntensityREd;
+  public JWFNumberField weightMapVariationIntensityREd;
+  public JLabel weightMapColorMapFilenameLbl;
+  public JButton weightMapColorMapFilenameBtn;
+  public JLabel weightMapColorMapFilenameInfoLbl;
+  public JWFNumberField weightMapParam01REd;
+  public JLabel weightMapParam01Lbl;
+  public JWFNumberField weightMapParam02REd;
+  public JLabel weightMapParam02Lbl;
+  public JWFNumberField weightMapParam03REd;
+  public JLabel weightMapParam03Lbl;
+  public JWFNumberField weightMapParam04REd;
+  public JLabel weightMapParam04Lbl;
+  public JWFNumberField weightMapParam05REd;
+  public JLabel weightMapParam05Lbl;
+  public JWFNumberField weightMapParam06REd;
+  public JLabel weightMapParam06Lbl;
+  public JWFNumberField weightMapParam07REd;
+  public JLabel weightMapParam07Lbl;
+  public JWFNumberField weightMapParam08REd;
+  public JLabel weightMapParam08Lbl;
+
 }

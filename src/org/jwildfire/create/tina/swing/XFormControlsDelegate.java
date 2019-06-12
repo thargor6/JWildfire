@@ -22,10 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jwildfire.create.tina.animate.AnimationService;
-import org.jwildfire.create.tina.base.ColorType;
-import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.EditPlane;
-import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.*;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 
 public class XFormControlsDelegate extends AbstractControlsDelegate {
@@ -177,6 +174,53 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormOpacitySlider.setEnabled(data.xFormOpacityREd.isEnabled());
     data.xFormDrawModeCmb.setEnabled(enabled);
     data.xFormColorTypeCmb.setEnabled(enabled);
+
+    data.weightMapTypeCmb.setEnabled(enabled);
+    boolean isImageMap = xForm!=null && WeightMapType.IMAGE_MAP.equals(xForm.getWeightMapType());
+    boolean isPerlinMap = xForm!=null && WeightMapType.PERLIN_NOISE.equals(xForm.getWeightMapType());
+    data.weightMapColorMapFilenameLbl.setVisible(isImageMap);
+    data.weightMapColorMapFilenameBtn.setVisible(isImageMap);
+    data.weightMapColorMapFilenameInfoLbl.setVisible(isImageMap);
+    data.weightMapParam01REd.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam01Lbl.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam02REd.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam02Lbl.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam03REd.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam03Lbl.setVisible(isImageMap || isPerlinMap);
+    data.weightMapParam04REd.setVisible(isImageMap);
+    data.weightMapParam04Lbl.setVisible(isImageMap);
+    data.weightMapParam05REd.setVisible(false);
+    data.weightMapParam05Lbl.setVisible(false);
+    data.weightMapParam06REd.setVisible(false);
+    data.weightMapParam06Lbl.setVisible(false);
+    data.weightMapParam07REd.setVisible(false);
+    data.weightMapParam07Lbl.setVisible(false);
+    data.weightMapParam08REd.setVisible(false);
+    data.weightMapParam08Lbl.setVisible(false);
+
+    data.weightMapInputCmb.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapColorIntensityREd.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapVariationIntensityREd.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapColorMapFilenameBtn.setEnabled(enabled && isImageMap);
+    data.weightMapParam01REd.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapParam02REd.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapParam03REd.setEnabled(enabled && (isImageMap || isPerlinMap));
+    data.weightMapParam04REd.setEnabled(enabled && isImageMap);
+    data.weightMapParam05REd.setEnabled(false);
+    data.weightMapParam06REd.setEnabled(false);
+    data.weightMapParam07REd.setEnabled(false);
+    data.weightMapParam08REd.setEnabled(false);
+    if(isImageMap) {
+      data.weightMapParam01Lbl.setText("CentreX");
+      data.weightMapParam02Lbl.setText("CentreX");
+      data.weightMapParam03Lbl.setText("SizeX");
+      data.weightMapParam04Lbl.setText("SizeY");
+    }
+    else if(isPerlinMap) {
+      data.weightMapParam01Lbl.setText("AScale");
+      data.weightMapParam02Lbl.setText("FScale");
+      data.weightMapParam03Lbl.setText("Octaves");
+    }
 
     data.relWeightsTable.setEnabled(enabled);
     enableRelWeightsControls();

@@ -186,7 +186,26 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve zxPostCoeff21Curve = new MotionCurve();
   boolean hasZXPostCoeffs;
   boolean hasZXCoeffs;
-  
+
+  private WeightMapType weightMapType = WeightMapType.NONE;
+  private WeightMapInputType weightMapInput = WeightMapInputType.AFFINE;
+  @AnimAware
+  private double weightMapColorIntensity;
+  private final MotionCurve weightMapColorIntensityCurve = new MotionCurve();
+  @AnimAware
+  private double weightMapVariationIntensity;
+  private final MotionCurve weightMapVariationIntensityCurve = new MotionCurve();
+
+  private String weightMapColorMapFilename = "";
+  private double weightMapColorMapXSize = 4.0;
+  private double weightMapColorMapYSize = 4.0;
+  private double weightMapColorMapXCentre = 0.0;
+  private double weightMapColorMapYCentre = 0.0;
+
+  private double weightMapPerlinNoiseAScale = 2.0;
+  private double weightMapPerlinNoiseFScale = 2.0;
+  private int weightMapPerlinNoiseOctaves = 3;
+
   // if mirrorPrePostTranslations, then calls to set coefficients that modify translation are mirrored between pre- and post-, 
   // therefore:
   //     calling set**Coeff2[01] to val sets **Coeff2[01] to val and **PostCoeff2[01] to -val
@@ -430,6 +449,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationAffineFullStep(this));
     }
+    if(isWeightMapActive()) {
+      t.add(new TransformationInitWeightMapStep(this));
+    }
+
+
     t.add(new TransformationPreparePreVariationsStep(this));
 
     for (Variation variation : variations) {
@@ -483,7 +507,11 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationPostAffineStep(this));
     }
-    
+
+    if(isWeightMapActive() && fabs(weightMapColorIntensity)>EPSILON) {
+      t.add(new TransformationApplyWightMapToColorStep(this));
+    }
+
     if (colorType == ColorType.DIFFUSION) {
       if (owner.isGradientMap()) {
         t.add(new TransformationGradientMapColorStep(this));
@@ -665,6 +693,23 @@ public final class XForm implements Assignable<XForm>, Serializable {
     drawMode = pXForm.drawMode;
     colorType = pXForm.colorType;
     name = pXForm.name;
+
+    weightMapType = pXForm.weightMapType;
+    weightMapInput = pXForm.weightMapInput;
+    weightMapColorIntensity = pXForm.weightMapColorIntensity;
+    weightMapColorIntensityCurve.assign(pXForm.weightMapColorIntensityCurve);
+    weightMapVariationIntensity = pXForm.weightMapVariationIntensity;
+    weightMapVariationIntensityCurve.assign(pXForm.weightMapVariationIntensityCurve);
+
+    weightMapColorMapFilename = pXForm.weightMapColorMapFilename;
+    weightMapColorMapXSize = pXForm.weightMapColorMapXSize;
+    weightMapColorMapYSize = pXForm.weightMapColorMapYSize;
+    weightMapColorMapXCentre = pXForm.weightMapColorMapXCentre;
+    weightMapColorMapYCentre = pXForm.weightMapColorMapYCentre;
+
+    weightMapPerlinNoiseAScale = pXForm.weightMapPerlinNoiseAScale;
+    weightMapPerlinNoiseFScale = pXForm.weightMapPerlinNoiseFScale;
+    weightMapPerlinNoiseOctaves = pXForm.weightMapPerlinNoiseOctaves;
   }
 
   @Override
@@ -738,7 +783,22 @@ public final class XForm implements Assignable<XForm>, Serializable {
         ((colorType != null && pSrc.colorType == null) || (colorType == null && pSrc.colorType != null) ||
         (colorType != null && pSrc.colorType != null && !colorType.equals(pSrc.colorType))) ||
         !name.equals(pSrc.name) ||
-        (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size())) {
+        (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size()) ||
+
+         weightMapType != pSrc.weightMapType || weightMapInput != pSrc.weightMapInput ||
+         (fabs(weightMapColorIntensity - pSrc.weightMapColorIntensity) > EPSILON) || !weightMapColorIntensityCurve.isEqual(pSrc.weightMapColorIntensityCurve) ||
+         (fabs(weightMapVariationIntensity - pSrc.weightMapVariationIntensity) > EPSILON) || !weightMapVariationIntensityCurve.isEqual(pSrc.weightMapVariationIntensityCurve) ||
+
+         !weightMapColorMapFilename.equals(pSrc.weightMapColorMapFilename) ||
+         (fabs(weightMapColorMapXSize - pSrc.weightMapColorMapXSize) > EPSILON) ||
+         (fabs(weightMapColorMapYSize - pSrc.weightMapColorMapYSize) > EPSILON) ||
+         (fabs(weightMapColorMapXCentre - pSrc.weightMapColorMapXCentre) > EPSILON) ||
+         (fabs(weightMapColorMapYCentre - pSrc.weightMapColorMapYCentre) > EPSILON) ||
+
+         (fabs(weightMapPerlinNoiseAScale - pSrc.weightMapPerlinNoiseAScale) > EPSILON) ||
+         (fabs(weightMapPerlinNoiseFScale - pSrc.weightMapPerlinNoiseFScale) > EPSILON) ||
+         (weightMapPerlinNoiseOctaves != pSrc.weightMapPerlinNoiseOctaves)
+    ) {
       return false;
     }
     for (int i = 0; i < modifiedWeights.length; i++) {
@@ -1699,4 +1759,114 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.materialSpeed = materialSpeed;
   }
 
+  public WeightMapType getWeightMapType() {
+    return weightMapType;
+  }
+
+  public void setWeightMapType(WeightMapType weightMapType) {
+    this.weightMapType = weightMapType;
+  }
+
+  public WeightMapInputType getWeightMapInput() {
+    return weightMapInput;
+  }
+
+  public void setWeightMapInput(WeightMapInputType weightMapInput) {
+    this.weightMapInput = weightMapInput;
+  }
+
+  public double getWeightMapColorIntensity() {
+    return weightMapColorIntensity;
+  }
+
+  public void setWeightMapColorIntensity(double weightMapColorIntensity) {
+    this.weightMapColorIntensity = weightMapColorIntensity;
+  }
+
+  public MotionCurve getWeightMapColorIntensityCurve() {
+    return weightMapColorIntensityCurve;
+  }
+
+  public double getWeightMapVariationIntensity() {
+    return weightMapVariationIntensity;
+  }
+
+  public void setWeightMapVariationIntensity(double weightMapVariationIntensity) {
+    this.weightMapVariationIntensity = weightMapVariationIntensity;
+  }
+
+  public MotionCurve getWeightMapVariationIntensityCurve() {
+    return weightMapVariationIntensityCurve;
+  }
+
+  public String getWeightMapColorMapFilename() {
+    return weightMapColorMapFilename;
+  }
+
+  public void setWeightMapColorMapFilename(String weightMapColorMapFilename) {
+    this.weightMapColorMapFilename = weightMapColorMapFilename;
+  }
+
+  public double getWeightMapColorMapXSize() {
+    return weightMapColorMapXSize;
+  }
+
+  public void setWeightMapColorMapXSize(double weightMapColorMapXSize) {
+    this.weightMapColorMapXSize = weightMapColorMapXSize;
+  }
+
+  public double getWeightMapColorMapYSize() {
+    return weightMapColorMapYSize;
+  }
+
+  public void setWeightMapColorMapYSize(double weightMapColorMapYSize) {
+    this.weightMapColorMapYSize = weightMapColorMapYSize;
+  }
+
+  public double getWeightMapColorMapXCentre() {
+    return weightMapColorMapXCentre;
+  }
+
+  public void setWeightMapColorMapXCentre(double weightMapColorMapXCentre) {
+    this.weightMapColorMapXCentre = weightMapColorMapXCentre;
+  }
+
+  public double getWeightMapColorMapYCentre() {
+    return weightMapColorMapYCentre;
+  }
+
+  public void setWeightMapColorMapYCentre(double weightMapColorMapYCentre) {
+    this.weightMapColorMapYCentre = weightMapColorMapYCentre;
+  }
+
+  public double getWeightMapPerlinNoiseAScale() {
+    return weightMapPerlinNoiseAScale;
+  }
+
+  public void setWeightMapPerlinNoiseAScale(double weightMapPerlinNoiseAScale) {
+    this.weightMapPerlinNoiseAScale = weightMapPerlinNoiseAScale;
+  }
+
+  public double getWeightMapPerlinNoiseFScale() {
+    return weightMapPerlinNoiseFScale;
+  }
+
+  public void setWeightMapPerlinNoiseFScale(double weightMapPerlinNoiseFScale) {
+    this.weightMapPerlinNoiseFScale = weightMapPerlinNoiseFScale;
+  }
+
+  public int getWeightMapPerlinNoiseOctaves() {
+    return weightMapPerlinNoiseOctaves;
+  }
+
+  public void setWeightMapPerlinNoiseOctaves(int weightMapPerlinNoiseOctaves) {
+    this.weightMapPerlinNoiseOctaves = weightMapPerlinNoiseOctaves;
+  }
+
+  public boolean isWeightMapActive() {
+    return (fabs(weightMapColorIntensity)>EPSILON || fabs(weightMapVariationIntensity)>EPSILON) && (
+            (WeightMapType.IMAGE_MAP.equals(weightMapType) && weightMapColorMapFilename!=null && !weightMapColorMapFilename.equals("")) ||
+            (WeightMapType.PERLIN_NOISE.equals(weightMapType))
+    );
+  }
 }

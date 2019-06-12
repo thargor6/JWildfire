@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -796,6 +798,10 @@ public class JWildfire extends JApplet {
   }
 
   public static void main(final String[] args) {
+    {
+      Logger root = Logger.getLogger("");
+      root.setLevel(Level.OFF);
+    }
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {

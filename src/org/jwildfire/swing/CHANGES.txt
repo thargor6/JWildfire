@@ -1,3 +1,12 @@
+V4.20 (06.06.2018)
+ - Introducing internal ranking of variation-code:
+   Only variations which
+     - behave fast enough and
+     - use a reasonable amount of memory
+   are included in random-flame-generators and random-flame-modifiers like MutaGen.
+   This should lead to a much more stable and fluid program behaviour.
+ - new juliascope3Db-variation by Brad Stefanov
+
 V4.10 (11.05.2018)
  - New variation: dc_code by Jesus Sosa
  - Enhancements to dc_ variations by Jesus Sosa

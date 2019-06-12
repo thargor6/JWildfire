@@ -70,11 +70,23 @@ public class Variation implements Assignable<Variation>, Serializable {
   }
 
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
-    func.transform(pContext, pXForm, pAffineTP, pVarTP, amount);
+    if(fabs(pAffineTP.weightMapValue)>EPSILON && fabs(pXForm.getWeightMapVariationIntensity())>EPSILON) {
+      double nAmount = amount * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightMapVariationIntensity());
+      func.transform(pContext, pXForm, pAffineTP, pVarTP, nAmount);
+    }
+    else {
+      func.transform(pContext, pXForm, pAffineTP, pVarTP, amount);
+    }
   }
 
   public void invtransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP) {
-    func.invtransform(pContext, pXForm, pAffineTP, pVarTP, amount);
+    if(fabs(pAffineTP.weightMapValue)>EPSILON && fabs(pXForm.getWeightMapVariationIntensity())>EPSILON) {
+      double nAmount = amount * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightMapVariationIntensity());
+      func.invtransform(pContext, pXForm, pAffineTP, pVarTP, nAmount);
+    }
+    else {
+      func.invtransform(pContext, pXForm, pAffineTP, pVarTP, amount);
+    }
   }
 
   @Override

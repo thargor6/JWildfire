@@ -78,13 +78,15 @@ import org.jwildfire.create.tina.animate.GlobalScriptType;
 import org.jwildfire.create.tina.animate.SequenceOutputType;
 import org.jwildfire.create.tina.animate.XFormScriptType;
 import org.jwildfire.create.tina.base.BGColorType;
-import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.ColorType;
+import org.jwildfire.create.tina.base.DrawMode;
 import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
+import org.jwildfire.create.tina.base.WeightMapInputType;
+import org.jwildfire.create.tina.base.WeightMapType;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
@@ -243,6 +245,8 @@ public class MainEditorFrame extends JFrame {
   private JPanel tinaModifiedWeightsPanel = null;
 
   private JPanel tinaTransformationColorPanel = null;
+
+  private JPanel tinaWeightMapPanel = null;
 
   private JLabel tinaPaletteRandomPointsLbl = null;
 
@@ -3442,10 +3446,10 @@ public class MainEditorFrame extends JFrame {
       tinaTransformationsTabbedPane.addTab("Nonlinear", null, getTinaVariationPanel(), null);
       tinaTransformationsTabbedPane.addTab("Xaos", null, getTinaModifiedWeightsPanel(), null);
       tinaTransformationsTabbedPane.addTab("Color", null, getTinaTransformationColorPanel(), null);
-
       JPanel panel_1 = new JPanel();
       tinaTransformationsTabbedPane.addTab("Gamma", null, panel_1, null);
       panel_1.setLayout(null);
+      tinaTransformationsTabbedPane.addTab("WgtMap", null, getTinaWeightMapPanel(), null);
 
       xFormModGammaSlider = new JSlider();
       xFormModGammaSlider.setValue(0);
@@ -3455,7 +3459,7 @@ public class MainEditorFrame extends JFrame {
       xFormModGammaSlider.setMaximum(100);
       xFormModGammaSlider.setLocation(new Point(125, 21));
       xFormModGammaSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaSlider.setBounds(125, 2, 156, 22);
+      xFormModGammaSlider.setBounds(137, 2, 144, 22);
       xFormModGammaSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3480,7 +3484,7 @@ public class MainEditorFrame extends JFrame {
       xFormModGammaREd.setHasMinValue(true);
       xFormModGammaREd.setHasMaxValue(true);
       xFormModGammaREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModGammaREd.setBounds(68, 2, 55, 22);
+      xFormModGammaREd.setBounds(68, 2, 70, 22);
       xFormModGammaREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3524,7 +3528,7 @@ public class MainEditorFrame extends JFrame {
       xFormModGammaSpeedSlider.setMaximum(100);
       xFormModGammaSpeedSlider.setLocation(new Point(125, 47));
       xFormModGammaSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModGammaSpeedSlider.setBounds(125, 22, 156, 22);
+      xFormModGammaSpeedSlider.setBounds(137, 22, 144, 22);
       xFormModGammaSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3549,7 +3553,7 @@ public class MainEditorFrame extends JFrame {
       xFormModGammaSpeedREd.setHasMinValue(true);
       xFormModGammaSpeedREd.setHasMaxValue(true);
       xFormModGammaSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModGammaSpeedREd.setBounds(68, 22, 55, 22);
+      xFormModGammaSpeedREd.setBounds(68, 22, 70, 22);
       xFormModGammaSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3585,7 +3589,7 @@ public class MainEditorFrame extends JFrame {
       xFormModContrastREd.setHasMinValue(true);
       xFormModContrastREd.setHasMaxValue(true);
       xFormModContrastREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModContrastREd.setBounds(68, 46, 55, 22);
+      xFormModContrastREd.setBounds(68, 46, 70, 22);
       xFormModContrastREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3609,7 +3613,7 @@ public class MainEditorFrame extends JFrame {
       xFormModContrastSlider.setMaximum(100);
       xFormModContrastSlider.setLocation(new Point(125, 21));
       xFormModContrastSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModContrastSlider.setBounds(125, 46, 156, 22);
+      xFormModContrastSlider.setBounds(137, 46, 144, 22);
       xFormModContrastSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3645,7 +3649,7 @@ public class MainEditorFrame extends JFrame {
       xFormModContrastSpeedREd.setHasMinValue(true);
       xFormModContrastSpeedREd.setHasMaxValue(true);
       xFormModContrastSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModContrastSpeedREd.setBounds(68, 66, 55, 22);
+      xFormModContrastSpeedREd.setBounds(68, 66, 70, 22);
       xFormModContrastSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3668,7 +3672,7 @@ public class MainEditorFrame extends JFrame {
       xFormModContrastSpeedSlider.setMaximum(100);
       xFormModContrastSpeedSlider.setLocation(new Point(125, 47));
       xFormModContrastSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModContrastSpeedSlider.setBounds(125, 66, 156, 22);
+      xFormModContrastSpeedSlider.setBounds(137, 66, 144, 22);
       xFormModContrastSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3704,7 +3708,7 @@ public class MainEditorFrame extends JFrame {
       xFormModSaturationREd.setHasMinValue(true);
       xFormModSaturationREd.setHasMaxValue(true);
       xFormModSaturationREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModSaturationREd.setBounds(68, 90, 55, 22);
+      xFormModSaturationREd.setBounds(68, 90, 70, 22);
       xFormModSaturationREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3727,7 +3731,7 @@ public class MainEditorFrame extends JFrame {
       xFormModSaturationSlider.setMaximum(100);
       xFormModSaturationSlider.setLocation(new Point(125, 21));
       xFormModSaturationSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModSaturationSlider.setBounds(125, 90, 156, 22);
+      xFormModSaturationSlider.setBounds(137, 90, 144, 22);
       xFormModSaturationSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3763,7 +3767,7 @@ public class MainEditorFrame extends JFrame {
       xFormModSaturationSpeedREd.setHasMinValue(true);
       xFormModSaturationSpeedREd.setHasMaxValue(true);
       xFormModSaturationSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModSaturationSpeedREd.setBounds(68, 110, 55, 22);
+      xFormModSaturationSpeedREd.setBounds(68, 110, 70, 22);
       xFormModSaturationSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3786,7 +3790,7 @@ public class MainEditorFrame extends JFrame {
       xFormModSaturationSpeedSlider.setMaximum(100);
       xFormModSaturationSpeedSlider.setLocation(new Point(125, 47));
       xFormModSaturationSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModSaturationSpeedSlider.setBounds(125, 110, 156, 22);
+      xFormModSaturationSpeedSlider.setBounds(137, 110, 144, 22);
       xFormModSaturationSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3844,7 +3848,7 @@ public class MainEditorFrame extends JFrame {
       xFormModHueREd.setHasMinValue(true);
       xFormModHueREd.setHasMaxValue(true);
       xFormModHueREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModHueREd.setBounds(68, 134, 55, 22);
+      xFormModHueREd.setBounds(68, 134, 70, 22);
       xFormModHueREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3890,7 +3894,7 @@ public class MainEditorFrame extends JFrame {
       xFormModHueSpeedREd.setHasMinValue(true);
       xFormModHueSpeedREd.setHasMaxValue(true);
       xFormModHueSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      xFormModHueSpeedREd.setBounds(68, 154, 55, 22);
+      xFormModHueSpeedREd.setBounds(68, 154, 70, 22);
       xFormModHueSpeedREd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -3913,7 +3917,7 @@ public class MainEditorFrame extends JFrame {
       xFormModHueSlider.setMaximum(100);
       xFormModHueSlider.setLocation(new Point(125, 21));
       xFormModHueSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModHueSlider.setBounds(125, 134, 156, 22);
+      xFormModHueSlider.setBounds(137, 134, 144, 22);
       xFormModHueSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -3935,7 +3939,7 @@ public class MainEditorFrame extends JFrame {
       xFormModHueSpeedSlider.setMaximum(100);
       xFormModHueSpeedSlider.setLocation(new Point(125, 47));
       xFormModHueSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      xFormModHueSpeedSlider.setBounds(125, 154, 156, 22);
+      xFormModHueSpeedSlider.setBounds(137, 154, 144, 22);
       xFormModHueSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -4228,7 +4232,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialLbl.setName("xFormMaterialLbl");
       xFormMaterialLbl.setLocation(new Point(6, 172));
       xFormMaterialLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-//      xFormMaterialLbl.setBounds(6, 146, 49, 22);
+      //      xFormMaterialLbl.setBounds(6, 146, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialLbl);
 
       xFormMaterialREd = new JWFNumberField();
@@ -4243,7 +4247,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialREd.setHasMinValue(true);
       xFormMaterialREd.setHasMaxValue(false);
       xFormMaterialREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-//      xFormMaterialREd.setBounds(55, 146, 70, 24);
+      //      xFormMaterialREd.setBounds(55, 146, 70, 24);
       xFormMaterialREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getXFormControls().editMotionCurve(e);
@@ -4272,7 +4276,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSlider.setMaximum(300);
       xFormMaterialSlider.setLocation(new Point(125, 172));
       xFormMaterialSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-//      xFormMaterialSlider.setBounds(125, 146, 195, 22);
+      //      xFormMaterialSlider.setBounds(125, 146, 195, 22);
       xFormMaterialSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -4299,7 +4303,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedLbl.setName("xFormMaterialSpeedLbl");
       xFormMaterialSpeedLbl.setLocation(new Point(6, 198));
       xFormMaterialSpeedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-//      xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
+      //      xFormMaterialSpeedLbl.setBounds(6, 172, 49, 22);
       tinaTransformationColorPanel.add(xFormMaterialSpeedLbl);
 
       xFormMaterialSpeedREd = new JWFNumberField();
@@ -4316,7 +4320,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedREd.setHasMinValue(true);
       xFormMaterialSpeedREd.setHasMaxValue(true);
       xFormMaterialSpeedREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-//      xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
+      //      xFormMaterialSpeedREd.setBounds(55, 172, 70, 24);
       xFormMaterialSpeedREd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.getXFormControls().editMotionCurve(e);
@@ -4346,7 +4350,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedSlider.setMaximum(100);
       xFormMaterialSpeedSlider.setLocation(new Point(125, 198));
       xFormMaterialSpeedSlider.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-//      xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
+      //      xFormMaterialSpeedSlider.setBounds(125, 172, 195, 22);
       xFormMaterialSpeedSlider.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -4361,6 +4365,470 @@ public class MainEditorFrame extends JFrame {
       tinaTransformationColorPanel.add(xFormMaterialSpeedSlider);
     }
     return tinaTransformationColorPanel;
+  }
+
+  private JPanel getTinaWeightMapPanel() {
+    if (tinaWeightMapPanel == null) {
+      tinaWeightMapPanel = new JPanel();
+      tinaWeightMapPanel.setLayout(null);
+
+      weightMapTypeCmb = new JComboBox();
+      weightMapTypeCmb.setSize(new Dimension(125, 22));
+      weightMapTypeCmb.setPreferredSize(new Dimension(125, 22));
+      weightMapTypeCmb.setLocation(new Point(100, 4));
+      weightMapTypeCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapTypeCmb.setBounds(92, 2, 150, 24);
+      weightMapTypeCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.weightMapTypeCmb_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapTypeCmb);
+
+      JLabel lblMapType = new JLabel();
+      lblMapType.setToolTipText("Type of Weight Map");
+      lblMapType.setText("Weight Map Type");
+      lblMapType.setSize(new Dimension(94, 22));
+      lblMapType.setPreferredSize(new Dimension(94, 22));
+      lblMapType.setLocation(new Point(4, 4));
+      lblMapType.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblMapType.setBounds(4, 2, 90, 22);
+      tinaWeightMapPanel.add(lblMapType);
+
+      weightMapColorMapFilenameLbl = new JLabel();
+      weightMapColorMapFilenameLbl.setToolTipText("RGB Image, only the R-component is used");
+      weightMapColorMapFilenameLbl.setText("Image File");
+      weightMapColorMapFilenameLbl.setSize(new Dimension(94, 22));
+      weightMapColorMapFilenameLbl.setPreferredSize(new Dimension(94, 22));
+      weightMapColorMapFilenameLbl.setLocation(new Point(4, 4));
+      weightMapColorMapFilenameLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapColorMapFilenameLbl.setBounds(4, 72, 90, 22);
+      tinaWeightMapPanel.add(weightMapColorMapFilenameLbl);
+
+      weightMapColorMapFilenameBtn = new JButton();
+      weightMapColorMapFilenameBtn.setToolTipText("Select an image to use as a background");
+      weightMapColorMapFilenameBtn.setText("Select image...");
+      weightMapColorMapFilenameBtn.setPreferredSize(new Dimension(190, 24));
+      weightMapColorMapFilenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapColorMapFilenameBtn.setBounds(92, 70, 116, 24);
+      weightMapColorMapFilenameBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (tinaController != null) {
+            tinaController.weightMapColorMapFilenameBtn_clicked();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapColorMapFilenameBtn);
+
+      weightMapColorIntensityREd = new JWFNumberField();
+      weightMapColorIntensityREd.setValueStep(0.01);
+      weightMapColorIntensityREd.setText("");
+      weightMapColorIntensityREd.setSize(new Dimension(55, 22));
+      weightMapColorIntensityREd.setPreferredSize(new Dimension(55, 22));
+      weightMapColorIntensityREd.setMinValue(-3.0);
+      weightMapColorIntensityREd.setMaxValue(3.0);
+      weightMapColorIntensityREd.setLocation(new Point(70, 21));
+      weightMapColorIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapColorIntensityREd.setBounds(252, 49, 70, 22);
+      weightMapColorIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapColorIntensityREd.isMouseAdjusting() || weightMapColorIntensityREd.getMouseChangeCount() == 0) {
+              //if (!weightMapColorIntensitySlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapColorIntensityREd_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapColorIntensityREd);
+
+      JLabel lblColorIntensity = new JLabel();
+      lblColorIntensity.setToolTipText("Change of Color");
+      lblColorIntensity.setText("Color Intensity");
+      lblColorIntensity.setSize(new Dimension(64, 22));
+      lblColorIntensity.setPreferredSize(new Dimension(64, 22));
+      lblColorIntensity.setLocation(new Point(6, 21));
+      lblColorIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblColorIntensity.setBounds(165, 49, 90, 22);
+      tinaWeightMapPanel.add(lblColorIntensity);
+
+      JLabel lblVariationIntensity = new JLabel();
+      lblVariationIntensity.setToolTipText("Change of Variation Intensity");
+      lblVariationIntensity.setText("Variation Intensity");
+      lblVariationIntensity.setSize(new Dimension(64, 22));
+      lblVariationIntensity.setPreferredSize(new Dimension(64, 22));
+      lblVariationIntensity.setLocation(new Point(6, 47));
+      lblVariationIntensity.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblVariationIntensity.setBounds(4, 49, 90, 22);
+      tinaWeightMapPanel.add(lblVariationIntensity);
+
+      weightMapVariationIntensityREd = new JWFNumberField();
+      weightMapVariationIntensityREd.setValueStep(0.01);
+      weightMapVariationIntensityREd.setText("");
+      weightMapVariationIntensityREd.setSize(new Dimension(55, 22));
+      weightMapVariationIntensityREd.setPreferredSize(new Dimension(55, 22));
+      weightMapVariationIntensityREd.setMinValue(-1.0);
+      weightMapVariationIntensityREd.setMaxValue(1.0);
+      weightMapVariationIntensityREd.setLocation(new Point(70, 47));
+      weightMapVariationIntensityREd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapVariationIntensityREd.setBounds(92, 49, 70, 22);
+      weightMapVariationIntensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapVariationIntensityREd.isMouseAdjusting() || weightMapVariationIntensityREd.getMouseChangeCount() == 0) {
+              //if (!weightMapVariationIntensitySlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapVariationIntensityREd_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapVariationIntensityREd);
+
+      weightMapInputCmb = new JComboBox();
+      weightMapInputCmb.setSize(new Dimension(125, 22));
+      weightMapInputCmb.setPreferredSize(new Dimension(125, 22));
+      weightMapInputCmb.setLocation(new Point(100, 4));
+      weightMapInputCmb.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapInputCmb.setBounds(92, 25, 150, 24);
+      weightMapInputCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.weightMapInputCmb_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapInputCmb);
+
+      JLabel lblInput = new JLabel();
+      lblInput.setToolTipText("Input Coordinate for evaluating the map");
+      lblInput.setText("Input Coordinate");
+      lblInput.setSize(new Dimension(94, 22));
+      lblInput.setPreferredSize(new Dimension(94, 22));
+      lblInput.setLocation(new Point(4, 4));
+      lblInput.setFont(new Font("Dialog", Font.BOLD, 10));
+      lblInput.setBounds(4, 25, 90, 22);
+      tinaWeightMapPanel.add(lblInput);
+
+      weightMapParam01REd = new JWFNumberField();
+      weightMapParam01REd.setValueStep(0.01);
+      weightMapParam01REd.setText("");
+      weightMapParam01REd.setSize(new Dimension(55, 22));
+      weightMapParam01REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam01REd.setMinValue(-3.0);
+      weightMapParam01REd.setMaxValue(3.0);
+      weightMapParam01REd.setLocation(new Point(70, 21));
+      weightMapParam01REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam01REd.setBounds(92, 94, 70, 22);
+      weightMapParam01REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam01REd.isMouseAdjusting() || weightMapParam01REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam01Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam01REd_changed();
+          }
+        }
+      });
+
+      tinaWeightMapPanel.add(weightMapParam01REd);
+
+      weightMapParam01Lbl = new JLabel();
+      weightMapParam01Lbl.setToolTipText("");
+      weightMapParam01Lbl.setText("Param 01");
+      weightMapParam01Lbl.setSize(new Dimension(64, 22));
+      weightMapParam01Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam01Lbl.setLocation(new Point(6, 21));
+      weightMapParam01Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam01Lbl.setBounds(4, 94, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam01Lbl);
+
+      weightMapParam02Lbl = new JLabel();
+      weightMapParam02Lbl.setToolTipText("");
+      weightMapParam02Lbl.setText("Param 02");
+      weightMapParam02Lbl.setSize(new Dimension(64, 22));
+      weightMapParam02Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam02Lbl.setLocation(new Point(6, 47));
+      weightMapParam02Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam02Lbl.setBounds(4, 114, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam02Lbl);
+
+      weightMapParam02REd = new JWFNumberField();
+      weightMapParam02REd.setValueStep(0.01);
+      weightMapParam02REd.setText("");
+      weightMapParam02REd.setSize(new Dimension(55, 22));
+      weightMapParam02REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam02REd.setMinValue(-1.0);
+      weightMapParam02REd.setMaxValue(1.0);
+      weightMapParam02REd.setLocation(new Point(70, 47));
+      weightMapParam02REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam02REd.setBounds(92, 114, 70, 22);
+      weightMapParam02REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam02REd.isMouseAdjusting() || weightMapParam02REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam02Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam02REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam02REd);
+
+      weightMapParam05REd = new JWFNumberField();
+      weightMapParam05REd.setValueStep(0.01);
+      weightMapParam05REd.setText("");
+      weightMapParam05REd.setSize(new Dimension(55, 22));
+      weightMapParam05REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam05REd.setMinValue(-3.0);
+      weightMapParam05REd.setMaxValue(3.0);
+      weightMapParam05REd.setLocation(new Point(70, 21));
+      weightMapParam05REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam05REd.setBounds(252, 94, 70, 22);
+      weightMapParam05REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam05REd.isMouseAdjusting() || weightMapParam05REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam05Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam05REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam05REd);
+
+      weightMapParam05Lbl = new JLabel();
+      weightMapParam05Lbl.setToolTipText("");
+      weightMapParam05Lbl.setText("Param 05");
+      weightMapParam05Lbl.setSize(new Dimension(64, 22));
+      weightMapParam05Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam05Lbl.setLocation(new Point(6, 21));
+      weightMapParam05Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam05Lbl.setBounds(164, 94, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam05Lbl);
+
+      weightMapParam06Lbl = new JLabel();
+      weightMapParam06Lbl.setToolTipText("");
+      weightMapParam06Lbl.setText("Param 06");
+      weightMapParam06Lbl.setSize(new Dimension(64, 22));
+      weightMapParam06Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam06Lbl.setLocation(new Point(6, 47));
+      weightMapParam06Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam06Lbl.setBounds(165, 114, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam06Lbl);
+
+      weightMapParam06REd = new JWFNumberField();
+      weightMapParam06REd.setValueStep(0.01);
+      weightMapParam06REd.setText("");
+      weightMapParam06REd.setSize(new Dimension(55, 22));
+      weightMapParam06REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam06REd.setMinValue(-1.0);
+      weightMapParam06REd.setMaxValue(1.0);
+      weightMapParam06REd.setLocation(new Point(70, 47));
+      weightMapParam06REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam06REd.setBounds(252, 114, 70, 22);
+      weightMapParam06REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam06REd.isMouseAdjusting() || weightMapParam06REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam06Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam06REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam06REd);
+
+      weightMapParam03REd = new JWFNumberField();
+      weightMapParam03REd.setValueStep(0.01);
+      weightMapParam03REd.setText("");
+      weightMapParam03REd.setSize(new Dimension(55, 22));
+      weightMapParam03REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam03REd.setMinValue(-3.0);
+      weightMapParam03REd.setMaxValue(3.0);
+      weightMapParam03REd.setLocation(new Point(70, 21));
+      weightMapParam03REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam03REd.setBounds(92, 134, 70, 22);
+      weightMapParam03REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam03REd.isMouseAdjusting() || weightMapParam03REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam03Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam03REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam03REd);
+
+      weightMapParam03Lbl = new JLabel();
+      weightMapParam03Lbl.setToolTipText("");
+      weightMapParam03Lbl.setText("Param 03");
+      weightMapParam03Lbl.setSize(new Dimension(64, 22));
+      weightMapParam03Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam03Lbl.setLocation(new Point(6, 21));
+      weightMapParam03Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam03Lbl.setBounds(4, 134, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam03Lbl);
+
+      weightMapParam04Lbl = new JLabel();
+      weightMapParam04Lbl.setToolTipText("");
+      weightMapParam04Lbl.setText("Param 04");
+      weightMapParam04Lbl.setSize(new Dimension(64, 22));
+      weightMapParam04Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam04Lbl.setLocation(new Point(6, 47));
+      weightMapParam04Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam04Lbl.setBounds(4, 154, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam04Lbl);
+
+      weightMapParam04REd = new JWFNumberField();
+      weightMapParam04REd.setValueStep(0.01);
+      weightMapParam04REd.setText("");
+      weightMapParam04REd.setSize(new Dimension(55, 22));
+      weightMapParam04REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam04REd.setMinValue(-1.0);
+      weightMapParam04REd.setMaxValue(1.0);
+      weightMapParam04REd.setLocation(new Point(70, 47));
+      weightMapParam04REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam04REd.setBounds(92, 154, 70, 22);
+      weightMapParam04REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam04REd.isMouseAdjusting() || weightMapParam04REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam04Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam04REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam04REd);
+
+      weightMapParam07Lbl = new JLabel();
+      weightMapParam07Lbl.setToolTipText("");
+      weightMapParam07Lbl.setText("Param 07");
+      weightMapParam07Lbl.setSize(new Dimension(64, 22));
+      weightMapParam07Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam07Lbl.setLocation(new Point(6, 21));
+      weightMapParam07Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam07Lbl.setBounds(165, 134, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam07Lbl);
+
+      weightMapParam08Lbl = new JLabel();
+      weightMapParam08Lbl.setToolTipText("");
+      weightMapParam08Lbl.setText("Param 08");
+      weightMapParam08Lbl.setSize(new Dimension(64, 22));
+      weightMapParam08Lbl.setPreferredSize(new Dimension(64, 22));
+      weightMapParam08Lbl.setLocation(new Point(6, 47));
+      weightMapParam08Lbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapParam08Lbl.setBounds(165, 154, 90, 22);
+      tinaWeightMapPanel.add(weightMapParam08Lbl);
+
+      weightMapParam07REd = new JWFNumberField();
+      weightMapParam07REd.setValueStep(0.01);
+      weightMapParam07REd.setText("");
+      weightMapParam07REd.setSize(new Dimension(55, 22));
+      weightMapParam07REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam07REd.setMinValue(-3.0);
+      weightMapParam07REd.setMaxValue(3.0);
+      weightMapParam07REd.setLocation(new Point(70, 21));
+      weightMapParam07REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam07REd.setBounds(252, 134, 70, 22);
+      weightMapParam07REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam07REd.isMouseAdjusting() || weightMapParam07REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam07Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam07REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam07REd);
+
+      weightMapParam08REd = new JWFNumberField();
+      weightMapParam08REd.setValueStep(0.01);
+      weightMapParam08REd.setText("");
+      weightMapParam08REd.setSize(new Dimension(55, 22));
+      weightMapParam08REd.setPreferredSize(new Dimension(55, 22));
+      weightMapParam08REd.setMinValue(-1.0);
+      weightMapParam08REd.setMaxValue(1.0);
+      weightMapParam08REd.setLocation(new Point(70, 47));
+      weightMapParam08REd.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam08REd.setBounds(252, 154, 70, 22);
+      weightMapParam08REd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightMapParam08REd.isMouseAdjusting() || weightMapParam08REd.getMouseChangeCount() == 0) {
+              //if (!weightMapParam08Slider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightMapParam08REd_changed();
+          }
+        }
+      });
+      tinaWeightMapPanel.add(weightMapParam08REd);
+      tinaWeightMapPanel.add(getWeightMapColorMapFilenameInfoLbl());
+
+      weightMapRandomizeAllBtn = new JButton();
+      weightMapRandomizeAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
+        }
+      });
+      weightMapRandomizeAllBtn.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
+      weightMapRandomizeAllBtn.setText("Randomize all");
+      weightMapRandomizeAllBtn.setPreferredSize(new Dimension(104, 24));
+      weightMapRandomizeAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapRandomizeAllBtn.setBounds(0, 174, 104, 24);
+      tinaWeightMapPanel.add(weightMapRandomizeAllBtn);
+
+      weightMapResetAllBtn = new JButton();
+      weightMapResetAllBtn.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.weightMapResetAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
+        }
+      });
+      weightMapResetAllBtn.setToolTipText("Reset weight-map-settings, either of the whole fractal or the selected transform");
+      weightMapResetAllBtn.setText("Reset all");
+      weightMapResetAllBtn.setPreferredSize(new Dimension(190, 24));
+      weightMapResetAllBtn.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapResetAllBtn.setBounds(107, 174, 104, 24);
+      tinaWeightMapPanel.add(weightMapResetAllBtn);
+
+      weightMapEditWholeFractalCBx = new JCheckBox("Whole fractal");
+      weightMapEditWholeFractalCBx.setToolTipText("Check if Randomize/Reset should apply to the whole fractal rather than only to the selected transform");
+      weightMapEditWholeFractalCBx.setSelected(true);
+      weightMapEditWholeFractalCBx.setBounds(214, 174, 104, 18);
+      tinaWeightMapPanel.add(weightMapEditWholeFractalCBx);
+    }
+    return tinaWeightMapPanel;
   }
 
   /**
@@ -5333,6 +5801,8 @@ public class MainEditorFrame extends JFrame {
     initDOFBlurShapeCmb(getDofDOFShapeCmb());
     initBGColorTypoCmb(getBackgroundColorTypeCmb());
     initMeshGenOutputTypeCmb(meshGenFrame.getMeshGenOutputTypeCmb());
+    initWeightMapTypeCmb(getWeightMapTypeCmb());
+    initWeightMapInputTypeCmb(getWeightMapInputCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -5381,8 +5851,8 @@ public class MainEditorFrame extends JFrame {
     params.setQuiltFlameRendererParams(quiltFlameRendererFrame.getOpenFlameButton(), quiltFlameRendererFrame.getImportFlameFromEditorButton(),
         quiltFlameRendererFrame.getImportFlameFromClipboardButton(),
         quiltFlameRendererFrame.getQualityEdit(), quiltFlameRendererFrame.getXSegmentationLevelEdit(), quiltFlameRendererFrame.getYSegmentationLevelEdit(),
-            quiltFlameRendererFrame.getResolution4KButton(),quiltFlameRendererFrame.getResolution8KButton(),quiltFlameRendererFrame.getResolution16KButton(),
-            quiltFlameRendererFrame.getResolution32KButton(), quiltFlameRendererFrame.getRenderWidthEdit(),
+        quiltFlameRendererFrame.getResolution4KButton(), quiltFlameRendererFrame.getResolution8KButton(), quiltFlameRendererFrame.getResolution16KButton(),
+        quiltFlameRendererFrame.getResolution32KButton(), quiltFlameRendererFrame.getRenderWidthEdit(),
         quiltFlameRendererFrame.getRenderHeightEdit(), quiltFlameRendererFrame.getSegmentWidthEdit(), quiltFlameRendererFrame.getSegmentHeightEdit(),
         quiltFlameRendererFrame.getOutputFilenameEdit(), quiltFlameRendererFrame.getSegmentProgressBar(), quiltFlameRendererFrame.getTotalProgressBar(),
         quiltFlameRendererFrame.getRenderButton(), quiltFlameRendererFrame.getPreviewRootPanel());
@@ -5542,6 +6012,12 @@ public class MainEditorFrame extends JFrame {
         getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
         getBackgroundColorCCIndicatorBtn());
 
+    params.setParams4(getWeightMapTypeCmb(), getWeightMapInputCmb(), getWeightMapColorIntensityREd(), getWeightMapVariationIntensityREd(),
+        getWeightMapColorMapFilenameLbl(), getWeightMapColorMapFilenameBtn(), getWeightMapColorMapFilenameInfoLbl(),
+        getWeightMapParam01REd(), getWeightMapParam01Lbl(), getWeightMapParam02REd(), getWeightMapParam02Lbl(), getWeightMapParam03REd(), getWeightMapParam03Lbl(),
+        getWeightMapParam04REd(), getWeightMapParam04Lbl(), getWeightMapParam05REd(), getWeightMapParam05Lbl(), getWeightMapParam06REd(), getWeightMapParam06Lbl(),
+        getWeightMapParam07REd(), getWeightMapParam07Lbl(), getWeightMapParam08REd(), getWeightMapParam08Lbl());
+
     tinaController = new TinaController(params);
 
     for (TinaNonlinearControlsRow row : nonlinearControlsRows) {
@@ -5587,7 +6063,7 @@ public class MainEditorFrame extends JFrame {
       getXFormDrawModeCmb().addItem(DrawMode.NORMAL);
       getXFormDrawModeCmb().addItem(DrawMode.OPAQUE);
       getXFormDrawModeCmb().addItem(DrawMode.HIDDEN);
-      
+
       getXFormColorTypeCmb().removeAllItems();
       getXFormColorTypeCmb().addItem(ColorType.NONE);
       getXFormColorTypeCmb().addItem(ColorType.DIFFUSION);
@@ -5716,6 +6192,19 @@ public class MainEditorFrame extends JFrame {
       tinaController.refreshing = tinaController.cmbRefreshing = tinaController.gridRefreshing = false;
     }
     return tinaController;
+  }
+
+  private void initWeightMapTypeCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(WeightMapType.NONE);
+    pCmb.addItem(WeightMapType.PERLIN_NOISE);
+    pCmb.addItem(WeightMapType.IMAGE_MAP);
+  }
+
+  private void initWeightMapInputTypeCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    pCmb.addItem(WeightMapInputType.AFFINE);
+    pCmb.addItem(WeightMapInputType.POSITION);
   }
 
   private void initXFormScriptCmb(JComboBox pCmb) {
@@ -10874,6 +11363,32 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField tinaFilterLowDensityREd;
   private JPanel panel_12;
   private JProgressBar randomBatchProgressBar;
+  private JComboBox weightMapTypeCmb;
+  private JComboBox weightMapInputCmb;
+  private JWFNumberField weightMapColorIntensityREd;
+  private JWFNumberField weightMapVariationIntensityREd;
+  private JButton weightMapColorMapFilenameBtn;
+  private JWFNumberField weightMapParam01REd;
+  private JWFNumberField weightMapParam02REd;
+  private JWFNumberField weightMapParam03REd;
+  private JWFNumberField weightMapParam04REd;
+  private JWFNumberField weightMapParam05REd;
+  private JWFNumberField weightMapParam06REd;
+  private JWFNumberField weightMapParam07REd;
+  private JWFNumberField weightMapParam08REd;
+  private JLabel weightMapParam01Lbl;
+  private JLabel weightMapParam02Lbl;
+  private JLabel weightMapParam03Lbl;
+  private JLabel weightMapParam04Lbl;
+  private JLabel weightMapParam05Lbl;
+  private JLabel weightMapParam06Lbl;
+  private JLabel weightMapParam07Lbl;
+  private JLabel weightMapParam08Lbl;
+  private JLabel weightMapColorMapFilenameInfoLbl;
+  private JLabel weightMapColorMapFilenameLbl;
+  private JButton weightMapRandomizeAllBtn;
+  private JButton weightMapResetAllBtn;
+  private JCheckBox weightMapEditWholeFractalCBx;
 
   /**
    * This method initializes affineFlipHorizontalButton	
@@ -11709,7 +12224,7 @@ public class MainEditorFrame extends JFrame {
       filterKernelFlatPreviewBtn.setBounds(449, 114, 107, 24);
       antialiasPanel.add(filterKernelFlatPreviewBtn);
 
-      tinaPostNoiseFilterCheckBox = new JCheckBox("Post noise reduction");
+      tinaPostNoiseFilterCheckBox = new JCheckBox("Post weightMapValue reduction");
       tinaPostNoiseFilterCheckBox.setBounds(674, 64, 169, 18);
       tinaPostNoiseFilterCheckBox.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -20522,5 +21037,120 @@ public class MainEditorFrame extends JFrame {
       randomBatchProgressBar.setLocation(new Point(273, 9));
     }
     return randomBatchProgressBar;
+  }
+
+  public JComboBox getWeightMapTypeCmb() {
+    return weightMapTypeCmb;
+  }
+
+  public JComboBox getWeightMapInputCmb() {
+    return weightMapInputCmb;
+  }
+
+  public JWFNumberField getWeightMapColorIntensityREd() {
+    return weightMapColorIntensityREd;
+  }
+
+  public JWFNumberField getWeightMapVariationIntensityREd() {
+    return weightMapVariationIntensityREd;
+  }
+
+  public JButton getWeightMapColorMapFilenameBtn() {
+    return weightMapColorMapFilenameBtn;
+  }
+
+  public JWFNumberField getWeightMapParam01REd() {
+    return weightMapParam01REd;
+  }
+
+  public JWFNumberField getWeightMapParam02REd() {
+    return weightMapParam02REd;
+  }
+
+  public JWFNumberField getWeightMapParam03REd() {
+    return weightMapParam03REd;
+  }
+
+  public JWFNumberField getWeightMapParam04REd() {
+    return weightMapParam04REd;
+  }
+
+  public JWFNumberField getWeightMapParam05REd() {
+    return weightMapParam05REd;
+  }
+
+  public JWFNumberField getWeightMapParam06REd() {
+    return weightMapParam06REd;
+  }
+
+  public JWFNumberField getWeightMapParam07REd() {
+    return weightMapParam07REd;
+  }
+
+  public JWFNumberField getWeightMapParam08REd() {
+    return weightMapParam08REd;
+  }
+
+  public JLabel getWeightMapParam01Lbl() {
+    return weightMapParam01Lbl;
+  }
+
+  public JLabel getWeightMapParam02Lbl() {
+    return weightMapParam02Lbl;
+  }
+
+  public JLabel getWeightMapParam03Lbl() {
+    return weightMapParam03Lbl;
+  }
+
+  public JLabel getWeightMapParam04Lbl() {
+    return weightMapParam04Lbl;
+  }
+
+  public JLabel getWeightMapParam05Lbl() {
+    return weightMapParam05Lbl;
+  }
+
+  public JLabel getWeightMapParam06Lbl() {
+    return weightMapParam06Lbl;
+  }
+
+  public JLabel getWeightMapParam07Lbl() {
+    return weightMapParam07Lbl;
+  }
+
+  public JLabel getWeightMapParam08Lbl() {
+    return weightMapParam08Lbl;
+  }
+
+  private JLabel getWeightMapColorMapFilenameInfoLbl() {
+    if (weightMapColorMapFilenameInfoLbl == null) {
+      weightMapColorMapFilenameInfoLbl = new JLabel();
+      weightMapColorMapFilenameInfoLbl.setHorizontalAlignment(SwingConstants.LEFT);
+      weightMapColorMapFilenameInfoLbl.setToolTipText("");
+      weightMapColorMapFilenameInfoLbl.setText("(empty)");
+      weightMapColorMapFilenameInfoLbl.setSize(new Dimension(94, 22));
+      weightMapColorMapFilenameInfoLbl.setPreferredSize(new Dimension(94, 22));
+      weightMapColorMapFilenameInfoLbl.setLocation(new Point(4, 4));
+      weightMapColorMapFilenameInfoLbl.setFont(new Font("Dialog", Font.BOLD, 10));
+      weightMapColorMapFilenameInfoLbl.setBounds(214, 72, 106, 22);
+    }
+    return weightMapColorMapFilenameInfoLbl;
+  }
+
+  public JLabel getWeightMapColorMapFilenameLbl() {
+    return weightMapColorMapFilenameLbl;
+  }
+
+  public JButton getWeightMapRandomizeAllBtn() {
+    return weightMapRandomizeAllBtn;
+  }
+
+  public JButton getWeightMapResetAllBtn() {
+    return weightMapResetAllBtn;
+  }
+
+  public JCheckBox getWeightMapEditWholeFractalCBx() {
+    return weightMapEditWholeFractalCBx;
   }
 } //  @jve:decl-index=0:visual-constraint="10,10"

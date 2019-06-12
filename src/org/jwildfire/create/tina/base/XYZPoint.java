@@ -59,6 +59,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
   protected boolean validSinA;
   protected double cosA;
   protected boolean validCosA;
+  public double weightMapValue;
 
   public XYZPoint() {
 
@@ -97,6 +98,7 @@ public final class XYZPoint implements Serializable, Assignable<XYZPoint> {
     greenColor = p.greenColor;
     blueColor = p.blueColor;
     doHide = p.doHide;
+    weightMapValue = p.weightMapValue;
   }
 
   @Override
