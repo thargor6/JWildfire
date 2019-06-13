@@ -13,24 +13,24 @@ public class Waves3Func extends VariationFunc {
   private static final String PARAM_SCALEY = "scaley";
   private static final String PARAM_FREQX = "freqx";
   private static final String PARAM_FREQY = "freqy";
-  private static final String PARAM_SXFREQ = "sxfreq";
-  private static final String PARAM_SYFREQ = "syfreq";
-  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_SXFREQ, PARAM_SYFREQ};
+  private static final String PARAM_SX_FREQ = "sx_freq";
+  private static final String PARAM_SY_FREQ = "sy_freq";
+  private static final String[] paramNames = {PARAM_SCALEX, PARAM_SCALEY, PARAM_FREQX, PARAM_FREQY, PARAM_SX_FREQ, PARAM_SY_FREQ};
 
   private double scalex = 0.05;
   private double scaley = 0.05;
   private double freqx = 7.0;
   private double freqy = 13.0;
-  private double sxfreq = 0.0;
-  private double syfreq = 2.0;
+  private double sx_freq = 0.0;
+  private double sy_freq = 2.0;
 
   @Override
   public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
     /* waves3 from Tatyana Zabanova converted by Brad Stefanov https://www.deviantart.com/tatasz/art/Weird-Waves-Plugin-Pack-1-783560564*/
 	double x0 = pAffineTP.x;
 	double y0 = pAffineTP.y;
-	double scalexx = 0.5 * scalex * (1.0 + sin(y0 * sxfreq));
-	double scaleyy = 0.5 * scaley * (1.0 + sin(x0 * syfreq));
+	double scalexx = 0.5 * scalex * (1.0 + sin(y0 * sx_freq));
+	double scaleyy = 0.5 * scaley * (1.0 + sin(x0 * sy_freq));
     pVarTP.x += pAmount * (x0 + sin(y0 * freqx) * scalexx);
     pVarTP.y += pAmount * (y0 + sin(x0 * freqy) * scaleyy);
     if (pContext.isPreserveZCoordinate()) {
@@ -45,7 +45,7 @@ public class Waves3Func extends VariationFunc {
 
   @Override
   public Object[] getParameterValues() {
-    return new Object[]{scalex, scaley, freqx, freqy, sxfreq, syfreq};
+    return new Object[]{scalex, scaley, freqx, freqy, sx_freq, sy_freq};
   }
 
   @Override
@@ -58,10 +58,10 @@ public class Waves3Func extends VariationFunc {
       freqx = pValue;
     else if (PARAM_FREQY.equalsIgnoreCase(pName))
       freqy = pValue;
-    else if (PARAM_SXFREQ.equalsIgnoreCase(pName))
-      sxfreq = pValue;
-    else if (PARAM_SYFREQ.equalsIgnoreCase(pName))
-      syfreq = pValue;
+    else if (PARAM_SX_FREQ.equalsIgnoreCase(pName))
+      sx_freq = pValue;
+    else if (PARAM_SY_FREQ.equalsIgnoreCase(pName))
+      sy_freq = pValue;
     else
       throw new IllegalArgumentException(pName);
   }
