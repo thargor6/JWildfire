@@ -756,7 +756,7 @@ public class VariationFuncList {
     registerVariationFunc(PreRecipFunc.class);
 
     registerVariationFunc(JuliaScope3DbFunc.class);
-	registerVariationFunc(DC_TrianTessFunc.class);
+    registerVariationFunc(DC_TrianTessFunc.class);
     registerVariationFunc(DC_PoincareDiscFunc.class);
     registerVariationFunc(DC_WorleyFunc.class);
     registerVariationFunc(DC_GlyphoFunc.class);
@@ -769,6 +769,11 @@ public class VariationFuncList {
     registerVariationFunc(DC_MoebiusLogFunc.class);
     registerVariationFunc(DC_InversionFunc.class);
 
+    registerVariationFunc(Waves22Func.class);
+    registerVariationFunc(Waves23Func.class);
+    registerVariationFunc(Waves3Func.class);
+    registerVariationFunc(Waves42Func.class);
+    registerVariationFunc(Waves4Func.class);	  
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
