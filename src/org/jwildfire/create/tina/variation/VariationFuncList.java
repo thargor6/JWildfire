@@ -806,7 +806,7 @@ public class VariationFuncList {
   }
 
   public static double getVariationCost(String variationName) {
-    Double cost = Optional.of(variationCosts.get(variationName)).orElse(-1.0);
+    Double cost = Optional.ofNullable(variationCosts.get(variationName)).orElse(-1.0);
     return cost > 0.0 ? cost : Double.MAX_VALUE;
   }
 
