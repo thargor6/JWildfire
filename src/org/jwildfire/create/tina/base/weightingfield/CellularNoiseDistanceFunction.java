@@ -14,53 +14,47 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base.weightmap;
+package org.jwildfire.create.tina.base.weightingfield;
 
 import fastnoise.FastNoise;
 
-public enum CellularReturnType {
+public enum CellularNoiseDistanceFunction {
 
-  DISTANCE {
+  EUCLIDIAN {
     @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance;
+    public FastNoise.CellularDistanceFunction toFastNoiseType() {
+      return FastNoise.CellularDistanceFunction.Euclidean;
+    }
+
+    @Override
+    public String toString() {
+      return "Euclidian";
     }
   },
 
-  DISTANCE2 {
+  MANHATTAN {
     @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance2;
+    public FastNoise.CellularDistanceFunction toFastNoiseType() {
+      return FastNoise.CellularDistanceFunction.Manhattan;
+    }
+
+    @Override
+    public String toString() {
+      return "Manhattan";
     }
   },
 
-  DISTANCE_ADD {
+  NATURAL {
     @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance2Add;
+    public FastNoise.CellularDistanceFunction toFastNoiseType() {
+      return FastNoise.CellularDistanceFunction.Natural;
     }
-  },
 
-  DISTANCE_SUB {
     @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance2Sub;
-    }
-  },
-
-  DISTANCE_MUL {
-    @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance2Mul;
-    }
-  },
-
-  DISTANCE_DIV {
-    @Override
-    public FastNoise.CellularReturnType toFastNoiseType() {
-      return FastNoise.CellularReturnType.Distance2Div;
+    public String toString() {
+      return "Natural";
     }
   };
 
-  public abstract FastNoise.CellularReturnType toFastNoiseType();
+  public abstract FastNoise.CellularDistanceFunction toFastNoiseType();
 }

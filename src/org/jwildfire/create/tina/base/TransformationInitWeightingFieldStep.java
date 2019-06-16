@@ -16,40 +16,21 @@
 */
 package org.jwildfire.create.tina.base;
 
-import org.jwildfire.base.mathlib.GfxMathLib;
-import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.base.weightmap.EmptyWeightMap;
-import org.jwildfire.create.tina.base.weightmap.ImageMapWeightMap;
-import org.jwildfire.create.tina.base.weightmap.PerlinNoiseWeightMap;
-import org.jwildfire.create.tina.base.weightmap.WeightMap;
+import org.jwildfire.create.tina.base.weightingfield.WeightingField;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
-import org.jwildfire.create.tina.variation.NoiseTools;
-import org.jwildfire.create.tina.variation.RessourceManager;
-import org.jwildfire.image.SimpleImage;
-import org.jwildfire.transform.ColorToGrayTransformer;
 
-public final class TransformationInitWeightMapStep extends AbstractTransformationStep {
+import java.util.Optional;
+
+public final class TransformationInitWeightingFieldStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
-  private final WeightMap weightMap;
-  private final WeightMapInputType inputType;
+  private final WeightingField weightMap;
+  private final WeightingFieldInputType inputType;
 
-  public TransformationInitWeightMapStep(XForm pXForm) {
+  public TransformationInitWeightingFieldStep(XForm pXForm) {
     super(pXForm);
-    weightMap = createWeightMap(pXForm);
-    inputType = pXForm.getWeightMapInput();
+    weightMap = Optional.ofNullable(pXForm.getWeightingFieldType()).orElse(WeightingFieldType.NONE).getInstance(pXForm);
+    inputType = pXForm.getWeightingFieldInput();
   }
-
-  private WeightMap createWeightMap(XForm pXForm) {
-    switch(pXForm.getWeightMapType()) {
-      case IMAGE_MAP:
-        return new ImageMapWeightMap(pXForm.getWeightMapColorMapFilename(), pXForm.getWeightMapColorMapXCentre(), pXForm.getWeightMapColorMapYCentre(), pXForm.getWeightMapColorMapXSize(), pXForm.getWeightMapColorMapYSize());
-      case PERLIN_NOISE:
-        return new PerlinNoiseWeightMap(pXForm.getWeightMapPerlinNoiseAScale(), pXForm.getWeightMapPerlinNoiseFScale(), pXForm.getWeightMapPerlinNoiseOctaves());
-      default:
-        return new EmptyWeightMap();
-    }
-  }
-
 
   @Override
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {

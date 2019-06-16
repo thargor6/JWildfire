@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2011 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -31,6 +31,9 @@ import org.jwildfire.create.tina.base.motion.PostRotateMotionValueChangeHandler;
 import org.jwildfire.create.tina.base.motion.PostScaleMotionValueChangeHandler;
 import org.jwildfire.create.tina.base.motion.RotateMotionValueChangeHandler;
 import org.jwildfire.create.tina.base.motion.ScaleMotionValueChangeHandler;
+import org.jwildfire.create.tina.base.weightingfield.CellularNoiseDistanceFunction;
+import org.jwildfire.create.tina.base.weightingfield.CellularNoiseReturnType;
+import org.jwildfire.create.tina.base.weightingfield.FractalNoiseType;
 import org.jwildfire.create.tina.edit.Assignable;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
@@ -192,24 +195,30 @@ public final class XForm implements Assignable<XForm>, Serializable {
   boolean hasZXPostCoeffs;
   boolean hasZXCoeffs;
 
-  private WeightMapType weightMapType = WeightMapType.NONE;
-  private WeightMapInputType weightMapInput = WeightMapInputType.AFFINE;
+  private WeightingFieldType weightingFieldType = WeightingFieldType.NONE;
+  private WeightingFieldInputType weightingFieldInput = WeightingFieldInputType.AFFINE;
   @AnimAware
-  private double weightMapColorIntensity;
-  private final MotionCurve weightMapColorIntensityCurve = new MotionCurve();
+  private double weightingFieldColorIntensity;
+  private final MotionCurve weightingFieldColorIntensityCurve = new MotionCurve();
   @AnimAware
-  private double weightMapVariationIntensity;
-  private final MotionCurve weightMapVariationIntensityCurve = new MotionCurve();
+  private double weightingFieldVarAmountIntensity;
+  private final MotionCurve weightingFieldVariationIntensityCurve = new MotionCurve();
 
-  private String weightMapColorMapFilename = "";
-  private double weightMapColorMapXSize = 4.0;
-  private double weightMapColorMapYSize = 4.0;
-  private double weightMapColorMapXCentre = 0.0;
-  private double weightMapColorMapYCentre = 0.0;
+  private String weightingFieldColorMapFilename = "";
+  private double weightingFieldColorMapXSize = 4.0;
+  private double weightingFieldColorMapYSize = 4.0;
+  private double weightingFieldColorMapXCentre = 0.0;
+  private double weightingFieldColorMapYCentre = 0.0;
 
-  private double weightMapPerlinNoiseAScale = 2.0;
-  private double weightMapPerlinNoiseFScale = 2.0;
-  private int weightMapPerlinNoiseOctaves = 3;
+  private int weightingFieldNoiseSeed = 1337;
+  private double weightingFieldNoiseFrequency = 1.0;
+  private FractalNoiseType weightingFieldFractalNoiseType = FractalNoiseType.FBM;
+  private int weightingFieldFractalNoiseOctaves = 3;
+  private double weightingFieldFractalNoiseGain = 0.5;
+  private double weightingFieldFractalNoiseLacunarity = 2.0;
+  private CellularNoiseReturnType weightingFieldCellularNoiseReturnType = CellularNoiseReturnType.DISTANCE2;
+  private CellularNoiseDistanceFunction weightingFieldCellularNoiseDistanceFunction = CellularNoiseDistanceFunction.EUCLIDIAN;
+
 
   // if mirrorPrePostTranslations, then calls to set coefficients that modify translation are mirrored between pre- and post-, 
   // therefore:
@@ -468,8 +477,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     else {
       t.add(new TransformationAffineFullStep(this));
     }
-    if(isWeightMapActive()) {
-      t.add(new TransformationInitWeightMapStep(this));
+    if(isWeightingFieldActive()) {
+      t.add(new TransformationInitWeightingFieldStep(this));
     }
 
 
@@ -527,7 +536,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
       t.add(new TransformationPostAffineStep(this));
     }
 
-    if(isWeightMapActive() && fabs(weightMapColorIntensity)>EPSILON) {
+    if(isWeightingFieldActive() && fabs(weightingFieldColorIntensity)>EPSILON) {
       t.add(new TransformationApplyWightMapToColorStep(this));
     }
 
@@ -736,22 +745,26 @@ public final class XForm implements Assignable<XForm>, Serializable {
     colorType = pXForm.colorType;
     name = pXForm.name;
 
-    weightMapType = pXForm.weightMapType;
-    weightMapInput = pXForm.weightMapInput;
-    weightMapColorIntensity = pXForm.weightMapColorIntensity;
-    weightMapColorIntensityCurve.assign(pXForm.weightMapColorIntensityCurve);
-    weightMapVariationIntensity = pXForm.weightMapVariationIntensity;
-    weightMapVariationIntensityCurve.assign(pXForm.weightMapVariationIntensityCurve);
+    weightingFieldType = pXForm.weightingFieldType;
+    weightingFieldInput = pXForm.weightingFieldInput;
+    weightingFieldColorIntensity = pXForm.weightingFieldColorIntensity;
+    weightingFieldColorIntensityCurve.assign(pXForm.weightingFieldColorIntensityCurve);
+    weightingFieldVarAmountIntensity = pXForm.weightingFieldVarAmountIntensity;
+    weightingFieldVariationIntensityCurve.assign(pXForm.weightingFieldVariationIntensityCurve);
 
-    weightMapColorMapFilename = pXForm.weightMapColorMapFilename;
-    weightMapColorMapXSize = pXForm.weightMapColorMapXSize;
-    weightMapColorMapYSize = pXForm.weightMapColorMapYSize;
-    weightMapColorMapXCentre = pXForm.weightMapColorMapXCentre;
-    weightMapColorMapYCentre = pXForm.weightMapColorMapYCentre;
-
-    weightMapPerlinNoiseAScale = pXForm.weightMapPerlinNoiseAScale;
-    weightMapPerlinNoiseFScale = pXForm.weightMapPerlinNoiseFScale;
-    weightMapPerlinNoiseOctaves = pXForm.weightMapPerlinNoiseOctaves;
+    weightingFieldColorMapFilename = pXForm.weightingFieldColorMapFilename;
+    weightingFieldColorMapXSize = pXForm.weightingFieldColorMapXSize;
+    weightingFieldColorMapYSize = pXForm.weightingFieldColorMapYSize;
+    weightingFieldColorMapXCentre = pXForm.weightingFieldColorMapXCentre;
+    weightingFieldColorMapYCentre = pXForm.weightingFieldColorMapYCentre;
+    weightingFieldNoiseSeed = pXForm.weightingFieldNoiseSeed;
+    weightingFieldNoiseFrequency = pXForm.weightingFieldNoiseFrequency;
+    weightingFieldFractalNoiseType = pXForm.weightingFieldFractalNoiseType;
+    weightingFieldFractalNoiseOctaves = pXForm.weightingFieldFractalNoiseOctaves;
+    weightingFieldFractalNoiseGain = pXForm.weightingFieldFractalNoiseGain;
+    weightingFieldFractalNoiseLacunarity = pXForm.weightingFieldFractalNoiseLacunarity;
+    weightingFieldCellularNoiseReturnType = pXForm.weightingFieldCellularNoiseReturnType;
+    weightingFieldCellularNoiseDistanceFunction = pXForm.weightingFieldCellularNoiseDistanceFunction;
   }
 
   @Override
@@ -828,19 +841,24 @@ public final class XForm implements Assignable<XForm>, Serializable {
         !name.equals(pSrc.name) ||
         (modifiedWeights.length != pSrc.modifiedWeights.length) || (variations.size() != pSrc.variations.size()) ||
 
-         weightMapType != pSrc.weightMapType || weightMapInput != pSrc.weightMapInput ||
-         (fabs(weightMapColorIntensity - pSrc.weightMapColorIntensity) > EPSILON) || !weightMapColorIntensityCurve.isEqual(pSrc.weightMapColorIntensityCurve) ||
-         (fabs(weightMapVariationIntensity - pSrc.weightMapVariationIntensity) > EPSILON) || !weightMapVariationIntensityCurve.isEqual(pSrc.weightMapVariationIntensityCurve) ||
+         weightingFieldType != pSrc.weightingFieldType || weightingFieldInput != pSrc.weightingFieldInput ||
+         (fabs(weightingFieldColorIntensity - pSrc.weightingFieldColorIntensity) > EPSILON) || !weightingFieldColorIntensityCurve.isEqual(pSrc.weightingFieldColorIntensityCurve) ||
+         (fabs(weightingFieldVarAmountIntensity - pSrc.weightingFieldVarAmountIntensity) > EPSILON) || !weightingFieldVariationIntensityCurve.isEqual(pSrc.weightingFieldVariationIntensityCurve) ||
 
-         !weightMapColorMapFilename.equals(pSrc.weightMapColorMapFilename) ||
-         (fabs(weightMapColorMapXSize - pSrc.weightMapColorMapXSize) > EPSILON) ||
-         (fabs(weightMapColorMapYSize - pSrc.weightMapColorMapYSize) > EPSILON) ||
-         (fabs(weightMapColorMapXCentre - pSrc.weightMapColorMapXCentre) > EPSILON) ||
-         (fabs(weightMapColorMapYCentre - pSrc.weightMapColorMapYCentre) > EPSILON) ||
+         !weightingFieldColorMapFilename.equals(pSrc.weightingFieldColorMapFilename) ||
+         (fabs(weightingFieldColorMapXSize - pSrc.weightingFieldColorMapXSize) > EPSILON) ||
+         (fabs(weightingFieldColorMapYSize - pSrc.weightingFieldColorMapYSize) > EPSILON) ||
+         (fabs(weightingFieldColorMapXCentre - pSrc.weightingFieldColorMapXCentre) > EPSILON) ||
+         (fabs(weightingFieldColorMapYCentre - pSrc.weightingFieldColorMapYCentre) > EPSILON) ||
 
-         (fabs(weightMapPerlinNoiseAScale - pSrc.weightMapPerlinNoiseAScale) > EPSILON) ||
-         (fabs(weightMapPerlinNoiseFScale - pSrc.weightMapPerlinNoiseFScale) > EPSILON) ||
-         (weightMapPerlinNoiseOctaves != pSrc.weightMapPerlinNoiseOctaves)
+         (weightingFieldNoiseSeed != pSrc.weightingFieldNoiseSeed) ||
+         (fabs(weightingFieldNoiseFrequency - pSrc.weightingFieldNoiseFrequency) > EPSILON) ||
+         (weightingFieldFractalNoiseType != pSrc.weightingFieldFractalNoiseType) ||
+         (weightingFieldFractalNoiseOctaves != pSrc.weightingFieldFractalNoiseOctaves) ||
+         (fabs(weightingFieldFractalNoiseGain - pSrc.weightingFieldFractalNoiseGain) > EPSILON) ||
+         (fabs(weightingFieldFractalNoiseLacunarity - pSrc.weightingFieldFractalNoiseLacunarity) > EPSILON) ||
+         (weightingFieldCellularNoiseReturnType != pSrc.weightingFieldCellularNoiseReturnType) ||
+         (weightingFieldCellularNoiseDistanceFunction != pSrc.weightingFieldCellularNoiseDistanceFunction)
     ) {
       return false;
     }
@@ -1802,114 +1820,154 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.materialSpeed = materialSpeed;
   }
 
-  public WeightMapType getWeightMapType() {
-    return weightMapType;
+  public WeightingFieldType getWeightingFieldType() {
+    return weightingFieldType;
   }
 
-  public void setWeightMapType(WeightMapType weightMapType) {
-    this.weightMapType = weightMapType;
+  public void setWeightingFieldType(WeightingFieldType weightingFieldType) {
+    this.weightingFieldType = weightingFieldType;
   }
 
-  public WeightMapInputType getWeightMapInput() {
-    return weightMapInput;
+  public WeightingFieldInputType getWeightingFieldInput() {
+    return weightingFieldInput;
   }
 
-  public void setWeightMapInput(WeightMapInputType weightMapInput) {
-    this.weightMapInput = weightMapInput;
+  public void setWeightingFieldInput(WeightingFieldInputType weightingFieldInput) {
+    this.weightingFieldInput = weightingFieldInput;
   }
 
-  public double getWeightMapColorIntensity() {
-    return weightMapColorIntensity;
+  public double getWeightingFieldColorIntensity() {
+    return weightingFieldColorIntensity;
   }
 
-  public void setWeightMapColorIntensity(double weightMapColorIntensity) {
-    this.weightMapColorIntensity = weightMapColorIntensity;
+  public void setWeightingFieldColorIntensity(double weightingFieldColorIntensity) {
+    this.weightingFieldColorIntensity = weightingFieldColorIntensity;
   }
 
-  public MotionCurve getWeightMapColorIntensityCurve() {
-    return weightMapColorIntensityCurve;
+  public MotionCurve getWeightingFieldColorIntensityCurve() {
+    return weightingFieldColorIntensityCurve;
   }
 
-  public double getWeightMapVariationIntensity() {
-    return weightMapVariationIntensity;
+  public double getWeightingFieldVarAmountIntensity() {
+    return weightingFieldVarAmountIntensity;
   }
 
-  public void setWeightMapVariationIntensity(double weightMapVariationIntensity) {
-    this.weightMapVariationIntensity = weightMapVariationIntensity;
+  public void setWeightingFieldVarAmountIntensity(double weightingFieldVarAmountIntensity) {
+    this.weightingFieldVarAmountIntensity = weightingFieldVarAmountIntensity;
   }
 
-  public MotionCurve getWeightMapVariationIntensityCurve() {
-    return weightMapVariationIntensityCurve;
+  public MotionCurve getWeightingFieldVariationIntensityCurve() {
+    return weightingFieldVariationIntensityCurve;
   }
 
-  public String getWeightMapColorMapFilename() {
-    return weightMapColorMapFilename;
+  public String getWeightingFieldColorMapFilename() {
+    return weightingFieldColorMapFilename;
   }
 
-  public void setWeightMapColorMapFilename(String weightMapColorMapFilename) {
-    this.weightMapColorMapFilename = weightMapColorMapFilename;
+  public void setWeightingFieldColorMapFilename(String weightingFieldColorMapFilename) {
+    this.weightingFieldColorMapFilename = weightingFieldColorMapFilename;
   }
 
-  public double getWeightMapColorMapXSize() {
-    return weightMapColorMapXSize;
+  public double getWeightingFieldColorMapXSize() {
+    return weightingFieldColorMapXSize;
   }
 
-  public void setWeightMapColorMapXSize(double weightMapColorMapXSize) {
-    this.weightMapColorMapXSize = weightMapColorMapXSize;
+  public void setWeightingFieldColorMapXSize(double weightingFieldColorMapXSize) {
+    this.weightingFieldColorMapXSize = weightingFieldColorMapXSize;
   }
 
-  public double getWeightMapColorMapYSize() {
-    return weightMapColorMapYSize;
+  public double getWeightingFieldColorMapYSize() {
+    return weightingFieldColorMapYSize;
   }
 
-  public void setWeightMapColorMapYSize(double weightMapColorMapYSize) {
-    this.weightMapColorMapYSize = weightMapColorMapYSize;
+  public void setWeightingFieldColorMapYSize(double weightingFieldColorMapYSize) {
+    this.weightingFieldColorMapYSize = weightingFieldColorMapYSize;
   }
 
-  public double getWeightMapColorMapXCentre() {
-    return weightMapColorMapXCentre;
+  public double getWeightingFieldColorMapXCentre() {
+    return weightingFieldColorMapXCentre;
   }
 
-  public void setWeightMapColorMapXCentre(double weightMapColorMapXCentre) {
-    this.weightMapColorMapXCentre = weightMapColorMapXCentre;
+  public void setWeightingFieldColorMapXCentre(double weightingFieldColorMapXCentre) {
+    this.weightingFieldColorMapXCentre = weightingFieldColorMapXCentre;
   }
 
-  public double getWeightMapColorMapYCentre() {
-    return weightMapColorMapYCentre;
+  public double getWeightingFieldColorMapYCentre() {
+    return weightingFieldColorMapYCentre;
   }
 
-  public void setWeightMapColorMapYCentre(double weightMapColorMapYCentre) {
-    this.weightMapColorMapYCentre = weightMapColorMapYCentre;
+  public void setWeightingFieldColorMapYCentre(double weightingFieldColorMapYCentre) {
+    this.weightingFieldColorMapYCentre = weightingFieldColorMapYCentre;
   }
 
-  public double getWeightMapPerlinNoiseAScale() {
-    return weightMapPerlinNoiseAScale;
+  public int getWeightingFieldNoiseSeed() {
+    return weightingFieldNoiseSeed;
   }
 
-  public void setWeightMapPerlinNoiseAScale(double weightMapPerlinNoiseAScale) {
-    this.weightMapPerlinNoiseAScale = weightMapPerlinNoiseAScale;
+  public void setWeightingFieldNoiseSeed(int weightingFieldNoiseSeed) {
+    this.weightingFieldNoiseSeed = weightingFieldNoiseSeed;
   }
 
-  public double getWeightMapPerlinNoiseFScale() {
-    return weightMapPerlinNoiseFScale;
+  public double getWeightingFieldNoiseFrequency() {
+    return weightingFieldNoiseFrequency;
   }
 
-  public void setWeightMapPerlinNoiseFScale(double weightMapPerlinNoiseFScale) {
-    this.weightMapPerlinNoiseFScale = weightMapPerlinNoiseFScale;
+  public void setWeightingFieldNoiseFrequency(double weightingFieldNoiseFrequency) {
+    this.weightingFieldNoiseFrequency = weightingFieldNoiseFrequency;
   }
 
-  public int getWeightMapPerlinNoiseOctaves() {
-    return weightMapPerlinNoiseOctaves;
+  public int getWeightingFieldFractalNoiseOctaves() {
+    return weightingFieldFractalNoiseOctaves;
   }
 
-  public void setWeightMapPerlinNoiseOctaves(int weightMapPerlinNoiseOctaves) {
-    this.weightMapPerlinNoiseOctaves = weightMapPerlinNoiseOctaves;
+  public void setWeightingFieldFractalNoiseOctaves(int weightingFieldFractalNoiseOctaves) {
+    this.weightingFieldFractalNoiseOctaves = weightingFieldFractalNoiseOctaves;
   }
 
-  public boolean isWeightMapActive() {
-    return (fabs(weightMapColorIntensity)>EPSILON || fabs(weightMapVariationIntensity)>EPSILON) && (
-            (WeightMapType.IMAGE_MAP.equals(weightMapType) && weightMapColorMapFilename!=null && !weightMapColorMapFilename.equals("")) ||
-            (WeightMapType.PERLIN_NOISE.equals(weightMapType))
+  public double getWeightingFieldFractalNoiseGain() {
+    return weightingFieldFractalNoiseGain;
+  }
+
+  public void setWeightingFieldFractalNoiseGain(double weightingFieldFractalNoiseGain) {
+    this.weightingFieldFractalNoiseGain = weightingFieldFractalNoiseGain;
+  }
+
+  public double getWeightingFieldFractalNoiseLacunarity() {
+    return weightingFieldFractalNoiseLacunarity;
+  }
+
+  public void setWeightingFieldFractalNoiseLacunarity(double weightingFieldFractalNoiseLacunarity) {
+    this.weightingFieldFractalNoiseLacunarity = weightingFieldFractalNoiseLacunarity;
+  }
+
+  public CellularNoiseReturnType getWeightingFieldCellularNoiseReturnType() {
+    return weightingFieldCellularNoiseReturnType;
+  }
+
+  public void setWeightingFieldCellularNoiseReturnType(CellularNoiseReturnType weightingFieldCellularNoiseReturnType) {
+    this.weightingFieldCellularNoiseReturnType = weightingFieldCellularNoiseReturnType;
+  }
+
+  public CellularNoiseDistanceFunction getWeightingFieldCellularNoiseDistanceFunction() {
+    return weightingFieldCellularNoiseDistanceFunction;
+  }
+
+  public void setWeightingFieldCellularNoiseDistanceFunction(CellularNoiseDistanceFunction weightingFieldCellularNoiseDistanceFunction) {
+    this.weightingFieldCellularNoiseDistanceFunction = weightingFieldCellularNoiseDistanceFunction;
+  }
+
+  public FractalNoiseType getWeightingFieldFractalNoiseType() {
+    return weightingFieldFractalNoiseType;
+  }
+
+  public void setWeightingFieldFractalNoiseType(FractalNoiseType weightingFieldFractalNoiseType) {
+    this.weightingFieldFractalNoiseType = weightingFieldFractalNoiseType;
+  }
+
+  public boolean isWeightingFieldActive() {
+    return (fabs(weightingFieldColorIntensity)>EPSILON || fabs(weightingFieldVarAmountIntensity)>EPSILON) && (
+            (WeightingFieldType.IMAGE_MAP.equals(weightingFieldType) && weightingFieldColorMapFilename !=null && !weightingFieldColorMapFilename.equals("")) ||
+            (weightingFieldType !=null && !WeightingFieldType.NONE.equals(weightingFieldType))
     );
   }
 }

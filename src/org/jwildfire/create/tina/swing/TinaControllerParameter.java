@@ -733,7 +733,7 @@ public class TinaControllerParameter {
   public JLabel weightMapParam02Lbl;
   public JWFNumberField weightMapParam03REd;
   public JLabel weightMapParam03Lbl;
-  public JWFNumberField weightMapParam04REd;
+  public JComboBox weightMapParam04Cmb;
   public JLabel weightMapParam04Lbl;
   public JWFNumberField weightMapParam05REd;
   public JLabel weightMapParam05Lbl;
@@ -741,7 +741,7 @@ public class TinaControllerParameter {
   public JLabel weightMapParam06Lbl;
   public JWFNumberField weightMapParam07REd;
   public JLabel weightMapParam07Lbl;
-  public JWFNumberField weightMapParam08REd;
+  public JComboBox weightMapParam08Cmb;
   public JLabel weightMapParam08Lbl;
 
   public void setParams1(JWildfire pDesktop, MainEditorFrame pMainEditorFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
@@ -1411,9 +1411,9 @@ public class TinaControllerParameter {
   public void setParams4(JComboBox weightMapTypeCmb, JComboBox weightMapInputCmb, JWFNumberField weightMapColorIntensityREd, JWFNumberField weightMapVariationIntensityREd,
     JLabel weightMapColorMapFilenameLbl, JButton weightMapColorMapFilenameBtn, JLabel weightMapColorMapFilenameInfoLbl, JWFNumberField weightMapParam01REd, JLabel weightMapParam01Lbl,
     JWFNumberField weightMapParam02REd, JLabel weightMapParam02Lbl, JWFNumberField weightMapParam03REd, JLabel weightMapParam03Lbl,
-    JWFNumberField weightMapParam04REd, JLabel weightMapParam04Lbl, JWFNumberField weightMapParam05REd,JLabel weightMapParam05Lbl,
+    JComboBox weightMapParam04Cmb, JLabel weightMapParam04Lbl, JWFNumberField weightMapParam05REd,JLabel weightMapParam05Lbl,
     JWFNumberField weightMapParam06REd, JLabel weightMapParam06Lbl, JWFNumberField weightMapParam07REd, JLabel weightMapParam07Lbl,
-    JWFNumberField weightMapParam08REd, JLabel weightMapParam08Lbl) {
+    JComboBox weightMapParam08Cmb, JLabel weightMapParam08Lbl) {
       this.weightMapTypeCmb = weightMapTypeCmb;
       this.weightMapInputCmb = weightMapInputCmb;
       this.weightMapColorIntensityREd = weightMapColorIntensityREd;
@@ -1427,7 +1427,7 @@ public class TinaControllerParameter {
       this.weightMapParam02Lbl = weightMapParam02Lbl;
       this.weightMapParam03REd = weightMapParam03REd;
       this.weightMapParam03Lbl = weightMapParam03Lbl;
-      this.weightMapParam04REd = weightMapParam04REd;
+      this.weightMapParam04Cmb = weightMapParam04Cmb;
       this.weightMapParam04Lbl = weightMapParam04Lbl;
       this.weightMapParam05REd = weightMapParam05REd;
       this.weightMapParam05Lbl = weightMapParam05Lbl;
@@ -1435,7 +1435,7 @@ public class TinaControllerParameter {
       this.weightMapParam06Lbl = weightMapParam06Lbl;
       this.weightMapParam07REd = weightMapParam07REd;
       this.weightMapParam07Lbl = weightMapParam07Lbl;
-      this.weightMapParam08REd = weightMapParam08REd;
+      this.weightMapParam08Cmb = weightMapParam08Cmb;
       this.weightMapParam08Lbl = weightMapParam08Lbl;
   }
 

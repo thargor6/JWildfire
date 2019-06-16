@@ -85,8 +85,8 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
-import org.jwildfire.create.tina.base.WeightMapInputType;
-import org.jwildfire.create.tina.base.WeightMapType;
+import org.jwildfire.create.tina.base.WeightingFieldInputType;
+import org.jwildfire.create.tina.base.WeightingFieldType;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
@@ -3450,7 +3450,7 @@ public class MainEditorFrame extends JFrame {
       JPanel panel_1 = new JPanel();
       tinaTransformationsTabbedPane.addTab("Gamma", null, panel_1, null);
       panel_1.setLayout(null);
-      tinaTransformationsTabbedPane.addTab("WgtMap", null, getTinaWeightMapPanel(), null);
+      tinaTransformationsTabbedPane.addTab("WField", null, getTinaWeightMapPanel(), null);
 
       xFormModGammaSlider = new JSlider();
       xFormModGammaSlider.setValue(0);
@@ -4392,8 +4392,8 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightMapTypeCmb);
 
       JLabel lblMapType = new JLabel();
-      lblMapType.setToolTipText("Type of Weight Map");
-      lblMapType.setText("Weight Map Type");
+      lblMapType.setToolTipText("Type of Weighting Field");
+      lblMapType.setText("Weighting Field");
       lblMapType.setSize(new Dimension(94, 22));
       lblMapType.setPreferredSize(new Dimension(94, 22));
       lblMapType.setLocation(new Point(4, 4));
@@ -4402,7 +4402,7 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblMapType);
 
       weightMapColorMapFilenameLbl = new JLabel();
-      weightMapColorMapFilenameLbl.setToolTipText("RGB Image, only the R-component is used");
+      weightMapColorMapFilenameLbl.setToolTipText("RGB Image, only the red color-channel is used");
       weightMapColorMapFilenameLbl.setText("Image File");
       weightMapColorMapFilenameLbl.setSize(new Dimension(94, 22));
       weightMapColorMapFilenameLbl.setPreferredSize(new Dimension(94, 22));
@@ -4412,7 +4412,7 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightMapColorMapFilenameLbl);
 
       weightMapColorMapFilenameBtn = new JButton();
-      weightMapColorMapFilenameBtn.setToolTipText("Select an image to use as a background");
+      weightMapColorMapFilenameBtn.setToolTipText("Select an image to use as a weighting field");
       weightMapColorMapFilenameBtn.setText("Select image...");
       weightMapColorMapFilenameBtn.setPreferredSize(new Dimension(190, 24));
       weightMapColorMapFilenameBtn.setFont(new Font("Dialog", Font.BOLD, 10));
@@ -4454,7 +4454,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblColorIntensity = new JLabel();
       lblColorIntensity.setToolTipText("Change of Color");
-      lblColorIntensity.setText("Color Intensity");
+      lblColorIntensity.setText("Color intensity");
       lblColorIntensity.setSize(new Dimension(64, 22));
       lblColorIntensity.setPreferredSize(new Dimension(64, 22));
       lblColorIntensity.setLocation(new Point(6, 21));
@@ -4463,8 +4463,8 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblColorIntensity);
 
       JLabel lblVariationIntensity = new JLabel();
-      lblVariationIntensity.setToolTipText("Change of Variation Intensity");
-      lblVariationIntensity.setText("Variation Intensity");
+      lblVariationIntensity.setToolTipText("Change of variation-amount");
+      lblVariationIntensity.setText("Var-amount intensity");
       lblVariationIntensity.setSize(new Dimension(64, 22));
       lblVariationIntensity.setPreferredSize(new Dimension(64, 22));
       lblVariationIntensity.setLocation(new Point(6, 47));
@@ -4705,29 +4705,22 @@ public class MainEditorFrame extends JFrame {
       weightMapParam04Lbl.setBounds(4, 154, 90, 22);
       tinaWeightMapPanel.add(weightMapParam04Lbl);
 
-      weightMapParam04REd = new JWFNumberField();
-      weightMapParam04REd.setValueStep(0.01);
-      weightMapParam04REd.setText("");
-      weightMapParam04REd.setSize(new Dimension(55, 22));
-      weightMapParam04REd.setPreferredSize(new Dimension(55, 22));
-      weightMapParam04REd.setMinValue(-1.0);
-      weightMapParam04REd.setMaxValue(1.0);
-      weightMapParam04REd.setLocation(new Point(70, 47));
-      weightMapParam04REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightMapParam04REd.setBounds(92, 154, 70, 22);
-      weightMapParam04REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      weightMapParam04Cmb = new JComboBox();
+      weightMapParam04Cmb.setSize(new Dimension(55, 22));
+      weightMapParam04Cmb.setPreferredSize(new Dimension(55, 22));
+      weightMapParam04Cmb.setLocation(new Point(70, 47));
+      weightMapParam04Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam04Cmb.setBounds(92, 154, 70, 22);
+      weightMapParam04Cmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (tinaController != null) {
-            if (!weightMapParam04REd.isMouseAdjusting() || weightMapParam04REd.getMouseChangeCount() == 0) {
-              //if (!weightMapParam04Slider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-              //}
-            }
-            tinaController.weightMapParam04REd_changed();
+            tinaController.saveUndoPoint();
+            tinaController.weightMapParam04Cmb_changed();
           }
         }
       });
-      tinaWeightMapPanel.add(weightMapParam04REd);
+
+      tinaWeightMapPanel.add(weightMapParam04Cmb);
 
       weightMapParam07Lbl = new JLabel();
       weightMapParam07Lbl.setToolTipText("");
@@ -4773,29 +4766,22 @@ public class MainEditorFrame extends JFrame {
       });
       tinaWeightMapPanel.add(weightMapParam07REd);
 
-      weightMapParam08REd = new JWFNumberField();
-      weightMapParam08REd.setValueStep(0.01);
-      weightMapParam08REd.setText("");
-      weightMapParam08REd.setSize(new Dimension(55, 22));
-      weightMapParam08REd.setPreferredSize(new Dimension(55, 22));
-      weightMapParam08REd.setMinValue(-1.0);
-      weightMapParam08REd.setMaxValue(1.0);
-      weightMapParam08REd.setLocation(new Point(70, 47));
-      weightMapParam08REd.setFont(new Font("Dialog", Font.PLAIN, 10));
-      weightMapParam08REd.setBounds(252, 154, 70, 22);
-      weightMapParam08REd.addChangeListener(new ChangeListener() {
-        public void stateChanged(ChangeEvent e) {
+      weightMapParam08Cmb = new JComboBox();
+      weightMapParam08Cmb.setSize(new Dimension(55, 22));
+      weightMapParam08Cmb.setPreferredSize(new Dimension(55, 22));
+      weightMapParam08Cmb.setLocation(new Point(70, 47));
+      weightMapParam08Cmb.setFont(new Font("Dialog", Font.PLAIN, 10));
+      weightMapParam08Cmb.setBounds(252, 154, 70, 22);
+      weightMapParam08Cmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
           if (tinaController != null) {
-            if (!weightMapParam08REd.isMouseAdjusting() || weightMapParam08REd.getMouseChangeCount() == 0) {
-              //if (!weightMapParam08Slider.getValueIsAdjusting()) {
-              tinaController.saveUndoPoint();
-              //}
-            }
-            tinaController.weightMapParam08REd_changed();
+            tinaController.saveUndoPoint();
+            tinaController.weightMapParam08Cmb_changed();
           }
         }
       });
-      tinaWeightMapPanel.add(weightMapParam08REd);
+
+      tinaWeightMapPanel.add(weightMapParam08Cmb);
       tinaWeightMapPanel.add(getWeightMapColorMapFilenameInfoLbl());
 
       weightMapRandomizeAllBtn = new JButton();
@@ -6017,8 +6003,8 @@ public class MainEditorFrame extends JFrame {
     params.setParams4(getWeightMapTypeCmb(), getWeightMapInputCmb(), getWeightMapColorIntensityREd(), getWeightMapVariationIntensityREd(),
         getWeightMapColorMapFilenameLbl(), getWeightMapColorMapFilenameBtn(), getWeightMapColorMapFilenameInfoLbl(),
         getWeightMapParam01REd(), getWeightMapParam01Lbl(), getWeightMapParam02REd(), getWeightMapParam02Lbl(), getWeightMapParam03REd(), getWeightMapParam03Lbl(),
-        getWeightMapParam04REd(), getWeightMapParam04Lbl(), getWeightMapParam05REd(), getWeightMapParam05Lbl(), getWeightMapParam06REd(), getWeightMapParam06Lbl(),
-        getWeightMapParam07REd(), getWeightMapParam07Lbl(), getWeightMapParam08REd(), getWeightMapParam08Lbl());
+        getWeightMapParam04Cmb(), getWeightMapParam04Lbl(), getWeightMapParam05REd(), getWeightMapParam05Lbl(), getWeightMapParam06REd(), getWeightMapParam06Lbl(),
+        getWeightMapParam07REd(), getWeightMapParam07Lbl(), getWeightMapParam08Cmb(), getWeightMapParam08Lbl());
 
     tinaController = new TinaController(params);
 
@@ -6200,15 +6186,24 @@ public class MainEditorFrame extends JFrame {
 
   private void initWeightMapTypeCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
-    pCmb.addItem(WeightMapType.NONE);
-    pCmb.addItem(WeightMapType.PERLIN_NOISE);
-    pCmb.addItem(WeightMapType.IMAGE_MAP);
+    pCmb.setMaximumRowCount(16);
+    pCmb.addItem(WeightingFieldType.NONE);
+    pCmb.addItem(WeightingFieldType.CELLULAR_NOISE);
+    pCmb.addItem(WeightingFieldType.CUBIC_NOISE);
+    pCmb.addItem(WeightingFieldType.CUBIC_FRACTAL_NOISE);
+    pCmb.addItem(WeightingFieldType.PERLIN_NOISE);
+    pCmb.addItem(WeightingFieldType.PERLIN_FRACTAL_NOISE);
+    pCmb.addItem(WeightingFieldType.SIMPLEX_NOISE);
+    pCmb.addItem(WeightingFieldType.SIMPLEX_FRACTAL_NOISE_NOISE);
+    pCmb.addItem(WeightingFieldType.VALUE_NOISE);
+    pCmb.addItem(WeightingFieldType.VALUE_FRACTAL_NOISE);
+    pCmb.addItem(WeightingFieldType.IMAGE_MAP);
   }
 
   private void initWeightMapInputTypeCmb(JComboBox pCmb) {
     pCmb.removeAllItems();
-    pCmb.addItem(WeightMapInputType.AFFINE);
-    pCmb.addItem(WeightMapInputType.POSITION);
+    pCmb.addItem(WeightingFieldInputType.AFFINE);
+    pCmb.addItem(WeightingFieldInputType.POSITION);
   }
 
   private void initXFormScriptCmb(JComboBox pCmb) {
@@ -7971,7 +7966,7 @@ public class MainEditorFrame extends JFrame {
     }
     return xFormColorTypeCmb;
   }
-  
+
   private JButton getXFormTargetColorBtn() {
     if (xFormTargetColorBtn == null) {
       xFormTargetColorBtn = new JButton();
@@ -11394,11 +11389,11 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField weightMapParam01REd;
   private JWFNumberField weightMapParam02REd;
   private JWFNumberField weightMapParam03REd;
-  private JWFNumberField weightMapParam04REd;
+  private JComboBox weightMapParam04Cmb;
   private JWFNumberField weightMapParam05REd;
   private JWFNumberField weightMapParam06REd;
   private JWFNumberField weightMapParam07REd;
-  private JWFNumberField weightMapParam08REd;
+  private JComboBox weightMapParam08Cmb;
   private JLabel weightMapParam01Lbl;
   private JLabel weightMapParam02Lbl;
   private JLabel weightMapParam03Lbl;
@@ -21094,8 +21089,8 @@ public class MainEditorFrame extends JFrame {
     return weightMapParam03REd;
   }
 
-  public JWFNumberField getWeightMapParam04REd() {
-    return weightMapParam04REd;
+  public JComboBox getWeightMapParam04Cmb() {
+    return weightMapParam04Cmb;
   }
 
   public JWFNumberField getWeightMapParam05REd() {
@@ -21110,8 +21105,8 @@ public class MainEditorFrame extends JFrame {
     return weightMapParam07REd;
   }
 
-  public JWFNumberField getWeightMapParam08REd() {
-    return weightMapParam08REd;
+  public JComboBox getWeightMapParam08Cmb() {
+    return weightMapParam08Cmb;
   }
 
   public JLabel getWeightMapParam01Lbl() {

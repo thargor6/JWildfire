@@ -1,0 +1,153 @@
+/*
+  JWildfire - an image and animation processor written in Java
+  Copyright (C) 1995-2019 Andreas Maschke
+
+  This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
+  General Public License as published by the Free Software Foundation; either version 2.1 of the
+  License, or (at your option) any later version.
+
+  This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License along with this software;
+  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  02110-1301 USA, or see the FSF site: http://www.fsf.org.
+*/
+package org.jwildfire.create.tina.swing;
+
+import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.weightingfield.FractalNoiseType;
+
+public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUpdater {
+  private boolean fillingComboBox;
+
+  public FractalNoiseWeightingFieldControlsUpdater(TinaController controller, TinaWeightingFieldControllerData controls) {
+    super(controller, controls);
+  }
+
+  @Override
+  public void weightingFieldColorMapFilenameBtn_clicked() {
+    // EMPTY
+  }
+
+  @Override
+  public void updateControls(XForm xform) {
+    controls.weightingFieldTypeCmb.setSelectedItem(xform.getWeightingFieldType());
+    controls.weightingFieldInputCmb.setSelectedItem(xform.getWeightingFieldInput());
+    controls.weightingFieldColorIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldColorIntensity()));
+    controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldVarAmountIntensity()));
+    controls.weightingFieldParam01REd.setText(String.valueOf(xform.getWeightingFieldNoiseSeed()));
+    controls.weightingFieldParam02REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseGain()));
+    controls.weightingFieldParam03REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseOctaves()));
+    controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldFractalNoiseType());
+    controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldNoiseFrequency()));
+    controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldFractalNoiseLacunarity()));
+  }
+
+  @Override
+  public void enableControls(XForm xform, boolean enabled) {
+    controls.weightingFieldTypeCmb.setEnabled(enabled);
+    controls.weightingFieldInputCmb.setEnabled(enabled);
+    controls.weightingFieldColorIntensityREd.setEnabled(enabled);
+    controls.weightingFieldVariationIntensityREd.setEnabled(enabled);
+
+    controls.weightingFieldColorMapFilenameLbl.setVisible(false);
+    controls.weightingFieldColorMapFilenameBtn.setVisible(false);
+    controls.weightingFieldColorMapFilenameInfoLbl.setVisible(false);
+
+    controls.weightingFieldParam01REd.setVisible(true);
+    controls.weightingFieldParam01REd.setEnabled(enabled);
+    controls.weightingFieldParam01Lbl.setVisible(true);
+    controls.weightingFieldParam01Lbl.setText("Seed");
+
+    controls.weightingFieldParam02REd.setVisible(true);
+    controls.weightingFieldParam02REd.setEnabled(enabled);
+    controls.weightingFieldParam02Lbl.setVisible(true);
+    controls.weightingFieldParam02Lbl.setText("Gain");
+
+    controls.weightingFieldParam03REd.setVisible(true);
+    controls.weightingFieldParam03REd.setEnabled(enabled);
+    controls.weightingFieldParam03Lbl.setVisible(true);
+    controls.weightingFieldParam03Lbl.setText("Octaves");
+
+    controls.weightingFieldParam04Cmb.setVisible(true);
+    controls.weightingFieldParam04Cmb.setEnabled(enabled);
+    controls.weightingFieldParam04Lbl.setVisible(true);
+    controls.weightingFieldParam04Lbl.setText("Noise Type");
+    fillingComboBox = true;
+    try {
+      controls.weightingFieldParam04Cmb.removeAllItems();
+      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.FBM);
+      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.BILLOW);
+      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.RIGID_MULTI);
+    }
+    finally {
+      fillingComboBox = false;
+    }
+
+    controls.weightingFieldParam05REd.setVisible(true);
+    controls.weightingFieldParam05REd.setEnabled(true);
+    controls.weightingFieldParam05Lbl.setVisible(true);
+    controls.weightingFieldParam05Lbl.setText("Frequency");
+
+    controls.weightingFieldParam06REd.setVisible(true);
+    controls.weightingFieldParam06REd.setEnabled(enabled);
+    controls.weightingFieldParam06Lbl.setVisible(true);
+    controls.weightingFieldParam06Lbl.setText("Lacunarity");
+
+    controls.weightingFieldParam07REd.setVisible(false);
+    controls.weightingFieldParam07Lbl.setVisible(false);
+    controls.weightingFieldParam08Cmb.setVisible(false);
+    controls.weightingFieldParam08Lbl.setVisible(false);
+  }
+
+  @Override
+  public void weightingFieldParam01REd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
+  }
+
+  @Override
+  public void weightingFieldParam02REd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam02REd, "weightingFieldFractalNoiseGain", 1.0);
+  }
+
+  @Override
+  public void weightingFieldParam03REd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam03REd, "weightingFieldFractalNoiseOctaves", 1.0);
+  }
+
+  @Override
+  public void weightingFieldParam04Cmb_changed() {
+    if (controller.gridRefreshing || fillingComboBox)
+      return;
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null && controls.weightingFieldParam04Cmb.getSelectedItem() != null) {
+      xForm.setWeightingFieldFractalNoiseType((FractalNoiseType) controls.weightingFieldParam04Cmb.getSelectedItem());
+      controller.xFormControls.enableControls(xForm);
+      controller.refreshXFormUI(xForm);
+      controller.refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  @Override
+  public void weightingFieldParam05REd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
+  }
+
+  @Override
+  public void weightingFieldParam06REd_changed() {
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam06REd, "weightingFieldFractalNoiseLacunarity", 1.0);
+  }
+
+  @Override
+  public void weightingFieldParam07REd_changed() {
+    // TODO
+  }
+
+  @Override
+  public void weightingFieldParam08Cmb_changed() {
+    // TODO
+  }
+}

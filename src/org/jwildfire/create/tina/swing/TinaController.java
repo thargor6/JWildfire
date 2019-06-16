@@ -45,10 +45,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -84,8 +81,7 @@ import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.WeightMapInputType;
-import org.jwildfire.create.tina.base.WeightMapType;
+import org.jwildfire.create.tina.base.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.batch.BatchRendererController;
@@ -196,7 +192,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private FlameControlsDelegate flameControls;
   private GradientControlsDelegate gradientControls;
-  private XFormControlsDelegate xFormControls;
+  protected XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
 
   private final MainEditorFrame mainEditorFrame;
@@ -224,6 +220,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private final ProgressUpdater mainProgressUpdater;
   private final ProgressUpdater randomBatchProgressUpdater;
   public TinaControllerData data = new TinaControllerData();
+  public TinaWeightingFieldControllerData weightMapData = new TinaWeightingFieldControllerData();
+
   private VariationControlsDelegate[] variationControlsDelegates;
   private RGBPalette _lastGradient;
 
@@ -868,33 +866,33 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineYZEditPlaneToggleBtn = parameterObject.affineYZEditPlaneToggleBtn;
     data.affineZXEditPlaneToggleBtn = parameterObject.affineZXEditPlaneToggleBtn;
 
-    data.weightMapTypeCmb = parameterObject.weightMapTypeCmb;
-    data.weightMapInputCmb = parameterObject.weightMapInputCmb;
-    data.weightMapColorIntensityREd = parameterObject.weightMapColorIntensityREd;
-    data.weightMapVariationIntensityREd = parameterObject.weightMapVariationIntensityREd;
-    data.weightMapColorMapFilenameLbl = parameterObject.weightMapColorMapFilenameLbl;
-    data.weightMapColorMapFilenameBtn = parameterObject.weightMapColorMapFilenameBtn;
-    data.weightMapColorMapFilenameInfoLbl = parameterObject.weightMapColorMapFilenameInfoLbl;
-    data.weightMapParam01REd = parameterObject.weightMapParam01REd;
-    data.weightMapParam01Lbl = parameterObject.weightMapParam01Lbl;
-    data.weightMapParam02REd = parameterObject.weightMapParam02REd;
-    data.weightMapParam02Lbl = parameterObject.weightMapParam02Lbl;
-    data.weightMapParam03REd = parameterObject.weightMapParam03REd;
-    data.weightMapParam03Lbl = parameterObject.weightMapParam03Lbl;
-    data.weightMapParam04REd = parameterObject.weightMapParam04REd;
-    data.weightMapParam04Lbl = parameterObject.weightMapParam04Lbl;
-    data.weightMapParam05REd = parameterObject.weightMapParam05REd;
-    data.weightMapParam05Lbl = parameterObject.weightMapParam05Lbl;
-    data.weightMapParam06REd = parameterObject.weightMapParam06REd;
-    data.weightMapParam06Lbl = parameterObject.weightMapParam06Lbl;
-    data.weightMapParam07REd = parameterObject.weightMapParam07REd;
-    data.weightMapParam07Lbl = parameterObject.weightMapParam07Lbl;
-    data.weightMapParam08REd = parameterObject.weightMapParam08REd;
-    data.weightMapParam08Lbl = parameterObject.weightMapParam08Lbl;
+    weightMapData.weightingFieldTypeCmb = parameterObject.weightMapTypeCmb;
+    weightMapData.weightingFieldInputCmb = parameterObject.weightMapInputCmb;
+    weightMapData.weightingFieldColorIntensityREd = parameterObject.weightMapColorIntensityREd;
+    weightMapData.weightingFieldVariationIntensityREd = parameterObject.weightMapVariationIntensityREd;
+    weightMapData.weightingFieldColorMapFilenameLbl = parameterObject.weightMapColorMapFilenameLbl;
+    weightMapData.weightingFieldColorMapFilenameBtn = parameterObject.weightMapColorMapFilenameBtn;
+    weightMapData.weightingFieldColorMapFilenameInfoLbl = parameterObject.weightMapColorMapFilenameInfoLbl;
+    weightMapData.weightingFieldParam01REd = parameterObject.weightMapParam01REd;
+    weightMapData.weightingFieldParam01Lbl = parameterObject.weightMapParam01Lbl;
+    weightMapData.weightingFieldParam02REd = parameterObject.weightMapParam02REd;
+    weightMapData.weightingFieldParam02Lbl = parameterObject.weightMapParam02Lbl;
+    weightMapData.weightingFieldParam03REd = parameterObject.weightMapParam03REd;
+    weightMapData.weightingFieldParam03Lbl = parameterObject.weightMapParam03Lbl;
+    weightMapData.weightingFieldParam04Cmb = parameterObject.weightMapParam04Cmb;
+    weightMapData.weightingFieldParam04Lbl = parameterObject.weightMapParam04Lbl;
+    weightMapData.weightingFieldParam05REd = parameterObject.weightMapParam05REd;
+    weightMapData.weightingFieldParam05Lbl = parameterObject.weightMapParam05Lbl;
+    weightMapData.weightingFieldParam06REd = parameterObject.weightMapParam06REd;
+    weightMapData.weightingFieldParam06Lbl = parameterObject.weightMapParam06Lbl;
+    weightMapData.weightingFieldParam07REd = parameterObject.weightMapParam07REd;
+    weightMapData.weightingFieldParam07Lbl = parameterObject.weightMapParam07Lbl;
+    weightMapData.weightingFieldParam08Cmb = parameterObject.weightMapParam08Cmb;
+    weightMapData.weightingFieldParam08Lbl = parameterObject.weightMapParam08Lbl;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootPanel);
-    xFormControls = new XFormControlsDelegate(this, data, rootPanel);
+    xFormControls = new XFormControlsDelegate(this, data, weightMapData, rootPanel);
     gradientControls = new GradientControlsDelegate(this, data, rootPanel);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
 
@@ -2120,7 +2118,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private void xFormTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
+  protected void xFormTextFieldChanged(JSlider pSlider, JWFNumberField pTextField, String pProperty, double pSliderScale) {
     if (noRefresh) {
       return;
     }
@@ -2529,7 +2527,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  private void refreshXFormUI(XForm pXForm) {
+  protected void refreshXFormUI(XForm pXForm) {
     boolean oldRefreshing = refreshing;
     boolean oldGridRefreshing = gridRefreshing;
     boolean oldCmbRefreshing = cmbRefreshing;
@@ -2617,25 +2615,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
 
-        data.weightMapTypeCmb.setSelectedItem(pXForm.getWeightMapType());
-        data.weightMapInputCmb.setSelectedItem(pXForm.getWeightMapInput());
-        data.weightMapColorIntensityREd.setText(Tools.doubleToString(pXForm.getWeightMapColorIntensity()));
-        data.weightMapVariationIntensityREd.setText(Tools.doubleToString(pXForm.getWeightMapVariationIntensity()));
-
-        boolean isImageMap = WeightMapType.IMAGE_MAP.equals(pXForm.getWeightMapType());
-        boolean isPerlinMap = WeightMapType.PERLIN_NOISE.equals(pXForm.getWeightMapType());
-        if (isImageMap) {
-          data.weightMapColorMapFilenameInfoLbl.setText(pXForm.getWeightMapColorMapFilename() != null && pXForm.getWeightMapColorMapFilename().length() > 0 ? new File(pXForm.getWeightMapColorMapFilename()).getName() : "(empty)");
-          data.weightMapParam01REd.setText(Tools.doubleToString(pXForm.getWeightMapColorMapXCentre()));
-          data.weightMapParam02REd.setText(Tools.doubleToString(pXForm.getWeightMapColorMapYCentre()));
-          data.weightMapParam03REd.setText(Tools.doubleToString(pXForm.getWeightMapColorMapXSize()));
-          data.weightMapParam04REd.setText(Tools.doubleToString(pXForm.getWeightMapColorMapYSize()));
-        }
-        else if (isPerlinMap) {
-          data.weightMapParam01REd.setText(Tools.doubleToString(pXForm.getWeightMapPerlinNoiseAScale()));
-          data.weightMapParam02REd.setText(Tools.doubleToString(pXForm.getWeightMapPerlinNoiseFScale()));
-          data.weightMapParam03REd.setText(Tools.doubleToString(pXForm.getWeightMapPerlinNoiseOctaves()));
-        }
+        getWeightMapControlsUpdater().updateControls(pXForm);
       }
       else {
         data.affineC00REd.setText(null);
@@ -2673,32 +2653,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.transformationWeightREd.setText(null);
         data.xFormDrawModeCmb.setSelectedIndex(-1);
         data.xFormColorTypeCmb.setSelectedIndex(-1);
-
-        data.weightMapTypeCmb.setSelectedIndex(-1);
-        data.weightMapInputCmb.setSelectedIndex(-1);
-        data.weightMapColorIntensityREd.setValue(0.0);
-        data.weightMapVariationIntensityREd.setValue(0.0);
-        data.weightMapColorMapFilenameLbl.setVisible(false);
-        data.weightMapColorMapFilenameBtn.setVisible(false);
-        data.weightMapColorMapFilenameInfoLbl.setVisible(false);
-        data.weightMapParam01REd.setVisible(false);
-        data.weightMapParam01Lbl.setVisible(false);
-        data.weightMapParam02REd.setVisible(false);
-        data.weightMapParam02Lbl.setVisible(false);
-        data.weightMapParam03REd.setVisible(false);
-        data.weightMapParam03Lbl.setVisible(false);
-        data.weightMapParam04REd.setVisible(false);
-        data.weightMapParam04Lbl.setVisible(false);
-        data.weightMapParam05REd.setVisible(false);
-        data.weightMapParam05Lbl.setVisible(false);
-        data.weightMapParam06REd.setVisible(false);
-        data.weightMapParam06Lbl.setVisible(false);
-        data.weightMapParam07REd.setVisible(false);
-        data.weightMapParam07Lbl.setVisible(false);
-        data.weightMapParam08REd.setVisible(false);
-        data.weightMapParam08Lbl.setVisible(false);
-
         data.xFormTargetColorBtn.setBackground(Color.BLACK);
+        getWeightMapControlsUpdater().clearComponents();
       }
 
       {
@@ -6964,143 +6920,69 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
+  protected WeightingFieldControlsUpdater getWeightMapControlsUpdater() {
+    WeightingFieldType weightMapType = Optional.ofNullable( (WeightingFieldType)weightMapData.weightingFieldTypeCmb.getSelectedItem()).orElse(WeightingFieldType.NONE);
+    return WeightingFieldControlsUpdaterFactory.getInstance(weightMapType, this, weightMapData);
+  }
+
   public void weightMapParam01REd_changed() {
-    switch ((WeightMapType) data.weightMapTypeCmb.getSelectedItem()) {
-      case IMAGE_MAP:
-        xFormTextFieldChanged(null, data.weightMapParam01REd, "weightMapColorMapXCentre", 1.0);
-        break;
-      case PERLIN_NOISE:
-        xFormTextFieldChanged(null, data.weightMapParam01REd, "weightMapPerlinNoiseAScale", 1.0);
-        break;
-    }
+    getWeightMapControlsUpdater().weightingFieldParam01REd_changed();
   }
 
   public void weightMapParam02REd_changed() {
-    switch ((WeightMapType) data.weightMapTypeCmb.getSelectedItem()) {
-      case IMAGE_MAP:
-        xFormTextFieldChanged(null, data.weightMapParam02REd, "weightMapColorMapYCentre", 1.0);
-        break;
-      case PERLIN_NOISE:
-        xFormTextFieldChanged(null, data.weightMapParam02REd, "weightMapPerlinNoiseFScale", 1.0);
-        break;
-    }
+    getWeightMapControlsUpdater().weightingFieldParam02REd_changed();
   }
 
   public void weightMapParam03REd_changed() {
-    switch ((WeightMapType) data.weightMapTypeCmb.getSelectedItem()) {
-      case IMAGE_MAP:
-        xFormTextFieldChanged(null, data.weightMapParam03REd, "weightMapColorMapXSize", 1.0);
-        break;
-      case PERLIN_NOISE:
-        xFormTextFieldChanged(null, data.weightMapParam03REd, "weightMapPerlinNoiseOctaves", 1.0);
-        break;
-    }
+    getWeightMapControlsUpdater().weightingFieldParam03REd_changed();
   }
 
-  public void weightMapParam04REd_changed() {
-    switch ((WeightMapType) data.weightMapTypeCmb.getSelectedItem()) {
-      case IMAGE_MAP:
-        xFormTextFieldChanged(null, data.weightMapParam04REd, "weightMapColorMapYSize", 1.0);
-        break;
-    }
+  public void weightMapParam04Cmb_changed() {
+    getWeightMapControlsUpdater().weightingFieldParam04Cmb_changed();
   }
 
   public void weightMapParam05REd_changed() {
-    // EMPTY
+    getWeightMapControlsUpdater().weightingFieldParam05REd_changed();
   }
 
   public void weightMapParam06REd_changed() {
-    // EMPTY
+    getWeightMapControlsUpdater().weightingFieldParam06REd_changed();
   }
 
   public void weightMapParam07REd_changed() {
-    // EMPTY
+    getWeightMapControlsUpdater().weightingFieldParam07REd_changed();
   }
 
-  public void weightMapParam08REd_changed() {
-    // EMPTY
+  public void weightMapParam08Cmb_changed() {
+    getWeightMapControlsUpdater().weightingFieldParam08Cmb_changed();
   }
 
   public void weightMapColorIntensityREd_changed() {
-    xFormTextFieldChanged(null, data.weightMapColorIntensityREd, "weightMapColorIntensity", 1.0);
+    getWeightMapControlsUpdater().weightingFieldColorIntensityREd_changed();
   }
 
   public void weightMapVariationIntensityREd_changed() {
-    xFormTextFieldChanged(null, data.weightMapVariationIntensityREd, "weightMapVariationIntensity", 1.0);
+    getWeightMapControlsUpdater().weightingFieldVarAmountIntensityREd_changed();
   }
 
   public void weightMapTypeCmb_changed() {
-    if (gridRefreshing)
-      return;
-    XForm xForm = getCurrXForm();
-    if (xForm != null && data.weightMapTypeCmb.getSelectedItem() != null) {
-      xForm.setWeightMapType((WeightMapType) data.weightMapTypeCmb.getSelectedItem());
-      xFormControls.enableControls(xForm);
-      refreshXFormUI(xForm);
-      refreshFlameImage(true, false, 1, true, false);
-    }
+    getWeightMapControlsUpdater().weightingFieldTypeCmb_changed();
   }
 
   public void weightMapInputCmb_changed() {
-    if (gridRefreshing)
-      return;
-    XForm xForm = getCurrXForm();
-    if (xForm != null && data.weightMapInputCmb.getSelectedItem() != null) {
-      xForm.setWeightMapInput((WeightMapInputType) data.weightMapInputCmb.getSelectedItem());
-      refreshFlameImage(true, false, 1, true, false);
-    }
+    getWeightMapControlsUpdater().weightingFieldInputCmb_changed();
   }
 
   public void weightMapColorMapFilenameBtn_clicked() {
-    XForm xForm = getCurrXForm();
-    if (xForm != null && data.weightMapInputCmb.getSelectedItem() != null) {
-      JFileChooser chooser = new ImageFileChooser(Tools.FILEEXT_PNG);
-      if (Prefs.getPrefs().getInputImagePath() != null) {
-        try {
-          if (xForm.getWeightMapColorMapFilename()!=null && xForm.getWeightMapColorMapFilename().length() > 0) {
-            chooser.setSelectedFile(new File(xForm.getWeightMapColorMapFilename()));
-          }
-          else {
-            chooser.setCurrentDirectory(new File(Prefs.getPrefs().getInputImagePath()));
-          }
-        }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-      }
-      if (chooser.showOpenDialog(getFlamePanel()) == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
-        try {
-          String filename = file.getAbsolutePath();
-          WFImage img = RessourceManager.getImage(filename);
-          if (img.getImageWidth() < 2 || img.getImageHeight() < 2 || !(img instanceof SimpleImage)) {
-            throw new Exception("Invalid image");
-          }
-          Prefs.getPrefs().setLastInputImageFile(file);
-
-          saveUndoPoint();
-          xForm.setWeightMapColorMapFilename(filename);
-          refreshXFormUI(xForm);
-          refreshFlameImage(true, false, 1, true, false);
-        }
-        catch (Throwable ex) {
-          errorHandler.handleError(ex);
-        }
-      }
-    }
+    getWeightMapControlsUpdater().weightingFieldColorMapFilenameBtn_clicked();
   }
 
   public void weightMapRandomizeAllBtn_clicked(boolean wholeFractal) {
-    // TODO Auto-generated method stub
-    saveUndoPoint();
-
+    // TODO
   }
 
   public void weightMapResetAllBtn_clicked(boolean wholeFractal) {
-    saveUndoPoint();
     // TODO
-
-
   }
 
 }

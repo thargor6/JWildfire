@@ -14,32 +14,47 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base.weightmap;
+package org.jwildfire.create.tina.base.weightingfield;
 
 import fastnoise.FastNoise;
 
-public enum CellularDistanceFunction {
+public enum FractalNoiseType {
 
-  EUCLIDIAN {
+  FBM {
     @Override
-    public FastNoise.CellularDistanceFunction toFastNoiseType() {
-      return FastNoise.CellularDistanceFunction.Euclidean;
+    public FastNoise.FractalType toFastNoiseType() {
+      return FastNoise.FractalType.FBM;
+    }
+
+    @Override
+    public String toString() {
+      return "FBM";
+    }
+  }
+
+  , BILLOW {
+    @Override
+    public FastNoise.FractalType toFastNoiseType() {
+      return FastNoise.FractalType.Billow;
+    }
+
+    @Override
+    public String toString() {
+      return "Billow";
     }
   },
 
-  MANHATTAN {
+  RIGID_MULTI {
     @Override
-    public FastNoise.CellularDistanceFunction toFastNoiseType() {
-      return FastNoise.CellularDistanceFunction.Manhattan;
+    public FastNoise.FractalType toFastNoiseType() {
+      return FastNoise.FractalType.RigidMulti;
     }
-  },
 
-  NATURAL {
     @Override
-    public FastNoise.CellularDistanceFunction toFastNoiseType() {
-      return FastNoise.CellularDistanceFunction.Natural;
+    public String toString() {
+      return "RigidMulti";
     }
   };
 
-  public abstract FastNoise.CellularDistanceFunction toFastNoiseType();
+  public abstract FastNoise.FractalType toFastNoiseType();
 }
