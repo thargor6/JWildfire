@@ -24,7 +24,7 @@ public final class TransformationApplyWightMapToColorStep extends AbstractTransf
 
   public TransformationApplyWightMapToColorStep(XForm pXForm) {
     super(pXForm);
-    weightValueScale = pXForm.getWeightMapColorIntensity();
+    weightValueScale = pXForm.getWeightingFieldColorIntensity();
   }
 
   @Override

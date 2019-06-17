@@ -204,6 +204,22 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private double weightingFieldVarAmountIntensity;
   private final MotionCurve weightingFieldVariationIntensityCurve = new MotionCurve();
 
+  @AnimAware
+  private double weightingFieldVarParam1Intensity;
+  private String weightingFieldVarParam1VarName = "";
+  private String weightingFieldVarParam1ParamName = "";
+  private final MotionCurve weightingFieldVarParam1IntensityCurve = new MotionCurve();
+  @AnimAware
+  private double weightingFieldVarParam2Intensity;
+  private String weightingFieldVarParam2VarName = "";
+  private String weightingFieldVarParam2ParamName = "";
+  private final MotionCurve weightingFieldVarParam2IntensityCurve = new MotionCurve();
+  @AnimAware
+  private double weightingFieldVarParam3Intensity;
+  private String weightingFieldVarParam3VarName = "";
+  private String weightingFieldVarParam3ParamName = "";
+  private final MotionCurve weightingFieldVarParam3IntensityCurve = new MotionCurve();
+
   private String weightingFieldColorMapFilename = "";
   private double weightingFieldColorMapXSize = 4.0;
   private double weightingFieldColorMapYSize = 4.0;
@@ -485,6 +501,16 @@ public final class XForm implements Assignable<XForm>, Serializable {
     t.add(new TransformationPreparePreVariationsStep(this));
 
     for (Variation variation : variations) {
+      variation.clearWeightingFieldParams();
+      if(fabs(weightingFieldVarParam1Intensity)>EPSILON && variation.getFunc().getName().equals(weightingFieldVarParam1VarName)) {
+        variation.addWeightingFieldParam(weightingFieldVarParam1ParamName, weightingFieldVarParam1Intensity);
+      }
+      if(fabs(weightingFieldVarParam2Intensity)>EPSILON && variation.getFunc().getName().equals(weightingFieldVarParam2VarName)) {
+        variation.addWeightingFieldParam(weightingFieldVarParam2ParamName, weightingFieldVarParam2Intensity);
+      }
+      if(fabs(weightingFieldVarParam3Intensity)>EPSILON && variation.getFunc().getName().equals(weightingFieldVarParam3VarName)) {
+        variation.addWeightingFieldParam(weightingFieldVarParam3ParamName, weightingFieldVarParam3Intensity);
+      }
       if (variation.getPriority() < 0 || variation.getPriority() == 2) {
         if (variation.getFunc().getPriority() == 2) {
         	t.add(new PreInvVariationTransformationStep(this, variation));
@@ -752,6 +778,21 @@ public final class XForm implements Assignable<XForm>, Serializable {
     weightingFieldVarAmountIntensity = pXForm.weightingFieldVarAmountIntensity;
     weightingFieldVariationIntensityCurve.assign(pXForm.weightingFieldVariationIntensityCurve);
 
+    weightingFieldVarParam1Intensity = pXForm.weightingFieldVarParam1Intensity;
+    weightingFieldVarParam1VarName = pXForm.weightingFieldVarParam1VarName;
+    weightingFieldVarParam1ParamName = pXForm.weightingFieldVarParam1ParamName;
+    weightingFieldVarParam1IntensityCurve.assign(pXForm.weightingFieldVarParam1IntensityCurve);
+
+    weightingFieldVarParam2Intensity = pXForm.weightingFieldVarParam2Intensity;
+    weightingFieldVarParam2VarName = pXForm.weightingFieldVarParam2VarName;
+    weightingFieldVarParam2ParamName = pXForm.weightingFieldVarParam2ParamName;
+    weightingFieldVarParam2IntensityCurve.assign(pXForm.weightingFieldVarParam2IntensityCurve);
+
+    weightingFieldVarParam3Intensity = pXForm.weightingFieldVarParam3Intensity;
+    weightingFieldVarParam3VarName = pXForm.weightingFieldVarParam3VarName;
+    weightingFieldVarParam3ParamName = pXForm.weightingFieldVarParam3ParamName;
+    weightingFieldVarParam3IntensityCurve.assign(pXForm.weightingFieldVarParam3IntensityCurve);
+
     weightingFieldColorMapFilename = pXForm.weightingFieldColorMapFilename;
     weightingFieldColorMapXSize = pXForm.weightingFieldColorMapXSize;
     weightingFieldColorMapYSize = pXForm.weightingFieldColorMapYSize;
@@ -844,6 +885,13 @@ public final class XForm implements Assignable<XForm>, Serializable {
          weightingFieldType != pSrc.weightingFieldType || weightingFieldInput != pSrc.weightingFieldInput ||
          (fabs(weightingFieldColorIntensity - pSrc.weightingFieldColorIntensity) > EPSILON) || !weightingFieldColorIntensityCurve.isEqual(pSrc.weightingFieldColorIntensityCurve) ||
          (fabs(weightingFieldVarAmountIntensity - pSrc.weightingFieldVarAmountIntensity) > EPSILON) || !weightingFieldVariationIntensityCurve.isEqual(pSrc.weightingFieldVariationIntensityCurve) ||
+
+         (fabs(weightingFieldVarParam1Intensity - pSrc.weightingFieldVarParam1Intensity) > EPSILON) || !weightingFieldVarParam1VarName.equals(pSrc.weightingFieldVarParam1VarName) ||
+         !weightingFieldVarParam1ParamName.equals(pSrc.weightingFieldVarParam1ParamName) || !weightingFieldVarParam1IntensityCurve.isEqual(pSrc.weightingFieldVarParam1IntensityCurve) ||
+         (fabs(weightingFieldVarParam2Intensity - pSrc.weightingFieldVarParam2Intensity) > EPSILON) || !weightingFieldVarParam2VarName.equals(pSrc.weightingFieldVarParam2VarName) ||
+         !weightingFieldVarParam2ParamName.equals(pSrc.weightingFieldVarParam2ParamName) || !weightingFieldVarParam2IntensityCurve.isEqual(pSrc.weightingFieldVarParam2IntensityCurve) ||
+         (fabs(weightingFieldVarParam3Intensity - pSrc.weightingFieldVarParam3Intensity) > EPSILON) || !weightingFieldVarParam3VarName.equals(pSrc.weightingFieldVarParam3VarName) ||
+         !weightingFieldVarParam3ParamName.equals(pSrc.weightingFieldVarParam3ParamName) || !weightingFieldVarParam3IntensityCurve.isEqual(pSrc.weightingFieldVarParam3IntensityCurve) ||
 
          !weightingFieldColorMapFilename.equals(pSrc.weightingFieldColorMapFilename) ||
          (fabs(weightingFieldColorMapXSize - pSrc.weightingFieldColorMapXSize) > EPSILON) ||
@@ -1964,8 +2012,96 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.weightingFieldFractalNoiseType = weightingFieldFractalNoiseType;
   }
 
+  public double getWeightingFieldVarParam1Intensity() {
+    return weightingFieldVarParam1Intensity;
+  }
+
+  public void setWeightingFieldVarParam1Intensity(double weightingFieldVarParam1Intensity) {
+    this.weightingFieldVarParam1Intensity = weightingFieldVarParam1Intensity;
+  }
+
+  public String getWeightingFieldVarParam1VarName() {
+    return weightingFieldVarParam1VarName;
+  }
+
+  public void setWeightingFieldVarParam1VarName(String weightingFieldVarParam1VarName) {
+    this.weightingFieldVarParam1VarName = weightingFieldVarParam1VarName;
+  }
+
+  public String getWeightingFieldVarParam1ParamName() {
+    return weightingFieldVarParam1ParamName;
+  }
+
+  public void setWeightingFieldVarParam1ParamName(String weightingFieldVarParam1ParamName) {
+    this.weightingFieldVarParam1ParamName = weightingFieldVarParam1ParamName;
+  }
+
+  public MotionCurve getWeightingFieldVarParam1IntensityCurve() {
+    return weightingFieldVarParam1IntensityCurve;
+  }
+
+  public double getWeightingFieldVarParam2Intensity() {
+    return weightingFieldVarParam2Intensity;
+  }
+
+  public void setWeightingFieldVarParam2Intensity(double weightingFieldVarParam2Intensity) {
+    this.weightingFieldVarParam2Intensity = weightingFieldVarParam2Intensity;
+  }
+
+  public String getWeightingFieldVarParam2VarName() {
+    return weightingFieldVarParam2VarName;
+  }
+
+  public void setWeightingFieldVarParam2VarName(String weightingFieldVarParam2VarName) {
+    this.weightingFieldVarParam2VarName = weightingFieldVarParam2VarName;
+  }
+
+  public String getWeightingFieldVarParam2ParamName() {
+    return weightingFieldVarParam2ParamName;
+  }
+
+  public void setWeightingFieldVarParam2ParamName(String weightingFieldVarParam2ParamName) {
+    this.weightingFieldVarParam2ParamName = weightingFieldVarParam2ParamName;
+  }
+
+  public MotionCurve getWeightingFieldVarParam2IntensityCurve() {
+    return weightingFieldVarParam2IntensityCurve;
+  }
+
+  public double getWeightingFieldVarParam3Intensity() {
+    return weightingFieldVarParam3Intensity;
+  }
+
+  public void setWeightingFieldVarParam3Intensity(double weightingFieldVarParam3Intensity) {
+    this.weightingFieldVarParam3Intensity = weightingFieldVarParam3Intensity;
+  }
+
+  public String getWeightingFieldVarParam3VarName() {
+    return weightingFieldVarParam3VarName;
+  }
+
+  public void setWeightingFieldVarParam3VarName(String weightingFieldVarParam3VarName) {
+    this.weightingFieldVarParam3VarName = weightingFieldVarParam3VarName;
+  }
+
+  public String getWeightingFieldVarParam3ParamName() {
+    return weightingFieldVarParam3ParamName;
+  }
+
+  public void setWeightingFieldVarParam3ParamName(String weightingFieldVarParam3ParamName) {
+    this.weightingFieldVarParam3ParamName = weightingFieldVarParam3ParamName;
+  }
+
+  public MotionCurve getWeightingFieldVarParam3IntensityCurve() {
+    return weightingFieldVarParam3IntensityCurve;
+  }
+
   public boolean isWeightingFieldActive() {
-    return (fabs(weightingFieldColorIntensity)>EPSILON || fabs(weightingFieldVarAmountIntensity)>EPSILON) && (
+    return (fabs(weightingFieldColorIntensity)>EPSILON || fabs(weightingFieldVarAmountIntensity)>EPSILON ||
+            (fabs(weightingFieldVarParam1Intensity)>EPSILON && weightingFieldVarParam1VarName.length()>0) ||
+            (fabs(weightingFieldVarParam2Intensity)>EPSILON && weightingFieldVarParam2VarName.length()>0) ||
+            (fabs(weightingFieldVarParam3Intensity)>EPSILON && weightingFieldVarParam3VarName.length()>0)
+            ) && (
             (WeightingFieldType.IMAGE_MAP.equals(weightingFieldType) && weightingFieldColorMapFilename !=null && !weightingFieldColorMapFilename.equals("")) ||
             (weightingFieldType !=null && !WeightingFieldType.NONE.equals(weightingFieldType))
     );

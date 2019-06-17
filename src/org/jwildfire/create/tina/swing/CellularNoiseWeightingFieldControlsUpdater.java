@@ -114,7 +114,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
   @Override
   public void weightingFieldParam01REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightMapNoiseSeed", 1.0);
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
   }
 
   @Override
@@ -142,7 +142,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
   @Override
   public void weightingFieldParam05REd_changed() {
-    controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightMapNoiseFrequency", 1.0);
+    controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
   }
 
   @Override
