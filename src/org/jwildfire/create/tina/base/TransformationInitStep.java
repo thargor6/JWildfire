@@ -40,5 +40,11 @@ public final class TransformationInitStep extends AbstractTransformationStep {
     pAffineT.modContrast = pSrcPoint.modContrast * xform.modContrast1 + xform.modContrast2;
     pAffineT.modSaturation = pSrcPoint.modSaturation * xform.modSaturation1 + xform.modSaturation2;
     pAffineT.modHue = pSrcPoint.modHue * xform.modHue1 + xform.modHue2;
+    
+    if (xform.getColorType() == ColorType.DISTANCE) {
+      xform.oldx = pSrcPoint.x;
+      xform.oldy = pSrcPoint.y;
+      xform.oldz = pSrcPoint.z;
+    }
   }
 }

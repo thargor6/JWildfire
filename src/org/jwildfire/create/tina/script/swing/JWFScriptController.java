@@ -619,6 +619,9 @@ public class JWFScriptController {
     case TARGETG:
       pSB.append("      xForm.setColorType(ColorType.TARGETG);\n");
       break;
+    case DISTANCE:
+      pSB.append("      xForm.setColorType(ColorType.DISTANCE);\n");
+      break;
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
     pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");
