@@ -46,12 +46,12 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   private class WeightFieldParamValue {
     public String paramName;
-    public double paramValue;
+    public double intensity;
     public Object oldParamValue;
 
-    public WeightFieldParamValue(String paramName, double paramValue) {
+    public WeightFieldParamValue(String paramName, double intensity) {
       this.paramName = paramName;
-      this.paramValue = paramValue;
+      this.intensity = intensity;
     }
   }
 
@@ -98,11 +98,11 @@ public class Variation implements Assignable<Variation>, Serializable {
       for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
         weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
         if(weightFieldParamValue.oldParamValue instanceof  Integer) {
-          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightingFieldColorIntensity()));
+          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
           getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
         }
         else {
-          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightingFieldColorIntensity());
+          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
           getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
         }
       }
@@ -142,11 +142,11 @@ public class Variation implements Assignable<Variation>, Serializable {
       for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
         weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
         if(weightFieldParamValue.oldParamValue instanceof  Integer) {
-          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightingFieldColorIntensity()));
+          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
           getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
         }
         else {
-          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * pXForm.getWeightingFieldColorIntensity());
+          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
           getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
         }
       }
@@ -328,6 +328,14 @@ public class Variation implements Assignable<Variation>, Serializable {
      if(Arrays.asList(getFunc().getParameterNames()).indexOf(paramName)>=0) {
         if(weightFieldParamValueList==null) {
           weightFieldParamValueList = new ArrayList<>();
+        }
+        else {
+          for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
+            if(weightFieldParamValue.paramName.equals(paramName)) {
+              // no duplicates
+              return;
+            }
+          }
         }
         weightFieldParamValueList.add(new WeightFieldParamValue(paramName, intensity));
      }

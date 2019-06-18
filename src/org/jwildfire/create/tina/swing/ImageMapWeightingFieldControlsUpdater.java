@@ -75,11 +75,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
   @Override
   public void updateControls(XForm xform) {
-    controls.weightingFieldTypeCmb.setSelectedItem(xform.getWeightingFieldType());
-    controls.weightingFieldInputCmb.setSelectedItem(xform.getWeightingFieldInput());
-    controls.weightingFieldColorIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldColorIntensity()));
-    controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldVarAmountIntensity()));
-
+    super.updateControls(xform);
     controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : "(empty)");
     controls.weightingFieldParam01REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXCentre()));
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYCentre()));
@@ -89,11 +85,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
   @Override
   public void enableControls(XForm xform, boolean enabled) {
-    controls.weightingFieldTypeCmb.setEnabled(enabled);
-    controls.weightingFieldInputCmb.setEnabled(enabled);
-    controls.weightingFieldColorIntensityREd.setEnabled(enabled);
-    controls.weightingFieldVariationIntensityREd.setEnabled(enabled);
-
+    super.enableControls(xform, enabled);
     controls.weightingFieldColorMapFilenameLbl.setVisible(true);
     controls.weightingFieldColorMapFilenameBtn.setVisible(true);
     controls.weightingFieldColorMapFilenameInfoLbl.setVisible(true);

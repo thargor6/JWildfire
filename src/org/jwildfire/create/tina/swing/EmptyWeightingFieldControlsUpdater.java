@@ -36,9 +36,7 @@ public class EmptyWeightingFieldControlsUpdater extends WeightingFieldControlsUp
 
   @Override
   public void enableControls(XForm xform, boolean enabled) {
-    controls.weightingFieldInputCmb.setEnabled(false);
-    controls.weightingFieldColorIntensityREd.setEnabled(false);
-    controls.weightingFieldVariationIntensityREd.setEnabled(false);
+    super.enableControls(xform, enabled);
 
     controls.weightingFieldColorMapFilenameLbl.setVisible(false);
     controls.weightingFieldColorMapFilenameBtn.setVisible(false);

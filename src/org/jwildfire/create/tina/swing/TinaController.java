@@ -866,29 +866,37 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.affineYZEditPlaneToggleBtn = parameterObject.affineYZEditPlaneToggleBtn;
     data.affineZXEditPlaneToggleBtn = parameterObject.affineZXEditPlaneToggleBtn;
 
-    weightMapData.weightingFieldTypeCmb = parameterObject.weightMapTypeCmb;
-    weightMapData.weightingFieldInputCmb = parameterObject.weightMapInputCmb;
-    weightMapData.weightingFieldColorIntensityREd = parameterObject.weightMapColorIntensityREd;
-    weightMapData.weightingFieldVariationIntensityREd = parameterObject.weightMapVariationIntensityREd;
-    weightMapData.weightingFieldColorMapFilenameLbl = parameterObject.weightMapColorMapFilenameLbl;
-    weightMapData.weightingFieldColorMapFilenameBtn = parameterObject.weightMapColorMapFilenameBtn;
-    weightMapData.weightingFieldColorMapFilenameInfoLbl = parameterObject.weightMapColorMapFilenameInfoLbl;
-    weightMapData.weightingFieldParam01REd = parameterObject.weightMapParam01REd;
-    weightMapData.weightingFieldParam01Lbl = parameterObject.weightMapParam01Lbl;
-    weightMapData.weightingFieldParam02REd = parameterObject.weightMapParam02REd;
-    weightMapData.weightingFieldParam02Lbl = parameterObject.weightMapParam02Lbl;
-    weightMapData.weightingFieldParam03REd = parameterObject.weightMapParam03REd;
-    weightMapData.weightingFieldParam03Lbl = parameterObject.weightMapParam03Lbl;
-    weightMapData.weightingFieldParam04Cmb = parameterObject.weightMapParam04Cmb;
-    weightMapData.weightingFieldParam04Lbl = parameterObject.weightMapParam04Lbl;
-    weightMapData.weightingFieldParam05REd = parameterObject.weightMapParam05REd;
-    weightMapData.weightingFieldParam05Lbl = parameterObject.weightMapParam05Lbl;
-    weightMapData.weightingFieldParam06REd = parameterObject.weightMapParam06REd;
-    weightMapData.weightingFieldParam06Lbl = parameterObject.weightMapParam06Lbl;
-    weightMapData.weightingFieldParam07REd = parameterObject.weightMapParam07REd;
-    weightMapData.weightingFieldParam07Lbl = parameterObject.weightMapParam07Lbl;
-    weightMapData.weightingFieldParam08Cmb = parameterObject.weightMapParam08Cmb;
-    weightMapData.weightingFieldParam08Lbl = parameterObject.weightMapParam08Lbl;
+    weightMapData.weightingFieldTypeCmb = parameterObject.weightingFieldTypeCmb;
+    weightMapData.weightingFieldInputCmb = parameterObject.weightingFieldInputCmb;
+    weightMapData.weightingFieldColorIntensityREd = parameterObject.weightingFieldColorIntensityREd;
+    weightMapData.weightingFieldVariationIntensityREd = parameterObject.weightingFieldVariationIntensityREd;
+    weightMapData.weightingFieldVarParam1AmountREd = parameterObject.weightingFieldVarParam1AmountREd;
+    weightMapData.weightingFieldVarParam2AmountREd = parameterObject.weightingFieldVarParam2AmountREd;
+    weightMapData.weightingFieldVarParam3AmountREd = parameterObject.weightingFieldVarParam3AmountREd;
+    weightMapData.weightingFieldVarParam1NameCmb = parameterObject.weightingFieldVarParam1NameCmb;
+    weightMapData.weightingFieldVarParam2NameCmb = parameterObject.weightingFieldVarParam2NameCmb;
+    weightMapData.weightingFieldVarParam3NameCmb = parameterObject.weightingFieldVarParam3NameCmb;
+
+    weightMapData.weightingFieldColorMapFilenameLbl = parameterObject.weightingFieldColorMapFilenameLbl;
+    weightMapData.weightingFieldColorMapFilenameBtn = parameterObject.weightingFieldColorMapFilenameBtn;
+    weightMapData.weightingFieldColorMapFilenameInfoLbl = parameterObject.weightingFieldColorMapFilenameInfoLbl;
+    weightMapData.weightingFieldParam01REd = parameterObject.weightingFieldParam01REd;
+    weightMapData.weightingFieldParam01Lbl = parameterObject.weightingFieldParam01Lbl;
+    weightMapData.weightingFieldParam02REd = parameterObject.weightingFieldParam02REd;
+    weightMapData.weightingFieldParam02Lbl = parameterObject.weightingFieldParam02Lbl;
+    weightMapData.weightingFieldParam03REd = parameterObject.weightingFieldParam03REd;
+    weightMapData.weightingFieldParam03Lbl = parameterObject.weightingFieldParam03Lbl;
+    weightMapData.weightingFieldParam04Cmb = parameterObject.weightingFieldParam04Cmb;
+    weightMapData.weightingFieldParam04Lbl = parameterObject.weightingFieldParam04Lbl;
+    weightMapData.weightingFieldParam05REd = parameterObject.weightingFieldParam05REd;
+    weightMapData.weightingFieldParam05Lbl = parameterObject.weightingFieldParam05Lbl;
+    weightMapData.weightingFieldParam06REd = parameterObject.weightingFieldParam06REd;
+    weightMapData.weightingFieldParam06Lbl = parameterObject.weightingFieldParam06Lbl;
+    weightMapData.weightingFieldParam07REd = parameterObject.weightingFieldParam07REd;
+    weightMapData.weightingFieldParam07Lbl = parameterObject.weightingFieldParam07Lbl;
+    weightMapData.weightingFieldParam08Cmb = parameterObject.weightingFieldParam08Cmb;
+    weightMapData.weightingFieldParam08Lbl = parameterObject.weightingFieldParam08Lbl;
+    weightMapData.weightingFieldPreviewImgRootPanel = parameterObject.weightingFieldPreviewImgRootPanel;
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootPanel);
@@ -2614,8 +2622,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormTargetColorBtn.setBackground(pXForm.getTargetColor().getColor());
 
         data.transformationWeightREd.setText(Tools.doubleToString(pXForm.getWeight()));
-
-        getWeightMapControlsUpdater().updateControls(pXForm);
+        getWeightMapControlsUpdater(pXForm).updateControls(pXForm);
       }
       else {
         data.affineC00REd.setText(null);
@@ -2654,7 +2661,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.xFormDrawModeCmb.setSelectedIndex(-1);
         data.xFormColorTypeCmb.setSelectedIndex(-1);
         data.xFormTargetColorBtn.setBackground(Color.BLACK);
-        getWeightMapControlsUpdater().clearComponents();
+        getWeightMapControlsUpdater(null).clearComponents();
       }
 
       {
@@ -6920,61 +6927,85 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
   }
 
-  protected WeightingFieldControlsUpdater getWeightMapControlsUpdater() {
-    WeightingFieldType weightMapType = Optional.ofNullable( (WeightingFieldType)weightMapData.weightingFieldTypeCmb.getSelectedItem()).orElse(WeightingFieldType.NONE);
+  protected WeightingFieldControlsUpdater getWeightMapControlsUpdater(XForm xform) {
+    WeightingFieldType weightMapType = xform!=null && xform.getWeightingFieldType()!=null ? xform.getWeightingFieldType(): WeightingFieldType.NONE;
     return WeightingFieldControlsUpdaterFactory.getInstance(weightMapType, this, weightMapData);
   }
 
   public void weightMapParam01REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam01REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam01REd_changed();
+  }
+
+  public void weightingFieldVarParam1NameCmb_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam1NameCmb_changed();
+  }
+
+  public void weightingFieldVarParam2NameCmb_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam2NameCmb_changed();
+  }
+
+  public void weightingFieldVarParam3NameCmb_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam3NameCmb_changed();
   }
 
   public void weightMapParam02REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam02REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam02REd_changed();
   }
 
   public void weightMapParam03REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam03REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam03REd_changed();
   }
 
   public void weightMapParam04Cmb_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam04Cmb_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam04Cmb_changed();
   }
 
   public void weightMapParam05REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam05REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam05REd_changed();
   }
 
   public void weightMapParam06REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam06REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam06REd_changed();
   }
 
   public void weightMapParam07REd_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam07REd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam07REd_changed();
   }
 
   public void weightMapParam08Cmb_changed() {
-    getWeightMapControlsUpdater().weightingFieldParam08Cmb_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldParam08Cmb_changed();
   }
 
   public void weightMapColorIntensityREd_changed() {
-    getWeightMapControlsUpdater().weightingFieldColorIntensityREd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldColorIntensityREd_changed();
   }
 
   public void weightMapVariationIntensityREd_changed() {
-    getWeightMapControlsUpdater().weightingFieldVarAmountIntensityREd_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarAmountIntensityREd_changed();
+  }
+
+  public void weightingFieldVarParam1AmountREd_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam1AmountREd_changed();
+  }
+
+  public void weightingFieldVarParam2AmountREd_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam2AmountREd_changed();
+  }
+
+  public void weightingFieldVarParam3AmountREd_changed() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam3AmountREd_changed();
   }
 
   public void weightMapTypeCmb_changed() {
-    getWeightMapControlsUpdater().weightingFieldTypeCmb_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldTypeCmb_changed();
   }
 
   public void weightMapInputCmb_changed() {
-    getWeightMapControlsUpdater().weightingFieldInputCmb_changed();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldInputCmb_changed();
   }
 
   public void weightMapColorMapFilenameBtn_clicked() {
-    getWeightMapControlsUpdater().weightingFieldColorMapFilenameBtn_clicked();
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldColorMapFilenameBtn_clicked();
   }
 
   public void weightMapRandomizeAllBtn_clicked(boolean wholeFractal) {

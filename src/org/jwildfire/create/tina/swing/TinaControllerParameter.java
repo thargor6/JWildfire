@@ -720,29 +720,36 @@ public class TinaControllerParameter {
   public JButton randomBatchButton;
   public JProgressBar randomBatchProgressBar;
 
-  public JComboBox weightMapTypeCmb;
-  public JComboBox weightMapInputCmb;
-  public JWFNumberField weightMapColorIntensityREd;
-  public JWFNumberField weightMapVariationIntensityREd;
-  public JLabel weightMapColorMapFilenameLbl;
-  public JButton weightMapColorMapFilenameBtn;
-  public JLabel weightMapColorMapFilenameInfoLbl;
-  public JWFNumberField weightMapParam01REd;
-  public JLabel weightMapParam01Lbl;
-  public JWFNumberField weightMapParam02REd;
-  public JLabel weightMapParam02Lbl;
-  public JWFNumberField weightMapParam03REd;
-  public JLabel weightMapParam03Lbl;
-  public JComboBox weightMapParam04Cmb;
-  public JLabel weightMapParam04Lbl;
-  public JWFNumberField weightMapParam05REd;
-  public JLabel weightMapParam05Lbl;
-  public JWFNumberField weightMapParam06REd;
-  public JLabel weightMapParam06Lbl;
-  public JWFNumberField weightMapParam07REd;
-  public JLabel weightMapParam07Lbl;
-  public JComboBox weightMapParam08Cmb;
-  public JLabel weightMapParam08Lbl;
+  public JComboBox weightingFieldTypeCmb;
+  public JComboBox weightingFieldInputCmb;
+  public JWFNumberField weightingFieldColorIntensityREd;
+  public JWFNumberField weightingFieldVariationIntensityREd;
+  public JWFNumberField weightingFieldVarParam1AmountREd;
+  public JWFNumberField weightingFieldVarParam2AmountREd;
+  public JWFNumberField weightingFieldVarParam3AmountREd;
+  public JComboBox weightingFieldVarParam1NameCmb;
+  public JComboBox weightingFieldVarParam2NameCmb;
+  public JComboBox weightingFieldVarParam3NameCmb;
+  public JLabel weightingFieldColorMapFilenameLbl;
+  public JButton weightingFieldColorMapFilenameBtn;
+  public JLabel weightingFieldColorMapFilenameInfoLbl;
+  public JWFNumberField weightingFieldParam01REd;
+  public JLabel weightingFieldParam01Lbl;
+  public JWFNumberField weightingFieldParam02REd;
+  public JLabel weightingFieldParam02Lbl;
+  public JWFNumberField weightingFieldParam03REd;
+  public JLabel weightingFieldParam03Lbl;
+  public JComboBox weightingFieldParam04Cmb;
+  public JLabel weightingFieldParam04Lbl;
+  public JWFNumberField weightingFieldParam05REd;
+  public JLabel weightingFieldParam05Lbl;
+  public JWFNumberField weightingFieldParam06REd;
+  public JLabel weightingFieldParam06Lbl;
+  public JWFNumberField weightingFieldParam07REd;
+  public JLabel weightingFieldParam07Lbl;
+  public JComboBox weightingFieldParam08Cmb;
+  public JLabel weightingFieldParam08Lbl;
+  public JPanel weightingFieldPreviewImgRootPanel;
 
   public void setParams1(JWildfire pDesktop, MainEditorFrame pMainEditorFrame, ErrorHandler pErrorHandler, Prefs pPrefs, JPanel pCenterPanel, JWFNumberField pCameraRollREd, JSlider pCameraRollSlider, JWFNumberField pCameraPitchREd, JSlider pCameraPitchSlider, JWFNumberField pCameraYawREd, JSlider pCameraYawSlider, JWFNumberField pCameraPerspectiveREd, JSlider pCameraPerspectiveSlider, JWFNumberField pCameraCentreXREd, JSlider pCameraCentreXSlider, JWFNumberField pCameraCentreYREd, JSlider pCameraCentreYSlider, JWFNumberField pCameraZoomREd, JSlider pCameraZoomSlider, JCheckBox pNewDOFCBx, JWFNumberField pFocusXREd, JSlider pFocusXSlider, JWFNumberField pFocusYREd, JSlider pFocusYSlider, JWFNumberField pFocusZREd, JSlider pFocusZSlider, JWFNumberField pDimishZREd, JSlider pDimishZSlider,
                          JWFNumberField pCameraDOFREd, JSlider pCameraDOFSlider, JWFNumberField pCameraDOFAreaREd, JSlider pCameraDOFAreaSlider, JWFNumberField pCameraDOFExponentREd, JSlider pCameraDOFExponentSlider, JWFNumberField pCamZREd, JSlider pCamZSlider, JWFNumberField pPixelsPerUnitREd, JSlider pPixelsPerUnitSlider, JWFNumberField pBrightnessREd, JSlider pBrightnessSlider, JWFNumberField pContrastREd, JSlider pContrastSlider, JWFNumberField pGammaREd, JSlider pGammaSlider, JWFNumberField pVibrancyREd, JSlider pVibrancySlider, JWFNumberField pFilterRadiusREd, JSlider pFilterRadiusSlider, JComboBox pFilterKernelCmb,
@@ -1408,35 +1415,44 @@ public class TinaControllerParameter {
     this.backgroundColorCCIndicatorBtn = backgroundColorCCIndicatorBtn;
   }
 
-  public void setParams4(JComboBox weightMapTypeCmb, JComboBox weightMapInputCmb, JWFNumberField weightMapColorIntensityREd, JWFNumberField weightMapVariationIntensityREd,
-    JLabel weightMapColorMapFilenameLbl, JButton weightMapColorMapFilenameBtn, JLabel weightMapColorMapFilenameInfoLbl, JWFNumberField weightMapParam01REd, JLabel weightMapParam01Lbl,
-    JWFNumberField weightMapParam02REd, JLabel weightMapParam02Lbl, JWFNumberField weightMapParam03REd, JLabel weightMapParam03Lbl,
-    JComboBox weightMapParam04Cmb, JLabel weightMapParam04Lbl, JWFNumberField weightMapParam05REd,JLabel weightMapParam05Lbl,
-    JWFNumberField weightMapParam06REd, JLabel weightMapParam06Lbl, JWFNumberField weightMapParam07REd, JLabel weightMapParam07Lbl,
-    JComboBox weightMapParam08Cmb, JLabel weightMapParam08Lbl) {
-      this.weightMapTypeCmb = weightMapTypeCmb;
-      this.weightMapInputCmb = weightMapInputCmb;
-      this.weightMapColorIntensityREd = weightMapColorIntensityREd;
-      this.weightMapVariationIntensityREd = weightMapVariationIntensityREd;
-      this.weightMapColorMapFilenameLbl = weightMapColorMapFilenameLbl;
-      this.weightMapColorMapFilenameBtn = weightMapColorMapFilenameBtn;
-      this.weightMapColorMapFilenameInfoLbl = weightMapColorMapFilenameInfoLbl;
-      this.weightMapParam01REd = weightMapParam01REd;
-      this.weightMapParam01Lbl = weightMapParam01Lbl;
-      this.weightMapParam02REd = weightMapParam02REd;
-      this.weightMapParam02Lbl = weightMapParam02Lbl;
-      this.weightMapParam03REd = weightMapParam03REd;
-      this.weightMapParam03Lbl = weightMapParam03Lbl;
-      this.weightMapParam04Cmb = weightMapParam04Cmb;
-      this.weightMapParam04Lbl = weightMapParam04Lbl;
-      this.weightMapParam05REd = weightMapParam05REd;
-      this.weightMapParam05Lbl = weightMapParam05Lbl;
-      this.weightMapParam06REd = weightMapParam06REd;
-      this.weightMapParam06Lbl = weightMapParam06Lbl;
-      this.weightMapParam07REd = weightMapParam07REd;
-      this.weightMapParam07Lbl = weightMapParam07Lbl;
-      this.weightMapParam08Cmb = weightMapParam08Cmb;
-      this.weightMapParam08Lbl = weightMapParam08Lbl;
+  public void setParams4(JComboBox weightingFieldTypeCmb, JComboBox weightingFieldInputCmb, JWFNumberField weightingFieldColorIntensityREd, JWFNumberField weightingFieldVariationIntensityREd,
+    JWFNumberField weightingFieldVarParam1AmountREd, JWFNumberField weightingFieldVarParam2AmountREd, JWFNumberField weightingFieldVarParam3AmountREd,
+    JComboBox weightingFieldVarParam1NameCmb, JComboBox weightingFieldVarParam2NameCmb, JComboBox weightingFieldVarParam3NameCmb,
+    JLabel weightingFieldColorMapFilenameLbl, JButton weightingFieldColorMapFilenameBtn, JLabel weightingFieldColorMapFilenameInfoLbl, JWFNumberField weightingFieldParam01REd, JLabel weightingFieldParam01Lbl,
+    JWFNumberField weightingFieldParam02REd, JLabel weightingFieldParam02Lbl, JWFNumberField weightingFieldParam03REd, JLabel weightingFieldParam03Lbl,
+    JComboBox weightingFieldParam04Cmb, JLabel weightingFieldParam04Lbl, JWFNumberField weightingFieldParam05REd,JLabel weightingFieldParam05Lbl,
+    JWFNumberField weightingFieldParam06REd, JLabel weightingFieldParam06Lbl, JWFNumberField weightingFieldParam07REd, JLabel weightingFieldParam07Lbl,
+    JComboBox weightingFieldParam08Cmb, JLabel weightingFieldParam08Lbl, JPanel weightingFieldPreviewImgRootPanel) {
+      this.weightingFieldTypeCmb = weightingFieldTypeCmb;
+      this.weightingFieldInputCmb = weightingFieldInputCmb;
+      this.weightingFieldColorIntensityREd = weightingFieldColorIntensityREd;
+      this.weightingFieldVariationIntensityREd = weightingFieldVariationIntensityREd;
+      this.weightingFieldVarParam1AmountREd = weightingFieldVarParam1AmountREd;
+      this.weightingFieldVarParam2AmountREd = weightingFieldVarParam2AmountREd;
+      this.weightingFieldVarParam3AmountREd = weightingFieldVarParam3AmountREd;
+      this.weightingFieldVarParam1NameCmb = weightingFieldVarParam1NameCmb;
+      this.weightingFieldVarParam2NameCmb = weightingFieldVarParam2NameCmb;
+      this.weightingFieldVarParam3NameCmb = weightingFieldVarParam3NameCmb;
+      this.weightingFieldColorMapFilenameLbl = weightingFieldColorMapFilenameLbl;
+      this.weightingFieldColorMapFilenameBtn = weightingFieldColorMapFilenameBtn;
+      this.weightingFieldColorMapFilenameInfoLbl = weightingFieldColorMapFilenameInfoLbl;
+      this.weightingFieldParam01REd = weightingFieldParam01REd;
+      this.weightingFieldParam01Lbl = weightingFieldParam01Lbl;
+      this.weightingFieldParam02REd = weightingFieldParam02REd;
+      this.weightingFieldParam02Lbl = weightingFieldParam02Lbl;
+      this.weightingFieldParam03REd = weightingFieldParam03REd;
+      this.weightingFieldParam03Lbl = weightingFieldParam03Lbl;
+      this.weightingFieldParam04Cmb = weightingFieldParam04Cmb;
+      this.weightingFieldParam04Lbl = weightingFieldParam04Lbl;
+      this.weightingFieldParam05REd = weightingFieldParam05REd;
+      this.weightingFieldParam05Lbl = weightingFieldParam05Lbl;
+      this.weightingFieldParam06REd = weightingFieldParam06REd;
+      this.weightingFieldParam06Lbl = weightingFieldParam06Lbl;
+      this.weightingFieldParam07REd = weightingFieldParam07REd;
+      this.weightingFieldParam07Lbl = weightingFieldParam07Lbl;
+      this.weightingFieldParam08Cmb = weightingFieldParam08Cmb;
+      this.weightingFieldParam08Lbl = weightingFieldParam08Lbl;
+      this.weightingFieldPreviewImgRootPanel = weightingFieldPreviewImgRootPanel;
   }
 
   public void setEasyMovieMakerParams(JComboBox pSWFAnimatorResolutionProfileCmb, JComboBox pSWFAnimatorQualityProfileCmb) {

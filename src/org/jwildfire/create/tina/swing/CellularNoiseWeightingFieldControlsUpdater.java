@@ -21,6 +21,8 @@ import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.weightingfield.CellularNoiseDistanceFunction;
 import org.jwildfire.create.tina.base.weightingfield.CellularNoiseReturnType;
 
+import javax.swing.*;
+
 public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUpdater {
   private boolean fillingComboBox;
 
@@ -35,10 +37,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
   @Override
   public void updateControls(XForm xform) {
-    controls.weightingFieldTypeCmb.setSelectedItem(xform.getWeightingFieldType());
-    controls.weightingFieldInputCmb.setSelectedItem(xform.getWeightingFieldInput());
-    controls.weightingFieldColorIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldColorIntensity()));
-    controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xform.getWeightingFieldVarAmountIntensity()));
+    super.updateControls(xform);
     controls.weightingFieldParam01REd.setText(String.valueOf(xform.getWeightingFieldNoiseSeed()));
     controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldCellularNoiseReturnType());
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldNoiseFrequency()));
@@ -47,10 +46,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
   @Override
   public void enableControls(XForm xform, boolean enabled) {
-    controls.weightingFieldTypeCmb.setEnabled(enabled);
-    controls.weightingFieldInputCmb.setEnabled(enabled);
-    controls.weightingFieldColorIntensityREd.setEnabled(enabled);
-    controls.weightingFieldVariationIntensityREd.setEnabled(enabled);
+    super.enableControls(xform, enabled);
 
     controls.weightingFieldColorMapFilenameLbl.setVisible(false);
     controls.weightingFieldColorMapFilenameBtn.setVisible(false);

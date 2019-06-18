@@ -23,6 +23,12 @@ public class TinaWeightingFieldControllerData {
   public JComboBox weightingFieldInputCmb;
   public JWFNumberField weightingFieldColorIntensityREd;
   public JWFNumberField weightingFieldVariationIntensityREd;
+  public JWFNumberField weightingFieldVarParam1AmountREd;
+  public JWFNumberField weightingFieldVarParam2AmountREd;
+  public JWFNumberField weightingFieldVarParam3AmountREd;
+  public JComboBox weightingFieldVarParam1NameCmb;
+  public JComboBox weightingFieldVarParam2NameCmb;
+  public JComboBox weightingFieldVarParam3NameCmb;
   public JLabel weightingFieldColorMapFilenameLbl;
   public JButton weightingFieldColorMapFilenameBtn;
   public JLabel weightingFieldColorMapFilenameInfoLbl;
@@ -42,4 +48,5 @@ public class TinaWeightingFieldControllerData {
   public JLabel weightingFieldParam07Lbl;
   public JComboBox weightingFieldParam08Cmb;
   public JLabel weightingFieldParam08Lbl;
+  public JPanel weightingFieldPreviewImgRootPanel;
 }

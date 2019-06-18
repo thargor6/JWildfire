@@ -4827,6 +4827,19 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1AmountREd.setLocation(new Point(70, 47));
       weightingFieldVarParam1AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam1AmountREd.setBounds(92, 69, 70, 22);
+      weightingFieldVarParam1AmountREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightingFieldVarParam1AmountREd.isMouseAdjusting() || weightingFieldVarParam1AmountREd.getMouseChangeCount() == 0) {
+              //if (!weightingFieldVarParam1AmountSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightingFieldVarParam1AmountREd_changed();
+          }
+        }
+      });
+
       tinaWeightMapPanel.add(weightingFieldVarParam1AmountREd);
 
       JLabel lblVarAmount = new JLabel();
@@ -4845,6 +4858,15 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam1NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam1NameCmb.setBounds(165, 69, 157, 22);
+      weightingFieldVarParam1NameCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.weightingFieldVarParam1NameCmb_changed();
+          }
+        }
+      });
+
       tinaWeightMapPanel.add(weightingFieldVarParam1NameCmb);
 
       JLabel lblVarParam = new JLabel();
@@ -4867,6 +4889,18 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2AmountREd.setLocation(new Point(70, 47));
       weightingFieldVarParam2AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam2AmountREd.setBounds(92, 91, 70, 22);
+      weightingFieldVarParam2AmountREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightingFieldVarParam2AmountREd.isMouseAdjusting() || weightingFieldVarParam2AmountREd.getMouseChangeCount() == 0) {
+              //if (!weightingFieldVarParam2AmountSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightingFieldVarParam2AmountREd_changed();
+          }
+        }
+      });
       tinaWeightMapPanel.add(weightingFieldVarParam2AmountREd);
 
       weightingFieldVarParam2NameCmb = new JComboBox();
@@ -4875,6 +4909,14 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam2NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam2NameCmb.setBounds(165, 91, 157, 22);
+      weightingFieldVarParam2NameCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.weightingFieldVarParam2NameCmb_changed();
+          }
+        }
+      });
       tinaWeightMapPanel.add(weightingFieldVarParam2NameCmb);
 
       JLabel lblVarParam_1 = new JLabel();
@@ -4897,6 +4939,18 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3AmountREd.setLocation(new Point(70, 47));
       weightingFieldVarParam3AmountREd.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam3AmountREd.setBounds(92, 113, 70, 22);
+      weightingFieldVarParam3AmountREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!weightingFieldVarParam3AmountREd.isMouseAdjusting() || weightingFieldVarParam3AmountREd.getMouseChangeCount() == 0) {
+              //if (!weightingFieldVarParam3AmountSlider.getValueIsAdjusting()) {
+              tinaController.saveUndoPoint();
+              //}
+            }
+            tinaController.weightingFieldVarParam3AmountREd_changed();
+          }
+        }
+      });
       tinaWeightMapPanel.add(weightingFieldVarParam3AmountREd);
 
       weightingFieldVarParam3NameCmb = new JComboBox();
@@ -4905,6 +4959,14 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3NameCmb.setLocation(new Point(70, 47));
       weightingFieldVarParam3NameCmb.setFont(new Font("Dialog", Font.PLAIN, 10));
       weightingFieldVarParam3NameCmb.setBounds(165, 113, 157, 22);
+      weightingFieldVarParam3NameCmb.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent e) {
+          if (tinaController != null) {
+            tinaController.saveUndoPoint();
+            tinaController.weightingFieldVarParam3NameCmb_changed();
+          }
+        }
+      });
       tinaWeightMapPanel.add(weightingFieldVarParam3NameCmb);
 
       weightingFieldPreviewImgRootPanel = new JPanel();
@@ -5889,8 +5951,8 @@ public class MainEditorFrame extends JFrame {
     initDOFBlurShapeCmb(getDofDOFShapeCmb());
     initBGColorTypoCmb(getBackgroundColorTypeCmb());
     initMeshGenOutputTypeCmb(meshGenFrame.getMeshGenOutputTypeCmb());
-    initWeightMapTypeCmb(getWeightMapTypeCmb());
-    initWeightMapInputTypeCmb(getWeightMapInputCmb());
+    initWeightMapTypeCmb(getWeightingFieldTypeCmb());
+    initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -6100,11 +6162,13 @@ public class MainEditorFrame extends JFrame {
         getBackgroundColorURIndicatorBtn(), getBackgroundColorLLIndicatorBtn(), getBackgroundColorLRIndicatorBtn(), getBackgroundColorTypeCmb(),
         getBackgroundColorCCIndicatorBtn());
 
-    params.setParams4(getWeightMapTypeCmb(), getWeightMapInputCmb(), getWeightMapColorIntensityREd(), getWeightMapVariationIntensityREd(),
-        getWeightMapColorMapFilenameLbl(), getWeightMapColorMapFilenameBtn(), getWeightingFieldColorMapFilenameInfoLbl(),
-        getWeightMapParam01REd(), getWeightMapParam01Lbl(), getWeightMapParam02REd(), getWeightMapParam02Lbl(), getWeightMapParam03REd(), getWeightMapParam03Lbl(),
-        getWeightMapParam04Cmb(), getWeightMapParam04Lbl(), getWeightMapParam05REd(), getWeightMapParam05Lbl(), getWeightMapParam06REd(), getWeightMapParam06Lbl(),
-        getWeightMapParam07REd(), getWeightMapParam07Lbl(), getWeightMapParam08Cmb(), getWeightMapParam08Lbl());
+    params.setParams4(getWeightingFieldTypeCmb(), getWeightingFieldInputCmb(), getWeightingFieldColorIntensityREd(), getWeightingFieldVariationIntensityREd(),
+        getWeightingFieldVarParam1AmountREd(), getWeightingFieldVarParam2AmountREd(), getWeightingFieldVarParam3AmountREd(),
+        getWeightingFieldVarParam1NameCmb(), getWeightingFieldVarParam2NameCmb(), getWeightingFieldVarParam3NameCmb(),
+        getWeightingFieldColorMapFilenameLbl(), getWeightingFieldColorMapFilenameBtn(), getWeightingFieldColorMapFilenameInfoLbl(),
+        getWeightingFieldParam01REd(), getWeightingFieldParam01Lbl(), getWeightingFieldParam02REd(), getWeightingFieldParam02Lbl(), getWeightingFieldParam03REd(), getWeightingFieldParam03Lbl(),
+        getWeightingFieldParam04Cmb(), getWeightingFieldParam04Lbl(), getWeightingFieldParam05REd(), getWeightingFieldParam05Lbl(), getWeightingFieldParam06REd(), getWeightingFieldParam06Lbl(),
+        getWeightingFieldParam07REd(), getWeightingFieldParam07Lbl(), getWeightingFieldParam08Cmb(), getWeightingFieldParam08Lbl(), getWeightingFieldPreviewImgRootPanel());
 
     tinaController = new TinaController(params);
 
@@ -21171,87 +21235,87 @@ public class MainEditorFrame extends JFrame {
     return randomBatchProgressBar;
   }
 
-  public JComboBox getWeightMapTypeCmb() {
+  public JComboBox getWeightingFieldTypeCmb() {
     return weightingFieldTypeCmb;
   }
 
-  public JComboBox getWeightMapInputCmb() {
+  public JComboBox getWeightingFieldInputCmb() {
     return weightingFieldInputCmb;
   }
 
-  public JWFNumberField getWeightMapColorIntensityREd() {
+  public JWFNumberField getWeightingFieldColorIntensityREd() {
     return weightingFieldColorIntensityREd;
   }
 
-  public JWFNumberField getWeightMapVariationIntensityREd() {
+  public JWFNumberField getWeightingFieldVariationIntensityREd() {
     return weightingFieldVariationAmountsREd;
   }
 
-  public JButton getWeightMapColorMapFilenameBtn() {
+  public JButton getWeightingFieldColorMapFilenameBtn() {
     return weightingFieldColorMapFilenameBtn;
   }
 
-  public JWFNumberField getWeightMapParam01REd() {
+  public JWFNumberField getWeightingFieldParam01REd() {
     return weightingFieldParam01REd;
   }
 
-  public JWFNumberField getWeightMapParam02REd() {
+  public JWFNumberField getWeightingFieldParam02REd() {
     return weightingFieldParam02REd;
   }
 
-  public JWFNumberField getWeightMapParam03REd() {
+  public JWFNumberField getWeightingFieldParam03REd() {
     return weightingFieldParam03REd;
   }
 
-  public JComboBox getWeightMapParam04Cmb() {
+  public JComboBox getWeightingFieldParam04Cmb() {
     return weightingFieldParam04Cmb;
   }
 
-  public JWFNumberField getWeightMapParam05REd() {
+  public JWFNumberField getWeightingFieldParam05REd() {
     return weightingFieldParam05REd;
   }
 
-  public JWFNumberField getWeightMapParam06REd() {
+  public JWFNumberField getWeightingFieldParam06REd() {
     return weightingFieldParam06REd;
   }
 
-  public JWFNumberField getWeightMapParam07REd() {
+  public JWFNumberField getWeightingFieldParam07REd() {
     return weightingFieldParam07REd;
   }
 
-  public JComboBox getWeightMapParam08Cmb() {
+  public JComboBox getWeightingFieldParam08Cmb() {
     return weightingFieldParam08Cmb;
   }
 
-  public JLabel getWeightMapParam01Lbl() {
+  public JLabel getWeightingFieldParam01Lbl() {
     return weightingFieldParam01Lbl;
   }
 
-  public JLabel getWeightMapParam02Lbl() {
+  public JLabel getWeightingFieldParam02Lbl() {
     return weightingFieldParam02Lbl;
   }
 
-  public JLabel getWeightMapParam03Lbl() {
+  public JLabel getWeightingFieldParam03Lbl() {
     return weightingFieldParam03Lbl;
   }
 
-  public JLabel getWeightMapParam04Lbl() {
+  public JLabel getWeightingFieldParam04Lbl() {
     return weightingFieldParam04Lbl;
   }
 
-  public JLabel getWeightMapParam05Lbl() {
+  public JLabel getWeightingFieldParam05Lbl() {
     return weightingFieldParam05Lbl;
   }
 
-  public JLabel getWeightMapParam06Lbl() {
+  public JLabel getWeightingFieldParam06Lbl() {
     return weightingFieldParam06Lbl;
   }
 
-  public JLabel getWeightMapParam07Lbl() {
+  public JLabel getWeightingFieldParam07Lbl() {
     return weightingFieldParam07Lbl;
   }
 
-  public JLabel getWeightMapParam08Lbl() {
+  public JLabel getWeightingFieldParam08Lbl() {
     return weightingFieldParam08Lbl;
   }
 
@@ -21270,7 +21334,7 @@ public class MainEditorFrame extends JFrame {
     return weightingFieldColorMapFilenameInfoLbl;
   }
 
-  public JLabel getWeightMapColorMapFilenameLbl() {
+  public JLabel getWeightingFieldColorMapFilenameLbl() {
     return weightingFieldColorMapFilenameLbl;
   }
 

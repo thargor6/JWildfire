@@ -181,7 +181,7 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
     data.xFormDrawModeCmb.setEnabled(enabled);
     data.xFormColorTypeCmb.setEnabled(enabled);
 
-    owner.getWeightMapControlsUpdater().enableControls(xForm, enabled);
+    owner.getWeightMapControlsUpdater(xForm).enableControls(xForm, enabled);
 
     data.relWeightsTable.setEnabled(enabled);
     enableRelWeightsControls();
