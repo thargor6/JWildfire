@@ -349,6 +349,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
   double modHue1;
   double modHue2;
   RenderColor targetRenderColor;
+  double distMult;
+  double oldx, oldy, oldz;
 
   public void initTransform() {
     // precalculate those variables to simplify the expression: 
@@ -360,6 +362,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     if (colorType != ColorType.DIFFUSION && colorType != ColorType.TARGETG) {
       c1 = 1;
       c2 = 0;
+    }
+    if (colorType == ColorType.DISTANCE) {
+      distMult = colorSymmetry + 1;
     }
     if (colorType == ColorType.TARGET) {
       targetRenderColor = new RenderColor(owner.getOwner().getWhiteLevel(), targetColor);
@@ -544,6 +549,9 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
     else if (colorType == ColorType.TARGET || colorType == ColorType.TARGETG) {
       t.add(new TransformationTargetColorStep(this));
+    }
+    else if (colorType == ColorType.DISTANCE) {
+      t.add(new TransformationDistanceColorStep(this));
     }
 
   }

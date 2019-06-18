@@ -6071,6 +6071,7 @@ public class MainEditorFrame extends JFrame {
       getXFormColorTypeCmb().addItem(ColorType.DIFFUSION);
       getXFormColorTypeCmb().addItem(ColorType.TARGET);
       getXFormColorTypeCmb().addItem(ColorType.TARGETG);
+      getXFormColorTypeCmb().addItem(ColorType.DISTANCE);
 
       getTinaSolidRenderingMaterialDiffuseResponseCmb().removeAllItems();
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA);
