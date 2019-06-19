@@ -1,4 +1,4 @@
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.base.weightingfield;
 
 public enum WeightingFieldInputType {
 

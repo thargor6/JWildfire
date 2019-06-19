@@ -81,7 +81,7 @@ import org.jwildfire.create.tina.base.EditPlane;
 import org.jwildfire.create.tina.base.Flame;
 import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.WeightingFieldType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.batch.BatchRendererController;

@@ -17,10 +17,15 @@
 package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.base.Tools;
-import org.jwildfire.create.tina.base.WeightingFieldInputType;
-import org.jwildfire.create.tina.base.WeightingFieldType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.plot.ParPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot2DWFFunc;
+import org.jwildfire.create.tina.variation.plot.YPlot3DWFFunc;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -237,8 +242,11 @@ public abstract class WeightingFieldControlsUpdater {
 
   static {
     VARIATION_BLACK_LIST = new ArrayList<>();
-    VARIATION_BLACK_LIST.add("subflame_wf");
-    VARIATION_BLACK_LIST.add("iflames_wf");
+    VARIATION_BLACK_LIST.add(new SubFlameWFFunc().getName());
+    VARIATION_BLACK_LIST.add(new IFlamesFunc().getName());
+    VARIATION_BLACK_LIST.add(new ParPlot2DWFFunc().getName());
+    VARIATION_BLACK_LIST.add(new YPlot2DWFFunc().getName());
+    VARIATION_BLACK_LIST.add(new YPlot3DWFFunc().getName());
   }
 
   public static String encodeVarNameParamName(String varName, String paramName) {

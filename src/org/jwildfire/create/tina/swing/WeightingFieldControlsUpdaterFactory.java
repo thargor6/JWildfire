@@ -16,7 +16,7 @@
 */
 package org.jwildfire.create.tina.swing;
 
-import org.jwildfire.create.tina.base.WeightingFieldType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 
 import java.util.HashMap;
 import java.util.Map;

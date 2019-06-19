@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="JWildfire" basedir="." default="packageDist">
-  <property name="release" value="4.20" />
+  <property name="release" value="4.50" />
   <property name="dist.dir" location="build/dist" />
   <property name="installer.dir" location="build/installer" />
 	<property name="build.dir" location="build/classes" />
@@ -66,6 +66,7 @@
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/lsystems.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/mesh/lsystems3D.txt"/>
       <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/variation/variation_costs.txt"/>
+      <fileset dir="${src.dir}" includes="org/jwildfire/create/tina/base/weightingfield/mb3dhm.jpg"/>
 	  <fileset dir="${build.dir}" includes="csk/"/>
       <fileset dir="${build.dir}" includes="com/"/>
       <fileset dir="${build.dir}" includes="odk/"/>
@@ -73,7 +74,8 @@
       <fileset dir="${build.dir}" includes="megamu/"/>
 	  <fileset dir="${build.dir}" includes="js/"/>
 	  <fileset dir="${build.dir}" includes="hehl/"/>
-      <zipfileset src="lib/quickhull3d.1.4.jar"/>		
+      <fileset dir="${build.dir}" includes="fastnoise/"/>
+      <zipfileset src="lib/quickhull3d.1.4.jar"/>
       <zipfileset src="lib/jep-2.4.1.jar"/>
       <zipfileset src="lib/sunflow.jar"/>
       <zipfileset src="lib/janino.jar"/>
@@ -84,6 +86,7 @@
       <zipfileset src="lib/colt-1.2.0.jar"/>
       <zipfileset src="lib/JOCL-0.1.9.jar"/>
       <zipfileset src="lib/jsyntaxpane-1.1.5.jar"/>
+      <zipfileset src="lib/vecmath-1.5.1.jar"/>
       <zipfileset src="lib/LeapJava.jar" includes="**/*.class"/>
       <zipfileset src="lib/oobj-loader.jar" includes="**/*.class"/>
 	  <zipfileset src="lib/j-wildfire-lib.jar"/>

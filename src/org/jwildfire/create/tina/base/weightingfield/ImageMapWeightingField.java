@@ -5,10 +5,15 @@ import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
+import org.jwildfire.io.ImageReader;
+
+import java.net.URL;
 
 public class ImageMapWeightingField implements WeightingField {
   private SimpleImage image = null;
-  // "D:\\TMP\\mb3dhm.jpg"
+  private final String DFLT_IMAGE_RESOURCE_NAME = ImageMapWeightingField.class.getName()+"_DFLT_IMG.jpg";
+  public static final String DFLT_IMAGE_FILE_NAME = "mb3dhm.jpg";
+
   private String imageFilename;
   private double xCentre = 0.0;
   private double yCentre = 0.0;
@@ -18,12 +23,18 @@ public class ImageMapWeightingField implements WeightingField {
   @Override
   public double getValue(FlameTransformationContext pContext, double x, double y, double z) {
     if(image==null) {
-      if(imageFilename==null || imageFilename.length()==0) {
-        return 0.0;
-      }
       try {
-        image = (SimpleImage) RessourceManager.getImage(imageFilename);
-      } catch (Exception e) {
+        if (imageFilename == null || imageFilename.length() == 0) {
+          image = getDefaultImage();
+        }
+        else {
+          image = (SimpleImage) RessourceManager.getImage(imageFilename);
+        }
+        if(image==null) {
+          return 0.0;
+        }
+      }
+      catch (Exception e) {
         e.printStackTrace();
         return 0.0;
       }
@@ -44,12 +55,25 @@ public class ImageMapWeightingField implements WeightingField {
     return noise;
   }
 
+  private SimpleImage getDefaultImage() throws Exception {
+    SimpleImage image = (SimpleImage) RessourceManager.getRessource(DFLT_IMAGE_RESOURCE_NAME);
+    if(image==null) {
+      URL url = getClass().getResource(DFLT_IMAGE_FILE_NAME);
+      image = new ImageReader().loadImage(url);
+      if(image!=null) {
+        RessourceManager.putRessource(DFLT_IMAGE_RESOURCE_NAME, image);
+      }
+    }
+    return image;
+  }
+
   public String getImageFilename() {
     return imageFilename;
   }
 
   public void setImageFilename(String imageFilename) {
     this.imageFilename = imageFilename;
+    this.image = null;
   }
 
   public double getxCentre() {

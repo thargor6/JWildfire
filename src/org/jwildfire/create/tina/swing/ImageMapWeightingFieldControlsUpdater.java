@@ -19,6 +19,7 @@ package org.jwildfire.create.tina.swing;
 import org.jwildfire.base.Prefs;
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.weightingfield.ImageMapWeightingField;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.image.WFImage;
@@ -76,7 +77,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   @Override
   public void updateControls(XForm xform) {
     super.updateControls(xform);
-    controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : "(empty)");
+    controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
     controls.weightingFieldParam01REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXCentre()));
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYCentre()));
     controls.weightingFieldParam02REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXSize()));

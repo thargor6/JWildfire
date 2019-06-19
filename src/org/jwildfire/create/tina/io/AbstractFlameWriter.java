@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -50,19 +50,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
-import org.jwildfire.create.tina.base.BGColorType;
-import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.ColorType;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.*;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
@@ -71,45 +67,101 @@ import org.jwildfire.create.tina.variation.VariationFunc;
 
 public class AbstractFlameWriter {
 
-  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder pXB, Layer pLayer, XForm pXForm) throws Exception {
+  protected List<SimpleXMLBuilder.Attribute<?>> createXFormAttrList(SimpleXMLBuilder xb, Layer layer, XForm xForm) throws Exception {
     List<SimpleXMLBuilder.Attribute<?>> attrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
-    attrList.add(pXB.createAttr("weight", pXForm.getWeight()));
-    if (pXForm.getColorType() != ColorType.UNSET) attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, pXForm.getColorType().toString()));
-    if (pXForm.getColorType() == ColorType.TARGET) {
-      RGBColor targetColor = pXForm.getTargetColor();
-      attrList.add(pXB.createAttr("targetcolor", (double) targetColor.getRed() / 255.0 + " " + (double) targetColor.getGreen() / 255.0 + " " + (double) targetColor.getBlue() / 255.0));
+    attrList.add(xb.createAttr("weight", xForm.getWeight()));
+    if (xForm.getColorType() != ColorType.UNSET) attrList.add(xb.createAttr(AbstractFlameReader.ATTR_COLOR_TYPE, xForm.getColorType().toString()));
+    if (xForm.getColorType() == ColorType.TARGET) {
+      RGBColor targetColor = xForm.getTargetColor();
+      attrList.add(xb.createAttr("targetcolor", (double) targetColor.getRed() / 255.0 + " " + (double) targetColor.getGreen() / 255.0 + " " + (double) targetColor.getBlue() / 255.0));
     }
     else {
-      attrList.add(pXB.createAttr("color", pXForm.getColor()));
+      attrList.add(xb.createAttr("color", xForm.getColor()));
     }
-    attrList.add(pXB.createAttr("symmetry", pXForm.getColorSymmetry()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, pXForm.getMirrorTranslations() ? 1 : 0));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL, pXForm.getMaterial()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, pXForm.getMaterialSpeed()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, pXForm.getModGamma()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA_SPEED, pXForm.getModGammaSpeed()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST, pXForm.getModContrast()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST_SPEED, pXForm.getModContrastSpeed()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION, pXForm.getModSaturation()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION_SPEED, pXForm.getModSaturationSpeed()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE, pXForm.getModHue()));
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_MOD_HUE_SPEED, pXForm.getModHueSpeed()));
-    if (pXForm.getDrawMode().equals(DrawMode.OPAQUE)) {
-      attrList.add(pXB.createAttr("opacity", pXForm.getOpacity()));
+    attrList.add(xb.createAttr("symmetry", xForm.getColorSymmetry()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MIRROR_PRE_POST_TRANSLATIONS, xForm.getMirrorTranslations() ? 1 : 0));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MATERIAL, xForm.getMaterial()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MATERIAL_SPEED, xForm.getMaterialSpeed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA, xForm.getModGamma()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_GAMMA_SPEED, xForm.getModGammaSpeed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST, xForm.getModContrast()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_CONTRAST_SPEED, xForm.getModContrastSpeed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION, xForm.getModSaturation()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_SATURATION_SPEED, xForm.getModSaturationSpeed()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_HUE, xForm.getModHue()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_MOD_HUE_SPEED, xForm.getModHueSpeed()));
+    if (xForm.getDrawMode().equals(DrawMode.OPAQUE)) {
+      attrList.add(xb.createAttr("opacity", xForm.getOpacity()));
     }
-    else if (pXForm.getDrawMode().equals(DrawMode.HIDDEN)) {
-      attrList.add(pXB.createAttr("opacity", 0.0));
+    else if (xForm.getDrawMode().equals(DrawMode.HIDDEN)) {
+      attrList.add(xb.createAttr("opacity", 0.0));
+    }
+    if(xForm.getWeightingFieldType()!=null && !WeightingFieldType.NONE.equals(xForm.getWeightingFieldType())) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_TYPE, xForm.getWeightingFieldType().name()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_INPUT, xForm.getWeightingFieldInput().name()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_COLOR_INTENSITY, xForm.getWeightingFieldColorIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_AMOUNT_INTENSITY, xForm.getWeightingFieldVarAmountIntensity()));
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM1_INTENSITY, xForm.getWeightingFieldVarParam1Intensity()));
+      if(MathLib.fabs(xForm.getWeightingFieldVarParam1Intensity())>EPSILON) {
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM1_VAR_NAME, xForm.getWeightingFieldVarParam1VarName()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM1_PARAM_NAME, xForm.getWeightingFieldVarParam1ParamName()));
+      }
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM2_INTENSITY, xForm.getWeightingFieldVarParam2Intensity()));
+      if(MathLib.fabs(xForm.getWeightingFieldVarParam2Intensity())>EPSILON) {
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM2_VAR_NAME, xForm.getWeightingFieldVarParam2VarName()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM2_PARAM_NAME, xForm.getWeightingFieldVarParam2ParamName()));
+      }
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM3_INTENSITY, xForm.getWeightingFieldVarParam3Intensity()));
+      if(MathLib.fabs(xForm.getWeightingFieldVarParam3Intensity())>EPSILON) {
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM3_VAR_NAME, xForm.getWeightingFieldVarParam3VarName()));
+        attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_VAR_PARAM3_PARAM_NAME, xForm.getWeightingFieldVarParam3ParamName()));
+      }
+      switch(xForm.getWeightingFieldType()) {
+        case CELLULAR_NOISE:
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_FREQUENY, xForm.getWeightingFieldNoiseFrequency()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CELL_NOISE_RETURN_TYPE, xForm.getWeightingFieldCellularNoiseReturnType().name()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CELL_NOISE_DIST_FUNCTION, xForm.getWeightingFieldCellularNoiseDistanceFunction().name()));
+          break;
+        case CUBIC_NOISE:
+        case PERLIN_NOISE:
+        case SIMPLEX_NOISE:
+        case VALUE_NOISE:
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_FREQUENY, xForm.getWeightingFieldNoiseFrequency()));
+          break;
+        case CUBIC_FRACTAL_NOISE:
+        case PERLIN_FRACTAL_NOISE:
+        case SIMPLEX_FRACTAL_NOISE_NOISE:
+        case VALUE_FRACTAL_NOISE:
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_FREQUENY, xForm.getWeightingFieldNoiseFrequency()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_TYPE, xForm.getWeightingFieldFractalNoiseType().name()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_GAIN, xForm.getWeightingFieldFractalNoiseGain()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_LACUNARITY, xForm.getWeightingFieldFractalNoiseLacunarity()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_OCTAVES, xForm.getWeightingFieldFractalNoiseOctaves()));
+          break;
+        case IMAGE_MAP:
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CMAP_FILENAME, xForm.getWeightingFieldColorMapFilename()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CMAP_XSIZE, xForm.getWeightingFieldColorMapXSize()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CMAP_YSIZE, xForm.getWeightingFieldColorMapYSize()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CMAP_XCENTRE, xForm.getWeightingFieldColorMapXCentre()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_CMAP_YCENTRE, xForm.getWeightingFieldColorMapYCentre()));
+          break;
+        default:
+          throw new RuntimeException("Weighting-field-type <" + xForm.getWeightingFieldType() +"> not supported");
+      }
     }
 
     UniqueNamesMaker namesMaker = new UniqueNamesMaker();
-    for (int vIdx = 0; vIdx < pXForm.getVariationCount(); vIdx++) {
-      Variation v = pXForm.getVariation(vIdx);
+    for (int vIdx = 0; vIdx < xForm.getVariationCount(); vIdx++) {
+      Variation v = xForm.getVariation(vIdx);
       VariationFunc func = v.getFunc();
 
       String fName = namesMaker.makeUnique(func.getName());
 
-      attrList.add(pXB.createAttr(fName, v.getAmount()));
-      attrList.add(pXB.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
+      attrList.add(xb.createAttr(fName, v.getAmount()));
+      attrList.add(xb.createAttr(fName + "_" + AbstractFlameReader.ATTR_FX_PRIORITY, v.getPriority()));
       // params
       {
         String params[] = func.getParameterNames();
@@ -117,24 +169,24 @@ public class AbstractFlameWriter {
           Object vals[] = func.getParameterValues();
           for (int i = 0; i < params.length; i++) {
             if (vals[i] instanceof Integer) {
-              attrList.add(pXB.createAttr((fName + "_" + params[i]), (Integer) vals[i]));
+              attrList.add(xb.createAttr((fName + "_" + params[i]), (Integer) vals[i]));
             }
             else if (vals[i] instanceof Double) {
-              attrList.add(pXB.createAttr((fName + "_" + params[i]), (Double) vals[i]));
+              attrList.add(xb.createAttr((fName + "_" + params[i]), (Double) vals[i]));
             }
             else {
               throw new IllegalStateException();
             }
             MotionCurve curve = v.getMotionCurve(params[i]);
             if (curve != null) {
-              writeMotionCurve(pXB, attrList, fName + "_" + params[i], curve);
+              writeMotionCurve(xb, attrList, fName + "_" + params[i], curve);
             }
           }
         }
       }
       // curves
       List<String> blackList = Collections.emptyList();
-      writeMotionCurves(v, pXB, attrList, fName + "_", blackList);
+      writeMotionCurves(v, xb, attrList, fName + "_", blackList);
       // ressources
       {
         String ressNames[] = func.getRessourceNames();
@@ -142,44 +194,44 @@ public class AbstractFlameWriter {
           byte vals[][] = func.getRessourceValues();
           for (int i = 0; i < ressNames.length; i++) {
             String hexStr = vals[i] != null && vals[i].length > 0 ? Tools.byteArrayToHexString(vals[i]) : "";
-            attrList.add(pXB.createAttr((fName + "_" + ressNames[i]), hexStr));
+            attrList.add(xb.createAttr((fName + "_" + ressNames[i]), hexStr));
           }
         }
       }
     }
 
-    attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_XY_COEFS, pXForm.getXYCoeff00() + " " + pXForm.getXYCoeff01() + " " + pXForm.getXYCoeff10() + " " + pXForm.getXYCoeff11() + " " + pXForm.getXYCoeff20() + " " + pXForm.getXYCoeff21()));
-    if (pXForm.isHasXYPostCoeffs()) {
-      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_XY_POST, pXForm.getXYPostCoeff00() + " " + pXForm.getXYPostCoeff01() + " " + pXForm.getXYPostCoeff10() + " " + pXForm.getXYPostCoeff11() + " " + pXForm.getXYPostCoeff20() + " " + pXForm.getXYPostCoeff21()));
+    attrList.add(xb.createAttr(AbstractFlameReader.ATTR_XY_COEFS, xForm.getXYCoeff00() + " " + xForm.getXYCoeff01() + " " + xForm.getXYCoeff10() + " " + xForm.getXYCoeff11() + " " + xForm.getXYCoeff20() + " " + xForm.getXYCoeff21()));
+    if (xForm.isHasXYPostCoeffs()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_XY_POST, xForm.getXYPostCoeff00() + " " + xForm.getXYPostCoeff01() + " " + xForm.getXYPostCoeff10() + " " + xForm.getXYPostCoeff11() + " " + xForm.getXYPostCoeff20() + " " + xForm.getXYPostCoeff21()));
     }
-    if (pXForm.isHasYZCoeffs()) {
-      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_YZ_COEFS, pXForm.getYZCoeff00() + " " + pXForm.getYZCoeff01() + " " + pXForm.getYZCoeff10() + " " + pXForm.getYZCoeff11() + " " + pXForm.getYZCoeff20() + " " + pXForm.getYZCoeff21()));
+    if (xForm.isHasYZCoeffs()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_YZ_COEFS, xForm.getYZCoeff00() + " " + xForm.getYZCoeff01() + " " + xForm.getYZCoeff10() + " " + xForm.getYZCoeff11() + " " + xForm.getYZCoeff20() + " " + xForm.getYZCoeff21()));
     }
-    if (pXForm.isHasYZPostCoeffs()) {
-      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_YZ_POST, pXForm.getYZPostCoeff00() + " " + pXForm.getYZPostCoeff01() + " " + pXForm.getYZPostCoeff10() + " " + pXForm.getYZPostCoeff11() + " " + pXForm.getYZPostCoeff20() + " " + pXForm.getYZPostCoeff21()));
+    if (xForm.isHasYZPostCoeffs()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_YZ_POST, xForm.getYZPostCoeff00() + " " + xForm.getYZPostCoeff01() + " " + xForm.getYZPostCoeff10() + " " + xForm.getYZPostCoeff11() + " " + xForm.getYZPostCoeff20() + " " + xForm.getYZPostCoeff21()));
     }
-    if (pXForm.isHasZXCoeffs()) {
-      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_ZX_COEFS, pXForm.getZXCoeff00() + " " + pXForm.getZXCoeff01() + " " + pXForm.getZXCoeff10() + " " + pXForm.getZXCoeff11() + " " + pXForm.getZXCoeff20() + " " + pXForm.getZXCoeff21()));
+    if (xForm.isHasZXCoeffs()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZX_COEFS, xForm.getZXCoeff00() + " " + xForm.getZXCoeff01() + " " + xForm.getZXCoeff10() + " " + xForm.getZXCoeff11() + " " + xForm.getZXCoeff20() + " " + xForm.getZXCoeff21()));
     }
-    if (pXForm.isHasZXPostCoeffs()) {
-      attrList.add(pXB.createAttr(AbstractFlameReader.ATTR_ZX_POST, pXForm.getZXPostCoeff00() + " " + pXForm.getZXPostCoeff01() + " " + pXForm.getZXPostCoeff10() + " " + pXForm.getZXPostCoeff11() + " " + pXForm.getZXPostCoeff20() + " " + pXForm.getZXPostCoeff21()));
+    if (xForm.isHasZXPostCoeffs()) {
+      attrList.add(xb.createAttr(AbstractFlameReader.ATTR_ZX_POST, xForm.getZXPostCoeff00() + " " + xForm.getZXPostCoeff01() + " " + xForm.getZXPostCoeff10() + " " + xForm.getZXPostCoeff11() + " " + xForm.getZXPostCoeff20() + " " + xForm.getZXPostCoeff21()));
     }
     {
       String hs = "";
-      for (int i = 0; i < pLayer.getXForms().size() - 1; i++) {
-        hs += pXForm.getModifiedWeights()[i] + " ";
+      for (int i = 0; i < layer.getXForms().size() - 1; i++) {
+        hs += xForm.getModifiedWeights()[i] + " ";
       }
-      hs += pXForm.getModifiedWeights()[pLayer.getXForms().size() - 1];
-      attrList.add(pXB.createAttr("chaos", hs));
+      hs += xForm.getModifiedWeights()[layer.getXForms().size() - 1];
+      attrList.add(xb.createAttr("chaos", hs));
     }
 
-    String xName = pXForm.getName().replaceAll("\"", "");
+    String xName = xForm.getName().replaceAll("\"", "");
     if (!xName.equals("")) {
-      attrList.add(pXB.createAttr("name", xName));
+      attrList.add(xb.createAttr("name", xName));
     }
 
     List<String> blackList = Collections.emptyList();
-    writeMotionCurves(pXForm, pXB, attrList, null, blackList);
+    writeMotionCurves(xForm, xb, attrList, null, blackList);
     return attrList;
   }
 

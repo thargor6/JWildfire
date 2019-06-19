@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -26,22 +26,14 @@ import org.jwildfire.base.Tools.XMLAttributes;
 import org.jwildfire.base.mathlib.MathLib;
 import org.jwildfire.create.tina.animate.AnimationService;
 import org.jwildfire.create.tina.animate.AnimationService.MotionCurveAttribute;
-import org.jwildfire.create.tina.base.BGColorType;
-import org.jwildfire.create.tina.base.DrawMode;
-import org.jwildfire.create.tina.base.ColorType;
-import org.jwildfire.create.tina.base.Flame;
-import org.jwildfire.create.tina.base.Layer;
-import org.jwildfire.create.tina.base.PostSymmetryType;
-import org.jwildfire.create.tina.base.Stereo3dColor;
-import org.jwildfire.create.tina.base.Stereo3dMode;
-import org.jwildfire.create.tina.base.Stereo3dPreview;
-import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.*;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
 import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.weightingfield.*;
 import org.jwildfire.create.tina.palette.RGBColor;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShape;
@@ -902,29 +894,56 @@ public class AbstractFlameReader {
   public static final String ATTR_ZBUFFER_SCALE = "zbuffer_scale";
   public static final String ATTR_MIRROR_PRE_POST_TRANSLATIONS = "mirror_pre_post_translations";
 
-  protected void parseXFormAttributes(Flame pFlame, XForm pXForm, String pXML) {
-    XMLAttributes atts = Tools.parseAttributes(pXML);
+  public static final String ATTR_WFIELD_TYPE = "wfield_type";
+  public static final String ATTR_WFIELD_INPUT = "wfield_input";
+  public static final String ATTR_WFIELD_COLOR_INTENSITY = "wfield_color_intensity";
+  public static final String ATTR_WFIELD_VAR_AMOUNT_INTENSITY = "wfield_var_amount_intensity";
+  public static final String ATTR_WFIELD_VAR_PARAM1_INTENSITY = "wfield_var_param1_intensity";
+  public static final String ATTR_WFIELD_VAR_PARAM1_VAR_NAME = "wfield_var_param1_var_name";
+  public static final String ATTR_WFIELD_VAR_PARAM1_PARAM_NAME = "wfield_var_param1_param_name";
+  public static final String ATTR_WFIELD_VAR_PARAM2_INTENSITY = "wfield_var_param2_intensity";
+  public static final String ATTR_WFIELD_VAR_PARAM2_VAR_NAME = "wfield_var_param2_var_name";
+  public static final String ATTR_WFIELD_VAR_PARAM2_PARAM_NAME = "wfield_var_param2_param_name";
+  public static final String ATTR_WFIELD_VAR_PARAM3_INTENSITY = "wfield_var_param3_intensity";
+  public static final String ATTR_WFIELD_VAR_PARAM3_VAR_NAME = "wfield_var_param3_var_name";
+  public static final String ATTR_WFIELD_VAR_PARAM3_PARAM_NAME = "wfield_var_param3_param_name";
+  public static final String ATTR_WFIELD_CMAP_FILENAME = "wfield_cmap_filename";
+  public static final String ATTR_WFIELD_CMAP_XSIZE = "wfield_cmap_xsize";
+  public static final String ATTR_WFIELD_CMAP_YSIZE = "wfield_cmap_ysize";
+  public static final String ATTR_WFIELD_CMAP_XCENTRE = "wfield_cmap_xcentre";
+  public static final String ATTR_WFIELD_CMAP_YCENTRE = "wfield_cmap_ycentre";
+  public static final String ATTR_WFIELD_NOISE_SEED = "wfield_noise_seed";
+  public static final String ATTR_WFIELD_NOISE_FREQUENY = "wfield_noise_frequency";
+  public static final String ATTR_WFIELD_FRACT_NOISE_TYPE = "wfield_fract_noise_type";
+  public static final String ATTR_WFIELD_FRACT_NOISE_GAIN = "wfield_fract_noise_gain";
+  public static final String ATTR_WFIELD_FRACT_NOISE_LACUNARITY = "wfield_fract_noise_lacunarity";
+  public static final String ATTR_WFIELD_FRACT_NOISE_OCTAVES = "wfield_fract_noise_octaves";
+  public static final String ATTR_WFIELD_CELL_NOISE_RETURN_TYPE = "wfield_cell_noise_return_type";
+  public static final String ATTR_WFIELD_CELL_NOISE_DIST_FUNCTION = "wfield_cell_noise_dist_function";
+
+  protected void parseXFormAttributes(Flame flame, XForm xForm, String xml) {
+    XMLAttributes atts = Tools.parseAttributes(xml);
     String hs;
     if ((hs = atts.get(ATTR_NAME)) != null) {
-      pXForm.setName(hs);
+      xForm.setName(hs);
     }
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
-      pXForm.setWeight(Double.parseDouble(hs));
+      xForm.setWeight(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MIRROR_PRE_POST_TRANSLATIONS)) != null) {
       double val = Double.parseDouble(hs);
-      pXForm.setMirrorTranslations(val == 1);
+      xForm.setMirrorTranslations(val == 1);
     }
     if ((hs = atts.get(ATTR_COLOR_TYPE)) != null) {
       try {
-        pXForm.setColorType(ColorType.valueOf(hs));
+        xForm.setColorType(ColorType.valueOf(hs));
       }
       catch (Exception ex) {
         ex.printStackTrace();
       }
     }
     if ((hs = atts.get(ATTR_COLOR)) != null) {
-      pXForm.setColor(Double.parseDouble(hs));
+      xForm.setColor(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_TARGETCOLOR)) != null) {
       String s[] = hs.split(" ");
@@ -932,128 +951,233 @@ public class AbstractFlameReader {
       r = Tools.roundColor(255.0 * Double.parseDouble(s[0]));
       g = Tools.roundColor(255.0 * Double.parseDouble(s[1]));
       b = Tools.roundColor(255.0 * Double.parseDouble(s[2]));
-      pXForm.setTargetColor(new RGBColor(r, g, b));
+      xForm.setTargetColor(new RGBColor(r, g, b));
     }
     if ((hs = atts.get(ATTR_MATERIAL)) != null) {
-      pXForm.setMaterial(Double.parseDouble(hs));
+      xForm.setMaterial(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MATERIAL_SPEED)) != null) {
-      pXForm.setMaterialSpeed(Double.parseDouble(hs));
+      xForm.setMaterialSpeed(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_GAMMA)) != null) {
-      pXForm.setModGamma(Double.parseDouble(hs));
+      xForm.setModGamma(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_GAMMA_SPEED)) != null) {
-      pXForm.setModGammaSpeed(Double.parseDouble(hs));
+      xForm.setModGammaSpeed(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_CONTRAST)) != null) {
-      pXForm.setModContrast(Double.parseDouble(hs));
+      xForm.setModContrast(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_CONTRAST_SPEED)) != null) {
-      pXForm.setModContrastSpeed(Double.parseDouble(hs));
+      xForm.setModContrastSpeed(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_SATURATION)) != null) {
-      pXForm.setModSaturation(Double.parseDouble(hs));
+      xForm.setModSaturation(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_SATURATION_SPEED)) != null) {
-      pXForm.setModSaturationSpeed(Double.parseDouble(hs));
+      xForm.setModSaturationSpeed(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_HUE)) != null) {
-      pXForm.setModHue(Double.parseDouble(hs));
+      xForm.setModHue(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_MOD_HUE_SPEED)) != null) {
-      pXForm.setModHueSpeed(Double.parseDouble(hs));
+      xForm.setModHueSpeed(Double.parseDouble(hs));
     }
     // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_AMOUNT)) != null) {
       double value = Double.parseDouble(hs);
       if (value > 0)
-        pFlame.setAntialiasAmount(value);
+        flame.setAntialiasAmount(value);
     }
     // legacy
     if ((hs = atts.get(ATTR_ANTIALIAS_RADIUS)) != null) {
       double value = Double.parseDouble(hs);
       if (value > 0)
-        pFlame.setAntialiasRadius(value);
+        flame.setAntialiasRadius(value);
     }
 
     if ((hs = atts.get(ATTR_OPACITY)) != null) {
       double opacity = Double.parseDouble(hs);
-      pXForm.setOpacity(opacity);
+      xForm.setOpacity(opacity);
       if (Math.abs(opacity) <= MathLib.EPSILON) {
-        pXForm.setDrawMode(DrawMode.HIDDEN);
+        xForm.setDrawMode(DrawMode.HIDDEN);
       }
       else if (Math.abs(opacity - 1.0) > MathLib.EPSILON) {
-        pXForm.setDrawMode(DrawMode.OPAQUE);
+        xForm.setDrawMode(DrawMode.OPAQUE);
       }
       else {
-        pXForm.setDrawMode(DrawMode.NORMAL);
+        xForm.setDrawMode(DrawMode.NORMAL);
       }
     }
     if ((hs = atts.get(ATTR_SYMMETRY)) != null) {
-      pXForm.setColorSymmetry(Double.parseDouble(hs));
+      xForm.setColorSymmetry(Double.parseDouble(hs));
     }
+
+    if ((hs = atts.get(ATTR_WFIELD_TYPE)) != null) {
+      try {
+        xForm.setWeightingFieldType(WeightingFieldType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_WFIELD_INPUT)) != null) {
+      try {
+        xForm.setWeightingFieldInput(WeightingFieldInputType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_WFIELD_COLOR_INTENSITY)) != null) {
+      xForm.setWeightingFieldColorIntensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_AMOUNT_INTENSITY)) != null) {
+      xForm.setWeightingFieldVarAmountIntensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM1_INTENSITY)) != null) {
+      xForm.setWeightingFieldVarParam1Intensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM1_VAR_NAME)) != null) {
+      xForm.setWeightingFieldVarParam1VarName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM1_PARAM_NAME)) != null) {
+      xForm.setWeightingFieldVarParam1ParamName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM2_INTENSITY)) != null) {
+      xForm.setWeightingFieldVarParam2Intensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM2_VAR_NAME)) != null) {
+      xForm.setWeightingFieldVarParam2VarName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM2_PARAM_NAME)) != null) {
+      xForm.setWeightingFieldVarParam2ParamName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM3_INTENSITY)) != null) {
+      xForm.setWeightingFieldVarParam3Intensity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM3_VAR_NAME)) != null) {
+      xForm.setWeightingFieldVarParam3VarName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_VAR_PARAM3_PARAM_NAME)) != null) {
+      xForm.setWeightingFieldVarParam3ParamName(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CMAP_FILENAME)) != null) {
+      xForm.setWeightingFieldColorMapFilename(hs);
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CMAP_XSIZE)) != null) {
+      xForm.setWeightingFieldColorMapXSize(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CMAP_YSIZE)) != null) {
+      xForm.setWeightingFieldColorMapYSize(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CMAP_XCENTRE)) != null) {
+      xForm.setWeightingFieldColorMapXCentre(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CMAP_YCENTRE)) != null) {
+      xForm.setWeightingFieldColorMapYCentre(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_NOISE_SEED)) != null) {
+      xForm.setWeightingFieldNoiseSeed(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_NOISE_FREQUENY)) != null) {
+      xForm.setWeightingFieldNoiseFrequency(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_TYPE)) != null) {
+      try {
+        xForm.setWeightingFieldFractalNoiseType(FractalNoiseType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_GAIN)) != null) {
+      xForm.setWeightingFieldFractalNoiseGain(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_LACUNARITY)) != null) {
+      xForm.setWeightingFieldFractalNoiseLacunarity(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_OCTAVES)) != null) {
+      xForm.setWeightingFieldFractalNoiseOctaves(Integer.parseInt(hs));
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CELL_NOISE_RETURN_TYPE)) != null) {
+      try {
+        xForm.setWeightingFieldCellularNoiseReturnType(CellularNoiseReturnType.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    if ((hs = atts.get(ATTR_WFIELD_CELL_NOISE_DIST_FUNCTION)) != null) {
+      try {
+        xForm.setWeightingFieldCellularNoiseDistanceFunction(CellularNoiseDistanceFunction.valueOf(hs));
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
     if ((hs = atts.get(ATTR_XY_COEFS)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setXYCoeff00(Double.parseDouble(s[0]));
-      pXForm.setXYCoeff01(Double.parseDouble(s[1]));
-      pXForm.setXYCoeff10(Double.parseDouble(s[2]));
-      pXForm.setXYCoeff11(Double.parseDouble(s[3]));
-      pXForm.setXYCoeff20(Double.parseDouble(s[4]));
-      pXForm.setXYCoeff21(Double.parseDouble(s[5]));
+      xForm.setXYCoeff00(Double.parseDouble(s[0]));
+      xForm.setXYCoeff01(Double.parseDouble(s[1]));
+      xForm.setXYCoeff10(Double.parseDouble(s[2]));
+      xForm.setXYCoeff11(Double.parseDouble(s[3]));
+      xForm.setXYCoeff20(Double.parseDouble(s[4]));
+      xForm.setXYCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_XY_POST)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setXYPostCoeff00(Double.parseDouble(s[0]));
-      pXForm.setXYPostCoeff01(Double.parseDouble(s[1]));
-      pXForm.setXYPostCoeff10(Double.parseDouble(s[2]));
-      pXForm.setXYPostCoeff11(Double.parseDouble(s[3]));
-      pXForm.setXYPostCoeff20(Double.parseDouble(s[4]));
-      pXForm.setXYPostCoeff21(Double.parseDouble(s[5]));
+      xForm.setXYPostCoeff00(Double.parseDouble(s[0]));
+      xForm.setXYPostCoeff01(Double.parseDouble(s[1]));
+      xForm.setXYPostCoeff10(Double.parseDouble(s[2]));
+      xForm.setXYPostCoeff11(Double.parseDouble(s[3]));
+      xForm.setXYPostCoeff20(Double.parseDouble(s[4]));
+      xForm.setXYPostCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_YZ_COEFS)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setYZCoeff00(Double.parseDouble(s[0]));
-      pXForm.setYZCoeff01(Double.parseDouble(s[1]));
-      pXForm.setYZCoeff10(Double.parseDouble(s[2]));
-      pXForm.setYZCoeff11(Double.parseDouble(s[3]));
-      pXForm.setYZCoeff20(Double.parseDouble(s[4]));
-      pXForm.setYZCoeff21(Double.parseDouble(s[5]));
+      xForm.setYZCoeff00(Double.parseDouble(s[0]));
+      xForm.setYZCoeff01(Double.parseDouble(s[1]));
+      xForm.setYZCoeff10(Double.parseDouble(s[2]));
+      xForm.setYZCoeff11(Double.parseDouble(s[3]));
+      xForm.setYZCoeff20(Double.parseDouble(s[4]));
+      xForm.setYZCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_YZ_POST)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setYZPostCoeff00(Double.parseDouble(s[0]));
-      pXForm.setYZPostCoeff01(Double.parseDouble(s[1]));
-      pXForm.setYZPostCoeff10(Double.parseDouble(s[2]));
-      pXForm.setYZPostCoeff11(Double.parseDouble(s[3]));
-      pXForm.setYZPostCoeff20(Double.parseDouble(s[4]));
-      pXForm.setYZPostCoeff21(Double.parseDouble(s[5]));
+      xForm.setYZPostCoeff00(Double.parseDouble(s[0]));
+      xForm.setYZPostCoeff01(Double.parseDouble(s[1]));
+      xForm.setYZPostCoeff10(Double.parseDouble(s[2]));
+      xForm.setYZPostCoeff11(Double.parseDouble(s[3]));
+      xForm.setYZPostCoeff20(Double.parseDouble(s[4]));
+      xForm.setYZPostCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_ZX_COEFS)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setZXCoeff00(Double.parseDouble(s[0]));
-      pXForm.setZXCoeff01(Double.parseDouble(s[1]));
-      pXForm.setZXCoeff10(Double.parseDouble(s[2]));
-      pXForm.setZXCoeff11(Double.parseDouble(s[3]));
-      pXForm.setZXCoeff20(Double.parseDouble(s[4]));
-      pXForm.setZXCoeff21(Double.parseDouble(s[5]));
+      xForm.setZXCoeff00(Double.parseDouble(s[0]));
+      xForm.setZXCoeff01(Double.parseDouble(s[1]));
+      xForm.setZXCoeff10(Double.parseDouble(s[2]));
+      xForm.setZXCoeff11(Double.parseDouble(s[3]));
+      xForm.setZXCoeff20(Double.parseDouble(s[4]));
+      xForm.setZXCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_ZX_POST)) != null) {
       String s[] = hs.split(" ");
-      pXForm.setZXPostCoeff00(Double.parseDouble(s[0]));
-      pXForm.setZXPostCoeff01(Double.parseDouble(s[1]));
-      pXForm.setZXPostCoeff10(Double.parseDouble(s[2]));
-      pXForm.setZXPostCoeff11(Double.parseDouble(s[3]));
-      pXForm.setZXPostCoeff20(Double.parseDouble(s[4]));
-      pXForm.setZXPostCoeff21(Double.parseDouble(s[5]));
+      xForm.setZXPostCoeff00(Double.parseDouble(s[0]));
+      xForm.setZXPostCoeff01(Double.parseDouble(s[1]));
+      xForm.setZXPostCoeff10(Double.parseDouble(s[2]));
+      xForm.setZXPostCoeff11(Double.parseDouble(s[3]));
+      xForm.setZXPostCoeff20(Double.parseDouble(s[4]));
+      xForm.setZXPostCoeff21(Double.parseDouble(s[5]));
     }
     if ((hs = atts.get(ATTR_CHAOS)) != null) {
       String s[] = hs.split(" ");
       for (int i = 0; i < s.length; i++) {
-        pXForm.getModifiedWeights()[i] = Double.parseDouble(s[i]);
+        xForm.getModifiedWeights()[i] = Double.parseDouble(s[i]);
       }
     }
-    readMotionCurves(pXForm, atts, null);
+    readMotionCurves(xForm, atts, null);
     // variations
     {
       List<String> variationNameList = VariationFuncList.getNameList();
@@ -1073,7 +1197,7 @@ public class AbstractFlameReader {
         }
         if (hasVariation) {
           VariationFunc varFunc = VariationFuncList.getVariationFuncInstance(varName);
-          Variation variation = pXForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
+          Variation variation = xForm.addVariation(Double.parseDouble(atts.get(rawName)), varFunc);
           String priority = atts.get(rawName + "_" + ATTR_FX_PRIORITY);
           if (priority != null && priority.length() > 0) {
             variation.setPriority(Integer.parseInt(priority));

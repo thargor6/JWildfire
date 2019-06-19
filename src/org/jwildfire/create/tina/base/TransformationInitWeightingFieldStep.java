@@ -17,6 +17,8 @@
 package org.jwildfire.create.tina.base;
 
 import org.jwildfire.create.tina.base.weightingfield.WeightingField;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 import java.util.Optional;

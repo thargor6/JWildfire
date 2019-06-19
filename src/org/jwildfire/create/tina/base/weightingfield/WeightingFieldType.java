@@ -14,8 +14,9 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base;
+package org.jwildfire.create.tina.base.weightingfield;
 
+import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.weightingfield.*;
 
 public enum WeightingFieldType {
