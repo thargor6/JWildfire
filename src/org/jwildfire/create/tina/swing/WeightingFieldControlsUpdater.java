@@ -20,6 +20,7 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldVariationBackList;
 import org.jwildfire.create.tina.variation.SubFlameWFFunc;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
@@ -238,19 +239,8 @@ public abstract class WeightingFieldControlsUpdater {
     }
   }
 
-  private final static List<String> VARIATION_BLACK_LIST;
-
-  static {
-    VARIATION_BLACK_LIST = new ArrayList<>();
-    VARIATION_BLACK_LIST.add(new SubFlameWFFunc().getName());
-    VARIATION_BLACK_LIST.add(new IFlamesFunc().getName());
-    VARIATION_BLACK_LIST.add(new ParPlot2DWFFunc().getName());
-    VARIATION_BLACK_LIST.add(new YPlot2DWFFunc().getName());
-    VARIATION_BLACK_LIST.add(new YPlot3DWFFunc().getName());
-  }
-
   public static String encodeVarNameParamName(String varName, String paramName) {
-    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && !VARIATION_BLACK_LIST.contains(varName)) {
+    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && !WeightingFieldVariationBackList.isBlackListed(varName)) {
       return varName + VAR_NAME_VAR_PARAM_SEPARATOR + paramName;
     }
     else {

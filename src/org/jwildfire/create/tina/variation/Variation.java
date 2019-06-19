@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.animate.AnimAware;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.create.tina.base.motion.MotionCurve;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldVariationBackList;
 import org.jwildfire.create.tina.edit.Assignable;
 
 import java.io.Serializable;
@@ -325,7 +326,7 @@ public class Variation implements Assignable<Variation>, Serializable {
   }
 
   public void addWeightingFieldParam(String paramName, double intensity) {
-     if(Arrays.asList(getFunc().getParameterNames()).indexOf(paramName)>=0) {
+     if(!WeightingFieldVariationBackList.isBlackListed(getFunc().getName()) && Arrays.asList(getFunc().getParameterNames()).indexOf(paramName)>=0) {
         if(weightFieldParamValueList==null) {
           weightFieldParamValueList = new ArrayList<>();
         }
