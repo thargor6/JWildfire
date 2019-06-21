@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2015 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -24,6 +24,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.RenderInfo;
 import org.jwildfire.create.tina.render.RenderMode;
@@ -45,16 +46,18 @@ public class RandomFlameGeneratorSampler {
   private RandomFlameGenerator randGen;
   private RandomSymmetryGenerator randSymmGen;
   private RandomGradientGenerator randGradientGen;
+  private RandomWeightingFieldGenerator randWeightingFieldGen;
 
   private final RandomBatchQuality quality;
 
-  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, RandomSymmetryGenerator pRandSymmGen, RandomGradientGenerator pRandGradientGen, int pPaletteSize, boolean pFadePaletteColors, boolean pUniformWidth, RandomBatchQuality pQuality) {
+  public RandomFlameGeneratorSampler(int pImageWidth, int pImageHeight, Prefs pPrefs, RandomFlameGenerator pRandGen, RandomSymmetryGenerator pRandSymmGen, RandomGradientGenerator pRandGradientGen, RandomWeightingFieldGenerator pRandWeightingFieldGen, int pPaletteSize, boolean pFadePaletteColors, boolean pUniformWidth, RandomBatchQuality pQuality) {
     imageWidth = pImageWidth;
     imageHeight = pImageHeight;
     prefs = pPrefs;
     randGen = pRandGen;
     randSymmGen = pRandSymmGen;
     randGradientGen = pRandGradientGen;
+    randWeightingFieldGen = pRandWeightingFieldGen;
     paletteSize = pPaletteSize;
     fadePaletteColors = pFadePaletteColors;
     uniformWidth = pUniformWidth;
@@ -116,6 +119,9 @@ public class RandomFlameGeneratorSampler {
         flame = randGen.createFlame(prefs, randGenState);
         if (randGen.supportsSymmetry()) {
           randSymmGen.addSymmetry(flame);
+        }
+        if(randGen.supportsWeightingField()) {
+          randWeightingFieldGen.addWeightingField(flame);
         }
       }
       catch (Exception ex) {

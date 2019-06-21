@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2014 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -34,6 +34,7 @@ import org.jwildfire.create.tina.palette.MedianCutQuantizer;
 import org.jwildfire.create.tina.palette.RGBPalette;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.swing.RandomBatchQuality;
 import org.jwildfire.create.tina.variation.AbstractColorMapWFFunc;
 import org.jwildfire.create.tina.variation.RessourceManager;
@@ -63,7 +64,7 @@ public class WikimediaCommonsRandomFlameGenerator extends RandomFlameGenerator {
     boolean fadePaletteColors = Math.random() > 0.33;
     boolean uniformWidth = Math.random() > 0.75;
 
-    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
+    RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, generator.createRandomFlameGenerator(), RandomSymmetryGeneratorList.NONE, RandomGradientGeneratorList.DEFAULT, RandomWeightingFieldGeneratorList.NONE, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
 
     Flame flame = sampler.createSample().getFlame();
 

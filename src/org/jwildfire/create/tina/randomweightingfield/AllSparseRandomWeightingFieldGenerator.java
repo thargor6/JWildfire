@@ -14,47 +14,26 @@
   if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.jwildfire.create.tina.base.weightingfield;
+package org.jwildfire.create.tina.randomweightingfield;
 
-import fastnoise.FastNoise;
+import org.jwildfire.create.tina.base.Flame;
 
-public enum FractalNoiseType {
+public class AllSparseRandomWeightingFieldGenerator extends AllRandomWeightingFieldGenerator {
 
-  FBM {
-    @Override
-    public FastNoise.FractalType toFastNoiseType() {
-      return FastNoise.FractalType.FBM;
+  @Override
+  public void addWeightingField(Flame pFlame) {
+    if (Math.random() > 0.66) {
+      RandomWeightingFieldGenerator generator = allGenerators.get((int) (Math.random() * allGenerators.size()));
+      generator.addWeightingField(pFlame);
     }
-
-    @Override
-    public String toString() {
-      return "FBM";
+    else {
+      RandomWeightingFieldGeneratorList.NONE.addWeightingField(pFlame);
     }
   }
 
-  , BILLOW {
-    @Override
-    public FastNoise.FractalType toFastNoiseType() {
-      return FastNoise.FractalType.Billow;
-    }
+  @Override
+  public String getName() {
+    return "(All, sparse)";
+  }
 
-    @Override
-    public String toString() {
-      return "Billow";
-    }
-  },
-
-  RIGID_MULTI {
-    @Override
-    public FastNoise.FractalType toFastNoiseType() {
-      return FastNoise.FractalType.RigidMulti;
-    }
-
-    @Override
-    public String toString() {
-      return "RigidMulti";
-    }
-  };
-
-  public abstract FastNoise.FractalType toFastNoiseType();
 }

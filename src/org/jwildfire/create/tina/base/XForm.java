@@ -226,7 +226,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   private int weightingFieldNoiseSeed = 1337;
   private double weightingFieldNoiseFrequency = 1.0;
-  private FractalNoiseType weightingFieldFractalNoiseType = FractalNoiseType.FBM;
+  private FractalType weightingFieldFractalType = FractalType.FBM;
   private int weightingFieldFractalNoiseOctaves = 3;
   private double weightingFieldFractalNoiseGain = 0.5;
   private double weightingFieldFractalNoiseLacunarity = 2.0;
@@ -566,7 +566,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     }
 
     if(isWeightingFieldActive() && fabs(weightingFieldColorIntensity)>EPSILON) {
-      t.add(new TransformationApplyWightMapToColorStep(this));
+      t.add(new TransformationApplyWeightMapToColorStep(this));
     }
 
     if (colorType == ColorType.DIFFUSION) {
@@ -806,7 +806,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     weightingFieldColorMapYCentre = pXForm.weightingFieldColorMapYCentre;
     weightingFieldNoiseSeed = pXForm.weightingFieldNoiseSeed;
     weightingFieldNoiseFrequency = pXForm.weightingFieldNoiseFrequency;
-    weightingFieldFractalNoiseType = pXForm.weightingFieldFractalNoiseType;
+    weightingFieldFractalType = pXForm.weightingFieldFractalType;
     weightingFieldFractalNoiseOctaves = pXForm.weightingFieldFractalNoiseOctaves;
     weightingFieldFractalNoiseGain = pXForm.weightingFieldFractalNoiseGain;
     weightingFieldFractalNoiseLacunarity = pXForm.weightingFieldFractalNoiseLacunarity;
@@ -907,7 +907,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
          (weightingFieldNoiseSeed != pSrc.weightingFieldNoiseSeed) ||
          (fabs(weightingFieldNoiseFrequency - pSrc.weightingFieldNoiseFrequency) > EPSILON) ||
-         (weightingFieldFractalNoiseType != pSrc.weightingFieldFractalNoiseType) ||
+         (weightingFieldFractalType != pSrc.weightingFieldFractalType) ||
          (weightingFieldFractalNoiseOctaves != pSrc.weightingFieldFractalNoiseOctaves) ||
          (fabs(weightingFieldFractalNoiseGain - pSrc.weightingFieldFractalNoiseGain) > EPSILON) ||
          (fabs(weightingFieldFractalNoiseLacunarity - pSrc.weightingFieldFractalNoiseLacunarity) > EPSILON) ||
@@ -2010,12 +2010,12 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.weightingFieldCellularNoiseDistanceFunction = weightingFieldCellularNoiseDistanceFunction;
   }
 
-  public FractalNoiseType getWeightingFieldFractalNoiseType() {
-    return weightingFieldFractalNoiseType;
+  public FractalType getWeightingFieldFractalType() {
+    return weightingFieldFractalType;
   }
 
-  public void setWeightingFieldFractalNoiseType(FractalNoiseType weightingFieldFractalNoiseType) {
-    this.weightingFieldFractalNoiseType = weightingFieldFractalNoiseType;
+  public void setWeightingFieldFractalType(FractalType weightingFieldFractalType) {
+    this.weightingFieldFractalType = weightingFieldFractalType;
   }
 
   public double getWeightingFieldVarParam1Intensity() {

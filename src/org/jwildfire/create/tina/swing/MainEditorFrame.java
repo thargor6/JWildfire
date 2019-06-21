@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -102,6 +102,8 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randommovie.RandomMovieGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.render.ChannelMixerMode;
 import org.jwildfire.create.tina.render.dof.DOFBlurShapeType;
 import org.jwildfire.create.tina.render.filter.FilterKernelType;
@@ -5954,6 +5956,7 @@ public class MainEditorFrame extends JFrame {
     initMeshGenOutputTypeCmb(meshGenFrame.getMeshGenOutputTypeCmb());
     initWeightMapTypeCmb(getWeightingFieldTypeCmb());
     initWeightMapInputTypeCmb(getWeightingFieldInputCmb());
+    initRandomWeightingFieldGenCmb(getRandomWeightingFieldCmb());
 
     TinaControllerParameter params = new TinaControllerParameter();
 
@@ -6360,7 +6363,7 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(WeightingFieldType.PERLIN_NOISE);
     pCmb.addItem(WeightingFieldType.PERLIN_FRACTAL_NOISE);
     pCmb.addItem(WeightingFieldType.SIMPLEX_NOISE);
-    pCmb.addItem(WeightingFieldType.SIMPLEX_FRACTAL_NOISE_NOISE);
+    pCmb.addItem(WeightingFieldType.SIMPLEX_FRACTAL_NOISE);
     pCmb.addItem(WeightingFieldType.VALUE_NOISE);
     pCmb.addItem(WeightingFieldType.VALUE_FRACTAL_NOISE);
     pCmb.addItem(WeightingFieldType.IMAGE_MAP);
@@ -6482,6 +6485,14 @@ public class MainEditorFrame extends JFrame {
     pCmb.addItem(Stereo3dColor.RED);
     pCmb.addItem(Stereo3dColor.CYAN);
     pCmb.setSelectedItem(pSelected);
+  }
+
+  private void initRandomWeightingFieldGenCmb(JComboBox pCmb) {
+    pCmb.removeAllItems();
+    for (String name : RandomWeightingFieldGeneratorList.getNameList()) {
+      pCmb.addItem(name);
+    }
+    pCmb.setSelectedItem(RandomWeightingFieldGeneratorList.DEFAULT_GENERATOR_NAME);
   }
 
   private void initRandomGenCmb(JComboBox pCmb) {
@@ -7178,7 +7189,8 @@ public class MainEditorFrame extends JFrame {
           RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance((String) randomStyleCmb.getSelectedItem(), true);
           RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance((String) randomSymmetryCmb.getSelectedItem(), true);
           RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((String) randomGradientCmb.getSelectedItem(), true);
-          tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, RandomBatchQuality.NORMAL);
+          RandomWeightingFieldGenerator randWeightingFieldGen = RandomWeightingFieldGeneratorList.getRandomWeightingFieldGeneratorInstance((String) randomWeightingFieldCmb.getSelectedItem(), true);
+          tinaController.createRandomBatch(-1, randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.NORMAL);
         }
       });
     }
@@ -15065,7 +15077,7 @@ public class MainEditorFrame extends JFrame {
     if (lblSymmetry == null) {
       lblSymmetry = new JLabel();
       lblSymmetry.setToolTipText("Select symmetry-, gradient- and weighting-field-generator. Those are used when generating random flames using the [Random batch]-function");
-      lblSymmetry.setText("  Symmtry/Gradnt/WFld");
+      lblSymmetry.setText("  Symmtry/Gradnt/WField");
       lblSymmetry.setPreferredSize(new Dimension(120, 22));
       lblSymmetry.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSymmetry.setAlignmentX(1.0f);

@@ -187,6 +187,7 @@ public class MutaGenController {
     pCmb.addItem(MutationType.RANDOM_FLAME);
     pCmb.addItem(MutationType.RANDOM_GRADIENT);
     pCmb.addItem(MutationType.RANDOM_PARAMETER);
+    pCmb.addItem(MutationType.WEIGHTING_FIELD);
     MutationType initialValue;
     try {
       initialValue = MutationType.valueOf(pInitialValue.trim().toUpperCase());

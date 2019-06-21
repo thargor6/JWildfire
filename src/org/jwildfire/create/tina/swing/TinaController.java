@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -97,6 +97,7 @@ import org.jwildfire.create.tina.meshgen.MeshGenController;
 import org.jwildfire.create.tina.mutagen.BokehMutation;
 import org.jwildfire.create.tina.mutagen.MutaGenController;
 import org.jwildfire.create.tina.mutagen.MutationType;
+import org.jwildfire.create.tina.mutagen.WeightingFieldMutation;
 import org.jwildfire.create.tina.palette.DefaultGradientSelectionProvider;
 import org.jwildfire.create.tina.palette.GradientSelectionProvider;
 import org.jwildfire.create.tina.palette.MedianCutQuantizer;
@@ -111,6 +112,8 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.render.ProgressUpdater;
 import org.jwildfire.create.tina.render.RenderInfo;
@@ -1303,7 +1306,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       int palettePoints = 3 + Tools.randomInt(21);
       boolean fadePaletteColors = Math.random() > 0.09;
       boolean uniformWidth = Math.random() > 0.75;
-      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
+      RandomFlameGeneratorSampler sampler = new RandomFlameGeneratorSampler(IMG_WIDTH, IMG_HEIGHT, prefs, randGen, RandomSymmetryGeneratorList.SPARSE, RandomGradientGeneratorList.DEFAULT, RandomWeightingFieldGeneratorList.SPARSE, palettePoints, fadePaletteColors, uniformWidth, RandomBatchQuality.LOW);
       Flame flame = sampler.createSample().getFlame();
       setCurrFlame(flame);
     }
@@ -3134,7 +3137,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private CreateRandomBatchThread createRandomBatchThread;
   private boolean loadFirstRandomFlame;
 
-  public void createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomBatchQuality pQuality) {
+  public void createRandomBatch(int pCount, RandomFlameGenerator randGen, RandomSymmetryGenerator randSymmGen, RandomGradientGenerator randGradientGen, RandomWeightingFieldGenerator randomWeightingFieldGen, RandomBatchQuality pQuality) {
     if (createRandomBatchThread != null) {
       stopRandomBatchThread();
       return;
@@ -3148,7 +3151,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     List<SimpleImage> imgList = new ArrayList<SimpleImage>();
     int maxCount = (pCount > 0 ? pCount : imgCount);
     loadFirstRandomFlame = true;
-    createRandomBatchThread = new CreateRandomBatchThread(this, randomBatchProgressUpdater, maxCount, imgList, randomBatch, randGen, randSymmGen, randGradientGen, pQuality);
+    createRandomBatchThread = new CreateRandomBatchThread(this, randomBatchProgressUpdater, maxCount, imgList, randomBatch, randGen, randSymmGen, randGradientGen, randomWeightingFieldGen, pQuality);
     refreshRandomBatchButton();
     new Thread(createRandomBatchThread).start();
   }
@@ -5498,7 +5501,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   }
 
   private List<MutationType> createRandomMutationTypes() {
-    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
+    MutationType allMutationTypes[] = { MutationType.LOCAL_GAMMA, MutationType.ADD_TRANSFORM, MutationType.ADD_VARIATION, MutationType.CHANGE_WEIGHT, MutationType.WEIGHTING_FIELD, MutationType.GRADIENT_POSITION, MutationType.AFFINE, MutationType.RANDOM_GRADIENT, MutationType.RANDOM_PARAMETER };
     int[] allCounts = { 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9 };
     int count = allCounts[(int) (Math.random() * allCounts.length)];
     List<MutationType> res = new ArrayList<MutationType>();
@@ -7008,12 +7011,60 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     getWeightMapControlsUpdater(getCurrXForm()).weightingFieldColorMapFilenameBtn_clicked();
   }
 
+  WeightingFieldMutation weightingFieldMutation = new WeightingFieldMutation();
+
   public void weightMapRandomizeAllBtn_clicked(boolean wholeFractal) {
-    // TODO
+    if(wholeFractal) {
+      Flame flame = getCurrFlame();
+      if(flame!=null) {
+        Layer layer = getCurrLayer();
+        if(layer!=null) {
+          saveUndoPoint();
+          weightingFieldMutation.execute(layer);
+          XForm xForm = getCurrXForm();
+          if(xForm!=null) {
+            refreshXFormUI(xForm);
+          }
+          refreshFlameImage(true, false, 1, true, false);
+        }
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm();
+      if(xForm!=null) {
+        saveUndoPoint();
+        weightingFieldMutation.applyRandomWeightField(xForm);
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
   }
 
   public void weightMapResetAllBtn_clicked(boolean wholeFractal) {
-    // TODO
+    if(wholeFractal) {
+      Flame flame = getCurrFlame();
+      if(flame!=null) {
+        Layer layer = getCurrLayer();
+        if(layer!=null) {
+          saveUndoPoint();
+          weightingFieldMutation.clearWeightingField(layer);
+          XForm xForm = getCurrXForm();
+          if(xForm!=null) {
+            refreshXFormUI(xForm);
+          }
+          refreshFlameImage(true, false, 1, true, false);
+        }
+      }
+    }
+    else {
+      XForm xForm = getCurrXForm();
+      if(xForm!=null) {
+        saveUndoPoint();
+        weightingFieldMutation.clearWeightingField(xForm);
+        refreshXFormUI(xForm);
+        refreshFlameImage(true, false, 1, true, false);
+      }
+    }
   }
 
 }

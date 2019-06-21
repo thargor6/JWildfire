@@ -19,7 +19,7 @@ package org.jwildfire.create.tina.base.weightingfield;
 import fastnoise.FastNoise;
 
 public abstract class FractalNoiseWeightingField extends NoiseWeightingField {
-  private FractalNoiseType fractalNoiseType = FractalNoiseType.FBM;
+  private FractalType fractalNoiseType = FractalType.FBM;
   private int octaves = 3;
   private double gain = 0.5;
   private double lacunarity = 2.0;
@@ -59,11 +59,11 @@ public abstract class FractalNoiseWeightingField extends NoiseWeightingField {
     noise.SetFractalLacunarity((float)lacunarity);
   }
 
-  public FractalNoiseType getFractalNoiseType() {
+  public FractalType getFractalNoiseType() {
     return fractalNoiseType;
   }
 
-  public void setFractalNoiseType(FractalNoiseType fractalNoiseType) {
+  public void setFractalNoiseType(FractalType fractalNoiseType) {
     this.fractalNoiseType = fractalNoiseType;
     noise.SetFractalType(fractalNoiseType.toFastNoiseType());
   }

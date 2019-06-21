@@ -914,7 +914,7 @@ public class AbstractFlameReader {
   public static final String ATTR_WFIELD_CMAP_YCENTRE = "wfield_cmap_ycentre";
   public static final String ATTR_WFIELD_NOISE_SEED = "wfield_noise_seed";
   public static final String ATTR_WFIELD_NOISE_FREQUENY = "wfield_noise_frequency";
-  public static final String ATTR_WFIELD_FRACT_NOISE_TYPE = "wfield_fract_noise_type";
+  public static final String ATTR_WFIELD_FRACT_NOISE_FRACT_TYPE = "wfield_fract_noise_fract_type";
   public static final String ATTR_WFIELD_FRACT_NOISE_GAIN = "wfield_fract_noise_gain";
   public static final String ATTR_WFIELD_FRACT_NOISE_LACUNARITY = "wfield_fract_noise_lacunarity";
   public static final String ATTR_WFIELD_FRACT_NOISE_OCTAVES = "wfield_fract_noise_octaves";
@@ -1083,9 +1083,9 @@ public class AbstractFlameReader {
     if ((hs = atts.get(ATTR_WFIELD_NOISE_FREQUENY)) != null) {
       xForm.setWeightingFieldNoiseFrequency(Double.parseDouble(hs));
     }
-    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_TYPE)) != null) {
+    if ((hs = atts.get(ATTR_WFIELD_FRACT_NOISE_FRACT_TYPE)) != null) {
       try {
-        xForm.setWeightingFieldFractalNoiseType(FractalNoiseType.valueOf(hs));
+        xForm.setWeightingFieldFractalType(FractalType.valueOf(hs));
       }
       catch (Exception ex) {
         ex.printStackTrace();

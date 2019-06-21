@@ -18,13 +18,13 @@ package org.jwildfire.create.tina.base;
 
 import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
-public final class TransformationApplyWightMapToColorStep extends AbstractTransformationStep {
+public final class TransformationApplyWeightMapToColorStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
   private final double weightValueScale;
 
-  public TransformationApplyWightMapToColorStep(XForm pXForm) {
+  public TransformationApplyWeightMapToColorStep(XForm pXForm) {
     super(pXForm);
-    weightValueScale = pXForm.getWeightingFieldColorIntensity();
+    weightValueScale = pXForm.getWeightingFieldColorIntensity() * 0.1;
   }
 
   @Override

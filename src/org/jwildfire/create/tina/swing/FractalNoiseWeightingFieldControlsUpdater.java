@@ -18,7 +18,7 @@ package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.weightingfield.FractalNoiseType;
+import org.jwildfire.create.tina.base.weightingfield.FractalType;
 
 public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUpdater {
   private boolean fillingComboBox;
@@ -38,7 +38,7 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     controls.weightingFieldParam01REd.setText(String.valueOf(xform.getWeightingFieldNoiseSeed()));
     controls.weightingFieldParam02REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseGain()));
     controls.weightingFieldParam03REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseOctaves()));
-    controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldFractalNoiseType());
+    controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldFractalType());
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldNoiseFrequency()));
     controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldFractalNoiseLacunarity()));
   }
@@ -73,9 +73,9 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     fillingComboBox = true;
     try {
       controls.weightingFieldParam04Cmb.removeAllItems();
-      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.FBM);
-      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.BILLOW);
-      controls.weightingFieldParam04Cmb.addItem(FractalNoiseType.RIGID_MULTI);
+      controls.weightingFieldParam04Cmb.addItem(FractalType.FBM);
+      controls.weightingFieldParam04Cmb.addItem(FractalType.BILLOW);
+      controls.weightingFieldParam04Cmb.addItem(FractalType.RIGID_MULTI);
     }
     finally {
       fillingComboBox = false;
@@ -118,7 +118,7 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldParam04Cmb.getSelectedItem() != null) {
-      xForm.setWeightingFieldFractalNoiseType((FractalNoiseType) controls.weightingFieldParam04Cmb.getSelectedItem());
+      xForm.setWeightingFieldFractalType((FractalType) controls.weightingFieldParam04Cmb.getSelectedItem());
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
       controller.refreshFlameImage(true, false, 1, true, false);

@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.base.weightingfield;
 
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.weightingfield.*;
 
 public enum WeightingFieldType {
 
@@ -71,7 +70,7 @@ public enum WeightingFieldType {
       CubicFractalNoiseWeightingField noise = new CubicFractalNoiseWeightingField();
       noise.setSeed(xform.getWeightingFieldNoiseSeed());
       noise.setFrequency(xform.getWeightingFieldNoiseFrequency());
-      noise.setFractalNoiseType(xform.getWeightingFieldFractalNoiseType());
+      noise.setFractalNoiseType(xform.getWeightingFieldFractalType());
       noise.setGain(xform.getWeightingFieldFractalNoiseGain());
       noise.setLacunarity(xform.getWeightingFieldFractalNoiseLacunarity());
       noise.setOctaves(xform.getWeightingFieldFractalNoiseOctaves());
@@ -105,7 +104,7 @@ public enum WeightingFieldType {
       PerlinFractalNoiseWeightingField noise = new PerlinFractalNoiseWeightingField();
       noise.setSeed(xform.getWeightingFieldNoiseSeed());
       noise.setFrequency(xform.getWeightingFieldNoiseFrequency());
-      noise.setFractalNoiseType(xform.getWeightingFieldFractalNoiseType());
+      noise.setFractalNoiseType(xform.getWeightingFieldFractalType());
       noise.setGain(xform.getWeightingFieldFractalNoiseGain());
       noise.setLacunarity(xform.getWeightingFieldFractalNoiseLacunarity());
       noise.setOctaves(xform.getWeightingFieldFractalNoiseOctaves());
@@ -133,13 +132,13 @@ public enum WeightingFieldType {
     }
   },
 
-  SIMPLEX_FRACTAL_NOISE_NOISE {
+  SIMPLEX_FRACTAL_NOISE {
     @Override
     public WeightingField getInstance(XForm xform) {
       SimplexFractalNoiseWeightingField noise = new SimplexFractalNoiseWeightingField();
       noise.setSeed(xform.getWeightingFieldNoiseSeed());
       noise.setFrequency(xform.getWeightingFieldNoiseFrequency());
-      noise.setFractalNoiseType(xform.getWeightingFieldFractalNoiseType());
+      noise.setFractalNoiseType(xform.getWeightingFieldFractalType());
       noise.setGain(xform.getWeightingFieldFractalNoiseGain());
       noise.setLacunarity(xform.getWeightingFieldFractalNoiseLacunarity());
       noise.setOctaves(xform.getWeightingFieldFractalNoiseOctaves());
@@ -173,7 +172,7 @@ public enum WeightingFieldType {
       ValueFractalNoiseWeightingField noise = new ValueFractalNoiseWeightingField();
       noise.setSeed(xform.getWeightingFieldNoiseSeed());
       noise.setFrequency(xform.getWeightingFieldNoiseFrequency());
-      noise.setFractalNoiseType(xform.getWeightingFieldFractalNoiseType());
+      noise.setFractalNoiseType(xform.getWeightingFieldFractalType());
       noise.setGain(xform.getWeightingFieldFractalNoiseGain());
       noise.setLacunarity(xform.getWeightingFieldFractalNoiseLacunarity());
       noise.setOctaves(xform.getWeightingFieldFractalNoiseOctaves());

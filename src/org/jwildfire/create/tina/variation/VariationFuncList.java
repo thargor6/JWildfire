@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
+  private static final double VARIATION_COST_THRESHOLD = 0.25;
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
   private static List<String> excludedNameList = null;
@@ -773,7 +774,11 @@ public class VariationFuncList {
     registerVariationFunc(Waves23Func.class);
     registerVariationFunc(Waves3Func.class);
     registerVariationFunc(Waves42Func.class);
-    registerVariationFunc(Waves4Func.class);	  
+    registerVariationFunc(Waves4Func.class);
+
+    registerVariationFunc(HexModulusFunc.class);
+    registerVariationFunc(TruchetHexCropFunc.class);
+    registerVariationFunc(TruchetHexFillFunc.class);
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
@@ -909,7 +914,7 @@ public class VariationFuncList {
   }
 
   public static boolean isValidRandomVariation(String name) {
-    return getVariationCost(name) < 0.25 &&
+    return getVariationCost(name) < VARIATION_COST_THRESHOLD &&
            !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
            && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten");
   }

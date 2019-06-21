@@ -106,6 +106,12 @@ public enum MutationType {
     protected Class<? extends Mutation> getMutationClass() {
       return RandomParamMutation.class;
     }
+  },
+  WEIGHTING_FIELD {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return WeightingFieldMutation.class;
+    }
   };
 
   protected abstract Class<? extends Mutation> getMutationClass();

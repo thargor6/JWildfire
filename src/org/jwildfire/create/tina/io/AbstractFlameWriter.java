@@ -132,11 +132,11 @@ public class AbstractFlameWriter {
           break;
         case CUBIC_FRACTAL_NOISE:
         case PERLIN_FRACTAL_NOISE:
-        case SIMPLEX_FRACTAL_NOISE_NOISE:
+        case SIMPLEX_FRACTAL_NOISE:
         case VALUE_FRACTAL_NOISE:
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_SEED, xForm.getWeightingFieldNoiseSeed()));
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_NOISE_FREQUENY, xForm.getWeightingFieldNoiseFrequency()));
-          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_TYPE, xForm.getWeightingFieldFractalNoiseType().name()));
+          attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_FRACT_TYPE, xForm.getWeightingFieldFractalType().name()));
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_GAIN, xForm.getWeightingFieldFractalNoiseGain()));
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_LACUNARITY, xForm.getWeightingFieldFractalNoiseLacunarity()));
           attrList.add(xb.createAttr(AbstractFlameReader.ATTR_WFIELD_FRACT_NOISE_OCTAVES, xForm.getWeightingFieldFractalNoiseOctaves()));
