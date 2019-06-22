@@ -71,6 +71,7 @@ public class SubFlameWFFunc extends VariationFunc {
   protected int flame_sequence_repeat = 1;
   protected int flame_sequence_digits = 4;
 
+  protected final static int CM_FLAME = -2;
   protected final static int CM_OFF = -1;
   protected final static int CM_DIRECT = 0;
   protected final static int CM_RED = 1;
@@ -129,7 +130,7 @@ public class SubFlameWFFunc extends VariationFunc {
     } else if (PARAM_COLORSCALE_Z.equalsIgnoreCase(pName))
       colorscale_z = pValue;
     else if (PARAM_COLOR_MODE.equalsIgnoreCase(pName))
-      color_mode = limitIntVal(Tools.FTOI(pValue), CM_OFF, CM_BRIGHTNESS);
+      color_mode = limitIntVal(Tools.FTOI(pValue), CM_FLAME, CM_BRIGHTNESS);
     else if (PARAM_FLAME_IS_SEQUENCE.equalsIgnoreCase(pName))
       flame_is_sequence = limitIntVal(Tools.FTOI(pValue), SEQ_OFF, SEQ_CURVE);
     else if (PARAM_FLAME_SEQUENCE_START.equalsIgnoreCase(pName))
@@ -269,11 +270,12 @@ public class SubFlameWFFunc extends VariationFunc {
     if (!q.doHide) {
       pVarTP.doHide = false;
       if (color_mode != CM_OFF) {
-        if (q.rgbColor) {
+        if (q.rgbColor || color_mode == CM_FLAME) {
           pVarTP.rgbColor = true;
           pVarTP.redColor = q.redColor;
           pVarTP.greenColor = q.greenColor;
           pVarTP.blueColor = q.blueColor;
+          pVarTP.color = q.color;
         }
         switch (color_mode) {
           case CM_DIRECT:
