@@ -84,6 +84,7 @@ public class NoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUp
   @Override
   public void weightingFieldParam01REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
@@ -104,6 +105,7 @@ public class NoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUp
   @Override
   public void weightingFieldParam05REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override

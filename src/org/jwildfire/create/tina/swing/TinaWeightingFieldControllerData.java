@@ -16,6 +16,8 @@
 */
 package org.jwildfire.create.tina.swing;
 
+import org.jwildfire.swing.ImagePanel;
+
 import javax.swing.*;
 
 public class TinaWeightingFieldControllerData {
@@ -49,4 +51,5 @@ public class TinaWeightingFieldControllerData {
   public JComboBox weightingFieldParam08Cmb;
   public JLabel weightingFieldParam08Lbl;
   public JPanel weightingFieldPreviewImgRootPanel;
+  public ImagePanel weightingFieldPreviewImgPanel;
 }

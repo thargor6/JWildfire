@@ -119,6 +119,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
   @Override
   public void weightingFieldParam01REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
@@ -137,16 +138,19 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldParam04Cmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       xForm.setWeightingFieldCellularNoiseReturnType((CellularNoiseReturnType) controls.weightingFieldParam04Cmb.getSelectedItem());
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
       controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage();
     }
   }
 
   @Override
   public void weightingFieldParam05REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
@@ -165,10 +169,12 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldParam08Cmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       xForm.setWeightingFieldCellularNoiseDistanceFunction((CellularNoiseDistanceFunction) controls.weightingFieldParam08Cmb.getSelectedItem());
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
       controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage();
     }
   }
 }

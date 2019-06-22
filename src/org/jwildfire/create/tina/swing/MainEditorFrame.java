@@ -2236,7 +2236,7 @@ public class MainEditorFrame extends JFrame {
       backgroundColorTypeCmb.setBounds(873, 3, 150, 24);
       backgroundColorTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.backgroundColorTypeCmb_changed();
           }
         }
@@ -4386,7 +4386,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldTypeCmb.setBounds(92, 2, 150, 24);
       weightingFieldTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightMapTypeCmb_changed();
           }
@@ -4521,7 +4521,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldInputCmb.setBounds(92, 25, 150, 24);
       weightingFieldInputCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightMapInputCmb_changed();
           }
@@ -4729,7 +4729,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam04Cmb.setBounds(92, 202, 70, 22);
       weightingFieldParam04Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if(e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightMapParam04Cmb_changed();
           }
@@ -4790,7 +4790,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldParam08Cmb.setBounds(252, 202, 70, 22);
       weightingFieldParam08Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightMapParam08Cmb_changed();
           }
@@ -4881,7 +4881,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam1NameCmb.setBounds(165, 69, 157, 22);
       weightingFieldVarParam1NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightingFieldVarParam1NameCmb_changed();
           }
@@ -4938,7 +4938,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam2NameCmb.setBounds(165, 91, 157, 22);
       weightingFieldVarParam2NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightingFieldVarParam2NameCmb_changed();
           }
@@ -4994,7 +4994,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldVarParam3NameCmb.setBounds(165, 113, 157, 22);
       weightingFieldVarParam3NameCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.weightingFieldVarParam3NameCmb_changed();
           }
@@ -5005,6 +5005,7 @@ public class MainEditorFrame extends JFrame {
       weightingFieldPreviewImgRootPanel = new JPanel();
       weightingFieldPreviewImgRootPanel.setBounds(244, 4, 76, 42);
       tinaWeightMapPanel.add(weightingFieldPreviewImgRootPanel);
+      weightingFieldPreviewImgRootPanel.setLayout(new BorderLayout(0, 0));
 
       JSeparator separator = new JSeparator();
       separator.setBounds(4, 137, 316, 2);
@@ -7242,7 +7243,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(0);
+          if(e.getStateChange() == ItemEvent.SELECTED ) {
+            tinaController.nonlinearVarCmbChanged(0);
+          }
         }
       });
     }
@@ -7296,7 +7299,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Cmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearParams1Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(0);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(0);
+          }
         }
       });
     }
@@ -7566,7 +7571,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar2Cmb.setSize(new Dimension(108, 24));
       nonlinearVar2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(1);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(1);
+          }
         }
       });
     }
@@ -7620,7 +7627,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2Cmb.setSize(new Dimension(128, 24));
       nonlinearParams2Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(1);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(1);
+          }
         }
       });
     }
@@ -7797,7 +7806,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar3Cmb.setSize(new Dimension(108, 24));
       nonlinearVar3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(2);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(2);
+          }
         }
       });
     }
@@ -7851,7 +7862,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3Cmb.setSize(new Dimension(128, 24));
       nonlinearParams3Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(2);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(2);
+          }
         }
       });
     }
@@ -8145,8 +8158,10 @@ public class MainEditorFrame extends JFrame {
       xFormDrawModeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormDrawModeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.saveUndoPoint();
-          tinaController.xFormDrawModeCmb_changed();
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormDrawModeCmb_changed();
+          }
         }
       });
     }
@@ -8167,8 +8182,10 @@ public class MainEditorFrame extends JFrame {
       xFormColorTypeCmb.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.saveUndoPoint();
-          tinaController.xFormColorTypeCmb_changed();
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.saveUndoPoint();
+            tinaController.xFormColorTypeCmb_changed();
+          }
         }
       });
     }
@@ -8571,7 +8588,7 @@ public class MainEditorFrame extends JFrame {
       triangleStyleCmb.setBounds(537, 4, 68, 24);
       triangleStyleCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.triangleStyleCmb_changed();
           }
         }
@@ -8927,7 +8944,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar4Cmb.setSize(new Dimension(108, 24));
       nonlinearVar4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(3);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(3);
+          }
         }
       });
     }
@@ -8981,7 +9000,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4Cmb.setSize(new Dimension(128, 24));
       nonlinearParams4Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(3);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(3);
+          }
         }
       });
     }
@@ -9233,7 +9254,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar5Cmb.setSize(new Dimension(108, 24));
       nonlinearVar5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(4);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(4);
+          }
         }
       });
     }
@@ -9287,7 +9310,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5Cmb.setSize(new Dimension(128, 24));
       nonlinearParams5Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(4);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(4);
+          }
         }
       });
     }
@@ -9463,7 +9488,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar6Cmb.setSize(new Dimension(108, 24));
       nonlinearVar6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(5);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(5);
+          }
         }
       });
     }
@@ -9517,7 +9544,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6Cmb.setSize(new Dimension(128, 24));
       nonlinearParams6Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(5);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(5);
+          }
         }
       });
     }
@@ -9694,7 +9723,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar7Cmb.setSize(new Dimension(108, 24));
       nonlinearVar7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(6);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(6);
+          }
         }
       });
     }
@@ -9748,7 +9779,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7Cmb.setSize(new Dimension(128, 24));
       nonlinearParams7Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(6);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(6);
+          }
         }
       });
     }
@@ -9925,7 +9958,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar8Cmb.setSize(new Dimension(108, 24));
       nonlinearVar8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(7);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(7);
+          }
         }
       });
     }
@@ -9979,7 +10014,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8Cmb.setSize(new Dimension(128, 24));
       nonlinearParams8Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(7);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(7);
+          }
         }
       });
     }
@@ -10156,7 +10193,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar9Cmb.setSize(new Dimension(108, 24));
       nonlinearVar9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(8);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(8);
+          }
         }
       });
     }
@@ -10210,7 +10249,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9Cmb.setSize(new Dimension(129, 24));
       nonlinearParams9Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(8);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(8);
+          }
         }
       });
     }
@@ -10386,7 +10427,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar10Cmb.setSize(new Dimension(108, 24));
       nonlinearVar10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(9);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(9);
+          }
         }
       });
     }
@@ -10440,7 +10483,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10Cmb.setSize(new Dimension(128, 24));
       nonlinearParams10Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(9);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(9);
+          }
         }
       });
     }
@@ -10617,7 +10662,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar11Cmb.setSize(new Dimension(108, 24));
       nonlinearVar11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(10);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(10);
+          }
         }
       });
     }
@@ -10671,7 +10718,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11Cmb.setSize(new Dimension(128, 24));
       nonlinearParams11Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(10);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(10);
+          }
         }
       });
     }
@@ -10847,7 +10896,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearVar12Cmb.setSize(new Dimension(108, 24));
       nonlinearVar12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearVarCmbChanged(11);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearVarCmbChanged(11);
+          }
         }
       });
     }
@@ -10901,7 +10952,9 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12Cmb.setSize(new Dimension(128, 24));
       nonlinearParams12Cmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          tinaController.nonlinearParamsCmbChanged(11);
+          if(e.getStateChange() == ItemEvent.SELECTED) {
+            tinaController.nonlinearParamsCmbChanged(11);
+          }
         }
       });
     }
@@ -12336,7 +12389,7 @@ public class MainEditorFrame extends JFrame {
       tinaFilterKernelCmb = new JComboBox();
       tinaFilterKernelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.spatialFilterKernelCmb_changed();
           }
         }
@@ -12446,7 +12499,7 @@ public class MainEditorFrame extends JFrame {
       filterKernelFlatPreviewBtn = new JToggleButton();
       filterKernelFlatPreviewBtn.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.filterKernelFlatPreviewBtn_clicked();
           }
         }
@@ -12546,7 +12599,7 @@ public class MainEditorFrame extends JFrame {
       tinaFilterTypeCmb.setBounds(115, 28, 322, 24);
       tinaFilterTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.spatialFilterTypeCmb_changed();
           }
         }
@@ -12776,7 +12829,7 @@ public class MainEditorFrame extends JFrame {
       panel_2.add(qualityProfileCmb);
       qualityProfileCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.saveUndoPoint();
             tinaController.qualityProfileCmb_changed();
           }
@@ -14696,7 +14749,7 @@ public class MainEditorFrame extends JFrame {
       postSymmetryTypeCmb.setBounds(102, 6, 100, 24);
       postSymmetryTypeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().postSymmetryCmb_changed();
           }
         }
@@ -15141,7 +15194,7 @@ public class MainEditorFrame extends JFrame {
       stereo3dModeCmb.setBounds(102, 6, 322, 24);
       stereo3dModeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().stereo3dModeCmb_changed();
           }
         }
@@ -15358,7 +15411,7 @@ public class MainEditorFrame extends JFrame {
       stereo3dLeftEyeColorCmb.setBounds(533, 31, 322, 24);
       stereo3dLeftEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().stereo3dLeftEyeColorCmb_changed();
           }
         }
@@ -15383,7 +15436,7 @@ public class MainEditorFrame extends JFrame {
       stereo3dRightEyeColorCmb.setBounds(532, 56, 323, 24);
       stereo3dRightEyeColorCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().stereo3dRightEyeColorCmb_changed();
           }
         }
@@ -15471,7 +15524,7 @@ public class MainEditorFrame extends JFrame {
       stereo3dSwapSidesCBx.setBounds(865, 8, 197, 18);
       stereo3dSwapSidesCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().stereo3dSwapSidesCBx_changed();
           }
         }
@@ -15529,7 +15582,7 @@ public class MainEditorFrame extends JFrame {
       stereo3dPreviewCmb.setBounds(533, 6, 322, 24);
       stereo3dPreviewCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getFlameControls().stereo3dPreviewCmb_changed();
           }
         }
@@ -15749,7 +15802,7 @@ public class MainEditorFrame extends JFrame {
       channelMixerModeCmb.setBounds(6, 39, 100, 24);
       channelMixerModeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null) {
             tinaController.getChannelMixerControls().channelMixerModeCmb_changed();
           }
         }
@@ -16014,7 +16067,7 @@ public class MainEditorFrame extends JFrame {
       postBokehFilterKernelCmb.setBounds(115, 72, 322, 24);
       postBokehFilterKernelCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingPostBokehFilterKernelCmb_changed();
           }
         }
@@ -16287,7 +16340,7 @@ public class MainEditorFrame extends JFrame {
       dofDOFShapeCmb = new JComboBox();
       dofDOFShapeCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().dofDOFShapeCmb_changed();
           }
         }
@@ -18006,7 +18059,7 @@ public class MainEditorFrame extends JFrame {
       leapMotionHandCmb = new JComboBox();
       leapMotionHandCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
             tinaController.getLeapMotionMainEditorController().leapMotionHandCmb_changed();
           }
         }
@@ -18141,7 +18194,7 @@ public class MainEditorFrame extends JFrame {
       leapMotionInputChannelCmb.setBounds(96, 34, 135, 24);
       leapMotionInputChannelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
             tinaController.getLeapMotionMainEditorController().leapMotionInputChannelCmb_changed();
           }
         }
@@ -18186,7 +18239,7 @@ public class MainEditorFrame extends JFrame {
       leapMotionOutputChannelCmb.setBounds(357, 7, 180, 24);
       leapMotionOutputChannelCmb.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
-          if (tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getLeapMotionMainEditorController() != null) {
             tinaController.getLeapMotionMainEditorController().leapMotionOutputChannelCmb_changed();
           }
         }
@@ -18707,7 +18760,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingSelectedLightCmb.setBounds(106, 6, 156, 24);
       tinaSolidRenderingSelectedLightCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingSelectedLightCmb_changed();
           }
         }
@@ -19169,7 +19222,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingSelectedMaterialCmb.setBounds(106, 1, 157, 24);
       tinaSolidRenderingSelectedMaterialCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingSelectedMaterialCmb_changed();
           }
         }
@@ -19413,7 +19466,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingMaterialDiffuseResponseCmb.setBounds(487, 24, 100, 24);
       tinaSolidRenderingMaterialDiffuseResponseCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingMaterialDiffuseResponseCmb_changed();
           }
         }
@@ -19507,7 +19560,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingMaterialReflectionMappingCmb.setBounds(705, 46, 246, 24);
       tinaSolidRenderingMaterialReflectionMappingCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingMaterialReflectionMappingCmb_changed();
           }
         }
@@ -20529,7 +20582,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingShadowTypeCmb.setBounds(98, 5, 100, 24);
       tinaSolidRenderingShadowTypeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingShadowTypeCmb_changed();
           }
         }
@@ -20566,7 +20619,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingShadowmapSizeCmb.setBounds(509, 5, 100, 24);
       tinaSolidRenderingShadowmapSizeCmb.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent e) {
-          if (tinaController != null && tinaController.getFlameControls() != null) {
+          if (e.getStateChange() == ItemEvent.SELECTED && tinaController != null && tinaController.getFlameControls() != null) {
             tinaController.getFlameControls().solidRenderingShadowmapSizeCmb_changed();
           }
         }

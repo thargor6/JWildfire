@@ -22,7 +22,10 @@ import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
+import org.jwildfire.image.SimpleImage;
+import org.jwildfire.swing.ImagePanel;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.*;
@@ -120,14 +123,51 @@ public abstract class WeightingFieldControlsUpdater {
     controls.weightingFieldVarParam2NameCmb.setEnabled(enabled && hasWeightingFieldType);
     fillVarParamCmb(xform, controls.weightingFieldVarParam3NameCmb);
     controls.weightingFieldVarParam3NameCmb.setEnabled(enabled && hasWeightingFieldType);
+    refreshFieldPreviewImage();
   }
 
-    private void clearFieldPreviewImage() {
-    // TODO
+  private ImagePanel getFieldPreviewImagePanel() {
+    if (controls.weightingFieldPreviewImgPanel == null) {
+      int width =  Math.max(controls.weightingFieldPreviewImgRootPanel.getWidth(), 64);
+      int height = Math.max(controls.weightingFieldPreviewImgRootPanel.getHeight(), 48);
+      SimpleImage img = new SimpleImage(width, height);
+      img.fillBackground(0, 0, 0);
+      controls.weightingFieldPreviewImgPanel = new ImagePanel(img, 0, 0, width);
+      controls.weightingFieldPreviewImgRootPanel.add(controls.weightingFieldPreviewImgPanel, BorderLayout.CENTER);
+      controls.weightingFieldPreviewImgRootPanel.getParent().validate();
+    }
+    return controls.weightingFieldPreviewImgPanel;
   }
+
+  static int clearCnt = 0;
+
+  private void clearFieldPreviewImage() {
+    ImagePanel imgPanel = getFieldPreviewImagePanel();
+    int width = imgPanel.getWidth();
+    int height = imgPanel.getHeight();
+    if (width >= 4 && height >= 4) {
+      SimpleImage img = imgPanel.getImage();
+      img.fillBackground(128,128,128);
+      imgPanel.getParent().validate();
+      imgPanel.getParent().getParent().validate();
+      imgPanel.repaint();
+    }
+  }
+
+  static int refreshCnt = 0;
 
   protected void refreshFieldPreviewImage() {
-    // TODO
+// TODO
+    ImagePanel imgPanel = getFieldPreviewImagePanel();
+    int width = imgPanel.getWidth();
+    int height = imgPanel.getHeight();
+    if (width >= 4 && height >= 4) {
+      SimpleImage img = imgPanel.getImage();
+      img.fillBackground(255,0,0);
+      imgPanel.getParent().validate();
+      imgPanel.getParent().getParent().validate();
+      imgPanel.repaint();
+    }
   }
 
   public abstract void weightingFieldColorMapFilenameBtn_clicked();
@@ -191,6 +231,7 @@ public abstract class WeightingFieldControlsUpdater {
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldVarParam1NameCmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       String selectedItem = (String)controls.weightingFieldVarParam1NameCmb.getSelectedItem();
       xForm.setWeightingFieldVarParam1VarName(decodeVarName(selectedItem));
       xForm.setWeightingFieldVarParam1ParamName(decodeParamName(selectedItem));
@@ -205,6 +246,7 @@ public abstract class WeightingFieldControlsUpdater {
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldVarParam2NameCmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       String selectedItem = (String)controls.weightingFieldVarParam2NameCmb.getSelectedItem();
       xForm.setWeightingFieldVarParam2VarName(decodeVarName(selectedItem));
       xForm.setWeightingFieldVarParam2ParamName(decodeParamName(selectedItem));
@@ -219,6 +261,7 @@ public abstract class WeightingFieldControlsUpdater {
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldVarParam3NameCmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       String selectedItem = (String)controls.weightingFieldVarParam3NameCmb.getSelectedItem();
       xForm.setWeightingFieldVarParam3VarName(decodeVarName(selectedItem));
       xForm.setWeightingFieldVarParam3ParamName(decodeParamName(selectedItem));
@@ -260,6 +303,7 @@ public abstract class WeightingFieldControlsUpdater {
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldTypeCmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       xForm.setWeightingFieldType((WeightingFieldType) controls.weightingFieldTypeCmb.getSelectedItem());
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
@@ -272,6 +316,7 @@ public abstract class WeightingFieldControlsUpdater {
       return;
     XForm xForm = controller.getCurrXForm();
     if (xForm != null && controls.weightingFieldInputCmb.getSelectedItem() != null) {
+      controller.saveUndoPoint();
       xForm.setWeightingFieldInput((WeightingFieldInputType) controls.weightingFieldInputCmb.getSelectedItem());
       controller.refreshFlameImage(true, false, 1, true, false);
     }

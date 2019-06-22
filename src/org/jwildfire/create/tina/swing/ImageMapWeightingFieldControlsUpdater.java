@@ -66,6 +66,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
           xForm.setWeightingFieldColorMapFilename(filename);
           updateControls(xForm);
           controller.refreshFlameImage(true, false, 1, true, false);
+          refreshFieldPreviewImage();
         }
         catch (Throwable ex) {
           controller.errorHandler.handleError(ex);
@@ -139,11 +140,13 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   @Override
   public void weightingFieldParam01REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldColorMapXCentre", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
   public void weightingFieldParam02REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam02REd, "weightingFieldColorMapXSize", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
@@ -159,11 +162,13 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   @Override
   public void weightingFieldParam05REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldColorMapYCentre", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
   public void weightingFieldParam06REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam06REd, "weightingFieldColorMapYSize", 1.0);
+    refreshFieldPreviewImage();
   }
 
   @Override
