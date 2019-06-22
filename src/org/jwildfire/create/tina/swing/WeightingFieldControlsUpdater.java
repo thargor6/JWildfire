@@ -20,8 +20,8 @@ import org.jwildfire.base.Tools;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.base.weightingfield.WeightingFieldVariationBlackList;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,10 +34,12 @@ public abstract class WeightingFieldControlsUpdater {
 
   protected final TinaController controller;
   protected final TinaWeightingFieldControllerData controls;
+  protected final XFormControlsDelegate xFormControlsDelegate;
 
   protected WeightingFieldControlsUpdater(TinaController controller, TinaWeightingFieldControllerData controls) {
     this.controller = controller;
     this.controls = controls;
+    this.xFormControlsDelegate = controller.xFormControls;
   }
 
   public void clearComponents() {
@@ -46,15 +48,15 @@ public abstract class WeightingFieldControlsUpdater {
     controls.weightingFieldInputCmb.setSelectedIndex(-1);
     controls.weightingFieldInputCmb.setEnabled(false);
     controls.weightingFieldColorIntensityREd.setValue(0.0);
-    controls.weightingFieldColorIntensityREd.setEnabled(false);
+    xFormControlsDelegate.enableControl(controls.weightingFieldColorIntensityREd, true);
     controls.weightingFieldVariationIntensityREd.setValue(0.0);
-    controls.weightingFieldVariationIntensityREd.setEnabled(false);
+    xFormControlsDelegate.enableControl(controls.weightingFieldVariationIntensityREd, true);
     controls.weightingFieldVarParam1AmountREd.setValue(0.0);
-    controls.weightingFieldVarParam1AmountREd.setEnabled(false);
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam1AmountREd, true);
     controls.weightingFieldVarParam2AmountREd.setValue(0.0);
-    controls.weightingFieldVarParam2AmountREd.setEnabled(false);
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam2AmountREd, true);
     controls.weightingFieldVarParam3AmountREd.setValue(0.0);
-    controls.weightingFieldVarParam3AmountREd.setEnabled(false);
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam3AmountREd, true);
     controls.weightingFieldVarParam1NameCmb.setSelectedIndex(-1);
     controls.weightingFieldVarParam1NameCmb.setEnabled(false);
     controls.weightingFieldVarParam2NameCmb.setSelectedIndex(-1);
@@ -105,12 +107,12 @@ public abstract class WeightingFieldControlsUpdater {
     WeightingFieldType weightingFieldType = (WeightingFieldType) controls.weightingFieldTypeCmb.getSelectedItem();
     boolean hasWeightingFieldType = weightingFieldType !=null && !WeightingFieldType.NONE.equals(weightingFieldType);
     controls.weightingFieldInputCmb.setEnabled(enabled && hasWeightingFieldType);
-    controls.weightingFieldColorIntensityREd.setEnabled(enabled && hasWeightingFieldType);
-    controls.weightingFieldVariationIntensityREd.setEnabled(enabled && hasWeightingFieldType);
+    xFormControlsDelegate.enableControl(controls.weightingFieldColorIntensityREd, !(enabled && hasWeightingFieldType));
+    xFormControlsDelegate.enableControl(controls.weightingFieldVariationIntensityREd, !(enabled && hasWeightingFieldType));
 
-    controls.weightingFieldVarParam1AmountREd.setEnabled(enabled && hasWeightingFieldType);
-    controls.weightingFieldVarParam2AmountREd.setEnabled(enabled && hasWeightingFieldType);
-    controls.weightingFieldVarParam3AmountREd.setEnabled(enabled && hasWeightingFieldType);
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam1AmountREd, !(enabled && hasWeightingFieldType));
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam2AmountREd ,!(enabled && hasWeightingFieldType));
+    xFormControlsDelegate.enableControl(controls.weightingFieldVarParam3AmountREd, !(enabled && hasWeightingFieldType));
 
     fillVarParamCmb(xform, controls.weightingFieldVarParam1NameCmb);
     controls.weightingFieldVarParam1NameCmb.setEnabled(enabled && hasWeightingFieldType);
@@ -245,7 +247,7 @@ public abstract class WeightingFieldControlsUpdater {
   }
 
   public static String encodeVarNameParamName(String varName, String paramName) {
-    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && !WeightingFieldVariationBlackList.isBlackListed(varName)) {
+    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && !VariationFuncList.isValidVariationForWeightingFields(varName)) {
       return varName + VAR_NAME_VAR_PARAM_SEPARATOR + paramName;
     }
     else {
@@ -283,12 +285,14 @@ public abstract class WeightingFieldControlsUpdater {
        Object selectedItem = cmb.getSelectedItem();
 
        cmb.removeAllItems();
-       cmb.addItem("");
        if(xform!=null) {
          for (Variation var : xform.getVariations()) {
            for (String paramName : var.getFunc().getParameterNames()) {
              String entry = encodeVarNameParamName(var.getFunc().getName(), paramName);
              if (!items.contains(entry)) {
+               if(cmb.getItemCount()==0) {
+                 cmb.addItem("");
+               }
                cmb.addItem(entry);
                items.add(entry);
              }

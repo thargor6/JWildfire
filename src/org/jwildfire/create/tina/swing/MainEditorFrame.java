@@ -86,12 +86,12 @@ import org.jwildfire.create.tina.base.PostSymmetryType;
 import org.jwildfire.create.tina.base.Stereo3dColor;
 import org.jwildfire.create.tina.base.Stereo3dMode;
 import org.jwildfire.create.tina.base.Stereo3dPreview;
-import org.jwildfire.create.tina.base.weightingfield.ImageMapWeightingField;
-import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
-import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.ReflectionMapping;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.weightingfield.ImageMapWeightingField;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.meshgen.filter.PreFilterType;
 import org.jwildfire.create.tina.meshgen.render.MeshGenRenderOutputType;
 import org.jwildfire.create.tina.quilt.QuiltFlameRendererFrame;
@@ -4432,6 +4432,12 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldColorMapFilenameBtn);
 
       weightingFieldColorIntensityREd = new JWFNumberField();
+      weightingFieldColorIntensityREd.setMotionPropertyName("weightingFieldColorIntensity");
+      weightingFieldColorIntensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       weightingFieldColorIntensityREd.setValueStep(0.01);
       weightingFieldColorIntensityREd.setText("");
       weightingFieldColorIntensityREd.setSize(new Dimension(55, 22));
@@ -4477,6 +4483,12 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblVariationIntensity);
 
       weightingFieldVariationAmountsREd = new JWFNumberField();
+      weightingFieldVariationAmountsREd.setMotionPropertyName("weightingFieldVarAmountIntensity");
+      weightingFieldVariationAmountsREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       weightingFieldVariationAmountsREd.setValueStep(0.01);
       weightingFieldVariationAmountsREd.setText("");
       weightingFieldVariationAmountsREd.setSize(new Dimension(55, 22));
@@ -4821,6 +4833,12 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldEditWholeFractalCBx);
 
       weightingFieldVarParam1AmountREd = new JWFNumberField();
+      weightingFieldVarParam1AmountREd.setMotionPropertyName("weightingFieldVarParam1Intensity");
+      weightingFieldVarParam1AmountREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       weightingFieldVarParam1AmountREd.setValueStep(0.01);
       weightingFieldVarParam1AmountREd.setText("");
       weightingFieldVarParam1AmountREd.setSize(new Dimension(55, 22));
@@ -4883,6 +4901,12 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblVarParam);
 
       weightingFieldVarParam2AmountREd = new JWFNumberField();
+      weightingFieldVarParam2AmountREd.setMotionPropertyName("weightingFieldVarParam2Intensity");
+      weightingFieldVarParam2AmountREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       weightingFieldVarParam2AmountREd.setValueStep(0.01);
       weightingFieldVarParam2AmountREd.setText("");
       weightingFieldVarParam2AmountREd.setSize(new Dimension(55, 22));
@@ -4933,6 +4957,12 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblVarParam_1);
 
       weightingFieldVarParam3AmountREd = new JWFNumberField();
+      weightingFieldVarParam3AmountREd.setMotionPropertyName("weightingFieldVarParam3Intensity");
+      weightingFieldVarParam3AmountREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getXFormControls().editMotionCurve(e);
+        }
+      });
       weightingFieldVarParam3AmountREd.setValueStep(0.01);
       weightingFieldVarParam3AmountREd.setText("");
       weightingFieldVarParam3AmountREd.setSize(new Dimension(55, 22));

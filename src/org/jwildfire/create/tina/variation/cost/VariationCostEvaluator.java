@@ -17,6 +17,8 @@ import org.jwildfire.create.tina.randomgradient.StrongHueRandomGradientGenerator
 import org.jwildfire.create.tina.render.FlameRenderer;
 import org.jwildfire.create.tina.variation.*;
 import org.jwildfire.create.tina.variation.iflames.IFlamesFunc;
+import org.jwildfire.create.tina.variation.mesh.OBJMeshWFFunc;
+import org.jwildfire.create.tina.variation.mesh.Strange3DFunc;
 
 import java.util.*;
 
@@ -154,17 +156,21 @@ public class VariationCostEvaluator {
     BLACKLIST.add(new CurliecueFunc().getName());
     BLACKLIST.add(new CustomWFFunc().getName());
     BLACKLIST.add(new CustomWFFunc().getName());
+    BLACKLIST.add(new DLAWFFunc().getName());
     BLACKLIST.add(new GPatternFunc().getName());
     BLACKLIST.add(new IFlamesFunc().getName());
+    BLACKLIST.add(new Knots3DFunc().getName());
     BLACKLIST.add(new MandalaFunc().getName());
     BLACKLIST.add(new MandelbrotFunc().getName());
     BLACKLIST.add(new NBlurFunc().getName());
     BLACKLIST.add(new NSudokuFunc().getName());
+    BLACKLIST.add(new OBJMeshWFFunc().getName());
     BLACKLIST.add(new PostCustomWFFunc().getName());
     BLACKLIST.add(new PreCustomWFFunc().getName());
     BLACKLIST.add(new SattractorFunc().getName());
     BLACKLIST.add(new SunFlowersFunc().getName());
     BLACKLIST.add(new SunflowerVoroniFunc().getName());
+    BLACKLIST.add(new Strange3DFunc().getName());
     BLACKLIST.add(new SZubietaFunc().getName());
     BLACKLIST.add(new TapratsFunc().getName());
     BLACKLIST.add(new TrianTruchetFunc().getName());

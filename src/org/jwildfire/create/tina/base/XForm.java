@@ -200,7 +200,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   private final MotionCurve weightingFieldColorIntensityCurve = new MotionCurve();
   @AnimAware
   private double weightingFieldVarAmountIntensity;
-  private final MotionCurve weightingFieldVariationIntensityCurve = new MotionCurve();
+  private final MotionCurve weightingFieldVarAmountIntensityCurve = new MotionCurve();
 
   @AnimAware
   private double weightingFieldVarParam1Intensity;
@@ -782,7 +782,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
     weightingFieldColorIntensity = pXForm.weightingFieldColorIntensity;
     weightingFieldColorIntensityCurve.assign(pXForm.weightingFieldColorIntensityCurve);
     weightingFieldVarAmountIntensity = pXForm.weightingFieldVarAmountIntensity;
-    weightingFieldVariationIntensityCurve.assign(pXForm.weightingFieldVariationIntensityCurve);
+    weightingFieldVarAmountIntensityCurve.assign(pXForm.weightingFieldVarAmountIntensityCurve);
 
     weightingFieldVarParam1Intensity = pXForm.weightingFieldVarParam1Intensity;
     weightingFieldVarParam1VarName = pXForm.weightingFieldVarParam1VarName;
@@ -890,7 +890,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
          weightingFieldType != pSrc.weightingFieldType || weightingFieldInput != pSrc.weightingFieldInput ||
          (fabs(weightingFieldColorIntensity - pSrc.weightingFieldColorIntensity) > EPSILON) || !weightingFieldColorIntensityCurve.isEqual(pSrc.weightingFieldColorIntensityCurve) ||
-         (fabs(weightingFieldVarAmountIntensity - pSrc.weightingFieldVarAmountIntensity) > EPSILON) || !weightingFieldVariationIntensityCurve.isEqual(pSrc.weightingFieldVariationIntensityCurve) ||
+         (fabs(weightingFieldVarAmountIntensity - pSrc.weightingFieldVarAmountIntensity) > EPSILON) || !weightingFieldVarAmountIntensityCurve.isEqual(pSrc.weightingFieldVarAmountIntensityCurve) ||
 
          (fabs(weightingFieldVarParam1Intensity - pSrc.weightingFieldVarParam1Intensity) > EPSILON) || !weightingFieldVarParam1VarName.equals(pSrc.weightingFieldVarParam1VarName) ||
          !weightingFieldVarParam1ParamName.equals(pSrc.weightingFieldVarParam1ParamName) || !weightingFieldVarParam1IntensityCurve.isEqual(pSrc.weightingFieldVarParam1IntensityCurve) ||
@@ -1910,8 +1910,8 @@ public final class XForm implements Assignable<XForm>, Serializable {
     this.weightingFieldVarAmountIntensity = weightingFieldVarAmountIntensity;
   }
 
-  public MotionCurve getWeightingFieldVariationIntensityCurve() {
-    return weightingFieldVariationIntensityCurve;
+  public MotionCurve getWeightingFieldVarAmountIntensityCurve() {
+    return weightingFieldVarAmountIntensityCurve;
   }
 
   public String getWeightingFieldColorMapFilename() {

@@ -35,11 +35,28 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
   @Override
   public void updateControls(XForm xform) {
     super.updateControls(xform);
+    controls.weightingFieldParam01REd.setOnlyIntegers(true);
+    controls.weightingFieldParam01REd.setMinValue(1);
+    controls.weightingFieldParam01REd.setHasMinValue(true);
     controls.weightingFieldParam01REd.setText(String.valueOf(xform.getWeightingFieldNoiseSeed()));
+
+    controls.weightingFieldParam02REd.setHasMinValue(false);
+    controls.weightingFieldParam02REd.setOnlyIntegers(false);
     controls.weightingFieldParam02REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseGain()));
+
+    controls.weightingFieldParam03REd.setMinValue(1);
+    controls.weightingFieldParam03REd.setHasMinValue(true);
+    controls.weightingFieldParam03REd.setOnlyIntegers(true);
     controls.weightingFieldParam03REd.setText(String.valueOf(xform.getWeightingFieldFractalNoiseOctaves()));
+
     controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldFractalType());
+
+    controls.weightingFieldParam05REd.setHasMinValue(false);
+    controls.weightingFieldParam05REd.setOnlyIntegers(false);
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldNoiseFrequency()));
+
+    controls.weightingFieldParam06REd.setHasMinValue(false);
+    controls.weightingFieldParam06REd.setOnlyIntegers(false);
     controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldFractalNoiseLacunarity()));
   }
 

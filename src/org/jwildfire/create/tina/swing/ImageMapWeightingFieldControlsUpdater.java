@@ -78,9 +78,21 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   public void updateControls(XForm xform) {
     super.updateControls(xform);
     controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
+
+    controls.weightingFieldParam01REd.setHasMinValue(false);
+    controls.weightingFieldParam01REd.setOnlyIntegers(false);
     controls.weightingFieldParam01REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXCentre()));
+
+    controls.weightingFieldParam05REd.setHasMinValue(false);
+    controls.weightingFieldParam05REd.setOnlyIntegers(false);
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYCentre()));
+
+    controls.weightingFieldParam02REd.setHasMinValue(false);
+    controls.weightingFieldParam02REd.setOnlyIntegers(false);
     controls.weightingFieldParam02REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapXSize()));
+
+    controls.weightingFieldParam06REd.setHasMinValue(false);
+    controls.weightingFieldParam06REd.setOnlyIntegers(false);
     controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYSize()));
   }
 

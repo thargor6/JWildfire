@@ -38,9 +38,17 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
   @Override
   public void updateControls(XForm xform) {
     super.updateControls(xform);
+    controls.weightingFieldParam01REd.setMinValue(1);
+    controls.weightingFieldParam01REd.setHasMinValue(true);
+    controls.weightingFieldParam01REd.setOnlyIntegers(true);
     controls.weightingFieldParam01REd.setText(String.valueOf(xform.getWeightingFieldNoiseSeed()));
+
     controls.weightingFieldParam04Cmb.setSelectedItem(xform.getWeightingFieldCellularNoiseReturnType());
+
+    controls.weightingFieldParam05REd.setHasMinValue(false);
+    controls.weightingFieldParam05REd.setOnlyIntegers(false);
     controls.weightingFieldParam05REd.setText(Tools.doubleToString(xform.getWeightingFieldNoiseFrequency()));
+
     controls.weightingFieldParam08Cmb.setSelectedItem(xform.getWeightingFieldCellularNoiseDistanceFunction());
   }
 
