@@ -825,7 +825,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
   public boolean isEqual(XForm pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) || !weightCurve.isEqual(pSrc.weightCurve) ||
         (fabs(color - pSrc.color) > EPSILON) || !colorCurve.isEqual(pSrc.colorCurve) ||
-        (! targetColor.equals(pSrc.targetColor)) ||
+        (!targetColor.isEqual(pSrc.targetColor)) ||
         (fabs(colorSymmetry - pSrc.colorSymmetry) > EPSILON) || !colorSymmetryCurve.isEqual(pSrc.colorSymmetryCurve) ||
         (fabs(material - pSrc.material) > EPSILON) || !materialCurve.isEqual(pSrc.materialCurve) ||
         (fabs(materialSpeed - pSrc.materialSpeed) > EPSILON) || !materialSymmetryCurve.isEqual(pSrc.materialSymmetryCurve) ||
