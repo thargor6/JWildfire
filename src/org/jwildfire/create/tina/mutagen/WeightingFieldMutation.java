@@ -68,6 +68,11 @@ public class WeightingFieldMutation implements Mutation {
 
   public void clearWeightingField(XForm xForm) {
     xForm.setWeightingFieldType(WeightingFieldType.NONE);
+    xForm.getWeightingFieldVarAmountIntensityCurve().setEnabled(false);
+    xForm.getWeightingFieldColorIntensityCurve().setEnabled(false);
+    xForm.getWeightingFieldVarParam1IntensityCurve().setEnabled(false);
+    xForm.getWeightingFieldVarParam2IntensityCurve().setEnabled(false);
+    xForm.getWeightingFieldVarParam3IntensityCurve().setEnabled(false);
   }
 
   public void clearWeightingField(Layer layer) {
@@ -172,7 +177,7 @@ public class WeightingFieldMutation implements Mutation {
   }
 
   private void randomizeSeed(XForm xForm) {
-    xForm.setWeightingFieldNoiseSeed(1+(int)Math.random()*30000);
+    xForm.setWeightingFieldNoiseSeed(1+(int)(Math.random()*30000));
   }
 
   private static List<WeightingFieldType> DEFAULT_WEIGHTING_FIELD_TYPE_LIST;

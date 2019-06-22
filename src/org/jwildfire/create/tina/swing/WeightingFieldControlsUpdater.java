@@ -247,7 +247,7 @@ public abstract class WeightingFieldControlsUpdater {
   }
 
   public static String encodeVarNameParamName(String varName, String paramName) {
-    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && !VariationFuncList.isValidVariationForWeightingFields(varName)) {
+    if(varName!=null && varName.length()>0 && paramName!=null && paramName.length()>0 && VariationFuncList.isValidVariationForWeightingFields(varName)) {
       return varName + VAR_NAME_VAR_PARAM_SEPARATOR + paramName;
     }
     else {

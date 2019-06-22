@@ -941,7 +941,7 @@ public class VariationFuncList {
   }
 
   public static boolean isValidVariationForWeightingFields(String name) {
-    return getVariationEvalCost(name) < VARIATION_COST_THRESHOLD && getVariationEvalCost(name) < VARIATION_COST_THRESHOLD;
+    return getVariationEvalCost(name) < VARIATION_COST_THRESHOLD && getVariationInitCost(name) < VARIATION_COST_THRESHOLD;
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {

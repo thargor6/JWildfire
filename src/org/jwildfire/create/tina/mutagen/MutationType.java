@@ -112,7 +112,14 @@ public enum MutationType {
     protected Class<? extends Mutation> getMutationClass() {
       return WeightingFieldMutation.class;
     }
+  },
+  COLOR_TYPE {
+    @Override
+    protected Class<? extends Mutation> getMutationClass() {
+      return ColorTypeMutation.class;
+    }
   };
+
 
   protected abstract Class<? extends Mutation> getMutationClass();
 

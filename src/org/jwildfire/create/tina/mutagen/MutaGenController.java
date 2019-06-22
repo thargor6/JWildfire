@@ -182,6 +182,7 @@ public class MutaGenController {
     pCmb.addItem(MutationType.AFFINE_3D);
     pCmb.addItem(MutationType.BOKEH);
     pCmb.addItem(MutationType.CHANGE_WEIGHT);
+    pCmb.addItem(MutationType.COLOR_TYPE);
     pCmb.addItem(MutationType.GRADIENT_POSITION);
     pCmb.addItem(MutationType.LOCAL_GAMMA);
     pCmb.addItem(MutationType.RANDOM_FLAME);
