@@ -2813,7 +2813,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     XForm xForm = new XForm();
     xForm.addVariation(1.0, new Linear3DFunc());
     xForm.setWeight(0.5);
-    xForm.setColorType(ColorType.DIFFUSION);
+    xForm.setColorType(ColorType.NONE);
     xForm.setColorSymmetry(1.0);
     saveUndoPoint();
     getCurrLayer().getXForms().add(xForm);
