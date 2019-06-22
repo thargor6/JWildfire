@@ -117,19 +117,19 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
   @Override
   public void weightingFieldParam01REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
   public void weightingFieldParam02REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam02REd, "weightingFieldFractalNoiseGain", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
   public void weightingFieldParam03REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam03REd, "weightingFieldFractalNoiseOctaves", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
@@ -149,13 +149,13 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
   @Override
   public void weightingFieldParam05REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
   public void weightingFieldParam06REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam06REd, "weightingFieldFractalNoiseLacunarity", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override

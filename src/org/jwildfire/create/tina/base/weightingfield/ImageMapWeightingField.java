@@ -2,7 +2,6 @@ package org.jwildfire.create.tina.base.weightingfield;
 
 import org.jwildfire.base.mathlib.GfxMathLib;
 import org.jwildfire.base.mathlib.MathLib;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.RessourceManager;
 import org.jwildfire.image.SimpleImage;
 import org.jwildfire.io.ImageReader;
@@ -21,7 +20,7 @@ public class ImageMapWeightingField implements WeightingField {
   private double ySize = 4.0;
 
   @Override
-  public double getValue(FlameTransformationContext pContext, double x, double y, double z) {
+  public double getValue(double x, double y, double z) {
     if(image==null) {
       try {
         if (imageFilename == null || imageFilename.length() == 0) {

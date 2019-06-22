@@ -119,7 +119,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
   @Override
   public void weightingFieldParam01REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam01REd, "weightingFieldNoiseSeed", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
@@ -143,14 +143,14 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
       controller.refreshFlameImage(true, false, 1, true, false);
-      refreshFieldPreviewImage();
+      refreshFieldPreviewImage(controller.getCurrXForm());
     }
   }
 
   @Override
   public void weightingFieldParam05REd_changed() {
     controller.xFormTextFieldChanged(null, controls.weightingFieldParam05REd, "weightingFieldNoiseFrequency", 1.0);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(controller.getCurrXForm());
   }
 
   @Override
@@ -174,7 +174,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
       controller.xFormControls.enableControls(xForm);
       controller.refreshXFormUI(xForm);
       controller.refreshFlameImage(true, false, 1, true, false);
-      refreshFieldPreviewImage();
+      refreshFieldPreviewImage(controller.getCurrXForm());
     }
   }
 }

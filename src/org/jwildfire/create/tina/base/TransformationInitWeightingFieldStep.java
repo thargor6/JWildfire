@@ -25,12 +25,12 @@ import java.util.Optional;
 
 public final class TransformationInitWeightingFieldStep extends AbstractTransformationStep {
   private static final long serialVersionUID = 1L;
-  private final WeightingField weightMap;
+  private final WeightingField weightingField;
   private final WeightingFieldInputType inputType;
 
   public TransformationInitWeightingFieldStep(XForm pXForm) {
     super(pXForm);
-    weightMap = Optional.ofNullable(pXForm.getWeightingFieldType()).orElse(WeightingFieldType.NONE).getInstance(pXForm);
+    weightingField = Optional.ofNullable(pXForm.getWeightingFieldType()).orElse(WeightingFieldType.NONE).getInstance(pXForm);
     inputType = pXForm.getWeightingFieldInput();
   }
 
@@ -38,10 +38,10 @@ public final class TransformationInitWeightingFieldStep extends AbstractTransfor
   public void transform(FlameTransformationContext pContext, XYZPoint pAffineT, XYZPoint pVarT, XYZPoint pSrcPoint, XYZPoint pDstPoint) {
     switch(inputType) {
       case AFFINE:
-        pAffineT.weightMapValue = weightMap.getValue(pContext, pAffineT.x, pAffineT.y, pAffineT.z);
+        pAffineT.weightMapValue = weightingField.getValue(pAffineT.x, pAffineT.y, pAffineT.z);
         break;
       case POSITION:
-        pAffineT.weightMapValue = weightMap.getValue(pContext, pSrcPoint.x, pSrcPoint.y, pSrcPoint.z);
+        pAffineT.weightMapValue = weightingField.getValue(pSrcPoint.x, pSrcPoint.y, pSrcPoint.z);
         break;
     }
   }

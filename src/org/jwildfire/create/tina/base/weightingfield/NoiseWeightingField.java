@@ -17,7 +17,6 @@
 package org.jwildfire.create.tina.base.weightingfield;
 
 import fastnoise.FastNoise;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 
 public abstract class NoiseWeightingField implements WeightingField {
   private int seed = 1337;
@@ -50,7 +49,7 @@ public abstract class NoiseWeightingField implements WeightingField {
   }
 
   @Override
-  public double getValue(FlameTransformationContext pContext, double x, double y, double z) {
+  public double getValue(double x, double y, double z) {
     return noise.GetNoise((float)x,(float)y,(float)z);
   }
 }

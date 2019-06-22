@@ -17,9 +17,11 @@
 package org.jwildfire.create.tina.swing;
 
 import org.jwildfire.base.Tools;
+import org.jwildfire.create.tina.base.weightingfield.WeightingField;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
+import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
@@ -27,6 +29,7 @@ import org.jwildfire.swing.ImagePanel;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import javax.swing.*;
 
@@ -123,7 +126,7 @@ public abstract class WeightingFieldControlsUpdater {
     controls.weightingFieldVarParam2NameCmb.setEnabled(enabled && hasWeightingFieldType);
     fillVarParamCmb(xform, controls.weightingFieldVarParam3NameCmb);
     controls.weightingFieldVarParam3NameCmb.setEnabled(enabled && hasWeightingFieldType);
-    refreshFieldPreviewImage();
+    refreshFieldPreviewImage(xform);
   }
 
   private ImagePanel getFieldPreviewImagePanel() {
@@ -139,8 +142,6 @@ public abstract class WeightingFieldControlsUpdater {
     return controls.weightingFieldPreviewImgPanel;
   }
 
-  static int clearCnt = 0;
-
   private void clearFieldPreviewImage() {
     ImagePanel imgPanel = getFieldPreviewImagePanel();
     int width = imgPanel.getWidth();
@@ -154,19 +155,93 @@ public abstract class WeightingFieldControlsUpdater {
     }
   }
 
-  static int refreshCnt = 0;
+  private class GenPreviewThread implements Runnable {
+    private final SimpleImage img;
+    private final XForm xform;
+    private boolean done;
+    private boolean cancelSignalled;
 
-  protected void refreshFieldPreviewImage() {
-// TODO
+    public GenPreviewThread(SimpleImage img, XForm xform) {
+      this.img = img;
+      this.xform = xform;
+    }
+
+    @Override
+    public void run() {
+      done = cancelSignalled = false;
+      try {
+        final double xCentre = 0.0;
+        final double yCentre = 0.0;
+        final double xSize = 4.0;
+        final double ySize = 4.0;
+        final int width = img.getImageWidth();
+        final int height = img.getImageHeight();
+
+        final WeightingField weightingField = Optional.ofNullable(xform.getWeightingFieldType()).orElse(WeightingFieldType.NONE).getInstance(xform);
+
+        for(int i=0;i<img.getImageHeight();i++) {
+          if(cancelSignalled) {
+            break;
+          }
+          double yCoord = (double)i/height*ySize+yCentre-ySize*0.5;
+          for(int j=0;j<img.getImageWidth();j++) {
+            if(cancelSignalled) {
+              break;
+            }
+            double xCoord = (double)j/width*xSize+xCentre-xSize*0.5;
+            double weight = weightingField.getValue(xCoord, yCoord, 0.0);
+            int v =  Math.max(Math.min((int)(weight * 128.0 + 128.0), 255), 0);
+
+            img.setRGB(j, i, 2*v/3, v, v/2);
+          }
+        }
+      }
+      finally {
+        done = true;
+        if(!cancelSignalled) {
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              ImagePanel imgPanel = getFieldPreviewImagePanel();
+              imgPanel.setImage(img);
+              imgPanel.getParent().validate();
+              imgPanel.getParent().getParent().validate();
+              imgPanel.repaint();
+            }
+          });
+        }
+      }
+    }
+
+    public void signalCancel() {
+      cancelSignalled = true;
+    }
+  }
+
+  private GenPreviewThread genPreviewThread;
+
+  protected void refreshFieldPreviewImage(XForm xform) {
+    if(xform == null || xform.getWeightingFieldType()==null || WeightingFieldType.NONE.equals(xform.getWeightingFieldType())) {
+      clearFieldPreviewImage();
+      return;
+    }
+
     ImagePanel imgPanel = getFieldPreviewImagePanel();
     int width = imgPanel.getWidth();
     int height = imgPanel.getHeight();
     if (width >= 4 && height >= 4) {
       SimpleImage img = imgPanel.getImage();
-      img.fillBackground(255,0,0);
-      imgPanel.getParent().validate();
-      imgPanel.getParent().getParent().validate();
-      imgPanel.repaint();
+      try {
+        if (genPreviewThread != null) {
+          genPreviewThread.signalCancel();
+          genPreviewThread = null;
+        }
+      }
+      catch(Exception ex) {
+        ex.printStackTrace();
+      }
+      genPreviewThread = new GenPreviewThread(imgPanel.getImage(), xform);
+      new Thread(genPreviewThread).start();
     }
   }
 
