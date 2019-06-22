@@ -235,6 +235,7 @@ public class PrefsReader {
         catch (Exception ex) {
           ex.printStackTrace();
         }
+        pPrefs.setTinaInitialRandomBatchSize(getIntProperty(props, Prefs.KEY_TINA_INITIAL_RANDOMBATCH_SIZE, pPrefs.getTinaInitialRandomBatchSize()));
         pPrefs.setTinaRandomBatchSize(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_SIZE, pPrefs.getTinaRandomBatchSize()));
         pPrefs.setTinaRandomMovieBatchSize(getIntProperty(props, Prefs.KEY_TINA_RANDOMMOVIEBATCH_SIZE, pPrefs.getTinaRandomMovieBatchSize()));
         pPrefs.setTinaRandomBatchBGColorRed(getIntProperty(props, Prefs.KEY_TINA_RANDOMBATCH_BGCOLOR_RED, pPrefs.getTinaRandomBatchBGColorRed()));

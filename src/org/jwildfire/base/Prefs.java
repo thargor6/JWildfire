@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java
-  Copyright (C) 1995-2017 Andreas Maschke
+  Copyright (C) 1995-2019 Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -91,6 +91,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_TINA_DISABLE_SOLID_RANDGENS = "tina.disable_solid_randgens";
 
   static final String KEY_TINA_RANDOM_GENERATOR = "tina.random.generator.3";
+  static final String KEY_TINA_INITIAL_RANDOMBATCH_SIZE = "tina.initial_random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_SIZE = "tina.random_batch.size";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION = "tina.random_batch.duality.prefered_variation";
   static final String KEY_TINA_RANDOMBATCH_DUALITY_PREFERED_VARIATION_PROBABILITY1 = "tina.random_batch.duality.prefered_variation_probability1";
@@ -465,6 +466,8 @@ public class Prefs extends ManagedObject {
   @Property(description = "Quality for realtime rendering (please restart app after changing this)", category = PropertyCategory.TINA)
   private double tinaRenderRealtimeQuality = 0.5;
 
+  @Property(description = "Number of random-flames generated during program-start", category = PropertyCategory.TINA)
+  private int tinaInitialRandomBatchSize = 3;
   @Property(description = "Number of generated flames by invoking the \"Random flames\" function", category = PropertyCategory.TINA)
   private int tinaRandomBatchSize = 24;
   @Property(description = "Number of generated movies by invoking the \"Random movies\" function", category = PropertyCategory.TINA)
@@ -735,6 +738,7 @@ public class Prefs extends ManagedObject {
     tinaRenderPreviewQuality = pSrc.tinaRenderPreviewQuality;
     tinaRenderRealtimeQuality = pSrc.tinaRenderRealtimeQuality;
     tinaRandomBatchSize = pSrc.tinaRandomBatchSize;
+    tinaInitialRandomBatchSize = pSrc.tinaInitialRandomBatchSize;
     tinaRandomMovieBatchSize = pSrc.tinaRandomMovieBatchSize;
     tinaRandomBatchBGColorRed = pSrc.tinaRandomBatchBGColorRed;
     tinaRandomBatchBGColorGreen = pSrc.tinaRandomBatchBGColorGreen;
@@ -865,7 +869,17 @@ public class Prefs extends ManagedObject {
   }
 
   public void setTinaRandomBatchSize(int tinaRandomBatchSize) {
-    this.tinaRandomBatchSize = tinaRandomBatchSize;
+    if(tinaRandomBatchSize<64) {
+      this.tinaRandomBatchSize = tinaRandomBatchSize;
+    }
+  }
+
+  public int getTinaInitialRandomBatchSize() {
+    return tinaInitialRandomBatchSize;
+  }
+
+  public void setTinaInitialRandomBatchSize(int tinaInitialRandomBatchSize) {
+    this.tinaInitialRandomBatchSize = tinaInitialRandomBatchSize;
   }
 
   public int getTinaRandomBatchBGColorRed() {
