@@ -1,666 +1,667 @@
-glsl_acrilic: 1
-dc_acrilic: 0.95945756
-dc_circlesblue: 0.47932579
-glsl_circlesblue: 0.46841927
-dc_fractaldots: 0.41426342
-glsl_fractaldots: 0.40241464
-glsl_randomoctree: 0.28612326
-dc_tree: 0.26613432
-dc_randomoctree: 0.25883685
-quaternion: 0.25782203
-dc_inversion: 0.25661449
-dc_gabornoise: 0.24558441
-fract_pearls_wf: 0.23690507
-fract_meteors_wf: 0.23626524
-fract_salamander_wf: 0.23478799
-fract_julia_wf: 0.23244275
-fract_mandelbrot_wf: 0.22406456
-complex: 0.22115749
-fract_dragon_wf: 0.19810042
-maurer_lines: 0.19509472
-dc_hoshi: 0.19105203
-glsl_hoshi: 0.18323852
-dc_circuits: 0.16818535
-vibration2: 0.15502786
-glsl_circuits: 0.15385697
-ducks: 0.14482617
-dc_voronoise: 0.13486312
-svg_wf: 0.134743
-glsl_mandala: 0.12809425
-text_wf: 0.11783918
-dc_fingerprint: 0.11011049
-dc_grid3D: 0.10874533
-dc_tesla: 0.10697788
-dc_ducks: 0.10639291
-w: 0.1023821
-dc_mandala: 0.09468786
-rosoni: 0.09279328
-glsl_grid3D: 0.08638743
-bipolar2: 0.08506763
-dc_kaliset2: 0.08442019
-dc_rotations: 0.07954604
-dc_code: 0.07661246
-jac_asn: 0.07636197
-dc_kaliset: 0.0751658
-ringsubflame: 0.07463643
-dc_starsfield: 0.07284783
-dc_kaleidocomplex: 0.07182847
-glsl_starsfield: 0.07073327
-dc_gnarly: 0.0701787
-glynnspiro: 0.06589615
-dc_layers: 0.06545508
-voron: 0.06442988
-dc_turbulence: 0.06327983
-dc_crackle_wf: 0.0605181
-glsl_kaliset2: 0.05951733
-circleRand: 0.05859052
-dc_squares: 0.05840688
-glsl_kaliset: 0.05787217
-lazyjess: 0.05721733
-dc_hexes_wf: 0.05709568
-dc_apollonian: 0.0568688
-dc_glypho: 0.05566348
-woggle_js: 0.05411305
-spirograph: 0.05370295
-sattractor_js: 0.05319672
-waves4_wf: 0.05236353
-colordomain: 0.05101689
-pRose3D: 0.05084849
-glsl_kaleidocomplex: 0.05034609
-dc_kaleidoscopic: 0.04997047
-crown_js: 0.04951929
-glsl_apollonian: 0.04916312
-dc_cracklep_wf: 0.04880163
-dc_mandbrot: 0.04831662
-dc_worley: 0.04796582
-dc_quadtree: 0.04772207
-fract_formula_julia_wf: 0.04737151
-spirograph3D: 0.0463264
-post_heat: 0.04581612
-siercarpet_js: 0.04459313
-synth: 0.04446373
-waves3_wf: 0.04359453
-glsl_kaleidoscopic: 0.04324753
-sattractor3D: 0.04310087
-waves3: 0.0430476
-hexes: 0.04299056
-dc_sunflower: 0.04227897
-dc_pentatiles: 0.04190894
-truchet_ae: 0.0417481
-dc_mandelbox2D: 0.04162882
-fract_formula_mand_wf: 0.04132575
-dc_cylinder: 0.04061642
-dc_carpet3D: 0.04033518
-mobiusN: 0.03943511
-pre_recip: 0.03931765
-glsl_squares: 0.03930398
-glynns3subfl: 0.03884664
-rhodonea: 0.03834589
-dc_triantess: 0.03800453
-waves2b: 0.03786704
-dc_cairotiles: 0.037601
-waves42: 0.03759703
-juliascope3Db: 0.03752265
-dc_cylinder2: 0.03743802
-harmonograph_js: 0.03727736
-gridout3D: 0.03704054
-jubiQ: 0.03615166
-waves22: 0.03586978
-fdisc: 0.03578195
-dc_moebiuslog: 0.03533915
-knots3D: 0.03520671
-gpattern: 0.0348232
-cpow3_wf: 0.03455264
-polylogarithm: 0.03452344
-dc_dmodulus: 0.03436191
-onion2: 0.03407755
-dc_hexagons: 0.03397326
-dc_poincaredisc: 0.03369166
-superShape3d: 0.03363239
-truchet2: 0.03361224
-waves4: 0.0334369
-dla3d_wf: 0.03339209
-subflame_wf: 0.03283093
-popcorn2_3D: 0.03247223
-dc_truchet: 0.03234357
-waves2_wf: 0.03222706
-mask: 0.03213835
-curl3D: 0.03213526
-r_circleblur: 0.03175805
-y: 0.03144747
-waves2_radial: 0.03108692
-glsl_mandelbox2D: 0.03098027
-glynnSShape: 0.03065107
-inversion: 0.03045498
-post_julia3Dq: 0.03027699
-dc_menger: 0.03025382
-mandala: 0.0302358
-hole2: 0.03021624
-x: 0.02987061
-truchet_hex_fill: 0.02966625
-pdj: 0.02952707
-minkowskope: 0.02948755
-svensson_js: 0.02947369
-falloff3: 0.02935828
-julia3Dq: 0.02934625
-sunflower: 0.02933179
-sech2_bs: 0.02920751
-cosh2_bs: 0.02909533
-z: 0.02908552
-nBlur: 0.02900632
-circular2: 0.02894519
-hypertile3D1: 0.02880012
-mobiq: 0.02872412
-atan2_spirals: 0.02841439
-pre_subflame_wf: 0.02829118
-hypertile3D2: 0.02809936
-pTransform: 0.02793205
-post_mirror_wf: 0.02768802
-dc_hyperbolictile: 0.02750403
-parplot2d_wf: 0.02733672
-yplot2d_wf: 0.02733511
-super_shape: 0.02704031
-terrain3D: 0.02700739
-crackle: 0.02696009
-csch2_bs: 0.02689335
-tanh2_bs: 0.02680741
-yplot3d_wf: 0.02680418
-curl: 0.02663459
-juliaq: 0.02655681
-sec2_bs: 0.02650535
-disc3: 0.02638884
-sinh2_bs: 0.02616638
-post_smartcrop: 0.02603103
-flower_db: 0.02602432
-post_axis_symmetry_wf: 0.0259742
-sin2_bs: 0.02592227
-ePush: 0.02584564
-cone: 0.02579267
-circular: 0.0257784
-hypertile2: 0.02575206
-obj_mesh_wf: 0.0257259
-oscilloscope2: 0.02570744
-julian3Dx: 0.02563166
-post_juliaq: 0.02561518
-phoenix_julia: 0.02560074
-hypertile1: 0.02559921
-minkQM: 0.02559307
-isosfplot3d_wf: 0.02551486
-lissajous: 0.0254976
-obj_mesh_primitive_wf: 0.02517873
-butterfly_fay: 0.02506734
-csc2_bs: 0.02497584
-post_falloff3: 0.02485043
-bwrands: 0.02484775
-taprats: 0.02482201
-pre_falloff3: 0.02479125
-cpow2: 0.02464558
-szubieta: 0.02461983
-clifford_js: 0.02460518
-exblur: 0.02456771
-bTransform: 0.02452283
-coth2_bs: 0.02451875
-cot2_bs: 0.02444817
-blob3D: 0.02444088
-glsl_hyperbolictile: 0.02441056
-nsudoku: 0.02421748
-tan2_bs: 0.0240829
-mobius_strip: 0.02406554
-ortho: 0.02400893
-cos2_bs: 0.02393621
-blocky: 0.02387867
-eMotion: 0.02385268
-glynnlissa: 0.02381741
-eScale: 0.02380281
-cpow3: 0.0238024
-affine3D: 0.02377298
-elliptic2: 0.02369545
-pulse: 0.02366078
-maurer_rose: 0.02363843
-gdoffs: 0.0235211
-waves2: 0.02343412
-sphtiling3v2: 0.02339753
-truchet_fill: 0.02339693
-line: 0.0233117
-triantruchet: 0.02322326
-eSwirl: 0.02316131
-cubic3D: 0.02315499
-falloff2: 0.02313184
-sunvoroni: 0.0230797
-juliac: 0.02301764
-juliascope: 0.0230069
-q_ode: 0.02299362
-tqmirror: 0.02290828
-taurus: 0.02267746
-pointgrid3d_wf: 0.02263569
-inverted_julia: 0.02251272
-pre_wave3D_wf: 0.0223636
-auger: 0.02219218
-pie3D: 0.0221058
-pie: 0.02207167
-popcorn2: 0.02203988
-iconattractor_js: 0.02203544
-waveblur_wf: 0.02192318
-xtrb: 0.02179632
-dc_kaleidotile: 0.02177159
-bsplit: 0.0217654
-recurrenceplot: 0.02174481
-lsystem_js: 0.02174114
-curliecue: 0.02171304
-projective: 0.02163271
-exp2_bs: 0.02160349
-truchet_hex_crop: 0.02158768
-target_sp: 0.02153496
-waves2_3D: 0.02146543
-dc_linear: 0.02145852
-julian: 0.02144675
-csc_squared: 0.02137346
-epispiral: 0.02104412
-post_bumpmap_wf: 0.02096363
-target: 0.02091732
-pow_block: 0.02087722
-mobius: 0.02080558
-julian2: 0.02080457
-dc_cube: 0.02062657
-wedge_julia: 0.02058714
-eMod: 0.02056827
-bipolar: 0.02053688
-ennepers2: 0.02053398
-plane_wf: 0.02052891
-prepost_mobius: 0.02051527
-bSwirl: 0.02047101
-corners: 0.0204591
-pre_bwraps2: 0.02038192
-sphere_nja: 0.02036609
-yin_yang: 0.02034632
-ho: 0.02033446
-post_falloff2: 0.02019999
-heart_wf: 0.02018796
-rational3: 0.02017898
-intersection: 0.0201454
-checkerboard_wf: 0.0201167
-ripple: 0.02004875
-crop3D: 0.01994178
-crop: 0.01992844
-seashell3D: 0.01992436
-jac_dn: 0.01987235
-prepost_circlize: 0.01978452
-klein_group: 0.01970285
-fan2: 0.0196985
-hexnix3D: 0.01963238
-loonie2: 0.01960382
-jac_cn: 0.01958758
-log_tile2: 0.01957999
-blob: 0.01947477
-murl2: 0.01946222
-post_custom_wf: 0.01944719
-custom_wf: 0.01941219
-scry2: 0.01934035
-circleLinear: 0.01933287
-pressure_wave: 0.01933065
-primitives_wf: 0.0193231
-murl: 0.0193163
-curl_sp: 0.01929702
-split: 0.01929067
-pointgrid_wf: 0.01925528
-hypershift2: 0.01923387
-sphericalN: 0.01918898
-glynnSim2: 0.01908877
-farblur: 0.01906431
-circlecrop: 0.01905451
-eRotate: 0.01902956
-fourth: 0.01901915
-post_displacemap_wf: 0.01897848
-plusrecip: 0.01896399
-spliptic_bs: 0.01895451
-bwraps7: 0.01893326
-mandala2: 0.01888235
-lazysensen: 0.01880531
-linearT3D: 0.01877244
-shift: 0.01875275
-bCollide: 0.01871813
-lorenz_js: 0.0187155
-squirrel: 0.01869461
-circleTrans1: 0.01868327
-radial_blur: 0.01868291
-pre_custom_wf: 0.0186481
-starblur: 0.01863898
-displacemap_wf: 0.01860897
-glynnSim1: 0.01857301
-prepost_affine: 0.0185551
-julia3D: 0.01836631
-cardioid: 0.01835875
-spherecrop: 0.01835073
-anamorphcyl: 0.01831984
-glynnSim3: 0.01830004
-eCollide: 0.01816518
-glsl_code: 0.01814628
-trade: 0.01793176
-splitbrdr: 0.01792069
-wedge_sph: 0.01790823
-ngon: 0.01790598
-hypershift: 0.01789473
-poincare3D: 0.0178373
-bMod: 0.01780189
-waffle: 0.01777937
-chunk: 0.01773125
-hypercrop: 0.01769825
-post_colorscale_wf: 0.01768573
-helix: 0.01765399
-pre_disc3d: 0.01764175
-stwin: 0.01760248
-log_db: 0.01758336
-kaleidoscope: 0.01757534
-layered_spiral: 0.01757172
-jac_sn: 0.01753412
-swirl3D_wf: 0.01752889
-shredlin: 0.01752546
-dla_wf: 0.01751596
-separation: 0.01749213
-npolar: 0.01748652
-gridout2: 0.01742479
-eJulia: 0.01742451
-post_curl: 0.01741857
-julia3Dz: 0.01741454
-mcarpet: 0.01741427
-post_circlecrop: 0.01738193
-octagon: 0.01737198
-hyperbolicellipse: 0.01737185
-helicoid: 0.01733465
-collideoscope: 0.01731945
-flower: 0.01730806
-splits3D: 0.0172382
-hexaplay3D: 0.01716923
-pre_circlecrop: 0.01715795
-devil_warp: 0.01714119
-blur_linear: 0.01713426
-cubicLattice_3D: 0.0171132
-fibonacci2: 0.01710597
-lazyTravis: 0.01707562
-post_rblur: 0.01695956
-macmillan: 0.0169242
-circlize2: 0.01692069
-wedge: 0.01691993
-barycentroid: 0.01690295
-perspective: 0.01684823
-dc_bubble: 0.01682119
-post_dcztransl: 0.01680756
-linearT: 0.01680487
-tile_reverse: 0.01677321
-oscilloscope: 0.01673944
-escher: 0.01670165
-disc3d: 0.01666793
-spligon: 0.01666199
-whorl: 0.01664665
-bubble2: 0.01662965
-waves23: 0.01655573
-hypertile3D: 0.01652467
-post_curl3D: 0.01650093
-dinis_surface_wf: 0.01648983
-blur_pixelize: 0.01647411
-sph3D: 0.01646321
-sineblur: 0.01646291
-scrambly: 0.01637407
-lazysusan: 0.01634851
-colorscale_wf: 0.0162927
-circlesplit: 0.016291
-epispiral_wf: 0.01627933
-xheart_blur_wf: 0.01626947
-splits: 0.01626328
-swirl3: 0.01624918
-pre_boarders2: 0.01624231
-extrude: 0.01623809
-spherical3D_wf: 0.01621128
-glynnia3: 0.01617973
-blur_zoom: 0.01616277
-cpow: 0.0161183
-d_spherical: 0.01610819
-wallpaper_js: 0.01610466
-post_crop: 0.01606221
-pre_rect_wf: 0.01596106
-flux: 0.01592803
-post_bwraps2: 0.01589525
-stripes: 0.01589114
-circlize: 0.01582437
-eclipse: 0.0157665
-ovoid3d: 0.01573284
-pre_dcztransl: 0.01572422
-pre_crop: 0.01562899
-dc_ztransl: 0.01560807
-checks: 0.01557852
-vogel: 0.01553045
-dc_perlin: 0.0154906
-dc_carpet: 0.01548129
-curve: 0.01538245
-henon: 0.01534709
-sintrange: 0.01533236
-svf: 0.01531768
-ztwister: 0.01530119
-shredrad: 0.01529133
-parabola: 0.01525819
-asteria: 0.01517258
-sigmoid: 0.01505111
-onion: 0.01502827
-conic: 0.01499853
-lozi: 0.0149979
-boarders2: 0.01498306
-circus: 0.01494989
-rectangles: 0.01492962
-rose_wf: 0.01488687
-tile_log: 0.0148404
-dc_triangle: 0.01483327
-loq: 0.01482495
-hypertile: 0.01477549
-funnel: 0.01477308
-cloverleaf_wf: 0.01470773
-bent2: 0.01466345
-log_apo: 0.01460757
-xheart: 0.01460336
-modulus: 0.0144954
-pre_curl: 0.01447732
-hex_modulus: 0.01434493
-tile_hlp: 0.01420903
-disc2: 0.01420772
-post_zscale_wf: 0.01416721
-atan: 0.01412857
-cannabiscurve_wf: 0.01404797
-post_depth: 0.01395342
-curliecue2: 0.01374501
-cell: 0.01369305
-stripfit: 0.0136687
-rings2: 0.01318619
-truchet: 0.01298854
-starfractal: 0.01280529
-squish: 0.01266862
-linear: 0.01037892
-sqrt_acosech: 0.01000662
-mandelbrot: 0.00939938
-waves: 0.00930703
-sqrt_asinh: 0.00855968
-sqrt_asech: 0.00851849
-sqrt_acosh: 0.0083497
-edisc: 0.00804118
-sqrt_acoth: 0.00794604
-acosech: 0.00783224
-arcsech2: 0.00783054
-sqrt_atanh: 0.00756406
-acosh: 0.00754623
-polar: 0.00748168
-rays3: 0.00746013
-cschq: 0.0073382
-lace_js: 0.0072361
-arcsinh: 0.00722309
-cos: 0.00712647
-chrysanthemum: 0.00697359
-elliptic: 0.00697277
-sinhq: 0.00693158
-petal: 0.00692574
-handkerchief: 0.00690326
-xerf: 0.006629
-acoth: 0.00641513
-erf3D: 0.00640166
-disc: 0.00637942
-sech: 0.0063345
-arctanh: 0.00629337
-deltaA: 0.00616229
-loonie_3D: 0.00612589
-gamma: 0.00610354
-crob: 0.00609374
-cotq: 0.00600684
-cothq: 0.0060064
-blur: 0.0060006
-tanhq: 0.00597934
-inflateZ_6: 0.00594396
-circleblur: 0.00588431
-diamond: 0.00586826
-sechq: 0.00581891
-ex: 0.00581814
-foci_3D: 0.00581535
-sec: 0.00579628
-secq: 0.00579283
-csch: 0.00577632
-coshq: 0.00576306
-tanq: 0.00568865
-cosine: 0.00567203
-csc: 0.00565675
-popcorn: 0.00564401
-erf: 0.0056382
-sinusoidal3d: 0.00559614
-panorama1: 0.00556489
-cscq: 0.00556174
-pre_blur3D: 0.0055584
-panorama2: 0.00555528
-cosq: 0.00554005
-spherical: 0.005518
-sinq: 0.00546605
-swirl: 0.00542806
-sin: 0.00541768
-estiq: 0.00541144
-secant2: 0.00539906
-cosh: 0.00536625
-power: 0.00536474
-gaussian_blur: 0.00534253
-glynnia: 0.00531969
-rays2: 0.005296
-julia: 0.00529482
-blur_circle: 0.00525949
-tan: 0.00525582
-tanh: 0.00525456
-pre_sinusoidal3d: 0.00525237
-squarize: 0.00523977
-blade: 0.00523966
-wdisc: 0.0052344
-blur3D: 0.0052278
-rays: 0.00521471
-cot: 0.00520031
-hyperbolic: 0.00518897
-coth: 0.00517949
-blade3D: 0.00517453
-inflateZ_3: 0.00512521
-idisc: 0.00512447
-inflateZ_5: 0.00512113
-ztranslate: 0.00510541
-zscale: 0.00509947
-inflateZ_1: 0.0050893
-rays1: 0.00508312
-sinh: 0.00507534
-twintrian: 0.00506022
-threepoint_js: 0.0050305
-pre_blur: 0.00488921
-apollony: 0.00487344
-scry_3D: 0.00486892
-foci: 0.00486829
-tangent3D: 0.00483849
-roundspher3D: 0.00483435
-scry: 0.00481379
-inflateZ_4: 0.00478854
-tangent: 0.00470339
-unpolar: 0.00468605
-pre_rotate_x: 0.00468496
-fan: 0.00467351
-exp: 0.00467115
-arch: 0.00465234
-cross: 0.00464954
-apocarpet_js: 0.00464418
-noise: 0.00462906
-heart: 0.00458165
-dustpoint: 0.00457864
-exponential: 0.0045768
-butterfly3D: 0.00454366
-rippled: 0.00453041
-spiralwing: 0.00452414
-tancos: 0.0045048
-invpolar: 0.0045022
-boarders: 0.00450056
-butterfly: 0.00444269
-square3D: 0.00442497
-fisheye: 0.00441503
-cylinder2: 0.00438126
-loonie: 0.00437416
-hadamard_js: 0.00436721
-sinusoidal: 0.00435921
-cylinder_apo: 0.00433823
-squircular: 0.00433084
-invsquircular: 0.00432744
-twoface: 0.00426289
-bubble_wf: 0.00425933
-loonie3: 0.00425771
-invtree_js: 0.00425467
-eyefish: 0.00424352
-square: 0.00420086
-hemisphere: 0.00416974
-zcone: 0.0041661
-spiral: 0.004142
-log: 0.00412132
-post_rotate_y: 0.00410952
-polar2: 0.00410645
-holesq: 0.00408761
-pyramid: 0.00405241
-rings: 0.00402771
-post_rotate_x: 0.00402144
-gridout: 0.00401862
-cylinder: 0.00400758
-pre_rotate_y: 0.0039995
-custom_wf_full: 0.0039625
-roundspher: 0.00396132
-horseshoe: 0.00396113
-zblur: 0.00394695
-flatten: 0.00389354
-ennepers: 0.00387278
-flipy: 0.00385276
-spherical3D: 0.00384643
-whitney_umbrella: 0.00380752
-bubble: 0.00379692
-flipcircle: 0.00379448
-bi_linear: 0.00376435
-pre_spherical: 0.00374754
-inflateZ_2: 0.00374231
-post_spherical: 0.00374023
-post_spin_z: 0.00373872
-post_ztranslate_wf: 0.00373505
-pre_spin_z: 0.00373242
-bent: 0.00372303
-pre_ztranslate: 0.00359584
-pre_zscale: 0.00357916
-linear3D: 0.00352704
-post_colormap_wf: -1
-colormap_wf: -1
-grid3d_wf: -1
-bubbleT3D: -1
-iflames_wf: -1
-post_point_symmetry_wf: -1
-dc_triTile: -1
-lsystem3D_js: -1
-hamid_js: -1
-tree_js: -1
-brownian_js: -1
-dragon_js: -1
-gosperisland_js: -1
-htree_js: -1
-koch_js: -1
-rsquares_js: -1
-hilbert_js: -1
-pre_stabilize: -1
-wangtiles: -1
-arctruchet: -1
-metaballs3d_wf: -1
+#variation; average eval-cost in ms; average init-cost in ms; average eval-memory in KB; average init-memory in KB; had eval-error; had init-error
+metaballs3d_wf; 0.05079876; 0.66670265; 0.00512; 31.25424974; false; false
+text_wf; 0.05007687; 0.00077464; 14.53190937; 0.01510755; true; false
+fract_mandelbrot_wf; 0.05006668; 0.00713869; 0.02561; 0.92574141; false; false
+lsystem3D_js; 0.05001685; 0.66676491; 18.65282094; 20.90500521; false; false
+fract_julia_wf; 0.05001001; 0.00444343; 0.03072; 3.99373385; false; false
+dc_triTile; 0.05000454; 0.0012695; 0.07681; 1.53606667; false; false
+isosfplot3d_wf; 0.0500022; 0.30645787; 0.10753; 17.64633333; false; false
+glsl_acrilic; 0.05000043; 0.00182253; 0.89601; 1.263; false; false
+dc_acrilic; 0.05000033; 0.00202042; 2.02241; 2.83313333; false; false
+bubbleT3D; 0.02243046; 0.00073741; 0.8704; 0.87840078; false; false
+dc_circlesblue; 0.01787108; 0.00136862; 8.21761; 1.6384; false; false
+glsl_circlesblue; 0.01718711; 0.00164946; 7.25505; 0.6144; false; false
+maurer_lines; 0.01433071; 0.66667601; 2.76481008; 16.65706667; false; false
+dc_fractaldots; 0.0130318; 0.00336961; 5.66785; 2.287; false; false
+dragon_js; 0.01139923; 0.00036869; 0.94208; 0.239; true; false
+quaternion; 0.0113917; 0.00475428; 2.13511234; 7.85066667; false; false
+koch_js; 0.0111155; 0.00041429; 0.9728; 0.239; true; false
+glsl_randomoctree; 0.01083186; 0.00206168; 3.1181834; 0.75093333; false; false
+brownian_js; 0.01066352; 0.00039539; 1.03424; 0.239; true; false
+hilbert_js; 0.01062244; 0.00036476; 0.9728; 0.239; true; false
+gosperisland_js; 0.01048043; 0.00042029; 0.94208; 0.239; true; false
+grid3d_wf; 0.0103542; 0.00907332; 2.85696; 2.08157344; true; false
+dc_gabornoise; 0.00983286; 0.00272411; 2.048; 1.4336; false; false
+dc_inversion; 0.00925583; 0.00265285; 5.03297; 1.6726; false; false
+complex; 0.00913365; 0.00377759; 5.53984; 5.5638; false; false
+dc_randomoctree; 0.00905188; 0.00241117; 11.88355016; 1.8774; false; false
+glsl_fractaldots; 0.00904381; 0.00125803; 4.44416; 1.0582; false; false
+fract_salamander_wf; 0.00870779; 0.00407001; 6.87617; 3.55033698; false; false
+fract_pearls_wf; 0.00855585; 0.00388862; 6.87617; 2.73073385; false; false
+fract_meteors_wf; 0.00853298; 0.00672578; 6.62017; 4.91526719; false; false
+fract_dragon_wf; 0.00835046; 0.00792963; 6.87617; 3.65240052; false; false
+dc_hoshi; 0.00739665; 0.00239965; 3.82465; 1.6726; false; false
+glsl_hoshi; 0.00709192; 0.00115823; 3.00545; 0.75093333; false; false
+dc_tree; 0.00704949; 0.00269579; 4.52097; 1.8774; false; false
+vibration2; 0.00654361; 0.00230218; 2.41664; 2.42353333; false; false
+w; 0.00588854; 0.00139815; 1.38753; 1.39953333; false; false
+dc_circuits; 0.00585873; 0.00204534; 13.16864; 2.35526667; false; false
+ducks; 0.00580173; 0.01017962; 3.09248; 4.57386667; false; false
+colormap_wf; 0.00508188; 0.00591049; 1.47969; 3.27784167; true; false
+glsl_circuits; 0.00504886; 0.00133071; 12.05761; 1.024; false; false
+post_colormap_wf; 0.00444819; 0.00634592; 1.47969; 0.05979427; true; false
+lazyTravis; 0.00436522; 0.00065433; 0.70656; 0.71759141; false; false
+dc_fingerprint; 0.00433926; 0.00209049; 3.33824; 1.6384; false; false
+maurer_rose; 0.00387742; 0.00116974; 1.19808; 1.2288; false; false
+dc_mandala; 0.00385412; 0.00205766; 9.95328; 2.15046667; false; false
+glsl_grid3D; 0.00382339; 0.00194493; 14.32576; 0.71686667; false; false
+dc_voronoise; 0.00379571; 0.00156975; 1.70497; 1.4336; false; false
+dc_grid3D; 0.00371861; 0.00114264; 13.7216; 1.60433333; false; false
+dc_cracklep_wf; 0.0036829; 0.07495937; 2.66753; 56.38840104; false; false
+glsl_mandala; 0.00365346; 0.00105937; 14.09024; 0.92166667; false; false
+dc_tesla; 0.00351937; 0.00231511; 3.63009; 1.8774; false; false
+dc_sunflower; 0.00340516; 0.00350661; 2.2016; 2.048; false; false
+dc_glypho; 0.00327897; 0.00186498; 1.97632; 1.8774; false; false
+rosoni; 0.00326877; 0.00081416; 0.79872; 0.8192; false; false
+dc_dmodulus; 0.00320182; 0.00134083; 1.03424; 1.0582; false; false
+dc_kaliset2; 0.0030665; 0.00154851; 5.80608; 2.4576; false; false
+dc_mandbrot; 0.00299526; 0.00255053; 14.08; 2.2528; false; false
+dc_ducks; 0.00296882; 0.0022095; 3.16929; 1.4336; false; false
+dc_kaliset; 0.00294635; 0.00170634; 5.2736; 1.80913333; false; false
+dc_mandelbox2D; 0.00289429; 0.00232298; 2.38592; 1.60433333; false; false
+ringsubflame; 0.00282367; 0.66668323; 3.79393; 15.25966641; false; false
+superShape3d; 0.00281591; 0.00121224; 1.6896; 0.1279599; false; false
+dc_rotations; 0.00274871; 0.00212724; 3.98336; 1.53606667; false; false
+dc_turbulence; 0.00267756; 0.00208739; 1.792; 1.53606667; false; false
+dc_starsfield; 0.00265007; 0.00220035; 3.52769; 1.60433333; false; false
+sattractor3D; 0.00258213; 0.68943217; 2.65216; 130.18453333; true; false
+jac_asn; 0.00257653; 0.00094084; 3.98849; 0.47786667; false; false
+jubiQ; 0.00253868; 0.00144118; 2.37057; 2.38933333; false; false
+dc_apollonian; 0.00251046; 0.00264405; 4.66433; 1.36533333; false; false
+fract_formula_julia_wf; 0.0025102; 0.00302614; 2.97473; 2.21880052; false; false
+truchet_ae; 0.00245919; 0.00185579; 1.92512; 1.94566667; false; false
+dc_squares; 0.00233406; 0.00218969; 2.816; 1.80913333; false; false
+dc_code; 0.00230375; 0.66667003; 4.19329; 45.6704; false; false
+glsl_starsfield; 0.00230248; 0.00111282; 2.70336; 0.71686667; false; false
+glsl_kaliset2; 0.00229965; 0.00202631; 4.43392; 1.024; false; false
+glynnspiro; 0.00227861; 0.00396674; 1.30561; 1.29706667; false; false
+dc_hexes_wf; 0.0021768; 0.00128347; 2.24769; 0.39454167; false; false
+r_circleblur; 0.0021683; 0.00075457; 0.70656; 0.71686667; false; false
+x; 0.00216089; 0.00127433; 1.31585; 1.33126667; false; false
+y; 0.00215898; 0.00106157; 1.31585; 1.33126667; false; false
+dc_kaleidocomplex; 0.00215542; 0.00228813; 2.09409; 1.8774; false; false
+butterfly_fay; 0.00210571; 0.00098706; 0.98817; 0.98993333; false; false
+woggle_js; 0.00210256; 0.00209163; 0.3072; 0.30726667; false; false
+voron; 0.00208429; 0.00066286; 0.58881; 0.60126615; false; false
+dc_carpet3D; 0.00200537; 0.00194798; 1.59744; 1.60433333; false; false
+glsl_kaliset; 0.00199571; 0.00119956; 4.10113; 0.71686667; false; false
+colordomain; 0.00197794; 0.00160726; 1.37216; 0.75093333; false; false
+siercarpet_js; 0.00194479; 0.00051105; 0.3072; 0.30726667; false; false
+dc_kaleidoscopic; 0.00190876; 0.00184729; 5.02784; 1.74086667; false; false
+bipolar2; 0.00187529; 0.00119033; 1.03424; 1.0582; false; false
+z; 0.00186519; 0.00123286; 1.31585; 1.33126667; false; false
+cpow3_wf; 0.00183094; 0.00102066; 0.8704; 0.88746667; false; false
+dc_truchet; 0.0018272; 0.00204567; 1.37729; 1.29706667; false; false
+dc_worley; 0.00181074; 0.00246735; 1.83296; 1.4336; false; false
+glynns3subfl; 0.00178484; 0.66669112; 3.27169; 45.26285781; false; false
+htree_js; 0.00176302; 0.00032744; 1.00865; 0.239; true; false
+fract_formula_mand_wf; 0.00175298; 0.00135869; 2.84161; 0.8082224; false; false
+glsl_kaleidocomplex; 0.00172556; 0.00124719; 1.18273; 0.88746667; false; false
+hexes; 0.00170061; 0.00090405; 1.54113; 0.61356719; false; false
+circleRand; 0.00168848; 0.00066499; 0.84481; 0.8534; false; false
+dc_cylinder; 0.0016877; 0.00071704; 0.77824; 0.78513333; false; false
+waveblur_wf; 0.00167299; 0.0010054; 0.77824; 0.78513333; false; false
+glsl_apollonian; 0.00165567; 0.00103687; 4.2496; 0.54613333; false; false
+post_heat; 0.00165231; 0.00097039; 1.03424; 1.0582; false; false
+dc_layers; 0.00163965; 0.00212877; 1.75104; 1.6384; false; false
+gridout3D; 0.00161879; 0.00283511; 2.58048; 2.59413333; false; false
+dc_crackle_wf; 0.00160801; 0.05873038; 1.92001; 5.5638; false; false
+dc_quadtree; 0.00160452; 0.00222806; 2.21184; 1.6384; false; false
+dc_menger; 0.00158934; 0.00216914; 1.41312; 1.29706667; false; false
+spirograph; 0.00158859; 0.00078482; 1.03424; 0.15306693; false; false
+pRose3D; 0.00157555; 0.00150061; 1.7408; 0.92173385; false; false
+crown_js; 0.0015606; 0.00056317; 0.53761; 0.47786667; false; false
+dc_poincaredisc; 0.0015079; 0.00407201; 1.56672; 1.57013333; false; false
+hamid_js; 0.00150012; 0.00135112; 1.76128; 1.74086667; true; false
+epispiral_wf; 0.00148345; 0.00054776; 0.37888; 0.38405104; false; false
+minkowskope; 0.00147911; 0.00094963; 0.77824; 0.78513333; false; false
+glynnSim2; 0.00147729; 0.00075947; 0.94208; 0.26646797; false; false
+dc_gnarly; 0.00146513; 0.00122175; 1.55137; 1.57013333; false; false
+mobiusN; 0.00142168; 0.0010726; 1.24417; 1.263; false; false
+dc_hexagons; 0.00142; 0.00204449; 1.54624; 1.53606667; false; false
+glsl_squares; 0.00140452; 0.00116352; 1.97121; 0.8192; false; false
+pre_recip; 0.00140287; 0.00323475; 2.06337; 1.53606667; false; false
+dc_cairotiles; 0.00140162; 0.00230775; 1.56672; 1.4336; false; false
+glsl_kaleidoscopic; 0.00138773; 0.00153063; 4.0448; 0.71686667; false; false
+dla3d_wf; 0.00138572; 0.6681207; 1.83296; 9.90559766; false; false
+dc_bubble; 0.00138533; 0.00059197; 0.54272; 0.54613333; false; false
+spirograph3D; 0.00135936; 0.00103771; 0.96256; 0.98993333; false; false
+rsquares_js; 0.00134557; 0.00033054; 1.00865; 0.239; true; false
+cubic3D; 0.0013414; 0.00058545; 0.58881; 0.59501276; false; false
+oscilloscope2; 0.00133993; 0.00080743; 0.77824; 0.77967344; false; false
+post_falloff3; 0.00132486; 0.00088307; 1.24417; 0.26211432; false; false
+waves2b; 0.00131836; 0.00115283; 1.10592; 1.12646667; false; false
+gdoffs; 0.00131508; 0.00075677; 0.89601; 0.2172099; false; false
+waves3_wf; 0.00131381; 0.00124392; 0.89601; 0.21704245; false; false
+svg_wf; 0.00130692; 0.00518674; 0.91136; 4.71144167; false; false
+obj_mesh_primitive_wf; 0.00130667; 0.87564652; 1.15201; 28.19202552; false; false
+dc_pentatiles; 0.00130627; 0.00260826; 1.54113; 1.36533333; false; false
+yplot3d_wf; 0.00129945; 0.29907786; 1.55137; 11.54311667; false; false
+waves4_wf; 0.00129198; 0.00100332; 0.89601; 0.21710547; false; false
+rhodonea; 0.00127391; 0.00168407; 1.38753; 1.6384; false; false
+falloff3; 0.00127206; 0.0012767; 1.24417; 0.26174557; false; false
+ngon; 0.00125922; 0.00070836; 0.6144; 0.13364245; false; false
+sphericalN; 0.00125731; 0.00072785; 0.6144; 0.6144; false; false
+mobiq; 0.00124736; 0.00139025; 1.59744; 1.60433333; false; false
+super_shape; 0.00124626; 0.0012868; 0.77824; 0.30733385; false; false
+atan2_spirals; 0.00123795; 0.00170517; 1.4336; 1.4336; false; false
+dc_triantess; 0.00122402; 0.00367444; 2.90816; 3.99366667; false; false
+pdj; 0.00121825; 0.00067899; 0.6144; 0.20355885; false; false
+juliascope3Db; 0.00121304; 0.00205617; 1.22369; 1.2288; false; false
+crackle; 0.00120837; 0.06048379; 1.00352; 2.76701771; false; false
+dc_carpet; 0.00119411; 0.00056097; 0.37888; 0.37553333; false; false
+spligon; 0.00118293; 0.00110333; 0.54272; 0.54613333; false; false
+tree_js; 0.00117801; 0.00044209; 1.00865; 0.239; true; false
+eCollide; 0.00117061; 0.00059383; 0.5632; 0.57692813; false; false
+glynnSShape; 0.00116309; 0.00240473; 1.36705; 1.36533333; false; false
+synth; 0.00116228; 0.00236754; 2.9184; 0.90682995; false; false
+affine3D; 0.00116112; 0.00401715; 1.66912; 1.6726; false; false
+asteria; 0.00115797; 0.00074263; 0.37888; 0.39897448; false; false
+glsl_mandelbox2D; 0.00115129; 0.00126853; 1.61281; 0.71686667; false; false
+subflame_wf; 0.00114698; 0.66668136; 1.03424; 1.8508026; false; false
+truchet_fill; 0.00114088; 0.00059765; 0.54272; 0.54613333; false; false
+disc; 0.00114032; 0.00016382; 0.16897; 0.16449297; false; false
+harmonograph_js; 0.00113174; 0.00197414; 1.23904; 1.263; false; false
+bTransform; 0.00112903; 0.00069828; 0.75265; 0.76651901; false; false
+crop3D; 0.00112828; 0.00074892; 1.01376; 1.024; false; false
+disc3d; 0.00112581; 0.00054213; 0.37888; 0.37608802; false; false
+post_point_symmetry_wf; 0.00112568; 0.33333682; 0.59392; 3.10008854; true; false
+sphtiling3v2; 0.00111887; 0.00123035; 0.96256; 0.98993333; false; false
+minkQM; 0.00111842; 0.00132876; 0.91649; 0.92166667; false; false
+jac_cn; 0.00111611; 0.00055093; 0.92673; 0.399825; false; false
+waves2_3D; 0.00111594; 0.00056751; 0.6144; 0.6144; false; false
+pre_subflame_wf; 0.00111542; 0.66668504; 1.03424; 3.48327161; false; false
+cpow3; 0.00111001; 0.0008318; 0.6144; 0.6144; false; false
+dc_moebiuslog; 0.00110978; 0.00313736; 1.86368; 1.80913333; false; false
+arctruchet; 0.00110381; 0.18993855; 0.51713; 39.96335469; false; false
+phoenix_julia; 0.00109779; 0.00059934; 0.6144; 0.6144; false; false
+dc_cube; 0.00109701; 0.00102505; 1.03424; 0.239; false; false
+waves4; 0.00109455; 0.00114391; 0.70656; 0.71686667; false; false
+obj_mesh_wf; 0.00109302; 0.00358421; 1.09057; 2.89226667; false; false
+waves2_radial; 0.00109225; 0.00077452; 0.77824; 0.78513333; false; false
+popcorn2_3D; 0.00108717; 0.00071013; 0.77824; 0.78322969; false; false
+inversion; 0.00108329; 0.00192536; 2.08896; 2.15046667; false; false
+conic; 0.00108224; 0.00061879; 0.45056; 0.46124036; false; false
+julian2; 0.0010806; 0.001028; 0.91649; 0.23906719; false; false
+juliascope; 0.00107999; 0.00189944; 0.42497; 0.13693646; false; false
+pre_falloff3; 0.00107363; 0.00077017; 1.24417; 0.2619151; false; false
+post_axis_symmetry_wf; 0.00106841; 0.00135321; 1.1264; 1.12646667; false; false
+yplot2d_wf; 0.00106615; 0.27117707; 1.55137; 6.90290677; false; false
+dc_hyperbolictile; 0.00105443; 0.00183809; 1.30048; 1.16053333; false; false
+curl3D; 0.00105122; 0.00372019; 0.68097; 0.13425208; false; false
+oscilloscope; 0.00105077; 0.00068348; 0.6144; 0.61100599; false; false
+ePush; 0.00105062; 0.00061804; 0.68097; 0.06833385; false; false
+rose_wf; 0.00104893; 0.00077394; 0.49665; 0.01864896; false; false
+hypertile1; 0.00104135; 0.0005961; 0.39936; 0.40359583; false; false
+dc_cylinder2; 0.00103726; 0.0008963; 0.77824; 0.78513333; false; false
+hypertile2; 0.00102719; 0.00057366; 0.39936; 0.40359349; false; false
+waves2; 0.00102571; 0.00061457; 0.6144; 0.61075469; false; false
+log_db; 0.00102124; 0.00053616; 0.45056; 0.46724219; false; false
+sineblur; 0.00102051; 0.00058071; 0.37888; 0.37597188; false; false
+collideoscope; 0.00101888; 0.00060373; 0.42497; 0.42580885; false; false
+eScale; 0.00101689; 0.00059828; 0.58881; 0.59810417; false; false
+spliptic_bs; 0.00101657; 0.00053547; 0.45056; 0.47786667; false; false
+chunk; 0.00101323; 0.0010943; 0.79872; 0.8192; false; false
+bCollide; 0.00101293; 0.00058298; 0.5632; 0.57785755; false; false
+wedge; 0.00101144; 0.00075692; 0.58881; 0.58886458; false; false
+splits; 0.0010107; 0.00069159; 0.77824; 0.09475; false; false
+waves3; 0.00100585; 0.00106174; 0.77824; 0.78513333; false; false
+hexnix3D; 0.00100579; 0.00070611; 0.75265; 0.76666667; false; false
+waves22; 0.00100512; 0.00197064; 0.79872; 0.8192; false; false
+sec2_bs; 0.001005; 0.00076111; 0.6144; 0.6144; false; false
+popcorn2; 0.0010019; 0.00066873; 0.54272; 0.5406276; false; false
+spherecrop; 0.00099926; 0.00069687; 0.75265; 0.75093333; false; false
+post_julia3Dq; 0.00099464; 0.00054563; 0.5632; 0.57839635; false; false
+waves42; 0.00098972; 0.00129536; 0.79872; 0.8192; false; false
+post_mirror_wf; 0.00098803; 0.00127841; 1.1264; 0.4438; false; false
+lazyjess; 0.00098684; 0.00061886; 0.5632; 0.56657083; false; false
+waves2_wf; 0.00098404; 0.00096532; 0.89601; 0.15004245; false; false
+glynnlissa; 0.00098314; 0.00261551; 1.20321; 1.2288; false; false
+cubicLattice_3D; 0.00098248; 0.00074907; 0.6144; 0.6144; false; false
+dc_triangle; 0.00098087; 0.00051899; 0.37889; 0.37553333; false; false
+julian; 0.00097652; 0.00303185; 0.42497; 0.06873698; false; false
+blocky; 0.00097186; 0.00054764; 0.54272; 0.54613333; false; false
+mobius; 0.00096871; 0.00146725; 0.94208; 0.36545937; false; false
+julian3Dx; 0.00096577; 0.00144521; 1.08033; 1.09226667; false; false
+split; 0.00096452; 0.00069712; 0.45056; 0.44925339; false; false
+circleTrans1; 0.00096421; 0.00068101; 0.88064; 0.8534; false; false
+curl_sp; 0.00096361; 0.00094916; 0.77824; 0.78513333; false; false
+shredrad; 0.00096234; 0.00060385; 0.45056; 0.47786667; false; false
+julia3D; 0.00096185; 0.00146343; 0.49665; 0.06833385; false; false
+shredlin; 0.00096155; 0.00066037; 0.6144; 0.6144; false; false
+rings2; 0.00096041; 0.00054146; 0.37888; 0.37859167; false; false
+lsystem_js; 0.00095572; 0.66682447; 0.91136; 10.07599193; false; false
+mcarpet; 0.00095521; 0.00057935; 0.6144; 0.6144; false; false
+tqmirror; 0.00095044; 0.00120649; 0.96256; 0.98993333; false; false
+bSwirl; 0.00094913; 0.00056056; 0.58881; 0.59280807; false; false
+ex; 0.00094874; 0.00014079; 0.16897; 0.16449297; false; false
+starblur; 0.00094296; 0.00064015; 0.42497; 0.42562318; false; false
+cardioid; 0.00094233; 0.00051587; 0.37888; 0.37553333; false; false
+truchet_hex_fill; 0.00094212; 0.00168385; 0.58881; 0.6144; false; false
+swirl3D_wf; 0.00094152; 0.00047583; 0.54272; 0.54613333; false; false
+rectangles; 0.00093848; 0.00054904; 0.45056; 0.03969687; false; false
+dc_linear; 0.00093368; 0.00069069; 0.54272; 0.54613333; false; false
+target_sp; 0.00093367; 0.00059791; 0.58881; 0.60294036; false; false
+blob3D; 0.00093052; 0.00066396; 0.68097; 0.68266667; false; false
+mask; 0.00093017; 0.00071138; 0.70656; 0.71686667; false; false
+heart_wf; 0.00092709; 0.00087607; 0.70656; 0.71639792; false; false
+handkerchief; 0.00092386; 0.00015383; 0.16897; 0.16449297; false; false
+lorenz_js; 0.00092153; 0.0011701; 0.8704; 0.88746667; false; false
+truchet; 0.00091796; 0.0002179; 0.23552; 0.23707708; false; false
+csch2_bs; 0.00091629; 0.00058143; 0.6144; 0.6144; false; false
+dc_perlin; 0.00091468; 0.00022695; 0.72193; 0.23596458; false; false
+rational3; 0.00091314; 0.00078589; 0.94208; 0.95573333; false; false
+truchet2; 0.00091084; 0.00087422; 0.79872; 0.8192; false; false
+eRotate; 0.00090649; 0.00078544; 0.51713; 0.52114167; false; false
+linearT; 0.00090645; 0.00057692; 0.58881; 0.59637344; false; false
+onion2; 0.00090621; 0.00092617; 0.98304; 0.9429125; false; false
+boarders2; 0.00090582; 0.00060822; 0.54272; 0.54091797; false; false
+linearT3D; 0.00090262; 0.00063745; 0.70656; 0.71377292; false; false
+pre_disc3d; 0.00089037; 0.00051831; 0.37888; 0.37690104; false; false
+cpow2; 0.00088992; 0.00099036; 0.58881; 0.6144; false; false
+pie3D; 0.00088967; 0.00061744; 0.68097; 0.68266667; false; false
+circlesplit; 0.00088383; 0.00060286; 0.45056; 0.47786667; false; false
+hexaplay3D; 0.00088365; 0.00082966; 0.70656; 0.71446719; false; false
+inverted_julia; 0.00087912; 0.00104128; 1.03424; 1.0582; false; false
+bipolar; 0.00087677; 0.00068741; 0.37888; 0.38102604; false; false
+bMod; 0.00087549; 0.00068677; 0.58881; 0.59290182; false; false
+post_smartcrop; 0.00087537; 0.00112191; 0.96256; 0.08475911; false; false
+pre_circlecrop; 0.00087435; 0.00063662; 0.68097; 0.6812026; false; false
+curl; 0.00087417; 0.00193564; 0.45056; 0.02452839; false; false
+post_depth; 0.00087371; 0.00062102; 0.37888; 0.38735182; false; false
+circleLinear; 0.00086944; 0.00075744; 1.08033; 1.09226667; false; false
+layered_spiral; 0.00086937; 0.00051308; 0.37888; 0.37637552; false; false
+mobius_strip; 0.00086893; 0.00136072; 0.96256; 0.98993333; false; false
+post_colorscale_wf; 0.00086582; 0.00063395; 0.70656; 0.71494271; false; false
+sinusoidal; 0.0008658; 0.00018169; 0.16897; 0.16847708; false; false
+pre_stabilize; 0.00086397; 0.66667789; 0.50176; 22.7993625; true; false
+falloff2; 0.00086208; 0.00105721; 1.05985; 0.24891484; false; false
+post_circlecrop; 0.00086151; 0.00090891; 0.68097; 0.06840104; false; false
+perspective; 0.00086094; 0.001106; 0.45056; 0.45728568; false; false
+cosh2_bs; 0.00086005; 0.00058963; 0.6144; 0.6144; false; false
+eJulia; 0.00085841; 0.00051444; 0.49665; 0.49446953; false; false
+cone; 0.0008583; 0.00117365; 1.03424; 1.0582; false; false
+glsl_hyperbolictile; 0.00085806; 0.00092911; 1.08033; 0.37553333; false; false
+jac_dn; 0.00085319; 0.00051491; 0.92673; 0.399825; false; false
+target; 0.00084947; 0.00056181; 0.54272; 0.5411599; false; false
+custom_wf; 0.00084823; 0.00090826; 0.8704; 0.88746667; false; false
+dinis_surface_wf; 0.00084614; 0.00066486; 0.45056; 0.46724219; false; false
+blob; 0.00084394; 0.00060286; 0.54272; 0.54499896; false; false
+epispiral; 0.00084341; 0.00054967; 0.54272; 0.54226667; false; false
+fdisc; 0.00084057; 0.00072619; 0.94208; 0.95573333; false; false
+pre_wave3D_wf; 0.00083996; 0.00092127; 0.96769; 0.15131953; false; false
+csc2_bs; 0.00083582; 0.00060899; 0.6144; 0.6144; false; false
+modulus; 0.00083453; 0.00068236; 0.45056; 0.44918802; false; false
+sigmoid; 0.00083304; 0.00057022; 0.45056; 0.47786667; false; false
+scry2; 0.00083117; 0.00076626; 0.47104; 0.47786667; false; false
+q_ode; 0.00083012; 0.00169357; 1.26976; 1.29706667; false; false
+iconattractor_js; 0.00082995; 0.00123917; 0.96256; 0.98993333; false; false
+svensson_js; 0.00082945; 0.00104359; 0.6144; 0.6144; false; false
+sin2_bs; 0.00082897; 0.00065257; 0.6144; 0.6144; false; false
+separation; 0.00082816; 0.00087353; 0.6144; 0.6116776; false; false
+swirl3; 0.00082321; 0.00052689; 0.37888; 0.37553333; false; false
+terrain3D; 0.00082138; 0.00598506; 1.50528; 13.312; false; false
+flower_db; 0.00081937; 0.0006526; 0.8704; 0.88746667; false; false
+splits3D; 0.00081909; 0.00063274; 0.68097; 0.68266667; false; false
+scrambly; 0.0008133; 0.00533034; 0.54272; 1.46438073; false; false
+exblur; 0.0008112; 0.00065707; 0.70656; 0.71110443; false; false
+eMotion; 0.00081082; 0.00060449; 0.58881; 0.59689375; false; false
+corners; 0.00080708; 0.00210987; 1.03424; 1.0582; false; false
+kaleidoscope; 0.00080591; 0.00080829; 0.70656; 0.71819844; false; false
+hypertile; 0.00080589; 0.0008974; 0.47104; 0.47146198; false; false
+fan2; 0.00080325; 0.00067188; 0.45056; 0.45639948; false; false
+post_bumpmap_wf; 0.00080213; 0.03173711; 0.84481; 16.40601927; false; false
+elliptic2; 0.00079741; 0.0015913; 1.19808; 1.2288; false; false
+disc2; 0.00079705; 0.00139321; 0.45056; 0.04028854; false; false
+checkerboard_wf; 0.00079409; 0.00130823; 0.89601; 0.92166667; false; false
+auger; 0.00079376; 0.00056928; 0.6144; 0.6144; false; false
+truchet_hex_crop; 0.00079273; 0.00101491; 0.45056; 0.47786667; false; false
+cot2_bs; 0.00079248; 0.00080397; 0.6144; 0.6144; false; false
+log_tile2; 0.00079231; 0.00059421; 0.54272; 0.54613333; false; false
+cpow; 0.0007915; 0.00066159; 0.54272; 0.54613333; false; false
+wedge_julia; 0.00078743; 0.00084314; 0.6144; 0.61120911; false; false
+circular; 0.00078651; 0.00053045; 0.45056; 0.47786667; false; false
+csc_squared; 0.00078628; 0.00143982; 0.8704; 0.88746667; false; false
+parplot2d_wf; 0.00078437; 0.29573682; 1.45921; 13.48223333; false; false
+exp2_bs; 0.00078165; 0.00059998; 0.54272; 0.54613333; false; false
+post_falloff2; 0.00078062; 0.00065532; 1.05985; 0.24943047; false; false
+waffle; 0.00077974; 0.00110331; 0.58881; 0.59673411; false; false
+eSwirl; 0.00077951; 0.00057764; 0.58881; 0.59824479; false; false
+loonie2; 0.00077483; 0.00062224; 0.47104; 0.47786667; false; false
+pre_custom_wf; 0.00077372; 0.00068942; 0.8704; 0.05954635; false; false
+ripple; 0.0007728; 0.00069563; 0.91649; 0.30451563; false; false
+post_displacemap_wf; 0.00077269; 0.00521182; 0.94208; 2.62924062; false; false
+ztwister; 0.00077267; 0.00051437; 0.45056; 0.46985885; false; false
+bwrands; 0.00077143; 0.00103649; 1.19808; 1.2216901; false; false
+julia3Dz; 0.00077043; 0.00139933; 0.49665; 0.49411953; false; false
+post_juliaq; 0.00076977; 0.00049097; 0.39936; 0.4057901; false; false
+post_bwraps2; 0.00076949; 0.00074183; 0.70656; 0.71378125; false; false
+radial_blur; 0.00076924; 0.00055126; 0.37888; 0.38782839; false; false
+pre_rect_wf; 0.00076755; 0.00059525; 0.6144; 0.6144; false; false
+pointgrid3d_wf; 0.00076616; 0.00130883; 1.10592; 1.12646667; false; false
+pie; 0.00076596; 0.00053978; 0.54272; 0.54056901; false; false
+escher; 0.00076382; 0.00050847; 0.37888; 0.37719089; false; false
+devil_warp; 0.00076381; 0.00063793; 0.77824; 0.78108958; false; false
+julia3Dq; 0.00076378; 0.00056677; 0.54272; 0.54266302; false; false
+plusrecip; 0.000762; 0.00080441; 0.4608; 0.47786667; false; false
+lazysusan; 0.00075954; 0.0007224; 0.70656; 0.0920474; false; false
+eMod; 0.00075597; 0.00069235; 0.58881; 0.59605625; false; false
+primitives_wf; 0.00075581; 0.00068868; 0.6144; 0.6144; false; false
+squirrel; 0.0007556; 0.00051813; 0.45056; 0.46809167; false; false
+tile_log; 0.00075542; 0.00049498; 0.37888; 0.37553333; false; false
+klein_group; 0.00075226; 0.0024286; 0.69121; 2.79893333; false; false
+pre_boarders2; 0.00075059; 0.00058291; 0.54272; 0.54108385; false; false
+glynnSim1; 0.00074996; 0.00149919; 0.94208; 0.26619948; false; false
+xheart_blur_wf; 0.00074979; 0.00090669; 0.45056; 0.46724219; false; false
+tan2_bs; 0.00074965; 0.00067011; 0.6144; 0.6144; false; false
+post_curl3D; 0.00074665; 0.00065441; 0.70656; 0.71344479; false; false
+hypershift; 0.00074556; 0.00053047; 0.45056; 0.47786667; false; false
+henon; 0.00074529; 0.00094281; 0.54272; 0.54613333; false; false
+post_zscale_wf; 0.00074496; 0.00048774; 0.37888; 0.3877151; false; false
+spherical3D_wf; 0.00074393; 0.00074864; 0.58881; 0.59244844; false; false
+disc3; 0.00074389; 0.00075146; 0.94208; 0.95573333; false; false
+blur_zoom; 0.00074122; 0.0005597; 0.54272; 0.54613333; false; false
+ho; 0.00074015; 0.00053907; 0.54272; 0.54167109; false; false
+circular2; 0.00073734; 0.00066804; 0.6144; 0.6144; false; false
+pre_bwraps2; 0.00073721; 0.00061411; 0.70656; 0.71360937; false; false
+lissajous; 0.00073533; 0.00069685; 0.8704; 0.86941823; false; false
+post_custom_wf; 0.00073336; 0.00071361; 0.8704; 0.88746667; false; false
+parabola; 0.00073187; 0.0005791; 0.45056; 0.45671901; false; false
+tanh2_bs; 0.00073182; 0.00059384; 0.6144; 0.6144; false; false
+poincare3D; 0.00073092; 0.00165607; 0.70656; 0.02370573; false; false
+trade; 0.00073084; 0.00065654; 0.6144; 0.6144; false; false
+cos2_bs; 0.00073042; 0.00059084; 0.6144; 0.6144; false; false
+mandala2; 0.00072996; 0.00114199; 0.42497; 0.4438; false; false
+hole2; 0.00072931; 0.00074408; 0.63488; 0.6486; false; false
+jac_sn; 0.00072906; 0.00049524; 0.92673; 0.399825; false; false
+eclipse; 0.00072905; 0.00067612; 0.37888; 0.38764531; false; false
+glynnia3; 0.00072868; 0.00067724; 0.6144; 0.6144; false; false
+lazysensen; 0.00072833; 0.00102477; 0.54272; 0.54613333; false; false
+prepost_mobius; 0.00072798; 0.00099002; 0.94208; 0.95573333; false; false
+whorl; 0.00072561; 0.00051281; 0.45056; 0.45718021; false; false
+pulse; 0.00072518; 0.00098497; 0.6144; 0.6144; false; false
+crop; 0.00072489; 0.00073066; 0.70656; 0.02427292; false; false
+glynnSim3; 0.00072457; 0.00067586; 0.77824; 0.09291563; false; false
+circlecrop; 0.00072207; 0.0006394; 0.68097; 0.68266667; false; false
+seashell3D; 0.00072168; 0.001654; 0.75265; 0.75093333; false; false
+dc_kaleidotile; 0.00072124; 0.00118006; 1.03424; 1.0582; false; false
+yin_yang; 0.00071802; 0.00149711; 0.5632; 0.57457057; false; false
+farblur; 0.00071588; 0.00103185; 0.77824; 0.78261875; false; false
+barycentroid; 0.00071503; 0.00061492; 0.6144; 0.6144; false; false
+clifford_js; 0.00071459; 0.00078032; 0.6144; 0.6144; false; false
+pTransform; 0.00071255; 0.00077518; 0.77824; 0.78513333; false; false
+sph3D; 0.00071179; 0.00061824; 0.68097; 0.68266667; false; false
+tile_hlp; 0.00071173; 0.00050615; 0.37888; 0.37553333; false; false
+splitbrdr; 0.00071096; 0.00063225; 0.6144; 0.61235469; false; false
+dla_wf; 0.00071024; 0.67824349; 0.63488; 1.38676667; false; false
+hypercrop; 0.00071019; 0.00084928; 0.51713; 0.54613333; false; false
+starfractal; 0.00070875; 0.00267648; 0.3072; 0.75093333; false; false
+checks; 0.00070847; 0.0005556; 0.6144; 0.6144; false; false
+pointgrid_wf; 0.00070835; 0.00138951; 0.8704; 0.92166667; false; false
+recurrenceplot; 0.00070573; 0.00147151; 0.98817; 0.98993333; false; false
+post_crop; 0.00070557; 0.00092743; 0.70656; 0.0342; false; false
+flux; 0.00070393; 0.00056274; 0.37888; 0.38104427; false; false
+sech2_bs; 0.00070307; 0.00063861; 0.6144; 0.6144; false; false
+dc_ztransl; 0.00070255; 0.00062867; 0.5632; 0.57225781; false; false
+pow_block; 0.00070194; 0.00087121; 0.70656; 0.71110443; false; false
+squish; 0.00070128; 0.00046727; 0.35329; 0.37194141; false; false
+coth2_bs; 0.00069967; 0.0007473; 0.6144; 0.6144; false; false
+gridout2; 0.00069857; 0.00071628; 0.6144; 0.6144; false; false
+intersection; 0.00069555; 0.00202921; 1.10592; 1.12646667; false; false
+stripes; 0.00069333; 0.00057345; 0.45056; 0.45325521; false; false
+wedge_sph; 0.00069293; 0.00061398; 0.6144; 0.61178333; false; false
+bwraps7; 0.00069288; 0.00094628; 0.70656; 0.71704687; false; false
+hyperbolicellipse; 0.00069281; 0.00081163; 0.37888; 0.37553333; false; false
+helicoid; 0.00068876; 0.0005803; 0.37888; 0.37553333; false; false
+curve; 0.00068602; 0.00082684; 0.6144; 0.6144; false; false
+flower; 0.00068509; 0.00074696; 0.45056; 0.4582401; false; false
+xtrb; 0.00068073; 0.00217827; 0.84481; 0.76733411; false; false
+fourth; 0.00067945; 0.00063204; 0.70656; 0.02457552; false; false
+vogel; 0.00067711; 0.00050369; 0.42497; 0.43803776; false; false
+taurus; 0.0006753; 0.00057073; 0.6144; 0.6144; false; false
+tile_reverse; 0.00067516; 0.00093761; 0.51713; 0.54613333; false; false
+circlize; 0.0006721; 0.00066123; 0.37888; 0.37944167; false; false
+sintrange; 0.00067167; 0.00051566; 0.37888; 0.3760401; false; false
+curliecue2; 0.00066836; 0.0009108; 0.35329; 0.4096; false; false
+bubble2; 0.00066801; 0.0006597; 0.54272; 0.54613333; false; false
+murl2; 0.00066764; 0.00057165; 0.42497; 0.42871979; false; false
+circlize2; 0.00066647; 0.00050034; 0.37888; 0.399825; false; false
+glsl_code; 0.00066582; 0.66668088; 0.64512; 16.33835755; false; false
+sphere_nja; 0.0006643; 0.00077053; 0.79361; 0.7802125; false; false
+displacemap_wf; 0.00066418; 0.00547226; 0.94208; 5.09557604; false; false
+colorscale_wf; 0.00066297; 0.00070865; 0.70656; 0.71407031; false; false
+blur_linear; 0.00066125; 0.0005522; 0.45056; 0.47786667; false; false
+pre_crop; 0.00065933; 0.00087264; 0.70656; 0.71226354; false; false
+hex_modulus; 0.00065817; 0.00078; 0.37888; 0.37553333; false; false
+polylogarithm; 0.0006572; 0.14397388; 0.43521; 1.53202891; false; false
+cell; 0.00065482; 0.00050142; 0.37888; 0.39161016; false; false
+sinh2_bs; 0.00065325; 0.00061744; 0.6144; 0.6144; false; false
+log_apo; 0.00065186; 0.00052417; 0.37888; 0.38692708; false; false
+hypertile3D; 0.0006507; 0.00083521; 0.63488; 0.64612161; false; false
+loq; 0.00065041; 0.00061492; 0.37888; 0.37553333; false; false
+extrude; 0.0006461; 0.00050381; 0.37888; 0.38095573; false; false
+macmillan; 0.00064564; 0.00097835; 0.6144; 0.6144; false; false
+prepost_circlize; 0.00064178; 0.0006205; 0.39936; 0.4096; false; false
+ovoid3d; 0.00064151; 0.000581; 0.54272; 0.54613333; false; false
+hypertile3D2; 0.00063871; 0.00063627; 0.5632; 0.57443542; false; false
+post_curl; 0.00063812; 0.0006628; 0.45056; 0.45969167; false; false
+bsplit; 0.0006379; 0.00065233; 0.45056; 0.46724219; false; false
+projective; 0.00063737; 0.00162197; 1.03424; 1.0582; false; false
+juliac; 0.00063573; 0.00057777; 0.54272; 0.54613333; false; false
+murl; 0.00062987; 0.0004846; 0.42497; 0.43007943; false; false
+prepost_affine; 0.00062973; 0.00206748; 1.03424; 1.0582; false; false
+bent2; 0.00062961; 0.00063797; 0.45056; 0.46014193; false; false
+svf; 0.00062628; 0.00055923; 0.37888; 0.38120104; false; false
+plane_wf; 0.00062495; 0.00420677; 0.6144; 3.02884948; false; false
+hypertile3D1; 0.00062476; 0.00062764; 0.5632; 0.57740052; false; false
+npolar; 0.0006201; 0.00050885; 0.39936; 0.40312578; false; false
+pre_dcztransl; 0.00061924; 0.00065296; 0.5632; 0.57446458; false; false
+hypershift2; 0.00061805; 0.00065556; 0.39936; 0.4096; false; false
+stwin; 0.00061044; 0.0005831; 0.6144; 0.6144; false; false
+octagon; 0.00060645; 0.00065003; 0.54272; 0.54613333; false; false
+ortho; 0.00060163; 0.0005899; 0.45056; 0.44886875; false; false
+circus; 0.00060012; 0.00049846; 0.37888; 0.37625885; false; false
+ennepers2; 0.00060009; 0.00056756; 0.54272; 0.54613333; false; false
+fibonacci2; 0.00059892; 0.00062483; 0.45056; 0.46222005; false; false
+xheart; 0.00059813; 0.00109066; 0.45056; 0.4560849; false; false
+pressure_wave; 0.00059288; 0.0005372; 0.45056; 0.47786667; false; false
+post_rblur; 0.00059281; 0.00071657; 0.6144; 0.6144; false; false
+funnel; 0.00058909; 0.00043969; 0.35329; 0.37061354; false; false
+waves23; 0.00058639; 0.00106755; 0.6144; 0.6144; false; false
+shift; 0.0005854; 0.00063203; 0.54272; 0.54613333; false; false
+helix; 0.00058433; 0.00052089; 0.45056; 0.47786667; false; false
+lozi; 0.00058427; 0.0009801; 0.54272; 0.54613333; false; false
+juliaq; 0.00058119; 0.0004799; 0.39936; 0.4096; false; false
+post_dcztransl; 0.00057648; 0.00074823; 0.5632; 0.57167344; false; false
+line; 0.00057467; 0.00066628; 0.45056; 0.4492224; false; false
+stripfit; 0.00057429; 0.00077916; 0.37888; 0.37553333; false; false
+blur_pixelize; 0.00056875; 0.0005251; 0.45056; 0.47786667; false; false
+wallpaper_js; 0.00056861; 0.00072571; 0.54272; 0.54613333; false; false
+anamorphcyl; 0.0005685; 0.00089796; 0.54272; 0.54613333; false; false
+cannabiscurve_wf; 0.00055788; 0.00045126; 0.35329; 0.35883542; false; false
+atan; 0.00055322; 0.00058583; 0.37888; 0.37553333; false; false
+cloverleaf_wf; 0.00053908; 0.0004414; 0.35329; 0.35749427; false; false
+onion; 0.00053642; 0.0006195; 0.45056; 0.44908958; false; false
+d_spherical; 0.00053149; 0.00050636; 0.37888; 0.37553333; false; false
+pre_curl; 0.00053028; 0.00052515; 0.45056; 0.46274115; false; false
+cosh; 0.00048197; 0.00013421; 0.16897; 0.17611953; false; false
+sqrt_asinh; 0.00047883; 0.00020637; 0.23552; 0.17073333; false; false
+sqrt_asech; 0.00047329; 0.00024228; 0.23041; 0.17073333; false; false
+blur3D; 0.00047256; 0.00020109; 0.16897; 0.16449297; false; false
+crob; 0.00046493; 0.00039028; 0.23552; 0.239; false; false
+foci_3D; 0.00045926; 0.00013025; 0.16897; 0.17727578; false; false
+sqrt_acosech; 0.00045859; 0.00020584; 0.22528; 0.17073333; false; false
+csch; 0.00045798; 0.00013964; 0.16897; 0.16558099; false; false
+loonie_3D; 0.00045425; 0.00013759; 0.16897; 0.17185208; false; false
+gaussian_blur; 0.00044816; 0.00012794; 0.16897; 0.16449297; false; false
+scry_3D; 0.00044596; 0.00012605; 0.16897; 0.17727578; false; false
+zblur; 0.00044053; 0.00017103; 0.16897; 0.16847734; false; false
+sqrt_acoth; 0.00043959; 0.00020649; 0.17408; 0.17073333; false; false
+edisc; 0.00043917; 0.0001353; 0.16897; 0.17636562; false; false
+blade; 0.00043474; 0.00013293; 0.16897; 0.17622448; false; false
+sqrt_acosh; 0.00042828; 0.00019979; 0.23041; 0.17073333; false; false
+sech; 0.00042745; 0.00014113; 0.16897; 0.16558099; false; false
+secant2; 0.00042658; 0.000159; 0.16897; 0.16816589; false; false
+roundspher3D; 0.00042494; 0.00013218; 0.16897; 0.17185208; false; false
+noise; 0.00041539; 0.00012985; 0.16897; 0.16449297; false; false
+coth; 0.00041533; 0.00013266; 0.16897; 0.17611953; false; false
+cylinder; 0.0004142; 0.00013083; 0.16897; 0.16449297; false; false
+inflateZ_4; 0.0004126; 0.00013638; 0.16897; 0.17185208; false; false
+deltaA; 0.00041241; 0.00013369; 0.16897; 0.17073333; false; false
+fisheye; 0.00041226; 0.00013534; 0.16897; 0.16449297; false; false
+inflateZ_2; 0.00041197; 0.00012692; 0.16897; 0.16914115; false; false
+pre_blur; 0.00040866; 0.00021143; 0.16897; 0.16847734; false; false
+pre_spin_z; 0.00040801; 0.00015987; 0.16897; 0.16914115; false; false
+cross; 0.00040473; 0.00012936; 0.16897; 0.17622448; false; false
+elliptic; 0.00040405; 0.00013758; 0.16897; 0.16478516; false; false
+inflateZ_5; 0.00039952; 0.00012867; 0.16897; 0.17185208; false; false
+post_rotate_y; 0.00039267; 0.00016941; 0.16897; 0.16449297; false; false
+sec; 0.00039187; 0.00017701; 0.16897; 0.17611953; false; false
+panorama1; 0.00038871; 0.00014889; 0.16897; 0.17073333; false; false
+panorama2; 0.00038618; 0.00016572; 0.16897; 0.17073333; false; false
+twintrian; 0.00038423; 0.00013252; 0.16897; 0.16845417; false; false
+waves; 0.00038362; 0.00046229; 0.16897; 0.25147865; false; false
+csc; 0.00038199; 0.00013173; 0.16897; 0.17611953; false; false
+tangent; 0.0003811; 0.00016163; 0.16897; 0.17622448; false; false
+tan; 0.00038041; 0.00013265; 0.16897; 0.17611953; false; false
+acoth; 0.00037888; 0.00019178; 0.17408; 0.17073333; false; false
+sinhq; 0.00037564; 0.00018976; 0.16897; 0.17073333; false; false
+foci; 0.00037455; 0.00013238; 0.16897; 0.16845417; false; false
+gamma; 0.00037401; 0.00013336; 0.16897; 0.17073333; false; false
+post_rotate_x; 0.00037371; 0.00012706; 0.16897; 0.16847734; false; false
+sqrt_atanh; 0.00037346; 0.00019787; 0.17408; 0.17073333; false; false
+inflateZ_3; 0.00037164; 0.00013021; 0.16897; 0.16914115; false; false
+acosech; 0.00037111; 0.00020369; 0.22528; 0.17073333; false; false
+post_spin_z; 0.00036999; 0.00020355; 0.16897; 0.16914115; false; false
+julia; 0.00036667; 0.00014194; 0.16897; 0.16847734; false; false
+glynnia; 0.00036438; 0.00014984; 0.16897; 0.16732682; false; false
+cosine; 0.0003607; 0.00016052; 0.16897; 0.16449297; false; false
+heart; 0.00035843; 0.00042478; 0.16897; 0.3600487; false; false
+sin; 0.0003574; 0.00015922; 0.16897; 0.17611953; false; false
+acosh; 0.00035684; 0.00018846; 0.23041; 0.17073333; false; false
+popcorn; 0.00035276; 0.00013214; 0.16897; 0.16449297; false; false
+sechq; 0.00035218; 0.00012965; 0.16897; 0.17073333; false; false
+cschq; 0.00035008; 0.00013279; 0.16897; 0.17073333; false; false
+rays; 0.00034947; 0.00012842; 0.16897; 0.16447187; false; false
+inflateZ_6; 0.00034489; 0.00012868; 0.16897; 0.16914115; false; false
+cot; 0.00034486; 0.00013073; 0.16897; 0.17611953; false; false
+chrysanthemum; 0.0003441; 0.00016894; 0.16897; 0.17073333; false; false
+secq; 0.00034392; 0.00015331; 0.16897; 0.17073333; false; false
+gridout; 0.00034388; 0.00013294; 0.16897; 0.17073333; false; false
+lace_js; 0.00034321; 0.00013913; 0.16897; 0.17073333; false; false
+arcsinh; 0.00033925; 0.00019294; 0.18432; 0.17073333; false; false
+sinh; 0.0003371; 0.00017063; 0.16897; 0.17611953; false; false
+xerf; 0.00033564; 0.00012894; 0.16897; 0.17073333; false; false
+cos; 0.00033543; 0.00013259; 0.16897; 0.17611953; false; false
+cylinder_apo; 0.00033405; 0.000131; 0.16897; 0.16732682; false; false
+pre_rotate_y; 0.00033271; 0.00012845; 0.16897; 0.16847734; false; false
+exp; 0.0003326; 0.00012985; 0.16897; 0.17611953; false; false
+holesq; 0.00033091; 0.00021381; 0.16897; 0.17073333; false; false
+tanh; 0.00033037; 0.00013159; 0.16897; 0.17611953; false; false
+arcsech2; 0.00032928; 0.00021891; 0.19456; 0.17073333; false; false
+fan; 0.00032854; 0.00012869; 0.16897; 0.16847734; false; false
+spherical3D; 0.00032757; 0.00013276; 0.16897; 0.16755156; false; false
+cotq; 0.00032615; 0.00017551; 0.16897; 0.17073333; false; false
+zcone; 0.00032612; 0.00013903; 0.16897; 0.16847734; false; false
+tanhq; 0.0003229; 0.00012788; 0.16897; 0.17073333; false; false
+inflateZ_1; 0.00032236; 0.00013016; 0.16897; 0.16914115; false; false
+blade3D; 0.00032154; 0.00013024; 0.16897; 0.17622448; false; false
+loonie; 0.00032116; 0.00013921; 0.16897; 0.17548255; false; false
+log; 0.00032041; 0.00012996; 0.16897; 0.17611953; false; false
+swirl; 0.0003204; 0.00013934; 0.16897; 0.09929792; false; false
+arch; 0.00031714; 0.00014722; 0.16897; 0.16829922; false; false
+erf3D; 0.00031673; 0.00012914; 0.16897; 0.17073333; false; false
+rays2; 0.00031473; 0.00013085; 0.16897; 0.16714036; false; false
+rays3; 0.00031365; 0.00012944; 0.16897; 0.16581224; false; false
+petal; 0.00031251; 0.00014017; 0.16897; 0.16714036; false; false
+blur_circle; 0.00031195; 0.00012935; 0.16897; 0.17073333; false; false
+diamond; 0.00030964; 0.00013416; 0.16897; 0.16449297; false; false
+pre_sinusoidal3d; 0.00030742; 0.00013227; 0.16897; 0.17604401; false; false
+blur; 0.0003059; 0.00016135; 0.16897; 0.16847708; false; false
+scry; 0.00030374; 0.00013881; 0.16897; 0.1650013; false; false
+circleblur; 0.00030317; 0.00013635; 0.16897; 0.16851068; false; false
+exponential; 0.000302; 0.00017367; 0.16897; 0.16449297; false; false
+polar; 0.00030144; 0.00022382; 0.16897; 0.16449297; false; false
+spiral; 0.00029725; 0.00017951; 0.16897; 0.09929792; false; false
+hemisphere; 0.00029705; 0.0001511; 0.16897; 0.16847734; false; false
+power; 0.00029554; 0.00012646; 0.16897; 0.16449297; false; false
+hyperbolic; 0.00029459; 0.00015957; 0.16897; 0.16847708; false; false
+pre_zscale; 0.0002922; 0.0001261; 0.16897; 0.16449297; false; false
+bubble; 0.00029206; 0.0001351; 0.16897; 0.16847734; false; false
+cothq; 0.00028838; 0.0001818; 0.16897; 0.17073333; false; false
+eyefish; 0.00028746; 0.00013945; 0.16897; 0.16847734; false; false
+tanq; 0.0002874; 0.00012703; 0.16897; 0.17073333; false; false
+cscq; 0.00028582; 0.00026703; 0.16897; 0.17073333; false; false
+butterfly; 0.00028553; 0.00013736; 0.16897; 0.17094063; false; false
+square3D; 0.00028438; 0.0001557; 0.16897; 0.17622448; false; false
+coshq; 0.00028408; 0.00012756; 0.16897; 0.17073333; false; false
+rays1; 0.00028174; 0.00012631; 0.16897; 0.16581224; false; false
+tangent3D; 0.00028009; 0.00013795; 0.16897; 0.17622448; false; false
+linear3D; 0.00027921; 0.00039523; 0.16897; 0.35673359; false; false
+ztranslate; 0.0002791; 0.00019899; 0.16897; 0.17322917; false; false
+linear; 0.00027383; 0.00073541; 0.16897; 0.16856302; false; false
+pre_ztranslate; 0.00027211; 0.00013169; 0.16897; 0.16847734; false; false
+spherical; 0.00027157; 0.00060691; 0.16897; 0.05327109; false; false
+bubble_wf; 0.00027148; 0.00019525; 0.16897; 0.18458307; false; false
+twoface; 0.00027112; 0.00013462; 0.16897; 0.17305885; false; false
+invpolar; 0.00026738; 0.00026648; 0.16897; 0.17073333; false; false
+squarize; 0.00026711; 0.0001464; 0.16897; 0.16581224; false; false
+bi_linear; 0.00026337; 0.00013091; 0.16897; 0.16821771; false; false
+erf; 0.00026275; 0.00019131; 0.16897; 0.17073333; false; false
+pre_rotate_x; 0.00026264; 0.00013378; 0.16897; 0.16449297; false; false
+post_ztranslate_wf; 0.00026171; 0.00012925; 0.16897; 0.17004896; false; false
+pre_blur3D; 0.00026168; 0.00019177; 0.16897; 0.16625937; false; false
+invtree_js; 0.00025992; 0.00015817; 0.16897; 0.17073333; false; false
+zscale; 0.00025835; 0.00019738; 0.16897; 0.17322917; false; false
+arctanh; 0.00025803; 0.00020925; 0.17921; 0.17073333; false; false
+flipy; 0.00025537; 0.00012812; 0.16897; 0.17144479; false; false
+tancos; 0.00025491; 0.00013626; 0.16897; 0.16581224; false; false
+butterfly3D; 0.00025416; 0.0001614; 0.16897; 0.17094063; false; false
+invsquircular; 0.00025344; 0.00039226; 0.16897; 0.37553333; false; false
+horseshoe; 0.00025343; 0.0001641; 0.16897; 0.16449297; false; false
+unpolar; 0.0002519; 0.00013678; 0.16897; 0.16769505; false; false
+rings; 0.00025094; 0.00013896; 0.16897; 0.16449297; false; false
+rippled; 0.00025063; 0.00013869; 0.16897; 0.16581224; false; false
+estiq; 0.00024979; 0.00013046; 0.16897; 0.17073333; false; false
+pyramid; 0.00024804; 0.00020416; 0.16897; 0.17073333; false; false
+spiralwing; 0.00024791; 0.00014897; 0.16897; 0.16581224; false; false
+cylinder2; 0.00024781; 0.00024152; 0.16897; 0.17073333; false; false
+square; 0.00024741; 0.00013718; 0.16897; 0.17622448; false; false
+flipcircle; 0.00024623; 0.00013129; 0.16897; 0.16876458; false; false
+sinq; 0.00024549; 0.00013073; 0.16897; 0.17073333; false; false
+squircular; 0.00024546; 0.00030471; 0.16897; 0.2048; false; false
+cosq; 0.00024191; 0.00012742; 0.16897; 0.17073333; false; false
+boarders; 0.00023865; 0.00017358; 0.16897; 0.16749818; false; false
+whitney_umbrella; 0.00023731; 0.00013217; 0.16897; 0.16538698; false; false
+wdisc; 0.00023063; 0.00013111; 0.16897; 0.17073333; false; false
+bent; 0.00022807; 0.00013077; 0.16897; 0.16449297; false; false
+custom_wf_full; 0.00022555; 0.00032166; 0.16897; 0.2048; false; false
+sinusoidal3d; 0.00022541; 0.00013436; 0.16897; 0.17242005; false; false
+idisc; 0.00022296; 0.00013847; 0.16897; 0.17073333; false; false
+loonie3; 0.00022287; 0.00014138; 0.16897; 0.16714036; false; false
+threepoint_js; 0.00021134; 0.00018928; 0.16897; 0.17073333; false; false
+apollony; 0.00021067; 0.00014301; 0.16897; 0.17073333; false; false
+polar2; 0.00020654; 0.00013059; 0.16897; 0.16794557; false; false
+dustpoint; 0.00020166; 0.00019306; 0.16897; 0.17073333; false; false
+flatten; 0.0002015; 0.00013158; 0.16897; 0.17465547; false; false
+apocarpet_js; 0.00019988; 0.00013286; 0.16897; 0.17073333; false; false
+hadamard_js; 0.00019759; 0.000142; 0.16897; 0.17073333; false; false
+ennepers; 0.00019056; 0.00013059; 0.16897; 0.16581224; false; false
+post_spherical; 0.00018432; 0.00013306; 0.16897; 0.17073333; false; false
+roundspher; 0.00018061; 0.00013724; 0.16897; 0.16581224; false; false
+pre_spherical; 0.0001775; 0.00016329; 0.16897; 0.17073333; false; false
+nBlur; -1; -1; -1; -1; true; true
+sattractor_js; -1; -1; -1; -1; true; true
+knots3D; -1; 0.66670884; -1; -1; true; true
+wangtiles; -1; 0.00313766; -1; -1; true; true
+taprats; -1; -1; -1; -1; true; true
+gpattern; -1; -1; -1; -1; true; true
+nsudoku; -1; -1; -1; -1; true; true
+sunflower; -1; -1; -1; -1; true; true
+sunvoroni; -1; -1; -1; -1; true; true
+curliecue; -1; -1; -1; -1; true; true
+szubieta; -1; -1; -1; -1; true; true
+triantruchet; -1; -1; -1; -1; true; true
+mandala; -1; -1; -1; -1; true; true
+iflames_wf; -1; -1; -1; -1; true; true
+mandelbrot; -1; -1; -1; -1; true; true

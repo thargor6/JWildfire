@@ -50,7 +50,11 @@ public class ImageReader {
         break;
       }
       catch(Exception ex) {
-        //
+        try {
+          Thread.sleep(1);
+        } catch (InterruptedException e) {
+          // EMPTY
+        }
       }
     }
   }

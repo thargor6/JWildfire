@@ -23,6 +23,7 @@ import org.jwildfire.create.tina.base.Layer;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.weightingfield.*;
 import org.jwildfire.create.tina.variation.Variation;
+import org.jwildfire.create.tina.variation.VariationFuncList;
 
 public class WeightingFieldMutation implements Mutation {
 
@@ -95,7 +96,7 @@ public class WeightingFieldMutation implements Mutation {
     xForm.setWeightingFieldVarParam3ParamName("");
     boolean hasVarParam = false;
     for (Variation var : xForm.getVariations()) {
-      if(!WeightingFieldVariationBlackList.isBlackListed(var.getFunc().getName()) && var.getFunc().getParameterNames().length>0 && Math.random()>0.33) {
+      if(VariationFuncList.isValidVariationForWeightingFields(var.getFunc().getName()) && var.getFunc().getParameterNames().length>0 && Math.random()>0.33) {
         int idx = Math.min((int)(Math.random()*var.getFunc().getParameterNames().length), var.getFunc().getParameterNames().length-1);
         if(Math.random()>0.33) {
           xForm.setWeightingFieldVarParam1Intensity(0.05 + Math.random() * 0.2);

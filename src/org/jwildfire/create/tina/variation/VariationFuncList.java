@@ -31,7 +31,8 @@ import java.util.Map.Entry;
 
 public class VariationFuncList {
   public static final String DEFAULT_VARIATION = "linear3D";
-  private static final double VARIATION_COST_THRESHOLD = 0.25;
+  private static final double VARIATION_COST_THRESHOLD = 0.02;
+  private static final double MEMORY_THRESHOLD = 1.0;
   private static List<Class<? extends VariationFunc>> items = new ArrayList<Class<? extends VariationFunc>>();
   private static List<String> unfilteredNameList = null;
   private static List<String> excludedNameList = null;
@@ -40,7 +41,7 @@ public class VariationFuncList {
   private static final Map<String, String> resolvedAliasMap;
 
   static {
-    initializeCostsMap();
+    initializeCostsMaps();
     // define alias for renamed variations to allow loading of old flame
     // files
     aliasMap.put(KaleidoscopeFunc.class, "kaleidoscope");
@@ -790,20 +791,35 @@ public class VariationFuncList {
 
   }
 
-  private static Map<String, Double> variationCosts;
+  private static Map<String, Double> variationInitCosts;
+  private static Map<String, Double> variationEvalCosts;
 
-  private static void initializeCostsMap() {
-    variationCosts = new HashMap<>();
+  private static void initializeCostsMaps() {
+    variationInitCosts = new HashMap<>();
+    variationEvalCosts = new HashMap<>();
     try {
       InputStream inputStream =  VariationFuncList.class.getResourceAsStream("variation_costs.txt");
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       String line;
+      // skip first line
+      bufferedReader.readLine();
+
       while ((line = bufferedReader.readLine()) != null) {
         try {
-          StringTokenizer tokenizer = new StringTokenizer(line, ":", false);
+          StringTokenizer tokenizer = new StringTokenizer(line, ";", false);
           String variationName = tokenizer.nextToken().trim();
-          Double cost = Double.parseDouble(tokenizer.nextToken().trim());
-          variationCosts.put(variationName, cost);
+          Double evalCostMs = Double.parseDouble(tokenizer.nextToken().trim());
+          Double initCostMs = Double.parseDouble(tokenizer.nextToken().trim());
+          Double evalMemoryKb = Double.parseDouble(tokenizer.nextToken().trim());
+          Double initMemoryKb = Double.parseDouble(tokenizer.nextToken().trim());
+          Boolean evalError = Boolean.parseBoolean(tokenizer.nextToken().trim());
+          Boolean initError = Boolean.parseBoolean(tokenizer.nextToken().trim());
+
+          double estimatedEvalCost = evalError ? -1.0 : evalMemoryKb > MEMORY_THRESHOLD ? -1.0 : evalCostMs;
+          variationEvalCosts.put(variationName, estimatedEvalCost);
+
+          double estimatedInitCost = initError ? -1.0 : initMemoryKb > MEMORY_THRESHOLD ? -1.0 : initCostMs;
+          variationInitCosts.put(variationName, estimatedInitCost);
         }
         catch (Exception ex) {
           ex.printStackTrace();
@@ -815,8 +831,13 @@ public class VariationFuncList {
     }
   }
 
-  public static double getVariationCost(String variationName) {
-    Double cost = Optional.ofNullable(variationCosts.get(variationName)).orElse(-1.0);
+  public static double getVariationEvalCost(String variationName) {
+    Double cost = Optional.ofNullable(variationEvalCosts.get(variationName)).orElse(-1.0);
+    return cost > 0.0 ? cost : Double.MAX_VALUE;
+  }
+
+  public static double getVariationInitCost(String variationName) {
+    Double cost = Optional.ofNullable(variationInitCosts.get(variationName)).orElse(-1.0);
     return cost > 0.0 ? cost : Double.MAX_VALUE;
   }
 
@@ -914,9 +935,13 @@ public class VariationFuncList {
   }
 
   public static boolean isValidRandomVariation(String name) {
-    return getVariationCost(name) < VARIATION_COST_THRESHOLD &&
+    return getVariationEvalCost(name) < VARIATION_COST_THRESHOLD &&
            !(name.indexOf("inflate") == 0) && !name.equals("svg_wf") && !(name.indexOf("post_") == 0) && !(name.indexOf("pre_") == 0)
            && !(name.indexOf("prepost_") == 0) && !name.equals("iflames_wf") && !name.equals("flatten");
+  }
+
+  public static boolean isValidVariationForWeightingFields(String name) {
+    return getVariationEvalCost(name) < VARIATION_COST_THRESHOLD && getVariationEvalCost(name) < VARIATION_COST_THRESHOLD;
   }
 
   public static VariationFunc getVariationFuncInstance(String pName) {
