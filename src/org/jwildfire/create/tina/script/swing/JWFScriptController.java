@@ -1,6 +1,6 @@
 /*
   JWildfire - an image and animation processor written in Java 
-  Copyright (C) 1995-2016 Andreas Maschke
+  Copyright (C) 1995-2019s Andreas Maschke
 
   This is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser 
   General Public License as published by the Free Software Foundation; either version 2.1 of the 
@@ -28,6 +28,7 @@ import org.jwildfire.create.tina.base.solidrender.DistantLight;
 import org.jwildfire.create.tina.base.solidrender.LightDiffFuncPreset;
 import org.jwildfire.create.tina.base.solidrender.MaterialSettings;
 import org.jwildfire.create.tina.base.solidrender.ShadowType;
+import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.io.Flam3GradientReader;
 import org.jwildfire.create.tina.io.RGBPaletteReader;
 import org.jwildfire.create.tina.palette.RGBColor;
@@ -684,6 +685,57 @@ public class JWFScriptController {
       pSB.append("      xForm.setZXPostCoeff11(" + Tools.doubleToString(pXForm.getZXPostCoeff11()) + ");\n");
       pSB.append("      xForm.setZXPostCoeff20(" + Tools.doubleToString(pXForm.getZXPostCoeff20()) + ");\n");
       pSB.append("      xForm.setZXPostCoeff21(" + Tools.doubleToString(pXForm.getZXPostCoeff21()) + ");\n");
+      pSB.append("\n");
+    }
+
+    if(pXForm.getWeightingFieldType()!=null && !WeightingFieldType.NONE.equals(pXForm.getWeightingFieldType())) {
+      pSB.append("      xForm.setWeightingFieldType(org.jwildfire.create.tina.base.weightingfield.WeightingFieldType." + pXForm.getWeightingFieldType().name() + ");\n");
+      pSB.append("      xForm.setWeightingFieldInput(org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType." + pXForm.getWeightingFieldInput().name() + ");\n");
+      pSB.append("      xForm.setWeightingFieldColorIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldColorIntensity()) + ");\n");
+      pSB.append("      xForm.setWeightingFieldVarAmountIntensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarAmountIntensity()) + ");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam1Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam1Intensity()) + ");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam1VarName(\"" + (pXForm.getWeightingFieldVarParam1ParamName() != null ? pXForm.getWeightingFieldVarParam1ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam1ParamName(\"" + (pXForm.getWeightingFieldVarParam1ParamName() != null ? pXForm.getWeightingFieldVarParam1ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam2Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam2Intensity()) + ");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam2VarName(\"" + (pXForm.getWeightingFieldVarParam2ParamName() != null ? pXForm.getWeightingFieldVarParam2ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam2ParamName(\"" + (pXForm.getWeightingFieldVarParam2ParamName() != null ? pXForm.getWeightingFieldVarParam2ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam3Intensity(" + Tools.doubleToString(pXForm.getWeightingFieldVarParam3Intensity()) + ");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam3VarName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
+      pSB.append("      xForm.setWeightingFieldVarParam3ParamName(\"" + (pXForm.getWeightingFieldVarParam3ParamName() != null ? pXForm.getWeightingFieldVarParam3ParamName() : "") + "\");\n");
+      switch (pXForm.getWeightingFieldType()) {
+        case CELLULAR_NOISE:
+          pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");
+          pSB.append("      xForm.setWeightingFieldNoiseFrequency(" + Tools.doubleToString(pXForm.getWeightingFieldNoiseFrequency()) + ");\n");
+          pSB.append("      xForm.setWeightingFieldCellularNoiseReturnType(org.jwildfire.create.tina.base.weightingfield.CellularNoiseReturnType." + pXForm.getWeightingFieldCellularNoiseReturnType().name() + ");\n");
+          pSB.append("      xForm.setWeightingFieldCellularNoiseDistanceFunction(org.jwildfire.create.tina.base.weightingfield.CellularNoiseDistanceFunction." + pXForm.getWeightingFieldCellularNoiseDistanceFunction().name() + ");\n");
+          break;
+        case CUBIC_NOISE:
+        case PERLIN_NOISE:
+        case SIMPLEX_NOISE:
+        case VALUE_NOISE:
+          pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");
+          pSB.append("      xForm.setWeightingFieldNoiseFrequency(" + Tools.doubleToString(pXForm.getWeightingFieldNoiseFrequency()) + ");\n");
+          break;
+        case PERLIN_FRACTAL_NOISE:
+        case CUBIC_FRACTAL_NOISE:
+        case SIMPLEX_FRACTAL_NOISE:
+        case VALUE_FRACTAL_NOISE:
+          pSB.append("      xForm.setWeightingFieldNoiseSeed(" + pXForm.getWeightingFieldNoiseSeed() + ");\n");
+          pSB.append("      xForm.setWeightingFieldNoiseFrequency(" + Tools.doubleToString(pXForm.getWeightingFieldNoiseFrequency()) + ");\n");
+          pSB.append("      xForm.setWeightingFieldFractalType(org.jwildfire.create.tina.base.weightingfield.FractalType." + pXForm.getWeightingFieldFractalType().name() + ");\n");
+          pSB.append("      xForm.setWeightingFieldFractalNoiseOctaves(" + pXForm.getWeightingFieldFractalNoiseOctaves() + ");\n");
+          pSB.append("      xForm.setWeightingFieldFractalNoiseGain(" + Tools.doubleToString(pXForm.getWeightingFieldFractalNoiseGain()) + ");\n");
+          pSB.append("      xForm.setWeightingFieldFractalNoiseLacunarity(" + Tools.doubleToString(pXForm.getWeightingFieldFractalNoiseLacunarity()) + ");\n");
+          break;
+        case IMAGE_MAP:
+          pSB.append("      xForm.setWeightingFieldColorMapXSize(" + pXForm.getWeightingFieldColorMapXSize() + ");\n");
+          pSB.append("      xForm.setWeightingFieldColorMapYSize(" + pXForm.getWeightingFieldColorMapYSize() + ");\n");
+          pSB.append("      xForm.setWeightingFieldColorMapXCentre(" + pXForm.getWeightingFieldColorMapXCentre() + ");\n");
+          pSB.append("      xForm.setWeightingFieldColorMapYCentre(" + pXForm.getWeightingFieldColorMapYCentre() + ");\n");
+          pSB.append("      xForm.setWeightingFieldColorMapFilename(\"" + (pXForm.getWeightingFieldColorMapFilename() != null ? pXForm.getWeightingFieldColorMapFilename() : "") + "\");\n");
+
+          break;
+      }
       pSB.append("\n");
     }
 

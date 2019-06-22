@@ -61,6 +61,8 @@ import org.jwildfire.create.tina.randomgradient.RandomGradientGenerator;
 import org.jwildfire.create.tina.randomgradient.RandomGradientGeneratorList;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGenerator;
 import org.jwildfire.create.tina.randomsymmetry.RandomSymmetryGeneratorList;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGenerator;
+import org.jwildfire.create.tina.randomweightingfield.RandomWeightingFieldGeneratorList;
 import org.jwildfire.create.tina.swing.*;
 import org.jwildfire.create.tina.swing.MainEditorFrame;
 
@@ -270,31 +272,32 @@ public class JWildfire extends JApplet {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
-        try {
-          RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
-          if (randGen instanceof AllRandomFlameGenerator) {
-            ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
-          }
-          RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
-          RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
-
-          tinaController.createRandomBatch(3, randGen, randSymmGen, randGradientGen, RandomBatchQuality.LOW);
-
-          MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
-          tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent e) {
-              triggerRefreshFlameImage();
-              //tinaController.refreshFlameImage(true, false, 1, true, false);
+        if(Prefs.getPrefs().getTinaInitialRandomBatchSize()>0) {
+          try {
+            RandomFlameGenerator randGen = RandomFlameGeneratorList.getRandomFlameGeneratorInstance(RandomFlameGeneratorList.DEFAULT_GENERATOR_NAME, true);
+            if (randGen instanceof AllRandomFlameGenerator) {
+              ((AllRandomFlameGenerator) randGen).setUseSimpleGenerators(true);
             }
-          });
-          if (!tinaInternalFrame.isVisible()) {
-            tinaInternalFrame.setVisible(true);
+            RandomSymmetryGenerator randSymmGen = RandomSymmetryGeneratorList.getRandomSymmetryGeneratorInstance(RandomSymmetryGeneratorList.DEFAULT_GENERATOR_NAME, true);
+            RandomGradientGenerator randGradientGen = RandomGradientGeneratorList.getRandomGradientGeneratorInstance((RandomGradientGeneratorList.DEFAULT_GENERATOR_NAME), true);
+            RandomWeightingFieldGenerator randWeightingFieldGen = RandomWeightingFieldGeneratorList.getRandomWeightingFieldGeneratorInstance(RandomWeightingFieldGeneratorList.DEFAULT_GENERATOR_NAME, true);
+
+            tinaController.createRandomBatch(Prefs.getPrefs().getTinaInitialRandomBatchSize(), randGen, randSymmGen, randGradientGen, randWeightingFieldGen, RandomBatchQuality.LOW);
+
+            MainEditorFrame tinaInternalFrame = getJFrame(MainEditorFrame.class);
+            tinaInternalFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
+              public void componentResized(java.awt.event.ComponentEvent e) {
+                triggerRefreshFlameImage();
+                //tinaController.refreshFlameImage(true, false, 1, true, false);
+              }
+            });
+            if (!tinaInternalFrame.isVisible()) {
+              tinaInternalFrame.setVisible(true);
+            }
+          } catch (Exception ex) {
+            ex.printStackTrace();
           }
         }
-        catch (Exception ex) {
-          ex.printStackTrace();
-        }
-        
         TipOfTheDayFrame tipOfTheDayFrame = getJFrame(TipOfTheDayFrame.class);
         if (!tipOfTheDayFrame.isVisible() && Prefs.getPrefs().isShowTipsAtStartup()) {
           tipOfTheDayFrame.setVisible(true);

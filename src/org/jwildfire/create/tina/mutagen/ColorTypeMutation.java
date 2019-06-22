@@ -30,25 +30,35 @@ public class ColorTypeMutation implements Mutation {
   static {
     xFormColorTypes = new ArrayList<>();
     xFormColorTypes.add(ColorType.DIFFUSION);
+    xFormColorTypes.add(ColorType.UNSET);
     xFormColorTypes.add(ColorType.DISTANCE);
     xFormColorTypes.add(ColorType.TARGET);
+    xFormColorTypes.add(ColorType.UNSET);
     xFormColorTypes.add(ColorType.DIFFUSION);
     xFormColorTypes.add(ColorType.TARGETG);
+    xFormColorTypes.add(ColorType.UNSET);
     xFormColorTypes.add(ColorType.NONE);
+    xFormColorTypes.add(ColorType.UNSET);
+    xFormColorTypes.add(ColorType.UNSET);
     xFormColorTypes.add(ColorType.DIFFUSION);
 
     finalXFormColorTypes = new ArrayList<>();
     finalXFormColorTypes.add(ColorType.NONE);
     finalXFormColorTypes.add(ColorType.DIFFUSION);
     finalXFormColorTypes.add(ColorType.NONE);
+    finalXFormColorTypes.add(ColorType.UNSET);
+    finalXFormColorTypes.add(ColorType.UNSET);
     finalXFormColorTypes.add(ColorType.DISTANCE);
     finalXFormColorTypes.add(ColorType.NONE);
     finalXFormColorTypes.add(ColorType.TARGET);
-    finalXFormColorTypes.add(ColorType.NONE);
+    finalXFormColorTypes.add(ColorType.UNSET);
     finalXFormColorTypes.add(ColorType.DIFFUSION);
+    finalXFormColorTypes.add(ColorType.UNSET);
+    finalXFormColorTypes.add(ColorType.UNSET);
     finalXFormColorTypes.add(ColorType.NONE);
     finalXFormColorTypes.add(ColorType.TARGETG);
-    finalXFormColorTypes.add(ColorType.NONE);
+    finalXFormColorTypes.add(ColorType.UNSET);
+    finalXFormColorTypes.add(ColorType.UNSET);
     finalXFormColorTypes.add(ColorType.DIFFUSION);
     finalXFormColorTypes.add(ColorType.NONE);
   }
