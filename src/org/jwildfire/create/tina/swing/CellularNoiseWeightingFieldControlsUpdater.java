@@ -62,6 +62,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
     controls.weightingFieldParam01REd.setVisible(true);
     controls.weightingFieldParam01REd.setEnabled(enabled);
+    controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
 
@@ -91,6 +92,7 @@ public class CellularNoiseWeightingFieldControlsUpdater extends WeightingFieldCo
 
     controls.weightingFieldParam05REd.setVisible(true);
     controls.weightingFieldParam05REd.setEnabled(true);
+    controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
 

@@ -106,11 +106,13 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
     controls.weightingFieldParam01REd.setVisible(true);
     controls.weightingFieldParam01REd.setEnabled(enabled);
+    controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldColorMapXCentre");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Centre X");
 
     controls.weightingFieldParam02REd.setVisible(true);
     controls.weightingFieldParam02REd.setEnabled(enabled);
+    controls.weightingFieldParam02REd.setMotionPropertyName("weightingFieldColorMapXSize");
     controls.weightingFieldParam02Lbl.setVisible(true);
     controls.weightingFieldParam02Lbl.setText("Size X");
 
@@ -122,11 +124,13 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
 
     controls.weightingFieldParam05REd.setVisible(true);
     controls.weightingFieldParam05REd.setEnabled(enabled);
+    controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldColorMapYCentre");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Centre Y");
 
     controls.weightingFieldParam06REd.setVisible(true);
     controls.weightingFieldParam06REd.setEnabled(enabled);
+    controls.weightingFieldParam06REd.setMotionPropertyName("weightingFieldColorMapYSize");
     controls.weightingFieldParam06Lbl.setVisible(true);
     controls.weightingFieldParam06Lbl.setText("Size Y");
 

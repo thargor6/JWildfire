@@ -5786,6 +5786,13 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVarParam2AmountREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVarParam3AmountREd);
 
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam01REd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam02REd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam03REd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam05REd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam06REd);
+    animationController.registerMotionPropertyControls(weightMapData.weightingFieldParam07REd);
+
     for (TinaNonlinearControlsRow row : data.TinaNonlinearControlsRows) {
       animationController.registerMotionPropertyControls(row.getNonlinearVarREd());
       animationController.registerMotionPropertyControls(row.getNonlinearParamsREd());

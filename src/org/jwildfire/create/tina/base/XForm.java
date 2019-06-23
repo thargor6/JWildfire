@@ -220,16 +220,26 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
   private String weightingFieldColorMapFilename = "";
   private double weightingFieldColorMapXSize = 4.0;
+  private final MotionCurve weightingFieldColorMapXSizeCurve = new MotionCurve();
   private double weightingFieldColorMapYSize = 4.0;
+  private final MotionCurve weightingFieldColorMapYSizeCurve = new MotionCurve();
   private double weightingFieldColorMapXCentre = 0.0;
+  private final MotionCurve weightingFieldColorMapXCentreCurve = new MotionCurve();
   private double weightingFieldColorMapYCentre = 0.0;
+  private final MotionCurve weightingFieldColorMapYCentreCurve = new MotionCurve();
 
   private int weightingFieldNoiseSeed = 1337;
+  private final MotionCurve weightingFieldNoiseSeedCurve = new MotionCurve();
   private double weightingFieldNoiseFrequency = 1.0;
+  private final MotionCurve weightingFieldNoiseFrequencyCurve = new MotionCurve();
+
   private FractalType weightingFieldFractalType = FractalType.FBM;
   private int weightingFieldFractalNoiseOctaves = 3;
+  private final MotionCurve weightingFieldFractalNoiseOctavesCurve = new MotionCurve();
   private double weightingFieldFractalNoiseGain = 0.5;
+  private final MotionCurve weightingFieldFractalNoiseGainCurve = new MotionCurve();
   private double weightingFieldFractalNoiseLacunarity = 2.0;
+  private final MotionCurve weightingFieldFractalNoiseLacunarityCurve = new MotionCurve();
   private CellularNoiseReturnType weightingFieldCellularNoiseReturnType = CellularNoiseReturnType.DISTANCE2;
   private CellularNoiseDistanceFunction weightingFieldCellularNoiseDistanceFunction = CellularNoiseDistanceFunction.EUCLIDIAN;
 
@@ -801,15 +811,24 @@ public final class XForm implements Assignable<XForm>, Serializable {
 
     weightingFieldColorMapFilename = pXForm.weightingFieldColorMapFilename;
     weightingFieldColorMapXSize = pXForm.weightingFieldColorMapXSize;
+    weightingFieldColorMapXSizeCurve.assign(pXForm.weightingFieldColorMapXSizeCurve);
     weightingFieldColorMapYSize = pXForm.weightingFieldColorMapYSize;
+    weightingFieldColorMapYSizeCurve.assign(pXForm.weightingFieldColorMapYSizeCurve);
     weightingFieldColorMapXCentre = pXForm.weightingFieldColorMapXCentre;
+    weightingFieldColorMapXCentreCurve.assign(pXForm.weightingFieldColorMapXCentreCurve);
     weightingFieldColorMapYCentre = pXForm.weightingFieldColorMapYCentre;
+    weightingFieldColorMapYCentreCurve.assign(pXForm.weightingFieldColorMapYCentreCurve);
     weightingFieldNoiseSeed = pXForm.weightingFieldNoiseSeed;
+    weightingFieldNoiseSeedCurve.assign(pXForm.weightingFieldNoiseSeedCurve);
     weightingFieldNoiseFrequency = pXForm.weightingFieldNoiseFrequency;
+    weightingFieldNoiseFrequencyCurve.assign(pXForm.weightingFieldNoiseFrequencyCurve);
     weightingFieldFractalType = pXForm.weightingFieldFractalType;
     weightingFieldFractalNoiseOctaves = pXForm.weightingFieldFractalNoiseOctaves;
+    weightingFieldFractalNoiseOctavesCurve.assign(pXForm.weightingFieldFractalNoiseOctavesCurve);
     weightingFieldFractalNoiseGain = pXForm.weightingFieldFractalNoiseGain;
+    weightingFieldFractalNoiseGainCurve.assign(pXForm.weightingFieldFractalNoiseGainCurve);
     weightingFieldFractalNoiseLacunarity = pXForm.weightingFieldFractalNoiseLacunarity;
+    weightingFieldFractalNoiseLacunarityCurve.assign(pXForm.weightingFieldFractalNoiseLacunarityCurve);
     weightingFieldCellularNoiseReturnType = pXForm.weightingFieldCellularNoiseReturnType;
     weightingFieldCellularNoiseDistanceFunction = pXForm.weightingFieldCellularNoiseDistanceFunction;
   }
@@ -900,17 +919,17 @@ public final class XForm implements Assignable<XForm>, Serializable {
          !weightingFieldVarParam3ParamName.equals(pSrc.weightingFieldVarParam3ParamName) || !weightingFieldVarParam3IntensityCurve.isEqual(pSrc.weightingFieldVarParam3IntensityCurve) ||
 
          !weightingFieldColorMapFilename.equals(pSrc.weightingFieldColorMapFilename) ||
-         (fabs(weightingFieldColorMapXSize - pSrc.weightingFieldColorMapXSize) > EPSILON) ||
-         (fabs(weightingFieldColorMapYSize - pSrc.weightingFieldColorMapYSize) > EPSILON) ||
-         (fabs(weightingFieldColorMapXCentre - pSrc.weightingFieldColorMapXCentre) > EPSILON) ||
-         (fabs(weightingFieldColorMapYCentre - pSrc.weightingFieldColorMapYCentre) > EPSILON) ||
+         (fabs(weightingFieldColorMapXSize - pSrc.weightingFieldColorMapXSize) > EPSILON) || !weightingFieldColorMapXSizeCurve.isEqual(pSrc.weightingFieldColorMapXSizeCurve) ||
+         (fabs(weightingFieldColorMapYSize - pSrc.weightingFieldColorMapYSize) > EPSILON) || !weightingFieldColorMapYSizeCurve.isEqual(pSrc.weightingFieldColorMapYSizeCurve) ||
+         (fabs(weightingFieldColorMapXCentre - pSrc.weightingFieldColorMapXCentre) > EPSILON) || !weightingFieldColorMapXCentreCurve.isEqual(pSrc.weightingFieldColorMapXCentreCurve) ||
+         (fabs(weightingFieldColorMapYCentre - pSrc.weightingFieldColorMapYCentre) > EPSILON) || !weightingFieldColorMapYCentreCurve.isEqual(pSrc.weightingFieldColorMapYCentreCurve) ||
 
-         (weightingFieldNoiseSeed != pSrc.weightingFieldNoiseSeed) ||
-         (fabs(weightingFieldNoiseFrequency - pSrc.weightingFieldNoiseFrequency) > EPSILON) ||
+         (weightingFieldNoiseSeed != pSrc.weightingFieldNoiseSeed) || !weightingFieldNoiseSeedCurve.isEqual(pSrc.weightingFieldNoiseSeedCurve) ||
+         (fabs(weightingFieldNoiseFrequency - pSrc.weightingFieldNoiseFrequency) > EPSILON) || !weightingFieldNoiseFrequencyCurve.isEqual(pSrc.weightingFieldNoiseFrequencyCurve) ||
          (weightingFieldFractalType != pSrc.weightingFieldFractalType) ||
-         (weightingFieldFractalNoiseOctaves != pSrc.weightingFieldFractalNoiseOctaves) ||
-         (fabs(weightingFieldFractalNoiseGain - pSrc.weightingFieldFractalNoiseGain) > EPSILON) ||
-         (fabs(weightingFieldFractalNoiseLacunarity - pSrc.weightingFieldFractalNoiseLacunarity) > EPSILON) ||
+         (weightingFieldFractalNoiseOctaves != pSrc.weightingFieldFractalNoiseOctaves) || !weightingFieldFractalNoiseOctavesCurve.isEqual(pSrc.weightingFieldFractalNoiseOctavesCurve) ||
+         (fabs(weightingFieldFractalNoiseGain - pSrc.weightingFieldFractalNoiseGain) > EPSILON) || !weightingFieldFractalNoiseGainCurve.isEqual(pSrc.weightingFieldFractalNoiseGainCurve) ||
+         (fabs(weightingFieldFractalNoiseLacunarity - pSrc.weightingFieldFractalNoiseLacunarity) > EPSILON) || !weightingFieldFractalNoiseLacunarityCurve.isEqual(pSrc.weightingFieldFractalNoiseLacunarityCurve) ||
          (weightingFieldCellularNoiseReturnType != pSrc.weightingFieldCellularNoiseReturnType) ||
          (weightingFieldCellularNoiseDistanceFunction != pSrc.weightingFieldCellularNoiseDistanceFunction)
     ) {

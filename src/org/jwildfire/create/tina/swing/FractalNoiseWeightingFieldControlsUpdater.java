@@ -70,16 +70,19 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
 
     controls.weightingFieldParam01REd.setVisible(true);
     controls.weightingFieldParam01REd.setEnabled(enabled);
+    controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
 
     controls.weightingFieldParam02REd.setVisible(true);
     controls.weightingFieldParam02REd.setEnabled(enabled);
+    controls.weightingFieldParam02REd.setMotionPropertyName("weightingFieldFractalNoiseGain");
     controls.weightingFieldParam02Lbl.setVisible(true);
     controls.weightingFieldParam02Lbl.setText("Gain");
 
     controls.weightingFieldParam03REd.setVisible(true);
     controls.weightingFieldParam03REd.setEnabled(enabled);
+    controls.weightingFieldParam03REd.setMotionPropertyName("weightingFieldFractalNoiseOctaves");
     controls.weightingFieldParam03Lbl.setVisible(true);
     controls.weightingFieldParam03Lbl.setText("Octaves");
 
@@ -100,11 +103,13 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
 
     controls.weightingFieldParam05REd.setVisible(true);
     controls.weightingFieldParam05REd.setEnabled(true);
+    controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
 
     controls.weightingFieldParam06REd.setVisible(true);
     controls.weightingFieldParam06REd.setEnabled(enabled);
+    controls.weightingFieldParam06REd.setMotionPropertyName("weightingFieldFractalNoiseLacunarity");
     controls.weightingFieldParam06Lbl.setVisible(true);
     controls.weightingFieldParam06Lbl.setText("Lacunarity");
 
