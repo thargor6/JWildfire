@@ -86,7 +86,7 @@ public class TinaNonlinearControlsRow {
 
     List<String> excludedNames = VariationFuncList.getExcludedNameList();
 
-    nonlinearVarCmb.addItem(null);
+    nonlinearVarCmb.addItem("");
     for (String name : nameList) {
       if (!excludedNames.contains(name)) {
         nonlinearVarCmb.addItem(name);

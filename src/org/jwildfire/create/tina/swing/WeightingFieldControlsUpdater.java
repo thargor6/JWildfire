@@ -126,11 +126,11 @@ public abstract class WeightingFieldControlsUpdater {
     xFormControlsDelegate.enableControl(controls.weightingFieldVarParam2AmountREd ,!(enabled && hasWeightingFieldType));
     xFormControlsDelegate.enableControl(controls.weightingFieldVarParam3AmountREd, !(enabled && hasWeightingFieldType));
 
-    fillVarParamCmb(xform, controls.weightingFieldVarParam1NameCmb);
+    //fillVarParamCmb(xform, controls.weightingFieldVarParam1NameCmb);
     controls.weightingFieldVarParam1NameCmb.setEnabled(enabled && hasWeightingFieldType);
-    fillVarParamCmb(xform, controls.weightingFieldVarParam2NameCmb);
+    //fillVarParamCmb(xform, controls.weightingFieldVarParam2NameCmb);
     controls.weightingFieldVarParam2NameCmb.setEnabled(enabled && hasWeightingFieldType);
-    fillVarParamCmb(xform, controls.weightingFieldVarParam3NameCmb);
+    //fillVarParamCmb(xform, controls.weightingFieldVarParam3NameCmb);
     controls.weightingFieldVarParam3NameCmb.setEnabled(enabled && hasWeightingFieldType);
     refreshFieldPreviewImage(xform);
   }
@@ -278,32 +278,14 @@ public abstract class WeightingFieldControlsUpdater {
   }
 
   public void weightingFieldVarParam1AmountREd_changed() {
-    XForm xForm = controller.getCurrXForm();
-    if (xForm != null) {
-      String selectedItem = (String)controls.weightingFieldVarParam1NameCmb.getSelectedItem();
-      xForm.setWeightingFieldVarParam1VarName(decodeVarName(selectedItem));
-      xForm.setWeightingFieldVarParam1ParamName(decodeParamName(selectedItem));
-    }
     controller.xFormTextFieldChanged(null, controls.weightingFieldVarParam1AmountREd, "weightingFieldVarParam1Intensity", 1.0);
   }
 
   public void weightingFieldVarParam2AmountREd_changed() {
-    XForm xForm = controller.getCurrXForm();
-    if (xForm != null) {
-      String selectedItem = (String)controls.weightingFieldVarParam2NameCmb.getSelectedItem();
-      xForm.setWeightingFieldVarParam2VarName(decodeVarName(selectedItem));
-      xForm.setWeightingFieldVarParam2ParamName(decodeParamName(selectedItem));
-    }
     controller.xFormTextFieldChanged(null, controls.weightingFieldVarParam2AmountREd, "weightingFieldVarParam2Intensity", 1.0);
   }
 
   public void weightingFieldVarParam3AmountREd_changed() {
-    XForm xForm = controller.getCurrXForm();
-    if (xForm != null) {
-      String selectedItem = (String)controls.weightingFieldVarParam3NameCmb.getSelectedItem();
-      xForm.setWeightingFieldVarParam3VarName(decodeVarName(selectedItem));
-      xForm.setWeightingFieldVarParam3ParamName(decodeParamName(selectedItem));
-    }
     controller.xFormTextFieldChanged(null, controls.weightingFieldVarParam3AmountREd, "weightingFieldVarParam3Intensity", 1.0);
   }
 

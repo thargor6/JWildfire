@@ -1335,6 +1335,7 @@ public class MainEditorFrame extends JFrame {
       randomizeBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
       randomizeBtn.setSelected(false);
       randomizeBtn.setPreferredSize(new Dimension(42, 24));
+      panel_1_1.add(getBokehBtn());
 
       tinaSouthTabbedPane.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -8701,7 +8702,20 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.add(getSnapShotButton());
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
-      centerWestPanel.add(getBokehBtn());
+
+      JButton btnWfld = new JButton();
+      btnWfld.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
+      btnWfld.setText("WFld");
+      btnWfld.setPreferredSize(new Dimension(72, 36));
+      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      btnWfld.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      btnWfld.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
+        }
+      });
+
+      centerWestPanel.add(btnWfld);
 
       motionCurveEditModeButton = new JToggleButton();
       centerWestPanel.add(motionCurveEditModeButton);
@@ -8712,7 +8726,7 @@ public class MainEditorFrame extends JFrame {
       });
       motionCurveEditModeButton.setToolTipText("Enable new controls to edit flame-properties as motion-curves rather than simple values");
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/motionEditingMode.gif")));
-      motionCurveEditModeButton.setPreferredSize(new Dimension(72, 42));
+      motionCurveEditModeButton.setPreferredSize(new Dimension(72, 36));
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
       centerWestPanel.add(getSolidRenderingToggleBtn());
@@ -17082,17 +17096,16 @@ public class MainEditorFrame extends JFrame {
   private JButton getBokehBtn() {
     if (bokehBtn == null) {
       bokehBtn = new JButton();
+      bokehBtn.setBounds(6, 44, 213, 24);
       bokehBtn.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.bokehBtn_clicked();
         }
       });
       bokehBtn.setToolTipText("Add random bokeh-like-effects (DOF)");
-      bokehBtn.setText("DOF");
+      bokehBtn.setText("Randomize DOF/bokeh");
       bokehBtn.setPreferredSize(new Dimension(72, 24));
-      bokehBtn.setMnemonic(KeyEvent.VK_K);
       bokehBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      //bokehBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/games-config-background.png")));
       bokehBtn.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
     }
     return bokehBtn;
@@ -20445,7 +20458,7 @@ public class MainEditorFrame extends JFrame {
       solidRenderingToggleBtn = new JToggleButton();
       solidRenderingToggleBtn.setText("3D");
       solidRenderingToggleBtn.setToolTipText("Enable solid rendering");
-      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
+      solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 36));
       solidRenderingToggleBtn.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/kwikdisk-4.png")));
       solidRenderingToggleBtn.setPreferredSize(new Dimension(72, 42));
       solidRenderingToggleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));

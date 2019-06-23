@@ -1,13 +1,83 @@
-V4.20 (06.06.2018)
- - Introducing internal ranking of variation-code:
-   Only variations which
-     - behave fast enough and
-     - use a reasonable amount of memory
-   are included in random-flame-generators and random-flame-modifiers like MutaGen.
-   This should lead to a much more stable and fluid program behaviour.
- - new juliascope3Db-variation by Brad Stefanov
+V5.00 (xx.xx.2019)
+ - Introducing a new artistic concept to flame-fractals: weighting-fields.
+   I had this in mind for a while, but never found the time to really "grasp" it.
+   When you look at my fractal art, you will notice that I'm usually striving for a very energetic and organic style.
+   Flame fractals support this style a lot, but I'm was often looking for "more".
 
-V4.10 (11.05.2018)
+   Finally, weighting-fields are the implementation of what I was looking for.
+   The basic idea: to add some kind of "natural disturbances" at the transform-level of the flame-fractals.
+   But, allow that in a very artistic way by just modulating an existing fractal shape. Allow to easily try out if different "styles".
+   You may choose between different types of this kind of disturbance, for example "Perlin Fractal Noise" for a very organic style.
+   But, you can also load image-maps (photographs) for very individual styles. Each style comes with a lot of options to tweak.
+
+   You may chose a weighting-field at the transform-level. So you may even combine different weighting-fields inside one fractal in non-destructive-way.
+
+   Currently, the following fractal-parameters may be affected by a weighting-field:
+   - variation-amount
+   - variation-parameter-amount (for up to three parameters per transform, like frequency of a waves-trandform)
+   - color-index (allows subtle color-changing effects)
+
+   With version 5.00, weighting-fields are integrated into JWildfire as "first-class-citizen":
+   - there is some new "weighting-field"-aspect inside random-flame-generators (similar to random-symmetry-generators or random-gradient-generators).
+     Currently, there are 6 built-in random-weighting-field generators. The default one is "All, sparse", which means to randomly generate weighting-field-aspects,
+     but only for a few random flames.
+   - there is new Mutation-type WEIGHT_FIELD inside MutaGen
+   - there is a new "WField"-tab under the "Transformations"-tab,where you can create, edit and generate weighting-field-related effects.
+   - scripting is completely supported
+   - by design, the performance-impact is moderate, and you may even animate weighting-fields
+
+   To get started, just load a favourite flame of yours, enter the "WField"-tab under the "Transformations"-tab, and press the "Randomize all"-button.
+   Repeat it multiple times to see what is possible.
+   To generate random-flames with weighting-fields always enabled, change the "WField"-setting at the upper left of the main editor from "(All, sparse)" to "(All)"
+   and hit the "Random batch"-button.
+
+ - Improved performance and stability due to an internal mechanism to evaluate costs of variations/plugins.
+   There are three types of cost: initialization time, calculation time and memory consumption.
+   JWildfire will prefer variations with low costs for performing "randomization-tasks" like generating random-flames.
+   There will be even variations/plugins which become completely "counted out" and never be touched in such operations.
+   This will improve general performance and stability, but also give variation/plugin-developers additional the freedom.
+   They may try out new things freely, without the danger of compromising the whole application.
+
+ - new option to specify the number of random-flames, generated during program-start (tina.initial_random_batch.size, defaults to 3)
+
+ - new coloring type: DISTANCE, provided by Rick Sidwell:
+   Uses the gradient indexed by the distance the transform moved the point. Color determines the starting point and Speed controls
+   how far along the gradient each unit of distance moves from there. Like other coloring types, Speed -1 sets the color
+   to the specified color. The input color is ignored, so unlike the others Speed 1 will still change the color.
+
+   DISTANCE is especially effective for coloring flames made with a single non-blur transform (blur transforms ignore the input point,
+   so the distance and thus the color of each point is random).
+
+ - new COLOR_TYPE-Mutation for MutaGen to randomly apply the new color-types (NONE, DIFFUSION, TARGET, TARGETG, DISTANCE)
+
+ - significant performance-improvement in the refreshing-behaviour in the UI, you especially notive this when changing variations in the "Nonlinear"-tab
+
+ - new "juliascope3Db"-variation, provided by Brad Stefanov
+ - new "waves22"-variation, provided by Brad Stefanov
+ - new "waves23"-variation, provided by Brad Stefanov
+ - new "waves3"-variation, provided by Brad Stefanov
+ - new "waves42"-variation, provided by Brad Stefanov
+ - new "waves4"-variation, provided by Brad Stefanov
+ - new "waves22"-variation, provided by Brad Stefanov
+ - new "hex_modulus"-variation, provided by Brad Stefanov
+ - new "truchet_hex_crop"-variation, provided by Brad Stefanov
+ - new "truchet_hex_fill"-variation, provided by Brad Stefanov
+ - new "dc_triantess-variation", provided by Jesus Sosa
+ - new "dc_poincaredisc", provided by Jesus Sosa
+ - new "dc_worley", provided by Jesus Sosa
+ - new "dc_glypho", provided by Jesus Sosa
+ - new "dc_fingerprint", provided by Jesus Sosa
+ - new "dc_pentatiles", provided by Jesus Sosa
+ - new "dc_quadtree", provided by Jesus Sosa
+ - new "dc_sunflower", provided by Jesus Sosa
+ - new "dc_gabornoise", provided by Jesus Sosa
+ - new "dc_cairotiles", provided by Jesus Sosa
+ - new "dc_moebiuslog", provided by Jesus Sosa
+ - new "dc_inversion", provided by Jesus Sosa
+
+ - Rick has updated the text in the About-section
+
+V4.10 (11.05.2019)
  - New variation: dc_code by Jesus Sosa
  - Enhancements to dc_ variations by Jesus Sosa
  - Tips for Apophysis users (in Fractal flames: Help window) updated
