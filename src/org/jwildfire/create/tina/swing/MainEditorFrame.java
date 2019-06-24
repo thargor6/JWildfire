@@ -8703,20 +8703,6 @@ public class MainEditorFrame extends JFrame {
       centerWestPanel.add(getLabel_8());
       centerWestPanel.add(getEditFlameTitleBtn());
 
-      JButton btnWfld = new JButton();
-      btnWfld.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
-      btnWfld.setText("WFld");
-      btnWfld.setPreferredSize(new Dimension(72, 36));
-      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      btnWfld.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
-      btnWfld.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
-        }
-      });
-
-      centerWestPanel.add(btnWfld);
-
       motionCurveEditModeButton = new JToggleButton();
       centerWestPanel.add(motionCurveEditModeButton);
       motionCurveEditModeButton.addActionListener(new ActionListener() {
@@ -8730,6 +8716,21 @@ public class MainEditorFrame extends JFrame {
       motionCurveEditModeButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       motionCurveEditModeButton.setIcon(new ImageIcon(getClass().getResource("/org/jwildfire/swing/icons/new/video-x-generic-2.png")));
       centerWestPanel.add(getSolidRenderingToggleBtn());
+
+      JButton btnWfld = new JButton();
+      btnWfld.setToolTipText("Randomize all weightmap-settings, either of the whole fractal or the selected transform");
+      btnWfld.setText("WFld");
+      btnWfld.setMnemonic(KeyEvent.VK_W);
+      btnWfld.setPreferredSize(new Dimension(72, 36));
+      btnWfld.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
+      btnWfld.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/roll.png")));
+      btnWfld.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.weightMapRandomizeAllBtn_clicked(getWeightMapEditWholeFractalCBx().isSelected());
+        }
+      });
+      centerWestPanel.add(btnWfld);
+
     }
     return centerWestPanel;
   }
@@ -14722,7 +14723,7 @@ public class MainEditorFrame extends JFrame {
     if (panel_66 == null) {
       panel_66 = new JPanel();
       panel_66.setAlignmentX(Component.LEFT_ALIGNMENT);
-      panel_66.setMaximumSize(new Dimension(200, 24));
+      panel_66.setMaximumSize(new Dimension(32000, 24));
       panel_66.setPreferredSize(new Dimension(125, 24));
       panel_66.setLayout(new BorderLayout(0, 0));
       panel_66.add(getTinaSaveFlameButton());
@@ -14735,7 +14736,7 @@ public class MainEditorFrame extends JFrame {
     if (panel_66a == null) {
       panel_66a = new JPanel();
       panel_66a.setAlignmentX(Component.LEFT_ALIGNMENT);
-      panel_66a.setMaximumSize(new Dimension(200, 24));
+      panel_66a.setMaximumSize(new Dimension(32000, 24));
       panel_66a.setPreferredSize(new Dimension(125, 24));
       panel_66a.setLayout(new BorderLayout(0, 0));
       panel_66a.add(getSaveFlameToClipboardButton());
