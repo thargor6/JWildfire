@@ -33,6 +33,7 @@ import static org.jwildfire.base.mathlib.MathLib.fabs;
 
 public class Variation implements Assignable<Variation>, Serializable {
   private static final long serialVersionUID = 1L;
+  public static final String WFIELD_AMOUNT_PARAM = "amount";
   @AnimAware
   private double amount;
 
@@ -47,15 +48,20 @@ public class Variation implements Assignable<Variation>, Serializable {
   private class WeightFieldParamValue {
     public String paramName;
     public double intensity;
+    public boolean isAmount;
     public Object oldParamValue;
 
     public WeightFieldParamValue(String paramName, double intensity) {
       this.paramName = paramName;
+      this.isAmount = WFIELD_AMOUNT_PARAM.equals(paramName);
       this.intensity = intensity;
     }
   }
 
+
+
   private List<WeightFieldParamValue> weightFieldParamValueList;
+  private boolean weightFieldParamValueIsOnlyAmount;
 
   public Variation() {
 
@@ -95,31 +101,48 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   private void executeTransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double nAmount) {
     if(weightFieldParamValueList!=null && !weightFieldParamValueList.isEmpty()) {
-      for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
-        weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
-        if(weightFieldParamValue.oldParamValue instanceof  Integer) {
-          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
-          getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
-        }
-        else {
-          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
-          getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
-        }
-      }
-      try {
-        getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
-        func.transform(pContext, pXForm, pAffineTP, pVarTP, nAmount);
-      }
-      finally {
+      if(weightFieldParamValueIsOnlyAmount) {
         for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
-          if (weightFieldParamValue.oldParamValue instanceof Integer) {
-            getFunc().setParameter(weightFieldParamValue.paramName, (Integer) weightFieldParamValue.oldParamValue);
-          }
-          else {
-            getFunc().setParameter(weightFieldParamValue.paramName, (Double) weightFieldParamValue.oldParamValue);
+          double vAmount = nAmount * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+          func.transform(pContext, pXForm, pAffineTP, pVarTP, vAmount);
+        }
+      }
+      else {
+        for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
+          if(!weightFieldParamValue.isAmount) {
+            weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
+            if (weightFieldParamValue.oldParamValue instanceof Integer) {
+              int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
+              getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
+            } else {
+              double newParamValue = ((Double) weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+              getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
+            }
           }
         }
-        getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
+        try {
+          double vAmount = nAmount;
+          for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
+            if(weightFieldParamValue.isAmount) {
+              vAmount = nAmount * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+              break;
+            }
+          }
+          getFunc().init(pContext, pXForm.getOwner(), pXForm, vAmount);
+          func.transform(pContext, pXForm, pAffineTP, pVarTP, vAmount);
+        }
+        finally {
+          for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
+            if(!weightFieldParamValue.isAmount) {
+              if (weightFieldParamValue.oldParamValue instanceof Integer) {
+                getFunc().setParameter(weightFieldParamValue.paramName, (Integer) weightFieldParamValue.oldParamValue);
+              } else {
+                getFunc().setParameter(weightFieldParamValue.paramName, (Double) weightFieldParamValue.oldParamValue);
+              }
+            }
+          }
+          getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
+        }
       }
     }
     else {
@@ -139,31 +162,48 @@ public class Variation implements Assignable<Variation>, Serializable {
 
   private void executeInvTransform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double nAmount) {
     if(weightFieldParamValueList!=null && !weightFieldParamValueList.isEmpty()) {
-      for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
-        weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
-        if(weightFieldParamValue.oldParamValue instanceof  Integer) {
-          int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
-          getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
-        }
-        else {
-          double newParamValue = ((Double)weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
-          getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
-        }
-      }
-      try {
-        getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
-        func.invtransform(pContext, pXForm, pAffineTP, pVarTP, nAmount);
-      }
-      finally {
+      if(weightFieldParamValueIsOnlyAmount) {
         for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
-          if (weightFieldParamValue.oldParamValue instanceof Integer) {
-            getFunc().setParameter(weightFieldParamValue.paramName, (Integer) weightFieldParamValue.oldParamValue);
-          }
-          else {
-            getFunc().setParameter(weightFieldParamValue.paramName, (Double) weightFieldParamValue.oldParamValue);
+          double vAmount = nAmount * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+          func.invtransform(pContext, pXForm, pAffineTP, pVarTP, vAmount);
+        }
+      }
+      else {
+        for (WeightFieldParamValue weightFieldParamValue : weightFieldParamValueList) {
+          if(!weightFieldParamValue.isAmount) {
+            weightFieldParamValue.oldParamValue = getFunc().getParameter(weightFieldParamValue.paramName);
+            if (weightFieldParamValue.oldParamValue instanceof Integer) {
+              int newParamValue = Tools.FTOI(((Integer) weightFieldParamValue.oldParamValue).intValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity));
+              getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
+            } else {
+              double newParamValue = ((Double) weightFieldParamValue.oldParamValue).doubleValue() * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+              getFunc().setParameter(weightFieldParamValue.paramName, newParamValue);
+            }
           }
         }
-        getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
+        try {
+          double vAmount = nAmount;
+          for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
+            if(weightFieldParamValue.isAmount) {
+              vAmount = nAmount * (1.0 + pAffineTP.weightMapValue * weightFieldParamValue.intensity);
+              break;
+            }
+          }
+          getFunc().init(pContext, pXForm.getOwner(), pXForm, vAmount);
+          func.invtransform(pContext, pXForm, pAffineTP, pVarTP, vAmount);
+        }
+        finally {
+          for (WeightFieldParamValue weightFieldParamValue : weightFieldParamValueList) {
+            if(!weightFieldParamValue.isAmount) {
+              if (weightFieldParamValue.oldParamValue instanceof Integer) {
+                getFunc().setParameter(weightFieldParamValue.paramName, (Integer) weightFieldParamValue.oldParamValue);
+              } else {
+                getFunc().setParameter(weightFieldParamValue.paramName, (Double) weightFieldParamValue.oldParamValue);
+              }
+            }
+          }
+          getFunc().init(pContext, pXForm.getOwner(), pXForm, nAmount);
+        }
       }
     }
     else {
@@ -325,9 +365,10 @@ public class Variation implements Assignable<Variation>, Serializable {
   }
 
   public void addWeightingFieldParam(String paramName, double intensity) {
-     if(VariationFuncList.isValidVariationForWeightingFields(getFunc().getName()) && Arrays.asList(getFunc().getParameterNames()).indexOf(paramName)>=0) {
+     if(VariationFuncList.isValidVariationForWeightingFields(getFunc().getName()) && ("amount".equals(paramName) || Arrays.asList(getFunc().getParameterNames()).indexOf(paramName)>=0)) {
         if(weightFieldParamValueList==null) {
           weightFieldParamValueList = new ArrayList<>();
+          weightFieldParamValueIsOnlyAmount = true;
         }
         else {
           for(WeightFieldParamValue weightFieldParamValue: weightFieldParamValueList) {
@@ -338,7 +379,9 @@ public class Variation implements Assignable<Variation>, Serializable {
           }
         }
         System.err.println(getFunc().getName()+"."+paramName);
-        weightFieldParamValueList.add(new WeightFieldParamValue(paramName, intensity));
+       WeightFieldParamValue value = new WeightFieldParamValue(paramName, intensity);
+       weightFieldParamValueIsOnlyAmount &= value.isAmount;
+       weightFieldParamValueList.add(value);
      }
   }
 }

@@ -129,6 +129,22 @@ public class WeightingFieldMutation implements Mutation {
       }
     }
 
+    if(!hasVarParam && xForm.getVariationCount()>1 && Math.random()>0.5) {
+      int idx = Math.min((int)(Math.random()*xForm.getVariationCount()), xForm.getVariationCount()-1);
+      Variation var = xForm.getVariation(idx);
+      if(Math.random()>0.33) {
+        xForm.setWeightingFieldVarParam1Intensity(0.05 + Math.random() * 0.2);
+      }
+      else {
+        xForm.setWeightingFieldVarParam1Intensity(0.25 - Math.random()*0.5);
+      }
+      xForm.setWeightingFieldVarParam1VarName(var.getFunc().getName());
+      xForm.setWeightingFieldVarParam1ParamName(Variation.WFIELD_AMOUNT_PARAM);
+      hasVarParam = true;
+    }
+
+
+
     if((hasVarParam && Math.random()>0.66) || (!hasVarParam && Math.random()>0.33)) {
       if(Math.random()>0.33) {
         xForm.setWeightingFieldVarAmountIntensity(0.05 + Math.random() * 0.5);

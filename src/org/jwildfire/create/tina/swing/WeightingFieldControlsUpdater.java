@@ -395,15 +395,13 @@ public abstract class WeightingFieldControlsUpdater {
        cmb.removeAllItems();
        if(xform!=null) {
          for (Variation var : xform.getVariations()) {
+           {
+             String entry = encodeVarNameParamName(var.getFunc().getName(), Variation.WFIELD_AMOUNT_PARAM);
+             addCmbItem(cmb, items, entry);
+           }
            for (String paramName : var.getFunc().getParameterNames()) {
              String entry = encodeVarNameParamName(var.getFunc().getName(), paramName);
-             if (!items.contains(entry)) {
-               if(cmb.getItemCount()==0) {
-                 cmb.addItem("");
-               }
-               cmb.addItem(entry);
-               items.add(entry);
-             }
+             addCmbItem(cmb, items, entry);
            }
          }
        }
@@ -414,5 +412,15 @@ public abstract class WeightingFieldControlsUpdater {
      finally {
        controller.gridRefreshing = oldGridRefreshing;
      }
+  }
+
+  private void addCmbItem(JComboBox cmb, Set<String> items, String entry) {
+    if (!"".equals(entry) && !items.contains(entry)) {
+      if (cmb.getItemCount() == 0) {
+        cmb.addItem("");
+      }
+      cmb.addItem(entry);
+      items.add(entry);
+    }
   }
 }
