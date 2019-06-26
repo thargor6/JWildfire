@@ -4113,6 +4113,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams1Lbl.setLocation(new Point(4, 26));
       nonlinearParams1Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar1Lbl = new JLabel();
+      nonlinearVar1Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(0);
+          }
+        }
+      });
       nonlinearVar1Lbl.setPreferredSize(new Dimension(60, 22));
       nonlinearVar1Lbl.setText("Var 1");
       nonlinearVar1Lbl.setSize(new Dimension(38, 22));
@@ -7503,6 +7511,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams2Lbl.setSize(new Dimension(38, 22));
       nonlinearParams2Lbl.setLocation(new Point(4, 26));
       nonlinearVar2Lbl = new JLabel();
+      nonlinearVar2Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(1);
+          }
+        }
+      });
       nonlinearVar2Lbl.setLocation(new Point(4, 2));
       nonlinearVar2Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar2Lbl.setPreferredSize(new Dimension(60, 22));
@@ -7737,6 +7753,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams3Lbl.setSize(new Dimension(38, 22));
       nonlinearParams3Lbl.setLocation(new Point(4, 26));
       nonlinearVar3Lbl = new JLabel();
+      nonlinearVar3Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(2);
+          }
+        }
+      });
       nonlinearVar3Lbl.setLocation(new Point(4, 2));
       nonlinearVar3Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar3Lbl.setPreferredSize(new Dimension(60, 22));
@@ -8889,6 +8913,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams4Lbl.setSize(new Dimension(38, 22));
       nonlinearParams4Lbl.setLocation(new Point(4, 26));
       nonlinearVar4Lbl = new JLabel();
+      nonlinearVar4Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(3);
+          }
+        }
+      });
       nonlinearVar4Lbl.setLocation(new Point(4, 2));
       nonlinearVar4Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar4Lbl.setPreferredSize(new Dimension(60, 22));
@@ -9200,6 +9232,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams5Lbl.setSize(new Dimension(38, 22));
       nonlinearParams5Lbl.setLocation(new Point(4, 26));
       nonlinearVar5Lbl = new JLabel();
+      nonlinearVar5Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(4);
+          }
+        }
+      });
       nonlinearVar5Lbl.setLocation(new Point(4, 2));
       nonlinearVar5Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar5Lbl.setPreferredSize(new Dimension(60, 22));
@@ -9434,6 +9474,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams6Lbl.setSize(new Dimension(38, 22));
       nonlinearParams6Lbl.setLocation(new Point(4, 26));
       nonlinearVar6Lbl = new JLabel();
+      nonlinearVar6Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(5);
+          }
+        }
+      });
       nonlinearVar6Lbl.setLocation(new Point(4, 2));
       nonlinearVar6Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar6Lbl.setPreferredSize(new Dimension(60, 22));
@@ -9668,6 +9716,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams7Lbl.setSize(new Dimension(38, 22));
       nonlinearParams7Lbl.setLocation(new Point(4, 26));
       nonlinearVar7Lbl = new JLabel();
+      nonlinearVar7Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(6);
+          }
+        }
+      });
       nonlinearVar7Lbl.setLocation(new Point(4, 2));
       nonlinearVar7Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar7Lbl.setPreferredSize(new Dimension(60, 22));
@@ -9903,6 +9959,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams8Lbl.setSize(new Dimension(38, 22));
       nonlinearParams8Lbl.setLocation(new Point(4, 26));
       nonlinearVar8Lbl = new JLabel();
+      nonlinearVar8Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(7);
+          }
+        }
+      });
       nonlinearVar8Lbl.setLocation(new Point(4, 2));
       nonlinearVar8Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar8Lbl.setPreferredSize(new Dimension(60, 22));
@@ -10138,6 +10202,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams9Lbl.setSize(new Dimension(38, 22));
       nonlinearParams9Lbl.setLocation(new Point(4, 26));
       nonlinearVar9Lbl = new JLabel();
+      nonlinearVar9Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(8);
+          }
+        }
+      });
       nonlinearVar9Lbl.setLocation(new Point(4, 2));
       nonlinearVar9Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar9Lbl.setPreferredSize(new Dimension(60, 22));
@@ -10373,6 +10445,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams10Lbl.setSize(new Dimension(38, 22));
       nonlinearParams10Lbl.setLocation(new Point(4, 26));
       nonlinearVar10Lbl = new JLabel();
+      nonlinearVar10Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(9);
+          }
+        }
+      });
       nonlinearVar10Lbl.setLocation(new Point(4, 2));
       nonlinearVar10Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar10Lbl.setPreferredSize(new Dimension(60, 22));
@@ -10607,6 +10687,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams11Lbl.setSize(new Dimension(38, 22));
       nonlinearParams11Lbl.setLocation(new Point(4, 26));
       nonlinearVar11Lbl = new JLabel();
+      nonlinearVar11Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(10);
+          }
+        }
+      });
       nonlinearVar11Lbl.setLocation(new Point(4, 2));
       nonlinearVar11Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar11Lbl.setPreferredSize(new Dimension(60, 22));
@@ -10842,6 +10930,14 @@ public class MainEditorFrame extends JFrame {
       nonlinearParams12Lbl.setSize(new Dimension(38, 22));
       nonlinearParams12Lbl.setLocation(new Point(4, 26));
       nonlinearVar12Lbl = new JLabel();
+      nonlinearVar12Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            tinaController.nonlinearResetVarParams(11);
+          }
+        }
+      });
       nonlinearVar12Lbl.setLocation(new Point(4, 2));
       nonlinearVar12Lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       nonlinearVar12Lbl.setPreferredSize(new Dimension(60, 22));

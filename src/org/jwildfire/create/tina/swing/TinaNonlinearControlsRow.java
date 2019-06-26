@@ -158,11 +158,11 @@ public class TinaNonlinearControlsRow {
     rootPanel.getParent().getParent().repaint();
   }
 
-  public void rebuildParamsPnl(XForm pXForm, Variation pVar) {
+  public void rebuildParamsPnl(int pIdx, XForm pXForm, Variation pVar) {
     removeParamsPnlComponents();
     resizeRootPnl(rootPnlBaseHeight);
     if (toggleParamsPnlButton.isSelected() && pXForm != null && pVar != null) {
-      createParamsPnlComponents(pXForm, pVar);
+      createParamsPnlComponents(pIdx, pXForm, pVar);
     }
     refreshView();
   }
@@ -182,7 +182,7 @@ public class TinaNonlinearControlsRow {
 
   private final int SLIDER_SCALE = 1000;
 
-  private void createParamsPnlComponents(XForm pXForm, Variation pVar) {
+  private void createParamsPnlComponents(int pIdx, XForm pXForm, Variation pVar) {
     if (pXForm != null && pVar != null) {
       String[] paramNames = pVar.getFunc().getParameterNames();
       String[] resNames = pVar.getFunc().getRessourceNames();
@@ -190,7 +190,7 @@ public class TinaNonlinearControlsRow {
         int pnlHeight = rootPnlBaseHeight;
         Object[] paramValues = pVar.getFunc().getParameterValues();
         for (int i = 0; i < paramNames.length; i++) {
-          addLabel(paramNames[i], pnlHeight);
+          addLabel(pIdx, paramNames[i], pnlHeight);
           addNumberField(paramNames[i], paramValues[i], pnlHeight);
           addSlider(paramNames[i], paramValues[i], pnlHeight);
           pnlHeight += ROW_HEIGHT;
@@ -207,8 +207,16 @@ public class TinaNonlinearControlsRow {
     extraPanelSize = pnlHeight - rootPnlBaseHeight;
   }
 
-  private void addLabel(String pName, int pOffset) {
+  private void addLabel(final int pIdx, final String pName, int pOffset) {
     JLabel lbl = new JLabel();
+    lbl.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
+          getTinaController().nonlinearResetVarParam(pIdx, pName);
+        }
+      }
+    });
     lbl.setText(pName);
     if (lbl.getPreferredSize().getWidth() > LBL_WIDTH) lbl.setToolTipText(pName);
     lbl.setSize(new Dimension(LBL_WIDTH, 22));
@@ -216,6 +224,10 @@ public class TinaNonlinearControlsRow {
     lbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
     rootPanel.add(lbl, null);
     paramsPnlComponents.add(lbl);
+  }
+
+  private TinaController getTinaController() {
+    return tinaController;
   }
 
   private void addNumberField(final String pParamName, Object pParamValue, int pOffset) {

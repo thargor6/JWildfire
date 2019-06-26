@@ -52,6 +52,11 @@ V5.00 (xx.xx.2019)
 
  - significant performance-improvement in the refreshing-behaviour in the UI, you especially notive this when changing variations in the "Nonlinear"-tab
 
+ - new way of resetting params of variations to their defaults (as suggested by Michael Bourne):
+     - double-click at the "Var x"-label to reset all parameters to their defaults
+     - double click at a specific param-label to reset it's value to the default value (you need expand the param-panel to access the labels)
+   Please note, that there are some parameters which have random defaults.
+
  - new "juliascope3Db"-variation, provided by Brad Stefanov
  - new "waves22"-variation, provided by Brad Stefanov
  - new "waves23"-variation, provided by Brad Stefanov
