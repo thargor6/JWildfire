@@ -26,28 +26,23 @@ public class PointCloudPLYWriter {
 
   public void writePLY(List<PCPoint> pPoints, String pFilename) {
     StringBuilder sb = new StringBuilder();
-    sb.append("ply\n" +
-        "format ascii 1.0\n" +
-        "comment " + Tools.APP_TITLE + " generated\n" +
-        "element vertex " + pPoints.size() + "\n" +
-        "property float x\n" +
-        "property float y\n" +
-        "property float z\n" +
-        "property uchar red\n" +
-        "property uchar green\n" +
-        "property uchar blue\n" +
-        "property uchar alpha\n" +
-        "property uchar float intensity\n" +
-        //"element face " + pPoints.size() + "\n" +
-        "element face 0\n" +
-        "property list uchar uint vertex_indices\n" +
-        "end_header\n");
+    sb.append("ply\r\n" +
+            "format ascii 1.0\r\n" +
+            "comment " + Tools.APP_TITLE + " generated\r\n" +
+            "element vertex " + pPoints.size() + "\r\n" +
+            "property float x\r\n" +
+            "property float y\r\n" +
+            "property float z\r\n" +
+            "property uchar red\r\n" +
+            "property uchar green\r\n" +
+            "property uchar blue\r\n" +
+            "property uchar alpha\r\n" +
+            "element face 0\r\n" +
+            "property list uchar int vertex_indices\r\n" +
+            "end_header\r\n");
     for (PCPoint p : pPoints) {
-      sb.append(p.x + " " + p.y + " " + p.z + " " + Tools.roundColor(p.r) + " " + Tools.roundColor(p.g) + " " + Tools.roundColor(p.b) + " " + Tools.roundColor(p.intensity * 255.0) + " " + p.intensity + "\n");
-    }/*
-    for (int i=0; i< pPoints.size(); i++) {
-      sb.append("1 "+ i + "\n");
-    } */
+      sb.append(p.x + " " + p.y + " " + p.z + " " + Tools.roundColor(p.r) + " " + Tools.roundColor(p.g) + " " + Tools.roundColor(p.b) + " " + Tools.roundColor(p.intensity * 255.0) + "\r\n");
+    }
     try {
       Tools.writeUTF8Textfile(pFilename, sb.toString());
     }
