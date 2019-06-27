@@ -203,6 +203,18 @@ public class TipOfTheDayFrame extends JFrame {
       catch (Exception ex) {
         ex.printStackTrace();
       }
+      
+      prevTipIndex = Prefs.getPrefs().getLastTip();
+      if (prevTipIndex < 0 || prevTipIndex >= tips.size())
+          prevTipIndex = 0;
+      Prefs.getPrefs().setLastTip(prevTipIndex + 1);
+      prevTipIndex -= 1;
+      try {
+        Prefs.getPrefs().saveToFile();
+      }
+      catch (Exception e1) {
+        e1.printStackTrace();
+      }
     }
   }
 

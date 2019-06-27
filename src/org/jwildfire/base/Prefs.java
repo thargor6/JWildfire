@@ -46,6 +46,7 @@ public class Prefs extends ManagedObject {
   static final String KEY_GENERAL_PATH_SOUND_FILES = "sunflow.path.sound_files";
 
   static final String KEY_GENERAL_SHOW_TIPS_AT_STARTUP = "general.show_tips_at_startup";
+  static final String KEY_GENERAL_LAST_TIP = "general.last_tip";
 
   static final String KEY_GENERAL_DEVELOPMENT_MODE = "general.development_mode";
   static final String KEY_GENERAL_BASE_MATH_LIB = "general.base_math_lib";
@@ -203,6 +204,9 @@ public class Prefs extends ManagedObject {
 
   @Property(description = "Show tips at startup", category = PropertyCategory.GENERAL)
   private boolean showTipsAtStartup = true;
+
+  @Property(description = "Last tip shown at startup", category = PropertyCategory.GENERAL)
+  private int lastTip = 0;
 
   @Property(description = "Path to the flames building the flame-library for the IFlames", category = PropertyCategory.IFLAMES)
   private String iflamesFlameLibraryPath = null;
@@ -798,6 +802,7 @@ public class Prefs extends ManagedObject {
     tinaEditorProgressivePreviewMaxRenderQuality = pSrc.tinaEditorProgressivePreviewMaxRenderQuality;
     tinaFontScale = pSrc.tinaFontScale;
     showTipsAtStartup = pSrc.showTipsAtStartup;
+    lastTip = pSrc.lastTip;
     tinaDisableSolidFlameRandGens = pSrc.tinaDisableSolidFlameRandGens;
     tinaDefaultExpandNonlinearParams = pSrc.tinaDefaultExpandNonlinearParams;
     tinaFACLRenderPath = pSrc.tinaFACLRenderPath;
@@ -1591,6 +1596,14 @@ public class Prefs extends ManagedObject {
 
   public void setShowTipsAtStartup(boolean showTipsAtStartup) {
     this.showTipsAtStartup = showTipsAtStartup;
+  }
+  
+  public int getLastTip() {
+    return lastTip;
+  }
+  
+  public void setLastTip(int pLastTip) {
+    lastTip = pLastTip;
   }
 
   public boolean isTinaDisableSolidFlameRandGens() {

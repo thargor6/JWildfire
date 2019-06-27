@@ -1,8 +1,8 @@
 <html>
 <body>
 <h3>Tip 001: Colors in the Flame-editor</h3>
-You have some nice gradient, but a small part is odd? Enter <b>Gradient</b>-tab and press the <b>Edit gradient</b> button.<br>
-Move the left color-marker to the left of the part of the gradient you want to remove.<br>
+You have some nice gradient, but a small part is odd? Enter <b>Gradient</b>-tab and press the <b>Edit gradient</b> button.<br><br>
+Move the left color-marker to the left of the part of the gradient you want to remove.<br><br>
 Move the right color-marker to the right of the part of the gradient you want to remove.
 Press the <b>Fade</b>-button, now left colors is faded to right, and the odd part is removed.
 </body>
@@ -29,7 +29,7 @@ To reduce the required amount of memory you may reduce the render-resolution.<br
 <body>
 <h3>Tip 004: Solid rendering</h3>
 When realtime-editing of a flame with solid-rendering appears too slow, just turn off solid rendering temporarily. 
-Continue editing and finally turn in on again to proceed.<br>
+Continue editing and finally turn in on again to proceed.<br><br>
 This works especially good for editing DOF-setting. Because they appear in non-solid-mode in realtime, while DOF 
 is a post-processing-effect in solid-rendering-mode, i. e. does not appear in realtime-editing. 
 </body>
@@ -38,8 +38,8 @@ is a post-processing-effect in solid-rendering-mode, i. e. does not appear in re
 <html>
 <body>
 <h3>Tip 005: Parametric plots</h3>
-There are many presets (formulas + variable ranges of interest) included in the parplot2d_wf-variation.<br> 
-To switch between them change the "preset_id" parameter (range: 0...currently maximum available preset).<br>
+There are many presets (formulas + variable ranges of interest) included in the parplot2d_wf-variation.<br><br>
+To switch between them change the "preset_id" parameter (range: 0...currently maximum available preset).<br><br>
 To edit your own formula turn off preset_mode by setting the parameter "preset_id" to some negative value, e.g. -1. <br> 
 </body>
 </html>
@@ -47,10 +47,134 @@ To edit your own formula turn off preset_mode by setting the parameter "preset_i
 <html>
 <body>
 <h3>Tip 006: Memory</h3>
-You may see both the available and occupied memory (RAM) in the "System Information" window.<br>
+You may see both the available and occupied memory (RAM) in the "System Information" window.<br><br>
 Some memory is occupied by caches in order to accelerate future calculations. 
-For example, Bitmaps, Fonts and Meshes are hold in the cache. <br>
+For example, Bitmaps, Fonts and Meshes are hold in the cache. <br><br>
 You may clear the cache at any time in the "System Information" window, in order to free memory.
 
 </body>
 </html>
+
+<html>
+<body>
+<h3>Tip 007: Blur Variations</h3>
+Variations that ignore their input are collectively called "blur variations". They often have blur in their name 
+(like blur, nBlur, and starblur), but just as often don't (like crackle, lissajous, and parplot2d_wf).<br><br>
+One way to determine if a variation is a blur variation is to create a new flame with one transform containing only that variation. 
+If the preview shows a shape and that shape doesn't change when you move the pre-affine triangle, it is probably a blur.<br><br>
+To move, rotate, or scale a blur variation, use the post-affine triangle (the pre-affine triangle is ignored).<br><br>
+For brighter colors with blur variations, set Speed on the Color tab to -1.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 008: Transforms with no variations</h3>
+It is allowed to have a transform with no variations. Delete the default linear3D (or whatever variations are there). This produces a 
+dot at the origin, which can be moved using the post-affine triangle and can be manipulated by other transforms. The dot is a 
+single point, but often appears larger because of anti-aliasing. Use the Antialiasing radius setting on the Antialiasing/Filter 
+tab to adjust the size.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 009: Hiding the Triangles</h3>
+The triangles that represent the affine transforms help to depict what effect they will have, but sometime they obscure the view 
+of the flame details. To hide them, pull down the dropdown above the flame (next to the Show Guides button) and select HIDDEN. 
+To show them again, select TRIANGLE (or one of the other shapes if preferred).
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 010: Fine Edit</h3>
+Some flames are extremely sensitive to small changes. To get more control while tweaking them, click the Fine Edit button. 
+It is above the flame preview, on the left side. In Fine Edit mode, larger mouse movements are needed to achieve the same results. 
+Click the Fine Edit button again to turn off Fine Edit mode.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 011: Preserve Z</h3>
+When making 3D flames, the Preserve Z button on the Affine tab makes it easy to include 2D variations that would otherwise 
+flatten the flame by not setting the z value. If you need some element to be flat when using Preserve Z, add the flatten 
+variation to the transform.<br><br>
+However, you can get more control by unsetting Preserve Z and adding zscale as a variation on all of the transforms that 
+have only 2D variations. Set the amount initially to the amount of the other variations on the transform 
+(this is what Preserve Z does). Then adjust the zscale amount to control how the transform affects the z value.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 012: SnapShots</h3>
+When you get a flame to a point where you like it, but want to continue working on it, take a snapshot by clicking the SShot button. 
+This will make a copy of the current flame on the thumbnail bar that you can retrieve at any time (for example if the continued 
+tweaking does more harm than good). Note that this does not save the flame to disk; that would be a good idea too, using either 
+Save... or Q (Quicksave), which saves the flame in the directory last used with a unique name containing the current date.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 013: Positioning layers</h3>
+Since the camera is shared with all the layers, it can't be used to position a layer with respect to the others. Instead, add a Final 
+transform to the layer with the default linear3D variation and use the Affine transform to position, rotate, or scale the layer.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 014: Ergonomics</h3>
+Making fractal flames can be addictive! Avoid fatigue and repetitive stress injuries with these tips:
+<ul>
+<li>Make sure your chair is adjusted correctly for you. It should provide support for your back and thighs without pinching and 
+allow your feet to rest on the floor (or footrest).</li>
+<li>The keyboard and mouse should be placed close enough that you don't have to reach excessively and your arms should be 
+supported to prevent straining the muscles in your shoulders.</li>
+<li>Take frequent breaks. Stand up and stretch. Focus your eyes on a distant object to give them a break.</li>
+</ul>
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 015: Gradients</h3>
+There are thousands of gradients available that work in JWildfire. They can be in .map, .gradient, or .ugr files. Copy the file(s) 
+with the gradients you want to your JWildfire gradients folder (set in Preferences, item tinaGradientPath). However, if the folder 
+contains a lot of gradients, it can take JWildfire a long time to open the Gradients tab. If this becomes a problem, move gradient 
+files you don't use often to another folder and copy them temporarily into the JWildfire gradients folder only when you need them.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 016: Tool Tips</h3>
+Many of the JWildfire controls have tool tips: short descriptions of what the control does. To see a tool tip, hold the mouse 
+cursor over the button or the title of a control and wait a second. If the control has a tool tip, it will appear next to the 
+cursor. These can be helpful for learning what the various controls do.
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 017: Foreground Opacity</h3>
+There is a control on the Coloring tab labeled "Fg opacity", which controls how much of the background will show through the 
+fractal flame. The default is 1 which will let some of the background appear through a translucent flame; with a white background, 
+this will often result in nice pastel colors. If this is not desired, reduce the amount to make the flame more opaque. If the 
+background is black, this control will have no effect (there is nothing to show through).
+</body>
+</html>
+
+<html>
+<body>
+<h3>Tip 018: Selecting Variations</h3>
+The list of variations is very large, so selecting a variation by pulling down the list and scrolling to find the desired one 
+can be difficult. A shortcut is to pull down the list, then start typing the name of the desired variation. The list will scroll 
+to the closest match to the typed letters.<br><br>
+To remove a variation, choose the blank item at the top of the list. The shortcut is the Home key.
+</body>
+</html>
+
