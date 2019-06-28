@@ -78,7 +78,7 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
   @Override
   public void updateControls(XForm xform) {
     super.updateControls(xform);
-    controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
+    updateColorMapFilenameInfoLbl(xform);
 
     controls.weightingFieldParam01REd.setHasMinValue(false);
     controls.weightingFieldParam01REd.setOnlyIntegers(false);
@@ -95,6 +95,10 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     controls.weightingFieldParam06REd.setHasMinValue(false);
     controls.weightingFieldParam06REd.setOnlyIntegers(false);
     controls.weightingFieldParam06REd.setText(Tools.doubleToString(xform.getWeightingFieldColorMapYSize()));
+  }
+
+  private void updateColorMapFilenameInfoLbl(XForm xform) {
+    controls.weightingFieldColorMapFilenameInfoLbl.setText(xform.getWeightingFieldColorMapFilename() != null && xform.getWeightingFieldColorMapFilename().length() > 0 ? new File(xform.getWeightingFieldColorMapFilename()).getName() : ImageMapWeightingField.DFLT_IMAGE_FILE_NAME);
   }
 
   @Override
@@ -185,4 +189,83 @@ public class ImageMapWeightingFieldControlsUpdater extends WeightingFieldControl
     // EMPTY
   }
 
+  @Override
+  public void weightMapParam01REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorMapXCentre(new XForm().getWeightingFieldColorMapXCentre());
+      controls.weightingFieldParam01REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapXCentre()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam02REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorMapXSize(new XForm().getWeightingFieldColorMapXSize());
+      controls.weightingFieldParam02REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapXSize()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam03REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam05REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorMapYCentre(new XForm().getWeightingFieldColorMapYCentre());
+      controls.weightingFieldParam05REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapYCentre()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam06REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorMapYSize(new XForm().getWeightingFieldColorMapYSize());
+      controls.weightingFieldParam06REd.setText(Tools.doubleToString(xForm.getWeightingFieldColorMapYSize()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam04Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam07REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam08Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapColorMapFilename_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorMapFilename(new XForm().getWeightingFieldColorMapFilename());
+      updateColorMapFilenameInfoLbl(xForm);
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
 }

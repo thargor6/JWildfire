@@ -99,4 +99,49 @@ public class EmptyWeightingFieldControlsUpdater extends WeightingFieldControlsUp
   public void weightingFieldParam08Cmb_changed() {
     // EMPTY
   }
+
+  @Override
+  public void weightMapParam01REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam02REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam03REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam05REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam06REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam04Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam07REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam08Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapColorMapFilename_reset() {
+    // EMPTY
+  }
 }

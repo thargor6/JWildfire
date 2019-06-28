@@ -1,4 +1,4 @@
-V5.00 (xx.xx.2019)
+V5.00 (28.06.2019)
  - Introducing a new artistic concept to flame-fractals: weighting-fields.
    I had this in mind for a while, but never found the time to really "grasp" it.
    When you look at my fractal art, you will notice that I'm usually striving for a very energetic and organic style.
@@ -26,8 +26,14 @@ V5.00 (xx.xx.2019)
    - scripting is completely supported
    - by design, the performance-impact is moderate, and you may even animate weighting-fields
 
-   To get started, just load a favourite flame of yours, enter the "WField"-tab under the "Transformations"-tab, and press the "Randomize all"-button.
+   To get started, just load a favourite flame of yours and the press the new "WFld"-button at the left of the preview-area.
    Repeat it multiple times to see what is possible.
+   To see what is going on, select a transform and enter the "WField"-tab under the "Transformations"-tab.
+   Have a look at the options and see how they change when you press the "WField"-button. Play with them while changing them manually.
+
+   You may also randomize the weighting-fields-params of one transform. Just selectt the transform, uncheck the "Whole fractal"-option at the "WField"-tab and
+   hit the "Randomize all"-button at the "WField"-tab or the "WFld"-button at the preview area.
+
    To generate random-flames with weighting-fields always enabled, change the "WField"-setting at the upper left of the main editor from "(All, sparse)" to "(All)"
    and hit the "Random batch"-button.
 
@@ -56,6 +62,11 @@ V5.00 (xx.xx.2019)
      - double-click at the "Var x"-label to reset all parameters to their defaults
      - double click at a specific param-label to reset it's value to the default value (you need expand the param-panel to access the labels)
    Please note, that there are some parameters which have random defaults.
+
+ - this way of resetting params may also used at the "WField"-tab (but is not available at all other places, yet).
+
+
+ - Rick added added some new tips to TipsOfTheDay.html, and a new preference to remember the last tip shown at startup and display the next one at the next startup.
 
  - new "juliascope3Db"-variation, provided by Brad Stefanov
  - new "waves22"-variation, provided by Brad Stefanov

@@ -21,7 +21,6 @@ import org.jwildfire.create.tina.base.weightingfield.WeightingField;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldInputType;
 import org.jwildfire.create.tina.base.weightingfield.WeightingFieldType;
 import org.jwildfire.create.tina.base.XForm;
-import org.jwildfire.create.tina.variation.FlameTransformationContext;
 import org.jwildfire.create.tina.variation.Variation;
 import org.jwildfire.create.tina.variation.VariationFuncList;
 import org.jwildfire.image.SimpleImage;
@@ -160,6 +159,101 @@ public abstract class WeightingFieldControlsUpdater {
       imgPanel.repaint();
     }
   }
+
+  public void weightMapVariationIntensityREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldVarAmountIntensity(new XForm().getWeightingFieldVarAmountIntensity());
+      controls.weightingFieldVariationIntensityREd.setText(Tools.doubleToString(xForm.getWeightingFieldVarAmountIntensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightingFieldTypeCmb_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldType(new XForm().getWeightingFieldType());
+      controls.weightingFieldTypeCmb.setSelectedItem(xForm.getWeightingFieldType());
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightMapInputCmb_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldInput(new XForm().getWeightingFieldInput());
+      controls.weightingFieldInputCmb.setSelectedItem(xForm.getWeightingFieldInput());
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightMapColorIntensityREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldColorIntensity(new XForm().getWeightingFieldColorIntensity());
+      controls.weightingFieldColorIntensityREd.setText(Tools.doubleToString(xForm.getWeightingFieldColorIntensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightingFieldVarParam1AmountREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldVarParam1Intensity(new XForm().getWeightingFieldVarParam1Intensity());
+      controls.weightingFieldVarParam1AmountREd.setText(Tools.doubleToString(xForm.getWeightingFieldVarParam1Intensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightingFieldVarParam2AmountREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldVarParam2Intensity(new XForm().getWeightingFieldVarParam2Intensity());
+      controls.weightingFieldVarParam2AmountREd.setText(Tools.doubleToString(xForm.getWeightingFieldVarParam2Intensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public void weightingFieldVarParam3AmountREd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldVarParam3Intensity(new XForm().getWeightingFieldVarParam3Intensity());
+      controls.weightingFieldVarParam3AmountREd.setText(Tools.doubleToString(xForm.getWeightingFieldVarParam3Intensity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  public abstract void weightMapParam01REd_reset();
+
+  public abstract void weightMapParam02REd_reset();
+
+  public abstract void weightMapParam03REd_reset();
+
+  public abstract void weightMapParam05REd_reset();
+
+  public abstract void weightMapParam06REd_reset();
+
+  public abstract void weightMapParam04Cmb_reset();
+
+  public abstract void weightMapParam07REd_reset();
+
+  public abstract void weightMapParam08Cmb_reset();
+
+  public abstract void weightMapColorMapFilename_reset();
 
   private class GenPreviewThread implements Runnable {
     private final SimpleImage img;

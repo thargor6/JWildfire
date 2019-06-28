@@ -3257,31 +3257,34 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       if (xForm != null) {
         if (pIdx < xForm.getVariationCount()) {
           Variation var = xForm.getVariation(pIdx);
-          if(var!=null && var.getFunc().getParameterNames().length>0 || (var.getFunc().getRessourceNames()!=null && var.getFunc().getRessourceNames().length>0)) {
+          if (var != null && var.getFunc().getParameterNames().length > 0 || (var.getFunc().getRessourceNames() != null && var.getFunc().getRessourceNames().length > 0)) {
             saveUndoPoint();
             String fName = (String) data.TinaNonlinearControlsRows[pIdx].getNonlinearVarCmb().getSelectedItem();
             VariationFunc tmpFunc = VariationFuncList.getVariationFuncInstance(fName);
-            for (String paramName: var.getFunc().getParameterNames()) {
-              if(pParamname==null || pParamname.equals(paramName)) {
+            for (String paramName : var.getFunc().getParameterNames()) {
+              if (pParamname == null || pParamname.equals(paramName)) {
                 try {
                   Object paramValue = tmpFunc.getParameter(paramName);
                   if (paramValue instanceof Integer) {
                     var.getFunc().setParameter(paramName, (Integer) paramValue);
-                  } else if (paramValue instanceof Double) {
+                  }
+                  else if (paramValue instanceof Double) {
                     var.getFunc().setParameter(paramName, (Double) paramValue);
                   }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                   ex.printStackTrace();
                 }
               }
             }
-            if(var.getFunc().getRessourceNames()!=null) {
+            if (var.getFunc().getRessourceNames() != null) {
               for (String ressName : var.getFunc().getRessourceNames()) {
                 if (pParamname == null || pParamname.equals(ressName)) {
                   try {
                     byte[] resValue = tmpFunc.getRessource(ressName);
                     var.getFunc().setRessource(ressName, resValue);
-                  } catch (Exception ex) {
+                  }
+                  catch (Exception ex) {
                     ex.printStackTrace();
                   }
                 }
@@ -3302,7 +3305,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       cmbRefreshing = oldCmbRefreshing;
     }
   }
-
 
   public void nonlinearVarCmbChanged(int pIdx) {
     if (cmbRefreshing) {
@@ -7142,6 +7144,70 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         refreshFlameImage(true, false, 1, true, false);
       }
     }
+  }
+
+  public void weightMapVariationIntensityREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapVariationIntensityREd_reset();
+  }
+
+  public void weightMapInputCmb_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapInputCmb_reset();
+  }
+
+  public void weightMapColorIntensityREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapColorIntensityREd_reset();
+  }
+
+  public void weightingFieldVarParam1AmountREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam1AmountREd_reset();
+  }
+
+  public void weightingFieldVarParam2AmountREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam2AmountREd_reset();
+  }
+
+  public void weightingFieldVarParam3AmountREd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldVarParam3AmountREd_reset();
+  }
+
+  public void weightMapParam01REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam01REd_reset();
+  }
+
+  public void weightMapParam02REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam02REd_reset();
+  }
+
+  public void weightMapParam03REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam03REd_reset();
+  }
+
+  public void weightMapParam05REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam05REd_reset();
+  }
+
+  public void weightMapParam06REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam06REd_reset();
+  }
+
+  public void weightMapParam04Cmb_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam04Cmb_reset();
+  }
+
+  public void weightMapParam07REd_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam07REd_reset();
+  }
+
+  public void weightMapParam08Cmb_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapParam08Cmb_reset();
+  }
+
+  public void weightMapColorMapFilename_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightMapColorMapFilename_reset();
+  }
+
+  public void weightingFieldTypeCmb_reset() {
+    getWeightMapControlsUpdater(getCurrXForm()).weightingFieldTypeCmb_reset();
   }
 
 }

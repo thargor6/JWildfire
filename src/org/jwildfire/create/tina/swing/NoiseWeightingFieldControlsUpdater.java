@@ -124,4 +124,63 @@ public class NoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUp
   public void weightingFieldParam08Cmb_changed() {
     // EMPTY
   }
+
+  @Override
+  public void weightMapParam01REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldNoiseSeed(new XForm().getWeightingFieldNoiseSeed());
+      controls.weightingFieldParam01REd.setText(String.valueOf(xForm.getWeightingFieldNoiseSeed()));
+      refreshFieldPreviewImage(xForm);
+      controller.refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  @Override
+  public void weightMapParam02REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam03REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam05REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldNoiseFrequency(new XForm().getWeightingFieldNoiseFrequency());
+      controls.weightingFieldParam05REd.setText(Tools.doubleToString(xForm.getWeightingFieldNoiseFrequency()));
+      refreshFieldPreviewImage(xForm);
+      controller.refreshFlameImage(true, false, 1, true, false);
+    }
+  }
+
+  @Override
+  public void weightMapParam06REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam04Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam07REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam08Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapColorMapFilename_reset() {
+    // EMPTY
+  }
 }

@@ -4405,6 +4405,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldTypeCmb);
 
       JLabel lblMapType = new JLabel();
+      lblMapType.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightingFieldTypeCmb_reset();
+            }
+          }
+        }
+      });
+
       lblMapType.setToolTipText("Type of weighting field");
       lblMapType.setText("Weighting field");
       lblMapType.setSize(new Dimension(94, 22));
@@ -4415,6 +4426,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblMapType);
 
       weightingFieldColorMapFilenameLbl = new JLabel();
+      weightingFieldColorMapFilenameLbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapColorMapFilename_reset();
+            }
+          }
+        }
+      });
+
       weightingFieldColorMapFilenameLbl.setToolTipText("RGB Image, only the red color-channel is used");
       weightingFieldColorMapFilenameLbl.setText("Image file");
       weightingFieldColorMapFilenameLbl.setSize(new Dimension(94, 22));
@@ -4472,6 +4494,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldColorIntensityREd);
 
       JLabel lblColorIntensity = new JLabel();
+      lblColorIntensity.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapColorIntensityREd_reset();
+            }
+          }
+        }
+      });
       lblColorIntensity.setToolTipText("Change of Color");
       lblColorIntensity.setText("Color amount");
       lblColorIntensity.setSize(new Dimension(64, 22));
@@ -4482,6 +4514,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(lblColorIntensity);
 
       JLabel lblVariationIntensity = new JLabel();
+      lblVariationIntensity.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapVariationIntensityREd_reset();
+            }
+          }
+        }
+      });
+
       lblVariationIntensity.setToolTipText("Change of variation-amounts");
       lblVariationIntensity.setText("Var amounts");
       lblVariationIntensity.setSize(new Dimension(64, 22));
@@ -4540,6 +4583,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldInputCmb);
 
       JLabel lblInput = new JLabel();
+      lblInput.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapInputCmb_reset();
+            }
+          }
+        }
+      });
+
       lblInput.setToolTipText("Input coordinate for evaluating the map");
       lblInput.setText("Input coordinate");
       lblInput.setSize(new Dimension(94, 22));
@@ -4580,6 +4634,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam01REd);
 
       weightingFieldParam01Lbl = new JLabel();
+      weightingFieldParam01Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam01REd_reset();
+            }
+          }
+        }
+      });
+
       weightingFieldParam01Lbl.setToolTipText("");
       weightingFieldParam01Lbl.setText("Param 01");
       weightingFieldParam01Lbl.setSize(new Dimension(64, 22));
@@ -4590,6 +4655,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam01Lbl);
 
       weightingFieldParam02Lbl = new JLabel();
+      weightingFieldParam02Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam02REd_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam02Lbl.setToolTipText("");
       weightingFieldParam02Lbl.setText("Param 02");
       weightingFieldParam02Lbl.setSize(new Dimension(64, 22));
@@ -4658,6 +4733,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam05REd);
 
       weightingFieldParam05Lbl = new JLabel();
+      weightingFieldParam05Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam05REd_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam05Lbl.setToolTipText("");
       weightingFieldParam05Lbl.setText("Param 05");
       weightingFieldParam05Lbl.setSize(new Dimension(64, 22));
@@ -4668,6 +4753,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam05Lbl);
 
       weightingFieldParam06Lbl = new JLabel();
+      weightingFieldParam06Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam06REd_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam06Lbl.setToolTipText("");
       weightingFieldParam06Lbl.setText("Param 06");
       weightingFieldParam06Lbl.setSize(new Dimension(64, 22));
@@ -4736,6 +4831,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam03REd);
 
       weightingFieldParam03Lbl = new JLabel();
+      weightingFieldParam03Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam03REd_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam03Lbl.setToolTipText("");
       weightingFieldParam03Lbl.setText("Param 03");
       weightingFieldParam03Lbl.setSize(new Dimension(64, 22));
@@ -4746,6 +4851,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam03Lbl);
 
       weightingFieldParam04Lbl = new JLabel();
+      weightingFieldParam04Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam04Cmb_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam04Lbl.setToolTipText("");
       weightingFieldParam04Lbl.setText("Param 04");
       weightingFieldParam04Lbl.setSize(new Dimension(64, 22));
@@ -4773,6 +4888,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam04Cmb);
 
       weightingFieldParam07Lbl = new JLabel();
+      weightingFieldParam07Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam07REd_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam07Lbl.setToolTipText("");
       weightingFieldParam07Lbl.setText("Param 07");
       weightingFieldParam07Lbl.setSize(new Dimension(64, 22));
@@ -4783,6 +4908,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldParam07Lbl);
 
       weightingFieldParam08Lbl = new JLabel();
+      weightingFieldParam08Lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightMapParam08Cmb_reset();
+            }
+          }
+        }
+      });
       weightingFieldParam08Lbl.setToolTipText("");
       weightingFieldParam08Lbl.setText("Param 08");
       weightingFieldParam08Lbl.setSize(new Dimension(64, 22));
@@ -4903,6 +5038,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam1AmountREd);
 
       JLabel lblVarAmount = new JLabel();
+      lblVarAmount.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightingFieldVarParam1AmountREd_reset();
+            }
+          }
+        }
+      });
+
       lblVarAmount.setToolTipText("Change of selected variation-parameter");
       lblVarAmount.setText("Var param 1");
       lblVarAmount.setSize(new Dimension(64, 22));
@@ -4930,6 +5076,17 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam1NameCmb);
 
       JLabel lblVarParam = new JLabel();
+      lblVarParam.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightingFieldVarParam2AmountREd_reset();
+            }
+          }
+        }
+      });
+
       lblVarParam.setToolTipText("Change of selected variation-parameter");
       lblVarParam.setText("Var param 2");
       lblVarParam.setSize(new Dimension(64, 22));
@@ -4986,6 +5143,16 @@ public class MainEditorFrame extends JFrame {
       tinaWeightMapPanel.add(weightingFieldVarParam2NameCmb);
 
       JLabel lblVarParam_1 = new JLabel();
+      lblVarParam_1.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          if (e.getClickCount() == 2) {
+            if (tinaController != null) {
+              tinaController.weightingFieldVarParam3AmountREd_reset();
+            }
+          }
+        }
+      });
       lblVarParam_1.setToolTipText("Change of selected variation-parameter");
       lblVarParam_1.setText("Var param 3");
       lblVarParam_1.setSize(new Dimension(64, 22));

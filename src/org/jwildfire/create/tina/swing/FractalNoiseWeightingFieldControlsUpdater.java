@@ -172,4 +172,91 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
   public void weightingFieldParam08Cmb_changed() {
     // EMPTY
   }
+
+  @Override
+  public void weightMapParam01REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldNoiseSeed(new XForm().getWeightingFieldNoiseSeed());
+      controls.weightingFieldParam01REd.setText(String.valueOf(xForm.getWeightingFieldNoiseSeed()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam02REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldFractalNoiseGain(new XForm().getWeightingFieldFractalNoiseGain());
+      controls.weightingFieldParam02REd.setText(String.valueOf(xForm.getWeightingFieldFractalNoiseGain()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam03REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldFractalNoiseOctaves(new XForm().getWeightingFieldFractalNoiseOctaves());
+      controls.weightingFieldParam03REd.setText(String.valueOf(xForm.getWeightingFieldFractalNoiseOctaves()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam05REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldNoiseFrequency(new XForm().getWeightingFieldNoiseFrequency());
+      controls.weightingFieldParam05REd.setText(Tools.doubleToString(xForm.getWeightingFieldNoiseFrequency()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam06REd_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldFractalNoiseLacunarity(new XForm().getWeightingFieldFractalNoiseLacunarity());
+      controls.weightingFieldParam06REd.setText(Tools.doubleToString(xForm.getWeightingFieldFractalNoiseLacunarity()));
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam04Cmb_reset() {
+    XForm xForm = controller.getCurrXForm();
+    if (xForm != null) {
+      controller.saveUndoPoint();
+      xForm.setWeightingFieldFractalType(new XForm().getWeightingFieldFractalType());
+      controls.weightingFieldParam04Cmb.setSelectedItem(xForm.getWeightingFieldFractalType());
+      controller.refreshFlameImage(true, false, 1, true, false);
+      refreshFieldPreviewImage(xForm);
+    }
+  }
+
+  @Override
+  public void weightMapParam07REd_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapParam08Cmb_reset() {
+    // EMPTY
+  }
+
+  @Override
+  public void weightMapColorMapFilename_reset() {
+    // EMPTY
+  }
 }
