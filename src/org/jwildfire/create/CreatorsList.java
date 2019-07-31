@@ -38,6 +38,7 @@ public class CreatorsList {
     registerCreator(TileBrickCreator.class);
     registerCreator(CloudCreator.class);
     registerCreator(PerlinNoiseCreator.class);
+    registerCreator(FastNoiseCreator.class);
   }
 
   public static Vector<String> getItemVector() {
