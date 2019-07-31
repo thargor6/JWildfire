@@ -17425,7 +17425,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.resetBokehSettings();
         }
       });
-      resetBokehOptionsButton.setToolTipText("Reset the camera-options to the defaults");
+      resetBokehOptionsButton.setToolTipText("Reset the bokeh-options to the defaults");
       resetBokehOptionsButton.setText("Reset");
       resetBokehOptionsButton.setPreferredSize(new Dimension(125, 24));
       resetBokehOptionsButton.setMinimumSize(new Dimension(100, 24));

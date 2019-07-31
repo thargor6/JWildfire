@@ -74,7 +74,7 @@ public class PerlinNoiseCreator extends ImageCreator {
   @Property(description = "Transformation on/off")
   private boolean transform = false;
 
-  @Property(description = "Transformation expression", editorClass = ShapeEditor.class)
+  @Property(description = "Transformation expression")
   private String transformation = "sin(x*x)";
 
   @Override

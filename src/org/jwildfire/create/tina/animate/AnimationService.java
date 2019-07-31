@@ -225,19 +225,20 @@ public class AnimationService {
       field.setAccessible(true);
       if (field.getType() == MotionCurve.class && field.getName().endsWith(Tools.CURVE_POSTFIX)) {
         MotionCurve curve = (MotionCurve) field.get(pObject);
-        if (curve.isEnabled()) {
+        if (curve != null && curve.isEnabled()) {
           curve.setEnabled(false);
         }
       }
       else if (field.getType().isAssignableFrom(ArrayList.class)) {
         List<?> childs = (List<?>) field.get(pObject);
-        for (Object child : childs) {
-          _disableMotionCurves(child);
-        }
+        if (childs != null)
+          for (Object child : childs) {
+            _disableMotionCurves(child);
+          }
       }
       else if (field.getType().isAssignableFrom(RGBPalette.class)) {
         RGBPalette gradient = (RGBPalette) field.get(pObject);
-        _disableMotionCurves(gradient);
+        if (gradient != null) _disableMotionCurves(gradient);
       }
     }
     if (pObject instanceof Variation) {

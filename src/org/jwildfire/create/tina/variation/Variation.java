@@ -378,7 +378,6 @@ public class Variation implements Assignable<Variation>, Serializable {
             }
           }
         }
-        System.err.println(getFunc().getName()+"."+paramName);
        WeightFieldParamValue value = new WeightFieldParamValue(paramName, intensity);
        weightFieldParamValueIsOnlyAmount &= value.isAmount;
        weightFieldParamValueList.add(value);
