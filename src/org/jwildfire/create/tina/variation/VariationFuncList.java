@@ -780,6 +780,9 @@ public class VariationFuncList {
     registerVariationFunc(HexModulusFunc.class);
     registerVariationFunc(TruchetHexCropFunc.class);
     registerVariationFunc(TruchetHexFillFunc.class);
+	  
+    registerVariationFunc(ExpMultiFunc.class);	
+    registerVariationFunc(ParallelFunc.class);	  
 
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
