@@ -90,7 +90,7 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
 
     r = sqrt(pAffineTP.x * pAffineTP.x + pAffineTP.y * pAffineTP.y);
     Alpha = this.radius / r;
-
+	pVarTP.doHide=false;	
     if (type != 0) {
       if (r < this.radius) {
         if (show == 1) {
@@ -126,6 +126,7 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
         } else { // agregado
           pnew.x += pAmount * pAffineTP.x; //parece funcionar
           pnew.y += pAmount * pAffineTP.y; //parece funcionar
+          pVarTP.doHide=true;	
 
 //	   			            pnew.x += 0.0;  // center dot
 //	   			            pnew.y += 0.0;
@@ -194,7 +195,7 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
     else if (PARAM_POW.equalsIgnoreCase(pName))
       pow = pValue;
     else if (PARAM_TYPE.equalsIgnoreCase(pName))
-      type = (int) pValue;
+      type = (int) limitVal(pValue, 0, 1);
     else if (PARAM_PHI1.equalsIgnoreCase(pName))
       phi1 = pValue;
     else if (PARAM_PHI2.equalsIgnoreCase(pName))
@@ -234,4 +235,14 @@ public class GlynnS3SubflWFFunc extends SubFlameWFFunc {
   public GlynnS3SubflWFFunc() {
     color_mode = CM_DIRECT;
   }
+	@Override
+	public boolean dynamicParameterExpansion() {
+		return true;
+	}
+
+	@Override
+	public boolean dynamicParameterExpansion(String pName) {
+		// preset_id doesn't really expand parameters, but it changes them; this will make them refresh
+		return true;
+	}	
 }
