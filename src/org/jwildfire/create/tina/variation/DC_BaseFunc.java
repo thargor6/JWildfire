@@ -18,18 +18,18 @@ import js.glsl.vec3;
 public  class DC_BaseFunc  extends VariationFunc {
 
 	/*
-	 * Base Classfor DC_Variations
+	 * Base Class for DC_Variations
 	 * 
 	 * Autor: Jesus Sosa
 	 * Date: February 12, 2019
 	 */
 
-	private static final String PARAM_DC = "ColorOnly";
-	private static final String PARAM_GRADIENT = "Gradient";
+	protected static final String PARAM_DC = "ColorOnly";
+	protected static final String PARAM_GRADIENT = "Gradient";
 	
-	private static final String PARAM_SCALE_Z = "z_scale"; 
-	private static final String PARAM_OFFSET_Z = "z_offset"; 
-	private static final String PARAM_RESET_Z = "reset_z"; 
+	protected static final String PARAM_SCALE_Z = "z_scale"; 
+	protected static final String PARAM_OFFSET_Z = "z_offset"; 
+	protected static final String PARAM_RESET_Z = "reset_z"; 
 
 	private static final long serialVersionUID = 1L;
 

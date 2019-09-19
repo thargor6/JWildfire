@@ -784,6 +784,28 @@ public class VariationFuncList {
     registerVariationFunc(ExpMultiFunc.class);	
     registerVariationFunc(ParallelFunc.class);	  
 
+    registerVariationFunc(MSTruchetFunc.class);	
+    registerVariationFunc(F_ComplexFunc.class);
+    
+    registerVariationFunc(CutTruchetFunc.class);  
+    registerVariationFunc(CutFingerPrintFunc.class);  
+    registerVariationFunc(CutGlyphoFunc.class); 
+    registerVariationFunc(CutMetaBallsFunc.class); 
+    
+    registerVariationFunc(CutBricksFunc.class);   
+    registerVariationFunc(CutShapesFunc.class);  
+    registerVariationFunc(CutKaleidoFunc.class);  
+    registerVariationFunc(CutPatternFunc.class);  
+    registerVariationFunc(CutFunFunc.class);  
+    registerVariationFunc(CutSnowflakeFunc.class);   
+    registerVariationFunc(CutCircleDesignFunc.class);   
+    registerVariationFunc(CutSinCosFunc.class);  
+    registerVariationFunc(CutSWarpFunc.class);   
+    registerVariationFunc(CutSqSplitsFunc.class);  
+    registerVariationFunc(CutSqCirFunc.class);  
+    
+    
+    
     resolvedAliasMap = new HashMap<>();
     for (Entry<Class<? extends VariationFunc>, String> funcCls : aliasMap.entrySet()) {
       String vName = getVariationName(funcCls.getKey(), false);
