@@ -17,7 +17,7 @@ package org.jwildfire.create.tina.variation;
 import org.jwildfire.create.tina.base.XForm;
 import org.jwildfire.create.tina.base.XYZPoint;
 import org.jwildfire.base.Tools;
-import static org.jwildfire.base.mathlib.Complex;
+import org.jwildfire.base.mathlib.Complex;
 import static org.jwildfire.base.mathlib.MathLib.M_2_PI;
 
 
