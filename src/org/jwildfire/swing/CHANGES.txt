@@ -45,16 +45,30 @@ V5.00 (28.06.2019)
    They may try out new things freely, without the danger of compromising the whole application.
 
  - new option to specify the number of random-flames, generated during program-start (tina.initial_random_batch.size, defaults to 3)
+ 
+ - new color_mode option in subflame_wf: -2 will use the actual subflame color (using the subflame's gradient or other coloring).
 
- - new coloring type: DISTANCE, provided by Rick Sidwell:
-   Uses the gradient indexed by the distance the transform moved the point. Color determines the starting point and Speed controls
-   how far along the gradient each unit of distance moves from there. Like other coloring types, Speed -1 sets the color
+ - new coloring types, provided by Rick Sidwell:
+   TARGET ignores the gradient, but uses a specific color that can be set    by clicking a new TargetColor button. The new color 
+   is interpolated from the current color and the target color. Speed works the same as with DIFFUSION coloring; -1 sets the new 
+   color to the target color, 1 doesn't change the color, and 0 sets the new color halfway between the current and target colors.
+
+   TARGETG works just like TARGET, but the gradient is used to select the target color, allowing it to be easily changed by changing 
+   or shifting the gradient. But the intermediate gradient colors are not used.
+
+   These coloring types can create very smooth color changes in flames, and also work with variations that set the RGB color values 
+   directly.
+   
+   DISTANCE uses the gradient indexed by the distance the transform moved the point. Color determines the starting point and Speed 
+   controls how far along the gradient each unit of distance moves from there. Like other coloring types, Speed -1 sets the color
    to the specified color. The input color is ignored, so unlike the others Speed 1 will still change the color.
 
    DISTANCE is especially effective for coloring flames made with a single non-blur transform (blur transforms ignore the input point,
    so the distance and thus the color of each point is random).
 
- - new COLOR_TYPE-Mutation for MutaGen to randomly apply the new color-types (NONE, DIFFUSION, TARGET, TARGETG, DISTANCE)
+ - new COLOR_TYPE-Mutation for MutaGen to randomly apply the new color-types (NONE, DIFFUSION, TARGET, TARGETG, DISTANCE)\
+ 
+ - spaces in gradient names are converted to underscores so the entire gradient name is now visible in the gradient list.
 
  - significant performance-improvement in the refreshing-behaviour in the UI, you especially notive this when changing variations in the "Nonlinear"-tab
 
