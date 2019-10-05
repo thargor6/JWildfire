@@ -360,7 +360,7 @@ param_d = 0.02
 
 ##32
 Cool shape 3 Brad Stefanov from http://math.stackexchange.com/questions/46212/interesting-implicit-surfaces-in-mathbbr3
-formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))
+formula = (pow((pow(x,2)+pow(y,2)-param_a*param_a),2)+ (pow((pow(z,2)-1),2)))*
 (pow((pow(y,2)+pow(z,2)-param_b*param_b),2)+ (pow((pow(x,2)-1),2)))*
 (pow((pow(z,2)+pow(x,2)-param_c*param_c),2)+ (pow((pow(y,2)-1),2)))-0.001
 xmin = -pi
@@ -445,4 +445,39 @@ ymin = -3.001
 ymax = 3.001
 zmin = -.501
 zmax =  .501
- 
+
+##40
+Floored V1 Brad Stefanov from https://www.deviantart.com/snicker02/art/Floored--812637142
+
+formula = cos(param_a*floor(x * param_e)) + sin(param_b*floor(y * param_f)) + cos(param_c*floor(z))-param_d
+xmin = -9.0
+xmax =  9.0
+ymin = -9.0
+ymax = 9.0
+zmin = -9.0
+zmax =  9.0
+param_a = 0.05
+param_b = 2.25
+param_c = 1.0
+param_c = 1.0
+param_d = 0.5
+param_e = 1.5
+param_f = 1.5
+
+##41
+Floored V2 Brad Stefanov from https://www.deviantart.com/snicker02/art/Floored-V2-815198935
+
+formula = cos(floor(param_a*floor(x))* param_e) + sin(floor(param_b*floor(y)) * param_f) + cos(floor(param_c*floor(z)) * param_d)
+xmin = -19.0
+xmax =  19.0
+ymin = -19.0
+ymax = 19.0
+zmin = -19.0
+zmax =  19.0
+param_a = 1.0
+param_b = 1.0
+param_c = 1.0
+param_c = 1.0
+param_d = 1.0
+param_e = 1.0
+param_f = 1.0
