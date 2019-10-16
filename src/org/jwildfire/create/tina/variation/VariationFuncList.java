@@ -803,7 +803,7 @@ public class VariationFuncList {
     registerVariationFunc(CutSWarpFunc.class);   
     registerVariationFunc(CutSqSplitsFunc.class);  
     registerVariationFunc(CutSqCirFunc.class);  
-    
+    registerVariationFunc(ShreddedFunc.class);      
     
     
     resolvedAliasMap = new HashMap<>();
