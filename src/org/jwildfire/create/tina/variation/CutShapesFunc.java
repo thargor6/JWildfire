@@ -34,7 +34,7 @@ public class  CutShapesFunc  extends VariationFunc  {
 
 	private static final long serialVersionUID = 1L;
 
-
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_TYPE = "type";
 	private static final String PARAM_CONCENTRICS = "Contour";
 	private static final String PARAM_ZOOM = "zoom";
@@ -43,7 +43,7 @@ public class  CutShapesFunc  extends VariationFunc  {
 	private static final String PARAM_THICK = "thick";
 	private static final String PARAM_TIME = "time";
 
-
+    int mode=1;
     int type=0;
     int contour=1;
 	double zoom=1.0;
@@ -53,7 +53,7 @@ public class  CutShapesFunc  extends VariationFunc  {
 	double time=0.50;
 
 
-	private static final String[] additionalParamNames = { PARAM_TYPE,PARAM_CONCENTRICS,PARAM_ZOOM,PARAM_INVERT,PARAM_STARS_N,PARAM_THICK,PARAM_TIME};
+	private static final String[] additionalParamNames = { PARAM_MODE,PARAM_TYPE,PARAM_CONCENTRICS,PARAM_ZOOM,PARAM_INVERT,PARAM_STARS_N,PARAM_THICK,PARAM_TIME};
 
 
 double sdHexagram( vec2 p, double r )
@@ -250,8 +250,17 @@ double sdBox( vec2 p, vec2 b )
 }
 
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		  double x,y;
+		  
+		  if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		    }else
+		    {
+		     x=pContext.random()-0.5;
+		     y=pContext.random()-0.5;	     
+		    }
   
 			vec2 p=new vec2(x*zoom,y*zoom);
 			double color;
@@ -378,11 +387,15 @@ double sdBox( vec2 p, vec2 b )
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return new Object[] { type,contour,zoom,invert,n,thick,time};
+		return new Object[] { mode, type,contour,zoom,invert,n,thick,time};
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_TYPE)) {
+	    if(pName.equalsIgnoreCase(PARAM_MODE))
+	    {
+	    	mode= (int)Tools.limitValue(pValue, 0 ,1);
+	    }
+		else if (pName.equalsIgnoreCase(PARAM_TYPE)) {
 			type = (int)Tools.limitValue(pValue, 0 , 12);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_CONCENTRICS)) {

@@ -21,6 +21,7 @@ public class CutBricksFunc  extends VariationFunc {
 	/*
 	 * Variation :cut_bricks
 	 * Date: august 29, 2019
+	 * Reference:  https://thebookofshaders.com/09/
 	 * Jesus Sosa
 	 */
 
@@ -30,14 +31,15 @@ public class CutBricksFunc  extends VariationFunc {
 
 
 	private static final String PARAM_SEED = "seed";	
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_SIZE = "size";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
-
-	double size=0.9;
 	int seed=1000;
-    double zoom=0.50;
+	int mode=1;
+	double size=0.9;
+    double zoom=3.0;
     int invert=0;
 
 
@@ -48,7 +50,7 @@ public class CutBricksFunc  extends VariationFunc {
  	
     double x0=0.,y0=0.;
     
-	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_SIZE,PARAM_ZOOM,PARAM_INVERT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_MODE,PARAM_SIZE,PARAM_ZOOM,PARAM_INVERT};
 
 
 	vec2 brickTile(vec2 _st){
@@ -69,8 +71,21 @@ public class CutBricksFunc  extends VariationFunc {
 
 	 	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		    double x,y,px_center,py_center;
+		    
+		    if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		      px_center=0.0;
+		      py_center=0.0;
+		    }else
+		    {
+		     x=pContext.random();
+		     y=pContext.random();
+		      px_center=0.5;
+		      py_center=0.5;		     
+		    }
 		    
 		    
 		    vec2 u =new vec2(x*zoom,y*zoom);
@@ -95,8 +110,8 @@ public class CutBricksFunc  extends VariationFunc {
 			        pVarTP.doHide = true;
 			      }
 		    }
-		    pVarTP.x = pAmount * x;
-		    pVarTP.y = pAmount * y;
+		    pVarTP.x = pAmount * (x-px_center);
+		    pVarTP.y = pAmount * (y-py_center);
 		    if (pContext.isPreserveZCoordinate()) {
 		      pVarTP.z += pAmount * pAffineTP.z;
 		    }
@@ -120,12 +135,15 @@ public class CutBricksFunc  extends VariationFunc {
 	}
 
 	public Object[] getParameterValues() { //
-		return (new Object[] {  seed, size,zoom,invert});
+		return (new Object[] {  seed, mode, size,zoom,invert});
 	}
 
 	public void setParameter(String pName, double pValue) {
 		if (pName.equalsIgnoreCase(PARAM_SIZE)) {
 			size = Tools.limitValue(pValue, 0.1 , 0.9999);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_MODE)) {
+			mode =(int)Tools.limitValue(pValue, 0 , 1);
 		}
 		else if(pName.equalsIgnoreCase(PARAM_SEED))
 		{

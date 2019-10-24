@@ -6,7 +6,7 @@ public class vec4
     public double x, y, z, w;
     public double r,g,b,a;
     
-    public void copyColor(double r,double b,double g,double a)
+    public void copyColor(double r,double g,double b,double a)
     {
     	this.r=r;
     	this.g=g;
