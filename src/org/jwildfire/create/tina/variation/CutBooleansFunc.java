@@ -16,13 +16,13 @@ import js.glsl.vec4;
 
 
 
-public class CutKaleidoFunc  extends VariationFunc {
+public class CutBooleansFunc  extends VariationFunc {
 
 	/*
-	 * Variation :cut_kaleido
+	 * Variation :cut_booleans
 	 * Date: august 29, 2019
+	 * Reference & Credits:  https://www.shadertoy.com/view/4ldcW8
 	 * Jesus Sosa
-	 * Reference & Credits: https://www.shadertoy.com/view/MttSzS
 	 */
 
 
@@ -31,57 +31,31 @@ public class CutKaleidoFunc  extends VariationFunc {
 
 
 	private static final String PARAM_SEED = "seed";	
-	private static final String PARAM_MODE = "mode";	
-	private static final String PARAM_TIME = "time";
-	private static final String PARAM_N = "n";
+	private static final String PARAM_MODE = "mode";
+	private static final String PARAM_TYPE = "^/&/|";
+
+
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
-
-
 	int seed=1000;
 	int mode=1;
-	double time=0.0;
-	int n=6;
-    double zoom=0.50;
+	
+	int type=0;
+
+	
+    double zoom=250.0;
     int invert=0;
 
-    vec2[] c=new vec2[n];
 
 	Random randomize=new Random(seed);
 	
- 	long last_time=System.currentTimeMillis();
- 	long elapsed_time=0;
  	
+    double x0=0.,y0=0.;
+    double temp;
     
-	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_MODE,PARAM_TIME,PARAM_N,PARAM_ZOOM,PARAM_INVERT};
-
-
-	void moveCenters()
-	{
-	    for(int i=0; i<n; i++)
-	    {
-	     double fi = 2.0*3.14*((double)i+0.02*time)/(double)(n);
-	     c[i]= new vec2(0.5*Math.sin(fi), 0.5*Math.cos(fi));
-	    }
-	}
-
-	double avgDistance(vec2 uv)
-	{
-	 	double d = 1.0;
-	    double k = 100.0+10.0*Math.sin(time/5.0);
-	    for(int i=0; i<n; i++)    
-	     	d+= Math.sin(k*G.distance(uv,c[i])); 
-	    return d/(double)n;  
-	}
-
-	double distToColor(double d)
-	{
-	  //  return vec4(1.,1.0-sin(d*12.0),1.0-cos(d*13.0),1.0);
-	    // return vec4(1.0-sin(d*12.0));
-	    return (0.0-Math.cos(d*13.0));
-	}
-	 	
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_MODE,PARAM_TYPE,PARAM_ZOOM,PARAM_INVERT};
+	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
 		    double x,y,px_center,py_center;
 		    
@@ -93,17 +67,24 @@ public class CutKaleidoFunc  extends VariationFunc {
 		      py_center=0.0;
 		    }else
 		    {
-		     x=pContext.random()-0.5;
-		     y=pContext.random()-0.5;
-		      px_center=0.0;
-		      py_center=0.0;		     
+		     x=pContext.random();
+		     y=pContext.random();
+		      px_center=0.5;
+		      py_center=0.5;		     
 		    }
 		    
 		    
 		    vec2 u =new vec2(x*zoom,y*zoom);
-		    
-		    moveCenters();
-			double color = distToColor(avgDistance(u));
+            u=u.plus(new vec2(x0,y0));
+            
+            if(type==0)   //XOR
+              temp=((int)u.x )^((int)u.y);            
+            else if(type==1)  // AND
+            	temp=((int)u.x )&((int)u.y);
+            else if(type==2)  // OR
+            	temp=((int)u.x )|((int)u.y);
+            
+            double color=Math.sin(temp);
               	
 		    pVarTP.doHide=false;
 		    if(invert==0)
@@ -131,13 +112,14 @@ public class CutKaleidoFunc  extends VariationFunc {
 	  
 	  @Override
 	  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-
-		  c=new vec2[n];
+		  randomize=new Random(seed);
+		  x0=seed*randomize.nextDouble();
+		  y0=seed*randomize.nextDouble();
 	   }
 
 	  
 	public String getName() {
-		return "cut_kaleido";
+		return "cut_booleans";
 	}
 
 	public String[] getParameterNames() {
@@ -145,7 +127,7 @@ public class CutKaleidoFunc  extends VariationFunc {
 	}
 
 	public Object[] getParameterValues() { //
-		return (new Object[] {  seed,mode, time,n,zoom,invert});
+		return (new Object[] {  seed, mode, type,zoom,invert});
 	}
 
 	public void setParameter(String pName, double pValue) {
@@ -153,22 +135,15 @@ public class CutKaleidoFunc  extends VariationFunc {
 		{
 			   seed =   (int)pValue;
 		       randomize=new Random(seed);
-		          long current_time = System.currentTimeMillis();
-		          elapsed_time += (current_time - last_time);
-		          last_time = current_time;
-		          time = (double) (elapsed_time / 1000.0);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_MODE)) {
 			mode =(int)Tools.limitValue(pValue, 0 , 1);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_TIME)) {
-			time = pValue;
+		else if (pName.equalsIgnoreCase(PARAM_TYPE)) {
+			type = (int)Tools.limitValue(pValue, 0 , 2);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
 			zoom =pValue;
-		}
-		else if (pName.equalsIgnoreCase(PARAM_N)) {
-			n =(int)Tools.limitValue(pValue, 2 , 20);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_INVERT)) {
 			invert =(int)Tools.limitValue(pValue, 0 , 1);

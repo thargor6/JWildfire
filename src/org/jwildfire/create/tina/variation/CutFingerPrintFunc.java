@@ -27,7 +27,7 @@ public class CutFingerPrintFunc  extends VariationFunc {
 	 * Variation : cut_fingerprint
 	 * Autor: Jesus Sosa
 	 * Date: August 20, 2019
-	 * Reference 
+	 * Reference https://www.shadertoy.com/view/4t3SWN
 	 */
 
 
@@ -36,16 +36,20 @@ public class CutFingerPrintFunc  extends VariationFunc {
 
 
 
-	private static final String PARAM_ZOOM = "zoom";
+
 	private static final String PARAM_SEED = "seed";
+	private static final String PARAM_MODE = "mode";
+	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_WIDTH = "width";
 	private static final String PARAM_INVERT = "invert";
 
 
 
 
-	double zoom=20.0;
+	
 	private int seed = 10000;
+	int mode=1;
+	double zoom=20.0;
 	double time=0.0;
 	double width=0.8;
 	int invert=0;
@@ -58,7 +62,7 @@ public class CutFingerPrintFunc  extends VariationFunc {
  	long elapsed_time=0;
 	
 
-	private static final String[] additionalParamNames = { PARAM_ZOOM,PARAM_SEED,PARAM_WIDTH,PARAM_INVERT};
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_MODE,PARAM_ZOOM,PARAM_WIDTH,PARAM_INVERT};
 
 
 	public vec2 hash2( vec2 p )
@@ -104,13 +108,26 @@ public class CutFingerPrintFunc  extends VariationFunc {
 	}
  	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		    double x,y,px_center,py_center;
+		    
+		    if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		      px_center=0.0;
+		      py_center=0.0;
+		    }else
+		    {
+		     x=pContext.random()-0.5;
+		     y=pContext.random()-0.5;
+		      px_center=0.0;
+		      py_center=0.0;		     
+		    }
 		    vec3 color=getRGBColor(x,y);
 		    pVarTP.doHide=false;
 		    if(invert==0)
 		    {
-		      if (color.x==0&& color.y==0 && color.z==0)
+		      if (color.x==0)
 		      { pVarTP.x=0;
 		        pVarTP.y=0;
 		        pVarTP.doHide = true;
@@ -118,15 +135,15 @@ public class CutFingerPrintFunc  extends VariationFunc {
 		      }
 		    } else
 		    {
-			      if (color.x>0 && color.y>0 && color.z>0)
+			      if (color.x>0)
 			      { pVarTP.x=0;
 			        pVarTP.y=0;
 			        pVarTP.doHide = true;
 			        return;
 			      }
 		    }
-		    pVarTP.x = pAmount * x;
-		    pVarTP.y = pAmount * y;
+		    pVarTP.x = pAmount * (x-px_center);
+		    pVarTP.y = pAmount * (y-py_center);
 		    if (pContext.isPreserveZCoordinate()) {
 		      pVarTP.z += pAmount * pAffineTP.z;
 		    }
@@ -143,14 +160,11 @@ public class CutFingerPrintFunc  extends VariationFunc {
 
 
 	public Object[] getParameterValues() { //re_min,re_max,im_min,im_max,
-		return (new Object[] { zoom,seed,width,invert});
+		return (new Object[] { seed,mode,zoom,width,invert});
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
-			zoom = Tools.limitValue(pValue, 1.0 , 100.0);
-		}
-		else if (pName.equalsIgnoreCase(PARAM_SEED)) {
+		if (pName.equalsIgnoreCase(PARAM_SEED)) {
 			   seed =   (int)pValue;
 		       randomize=new Random(seed);
 		          long current_time = System.currentTimeMillis();
@@ -158,7 +172,14 @@ public class CutFingerPrintFunc  extends VariationFunc {
 		          last_time = current_time;
 		          time = (double) (elapsed_time / 1000.0);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_WIDTH)) {
+		else if (pName.equalsIgnoreCase(PARAM_MODE)) {
+			mode =(int)Tools.limitValue(pValue, 0 , 1);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
+			zoom = Tools.limitValue(pValue, 1.0 , 100.0);
+		}
+		else 
+		 if (pName.equalsIgnoreCase(PARAM_WIDTH)) {
 			width =Math.abs(Tools.limitValue(pValue, 0.02 , 1.0));
 		}
 		else if (pName.equalsIgnoreCase(PARAM_INVERT)) {

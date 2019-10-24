@@ -308,10 +308,10 @@ public class F_ComplexFunc  extends DC_BaseFunc {
     int maxIters=50;
     int nIters=1;
     
-    int julia =0;
-	double c_re=0.672;
-	double c_im=-0.378;
-    int colortype=0;
+    int julia =1;
+	double c_re=0.32;
+	double c_im=-0.906;
+    int colortype=2;
 	 
 	int seed=10000;
 	Random rnd=new Random(seed);

@@ -28,13 +28,13 @@ public class CutTruchetFunc  extends VariationFunc {
 
 
 
-	
+	private static final String PARAM_MODE = "mode";
 	private static final String PARAM_TYPE = "type";
 	private static final String PARAM_SEED = "seed";
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
-
+    int mode=1;
 	int type=0;
 	int seed=1000;
     double zoom=10.0;
@@ -48,7 +48,7 @@ public class CutTruchetFunc  extends VariationFunc {
  	long elapsed_time=0;
  	
     
-	private static final String[] additionalParamNames = { PARAM_TYPE,PARAM_SEED,PARAM_ZOOM,PARAM_INVERT};
+	private static final String[] additionalParamNames = { PARAM_MODE,PARAM_TYPE,PARAM_SEED,PARAM_ZOOM,PARAM_INVERT};
 
 	public static   double random (vec2 st)
 	{
@@ -75,8 +75,16 @@ public class CutTruchetFunc  extends VariationFunc {
 	
 	 	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x = pAffineTP.x;
-		    double y = pAffineTP.y;
+		  double x,y;  
+		  if(mode==0)
+		    {
+		      x= pAffineTP.x;
+		      y =pAffineTP.y;
+		    }else
+		    {
+		     x=pContext.random()-0.5;
+		     y=pContext.random()-0.5;		     
+		    }
 		    
 		    
 		    vec2 st =new vec2(x*zoom,y*zoom);
@@ -148,11 +156,14 @@ public class CutTruchetFunc  extends VariationFunc {
 	}
 
 	public Object[] getParameterValues() { //
-		return (new Object[] {  type,seed, zoom,invert});
+		return (new Object[] {  mode,type,seed, zoom,invert});
 	}
 
 	public void setParameter(String pName, double pValue) {
-		if (pName.equalsIgnoreCase(PARAM_TYPE)) {
+		if (pName.equalsIgnoreCase(PARAM_MODE)) {
+			mode =(int)Tools.limitValue(pValue, 0 , 1);
+		}
+		else if (pName.equalsIgnoreCase(PARAM_TYPE)) {
 			type = (int)Tools.limitValue(pValue, 0 , 2);
 		}
 		else if(pName.equalsIgnoreCase(PARAM_SEED))

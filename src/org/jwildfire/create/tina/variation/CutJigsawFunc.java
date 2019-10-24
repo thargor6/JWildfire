@@ -12,17 +12,18 @@ import org.jwildfire.create.tina.palette.RGBPalette;
 
 import js.glsl.G;
 import js.glsl.vec2;
+import js.glsl.vec3;
 import js.glsl.vec4;
 
 
 
-public class CutKaleidoFunc  extends VariationFunc {
+public class CutJigsawFunc  extends VariationFunc {
 
 	/*
-	 * Variation :cut_kaleido
-	 * Date: august 29, 2019
-	 * Jesus Sosa
-	 * Reference & Credits: https://www.shadertoy.com/view/MttSzS
+	 * Variation :cut_jigsaw
+	 * Date: october 19, 2019
+	 * Author: Jesus Sosa
+	 * Reference & Credits: https://www.shadertoy.com/view/wddGzj
 	 */
 
 
@@ -31,79 +32,53 @@ public class CutKaleidoFunc  extends VariationFunc {
 
 
 	private static final String PARAM_SEED = "seed";	
-	private static final String PARAM_MODE = "mode";	
 	private static final String PARAM_TIME = "time";
-	private static final String PARAM_N = "n";
+	private static final String PARAM_MODE = "mode";	
 	private static final String PARAM_ZOOM = "zoom";
 	private static final String PARAM_INVERT = "invert";
 	
-
-
 	int seed=1000;
-	int mode=1;
 	double time=0.0;
-	int n=6;
-    double zoom=0.50;
+    double zoom=4.0;
+    int mode=1;
     int invert=0;
 
-    vec2[] c=new vec2[n];
 
 	Random randomize=new Random(seed);
-	
  	long last_time=System.currentTimeMillis();
  	long elapsed_time=0;
  	
+    double x0=0.,y0=0.;
+    double temp;
     
-	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_MODE,PARAM_TIME,PARAM_N,PARAM_ZOOM,PARAM_INVERT};
-
-
-	void moveCenters()
-	{
-	    for(int i=0; i<n; i++)
-	    {
-	     double fi = 2.0*3.14*((double)i+0.02*time)/(double)(n);
-	     c[i]= new vec2(0.5*Math.sin(fi), 0.5*Math.cos(fi));
-	    }
-	}
-
-	double avgDistance(vec2 uv)
-	{
-	 	double d = 1.0;
-	    double k = 100.0+10.0*Math.sin(time/5.0);
-	    for(int i=0; i<n; i++)    
-	     	d+= Math.sin(k*G.distance(uv,c[i])); 
-	    return d/(double)n;  
-	}
-
-	double distToColor(double d)
-	{
-	  //  return vec4(1.,1.0-sin(d*12.0),1.0-cos(d*13.0),1.0);
-	    // return vec4(1.0-sin(d*12.0));
-	    return (0.0-Math.cos(d*13.0));
-	}
-	 	
+	private static final String[] additionalParamNames = { PARAM_SEED,PARAM_TIME,PARAM_MODE,PARAM_ZOOM,PARAM_INVERT};
+	
 	  public void transform(FlameTransformationContext pContext, XForm pXForm, XYZPoint pAffineTP, XYZPoint pVarTP, double pAmount) {
-		    double x,y,px_center,py_center;
+		    double x,y;
 		    
 		    if(mode==0)
 		    {
 		      x= pAffineTP.x;
 		      y =pAffineTP.y;
-		      px_center=0.0;
-		      py_center=0.0;
 		    }else
 		    {
 		     x=pContext.random()-0.5;
-		     y=pContext.random()-0.5;
-		      px_center=0.0;
-		      py_center=0.0;		     
+		     y=pContext.random()-0.5;	     
 		    }
 		    
-		    
-		    vec2 u =new vec2(x*zoom,y*zoom);
-		    
-		    moveCenters();
-			double color = distToColor(avgDistance(u));
+    	    vec2 u =new vec2(x*zoom,y*zoom).plus(new vec2(1.,0.0).multiply(time));
+    	    vec2 i = G.ceil(u),m = G.mod(i,2.).minus(.5);
+    	    u=u.minus(i.minus(0.5));
+            vec2 D = G.dot(m, u) < 0. ? m.multiply(-1.0) : m;           
+    	    
+            double f = G.dot( G.abs(u.minus(D)), new vec2(1.0)) *.7 -.65; 
+            double c = G.length(u.minus(D.multiply(.2))) - .2; 
+            double d=Math.sin(G.dot(i,new vec2(27, 57)))*1e5;
+            boolean q= (G.fract(d)-.5)*D.x < 0.;
+            double t= q ? Math.max(f,.1-c) : f;
+            double s=Math.min(t, c);
+        	            
+            double color=1.0-s*1e4/8.0;
               	
 		    pVarTP.doHide=false;
 		    if(invert==0)
@@ -121,8 +96,8 @@ public class CutKaleidoFunc  extends VariationFunc {
 			        pVarTP.doHide = true;
 			      }
 		    }
-		    pVarTP.x = pAmount * (x-px_center);
-		    pVarTP.y = pAmount * (y-py_center);
+		    pVarTP.x = pAmount * (x);
+		    pVarTP.y = pAmount * (y);
 		    if (pContext.isPreserveZCoordinate()) {
 		      pVarTP.z += pAmount * pAffineTP.z;
 		    }
@@ -131,13 +106,14 @@ public class CutKaleidoFunc  extends VariationFunc {
 	  
 	  @Override
 	  public void init(FlameTransformationContext pContext, Layer pLayer, XForm pXForm, double pAmount) {
-
-		  c=new vec2[n];
+		  randomize=new Random(seed);
+		  x0=seed*randomize.nextDouble();
+		  y0=seed*randomize.nextDouble();
 	   }
 
 	  
 	public String getName() {
-		return "cut_kaleido";
+		return "cut_jigsaw";
 	}
 
 	public String[] getParameterNames() {
@@ -145,7 +121,7 @@ public class CutKaleidoFunc  extends VariationFunc {
 	}
 
 	public Object[] getParameterValues() { //
-		return (new Object[] {  seed,mode, time,n,zoom,invert});
+		return (new Object[] {  seed, time, mode, zoom,invert});
 	}
 
 	public void setParameter(String pName, double pValue) {
@@ -158,17 +134,14 @@ public class CutKaleidoFunc  extends VariationFunc {
 		          last_time = current_time;
 		          time = (double) (elapsed_time / 1000.0);
 		}
+		else if (pName.equalsIgnoreCase(PARAM_TIME)) {
+			time =pValue;
+		}
 		else if (pName.equalsIgnoreCase(PARAM_MODE)) {
 			mode =(int)Tools.limitValue(pValue, 0 , 1);
 		}
-		else if (pName.equalsIgnoreCase(PARAM_TIME)) {
-			time = pValue;
-		}
 		else if (pName.equalsIgnoreCase(PARAM_ZOOM)) {
 			zoom =pValue;
-		}
-		else if (pName.equalsIgnoreCase(PARAM_N)) {
-			n =(int)Tools.limitValue(pValue, 2 , 20);
 		}
 		else if (pName.equalsIgnoreCase(PARAM_INVERT)) {
 			invert =(int)Tools.limitValue(pValue, 0 , 1);
