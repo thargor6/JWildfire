@@ -740,6 +740,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblDepthOfField = new JLabel();
       lblDepthOfField.setName("lblDepthOfField");
       lblDepthOfField.setText("Amount");
+      lblDepthOfField.setToolTipText("Strength of the DOF effect");
       lblDepthOfField.setSize(new Dimension(94, 22));
       lblDepthOfField.setPreferredSize(new Dimension(94, 22));
       lblDepthOfField.setLocation(new Point(4, 98));
@@ -748,6 +749,7 @@ public class MainEditorFrame extends JFrame {
       tinaDOFPanel.add(lblDepthOfField);
 
       dofNewDOFCBx = new JCheckBox("New DOF");
+      dofNewDOFCBx.setToolTipText("<html>Unchecked: distant points are blurred, near points are not (threshold set with Camera distance)<br>Checked: points outside the set focal area are blurred (focal area set with FocusX, Y, Z)</html>");
       dofNewDOFCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null) {
@@ -762,6 +764,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblArea = new JLabel();
       lblArea.setName("lblArea");
       lblArea.setText("Area");
+      lblArea.setToolTipText("Size of the focal area");
       lblArea.setSize(new Dimension(94, 22));
       lblArea.setPreferredSize(new Dimension(94, 22));
       lblArea.setLocation(new Point(4, 98));
@@ -827,6 +830,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblExponent = new JLabel();
       lblExponent.setName("lblExponent");
       lblExponent.setText("Exponent");
+      lblExponent.setToolTipText("Speed of the DOF effect; large values produce more gradual blurring");
       lblExponent.setSize(new Dimension(94, 22));
       lblExponent.setPreferredSize(new Dimension(94, 22));
       lblExponent.setLocation(new Point(4, 98));
@@ -892,6 +896,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblCameraDistance = new JLabel();
       lblCameraDistance.setName("lblCameraDistance");
       lblCameraDistance.setText("Camera distance");
+      lblCameraDistance.setToolTipText("Distance where DOF effect begins; large values start DOF effect closer to the camera");
       lblCameraDistance.setSize(new Dimension(94, 22));
       lblCameraDistance.setPreferredSize(new Dimension(94, 22));
       lblCameraDistance.setLocation(new Point(4, 98));
@@ -957,6 +962,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblFocusx = new JLabel();
       lblFocusx.setName("lblFocusx");
       lblFocusx.setText("FocusX");
+      lblFocusx.setToolTipText("X coordinate of center of focal area");
       lblFocusx.setSize(new Dimension(94, 22));
       lblFocusx.setPreferredSize(new Dimension(94, 22));
       lblFocusx.setLocation(new Point(4, 98));
@@ -1021,6 +1027,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblFocusy = new JLabel();
       lblFocusy.setName("lblFocusy");
       lblFocusy.setText("FocusY");
+      lblFocusy.setToolTipText("Y coordinate of center of focal area");
       lblFocusy.setSize(new Dimension(94, 22));
       lblFocusy.setPreferredSize(new Dimension(94, 22));
       lblFocusy.setLocation(new Point(4, 98));
@@ -1085,6 +1092,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblFocusz = new JLabel();
       lblFocusz.setName("lblFocusz");
       lblFocusz.setText("FocusZ");
+      lblFocusz.setToolTipText("Z coordinate of center of focal area");
       lblFocusz.setSize(new Dimension(94, 22));
       lblFocusz.setPreferredSize(new Dimension(94, 22));
       lblFocusz.setLocation(new Point(4, 98));
@@ -1149,6 +1157,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblDimishz = new JLabel();
       lblDimishz.setName("lblDimishz");
       lblDimishz.setText("DiminishZ");
+      lblDimishz.setToolTipText("Amount distant points are darkened");
       lblDimishz.setSize(new Dimension(94, 22));
       lblDimishz.setPreferredSize(new Dimension(94, 22));
       lblDimishz.setLocation(new Point(4, 98));
@@ -16680,6 +16689,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblShape = new JLabel();
       lblShape.setText("Shape");
+      lblShape.setToolTipText("Shape of the bokeh");
       lblShape.setSize(new Dimension(94, 22));
       lblShape.setPreferredSize(new Dimension(94, 22));
       lblShape.setLocation(new Point(488, 2));
@@ -16689,6 +16699,7 @@ public class MainEditorFrame extends JFrame {
 
       dofDOFScaleLbl = new JLabel();
       dofDOFScaleLbl.setText("Scale");
+      dofDOFScaleLbl.setToolTipText("Relative size of the bokeh (size is also affected by DOF Amount)");
       dofDOFScaleLbl.setSize(new Dimension(94, 22));
       dofDOFScaleLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFScaleLbl.setName("dofDOFScaleLbl");
@@ -16810,6 +16821,7 @@ public class MainEditorFrame extends JFrame {
 
       dofDOFAngleLbl = new JLabel();
       dofDOFAngleLbl.setText("Rotate");
+      dofDOFAngleLbl.setToolTipText("Angle to rotate bokeh shapes");
       dofDOFAngleLbl.setSize(new Dimension(94, 22));
       dofDOFAngleLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFAngleLbl.setName("dofDOFAngleLbl");
@@ -16845,6 +16857,7 @@ public class MainEditorFrame extends JFrame {
 
       dofDOFFadeLbl = new JLabel();
       dofDOFFadeLbl.setText("Fade");
+      dofDOFFadeLbl.setToolTipText("Amount of bokeh fading");
       dofDOFFadeLbl.setSize(new Dimension(94, 22));
       dofDOFFadeLbl.setPreferredSize(new Dimension(94, 22));
       dofDOFFadeLbl.setName("dofDOFFadeLbl");
@@ -19140,6 +19153,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblSelectLight = new JLabel();
       lblSelectLight.setText("Selected Light");
+      lblSelectLight.setToolTipText("Which light to view/edit");
       lblSelectLight.setPreferredSize(new Dimension(100, 22));
       lblSelectLight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSelectLight.setAlignmentX(1.0f);
@@ -19166,6 +19180,7 @@ public class MainEditorFrame extends JFrame {
       JLabel tinaSolidRenderingLightAltitudeLbl = new JLabel();
       tinaSolidRenderingLightAltitudeLbl.setToolTipText("");
       tinaSolidRenderingLightAltitudeLbl.setText("Altitude*");
+      tinaSolidRenderingLightAltitudeLbl.setToolTipText("Angle between the light and the -Z axis (-90 = +Y, 0 = -Z, 90 = -Y, 180 = +Z)");
       tinaSolidRenderingLightAltitudeLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightAltitudeLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightAltitudeLbl.setName("tinaSolidRenderingLightAltitudeLbl");
@@ -19228,6 +19243,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingLightAzimuthLbl = new JLabel();
       tinaSolidRenderingLightAzimuthLbl.setText("Azimuth*");
+      tinaSolidRenderingLightAzimuthLbl.setToolTipText("Angle between the light and the YZ plane (-90 = -X to 90 = +X)");
       tinaSolidRenderingLightAzimuthLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightAzimuthLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightAzimuthLbl.setName("tinaSolidRenderingLightAzimuthLbl");
@@ -19305,6 +19321,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblLightColor = new JLabel();
       lblLightColor.setText("Light color*");
+      lblLightColor.setToolTipText("Color of this light");
       lblLightColor.setSize(new Dimension(88, 22));
       lblLightColor.setPreferredSize(new Dimension(88, 22));
       lblLightColor.setLocation(new Point(4, 4));
@@ -19314,6 +19331,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingLightIntensityLbl0 = new JLabel();
       tinaSolidRenderingLightIntensityLbl0.setText("Light intensity*");
+      tinaSolidRenderingLightIntensityLbl0.setToolTipText("Intensity of the light; affects both diffuse and specular reflections");
       tinaSolidRenderingLightIntensityLbl0.setSize(new Dimension(68, 22));
       tinaSolidRenderingLightIntensityLbl0.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingLightIntensityLbl0.setName("tinaSolidRenderingLightIntensityLbl0");
@@ -19389,6 +19407,7 @@ public class MainEditorFrame extends JFrame {
       tinaSolidRenderingLightPnl.add(tinaSolidRenderingDeleteLightBtn);
 
       tinaSolidRenderingLightCastShadowsCBx = new JCheckBox("Cast shadows");
+      tinaSolidRenderingLightCastShadowsCBx.setToolTipText("Check to enable this light to cast shadows (configure shadows in Hard shadows tab)");
       tinaSolidRenderingLightCastShadowsCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -19404,6 +19423,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingShadowIntensityLbl0 = new JLabel();
       tinaSolidRenderingShadowIntensityLbl0.setText("Shadow intensity");
+      tinaSolidRenderingShadowIntensityLbl0.setToolTipText("Intensity of shadows cast by this light; 0 for no shadow to 1 for full shadow");
       tinaSolidRenderingShadowIntensityLbl0.setSize(new Dimension(68, 22));
       tinaSolidRenderingShadowIntensityLbl0.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowIntensityLbl0.setName("tinaSolidRenderingShadowIntensityLbl0");
@@ -19535,6 +19555,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblSpecularColor = new JLabel();
       lblSpecularColor.setText("Specular color*");
+      lblSpecularColor.setToolTipText("Color of specular reflections");
       lblSpecularColor.setSize(new Dimension(88, 22));
       lblSpecularColor.setPreferredSize(new Dimension(88, 22));
       lblSpecularColor.setLocation(new Point(4, 4));
@@ -19545,6 +19566,7 @@ public class MainEditorFrame extends JFrame {
       JLabel tinaSolidRenderingMaterialSpecularSharpnessLbl = new JLabel();
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setToolTipText("Specular sharpness");
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setText("Spec size*");
+      tinaSolidRenderingMaterialSpecularSharpnessLbl.setToolTipText("Specular reflection size; larger values produce smaller reflections");
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialSpecularSharpnessLbl.setName("tinaSolidRenderingMaterialSpecularSharpnessLbl");
@@ -19628,6 +19650,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblSelectedMaterial = new JLabel();
       lblSelectedMaterial.setText("Selected Material");
+      lblSelectedMaterial.setToolTipText("Which material to view/edit");
       lblSelectedMaterial.setPreferredSize(new Dimension(100, 22));
       lblSelectedMaterial.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblSelectedMaterial.setAlignmentX(1.0f);
@@ -19697,8 +19720,8 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(tinaSolidRenderingMaterialDiffuseREd);
 
       JLabel tinaSolidRenderingMaterialDiffuseLbl = new JLabel();
-      tinaSolidRenderingMaterialDiffuseLbl.setToolTipText("");
       tinaSolidRenderingMaterialDiffuseLbl.setText("Diffuse*");
+      tinaSolidRenderingMaterialDiffuseLbl.setToolTipText("Amount of diffuse reflection (light reflected from a rough surface); color determined by light colors");
       tinaSolidRenderingMaterialDiffuseLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialDiffuseLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialDiffuseLbl.setName("tinaSolidRenderingMaterialDiffuseLbl");
@@ -19730,6 +19753,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingMaterialAmbientLbl = new JLabel();
       tinaSolidRenderingMaterialAmbientLbl.setText("Ambient*");
+      tinaSolidRenderingMaterialAmbientLbl.setToolTipText("Amount of ambient light (provided by the flame coloring)");
       tinaSolidRenderingMaterialAmbientLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialAmbientLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialAmbientLbl.setName("tinaSolidRenderingMaterialAmbientLbl");
@@ -19792,6 +19816,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingMaterialSpecularLbl = new JLabel();
       tinaSolidRenderingMaterialSpecularLbl.setText("Specular*");
+      tinaSolidRenderingMaterialSpecularLbl.setToolTipText("Amount of specular reflection (light reflected from a smooth surface); color determined by Specular color");
       tinaSolidRenderingMaterialSpecularLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialSpecularLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialSpecularLbl.setName("tinaSolidRenderingMaterialSpecularLbl");
@@ -19871,6 +19896,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblDiffuseResponse = new JLabel();
       lblDiffuseResponse.setText("Diffuse response*");
+      lblDiffuseResponse.setToolTipText("Controls how the material reflects diffuse light");
       lblDiffuseResponse.setSize(new Dimension(68, 22));
       lblDiffuseResponse.setPreferredSize(new Dimension(94, 22));
       lblDiffuseResponse.setName("tinaSolidRenderingMaterialSpecularSharpnessLbl0");
@@ -19884,8 +19910,8 @@ public class MainEditorFrame extends JFrame {
       panel_114.add(getLblReflectionMap());
 
       JLabel tinaSolidRenderingMaterialReflectionMapIntensityLbl = new JLabel();
-      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setToolTipText("Reflection map intensity");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setText("Refl intensity*");
+      tinaSolidRenderingMaterialReflectionMapIntensityLbl.setToolTipText("Amount of light emitted by the reflection map");
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingMaterialReflectionMapIntensityLbl.setName("tinaSolidRenderingMaterialReflectionMapIntensityLbl");
@@ -19965,6 +19991,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblReflectionMapping = new JLabel();
       lblReflectionMapping.setText("Refl mapping*");
+      lblReflectionMapping.setToolTipText("The function used to map the image to the surface");
       lblReflectionMapping.setSize(new Dimension(68, 22));
       lblReflectionMapping.setPreferredSize(new Dimension(94, 22));
       lblReflectionMapping.setName("tinaSolidRenderingMaterialReflectionMappingLbl");
@@ -20209,6 +20236,7 @@ public class MainEditorFrame extends JFrame {
     if (lblReflectionMap == null) {
       lblReflectionMap = new JLabel();
       lblReflectionMap.setText("Reflection map");
+      lblReflectionMap.setToolTipText("Allows mapping an image from a file onto the 3D surface");
       lblReflectionMap.setSize(new Dimension(94, 22));
       lblReflectionMap.setPreferredSize(new Dimension(94, 22));
       lblReflectionMap.setLocation(new Point(4, 4));
@@ -20268,6 +20296,7 @@ public class MainEditorFrame extends JFrame {
       panel.setLayout(null);
 
       tinaSolidRenderingEnableAOCBx = new JCheckBox("Enable ambient shadows");
+      tinaSolidRenderingEnableAOCBx.setToolTipText("Darken the ambient light in occluded areas to enhance 3D appearance");
       tinaSolidRenderingEnableAOCBx.setBounds(16, 2, 169, 18);
       tinaSolidRenderingEnableAOCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -20281,6 +20310,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingAOIntensityLbl = new JLabel();
       tinaSolidRenderingAOIntensityLbl.setText("Amb shadow intensity*");
+      tinaSolidRenderingAOIntensityLbl.setToolTipText("Intensity of the ambient shadow effect");
       tinaSolidRenderingAOIntensityLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOIntensityLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOIntensityLbl.setName("tinaSolidRenderingAOIntensityLbl");
@@ -20344,6 +20374,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingAOSearchRadiusLbl = new JLabel();
       tinaSolidRenderingAOSearchRadiusLbl.setText("Search radius");
+      tinaSolidRenderingAOSearchRadiusLbl.setToolTipText("Distance to search for ambient occlusions");
       tinaSolidRenderingAOSearchRadiusLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOSearchRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOSearchRadiusLbl.setName("tinaSolidRenderingAOSearchRadiusLbl");
@@ -20406,6 +20437,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingAOBlurRadiusLbl = new JLabel();
       tinaSolidRenderingAOBlurRadiusLbl.setText("Blur radius");
+      tinaSolidRenderingAOBlurRadiusLbl.setToolTipText("Amount to blur ambient shadows (0 to make them unnaturally sharp)");
       tinaSolidRenderingAOBlurRadiusLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOBlurRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOBlurRadiusLbl.setName("tinaSolidRenderingAOBlurRadiusLbl");
@@ -20468,6 +20500,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingAOFalloffLbl = new JLabel();
       tinaSolidRenderingAOFalloffLbl.setText("Falloff");
+      tinaSolidRenderingAOFalloffLbl.setToolTipText("Ambient shadow falloff; higher values make shadows smaller");
       tinaSolidRenderingAOFalloffLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingAOFalloffLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingAOFalloffLbl.setName("tinaSolidRenderingAOFalloffLbl");
@@ -20939,6 +20972,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingShadowSmoothRadiusLbl = new JLabel();
       tinaSolidRenderingShadowSmoothRadiusLbl.setText("Smooth radius");
+      tinaSolidRenderingShadowSmoothRadiusLbl.setToolTipText("Radius for smoothing hard shadows");
       tinaSolidRenderingShadowSmoothRadiusLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingShadowSmoothRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowSmoothRadiusLbl.setName("tinaSolidRenderingShadowSmoothRadiusLbl");
@@ -20987,6 +21021,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSolidRenderingShadowTypeLbl = new JLabel();
       tinaSolidRenderingShadowTypeLbl.setText("Shadow type");
+      tinaSolidRenderingShadowTypeLbl.setToolTipText("Type of hard shadow calculation; SMOOTH is best quality, but slow.");
       tinaSolidRenderingShadowTypeLbl.setSize(new Dimension(68, 22));
       tinaSolidRenderingShadowTypeLbl.setPreferredSize(new Dimension(94, 22));
       tinaSolidRenderingShadowTypeLbl.setName("tinaSolidRenderingShadowTypeLbl");
