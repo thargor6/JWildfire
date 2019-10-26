@@ -73,23 +73,27 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
+    controls.weightingFieldParam01Lbl.setToolTipText("Random number generator seed");
 
     controls.weightingFieldParam02REd.setVisible(true);
     controls.weightingFieldParam02REd.setEnabled(enabled);
     controls.weightingFieldParam02REd.setMotionPropertyName("weightingFieldFractalNoiseGain");
     controls.weightingFieldParam02Lbl.setVisible(true);
     controls.weightingFieldParam02Lbl.setText("Gain");
+    controls.weightingFieldParam02Lbl.setToolTipText("Multiply amplitude by this value for each octave");
 
     controls.weightingFieldParam03REd.setVisible(true);
     controls.weightingFieldParam03REd.setEnabled(enabled);
     controls.weightingFieldParam03REd.setMotionPropertyName("weightingFieldFractalNoiseOctaves");
     controls.weightingFieldParam03Lbl.setVisible(true);
     controls.weightingFieldParam03Lbl.setText("Octaves");
+    controls.weightingFieldParam03Lbl.setToolTipText("Number of components for fractal noise");
 
     controls.weightingFieldParam04Cmb.setVisible(true);
     controls.weightingFieldParam04Cmb.setEnabled(enabled);
     controls.weightingFieldParam04Lbl.setVisible(true);
     controls.weightingFieldParam04Lbl.setText("Noise Type");
+    controls.weightingFieldParam04Lbl.setToolTipText("Type of fractal noise to use");
     fillingComboBox = true;
     try {
       controls.weightingFieldParam04Cmb.removeAllItems();
@@ -106,12 +110,14 @@ public class FractalNoiseWeightingFieldControlsUpdater extends WeightingFieldCon
     controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
+    controls.weightingFieldParam05Lbl.setToolTipText("Noise frequency; increase to put peaks closer together");
 
     controls.weightingFieldParam06REd.setVisible(true);
     controls.weightingFieldParam06REd.setEnabled(enabled);
     controls.weightingFieldParam06REd.setMotionPropertyName("weightingFieldFractalNoiseLacunarity");
     controls.weightingFieldParam06Lbl.setVisible(true);
     controls.weightingFieldParam06Lbl.setText("Lacunarity");
+    controls.weightingFieldParam06Lbl.setToolTipText("Multiply frequency by this value for each octave");
 
     controls.weightingFieldParam07REd.setVisible(false);
     controls.weightingFieldParam07Lbl.setVisible(false);

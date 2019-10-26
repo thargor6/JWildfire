@@ -57,6 +57,7 @@ public class NoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUp
     controls.weightingFieldParam01REd.setMotionPropertyName("weightingFieldNoiseSeed");
     controls.weightingFieldParam01Lbl.setVisible(true);
     controls.weightingFieldParam01Lbl.setText("Seed");
+    controls.weightingFieldParam01Lbl.setToolTipText("Random number generator seed");
 
     controls.weightingFieldParam02REd.setVisible(false);
     controls.weightingFieldParam02Lbl.setVisible(false);
@@ -72,6 +73,7 @@ public class NoiseWeightingFieldControlsUpdater extends WeightingFieldControlsUp
     controls.weightingFieldParam05REd.setMotionPropertyName("weightingFieldNoiseFrequency");
     controls.weightingFieldParam05Lbl.setVisible(true);
     controls.weightingFieldParam05Lbl.setText("Frequency");
+    controls.weightingFieldParam05Lbl.setToolTipText("Noise frequency; increase to put peaks closer together");
 
     controls.weightingFieldParam06REd.setVisible(false);
     controls.weightingFieldParam06Lbl.setVisible(false);
