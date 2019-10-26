@@ -1366,6 +1366,7 @@ public class MainEditorFrame extends JFrame {
       tinaPixelsPerUnitLbl = new JLabel();
       tinaPixelsPerUnitLbl.setName("tinaPixelsPerUnitLbl");
       tinaPixelsPerUnitLbl.setText("Pixs per unit");
+      tinaPixelsPerUnitLbl.setToolTipText("Pixels per unit; increase to make image larger");
       tinaPixelsPerUnitLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPixelsPerUnitLbl.setLocation(new Point(390, 78));
       tinaPixelsPerUnitLbl.setSize(new Dimension(68, 22));
@@ -1373,6 +1374,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraZoomLbl = new JLabel();
       tinaCameraZoomLbl.setName("tinaCameraZoomLbl");
       tinaCameraZoomLbl.setText("Zoom");
+      tinaCameraZoomLbl.setToolTipText("Camera zoom amount; increase to make image larger");
       tinaCameraZoomLbl.setLocation(new Point(390, 52));
       tinaCameraZoomLbl.setSize(new Dimension(68, 22));
       tinaCameraZoomLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1380,6 +1382,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCentreYLbl = new JLabel();
       tinaCameraCentreYLbl.setName("tinaCameraCentreYLbl");
       tinaCameraCentreYLbl.setText("CentreY");
+      tinaCameraCentreYLbl.setToolTipText("Move flame up or down");
       tinaCameraCentreYLbl.setLocation(new Point(390, 28));
       tinaCameraCentreYLbl.setSize(new Dimension(68, 22));
       tinaCameraCentreYLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1387,6 +1390,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraCentreXLbl = new JLabel();
       tinaCameraCentreXLbl.setName("tinaCameraCentreXLbl");
       tinaCameraCentreXLbl.setText("CentreX");
+      tinaCameraCentreXLbl.setToolTipText("Move flame right or left");
       tinaCameraCentreXLbl.setLocation(new Point(390, 6));
       tinaCameraCentreXLbl.setSize(new Dimension(68, 22));
       tinaCameraCentreXLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1394,6 +1398,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraPerspectiveLbl = new JLabel();
       tinaCameraPerspectiveLbl.setName("tinaCameraPerspectiveLbl");
       tinaCameraPerspectiveLbl.setText("Perspective");
+      tinaCameraPerspectiveLbl.setToolTipText("Amount of foreshortening; positive values make objects closer to the camera appear larger (small values work best)");
       tinaCameraPerspectiveLbl.setLocation(new Point(4, 76));
       tinaCameraPerspectiveLbl.setSize(new Dimension(68, 22));
       tinaCameraPerspectiveLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1401,6 +1406,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraYawLbl = new JLabel();
       tinaCameraYawLbl.setName("tinaCameraYawLbl");
       tinaCameraYawLbl.setText("Yaw");
+      tinaCameraYawLbl.setToolTipText("Rotation of flame around its Z axis; same as Roll when Pitch is 0");
       tinaCameraYawLbl.setLocation(new Point(4, 52));
       tinaCameraYawLbl.setSize(new Dimension(68, 22));
       tinaCameraYawLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1408,6 +1414,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraPitchLbl = new JLabel();
       tinaCameraPitchLbl.setName("tinaCameraPitchLbl");
       tinaCameraPitchLbl.setText("Pitch");
+      tinaCameraPitchLbl.setToolTipText("Rotation of flame around its X axis; allows seeing the Z dimension of 3D flames");
       tinaCameraPitchLbl.setLocation(new Point(4, 28));
       tinaCameraPitchLbl.setSize(new Dimension(68, 22));
       tinaCameraPitchLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1415,6 +1422,7 @@ public class MainEditorFrame extends JFrame {
       tinaCameraRollLbl = new JLabel();
       tinaCameraRollLbl.setName("tinaCameraRollLbl");
       tinaCameraRollLbl.setText("Roll");
+      tinaCameraRollLbl.setToolTipText("Rotation of camera around its Z axis; rotates image in the frame");
       tinaCameraRollLbl.setLocation(new Point(4, 4));
       tinaCameraRollLbl.setSize(new Dimension(68, 22));
       tinaCameraRollLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1477,6 +1485,7 @@ public class MainEditorFrame extends JFrame {
       JLabel tinaCameraCamPosXLbl = new JLabel();
       tinaCameraCamPosXLbl.setToolTipText("");
       tinaCameraCamPosXLbl.setText("CamPosX");
+      tinaCameraCamPosXLbl.setToolTipText("Camera X (horizontal) position");
       tinaCameraCamPosXLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosXLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosXLbl.setName("tinaCameraCamPosXLbl");
@@ -1510,6 +1519,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaCameraCamPosYLbl = new JLabel();
       tinaCameraCamPosYLbl.setText("CamPosY");
+      tinaCameraCamPosYLbl.setToolTipText("Camera Y (vertical) position");
       tinaCameraCamPosYLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosYLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosYLbl.setName("tinaCameraCamPosYLbl");
@@ -1570,6 +1580,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaCameraCamPosZLbl = new JLabel();
       tinaCameraCamPosZLbl.setText("CamPosZ");
+      tinaCameraCamPosZLbl.setToolTipText("Camera Z position; changes image size; must be larger than -1");
       tinaCameraCamPosZLbl.setSize(new Dimension(68, 22));
       tinaCameraCamPosZLbl.setPreferredSize(new Dimension(94, 22));
       tinaCameraCamPosZLbl.setName("tinaCameraCamPosZLbl");
@@ -1642,6 +1653,7 @@ public class MainEditorFrame extends JFrame {
       tinaGammaThresholdLbl = new JLabel();
       tinaGammaThresholdLbl.setName("tinaGammaThresholdLbl");
       tinaGammaThresholdLbl.setText("Gamma threshold*");
+      tinaGammaThresholdLbl.setToolTipText("Threshold for low density areas; can help remove noise");
       tinaGammaThresholdLbl.setLocation(new Point(4, 73));
       tinaGammaThresholdLbl.setSize(new Dimension(94, 22));
       tinaGammaThresholdLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1649,6 +1661,7 @@ public class MainEditorFrame extends JFrame {
       tinaVibrancyLbl = new JLabel();
       tinaVibrancyLbl.setName("tinaVibrancyLbl");
       tinaVibrancyLbl.setText("Vibrancy*");
+      tinaVibrancyLbl.setToolTipText("Vibrancy of the colors of points as they are rendered");
       tinaVibrancyLbl.setLocation(new Point(409, 96));
       tinaVibrancyLbl.setSize(new Dimension(94, 22));
       tinaVibrancyLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1656,6 +1669,7 @@ public class MainEditorFrame extends JFrame {
       tinaGammaLbl = new JLabel();
       tinaGammaLbl.setName("tinaGammaLbl");
       tinaGammaLbl.setText("Gamma*");
+      tinaGammaLbl.setToolTipText("Controls mapping of density to brightness; lower values produce higher contrast");
       tinaGammaLbl.setLocation(new Point(4, 50));
       tinaGammaLbl.setSize(new Dimension(94, 22));
       tinaGammaLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1663,6 +1677,7 @@ public class MainEditorFrame extends JFrame {
       tinaContrastLbl = new JLabel();
       tinaContrastLbl.setName("tinaContrastLbl");
       tinaContrastLbl.setText("Contrast*");
+      tinaContrastLbl.setToolTipText("Overall image contrast");
       tinaContrastLbl.setLocation(new Point(4, 96));
       tinaContrastLbl.setSize(new Dimension(94, 22));
       tinaContrastLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1670,6 +1685,7 @@ public class MainEditorFrame extends JFrame {
       tinaBrightnessLbl = new JLabel();
       tinaBrightnessLbl.setName("tinaBrightnessLbl");
       tinaBrightnessLbl.setText("Brightness*");
+      tinaBrightnessLbl.setToolTipText("Overall image brightness");
       tinaBrightnessLbl.setLocation(new Point(4, 4));
       tinaBrightnessLbl.setSize(new Dimension(94, 22));
       tinaBrightnessLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -1693,6 +1709,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(getTinaGammaThresholdSlider(), null);
 
       bgTransparencyCBx = new JCheckBox("Background transparency");
+      bgTransparencyCBx.setToolTipText("When checked, saved images (not previews) will have a transparent background");
       bgTransparencyCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
           if (tinaController != null && tinaController.getFlameControls() != null) {
@@ -1706,7 +1723,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(getBackgroundColorIndicatorBtn());
 
       JLabel lblBackgroundColor = new JLabel();
-      lblBackgroundColor.setToolTipText("Background color");
+      lblBackgroundColor.setToolTipText("Background color or gradient");
       lblBackgroundColor.setText("Bg color*");
       lblBackgroundColor.setSize(new Dimension(94, 22));
       lblBackgroundColor.setPreferredSize(new Dimension(94, 22));
@@ -1717,6 +1734,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaSaturationLbl = new JLabel();
       tinaSaturationLbl.setText("Saturation*");
+      tinaSaturationLbl.setToolTipText("Overall image color saturation");
       tinaSaturationLbl.setSize(new Dimension(94, 22));
       tinaSaturationLbl.setPreferredSize(new Dimension(94, 22));
       tinaSaturationLbl.setName("tinaSaturationLbl");
@@ -1907,7 +1925,7 @@ public class MainEditorFrame extends JFrame {
       tinaColoringPanel.add(foregroundOpacityField);
 
       JLabel lblOpacity = new JLabel();
-      lblOpacity.setToolTipText("Foreground opacity");
+      lblOpacity.setToolTipText("Foreground opacity; 0 for completely opaque");
       lblOpacity.setText("Fg opacity*");
       lblOpacity.setSize(new Dimension(94, 22));
       lblOpacity.setPreferredSize(new Dimension(94, 22));
@@ -2047,7 +2065,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblRedBalance = new JLabel();
       lblRedBalance.setForeground(new Color(165, 42, 42));
-      lblRedBalance.setToolTipText("");
+      lblRedBalance.setToolTipText("Increase/decrease the amount of red (1 is neutral)");
       lblRedBalance.setText("Red balance*");
       lblRedBalance.setSize(new Dimension(94, 22));
       lblRedBalance.setPreferredSize(new Dimension(94, 22));
@@ -2116,7 +2134,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblGreenBalance = new JLabel();
       lblGreenBalance.setForeground(new Color(34, 139, 34));
-      lblGreenBalance.setToolTipText("");
+      lblGreenBalance.setToolTipText("Increase/decrease the amount of green (1 is neutral)");
       lblGreenBalance.setText("Green balance*");
       lblGreenBalance.setSize(new Dimension(94, 22));
       lblGreenBalance.setPreferredSize(new Dimension(94, 22));
@@ -2186,7 +2204,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblRedBalancing = new JLabel();
       lblRedBalancing.setForeground(new Color(0, 0, 205));
-      lblRedBalancing.setToolTipText("");
+      lblRedBalancing.setToolTipText("Increase/decrease the amount of blue (1 is neutral)");
       lblRedBalancing.setText("Blue balance*");
       lblRedBalancing.setSize(new Dimension(94, 22));
       lblRedBalancing.setPreferredSize(new Dimension(94, 22));
@@ -2575,6 +2593,7 @@ public class MainEditorFrame extends JFrame {
       tinaLoadFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaLoadFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaLoadFlameButton.setText("Load flame...");
+      tinaLoadFlameButton.setToolTipText("Load a flame from a file");
       tinaLoadFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaLoadFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaLoadFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2599,6 +2618,7 @@ public class MainEditorFrame extends JFrame {
       tinaSaveFlameButton.setMinimumSize(new Dimension(100, 24));
       tinaSaveFlameButton.setMaximumSize(new Dimension(32000, 24));
       tinaSaveFlameButton.setText("Save flame...");
+      tinaSaveFlameButton.setToolTipText("Save the current flame to a file");
       tinaSaveFlameButton.setPreferredSize(new Dimension(125, 24));
       tinaSaveFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaSaveFlameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -2622,7 +2642,7 @@ public class MainEditorFrame extends JFrame {
       tinaRenderFlameButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/fraqtive3.png")));
       tinaRenderFlameButton.setMnemonic(KeyEvent.VK_R);
       tinaRenderFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 9));
-      tinaRenderFlameButton.setToolTipText("Render image");
+      tinaRenderFlameButton.setToolTipText("Render image preview");
       tinaRenderFlameButton.setPreferredSize(new Dimension(42, 24));
       tinaRenderFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -3367,7 +3387,7 @@ public class MainEditorFrame extends JFrame {
       tinaDeleteTransformationButton = new JButton();
       tinaDeleteTransformationButton.setText("Delete");
       tinaDeleteTransformationButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      tinaDeleteTransformationButton.setToolTipText("Delete triangle");
+      tinaDeleteTransformationButton.setToolTipText("Delete transform");
       tinaDeleteTransformationButton.setPreferredSize(new Dimension(90, 24));
       tinaDeleteTransformationButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -4183,14 +4203,14 @@ public class MainEditorFrame extends JFrame {
   private JPanel getTinaTransformationColorPanel() {
     if (tinaTransformationColorPanel == null) {
       xFormDrawModeLbl = new JLabel();
-      xFormDrawModeLbl.setToolTipText("");
+      xFormDrawModeLbl.setToolTipText("Whether to show (normal), hide, or partially show points with this transform");
       xFormDrawModeLbl.setPreferredSize(new Dimension(64, 22));
       xFormDrawModeLbl.setText("Draw mode");
       xFormDrawModeLbl.setSize(new Dimension(119, 22));
       xFormDrawModeLbl.setLocation(new Point(6, 101));
       xFormDrawModeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormColorTypeLbl = new JLabel();
-      xFormColorTypeLbl.setToolTipText("");
+      xFormColorTypeLbl.setToolTipText("How to color points with this transform");
       xFormColorTypeLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorTypeLbl.setText("Color type");
       xFormColorTypeLbl.setSize(new Dimension(119, 22));
@@ -4200,12 +4220,13 @@ public class MainEditorFrame extends JFrame {
       xFormOpacityLbl.setName("xFormOpacityLbl");
       xFormOpacityLbl.setPreferredSize(new Dimension(64, 22));
       xFormOpacityLbl.setText("Opacity");
+      xFormOpacityLbl.setToolTipText("How much to show points (0 for hidden, 1 for normal)");
       xFormOpacityLbl.setSize(new Dimension(49, 22));
       xFormOpacityLbl.setLocation(new Point(6, 127));
       xFormOpacityLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       xFormSymmetryLbl = new JLabel();
       xFormSymmetryLbl.setName("xFormSymmetryLbl");
-      xFormSymmetryLbl.setToolTipText("Color speed");
+      xFormSymmetryLbl.setToolTipText("How fast point color goes to specified color (-1 to go immediately, 0 to go halfway, 1 to not change color)");
       xFormSymmetryLbl.setPreferredSize(new Dimension(64, 22));
       xFormSymmetryLbl.setText("Speed");
       xFormSymmetryLbl.setSize(new Dimension(49, 22));
@@ -4215,6 +4236,7 @@ public class MainEditorFrame extends JFrame {
       xFormColorLbl.setName("xFormColorLbl");
       xFormColorLbl.setPreferredSize(new Dimension(64, 22));
       xFormColorLbl.setText("Color");
+      xFormColorLbl.setToolTipText("Gradient index or target color");
       xFormColorLbl.setSize(new Dimension(49, 22));
       xFormColorLbl.setLocation(new Point(6, 47));
       xFormColorLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -4253,6 +4275,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialREd = new JWFNumberField();
       xFormMaterialREd.setValueStep(0.01);
       xFormMaterialREd.setText("");
+      xFormMaterialREd.setToolTipText("Target material (materials are defined in 3D rendering tab)");
       xFormMaterialREd.setSize(new Dimension(70, 24));
       xFormMaterialREd.setPreferredSize(new Dimension(70, 24));
       xFormMaterialREd.setMotionPropertyName("material");
@@ -4324,6 +4347,7 @@ public class MainEditorFrame extends JFrame {
       xFormMaterialSpeedREd = new JWFNumberField();
       xFormMaterialSpeedREd.setValueStep(0.01);
       xFormMaterialSpeedREd.setText("");
+      xFormMaterialSpeedREd.setToolTipText("How fast material goes to target material (-1 to go immediately, 0 to go halfway, 1 to not change material)");
       xFormMaterialSpeedREd.setSize(new Dimension(70, 24));
       xFormMaterialSpeedREd.setPreferredSize(new Dimension(55, 24));
       xFormMaterialSpeedREd.setMotionPropertyName("materialSpeed");
@@ -5247,6 +5271,7 @@ public class MainEditorFrame extends JFrame {
       tinaRandomPaletteButton = new JButton();
       tinaRandomPaletteButton.setBounds(5, 3, 148, 46);
       tinaRandomPaletteButton.setText("Random Gradient");
+      tinaRandomPaletteButton.setToolTipText("Create a new random gradient");
       tinaRandomPaletteButton.setPreferredSize(new Dimension(190, 24));
       tinaRandomPaletteButton.setActionCommand("Random Gradient");
       tinaRandomPaletteButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -5333,6 +5358,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteShiftLbl.setBounds(116, 7, 29, 22);
       tinaPaletteSubSouthPanel.add(tinaPaletteShiftLbl);
       tinaPaletteShiftLbl.setText("Shift");
+      tinaPaletteShiftLbl.setToolTipText("Rotate gradient right (positive) or left (negative)");
       tinaPaletteShiftLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteShiftLbl.setPreferredSize(new Dimension(64, 22));
 
@@ -5441,6 +5467,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteRandomPointsLbl.setBounds(163, 34, 100, 14);
       tinaPaletteCreatePanel.add(tinaPaletteRandomPointsLbl);
       tinaPaletteRandomPointsLbl.setText("Random points");
+      tinaPaletteRandomPointsLbl.setToolTipText("Number of color points in random gradients (not used by all gradient generators)");
       tinaPaletteRandomPointsLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteRandomPointsLbl.setPreferredSize(new Dimension(100, 22));
       tinaPaletteCreatePanel.add(getTinaPaletteRandomPointsREd());
@@ -5460,6 +5487,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblGradientGenerator = new JLabel();
       lblGradientGenerator.setText("Gradient generator");
+      lblGradientGenerator.setToolTipText("Type of random gradient to generate");
       lblGradientGenerator.setPreferredSize(new Dimension(100, 22));
       lblGradientGenerator.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       lblGradientGenerator.setAlignmentX(1.0f);
@@ -5467,7 +5495,7 @@ public class MainEditorFrame extends JFrame {
       tinaPaletteCreatePanel.add(lblGradientGenerator);
 
       tinaPaletteRandomGeneratorCmb = new JComboBox();
-      tinaPaletteRandomGeneratorCmb.setToolTipText("Random-Symmetry-Geneator");
+      tinaPaletteRandomGeneratorCmb.setToolTipText("Random gradient generator");
       tinaPaletteRandomGeneratorCmb.setPreferredSize(new Dimension(50, 24));
       tinaPaletteRandomGeneratorCmb.setMinimumSize(new Dimension(100, 24));
       tinaPaletteRandomGeneratorCmb.setMaximumSize(new Dimension(32767, 24));
@@ -5488,48 +5516,56 @@ public class MainEditorFrame extends JFrame {
     if (tinaPaletteBalancingPanel == null) {
       tinaPaletteBrightnessLbl = new JLabel();
       tinaPaletteBrightnessLbl.setText("Brightness");
+      tinaPaletteBrightnessLbl.setToolTipText("Make the gradient lighter or darker");
       tinaPaletteBrightnessLbl.setSize(new Dimension(56, 22));
       tinaPaletteBrightnessLbl.setLocation(new Point(334, 84));
       tinaPaletteBrightnessLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBrightnessLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGammaLbl = new JLabel();
       tinaPaletteGammaLbl.setText("Gamma");
+      tinaPaletteGammaLbl.setToolTipText("Make gradient midtones lighter or darker");
       tinaPaletteGammaLbl.setSize(new Dimension(56, 22));
       tinaPaletteGammaLbl.setLocation(new Point(334, 58));
       tinaPaletteGammaLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGammaLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteContrastLbl = new JLabel();
       tinaPaletteContrastLbl.setText("Contrast");
+      tinaPaletteContrastLbl.setToolTipText("Increase or decrease gradient contrast");
       tinaPaletteContrastLbl.setSize(new Dimension(56, 22));
       tinaPaletteContrastLbl.setLocation(new Point(334, 32));
       tinaPaletteContrastLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteContrastLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteSaturationLbl = new JLabel();
       tinaPaletteSaturationLbl.setText("Saturation");
+      tinaPaletteSaturationLbl.setToolTipText("Increase or decrease the saturation of gradient colors");
       tinaPaletteSaturationLbl.setSize(new Dimension(56, 22));
       tinaPaletteSaturationLbl.setLocation(new Point(334, 6));
       tinaPaletteSaturationLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteSaturationLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteHueLbl = new JLabel();
       tinaPaletteHueLbl.setText("Hue");
+      tinaPaletteHueLbl.setToolTipText("Rotate the hue of gradient colors around the color wheel");
       tinaPaletteHueLbl.setSize(new Dimension(56, 22));
       tinaPaletteHueLbl.setLocation(new Point(6, 84));
       tinaPaletteHueLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteHueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBlueLbl = new JLabel();
       tinaPaletteBlueLbl.setText("Blue");
+      tinaPaletteBlueLbl.setToolTipText("Increase or decrease the amount of blue in the gradient");
       tinaPaletteBlueLbl.setSize(new Dimension(56, 22));
       tinaPaletteBlueLbl.setLocation(new Point(6, 58));
       tinaPaletteBlueLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteBlueLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteGreenLbl = new JLabel();
       tinaPaletteGreenLbl.setText("Green");
+      tinaPaletteGreenLbl.setToolTipText("Increase or decrease the amount of green in the gradient");
       tinaPaletteGreenLbl.setSize(new Dimension(56, 22));
       tinaPaletteGreenLbl.setLocation(new Point(6, 32));
       tinaPaletteGreenLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaPaletteGreenLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteRedLbl = new JLabel();
       tinaPaletteRedLbl.setText("Red");
+      tinaPaletteRedLbl.setToolTipText("Increase or decrease the amount of red in the gradient");
       tinaPaletteRedLbl.setSize(new Dimension(56, 22));
       tinaPaletteRedLbl.setLocation(new Point(6, 6));
       tinaPaletteRedLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -6930,6 +6966,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC00REd.setPreferredSize(new Dimension(76, 24));
       affineC00REd.setText("");
+      affineC00REd.setToolTipText("Set affine coefficients directly");
       affineC00REd.setLocation(new Point(24, 6));
       affineC00REd.setSize(new Dimension(84, 24));
       affineC00REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -6959,6 +6996,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC01REd.setPreferredSize(new Dimension(76, 24));
       affineC01REd.setText("");
+      affineC01REd.setToolTipText("Set affine coefficients directly");
       affineC01REd.setLocation(new Point(24, 30));
       affineC01REd.setSize(new Dimension(84, 24));
       affineC01REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -6989,6 +7027,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC10REd.setPreferredSize(new Dimension(76, 24));
       affineC10REd.setText("");
+      affineC10REd.setToolTipText("Set affine coefficients directly");
       affineC10REd.setLocation(new Point(132, 6));
       affineC10REd.setSize(new Dimension(84, 24));
       affineC10REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7018,6 +7057,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC11REd.setPreferredSize(new Dimension(76, 24));
       affineC11REd.setText("");
+      affineC11REd.setToolTipText("Set affine coefficients directly");
       affineC11REd.setLocation(new Point(132, 30));
       affineC11REd.setSize(new Dimension(84, 24));
       affineC11REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7047,6 +7087,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC20REd.setPreferredSize(new Dimension(76, 24));
       affineC20REd.setText("");
+      affineC20REd.setToolTipText("Set affine coefficients directly");
       affineC20REd.setLocation(new Point(240, 6));
       affineC20REd.setSize(new Dimension(84, 24));
       affineC20REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7076,6 +7117,7 @@ public class MainEditorFrame extends JFrame {
       });
       affineC21REd.setPreferredSize(new Dimension(76, 24));
       affineC21REd.setText("");
+      affineC21REd.setToolTipText("Set affine coefficients directly");
       affineC21REd.setLocation(new Point(240, 30));
       affineC21REd.setSize(new Dimension(84, 24));
       affineC21REd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7191,6 +7233,7 @@ public class MainEditorFrame extends JFrame {
       affineRotateAmountREd = new JWFNumberField();
       affineRotateAmountREd.setPreferredSize(new Dimension(56, 24));
       affineRotateAmountREd.setText("90");
+      affineRotateAmountREd.setToolTipText("Angle in degrees to rotate triangle");
       affineRotateAmountREd.setSize(new Dimension(70, 24));
       affineRotateAmountREd.setLocation(new Point(0, 80));
       affineRotateAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7282,6 +7325,7 @@ public class MainEditorFrame extends JFrame {
       affineScaleAmountREd = new JWFNumberField();
       affineScaleAmountREd.setPreferredSize(new Dimension(56, 24));
       affineScaleAmountREd.setText("105");
+      affineScaleAmountREd.setToolTipText("Percentage to enlarge or shrink triangle (should be larger than 100)");
       affineScaleAmountREd.setSize(new Dimension(70, 24));
       affineScaleAmountREd.setLocation(new Point(92, 80));
       affineScaleAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7399,6 +7443,7 @@ public class MainEditorFrame extends JFrame {
       affineMoveVertAmountREd = new JWFNumberField();
       affineMoveVertAmountREd.setPreferredSize(new Dimension(56, 24));
       affineMoveVertAmountREd.setText("0.5");
+      affineMoveVertAmountREd.setToolTipText("Units to move triangle");
       affineMoveVertAmountREd.setSize(new Dimension(70, 24));
       affineMoveVertAmountREd.setLocation(new Point(215, 80));
       affineMoveVertAmountREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -7466,6 +7511,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar1REd() {
     if (nonlinearVar1REd == null) {
       nonlinearVar1REd = new JWFNumberField();
+      nonlinearVar1REd.setToolTipText("Variation amount");
       nonlinearVar1REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(0);
@@ -7802,6 +7848,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar2REd() {
     if (nonlinearVar2REd == null) {
       nonlinearVar2REd = new JWFNumberField();
+      nonlinearVar2REd.setToolTipText("Variation amount");
       nonlinearVar2REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(1);
@@ -8045,6 +8092,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar3REd() {
     if (nonlinearVar3REd == null) {
       nonlinearVar3REd = new JWFNumberField();
+      nonlinearVar3REd.setToolTipText("Variation amount");
       nonlinearVar3REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(2);
@@ -8183,6 +8231,7 @@ public class MainEditorFrame extends JFrame {
       xFormColorREd.setHasMaxValue(true);
       xFormColorREd.setPreferredSize(new Dimension(70, 24));
       xFormColorREd.setText("");
+      xFormColorREd.setToolTipText("Gradient index or target color");
       xFormColorREd.setSize(new Dimension(70, 24));
       xFormColorREd.setLocation(new Point(55, 47));
       xFormColorREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -8256,6 +8305,7 @@ public class MainEditorFrame extends JFrame {
       xFormSymmetryREd.setMinValue(-1.0);
       xFormSymmetryREd.setPreferredSize(new Dimension(55, 24));
       xFormSymmetryREd.setText("");
+      xFormSymmetryREd.setToolTipText("How fast point color goes to specified color (-1 to go immediately, 0 to go halfway, 1 to not change color)");
       xFormSymmetryREd.setSize(new Dimension(70, 24));
       xFormSymmetryREd.setLocation(new Point(55, 73));
       xFormSymmetryREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -8328,6 +8378,7 @@ public class MainEditorFrame extends JFrame {
       xFormOpacityREd.setMaxValue(1.0);
       xFormOpacityREd.setPreferredSize(new Dimension(55, 24));
       xFormOpacityREd.setText("");
+      xFormOpacityREd.setToolTipText("How much to show points (0 for hidden, 1 for normal)");
       xFormOpacityREd.setSize(new Dimension(70, 24));
       xFormOpacityREd.setLocation(new Point(55, 127));
       xFormOpacityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
@@ -8374,6 +8425,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getXFormDrawModeCmb() {
     if (xFormDrawModeCmb == null) {
       xFormDrawModeCmb = new JComboBox();
+      xFormDrawModeCmb.setToolTipText("<html>NORMAL: show points<br>OPAQUE: partially show points<br>HIDDEN: hide points</html>");
       xFormDrawModeCmb.setPreferredSize(new Dimension(120, 22));
       xFormDrawModeCmb.setSize(new Dimension(120, 22));
       xFormDrawModeCmb.setLocation(new Point(122, 103));
@@ -8398,6 +8450,9 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getXFormColorTypeCmb() {
     if (xFormColorTypeCmb == null) {
       xFormColorTypeCmb = new JComboBox();
+      xFormColorTypeCmb.setToolTipText("<html>NONE: don't change color<br>DIFFUSION: move color along gradient<br>"
+          + "TARGET: move color toward arbitrary target color<br>TARGETG: move color toward target gradient color (not along gradient)<br>" 
+          + "DISTANCE: use the gradient indexed by the distance the point moved</html>");
       xFormColorTypeCmb.setPreferredSize(new Dimension(120, 22));
       xFormColorTypeCmb.setSize(new Dimension(120, 22));
       xFormColorTypeCmb.setLocation(new Point(122, 10));
@@ -8802,6 +8857,7 @@ public class MainEditorFrame extends JFrame {
       centerNorthPanel.add(toggleTriangleWithColorsButton);
 
       triangleStyleCmb = new JComboBox();
+      triangleStyleCmb.setToolTipText("Select style for the editor controls (\"triangles\")");
       triangleStyleCmb.setPreferredSize(new Dimension(125, 24));
       triangleStyleCmb.setMinimumSize(new Dimension(100, 24));
       triangleStyleCmb.setMaximumSize(new Dimension(32767, 24));
@@ -8971,6 +9027,7 @@ public class MainEditorFrame extends JFrame {
       affineEditPostTransformButton.setPreferredSize(new Dimension(136, 24));
       affineEditPostTransformButton.setSize(new Dimension(104, 24));
       affineEditPostTransformButton.setText("Post TF");
+      affineEditPostTransformButton.setToolTipText("Toggle post transform mode");
       affineEditPostTransformButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       affineEditPostTransformButton.setLocation(new Point(0, 155));
       affineEditPostTransformButton.setIcon(new ImageIcon(MainEditorFrame.class.getResource("/org/jwildfire/swing/icons/new/edit_triangle_post.png")));
@@ -9205,6 +9262,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar4REd() {
     if (nonlinearVar4REd == null) {
       nonlinearVar4REd = new JWFNumberField();
+      nonlinearVar4REd.setToolTipText("Variation amount");
       nonlinearVar4REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(3);
@@ -9523,6 +9581,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar5REd() {
     if (nonlinearVar5REd == null) {
       nonlinearVar5REd = new JWFNumberField();
+      nonlinearVar5REd.setToolTipText("Variation amount");
       nonlinearVar5REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(4);
@@ -9765,6 +9824,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar6REd() {
     if (nonlinearVar6REd == null) {
       nonlinearVar6REd = new JWFNumberField();
+      nonlinearVar6REd.setToolTipText("Variation amount");
       nonlinearVar6REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(5);
@@ -10008,6 +10068,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar7REd() {
     if (nonlinearVar7REd == null) {
       nonlinearVar7REd = new JWFNumberField();
+      nonlinearVar7REd.setToolTipText("Variation amount");
       nonlinearVar7REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(6);
@@ -10251,6 +10312,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar8REd() {
     if (nonlinearVar8REd == null) {
       nonlinearVar8REd = new JWFNumberField();
+      nonlinearVar8REd.setToolTipText("Variation amount");
       nonlinearVar8REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(7);
@@ -10494,6 +10556,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar9REd() {
     if (nonlinearVar9REd == null) {
       nonlinearVar9REd = new JWFNumberField();
+      nonlinearVar9REd.setToolTipText("Variation amount");
       nonlinearVar9REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(8);
@@ -10736,6 +10799,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar10REd() {
     if (nonlinearVar10REd == null) {
       nonlinearVar10REd = new JWFNumberField();
+      nonlinearVar10REd.setToolTipText("Variation amount");
       nonlinearVar10REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(9);
@@ -10979,6 +11043,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar11REd() {
     if (nonlinearVar11REd == null) {
       nonlinearVar11REd = new JWFNumberField();
+      nonlinearVar11REd.setToolTipText("Variation amount");
       nonlinearVar11REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(10);
@@ -11221,6 +11286,7 @@ public class MainEditorFrame extends JFrame {
   private JWFNumberField getNonlinearVar12REd() {
     if (nonlinearVar12REd == null) {
       nonlinearVar12REd = new JWFNumberField();
+      nonlinearVar12REd.setToolTipText("Variation amount");
       nonlinearVar12REd.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           tinaController.nonlinearVarEditMotionCurve(11);
@@ -11336,6 +11402,7 @@ public class MainEditorFrame extends JFrame {
       tinaGrabPaletteFromFlameButton.setBounds(5, 54, 148, 24);
       tinaGrabPaletteFromFlameButton.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       tinaGrabPaletteFromFlameButton.setText("Extract from flame");
+      tinaGrabPaletteFromFlameButton.setToolTipText("Use the gradient from a saved flame");
       tinaGrabPaletteFromFlameButton.setPreferredSize(new Dimension(190, 24));
       tinaGrabPaletteFromFlameButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -12557,6 +12624,7 @@ public class MainEditorFrame extends JFrame {
       });
       transformationWeightREd.setValueStep(0.05);
       transformationWeightREd.setText("");
+      transformationWeightREd.setToolTipText("Transform weight (relative density of transform)");
       transformationWeightREd.setSize(new Dimension(81, 24));
       transformationWeightREd.setPreferredSize(new Dimension(90, 24));
       transformationWeightREd.setLocation(new Point(238, 6));
@@ -12635,6 +12703,7 @@ public class MainEditorFrame extends JFrame {
 
       tinaFilterRadiusLbl = new JLabel();
       tinaFilterRadiusLbl.setText("Filter radius");
+      tinaFilterRadiusLbl.setToolTipText("Size of the area around a pixel used to calculate its value");
       tinaFilterRadiusLbl.setSize(new Dimension(94, 22));
       tinaFilterRadiusLbl.setPreferredSize(new Dimension(94, 22));
       tinaFilterRadiusLbl.setLocation(new Point(488, 2));
@@ -12711,6 +12780,7 @@ public class MainEditorFrame extends JFrame {
 
       tinaFilterKernelLbl = new JLabel();
       tinaFilterKernelLbl.setText("Filter kernel");
+      tinaFilterKernelLbl.setToolTipText("Select the algorithm used for filtering");
       tinaFilterKernelLbl.setSize(new Dimension(94, 22));
       tinaFilterKernelLbl.setPreferredSize(new Dimension(94, 22));
       tinaFilterKernelLbl.setLocation(new Point(488, 2));
@@ -12724,7 +12794,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.resetAntialiasingSettings();
         }
       });
-      resetAntialiasOptionsButton.setToolTipText("Reset the antialiasing-options to the defaults");
+      resetAntialiasOptionsButton.setToolTipText("Reset the filter and antialiasing options to the defaults");
       resetAntialiasOptionsButton.setText("Reset");
       resetAntialiasOptionsButton.setPreferredSize(new Dimension(125, 24));
       resetAntialiasOptionsButton.setMinimumSize(new Dimension(100, 24));
@@ -12736,7 +12806,7 @@ public class MainEditorFrame extends JFrame {
       antialiasPanel.add(resetAntialiasOptionsButton);
 
       JLabel lblSpatialOversampling = new JLabel();
-      lblSpatialOversampling.setToolTipText("");
+      lblSpatialOversampling.setToolTipText("Collect point data at a higher resolution, resulting in better quality at the expense of time and memory");
       lblSpatialOversampling.setText("Spatial oversampling");
       lblSpatialOversampling.setSize(new Dimension(94, 22));
       lblSpatialOversampling.setPreferredSize(new Dimension(94, 22));
@@ -12803,6 +12873,7 @@ public class MainEditorFrame extends JFrame {
       filterKernelPreviewRootPnl.setBounds(449, 6, 104, 104);
       antialiasPanel.add(filterKernelPreviewRootPnl);
       filterKernelPreviewRootPnl.setLayout(new BorderLayout(0, 0));
+      filterKernelPreviewRootPnl.setToolTipText("Preview of the filter kernel");
 
       filterKernelFlatPreviewBtn = new JToggleButton();
       filterKernelFlatPreviewBtn.addItemListener(new ItemListener() {
@@ -12822,7 +12893,8 @@ public class MainEditorFrame extends JFrame {
       filterKernelFlatPreviewBtn.setBounds(449, 114, 107, 24);
       antialiasPanel.add(filterKernelFlatPreviewBtn);
 
-      tinaPostNoiseFilterCheckBox = new JCheckBox("Post weightMapValue reduction");
+      tinaPostNoiseFilterCheckBox = new JCheckBox("Post noise reduction");
+      tinaPostNoiseFilterCheckBox.setToolTipText("Enable a filter to reduce noise after the render");
       tinaPostNoiseFilterCheckBox.setBounds(674, 64, 169, 18);
       tinaPostNoiseFilterCheckBox.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -12867,6 +12939,7 @@ public class MainEditorFrame extends JFrame {
       JLabel lblNoiseThreshold = new JLabel();
       lblNoiseThreshold.setToolTipText("");
       lblNoiseThreshold.setText("Noise threshold");
+      lblNoiseThreshold.setToolTipText("Threshold for noise reduction: 0 (no noise reduction) to 1 (soften entire image)");
       lblNoiseThreshold.setSize(new Dimension(94, 22));
       lblNoiseThreshold.setPreferredSize(new Dimension(94, 22));
       lblNoiseThreshold.setLocation(new Point(488, 2));
@@ -12917,6 +12990,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel lblFiltering = new JLabel();
       lblFiltering.setText("Filtering");
+      lblFiltering.setToolTipText("Type of filtering to perform");
       lblFiltering.setSize(new Dimension(94, 22));
       lblFiltering.setPreferredSize(new Dimension(94, 22));
       lblFiltering.setLocation(new Point(488, 2));
@@ -12925,7 +12999,7 @@ public class MainEditorFrame extends JFrame {
       antialiasPanel.add(lblFiltering);
 
       tinaFilterIndicatorCBx = new JCheckBox("Indicator (red=sharp, green=smooth, blue=low density, displays only at the next-quickrender)");
-      tinaFilterIndicatorCBx.setToolTipText("");
+      tinaFilterIndicatorCBx.setToolTipText("Enable/disable the Adaptive filter indicator");
       tinaFilterIndicatorCBx.setBounds(565, 117, 553, 18);
       tinaFilterIndicatorCBx.addItemListener(new ItemListener() {
         public void itemStateChanged(ItemEvent e) {
@@ -13158,6 +13232,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaPaletteSwapRGBLbl_1 = new JLabel();
       tinaPaletteSwapRGBLbl_1.setText("Swap RGB");
+      tinaPaletteSwapRGBLbl_1.setToolTipText("Swap red, green, and blue values; move slider to get different permutations");
       tinaPaletteSwapRGBLbl_1.setSize(new Dimension(56, 22));
       tinaPaletteSwapRGBLbl_1.setPreferredSize(new Dimension(64, 22));
       tinaPaletteSwapRGBLbl_1.setLocation(new Point(6, 214));
@@ -13217,6 +13292,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaPaletteFrequencyLbl = new JLabel();
       tinaPaletteFrequencyLbl.setText("Frequency");
+      tinaPaletteFrequencyLbl.setToolTipText("Repeat gradient several times to increase its frequency");
       tinaPaletteFrequencyLbl.setSize(new Dimension(56, 22));
       tinaPaletteFrequencyLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteFrequencyLbl.setLocation(new Point(6, 214));
@@ -13277,6 +13353,7 @@ public class MainEditorFrame extends JFrame {
 
       JLabel tinaPaletteBlurLbl = new JLabel();
       tinaPaletteBlurLbl.setText("Blur");
+      tinaPaletteBlurLbl.setToolTipText("Blur neighboring gradient colors");
       tinaPaletteBlurLbl.setSize(new Dimension(56, 22));
       tinaPaletteBlurLbl.setPreferredSize(new Dimension(64, 22));
       tinaPaletteBlurLbl.setLocation(new Point(6, 214));
@@ -13866,7 +13943,7 @@ public class MainEditorFrame extends JFrame {
           tinaController.getJwfScriptController().newScriptFromFlameBtn_clicked();
         }
       });
-      newScriptFromFlameBtn.setToolTipText("Create a new script by convderting the currently selected flame");
+      newScriptFromFlameBtn.setToolTipText("Create a new script by converting the currently selected flame");
       newScriptFromFlameBtn.setText("From flame");
       newScriptFromFlameBtn.setPreferredSize(new Dimension(116, 24));
       newScriptFromFlameBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -14870,12 +14947,14 @@ public class MainEditorFrame extends JFrame {
       keyframesFrameLbl.setBounds(6, 2, 39, 22);
       panel_79.add(keyframesFrameLbl);
       keyframesFrameLbl.setText("Frame");
+      keyframesFrameLbl.setToolTipText("Current frame of animation");
       keyframesFrameLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
 
       keyframesFrameField = new JWFNumberField();
       keyframesFrameField.setText("1");
+      keyframesFrameField.setToolTipText("Current frame of animation");
       keyframesFrameField.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null && tinaController.getAnimationController() != null) {
@@ -14923,6 +15002,7 @@ public class MainEditorFrame extends JFrame {
       });
 
       keyframesFrameCountField.setText("300");
+      keyframesFrameCountField.setToolTipText("Number of frames in animation");
       keyframesFrameCountField.setPreferredSize(new Dimension(56, 22));
       keyframesFrameCountField.setOnlyIntegers(true);
       keyframesFrameCountField.setMinValue(1.0);
@@ -14935,6 +15015,7 @@ public class MainEditorFrame extends JFrame {
 
       keyframesFrameCountLbl = new JLabel();
       keyframesFrameCountLbl.setText("Frame count");
+      keyframesFrameCountLbl.setToolTipText("Number of frames in animation");
       keyframesFrameCountLbl.setPreferredSize(new Dimension(94, 22));
       keyframesFrameCountLbl.setHorizontalAlignment(SwingConstants.RIGHT);
       keyframesFrameCountLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -14954,7 +15035,7 @@ public class MainEditorFrame extends JFrame {
           }
         }
       });
-      motionCurvePlayPreviewButton.setToolTipText("");
+      motionCurvePlayPreviewButton.setToolTipText("Play animation (turn off Realtime preview if too slow)");
       motionCurvePlayPreviewButton.setText("Play");
       motionCurvePlayPreviewButton.setSize(new Dimension(70, 24));
       motionCurvePlayPreviewButton.setPreferredSize(new Dimension(55, 24));
@@ -15066,7 +15147,8 @@ public class MainEditorFrame extends JFrame {
 
       JLabel postSymmetryTypeLbl = new JLabel();
       postSymmetryTypeLbl.setText("Symmetry type");
-      postSymmetryTypeLbl.setSize(new Dimension(94, 22));
+      postSymmetryTypeLbl.setToolTipText("Type of post symmetry to perform");
+          postSymmetryTypeLbl.setSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryTypeLbl.setLocation(new Point(488, 2));
       postSymmetryTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -15101,6 +15183,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryDistanceLbl = new JLabel();
       postSymmetryDistanceLbl.setName("postSymmetryDistanceLbl");
       postSymmetryDistanceLbl.setText("Distance");
+      postSymmetryDistanceLbl.setToolTipText("Distance to move flame before applying symmetry");
       postSymmetryDistanceLbl.setSize(new Dimension(94, 22));
       postSymmetryDistanceLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryDistanceLbl.setLocation(new Point(488, 2));
@@ -15111,6 +15194,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryRotationLbl = new JLabel();
       postSymmetryRotationLbl.setName("postSymmetryRotationLbl");
       postSymmetryRotationLbl.setText("Rotation");
+      postSymmetryRotationLbl.setToolTipText("Amount to rotate flame before applying symmetry");
       postSymmetryRotationLbl.setSize(new Dimension(94, 22));
       postSymmetryRotationLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryRotationLbl.setLocation(new Point(488, 2));
@@ -15225,6 +15309,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryOrderLbl = new JLabel();
       postSymmetryOrderLbl.setName("postSymmetryOrderLbl");
       postSymmetryOrderLbl.setText("Symmetry order");
+      postSymmetryOrderLbl.setToolTipText("Number of repetitions for point symmetry (including the original)");
       postSymmetryOrderLbl.setSize(new Dimension(94, 22));
       postSymmetryOrderLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryOrderLbl.setLocation(new Point(488, 2));
@@ -15235,6 +15320,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryCentreXLbl = new JLabel();
       postSymmetryCentreXLbl.setName("postSymmetryCentreXLbl");
       postSymmetryCentreXLbl.setText("Centre X");
+      postSymmetryCentreXLbl.setToolTipText("X coordinate of symmetry centre point");
       postSymmetryCentreXLbl.setSize(new Dimension(94, 22));
       postSymmetryCentreXLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryCentreXLbl.setLocation(new Point(488, 2));
@@ -15320,6 +15406,7 @@ public class MainEditorFrame extends JFrame {
       JLabel postSymmetryCentreYLbl = new JLabel();
       postSymmetryCentreYLbl.setName("postSymmetryCentreYLbl");
       postSymmetryCentreYLbl.setText("Centre Y");
+      postSymmetryCentreYLbl.setToolTipText("Y coordinate of symmetry centre point");
       postSymmetryCentreYLbl.setSize(new Dimension(94, 22));
       postSymmetryCentreYLbl.setPreferredSize(new Dimension(94, 22));
       postSymmetryCentreYLbl.setLocation(new Point(488, 2));
@@ -15452,7 +15539,7 @@ public class MainEditorFrame extends JFrame {
       panel_81.add(getRandomSymmetryCmb());
 
       randomGradientCmb = new JComboBox();
-      randomGradientCmb.setToolTipText("Random-Symmetry-Geneator");
+      randomGradientCmb.setToolTipText("Random-gradient-generator");
       randomGradientCmb.setPreferredSize(new Dimension(50, 24));
       randomGradientCmb.setMinimumSize(new Dimension(100, 24));
       randomGradientCmb.setMaximumSize(new Dimension(32767, 24));
@@ -15479,7 +15566,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getRandomSymmetryCmb() {
     if (randomSymmetryCmb == null) {
       randomSymmetryCmb = new JComboBox();
-      randomSymmetryCmb.setToolTipText("Random-Symmetry-Geneator");
+      randomSymmetryCmb.setToolTipText("Random-symmetry-generator");
       randomSymmetryCmb.setPreferredSize(new Dimension(50, 24));
       randomSymmetryCmb.setMinimumSize(new Dimension(100, 24));
       randomSymmetryCmb.setMaximumSize(new Dimension(32767, 24));
@@ -18691,6 +18778,7 @@ public class MainEditorFrame extends JFrame {
     if (xFormAntialiasAmountLbl == null) {
       xFormAntialiasAmountLbl = new JLabel();
       xFormAntialiasAmountLbl.setText("Antialiasing amount");
+      xFormAntialiasAmountLbl.setToolTipText("Amount of blur to add to points to reduce aliasing: 0 (disable antialiasing) to 1 (full effect)");
       xFormAntialiasAmountLbl.setSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasAmountLbl.setLocation(new Point(4, 4));
@@ -18762,6 +18850,7 @@ public class MainEditorFrame extends JFrame {
     if (xFormAntialiasRadiusLbl == null) {
       xFormAntialiasRadiusLbl = new JLabel();
       xFormAntialiasRadiusLbl.setText("Antialiasing radius");
+      xFormAntialiasRadiusLbl.setToolTipText("Radius of antialiasing blur; increase to reduce jagged edges, decrease if flame gets too blurry");
       xFormAntialiasRadiusLbl.setSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setPreferredSize(new Dimension(64, 22));
       xFormAntialiasRadiusLbl.setLocation(new Point(4, 4));
@@ -21785,7 +21874,7 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getRandomWeightingFieldCmb() {
     if (randomWeightingFieldCmb == null) {
       randomWeightingFieldCmb = new JComboBox();
-      randomWeightingFieldCmb.setToolTipText("Random-Symmetry-Geneator");
+      randomWeightingFieldCmb.setToolTipText("Random-weighting-field-generator");
       randomWeightingFieldCmb.setPreferredSize(new Dimension(50, 24));
       randomWeightingFieldCmb.setMinimumSize(new Dimension(100, 24));
       randomWeightingFieldCmb.setMaximumSize(new Dimension(32767, 24));

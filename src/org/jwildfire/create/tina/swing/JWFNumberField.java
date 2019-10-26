@@ -217,6 +217,10 @@ public class JWFNumberField extends JPanel implements MotionCurveEditor {
     return Tools.doubleToString((Double) getValue());
   }
 
+  public void setToolTipText(String pText) {
+    spinnerField.setToolTipText(pText);
+  }
+  
   public boolean isHasMinValue() {
     return hasMinValue;
   }

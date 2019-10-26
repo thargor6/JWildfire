@@ -257,7 +257,7 @@ public class EnvelopeDialog extends JDialog implements FlameHolder {
     envelopeRemovePointButton.setBounds(6, 96, 141, 26);
     panel_5.add(envelopeRemovePointButton);
     envelopeRemovePointButton.setFont(new Font("Dialog", Font.BOLD, 10));
-    envelopeRemovePointButton.setToolTipText("Remove a point (after clikcing this button, click at a point)");
+    envelopeRemovePointButton.setToolTipText("Remove a point (after clicking this button, click at a point)");
     envelopeRemovePointButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (ctrl != null)
