@@ -4336,7 +4336,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public void importFlame(Flame pFlame, boolean pAddToThumbnails) {
     if (data.layerAppendBtn.isSelected() && getCurrFlame() != null) {
-      if (appendToFlame(pFlame)) {
+      if (appendToFlame(pFlame.makeCopy())) {
         messageHelper.showStatusMessage(pFlame, "added as new layers");
         setLastGradient(getCurrLayer().getPalette());
       }

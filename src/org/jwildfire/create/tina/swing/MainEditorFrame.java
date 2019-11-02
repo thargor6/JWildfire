@@ -954,7 +954,6 @@ public class MainEditorFrame extends JFrame {
       dofCamZREd.setSize(new Dimension(100, 24));
       dofCamZREd.setPreferredSize(new Dimension(100, 24));
       dofCamZREd.setLocation(new Point(100, 98));
-      dofCamZREd.setHasMinValue(true);
       dofCamZREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       dofCamZREd.setBounds(543, 4, 100, 24);
       tinaDOFPanel.add(dofCamZREd);
@@ -1826,7 +1825,7 @@ public class MainEditorFrame extends JFrame {
       tinaWhiteLevelREd.setText("");
       tinaWhiteLevelREd.setSize(new Dimension(100, 24));
       tinaWhiteLevelREd.setPreferredSize(new Dimension(100, 24));
-      tinaWhiteLevelREd.setMotionPropertyName("saturation");
+      tinaWhiteLevelREd.setMotionPropertyName("whiteLevel");
       tinaWhiteLevelREd.setMinValue(20);
       tinaWhiteLevelREd.setMaxValue(500.0);
       tinaWhiteLevelREd.setLocation(new Point(100, 100));
@@ -8766,6 +8765,7 @@ public class MainEditorFrame extends JFrame {
     getGradientEditorFncPnl().setVisible(pSelected);
     if (oldVis != pSelected && tinaController != null) {
       tinaController.resolutionProfileCmb_changed();
+      tinaController.getFlamePanel().requestFocus();
     }
   }
 
