@@ -1088,7 +1088,8 @@ public class Flame implements Assignable<Flame>, Serializable {
   }
 
   public boolean hasPreRenderMotionProperty() {
-    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || vibrancyCurve.isEnabled() || saturationCurve.isEnabled();
+    return brightnessCurve.isEnabled() || contrastCurve.isEnabled() || gammaCurve.isEnabled() || gammaThresholdCurve.isEnabled() || 
+        vibrancyCurve.isEnabled() || saturationCurve.isEnabled() || whiteLevelCurve.isEnabled();
   }
 
   public PostSymmetryType getPostSymmetryType() {
