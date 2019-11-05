@@ -179,7 +179,7 @@ public class FlameRendererView {
       pProjectedPoint.z = camPoint.z;
 
       if (flame.getDimishZ() > EPSILON) {
-        double zdist = (flame.getCamZ() - camPoint.z);
+        double zdist = (flame.getDimZDistance() - camPoint.z);
         if (zdist > 0.0) {
           pProjectedPoint.intensity = exp(-zdist * zdist * flame.getDimishZ());
         }

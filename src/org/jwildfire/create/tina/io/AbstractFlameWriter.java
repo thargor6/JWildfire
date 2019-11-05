@@ -326,6 +326,8 @@ public class AbstractFlameWriter {
     attrList.add(xb.createAttr("cam_zfocus", pFlame.getFocusZ()));
     if (pFlame.getDimishZ() != 0.0) {
       attrList.add(xb.createAttr("cam_zdimish", pFlame.getDimishZ()));
+      attrList.add(xb.createAttr("cam_zdimcolor", (double) pFlame.getDimishZRed() / 255.0 + " " + (double) pFlame.getDimishZGreen() / 255.0 + " " + (double) pFlame.getDimishZBlue() / 255.0));
+      attrList.add(xb.createAttr("cam_zdimdist", pFlame.getDimZDistance()));
     }
     attrList.add(xb.createAttr(ATTR_CAM_POS_X, pFlame.getCamPosX()));
     attrList.add(xb.createAttr(ATTR_CAM_POS_Y, pFlame.getCamPosY()));

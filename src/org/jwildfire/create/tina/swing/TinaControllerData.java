@@ -77,6 +77,9 @@ public class TinaControllerData {
   public JSlider focusZSlider;
   public JWFNumberField dimishZREd;
   public JSlider dimishZSlider;
+  public JButton dimishZColorButton;
+  public JWFNumberField dimZDistanceREd;
+  public JSlider dimZDistanceSlider;
   public JWFNumberField camZREd;
   public JSlider camZSlider;
   public JWFNumberField cameraDOFREd;

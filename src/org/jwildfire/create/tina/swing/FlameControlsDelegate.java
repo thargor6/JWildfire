@@ -159,6 +159,7 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     res.add(data.focusXREd);
     res.add(data.focusYREd);
     res.add(data.focusZREd);
+    res.add(data.dimZDistanceREd);
 
     res.add(data.dofDOFScaleREd);
     res.add(data.dofDOFAngleREd);
@@ -384,6 +385,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
   public void diminishZSlider_stateChanged(ChangeEvent e) {
     flameSliderChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
+  }
+
+  public void dimZDistanceSlider_stateChanged(ChangeEvent e) {
+    flameSliderChanged(data.dimZDistanceSlider, data.dimZDistanceREd, "dimZDistance", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
   public void camZSlider_stateChanged(ChangeEvent e) {
@@ -622,6 +627,10 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     flameTextFieldChanged(data.dimishZSlider, data.dimishZREd, "dimishZ", TinaController.SLIDER_SCALE_ZPOS, false);
   }
 
+  public void dimZDistanceREd_changed() {
+    flameTextFieldChanged(data.dimZDistanceSlider, data.dimZDistanceREd, "dimZDistance", TinaController.SLIDER_SCALE_ZPOS, false);
+  }
+
   public void cameraDOFREd_changed() {
     flameTextFieldChanged(data.cameraDOFSlider, data.cameraDOFREd, "camDOF", TinaController.SLIDER_SCALE_DOF, false);
   }
@@ -652,10 +661,13 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
     data.cameraDOFAreaSlider.setEnabled(newDOF);
     data.cameraDOFExponentREd.setEnabled(newDOF);
     data.cameraDOFExponentSlider.setEnabled(newDOF);
-    data.camZREd.setEnabled(getCurrFlame() != null);
-    data.camZSlider.setEnabled(getCurrFlame() != null);
+    data.camZREd.setEnabled(!newDOF);
+    data.camZSlider.setEnabled(!newDOF);
     data.dimishZREd.setEnabled(getCurrFlame() != null);
     data.dimishZSlider.setEnabled(getCurrFlame() != null);
+    data.dimishZColorButton.setEnabled(getCurrFlame() != null);
+    data.dimZDistanceREd.setEnabled(getCurrFlame() != null);
+    data.dimZDistanceSlider.setEnabled(getCurrFlame() != null);    
   }
 
   public void enablePostSymmetryUI() {
@@ -1096,9 +1108,37 @@ public class FlameControlsDelegate extends AbstractControlsDelegate {
 
       data.dimishZREd.setText(Tools.doubleToString(getCurrFlame().getDimishZ()));
       data.dimishZSlider.setValue(Tools.FTOI(getCurrFlame().getDimishZ() * TinaController.SLIDER_SCALE_ZPOS));
+      
+      data.dimZDistanceREd.setText(Tools.doubleToString(getCurrFlame().getDimZDistance()));
+      data.dimZDistanceSlider.setValue(Tools.FTOI(getCurrFlame().getDimZDistance() * TinaController.SLIDER_SCALE_ZPOS));
+      
+      refreshDimishZColorIndicator();
     }
     finally {
       setNoRefresh(oldNoRefrsh);
+    }
+  }
+  
+  private void refreshDimishZColorIndicator() {
+    Color color = getCurrFlame() != null ? new Color(getCurrFlame().getDimishZRed(), 
+        getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()) : Color.BLACK;
+    data.dimishZColorButton.setBackground(color);
+  }
+  
+  public void dimishZColorBtn_clicked() {
+    if (getCurrFlame() != null) {
+      ResourceManager rm = ResourceManager.all(FilePropertyEditor.class);
+      String title = rm.getString("ColorPropertyEditor.title");
+      
+      Color selectedColor = JColorChooser.showDialog(rootPanel, title, new Color(getCurrFlame().getDimishZRed(), 
+          getCurrFlame().getDimishZGreen(), getCurrFlame().getDimishZBlue()));
+      if (selectedColor != null) {
+        getCurrFlame().setDimishZRed(selectedColor.getRed());
+        getCurrFlame().setDimishZGreen(selectedColor.getGreen());
+        getCurrFlame().setDimishZBlue(selectedColor.getBlue());
+        refreshDimishZColorIndicator();
+        owner.refreshFlameImage(true, false, 1, true, false);
+      }
     }
   }
 

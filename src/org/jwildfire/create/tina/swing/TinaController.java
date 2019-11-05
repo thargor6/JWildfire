@@ -407,6 +407,9 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.focusZSlider = parameterObject.pFocusZSlider;
     data.dimishZREd = parameterObject.pDimishZREd;
     data.dimishZSlider = parameterObject.pDimishZSlider;
+    data.dimishZColorButton = parameterObject.pDimishZColorButton;
+    data.dimZDistanceREd = parameterObject.pDimZDistanceREd;
+    data.dimZDistanceSlider = parameterObject.pDimZDistanceSlider;
     data.cameraDOFREd = parameterObject.pCameraDOFREd;
     data.cameraDOFSlider = parameterObject.pCameraDOFSlider;
     data.cameraDOFAreaREd = parameterObject.pCameraDOFAreaREd;
