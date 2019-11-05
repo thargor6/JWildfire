@@ -91,6 +91,12 @@ public class Flame implements Assignable<Flame>, Serializable {
   @AnimAware
   private double dimishZ;
   private final MotionCurve dimishZCurve = new MotionCurve();
+  private int dimishZRed;
+  private int dimishZGreen;
+  private int dimishZBlue;
+  @AnimAware
+  private double dimZDistance;
+  private final MotionCurve dimZDistanceCurve = new MotionCurve();
   @AnimAware
   private double camDOF;
   private final MotionCurve camDOFCurve = new MotionCurve();
@@ -371,6 +377,10 @@ public class Flame implements Assignable<Flame>, Serializable {
     camDOFExponent = 2.0;
     camDOF = 0.0;
     dimishZ = 0.0;
+    dimishZRed = 0;
+    dimishZGreen = 0;
+    dimishZBlue = 0;
+    dimZDistance = 0.0;
     camZ = 0.0;
     focusX = 0.0;
     focusY = 0.0;
@@ -683,6 +693,11 @@ public class Flame implements Assignable<Flame>, Serializable {
     focusZCurve.assign(pFlame.focusZCurve);
     dimishZ = pFlame.dimishZ;
     dimishZCurve.assign(pFlame.dimishZCurve);
+    dimishZRed = pFlame.dimishZRed;
+    dimishZGreen = pFlame.dimishZGreen;
+    dimishZBlue = pFlame.dimishZBlue;
+    dimZDistance = pFlame.dimZDistance;
+    dimZDistanceCurve.assign(pFlame.dimZDistanceCurve);
     camPosX = pFlame.camPosX;
     camPosXCurve.assign(pFlame.camPosXCurve);
     camPosY = pFlame.camPosY;
@@ -843,6 +858,8 @@ public class Flame implements Assignable<Flame>, Serializable {
         (fabs(focusY - pFlame.focusY) > EPSILON) || !focusYCurve.isEqual(pFlame.focusYCurve) ||
         (fabs(focusZ - pFlame.focusZ) > EPSILON) || !focusZCurve.isEqual(pFlame.focusZCurve) ||
         (fabs(dimishZ - pFlame.dimishZ) > EPSILON) || !dimishZCurve.isEqual(pFlame.dimishZCurve) ||
+        (fabs(dimishZRed - pFlame.dimishZRed) > EPSILON) || (fabs(dimishZGreen - pFlame.dimishZGreen) > EPSILON) || (fabs(dimishZBlue - pFlame.dimishZBlue) > EPSILON) ||
+        (fabs(dimZDistance - pFlame.dimZDistance) > EPSILON) || !dimZDistanceCurve.isEqual(pFlame.dimZDistanceCurve) ||
         (fabs(camDOF - pFlame.camDOF) > EPSILON) || !camDOFCurve.isEqual(pFlame.camDOFCurve) ||
         (camDOFShape != pFlame.camDOFShape) || (spatialOversampling != pFlame.spatialOversampling) ||
         (postNoiseFilter != pFlame.postNoiseFilter) || (fabs(postNoiseFilterThreshold - pFlame.postNoiseFilterThreshold) > EPSILON) ||
@@ -976,6 +993,38 @@ public class Flame implements Assignable<Flame>, Serializable {
 
   public void setDimishZ(double dimishZ) {
     this.dimishZ = dimishZ;
+  }
+
+  public int getDimishZRed() {
+    return dimishZRed;
+  }
+
+  public void setDimishZRed(int dimishZRed) {
+    this.dimishZRed = dimishZRed;
+  }
+
+  public int getDimishZGreen() {
+    return dimishZGreen;
+  }
+
+  public void setDimishZGreen(int dimishZGreen) {
+    this.dimishZGreen = dimishZGreen;
+  }
+
+  public int getDimishZBlue() {
+    return dimishZBlue;
+  }
+
+  public void setDimishZBlue(int dimishZBlue) {
+    this.dimishZBlue = dimishZBlue;
+  }
+
+  public double getDimZDistance() {
+    return dimZDistance;
+  }
+
+  public void setDimZDistance(double dimZDistance) {
+    this.dimZDistance = dimZDistance;
   }
 
   public Layer getFirstLayer() {

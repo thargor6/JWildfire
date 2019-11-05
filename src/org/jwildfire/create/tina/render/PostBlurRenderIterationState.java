@@ -70,7 +70,7 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
   }
 
   @Override
-  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double intensity, XYZPoint origin) {
+  protected void plotPoint(int screenX, int screenY, double rawX, double rawY, double dzIntensity, double lIntensity, XYZPoint origin) {
     plotRed = origin.redColor;
     plotGreen = origin.greenColor;
     plotBlue = origin.blueColor;
@@ -85,9 +85,9 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
 
               double scl = blurKernel[yk][xk];
 
-              double finalRed = plotRed * scl * prj.intensity;
-              double finalGreen = plotGreen * scl * prj.intensity;
-              double finalBlue = plotBlue * scl * prj.intensity;
+              double finalRed = lerp(dimishZRed, plotRed, dzIntensity) * scl ;
+              double finalGreen = lerp(dimishZGreen, plotGreen, dzIntensity) * scl;
+              double finalBlue = lerp(dimishZBlue, plotBlue, dzIntensity) * scl;
               plotBuffer[plotBufferIdx++].set(l, k, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
               if (plotBufferIdx >= plotBuffer.length) {
                 applySamplesToRaster();
@@ -104,9 +104,9 @@ public class PostBlurRenderIterationState extends DefaultRenderIterationState {
       }
     }
     else {
-      double finalRed = plotRed * prj.intensity;
-      double finalGreen = plotGreen * prj.intensity;
-      double finalBlue = plotBlue * prj.intensity;
+      double finalRed = lerp(dimishZRed, plotRed, dzIntensity);
+      double finalGreen = lerp(dimishZGreen, plotGreen, dzIntensity);
+      double finalBlue = lerp(dimishZBlue, plotBlue, dzIntensity);
       plotBuffer[plotBufferIdx++].set(screenX, screenY, finalRed, finalGreen, finalBlue, rawX, rawY, prj.z * view.bws, p.material, prj.dofDist, origin.x, origin.y, origin.z, p.receiveOnlyShadows);
       if (plotBufferIdx >= plotBuffer.length) {
         applySamplesToRaster();

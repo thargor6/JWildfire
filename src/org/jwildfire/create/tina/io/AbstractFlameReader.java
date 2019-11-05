@@ -103,6 +103,8 @@ public class AbstractFlameReader {
   public static final String ATTR_CAM_YFOCUS = "cam_yfocus";
   public static final String ATTR_CAM_ZFOCUS = "cam_zfocus";
   public static final String ATTR_CAM_ZDIMISH = "cam_zdimish";
+  public static final String ATTR_CAM_ZDIM_COLOR = "cam_zdimcolor";
+  public static final String ATTR_CAM_ZDIM_DIST = "cam_zdimdist";
   public static final String ATTR_CAM_DOF = "cam_dof";
   public static final String ATTR_CAM_DOF_AREA = "cam_dof_area";
   public static final String ATTR_CAM_DOF_EXPONENT = "cam_dof_exponent";
@@ -450,6 +452,15 @@ public class AbstractFlameReader {
     }
     if ((hs = atts.get(ATTR_CAM_ZDIMISH)) != null) {
       pFlame.setDimishZ(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_CAM_ZDIM_COLOR)) != null) {
+      String s[] = hs.split(" ");
+      pFlame.setDimishZRed(Tools.roundColor(255.0 * Double.parseDouble(s[0])));
+      pFlame.setDimishZGreen(Tools.roundColor(255.0 * Double.parseDouble(s[1])));
+      pFlame.setDimishZBlue(Tools.roundColor(255.0 * Double.parseDouble(s[2])));
+    }
+    if ((hs = atts.get(ATTR_CAM_ZDIM_DIST)) != null) {
+      pFlame.setDimZDistance(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_CAM_DOF)) != null) {
       pFlame.setCamDOF(Double.parseDouble(hs));
