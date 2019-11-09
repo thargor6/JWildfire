@@ -252,6 +252,7 @@ public class TinaControllerParameter {
   public JPanel pGradientLibraryPanel;
   public JTextPane pHelpPane;
   public JTextPane apophysisHintsPane;
+  public JTextPane getColorTypesPane;
   public JToggleButton pToggleVariationsButton;
   public JToggleButton pToggleTransparencyButton;
   public JToggleButton pAffinePreserveZButton;
@@ -1649,9 +1650,10 @@ public class TinaControllerParameter {
     meshGenSmoothMuREd = pMeshGenSmoothMuREd;
   }
 
-  public void setHelpParams(JTextPane pMeshGenHintPane, JTextPane pHelpPane, JTextPane pApophysisHintsPane) {
+  public void setHelpParams(JTextPane pMeshGenHintPane, JTextPane pHelpPane, JTextPane pApophysisHintsPane, JTextPane pgetColorTypesPane) {
     this.meshGenHintPane = pMeshGenHintPane;
     this.pHelpPane = pHelpPane;
     this.apophysisHintsPane = pApophysisHintsPane;
+    this.getColorTypesPane = pgetColorTypesPane;
   }
 }

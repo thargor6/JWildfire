@@ -785,6 +785,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     rootPanel = parameterObject.pRootPanel;
     data.helpPane = parameterObject.pHelpPane;
     data.apophysisHintsPane = parameterObject.apophysisHintsPane;
+    data.getColorTypesPane = parameterObject.getColorTypesPane;
 
     data.undoButton = parameterObject.pUndoButton;
     data.redoButton = parameterObject.pRedoButton;
@@ -927,6 +928,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     initHelpPane();
     initApophysisHintsPane();
+    initGetColorTypesPane();
 
     for (int i = 0; i < data.TinaNonlinearControlsRows.length; i++) {
       initNonlinearControls(data.TinaNonlinearControlsRows[i]);
@@ -990,6 +992,29 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       data.apophysisHintsPane.setText(content.toString());
       data.apophysisHintsPane.setSelectionStart(0);
       data.apophysisHintsPane.setSelectionEnd(0);
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private void initGetColorTypesPane() {
+    data.getColorTypesPane.setContentType("text/html");
+    try {
+      InputStream is = this.getClass().getResourceAsStream("ColoringTypes.html");
+      StringBuffer content = new StringBuffer();
+      String lineFeed = System.getProperty("line.separator");
+      String line;
+      Reader r = new InputStreamReader(is, "utf-8");
+      BufferedReader in = new BufferedReader(r);
+      while ((line = in.readLine()) != null) {
+        content.append(line).append(lineFeed);
+      }
+      in.close();
+
+      data.getColorTypesPane.setText(content.toString());
+      data.getColorTypesPane.setSelectionStart(0);
+      data.getColorTypesPane.setSelectionEnd(0);
     }
     catch (Exception ex) {
       ex.printStackTrace();

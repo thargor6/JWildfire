@@ -285,6 +285,7 @@ public class TinaControllerData {
   public JButton batchRenderStartButton;
   public JTextPane helpPane;
   public JTextPane apophysisHintsPane;
+  public JTextPane getColorTypesPane;
   public JButton undoButton;
   public JButton redoButton;
   public JButton editTransformCaptionButton;

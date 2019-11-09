@@ -1,0 +1,55 @@
+<html>
+<body>
+<h1>JWildfire Coloring Types</h1>
+
+JWildfire has numerous options for coloring your flames. Every point has an associated color. When a transformation maps a
+point to a new location, it also gives it a new color. Each transformation has a Coloring type, specified in the transform's
+Color tab. The default coloring types are suitable for most flames; the others provide alternatives to meet special needs.
+<br><br>
+
+<b>NONE</b> does not change the point's color; it will be the same as tne input point. This is the default for final transforms
+since using a different type would reduce the color range.
+<br><br>
+<b>DIFFUSION</b> is the standard flame coloring type invented by Scott Draves and used in all flame fractal programs such as
+Apophysis and Chaotica, and is the default for normal transforms.
+It is based on a gradient, which can be selected and edited in the Gradient tab, and uses an index
+to the gradient between 0 (leftmost color) and 1 (rightmost color) to set the flame colors. There are two controls: Color and
+Speed. Color specifies the target gradient index for the transform. On each iteration, the index for the point will move towards
+the target index. Speed controls how fast it moves; 0 will move the index halfway between the current and target indices. Higher
+values will move it less than halfway (more slowly); the highest value of 1 means it won't move at all; the color won't change.
+Negative Speed values will move it more than halfway (more quickly); the extreme of -1 means it moves all the way; the new
+color will be the gradient color matching the Color value.
+<br><br>
+<b>TARGET</b> ignores the gradient. The Color setting is a target color instead of a target gradient index. On each iteration,
+the point's color will be be interpolated between the current color and the target color. Speed works in the same way as
+DIFFUSION: 0 will make the color halfway between the current and target colors, 1 will not change the color, and -1 will set
+the color to the target color.
+<br><br>
+<b>TARGETG</b> is like TARGET, but uses the gradient to set the target color. So the target color will change when a new
+gradient is selected, but the color is more likely to be consistent with other gradient colors. The point's color is 
+interpolated with the target color as with TARGET rather than moving along the gradient.
+<br><br>
+<b>DISTANCE</b> uses the gradient indexed by the distance the transform moved the point. Color determines the starting point
+and Speed controls how far along the gradient each unit of distance moves from there. Like other coloring types, Speed -1 sets
+the color to the specified color. But the input color is ignored, so unlike the other coloring types, Speed 1 will still change
+the color. DISTANCE is especially effective for coloring flames made with a single non-blur transform, which are otherwise
+quite difficult to color.
+<br><br>
+<b>CYCLIC</b> uses the gradient, but simply shifts the gradient index right the amount specified by Speed. If it goes off the
+end of the gradient, it wraps around to the other side. CYCLIC will not converge to a color when iterated, so doesn't work as
+the only coloring type in a flame; some other iterated transform needs to use DIFFUSION to get a stable color that CYCLIC can
+use as a starting point. Normally, Speed is set to <i>m</i>/<i>n</i>, where <i>m</i> and <i>n</i> are small integers; this 
+makes the colors cycle through <i>n</i> gradient colors, and is especially useful for coloring tilings.
+<br><br><br>
+Some variations will set the color of the new point, so provide additional coloring options. There are two types.
+<br><br>
+<b>Direct Color</b> was one of the features added to Apophysis 7X by George Kiehne (xyrus02), and included in JWildfire.
+Direct Color variations set the gradient index directly, overriding the value computed by the DIFFUSION method. The coloring
+type for transforms that use Direct Color variations must be DIFFUSION since the other methods ignore the gradient index.
+<br><br>
+<b>True Color</b> (sometimes called RGB Color) variations set the actual color of the target point directly. These variations
+override the coloring type. But they don't set the gradient index, so other transforms using the default DIFFUSION coloring
+type will not preserve the colors. To do so, set the coloring type for the other transforms to NONE, TARGET, or TARGETG.
+
+</body>
+</html>

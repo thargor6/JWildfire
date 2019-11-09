@@ -4309,7 +4309,7 @@ public class MainEditorFrame extends JFrame {
       xFormColorTypeLbl = new JLabel();
       xFormColorTypeLbl.setToolTipText("How to color points with this transform");
       xFormColorTypeLbl.setPreferredSize(new Dimension(64, 22));
-      xFormColorTypeLbl.setText("Color type");
+      xFormColorTypeLbl.setText("Coloring type");
       xFormColorTypeLbl.setSize(new Dimension(119, 22));
       xFormColorTypeLbl.setLocation(new Point(6, 10));
       xFormColorTypeLbl.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
@@ -6404,7 +6404,7 @@ public class MainEditorFrame extends JFrame {
         meshGenFrame.getMeshGenTaubinSmoothCbx(), meshGenFrame.getMeshGenSmoothPassesREd(), meshGenFrame.getMeshGenSmoothLambdaREd(),
         meshGenFrame.getMeshGenSmoothMuREd());
 
-    params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane());
+    params.setHelpParams(helpFrame.getMeshGenHintPane(), helpFrame.getHelpPane(), helpFrame.getApophysisHintsPane(), helpFrame.getColorTypesPane());
 
     params.setParams1(pDesktop, this, pErrorHandler, pPrefs, /* getCenterCenterPanel()*/getMainPrevievPnl(), getTinaCameraRollREd(), getTinaCameraRollSlider(), getTinaCameraPitchREd(),
         getTinaCameraPitchSlider(), getTinaCameraYawREd(), getTinaCameraYawSlider(), getTinaCameraPerspectiveREd(), getTinaCameraPerspectiveSlider(),
@@ -6596,6 +6596,7 @@ public class MainEditorFrame extends JFrame {
       getXFormColorTypeCmb().addItem(ColorType.TARGET);
       getXFormColorTypeCmb().addItem(ColorType.TARGETG);
       getXFormColorTypeCmb().addItem(ColorType.DISTANCE);
+      getXFormColorTypeCmb().addItem(ColorType.CYCLIC);
 
       getTinaSolidRenderingMaterialDiffuseResponseCmb().removeAllItems();
       getTinaSolidRenderingMaterialDiffuseResponseCmb().addItem(LightDiffFuncPreset.COSA);
@@ -8547,9 +8548,9 @@ public class MainEditorFrame extends JFrame {
   private JComboBox getXFormColorTypeCmb() {
     if (xFormColorTypeCmb == null) {
       xFormColorTypeCmb = new JComboBox();
-      xFormColorTypeCmb.setToolTipText("<html>NONE: don't change color<br>DIFFUSION: move color along gradient<br>"
+      xFormColorTypeCmb.setToolTipText("<html>NONE: don't change color<br>DIFFUSION: move color along gradient toward target gradient color<br>"
           + "TARGET: move color toward arbitrary target color<br>TARGETG: move color toward target gradient color (not along gradient)<br>" 
-          + "DISTANCE: use the gradient indexed by the distance the point moved</html>");
+          + "DISTANCE: use the gradient indexed by the distance the point moved<br>CYCLIC: cycle through gradient colors (requires DIFFUSION on a different transform)</html>");
       xFormColorTypeCmb.setPreferredSize(new Dimension(120, 22));
       xFormColorTypeCmb.setSize(new Dimension(120, 22));
       xFormColorTypeCmb.setLocation(new Point(122, 10));

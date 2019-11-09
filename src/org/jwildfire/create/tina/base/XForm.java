@@ -579,7 +579,7 @@ public final class XForm implements Assignable<XForm>, Serializable {
       t.add(new TransformationApplyWeightMapToColorStep(this));
     }
 
-    if (colorType == ColorType.DIFFUSION) {
+    if (colorType == ColorType.DIFFUSION || colorType == ColorType.CYCLIC) {
       if (owner.isGradientMap()) {
         t.add(new TransformationGradientMapColorStep(this));
       }

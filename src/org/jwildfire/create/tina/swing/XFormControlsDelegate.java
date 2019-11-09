@@ -148,10 +148,10 @@ public class XFormControlsDelegate extends AbstractControlsDelegate {
       // rows.getNonlinearParamsRightButton().setEnabled(enabled);
     }
     boolean colorEnabled = enabled && (xForm.getColorType() != ColorType.NONE );
-    data.xFormColorREd.setVisible(enabled && xForm.getColorType() != ColorType.TARGET);
-    data.xFormColorREd.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET);
-    data.xFormColorSlider.setVisible(enabled && xForm.getColorType() != ColorType.TARGET);
-    data.xFormColorSlider.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET);
+    data.xFormColorREd.setVisible(enabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
+    data.xFormColorREd.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
+    data.xFormColorSlider.setVisible(enabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
+    data.xFormColorSlider.setEnabled(colorEnabled && xForm.getColorType() != ColorType.TARGET && xForm.getColorType() != ColorType.CYCLIC);
     data.xFormTargetColorBtn.setVisible(enabled && xForm.getColorType() == ColorType.TARGET);
     data.xFormTargetColorBtn.setEnabled(enabled && xForm.getColorType() == ColorType.TARGET);
     data.xFormSymmetryREd.setEnabled(colorEnabled);
