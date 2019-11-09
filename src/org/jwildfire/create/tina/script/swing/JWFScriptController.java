@@ -623,6 +623,8 @@ public class JWFScriptController {
     case DISTANCE:
       pSB.append("      xForm.setColorType(ColorType.DISTANCE);\n");
       break;
+    case CYCLIC:
+      pSB.append("      xForm.setColorType(ColorType.CYCLIC);\n");
     }
     pSB.append("      xForm.setMaterial(" + Tools.doubleToString(pXForm.getMaterial()) + ");\n");
     pSB.append("      xForm.setMaterialSpeed(" + Tools.doubleToString(pXForm.getMaterialSpeed()) + ");\n");
