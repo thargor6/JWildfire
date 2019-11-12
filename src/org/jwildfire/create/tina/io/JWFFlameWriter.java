@@ -44,6 +44,7 @@ public class JWFFlameWriter extends AbstractFlameWriter {
     for (Layer layer : pFlame.getLayers()) {
       List<SimpleXMLBuilder.Attribute<?>> layerAttrList = new ArrayList<SimpleXMLBuilder.Attribute<?>>();
       layerAttrList.add(xb.createAttr("weight", layer.getWeight()));
+      layerAttrList.add(xb.createAttr("density", layer.getDensity()));
       layerAttrList.add(xb.createAttr("visible", layer.isVisible() ? 1 : 0));
       {
         String name = layer.getName().replaceAll("\"", "");

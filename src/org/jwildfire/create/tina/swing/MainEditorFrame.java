@@ -6454,7 +6454,7 @@ public class MainEditorFrame extends JFrame {
         getNewScriptBtn(), getNewScriptFromFlameBtn(), getDeleteScriptBtn(), getScriptRenameBtn(), getDuplicateScriptBtn(), getScriptRunBtn(),
         getMouseTransformEditGradientButton(), getGradientLibTree(), getGradientLibraryRescanBtn(), getGradientLibraryNewFolderBtn(), getGradientLibraryRenameFolderBtn(),
         getGradientsList(), getBackgroundColorIndicatorBtn(), getRandomizeBtn(),
-        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
+        getTinaPaletteFadeColorsCBx(), getTinaPaletteUniformWidthCBx(), getLayerWeightEd(), getLayerDensityREd(), getLayerAddBtn(), getLayerDuplicateBtn(), getLayerDeleteBtn(),
         getLayersTable(), getLayerVisibleBtn(), getLayerAppendBtn(), getLayerHideOthersBtn(), getLayerShowAllBtn(), getLayerPreviewBtn(),
         getKeyframesFrameField(), getKeyframesFrameSlider(), getKeyframesFrameCountField(), getMotionBlurLengthField(), getMotionBlurLengthSlider(),
         getMotionBlurTimeStepField(), getMotionBlurTimeStepSlider(), getMotionBlurDecayField(), getMotionBlurDecaySlider(),
@@ -11714,6 +11714,7 @@ public class MainEditorFrame extends JFrame {
   private JScrollPane scrollPane_8;
   private JTable layersTable;
   private JWFNumberField layerWeightEd;
+  private JWFNumberField layerDensityREd;
   private JButton layerDeleteBtn;
   private JToggleButton layerVisibleBtn;
   private JButton layerAddBtn;
@@ -14623,8 +14624,32 @@ public class MainEditorFrame extends JFrame {
       layerAddBtn.setText("Add");
       layerAddBtn.setPreferredSize(new Dimension(56, 24));
       layerAddBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      layerAddBtn.setBounds(6, 81, 90, 24);
+      layerAddBtn.setBounds(6, 100, 90, 24);
       panel_75.add(layerAddBtn);
+
+      layerDensityREd = new JWFNumberField();
+      layerDensityREd.setValueStep(0.05);
+      layerDensityREd.setText("");
+      layerDensityREd.setSize(new Dimension(81, 24));
+      layerDensityREd.setPreferredSize(new Dimension(56, 24));
+      layerDensityREd.setLocation(new Point(238, 6));
+      layerDensityREd.setHasMinValue(true);
+      layerDensityREd.setHasMaxValue(true);
+      layerDensityREd.setMaxValue(1.0);
+      layerDensityREd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
+      layerDensityREd.setBounds(172, 6, 90, 24);
+      layerDensityREd.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          if (tinaController != null) {
+            if (!layerDensityREd.isMouseAdjusting() || layerDensityREd.getMouseChangeCount() == 0) {
+              tinaController.saveUndoPoint();
+            }
+            tinaController.layerDensityREd_changed();
+          }
+        }
+      });
+      
+      panel_75.add(layerDensityREd);
 
       layerWeightEd = new JWFNumberField();
       layerWeightEd.setValueStep(0.05);
@@ -14634,7 +14659,7 @@ public class MainEditorFrame extends JFrame {
       layerWeightEd.setLocation(new Point(238, 6));
       layerWeightEd.setHasMinValue(true);
       layerWeightEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
-      layerWeightEd.setBounds(172, 6, 90, 24);
+      layerWeightEd.setBounds(172, 34, 90, 24);
       layerWeightEd.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           if (tinaController != null) {
@@ -14658,7 +14683,7 @@ public class MainEditorFrame extends JFrame {
       layerDuplicateBtn.setText("Duplicate");
       layerDuplicateBtn.setPreferredSize(new Dimension(90, 24));
       layerDuplicateBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      layerDuplicateBtn.setBounds(6, 107, 90, 24);
+      layerDuplicateBtn.setBounds(6, 126, 90, 24);
       panel_75.add(layerDuplicateBtn);
 
       layerDeleteBtn = new JButton();
@@ -14671,7 +14696,7 @@ public class MainEditorFrame extends JFrame {
       layerDeleteBtn.setText("Delete");
       layerDeleteBtn.setPreferredSize(new Dimension(90, 24));
       layerDeleteBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      layerDeleteBtn.setBounds(112, 81, 90, 24);
+      layerDeleteBtn.setBounds(112, 100, 90, 24);
       panel_75.add(layerDeleteBtn);
 
       layerVisibleBtn = new JToggleButton();
@@ -14690,14 +14715,26 @@ public class MainEditorFrame extends JFrame {
       layerVisibleBtn.setBounds(6, 7, 86, 24);
       panel_75.add(layerVisibleBtn);
 
+      JLabel lblDensity = new JLabel();
+      lblDensity.setText("Density");
+      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density)");
+      lblDensity.setSize(new Dimension(20, 22));
+      lblDensity.setPreferredSize(new Dimension(24, 22));
+      lblDensity.setLocation(new Point(212, 6));
+      lblDensity.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblDensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblDensity.setBounds(107, 7, 58, 22);
+      panel_75.add(lblDensity);
+
       JLabel lblWeight = new JLabel();
       lblWeight.setText("Weight");
+      lblWeight.setToolTipText("Intensity of layer: 1 is normal, lower is darker, higher is lighter");
       lblWeight.setSize(new Dimension(20, 22));
       lblWeight.setPreferredSize(new Dimension(24, 22));
       lblWeight.setLocation(new Point(212, 6));
       lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
       lblWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblWeight.setBounds(107, 10, 58, 22);
+      lblWeight.setBounds(107, 34, 58, 22);
       panel_75.add(lblWeight);
 
       layerHideOthersBtn = new JButton();
@@ -14710,7 +14747,7 @@ public class MainEditorFrame extends JFrame {
       layerHideOthersBtn.setText("Hide all others");
       layerHideOthersBtn.setPreferredSize(new Dimension(56, 24));
       layerHideOthersBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      layerHideOthersBtn.setBounds(6, 34, 159, 24);
+      layerHideOthersBtn.setBounds(6, 61, 159, 24);
       panel_75.add(layerHideOthersBtn);
 
       layerShowAllBtn = new JButton();
@@ -14723,7 +14760,7 @@ public class MainEditorFrame extends JFrame {
       layerShowAllBtn.setText("Show all");
       layerShowAllBtn.setPreferredSize(new Dimension(56, 24));
       layerShowAllBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      layerShowAllBtn.setBounds(172, 34, 159, 24);
+      layerShowAllBtn.setBounds(172, 61, 159, 24);
       panel_75.add(layerShowAllBtn);
     }
     return panel_75;
@@ -14785,6 +14822,10 @@ public class MainEditorFrame extends JFrame {
       });
     }
     return layersTable;
+  }
+
+  public JWFNumberField getLayerDensityREd() {
+    return layerDensityREd;
   }
 
   public JWFNumberField getLayerWeightEd() {

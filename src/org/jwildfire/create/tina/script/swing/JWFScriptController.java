@@ -558,6 +558,7 @@ public class JWFScriptController {
     pSB.append("    Layer layer = new Layer();\n");
     pSB.append("    flame.getLayers().add(layer);\n");
     pSB.append("    layer.setWeight(" + Tools.doubleToString(pLayer.getWeight()) + ");\n");
+    pSB.append("    layer.setDensity(" + Tools.doubleToString(pLayer.getDensity()) + ");\n");
     pSB.append("    layer.setVisible(" + pLayer.isVisible() + ");\n");
     pSB.append("    // create a random gradient\n");
     pSB.append("    new RandomGradientMutation().execute(layer);\n");

@@ -42,6 +42,8 @@ public class Layer implements Assignable<Layer>, Serializable {
   @AnimAware
   private double weight = 1.0;
   @AnimAware
+  private double density = 1.0;
+  @AnimAware
   private RGBPalette palette = new RGBPalette();
   @AnimAware
   private final List<XForm> xForms = new XFormList(this);
@@ -182,6 +184,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   @Override
   public void assign(Layer pSrc) {
     weight = pSrc.weight;
+    density = pSrc.density;
     visible = pSrc.visible;
     name = pSrc.name;
     gradientMapFilename = pSrc.gradientMapFilename;
@@ -213,6 +216,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   @Override
   public boolean isEqual(Layer pSrc) {
     if ((fabs(weight - pSrc.weight) > EPSILON) ||
+        (fabs(density - pSrc.density) > EPSILON) ||
         (fabs(gradientMapHorizOffset - pSrc.gradientMapHorizOffset) > EPSILON) || (fabs(gradientMapHorizScale - pSrc.gradientMapHorizScale) > EPSILON) ||
         (fabs(gradientMapVertOffset - pSrc.gradientMapVertOffset) > EPSILON) || (fabs(gradientMapVertScale - pSrc.gradientMapVertScale) > EPSILON) ||
         (fabs(gradientMapLocalColorAdd - pSrc.gradientMapLocalColorAdd) > EPSILON) || (fabs(gradientMapLocalColorScale - pSrc.gradientMapLocalColorScale) > EPSILON) ||
@@ -243,6 +247,14 @@ public class Layer implements Assignable<Layer>, Serializable {
   public void setWeight(double pWeight) {
     weight = pWeight;
   }
+  
+  public double getDensity() {
+    return density;
+  }
+  
+  public void setDensity(double pDensity) {
+    density = pDensity;
+  }
 
   public boolean isVisible() {
     return visible;
@@ -253,7 +265,7 @@ public class Layer implements Assignable<Layer>, Serializable {
   }
 
   public boolean isRenderable() {
-    return isVisible() && getWeight() > -EPSILON && getXForms().size() > 0;
+    return isVisible() && getWeight() > -EPSILON && getDensity() > -EPSILON && getXForms().size() > 0;
   }
 
   public String getName() {

@@ -133,6 +133,9 @@ public class DefaultRenderIterationState extends RenderIterationState {
       return;
     else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
       return;
+    else if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()) {
+      return;
+    }
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);

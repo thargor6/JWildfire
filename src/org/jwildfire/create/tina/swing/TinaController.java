@@ -602,6 +602,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     data.mouseTransformEditGradientButton = parameterObject.mouseTransformEditGradientButton;
     data.mouseTransformEditTriangleViewButton = parameterObject.mouseTransformEditTriangleViewButton;
 
+    data.layerDensityREd = parameterObject.layerDensityREd;
     data.layerWeightEd = parameterObject.layerWeightEd;
     data.layerAddBtn = parameterObject.layerAddBtn;
     data.layerDuplicateBtn = parameterObject.layerDuplicateBtn;
@@ -963,6 +964,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
   private void enableLayerControls() {
     Flame flame = getCurrFlame();
     Layer layer = getCurrLayer();
+    data.layerDensityREd.setEnabled(layer != null);
     data.layerWeightEd.setEnabled(layer != null);
     data.layerAddBtn.setEnabled(flame != null);
     data.layerDuplicateBtn.setEnabled(layer != null);
@@ -1605,7 +1607,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     final int COL_LAYER = 0;
     final int COL_CAPTION = 1;
     final int COL_VISIBLE = 2;
-    final int COL_WEIGHT = 3;
+    final int COL_DENSITY = 3;
+    final int COL_WEIGHT = 4;
     data.layersTable.setModel(new DefaultTableModel() {
       private static final long serialVersionUID = 1L;
 
@@ -1616,7 +1619,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public int getColumnCount() {
-        return 4;
+        return 5;
       }
 
       @Override
@@ -1628,6 +1631,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
             return "Caption";
           case COL_VISIBLE:
             return "Visible";
+          case COL_DENSITY:
+            return "Density";
           case COL_WEIGHT:
             return "Weight";
         }
@@ -1649,6 +1654,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               if (layer != null) {
                 return layer.isVisible() ? "1" : "0";
               }
+            case COL_DENSITY:
+              if (layer != null) {
+                return Tools.doubleToString(layer.getDensity());
+              }
             case COL_WEIGHT:
               if (layer != null) {
                 return Tools.doubleToString(layer.getWeight());
@@ -1660,7 +1669,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
       @Override
       public boolean isCellEditable(int row, int column) {
-        return column == COL_CAPTION || column == COL_VISIBLE || column == COL_WEIGHT;
+        return column == COL_CAPTION || column == COL_VISIBLE || column == COL_DENSITY || column == COL_WEIGHT;
       }
 
       @Override
@@ -1677,6 +1686,11 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
               layer.setVisible("1".equals(aValue));
               data.layerVisibleBtn.setSelected(layer.isVisible());
               refreshFlameImage(true, false, 1, true, false);
+              break;
+            case COL_DENSITY:
+              saveUndoPoint();
+              layer.setDensity(Tools.limitValue(Tools.stringToDouble((String) aValue), 0.0, 1.0));
+              data.layerDensityREd.setValue(layer.getDensity());
               break;
             case COL_WEIGHT:
               saveUndoPoint();
@@ -2529,6 +2543,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     gridRefreshing = cmbRefreshing = refreshing = noRefresh = true;
     try {
       if (pLayer == null) {
+        data.layerDensityREd.setText(null);
         data.layerWeightEd.setText(null);
         data.layerVisibleBtn.setSelected(true);
         data.gradientColorMapHorizOffsetREd.setText(null);
@@ -2545,6 +2560,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         data.gradientColorMapLocalColorScaleSlider.setValue(0);
       }
       else {
+        data.layerDensityREd.setValue(pLayer.getDensity());
         data.layerWeightEd.setValue(pLayer.getWeight());
         data.layerVisibleBtn.setSelected(pLayer.isVisible());
         data.gradientColorMapHorizOffsetREd.setText(Tools.doubleToString(pLayer.getGradientMapHorizOffset()));
@@ -5753,6 +5769,24 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     }
 
     layersTableClicked();
+  }
+
+  public void layerDensityREd_changed() {
+    if (!gridRefreshing && getCurrLayer() != null) {
+      saveUndoPoint();
+      getCurrLayer().setDensity(Tools.stringToDouble(data.layerDensityREd.getText()));
+      int row = data.layersTable.getSelectedRow();
+      boolean oldGridRefreshing = gridRefreshing;
+      gridRefreshing = true;
+      try {
+        refreshLayersTable();
+        data.layersTable.getSelectionModel().setSelectionInterval(row, row);
+      }
+      finally {
+        gridRefreshing = oldGridRefreshing;
+      }
+      refreshFlameImage(true, false, 1, true, false);
+    }
   }
 
   public void layerWeightREd_changed() {
