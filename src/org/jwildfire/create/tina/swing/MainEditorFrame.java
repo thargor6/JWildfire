@@ -14627,12 +14627,31 @@ public class MainEditorFrame extends JFrame {
       layerAddBtn.setBounds(6, 100, 90, 24);
       panel_75.add(layerAddBtn);
 
+      JLabel lblDensity = new JLabel();
+      lblDensity.setText("Density");
+      lblDensity.setName("lblDensity");
+      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density)");
+      lblDensity.setSize(new Dimension(20, 22));
+      lblDensity.setPreferredSize(new Dimension(24, 22));
+      lblDensity.setLocation(new Point(212, 6));
+      lblDensity.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblDensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblDensity.setBounds(107, 7, 58, 22);
+      panel_75.add(lblDensity);
+
       layerDensityREd = new JWFNumberField();
+      layerDensityREd.setLinkedLabelControlName("lblDensity");
+      layerDensityREd.setMotionPropertyName("density");
+      layerDensityREd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLayerControls().editMotionCurve(e);
+        }
+      });
       layerDensityREd.setValueStep(0.05);
       layerDensityREd.setText("");
       layerDensityREd.setSize(new Dimension(81, 24));
       layerDensityREd.setPreferredSize(new Dimension(56, 24));
-      layerDensityREd.setLocation(new Point(238, 6));
+      layerDensityREd.setLocation(new Point(172, 6));
       layerDensityREd.setHasMinValue(true);
       layerDensityREd.setHasMaxValue(true);
       layerDensityREd.setMaxValue(1.0);
@@ -14651,12 +14670,31 @@ public class MainEditorFrame extends JFrame {
       
       panel_75.add(layerDensityREd);
 
+      JLabel lblWeight = new JLabel();
+      lblWeight.setText("Weight");
+      lblWeight.setName("lblWeight");
+      lblWeight.setToolTipText("Brightness of layer: 1 is normal, lower is darker, higher is lighter");
+      lblWeight.setSize(new Dimension(20, 22));
+      lblWeight.setPreferredSize(new Dimension(24, 22));
+      lblWeight.setLocation(new Point(212, 6));
+      lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
+      lblWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
+      lblWeight.setBounds(107, 34, 58, 22);
+      panel_75.add(lblWeight);
+
       layerWeightEd = new JWFNumberField();
+      layerWeightEd.setLinkedLabelControlName("lblWeight");
+      layerWeightEd.setMotionPropertyName("weight");
+      layerWeightEd.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          tinaController.getLayerControls().editMotionCurve(e);
+        }
+      });
       layerWeightEd.setValueStep(0.05);
       layerWeightEd.setText("");
       layerWeightEd.setSize(new Dimension(81, 24));
       layerWeightEd.setPreferredSize(new Dimension(56, 24));
-      layerWeightEd.setLocation(new Point(238, 6));
+      layerWeightEd.setLocation(new Point(172, 34));
       layerWeightEd.setHasMinValue(true);
       layerWeightEd.setFont(Prefs.getPrefs().getFont("Dialog", Font.PLAIN, 10));
       layerWeightEd.setBounds(172, 34, 90, 24);
@@ -14714,28 +14752,6 @@ public class MainEditorFrame extends JFrame {
       layerVisibleBtn.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
       layerVisibleBtn.setBounds(6, 7, 86, 24);
       panel_75.add(layerVisibleBtn);
-
-      JLabel lblDensity = new JLabel();
-      lblDensity.setText("Density");
-      lblDensity.setToolTipText("Layer density from 0 (invisible) to 1 (full density)");
-      lblDensity.setSize(new Dimension(20, 22));
-      lblDensity.setPreferredSize(new Dimension(24, 22));
-      lblDensity.setLocation(new Point(212, 6));
-      lblDensity.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblDensity.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblDensity.setBounds(107, 7, 58, 22);
-      panel_75.add(lblDensity);
-
-      JLabel lblWeight = new JLabel();
-      lblWeight.setText("Weight");
-      lblWeight.setToolTipText("Intensity of layer: 1 is normal, lower is darker, higher is lighter");
-      lblWeight.setSize(new Dimension(20, 22));
-      lblWeight.setPreferredSize(new Dimension(24, 22));
-      lblWeight.setLocation(new Point(212, 6));
-      lblWeight.setHorizontalAlignment(SwingConstants.RIGHT);
-      lblWeight.setFont(Prefs.getPrefs().getFont("Dialog", Font.BOLD, 10));
-      lblWeight.setBounds(107, 34, 58, 22);
-      panel_75.add(lblWeight);
 
       layerHideOthersBtn = new JButton();
       layerHideOthersBtn.addActionListener(new ActionListener() {

@@ -198,6 +198,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   private FlameControlsDelegate flameControls;
   private GradientControlsDelegate gradientControls;
+  private LayerControlsDelegate layerControls;
   protected XFormControlsDelegate xFormControls;
   private ChannelMixerControlsDelegate channelMixerControls;
 
@@ -911,6 +912,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     // end create
     flameControls = new FlameControlsDelegate(this, data, rootPanel);
+    layerControls = new LayerControlsDelegate(this, data, rootPanel);
     xFormControls = new XFormControlsDelegate(this, data, weightMapData, rootPanel);
     gradientControls = new GradientControlsDelegate(this, data, rootPanel);
     channelMixerControls = new ChannelMixerControlsDelegate(this, errorHandler, data, rootPanel, true);
@@ -945,7 +947,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     enableControls();
 
     xFormControls.enableControls(null);
-    enableLayerControls();
+    layerControls.enableControls();
 
     refreshResolutionProfileCmb(data.resolutionProfileCmb, null);
     refreshResolutionProfileCmb(data.interactiveResolutionProfileCmb, null);
@@ -959,22 +961,6 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
     getFlameBrowserController().init();
     loadScriptProps();
-  }
-
-  private void enableLayerControls() {
-    Flame flame = getCurrFlame();
-    Layer layer = getCurrLayer();
-    data.layerDensityREd.setEnabled(layer != null);
-    data.layerWeightEd.setEnabled(layer != null);
-    data.layerAddBtn.setEnabled(flame != null);
-    data.layerDuplicateBtn.setEnabled(layer != null);
-    data.layerDeleteBtn.setEnabled(flame != null && layer != null && getCurrFlame().getLayers().size() > 1);
-    data.layersTable.setEnabled(flame != null);
-    data.layerVisibleBtn.setEnabled(layer != null);
-    data.layerAppendBtn.setEnabled(flame != null);
-    data.layerPreviewBtn.setEnabled(flame != null);
-    data.layerHideOthersBtn.setEnabled(layer != null);
-    data.layerShowAllBtn.setEnabled(flame != null);
   }
 
   private void initApophysisHintsPane() {
@@ -1467,7 +1453,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
       transformationChanged(true);
 
       enableControls();
-      enableLayerControls();
+      layerControls.enableControls();
       channelMixerControls.refreshValues(true);
       refreshPaletteUI(getCurrLayer().getPalette());
     }
@@ -5704,7 +5690,7 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
         Layer layer = getCurrLayer();
         refreshLayerUI();
         refreshLayerControls(layer);
-        enableLayerControls();
+        layerControls.enableControls();
         //refreshFlameImage(false);
       }
       finally {
@@ -5909,6 +5895,8 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
     animationController.registerMotionPropertyControls(data.xFormMaterialREd);
     animationController.registerMotionPropertyControls(data.xFormMaterialSpeedREd);
     animationController.registerMotionPropertyControls(data.xFormOpacityREd);
+    animationController.registerMotionPropertyControls(data.layerDensityREd);
+    animationController.registerMotionPropertyControls(data.layerWeightEd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVariationIntensityREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldColorIntensityREd);
     animationController.registerMotionPropertyControls(weightMapData.weightingFieldVarParam1AmountREd);
@@ -5931,6 +5919,10 @@ public class TinaController implements FlameHolder, LayerHolder, ScriptRunnerEnv
 
   public FlameControlsDelegate getFlameControls() {
     return flameControls;
+  }
+  
+  public LayerControlsDelegate getLayerControls() {
+    return layerControls;
   }
 
   public XFormControlsDelegate getXFormControls() {

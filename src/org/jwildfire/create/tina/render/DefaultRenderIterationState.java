@@ -127,15 +127,14 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     xf = selectNextXForm(xf);
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
       return;
     else if ((xf.getDrawMode() == DrawMode.OPAQUE) && (randGen.random() > xf.getOpacity()))
       return;
-    else if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()) {
-      return;
-    }
     List<XForm> finalXForms = layer.getFinalXForms();
     if (finalXForms.size() > 0) {
       applyFinalTransforms(finalXForms);
@@ -147,6 +146,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext(List<RenderSlice> pSlices) {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
