@@ -13,6 +13,7 @@ public class JWFFlameReader extends AbstractFlameReader {
   public static final String ATTR_FLAME = "flame";
   public static final String ATTR_JWF_FLAME = "jwf-flame";
   public static final String ATTR_LAYER = "layer";
+  public static final String ATTR_DENSITY = "density";
 
   protected JWFFlameReader(Prefs pPrefs) {
     super(pPrefs);
@@ -91,6 +92,9 @@ public class JWFFlameReader extends AbstractFlameReader {
     String hs;
     if ((hs = atts.get(ATTR_WEIGHT)) != null) {
       pLayer.setWeight(Double.parseDouble(hs));
+    }
+    if ((hs = atts.get(ATTR_DENSITY)) != null) {
+      pLayer.setDensity(Double.parseDouble(hs));
     }
     if ((hs = atts.get(ATTR_VISIBLE)) != null) {
       pLayer.setVisible(Integer.parseInt(hs) == 1);

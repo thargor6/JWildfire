@@ -127,6 +127,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext() {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     xf = selectNextXForm(xf);
     transformPoint();
     if (xf.getDrawMode() == DrawMode.HIDDEN)
@@ -144,6 +146,8 @@ public class DefaultRenderIterationState extends RenderIterationState {
   }
 
   public void iterateNext(List<RenderSlice> pSlices) {
+    if (layer.getDensity() < 1 && randGen.random() > layer.getDensity()*layer.getDensity())
+      return;
     int nextXForm = randGen.random(Constants.NEXT_APPLIED_XFORM_TABLE_SIZE);
     xf = xf.getNextAppliedXFormTable()[nextXForm];
     if (xf == null) {
